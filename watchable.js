@@ -22,7 +22,17 @@ class Watchable<WatchableKey: string> {
                 if (!this._changeWatchersByKey[key]) {
                     this._changeWatchersByKey[key] = [];
                 }
-                this._changeWatchersByKey[key].push({callback, context});
+                // Rather than pushing onto this array, we initialize a new array.
+                // This is necessary since watches can change as a result of an
+                // event getting triggered. It would be bad if as we iterate over
+                // our watchers, new watchers get pushed onto the array that we
+                // are iterating over.
+                // TODO(jb): as a perf optimization, we *could* push onto this array
+                // as long as we are not in the middle of iterating over it.
+                this._changeWatchersByKey[key] = [
+                    ...this._changeWatchersByKey[key],
+                    {callback, context},
+                ];
             } else {
                 console.warn(`Invalid key to watch for ${this.constructor._className}: ${key}`); // eslint-disable-line no-console
             }
@@ -57,11 +67,11 @@ class Watchable<WatchableKey: string> {
 
         return validKeys;
     }
-    _onChange(key: WatchableKey, arg?: any) { // eslint-disable-line flowtype/no-weak-types
+    _onChange(key: WatchableKey, ...args?: Array<any>) { // eslint-disable-line flowtype/no-weak-types
         const watchers = this._changeWatchersByKey[key];
         if (watchers) {
             for (const watcher of watchers) {
-                watcher.callback.call(watcher.context, arg);
+                watcher.callback.call(watcher.context, this, ...args);
             }
         }
     }

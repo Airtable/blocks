@@ -9,17 +9,23 @@ const Base = require('client/blocks/sdk/models/base');
 const models = require('client/blocks/sdk/models/models');
 const NamespacedStorage = require('client/blocks/sdk/namespaced_storage');
 const Viewport = require('client/blocks/sdk/viewport');
+const Cursor = require('client/blocks/sdk/cursor');
+const UI = require('client/blocks/sdk/ui/ui');
+const BlockWrapperComponent = require('client/blocks/sdk/ui/block_wrapper_component');
+const liveappInterface = require('client/blocks/sdk/liveapp_interface');
+const {HostMethodNames} = require('client/blocks/block_message_types');
+const utils = require('client/blocks/sdk/utils');
 
 import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge';
-import type {UIType} from 'client/blocks/sdk/ui/ui';
+import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
 
-// The UI module depends on React being available on window (via window[GLOBAL_REACT_VARIABLE_NAME]).
-// React won't be available until all the scripts for the block frame have loaded,
-// so we require that module lazily the first time BlockSdk.UI is accessed, since
-// BlockSdk itself is initialized before scripts are loaded in run_block_frame.
-let UI: UIType | null = null;
+type RunInfo = {
+    isFirstRun: boolean,
+    isDevelopmentMode: boolean,
+};
 
 class BlockSdk {
+    __BlockWrapperComponent: typeof BlockWrapperComponent;
     globalConfig: GlobalConfig;
     base: Base;
     models: typeof models;
@@ -27,14 +33,19 @@ class BlockSdk {
     localStorage: NamespacedStorage;
     sessionStorage: NamespacedStorage;
     viewport: Viewport;
+    runInfo: RunInfo;
+    cursor: Cursor;
+    UI: typeof UI;
     constructor(args: {
-        initialKvStringifiedValuesByKey: {[key: string]: string},
+        initialKvValuesByKey: {[key: string]: BlockKvValue},
         isDevelopmentMode: boolean,
         isFullscreen: boolean,
+        isFirstRun: boolean,
         baseData: BaseDataForBlocks,
         blockInstallationId: string,
     }) {
-        this.globalConfig = new GlobalConfig(args.initialKvStringifiedValuesByKey, args.isDevelopmentMode);
+        this.__BlockWrapperComponent = BlockWrapperComponent;
+        this.globalConfig = new GlobalConfig(args.initialKvValuesByKey, args.isDevelopmentMode);
         this.base = new Base(args.baseData);
         this.models = models;
         this.installationId = args.blockInstallationId;
@@ -48,14 +59,21 @@ class BlockSdk {
         this.sessionStorage = new NamespacedStorage(window.sessionStorage, args.blockInstallationId);
 
         this.viewport = new Viewport(args.isFullscreen);
+        this.cursor = new Cursor(args.baseData);
+        this.UI = UI;
+
+        this.runInfo = Object.freeze({
+            isFirstRun: args.isFirstRun,
+            isDevelopmentMode: args.isDevelopmentMode,
+        });
 
         Object.freeze(this);
     }
-    get UI(): UIType {
-        if (!UI) {
-            UI = require('client/blocks/sdk/ui/ui');
-        }
-        return UI;
+    reload() {
+        utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
+            liveappInterface,
+            HostMethodNames.RELOAD_FRAME,
+        ));
     }
 }
 

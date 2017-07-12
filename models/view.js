@@ -5,7 +5,7 @@ const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_mo
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const viewTypeProvider = require('client_server_shared/view_types/view_type_provider');
 
-import type {BaseDataForBlocks, ViewDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, ViewDataForBlocks, BlockModelChange} from 'client/blocks/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type FieldType from 'client/blocks/sdk/models/field';
 import type RecordType from 'client/blocks/sdk/models/record';
@@ -73,6 +73,24 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             WatchableViewKeys.visibleRecordIds,
             WatchableViewKeys.allFields,
             WatchableViewKeys.visibleFields,
+        ];
+    }
+    __generateChangesForParentTableAddMultipleRecords(recordIds: Array<string>): Array<BlockModelChange> {
+        const newVisibleRecordIds = this.visibleRecordIds.concat(recordIds);
+        return [
+            {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
+        ];
+    }
+    __generateChangesForParentTableDeleteMultipleRecords(recordIds: Array<string>): Array<BlockModelChange> {
+        const recordIdsToDeleteSet = {};
+        for (const recordId of recordIds) {
+            recordIdsToDeleteSet[recordId] = true;
+        }
+        const newVisibleRecordIds = this.visibleRecordIds.filter(recordId => {
+            return !recordIdsToDeleteSet[recordId];
+        });
+        return [
+            {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
         ];
     }
     _unloadData() {

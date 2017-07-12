@@ -6,8 +6,10 @@ const Table = require('client/blocks/sdk/models/table');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const BlockMessageTypes = require('client/blocks/block_message_types');
 const permissions = require('client_server_shared/permissions');
+const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
+const getSdk = require('client/blocks/sdk/get_sdk');
 
-import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, Collaborator} from 'client/blocks/blocks_model_bridge';
 import type {AppBlanket} from 'client_server_shared/object_schemas/app_blanket_schema';
 
 // How these model classes work:
@@ -29,6 +31,7 @@ const WatchableBaseKeys = {
     permissionLevel: 'permissionLevel',
     tables: 'tables',
     activeTable: 'activeTable',
+    collaborators: 'collaborators',
 };
 
 class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKeys>> {
@@ -43,7 +46,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.
 
         liveappInterface.registerHandler(BlockMessageTypes.HostToBlock.UPDATE_MODELS, data => {
-            this._applyChanges(data.changes);
+            this.__applyChanges(data.changes);
         });
 
         Object.freeze(this);
@@ -53,6 +56,17 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     }
     get name(): string {
         return this._data.name;
+    }
+    /**
+     * This will be `null` if the block is running in a publicly shared base.
+     */
+    get currentUser(): Collaborator | null {
+        const userId = this._data.currentUserId;
+        if (!userId) {
+            return null;
+        } else {
+            return this.getCollaboratorById(userId);
+        }
     }
     get permissionLevel(): string {
         return permissions.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
@@ -75,6 +89,26 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             }
         });
         return tables;
+    }
+    get collaborators(): Array<Collaborator> {
+        const collaborators = [];
+        const appBlanket = this.__appBlanket;
+        if (appBlanket) {
+            for (const userObj of utils.iterateValues(appBlanket.userInfoById)) {
+                collaborators.push(userObjMethods.formatUserObjForPublicApiV2(userObj));
+            }
+        }
+        return collaborators;
+    }
+    getCollaboratorById(collaboratorId: string): Collaborator | null {
+        if (!this.__appBlanket) {
+            return null;
+        }
+        const userObj = this.__appBlanket.userInfoById[collaboratorId];
+        if (!userObj) {
+            return null;
+        }
+        return userObjMethods.formatUserObjForPublicApiV2(userObj);
     }
     get __appBlanket(): AppBlanket | null {
         return this._data.appBlanket;
@@ -128,8 +162,14 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
                 }
             }
         }
+        if (dirtyPaths.appBlanket) {
+            this._onChange(WatchableBaseKeys.collaborators);
+        }
+        if (dirtyPaths.cursorData) {
+            getSdk().cursor.__triggerOnChangeForDirtyPaths(dirtyPaths.cursorData);
+        }
     }
-    _applyChanges(changes: Array<{path: Array<string>, value: mixed}>) { // Internal method.
+    __applyChanges(changes: Array<{path: Array<string>, value: mixed}>) { // Internal method.
         // After applying all changes, dirtyPaths will have the same shape as
         // the subset of this._data that changed. For example, if some table's
         // name changes, dirtyPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
@@ -138,7 +178,6 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         for (const change of changes) {
             this._applyChange(change.path, change.value, dirtyPaths);
         }
-
         this._triggerOnChangeForDirtyPaths(dirtyPaths);
     }
     _applyChange(path: Array<string>, value: mixed, dirtyPathsByRef: Object) {

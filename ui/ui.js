@@ -6,14 +6,32 @@ const FieldPicker = require('client/blocks/sdk/ui/field_picker');
 const FieldPickerSynced = require('client/blocks/sdk/ui/field_picker_synced');
 const ViewPicker = require('client/blocks/sdk/ui/view_picker');
 const ViewPickerSynced = require('client/blocks/sdk/ui/view_picker_synced');
+const Input = require('client/blocks/sdk/ui/input');
 const InputSynced = require('client/blocks/sdk/ui/input_synced');
 const RadioSynced = require('client/blocks/sdk/ui/radio_synced');
 const CellRenderer = require('client/blocks/sdk/ui/cell_renderer');
 const expandRecord = require('client/blocks/sdk/ui/expand_record');
+const GlobalAlert = require('client/blocks/sdk/ui/global_alert');
 const FieldIcon = require('client/blocks/sdk/ui/field_icon');
-const Icon = require('client_server_shared/react/assets/icon');
+const Icon = require('client/blocks/sdk/ui/icon');
 const Loader = require('client/blocks/sdk/ui/loader');
-const Tooltip = require('client/react/ui/tooltip/tooltip');
+const Tooltip = require('client/react/ui/tooltip/tooltip'); // TODO(kasra): don't depend on liveapp components.
+const CollaboratorToken = require('client/blocks/sdk/ui/collaborator_token');
+const ChoiceToken = require('client/blocks/sdk/ui/choice_token');
+const colors = require('client/blocks/sdk/ui/colors');
+const colorUtils = require('client/blocks/sdk/ui/color_utils');
+const ColorPalette = require('client/blocks/sdk/ui/color_palette');
+const ColorPaletteSynced = require('client/blocks/sdk/ui/color_palette_synced');
+const ProgressBar = require('client/blocks/sdk/ui/progress_bar');
+const Button = require('client/blocks/sdk/ui/button');
+const RecordCard = require('client/blocks/sdk/ui/record_card');
+const Select = require('client/blocks/sdk/ui/select');
+const SelectSynced = require('client/blocks/sdk/ui/select_synced');
+const SelectButtons = require('client/blocks/sdk/ui/select_buttons');
+const SelectButtonsSynced = require('client/blocks/sdk/ui/select_buttons_synced');
+const Modal = require('client/blocks/sdk/ui/modal');
+const Toggle = require('client/blocks/sdk/ui/toggle');
+const ToggleSynced = require('client/blocks/sdk/ui/toggle_synced');
 const {
     loadCSSFromString,
     loadCSSFromURLAsync,
@@ -32,6 +50,7 @@ const UI = Object.freeze({
     FieldPickerSynced,
     ViewPicker,
     ViewPickerSynced,
+    Input,
     InputSynced,
     RadioSynced,
     CellRenderer,
@@ -39,8 +58,23 @@ const UI = Object.freeze({
     Icon,
     Loader,
     Tooltip,
+    CollaboratorToken,
+    ChoiceToken,
+    colors,
+    colorUtils,
+    ColorPalette,
+    ColorPaletteSynced,
+    ProgressBar,
+    Button,
+    RecordCard,
+    Select,
+    SelectSynced,
+    SelectButtons,
+    SelectButtonsSynced,
+    Modal,
+    Toggle,
+    ToggleSynced,
+    globalAlert: new GlobalAlert(),
 });
-
-export type UIType = typeof UI;
 
 module.exports = UI;

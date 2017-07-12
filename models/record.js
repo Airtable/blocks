@@ -5,14 +5,14 @@ const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const Field = require('client/blocks/sdk/models/field');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
-const ApiDisplayFormats = require('client_server_shared/api_display_formats');
-const liveappInterface = require('client/blocks/sdk/liveapp_interface');
+const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 
 import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 
 const WatchableRecordKeys = {
     primaryCellValue: 'primaryCellValue',
+    commentCount: 'commentCount',
     // TODO(kasra): these keys don't have matching getters (not that they should
     // it's just inconsistent...)
     cellValues: 'cellValues',
@@ -57,30 +57,18 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         return rawCellValue;
     }
     _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
-        let field: Field | null;
-        if (fieldOrFieldIdOrFieldName instanceof Field) {
-            field = fieldOrFieldIdOrFieldName;
-        } else {
-            field = this.parentTable.getFieldById(fieldOrFieldIdOrFieldName) ||
-                this.parentTable.getFieldByName(fieldOrFieldIdOrFieldName);
-        }
-        return field;
+        return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
     getCellValue(fieldOrFieldIdOrFieldName: Field | string): mixed {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
+        invariant(field.parentTable.id === this.parentTable.id, 'Field must have same parent table as record');
         const rawCellValue = this.__getRawCellValue(field.id);
 
-        const publicCellValue = columnTypeProvider.formatCellValueForPublicApi(
-            rawCellValue,
-            field.__getRawType(),
-            field.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appBlanket,
-            ApiDisplayFormats.API2,
-        );
+        const publicCellValue = cellValueUtils.getPublicCellValueFromPrivateCellValue(rawCellValue, field);
 
-        if (typeof publicCellValue === 'object') {
+        if (typeof publicCellValue === 'object' && publicCellValue !== null) {
             // Copy non-primitives.
             // TODO(kasra): maybe freezeDeep instead?
             return utils.cloneDeep(publicCellValue);
@@ -111,47 +99,32 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     get primaryCellValueAsString(): string {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
-    setCellValue(fieldOrFieldIdOrFieldName: Field | string, cellValue: mixed) {
-        if (this.parentTable.isDeleted) {
-            throw new Error('Table does not exist');
-        }
-        if (this.isDeleted) {
-            throw new Error('Record does not exist');
-        }
-
+    setCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed) {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
-        const fieldId = field.id;
 
-        // TODO(kasra): this optimistically updates the cell value...
-        // Liveapp will also do the same thing. This needs actual validation and
-        // error handling.
-        // TODO(kasra): check max cell length for text and multiline text, and
-        // limits for other cell types.
-        const data = this._data;
-        if (!data.cellValuesByFieldId) {
-            data.cellValuesByFieldId = {};
-        }
-        data.cellValuesByFieldId[fieldId] = cellValue;
-
-        // Trigger cellValue change events.
-        this.__triggerOnChangeForDirtyPaths({
-            cellValuesByFieldId: {
-                [fieldId]: true,
-            },
+        this.setCellValues({
+            [field.id]: publicCellValue,
         });
-
-        utils.fireAndForgetPromise(liveappInterface.setCellValueAsync.bind(
-            liveappInterface,
-            this.parentTable.id,
-            this.id,
-            fieldId,
-            cellValue,
-        ));
+    }
+    setCellValues(cellValuesByFieldIdOrFieldName: {[key: string]: mixed}) {
+        this.parentTable.setCellValues({
+            [this.id]: cellValuesByFieldIdOrFieldName,
+        });
+    }
+    delete() {
+        this.parentTable.deleteRecord(this);
+    }
+    get commentCount(): number {
+        return this._data.commentCount;
+    }
+    get createdTime(): Date {
+        return new Date(this._data.createdTime);
     }
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
-        const {cellValuesByFieldId} = dirtyPaths;
+        const {cellValuesByFieldId, commentCount} = dirtyPaths;
+
         if (cellValuesByFieldId && _.size(cellValuesByFieldId) > 0) {
             this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
 
@@ -160,8 +133,12 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             }
 
             for (const fieldId of utils.iterateKeys(cellValuesByFieldId)) {
-                this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, this.id);
+                this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
             }
+        }
+
+        if (commentCount) {
+            this._onChange(WatchableRecordKeys.commentCount);
         }
     }
 }

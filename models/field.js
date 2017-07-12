@@ -5,10 +5,13 @@ const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
 const Aggregators = require('client/blocks/sdk/models/aggregators');
 const liveappSummaryFunctionKeyByAggregatorKey = require('client/blocks/sdk/models/liveapp_summary_function_key_by_aggregator_key');
+const ColumnTypes = require('client_server_shared/column_types/column_types');
+const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 
 import type {BaseDataForBlocks, FieldDataForBlocks} from 'client/blocks/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type {Aggregator} from 'client/blocks/sdk/models/aggregators';
+import type {ColumnType} from 'client_server_shared/column_types/column_types';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -56,6 +59,9 @@ class Field extends AbstractModel<FieldDataForBlocks, $Keys<typeof WatchableFiel
             options: options ? utils.cloneDeep(options) : null,
         };
     }
+    get isPrimaryField(): boolean {
+        return this.id === this.parentTable.primaryField.id;
+    }
     get availableAggregators(): Array<Aggregator> {
         const possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(
             this.__getRawType(),
@@ -76,11 +82,38 @@ class Field extends AbstractModel<FieldDataForBlocks, $Keys<typeof WatchableFiel
         );
         return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
     }
-    __getRawType(): string {
+    convertStringToCellValue(string: string): mixed {
+        // TODO(jb): figure out 'cacheForBulkConversion'
+        const privateCellValue = columnTypeProvider.convertStringToCellValue(
+            string,
+            this.__getRawType(),
+            this.__getRawTypeOptions(),
+            this._parentTable._parentBase.__appBlanket,
+        );
+
+        return cellValueUtils.getPublicCellValueFromPrivateCellValue(privateCellValue, this);
+
+    }
+    __getRawType(): ColumnType {
         return this._data.type;
     }
-    __getRawTypeOptions(): any { // eslint-disable-line flowtype/no-weak-types
+    __getRawTypeOptions(): ?Object {
         return this._data.typeOptions;
+    }
+    __getRawFormulaicResultType() {
+        // Copied from liveapp column model.
+        // We don't store resultType for count, for all intents and purposes on the
+        // client side, counts should use a "number" resultType.
+        if (this.__getRawType() === ColumnTypes.COUNT) {
+            return ColumnTypes.NUMBER;
+        } else {
+            const typeOptions = this.__getRawTypeOptions();
+            if (!typeOptions || typeOptions.resultType === undefined) {
+                return null;
+            } else {
+                return typeOptions.resultType;
+            }
+        }
     }
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {

@@ -1,7 +1,7 @@
 // @flow
 function loadCSSFromString(string: string): HTMLStyleElement {
     const styleTag = document.createElement('style');
-    styleTag.innerText = string;
+    styleTag.innerHTML = string;
     document.head.appendChild(styleTag);
     return styleTag;
 }

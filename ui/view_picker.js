@@ -6,26 +6,14 @@ const getSdk = require('client/blocks/sdk/get_sdk');
 const ViewModel = require('client/blocks/sdk/models/view');
 const TableModel = require('client/blocks/sdk/models/table');
 const ApiViewTypes = require('client_server_shared/view_types/api_view_types');
+const ModelPickerSelect = require('client/blocks/sdk/ui/model_picker_select');
 
 import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
-
-type ViewPickerOptionProps = {
-    view: ViewModel,
-    isDisabled: boolean,
-};
-const _ViewPickerOption = (props: ViewPickerOptionProps) => {
-    const {view} = props;
-    return <option value={view.id} disabled={props.isDisabled}>{view.name}</option>;
-};
-const ViewPickerOption = createDataContainer(_ViewPickerOption, (props: ViewPickerOptionProps) => {
-    return [
-        {watch: props.view, key: 'name'},
-    ];
-});
 
 type ViewPickerProps = {
     table: ?TableModel,
     view: ?ViewModel,
+    shouldAllowPickingNone?: boolean,
     onChange?: (viewModel: ViewModel | null) => void,
     allowedTypes?: Array<ApiViewType>,
     placeholder?: string,
@@ -38,6 +26,7 @@ class ViewPicker extends React.Component {
     static propTypes = {
         table: React.PropTypes.instanceOf(TableModel),
         view: React.PropTypes.instanceOf(ViewModel),
+        shouldAllowPickingNone: React.PropTypes.bool,
         onChange: React.PropTypes.func,
         allowedTypes: React.PropTypes.arrayOf(React.PropTypes.oneOf(_.values(ApiViewTypes))),
         placeholder: React.PropTypes.string,
@@ -45,35 +34,39 @@ class ViewPicker extends React.Component {
         className: React.PropTypes.string,
         disabled: React.PropTypes.bool,
     };
-    static defaultProps = {
-        placeholder: 'Pick a view...',
-    };
     props: ViewPickerProps;
-    _onChange(e) {
+    _onChange: (string | null) => void;
+    constructor(props) {
+        super(props);
+        this._onChange = this._onChange.bind(this);
+    }
+    _onChange(viewId: string | null) {
         const {onChange, table} = this.props;
         if (onChange) {
-            const view = table && !table.isDeleted ? table.getViewById(e.target.value) : null;
+            const view = table && !table.isDeleted && viewId ? table.getViewById(viewId) : null;
             onChange(view);
         }
     }
-    _onViewsChanged() {
-        const {view} = this.props;
-        if (view && view.isDeleted && this.props.onChange) {
-            this.props.onChange(null);
-        }
-        this.forceUpdate();
-    }
-    _onTablesChanged() {
-        const {table} = this.props;
-        if (table && table.isDeleted && this.props.onChange) {
-            this.props.onChange(null);
-        }
-        this.forceUpdate();
-    }
     render() {
-        const {view: selectedView, table} = this.props;
+        const {
+            view: selectedView,
+            table,
+            shouldAllowPickingNone,
+            style,
+            className,
+            disabled,
+        } = this.props;
         if (!table || table.isDeleted) {
             return null;
+        }
+
+        let placeholder;
+        if (this.props.placeholder === undefined) {
+            // Let's set a good default value for the placeholder, depending
+            // on the shouldAllowPickingNone flag.
+            placeholder = shouldAllowPickingNone ? 'None' : 'Pick a view...';
+        } else {
+            placeholder = this.props.placeholder;
         }
 
         let allowedTypes = null;
@@ -83,32 +76,30 @@ class ViewPicker extends React.Component {
                 allowedTypes[allowedType] = true;
             }
         }
+        const shouldAllowPickingViewFn = view => {
+            return !allowedTypes || allowedTypes[view.type];
+        };
 
         return (
-            <select
-                value={selectedView && !selectedView.isDeleted ? selectedView.id : ''}
-                onChange={this._onChange.bind(this)}
-                style={this.props.style}
-                className={this.props.className}
-                disabled={this.props.disabled}>
-                <option value={''} disabled={true}>{this.props.placeholder}</option>
-                {table.views.map(view => {
-                    return (
-                        <ViewPickerOption
-                            key={view.id}
-                            view={view}
-                            isDisabled={allowedTypes && !allowedTypes[view.type]}
-                        />
-                    );
-                })}
-            </select>
+            <ModelPickerSelect
+                models={table.views}
+                selectedModelId={selectedView && !selectedView.isDeleted ? selectedView.id : null}
+                shouldAllowPickingModelFn={shouldAllowPickingViewFn}
+                onChange={this._onChange}
+                style={style}
+                className={className}
+                disabled={disabled}
+                placeholder={placeholder}
+                shouldAllowPickingNone={shouldAllowPickingNone}
+                modelKeysToWatch={['name']}
+            />
         );
     }
 }
 
 module.exports = createDataContainer(ViewPicker, (props: ViewPickerProps) => {
     return [
-        {watch: props.table, key: 'views', callback: ViewPicker.prototype._onViewsChanged},
-        {watch: getSdk().base, key: 'tables', callback: ViewPicker.prototype._onTablesChanged},
+        {watch: props.table, key: 'views'},
+        {watch: getSdk().base, key: 'tables'},
     ];
 });

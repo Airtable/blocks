@@ -1,90 +1,77 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const Input = require('client/blocks/sdk/ui/input');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const permissions = require('client_server_shared/permissions');
+const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
+
+const {PropTypes} = React;
+
+import type {GlobalConfigKey} from 'client/blocks/sdk/global_config';
+import type {InputValue} from 'client/blocks/sdk/ui/input';
 
 type InputSyncedProps = {
     type: ?string,
-    globalConfigKey: string,
+    globalConfigKey: GlobalConfigKey,
     placeholder?: string,
+    onChange?: InputValue => void,
     style: ?Object,
     className: ?string,
     disabled: ?boolean,
-};
-
-const validTypesSet = {
-    checkbox: true,
-    color: true,
-    date: true,
-    datetime: true,
-    'datetime-local': true,
-    email: true,
-    hidden: true,
-    month: true,
-    number: true,
-    password: true,
-    range: true,
-    search: true,
-    tel: true,
-    text: true,
-    time: true,
-    url: true,
-    week: true,
+    spellCheck: ?boolean,
 };
 
 class InputSynced extends React.Component {
     static propTypes = {
-        type: React.PropTypes.oneOf(Object.keys(validTypesSet)),
-        globalConfigKey: React.PropTypes.string.isRequired,
-        placeholder: React.PropTypes.string,
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+        type: PropTypes.oneOf(Object.keys(Input.validTypesSet)),
+        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+        placeholder: PropTypes.string,
+        onChange: PropTypes.func,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        disabled: PropTypes.bool,
+        spellCheck: PropTypes.bool,
     };
     props: InputSyncedProps;
-    _isCheckbox() {
-        return this.props.type === 'checkbox';
-    }
-    _onChange(e) {
-        const value = this._isCheckbox() ?
-            e.target.checked :
-            e.target.value;
+    _onChange: InputValue => void;
+    constructor(props: InputSyncedProps) {
+        super(props);
 
+        this._onChange = this._onChange.bind(this);
+    }
+    _onChange(value: InputValue) {
         getSdk().globalConfig.set(this.props.globalConfigKey, value);
+
+        if (this.props.onChange) {
+            this.props.onChange(value);
+        }
     }
     render() {
         const {base, globalConfig} = getSdk();
 
-        let value = globalConfig.get(this.props.globalConfigKey);
-        if (value === undefined) {
-            value = this._isCheckbox() ? false : '';
-        }
-
-        const valueObj = this._isCheckbox() ? {checked: value} : {value};
-
-        let {type} = this.props;
-        if (type === undefined || type === null || !validTypesSet[type]) {
-            type = 'text';
-        }
+        const value = globalConfig.get(this.props.globalConfigKey);
 
         return (
-            <input
-                type={type}
+            <Input
+                type={this.props.type}
+                value={value}
                 placeholder={this.props.placeholder}
                 style={this.props.style}
                 className={this.props.className}
                 disabled={this.props.disabled || base.permissionLevel === permissions.API_LEVELS.READ}
-                onChange={this._onChange.bind(this)}
-                {...valueObj}
+                onChange={this._onChange}
+                spellCheck={this.props.spellCheck}
             />
         );
     }
 }
 
+InputSynced.defaultProps = {
+    type: 'text',
+    spellCheck: true,
+};
+
 module.exports = createDataContainer(InputSynced, (props: InputSyncedProps) => {
-    return [
-        {watch: getSdk().globalConfig, key: props.globalConfigKey},
-        {watch: getSdk().base, key: 'permissionLevel'},
-    ];
+    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
 });

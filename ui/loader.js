@@ -1,5 +1,6 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+// TODO(kasra): don't depend on liveapp components.
 const _Loader = require('client_server_shared/react/ui/loader/loader');
 
 type LoaderPropTypes = {fillColor: string, scale: number};

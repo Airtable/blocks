@@ -3,9 +3,14 @@ const React = require('client/blocks/sdk/ui/react');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const permissions = require('client_server_shared/permissions');
+const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
+
+const {PropTypes} = React;
+
+import type {GlobalConfigKey} from 'client/blocks/sdk/global_config';
 
 type RadioSyncedProps = {
-    globalConfigKey: string,
+    globalConfigKey: GlobalConfigKey,
     value: string,
     style: ?Object,
     className: ?string,
@@ -14,11 +19,11 @@ type RadioSyncedProps = {
 
 class RadioSynced extends React.Component {
     static propTypes = {
-        globalConfigKey: React.PropTypes.string.isRequired,
-        value: React.PropTypes.string.isRequired,
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+        value: PropTypes.string.isRequired,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        disabled: PropTypes.bool,
     };
     props: RadioSyncedProps;
     _onChange(e) {
@@ -31,10 +36,12 @@ class RadioSynced extends React.Component {
         const {base, globalConfig} = getSdk();
         const checked = globalConfig.get(this.props.globalConfigKey) === this.props.value;
 
+        const globalConfigPathAsString = globalConfig.__formatKeyAsPath(this.props.globalConfigKey).join('~');
+        const name = `RadioSynced::${globalConfigPathAsString}`;
         return (
             <input
                 type="radio"
-                name={`RadioSynced::${this.props.globalConfigKey}`}
+                name={name}
                 value={this.props.value}
                 style={this.props.style}
                 className={this.props.className}
@@ -47,8 +54,5 @@ class RadioSynced extends React.Component {
 }
 
 module.exports = createDataContainer(RadioSynced, (props: RadioSyncedProps) => {
-    return [
-        {watch: getSdk().globalConfig, key: props.globalConfigKey},
-        {watch: getSdk().base, key: 'permissionLevel'},
-    ];
+    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
 });

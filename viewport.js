@@ -8,6 +8,7 @@ const _ = require('client_server_shared/lodash.custom');
 const WatchableViewportKeys = {
     isFullscreen: 'isFullscreen',
     size: 'size',
+    minSize: 'minSize',
 };
 
 type WatchableViewportKey = $Keys<typeof WatchableViewportKeys>;
@@ -20,6 +21,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     _isFullscreen: boolean;
     _sizeWatchCount: number;
     _onSizeChangeDebounced: Function;
+    _minSize: {width: number | null, height: number | null};
     constructor(isFullscreen: boolean) {
         super();
 
@@ -39,7 +41,15 @@ class Viewport extends Watchable<WatchableViewportKey> {
             this._onExitFullscreen();
         });
 
-        this._onSizeChangeDebounced = _.debounce(this._onSizeChange.bind(this), 200);
+        this._onSizeChangeDebounced = _.debounce(this._onSizeChange.bind(this), 200, {
+            leading: true,
+            maxWait: 1500,
+        });
+
+        this._minSize = Object.freeze({
+            width: null,
+            height: null,
+        });
     }
     enterFullscreen() {
         utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
@@ -52,6 +62,32 @@ class Viewport extends Watchable<WatchableViewportKey> {
             liveappInterface,
             BlockMessageTypes.HostMethodNames.EXIT_FULLSCREEN,
         ));
+    }
+    setMaxFullscreenSize(size: {width?: number | null, height?: number | null}) {
+        utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
+            liveappInterface,
+            BlockMessageTypes.HostMethodNames.SET_FULLSCREEN_MAX_SIZE,
+            {
+                width: size.width,
+                height: size.height,
+            },
+        ));
+    }
+    get minSize(): {width: number | null, height: number | null} {
+        return this._minSize;
+    }
+    setMinSize(size: {width?: number | null, height?: number | null}) {
+        this._minSize = Object.freeze({
+            ...this._minSize,
+            ...size,
+        });
+        this._onChange(WatchableViewportKeys.minSize);
+    }
+    get isSmallerThanMinSize(): boolean {
+        const {width, height} = this.size;
+        const isWidthTooSmall = !!this._minSize.width && this._minSize.width > width;
+        const isHeightTooSmall = !!this._minSize.height && this._minSize.height > height;
+        return isWidthTooSmall || isHeightTooSmall;
     }
     get isFullscreen(): boolean {
         return this._isFullscreen;

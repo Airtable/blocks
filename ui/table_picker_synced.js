@@ -4,11 +4,16 @@ const createDataContainer = require('client/blocks/sdk/ui/create_data_container'
 const getSdk = require('client/blocks/sdk/get_sdk');
 const TablePicker = require('client/blocks/sdk/ui/table_picker');
 const permissions = require('client_server_shared/permissions');
+const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
+
+const {PropTypes} = React;
 
 import type TableModel from 'client/blocks/sdk/models/table';
+import type {GlobalConfigKey} from 'client/blocks/sdk/global_config';
 
 type TablePickerSyncedProps = {
-    globalConfigKey: string,
+    globalConfigKey: GlobalConfigKey,
+    shouldAllowPickingNone?: boolean,
     onChange?: (tableModel: TableModel | null) => void,
     placeholder?: string,
     style: ?Object,
@@ -18,26 +23,15 @@ type TablePickerSyncedProps = {
 
 class TablePickerSynced extends React.Component {
     static propTypes = {
-        globalConfigKey: React.PropTypes.string.isRequired,
-        onChange: React.PropTypes.func,
-        placeholder: React.PropTypes.string,
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+        shouldAllowPickingNone: PropTypes.bool,
+        onChange: PropTypes.func,
+        placeholder: PropTypes.string,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        disabled: PropTypes.bool,
     };
     props: TablePickerSyncedProps;
-    componentDidMount() {
-        // It is possible that since this component was last shown, the table was deleted,
-        // so let's check for that before the initial render so we don't try to use a table
-        // that no longer exists.
-        const tableId = getSdk().globalConfig.get(this.props.globalConfigKey);
-        const table = this._getSelectedTable();
-        if (tableId && !table) {
-            // We have a tableId, but the table no longer exists, so let's just
-            // clear out the value in the globalConfig.
-            this._onChange(null);
-        }
-    }
     _onChange(table: TableModel | null) {
         const tableId = table ? table.id : null;
         getSdk().globalConfig.set(this.props.globalConfigKey, tableId);
@@ -55,6 +49,7 @@ class TablePickerSynced extends React.Component {
         return (
             <TablePicker
                 table={table}
+                shouldAllowPickingNone={this.props.shouldAllowPickingNone}
                 onChange={this._onChange.bind(this)}
                 placeholder={this.props.placeholder}
                 style={this.props.style}
@@ -67,7 +62,7 @@ class TablePickerSynced extends React.Component {
 
 module.exports = createDataContainer(TablePickerSynced, (props: TablePickerSyncedProps) => {
     return [
-        {watch: getSdk().globalConfig, key: props.globalConfigKey},
-        {watch: getSdk().base, key: 'permissionLevel'},
+        {watch: getSdk().base, key: 'tables'},
+        ...globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey),
     ];
 });

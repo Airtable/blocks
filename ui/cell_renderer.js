@@ -4,34 +4,75 @@ const createDataContainer = require('client/blocks/sdk/ui/create_data_container'
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
 const Record = require('client/blocks/sdk/models/record');
 const Field = require('client/blocks/sdk/models/field');
+const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 
 type CellRendererProps = {
-    record: Record,
+    record?: Record,
+    cellValue?: mixed,
     field: Field,
+    className?: string,
     style?: Object,
 };
 
 class CellRenderer extends React.Component {
     static propTypes = {
-        record: React.PropTypes.instanceOf(Record).isRequired,
+        // NOTE: must pass in one of record or cellValue. It will default to using
+        // the record if one is passed in, and cellValue otherwise.
+        record: React.PropTypes.instanceOf(Record),
+        cellValue: React.PropTypes.any,
         field: React.PropTypes.instanceOf(Field).isRequired,
+        className: React.PropTypes.string,
         style: React.PropTypes.object,
     };
     props: CellRendererProps;
 
-    render() {
-        const {record, field} = this.props;
+    constructor(props: CellRendererProps) {
+        super(props);
 
-        if (record.isDeleted || field.isDeleted) {
+        this._validateProps(props);
+    }
+    componentWillReceiveProps(nextProps: CellRendererProps) {
+        this._validateProps(nextProps);
+    }
+    _validateProps(props: CellRendererProps) {
+        if (props.record && !props.record.isDeleted && !props.field.isDeleted && props.record.parentTable.id !== props.field.parentTable.id) {
+            throw new Error('CellRenderer: record and field must have the same parent table');
+        }
+    }
+    render() {
+        const {record, cellValue, field} = this.props;
+
+        if (field.isDeleted) {
             return null;
         }
 
-        const rawCellValue = record.__getRawCellValue(field.id);
+        let privateCellValue;
+        if (record) {
+            if (cellValue !== undefined) {
+                console.warn('CellRenderer was given both record and cellValue, choosing to render record value'); // eslint-disable-line
+            }
+
+            if (record.isDeleted) {
+                return null;
+            }
+
+            privateCellValue = record.__getRawCellValue(field.id);
+        } else {
+            // NOTE: this will not work if you want to render a cell value for
+            // foreign record, single/multi select, or single/multi collaborator
+            // fields and the cell value is not *currently* valid for that field.
+            // i.e. if you want to render a foreign record for a record that
+            // does not yet exist, this will throw.
+            // TODO: handle "preview" cell values that are not yet valid in the given field
+            // but that *could* be.
+            privateCellValue = cellValueUtils.parsePublicCellValueForUpdate(cellValue, null, field);
+        }
+
         const rawHtml = columnTypeProvider.renderReadModeCellValue(
-            rawCellValue,
+            privateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            record.parentTable.parentBase.__appBlanket
+            field.parentTable.parentBase.__appBlanket
         );
         const attributes: Object = {
             'data-columntype': field.__getRawType(),
@@ -44,7 +85,7 @@ class CellRenderer extends React.Component {
             <div
                 style={this.props.style}
                 {...attributes}
-                className="cell read"
+                className={`cell read ${this.props.className || ''}`}
                 dangerouslySetInnerHTML={{
                     __html: rawHtml,
                 }}
