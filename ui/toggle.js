@@ -89,7 +89,7 @@ class Toggle extends React.Component {
                 }, className)}
                 style={style}>
                 <div
-                    className={classNames('pill flex animate', {
+                    className={classNames('pill flex animate flex-none', {
                         'justify-start darken2': !value,
                         'justify-end': value,
                         [toggleClassNameForTheme]: value,
@@ -105,7 +105,7 @@ class Toggle extends React.Component {
                     />
                 </div>
                 {label &&
-                    <div className="ml1 normal text-dark">{label}</div>
+                    <div className="flex-auto ml1 normal text-dark">{label}</div>
                 }
             </div>
         );

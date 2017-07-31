@@ -12,10 +12,12 @@ const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const permissions = require('client_server_shared/permissions');
 const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
+const airtableUrls = require('client_server_shared/airtable_urls');
 
 import type {BaseDataForBlocks, TableDataForBlocks} from 'client/blocks/blocks_model_bridge';
 import type Base from 'client/blocks/sdk/models/base';
 import type {ApiViewType as ViewType} from 'client_server_shared/view_types/api_view_types';
+import type {RecordDef} from 'client/blocks/sdk/models/record';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -71,6 +73,11 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     }
     get name(): string {
         return this._data.name;
+    }
+    get url(): string {
+        return airtableUrls.getUrlForTable(this.id, {
+            absolute: true,
+        });
     }
     get primaryField(): Field {
         const primaryField = this.getFieldById(this._data.primaryFieldId);
@@ -176,7 +183,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this._recordModelsById[recordId];
         }
     }
-    setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[key: string]: {[key: string]: mixed}}) {
+    setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[key: string]: RecordDef}) {
         if (this.isDeleted) {
             throw new Error('Table does not exist');
         }
@@ -222,12 +229,12 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             privateCellValuesByRecordIdThenFieldId,
         );
     }
-    createRecord(cellValuesByFieldIdOrFieldName: ?{[key: string]: mixed}): Record {
+    createRecord(cellValuesByFieldIdOrFieldName: ?RecordDef): Record {
         const recordDef = cellValuesByFieldIdOrFieldName || {};
         const records = this.createRecords([recordDef]);
         return records[0];
     }
-    createRecords(recordDefsOrNumberOfRecords: Array<{[key: string]: mixed}> | number): Array<Record> {
+    createRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): Array<Record> {
         if (getSdk().base.permissionLevel === permissions.API_LEVELS.READ) {
             throw new Error('User does not have permission to create records');
         }

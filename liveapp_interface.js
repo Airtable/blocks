@@ -7,6 +7,7 @@ const invariant = require('invariant');
 import type {RecordDataForBlocks} from 'client/blocks/blocks_model_bridge';
 import type {BlockToHostMessageType, HostToBlockMessageType, HostMethodName} from 'client/blocks/block_message_types';
 import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
+import type {RecordDef} from 'client/blocks/sdk/models/record';
 
 // TODO(kasra): update this once blocks are running on a separate domain,
 // since window.parent.window.location won't be available.
@@ -25,7 +26,7 @@ type BatchUpdateType = 'SET_CELL_VALUES' | 'CREATE_RECORDS' | 'DELETE_RECORDS' |
 type BatchUpdate =
     {updateType: 'SET_CELL_VALUES', args: {
         tableId: string,
-        cellValuesByRecordIdThenFieldId: {[key: string]: {[key: string]: mixed}},
+        cellValuesByRecordIdThenFieldId: {[key: string]: RecordDef},
     }} |
     {updateType: 'CREATE_RECORDS', args: {
         tableId: string,

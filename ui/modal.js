@@ -50,13 +50,11 @@ class Modal extends React.Component {
         const container = this._container;
         invariant(container, 'No modal container');
 
-        container.className = 'fixed all-0';
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';
         document.body.appendChild(container);
 
         this._refreshContainer();
-        this._bindToInputEvents();
 
         // Focus the container. Next time the user presses tab, it will focus the first
         // focusable element in the modal.
@@ -66,18 +64,16 @@ class Modal extends React.Component {
         this._refreshContainer();
     }
     componentWillUnmount() {
-        this._unbindFromInputEvents();
-
         const container = this._container;
         invariant(container, 'No modal container');
         ReactDOM.unmountComponentAtNode(container);
         container.remove();
     }
     _refreshContainer() {
-        const backgroundClassName = classNames('absolute all-0 darken3 flex items-center noevents justify-center', this.props.backgroundClassName);
+        const backgroundClassName = classNames('fixed all-0 darken3 flex items-center justify-center', this.props.backgroundClassName);
         const backgroundStyle = this.props.backgroundStyle;
 
-        const contentClassName = classNames('white rounded-big overflow-auto light-scrollbar events width-full stroked1 animate-bounce-in', this.props.className);
+        const contentClassName = classNames('white rounded-big overflow-auto light-scrollbar width-full stroked1 animate-bounce-in', this.props.className);
         const contentStyle = {
             maxWidth: '95vw',
             maxHeight: '95vh',
@@ -89,25 +85,16 @@ class Modal extends React.Component {
         // editor.
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
-            <div className={backgroundClassName} style={backgroundStyle}>
+            <div
+                ref={el => this._background = el}
+                className={backgroundClassName}
+                style={backgroundStyle}
+                onMouseDown={this._onMouseDown}
+                onMouseUp={this._onMouseUp}>
                 <div className={contentClassName} style={contentStyle}>{this.props.children}</div>
             </div>,
             this._container,
         );
-    }
-    _bindToInputEvents() {
-        const container = this._container;
-        invariant(container, 'No modal container');
-
-        container.addEventListener('mousedown', this._onMouseDown);
-        container.addEventListener('mouseup', this._onMouseUp);
-    }
-    _unbindFromInputEvents() {
-        const container = this._container;
-        invariant(container, 'No modal container');
-
-        container.removeEventListener('mousedown', this._onMouseDown);
-        container.removeEventListener('mouseup', this._onMouseUp);
     }
     _onMouseDown(e: Event) {
         if (this._shouldClickingOnElementCloseModal(e.target)) {
@@ -121,7 +108,7 @@ class Modal extends React.Component {
         this._mouseDownOutsideModal = false;
     }
     _shouldClickingOnElementCloseModal(element: EventTarget) {
-        return element === this._container;
+        return element === this._background;
     }
     render() {
         return null;

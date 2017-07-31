@@ -11,8 +11,12 @@ const attachmentPreviewRenderer = require('client_server_shared/read_mode_render
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const classNames = require('classnames');
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
+const expandRecord = require('client/blocks/sdk/ui/expand_record');
+const keyCodeUtils = require('client/mylib/key_code_utils');
 
 const {PropTypes} = React;
+
+import type {RecordDef} from 'client/blocks/sdk/models/record';
 
 const CARD_PADDING = 12;
 
@@ -71,8 +75,8 @@ CellValueAndFieldLabel.propTypes = {
 };
 
 type RecordCardProps = {
-    record?: RecordModel,
-    cellValuesByFieldId?: {[key: string]: mixed},
+    record?: RecordModel | RecordDef,
+    cellValuesByFieldId?: RecordDef,
     fields?: Array<FieldModel>,
     view?: ViewModel,
     attachmentCoverField?: FieldModel,
@@ -109,9 +113,11 @@ const getFieldResultType = (field: FieldModel): string => {
 };
 
 class RecordCard extends React.Component {
+    _onClick: (e: SyntheticMouseEvent) => void;
     constructor(props: RecordCardProps) {
         super(props);
 
+        this._onClick = this._onClick.bind(this);
         this._validateProps(props);
     }
     componentWillReceiveProps(nextProps: RecordCardProps) {
@@ -120,7 +126,7 @@ class RecordCard extends React.Component {
     _validateProps(props: RecordCardProps) {
         const {record, cellValuesByFieldId, view, fields, attachmentCoverField} = props;
 
-        if (record && record.isDeleted) {
+        if (record && record instanceof RecordModel && record.isDeleted) {
             throw new Error('Record is deleted');
         }
 
@@ -128,13 +134,13 @@ class RecordCard extends React.Component {
             throw new Error('Must provide either record or cellValuesByFieldId');
         }
 
-        if (record && attachmentCoverField) {
+        if (record && record instanceof RecordModel && attachmentCoverField) {
             if (attachmentCoverField.parentTable.id !== record.parentTable.id) {
                 throw new Error('Attachment cover field must have the same parent table as record');
             }
         }
 
-        if (record && fields) {
+        if (record && record instanceof RecordModel && fields) {
             for (const field of fields) {
                 if (!field.isDeleted && field.parentTable.id !== record.parentTable.id) {
                     throw new Error('All fields must have the same parent table as record');
@@ -142,9 +148,27 @@ class RecordCard extends React.Component {
             }
         }
 
-        if (record && view && !view.isDeleted) {
+        if (record && record instanceof RecordModel && view && !view.isDeleted) {
             if (view.parentTable.id !== record.parentTable.id) {
                 throw new Error('View must have the same parent table as record');
+            }
+        }
+    }
+    _onClick(e: SyntheticMouseEvent) {
+        if (this.props.onClick) {
+            this.props.onClick(e);
+        } else if (this.props.onClick === undefined) {
+            // NOTE: `null` disables the default click behavior.
+
+            const {record} = this.props;
+            const recordModel = record && record instanceof RecordModel ? record : null;
+            if (recordModel) {
+                if (keyCodeUtils.isCommandModifierKeyEvent(e) || e.shiftKey) {
+                    // No-op, let the <a> tag handle opening in new tab or window.
+                } else {
+                    e.preventDefault();
+                    expandRecord(recordModel);
+                }
             }
         }
     }
@@ -174,12 +198,20 @@ class RecordCard extends React.Component {
     _isAttachment(field: FieldModel): boolean {
         return getFieldResultType(field) === ApiFieldTypes.MULTIPLE_ATTACHMENTS;
     }
-    _getRawCellValue(field: FieldModel): mixed {
+    _getRecordDef(): RecordDef {
         const {record, cellValuesByFieldId} = this.props;
-        if (record) {
+        if (record && record instanceof RecordModel) {
+            throw new Error('No recordDef, since record is a record model');
+        }
+        return record || cellValuesByFieldId;
+    }
+    _getRawCellValue(field: FieldModel): mixed {
+        const {record} = this.props;
+        if (record && record instanceof RecordModel) {
             return record.__getRawCellValue(field.id);
         } else {
-            const publicCellValue = cellValuesByFieldId[field.id];
+            const recordDef = this._getRecordDef();
+            const publicCellValue = recordDef[field.id];
             return cellValueUtils.parsePublicCellValueForUpdate(publicCellValue, null, field);
         }
     }
@@ -201,7 +233,7 @@ class RecordCard extends React.Component {
             fieldsToUse = fields.filter(field => !field.isDeleted);
         } else if (view && !view.isDeleted) {
             fieldsToUse = view.visibleFields;
-        } else if (record && !record.isDeleted) {
+        } else if (record && record instanceof RecordCard && !record.isDeleted) {
             const parentTable = record.parentTable;
             fieldsToUse = parentTable.fields;
         } else {
@@ -252,8 +284,26 @@ class RecordCard extends React.Component {
 
         return widthAndFieldIdArray;
     }
+    _getRecordModel(): RecordModel | null {
+        const {record} = this.props;
+        if (record && record instanceof RecordModel) {
+            return record;
+        } else {
+            return null;
+        }
+    }
     _renderCellsAndFieldLabels(attachmentSize: number, fieldsToUse: Array<FieldModel>) {
-        const {record, cellValuesByFieldId, width} = this.props;
+        const {record, width} = this.props;
+
+        let recordModel;
+        let recordDef;
+        if (record && record instanceof RecordModel) {
+            recordModel = record;
+            recordDef = null;
+        } else {
+            recordModel = null;
+            recordDef = this._getRecordDef();
+        }
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
         const widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
@@ -264,8 +314,8 @@ class RecordCard extends React.Component {
             return (
                 <CellValueAndFieldLabel
                     key={field.id}
-                    record={record}
-                    cellValue={cellValuesByFieldId ? cellValuesByFieldId[field.id] : undefined}
+                    record={recordModel}
+                    cellValue={recordDef ? recordDef[field.id] : undefined}
                     field={field}
                     width={widthAndFieldId.width}
                 />
@@ -273,13 +323,13 @@ class RecordCard extends React.Component {
         });
     }
     render() {
-        const {record, cellValuesByFieldId, width, height, onClick, className, style} = this.props;
+        const {record, cellValuesByFieldId, width, height, onClick, onMouseEnter, onMouseLeave, className, style} = this.props;
 
         if (record && cellValuesByFieldId) {
             console.warn('RecordCard: given record and cellValuesByFieldId, choosing to render based on record'); // eslint-disable-line no-console
         }
 
-        if (record && record.isDeleted) {
+        if (record && record instanceof RecordModel && record.isDeleted) {
             return null;
         }
 
@@ -288,9 +338,12 @@ class RecordCard extends React.Component {
         const attachmentObj = this._getAttachmentCover(fieldsToUse);
         const hasAttachment = !!attachmentObj;
 
-        const containerClasses = classNames('white rounded relative block overflow-hidden cardBoxShadow', className, {
-            pointer: !!onClick,
-        });
+        const hasOnClick = !!onClick || !!this._getRecordModel();
+
+        const containerClasses = classNames('white rounded relative block overflow-hidden', {
+            'pointer cardBoxShadow': !hasOnClick,
+            stroked1: hasOnClick,
+        }, className);
 
         // use height as size in order to get square attachment
         const attachmentSize = hasAttachment ? height : 0;
@@ -315,11 +368,14 @@ class RecordCard extends React.Component {
         let isUnnamed;
 
         let primaryCellValueAsString;
-        if (record) {
+        let recordUrl;
+        if (record && record instanceof RecordModel) {
+            recordUrl = record.url;
             primaryCellValueAsString = record.primaryCellValueAsString;
         } else {
+            const recordDef = this._getRecordDef();
             const primaryField = allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
-            primaryCellValueAsString = primaryField ? cellValuesByFieldId[primaryField.id] : null;
+            primaryCellValueAsString = primaryField ? recordDef[primaryField.id] : null;
         }
         if (h.utils.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
             primaryValue = 'Unnamed record';
@@ -338,10 +394,13 @@ class RecordCard extends React.Component {
         };
 
         return (
-            <div
+            <a
+                href={onClick === undefined && recordUrl ? recordUrl : undefined}
                 className={containerClasses}
                 style={containerStyles}
-                onClick={onClick}>
+                onClick={this._onClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}>
                 <div className="absolute top-0 bottom-0 left-0 appFontColor" style={{
                     right: attachmentSize,
                     background: 'transparent',
@@ -356,14 +415,19 @@ class RecordCard extends React.Component {
                     </div>
                 </div>
                 <div dangerouslySetInnerHTML={{__html: imageHtml}} />
-            </div>
+            </a>
         );
     }
 }
 
 RecordCard.propTypes = {
-    // Should provide one of record and cellValuesByFieldId
-    record: PropTypes.instanceOf(RecordModel),
+    // Record can either be a record model or a record def (cellValuesByFieldId)
+    record: PropTypes.oneOfType([
+        PropTypes.instanceOf(RecordModel),
+        PropTypes.object,
+    ]),
+    // TODO(jb): remove this after the next deploy, since you can now pass a record
+    // def through the record prop.
     cellValuesByFieldId: PropTypes.object,
 
     // Should provide one of fields and view
@@ -380,6 +444,9 @@ RecordCard.propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
     onClick: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
+    // TODO: add all other mouse events: https://facebook.github.io/react/docs/events.html#mouse-events
     className: PropTypes.string,
     style: PropTypes.object,
 };
@@ -392,12 +459,21 @@ RecordCard.defaultProps = {
 };
 
 module.exports = createDataContainer(RecordCard, (props: RecordCardProps) => {
+    const recordModel = props.record && props.record instanceof RecordModel ? props.record : null;
+    let parentTable;
+    if (recordModel) {
+        parentTable = recordModel.parentTable;
+    } else if (props.fields && props.fields.length > 0) {
+        parentTable = props.fields[0].parentTable;
+    } else if (props.view) {
+        parentTable = props.view.parentTable;
+    }
     return [
-        {watch: props.record, key: 'primaryCellValue'},
+        {watch: recordModel, key: 'primaryCellValue'},
 
         // It's safe to watch the record's parentTable since a record's
         // parent table never changes.
-        props.record && {watch: props.record.parentTable, key: 'fields'},
+        {watch: parentTable, key: 'fields'},
         {watch: props.view, key: 'visibleFields'},
     ];
 });

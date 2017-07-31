@@ -50,7 +50,12 @@ class InputSynced extends React.Component {
     render() {
         const {base, globalConfig} = getSdk();
 
-        const value = globalConfig.get(this.props.globalConfigKey);
+        let value = globalConfig.get(this.props.globalConfigKey);
+        if (value === null) {
+            // If an input gets "null" for value, React treats it as uncontrolled
+            // and will throw warnings when it becomes controlled.
+            value = '';
+        }
 
         return (
             <Input

@@ -66,7 +66,7 @@ const publicCellValueUtils = {
     },
     _validateLinkedRecordCellValueForUpdate(newPublicCellValue: mixed, field: Field): ValidationResult {
         // Special case foreign records to enforce that the foreign table is
-        // loaded. This let's us validate recordIds and names against the foreign
+        // loaded. This let's us validate recordIds against the foreign
         // table before hitting the server.
 
         if (newPublicCellValue === null || newPublicCellValue === undefined) {
@@ -114,12 +114,15 @@ const publicCellValueUtils = {
 
             const foreignRecord = table.getRecordById(foreignRecordId);
             invariant(foreignRecord, `Foreign record does not exist for id: ${foreignRecordId}`);
-            if (foreignRecordObj.name === undefined) {
-                // Doesn't have a name prop, so let's fill that in with the record's name.
-                foreignRecordObj.name = foreignRecord.primaryCellValueAsString;
-            } else if (foreignRecordObj.name !== foreignRecord.primaryCellValueAsString) {
-                throw new Error('Invalid cell value: Cannot update linked record name');
-            }
+
+            // Ignore whatever `name` we were given (if any) and overwrite it
+            // with the record's primary cell value. The `name` is effectively
+            // read-only (i.e. you can't update a record primary cell value through
+            // it's record link obj). We could assert that the name doesn't change,
+            // but the strictness is annoying (e.g. if you generate an updated cell value,
+            // then the record's primary cell value changes before you run it, it's better
+            // for it to succeed than to throw an error).
+            foreignRecordObj.name = foreignRecord.primaryCellValueAsString;
         }
         return newPublicCellValue;
     },

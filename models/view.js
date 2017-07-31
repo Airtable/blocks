@@ -4,6 +4,7 @@ const utils = require('client/blocks/sdk/utils');
 const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data.js');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const viewTypeProvider = require('client_server_shared/view_types/view_type_provider');
+const airtableUrls = require('client_server_shared/airtable_urls');
 
 import type {BaseDataForBlocks, ViewDataForBlocks, BlockModelChange} from 'client/blocks/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
@@ -59,6 +60,11 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     get type(): ApiViewType {
         return viewTypeProvider.getApiViewType(this._data.type);
+    }
+    get url(): string {
+        return airtableUrls.getUrlForView(this.id, this.parentTable.id, {
+            absolute: true,
+        });
     }
     async _loadDataAsync(): Promise<Array<WatchableViewKey>> {
         const [viewData] = await Promise.all([

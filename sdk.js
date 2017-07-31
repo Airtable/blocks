@@ -15,6 +15,7 @@ const BlockWrapperComponent = require('client/blocks/sdk/ui/block_wrapper_compon
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const {HostMethodNames} = require('client/blocks/block_message_types');
 const utils = require('client/blocks/sdk/utils');
+const SettingsButton = require('client/blocks/sdk/settings_button');
 
 import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge';
 import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
@@ -36,6 +37,7 @@ class BlockSdk {
     runInfo: RunInfo;
     cursor: Cursor;
     UI: typeof UI;
+    settingsButton: SettingsButton;
     constructor(args: {
         initialKvValuesByKey: {[key: string]: BlockKvValue},
         isDevelopmentMode: boolean,
@@ -61,6 +63,7 @@ class BlockSdk {
         this.viewport = new Viewport(args.isFullscreen);
         this.cursor = new Cursor(args.baseData);
         this.UI = UI;
+        this.settingsButton = new SettingsButton();
 
         this.runInfo = Object.freeze({
             isFirstRun: args.isFirstRun,

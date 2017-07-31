@@ -6,9 +6,14 @@ const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const Field = require('client/blocks/sdk/models/field');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
+const airtableUrls = require('client_server_shared/airtable_urls');
+const Sorter = require('client_server_shared/filter_and_sort/sorter');
 
 import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
+
+// A record def is a cellValuesByFieldId object.
+export type RecordDef = {[key: string]: mixed};
 
 const WatchableRecordKeys = {
     primaryCellValue: 'primaryCellValue',
@@ -26,6 +31,42 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableRecordKeys, key) ||
             utils.startsWith(key, WatchableCellValueInFieldKeyPrefix);
+    }
+    static sortRecords(records: Array<Record>, sortConfigs: Array<{field: string, direction?: 'asc' | 'desc'}>): Array<Record> {
+        if (records.length === 0 || sortConfigs.length === 0) {
+            return records;
+        }
+        const table = records[0].parentTable;
+        const sorter = new Sorter({
+            rowsArray: records.map(record => {
+                const data = record._data;
+                return {
+                    id: data.id,
+                    createdTime: data.createdTime,
+                    cellValuesByColumnId: data.cellValuesByFieldId,
+                };
+            }),
+            columnsArray: table.fields.map(field => {
+                return {
+                    id: field.id,
+                    type: field.__getRawType(),
+                    typeOptions: field.__getRawTypeOptions(),
+                };
+            }),
+            sorts: sortConfigs.map(sortConfig => {
+                const field = table.__getFieldMatching(sortConfig.field);
+                if (!field) {
+                    throw new Error('Unknown field for sorting: ' + sortConfig.field);
+                }
+                return {
+                    columnId: field.id,
+                    ascending: sortConfig.direction === undefined || sortConfig.direction === 'asc',
+                };
+            }),
+            appBlanket: table.parentBase.__appBlanket,
+        });
+        const sortedRecords = sorter.getSortedRowIds().map(recordId => table.getRecordById(recordId));
+        return sortedRecords;
     }
     _parentTable: TableType;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, recordId: string) {
@@ -93,6 +134,11 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             );
         }
     }
+    get url(): string {
+        return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
+            absolute: true,
+        });
+    }
     get primaryCellValue(): mixed {
         return this.getCellValue(this.parentTable.primaryField);
     }
@@ -108,7 +154,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             [field.id]: publicCellValue,
         });
     }
-    setCellValues(cellValuesByFieldIdOrFieldName: {[key: string]: mixed}) {
+    setCellValues(cellValuesByFieldIdOrFieldName: RecordDef) {
         this.parentTable.setCellValues({
             [this.id]: cellValuesByFieldIdOrFieldName,
         });
