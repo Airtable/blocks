@@ -1,5 +1,6 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const colorUtils = require('client/blocks/sdk/ui/color_utils');
 const Icon = require('client/blocks/sdk/ui/icon');
 const classNames = require('classnames');
@@ -10,14 +11,14 @@ const classNames = require('classnames');
 
 class ColorPalette extends React.Component {
     static propTypes = {
-        color: React.PropTypes.string,
-        allowedColors: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-        onChange: React.PropTypes.func,
-        squareSize: React.PropTypes.number,
-        squareMargin: React.PropTypes.number,
-        className: React.PropTypes.string,
-        style: React.PropTypes.object,
-        disabled: React.PropTypes.bool,
+        color: PropTypes.string,
+        allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
+        onChange: PropTypes.func,
+        squareSize: PropTypes.number,
+        squareMargin: PropTypes.number,
+        className: PropTypes.string,
+        style: PropTypes.object,
+        disabled: PropTypes.bool,
     };
     static defaultProps = {
         squareSize: 32,

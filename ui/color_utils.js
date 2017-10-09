@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u, _} = require('client_server_shared/hu_');
 const liveappColors = require('client_server_shared/colors');
 const colors = require('client/blocks/sdk/ui/colors');
 
@@ -34,7 +34,7 @@ const colorUtils = {
         // Bright, Dark1 and no suffix colors use light text.
         // NOTE: use shouldUseDarkText instead of shouldUseLightText just to make
         // checking the suffix easier, since no suffix uses light text.
-        const shouldUseDarkText = _.some(['Light1', 'Light2'], suffix => {
+        const shouldUseDarkText = u.some(['Light1', 'Light2'], suffix => {
             return _.endsWith(color, suffix);
         });
         return !shouldUseDarkText;

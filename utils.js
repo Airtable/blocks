@@ -3,21 +3,21 @@ import typeof Lodash from 'lodash';
 const _: Lodash = require('client_server_shared/lodash.custom');
 
 class Utils {
-    *iterateKeys(obj: {[key: string]: any}): Iterable<string> { // eslint-disable-line flowtype/no-weak-types
+    *iterateKeys(obj: {[string]: any}): Iterable<string> { // eslint-disable-line flowtype/no-weak-types
         for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
                 yield key;
             }
         }
     }
-    *iterateValues<T>(obj: {[key: string]: T}): Iterable<T> {
+    *iterateValues<T>(obj: {[string]: T}): Iterable<T> {
         for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
                 yield obj[key];
             }
         }
     }
-    *iterate<T>(obj: {[key: string]: T}): Iterable<[T, string]> {
+    *iterate<T>(obj: {[string]: T}): Iterable<[T, string]> {
         for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
                 yield [obj[key], key];
@@ -64,7 +64,7 @@ class Utils {
         }
         return true;
     }
-    isEnumValue(enumObj: {[key: string]: string}, valueToCheck: string): boolean {
+    isEnumValue(enumObj: {[string]: string}, valueToCheck: string): boolean {
         for (const value of this.iterateValues(enumObj)) {
             if (value === valueToCheck) {
                 return true;

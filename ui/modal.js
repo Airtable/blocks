@@ -1,11 +1,10 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
 const ReactDOM = require('client/blocks/sdk/ui/react-dom');
+const PropTypes = require('prop-types');
 const Icon = require('client/blocks/sdk/ui/icon');
 const classNames = require('classnames');
 const invariant = require('invariant');
-
-const {PropTypes} = React;
 
 type ModalPropTypes = {
     onClose?: Function,
@@ -25,7 +24,7 @@ class Modal extends React.Component {
     };
     // automatically pass onClose to any descendants that are Modal.CloseButton
     static childContextTypes = {
-        onModalClose: React.PropTypes.func,
+        onModalClose: PropTypes.func,
     };
     _container: null | HTMLElement;
     _mouseDownOutsideModal: boolean;
@@ -52,6 +51,11 @@ class Modal extends React.Component {
 
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';
+        // If we don't set `position: fixed`, the outline and box-shadow
+        // of elements that are in theory underneath this element will cover
+        // up the modal.
+        container.style.position = 'fixed';
+        invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
         this._refreshContainer();
@@ -121,7 +125,7 @@ class ModalCloseButton extends React.Component {
         style: PropTypes.object,
     };
     static contextTypes = {
-        onModalClose: React.PropTypes.func,
+        onModalClose: PropTypes.func,
     };
     render() {
         return (

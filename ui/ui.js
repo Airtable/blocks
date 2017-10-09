@@ -22,6 +22,8 @@ const colors = require('client/blocks/sdk/ui/colors');
 const colorUtils = require('client/blocks/sdk/ui/color_utils');
 const ColorPalette = require('client/blocks/sdk/ui/color_palette');
 const ColorPaletteSynced = require('client/blocks/sdk/ui/color_palette_synced');
+const FieldTokenizedTextArea = require('client/blocks/sdk/ui/field_tokenized_text_area');
+const FieldTokenizedTextAreaSynced = require('client/blocks/sdk/ui/field_tokenized_text_area_synced');
 const ProgressBar = require('client/blocks/sdk/ui/progress_bar');
 const Button = require('client/blocks/sdk/ui/button');
 const RecordCard = require('client/blocks/sdk/ui/record_card');
@@ -55,6 +57,8 @@ const UI = Object.freeze({
     FieldPickerSynced,
     ViewPicker,
     ViewPickerSynced,
+    FieldTokenizedTextArea,
+    FieldTokenizedTextAreaSynced,
     Input,
     InputSynced,
     RadioSynced,

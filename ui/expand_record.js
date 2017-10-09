@@ -6,7 +6,7 @@ const {HostMethodNames} = require('client/blocks/block_message_types');
 import type Record from 'client/blocks/sdk/models/record';
 
 type ExpandRecordOpts = {
-    records: Array<Record>,
+    records?: Array<Record>,
 };
 
 function expandRecord(record: Record, opts?: ExpandRecordOpts) {

@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u, _} = require('client_server_shared/hu_');
 const invariant = require('invariant');
 const utils = require('client/blocks/sdk/utils');
 const hyperId = require('client_server_shared/hyper_id');
@@ -35,7 +35,7 @@ const WatchableTableKeys = {
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 // The string case is to accomodate cellValuesInField:$FieldId.
 // It may also be useful to have cellValuesInView:$ViewId...
-type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
+export type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
 
 class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTableKey> {
     static _className = 'Table';
@@ -50,10 +50,10 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
     }
     _parentBase: Base;
-    _viewModelsById: {[key: string]: View};
-    _fieldModelsById: {[key: string]: Field};
-    _recordModelsById: {[key: string]: Record};
-    _cachedFieldNamesById: {[key: string]: string} | null;
+    _viewModelsById: {[string]: View};
+    _fieldModelsById: {[string]: Field};
+    _recordModelsById: {[string]: Record};
+    _cachedFieldNamesById: {[string]: string} | null;
     constructor(baseData: BaseDataForBlocks, parentBase: Base, tableId: string) {
         super(baseData, tableId);
 
@@ -183,7 +183,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this._recordModelsById[recordId];
         }
     }
-    setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[key: string]: RecordDef}) {
+    setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}) {
         if (this.isDeleted) {
             throw new Error('Table does not exist');
         }
@@ -351,7 +351,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             allowedViewTypes = [allowedViewTypes];
         }
 
-        return _.find(this.views, view => {
+        return u.find(this.views, view => {
             return _.includes(allowedViewTypes, view.type);
         }) || null;
     }
@@ -431,15 +431,23 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         if (dirtyPaths.fieldsById) {
             // Since tables don't have a field order, need to detect if a field
             // was created or deleted and trigger onChange for fields.
-            let didFieldsChange = false;
+            const addedFieldIds = [];
+            const removedFieldIds = [];
             for (const [dirtyFieldPaths, fieldId] of utils.iterate(dirtyPaths.fieldsById)) {
                 if (dirtyFieldPaths._isDirty) {
                     // If the entire field is dirty, it was either created or deleted.
-                    if (!didFieldsChange) {
-                        // We only want to trigger onChange of fields once, even
-                        // if multiple fields were created or deleted.
-                        didFieldsChange = true;
-                        this._onChange(WatchableTableKeys.fields);
+
+                    invariant(this._data.fieldsById, 'No recordsById');
+                    if (this._data.fieldsById.hasOwnProperty(fieldId)) {
+                        addedFieldIds.push(fieldId);
+                    } else {
+                        removedFieldIds.push(fieldId);
+
+                        const fieldModel = this._fieldModelsById[fieldId];
+                        if (fieldModel) {
+                            // Remove the Field model if it was deleted.
+                            delete this._fieldModelsById[fieldId];
+                        }
                     }
                 } else {
                     // Directly access from _fieldModelsById to avoid creating
@@ -452,13 +460,11 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                 }
             }
 
-            if (didFieldsChange) {
-                // Clean up deleted fields
-                for (const [fieldModel, fieldId] of utils.iterate(this._fieldModelsById)) {
-                    if (fieldModel.isDeleted) {
-                        delete this._fieldModelsById[fieldId];
-                    }
-                }
+            if (addedFieldIds.length > 0 || removedFieldIds.length > 0) {
+                this._onChange(WatchableTableKeys.fields, {
+                    addedFieldIds,
+                    removedFieldIds,
+                });
             }
 
             // Clear out cached field names in case a field was added/removed/renamed.
@@ -468,21 +474,23 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             // Since tables don't have a record order, need to detect if a record
             // was created or deleted and trigger onChange for records.
             const dirtyFieldIdsSet = {};
-            let didRecordsChange = false;
+            const addedRecordIds = [];
+            const removedRecordIds = [];
             for (const [dirtyRecordPaths, recordId] of utils.iterate(dirtyPaths.recordsById)) {
                 if (dirtyRecordPaths._isDirty) {
                     // If the entire record is dirty, it was either created or deleted.
-                    if (!didRecordsChange) {
-                        // We only want to trigger onChange of records once, even
-                        // if multiple records were created or deleted.
-                        didRecordsChange = true;
-                        this._onChange(WatchableTableKeys.records);
-                    }
 
-                    // Remove the Record model if it was deleted.
-                    const recordModel = this._recordModelsById[recordId];
-                    if (recordModel && recordModel.isDeleted) {
-                        delete this._recordModelsById[recordId];
+                    invariant(this._data.recordsById, 'No recordsById');
+                    if (this._data.recordsById.hasOwnProperty(recordId)) {
+                        addedRecordIds.push(recordId);
+                    } else {
+                        removedRecordIds.push(recordId);
+
+                        const recordModel = this._recordModelsById[recordId];
+                        if (recordModel) {
+                            // Remove the Record model if it was deleted.
+                            delete this._recordModelsById[recordId];
+                        }
                     }
                 } else {
                     const recordModel = this._recordModelsById[recordId];
@@ -497,6 +505,20 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                         dirtyFieldIdsSet[fieldId] = true;
                     }
                 }
+            }
+
+            // Now that we've composed our created/deleted record ids arrays, let's fire
+            // the records onChange event if any records were created or deleted.
+            if (addedRecordIds.length > 0 || removedRecordIds.length > 0) {
+                this._onChange(WatchableTableKeys.records, {
+                    addedRecordIds,
+                    removedRecordIds,
+                });
+
+                this._onChange(WatchableTableKeys.recordIds, {
+                    addedRecordIds,
+                    removedRecordIds,
+                });
             }
 
             // NOTE: this is an experimental (and somewhat messy) way to watch
@@ -518,7 +540,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             }
         }
     }
-    __getFieldNamesById(): {[key: string]: string} {
+    __getFieldNamesById(): {[string]: string} {
         if (!this._cachedFieldNamesById) {
             const fieldNamesById = {};
             for (const [fieldData, fieldId] of utils.iterate(this._data.fieldsById)) {

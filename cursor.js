@@ -10,10 +10,10 @@ import type {BaseDataForBlocks, CursorDataForBlocks} from 'client/blocks/blocks_
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
 
 const WatchableCursorKeys = {
-    selectedRecordIds: 'selectedRecordIds',
+    selectedRecordIds: ('selectedRecordIds': 'selectedRecordIds'),
 };
 
-type WatchableCursorKey = 'selectedRecordIds';
+type WatchableCursorKey = $Values<typeof WatchableCursorKeys>;
 
 // NOTE: cursor is an AbstractModel because it needs access to the base data.
 class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCursorKey> {

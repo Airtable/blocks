@@ -1,6 +1,7 @@
 // @flow
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const colors = require('client/blocks/sdk/ui/colors');
 const colorUtils = require('client/blocks/sdk/ui/color_utils');
 
@@ -43,12 +44,12 @@ const ProgressBar = (props: ProgressBarProps) => {
 };
 
 ProgressBar.propTypes = {
-    progress: React.PropTypes.number.isRequired,
-    barColor: React.PropTypes.string,
-    backgroundColor: React.PropTypes.string,
-    height: React.PropTypes.number,
-    className: React.PropTypes.string,
-    style: React.PropTypes.object,
+    progress: PropTypes.number.isRequired,
+    barColor: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    height: PropTypes.number,
+    className: PropTypes.string,
+    style: PropTypes.object,
 };
 
 module.exports = ProgressBar;

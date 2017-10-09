@@ -27,9 +27,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // not much we can do here to check if a key is valid.
         return true;
     }
-    _kvStore: {[key: string]: BlockKvValue};
+    _kvStore: {[string]: BlockKvValue};
     _isDevelopmentMode: boolean;
-    constructor(initialKvValuesByKey: {[key: string]: BlockKvValue}, isDevelopmentMode: boolean) {
+    constructor(initialKvValuesByKey: {[string]: BlockKvValue}, isDevelopmentMode: boolean) {
         super();
 
         this._isDevelopmentMode = isDevelopmentMode;
@@ -103,6 +103,11 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
 
             const topLevelKey = update.path[0];
             topLevelKeySet[topLevelKey] = true;
+        }
+
+        const limitCheckResult = blockKvHelpers.limitCheckKvStore(this._kvStore, _.keys(topLevelKeySet));
+        if (!limitCheckResult.isValid) {
+            throw new Error(`globalConfig over limits: ${limitCheckResult.reason}`);
         }
 
         // Now loop over the top level keys to fire change events.

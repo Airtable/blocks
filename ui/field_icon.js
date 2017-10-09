@@ -1,6 +1,7 @@
 // @flow
 const _ = require('client_server_shared/lodash.custom');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const Icon = require('client/blocks/sdk/ui/icon');
 const FieldModel = require('client/blocks/sdk/models/field');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
@@ -35,7 +36,7 @@ const FieldIcon = (props: FieldIconProps) => {
 const iconPropsWithoutName = _.omit(Icon.propTypes, 'name');
 FieldIcon.propTypes = {
     ...iconPropsWithoutName,
-    field: React.PropTypes.instanceOf(FieldModel).isRequired,
+    field: PropTypes.instanceOf(FieldModel).isRequired,
 };
 
 module.exports = FieldIcon;

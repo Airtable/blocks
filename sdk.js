@@ -39,7 +39,7 @@ class BlockSdk {
     UI: typeof UI;
     settingsButton: SettingsButton;
     constructor(args: {
-        initialKvValuesByKey: {[key: string]: BlockKvValue},
+        initialKvValuesByKey: {[string]: BlockKvValue},
         isDevelopmentMode: boolean,
         isFullscreen: boolean,
         isFirstRun: boolean,

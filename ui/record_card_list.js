@@ -1,6 +1,7 @@
 // @flow
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const RecordCard = require('client/blocks/sdk/ui/record_card');
 const RecordModel = require('client/blocks/sdk/models/record');
 const FieldModel = require('client/blocks/sdk/models/field');
@@ -11,13 +12,12 @@ const createDetectElementResize = require('client/blocks/sdk/ui/create_detect_el
 // TODO(jb): don't rely on liveapp components
 const DynamicDraw = require('client/react/ui/dynamic_draw/dynamic_draw');
 
-const {PropTypes} = React;
-
 import type {RecordDef} from 'client/blocks/sdk/models/record';
 
 class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProvider {
     _items: Array<{id?: string, size: number, trailingMargin: number}>;
     _layout: DynamicDraw.LinearLayout;
+    _getExpandRecordOptions: () => void;
     constructor(opts) {
         super();
 
@@ -45,6 +45,14 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
         }, opts);
 
         this._buildItemsList();
+
+        this._getExpandRecordOptions = this._getExpandRecordOptions.bind(this);
+    }
+
+    _getExpandRecordOptions() {
+        return {
+            records: this._opts.records,
+        };
     }
 
     _buildItemsList() {
@@ -98,6 +106,7 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
                     view={this._opts.view}
                     attachmentCoverField={this._opts.attachmentCoverField}
                     onClick={this._opts.onRecordClick && (() => this._opts.onRecordClick(record, itemIndex))}
+                    getExpandRecordOptions={this._getExpandRecordOptions}
                     onMouseEnter={this._opts.onRecordMouseEnter && (() => this._opts.onRecordMouseEnter(record, itemIndex))}
                     onMouseLeave={this._opts.onRecordMouseLeave && (() => this._opts.onRecordMouseLeave(record, itemIndex))}
                     width={rect.width}

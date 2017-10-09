@@ -1,10 +1,9 @@
 // @flow
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const Popover = require('client/blocks/sdk/ui/popover');
 const classNames = require('classnames');
-
-const {PropTypes} = React;
 
 import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from 'client/blocks/sdk/ui/popover';
 

@@ -3,6 +3,7 @@ const React = require('client/blocks/sdk/ui/react');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const permissions = require('client_server_shared/permissions');
+const invariant = require('invariant');
 const Select = require('client/blocks/sdk/ui/select');
 const {SelectAndSelectButtonsSyncedPropTypes} = require('client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers');
 const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
@@ -12,9 +13,11 @@ import type {SelectOptionValue, SelectAndSelectButtonsSyncedProps as SelectSynce
 class SelectSynced extends React.Component {
     static propTypes = SelectAndSelectButtonsSyncedPropTypes;
     props: SelectSyncedProps;
+    _select: Select | null;
     constructor(props: SelectSyncedProps) {
         super(props);
 
+        this._select = null;
         this._onChange = this._onChange.bind(this);
     }
     _onChange: (value: SelectOptionValue) => void;
@@ -24,6 +27,18 @@ class SelectSynced extends React.Component {
         if (this.props.onChange) {
             this.props.onChange(value);
         }
+    }
+    focus() {
+        invariant(this._select, 'No select to focus');
+        this._select.focus();
+    }
+    blur() {
+        invariant(this._select, 'No select to blur');
+        this._select.blur();
+    }
+    click() {
+        invariant(this._select, 'No select to click');
+        this._select.click();
     }
     render() {
         const {
@@ -43,6 +58,7 @@ class SelectSynced extends React.Component {
 
         return (
             <Select
+                ref={el => this._select = el}
                 onChange={this._onChange}
                 value={value}
                 options={options}
@@ -57,4 +73,8 @@ class SelectSynced extends React.Component {
 
 module.exports = createDataContainer(SelectSynced, (props: SelectSyncedProps) => {
     return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
-});
+}, [
+    'focus',
+    'blur',
+    'click',
+]);

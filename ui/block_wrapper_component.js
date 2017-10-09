@@ -1,6 +1,6 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
-const {PropTypes} = React;
+const PropTypes = require('prop-types');
 const Modal = require('client/blocks/sdk/ui/modal');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
@@ -11,6 +11,18 @@ class BlockWrapperComponent extends React.Component {
         // so there's no guarantee that it's actually a React component.
         EntryComponent: PropTypes.any,
     };
+    constructor(props) {
+        super(props);
+
+        // We watch globalAlert in constructor, instead of using createDataContainer,
+        // because createDataContainer starts watching after the component is mounted.
+        // If we used createDataContainer and some child component in its constructor or
+        // componentDidMount called globalAlert.showReloadPrompt, this component
+        // would not update.
+        // TODO(kasra): maybe change createDataContainer to handle this case
+        // without having to special case it.
+        getSdk().UI.globalAlert.watch('__alertInfo', () => this.forceUpdate());
+    }
     render() {
         const {UI, viewport} = getSdk();
 
@@ -74,5 +86,4 @@ class BlockWrapperComponent extends React.Component {
 
 module.exports = createDataContainer(BlockWrapperComponent, () => [
     {watch: getSdk().viewport, key: ['size', 'minSize']},
-    {watch: getSdk().UI.globalAlert, key: '__alertInfo'},
 ]);

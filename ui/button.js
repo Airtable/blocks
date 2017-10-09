@@ -1,7 +1,8 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
-const {PropTypes} = React;
+const PropTypes = require('prop-types');
 const classNames = require('classnames');
+const invariant = require('invariant');
 
 type ButtonPropTypes = {
     className: string,
@@ -32,26 +33,50 @@ const classNamesByTheme = {
     [themes.TRANSPARENT]: 'background-transparent text-dark',
 };
 
-const Button = (props: ButtonPropTypes) => {
-    const {
-        className,
-        theme,
-        ...restOfProps
-    } = props;
+class Button extends React.Component {
+    _button: HTMLButtonElement | null;
+    constructor(props: ButtonPropTypes) {
+        super(props);
 
-    const themeClassNames = classNamesByTheme[theme] || '';
+        this._button = null;
+    }
+    focus() {
+        invariant(this._button, 'No button to focus');
+        this._button.focus();
+    }
+    blur() {
+        invariant(this._button, 'No button to blur');
+        this._button.blur();
+    }
+    click() {
+        invariant(this._button, 'No button to click');
+        this._button.click();
+    }
+    render() {
+        const {
+            className,
+            theme,
+            disabled,
+            children,
+            ...restOfProps
+        } = this.props;
 
-    return (
-        <button
-            className={classNames(`baymax rounded big strong p1 flex-inline items-center no-outline ${themeClassNames} ${className}`, {
-                'pointer link-quiet': !props.disabled,
-                quieter: props.disabled,
-            })}
-            {...restOfProps}>
-            {props.children}
-        </button>
-    );
-};
+        const themeClassNames = classNamesByTheme[theme] || '';
+
+        return (
+            <button
+                ref={el => this._button = el}
+                disabled={disabled}
+                className={classNames(`baymax rounded big strong p1 flex-inline items-center no-outline ${themeClassNames} ${className}`, {
+                    'pointer link-quiet': !disabled,
+                    quieter: disabled,
+                })}
+                {...restOfProps}>
+                {children}
+            </button>
+        );
+    }
+}
 
 Button.propTypes = {
     className: PropTypes.string,

@@ -1,9 +1,9 @@
 // @flow
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const classNames = require('classnames');
-
-const {PropTypes} = React;
+const invariant = require('invariant');
 
 export type InputValue = string | boolean | number;
 
@@ -11,7 +11,9 @@ type InputProps = {
     value: mixed,
     type?: string,
     placeholder?: string,
-    onChange?: InputValue => void,
+    // TODO(jb): update this when we remove the old input behavior.
+    onChange?: (InputValue | SyntheticInputEvent) => void,
+    shouldPassEventToOnChange?: boolean,
     style?: Object,
     className?: string,
     disabled?: boolean,
@@ -54,6 +56,7 @@ class Input extends React.Component {
         type: PropTypes.oneOf(Object.keys(validTypesSet)),
         placeholder: PropTypes.string,
         onChange: PropTypes.func,
+        shouldPassEventToOnChange: PropTypes.bool,
         style: PropTypes.object,
         className: PropTypes.string,
         disabled: PropTypes.bool,
@@ -65,10 +68,24 @@ class Input extends React.Component {
     };
     props: InputProps;
     _onChange: SyntheticInputEvent => void;
+    _input: HTMLInputElement | null;
     constructor(props: InputProps) {
         super(props);
 
+        this._input = null;
         this._onChange = this._onChange.bind(this);
+    }
+    focus() {
+        invariant(this._input, 'No input to focus');
+        this._input.focus();
+    }
+    blur() {
+        invariant(this._input, 'No input to blur');
+        this._input.blur();
+    }
+    click() {
+        invariant(this._input, 'No input to click');
+        this._input.click();
     }
     _isCheckbox() {
         return this.props.type === 'checkbox';
@@ -77,12 +94,17 @@ class Input extends React.Component {
         return !this.props.type || !typesToExcludeFromDefaultClassesSet[this.props.type];
     }
     _onChange(e: SyntheticInputEvent) {
-        const value: InputValue = this._isCheckbox() ?
-            e.target.checked :
-            e.target.value;
+        const {onChange, shouldPassEventToOnChange} = this.props;
+        if (onChange) {
+            if (shouldPassEventToOnChange) {
+                onChange(e);
+            } else {
+                const value: InputValue = this._isCheckbox() ?
+                    e.target.checked :
+                    e.target.value;
 
-        if (this.props.onChange) {
-            this.props.onChange(value);
+                onChange(value);
+            }
         }
     }
     render() {
@@ -105,11 +127,12 @@ class Input extends React.Component {
 
         return (
             <input
+                ref={el => this._input = el}
                 type={type}
                 placeholder={this.props.placeholder}
                 style={this.props.style}
                 className={classNames(defaultClassName, {
-                    'quieter': disabled,
+                    quieter: disabled,
                     'link-quiet': !disabled,
                 }, this.props.className)}
                 disabled={disabled}

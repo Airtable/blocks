@@ -1,11 +1,10 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u, _} = require('client_server_shared/hu_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const Popover = require('client/blocks/sdk/ui/popover');
 const KeyCodes = require('client_server_shared/key_codes');
 const classNames = require('classnames');
-
-const {PropTypes} = React;
 
 import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from 'client/blocks/sdk/ui/popover';
 
@@ -63,6 +62,7 @@ class AutocompletePopover extends React.Component {
     };
     static defaultProps = {
         focusOnOpen: true,
+        isOpen: true,
     };
     props: AutocompletePopoverProps;
     _input: ?HTMLElement;
@@ -86,7 +86,7 @@ class AutocompletePopover extends React.Component {
     }
     componentDidMount() {
         if (this.props.isOpen && this.props.focusOnOpen) {
-            this.focus();
+            _.defer(() => this.focus());
         }
 
         document.addEventListener('mousemove', this._resetResultsPointerEvents, false);
@@ -114,7 +114,7 @@ class AutocompletePopover extends React.Component {
         } else {
             const lowercaseQuery = query.toLowerCase();
             return allItems.filter(item => {
-                return item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 || (item.aliases && _.some(item.aliases, alias => {
+                return item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 || (item.aliases && u.some(item.aliases, alias => {
                     return alias.toLowerCase().indexOf(lowercaseQuery) !== -1;
                 }));
             });
@@ -334,5 +334,8 @@ class AutocompletePopover extends React.Component {
         return this._renderPopover();
     }
 }
+
+AutocompletePopover.placements = Popover.placements;
+AutocompletePopover.fitInWindowModes = Popover.fitInWindowModes;
 
 module.exports = AutocompletePopover;

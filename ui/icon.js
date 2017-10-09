@@ -1,6 +1,6 @@
 // @flow
 const React = require('client_server_shared/react/react');
-const {PropTypes} = React;
+const PropTypes = require('prop-types');
 const Svg = require('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
 const iconConfig = require('client_server_shared/react/assets/icon_config');
 
@@ -17,8 +17,8 @@ type IconProps = {
 };
 
 const Icon = ({name, size, scale, fillColor, className, style, pathClassName}: IconProps) => {
-    if (!size) {
-        size = 16 * (scale || 1);
+    if (size === undefined) {
+        size = 16 * ((scale !== undefined) ? scale : 1);
     }
 
     const isMicro = size <= 12;

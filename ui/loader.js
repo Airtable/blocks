@@ -1,5 +1,6 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 // TODO(kasra): don't depend on liveapp components.
 const _Loader = require('client_server_shared/react/ui/loader/loader');
 
@@ -11,8 +12,8 @@ const Loader = ({fillColor = '#888', scale = 0.3}: LoaderPropTypes) => {
 };
 
 Loader.propTypes = {
-    fillColor: React.PropTypes.string,
-    scale: React.PropTypes.number,
+    fillColor: PropTypes.string,
+    scale: PropTypes.number,
 };
 
 module.exports = Loader;

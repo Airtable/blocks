@@ -43,12 +43,15 @@ class SelectButtons extends React.Component {
             throw new Error(`<SelectButtons> ${validationResult.reason}`);
         }
 
+        const restOfProps = _.omit(this.props, Object.keys(SelectButtons.propTypes));
+
         return (
             <div
                 className={classNames('flex rounded overflow-hidden p-half darken2', {
                     quieter: disabled,
                 }, className)}
-                style={style}>
+                style={style}
+                {...restOfProps}>
                 {options && options.map(option => {
                     const valueJson = JSON.stringify(option.value);
                     const isSelected = option.value === value;

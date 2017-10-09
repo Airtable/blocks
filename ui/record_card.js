@@ -1,6 +1,7 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u, _} = require('client_server_shared/hu_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const CellRenderer = require('client/blocks/sdk/ui/cell_renderer');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
 const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
@@ -13,8 +14,6 @@ const classNames = require('classnames');
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 const expandRecord = require('client/blocks/sdk/ui/expand_record');
 const keyCodeUtils = require('client/mylib/key_code_utils');
-
-const {PropTypes} = React;
 
 import type {RecordDef} from 'client/blocks/sdk/models/record';
 
@@ -167,7 +166,8 @@ class RecordCard extends React.Component {
                     // No-op, let the <a> tag handle opening in new tab or window.
                 } else {
                     e.preventDefault();
-                    expandRecord(recordModel);
+                    const opts = this.props.getExpandRecordOptions ? this.props.getExpandRecordOptions(recordModel) : {};
+                    expandRecord(recordModel, opts);
                 }
             }
         }
@@ -187,7 +187,7 @@ class RecordCard extends React.Component {
             // if there is no view.
             // TODO: use the real cover field if the view is gallery or kanban instead of
             // the first attachment field
-            const firstAttachmentFieldInView = _.find(fieldsToUse, field => {
+            const firstAttachmentFieldInView = u.find(fieldsToUse, field => {
                 return this._isAttachment(field);
             });
             return firstAttachmentFieldInView;
@@ -341,22 +341,22 @@ class RecordCard extends React.Component {
         const hasOnClick = !!onClick || !!this._getRecordModel();
 
         const containerClasses = classNames('white rounded relative block overflow-hidden', {
-            'pointer cardBoxShadow': !hasOnClick,
-            stroked1: hasOnClick,
+            'pointer cardBoxShadow': hasOnClick,
+            stroked1: !hasOnClick,
         }, className);
 
         // use height as size in order to get square attachment
         const attachmentSize = hasAttachment ? height : 0;
-        const imageHtml = hasAttachment
-            ? attachmentPreviewRenderer.renderSquarePreview(attachmentObj, {
+        const imageHtml = hasAttachment ?
+            attachmentPreviewRenderer.renderSquarePreview(attachmentObj, {
                 extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
                 extraStyles: {
                     'border-top-right-radius': 2,
                     'border-bottom-right-radius': 2,
                 },
                 size: attachmentSize,
-            })
-            : '';
+            }) :
+            '';
 
         const containerStyles = {
             ...style,
@@ -449,6 +449,7 @@ RecordCard.propTypes = {
     // TODO: add all other mouse events: https://facebook.github.io/react/docs/events.html#mouse-events
     className: PropTypes.string,
     style: PropTypes.object,
+    getExpandRecordOptions: PropTypes.func,
 };
 
 RecordCard.defaultProps = {

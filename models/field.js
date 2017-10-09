@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const {h, u, _} = require('client_server_shared/hu_');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
@@ -20,7 +20,9 @@ const WatchableFieldKeys = {
     config: 'config',
 };
 
-class Field extends AbstractModel<FieldDataForBlocks, $Keys<typeof WatchableFieldKeys>> {
+export type WatchableFieldKey = $Keys<typeof WatchableFieldKeys>;
+
+class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
     static _className = 'Field';
     static _isWatchableKey(key: string) {
         return utils.isEnumValue(WatchableFieldKeys, key);
@@ -67,7 +69,7 @@ class Field extends AbstractModel<FieldDataForBlocks, $Keys<typeof WatchableFiel
             this.__getRawType(),
             this.__getRawTypeOptions(),
         );
-        return _.filter(Aggregators, aggregator => {
+        return u.filter(Aggregators, aggregator => {
             const liveappSummaryFunctionKey = liveappSummaryFunctionKeyByAggregatorKey[aggregator.key];
             return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
         });
@@ -114,6 +116,13 @@ class Field extends AbstractModel<FieldDataForBlocks, $Keys<typeof WatchableFiel
                 return typeOptions.resultType;
             }
         }
+    }
+    __getRawColumn(): {id: string, type: string, typeOptions: ?Object} {
+        return {
+            id: this.id,
+            type: this.__getRawType(),
+            typeOptions: this.__getRawTypeOptions(),
+        };
     }
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {

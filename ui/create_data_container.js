@@ -74,7 +74,10 @@ type WrappedWatchConfig = {
 // The getDependencies function will be invoked on componentDidMount, whenever props
 // shallowly change, and whenever one of the watches returned from the getDependencies
 // function is triggered.
-function createDataContainer<Props>(Component: ReactClass<Props>, getDependencies: (props: Props) => Array<?WatchDependency>): ReactClass<{}> {
+//
+// IMPORTANT: The passthruMethodNames arg should be reserved for internal blocks SDK use only.
+// This is experimental and very subject to change.
+function createDataContainer<Props>(Component: ReactClass<Props>, getDependencies: (props: Props) => Array<?WatchDependency>, passthruMethodNames: ?Array<string>): ReactClass<{}> {
     const ComponentClass = getReactComponent(Component);
     const componentName = getComponentName(Component);
 
@@ -251,11 +254,11 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
             return watchConfigs;
         }
         _addWatchesForWrappedWatchConfigs(wrappedWatchConfigsToAdd: Array<WrappedWatchConfig>) {
-            const viewsToWatchById: {[key: string]: {
+            const viewsToWatchById: {[string]: {
                 watchable: View,
                 wrappedWatchConfigs: Array<WrappedWatchConfig>,
             }} = {};
-            const tablesToWatchById: {[key: string]: {
+            const tablesToWatchById: {[string]: {
                 watchable: Table,
                 wrappedWatchConfigs: Array<WrappedWatchConfig>,
             }} = {};
@@ -345,6 +348,16 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
                 // Stateless functional component.
                 return <Component {...this.props} />;
             }
+        }
+    }
+
+    if (passthruMethodNames) {
+        // Let's augment the data container's prototype to have methods that pass through
+        // to the wrapped component.
+        for (const passthruMethodName of passthruMethodNames) {
+            DataContainer.prototype[passthruMethodName] = function(...args) {
+                this._wrappedComponent[passthruMethodName](args);
+            };
         }
     }
 

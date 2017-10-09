@@ -1,5 +1,6 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
 const Record = require('client/blocks/sdk/models/record');
@@ -18,11 +19,11 @@ class CellRenderer extends React.Component {
     static propTypes = {
         // NOTE: must pass in one of record or cellValue. It will default to using
         // the record if one is passed in, and cellValue otherwise.
-        record: React.PropTypes.instanceOf(Record),
-        cellValue: React.PropTypes.any,
-        field: React.PropTypes.instanceOf(Field).isRequired,
-        className: React.PropTypes.string,
-        style: React.PropTypes.object,
+        record: PropTypes.instanceOf(Record),
+        cellValue: PropTypes.any,
+        field: PropTypes.instanceOf(Field).isRequired,
+        className: PropTypes.string,
+        style: PropTypes.object,
     };
     props: CellRendererProps;
 

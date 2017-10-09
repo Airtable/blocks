@@ -1,7 +1,7 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
 const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
-const {PropTypes} = React;
+const PropTypes = require('prop-types');
 
 import type {GlobalConfigKey} from 'client/blocks/sdk/global_config';
 
@@ -67,7 +67,7 @@ const SelectAndSelectButtonsSyncedPropTypes = {
         label: PropTypes.node,
         disabled: PropTypes.bool,
     })).isRequired,
-    onChange: React.PropTypes.func,
+    onChange: PropTypes.func,
     disabled: PropTypes.bool,
     style: PropTypes.object,
     className: PropTypes.string,

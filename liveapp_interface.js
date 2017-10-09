@@ -16,17 +16,17 @@ const hostOrigin = window.parent.window.location.origin;
 type HostMethodCallback = (error: mixed, result: mixed) => void;
 
 const BatchUpdateTypes = {
-    SET_CELL_VALUES: 'SET_CELL_VALUES',
-    CREATE_RECORDS: 'CREATE_RECORDS',
-    DELETE_RECORDS: 'DELETE_RECORDS',
-    SET_MULTIPLE_KV_PATHS: 'SET_MULTIPLE_KV_PATHS',
+    SET_CELL_VALUES: ('SET_CELL_VALUES': 'SET_CELL_VALUES'),
+    CREATE_RECORDS: ('CREATE_RECORDS': 'CREATE_RECORDS'),
+    DELETE_RECORDS: ('DELETE_RECORDS': 'DELETE_RECORDS'),
+    SET_MULTIPLE_KV_PATHS: ('SET_MULTIPLE_KV_PATHS': 'SET_MULTIPLE_KV_PATHS'),
 };
-type BatchUpdateType = 'SET_CELL_VALUES' | 'CREATE_RECORDS' | 'DELETE_RECORDS' | 'SET_MULTIPLE_KV_PATHS';
+type BatchUpdateType = $Values<typeof BatchUpdateTypes>;
 
 type BatchUpdate =
     {updateType: 'SET_CELL_VALUES', args: {
         tableId: string,
-        cellValuesByRecordIdThenFieldId: {[key: string]: RecordDef},
+        cellValuesByRecordIdThenFieldId: {[string]: RecordDef},
     }} |
     {updateType: 'CREATE_RECORDS', args: {
         tableId: string,
@@ -43,8 +43,8 @@ type BatchUpdate =
 
 class LiveappInterface {
     _nextHostMethodCallId: number;
-    _pendingHostMethodCallbacksById: {[key: number]: HostMethodCallback};
-    _handlersByMessageType: {[key: string]: Array<(data: Object) => void>};
+    _pendingHostMethodCallbacksById: {[number]: HostMethodCallback};
+    _handlersByMessageType: {[string]: Array<(data: Object) => void>};
     _batchUpdatesTimeoutId: null | number;
     _batchUpdateQueue: Array<BatchUpdate>;
     constructor() {
@@ -120,7 +120,7 @@ class LiveappInterface {
     }
     // This enqueues a host method call to be batched at the end of the current run loop.
     _enqueueBatchUpdate(batchUpdate: BatchUpdate) {
-        if (!this._batchUpdatesTimeoutId) {
+        if (this._batchUpdatesTimeoutId === null) {
             this._batchUpdatesTimeoutId = setTimeout(this._processBatchUpdateQueue.bind(this), 0);
         }
 
@@ -174,7 +174,7 @@ class LiveappInterface {
                 return originalBatchUpdate.args.isDevelopmentMode === newBatchUpdate.args.isDevelopmentMode;
 
             default:
-                throw new Error('Unrecognized batch update type: ', newBatchUpdate.updateType);
+                throw new Error('Unrecognized batch update type: ' + newBatchUpdate.updateType);
         }
     }
     _mergeBatchUpdatesIfPossible(originalBatchUpdate: BatchUpdate, newBatchUpdate: BatchUpdate): BatchUpdate | null {
@@ -222,7 +222,7 @@ class LiveappInterface {
             }
 
             default:
-                throw new Error('Unrecognized batch update type: ', newBatchUpdate.updateType);
+                throw new Error('Unrecognized batch update type: ' + newBatchUpdate.updateType);
         }
 
         return mergedBatchUpdate;
@@ -242,7 +242,7 @@ class LiveappInterface {
                 return BlockMessageTypes.HostMethodNames.SET_MULTIPLE_KV_PATHS;
 
             default:
-                throw new Error('Unrecognized batch update type: ', batchUpdateType);
+                throw new Error('Unrecognized batch update type: ' + batchUpdateType);
         }
     }
     async fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any> { // eslint-disable-line flowtype/no-weak-types
@@ -272,7 +272,7 @@ class LiveappInterface {
             },
         });
     }
-    setCellValues(tableId: string, cellValuesByRecordIdThenFieldId: {[key: string]: {[key: string]: any}}) { // eslint-disable-line flowtype/no-weak-types
+    setCellValues(tableId: string, cellValuesByRecordIdThenFieldId: {[string]: {[string]: any}}) { // eslint-disable-line flowtype/no-weak-types
         this._enqueueBatchUpdate({
             updateType: BatchUpdateTypes.SET_CELL_VALUES,
             args: {

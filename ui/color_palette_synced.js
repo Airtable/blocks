@@ -1,13 +1,12 @@
 // @flow
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const permissions = require('client_server_shared/permissions');
 const ColorPalette = require('client/blocks/sdk/ui/color_palette');
 const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
-
-const {PropTypes} = React;
 
 class ColorPaletteSynced extends React.Component {
     static propTypes = {

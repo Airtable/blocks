@@ -1,12 +1,14 @@
 // @flow
 const _ = require('client_server_shared/lodash.custom');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const FieldModel = require('client/blocks/sdk/models/field');
 const TableModel = require('client/blocks/sdk/models/table');
 const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
 const ModelPickerSelect = require('client/blocks/sdk/ui/model_picker_select');
+const invariant = require('invariant');
 
 import type {ApiFieldType} from 'client_server_shared/column_types/api_field_types';
 
@@ -24,21 +26,35 @@ type FieldPickerProps = {
 
 class FieldPicker extends React.Component {
     static propTypes = {
-        table: React.PropTypes.instanceOf(TableModel),
-        field: React.PropTypes.instanceOf(FieldModel),
-        shouldAllowPickingNone: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
-        allowedTypes: React.PropTypes.arrayOf(React.PropTypes.oneOf(_.values(ApiFieldTypes))),
-        placeholder: React.PropTypes.string,
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+        table: PropTypes.instanceOf(TableModel),
+        field: PropTypes.instanceOf(FieldModel),
+        shouldAllowPickingNone: PropTypes.bool,
+        onChange: PropTypes.func,
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(_.values(ApiFieldTypes))),
+        placeholder: PropTypes.string,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        disabled: PropTypes.bool,
     };
     props: FieldPickerProps;
     _onChange: (string | null) => void;
+    _select: ModelPickerSelect | null;
     constructor(props) {
         super(props);
+        this._select = null;
         this._onChange = this._onChange.bind(this);
+    }
+    focus() {
+        invariant(this._select, 'No select to focus');
+        this._select.focus();
+    }
+    blur() {
+        invariant(this._select, 'No select to blur');
+        this._select.blur();
+    }
+    click() {
+        invariant(this._select, 'No select to click');
+        this._select.click();
     }
     _onChange(fieldId: string | null) {
         const {onChange, table} = this.props;
@@ -80,8 +96,11 @@ class FieldPicker extends React.Component {
             return !allowedTypes || allowedTypes[field.config.type];
         };
 
+        const restOfProps = _.omit(this.props, Object.keys(FieldPicker.propTypes));
+
         return (
             <ModelPickerSelect
+                ref={el => this._select = el}
                 models={table.fields}
                 selectedModelId={selectedField && !selectedField.isDeleted ? selectedField.id : null}
                 shouldAllowPickingModelFn={shouldAllowPickingFieldFn}
@@ -92,6 +111,7 @@ class FieldPicker extends React.Component {
                 placeholder={placeholder}
                 shouldAllowPickingNone={shouldAllowPickingNone}
                 modelKeysToWatch={['name', 'config']}
+                {...restOfProps}
             />
         );
     }
@@ -102,4 +122,8 @@ module.exports = createDataContainer(FieldPicker, (props: FieldPickerProps) => {
         {watch: props.table, key: 'fields'},
         {watch: getSdk().base, key: 'tables'},
     ];
-});
+}, [
+    'focus',
+    'blur',
+    'click',
+]);

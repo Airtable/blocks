@@ -2,30 +2,28 @@
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
 const ReactDOM = require('client/blocks/sdk/ui/react-dom');
+const PropTypes = require('prop-types');
 const Geometry = require('client/geometry/geometry');
 const classNames = require('classnames');
 const invariant = require('invariant');
 const createDetectElementResize = require('client/blocks/sdk/ui/create_detect_element_resize');
 
-const {PropTypes} = React;
-
 const PopoverPlacements = {
-    TOP: 'top',
-    CENTER: 'center',
-    BOTTOM: 'bottom',
-    LEFT: 'left',
-    RIGHT: 'right',
+    TOP: ('top': 'top'),
+    CENTER: ('center': 'center'),
+    BOTTOM: ('bottom': 'bottom'),
+    LEFT: ('left': 'left'),
+    RIGHT: ('right': 'right'),
 };
 export type PopoverPlacementX = 'left' | 'center' | 'right';
 export type PopoverPlacementY = 'top' | 'center' | 'bottom';
 
 const FitInWindowModes = {
-    NONE: 'none',
-    FLIP: 'flip',
-    NUDGE: 'nudge',
+    NONE: ('none': 'none'),
+    FLIP: ('flip': 'flip'),
+    NUDGE: ('nudge': 'nudge'),
 };
-
-export type FitInWindowMode = 'none' | 'flip' | 'nudge';
+export type FitInWindowMode = $Values<typeof FitInWindowModes>;
 
 type PopoverProps = {
     children: React$Element<*>,
@@ -112,6 +110,7 @@ class Popover extends React.Component {
 
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';
+        invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
         window.addEventListener('scroll', this._refreshContainerAsync);
@@ -195,7 +194,7 @@ class Popover extends React.Component {
             } else if (popoverRect.bottom() > viewportRect.bottom()) {
                 placementY = PopoverPlacements.TOP;
             }
-            const flippedPopoverRect = this._getPlacedPopoverRect(popoverSize, anchorRect, placementX, placementY, viewportRect);
+            const flippedPopoverRect = this._getPlacedPopoverRect(popoverSize, anchorRect, placementX, placementY);
 
             // Check if the flipped rect is within the viewport before using it. If the flipped rect
             // is also outside the viewport, we might as well just use the original one and then nudge it.

@@ -1,15 +1,15 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const classNames = require('classnames');
 const KeyCodes = require('client_server_shared/key_codes');
-
-const {PropTypes} = React;
+const invariant = require('invariant');
 
 const onEnterOrSpaceKey = handler => {
     return function(e) {
         if ((e.which === KeyCodes.ENTER || e.which === KeyCodes.SPACE) && handler) {
             e.preventDefault();
-            handler(e);
+            handler();
         }
     };
 };
@@ -57,10 +57,24 @@ class Toggle extends React.Component {
         theme: themes.GREEN,
     };
     _toggleValue: () => void;
+    _container: HTMLElement | null;
     constructor(props: ToggleProps) {
         super(props);
 
+        this._container = null;
         this._toggleValue = this._toggleValue.bind(this);
+    }
+    focus() {
+        invariant(this._container, 'No toggle to focus');
+        this._container.focus();
+    }
+    blur() {
+        invariant(this._container, 'No toggle to blur');
+        this._container.blur();
+    }
+    click() {
+        invariant(this._container, 'No toggle to click');
+        this._container.click();
     }
     _toggleValue() {
         const {value, onChange} = this.props;
@@ -69,7 +83,19 @@ class Toggle extends React.Component {
         }
     }
     render() {
-        const {value, label, theme, disabled, className, style, tabIndex} = this.props;
+        const {
+            value,
+            label,
+            theme,
+            disabled,
+            className,
+            style,
+            tabIndex,
+            // Filter these out so they're not
+            // included in restOfProps:
+            onChange, // eslint-disable-line no-unused-vars
+            ...restOfProps
+        } = this.props;
 
         const onClick = disabled ? null : this._toggleValue;
         const tabIndexToUse = disabled ? -1 : tabIndex;
@@ -80,6 +106,7 @@ class Toggle extends React.Component {
 
         return (
             <div
+                ref={el => this._container = el}
                 onClick={onClick}
                 tabIndex={tabIndexToUse}
                 onKeyDown={onEnterOrSpaceKey(onClick)}
@@ -87,7 +114,8 @@ class Toggle extends React.Component {
                     'pointer link-quiet': !disabled,
                     'noevents quieter': disabled,
                 }, className)}
-                style={style}>
+                style={style}
+                {...restOfProps}>
                 <div
                     className={classNames('pill flex animate flex-none', {
                         'justify-start darken2': !value,

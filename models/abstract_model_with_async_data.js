@@ -1,4 +1,5 @@
 // @flow
+const {h, _} = require('client_server_shared/h_');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 
@@ -16,12 +17,14 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     _isDataLoaded: boolean;
     _pendingDataLoadPromise: Promise<Array<WatchableKey>> | null;
     _dataRetainCount: number;
+    _unloadDataTimeoutId: null | number;
     constructor(baseData: BaseDataForBlocks, modelId: string) {
         super(baseData, modelId);
 
         this._isDataLoaded = false;
         this._pendingDataLoadPromise = null;
         this._dataRetainCount = 0;
+        this._unloadDataTimeoutId = null;
     }
     watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: mixed): Array<WatchableKey> {
         const validKeys = super.watch(keys, callback, context);
@@ -30,7 +33,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
                 // Note: for simplicity, we will call loadData for every key that needs
                 // needs data, relying on the retain count to unload once all keys have
                 // been unwatched.
-                utils.fireAndForgetPromise(this._loadDataIfNeededAndRetainAsync.bind(this));
+                utils.fireAndForgetPromise(this.loadDataAsync.bind(this));
             }
         }
         return validKeys;
@@ -39,12 +42,15 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
         const validKeys = super.unwatch(keys, callback, context);
         for (const key of validKeys) {
             if (this.constructor._shouldLoadDataForKey(key)) {
-                // We called _loadDataIfNeededAndRetainAsync for every key that needs
-                // data so call _releaseData for every key to balance the retain count.
-                this._releaseData();
+                // We called loadDataAsync for every key that needs data so call
+                // unloadData for every key to balance the retain count.
+                this.unloadData();
             }
         }
         return validKeys;
+    }
+    get isDataLoaded(): boolean {
+        return this._isDataLoaded;
     }
     async _loadDataAsync(): Promise<Array<WatchableKey>> {
         // Override this to fetch the data.
@@ -56,16 +62,18 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
         // Override this to unload the data.
         throw new Error('abstract method');
     }
-    get isDataLoaded(): boolean {
-        return this._isDataLoaded;
-    }
+    // Override this method if your model is dependent on other models.
+    // Do NOT load other models' data from _loadDataAsync, since it can lead to
+    // unexpected behavior.
+    // IMPORTANT: always call super.loadDataAsync() from your override.
     async loadDataAsync() {
-        return this._loadDataIfNeededAndRetainAsync();
-    }
-    unloadData() {
-        this._releaseData();
-    }
-    async _loadDataIfNeededAndRetainAsync() {
+        if (this._unloadDataTimeoutId !== null) {
+            // If we set a timeout to unload data, clear it since we are incrementing
+            // the retain count and loading data.
+            clearTimeout(this._unloadDataTimeoutId);
+            this._unloadDataTimeoutId = null;
+        }
+
         // We keep a count of how many things have loaded the data so we don't
         // actually unload the data until the retain count comes back down to zero.
         this._dataRetainCount++;
@@ -86,7 +94,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
         }
         await this._pendingDataLoadPromise;
     }
-    _releaseData() {
+    // Override this method if your model is dependent on other models.
+    // Do NOT unload other models' data from _unloadData, since it can lead to
+    // unexpected behavior.
+    // IMPORTANT: always call super.unloadData() from your override.
+    unloadData() {
         this._dataRetainCount--;
 
         if (this._dataRetainCount < 0) {
@@ -97,11 +109,10 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
             // Don't unload immediately. Wait a while in case something else
             // requests the data, so we can avoid going back to liveapp or
             // the network.
-            setTimeout(() => {
-                if (this._dataRetainCount === 0) {
-                    this._unloadData();
-                    this._isDataLoaded = false;
-                }
+            this._unloadDataTimeoutId = setTimeout(() => {
+                h.assert(this._dataRetainCount === 0, 'Unload data timeout fired with non-zero retain count');
+                this._unloadData();
+                this._isDataLoaded = false;
             }, DATA_UNLOAD_DELAY_MS);
         }
     }

@@ -28,12 +28,18 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     get _data(): DataType {
         const data = this._dataOrNullIfDeleted;
         if (data === null) {
-            throw new Error(this.constructor._className + ' has been deleted');
+            throw new Error(this._getErrorMessageForDeletion());
         }
         return data;
     }
     get isDeleted(): boolean {
         return this._dataOrNullIfDeleted === null;
+    }
+    get __baseData(): BaseDataForBlocks {
+        return this._baseData;
+    }
+    _getErrorMessageForDeletion(): string {
+        return this.constructor._className + ' has been deleted';
     }
 }
 

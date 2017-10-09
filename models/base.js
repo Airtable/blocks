@@ -10,7 +10,7 @@ const userObjMethods = require('client_server_shared/column_types/helpers/user_o
 const getSdk = require('client/blocks/sdk/get_sdk');
 
 import type {BaseDataForBlocks, Collaborator} from 'client/blocks/blocks_model_bridge';
-import type {AppBlanket} from 'client_server_shared/object_schemas/app_blanket_schema';
+import type {AppBlanket} from 'client_server_shared/types/app_json/app_blanket';
 
 // How these model classes work:
 //
@@ -39,7 +39,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableBaseKeys, key);
     }
-    _tableModelsById: {[key: string]: Table};
+    _tableModelsById: {[string]: Table};
     constructor(baseData: BaseDataForBlocks) {
         super(baseData, baseData.id);
 
@@ -94,23 +94,27 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         const collaborators = [];
         const appBlanket = this.__appBlanket;
         if (appBlanket) {
-            for (const userObj of utils.iterateValues(appBlanket.userInfoById)) {
-                collaborators.push(userObjMethods.formatUserObjForPublicApiV2(userObj));
+            const {userInfoById} = appBlanket;
+            if (userInfoById) {
+                for (const userObj of utils.iterateValues(userInfoById)) {
+                    collaborators.push(userObjMethods.formatUserObjForPublicApiV2(userObj));
+                }
             }
         }
         return collaborators;
     }
     getCollaboratorById(collaboratorId: string): Collaborator | null {
-        if (!this.__appBlanket) {
+        const appBlanket = this.__appBlanket;
+        if (!appBlanket || !appBlanket.userInfoById) {
             return null;
         }
-        const userObj = this.__appBlanket.userInfoById[collaboratorId];
+        const userObj = appBlanket.userInfoById[collaboratorId];
         if (!userObj) {
             return null;
         }
         return userObjMethods.formatUserObjForPublicApiV2(userObj);
     }
-    get __appBlanket(): AppBlanket | null {
+    get __appBlanket(): AppBlanket {
         return this._data.appBlanket;
     }
     getTableById(tableId: string): Table | null {

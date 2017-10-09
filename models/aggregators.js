@@ -21,7 +21,7 @@ export type Aggregator = {
 
 const aggregatorKeys = _.keys(liveappSummaryFunctionKeyByAggregatorKey);
 
-const aggregators: {[key: string]: Aggregator} = {};
+const aggregators: {[string]: Aggregator} = {};
 
 const aggregate = (aggregatorKey: string, records: Array<RecordType>, field: FieldType) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {

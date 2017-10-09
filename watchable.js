@@ -6,7 +6,7 @@ class Watchable<WatchableKey: string> {
         // Override to return whether `key` is a valid watchable key.
         return false;
     }
-    _changeWatchersByKey: {[key: string]: Array<{callback: Function, context: any}>}; // eslint-disable-line flowtype/no-weak-types
+    _changeWatchersByKey: {[string]: Array<{callback: Function, context: any}>}; // eslint-disable-line flowtype/no-weak-types
     constructor() {
         this._changeWatchersByKey = {};
     }
@@ -71,7 +71,7 @@ class Watchable<WatchableKey: string> {
         const watchers = this._changeWatchersByKey[key];
         if (watchers) {
             for (const watcher of watchers) {
-                watcher.callback.call(watcher.context, this, ...args);
+                watcher.callback.call(watcher.context, this, key, ...args);
             }
         }
     }

@@ -1,12 +1,14 @@
 // @flow
 const _ = require('client_server_shared/lodash.custom');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const ViewModel = require('client/blocks/sdk/models/view');
 const TableModel = require('client/blocks/sdk/models/table');
 const ApiViewTypes = require('client_server_shared/view_types/api_view_types');
 const ModelPickerSelect = require('client/blocks/sdk/ui/model_picker_select');
+const invariant = require('invariant');
 
 import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
 
@@ -24,21 +26,35 @@ type ViewPickerProps = {
 
 class ViewPicker extends React.Component {
     static propTypes = {
-        table: React.PropTypes.instanceOf(TableModel),
-        view: React.PropTypes.instanceOf(ViewModel),
-        shouldAllowPickingNone: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
-        allowedTypes: React.PropTypes.arrayOf(React.PropTypes.oneOf(_.values(ApiViewTypes))),
-        placeholder: React.PropTypes.string,
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+        table: PropTypes.instanceOf(TableModel),
+        view: PropTypes.instanceOf(ViewModel),
+        shouldAllowPickingNone: PropTypes.bool,
+        onChange: PropTypes.func,
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(_.values(ApiViewTypes))),
+        placeholder: PropTypes.string,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        disabled: PropTypes.bool,
     };
     props: ViewPickerProps;
     _onChange: (string | null) => void;
+    _select: ModelPickerSelect | null;
     constructor(props) {
         super(props);
+        this._select = null;
         this._onChange = this._onChange.bind(this);
+    }
+    focus() {
+        invariant(this._select, 'No select to focus');
+        this._select.focus();
+    }
+    blur() {
+        invariant(this._select, 'No select to blur');
+        this._select.blur();
+    }
+    click() {
+        invariant(this._select, 'No select to click');
+        this._select.click();
     }
     _onChange(viewId: string | null) {
         const {onChange, table} = this.props;
@@ -80,8 +96,11 @@ class ViewPicker extends React.Component {
             return !allowedTypes || allowedTypes[view.type];
         };
 
+        const restOfProps = _.omit(this.props, Object.keys(ViewPicker.propTypes));
+
         return (
             <ModelPickerSelect
+                ref={el => this._select = el}
                 models={table.views}
                 selectedModelId={selectedView && !selectedView.isDeleted ? selectedView.id : null}
                 shouldAllowPickingModelFn={shouldAllowPickingViewFn}
@@ -92,6 +111,7 @@ class ViewPicker extends React.Component {
                 placeholder={placeholder}
                 shouldAllowPickingNone={shouldAllowPickingNone}
                 modelKeysToWatch={['name']}
+                {...restOfProps}
             />
         );
     }
@@ -102,4 +122,8 @@ module.exports = createDataContainer(ViewPicker, (props: ViewPickerProps) => {
         {watch: props.table, key: 'views'},
         {watch: getSdk().base, key: 'tables'},
     ];
-});
+}, [
+    'focus',
+    'blur',
+    'click',
+]);

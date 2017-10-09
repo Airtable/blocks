@@ -1,5 +1,6 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const _ChoiceToken = require('client_server_shared/column_types/components/choice_token'); // TODO(kasra): don't depend on liveapp components.
 const colors = require('client_server_shared/colors');
 const classNames = require('classnames');
@@ -24,12 +25,12 @@ const ChoiceToken = ({choice, className}: ChoiceTokenProps) => {
 };
 
 ChoiceToken.propTypes = {
-    choice: React.PropTypes.shape({
-        id: React.PropTypes.string.isRequired,
-        name: React.PropTypes.string.isRequired,
-        color: React.PropTypes.string,
+    choice: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        color: PropTypes.string,
     }).isRequired,
-    className: React.PropTypes.string,
+    className: PropTypes.string,
 };
 
 module.exports = ChoiceToken;

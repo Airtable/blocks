@@ -59,7 +59,7 @@ const liveappColorsToInclude = [
     'grayDark1',
 ];
 
-const colors: {[key: string]: string} = {};
+const colors: {[string]: string} = {};
 for (const color of liveappColorsToInclude) {
     h.assert(liveappColors.ALL_COLORS[color], 'Liveapp color names out of sync');
 

@@ -23,9 +23,11 @@ const styleForChevron = {
 class Select extends React.Component {
     static propTypes = SelectAndSelectButtonsPropTypes;
     props: SelectProps;
+    _select: HTMLSelectElement | null;
     constructor(props: SelectProps) {
         super(props);
 
+        this._select = null;
         this._onChange = this._onChange.bind(this);
     }
     _onChange: (e: Event) => void;
@@ -35,6 +37,18 @@ class Select extends React.Component {
             invariant(e.target instanceof HTMLSelectElement, 'bad input');
             onChange(JSON.parse(e.target.value));
         }
+    }
+    focus() {
+        invariant(this._select, 'No select to focus');
+        this._select.focus();
+    }
+    blur() {
+        invariant(this._select, 'No select to blur');
+        this._select.blur();
+    }
+    click() {
+        invariant(this._select, 'No select to click');
+        this._select.click();
     }
     render() {
         const {
@@ -79,6 +93,7 @@ class Select extends React.Component {
 
         return (
             <select
+                ref={el => this._select = el}
                 className={classNames('styled-input p1 rounded normal no-outline darken1 text-dark', {
                     'link-quiet pointer': !this.props.disabled,
                     quieter: this.props.disabled,

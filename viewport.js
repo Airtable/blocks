@@ -41,10 +41,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
             this._onExitFullscreen();
         });
 
-        this._onSizeChangeDebounced = _.debounce(this._onSizeChange.bind(this), 200, {
-            leading: true,
-            maxWait: 1500,
-        });
+        this._onSizeChangeDebounced = _.debounce(this._onSizeChange.bind(this), 200);
 
         this._minSize = Object.freeze({
             width: null,
@@ -85,8 +82,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
     get isSmallerThanMinSize(): boolean {
         const {width, height} = this.size;
-        const isWidthTooSmall = !!this._minSize.width && this._minSize.width > width;
-        const isHeightTooSmall = !!this._minSize.height && this._minSize.height > height;
+        const isWidthTooSmall = this._minSize.width !== null && this._minSize.width > width;
+        const isHeightTooSmall = this._minSize.height !== null && this._minSize.height > height;
         return isWidthTooSmall || isHeightTooSmall;
     }
     get isFullscreen(): boolean {
@@ -126,11 +123,13 @@ class Viewport extends Watchable<WatchableViewportKey> {
         this._isFullscreen = true;
 
         this._onChange(WatchableViewportKeys.isFullscreen);
+        this._onChange(WatchableViewportKeys.size);
     }
     _onExitFullscreen() {
         this._isFullscreen = false;
 
         this._onChange(WatchableViewportKeys.isFullscreen);
+        this._onChange(WatchableViewportKeys.size);
     }
     _onSizeChange() {
         this._onChange(WatchableViewportKeys.size);

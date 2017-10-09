@@ -1,6 +1,7 @@
 // @flow
 const {h, _} = require('client_server_shared/h_');
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
 const profilePicHelper = require('client_server_shared/profile_pic_helper');
 const _CollaboratorToken = require('client_server_shared/column_types/components/collaborator_token'); // TODO(kasra): don't depend on liveapp components.
@@ -17,6 +18,10 @@ type CollaboratorTokenProps = {
     className?: string,
 };
 
+const fakeCollaboratorColumnTypeOptions = {
+    shouldNotify: false,
+};
+
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className} = props;
 
@@ -26,17 +31,20 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     // objects are not equal, then we can't use these, so we'll just render what we were given without
     // formatting it nicely.
     const appBlanket = getSdk().base.__appBlanket;
-    const userObj = appBlanket && collaborator.id ? appBlanket.userInfoById[collaborator.id] : null;
+    const userObj = appBlanket && appBlanket.userInfoById && collaborator.id ? appBlanket.userInfoById[collaborator.id] : null;
     const userObjFormattedForPublicApiV2 = userObj ? userObjMethods.formatUserObjForPublicApiV2(userObj) : null;
 
     let userName;
     let profilePicUrl;
-    if (_.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    if (userObj === null) {
+        profilePicUrl = profilePicHelper.getSizedUnknownProfilePicUrl(18);
+        userName = 'Unknown';
+    } else if (_.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
         // Since the object we got passed and the formatted v2 obj are the same, we can just use
         // the private obj and our helpers. We do this so that we can use sized prof pic urls
         // and name helper functions that we couldn't otherwise use.
         profilePicUrl = userObjMethods.getTokenSizedProfilePicUrl(userObj);
-        userName = userObjMethods.getName(userObj) || 'Unknown';
+        userName = userObjMethods.getName(userObj, fakeCollaboratorColumnTypeOptions) || 'Unknown';
     } else {
         // Can't use helpers to get token-sized prof pic url, since we can't be sure we were
         // given an airtable url.
@@ -54,14 +62,14 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
 };
 
 CollaboratorToken.propTypes = {
-    collaborator: React.PropTypes.shape({
-        id: React.PropTypes.string,
-        email: React.PropTypes.string,
-        name: React.PropTypes.string,
-        profilePicUrl: React.PropTypes.string,
-        status: React.PropTypes.string,
+    collaborator: PropTypes.shape({
+        id: PropTypes.string,
+        email: PropTypes.string,
+        name: PropTypes.string,
+        profilePicUrl: PropTypes.string,
+        status: PropTypes.string,
     }).isRequired,
-    className: React.PropTypes.string,
+    className: PropTypes.string,
 };
 
 module.exports = CollaboratorToken;

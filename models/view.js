@@ -21,7 +21,7 @@ const WatchableViewKeys = {
     allFields: 'allFields',
     visibleFields: 'visibleFields',
 };
-type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
+export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
 class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKey> {
     static _className = 'View';
@@ -35,10 +35,12 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             key === WatchableViewKeys.visibleFields;
     }
     _parentTable: TableType;
+    _tableLoadPromises: Array<Promise<*>>;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, viewId: string) {
         super(baseData, viewId);
 
         this._parentTable = parentTable;
+        this._tableLoadPromises = [];
 
         Object.seal(this);
     }
@@ -66,10 +68,30 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             absolute: true,
         });
     }
+    async loadDataAsync() {
+        // Override this method to also load table data.
+        // NOTE: it's important that we call loadDataAsync on the table here and not in
+        // _loadDataAsync since we want the retain counts for the view and table to increase/decrease
+        // in lock-step. If we load table data in _loadDataAsync, the table's retain
+        // count only increments some of the time, which leads to unexpected behavior.
+        const tableLoadPromise = this.parentTable.loadDataAsync();
+        this._tableLoadPromises.push(tableLoadPromise);
+
+        await super.loadDataAsync();
+    }
     async _loadDataAsync(): Promise<Array<WatchableViewKey>> {
+        invariant(this._tableLoadPromises.length > 0, 'No table load promises');
+
+        // We need to be sure that the table data is loaded *before* we return from this
+        // method, so let's pop a promise off of the array and await it.
+        // NOTE: if the array has multiple promises, we might not be awaiting the same
+        // promise that we stored in the corresponding loadDataAsync call, but that
+        // doesn't really matter, since we just care that the table data is loaded.
+        const tableLoadPromise = this._tableLoadPromises.pop();
+
         const [viewData] = await Promise.all([
             liveappInterface.fetchAndSubscribeToViewDataAsync(this.parentTable.id, this._id),
-            this.parentTable.loadDataAsync(),
+            tableLoadPromise,
         ]);
 
         this._data.visibleRecordIds = viewData.visibleRecordIds;
@@ -80,6 +102,20 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             WatchableViewKeys.allFields,
             WatchableViewKeys.visibleFields,
         ];
+    }
+    unloadData() {
+        // Override this method to also unload the table's data.
+        // NOTE: it's important that we do this here, since we want the view and table's
+        // retain counts to increment/decrement in lock-step. If we unload the table's
+        // data in _unloadData, it leads to unexpected behavior.
+        super.unloadData();
+        this.parentTable.unloadData();
+    }
+    _unloadData() {
+        liveappInterface.unsubscribeFromViewData(this.parentTable.id, this._id);
+        if (!this.isDeleted) {
+            this._data.visibleRecordIds = undefined;
+        }
     }
     __generateChangesForParentTableAddMultipleRecords(recordIds: Array<string>): Array<BlockModelChange> {
         const newVisibleRecordIds = this.visibleRecordIds.concat(recordIds);
@@ -98,14 +134,6 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         return [
             {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
         ];
-    }
-    _unloadData() {
-        this.parentTable.unloadData();
-
-        liveappInterface.unsubscribeFromViewData(this.parentTable.id, this._id);
-        if (!this.isDeleted) {
-            this._data.visibleRecordIds = undefined;
-        }
     }
     get visibleRecordIds(): Array<string> {
         const visibleRecordIds = this._data.visibleRecordIds;

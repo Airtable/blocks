@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const {h, u, _} = require('client_server_shared/hu_');
 const invariant = require('invariant');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
@@ -13,7 +13,7 @@ import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_
 import type TableType from 'client/blocks/sdk/models/table';
 
 // A record def is a cellValuesByFieldId object.
-export type RecordDef = {[key: string]: mixed};
+export type RecordDef = {[string]: mixed};
 
 const WatchableRecordKeys = {
     primaryCellValue: 'primaryCellValue',
@@ -39,19 +39,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         const table = records[0].parentTable;
         const sorter = new Sorter({
             rowsArray: records.map(record => {
-                const data = record._data;
-                return {
-                    id: data.id,
-                    createdTime: data.createdTime,
-                    cellValuesByColumnId: data.cellValuesByFieldId,
-                };
+                return record.__getRawRow();
             }),
             columnsArray: table.fields.map(field => {
-                return {
-                    id: field.id,
-                    type: field.__getRawType(),
-                    typeOptions: field.__getRawTypeOptions(),
-                };
+                return field.__getRawColumn();
             }),
             sorts: sortConfigs.map(sortConfig => {
                 const field = table.__getFieldMatching(sortConfig.field);
@@ -66,7 +57,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             appBlanket: table.parentBase.__appBlanket,
         });
         const sortedRecords = sorter.getSortedRowIds().map(recordId => table.getRecordById(recordId));
-        return sortedRecords;
+        return _.compact(sortedRecords);
     }
     _parentTable: TableType;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, recordId: string) {
@@ -87,6 +78,15 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     }
     get parentTable(): TableType {
         return this._parentTable;
+    }
+    __getRawRow(): {id: string, createdTime: string, cellValuesByColumnId?: RecordDef} {
+        return {
+            id: this.id,
+            createdTime: this._data.createdTime,
+            ...(this._data.cellValuesByFieldId ? {
+                cellValuesByColumnId: this._data.cellValuesByFieldId,
+            } : {}),
+        };
     }
     __getRawCellValue(fieldId: string): mixed {
         const {cellValuesByFieldId} = this._data;
@@ -171,7 +171,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         const {cellValuesByFieldId, commentCount} = dirtyPaths;
 
-        if (cellValuesByFieldId && _.size(cellValuesByFieldId) > 0) {
+        if (cellValuesByFieldId && u.size(cellValuesByFieldId) > 0) {
             this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
 
             if (cellValuesByFieldId[this.parentTable.primaryField.id]) {

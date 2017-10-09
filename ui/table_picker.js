@@ -1,9 +1,11 @@
 // @flow
 const React = require('client/blocks/sdk/ui/react');
+const PropTypes = require('prop-types');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const TableModel = require('client/blocks/sdk/models/table');
 const ModelPickerSelect = require('client/blocks/sdk/ui/model_picker_select');
+const invariant = require('invariant');
 
 type TablePickerProps = {
      table: ?TableModel,
@@ -17,19 +19,34 @@ type TablePickerProps = {
 
 class TablePicker extends React.Component {
     static propTypes = {
-        table: React.PropTypes.instanceOf(TableModel),
-        shouldAllowPickingNone: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
-        placeholder: React.PropTypes.string,
-        style: React.PropTypes.object,
-        className: React.PropTypes.string,
-        disabled: React.PropTypes.bool,
+        table: PropTypes.instanceOf(TableModel),
+        shouldAllowPickingNone: PropTypes.bool,
+        onChange: PropTypes.func,
+        placeholder: PropTypes.string,
+        style: PropTypes.object,
+        className: PropTypes.string,
+        disabled: PropTypes.bool,
     };
     props: TablePickerProps;
+    _select: ModelPickerSelect | null;
     _onChange: (string | null) => void;
     constructor(props) {
         super(props);
+
+        this._select = null;
         this._onChange = this._onChange.bind(this);
+    }
+    focus() {
+        invariant(this._select, 'No select to focus');
+        this._select.focus();
+    }
+    blur() {
+        invariant(this._select, 'No select to blur');
+        this._select.blur();
+    }
+    click() {
+        invariant(this._select, 'No select to click');
+        this._select.click();
     }
     _onChange(tableId: string | null) {
         const {onChange} = this.props;
@@ -39,29 +56,42 @@ class TablePicker extends React.Component {
         }
     }
     render() {
-        const {shouldAllowPickingNone, style, className, disabled} = this.props;
-        const selectedTable = this.props.table && !this.props.table.isDeleted ? this.props.table : null;
+        const {
+            table,
+            shouldAllowPickingNone,
+            style,
+            className,
+            disabled,
+            placeholder,
+            // Filter these out so they're not
+            // included in restOfProps:
+            onChange, // eslint-disable-line no-unused-vars
+            ...restOfProps
+        } = this.props;
+        const selectedTable = table && !table.isDeleted ? table : null;
 
-        let placeholder;
-        if (this.props.placeholder === undefined) {
+        let placeholderToUse;
+        if (placeholder === undefined) {
             // Let's set a good default value for the placeholder, depending
             // on the shouldAllowPickingNone flag.
-            placeholder = shouldAllowPickingNone ? 'None' : 'Pick a table...';
+            placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a table...';
         } else {
-            placeholder = this.props.placeholder;
+            placeholderToUse = placeholder;
         }
 
         return (
             <ModelPickerSelect
+                ref={el => this._select = el}
                 models={getSdk().base.tables}
                 selectedModelId={selectedTable ? selectedTable.id : null}
                 onChange={this._onChange}
                 style={style}
                 className={className}
                 disabled={disabled}
-                placeholder={placeholder}
+                placeholder={placeholderToUse}
                 shouldAllowPickingNone={shouldAllowPickingNone}
                 modelKeysToWatch={['name']}
+                {...restOfProps}
             />
         );
     }
@@ -71,4 +101,8 @@ module.exports = createDataContainer(TablePicker, (props: TablePickerProps) => {
     return [
         {watch: getSdk().base, key: 'tables'},
     ];
-});
+}, [
+    'focus',
+    'blur',
+    'click',
+]);

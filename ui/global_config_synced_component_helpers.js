@@ -1,8 +1,6 @@
 // @flow
-const React = require('client/blocks/sdk/ui/react');
 const getSdk = require('client/blocks/sdk/get_sdk');
-
-const {PropTypes} = React;
+const PropTypes = require('prop-types');
 
 import type {GlobalConfigKey} from 'client/blocks/sdk/global_config';
 import type {WatchDependency} from 'client/blocks/sdk/ui/create_data_container';
