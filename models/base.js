@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const Table = require('client/blocks/sdk/models/table');
@@ -9,8 +9,9 @@ const permissions = require('client_server_shared/permissions');
 const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
 const getSdk = require('client/blocks/sdk/get_sdk');
 
-import type {BaseDataForBlocks, Collaborator} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, Collaborator} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {AppBlanket} from 'client_server_shared/types/app_json/app_blanket';
+import type {PermissionLevel} from 'client_server_shared/permissions';
 
 // How these model classes work:
 //
@@ -67,6 +68,9 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         } else {
             return this.getCollaboratorById(userId);
         }
+    }
+    get __rawPermissionLevel(): PermissionLevel {
+        return this._data.permissionLevel;
     }
     get permissionLevel(): string {
         return permissions.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
@@ -203,7 +207,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             dirtySubtree = dirtySubtree[part];
         }
         const lastPathPart = path[path.length - 1];
-        const didChange = !_.isEqual(dataSubtree[lastPathPart], value);
+        const didChange = !u.isEqual(dataSubtree[lastPathPart], value);
         if (value === undefined) {
             delete dataSubtree[lastPathPart];
         } else {

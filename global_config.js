@@ -1,11 +1,12 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const utils = require('client/blocks/sdk/utils');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const BlockMessageTypes = require('client/blocks/block_message_types');
 const Watchable = require('client/blocks/sdk/watchable');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const blockKvHelpers = require('client_server_shared/blocks/block_kv_helpers');
+const permissions = require('client_server_shared/permissions');
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
 
@@ -54,11 +55,18 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     }
     get(key: GlobalConfigKey): BlockKvValue {
         const path = this.__formatKeyAsPath(key);
-        const value = _.get(this._kvStore, path);
+        const value = u.get(this._kvStore, path);
         if (value === undefined) {
             return null;
         }
         return value;
+    }
+    canSet(key: GlobalConfigKey) {
+        // This takes the key to future-proof against having per-key
+        // permissions.
+        // For now, just need at least edit permissions to update globalConfig.
+        const {base} = getSdk();
+        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
     }
     set(key: GlobalConfigKey, value: BlockKvValue) {
         const path = this.__formatKeyAsPath(key);
@@ -72,13 +80,18 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             {path, value},
         ]);
     }
+    canSetPaths(updates: Array<BlockKvUpdate>) {
+        // This takes the updates to future-proof against having per-key
+        // permissions.
+        // For now, just need at least edit permissions to update globalConfig.
+        const {base} = getSdk();
+        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
+    }
     setPaths(updates: Array<BlockKvUpdate>) {
-        // Read-only users can't update kvstore. Return an error to the block in this case.
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
-        const {base, models} = getSdk();
-        if (base.permissionLevel === models.permissionLevels.READ) {
-            throw new Error('Read-only user cannot set globalConfig values');
+        if (!this.canSetPaths(updates)) {
+            throw new Error('Your permission level does not allow setting globalConfig values');
         }
 
         this._setMultipleKvPaths(updates);
@@ -105,7 +118,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             topLevelKeySet[topLevelKey] = true;
         }
 
-        const limitCheckResult = blockKvHelpers.limitCheckKvStore(this._kvStore, _.keys(topLevelKeySet));
+        const limitCheckResult = blockKvHelpers.limitCheckKvStore(this._kvStore, u.keys(topLevelKeySet));
         if (!limitCheckResult.isValid) {
             throw new Error(`globalConfig over limits: ${limitCheckResult.reason}`);
         }

@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const TableModel = require('client/blocks/sdk/models/table');
@@ -8,7 +8,7 @@ const Tooltip = require('client/blocks/sdk/ui/tooltip');
 const Icon = require('client/blocks/sdk/ui/icon');
 const Quill = require('quill');
 const QuillDelta = require('quill-delta');
-const InlineEmbed = Quill.import('blots/inline/embed');
+const Embed = Quill.import('blots/embed');
 const AutocompletePopover = require('client/blocks/sdk/ui/autocomplete_popover');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
@@ -57,7 +57,7 @@ class FieldTokenPicker extends React.Component {
     }
 }
 
-class FieldTokenBlot extends InlineEmbed {
+class FieldTokenBlot extends Embed {
     static blotName = 'fieldToken';
     static tagName = 'control';
     static className = 'fieldToken';
@@ -163,7 +163,7 @@ class FieldTokenizedTextArea extends React.Component {
     componentWillReceiveProps(nextProps: FieldTokenizedTextAreaProps) {
         const quill = this._getQuill();
         const currentContents = quill.getContents();
-        if (!_.isEqual(nextProps.value, currentContents.ops)) {
+        if (!u.isEqual(nextProps.value, currentContents.ops)) {
             // If the value in props is different from the quill contents, let's
             // set the quill contents.
             this._setQuillContents(new QuillDelta(nextProps.value));

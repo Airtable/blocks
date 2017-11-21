@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const Popover = require('client/blocks/sdk/ui/popover');
@@ -38,7 +38,7 @@ class Tooltip extends React.Component {
         placementY: PropTypes.oneOf([Popover.placements.TOP, Popover.placements.CENTER, Popover.placements.BOTTOM]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(_.values(Popover.fitInWindowModes)),
+        fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
         shouldHideTooltipOnClick: PropTypes.bool,
         isDisabled: PropTypes.bool,
         className: PropTypes.string,

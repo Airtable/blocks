@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const colors = require('client/blocks/sdk/ui/colors');
@@ -24,7 +24,7 @@ const ProgressBar = (props: ProgressBarProps) => {
         style,
     } = props;
 
-    const clampedProgress = _.clamp(progress, 0, 1);
+    const clampedProgress = u.clamp(progress, 0, 1);
 
     return (
         <div className={`${className} relative pill overflow-hidden`} style={{

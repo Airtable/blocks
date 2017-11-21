@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
@@ -39,7 +39,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     if (userObj === null) {
         profilePicUrl = profilePicHelper.getSizedUnknownProfilePicUrl(18);
         userName = 'Unknown';
-    } else if (_.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    } else if (u.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
         // Since the object we got passed and the formatted v2 obj are the same, we can just use
         // the private obj and our helpers. We do this so that we can use sized prof pic urls
         // and name helper functions that we couldn't otherwise use.

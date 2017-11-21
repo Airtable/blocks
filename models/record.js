@@ -1,5 +1,5 @@
 // @flow
-const {h, u, _} = require('client_server_shared/hu_');
+const {h, u} = require('client_server_shared/hu');
 const invariant = require('invariant');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
@@ -9,7 +9,7 @@ const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 const airtableUrls = require('client_server_shared/airtable_urls');
 const Sorter = require('client_server_shared/filter_and_sort/sorter');
 
-import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 
 // A record def is a cellValuesByFieldId object.
@@ -22,6 +22,9 @@ const WatchableRecordKeys = {
     // it's just inconsistent...)
     cellValues: 'cellValues',
 };
+// TODO: load cell values in field when this is watched? This will
+// cause the CellRenderer component to load cell values, which seems okay,
+// but needs a little more thought.
 const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 // The string case is to accomodate cellValueInField:$FieldId.
 type WatchableRecordKey = $Keys<typeof WatchableRecordKeys> | string;
@@ -57,7 +60,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             appBlanket: table.parentBase.__appBlanket,
         });
         const sortedRecords = sorter.getSortedRowIds().map(recordId => table.getRecordById(recordId));
-        return _.compact(sortedRecords);
+        return u.compact(sortedRecords);
     }
     _parentTable: TableType;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, recordId: string) {
@@ -89,6 +92,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         };
     }
     __getRawCellValue(fieldId: string): mixed {
+        invariant(this.parentTable.areCellValuesLoadedForFieldId(fieldId), 'Cell values for field are not loaded');
         const {cellValuesByFieldId} = this._data;
         if (!cellValuesByFieldId) {
             return null;
@@ -105,6 +109,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
         invariant(field.parentTable.id === this.parentTable.id, 'Field must have same parent table as record');
+        invariant(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
         const rawCellValue = this.__getRawCellValue(field.id);
 
         const publicCellValue = cellValueUtils.getPublicCellValueFromPrivateCellValue(rawCellValue, field);
@@ -121,6 +126,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
+        invariant(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
         const rawCellValue = this.__getRawCellValue(field.id);
 
         if (rawCellValue === null || rawCellValue === undefined) {
@@ -145,6 +151,15 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     get primaryCellValueAsString(): string {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
+    canSetCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed) {
+        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+        invariant(field, 'Field does not exist');
+        invariant(!field.isDeleted, 'Field has been deleted');
+
+        return this.canSetCellValues({
+            [field.id]: publicCellValue,
+        });
+    }
     setCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed) {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
@@ -154,10 +169,18 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             [field.id]: publicCellValue,
         });
     }
+    canSetCellValues(cellValuesByFieldIdOrFieldName: RecordDef): boolean {
+        return this.parentTable.canSetCellValues({
+            [this.id]: cellValuesByFieldIdOrFieldName,
+        });
+    }
     setCellValues(cellValuesByFieldIdOrFieldName: RecordDef) {
         this.parentTable.setCellValues({
             [this.id]: cellValuesByFieldIdOrFieldName,
         });
+    }
+    canDelete(): boolean {
+        return this.parentTable.canDeleteRecord(this);
     }
     delete() {
         this.parentTable.deleteRecord(this);
@@ -172,6 +195,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         const {cellValuesByFieldId, commentCount} = dirtyPaths;
 
         if (cellValuesByFieldId && u.size(cellValuesByFieldId) > 0) {
+            // TODO: don't trigger changes for fields that aren't supposed to be loaded
+            // (in some cases, e.g. record created, liveapp will send cell values
+            // that we're not subscribed to).
+
             this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
 
             if (cellValuesByFieldId[this.parentTable.primaryField.id]) {

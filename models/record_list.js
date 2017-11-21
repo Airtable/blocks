@@ -1,5 +1,5 @@
 // @flow
-const {h, u, _} = require('client_server_shared/hu_');
+const {h, u} = require('client_server_shared/hu');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data');
 const GroupedRowVisList = require('client_server_shared/vis_lists/grouped_row_vis_list');
@@ -8,6 +8,7 @@ const TableModel = require('client/blocks/sdk/models/table');
 const ViewModel = require('client/blocks/sdk/models/view');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const invariant = require('invariant');
+const Field = require('client/blocks/sdk/models/field');
 
 const WatchableRecordListKeys = {
     records: 'records',
@@ -21,13 +22,72 @@ type RecordListData = {
     recordIds: Array<string> | null, // null if data isn't loaded (or if it hasn't been lazily initialized).
 };
 
-type SortConfig = {field: string, direction?: 'asc' | 'desc'};
+type SortConfig = {
+    field: Field | string,
+    direction?: 'asc' | 'desc',
+};
+
+export type RecordListOpts = {
+    sorts?: Array<SortConfig>,
+    // Allow falsey values for convenience of including
+    // fields conditionally. They'll be filtered out.
+    fields?: Array<Field | string | void | null | false>,
+};
+
+type NormalizedRecordListOpts = {
+    sorts: Array<{fieldId: string, direction: 'asc' | 'desc'}> | null,
+    fieldIdsOrNullIfAllFields: Array<string> | null,
+};
 
 import type {GroupLevelObj} from 'client_server_shared/types/view_config/group_level_obj';
 import type {WatchableTableKey} from 'client/blocks/sdk/models/table';
 import type {WatchableViewKey} from 'client/blocks/sdk/models/view';
 import type FieldModel from 'client/blocks/sdk/models/field';
 import type RecordModel from 'client/blocks/sdk/models/record';
+
+class RecordListPool {
+    _recordListsBySourceModelId: {[string]: Array<RecordList> | void};
+    constructor() {
+        this._recordListsBySourceModelId = {};
+    }
+    registerRecordListForReuse(recordList: RecordList) {
+        const sourceModelId = recordList.__sourceModelId;
+        const recordLists = this._recordListsBySourceModelId[sourceModelId];
+        if (recordLists) {
+            recordLists.push(recordList);
+        } else {
+            this._recordListsBySourceModelId[sourceModelId] = [recordList];
+        }
+    }
+    unregisterRecordListForReuse(recordList: RecordList) {
+        const sourceModelId = recordList.__sourceModelId;
+        const recordLists = this._recordListsBySourceModelId[sourceModelId];
+        invariant(recordLists, 'recordLists');
+        const index = recordLists.indexOf(recordList);
+        invariant(index !== -1, 'recordList not registered');
+        recordLists.splice(index, 1);
+        if (recordLists.length === 0) {
+            // `delete` causes de-opts, which slows down subsequent reads,
+            // so set to undefined instead (unverified that this is actually faster).
+            this._recordListsBySourceModelId[sourceModelId] = undefined;
+        }
+    }
+    getRecordListForReuse(sourceModel: TableModel | ViewModel, normalizedOpts: NormalizedRecordListOpts): RecordList | null {
+        const recordLists = this._recordListsBySourceModelId[sourceModel.id];
+        if (recordLists) {
+            // We expect that there won't be too many RecordLists for a given
+            // model, so iterating over them should be okay. If this assumption
+            // ends up being wrong, we can hash the opts or something.
+            for (const recordList of recordLists) {
+                if (recordList.__canBeReusedForNormalizedOpts(normalizedOpts)) {
+                    return recordList;
+                }
+            }
+        }
+        return null;
+    }
+}
+const recordListPool = new RecordListPool();
 
 class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRecordListKey> {
     static _className = 'RecordList';
@@ -41,8 +101,64 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
             key === WatchableRecordListKeys.cellValues ||
             utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
     }
+    static __createOrReuseRecordList(sourceModel: TableModel | ViewModel, opts: RecordListOpts) {
+        const tableModel = sourceModel instanceof ViewModel ? sourceModel.parentTable : sourceModel;
+        const normalizedOpts = this._normalizeOpts(tableModel, opts);
+        const recordList = recordListPool.getRecordListForReuse(sourceModel, normalizedOpts);
+        if (recordList) {
+            return recordList;
+        } else {
+            return new RecordList(sourceModel, opts);
+        }
+    }
+    static _normalizeOpts(table: TableModel, opts: RecordListOpts): NormalizedRecordListOpts {
+        const sorts = !opts.sorts ? null : opts.sorts.map(sort => {
+            const field = table.__getFieldMatching(sort.field);
+            if (!field) {
+                throw new Error(`No field found for sort: ${sort.field.toString()}`);
+            }
+            if (sort.direction !== undefined && sort.direction !== 'asc' && sort.direction !== 'desc') {
+                throw new Error(`Invalid sort direction: ${sort.direction}`);
+            }
+            return {
+                fieldId: field.id,
+                direction: sort.direction || 'asc',
+            };
+        });
+
+        let fieldIdsOrNullIfAllFields = null;
+        if (opts.fields) {
+            invariant(Array.isArray(opts.fields), 'Must specify an array of fields');
+            fieldIdsOrNullIfAllFields = [];
+            for (const fieldOrFieldIdOrFieldName of opts.fields) {
+                if (!fieldOrFieldIdOrFieldName) {
+                    // Filter out false-y values so users of this API
+                    // can conveniently list conditional fields, e.g. [field1, isFoo && field2]
+                    continue;
+                }
+                if (typeof fieldOrFieldIdOrFieldName !== 'string' && !(fieldOrFieldIdOrFieldName instanceof Field)) {
+                    throw new Error(`Invalid value for field, expected a field, id, or name but got: ${fieldOrFieldIdOrFieldName.toString()}`);
+                }
+                const field = table.__getFieldMatching(fieldOrFieldIdOrFieldName);
+                if (!field) {
+                    throw new Error(`No field found: ${fieldOrFieldIdOrFieldName.toString()}`);
+                }
+                fieldIdsOrNullIfAllFields.push(field.id);
+            }
+        }
+
+        return {
+            sorts,
+            fieldIdsOrNullIfAllFields,
+        };
+    }
     _sourceModel: TableModel | ViewModel;
-    _sourceModelLoadPromises: Array<Promise<*>>;
+    _mostRecentSourceModelLoadPromise: Promise<*> | null;
+    _table: TableModel;
+
+    _normalizedOpts: NormalizedRecordListOpts;
+
+    _fieldIdsSetToLoadOrNullIfAllFields: {[string]: true} | null;
 
     // If custom sorts are specified, we'll use a vis list to handle sorting. If no sorts
     // are specified, we'll use the underlying row order of the source model.
@@ -64,31 +180,23 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
     _cellValueKeyWatchCounts: {[string]: number};
     constructor(
         sourceModel: TableModel | ViewModel,
-        opts?: {
-            sorts?: Array<SortConfig>,
-            // TODO(jb): filters
-        },
+        opts?: RecordListOpts,
     ) {
         super(sourceModel.__baseData, getSdk().models.generateGuid());
 
-        opts = h.utils.setAndEnforceDefaultOpts({
-            sorts: null,
-        }, opts);
-
         this._sourceModel = sourceModel;
-        this._sourceModelLoadPromises = [];
+        this._mostRecentSourceModelLoadPromise = null;
 
-        if (opts.sorts) {
-            this._groupLevels = opts.sorts.map(sort => {
-                const field = this._table.__getFieldMatching(sort.field);
-                if (!field) {
-                    throw new Error(`No field found for sort: ${sort.field}`);
-                }
-                if (sort.direction !== undefined && sort.direction !== 'asc' && sort.direction !== 'desc') {
-                    throw new Error(`Invalid sort direction: ${sort.direction}`);
-                }
+        this._table = sourceModel instanceof ViewModel ? sourceModel.parentTable : sourceModel;
+
+        this._normalizedOpts = RecordList._normalizeOpts(this._table, opts || {});
+        const {sorts} = this._normalizedOpts;
+
+        if (sorts) {
+            const groupLevels: Array<GroupLevelObj> = sorts.map(sort => {
                 return {
-                    columnId: field.id,
+                    id: h.id.generateGroupLevelId(),
+                    columnId: sort.fieldId,
                     order: sort.direction === 'desc' ? 'descending' : 'ascending',
                     groupingOptions: {
                         // Always use the raw cell value (rather than normalizing for grouping) so
@@ -99,13 +207,16 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
             });
 
             // Tie-break using record created time.
-            this._groupLevels.push({
+            groupLevels.push({
+                id: h.id.generateGroupLevelId(),
                 isCreatedTime: true,
                 order: 'ascending',
                 groupingOptions: {
                     shouldUseRawCellValue: true,
                 },
             });
+
+            this._groupLevels = groupLevels;
         } else {
             this._groupLevels = null;
         }
@@ -115,7 +226,28 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
 
         this._cellValueKeyWatchCounts = {};
 
+        let fieldIdsSetToLoadOrNullIfAllFields = null;
+        if (this._normalizedOpts.fieldIdsOrNullIfAllFields) {
+            fieldIdsSetToLoadOrNullIfAllFields = {};
+            for (const fieldId of this._normalizedOpts.fieldIdsOrNullIfAllFields) {
+                fieldIdsSetToLoadOrNullIfAllFields[fieldId] = true;
+            }
+            // Need to load data for fields we're sorting by, even if
+            // they're not explicitly requested in the `fields` opt.
+            if (this._groupLevels) {
+                for (const groupLevel of this._groupLevels) {
+                    if (!groupLevel.isCreatedTime) {
+                        fieldIdsSetToLoadOrNullIfAllFields[groupLevel.columnId] = true;
+                    }
+                }
+            }
+        }
+        this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields;
+
         Object.seal(this);
+    }
+    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordListOpts): boolean {
+        return u.isEqual(this._normalizedOpts, normalizedOpts);
     }
     get _dataOrNullIfDeleted(): RecordListData | null {
         if (this._sourceModel.isDeleted) {
@@ -125,6 +257,15 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
         return {
             recordIds: this._orderedRecordIds,
         };
+    }
+    get __sourceModelId(): string {
+        return this._sourceModel.id;
+    }
+    get parentTable(): TableModel {
+        return this._table;
+    }
+    get parentView(): ViewModel | null {
+        return this._sourceModel instanceof TableModel ? null : this._sourceModel;
     }
     get recordIds(): Array<string> {
         invariant(this.isDataLoaded, 'RecordList data is not loaded');
@@ -138,8 +279,27 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
             return record;
         });
     }
+    get fields(): Array<FieldModel> | null {
+        const {fieldIdsOrNullIfAllFields} = this._normalizedOpts;
+        if (fieldIdsOrNullIfAllFields) {
+            const fields = [];
+            // Filter out any deleted fields, since RecordList is "live".
+            // It would be too cumbersome (and defeat part of the purpose of
+            // using RecordList) if the user had to manually watch for deletion
+            // on all the fields and recreate the RecordList.
+            for (const fieldId of fieldIdsOrNullIfAllFields) {
+                const field = this._table.getFieldById(fieldId);
+                if (field !== null) {
+                    fields.push(field);
+                }
+            }
+            return fields;
+        } else {
+            return null;
+        }
+    }
     get _cellValuesForSortWatchKeys(): Array<string> {
-        return this._groupLevels ? _.compact(this._groupLevels.map(groupLevel => {
+        return this._groupLevels ? u.compact(this._groupLevels.map(groupLevel => {
             if (groupLevel.isCreatedTime) {
                 return null;
             }
@@ -157,9 +317,6 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
     }
     get _sourceModelRecords(): Array<RecordModel> {
         return this._sourceModel instanceof TableModel ? this._sourceModel.records : this._sourceModel.visibleRecords;
-    }
-    get _table(): TableModel {
-        return this._sourceModel instanceof TableModel ? this._sourceModel : this._sourceModel.parentTable;
     }
     _incrementCellValueKeyWatchCountAndWatchIfNecessary(key: string, watchCallback: Function) {
         if (!this._cellValueKeyWatchCounts[key]) {
@@ -193,11 +350,21 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
 
         for (const key of validKeys) {
             if (utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
+                const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
+                if (this._fieldIdsSetToLoadOrNullIfAllFields && !this._fieldIdsSetToLoadOrNullIfAllFields.hasOwnProperty(fieldId)) {
+                    throw new Error(`Can't watch field because it wasn't included in RecordList fields: ${fieldId}`);
+                }
                 this._incrementCellValueKeyWatchCountAndWatchIfNecessary(key, this._onCellValuesInFieldChanged);
             }
 
             if (key === WatchableRecordListKeys.cellValues) {
-                this._incrementCellValueKeyWatchCountAndWatchIfNecessary(key, this._onCellValuesChanged);
+                if (this._fieldIdsSetToLoadOrNullIfAllFields) {
+                    for (const fieldId of Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields)) {
+                        this._incrementCellValueKeyWatchCountAndWatchIfNecessary(WatchableCellValuesInFieldKeyPrefix + fieldId, this._onCellValuesChanged);
+                    }
+                } else {
+                    this._incrementCellValueKeyWatchCountAndWatchIfNecessary(key, this._onCellValuesChanged);
+                }
             }
         }
 
@@ -215,22 +382,53 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
             }
 
             if (key === WatchableRecordListKeys.cellValues) {
-                this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(key, this._onCellValuesChanged);
+                if (this._fieldIdsSetToLoadOrNullIfAllFields) {
+                    for (const fieldId of Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields)) {
+                        this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(WatchableCellValuesInFieldKeyPrefix + fieldId, this._onCellValuesChanged);
+                    }
+                } else {
+                    this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(key, this._onCellValuesChanged);
+                }
             }
         }
 
         return validKeys;
     }
     async loadDataAsync() {
-        const sourceModelLoadPromise = this._sourceModel.loadDataAsync();
-        this._sourceModelLoadPromises.push(sourceModelLoadPromise);
+        let sourceModelLoadPromise;
+        let cellValuesInFieldsLoadPromise;
+
+        if (this._fieldIdsSetToLoadOrNullIfAllFields) {
+            cellValuesInFieldsLoadPromise = this._table.loadCellValuesInFieldIdsAsync(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
+        } else {
+            // Load all fields.
+            cellValuesInFieldsLoadPromise = this._table.loadDataAsync();
+        }
+
+        if (this._sourceModel instanceof TableModel) {
+            if (this._fieldIdsSetToLoadOrNullIfAllFields) {
+                sourceModelLoadPromise = this._table.loadRecordMetadataAsync();
+            } else {
+                // table.loadDataAsync is a superset of loadRecordMetadataAsync,
+                // so no need to load record metadata again.
+                sourceModelLoadPromise = null;
+            }
+        } else {
+            sourceModelLoadPromise = this._sourceModel.loadDataAsync();
+        }
+
+        this._mostRecentSourceModelLoadPromise = Promise.all([
+            sourceModelLoadPromise,
+            cellValuesInFieldsLoadPromise,
+        ]);
 
         await super.loadDataAsync();
     }
     async _loadDataAsync(): Promise<Array<WatchableRecordListKey>> {
-        invariant(this._sourceModelLoadPromises.length > 0, 'No source model load promises');
-        const sourceModelLoadPromise = this._sourceModelLoadPromises.pop();
-        await sourceModelLoadPromise;
+        recordListPool.registerRecordListForReuse(this);
+
+        invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
+        await this._mostRecentSourceModelLoadPromise;
 
         if (this._groupLevels) {
             this._replaceVisList();
@@ -278,17 +476,35 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
             WatchableRecordListKeys.cellValues,
         ];
 
-        for (const field of this._table.fields) {
-            changedKeys.push(WatchableCellValuesInFieldKeyPrefix + field.id);
+        const fieldIds = this._normalizedOpts.fieldIdsOrNullIfAllFields ||
+            this._table.fields.map(field => field.id);
+
+        for (const fieldId of fieldIds) {
+            changedKeys.push(WatchableCellValuesInFieldKeyPrefix + fieldId);
         }
 
         return changedKeys;
     }
     unloadData() {
         super.unloadData();
-        this._sourceModel.unloadData();
+
+        if (this._sourceModel instanceof TableModel) {
+            if (this._fieldIdsSetToLoadOrNullIfAllFields) {
+                this._sourceModel.unloadRecordMetadata();
+            } else {
+                this._sourceModel.unloadData();
+            }
+        } else {
+            this._sourceModel.unloadData();
+        }
+
+        if (this._fieldIdsSetToLoadOrNullIfAllFields) {
+            this._table.unloadCellValuesInFieldIds(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
+        }
     }
     _unloadData() {
+        this._mostRecentSourceModelLoadPromise = null;
+
         this._sourceModel.unwatch(
             // flow-disable-next-line since we know this watch key is valid.
             this._recordsWatchKey,
@@ -327,6 +543,8 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
 
         this._visList = null;
         this._orderedRecordIds = null;
+
+        recordListPool.unregisterRecordListForReuse(this);
     }
     _getColumnsById(): {[string]: Object} {
         return this._table.fields.reduce((result, field) => {
@@ -357,8 +575,8 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
             // so we need to manually generate updates based on the old and new
             // recordIds.
             if (this._orderedRecordIds) {
-                const addedRecordIds = _.difference(model.visibleRecordIds, this._orderedRecordIds);
-                const removedRecordIds = _.difference(this._orderedRecordIds, model.visibleRecordIds);
+                const addedRecordIds = u.difference(model.visibleRecordIds, this._orderedRecordIds);
+                const removedRecordIds = u.difference(this._orderedRecordIds, model.visibleRecordIds);
                 updates = {addedRecordIds, removedRecordIds};
             } else {
                 updates = null;
@@ -412,8 +630,12 @@ class RecordList extends AbstractModelWithAsyncData<RecordListData, WatchableRec
         }
 
         // Move the record ids in the vis list.
-        visList.removeMultipleIds(recordIds);
-        this._addRecordIdsToVisList(recordIds);
+        // Note: the cell value changes may have resulted in the records
+        // being filtered out. So don't try to remove and re-add them if
+        // they're no longer visible.
+        const visibleRecordIds = recordIds.filter(recordId => visList.isIdVisible(recordId));
+        visList.removeMultipleIds(visibleRecordIds);
+        this._addRecordIdsToVisList(visibleRecordIds);
         this._orderedRecordIds = this._generateOrderedRecordIds();
 
         const changeData = {addedRecordIds: [], removedRecordIds: []};

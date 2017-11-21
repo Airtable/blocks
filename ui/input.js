@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const classNames = require('classnames');
@@ -11,9 +11,7 @@ type InputProps = {
     value: mixed,
     type?: string,
     placeholder?: string,
-    // TODO(jb): update this when we remove the old input behavior.
-    onChange?: (InputValue | SyntheticInputEvent) => void,
-    shouldPassEventToOnChange?: boolean,
+    onChange?: (SyntheticInputEvent) => void,
     style?: Object,
     className?: string,
     disabled?: boolean,
@@ -56,7 +54,6 @@ class Input extends React.Component {
         type: PropTypes.oneOf(Object.keys(validTypesSet)),
         placeholder: PropTypes.string,
         onChange: PropTypes.func,
-        shouldPassEventToOnChange: PropTypes.bool,
         style: PropTypes.object,
         className: PropTypes.string,
         disabled: PropTypes.bool,
@@ -87,6 +84,10 @@ class Input extends React.Component {
         invariant(this._input, 'No input to click');
         this._input.click();
     }
+    select() {
+        invariant(this._input, 'No input to select');
+        this._input.select();
+    }
     _isCheckbox() {
         return this.props.type === 'checkbox';
     }
@@ -94,17 +95,9 @@ class Input extends React.Component {
         return !this.props.type || !typesToExcludeFromDefaultClassesSet[this.props.type];
     }
     _onChange(e: SyntheticInputEvent) {
-        const {onChange, shouldPassEventToOnChange} = this.props;
+        const {onChange} = this.props;
         if (onChange) {
-            if (shouldPassEventToOnChange) {
-                onChange(e);
-            } else {
-                const value: InputValue = this._isCheckbox() ?
-                    e.target.checked :
-                    e.target.value;
-
-                onChange(value);
-            }
+            onChange(e);
         }
     }
     render() {
@@ -123,7 +116,7 @@ class Input extends React.Component {
         const {disabled} = this.props;
         const defaultClassName = this._shouldUseDefaultClassesForType() ? 'styled-input rounded p1 darken1 text-dark normal' : '';
 
-        const restOfProps = _.omit(this.props, Object.keys(Input.propTypes));
+        const restOfProps = u.omit(this.props, Object.keys(Input.propTypes));
 
         return (
             <input

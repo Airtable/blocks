@@ -3,15 +3,15 @@ const utils = require('client/blocks/sdk/utils');
 const BlockMessageTypes = require('client/blocks/block_message_types');
 const blockMessageParser = require('client/blocks/block_message_parser');
 const invariant = require('invariant');
+const getBaseUrl = require('client_server_shared/get_base_url');
 
-import type {RecordDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {RecordDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {BlockToHostMessageType, HostToBlockMessageType, HostMethodName} from 'client/blocks/block_message_types';
 import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
 import type {RecordDef} from 'client/blocks/sdk/models/record';
 
-// TODO(kasra): update this once blocks are running on a separate domain,
-// since window.parent.window.location won't be available.
-const hostOrigin = window.parent.window.location.origin;
+// The origin of the host page. We'll reject all messages that do not come from this origin.
+const hostOrigin = getBaseUrl();
 
 type HostMethodCallback = (error: mixed, result: mixed) => void;
 
@@ -246,19 +246,25 @@ class LiveappInterface {
         }
     }
     async fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any> { // eslint-disable-line flowtype/no-weak-types
-        return this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_TABLE_DATA, {tableId});
+        return await this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_TABLE_DATA, {tableId});
     }
     unsubscribeFromTableData(tableId: string) {
         utils.fireAndForgetPromise(this.callHostMethodAsync.bind(this, BlockMessageTypes.HostMethodNames.UNSUBSCRIBE_FROM_TABLE_DATA, {tableId}));
     }
+    async fetchAndSubscribeToCellValuesInFieldsAsync(tableId: string, fieldIds: Array<string>): Promise<any> { // eslint-disable-line flowtype/no-weak-types
+        return await this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_CELL_VALUES_IN_FIELDS, {tableId, fieldIds});
+    }
+    unsubscribeFromCellValuesInFields(tableId: string, fieldIds: Array<string>) {
+        utils.fireAndForgetPromise(this.callHostMethodAsync.bind(this, BlockMessageTypes.HostMethodNames.UNSUBSCRIBE_FROM_CELL_VALUES_IN_FIELDS, {tableId, fieldIds}));
+    }
     async fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any> { // eslint-disable-line flowtype/no-weak-types
-        return this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_VIEW_DATA, {tableId, viewId});
+        return await this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_VIEW_DATA, {tableId, viewId});
     }
     unsubscribeFromViewData(tableId: string, viewId: string) {
         utils.fireAndForgetPromise(this.callHostMethodAsync.bind(this, BlockMessageTypes.HostMethodNames.UNSUBSCRIBE_FROM_VIEW_DATA, {tableId, viewId}));
     }
     async fetchAndSubscribeToCursorDataAsync(): Promise<any> { // eslint-disable-line flowtype/no-weak-types
-        return this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_CURSOR_DATA, {});
+        return await this.callHostMethodAsync(BlockMessageTypes.HostMethodNames.FETCH_AND_SUBSCRIBE_TO_CURSOR_DATA, {});
     }
     unsubscribeFromCursorData() {
         utils.fireAndForgetPromise(this.callHostMethodAsync.bind(this, BlockMessageTypes.HostMethodNames.UNSUBSCRIBE_FROM_CURSOR_DATA, {}));

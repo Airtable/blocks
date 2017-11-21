@@ -1,24 +1,19 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const Input = require('client/blocks/sdk/ui/input');
-const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
-const getSdk = require('client/blocks/sdk/get_sdk');
-const permissions = require('client_server_shared/permissions');
+const Synced = require('client/blocks/sdk/ui/synced');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
 
 import type {GlobalConfigKey} from 'client/blocks/sdk/global_config';
-import type {InputValue} from 'client/blocks/sdk/ui/input';
 
 type InputSyncedProps = {
     type: ?string,
     globalConfigKey: GlobalConfigKey,
     placeholder?: string,
-    // TODO(jb): update this when we remove the old input behavior.
-    onChange?: (InputValue | SyntheticInputEvent) => void,
-    shouldPassEventToOnChange?: boolean,
+    onChange?: (SyntheticInputEvent) => void,
     style: ?Object,
     className: ?string,
     disabled: ?boolean,
@@ -31,20 +26,16 @@ class InputSynced extends React.Component {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         placeholder: PropTypes.string,
         onChange: PropTypes.func,
-        shouldPassEventToOnChange: PropTypes.bool,
         style: PropTypes.object,
         className: PropTypes.string,
         disabled: PropTypes.bool,
         spellCheck: PropTypes.bool,
     };
     props: InputSyncedProps;
-    _onChange: (InputValue | SyntheticInputEvent) => void;
     _input: Input | null;
     constructor(props: InputSyncedProps) {
         super(props);
-
         this._input = null;
-        this._onChange = this._onChange.bind(this);
     }
     focus() {
         invariant(this._input, 'No input to focus');
@@ -58,45 +49,32 @@ class InputSynced extends React.Component {
         invariant(this._input, 'No input to click');
         this._input.click();
     }
-    _onChange(e: (InputValue | SyntheticInputEvent)) {
-        let value;
-        if (this.props.shouldPassEventToOnChange) {
-            e = ((e: any): SyntheticInputEvent); // eslint-disable-line flowtype/no-weak-types
-            value = e.target.value;
-        } else {
-            value = e;
-        }
-        getSdk().globalConfig.set(this.props.globalConfigKey, value);
-
-        if (this.props.onChange) {
-            this.props.onChange(e);
-        }
+    select() {
+        invariant(this._input, 'No input to select');
+        this._input.select();
     }
     render() {
-        const {base, globalConfig} = getSdk();
-
-        let value = globalConfig.get(this.props.globalConfigKey);
-        if (value === null) {
-            // If an input gets "null" for value, React treats it as uncontrolled
-            // and will throw warnings when it becomes controlled.
-            value = '';
-        }
-
-        const restOfProps = _.omit(this.props, Object.keys(InputSynced.propTypes));
-
+        const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
         return (
-            <Input
-                ref={el => this._input = el}
-                type={this.props.type}
-                value={value}
-                placeholder={this.props.placeholder}
-                style={this.props.style}
-                className={this.props.className}
-                disabled={this.props.disabled || base.permissionLevel === permissions.API_LEVELS.READ}
-                onChange={this._onChange}
-                shouldPassEventToOnChange={this.props.shouldPassEventToOnChange}
-                spellCheck={this.props.spellCheck}
-                {...restOfProps}
+            <Synced
+                globalConfigKey={this.props.globalConfigKey}
+                render={({value, canSetValue, setValue}) => (
+                    <Input
+                        ref={el => this._input = el}
+                        // If an input gets "null" for value, React treats it as uncontrolled
+                        // and will throw warnings when it becomes controlled.
+                        value={value === null ? '' : value}
+                        disabled={this.props.disabled || !canSetValue}
+                        onChange={(e: SyntheticInputEvent) => {
+                            setValue(e.target.value);
+                            if (this.props.onChange) {
+                                this.props.onChange(e);
+                            }
+                        }}
+                        spellCheck={this.props.spellCheck}
+                        {...restOfProps}
+                    />
+                )}
             />
         );
     }
@@ -107,10 +85,4 @@ InputSynced.defaultProps = {
     spellCheck: true,
 };
 
-module.exports = createDataContainer(InputSynced, (props: InputSyncedProps) => {
-    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = InputSynced;

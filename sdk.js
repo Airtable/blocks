@@ -17,7 +17,7 @@ const {HostMethodNames} = require('client/blocks/block_message_types');
 const utils = require('client/blocks/sdk/utils');
 const SettingsButton = require('client/blocks/sdk/settings_button');
 
-import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
 
 type RunInfo = {
@@ -70,7 +70,7 @@ class BlockSdk {
             isDevelopmentMode: args.isDevelopmentMode,
         });
 
-        Object.freeze(this);
+        // TODO: freeze this object before we ship the code editor.
     }
     reload() {
         utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(

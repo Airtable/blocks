@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const invariant = require('invariant');
 const React = require('client/blocks/sdk/ui/react');
 const classNames = require('classnames');

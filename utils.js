@@ -1,6 +1,5 @@
 // @flow
-import typeof Lodash from 'lodash';
-const _: Lodash = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 
 class Utils {
     *iterateKeys(obj: {[string]: any}): Iterable<string> { // eslint-disable-line flowtype/no-weak-types
@@ -43,27 +42,6 @@ class Utils {
             }, 0);
         });
     }
-    // Logically equivalent to h.utils.isObjectShallowEqual, without using lodash.
-    isObjectShallowEqual(a: ?Object, b: ?Object): boolean {
-        if (a === b) {
-            return true;
-        }
-        if (!a || !b) {
-            return false;
-        }
-        const aKeys = Object.keys(a);
-        const bKeys = Object.keys(b);
-        if (aKeys.length !== bKeys.length) {
-            return false;
-        }
-
-        for (const aKey of aKeys) {
-            if (a[aKey] !== b[aKey]) {
-                return false;
-            }
-        }
-        return true;
-    }
     isEnumValue(enumObj: {[string]: string}, valueToCheck: string): boolean {
         for (const value of this.iterateValues(enumObj)) {
             if (value === valueToCheck) {
@@ -73,7 +51,7 @@ class Utils {
         return false;
     }
     startsWith(string: string, target: string): boolean {
-        return _.startsWith(string, target);
+        return u.startsWith(string, target);
     }
 }
 

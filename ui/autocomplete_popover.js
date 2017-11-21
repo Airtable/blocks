@@ -1,5 +1,5 @@
 // @flow
-const {h, u, _} = require('client_server_shared/hu_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const Popover = require('client/blocks/sdk/ui/popover');
@@ -56,7 +56,7 @@ class AutocompletePopover extends React.Component {
         placementY: PropTypes.oneOf([Popover.placements.TOP, Popover.placements.CENTER, Popover.placements.BOTTOM]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(_.values(Popover.fitInWindowModes)),
+        fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
         isOpen: PropTypes.bool,
         onClose: PropTypes.func,
     };
@@ -86,7 +86,7 @@ class AutocompletePopover extends React.Component {
     }
     componentDidMount() {
         if (this.props.isOpen && this.props.focusOnOpen) {
-            _.defer(() => this.focus());
+            u.defer(() => this.focus());
         }
 
         document.addEventListener('mousemove', this._resetResultsPointerEvents, false);
@@ -281,7 +281,7 @@ class AutocompletePopover extends React.Component {
             return null;
         }
 
-        const items = _.map(itemsMatchingQuery, (item, index) => {
+        const items = u.map((itemsMatchingQuery: Array<AutocompleteItem>), (item, index) => {
             const isFocused = index === this.state.focusedItemIndex;
             return (
                 <div

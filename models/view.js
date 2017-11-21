@@ -6,11 +6,12 @@ const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const viewTypeProvider = require('client_server_shared/view_types/view_type_provider');
 const airtableUrls = require('client_server_shared/airtable_urls');
 
-import type {BaseDataForBlocks, ViewDataForBlocks, BlockModelChange} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, ViewDataForBlocks, BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type FieldType from 'client/blocks/sdk/models/field';
 import type RecordType from 'client/blocks/sdk/models/record';
 import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
+import type RecordListType, {RecordListOpts} from 'client/blocks/sdk/models/record_list';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -24,6 +25,10 @@ const WatchableViewKeys = {
 export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
 class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKey> {
+    // Once all blocks that current set this flag to true are migrated,
+    // remove this flag.
+    static shouldLoadAllCellValuesForRecords = false;
+
     static _className = 'View';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableViewKeys, key);
@@ -35,12 +40,12 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             key === WatchableViewKeys.visibleFields;
     }
     _parentTable: TableType;
-    _tableLoadPromises: Array<Promise<*>>;
+    _mostRecentTableLoadPromise: Promise<*> | null;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, viewId: string) {
         super(baseData, viewId);
 
         this._parentTable = parentTable;
-        this._tableLoadPromises = [];
+        this._mostRecentTableLoadPromise = null;
 
         Object.seal(this);
     }
@@ -51,8 +56,15 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         }
         return tableData.viewsById[this._id] || null;
     }
+    get _isRecordMetadataLoaded(): boolean {
+        const parentTable = this.parentTable;
+        const isParentTableLoaded = View.shouldLoadAllCellValuesForRecords ?
+            parentTable.isDataLoaded :
+            parentTable.isRecordMetadataLoaded;
+        return isParentTableLoaded;
+    }
     get isDataLoaded(): boolean {
-        return this._isDataLoaded && this.parentTable.isDataLoaded;
+        return this._isDataLoaded && this._isRecordMetadataLoaded;
     }
     get parentTable(): TableType {
         return this._parentTable;
@@ -68,26 +80,33 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             absolute: true,
         });
     }
+    select(opts?: RecordListOpts): RecordListType {
+        // require here to avoid circular import
+        const RecordList = require('client/blocks/sdk/models/record_list');
+        return RecordList.__createOrReuseRecordList(this, opts || {});
+    }
     async loadDataAsync() {
         // Override this method to also load table data.
         // NOTE: it's important that we call loadDataAsync on the table here and not in
         // _loadDataAsync since we want the retain counts for the view and table to increase/decrease
         // in lock-step. If we load table data in _loadDataAsync, the table's retain
         // count only increments some of the time, which leads to unexpected behavior.
-        const tableLoadPromise = this.parentTable.loadDataAsync();
-        this._tableLoadPromises.push(tableLoadPromise);
+        if (View.shouldLoadAllCellValuesForRecords) {
+            // Legacy behavior.
+            const tableLoadPromise = this.parentTable.loadDataAsync();
+            this._mostRecentTableLoadPromise = tableLoadPromise;
+        } else {
+            const tableLoadPromise = this.parentTable.loadRecordMetadataAsync();
+            this._mostRecentTableLoadPromise = tableLoadPromise;
+        }
 
         await super.loadDataAsync();
     }
     async _loadDataAsync(): Promise<Array<WatchableViewKey>> {
-        invariant(this._tableLoadPromises.length > 0, 'No table load promises');
-
-        // We need to be sure that the table data is loaded *before* we return from this
-        // method, so let's pop a promise off of the array and await it.
-        // NOTE: if the array has multiple promises, we might not be awaiting the same
-        // promise that we stored in the corresponding loadDataAsync call, but that
-        // doesn't really matter, since we just care that the table data is loaded.
-        const tableLoadPromise = this._tableLoadPromises.pop();
+        // We need to be sure that the table data is loaded *before* we return
+        // from this method.
+        invariant(this._mostRecentTableLoadPromise, 'No table load promise');
+        const tableLoadPromise = this._mostRecentTableLoadPromise;
 
         const [viewData] = await Promise.all([
             liveappInterface.fetchAndSubscribeToViewDataAsync(this.parentTable.id, this._id),
@@ -109,9 +128,16 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         // retain counts to increment/decrement in lock-step. If we unload the table's
         // data in _unloadData, it leads to unexpected behavior.
         super.unloadData();
-        this.parentTable.unloadData();
+
+        if (View.shouldLoadAllCellValuesForRecords) {
+            // Legacy behavior.
+            this.parentTable.unloadData();
+        } else {
+            this.parentTable.unloadRecordMetadata();
+        }
     }
     _unloadData() {
+        this._mostRecentTableLoadPromise = null;
         liveappInterface.unsubscribeFromViewData(this.parentTable.id, this._id);
         if (!this.isDeleted) {
             this._data.visibleRecordIds = undefined;
@@ -150,7 +176,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     get visibleRecords(): Array<RecordType> {
         const {parentTable} = this;
-        invariant(parentTable.isDataLoaded, 'Table data is not loaded');
+        invariant(this._isRecordMetadataLoaded, 'Table data is not loaded');
 
         const visibleRecordIds = this._data.visibleRecordIds;
         invariant(visibleRecordIds, 'View data is not loaded');

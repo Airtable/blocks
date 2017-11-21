@@ -1,5 +1,6 @@
 // @flow
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
+const Synced = require('client/blocks/sdk/ui/synced');
 const TablePicker = require('client/blocks/sdk/ui/table_picker');
 const TablePickerSynced = require('client/blocks/sdk/ui/table_picker_synced');
 const FieldPicker = require('client/blocks/sdk/ui/field_picker');
@@ -43,7 +44,8 @@ const {
     loadScriptFromURLAsync,
 } = require('client/blocks/sdk/ui/remote_utils');
 
-const UI = Object.freeze({
+// TODO: freeze this object before we ship the code editor.
+const UI = {
     Popover,
     AutocompletePopover,
     createDataContainer,
@@ -51,6 +53,7 @@ const UI = Object.freeze({
     loadScriptFromURLAsync,
     loadCSSFromURLAsync,
     expandRecord,
+    Synced,
     TablePicker,
     TablePickerSynced,
     FieldPicker,
@@ -85,6 +88,6 @@ const UI = Object.freeze({
     Toggle,
     ToggleSynced,
     globalAlert: new GlobalAlert(),
-});
+};
 
 module.exports = UI;

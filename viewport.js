@@ -3,7 +3,7 @@ const Watchable = require('client/blocks/sdk/watchable');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const BlockMessageTypes = require('client/blocks/block_message_types');
 const utils = require('client/blocks/sdk/utils');
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 
 const WatchableViewportKeys = {
     isFullscreen: 'isFullscreen',
@@ -41,7 +41,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
             this._onExitFullscreen();
         });
 
-        this._onSizeChangeDebounced = _.debounce(this._onSizeChange.bind(this), 200);
+        this._onSizeChangeDebounced = u.debounce(this._onSizeChange.bind(this), 200);
 
         this._minSize = Object.freeze({
             width: null,
@@ -98,7 +98,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     watch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: any): Array<WatchableViewportKey> { // eslint-disable-line flowtype/no-weak-types
         const validKeys = super.watch(keys, callback, context);
 
-        if (_.includes(validKeys, WatchableViewportKeys.size)) {
+        if (u.includes(validKeys, WatchableViewportKeys.size)) {
             if (this._sizeWatchCount === 0) {
                 window.addEventListener('resize', this._onSizeChangeDebounced, false);
             }
@@ -110,7 +110,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     unwatch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: any): Array<WatchableViewportKey> { // eslint-disable-line flowtype/no-weak-types
         const validKeys = super.unwatch(keys, callback, context);
 
-        if (_.includes(validKeys, WatchableViewportKeys.size)) {
+        if (u.includes(validKeys, WatchableViewportKeys.size)) {
             this._sizeWatchCount--;
             if (this._sizeWatchCount === 0) {
                 window.removeEventListener('resize', this._onSizeChangeDebounced, false);

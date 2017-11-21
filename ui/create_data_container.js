@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const utils = require('client/blocks/sdk/utils');
 const Watchable = require('client/blocks/sdk/watchable');
@@ -112,7 +112,7 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
             this._dataContainerIsMounted = false;
         }
         componentWillReceiveProps(newProps: Object) {
-            const shouldUpdateDependencies = !utils.isObjectShallowEqual(this.props, newProps);
+            const shouldUpdateDependencies = !u.isObjectShallowEqual(this.props, newProps);
             if (shouldUpdateDependencies) {
                 this._shouldUpdateDependenciesOnComponentDidUpdate = true;
             }
@@ -127,7 +127,7 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
             return a.watchable === b.watchable &&
                 a.callback === b.callback &&
                 a.context === b.context &&
-                _.isEqual(a.key, b.key);
+                u.isEqual(a.key, b.key);
         }
         _wrapCallback(context: ?ComponentWithProps, unwrappedCallback: Function): Function {
             return (...callbackArguments) => {

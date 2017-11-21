@@ -1,5 +1,5 @@
 // @flow
-const {h, u, _} = require('client_server_shared/hu_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const CellRenderer = require('client/blocks/sdk/ui/cell_renderer');
@@ -219,7 +219,7 @@ class RecordCard extends React.Component {
         let attachmentsInField;
         if (attachmentField.config.type === ApiFieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
-            attachmentsInField = _.flattenDeep(_.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
+            attachmentsInField = u.flattenDeep(u.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
         } else {
             attachmentsInField = ((this._getRawCellValue(attachmentField): any): Array<Object>); // eslint-disable-line flowtype/no-weak-types
         }
@@ -240,7 +240,7 @@ class RecordCard extends React.Component {
             console.warn('RecordCard: no fields, view, or record, so rendering an empty card'); // eslint-disable-line no-console
             fieldsToUse = [];
         }
-        return _.uniqBy(fieldsToUse, field => field.id);
+        return u.uniqBy(fieldsToUse, field => field.id);
     }
     _getPossibleFieldsForCard(): Array<FieldModel> {
         const fields = this._getFields();
@@ -307,7 +307,7 @@ class RecordCard extends React.Component {
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
         const widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
-        const fieldsById = _.keyBy(fieldsToUse, o => o.id);
+        const fieldsById = u.keyBy(fieldsToUse, o => o.id);
 
         return widthAndFieldIdArray.map(widthAndFieldId => {
             const field = fieldsById[widthAndFieldId.fieldId];

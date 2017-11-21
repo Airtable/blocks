@@ -1,7 +1,7 @@
 // @flow
 const Watchable = require('client/blocks/sdk/watchable');
 
-import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 
 // Abstract superclass for all block SDK models.
 class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableKey> {
@@ -40,6 +40,9 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     }
     _getErrorMessageForDeletion(): string {
         return this.constructor._className + ' has been deleted';
+    }
+    toString(): string {
+        return `[${this.constructor._className} ${this.id}]`;
     }
 }
 

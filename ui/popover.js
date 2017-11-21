@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const ReactDOM = require('client/blocks/sdk/ui/react-dom');
 const PropTypes = require('prop-types');
@@ -47,7 +47,7 @@ class Popover extends React.Component {
         placementY: PropTypes.oneOf([PopoverPlacements.TOP, PopoverPlacements.CENTER, PopoverPlacements.BOTTOM]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(_.values(FitInWindowModes)),
+        fitInWindowMode: PropTypes.oneOf(u.values(FitInWindowModes)),
         onClose: PropTypes.func,
         isOpen: PropTypes.bool,
         backgroundClassName: PropTypes.string,
@@ -110,6 +110,7 @@ class Popover extends React.Component {
 
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';
+        container.style.position = 'relative';
         invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
@@ -322,6 +323,7 @@ class Popover extends React.Component {
         return element === this._background;
     }
     render() {
+        // TODO: if children is not a component (e.g. just string), wrap it in a div?
         return this.props.children;
     }
 }

@@ -1,5 +1,5 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const liveappColors = require('client_server_shared/colors');
 
 const liveappColorsToInclude = [
@@ -65,7 +65,7 @@ for (const color of liveappColorsToInclude) {
 
     // The name of the enum is the snakecased and uppercased version of the color
     // name. i.e. redDark1 -> RED_DARK_1
-    const enumNameForColor = _.snakeCase(color).toUpperCase();
+    const enumNameForColor = u.snakeCase(color).toUpperCase();
     colors[enumNameForColor] = color;
 }
 

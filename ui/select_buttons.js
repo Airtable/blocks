@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const React = require('client/blocks/sdk/ui/react');
 const classNames = require('classnames');
 const KeyCodes = require('client_server_shared/key_codes');
@@ -43,7 +43,7 @@ class SelectButtons extends React.Component {
             throw new Error(`<SelectButtons> ${validationResult.reason}`);
         }
 
-        const restOfProps = _.omit(this.props, Object.keys(SelectButtons.propTypes));
+        const restOfProps = u.omit(this.props, Object.keys(SelectButtons.propTypes));
 
         return (
             <div

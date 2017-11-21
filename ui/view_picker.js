@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
@@ -30,7 +30,7 @@ class ViewPicker extends React.Component {
         view: PropTypes.instanceOf(ViewModel),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(_.values(ApiViewTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ApiViewTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,
@@ -96,7 +96,7 @@ class ViewPicker extends React.Component {
             return !allowedTypes || allowedTypes[view.type];
         };
 
-        const restOfProps = _.omit(this.props, Object.keys(ViewPicker.propTypes));
+        const restOfProps = u.omit(this.props, Object.keys(ViewPicker.propTypes));
 
         return (
             <ModelPickerSelect

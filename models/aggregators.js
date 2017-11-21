@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const liveappSummaryFunctions = require('client_server_shared/summary_functions');
 const liveappSummaryFunctionKeyByAggregatorKey = require('client/blocks/sdk/models/liveapp_summary_function_key_by_aggregator_key');
 const getSdk = require('client/blocks/sdk/get_sdk');
@@ -19,7 +19,7 @@ export type Aggregator = {
     aggregateToString: (records: Array<RecordType>, field: FieldType) => string,
 };
 
-const aggregatorKeys = _.keys(liveappSummaryFunctionKeyByAggregatorKey);
+const aggregatorKeys = u.keys(liveappSummaryFunctionKeyByAggregatorKey);
 
 const aggregators: {[string]: Aggregator} = {};
 

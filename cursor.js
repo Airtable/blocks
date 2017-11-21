@@ -1,12 +1,12 @@
 // @flow
 const utils = require('client/blocks/sdk/utils');
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data.js');
 const Record = require('client/blocks/sdk/models/record');
 const invariant = require('invariant');
 
-import type {BaseDataForBlocks, CursorDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, CursorDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
 
 const WatchableCursorKeys = {

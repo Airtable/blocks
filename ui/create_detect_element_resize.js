@@ -11,8 +11,9 @@
 *
 * NOTE (jb): ported from react-virtualized to conform to our eslint rules.
 * https://github.com/bvaughn/react-virtualized/blob/master/source/vendor/detectElementResize.js
+*
+* TODO: make this file conform to our styleguide.
 **/
-
 module.exports = function createDetectElementResize(nonce) {
     // Check `document` and `window` in case of server-side rendering
     var _window;

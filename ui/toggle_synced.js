@@ -1,11 +1,9 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const Toggle = require('client/blocks/sdk/ui/toggle');
-const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
-const getSdk = require('client/blocks/sdk/get_sdk');
-const permissions = require('client_server_shared/permissions');
+const Synced = require('client/blocks/sdk/ui/synced');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
 
@@ -26,20 +24,18 @@ class ToggleSynced extends React.Component {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         label: PropTypes.node,
-        theme: PropTypes.oneOf(_.values(Toggle.themes)),
+        theme: PropTypes.oneOf(u.values(Toggle.themes)),
         onChange: PropTypes.func,
         disabled: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
         tabIndex: PropTypes.number,
     };
-    _onChange: boolean => void;
     _toggle: Toggle | null;
     constructor(props: ToggleSyncedProps) {
         super(props);
 
         this._toggle = null;
-        this._onChange = this._onChange.bind(this);
     }
     focus() {
         invariant(this._toggle, 'No toggle to focus');
@@ -53,40 +49,28 @@ class ToggleSynced extends React.Component {
         invariant(this._toggle, 'No toggle to click');
         this._toggle.click();
     }
-    _onChange(value: boolean) {
-        getSdk().globalConfig.set(this.props.globalConfigKey, value);
-
-        if (this.props.onChange) {
-            this.props.onChange(value);
-        }
-    }
     render() {
-        const {base, globalConfig} = getSdk();
-
-        const {
-            globalConfigKey,
-            disabled,
-            onChange, // eslint-disable-line no-unused-vars
-            ...restOfProps
-        } = this.props;
-
-        const value = globalConfig.get(globalConfigKey) || false;
+        const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
         return (
-            <Toggle
-                ref={el => this._toggle = el}
-                value={value}
-                disabled={disabled || base.permissionLevel === permissions.API_LEVELS.READ}
-                onChange={this._onChange}
-                {...restOfProps}
+            <Synced
+                globalConfigKey={this.props.globalConfigKey}
+                render={({value, canSetValue, setValue}) => (
+                    <Toggle
+                        ref={el => this._toggle = el}
+                        value={value || false}
+                        disabled={this.props.disabled || !canSetValue}
+                        onChange={newValue => {
+                            setValue(newValue);
+                            if (this.props.onChange) {
+                                this.props.onChange(newValue);
+                            }
+                        }}
+                        {...restOfProps}
+                    />
+                )}
             />
         );
     }
 }
 
-module.exports = createDataContainer(ToggleSynced, (props: ToggleSyncedProps) => {
-    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = ToggleSynced;

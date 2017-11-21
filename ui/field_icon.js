@@ -1,5 +1,5 @@
 // @flow
-const _ = require('client_server_shared/lodash.custom');
+const u = require('client_server_shared/u');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const Icon = require('client/blocks/sdk/ui/icon');
@@ -20,7 +20,7 @@ type FieldIconProps = {
 
 const FieldIcon = (props: FieldIconProps) => {
     const {field} = props;
-    const restOfProps = _.omit(props, 'field');
+    const restOfProps = u.omit(props, 'field');
 
     const type = field.__getRawType();
     const typeOptions = field.__getRawTypeOptions();
@@ -33,7 +33,7 @@ const FieldIcon = (props: FieldIconProps) => {
     return <Icon name={name} {...restOfProps} />;
 };
 
-const iconPropsWithoutName = _.omit(Icon.propTypes, 'name');
+const iconPropsWithoutName = u.omit(Icon.propTypes, 'name');
 FieldIcon.propTypes = {
     ...iconPropsWithoutName,
     field: PropTypes.instanceOf(FieldModel).isRequired,

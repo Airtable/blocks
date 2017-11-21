@@ -1,12 +1,12 @@
 // @flow
-const {h, u, _} = require('client_server_shared/hu_');
+const {h, u} = require('client_server_shared/hu');
 const liveappColors = require('client_server_shared/colors');
 const colors = require('client/blocks/sdk/ui/colors');
 
 // Construct a set of all the possible color values, so the below
 // methods have constant time lookup when validating that a color
 // exists.
-const colorValuesSet = h.utils.arrayToSet(_.values(colors));
+const colorValuesSet = h.utils.arrayToSet(u.values(colors));
 
 const colorUtils = {
     getHexForColor(color: string): string | null {
@@ -35,7 +35,7 @@ const colorUtils = {
         // NOTE: use shouldUseDarkText instead of shouldUseLightText just to make
         // checking the suffix easier, since no suffix uses light text.
         const shouldUseDarkText = u.some(['Light1', 'Light2'], suffix => {
-            return _.endsWith(color, suffix);
+            return u.endsWith(color, suffix);
         });
         return !shouldUseDarkText;
     },

@@ -1,5 +1,5 @@
 // @flow
-const {h, u, _} = require('client_server_shared/hu_');
+const {h, u} = require('client_server_shared/hu');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
@@ -8,7 +8,7 @@ const liveappSummaryFunctionKeyByAggregatorKey = require('client/blocks/sdk/mode
 const ColumnTypes = require('client_server_shared/column_types/column_types');
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 
-import type {BaseDataForBlocks, FieldDataForBlocks} from 'client/blocks/blocks_model_bridge';
+import type {BaseDataForBlocks, FieldDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type {Aggregator} from 'client/blocks/sdk/models/aggregators';
 import type {ColumnType} from 'client_server_shared/column_types/column_types';

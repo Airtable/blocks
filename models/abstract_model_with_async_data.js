@@ -1,14 +1,13 @@
 // @flow
-const {h, _} = require('client_server_shared/h_');
+const {h, u} = require('client_server_shared/hu');
 const utils = require('client/blocks/sdk/utils');
 const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 
-import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge';
-
-const DATA_UNLOAD_DELAY_MS = 1000;
+import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 
 // Abstract superclass for all block SDK models that need to fetch async data.
 class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends AbstractModel<DataType, WatchableKey> {
+    static __DATA_UNLOAD_DELAY_MS = 1000;
     static _shouldLoadDataForKey(key: WatchableKey): boolean {
         // Override to return whether watching the key should trigger the
         // data to be loaded for this model.
@@ -111,9 +110,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
             // the network.
             this._unloadDataTimeoutId = setTimeout(() => {
                 h.assert(this._dataRetainCount === 0, 'Unload data timeout fired with non-zero retain count');
-                this._unloadData();
+                // Set _isDataLoaded to false before calling _unloadData in case
+                // _unloadData reads from isDataLoaded.
                 this._isDataLoaded = false;
-            }, DATA_UNLOAD_DELAY_MS);
+                this._unloadData();
+            }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
         }
     }
 }
