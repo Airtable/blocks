@@ -1,0 +1,28 @@
+{
+  "name": "blockslocalbuildserver",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "es2015": "0.0.0",
+    "express": "~4.15.5",
+    "i": "^0.3.6",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.0",
+    "npm": "^5.5.1",
+    "serve-favicon": "~2.4.5",
+    "watchify": "^3.9.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babelify": "^8.0.0"
+  }
+}
