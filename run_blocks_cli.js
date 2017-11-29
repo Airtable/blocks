@@ -2,6 +2,7 @@
 'use  strict';
 
 const _ = require('lodash');
+const ngrok = require('ngrok');
 const BlockBuilderServer = require('./lib/block_builder_server');
 
 const Commands = {
@@ -28,6 +29,12 @@ switch (command) {
         }
         const blockBuilderServer = new BlockBuilderServer(port);
         blockBuilderServer.start();
+        ngrok.connect(port, (err, url) => {
+            if (err) {
+                _exitWithError(err.message);
+            }
+            console.log(`Serving bundle at ${url}/bundle`);
+        });
         break;
     default:
         _exitWithError('Not implemented yet');
