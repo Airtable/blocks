@@ -3,7 +3,7 @@
 
 const _ = require('lodash');
 const ngrok = require('ngrok');
-const BlockBuilderServer = require('./lib/block_builder_server');
+const BlockBundleServer = require('./lib/block_builder_server');
 
 const Commands = {
     run: 'run',
@@ -27,8 +27,8 @@ switch (command) {
         if (!port || isNaN(port)) {
             _exitWithError('Please provide a valid port number');
         }
-        const blockBuilderServer = new BlockBuilderServer(port);
-        blockBuilderServer.start();
+        const blockBundleServer = new BlockBundleServer(port);
+        blockBundleServer.start();
         ngrok.connect(port, (err, url) => {
             if (err) {
                 _exitWithError(err.message);
