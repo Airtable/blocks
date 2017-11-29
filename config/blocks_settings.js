@@ -6,10 +6,8 @@ module.exports = {
         // Careful: if you change any of these, you will break blocks that are
         // already released, since the values will  be hardcoded in those bundles.
         GLOBAL_SDK_VARIABLE_NAME: '_airtableBlockSdk',
-        GLOBAL_PACKAGES_VARIABLE_NAME: '_airtableBlockPackagesByName',
         GLOBAL_REACT_VARIABLE_NAME: '_airtableReact',
         GLOBAL_REACT_DOM_VARIABLE_NAME: '_airtableReactDOM',
-        GLOBAL_RUN_BLOCK_FUNCTION_NAME: '_airtableRunBlock',
 
         // Wrapper file for blocks frontend code
         CLIENT_WRAPPER_FILE_NAME: 'block_client_wrapper.js',
