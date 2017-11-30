@@ -21,7 +21,7 @@ function triggerInitialBundleAndStartNgrok(port) {
     // this might be the very first time they are running the server.
     // NOTE: We do this here instead of in BlockBundleServer.start so that
     // the bundler logging doesn't mess up the port prompt stuff below.
-    blockBundleServer.bundle(() => {
+    blockBundleServer.bundle(null, () => {
         ngrok.connect(port, (err, url) => {
             if (err) {
                 _exitWithError(err.message);
