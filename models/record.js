@@ -29,12 +29,23 @@ const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 // The string case is to accomodate cellValueInField:$FieldId.
 type WatchableRecordKey = $Keys<typeof WatchableRecordKeys> | string;
 
+/**
+ * Model class representing a record in a table.
+ *
+ * Do not instantiate. To create a new record, use `table.createRecord`.
+ */
 class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     static _className = 'Record';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableRecordKeys, key) ||
             utils.startsWith(key, WatchableCellValueInFieldKeyPrefix);
     }
+    /**
+     * Static helper to perform a one-time sort of array of records.
+     *
+     * If you want a sorted list of records that stays sorted as cell values
+     * change, use QueryResult.
+     */
     static sortRecords(records: Array<Record>, sortConfigs: Array<{field: string, direction?: 'asc' | 'desc'}>): Array<Record> {
         if (records.length === 0 || sortConfigs.length === 0) {
             return records;
@@ -79,6 +90,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         invariant(recordsById, 'Record data is not loaded');
         return recordsById[this._id] || null;
     }
+    /** */
     get parentTable(): TableType {
         return this._parentTable;
     }
@@ -104,6 +116,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
         return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
+    /** */
     getCellValue(fieldOrFieldIdOrFieldName: Field | string): mixed {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
@@ -122,6 +135,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             return publicCellValue;
         }
     }
+    /** */
     getCellValueAsString(fieldOrFieldIdOrFieldName: Field | string): string {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
@@ -140,17 +154,24 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             );
         }
     }
+    /** Returns the URL for this record. */
     get url(): string {
         return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
             absolute: true,
         });
     }
+    /** */
     get primaryCellValue(): mixed {
         return this.getCellValue(this.parentTable.primaryField);
     }
+    /** */
     get primaryCellValueAsString(): string {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
+    /**
+     * Use this to check if the current user has permission to update a
+     * specific cell value before calling `setCellValue`.
+     */
     canSetCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed) {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
@@ -160,6 +181,11 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             [field.id]: publicCellValue,
         });
     }
+    /**
+     * Use `canSetCellValue` to check if the current user has permission to update a
+     * specific cell value before calling. Will throw if the user does not have
+     * permission.
+     */
     setCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed) {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
@@ -169,25 +195,38 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             [field.id]: publicCellValue,
         });
     }
+    /**
+     * Use this to check if the current user has permission to update a
+     * set of cell values before calling `setCellValues`.
+     */
     canSetCellValues(cellValuesByFieldIdOrFieldName: RecordDef): boolean {
         return this.parentTable.canSetCellValues({
             [this.id]: cellValuesByFieldIdOrFieldName,
         });
     }
+    /**
+     * Use `canSetCellValues` to check if the current user has permission to update
+     * the cell values before calling. Will throw if the user does not have
+     * permission.
+     */
     setCellValues(cellValuesByFieldIdOrFieldName: RecordDef) {
         this.parentTable.setCellValues({
             [this.id]: cellValuesByFieldIdOrFieldName,
         });
     }
+    /** */
     canDelete(): boolean {
         return this.parentTable.canDeleteRecord(this);
     }
+    /** */
     delete() {
         this.parentTable.deleteRecord(this);
     }
+    /** */
     get commentCount(): number {
         return this._data.commentCount;
     }
+    /** */
     get createdTime(): Date {
         return new Date(this._data.createdTime);
     }

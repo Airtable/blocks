@@ -5,7 +5,7 @@ const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 
 import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 
-// Abstract superclass for all block SDK models that need to fetch async data.
+/** Abstract superclass for all block SDK models that need to fetch async data. */
 class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends AbstractModel<DataType, WatchableKey> {
     static __DATA_UNLOAD_DELAY_MS = 1000;
     static _shouldLoadDataForKey(key: WatchableKey): boolean {
@@ -25,6 +25,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
         this._dataRetainCount = 0;
         this._unloadDataTimeoutId = null;
     }
+    /**
+     * Watching a key that needs to load data asynchronously will automatically
+     * cause the data to be fetched. Once the data is available, the callback
+     * will be called.
+     */
     watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: mixed): Array<WatchableKey> {
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
@@ -37,6 +42,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
         }
         return validKeys;
     }
+    /**
+     * Unwatching a key that needs to load data asynchronously will automatically
+     * cause the data to be released. Once the data is available, the callback
+     * will be called.
+     */
     unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: mixed): Array<WatchableKey> {
         const validKeys = super.unwatch(keys, callback, context);
         for (const key of validKeys) {
@@ -48,6 +58,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
         }
         return validKeys;
     }
+    /** */
     get isDataLoaded(): boolean {
         return this._isDataLoaded;
     }
@@ -65,6 +76,12 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     // Do NOT load other models' data from _loadDataAsync, since it can lead to
     // unexpected behavior.
     // IMPORTANT: always call super.loadDataAsync() from your override.
+    /**
+     * Will cause all the async data to be fetched and retained. Every call to
+     * `loadDataAsync` should have a matching call to `unloadData`.
+     *
+     * Returns a Promise that will resolve once the data is loaded.
+     */
     async loadDataAsync() {
         if (this._unloadDataTimeoutId !== null) {
             // If we set a timeout to unload data, clear it since we are incrementing
@@ -97,6 +114,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     // Do NOT unload other models' data from _unloadData, since it can lead to
     // unexpected behavior.
     // IMPORTANT: always call super.unloadData() from your override.
+    /** */
     unloadData() {
         this._dataRetainCount--;
 

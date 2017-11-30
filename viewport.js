@@ -13,6 +13,12 @@ const WatchableViewportKeys = {
 
 type WatchableViewportKey = $Keys<typeof WatchableViewportKeys>;
 
+/**
+ * Information about the current viewport
+ *
+ * @example
+ * import {viewport} from 'airtable-block';
+ */
 class Viewport extends Watchable<WatchableViewportKey> {
     static _className = 'Viewport';
     static _isWatchableKey(key: string): boolean {
@@ -48,18 +54,31 @@ class Viewport extends Watchable<WatchableViewportKey> {
             height: null,
         });
     }
+    /**
+     * Request to enter fullscreen mode.
+     *
+     * May fail if another block is fullscreen or this block doesn't have
+     * permission to fullscreen itself. Watch `isFullscreen` to know if the
+     * request succeeded.
+     */
     enterFullscreen() {
         utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
             liveappInterface,
             BlockMessageTypes.HostMethodNames.ENTER_FULLSCREEN,
         ));
     }
+    /** Request to exit fullscreen mode */
     exitFullscreen() {
         utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
             liveappInterface,
             BlockMessageTypes.HostMethodNames.EXIT_FULLSCREEN,
         ));
     }
+    /**
+     * Set the maximum dimensions of the block when it is in fullscreen mode.
+     * Both `width` and `height` are optional. If either is set to `null`, that
+     * means there is not max size in that dimension.
+     */
     setMaxFullscreenSize(size: {width?: number | null, height?: number | null}) {
         utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
             liveappInterface,
@@ -70,9 +89,18 @@ class Viewport extends Watchable<WatchableViewportKey> {
             },
         ));
     }
+    /** Can be watched. */
     get minSize(): {width: number | null, height: number | null} {
         return this._minSize;
     }
+    /**
+     * Set the minimum dimensions of the block. If the viewport gets smaller
+     * than this size, an overlay will be shown to the user asking them to
+     * resize the block to be bigger.
+     *
+     * Both `width` and `height` and optional. If either is set to `null`, that
+     * means there is not a min size in that dimension.
+     */
     setMinSize(size: {width?: number | null, height?: number | null}) {
         this._minSize = Object.freeze({
             ...this._minSize,
@@ -80,15 +108,18 @@ class Viewport extends Watchable<WatchableViewportKey> {
         });
         this._onChange(WatchableViewportKeys.minSize);
     }
+    /** */
     get isSmallerThanMinSize(): boolean {
         const {width, height} = this.size;
         const isWidthTooSmall = this._minSize.width !== null && this._minSize.width > width;
         const isHeightTooSmall = this._minSize.height !== null && this._minSize.height > height;
         return isWidthTooSmall || isHeightTooSmall;
     }
+    /** Can be watched. */
     get isFullscreen(): boolean {
         return this._isFullscreen;
     }
+    /** Can be watched. */
     get size(): {width: number, height: number} {
         return {
             width: window.innerWidth,

@@ -11,7 +11,7 @@ import type TableType from 'client/blocks/sdk/models/table';
 import type FieldType from 'client/blocks/sdk/models/field';
 import type RecordType from 'client/blocks/sdk/models/record';
 import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
-import type RecordListType, {RecordListOpts} from 'client/blocks/sdk/models/record_list';
+import type QueryResultType, {QueryResultOpts} from 'client/blocks/sdk/models/query_result';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -24,6 +24,7 @@ const WatchableViewKeys = {
 };
 export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
+/** Model class representing a view in a table. */
 class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKey> {
     // Once all blocks that current set this flag to true are migrated,
     // remove this flag.
@@ -63,27 +64,33 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             parentTable.isRecordMetadataLoaded;
         return isParentTableLoaded;
     }
+    /** */
     get isDataLoaded(): boolean {
         return this._isDataLoaded && this._isRecordMetadataLoaded;
     }
+    /** */
     get parentTable(): TableType {
         return this._parentTable;
     }
+    /** The name of the view. Can be watched. */
     get name(): string {
         return this._data.name;
     }
+    /** The type of the view. Will not change. */
     get type(): ApiViewType {
         return viewTypeProvider.getApiViewType(this._data.type);
     }
+    /** */
     get url(): string {
         return airtableUrls.getUrlForView(this.id, this.parentTable.id, {
             absolute: true,
         });
     }
-    select(opts?: RecordListOpts): RecordListType {
+    /** */
+    select(opts?: QueryResultOpts): QueryResultType {
         // require here to avoid circular import
-        const RecordList = require('client/blocks/sdk/models/record_list');
-        return RecordList.__createOrReuseRecordList(this, opts || {});
+        const QueryResult = require('client/blocks/sdk/models/query_result');
+        return QueryResult.__createOrReuseQueryResult(this, opts || {});
     }
     async loadDataAsync() {
         // Override this method to also load table data.
@@ -161,6 +168,11 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
         ];
     }
+    /**
+     * The record IDs that are not filtered out of this view.
+     * Can be watched to know when records are created, deleted, reordered, or
+     * filtered in and out of this view.
+     */
     get visibleRecordIds(): Array<string> {
         const visibleRecordIds = this._data.visibleRecordIds;
         invariant(visibleRecordIds, 'View data is not loaded');
@@ -174,6 +186,11 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
 
         return visibleRecordIds;
     }
+    /**
+     * The records that are not filtered out of this view.
+     * Can be watched to know when records are created, deleted, reordered, or
+     * filtered in and out of this view.
+     */
     get visibleRecords(): Array<RecordType> {
         const {parentTable} = this;
         invariant(this._isRecordMetadataLoaded, 'Table data is not loaded');
@@ -187,6 +204,10 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             return record;
         });
     }
+    /**
+     * All the fields in the table, including fields that are hidden in this
+     * view. Can be watched to know when fields are created, deleted, or reordered.
+     */
     get allFields(): Array<FieldType> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');
@@ -196,6 +217,10 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             return field;
         });
     }
+    /**
+     * The fields that are not hidden in this view.
+     * view. Can be watched to know when fields are created, deleted, or reordered.
+     */
     get visibleFields(): Array<FieldType> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');

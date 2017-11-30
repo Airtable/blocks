@@ -35,6 +35,12 @@ const WatchableBaseKeys = {
     collaborators: 'collaborators',
 };
 
+/**
+ * Model class representing a base.
+ *
+ * @example
+ * import {base} from 'airtable-blocks';
+ */
 class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKeys>> {
     static _className = 'Base';
     static _isWatchableKey(key: string): boolean {
@@ -55,11 +61,12 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     get _dataOrNullIfDeleted(): BaseDataForBlocks | null {
         return this._baseData;
     }
+    /** The name of the base. */
     get name(): string {
         return this._data.name;
     }
     /**
-     * This will be `null` if the block is running in a publicly shared base.
+     * The current user, or `null` if the block is running in a publicly shared base.
      */
     get currentUser(): Collaborator | null {
         const userId = this._data.currentUserId;
@@ -75,10 +82,19 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     get permissionLevel(): string {
         return permissions.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
     }
+    /**
+     * The table model corresponding to the table the user is currently
+     * viewing in Airtable. May be `null` if the user is switching between
+     * tables. Can be watched.
+     */
     get activeTable(): Table | null {
         const {activeTableId} = this._data;
         return activeTableId ? this.getTableById(activeTableId) : null;
     }
+    /**
+     * The tables in this base. Can be watched to know when tables are created,
+     * deleted, or reordered in the base.
+     */
     get tables(): Array<Table> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const tables = [];
@@ -94,6 +110,9 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         });
         return tables;
     }
+    /**
+     * The users who have access to this base.
+     */
     get collaborators(): Array<Collaborator> {
         const collaborators = [];
         const appBlanket = this.__appBlanket;
@@ -107,6 +126,10 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         }
         return collaborators;
     }
+    /**
+     * Returns the user matching the given ID, or `null` if that
+     * user does not exist or does not have access to this base.
+     */
     getCollaboratorById(collaboratorId: string): Collaborator | null {
         const appBlanket = this.__appBlanket;
         if (!appBlanket || !appBlanket.userInfoById) {
@@ -121,6 +144,10 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     get __appBlanket(): AppBlanket {
         return this._data.appBlanket;
     }
+    /**
+     * Returns the table matching the given ID, or `null` if that
+     * table does not exist in this base.
+     */
     getTableById(tableId: string): Table | null {
         if (!this._data.tablesById[tableId]) {
             return null;
@@ -131,6 +158,10 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             return this._tableModelsById[tableId];
         }
     }
+    /**
+     * Returns the table matching the given name, or `null` if no table
+     * exists with that name in this base.
+     */
     getTableByName(tableName: string): Table | null {
         for (const [tableData, tableId] of utils.iterate(this._data.tablesById)) {
             if (tableData.name === tableName) {

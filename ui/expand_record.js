@@ -5,11 +5,11 @@ const {HostMethodNames} = require('client/blocks/block_message_types');
 
 import type Record from 'client/blocks/sdk/models/record';
 
-type ExpandRecordOpts = {
+/** */
+function expandRecord(record: Record, opts?: {
+    /** If provided, will enable paging between records from the expanded record. */
     records?: Array<Record>,
-};
-
-function expandRecord(record: Record, opts?: ExpandRecordOpts) {
+}) {
     // TODO(kasra): this will cause the liveapp page to force a refresh if the
     // tableId and recordId are both valid, but the recordId does not
     // exist in the table.

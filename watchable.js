@@ -1,5 +1,6 @@
 // @flow
 
+/** */
 class Watchable<WatchableKey: string> {
     static _className = 'Watchable';
     static _isWatchableKey(key: string): boolean {
@@ -10,6 +11,12 @@ class Watchable<WatchableKey: string> {
     constructor() {
         this._changeWatchersByKey = {};
     }
+    /**
+     * Start watching the given key or keys. The callback will be called when the
+     * value changes. Every call to `watch` should have a matching call to `unwatch`.
+     *
+     * Will log a warning if the keys given are invalid.
+     */
     watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: any): Array<WatchableKey> { // eslint-disable-line flowtype/no-weak-types
         if (!Array.isArray(keys)) {
             keys = [keys];
@@ -40,6 +47,12 @@ class Watchable<WatchableKey: string> {
 
         return validKeys;
     }
+    /**
+     * Stop watching the given key or keys. Should be called with the same
+     * arguments that were given to `watch`.
+     *
+     * Will log a warning if the keys given are invalid.
+     */
     unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: any): Array<WatchableKey> { // eslint-disable-line flowtype/no-weak-types
         if (!Array.isArray(keys)) {
             keys = [keys];

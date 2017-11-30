@@ -27,13 +27,11 @@ class Utils {
         // TODO(kasra): replace this with something faster.
         return JSON.parse(JSON.stringify(obj));
     }
-    /**
-     * Result values are discarded and errors are thrown asynchronously.
-     * NOTE: this is different from the one in hyperUtils: the function passed
-     * in must be fully bound with all of its arguments and will be immediately
-     * called (this does not return a function). This makes it work better with
-     * Flow: you get argument type checking by using `.bind`.
-     */
+    // Result values are discarded and errors are thrown asynchronously.
+    // NOTE: this is different from the one in hyperUtils: the function passed
+    // in must be fully bound with all of its arguments and will be immediately
+    // called (this does not return a function). This makes it work better with
+    // Flow: you get argument type checking by using `.bind`.
     fireAndForgetPromise(fn: Function) {
         fn().catch(err => {
             // Defer til later, so the error doesn't cause the promise to be rejected.

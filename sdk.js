@@ -7,7 +7,11 @@
 const GlobalConfig = require('client/blocks/sdk/global_config');
 const Base = require('client/blocks/sdk/models/base');
 const models = require('client/blocks/sdk/models/models');
-const NamespacedStorage = require('client/blocks/sdk/namespaced_storage');
+const InMemoryStorage = require('client/helpers/browser_storage/in_memory_storage');
+const {
+    isLocalStorageAvailable,
+    isSessionStorageAvailable,
+} = require('client/helpers/browser_storage/is_storage_available');
 const Viewport = require('client/blocks/sdk/viewport');
 const Cursor = require('client/blocks/sdk/cursor');
 const UI = require('client/blocks/sdk/ui/ui');
@@ -20,23 +24,45 @@ const SettingsButton = require('client/blocks/sdk/settings_button');
 import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
 
+/**
+ * @example
+ * import {runInfo} from 'airtable-block';
+ */
 type RunInfo = {
     isFirstRun: boolean,
     isDevelopmentMode: boolean,
 };
 
+/**
+ * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
+ */
 class BlockSdk {
     __BlockWrapperComponent: typeof BlockWrapperComponent;
     globalConfig: GlobalConfig;
+    /** The current base */
     base: Base;
+    /** */
     models: typeof models;
     installationId: string;
-    localStorage: NamespacedStorage;
-    sessionStorage: NamespacedStorage;
+    /**
+     * Wrapper for window.localStorage which will automatically fall back
+     * to in-memory storage when window.localStorage is unavailable.
+     */
+    localStorage: Storage | InMemoryStorage;
+    /**
+     * Wrapper for window.sessionStorage which will automatically fall back
+     * to in-memory storage when window.sessionStorage is unavailable.
+     */
+    sessionStorage: Storage | InMemoryStorage;
+    /** */
     viewport: Viewport;
+    /** */
     runInfo: RunInfo;
+    /** */
     cursor: Cursor;
+    /** */
     UI: typeof UI;
+    /** */
     settingsButton: SettingsButton;
     constructor(args: {
         initialKvValuesByKey: {[string]: BlockKvValue},
@@ -52,13 +78,12 @@ class BlockSdk {
         this.models = models;
         this.installationId = args.blockInstallationId;
 
-        // Wrap localStorage and sessionStorage to namespace
-        // items by installation ID. If we run each installation on its
-        // own subdomain (e.g. bli123.airtableblocks.com) we can remove
-        // this, I think. Note that we can't replace window.localStorage
-        // because it's read-only (at least in Chrome).
-        this.localStorage = new NamespacedStorage(window.localStorage, args.blockInstallationId);
-        this.sessionStorage = new NamespacedStorage(window.sessionStorage, args.blockInstallationId);
+        // When localStorage/sessionStorage aren't availabe (e.g. when
+        // "Block third-party cookies" is enabled in Chrome), we provide
+        // an in-memory replacement. Otherwise, accessing window.localStorage or
+        // window.sessionStorage will throw an exception.
+        this.localStorage = isLocalStorageAvailable() ? window.localStorage : new InMemoryStorage();
+        this.sessionStorage = isSessionStorageAvailable() ? window.localStorage : new InMemoryStorage();
 
         this.viewport = new Viewport(args.isFullscreen);
         this.cursor = new Cursor(args.baseData);
@@ -72,6 +97,7 @@ class BlockSdk {
 
         // TODO: freeze this object before we ship the code editor.
     }
+    /** */
     reload() {
         utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
             liveappInterface,

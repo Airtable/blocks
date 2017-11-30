@@ -4,7 +4,7 @@ const Table = require('client/blocks/sdk/models/table');
 const Field = require('client/blocks/sdk/models/field');
 const View = require('client/blocks/sdk/models/view');
 const Record = require('client/blocks/sdk/models/record');
-const RecordList = require('client/blocks/sdk/models/record_list');
+const QueryResult = require('client/blocks/sdk/models/query_result');
 const aggregators = require('client/blocks/sdk/models/aggregators');
 const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
 const ApiViewTypes = require('client_server_shared/view_types/api_view_types');
@@ -17,7 +17,8 @@ const models = Object.freeze({
     Field,
     View,
     Record,
-    RecordList,
+    RecordList: QueryResult, // RecordList has been renamed to QueryResult.
+    QueryResult,
     aggregators,
     fieldTypes: ApiFieldTypes,
     viewTypes: ApiViewTypes,

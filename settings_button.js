@@ -11,7 +11,18 @@ const WatchableSettingsButtonKeys = {
 
 type WatchableSettingsButtonKey = $Keys<typeof WatchableSettingsButtonKeys>;
 
-// Interface to the settings button that lives outside the block's iframe.
+/**
+ * Interface to the settings button that lives outside the block's viewport.
+ *
+ * Watch `click` to handle click events on the button.
+ *
+ * @example
+ * import {settingsButton} from 'airtable-block';
+ * settingsButton.isVisible = true;
+ * settingsButton.watch('click', () => {
+ *     alert('Clicked!');
+ * })
+ */
 class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     static _className = 'SettingsButton';
     static _isWatchableKey(key: string): boolean {
@@ -31,6 +42,11 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
             }
         });
     }
+    /**
+     * Whether the settings button is being shown.
+     * Set to `true` to show the settings button.
+     * Can be watched.
+     */
     get isVisible(): boolean {
         return this._isVisible;
     }

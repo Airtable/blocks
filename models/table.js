@@ -19,7 +19,7 @@ import type {BaseDataForBlocks, TableDataForBlocks, RecordDataForBlocks} from 'c
 import type Base from 'client/blocks/sdk/models/base';
 import type {ApiViewType as ViewType} from 'client_server_shared/view_types/api_view_types';
 import type {RecordDef} from 'client/blocks/sdk/models/record';
-import type RecordListType, {RecordListOpts} from 'client/blocks/sdk/models/record_list';
+import type QueryResultType, {QueryResultOpts} from 'client/blocks/sdk/models/query_result';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -39,6 +39,7 @@ const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 // It may also be useful to have cellValuesInView:$ViewId...
 export type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
 
+/** Model class representing a table in the base. */
 class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTableKey> {
     // Once all blocks that current set this flag to true are migrated,
     // remove this flag.
@@ -126,22 +127,35 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     get _dataOrNullIfDeleted(): TableDataForBlocks | null {
         return this._baseData.tablesById[this._id] || null;
     }
+    /** */
     get parentBase(): Base {
         return this._parentBase;
     }
+    /** The table's name. Can be watched. */
     get name(): string {
         return this._data.name;
     }
+    /** */
     get url(): string {
         return airtableUrls.getUrlForTable(this.id, {
             absolute: true,
         });
     }
+    /**
+     * Every table has exactly one primary field. The primary field of a table
+     * will not change.
+     */
     get primaryField(): Field {
         const primaryField = this.getFieldById(this._data.primaryFieldId);
         invariant(primaryField, 'no primary field');
         return primaryField;
     }
+    /**
+     * The fields in this table. The order is arbitrary, since fields are
+     * only ordered in the context of a specific view.
+     *
+     * Can be watched to know when fields are created or deleted.
+     */
     get fields(): Array<Field> {
         // TODO(kasra): is it confusing that this returns an array, since the order
         // is arbitrary?
@@ -154,6 +168,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         return fields;
     }
+    /** */
     getFieldById(fieldId: string): Field | null {
         if (!this._data.fieldsById[fieldId]) {
             return null;
@@ -164,6 +179,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this._fieldModelsById[fieldId];
         }
     }
+    /** */
     getFieldByName(fieldName: string): Field | null {
         for (const [fieldData, fieldId] of utils.iterate(this._data.fieldsById)) {
             if (fieldData.name === fieldName) {
@@ -172,10 +188,19 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         return null;
     }
+    /**
+     * The view model corresponding to the view the user is currently viewing
+     * in Airtable. May be `null` if the user is switching between
+     * tables or views. Can be watched.
+     */
     get activeView(): View | null {
         const {activeViewId} = this._data;
         return activeViewId ? this.getViewById(activeViewId) : null;
     }
+    /**
+     * The views in the table. Can be watched to know when views are created,
+     * deleted, or reordered.
+     */
     get views(): Array<View> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const views = [];
@@ -186,6 +211,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         });
         return views;
     }
+    /** */
     getViewById(viewId: string): View | null {
         if (!this._data.viewsById[viewId]) {
             return null;
@@ -196,6 +222,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this._viewModelsById[viewId];
         }
     }
+    /** */
     getViewByName(viewName: string): View | null {
         for (const [viewData, viewId] of utils.iterate(this._data.viewsById)) {
             if (viewData.name === viewName) {
@@ -204,11 +231,16 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         return null;
     }
-    select(opts?: RecordListOpts): RecordListType {
+    /** */
+    select(opts?: QueryResultOpts): QueryResultType {
         // require here to avoid circular import
-        const RecordList = require('client/blocks/sdk/models/record_list');
-        return RecordList.__createOrReuseRecordList(this, opts || {});
+        const QueryResult = require('client/blocks/sdk/models/query_result');
+        return QueryResult.__createOrReuseQueryResult(this, opts || {});
     }
+    /**
+     * The records in this table. The order is arbitrary since records are
+     * only ordered in the context of a specific view.
+     */
     get records(): Array<Record> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
@@ -219,20 +251,28 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         });
         return records;
     }
+    /**
+     * The record IDs in this table. The order is arbitrary since records are
+     * only ordered in the context of a specific view.
+     */
     get recordIds(): Array<string> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
         return Object.keys(recordsById);
     }
+    /** Number of records in the table */
     get recordCount(): number {
         return this.recordIds.length;
     }
+    /** Maximum number of records that the table can contain */
     get recordLimit(): number {
         return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
     }
+    /** Maximum number of additional records that can be created in the table */
     get remainingRecordLimit(): number {
         return this.recordLimit - this.recordCount;
     }
+    /** */
     getRecordById(recordId: string): Record | null {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
@@ -246,12 +286,14 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this._recordModelsById[recordId];
         }
     }
+    /** */
     canSetCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}): boolean {
         // This takes the field and record IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
         return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
     }
+    /** */
     setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}) {
         if (this.isDeleted) {
             throw new Error('Table does not exist');
@@ -298,20 +340,24 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             privateCellValuesByRecordIdThenFieldId,
         );
     }
+    /** */
     canCreateRecord(cellValuesByFieldIdOrFieldName: ?RecordDef): boolean {
         return this.canCreateRecords(cellValuesByFieldIdOrFieldName ? [cellValuesByFieldIdOrFieldName] : 1);
     }
+    /** */
     createRecord(cellValuesByFieldIdOrFieldName: ?RecordDef): Record {
         const recordDef = cellValuesByFieldIdOrFieldName || {};
         const records = this.createRecords([recordDef]);
         return records[0];
     }
+    /** */
     canCreateRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): boolean {
         // This takes the field IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
         return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
     }
+    /** */
     createRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): Array<Record> {
         if (!this.canCreateRecords()) {
             throw new Error('Your permission level does not allow creating records');
@@ -393,18 +439,22 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
         return recordModels;
     }
+    /** */
     canDeleteRecord(record: Record) {
         return this.canDeleteRecords([record]);
     }
+    /** */
     deleteRecord(record: Record) {
         this.deleteRecords([record]);
     }
+    /** */
     canDeleteRecords(records: Array<Record>) {
         // This takes the records to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
         return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
     }
+    /** */
     deleteRecords(records: Array<Record>) {
         if (!this.canDeleteRecords(records)) {
             throw new Error('Your permission level does not allow deleting records');
@@ -437,6 +487,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             recordIds,
         );
     }
+    /** */
     getFirstViewOfType(allowedViewTypes: Array<ViewType> | ViewType): View | null {
         if (!Array.isArray(allowedViewTypes)) {
             allowedViewTypes = [allowedViewTypes];
@@ -446,6 +497,12 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return u.includes(allowedViewTypes, view.type);
         }) || null;
     }
+    /**
+     * If the activeView's type is in allowedViewTypes, then the activeView
+     * is returned. Otherwise, the first view whose type is in allowedViewTypes
+     * will be returned. Returns null if no view satisfying allowedViewTypes
+     * exists.
+     */
     getDefaultViewOfType(allowedViewTypes: Array<ViewType> | ViewType): View | null {
         if (!Array.isArray(allowedViewTypes)) {
             allowedViewTypes = [allowedViewTypes];
@@ -458,12 +515,21 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this.getFirstViewOfType(allowedViewTypes);
         }
     }
+    /**
+     * Record metadata means record IDs, createdTime, and commentCount are loaded.
+     * Record metadata must be loaded before creating, deleting, or updating records.
+     */
     get isRecordMetadataLoaded(): boolean {
         return !!this._data.recordsById;
     }
+    /**
+     * Loads record metadata. Returns a Promise that resolves when record
+     * metadata is loaded.
+     */
     async loadRecordMetadataAsync() {
         return await this.loadCellValuesInFieldIdsAsync([this._getFieldIdForCausingRecordMetadataToLoad()]);
     }
+    /** Unloads record metadata. */
     unloadRecordMetadata() {
         this.unloadCellValuesInFieldIds([this._getFieldIdForCausingRecordMetadataToLoad()]);
     }
@@ -474,9 +540,14 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // bridge to fetch and subscribe to row metadata.
         return this.primaryField.id;
     }
+    /** */
     areCellValuesLoadedForFieldId(fieldId: string): boolean {
         return this.isDataLoaded || this._areCellValuesLoadedByFieldId[fieldId] || false;
     }
+    /**
+     * This is a low-level API. In most cases, using a `QueryResult` obtained by
+     * calling `table.select` or `view.select` is preferred.
+     */
     async loadCellValuesInFieldIdsAsync(fieldIds: Array<string>) {
         const fieldIdsWhichAreNotAlreadyLoadedOrLoading: Array<string> = [];
         const pendingLoadPromises: Array<Promise<Array<WatchableTableKey>>> = [];
@@ -575,6 +646,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         changedKeys.push(WatchableTableKeys.cellValues);
         return changedKeys;
     }
+    /** */
     unloadCellValuesInFieldIds(fieldIds: Array<string>) {
         const fieldIdsWithZeroRetainCount: Array<string> = [];
         for (const fieldId of fieldIds) {

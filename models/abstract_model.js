@@ -3,7 +3,9 @@ const Watchable = require('client/blocks/sdk/watchable');
 
 import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 
-// Abstract superclass for all block SDK models.
+/**
+ * Abstract superclass for all models.
+ */
 class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableKey> {
     static _className = 'AbstractModel';
     static _isWatchableKey(key: string): boolean {
@@ -18,6 +20,7 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
         this._baseData = baseData;
         this._id = modelId;
     }
+    /** The ID for this model. */
     get id(): string {
         return this._id;
     }
@@ -32,6 +35,15 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
         }
         return data;
     }
+    /**
+     * True if the model has been deleted.
+     *
+     * In general, it's best to avoid keeping a reference to an object past the
+     * current event loop, since it may be deleted and trying to access any data
+     * of a deleted object (other than its ID) will throw. But if you keep a
+     * reference, you can use `isDeleted` to check that it's safe to access the
+     * model's data.
+     */
     get isDeleted(): boolean {
         return this._dataOrNullIfDeleted === null;
     }

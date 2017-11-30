@@ -22,6 +22,7 @@ const WatchableFieldKeys = {
 
 export type WatchableFieldKey = $Keys<typeof WatchableFieldKeys>;
 
+/** Model class representing a field in a table. */
 class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
     static _className = 'Field';
     static _isWatchableKey(key: string) {
@@ -42,12 +43,15 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
         }
         return tableData.fieldsById[this._id] || null;
     }
+    /** */
     get parentTable(): TableType {
         return this._parentTable;
     }
+    /** */
     get name(): string {
         return this._data.name;
     }
+    /** */
     get config(): {type: string, options: any} { // eslint-disable-line flowtype/no-weak-types
         const {type, options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
@@ -61,9 +65,14 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
             options: options ? utils.cloneDeep(options) : null,
         };
     }
+    /**
+     * Every table has exactly one primary field. True if this field is
+     * its parent table's primary field.
+     */
     get isPrimaryField(): boolean {
         return this.id === this.parentTable.primaryField.id;
     }
+    /** */
     get availableAggregators(): Array<Aggregator> {
         const possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(
             this.__getRawType(),
@@ -74,6 +83,7 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
             return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
         });
     }
+    /** */
     isAggregatorAvailable(aggregator: Aggregator | string): boolean {
         const aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
         const liveappSummaryFunctionKey = liveappSummaryFunctionKeyByAggregatorKey[aggregatorKey];
@@ -84,6 +94,10 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
         );
         return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
     }
+    /**
+     * Given a string, will attempt to parse it and return a valid cell value for
+     * the field's current config.
+     */
     convertStringToCellValue(string: string): mixed {
         // TODO(jb): figure out 'cacheForBulkConversion'
         const privateCellValue = columnTypeProvider.convertStringToCellValue(

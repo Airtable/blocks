@@ -16,6 +16,12 @@ const WatchableCursorKeys = {
 type WatchableCursorKey = $Values<typeof WatchableCursorKeys>;
 
 // NOTE: cursor is an AbstractModel because it needs access to the base data.
+/**
+ * Contains information about the state of the user's current interactions in Airtable
+ *
+ * @example
+ * import {cursor} from 'airtable-block';
+ */
 class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCursorKey> {
     static _className = 'Cursor';
     static _isWatchableKey(key: string): boolean {
@@ -38,11 +44,13 @@ class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCu
 
         return [WatchableCursorKeys.selectedRecordIds];
     }
+    /** */
     get selectedRecordIds(): Array<RecordId> {
         invariant(this._data, 'Cursor data is not loaded');
         const selectedRecordIds = Object.keys(this._data.selectedRecordIdSet);
         return selectedRecordIds;
     }
+    /** */
     isRecordSelected(recordOrRecordId: Record | string): boolean {
         invariant(this._data, 'Cursor data is not loaded');
 

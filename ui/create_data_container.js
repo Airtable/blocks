@@ -55,25 +55,29 @@ type WrappedWatchConfig = {
     wrappedCallback: Function,
 };
 
-// Returns a HOC component that will watch and unwatch the specified watchable objects.
-// Usage:
-//    const FooWithData = createDataContainer(Foo, getDependencies(props) {
-//        // This should return an array of dependency objects:
-//        return [
-//            // Will call forceUpdate when table name changes.
-//            {watch: props.table, key: 'name'},
-//
-//            // Will call this._onFieldsChange when table fields change.
-//            {watch: props.table, key: 'fields', callback: Foo.prototype._onFieldsChange},
-//        ];
-//    });
-//
-// Foo can either be a stateful React component class, or a stateless functional
-// component.
-//
-// The getDependencies function will be invoked on componentDidMount, whenever props
-// shallowly change, and whenever one of the watches returned from the getDependencies
-// function is triggered.
+/**
+ * Returns a HOC component that will watch and unwatch the specified watchable objects.
+ *
+ * Component can either be a stateful React component class, or a stateless functional
+ * component.
+ *
+ * The getDependencies function will be invoked on componentDidMount, whenever props
+ * shallowly change, and whenever one of the watches returned from the getDependencies
+ * function is triggered.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * const MyComponentWithData = UI.createDataContainer(MyComponent, getDependencies(props) {
+ *     // This should return an array of dependency objects:
+ *     return [
+ *         // Will call forceUpdate when table name changes.
+ *         {watch: props.table, key: 'name'},
+ *
+ *         // Will call this._onFieldsChange when table fields change.
+ *         {watch: props.table, key: 'fields', callback: MyComponent.prototype._onFieldsChange},
+ *     ];
+ * });
+ */
 //
 // IMPORTANT: The passthruMethodNames arg should be reserved for internal blocks SDK use only.
 // This is experimental and very subject to change.

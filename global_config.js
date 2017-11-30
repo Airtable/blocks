@@ -21,6 +21,18 @@ type WatchableGlobalConfigKey = string;
 //    a UserConfig which would be scoped to an individual user), and
 // 2) that is should be used mainly for configuration of the block (kv store
 //    as a name seems a bit too vague in terms of intended usage).
+/**
+ * A key-value store for persisting configuration options for a block installation.
+ *
+ * The contents will be synced in real-time to all logged-in users of the installation.
+ * Contents will not be updated in real-time when the installation is running in
+ * a publicly shared base, or in development mode.
+ *
+ * Any key can be watched to know when the value of the key changes.
+ *
+ * @example
+ * import {globalConfig} from 'airtable-block';
+ */
 class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     static _className = 'GlobalConfig';
     static _isWatchableKey(key: string): boolean {
@@ -53,6 +65,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         }
         return key;
     }
+    /** */
     get(key: GlobalConfigKey): BlockKvValue {
         const path = this.__formatKeyAsPath(key);
         const value = u.get(this._kvStore, path);
@@ -61,6 +74,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         }
         return value;
     }
+    /** */
     canSet(key: GlobalConfigKey) {
         // This takes the key to future-proof against having per-key
         // permissions.
@@ -68,6 +82,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         const {base} = getSdk();
         return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
     }
+    /** */
     set(key: GlobalConfigKey, value: BlockKvValue) {
         const path = this.__formatKeyAsPath(key);
         this.setPaths([
@@ -80,6 +95,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             {path, value},
         ]);
     }
+    /** */
     canSetPaths(updates: Array<BlockKvUpdate>) {
         // This takes the updates to future-proof against having per-key
         // permissions.
@@ -87,6 +103,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         const {base} = getSdk();
         return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
     }
+    /** */
     setPaths(updates: Array<BlockKvUpdate>) {
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
