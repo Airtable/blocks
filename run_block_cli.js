@@ -75,7 +75,7 @@ const runBlocksCli =  function runBlocksCli() {
         .command(`${Commands.CLONE} <appId> <blockId> <blockDirPath>`, 'Clone a block')
         .command(Commands.RUN, 'Build and run a block')
         .command(Commands.PUSH, 'Push changes to server')
-        .command(Commands.PULL, 'Push changes from server')
+        .command(Commands.PULL, 'Pull changes from server')
         .example('blocks clone app123 blk456 /path/to/block/')
         .example('blocks run')
         .example('block push')
