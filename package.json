@@ -15,7 +15,8 @@
     "lodash": "^4.17.4",
     "ngrok": "^2.2.24",
     "prompt": "^1.0.0",
-    "watchify": "^3.9.0"
+    "watchify": "^3.9.0",
+    "yargs": "^10.0.3"
   },
   "devDependencies": {}
 }
