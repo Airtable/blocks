@@ -8,6 +8,7 @@ const yargsOuter = require('yargs');
 const promisify = require('es6-promisify');
 const BlockBundleServer = require('./lib/block_bundle_server');
 const blockCloneAsync = require('./lib/block_clone');
+const blockPushAsync = require('./lib/block_push');
 
 const promptAsync = promisify(prompt.get);
 
@@ -66,18 +67,20 @@ function startBlockBundleServer(blockBundleServer, port) {
     });
 }
 
-
-
 const runBlocksCli =  function runBlocksCli() {
-    yargsOuter['$0'] = 'blocks';
     const config = yargsOuter
         .usage('Usage: blocks <command> [options]')
         .command(`${Commands.CLONE} <appId> <blockId> <blockDirPath>`, 'Clone a block')
         .command(Commands.RUN, 'Build and run a block')
         .command(Commands.PUSH, 'Push changes to server')
         .command(Commands.PULL, 'Pull changes from server')
-        .example('blocks clone app123 blk456 /path/to/block/')
-        .example('blocks run')
+        .option('force', {
+            describe: 'Bypass revision check when updating files?',
+            type: 'boolean',
+            default: false,
+        })
+        .example('block clone app123 blk456 /path/to/block/')
+        .example('block run')
         .example('block push')
         .example('block pull')
         .help('help')
@@ -100,7 +103,11 @@ const runBlocksCli =  function runBlocksCli() {
             _exitWithError(err.message)
         });
     } else if (command === Commands.PUSH) {
-        throw new Error('Not implemented yet');
+        blockPushAsync(config.force).then(() => {
+            console.log('Block updated');
+        }).catch(err => {
+            _exitWithError(err);
+        });
     } else if (command === Commands.PULL) {
         throw new Error('Not implemented yet');
     } else {
