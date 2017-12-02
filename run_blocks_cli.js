@@ -48,18 +48,17 @@ function startBlockBundleServer(blockBundleServer, port) {
         // If there was an error due to the port being taken, prompt for an
         // alternative port and try again
         if (err.code == 'EADDRINUSE') {
-            prompt.get({
+            promptAsync({
                 name: 'port',
                 description: `Port ${port} is taken, please provide an alternative port to run on`,
-            }, (err, result) => {
-                if (err) {
-                    _exitWithError(err.message);
-                }
+            }).then(result => {
                 const newPort = result.port;
                 if (isNaN(newPort)) {
                     _exitWithError('Invalid port number');
                 }
-                startBlockBundleServer(newPort);
+                startBlockBundleServer(blockBundleServer, newPort);
+            }).catch(err => {
+                _exitWithError(err.message);
             });
         } else {
             _exitWithError(err.message);
