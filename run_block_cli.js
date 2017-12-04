@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use  strict';
 
-const _ = require('lodash');
 const ngrok = require('ngrok');
 const prompt = require('prompt');
 const yargsOuter = require('yargs');
@@ -48,7 +47,7 @@ function startBlockBundleServer(blockBundleServer, port) {
     }).catch(err => {
         // If there was an error due to the port being taken, prompt for an
         // alternative port and try again
-        if (err.code == 'EADDRINUSE') {
+        if (err.code === 'EADDRINUSE') {
             promptAsync({
                 name: 'port',
                 description: `Port ${port} is taken, please provide an alternative port to run on`,
@@ -67,7 +66,7 @@ function startBlockBundleServer(blockBundleServer, port) {
     });
 }
 
-const runBlocksCli =  function runBlocksCli() {
+const runBlocksCli = function runBlocksCli() {
     const config = yargsOuter
         .usage('Usage: blocks <command> [options]')
         .command(`${Commands.CLONE} <appId> <blockId> <blockDirPath>`, 'Clone a block')
@@ -103,10 +102,10 @@ const runBlocksCli =  function runBlocksCli() {
             _exitWithError(err.message)
         });
     } else if (command === Commands.PUSH) {
-        blockPushAsync(config.force).then(() => {
+        blockPushAsync({shouldForceUpdate: config.force}).then(() => {
             console.log('Block updated');
         }).catch(err => {
-            _exitWithError(err);
+            _exitWithError(err.message);
         });
     } else if (command === Commands.PULL) {
         throw new Error('Not implemented yet');
