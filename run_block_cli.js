@@ -69,17 +69,27 @@ function startBlockBundleServer(blockBundleServer, port) {
 
 const runBlocksCli = function runBlocksCli() {
     const config = yargsOuter
-        .usage('Usage: blocks <command> [options]')
-        .command(`${Commands.CLONE} <appId> <blockId> <blockDirPath>`, 'Clone a block')
+        .usage('Usage: block <command> [options]')
+        .command(`${Commands.CLONE} <blockIdentifier> <blockDirPath>`, 'Clone a block from Airtable')
         .command(Commands.RUN, 'Build and run a block')
-        .command(Commands.PUSH, 'Push changes to server')
-        .command(Commands.PULL, 'Pull changes from server')
+        .command(Commands.PUSH, 'Push changes to Airtable')
+        .command(Commands.PULL, 'Pull changes from Airtable')
         .option('force', {
             describe: 'Bypass revision check when updating files?',
             type: 'boolean',
             default: false,
         })
-        .example('block clone app123 blk456 /path/to/block/')
+        .check(config => {
+            const blockIdentifier = config.blockIdentifier;
+            const blockIdentifierSplit = blockIdentifier.split('/');
+            if (!blockIdentifierSplit[0] || !blockIdentifierSplit[1]) {
+                throw new Error('Block identifier must be of format <applicationId>/<blockId>');
+            }
+            config.appId = blockIdentifierSplit[0];
+            config.blockId = blockIdentifierSplit[1];
+            return true;
+        })
+        .example('block clone app123/blk456 my-block')
         .example('block run')
         .example('block push')
         .example('block pull')

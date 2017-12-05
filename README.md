@@ -7,7 +7,7 @@ Create a symlink to the script file:<br>
 `ln -s run_block_cli.js /usr/local/bin/block`
 
 ## Usage
-#### Clone a block
+#### Clone a block from Airtable
 `block clone <applicationId> <blockId> </path/to/blockDir>`
 #### Install packages
 `cd </path/to/blockDir> && npm install`
