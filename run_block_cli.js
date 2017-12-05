@@ -14,6 +14,7 @@ const Commands = {
     CLONE: 'clone',
     PUSH: 'push',
     PULL: 'pull',
+    UPDATE_ENTRY_MODULE_NAME: 'updateEntryModuleName',
 };
 
 function _exitWithError(message) {
@@ -70,6 +71,7 @@ const runBlocksCli = function runBlocksCli() {
         .command(Commands.RUN, 'Build and run a block')
         .command(Commands.PUSH, 'Push changes to Airtable')
         .command(Commands.PULL, 'Pull changes from Airtable')
+        .command(`${Commands.UPDATE_ENTRY_MODULE_NAME} <newName>`, 'Update the entry module name')
         .option('force', {
             describe: 'Bypass revision check when updating files?',
             type: 'boolean',
@@ -92,6 +94,7 @@ const runBlocksCli = function runBlocksCli() {
         .example('block run')
         .example('block push')
         .example('block pull')
+        .example('block updateEntryModuleName newModuleName')
         .help('help')
         .argv;
 
@@ -125,9 +128,16 @@ const runBlocksCli = function runBlocksCli() {
         blockPullAsync().then(() => {
             console.log('Local block updated');
         }).catch(err => {
-            console.log(err.stack);
             _exitWithError(err.message);
         });
+    } else if (command === Commands.UPDATE_ENTRY_MODULE_NAME) {
+        const updateEntryModuleName = require('./lib/update_entry_module_name');
+        try {
+            updateEntryModuleName(config.newName);
+            console.log('Entry module name updated');
+        } catch (err) {
+            _exitWithError(err.message);
+        }
     } else {
         yargsOuter.showHelp();
         _exitWithError('Please use a valid command');
