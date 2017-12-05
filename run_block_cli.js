@@ -8,6 +8,7 @@ const promisify = require('es6-promisify');
 const BlockBundleServer = require('./lib/block_bundle_server');
 const blockCloneAsync = require('./lib/block_clone');
 const blockPushAsync = require('./lib/block_push');
+const blockPullAsync = require('./lib/block_pull');
 
 const promptAsync = promisify(prompt.get);
 
@@ -103,12 +104,17 @@ const runBlocksCli = function runBlocksCli() {
         });
     } else if (command === Commands.PUSH) {
         blockPushAsync({shouldForceUpdate: config.force}).then(() => {
-            console.log('Block updated');
+            console.log('Remote block updated');
         }).catch(err => {
             _exitWithError(err.message);
         });
     } else if (command === Commands.PULL) {
-        throw new Error('Not implemented yet');
+        blockPullAsync().then(() => {
+            console.log('Local block updated');
+        }).catch(err => {
+            console.log(err.stack);
+            _exitWithError(err.message);
+        });
     } else {
         yargsOuter.showHelp();
         _exitWithError('Please use a valid command');

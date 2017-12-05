@@ -13,3 +13,7 @@ Create a symlink to the script file:<br>
 `cd </path/to/blockDir> && npm install`
 #### Run the block
 `block run`
+#### Push new changes to Airtable
+`block push`
+#### Pull new changes from Airtable
+`block pull`
