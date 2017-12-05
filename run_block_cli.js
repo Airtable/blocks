@@ -80,13 +80,16 @@ const runBlocksCli = function runBlocksCli() {
             default: false,
         })
         .check(config => {
-            const blockIdentifier = config.blockIdentifier;
-            const blockIdentifierSplit = blockIdentifier.split('/');
-            if (!blockIdentifierSplit[0] || !blockIdentifierSplit[1]) {
-                throw new Error('Block identifier must be of format <applicationId>/<blockId>');
+            const command = config._[0] || '';
+            if (command === Commands.CLONE) {
+                const blockIdentifier = config.blockIdentifier;
+                const blockIdentifierSplit = blockIdentifier.split('/');
+                if (!blockIdentifierSplit[0] || !blockIdentifierSplit[1]) {
+                    throw new Error('Block identifier must be of format <applicationId>/<blockId>');
+                }
+                config.appId = blockIdentifierSplit[0];
+                config.blockId = blockIdentifierSplit[1];
             }
-            config.appId = blockIdentifierSplit[0];
-            config.blockId = blockIdentifierSplit[1];
             return true;
         })
         .example('block clone app123/blk456 my-block')
