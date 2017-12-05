@@ -1,14 +1,9 @@
 #!/usr/bin/env node
 'use  strict';
 
-const ngrok = require('ngrok');
 const prompt = require('prompt');
 const yargsOuter = require('yargs');
 const promisify = require('es6-promisify');
-const BlockBundleServer = require('./lib/block_bundle_server');
-const blockCloneAsync = require('./lib/block_clone');
-const blockPushAsync = require('./lib/block_push');
-const blockPullAsync = require('./lib/block_pull');
 
 const promptAsync = promisify(prompt.get);
 
@@ -27,6 +22,7 @@ function _exitWithError(message) {
 }
 
 function triggerInitialBundleAndStartNgrok(blockBundleServer, port) {
+    const ngrok = require('ngrok');
     // We perform an intial bundle before starting ngrok since the user might
     // have made changes since the last time the server was running or this
     // this might be the very first time they are running the server.
@@ -101,6 +97,7 @@ const runBlocksCli = function runBlocksCli() {
 
     const command = config._[0] || '';
     if (command === Commands.RUN) {
+        const BlockBundleServer = require('./lib/block_bundle_server');
         const blockBundleServer = new BlockBundleServer();
         startBlockBundleServer(blockBundleServer, defaultPort);
     } else if (command === Commands.CLONE) {
@@ -109,6 +106,7 @@ const runBlocksCli = function runBlocksCli() {
             name: 'apiKey',
             description: `Please enter your api key. You can generate one at https://airtable.com/account`,
         }).then(result => {
+            const blockCloneAsync = require('./lib/block_clone');
             return blockCloneAsync(config.appId, config.blockId, config.blockDirPath, result.apiKey);
         }).then(() => {
             console.log(`Block cloned in ${config.blockDirPath}`);
@@ -116,12 +114,14 @@ const runBlocksCli = function runBlocksCli() {
             _exitWithError(err.message)
         });
     } else if (command === Commands.PUSH) {
+        const blockPushAsync = require('./lib/block_push');
         blockPushAsync({shouldForceUpdate: config.force}).then(() => {
             console.log('Remote block updated');
         }).catch(err => {
             _exitWithError(err.message);
         });
     } else if (command === Commands.PULL) {
+        const blockPullAsync = require('./lib/block_pull');
         blockPullAsync().then(() => {
             console.log('Local block updated');
         }).catch(err => {
