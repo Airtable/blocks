@@ -8,7 +8,7 @@ Create a symlink to the script file:<br>
 
 ## Usage
 #### Clone a block from Airtable
-`block clone <applicationId> <blockId> </path/to/blockDir>`
+`block clone <applicationId>/<blockId> </path/to/blockDir>`
 #### Install packages
 `cd </path/to/blockDir> && npm install`
 #### Run the block
