@@ -1,10 +1,13 @@
 # Command line tool for local Blocks development
 
 ## Installation
-`git clone https://github.com/Hyperbase/blocks-cli.git`<br>
-`cd blocks-cli && npm install`<br><br>
+
+    git clone https://github.com/Hyperbase/blocks-cli.git
+    cd blocks-cli && npm install
+
 Create a symlink to the script file:<br>
-`ln -s run_block_cli.js /usr/local/bin/block`
+
+    ln -s `pwd`/run_block_cli.js /usr/local/bin/block
 
 ## Usage
 #### Clone a block from Airtable
