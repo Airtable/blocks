@@ -15,4 +15,7 @@ module.exports = {
 
     // Metadata file for the block cli
     BLOCK_FILE_NAME: 'block.json',
+
+    // File to store the airtable api key
+    AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',
 };
