@@ -32,7 +32,7 @@ function startNgrokAndTriggerInitialBundle(blockBundleServer, port) {
         if (err) {
             _exitWithError(err.message);
         }
-        blockBundleServer.setNgrokUrl(url);
+        blockBundleServer.setExternalUrl(url);
         blockBundleServer.bundle(null, () => {
             console.log(`Serving bundle at ${url}/bundle`);
         });
