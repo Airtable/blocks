@@ -3,7 +3,7 @@
 ## Installation
 
     git clone https://github.com/Hyperbase/blocks-cli.git
-    cd blocks-cli && npm install
+    cd blocks-cli && npm install react react-dom
 
 Create a symlink to the script file:<br>
 
