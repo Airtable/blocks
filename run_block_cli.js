@@ -21,18 +21,19 @@ function _exitWithError(message) {
     process.exit(1);
 }
 
-function triggerInitialBundleAndStartNgrok(blockBundleServer, port) {
+function startNgrokAndTriggerInitialBundle(blockBundleServer, port) {
     const ngrok = require('ngrok');
-    // We perform an intial bundle before starting ngrok since the user might
-    // have made changes since the last time the server was running or this
-    // this might be the very first time they are running the server.
-    // NOTE: We do this here instead of in BlockBundleServer.start so that
-    // the bundler logging doesn't mess up the port prompt stuff below.
-    blockBundleServer.bundle(null, () => {
-        ngrok.connect(port, (err, url) => {
-            if (err) {
-                _exitWithError(err.message);
-            }
+    // We start ngrok, then tell the server its ngrok url, then trigger the
+    // initial bundle and finally log the url to the user.
+    // NOTE: We wait for the initial bundle to finish before logging the
+    // ngrok url to the user so that they we can ensure that there is a
+    // bundle at the time the url if first hit.
+    ngrok.connect(port, (err, url) => {
+        if (err) {
+            _exitWithError(err.message);
+        }
+        blockBundleServer.setPublicUrlForLongPoll(url);
+        blockBundleServer.bundle(null, () => {
             console.log(`Serving bundle at ${url}/bundle`);
         });
     });
@@ -40,7 +41,7 @@ function triggerInitialBundleAndStartNgrok(blockBundleServer, port) {
 
 function startBlockBundleServer(blockBundleServer, port) {
     blockBundleServer.startAsync(port).then(() => {
-        triggerInitialBundleAndStartNgrok(blockBundleServer, defaultPort);
+        startNgrokAndTriggerInitialBundle(blockBundleServer, defaultPort);
     }).catch(err => {
         // If there was an error due to the port being taken, prompt for an
         // alternative port and try again
