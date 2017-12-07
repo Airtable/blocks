@@ -5,18 +5,44 @@
     git clone https://github.com/Hyperbase/blocks-cli.git
     cd blocks-cli && npm install
 
-Create a symlink to the script file:<br>
+Create a symlink to the script file so it's globally available:<br>
 
     ln -s `pwd`/run_block_cli.js /usr/local/bin/block
 
 ## Usage
-#### Clone a block from Airtable
+#### Clone a specific block from Airtable
+
+Go to the base where the block lives, click the block's name, then click “Edit block locally”.
+
+Copy the clone command and paste into your terminal:
+
 `block clone <applicationId>/<blockId> </path/to/blockDir>`
-#### Install packages
+
+Once the block is cloned, install the block's npm packages:
+
 `cd </path/to/blockDir> && npm install`
-#### Run the block
+
+Now would be a good time to set up version control. **Do not check in the .airtableAPIKey file!**
+
+#### Running the block locally
+
+Go to the block's directly and run:
+
 `block run`
-#### Push new changes to Airtable
-`block push`
-#### Pull new changes from Airtable
-`block pull`
+
+Paste the bundle URL into the "Edit block locally" dialog in Airtable.
+
+The block's frame will switch to the local development bundle. It will automatically reload when you update the code locally.
+
+#### Pushing and pulling changes
+
+Once you're happy with your changes, use `block push` to upload the code to the block. Pushing will update the code others users see when they open the web IDE or when they pull.
+
+To pull other users' changes, use `block pull`.
+
+To release a block, push your code, then go into the web IDE (“Edit block”), click “Run”, then open the Builds popover, then click “Release” on the latest build.
+
+## Limitations
+
+- Directories are not supported. Don't create new folders or delete the existing folders.
+- If you want to rename the entry module, use `block rename-entry <new name>` instead of renaming the file directly (rename-entry will also update the metadata so the block syncs properly the next time you push)
