@@ -26,7 +26,7 @@ Now would be a good time to set up version control. **Do not check in the .airta
 
 #### Running the block locally
 
-Go to the block's directly and run:
+Go to the block's directory and run:
 
 `block run`
 
