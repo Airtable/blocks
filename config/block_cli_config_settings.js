@@ -18,4 +18,7 @@ module.exports = {
 
     // File to store the airtable api key
     AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',
+
+    // Bundle file
+    BUNDLE_FILE_NAME: 'bundle.js',
 };
