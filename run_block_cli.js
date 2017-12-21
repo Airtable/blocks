@@ -18,7 +18,7 @@ const Commands = {
 };
 
 function _exitWithError(message) {
-    console.log(message);
+    console.error('Error:', message);
     process.exit(1);
 }
 
