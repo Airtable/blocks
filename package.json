@@ -1,0 +1,29 @@
+{
+  "name": "blocks-sdk",
+  "version": "1.0.0",
+  "description": "- [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/) - [Local development tool](https://github.com/Hyperbase/blocks-cli) - [Airtable styleguide](https://airtable.com/styleguide)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hyperbase/blocks-sdk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hyperbase/blocks-sdk/issues"
+  },
+  "homepage": "https://github.com/Hyperbase/blocks-sdk#readme",
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "invariant": "^2.2.2",
+    "prop-types": "^15.6.0",
+    "quill": "^1.3.4",
+    "quill-delta": "^3.6.2"
+  }
+}
