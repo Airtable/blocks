@@ -1,4 +1,4 @@
-The SDK source is in [client/blocks/sdk](https://github.com/Hyperbase/blocks-sdk/tree/master/client/blocks/sdk). The rest of the files are empty stubs so you can run Flow in this directory without it complaining.
+The SDK source is in [client/blocks/sdk](https://github.com/Hyperbase/blocks-sdk/tree/master/client/blocks/sdk). The rest of the files are empty stubs so you can run Flow in this directory without it complaining. If you're going to run Flow, first run `bin/symlink.sh` to make the requires resolve properly.
 
 ## Links
 - [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
