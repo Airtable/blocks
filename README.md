@@ -1,3 +1,5 @@
+The SDK source is in [client/blocks/sdk](https://github.com/Hyperbase/blocks-sdk/tree/master/client/blocks/sdk). The rest of the files are empty stubs so you can run Flow in this directory without it complaining.
+
 ## Links
 - [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
 - [Local development tool](https://github.com/Hyperbase/blocks-cli)
