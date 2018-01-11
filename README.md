@@ -179,7 +179,7 @@ directory without it complaining.
 Install flow and the SDK repo:
 
 ```sh
-npm i --save-dev flow-bin@0.52 git@github.com:Hyperbase/blocks-sdk.git
+npm i --save-dev flow-bin@0.52 git+ssh://git@github.com:Hyperbase/blocks-sdk.git
 ```
 
 Create a `.flowconfig` file in your repo and add the following:
