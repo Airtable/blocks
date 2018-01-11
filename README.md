@@ -1,5 +1,3 @@
-The SDK source is in [client/blocks/sdk](https://github.com/Hyperbase/blocks-sdk/tree/master/client/blocks/sdk). The rest of the files are empty stubs so you can run Flow in this directory without it complaining. If you're going to run Flow, first run `bin/symlink.sh` to make the requires resolve properly.
-
 ## Links
 - [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
 - [Local development tool](https://github.com/Hyperbase/blocks-cli)
@@ -17,8 +15,8 @@ all cases since it takes care of loading data when components are mounted, unloa
 components are unmounted, and automatically re-rendering when data changes. You should only
 use the manual watch / unwatch methods if you need to load / unload data on the fly.
 
-* Instead of using `table.loadDataAsync`, `view.loadDataAsync`, or watching `table.records` / 
-`view.visibleRecords`, it's preferable to use `QueryResult`. This lets you have 
+* Instead of using `table.loadDataAsync`, `view.loadDataAsync`, or watching `table.records` /
+`view.visibleRecords`, it's preferable to use `QueryResult`. This lets you have
 better control on which fields you're loading. Example:
 
 ```js
@@ -167,4 +165,53 @@ The native APIs will throw in that scenario.
 
 ```js
 import {localStorage, sessionStorage} from 'airtable-block';
+```
+
+## flow
+
+Supported flow version: 0.52.0.
+
+The `stubs` folder contains empty stub files so you can run Flow in this
+directory without it complaining.
+
+### Setting up flow for a block
+
+Install flow and the SDK repo:
+
+```sh
+npm i --save-dev flow-bin@0.52 git@github.com:Hyperbase/blocks-sdk.git
+```
+
+Create a `.flowconfig` file in your repo and add the following:
+```
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+unsafe.enable_getters_and_setters=true
+suppress_comment= \\(.\\|\n\\)*flow-disable-next-line
+module.name_mapper='^frontend\/\(.*\)$' -> '<PROJECT_ROOT>/frontend/\1'
+module.name_mapper='^airtable-block$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/flow-index.js'
+module.name_mapper='^airtable-block\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/\1'
+module.name_mapper='^client\/blocks\/sdk\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/\1'
+module.name_mapper='^client\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/stubs/client/\1'
+module.name_mapper='^client_server_shared\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/stubs/client_server_shared/\1'
+```
+
+Add a flow script to package.json:
+
+```json
+  "scripts": {
+    "flow": "flow"
+  }
+```
+
+Run flow:
+```sh
+npm run flow
 ```

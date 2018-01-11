@@ -45,12 +45,12 @@ var output = JSON.parse(result.output.toString('utf8').slice(1, -1));
 output.errors.forEach(error => {
     if (error.message.length === 2 &&
         error.message[1].descr === 'Required module not found') {
-        var filepath = error.message[0].descr;
+        var filepath = path.join('stubs', error.message[0].descr);
         var filedir = path.dirname(filepath);
         var filename = path.basename(filepath);
 
         mkdirpSync(filedir);
 
-        fs.writeFileSync(filepath + '.js', '// Stub file\n');
+        fs.writeFileSync(filepath + '.js', '// Stub file');
     }
 });
