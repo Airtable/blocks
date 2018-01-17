@@ -8,6 +8,7 @@ module.exports = {
     GLOBAL_SDK_VARIABLE_NAME: '_airtableBlockSdk',
     GLOBAL_REACT_VARIABLE_NAME: '_airtableReact',
     GLOBAL_REACT_DOM_VARIABLE_NAME: '_airtableReactDOM',
+    GLOBAL_REACT_DOM_SERVER_VARIABLE_NAME: '_airtableReactDOMServer',
     GLOBAL_RUN_BLOCK_FUNCTION_NAME: '_airtableRunBlock',
 
     // Wrapper file for blocks frontend code
