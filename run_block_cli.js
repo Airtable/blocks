@@ -108,7 +108,7 @@ const runBlocksCli = function runBlocksCli() {
         // Prompt for apiKey
         promptAsync({
             name: 'apiKey',
-            description: `Please enter your api key. You can generate one at https://airtable.com/account`,
+            description: `Please enter your API key. You can generate one at https://airtable.com/account`,
         }).then(result => {
             const blockCloneAsync = require('./lib/block_clone');
             return blockCloneAsync(config.appId, config.blockId, config.blockDirPath, result.apiKey);
