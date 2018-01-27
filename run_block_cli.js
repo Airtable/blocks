@@ -15,11 +15,15 @@ const Commands = {
     CLONE: 'clone',
     PUSH: 'push',
     PULL: 'pull',
+    LINT: 'lint',
     RENAME_ENTRY: 'rename-entry',
 };
 
-function _exitWithError(message) {
+function _exitWithError(message, err) {
     console.error('Error:', message);
+    if (err) {
+        console.error(err.stack);
+    }
     process.exit(1);
 }
 
@@ -73,6 +77,7 @@ const runBlocksCli = function runBlocksCli() {
         .command(Commands.RUN, 'Build and run a block')
         .command(Commands.PUSH, 'Push changes to Airtable')
         .command(Commands.PULL, 'Pull changes from Airtable')
+        .command(Commands.LINT, 'Lint block code')
         .command(`${Commands.RENAME_ENTRY} <newName>`, 'Update the entry module name')
         .option('force', {
             describe: 'Bypass revision check when updating files?',
@@ -129,6 +134,17 @@ const runBlocksCli = function runBlocksCli() {
         const blockPullAsync = require('./lib/block_pull');
         blockPullAsync().then(() => {
             console.log('Local block updated');
+        }).catch(err => {
+            _exitWithError(err.message);
+        });
+    } else if (command === Commands.LINT) {
+        const findBlockDirPathAsync = require('./lib/find_block_dir_path');
+        const blockLint = require('./lib/block_lint');
+        findBlockDirPathAsync().then(blockDirPath => {
+            console.log('Linting...');
+            const lint = blockLint(blockDirPath);
+            const report = lint.report;
+            console.log(lint.formatter(report.results));
         }).catch(err => {
             _exitWithError(err.message);
         });

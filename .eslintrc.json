@@ -10,8 +10,7 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react",
-        "class-property"
+        "react"
     ],
     "rules": {
         "linebreak-style": [
@@ -26,6 +25,9 @@
         "semi": [
             "error",
             "always"
+        ],
+        "no-unused-vars": [
+            "warn"
         ]
     }
 }
