@@ -28,6 +28,7 @@
         ],
         "no-unused-vars": [
             "warn"
-        ]
+        ],
+        "react/jsx-uses-vars": 1
     }
 }
