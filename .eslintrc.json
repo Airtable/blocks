@@ -27,7 +27,8 @@
             "always"
         ],
         "no-unused-vars": [
-            "warn"
+            "warn",
+            {"varsIgnorePattern": "(React|Block)"}
         ],
         "react/jsx-uses-vars": 1
     }
