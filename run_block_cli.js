@@ -141,6 +141,13 @@ const runBlocksCli = function runBlocksCli() {
         const findBlockDirPathAsync = require('./lib/find_block_dir_path');
         const blockLint = require('./lib/block_lint');
         findBlockDirPathAsync().then(blockDirPath => {
+            const setUpEslintIfNeededSync = require('./lib/set_up_eslint_if_needed_sync');
+            const didSetUpEslint = setUpEslintIfNeededSync(blockDirPath);
+            if (didSetUpEslint) {
+                console.log('Dev dependencies updated. Please run `npm install` and try again.');
+                process.exit(1);
+            }
+
             console.log('Linting...');
             const lint = blockLint(blockDirPath);
             const report = lint.report;
