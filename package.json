@@ -21,5 +21,10 @@
     "watchify": "^3.9.0",
     "yargs": "^10.0.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+      "babel-eslint": "^8.2.1",
+      "eslint": "^4.16.0",
+      "eslint-plugin-class-property": "^1.1.0",
+      "eslint-plugin-react": "^7.6.0"
+  }
 }

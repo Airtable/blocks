@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 'use  strict';
 
 const prompt = require('prompt');
@@ -108,14 +109,14 @@ const runBlocksCli = function runBlocksCli() {
         // Prompt for apiKey
         promptAsync({
             name: 'apiKey',
-            description: `Please enter your API key. You can generate one at https://airtable.com/account`,
+            description: 'Please enter your API key. You can generate one at https://airtable.com/account',
         }).then(result => {
             const blockCloneAsync = require('./lib/block_clone');
             return blockCloneAsync(config.appId, config.blockId, config.blockDirPath, result.apiKey);
         }).then(() => {
             console.log(`Block cloned in ${config.blockDirPath}`);
         }).catch(err => {
-            _exitWithError(err.message)
+            _exitWithError(err.message);
         });
     } else if (command === Commands.PUSH) {
         const blockPushAsync = require('./lib/block_push');
