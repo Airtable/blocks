@@ -61,8 +61,8 @@ function startBlockBundleServer(blockBundleServer, port) {
                     _exitWithError('Invalid port number');
                 }
                 startBlockBundleServer(blockBundleServer, newPort);
-            }).catch(err => {
-                _exitWithError(err.message);
+            }).catch(innerErr => {
+                _exitWithError(innerErr.message);
             });
         } else {
             _exitWithError(err.message);
