@@ -2,12 +2,9 @@
 
 ## Installation
 
-    git clone https://github.com/Hyperbase/blocks-cli.git
-    cd blocks-cli && npm install
+To install or update the `blocks` cli, run:
 
-Create a symlink to the script file so it's globally available:<br>
-
-    ln -s `pwd`/run_block_cli.js /usr/local/bin/block
+    npm install --global https://github.com/Hyperbase/blocks-cli.git
 
 ## Usage
 #### Clone a specific block from Airtable

@@ -2,7 +2,12 @@
   "name": "blocks-cli",
   "version": "0.0.1",
   "private": true,
-  "scripts": {},
+  "bin": {
+    "block": "run_block_cli.js"
+  },
+  "scripts": {
+    "lint": "eslint ."
+  },
   "dependencies": {
     "babel-core": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -22,12 +27,9 @@
     "yargs": "^10.0.3"
   },
   "devDependencies": {
-      "babel-eslint": "^8.2.1",
-      "eslint": "^4.16.0",
-      "eslint-plugin-class-property": "^1.1.0",
-      "eslint-plugin-react": "^7.6.0"
-  },
-  "scripts": {
-      "lint": "eslint ."
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.16.0",
+    "eslint-plugin-class-property": "^1.1.0",
+    "eslint-plugin-react": "^7.6.0"
   }
 }
