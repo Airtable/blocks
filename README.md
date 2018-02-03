@@ -167,6 +167,34 @@ The native APIs will throw in that scenario.
 import {localStorage, sessionStorage} from 'airtable-block';
 ```
 
+## Blocks testing checklist
+
+When building and testing a block, here are some common things to test:
+
+### Permissions
+
+* Does the block correctly handle the different user permission levels? You can simulate this in development mode.
+    * In read-only mode the block should not attempt to mutate any records or globalConfig. You can check before performing actions by using:
+        * globalConfig.canSet, globalConfig.canSetPaths
+        * record.canSetCellValue, record.canSetCellValues, record.canDelete
+        * table.canSetCellValues, table.canCreateRecord, table.canCreateRecords, table.canDeleteRecord, table.canDeleteRecords
+* Note that the user's permission level may change in real-time! Your components should watch base.permissionLevel to re-render appropriately (e.g. to disable any relevant inputs or buttons)
+* The Synced components will automatically disable themselves for read-only users.
+
+### Model mutation
+
+* Does the block correctly handle the deletion of any models (e.g. table, view, field, record) it depends on? Two cases to test:
+    * the model is deleted while the block is running (block needs to handle the deletion in real-time)
+    * the model is deleted while the block is not running (block needs to handle the deletion next time it runs). To test this, stop running the block (or disable it), delete the model, then run the block again.
+* Note that the type of a field can change. E.g. a text field may turn into a formula field, in which case trying to write to it will fail. Or a text field may turn into a number field, in which case writing a string to it will throw an error.
+* Note that model deletions/updates can come from the current client or remote collaborators. You generally shouldn't need to do anything special to handle the two different cases as long as you're watching the right things.
+
+### Viewport sizes
+
+* As much as reasonably possible, blocks should be responsive to different viewport sizes.
+* On the smaller end, use viewport.setMinSize to set the breakpoint below which we'll show a “Please make this block bigger” message.
+* For certain blocks, it may make sense to use viewport.setMaxFullscreenSize to constrain the maximum height or width of the block when it is fullscreen. This does not affect the block when it's not fullscreen. This is useful for dialog-type blocks (e.g. batch update), but should not be used to overly constrain visualization-type blocks (e.g. map, timeline)
+
 ## flow
 
 Supported flow version: 0.52.0.
