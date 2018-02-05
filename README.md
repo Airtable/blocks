@@ -195,6 +195,13 @@ When building and testing a block, here are some common things to test:
 * On the smaller end, use viewport.setMinSize to set the breakpoint below which we'll show a “Please make this block bigger” message.
 * For certain blocks, it may make sense to use viewport.setMaxFullscreenSize to constrain the maximum height or width of the block when it is fullscreen. This does not affect the block when it's not fullscreen. This is useful for dialog-type blocks (e.g. batch update), but should not be used to overly constrain visualization-type blocks (e.g. map, timeline)
 
+### Browser compatibility
+
+* Officially, these are browsers that Airtable supports: https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable-
+    * If supporting these requirements in the block you're building is too onerous, we can reconsider the requirements.
+* Note that we currently only include regenerator-runtime instead of the full babel polyfill, which can lead to issues in slightly older browsers (e.g. Object.values in older Chrome). We'll probably serve a more robust polyfill in the future.
+
+
 ## flow
 
 Supported flow version: 0.52.0.
