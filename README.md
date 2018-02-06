@@ -167,6 +167,69 @@ The native APIs will throw in that scenario.
 import {localStorage, sessionStorage} from 'airtable-block';
 ```
 
+## Field types and cell values
+
+Each field in a table has a type and associated configuration. You can inspect this information
+by looking at `field.config`. For example, a date field's `config` looks like this:
+
+```
+{
+  "type": "date",
+  "options": {
+    "dateFormat": {
+      "name": "us",
+      "format": "M/D/YYYY"
+    }
+  }
+}
+```
+
+The cell values depend on the type of the field. You can use the "Inspector" block to look at
+the raw cell values in a table.
+
+The list of field types is:
+
+```
+import {models} from 'airtable-block';
+models.fieldTypes = {
+    SINGLE_LINE_TEXT: 'singleLineText',
+    EMAIL: 'email',
+    URL: 'url',
+    MULTILINE_TEXT: 'multilineText',
+    NUMBER: 'number',
+    CURRENCY: 'currency',
+    LEGACY_PERCENT_TIMES_100: 'legacyPercentTimes100',
+    SINGLE_SELECT: 'singleSelect',
+    MULTIPLE_SELECTS: 'multipleSelects',
+    SINGLE_COLLABORATOR: 'singleCollaborator',
+    MULTIPLE_COLLABORATORS: 'multipleCollaborators',
+    MULTIPLE_RECORD_LINKS: 'multipleRecordLinks',
+    DATE: 'date',
+    DATE_TIME: 'dateTime',
+    PHONE_NUMBER: 'phoneNumber',
+    MULTIPLE_ATTACHMENTS: 'multipleAttachments',
+    CHECKBOX: 'checkbox',
+    FORMULA: 'formula',
+    CREATED_TIME: 'createdTime',
+    ROLLUP: 'rollup',
+    COUNT: 'count',
+    LOOKUP: 'lookup',
+    AUTO_NUMBER: 'autoNumber',
+    BARCODE: 'barcode',
+    RATING: 'rating',
+    RICH_TEXT: 'richText',
+    DURATION: 'duration',
+};
+```
+
+Rollups, formulas, and lookups are computed fields, which means they can't be updated manually and their cell format is ultimately based on some other non-computed field. For these computed fields, you can inspect `field.config.options.resultConfig` to see what the underlying format is. The `resultConfig` will be equivalent to the `field.config` of the underlying field type. For example, a rollup's `resultConfig` can be `{type: 'date', ...}` or `{type: 'dateTime', ...}`.
+
+There are currently some rough edges to be aware of:
+
+- `CREATED_TIME` is a computed field, so it also has `resultConfig` right now. We'll probably change created time's config to look more like the config of `date` and `dateTime` fields so the options don't nest under resultConfig.
+- Lookup cell values are arrays. For example, a lookup of a text field will have `field.options.resultConfig === {type: 'singleLineText'}` but each cell value will actually be an array of strings.
+- Before inspecting the `resultConfig` of computed fields, you should first check `field.config.options.isError`. If `isError` is true, there won't be a `resultConfig` (usually as a result of an error in the formula, or if one of the fields the computed field depends on has been deleted).
+
 ## Blocks testing checklist
 
 When building and testing a block, here are some common things to test:
