@@ -172,7 +172,7 @@ import {localStorage, sessionStorage} from 'airtable-block';
 Each field in a table has a type and associated configuration. You can inspect this information
 by looking at `field.config`. For example, a date field's `config` looks like this:
 
-```
+```json
 {
   "type": "date",
   "options": {
@@ -189,7 +189,7 @@ the raw cell values in a table.
 
 The list of field types is:
 
-```
+```js
 import {models} from 'airtable-block';
 models.fieldTypes = {
     SINGLE_LINE_TEXT: 'singleLineText',
@@ -226,7 +226,7 @@ Rollups, formulas, and lookups are computed fields, which means they can't be up
 
 There are currently some rough edges to be aware of:
 
-- `CREATED_TIME` is a computed field, so it also has `resultConfig` right now. We'll probably change created time's config to look more like the config of `date` and `dateTime` fields so the options don't nest under resultConfig.
+- `CREATED_TIME` is a computed field, so it also has `resultConfig` right now. We'll probably change created time's config to look more like the config of `DATE` and `DATE_TIME` fields so the options don't nest under resultConfig.
 - Lookup cell values are arrays. For example, a lookup of a text field will have `field.options.resultConfig === {type: 'singleLineText'}` but each cell value will actually be an array of strings.
 - Before inspecting the `resultConfig` of computed fields, you should first check `field.config.options.isError`. If `isError` is true, there won't be a `resultConfig` (usually as a result of an error in the formula, or if one of the fields the computed field depends on has been deleted).
 
