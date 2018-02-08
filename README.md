@@ -258,6 +258,43 @@ When building and testing a block, here are some common things to test:
 * On the smaller end, use viewport.setMinSize to set the breakpoint below which we'll show a “Please make this block bigger” message.
 * For certain blocks, it may make sense to use viewport.setMaxFullscreenSize to constrain the maximum height or width of the block when it is fullscreen. This does not affect the block when it's not fullscreen. This is useful for dialog-type blocks (e.g. batch update), but should not be used to overly constrain visualization-type blocks (e.g. map, timeline)
 
+### Onboarding
+
+* When a block is running for the first time, try to automatically configure as many options as possible. Usually this default setup is performed in the SettingsStore constructor. For example (adapted from the Chart block):
+
+```js
+// Note that permission check! If we don't do this and
+// the block starts running without a table for a user
+// with read-only permissions, it'll crash.
+if (globalConfig.canSet(ConfigKeys.tableId) && !this.table) {
+    // Make the block use the table the user is currently looking at (base.activeTable).
+    // base.activeTable may be null if the user is in between switching tables, in which
+    // case just fallback to the first table in the base.
+    const table = base.activeTable || base.tables[0];
+    this.table = table;
+    
+    // getDefaultViewOfType will return the active view if there is one and it
+    // satisfies allowedViewTypes. Otherwise, it will return the first view that
+    // satisified allowedViewTypes, if any. Note that every table has at least 1
+    // grid view.
+    this.view = table.getDefaultViewOfType(allowedViewTypes);
+
+    // Depending on the block, you may be able to choose
+    // some other sensible defaults. For example, the chart
+    // will attempt to show a bar chart using the first single
+    // select or single collaborator field it finds.
+    for (const field of table.fields) {
+        if (field.config.type === models.fieldTypes.SINGLE_SELECT ||
+            field.config.type === models.fieldTypes.SINGLE_COLLABORATOR) {
+            this.xField = field;
+            break;
+        }
+    }
+}
+```
+
+* You can simulate this scenario by running with empty globalConfig and different permission levels.
+
 ### Browser compatibility
 
 * Officially, these are browsers that Airtable supports: https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable-
