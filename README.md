@@ -266,7 +266,12 @@ When building and testing a block, here are some common things to test:
 // Note that permission check! If we don't do this and
 // the block starts running without a table for a user
 // with read-only permissions, it'll crash.
-if (globalConfig.canSet(ConfigKeys.tableId) && !this.table) {
+//
+// Also note the isFirstRun check. If we don't do this,
+// the block will unexpectedly choose a new table if the
+// table it was previously using is deleted and the block reloads.
+import {runInfo} from 'airtable-block';
+if (globalConfig.canSet(ConfigKeys.tableId) && runInfo.isFirstRun && !this.table) {
     // Make the block use the table the user is currently looking at (base.activeTable).
     // base.activeTable may be null if the user is in between switching tables, in which
     // case just fallback to the first table in the base.
