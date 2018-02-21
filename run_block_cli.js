@@ -27,47 +27,66 @@ function _exitWithError(message, err) {
     process.exit(1);
 }
 
-function startNgrokAndTriggerInitialBundle(blockBundleServer, port) {
-    const ngrok = require('ngrok');
-    // We start ngrok, then tell the server its ngrok url, then trigger the
-    // initial bundle and finally log the url to the user.
-    // NOTE: We wait for the initial bundle to finish before logging the
-    // ngrok url to the user so that they we can ensure that there is a
-    // bundle at the time the url if first hit.
-    ngrok.connect(port, (err, url) => {
-        if (err) {
-            _exitWithError(err.message);
-        }
-        blockBundleServer.setPublicUrlForLongPoll(url);
-        blockBundleServer.bundle(null, () => {
-            console.log(`Serving bundle at ${url}/bundle`);
-        });
-    });
+function startBlockBundleServerNgrok(blockBundleServer, port) {
+    return blockBundleServer
+        .startAsync(port)
+        .then(() => new Promise((resolve, reject) => {
+            require('ngrok').connect(port, (err, url) => {
+                if (err) reject(err);
+                resolve(url);
+            });
+        }))
 }
 
-function startBlockBundleServer(blockBundleServer, port) {
-    blockBundleServer.startAsync(port).then(() => {
-        startNgrokAndTriggerInitialBundle(blockBundleServer, defaultPort);
-    }).catch(err => {
-        // If there was an error due to the port being taken, prompt for an
-        // alternative port and try again
-        if (err.code === 'EADDRINUSE') {
-            promptAsync({
-                name: 'port',
-                description: `Port ${port} is taken, please provide an alternative port to run on`,
-            }).then(result => {
-                const newPort = result.port;
-                if (isNaN(newPort)) {
-                    _exitWithError('Invalid port number');
-                }
-                startBlockBundleServer(blockBundleServer, newPort);
-            }).catch(innerErr => {
-                _exitWithError(innerErr.message);
+function startBlockBundleServerLocal(blockBundleServer, port) {
+    return blockBundleServer
+        .startLocalAsync(port)
+        .then(() => {
+            const url = `https://localhost:${port}`;
+            console.log('Local mode: serving self-signed https on localhost');
+            console.log('If this is the first time you\'re running this command in local mode, you need to do some extra setup in your browser:')
+            console.log(`  - Firefox: go to https://localhost:${port} and add an ssl exception`);
+            console.log('  - Chrome: go to chrome://flags/#allow-insecure-localhost and click enable. Restart your browser');
+            console.log('');
+            return url;
+        })
+}
+
+function startBlockBundleServer(blockBundleServer, port, localMode) {
+    const startPromise = localMode
+        ? startBlockBundleServerLocal(blockBundleServer, port)
+        : startBlockBundleServerNgrok(blockBundleServer, port);
+
+    startPromise
+        .catch(err => {
+            // If there was an error due to the port being taken, prompt for an
+            // alternative port and try again
+            if (err.code === 'EADDRINUSE') {
+                promptAsync({
+                    name: 'port',
+                    description: `Port ${port} is taken, please provide an alternative port to run on`,
+                }).then(result => {
+                    const newPort = result.port;
+                    if (isNaN(newPort)) {
+                        _exitWithError('Invalid port number');
+                    }
+                    startBlockBundleServer(blockBundleServer, newPort, localMode);
+                }).catch(innerErr => {
+                    _exitWithError(innerErr.message);
+                });
+            } else {
+                _exitWithError(err.message);
+            }
+        })
+        .then(url => {
+            // wait for the initial bundle to finish before logging the ngrok
+            // url to the user so there's definitely a bundle ready on the
+            // first hit
+            blockBundleServer.setPublicUrlForLongPoll(url);
+            blockBundleServer.bundle(null, () => {
+                console.log(`Serving bundle at ${url}/bundle`);
             });
-        } else {
-            _exitWithError(err.message);
-        }
-    });
+        })
 }
 
 const runBlocksCli = function runBlocksCli() {
@@ -81,6 +100,11 @@ const runBlocksCli = function runBlocksCli() {
         .command(`${Commands.RENAME_ENTRY} <newName>`, 'Update the entry module name')
         .option('force', {
             describe: 'Bypass revision check when updating files?',
+            type: 'boolean',
+            default: false,
+        })
+        .option('local', {
+            description: 'Run blocks locally on with a self-signed certificate instead of through ngrok.io',
             type: 'boolean',
             default: false,
         })
@@ -109,7 +133,7 @@ const runBlocksCli = function runBlocksCli() {
     if (command === Commands.RUN) {
         const BlockBundleServer = require('./lib/block_bundle_server');
         const blockBundleServer = new BlockBundleServer();
-        startBlockBundleServer(blockBundleServer, defaultPort);
+        startBlockBundleServer(blockBundleServer, defaultPort, config.local);
     } else if (command === Commands.CLONE) {
         // Prompt for apiKey
         promptAsync({
