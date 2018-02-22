@@ -52,12 +52,21 @@ function startBlockBundleServerLocal(blockBundleServer, port) {
         })
 }
 
-function startBlockBundleServer(blockBundleServer, port, localMode) {
-    const startPromise = localMode
+function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
+    const startPromise = shouldUseLocalhost
         ? startBlockBundleServerLocal(blockBundleServer, port)
         : startBlockBundleServerNgrok(blockBundleServer, port);
 
     startPromise
+        .then(url => {
+            // wait for the initial bundle to finish before logging the ngrok
+            // url to the user so there's definitely a bundle ready on the
+            // first hit
+            blockBundleServer.setPublicUrlForLongPoll(url);
+            blockBundleServer.bundle(null, () => {
+                console.log(`Serving bundle at ${url}/bundle`);
+            });
+        })
         .catch(err => {
             // If there was an error due to the port being taken, prompt for an
             // alternative port and try again
@@ -70,23 +79,14 @@ function startBlockBundleServer(blockBundleServer, port, localMode) {
                     if (isNaN(newPort)) {
                         _exitWithError('Invalid port number');
                     }
-                    startBlockBundleServer(blockBundleServer, newPort, localMode);
+                    startBlockBundleServer(blockBundleServer, newPort, shouldUseLocalhost);
                 }).catch(innerErr => {
                     _exitWithError(innerErr.message);
                 });
             } else {
                 _exitWithError(err.message);
             }
-        })
-        .then(url => {
-            // wait for the initial bundle to finish before logging the ngrok
-            // url to the user so there's definitely a bundle ready on the
-            // first hit
-            blockBundleServer.setPublicUrlForLongPoll(url);
-            blockBundleServer.bundle(null, () => {
-                console.log(`Serving bundle at ${url}/bundle`);
-            });
-        })
+        });
 }
 
 const runBlocksCli = function runBlocksCli() {
