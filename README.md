@@ -27,7 +27,13 @@ Go to the block's directory and run:
 
 `block run`
 
-Paste the bundle URL into the "Edit block locally" dialog in Airtable.
+This will start a local server and create a tunnel with ngrok.io to make the URL accessible remotely. If you don't want to use the tunnel (for example, if you're on a slow internet connection) you can start the server in local mode:
+
+`block run --local`
+
+This will skip setting up the ngrok tunnel and instead serve the bundle over https locally, with a self-signed certificate. You'll need to follow the instructions in the command to get the self-signed cert working in your browser.
+
+Once the server is started (in both local or ngrok mode) paste the bundle URL into the "Edit block locally" dialog in Airtable.
 
 The block's frame will switch to the local development bundle. It will automatically reload when you update the code locally.
 
