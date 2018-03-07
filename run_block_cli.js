@@ -108,6 +108,11 @@ const runBlocksCli = function runBlocksCli() {
             type: 'boolean',
             default: false,
         })
+        .option('staging', {
+            description: 'Sync blocks with staging environment',
+            type: 'boolean',
+            default: false,
+        })
         .check(config => {
             const command = config._[0] || '';
             if (command === Commands.CLONE) {
@@ -135,13 +140,15 @@ const runBlocksCli = function runBlocksCli() {
         const blockBundleServer = new BlockBundleServer();
         startBlockBundleServer(blockBundleServer, defaultPort, config.local);
     } else if (command === Commands.CLONE) {
+        const environment = config.staging ? 'staging' : 'production';
+        const domain = config.staging ? 'staging.airtable.com' : 'airtable.com';
         // Prompt for apiKey
         promptAsync({
             name: 'apiKey',
-            description: 'Please enter your API key. You can generate one at https://airtable.com/account',
+            description: `Please enter your API key. You can generate one at https://${domain}/account`,
         }).then(result => {
             const blockCloneAsync = require('./lib/block_clone');
-            return blockCloneAsync(config.appId, config.blockId, config.blockDirPath, result.apiKey);
+            return blockCloneAsync(environment, config.appId, config.blockId, config.blockDirPath, result.apiKey);
         }).then(() => {
             console.log(`Block cloned in ${config.blockDirPath}`);
         }).catch(err => {
