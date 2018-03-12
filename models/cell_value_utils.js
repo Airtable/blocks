@@ -74,6 +74,7 @@ const publicCellValueUtils = {
             return {isValid: true};
         }
 
+        invariant(field.config.options, 'Invalid field type');
         const tableId = field.config.options.linkedTableId;
         const table = getSdk().base.getTableById(tableId);
         if (!table) {
@@ -102,6 +103,7 @@ const publicCellValueUtils = {
             return newPublicCellValue;
         }
 
+        invariant(field.config.options, 'Invalid field type');
         const tableId = field.config.options.linkedTableId;
         const table = getSdk().base.getTableById(tableId);
         invariant(table, 'Linked table does not exist');

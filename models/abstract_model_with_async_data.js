@@ -30,7 +30,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
      * cause the data to be fetched. Once the data is available, the callback
      * will be called.
      */
-    watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: mixed): Array<WatchableKey> {
+    watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
             if (this.constructor._shouldLoadDataForKey(key)) {
@@ -47,7 +47,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
      * cause the data to be released. Once the data is available, the callback
      * will be called.
      */
-    unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: mixed): Array<WatchableKey> {
+    unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
         const validKeys = super.unwatch(keys, callback, context);
         for (const key of validKeys) {
             if (this.constructor._shouldLoadDataForKey(key)) {

@@ -1,6 +1,15 @@
 // @flow
 const invariant = require('invariant');
 
+/**
+ * Injects CSS from a string into the page.
+ *
+ * @returns the style tag inserted into the page.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.loadCSSFromString('body { background: red; }');
+ */
 function loadCSSFromString(string: string): HTMLStyleElement {
     const styleTag = document.createElement('style');
     styleTag.innerHTML = string;
@@ -9,6 +18,15 @@ function loadCSSFromString(string: string): HTMLStyleElement {
     return styleTag;
 }
 
+/**
+ * Injects CSS from a remote URL.
+ *
+ * @returns a Promise that resolves to the style tag inserted into the page.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.loadCSSFromURLAsync('https://example.com/style.css');
+ */
 function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
     // Pre-create the error for a nicer stack trace.
     const loadError = new Error('Failed to load remote CSS: ' + url);
@@ -27,6 +45,15 @@ function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
     });
 }
 
+/**
+ * Injects Javascript from a remote URL.
+ *
+ * @returns a Promise that resolves to the script tag inserted into the page.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.loadScriptFromURLAsync('https://example.com/script.js');
+ */
 function loadScriptFromURLAsync(url: string): Promise<HTMLScriptElement> {
     // Pre-create the error for a nicer stack trace.
     const loadError = new Error('Failed to load remote script: ' + url);

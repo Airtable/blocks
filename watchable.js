@@ -7,7 +7,7 @@ class Watchable<WatchableKey: string> {
         // Override to return whether `key` is a valid watchable key.
         return false;
     }
-    _changeWatchersByKey: {[string]: Array<{callback: Function, context: any}>}; // eslint-disable-line flowtype/no-weak-types
+    _changeWatchersByKey: {[string]: Array<{callback: Function, context: ?Object}>};
     constructor() {
         this._changeWatchersByKey = {};
     }
@@ -17,7 +17,7 @@ class Watchable<WatchableKey: string> {
      *
      * Will log a warning if the keys given are invalid.
      */
-    watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: any): Array<WatchableKey> { // eslint-disable-line flowtype/no-weak-types
+    watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
@@ -53,7 +53,7 @@ class Watchable<WatchableKey: string> {
      *
      * Will log a warning if the keys given are invalid.
      */
-    unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: any): Array<WatchableKey> { // eslint-disable-line flowtype/no-weak-types
+    unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
@@ -80,7 +80,7 @@ class Watchable<WatchableKey: string> {
 
         return validKeys;
     }
-    _onChange(key: WatchableKey, ...args?: Array<any>) { // eslint-disable-line flowtype/no-weak-types
+    _onChange(key: WatchableKey, ...args: Array<mixed>) {
         const watchers = this._changeWatchersByKey[key];
         if (watchers) {
             for (const watcher of watchers) {

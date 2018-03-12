@@ -50,7 +50,7 @@ class QueryResultPool {
     constructor() {
         this._queryResultsBySourceModelId = {};
     }
-    registerQueryResultForReuse(queryResult: QueryResult) {
+    registerQueryResultForReuse(queryResult: QueryResult) { // eslint-disable-line no-use-before-define
         const sourceModelId = queryResult.__sourceModelId;
         const queryResults = this._queryResultsBySourceModelId[sourceModelId];
         if (queryResults) {
@@ -59,7 +59,7 @@ class QueryResultPool {
             this._queryResultsBySourceModelId[sourceModelId] = [queryResult];
         }
     }
-    unregisterQueryResultForReuse(queryResult: QueryResult) {
+    unregisterQueryResultForReuse(queryResult: QueryResult) { // eslint-disable-line no-use-before-define
         const sourceModelId = queryResult.__sourceModelId;
         const queryResults = this._queryResultsBySourceModelId[sourceModelId];
         invariant(queryResults, 'queryResults');
@@ -99,13 +99,13 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
     static _className = 'QueryResult';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableQueryResultKeys, key) ||
-            utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
+            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
     }
     static _shouldLoadDataForKey(key: WatchableQueryResultKey): boolean {
         return key === WatchableQueryResultKeys.records ||
             key === WatchableQueryResultKeys.recordIds ||
             key === WatchableQueryResultKeys.cellValues ||
-            utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
+            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
     }
     static __createOrReuseQueryResult(sourceModel: TableModel | ViewModel, opts: QueryResultOpts) {
         const tableModel = sourceModel instanceof ViewModel ? sourceModel.parentTable : sourceModel;
@@ -367,14 +367,14 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
             delete this._cellValueKeyWatchCounts[key];
         }
     }
-    watch(keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>, callback: Function, context?: any): Array<WatchableQueryResultKey> { // eslint-disable-line flowtype/no-weak-types
+    watch(keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>, callback: Function, context?: ?Object): Array<WatchableQueryResultKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
         const validKeys = super.watch(keys, callback, context);
 
         for (const key of validKeys) {
-            if (utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
+            if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
                 if (this._fieldIdsSetToLoadOrNullIfAllFields && !this._fieldIdsSetToLoadOrNullIfAllFields.hasOwnProperty(fieldId)) {
                     throw new Error(`Can't watch field because it wasn't included in QueryResult fields: ${fieldId}`);
@@ -395,14 +395,14 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
 
         return validKeys;
     }
-    unwatch(keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>, callback: Function, context?: any): Array<WatchableQueryResultKey> { // eslint-disable-line flowtype/no-weak-types
+    unwatch(keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>, callback: Function, context?: ?Object): Array<WatchableQueryResultKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
-            if (utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
+            if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
                 this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(key, this._onCellValuesInFieldChanged);
             }
 

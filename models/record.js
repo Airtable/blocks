@@ -38,7 +38,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     static _className = 'Record';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableRecordKeys, key) ||
-            utils.startsWith(key, WatchableCellValueInFieldKeyPrefix);
+            u.startsWith(key, WatchableCellValueInFieldKeyPrefix);
     }
     /**
      * Static helper to perform a one-time sort of array of records.
@@ -244,7 +244,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
                 this._onChange(WatchableRecordKeys.primaryCellValue);
             }
 
-            for (const fieldId of utils.iterateKeys(cellValuesByFieldId)) {
+            for (const fieldId of u.keys(cellValuesByFieldId)) {
                 this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
             }
         }

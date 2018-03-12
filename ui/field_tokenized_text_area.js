@@ -6,14 +6,15 @@ const TableModel = require('client/blocks/sdk/models/table');
 const FieldModel = require('client/blocks/sdk/models/field');
 const Tooltip = require('client/blocks/sdk/ui/tooltip');
 const Icon = require('client/blocks/sdk/ui/icon');
-const Quill = require('quill');
-const QuillDelta = require('quill-delta');
-const Embed = Quill.import('blots/embed');
+const loadQuillAsync = require('client/helpers/load_quill_async');
 const AutocompletePopover = require('client/blocks/sdk/ui/autocomplete_popover');
 const createDataContainer = require('client/blocks/sdk/ui/create_data_container');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const invariant = require('invariant');
 const classNames = require('classnames');
+const QuillDelta = require('quill-delta');
+
+import type {Quill as QuillType} from 'quill';
 
 type FieldTokenPickerProps = {
     table: TableModel,
@@ -57,42 +58,57 @@ class FieldTokenPicker extends React.Component {
     }
 }
 
-class FieldTokenBlot extends Embed {
-    static blotName = 'fieldToken';
-    static tagName = 'control';
-    static className = 'fieldToken';
-    static create(data) {
-        const {base} = getSdk();
-        const table = base.getTableById(data.tableId);
-        invariant(table, 'No table');
-        const field = table.getFieldById(data.fieldId);
-
-        const node = super.create(data);
-        node.setAttribute('data-fieldid', data.fieldId);
-        node.setAttribute('data-tableid', data.tableId);
-
-        const token = document.createElement('span');
-        token.className = classNames('px1 pill nowrap text-white', {
-            blue: !!field,
-            red: !field,
-        });
-        token.textContent = field ? field.name : 'Deleted field';
-
-        node.appendChild(token);
-
-        return node;
+let lastRegisteredQuillClass = null;
+function registerFieldTokenBlot(Quill) {
+    if (lastRegisteredQuillClass === Quill) {
+        // This is a nice-to-have check for perf. We only keep track of
+        // the most recent Quill class that we registered the blot for since
+        // in practice we don't load multiple versions of Quill on the page.
+        // If we did, it would be okay. `Quill.register` will just replace
+        // the previous blot.
+        return;
     }
-    static value(node) {
-        return {
-            fieldId: node.getAttribute('data-fieldid'),
-            tableId: node.getAttribute('data-tableid'),
-        };
+    lastRegisteredQuillClass = Quill;
+
+    const Embed = Quill.import('blots/embed');
+
+    class FieldTokenBlot extends Embed {
+        static blotName = 'fieldToken';
+        static tagName = 'control';
+        static className = 'fieldToken';
+        static create(data) {
+            const {base} = getSdk();
+            const table = base.getTableById(data.tableId);
+            invariant(table, 'No table');
+            const field = table.getFieldById(data.fieldId);
+
+            const node = super.create(data);
+            node.setAttribute('data-fieldid', data.fieldId);
+            node.setAttribute('data-tableid', data.tableId);
+
+            const token = document.createElement('span');
+            token.className = classNames('px1 pill nowrap text-white', {
+                blue: !!field,
+                red: !field,
+            });
+            token.textContent = field ? field.name : 'Deleted field';
+
+            node.appendChild(token);
+
+            return node;
+        }
+        static value(node) {
+            return {
+                fieldId: node.getAttribute('data-fieldid'),
+                tableId: node.getAttribute('data-tableid'),
+            };
+        }
     }
+
+    Quill.register({
+        'formats/fieldToken': FieldTokenBlot,
+    }, true);
 }
-
-Quill.register({
-    'formats/fieldToken': FieldTokenBlot,
-}, true);
 
 // See https://quilljs.com/docs/api/#events
 const QuillChangeSourceTypes = {
@@ -110,6 +126,7 @@ type FieldTokenizedTextAreaProps = {
     style?: Object,
 };
 
+/** */
 class FieldTokenizedTextArea extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel).isRequired,
@@ -120,6 +137,8 @@ class FieldTokenizedTextArea extends React.Component {
         style: PropTypes.object,
     };
     props: FieldTokenizedTextAreaProps;
+    _isMounted: boolean;
+    _quill: QuillType | null;
     _input: ?HTMLElement;
     _onChange: Function;
     _onInsertFieldTokenForField: FieldModel => void;
@@ -137,6 +156,8 @@ class FieldTokenizedTextArea extends React.Component {
             selectionBounds: null,
         };
 
+        this._quill = null;
+
         this._onChange = this._onChange.bind(this);
         this._onInsertFieldTokenForField = this._onInsertFieldTokenForField.bind(this);
         this._onAddFieldTokenButtonClick = this._onAddFieldTokenButtonClick.bind(this);
@@ -144,7 +165,46 @@ class FieldTokenizedTextArea extends React.Component {
         this.focus = this.focus.bind(this);
     }
     componentDidMount() {
-        this._quill = new Quill(this._quillContainer, {
+        this._isMounted = true;
+
+        u.fireAndForgetPromise(this._loadQuillAsync.bind(this))();
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+
+        const quill = this._getQuill();
+        if (quill) {
+            quill.off('editor-change', this._onChange);
+        }
+    }
+    componentWillReceiveProps(nextProps: FieldTokenizedTextAreaProps) {
+        const quill = this._getQuill();
+        if (quill) {
+            const currentContents = quill.getContents();
+            if (!u.isEqual(nextProps.value, currentContents.ops)) {
+                // If the value in props is different from the quill contents, let's
+                // set the quill contents.
+                invariant(QuillDelta, 'QuillDelta');
+                this._setQuillContents(new QuillDelta(nextProps.value));
+            }
+
+            if (nextProps.disabled) {
+                quill.disable();
+            } else {
+                quill.enable();
+            }
+        }
+    }
+    async _loadQuillAsync() {
+        const {Quill} = await loadQuillAsync();
+
+        if (!this._isMounted) {
+            return;
+        }
+
+        registerFieldTokenBlot(Quill);
+
+        const quill = new Quill(this._quillContainer, {
             readOnly: this.props.disabled,
 
             // Disable all formats by default (except for field tokens). We can update
@@ -152,39 +212,20 @@ class FieldTokenizedTextArea extends React.Component {
             formats: ['fieldToken'],
         });
 
+        this._quill = quill;
         this._setQuillContents(new QuillDelta(this.props.value));
-
-        this._quill.on('editor-change', this._onChange);
-    }
-    componentWillUnmount() {
-        const quill = this._getQuill();
-        quill.off('editor-change', this._onChange);
-    }
-    componentWillReceiveProps(nextProps: FieldTokenizedTextAreaProps) {
-        const quill = this._getQuill();
-        const currentContents = quill.getContents();
-        if (!u.isEqual(nextProps.value, currentContents.ops)) {
-            // If the value in props is different from the quill contents, let's
-            // set the quill contents.
-            this._setQuillContents(new QuillDelta(nextProps.value));
-        }
-
-        if (nextProps.disabled) {
-            this._getQuill().disable();
-        } else {
-            this._getQuill().enable();
-        }
+        quill.on('editor-change', this._onChange);
     }
     _setQuillContents(contents: ?Array<Object>) {
         const quill = this._getQuill();
+        invariant(quill, 'quill');
         if (contents === null || contents === undefined) {
             quill.setText('', QuillChangeSourceTypes.API);
         } else {
             quill.setContents(contents, QuillChangeSourceTypes.API);
         }
     }
-    _getQuill(): Quill {
-        invariant(this._quill, 'quill not available');
+    _getQuill(): QuillType | null {
         return this._quill;
     }
     _onChange(eventName: string, ...args: Array<any>) { // eslint-disable-line flowtype/no-weak-types
@@ -198,6 +239,7 @@ class FieldTokenizedTextArea extends React.Component {
         const {selectionRange: currSelectionRange, prevSelectionRange} = this.state;
 
         const quill = this._getQuill();
+        invariant(quill, 'quill');
 
         // If we don't have a selection range, insert at the end.
         const selectionRange = currSelectionRange || prevSelectionRange || {index: quill.getText().length - 1};
@@ -223,6 +265,7 @@ class FieldTokenizedTextArea extends React.Component {
     _onAddFieldTokenButtonClick(e: SyntheticMouseEvent) {
         this.setState(prevState => {
             const quill = this._getQuill();
+            invariant(quill, 'quill');
             let selectionBounds = prevState.selectionBounds;
             if (!selectionBounds) {
                 // If we don't have selection bounds, put the field picker at the
@@ -245,11 +288,18 @@ class FieldTokenizedTextArea extends React.Component {
         }, this.focus);
     }
     focus() {
-        this._getQuill().focus();
+        const quill = this._getQuill();
+        if (quill) {
+            // TODO: maybe queue up the focus call and autofocus once quill loads?
+            // Might get weird if the user focuses *another* element in the meantime.
+            quill.focus();
+        }
     }
     _onFieldsChanged() {
         const quill = this._getQuill();
-        quill.setContents(quill.getContents(), QuillChangeSourceTypes.SILENT);
+        if (quill) {
+            quill.setContents(quill.getContents(), QuillChangeSourceTypes.SILENT);
+        }
     }
     _onTextChange(delta: Object, oldDelta: Object, source: string) {
         // ignore change if the source is not "user". See https://quilljs.com/docs/api/#events
@@ -258,6 +308,7 @@ class FieldTokenizedTextArea extends React.Component {
         }
 
         const quill = this._getQuill();
+        invariant(quill, 'quill');
 
         if (delta.ops.some(op => op.insert === '{')) {
             const selectionRange = quill.getSelection();
@@ -275,6 +326,7 @@ class FieldTokenizedTextArea extends React.Component {
     }
     _onSelectionChange(selectionRange: Object, oldSelectionRange: Object, source: string) {
         const quill = this._getQuill();
+        invariant(quill, 'quill');
 
         const selectionBounds = selectionRange && quill.getBounds(selectionRange.index, selectionRange.length);
         this.setState(prevState => ({

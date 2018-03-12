@@ -22,6 +22,7 @@ const fakeCollaboratorColumnTypeOptions = {
     shouldNotify: false,
 };
 
+/** */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className} = props;
 

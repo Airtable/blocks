@@ -5,9 +5,20 @@ const {HostMethodNames} = require('client/blocks/block_message_types');
 
 import type Record from 'client/blocks/sdk/models/record';
 
-/** */
+/**
+ * Expands the given record in the Airtable UI.
+ *
+ * @param record the record to expand
+ * @param opts If `records` is provided, the list will be used to page through
+ * records from the expanded record dialog.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.expandRecord(record1, {
+ *     records: [record1, record2, record3],
+ * });
+ */
 function expandRecord(record: Record, opts?: {
-    /** If provided, will enable paging between records from the expanded record. */
     records?: Array<Record>,
 }) {
     // TODO(kasra): this will cause the liveapp page to force a refresh if the

@@ -39,6 +39,7 @@ type PopoverProps = {
     backgroundStyle?: Object,
 };
 
+/** */
 class Popover extends React.Component {
     static propTypes = {
         children: PropTypes.element.isRequired,

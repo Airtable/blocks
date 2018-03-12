@@ -24,6 +24,7 @@ type ViewPickerProps = {
     disabled: ?boolean,
 };
 
+/** */
 class ViewPicker extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel),

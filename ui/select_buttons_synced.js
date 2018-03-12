@@ -7,6 +7,7 @@ const Synced = require('client/blocks/sdk/ui/synced');
 
 import type {SelectAndSelectButtonsSyncedProps as SelectButtonsSyncedProps} from 'client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers';
 
+/** */
 class SelectButtonsSynced extends React.Component {
     static propTypes = SelectAndSelectButtonsSyncedPropTypes;
     props: SelectButtonsSyncedProps;

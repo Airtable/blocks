@@ -14,6 +14,7 @@ type ModalPropTypes = {
     backgroundStyle?: Object,
 };
 
+/** */
 class Modal extends React.Component {
     static propTypes = {
         onClose: PropTypes.func,

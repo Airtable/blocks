@@ -18,6 +18,7 @@ type FieldIconProps = {
     scale?: number,
 };
 
+/** */
 const FieldIcon = (props: FieldIconProps) => {
     const {field} = props;
     const restOfProps = u.omit(props, 'field');

@@ -1,12 +1,12 @@
 // @flow
 const {h, u} = require('client_server_shared/hu');
-const utils = require('client/blocks/sdk/utils');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const BlockMessageTypes = require('client/blocks/block_message_types');
 const Watchable = require('client/blocks/sdk/watchable');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const blockKvHelpers = require('client_server_shared/blocks/block_kv_helpers');
-const permissions = require('client_server_shared/permissions');
+const PermissionLevels = require('client_server_shared/permissions/permission_levels');
+const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
 
@@ -68,10 +68,13 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /** */
     get(key: GlobalConfigKey): BlockKvValue {
         const path = this.__formatKeyAsPath(key);
-        const value = u.get(this._kvStore, path);
-        if (value === undefined) {
-            return null;
+
+        const pathValidationResult = blockKvHelpers.validateKvKeyPath(path, this._kvStore);
+        if (!pathValidationResult.isValid) {
+            throw new Error(`Invalid globalConfig path: ${pathValidationResult.reason}`);
         }
+
+        const value = u.get(this._kvStore, path);
         return value;
     }
     /** */
@@ -80,7 +83,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.
         const {base} = getSdk();
-        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
+        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
     set(key: GlobalConfigKey, value: BlockKvValue) {
@@ -101,7 +104,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.
         const {base} = getSdk();
-        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
+        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
     setPaths(updates: Array<BlockKvUpdate>) {
@@ -113,9 +116,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
 
         this._setMultipleKvPaths(updates);
 
-        // Now send the update over to liveapp. Liveapp will handle whether or not it
-        // sends the update to the server (depending on whether we are in dev mode
-        // or not).
+        // Now send the update over to liveapp.
+        // TODO(jb): remove the isDevelopmentMode arg once we think enough clients
+        // are updated. New clients don't need it, but we don't want to break old ones.
         liveappInterface.setMultipleKvPaths(updates, this._isDevelopmentMode);
     }
     _setMultipleKvPaths(updates: Array<BlockKvUpdate>) {
@@ -129,7 +132,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             if (!updateValidationResult.isValid) {
                 throw new Error(`Invalid globalConfig update: ${updateValidationResult.reason}`);
             }
-            blockKvHelpers.applyUpdateToKvStoreByReference(this._kvStore, update);
+            blockKvHelpers.applyValidatedUpdateToKvStoreByReference(this._kvStore, update);
 
             const topLevelKey = update.path[0];
             topLevelKeySet[topLevelKey] = true;
@@ -143,7 +146,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // Now loop over the top level keys to fire change events.
         // NOTE: it's important that we do this after the loop above (instead of inline),
         // so that all of the changes are reflected by the time we trigger change events.
-        for (const key of utils.iterateKeys(topLevelKeySet)) {
+        for (const key of Object.keys(topLevelKeySet)) {
             this._onChange(key);
         }
     }

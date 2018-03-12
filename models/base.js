@@ -5,13 +5,13 @@ const AbstractModel = require('client/blocks/sdk/models/abstract_model');
 const Table = require('client/blocks/sdk/models/table');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const BlockMessageTypes = require('client/blocks/block_message_types');
-const permissions = require('client_server_shared/permissions');
+const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
 const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
 const getSdk = require('client/blocks/sdk/get_sdk');
 
 import type {BaseDataForBlocks, Collaborator} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {AppBlanket} from 'client_server_shared/types/app_json/app_blanket';
-import type {PermissionLevel} from 'client_server_shared/permissions';
+import type {PermissionLevel} from 'client_server_shared/permissions/permission_levels';
 
 // How these model classes work:
 //
@@ -79,8 +79,29 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     get __rawPermissionLevel(): PermissionLevel {
         return this._data.permissionLevel;
     }
+    /**
+     * The current user's permission level.
+     *
+     * The value of this should not be consumed and will be deprecated.
+     * To know whether a user can perform an action, use the more specific
+     * `can` method.
+     *
+     * Can be watched to know when the user's permission level changes. Usually,
+     * you'll want to watch this in your root component and re-render your whole
+     * block when the permission level changes.
+     *
+     * @example
+     * if (globalConfig.canSet('foo')) {
+     *     globalConfig.set('foo', 'bar');
+     * }
+     *
+     * @example
+     * if (record.canSetCellValue('Name', 'Chair')) {
+     *     record.setCellValue('Name', 'Chair');
+     * }
+     */
     get permissionLevel(): string {
-        return permissions.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
+        return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
     }
     /**
      * The table model corresponding to the table the user is currently
@@ -119,7 +140,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         if (appBlanket) {
             const {userInfoById} = appBlanket;
             if (userInfoById) {
-                for (const userObj of utils.iterateValues(userInfoById)) {
+                for (const userObj of u.values(userInfoById)) {
                     collaborators.push(userObjMethods.formatUserObjForPublicApiV2(userObj));
                 }
             }
@@ -163,7 +184,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
      * exists with that name in this base.
      */
     getTableByName(tableName: string): Table | null {
-        for (const [tableData, tableId] of utils.iterate(this._data.tablesById)) {
+        for (const [tableId, tableData] of u.entries(this._data.tablesById)) {
             if (tableData.name === tableName) {
                 return this.getTableById(tableId);
             }
@@ -181,7 +202,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             this._onChange(WatchableBaseKeys.tables);
 
             // Clean up deleted tables
-            for (const [tableModel, tableId] of utils.iterate(this._tableModelsById)) {
+            for (const [tableId, tableModel] of u.entries(this._tableModelsById)) {
                 if (tableModel.isDeleted) {
                     delete this._tableModelsById[tableId];
                 }
@@ -191,7 +212,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             this._onChange(WatchableBaseKeys.activeTable);
         }
         if (dirtyPaths.tablesById) {
-            for (const [dirtyTablePaths, tableId] of utils.iterate(dirtyPaths.tablesById)) {
+            for (const [tableId, dirtyTablePaths] of u.entries(dirtyPaths.tablesById)) {
                 // Directly access from _tableModelsById to avoid creating
                 // a table model if it doesn't already exist. If it doesn't exist,
                 // nothing can be subscribed to any events on it.

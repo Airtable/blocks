@@ -4,9 +4,22 @@ const liveappSummaryFunctions = require('client_server_shared/summary_functions'
 const liveappSummaryFunctionKeyByAggregatorKey = require('client/blocks/sdk/models/liveapp_summary_function_key_by_aggregator_key');
 const getSdk = require('client/blocks/sdk/get_sdk');
 
-import type RecordType from 'client/blocks/sdk/models/record';
-import type FieldType from 'client/blocks/sdk/models/field';
+import type Record from 'client/blocks/sdk/models/record';
+import type Field from 'client/blocks/sdk/models/field';
 
+/**
+ * Aggregators can be used to compute aggregates for cell values.
+ *
+ * @example
+ * // To get a list of aggregators supported for a specific field:
+ * const aggregators = myField.availableAggregators;
+ *
+ * // To compute the total attachment size of an attachment field:
+ * import {models} from 'airtable-block';
+ * const aggregator = models.aggregators.totalAttachmentSize;
+ * const value = aggregator.aggregate(myRecords, myAttachmentField);
+ * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
+ */
 export type Aggregator = {
     key: string,
     displayName: string,
@@ -15,15 +28,15 @@ export type Aggregator = {
     // TODO(jb): add better flow types for the result of these functions. This would
     // require manually defining each aggregation function below rather than doing it
     // dynamically on load.
-    aggregate: (records: Array<RecordType>, field: FieldType) => mixed,
-    aggregateToString: (records: Array<RecordType>, field: FieldType) => string,
+    aggregate: (records: Array<Record>, field: Field) => mixed,
+    aggregateToString: (records: Array<Record>, field: Field) => string,
 };
 
 const aggregatorKeys = u.keys(liveappSummaryFunctionKeyByAggregatorKey);
 
 const aggregators: {[string]: Aggregator} = {};
 
-const aggregate = (aggregatorKey: string, records: Array<RecordType>, field: FieldType) => {
+const aggregate = (aggregatorKey: string, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
         throw new Error(`The ${aggregatorKey} aggregator is not available for ${field.config.type} fields`);
     }
@@ -44,7 +57,7 @@ const aggregate = (aggregatorKey: string, records: Array<RecordType>, field: Fie
     );
 };
 
-const aggregateToString = (aggregatorKey: string, records: Array<RecordType>, field: FieldType) => {
+const aggregateToString = (aggregatorKey: string, records: Array<Record>, field: Field) => {
     const summaryValue = aggregate(aggregatorKey, records, field);
     const summaryFunction = liveappSummaryFunctionKeyByAggregatorKey[aggregatorKey];
     const columnType = field.__getRawFormulaicResultType() || field.__getRawType();

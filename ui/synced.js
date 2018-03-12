@@ -18,6 +18,7 @@ type SyncedProps = {
     }) => mixed,
 };
 
+/** */
 class Synced extends React.Component {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

@@ -13,6 +13,11 @@ type AlertInfo = {
     content: React$Element<*>,
 };
 
+/**
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.globalAlert.showReloadPrompt();
+ */
 class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     static _className = 'GlobalAlert';
     static _isWatchableKey(key: string): boolean {
@@ -27,6 +32,7 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     get __alertInfo(): AlertInfo | null {
         return this._alertInfo;
     }
+    /** */
     showReloadPrompt() {
         this._alertInfo = {
             content: (

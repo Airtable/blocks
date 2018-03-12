@@ -35,6 +35,7 @@ type AutocompletePopoverProps = {
     onClose?: (opts: {wasFromEscape: boolean}) => void,
 };
 
+/** */
 class AutocompletePopover extends React.Component {
     static propTypes = {
         children: PropTypes.element.isRequired,

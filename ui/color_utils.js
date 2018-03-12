@@ -6,9 +6,15 @@ const colors = require('client/blocks/sdk/ui/colors');
 // Construct a set of all the possible color values, so the below
 // methods have constant time lookup when validating that a color
 // exists.
-const colorValuesSet = h.utils.arrayToSet(u.values(colors));
+const colorValuesSet = u.arrayToSet(u.values(colors));
 
+/**
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.colorUtils.getHexForColor(UI.colors.RED);
+ */
 const colorUtils = {
+    /** */
     getHexForColor(color: string): string | null {
         if (!colorValuesSet[color]) {
             return null;
@@ -16,6 +22,7 @@ const colorUtils = {
 
         return liveappColors.getHexForColor(color);
     },
+    /** */
     getRgbForColor(color: string): {r: number, g: number, b: number} | null {
         if (!colorValuesSet[color]) {
             return null;
@@ -23,6 +30,7 @@ const colorUtils = {
 
         return liveappColors.getRgbObjForColor(color);
     },
+    /** */
     shouldUseLightTextOnColor(color: string): boolean {
         if (!colorValuesSet[color]) {
             // Don't have a color for this. Let's just return false as a default

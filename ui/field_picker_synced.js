@@ -29,6 +29,7 @@ type FieldPickerSyncedProps = {
     className: ?string,
 };
 
+/** */
 class FieldPickerSynced extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel),

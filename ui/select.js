@@ -20,6 +20,7 @@ const styleForChevron = {
 // a margin (I think this is a limitation of <select>). We should probably replace it with
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
+/** */
 class Select extends React.Component {
     static propTypes = SelectAndSelectButtonsPropTypes;
     props: SelectProps;

@@ -52,7 +52,7 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
         return this._data.name;
     }
     /** */
-    get config(): {type: string, options: any} { // eslint-disable-line flowtype/no-weak-types
+    get config(): {type: string, options: Object | null} {
         const {type, options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
             this.__getRawTypeOptions(),

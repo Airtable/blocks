@@ -21,7 +21,7 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
     constructor(opts) {
         super();
 
-        this._opts = h.utils.setAndEnforceDefaultOpts({
+        this._opts = u.setAndEnforceDefaultOpts({
             // The height of each row card.
             rowHeight: 80,
             // Amount of space between each row card.
@@ -193,6 +193,7 @@ type RecordCardListProps = {
     className?: string,
     style?: Object,
 };
+/** */
 class RecordCardList extends React.Component {
     static propTypes = {
         records: PropTypes.arrayOf(PropTypes.oneOfType([

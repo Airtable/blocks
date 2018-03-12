@@ -33,6 +33,20 @@ const classNamesByTheme = {
     [themes.TRANSPARENT]: 'background-transparent text-dark',
 };
 
+/**
+ * Clickable button component.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * const button = (
+ *     <UI.Button
+ *        disabled={false}
+ *        theme={UI.Button.themes.BLUE}
+ *        onClick={() = alert('Clicked!')}>
+ *         Done
+ *     </UI.Button>
+ * );
+ */
 class Button extends React.Component {
     _button: HTMLButtonElement | null;
     constructor(props: ButtonPropTypes) {
@@ -67,7 +81,7 @@ class Button extends React.Component {
             <button
                 ref={el => this._button = el}
                 disabled={disabled}
-                className={classNames(`baymax rounded big strong p1 flex-inline items-center no-outline ${themeClassNames} ${className}`, {
+                className={classNames('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
                     'pointer link-quiet': !disabled,
                     quieter: disabled,
                 })}

@@ -27,6 +27,13 @@ import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
 /**
  * @example
  * import {runInfo} from 'airtable-block';
+ * if (runInfo.isFirstRun) {
+ *     // The current user just installed this block.
+ *     // Take the opportunity to show any onboarding and set
+ *     // sensible defaults if the user has permission.
+ *     // For example, if the block relies on a table, it would
+ *     // make sense to set that to base.activeTable
+ * }
  */
 type RunInfo = {
     isFirstRun: boolean,
@@ -83,7 +90,7 @@ class BlockSdk {
         // an in-memory replacement. Otherwise, accessing window.localStorage or
         // window.sessionStorage will throw an exception.
         this.localStorage = isLocalStorageAvailable() ? window.localStorage : new InMemoryStorage();
-        this.sessionStorage = isSessionStorageAvailable() ? window.localStorage : new InMemoryStorage();
+        this.sessionStorage = isSessionStorageAvailable() ? window.sessionStorage : new InMemoryStorage();
 
         this.viewport = new Viewport(args.isFullscreen);
         this.cursor = new Cursor(args.baseData);

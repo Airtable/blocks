@@ -16,6 +16,7 @@ type RadioSyncedProps = {
     disabled: ?boolean,
 };
 
+/** */
 class RadioSynced extends React.Component {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

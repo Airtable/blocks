@@ -4,10 +4,15 @@ const React = require('client/blocks/sdk/ui/react');
 const classNames = require('classnames');
 const KeyCodes = require('client_server_shared/key_codes');
 
+// Disable the "react/prop-types" rule in this file, since it doesn't support this
+// "shared/reusable prop types" pattern:
+// https://github.com/yannickcr/eslint-plugin-react/issues/476
+/* eslint-disable react/prop-types */
 const {SelectAndSelectButtonsPropTypes, validateOptions} = require('client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers');
 
 import type {SelectAndSelectButtonsProps as SelectButtonsProps} from 'client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers';
 
+/** */
 class SelectButtons extends React.Component {
     static propTypes = SelectAndSelectButtonsPropTypes;
     props: SelectButtonsProps;

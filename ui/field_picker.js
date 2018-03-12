@@ -24,6 +24,7 @@ type FieldPickerProps = {
     disabled: ?boolean,
 };
 
+/** */
 class FieldPicker extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel),

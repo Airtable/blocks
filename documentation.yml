@@ -10,6 +10,49 @@ toc:
     - AbstractModelWithAsyncData
     - AbstractModel
     - Watchable
+    - name: UI components
+    - AutocompletePopover
+    - Button
+    - CellRenderer
+    - ChoiceToken
+    - CollaboratorToken
+    - ColorPalette
+    - ColorPaletteSynced
+    - FieldIcon
+    - FieldPicker
+    - FieldPickerSynced
+    - FieldTokenizedTextArea
+    - FieldTokenizedTextAreaSynced
+    - Icon
+    - Input
+    - InputSynced
+    - Loader
+    - Modal
+    - Popover
+    - ProgressBar
+    - RadioSynced
+    - RecordCard
+    - RecordCardList
+    - Select
+    - SelectSynced
+    - SelectButtons
+    - SelectButtonsSynced
+    - Synced
+    - TablePicker
+    - TablePickerSynced
+    - Toggle
+    - ToggleSynced
+    - Tooltip
+    - ViewPicker
+    - ViewPickerSynced
+    - name: UI helpers
+    - createDataContainer
+    - expandRecord
+    - loadCSSFromString
+    - loadCSSFromURLAsync
+    - loadScriptFromURLAsync
+    - GlobalAlert
+    - colorUtils
     - name: Misc
     - Cursor
     - GlobalConfig

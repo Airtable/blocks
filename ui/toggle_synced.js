@@ -20,6 +20,7 @@ type ToggleSyncedProps = {
     tabIndex?: number,
 };
 
+/** */
 class ToggleSynced extends React.Component {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

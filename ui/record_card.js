@@ -1,5 +1,6 @@
 // @flow
 const {h, u} = require('client_server_shared/hu');
+const invariant = require('invariant');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const CellRenderer = require('client/blocks/sdk/ui/cell_renderer');
@@ -30,7 +31,6 @@ const styles = {
     },
     cellValue: {
         lineHeight: '16px',
-        marginTop: 6,
         fontSize: 12,
     },
 };
@@ -52,6 +52,7 @@ const CellValueAndFieldLabel = createDataContainer(({record, cellValue, field, w
                 record={record}
                 cellValue={cellValue}
                 field={field}
+                shouldWrap={false}
                 className="recordCardCellValue block textOverflowEllipsis"
                 style={styles.cellValue}
             />
@@ -100,6 +101,7 @@ const getFieldResultType = (field: FieldModel): string => {
         return ApiFieldTypes.NUMBER;
     }
     if (isFieldFormulaic(field)) {
+        invariant(field.config.options, 'options');
         if (!field.config.options.resultConfig) {
             // Formula is misconfigured.
             return ApiFieldTypes.SINGLE_LINE_TEXT;
@@ -111,6 +113,7 @@ const getFieldResultType = (field: FieldModel): string => {
     }
 };
 
+/** */
 class RecordCard extends React.Component {
     _onClick: (e: SyntheticMouseEvent) => void;
     constructor(props: RecordCardProps) {
@@ -377,7 +380,7 @@ class RecordCard extends React.Component {
             const primaryField = allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
             primaryCellValueAsString = primaryField ? recordDef[primaryField.id] : null;
         }
-        if (h.utils.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
+        if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
             primaryValue = 'Unnamed record';
             isUnnamed = true;
         } else {
@@ -408,8 +411,7 @@ class RecordCard extends React.Component {
                 }}>
                     <div className={primaryClasses} style={primaryStyles}>{primaryValue}</div>
                     <div className="absolute appFontColorLight" style={{
-                        height: 32,
-                        marginTop: 5,
+                        marginTop: 3,
                     }}>
                         {this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse)}
                     </div>

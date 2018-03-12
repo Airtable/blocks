@@ -25,6 +25,7 @@ type TooltipProps = {
     style?: Object,
 };
 
+/** */
 class Tooltip extends React.Component {
     static propTypes = {
         children: PropTypes.element.isRequired,

@@ -24,6 +24,7 @@ type TablePickerSyncedProps = {
     className: ?string,
 };
 
+/** */
 class TablePickerSynced extends React.Component {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

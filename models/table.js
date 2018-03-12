@@ -10,7 +10,8 @@ const Record = require('client/blocks/sdk/models/record');
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const getSdk = require('client/blocks/sdk/get_sdk');
-const permissions = require('client_server_shared/permissions');
+const PermissionLevels = require('client_server_shared/permissions/permission_levels');
+const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
 const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
 const airtableUrls = require('client_server_shared/airtable_urls');
 
@@ -48,7 +49,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     static _className = 'Table';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableTableKeys, key) ||
-            utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
+            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
     }
     static _shouldLoadDataForKey(key: WatchableTableKey): boolean {
         // "Data" means *all* cell values in the table. If only watching records/recordIds,
@@ -69,6 +70,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     _fieldModelsById: {[string]: Field};
     _recordModelsById: {[string]: Record};
     _cachedFieldNamesById: {[string]: string} | null;
+    _primaryFieldId: string;
 
     // TODO: try making Field models manage their own load state?
     // There is a lot of duplication here and in AbstractModelWithAsyncData.
@@ -88,13 +90,19 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         this._recordModelsById = {}; // Record instances are lazily created by getRecordById.
         this._cachedFieldNamesById = null;
 
+        // A bit of a hack, but we use the primary field ID to load record
+        // metadata (see _getFieldIdForCausingRecordMetadataToLoad). We copy the
+        // ID here instead of calling this.primaryField.id since that would crash
+        // when the table is getting unloaded after being deleted.
+        this._primaryFieldId = this._data.primaryFieldId;
+
         this._areCellValuesLoadedByFieldId = {};
         this._pendingCellValuesLoadPromiseByFieldId = {};
         this._cellValuesRetainCountByFieldId = {};
 
         Object.seal(this);
     }
-    watch(keys: WatchableTableKey | Array<WatchableTableKey>, callback: Function, context?: mixed): Array<WatchableTableKey> {
+    watch(keys: WatchableTableKey | Array<WatchableTableKey>, callback: Function, context?: ?Object): Array<WatchableTableKey> {
         const validKeys = super.watch(keys, callback, context);
         const fieldIdsToLoad = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToLoad.length > 0) {
@@ -102,7 +110,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         return validKeys;
     }
-    unwatch(keys: WatchableTableKey | Array<WatchableTableKey>, callback: Function, context?: mixed): Array<WatchableTableKey> {
+    unwatch(keys: WatchableTableKey | Array<WatchableTableKey>, callback: Function, context?: ?Object): Array<WatchableTableKey> {
         const validKeys = super.unwatch(keys, callback, context);
         const fieldIdsToUnload = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToUnload.length > 0) {
@@ -113,7 +121,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     _getFieldIdsToLoadFromWatchableKeys(keys: Array<WatchableTableKey>): Array<string> {
         const fieldIdsToLoad = [];
         for (const key of keys) {
-            if (utils.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
+            if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
                 fieldIdsToLoad.push(fieldId);
             } else if (!Table.shouldLoadAllCellValuesForRecords) {
@@ -161,7 +169,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // is arbitrary?
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const fields = [];
-        for (const fieldId of utils.iterateKeys(this._data.fieldsById)) {
+        for (const fieldId of u.keys(this._data.fieldsById)) {
             const field = this.getFieldById(fieldId);
             invariant(field, 'no field model' + fieldId);
             fields.push(field);
@@ -181,7 +189,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     }
     /** */
     getFieldByName(fieldName: string): Field | null {
-        for (const [fieldData, fieldId] of utils.iterate(this._data.fieldsById)) {
+        for (const [fieldId, fieldData] of u.entries(this._data.fieldsById)) {
             if (fieldData.name === fieldName) {
                 return this.getFieldById(fieldId);
             }
@@ -224,7 +232,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     }
     /** */
     getViewByName(viewName: string): View | null {
-        for (const [viewData, viewId] of utils.iterate(this._data.viewsById)) {
+        for (const [viewId, viewData] of u.entries(this._data.viewsById)) {
             if (viewData.name === viewName) {
                 return this.getViewById(viewId);
             }
@@ -291,7 +299,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // This takes the field and record IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
-        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
+        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
     setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}) {
@@ -304,7 +312,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
         const changes = [];
         const privateCellValuesByRecordIdThenFieldId = {};
-        for (const [cellValuesByFieldIdOrFieldName, recordId] of utils.iterate(cellValuesByRecordIdThenFieldIdOrFieldName)) {
+        for (const [recordId, cellValuesByFieldIdOrFieldName] of u.entries(cellValuesByRecordIdThenFieldIdOrFieldName)) {
             const record = this.getRecordById(recordId);
             if (!record) {
                 throw new Error('Record does not exist');
@@ -314,7 +322,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                 privateCellValuesByRecordIdThenFieldId[recordId] = {};
             }
 
-            for (const [publicCellValue, fieldIdOrFieldName] of utils.iterate(cellValuesByFieldIdOrFieldName)) {
+            for (const [fieldIdOrFieldName, publicCellValue] of u.entries(cellValuesByFieldIdOrFieldName)) {
                 const field = this.__getFieldMatching(fieldIdOrFieldName);
                 invariant(field, 'Field does not exist');
                 invariant(!field.isDeleted, 'Field has been deleted');
@@ -355,7 +363,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // This takes the field IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
-        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
+        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
     createRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): Array<Record> {
@@ -389,7 +397,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         const changes = [];
         for (const recordDef of recordDefs) {
             const privateCellValuesByFieldId = {};
-            for (const [publicCellValue, fieldIdOrFieldName] of utils.iterate(recordDef)) {
+            for (const [fieldIdOrFieldName, publicCellValue] of u.entries(recordDef)) {
                 const field = this.__getFieldMatching(fieldIdOrFieldName);
                 invariant(field, `Field does not exist: ${fieldIdOrFieldName}`);
                 invariant(!field.isDeleted, `Field has been deleted: ${fieldIdOrFieldName}`);
@@ -452,7 +460,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // This takes the records to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
-        return permissions.can(base.__rawPermissionLevel, permissions.LEVELS.edit);
+        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
     deleteRecords(records: Array<Record>) {
@@ -538,7 +546,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // cause record metadata (id, createdTime, commentCount) to be loaded
         // and subscribed to. In the future, we could add an explicit model
         // bridge to fetch and subscribe to row metadata.
-        return this.primaryField.id;
+        return this._primaryFieldId;
     }
     /** */
     areCellValuesLoadedForFieldId(fieldId: string): boolean {
@@ -760,14 +768,14 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             this._onChange(WatchableTableKeys.views);
 
             // Clean up deleted views
-            for (const [viewModel, viewId] of utils.iterate(this._viewModelsById)) {
+            for (const [viewId, viewModel] of u.entries(this._viewModelsById)) {
                 if (viewModel.isDeleted) {
                     delete this._viewModelsById[viewId];
                 }
             }
         }
         if (dirtyPaths.viewsById) {
-            for (const [dirtyViewPaths, viewId] of utils.iterate(dirtyPaths.viewsById)) {
+            for (const [viewId, dirtyViewPaths] of u.entries(dirtyPaths.viewsById)) {
                 // Directly access from _viewModelsById to avoid creating
                 // a view model if it doesn't already exist. If it doesn't exist,
                 // nothing can be subscribed to any events on it.
@@ -782,7 +790,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             // was created or deleted and trigger onChange for fields.
             const addedFieldIds = [];
             const removedFieldIds = [];
-            for (const [dirtyFieldPaths, fieldId] of utils.iterate(dirtyPaths.fieldsById)) {
+            for (const [fieldId, dirtyFieldPaths] of u.entries(dirtyPaths.fieldsById)) {
                 if (dirtyFieldPaths._isDirty) {
                     // If the entire field is dirty, it was either created or deleted.
 
@@ -825,7 +833,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             const dirtyFieldIdsSet = {};
             const addedRecordIds = [];
             const removedRecordIds = [];
-            for (const [dirtyRecordPaths, recordId] of utils.iterate(dirtyPaths.recordsById)) {
+            for (const [recordId, dirtyRecordPaths] of u.entries(dirtyPaths.recordsById)) {
                 if (dirtyRecordPaths._isDirty) {
                     // If the entire record is dirty, it was either created or deleted.
 
@@ -850,7 +858,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
                 const {cellValuesByFieldId} = dirtyRecordPaths;
                 if (cellValuesByFieldId) {
-                    for (const fieldId of utils.iterateKeys(cellValuesByFieldId)) {
+                    for (const fieldId of u.keys(cellValuesByFieldId)) {
                         dirtyFieldIdsSet[fieldId] = true;
                     }
                 }
@@ -895,7 +903,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     __getFieldNamesById(): {[string]: string} {
         if (!this._cachedFieldNamesById) {
             const fieldNamesById = {};
-            for (const [fieldData, fieldId] of utils.iterate(this._data.fieldsById)) {
+            for (const [fieldId, fieldData] of u.entries(this._data.fieldsById)) {
                 fieldNamesById[fieldId] = fieldData.name;
             }
             this._cachedFieldNamesById = fieldNamesById;

@@ -16,6 +16,7 @@ type IconProps = {
     scale?: number,
 };
 
+/** */
 const Icon = ({name, size, scale, fillColor, className, style, pathClassName}: IconProps) => {
     if (size === undefined) {
         size = 16 * ((scale !== undefined) ? scale : 1);

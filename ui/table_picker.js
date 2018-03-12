@@ -17,6 +17,7 @@ type TablePickerProps = {
      disabled: ?boolean,
 };
 
+/** */
 class TablePicker extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel),

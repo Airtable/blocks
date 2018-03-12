@@ -20,6 +20,7 @@ type InputSyncedProps = {
     spellCheck: ?boolean,
 };
 
+/** */
 class InputSynced extends React.Component {
     static propTypes = {
         type: PropTypes.oneOf(Object.keys(Input.validTypesSet)),

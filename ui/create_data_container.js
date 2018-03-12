@@ -1,7 +1,6 @@
 // @flow
 const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
-const utils = require('client/blocks/sdk/utils');
 const Watchable = require('client/blocks/sdk/watchable');
 const Table = require('client/blocks/sdk/models/table');
 const View = require('client/blocks/sdk/models/view');
@@ -47,7 +46,7 @@ type WatchConfig = {
     watchable: Watchable<any>, // eslint-disable-line flowtype/no-weak-types
     key: string | Array<string>,
     callback: Function,
-    context: any, // eslint-disable-line flowtype/no-weak-types
+    context: ?Object,
 };
 
 type WrappedWatchConfig = {
@@ -292,14 +291,14 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
             // that view's data in a single request.
             // TODO(kasra): improve this by moving this logic into liveapp so
             // it can batch multiple view and table loads.
-            for (const {watchable, wrappedWatchConfigs} of utils.iterateValues(viewsToWatchById)) {
+            for (const {watchable, wrappedWatchConfigs} of u.values(viewsToWatchById)) {
                 for (const wrappedWatchConfig of wrappedWatchConfigs) {
                     const {watchConfig, wrappedCallback} = wrappedWatchConfig;
                     const key: any = watchConfig.key; // eslint-disable-line flowtype/no-weak-types
                     watchable.watch(key, wrappedCallback, watchConfig.context);
                 }
             }
-            for (const {watchable, wrappedWatchConfigs} of utils.iterateValues(tablesToWatchById)) {
+            for (const {watchable, wrappedWatchConfigs} of u.values(tablesToWatchById)) {
                 for (const wrappedWatchConfig of wrappedWatchConfigs) {
                     const {watchConfig, wrappedCallback} = wrappedWatchConfig;
                     const key: any = watchConfig.key; // eslint-disable-line flowtype/no-weak-types

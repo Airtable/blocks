@@ -29,6 +29,7 @@ type ViewPickerSyncedProps = {
     className: ?string,
 };
 
+/** */
 class ViewPickerSynced extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel),

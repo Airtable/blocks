@@ -17,6 +17,7 @@ type FieldTokenizedTextAreaSyncedProps = {
     style?: Object,
 };
 
+/** */
 class FieldTokenizedTextAreaSynced extends React.Component {
     static propTypes = {
         table: PropTypes.instanceOf(TableModel).isRequired,

@@ -13,21 +13,27 @@ type CellRendererProps = {
     record?: Record,
     cellValue?: mixed,
     field: Field,
+    shouldWrap?: boolean,
     className?: string,
     style?: Object,
 };
 
+/** */
 class CellRenderer extends React.Component {
+    props: CellRendererProps;
     static propTypes = {
         // NOTE: must pass in one of record or cellValue. It will default to using
         // the record if one is passed in, and cellValue otherwise.
         record: PropTypes.instanceOf(Record),
         cellValue: PropTypes.any,
         field: PropTypes.instanceOf(Field).isRequired,
+        shouldWrap: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
     };
-    props: CellRendererProps;
+    static defaultProps = {
+        shouldWrap: true,
+    };
 
     constructor(props: CellRendererProps) {
         super(props);
@@ -43,7 +49,7 @@ class CellRenderer extends React.Component {
         }
     }
     render() {
-        const {record, cellValue, field} = this.props;
+        const {record, cellValue, field, shouldWrap} = this.props;
 
         if (field.isDeleted) {
             return null;
@@ -71,12 +77,14 @@ class CellRenderer extends React.Component {
             privateCellValue = cellValueUtils.parsePublicCellValueForUpdate(cellValue, null, field);
         }
 
+        const cellContextType = shouldWrap ? CellContextTypes.BLOCKS_READ_WRAP : CellContextTypes.BLOCKS_READ_NO_WRAP;
+
         const rawHtml = columnTypeProvider.renderReadModeCellValue(
             privateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
             field.parentTable.parentBase.__appBlanket,
-            CellContext.forContextType(CellContextTypes.BLOCKS_READ),
+            CellContext.forContextType(cellContextType),
         );
         const attributes: Object = {
             'data-columntype': field.__getRawType(),

@@ -57,11 +57,19 @@ class LiveappInterface {
         window.addEventListener('message', event => {
             const result = blockMessageParser.parseMessageFromEvent(event, hostOrigin);
             if (result.error) {
-                // TODO(kasra): maybe disable the block or prompt the user to
-                // reload the page, since this may be happening due to a version
-                // mismatch between the liveapp page and run_block_frame (e.g. user
-                // loaded liveapp, we deployed, then they loaded a block).
-                console.log('Bad message from host page:', event.data); // eslint-disable-line
+                switch (result.error) {
+                    case blockMessageParser.ErrorTypes.UNEXPECTED_ORIGIN:
+                        // Other frames may be sending messages (e.g. FB login button),
+                        // so no-op those messages.
+                        break;
+                    default:
+                        // TODO(kasra): maybe disable the block or prompt the user to
+                        // reload the page, since this may be happening due to a version
+                        // mismatch between the liveapp page and run_block_frame (e.g. user
+                        // loaded liveapp, we deployed, then they loaded a block).
+                        console.log('Bad message from host page:', event.data); // eslint-disable-line
+                        break;
+                }
             } else {
                 const handlers = this._handlersByMessageType[result.message.type];
                 if (handlers) {
@@ -188,8 +196,8 @@ class LiveappInterface {
                 invariant(mergedBatchUpdate.updateType === BatchUpdateTypes.SET_CELL_VALUES, 'Incorrect updateType');
                 const {cellValuesByRecordIdThenFieldId} = newBatchUpdate.args;
 
-                for (const [cellValuesByFieldId, recordId] of utils.iterate(cellValuesByRecordIdThenFieldId)) {
-                    for (const [value, fieldId] of utils.iterate(cellValuesByFieldId)) {
+                for (const [recordId, cellValuesByFieldId] of utils.entries(cellValuesByRecordIdThenFieldId)) {
+                    for (const [fieldId, value] of utils.entries(cellValuesByFieldId)) {
                         if (!mergedBatchUpdate.args.cellValuesByRecordIdThenFieldId[recordId]) {
                             mergedBatchUpdate.args.cellValuesByRecordIdThenFieldId[recordId] = {};
                         }

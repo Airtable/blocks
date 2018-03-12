@@ -44,6 +44,7 @@ const typesToExcludeFromDefaultClassesSet = {
     range: true,
 };
 
+/** */
 class Input extends React.Component {
     static propTypes = {
         value: PropTypes.oneOfType([

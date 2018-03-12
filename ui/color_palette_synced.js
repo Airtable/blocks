@@ -6,6 +6,7 @@ const ColorPalette = require('client/blocks/sdk/ui/color_palette');
 const Synced = require('client/blocks/sdk/ui/synced');
 const globalConfigSyncedComponentHelpers = require('client/blocks/sdk/ui/global_config_synced_component_helpers');
 
+/** */
 class ColorPaletteSynced extends React.Component {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

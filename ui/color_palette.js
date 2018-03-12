@@ -9,6 +9,7 @@ const classNames = require('classnames');
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
 
+/** */
 class ColorPalette extends React.Component {
     static propTypes = {
         color: PropTypes.string,

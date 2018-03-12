@@ -126,7 +126,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
             height: window.innerHeight,
         };
     }
-    watch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: any): Array<WatchableViewportKey> { // eslint-disable-line flowtype/no-weak-types
+    watch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: ?Object): Array<WatchableViewportKey> {
         const validKeys = super.watch(keys, callback, context);
 
         if (u.includes(validKeys, WatchableViewportKeys.size)) {
@@ -138,7 +138,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
 
         return validKeys;
     }
-    unwatch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: any): Array<WatchableViewportKey> { // eslint-disable-line flowtype/no-weak-types
+    unwatch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: ?Object): Array<WatchableViewportKey> {
         const validKeys = super.unwatch(keys, callback, context);
 
         if (u.includes(validKeys, WatchableViewportKeys.size)) {

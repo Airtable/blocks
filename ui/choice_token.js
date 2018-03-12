@@ -14,6 +14,7 @@ type ChoiceTokenProps = {
     className?: string,
 };
 
+/** */
 const ChoiceToken = ({choice, className}: ChoiceTokenProps) => {
     // Convert the choice color back to a private api choice color.
     const color = choice.color ? colors.getColorForColorClass(choice.color) : colors.DEFAULT_CHOICE_COLOR;

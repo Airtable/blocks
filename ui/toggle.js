@@ -41,6 +41,7 @@ type ToggleProps = {
     tabIndex?: number,
 };
 
+/** */
 class Toggle extends React.Component {
     static propTypes = {
         value: PropTypes.bool.isRequired,

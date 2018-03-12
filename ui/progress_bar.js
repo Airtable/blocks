@@ -14,6 +14,7 @@ type ProgressBarProps = {
     style?: Object,
 };
 
+/** */
 const ProgressBar = (props: ProgressBarProps) => {
     const {
         progress,
