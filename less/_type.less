@@ -1,0 +1,242 @@
+@import './_viewport_widths.less';
+
+// GT Eesti
+@font-face {
+    font-family: 'GTEestiDisplay-Regular';
+    font-display: swap;
+    src:  url('/font/GT-Eesti-Display-Regular-2.eot');
+    src:  url('/font/GT-Eesti-Display-Regular-2.eot?#iefix') format('embedded-opentype'),
+        url('/font/GT-Eesti-Display-Regular-2.woff') format('woff'),
+        url('/font/GT-Eesti-Display-Regular-2.ttf') format('truetype');
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'GTEestiDisplay-Medium';
+    font-display: swap;
+    src:  url('/font/GT-Eesti-Display-Medium-2.eot');
+    src:  url('/font/GT-Eesti-Display-Medium-2.eot?#iefix') format('embedded-opentype'),
+        url('/font/GT-Eesti-Display-Medium-2.woff') format('woff'),
+        url('/font/GT-Eesti-Display-Medium-2.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@platformFontStack: -apple-system, system-ui, BlinkMacSystemFont,
+    'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+    'Helvetica Neue', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+@monospaceFontStack: Menlo, Courier, monospace;
+@eestiRegular: 'GTEestiDisplay-Regular', @platformFontStack;
+@eestiMedium: 'GTEestiDisplay-Medium', @platformFontStack;
+
+.display {
+    font-family: @eestiRegular;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    // Turn off "contextual alternatives" https://css-tricks.com/almanac/properties/f/font-feature-settings/
+    font-feature-settings: 'calt' 0;
+}
+.display.strong, .strong .display, .display .strong { font-family: @eestiMedium; }
+.monospace { font-family: Menlo, monospace }
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    font-weight: normal;
+}
+
+h1 { font-size: 2rem }
+h2 { font-size: 1.5rem }
+h3 { font-size: 1.25rem }
+h4 { font-size: 1rem }
+h5 { font-size: .875rem }
+
+.normal { font-size: 0.8rem; }
+.small { font-size: 11px; }
+.micro { font-size: 9px; }
+
+.font-family-inherit { font-family: inherit; }
+.font-size-inherit { font-size: inherit; }
+.text-decoration-none { text-decoration: none; }
+
+.thin { font-weight: 300; } // use sparingly if at all
+// 400 weight is the default
+.bold, .strong { font-weight: 500; }
+.stronger { font-weight: 600; }
+.strongest { font-weight: 700; }
+
+.regular { font-weight:normal; }
+.italic { font-style:italic; }
+.caps { text-transform:uppercase; letter-spacing: .1em; }
+.uppercase { text-transform: uppercase; }
+.strikethrough { text-decoration: line-through; }
+
+.left-align { text-align: left; }
+.center { text-align: center; }
+.right-align { text-align: right; }
+.justify { text-align: justify; }
+
+.nowrap { white-space: nowrap; }
+.break-word { word-wrap: break-word; }
+.pre-wrap, pre.pre-wrap { white-space: pre-wrap; }
+.hyphens {
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+.line-height-0 { line-height: 0; }
+.line-height-1 { line-height: 1; }
+.line-height-2 { line-height: 1.125; }
+.line-height-3 { line-height: 1.25; }
+.line-height-4 { line-height: 1.5; }
+.line-height-5 { line-height: 1.6; }
+
+.list-style-none { list-style: none; }
+.list-style-inherit { list-style-type: inherit; }
+.underline { text-decoration: underline; }
+
+.truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+// truncate to three lines
+.truncate-block {
+    overflow: hidden;
+    position: relative;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: -o-ellipsis-lastline;
+
+    &.line-height-1 { max-height: 3em; }
+    &.line-height-2 { max-height: 3.375em; }
+    &.line-height-3 { max-height: 3.75em; }
+    &.line-height-4 { max-height: 4.5em; }
+    &.line-height-5 { max-height: 4.8em; }
+}
+
+.truncate-block-2-lines {
+    .truncate-block;
+    -webkit-line-clamp: 2;
+
+    &.line-height-3 { max-height: 2.5em; }
+    &.line-height-4 { max-height: 3em; }
+}
+
+.truncate-block-3-lines {
+    .truncate-block;
+}
+
+.truncate-block-4-lines {
+    .truncate-block;
+    -webkit-line-clamp: 4;
+}
+
+.truncate-block-5-lines {
+    .truncate-block;
+    -webkit-line-clamp: 5;
+}
+
+.truncate-block-6-lines {
+    .truncate-block;
+    -webkit-line-clamp: 6;
+}
+
+.truncate-block-7-lines {
+    .truncate-block;
+    -webkit-line-clamp: 7;
+}
+
+.truncate-block-8-lines {
+    .truncate-block;
+    -webkit-line-clamp: 8;
+}
+
+.cell {
+    .truncate-block,
+    .truncate-block-2-lines,
+    .truncate-block-3-lines,
+    .truncate-block-4-lines,
+    .truncate-block-5-lines,
+    .truncate-block-6-lines,
+    .truncate-block-7-lines,
+    .truncate-block-8-lines {
+        max-height: none;
+    }
+}
+
+.huge {
+    font-size: 1rem;
+    &.h1 { font-size: 2.8rem; }
+    &.h2 { font-size: 2rem; }
+    &.h3 { font-size: 1.4rem; }
+    &.h4 { font-size: 1.2rem; }
+    &.h5 { font-size: 1rem; }
+}
+h1.huge, .huge h1 { .huge.h1; }
+h2.huge, .huge h2 { .huge.h2; }
+h3.huge, .huge h3 { .huge.h3; }
+h4.huge, .huge h4 { .huge.h4; }
+h5.huge, .huge h5 { .huge.h5; }
+
+.big {
+    font-size: 0.9rem;
+    &.h1 { font-size: 2.25rem; }
+    &.h2 { font-size: 1.75rem; }
+    &.h3 { font-size: 1.25rem; }
+    &.h4 { font-size: 1rem; }
+    &.h5 { font-size: 0.9rem; }
+}
+h1.big, .big h1 { .big.h1; }
+h2.big, .big h2 { .big.h2; }
+h3.big, .big h3 { .big.h3; }
+h4.big, .big h4 { .big.h4; }
+h5.big, .big h5 { .big.h5; }
+
+.small { font-size: 11px; }
+.micro { font-size: 9px; }
+
+.viewportSizePrefix(@prefix) {
+    .@{prefix}huge { .huge }
+    *.h1.@{prefix}huge, h1.@{prefix}huge, .@{prefix}huge h1 { .huge.h1; }
+    *.h2.@{prefix}huge, h2.@{prefix}huge, .@{prefix}huge h2 { .huge.h2; }
+    *.h3.@{prefix}huge, h3.@{prefix}huge, .@{prefix}huge h3 { .huge.h3; }
+    *.h4.@{prefix}huge, h4.@{prefix}huge, .@{prefix}huge h4 { .huge.h4; }
+    *.h5.@{prefix}huge, h5.@{prefix}huge, .@{prefix}huge h5 { .huge.h5; }
+
+    .@{prefix}big { .big; }
+    *.h1.@{prefix}big, h1.@{prefix}big, .@{prefix}big h1 { .big.h1; }
+    *.h2.@{prefix}big, h2.@{prefix}big, .@{prefix}big h2 { .big.h2; }
+    *.h3.@{prefix}big, h3.@{prefix}big, .@{prefix}big h3 { .big.h3; }
+    *.h4.@{prefix}big, h4.@{prefix}big, .@{prefix}big h4 { .big.h4; }
+    *.h5.@{prefix}big, h5.@{prefix}big, .@{prefix}big h5 { .big.h5; }
+
+    .@{prefix}small { .small; }
+    .@{prefix}micro { .micro; }
+}
+
+@media (max-width: @xsWidthMax) {
+    .viewportSizePrefix(xs-);
+    .xs-right-align { .right-align; }
+    .xs-center { .center; }
+}
+
+@media (min-width: @smWidthMin) and (max-width: @smWidthMax) {
+    .viewportSizePrefix(sm-);
+    .sm-right-align { .right-align; }
+    .sm-center { .center; }
+}
+
+@media (min-width: @mdWidthMin) and (max-width: @mdWidthMax) {
+    .viewportSizePrefix(md-);
+    .md-right-align { .right-align; }
+    .md-center { .center; }
+}
+
+@media (min-width: @lgWidthMin) {
+    .viewportSizePrefix(lg-);
+    .lg-right-align { .right-align; }
+    .lg-center { .center; }
+}

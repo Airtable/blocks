@@ -1,0 +1,174 @@
+.animate { transition: 0.085s all ease-in; }
+.animate-slow { transition: 0.25s all ease-in; }
+.animate-slower { transition: 0.4s all ease-in; }
+.animate-ease-in-out { transition-timing-function: ease-in-out; }
+
+.animate-spin-scale {
+    animation-name: spinScale;
+    animation-duration: 1800ms;
+    animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+}
+.animate-bounce-in {
+    animation-name: bounceIn;
+    animation-duration: 240ms;
+}
+
+.animate-bounce-in-loud {
+    animation-name: bounceInLoud;
+    animation-duration: 240ms;
+}
+
+.animate-opacity-fade-in {
+    animation-name: opacityFadeIn;
+    animation-duration: 400ms;
+}
+
+.animate-fade-up-in {
+    animation-name: fadeUpIn;
+    animation-duration: 500ms;
+    animation-timing-function: ease-in-out;
+}
+
+.animate-spin-slow {
+    animation-name: spin;
+    animation-duration: 40s;
+    animation-timing-function: linear;
+}
+
+.animate-highlight {
+    animation-name: highlight;
+    animation-duration: 800ms;
+}
+
+.animate-spin-slow-reverse {
+    .animate-spin-slow;
+    animation-name: spinReverse;
+}
+
+.animate-progress {
+    animation-timing-function: linear;
+    animation-name: progress;
+}
+
+@keyframes progress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+@keyframes spinScale {
+    0% { transform: rotate(0) scale(1); }
+    50% { transform: rotate(360deg) scale(0.9); }
+    100% { transform: rotate(720deg) scale(1); }
+}
+
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}
+
+@keyframes spinReverse {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(-360deg);}
+}
+
+@keyframes highlight {
+    from {
+        background-color: @cyanLight2;
+        border-radius: 20px;
+        box-shadow: 0 0 0 20px @cyanLight2;
+    }
+    to {
+        background-color: rgba(255,255,255, 0);
+        border-radius: 20px;
+        box-shadow: 0 0 0 20px rgba(255,255,255, 0);
+    }
+}
+
+@keyframes spacey {
+    from {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+    to {
+        -webkit-transform: translateX(-2560px);
+        transform: translateX(-2560px);
+    }
+}
+
+@keyframes bounceIn {
+    from, 50%, to {
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0.9;
+        -webkit-transform: scale3d(.98, .98, .98);
+        transform: scale3d(.98, .98, .98);
+    }
+    70% {
+        opacity: 1;
+        -webkit-transform: scale3d(1.01, 1.01, 1.01);
+        transform: scale3d(1.01, 1.01, 1.01);
+    }
+    to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+@keyframes bounceIn {
+    from, 50%, to {
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+    0% {
+        opacity: 0.9;
+        -webkit-transform: scale3d(.98, .98, .98);
+        transform: scale3d(.98, .98, .98);
+    }
+    70% {
+        opacity: 1;
+        -webkit-transform: scale3d(1.03, 1.03, 1.03);
+        transform: scale3d(1.03, 1.03, 1.03);
+    }
+    to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+    }
+}
+
+@keyframes opacityFadeIn {
+    from { opacity: 0.0; }
+    to { opacity: 1.0; }
+}
+
+@keyframes opacityFadeOut {
+    from { opacity: 1.0; }
+    to { opacity: 0.0; }
+}
+
+@keyframes fadeUpIn {
+    from {
+        opacity: 0;
+        transform: translate(0, -4px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+.animate-infinite { animation-iteration-count: infinite; }
+
+
+// React CSS Transition Group helpers
+.transition-group-opacity-enter,
+.transition-group-opacity-appear,
+.transition-group-opacity-leave.transition-group-opacity-leave-active { opacity: 0.01; }
+
+.trantision-group-opacity-enter.transition-group-opacity-enter-active,
+.transition-group-opacity-leave,
+.transition-group-opacity-appear.transition-group-opacity-appear-active { opacity: 1; }
+
+.trantision-group-opacity-enter.transition-group-opacity-enter-active,
+.transition-group-opacity-leave.transition-group-opacity-leave-active,
+.transition-group-opacity-appear.transition-group-opacity-appear-active { transition: opacity 500ms ease-in; }

@@ -1,0 +1,168 @@
+@import './_viewport_widths.less';
+
+@space0: 0;
+// @space-half is 1/2 of @space1
+@space-half: 0.25rem;
+@space1: .5rem;
+@space2: 1rem;
+@space3: 2rem;
+@space4: 4rem;
+@space5: 8rem;
+
+.buildMarginSet(@prefix) {
+    .@{prefix}0 { margin: @space0; }
+    .@{prefix}t0 { margin-top: @space0; }
+    .@{prefix}r0 { margin-right: @space0; }
+    .@{prefix}b0 { margin-bottom: @space0; }
+    .@{prefix}l0 { margin-left: @space0; }
+    .@{prefix}x0 { margin-left: @space0; margin-right: @space0; }
+    .@{prefix}y0 { margin-top: @space0; margin-bottom: @space0; }
+
+    .@{prefix}-half { margin: @space-half; }
+    .@{prefix}t-half { margin-top: @space-half; }
+    .@{prefix}r-half { margin-right: @space-half; }
+    .@{prefix}b-half { margin-bottom: @space-half; }
+    .@{prefix}l-half { margin-left: @space-half; }
+    .@{prefix}x-half { margin-left: @space-half; margin-right: @space-half; }
+    .@{prefix}y-half { margin-top: @space-half; margin-bottom: @space-half; }
+
+    .@{prefix}1 { margin: @space1; }
+    .@{prefix}t1 { margin-top: @space1; }
+    .@{prefix}r1 { margin-right: @space1; }
+    .@{prefix}b1 { margin-bottom: @space1; }
+    .@{prefix}l1 { margin-left: @space1; }
+    .@{prefix}x1 { margin-left: @space1; margin-right: @space1; }
+    .@{prefix}y1 { margin-top: @space1; margin-bottom: @space1; }
+
+    .@{prefix}2 { margin: @space2; }
+    .@{prefix}t2 { margin-top: @space2; }
+    .@{prefix}r2 { margin-right: @space2; }
+    .@{prefix}b2 { margin-bottom: @space2; }
+    .@{prefix}l2 { margin-left: @space2; }
+    .@{prefix}x2 { margin-left: @space2; margin-right: @space2; }
+    .@{prefix}y2 { margin-top: @space2; margin-bottom: @space2; }
+
+    .@{prefix}3 { margin: @space3; }
+    .@{prefix}t3 { margin-top: @space3; }
+    .@{prefix}r3 { margin-right: @space3; }
+    .@{prefix}b3 { margin-bottom: @space3; }
+    .@{prefix}l3 { margin-left: @space3; }
+    .@{prefix}x3 { margin-left: @space3; margin-right: @space3; }
+    .@{prefix}y3 { margin-top: @space3; margin-bottom: @space3; }
+
+    .@{prefix}4 { margin: @space4; }
+    .@{prefix}t4 { margin-top: @space4; }
+    .@{prefix}r4 { margin-right: @space4; }
+    .@{prefix}b4 { margin-bottom: @space4; }
+    .@{prefix}l4 { margin-left: @space4; }
+    .@{prefix}x4 { margin-left: @space4; margin-right: @space4; }
+    .@{prefix}y4 { margin-top: @space4; margin-bottom: @space4; }
+
+    .@{prefix}5 { margin: @space5; }
+    .@{prefix}t5 { margin-top: @space5; }
+    .@{prefix}r5 { margin-right: @space5; }
+    .@{prefix}b5 { margin-bottom: @space5; }
+    .@{prefix}l5 { margin-left: @space5; }
+    .@{prefix}x5 { margin-left: @space5; margin-right: @space5; }
+    .@{prefix}y5 { margin-top: @space5; margin-bottom: @space5; }
+
+    .@{prefix}ln1 { margin-left: -@space1; }
+    .@{prefix}ln2 { margin-left: -@space2; }
+    .@{prefix}ln3 { margin-left: -@space3; }
+    .@{prefix}ln4 { margin-left: -@space4; }
+    .@{prefix}ln5 { margin-top: -@space5; }
+    .@{prefix}tn1 { margin-top: -@space1; }
+    .@{prefix}tn2 { margin-top: -@space2; }
+    .@{prefix}tn3 { margin-top: -@space3; }
+    .@{prefix}tn4 { margin-top: -@space4; }
+    .@{prefix}tn5 { margin-top: -@space5; }
+    .@{prefix}xn1 { margin-left: -@space1; margin-right: -@space1; }
+    .@{prefix}xn2 { margin-left: -@space2; margin-right: -@space2; }
+    .@{prefix}xn3 { margin-left: -@space3; margin-right: -@space3; }
+    .@{prefix}xn4 { margin-left: -@space4; margin-right: -@space4; }
+    .@{prefix}xn5 { margin-left: -@space5; margin-right: -@space5; }
+
+    .@{prefix}l-auto { margin-left:auto }
+    .@{prefix}r-auto { margin-right:auto }
+    .@{prefix}x-auto { margin-left:auto; margin-right:auto; }
+}
+.buildPaddingSet(@prefix) {
+    .@{prefix}0 { padding: @space0; }
+    .@{prefix}t0 { padding-top: @space0; }
+    .@{prefix}r0 { padding-right: @space0; }
+    .@{prefix}b0 { padding-bottom: @space0; }
+    .@{prefix}l0 { padding-left: @space0; }
+    .@{prefix}x0 { padding-left: @space0; padding-right: @space0; }
+    .@{prefix}y0 { padding-top: @space0;  padding-bottom: @space0; }
+
+    .@{prefix}-half { padding: @space-half; }
+    .@{prefix}t-half { padding-top: @space-half; }
+    .@{prefix}r-half { padding-right: @space-half; }
+    .@{prefix}b-half { padding-bottom: @space-half; }
+    .@{prefix}l-half { padding-left: @space-half; }
+    .@{prefix}x-half { padding-left: @space-half; padding-right: @space-half; }
+    .@{prefix}y-half { padding-top: @space-half; padding-bottom: @space-half; }
+
+    .@{prefix}1 { padding: @space1; }
+    .@{prefix}t1 { padding-top: @space1; }
+    .@{prefix}r1 { padding-right: @space1; }
+    .@{prefix}b1 { padding-bottom: @space1; }
+    .@{prefix}l1 { padding-left: @space1; }
+    .@{prefix}y1 { padding-top: @space1; padding-bottom: @space1; }
+    .@{prefix}x1 { padding-left: @space1; padding-right: @space1; }
+
+    .@{prefix}2 { padding: @space2 }
+    .@{prefix}t2 { padding-top: @space2 }
+    .@{prefix}r2 { padding-right: @space2 }
+    .@{prefix}b2 { padding-bottom: @space2 }
+    .@{prefix}l2 { padding-left: @space2 }
+    .@{prefix}y2 { padding-top: @space2; padding-bottom: @space2 }
+    .@{prefix}x2 { padding-left: @space2; padding-right: @space2 }
+
+    .@{prefix}3 { padding: @space3; }
+    .@{prefix}t3 { padding-top: @space3; }
+    .@{prefix}r3 { padding-right: @space3; }
+    .@{prefix}b3 { padding-bottom: @space3; }
+    .@{prefix}l3 { padding-left: @space3; }
+    .@{prefix}y3 { padding-top: @space3; padding-bottom: @space3; }
+    .@{prefix}x3 { padding-left: @space3; padding-right: @space3; }
+
+    .@{prefix}4 { padding: @space4; }
+    .@{prefix}t4 { padding-top: @space4; }
+    .@{prefix}r4 { padding-right: @space4; }
+    .@{prefix}b4 { padding-bottom: @space4; }
+    .@{prefix}l4 { padding-left: @space4; }
+    .@{prefix}y4 { padding-top: @space4; padding-bottom: @space4; }
+    .@{prefix}x4 { padding-left: @space4; padding-right: @space4; }
+
+    .@{prefix}5 { padding: @space5; }
+    .@{prefix}t5 { padding-top: @space5; }
+    .@{prefix}r5 { padding-right: @space5; }
+    .@{prefix}b5 { padding-bottom: @space5; }
+    .@{prefix}l5 { padding-left: @space5; }
+    .@{prefix}y5 { padding-top: @space5; padding-bottom: @space5; }
+    .@{prefix}x5 { padding-left: @space5; padding-right: @space5; }
+}
+
+.buildPaddingSet(p);
+.buildMarginSet(m);
+
+@media (max-width: @xsWidthMax) {
+    .buildPaddingSet(xs-p);
+    .buildMarginSet(xs-m);
+}
+
+@media (min-width: @smWidthMin) and (max-width: @smWidthMax) {
+    .buildPaddingSet(sm-p);
+    .buildMarginSet(sm-m);
+}
+
+@media (min-width: @mdWidthMin) and (max-width: @mdWidthMax) {
+    .buildPaddingSet(md-p);
+    .buildMarginSet(md-m);
+}
+
+@media (min-width: @lgWidthMin) {
+    .buildPaddingSet(lg-p);
+    .buildMarginSet(lg-m);
+}

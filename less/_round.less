@@ -1,0 +1,89 @@
+@import './_viewport_widths.less';
+
+@round: 3px;
+@round-big: 6px;
+@round-huge: 14px;
+
+.unround { border-radius: 0; }
+.roundedPrefix(@prefix) {
+    // round
+    .@{prefix} { border-radius: @round; }
+    .@{prefix}-right {
+        border-top-right-radius: @round;
+        border-bottom-right-radius: @round;
+    }
+    .@{prefix}-left {
+        border-top-left-radius: @round;
+        border-bottom-left-radius: @round;
+    }
+    .@{prefix}-top {
+        border-top-right-radius: @round;
+        border-top-left-radius: @round;
+    }
+    .@{prefix}-bottom {
+        border-bottom-right-radius: @round;
+        border-bottom-left-radius: @round;
+    }
+
+    // round-big
+    .@{prefix}-big { border-radius: @round-big; }
+    .@{prefix}-big-right {
+        border-top-right-radius: @round-big;
+        border-bottom-right-radius: @round-big;
+    }
+    .@{prefix}-big-left {
+        border-top-left-radius: @round-big;
+        border-bottom-left-radius: @round-big;
+    }
+    .@{prefix}-big-top {
+        border-top-right-radius: @round-big;
+        border-top-left-radius: @round-big;
+    }
+    .@{prefix}-big-top-left {
+        border-top-left-radius: @round-big;
+    }
+    .@{prefix}-big-top-right {
+        border-top-right-radius: @round-big;
+    }
+    .@{prefix}-big-bottom {
+        border-bottom-right-radius: @round-big;
+        border-bottom-left-radius: @round-big;
+    }
+
+    // round-huge
+    .@{prefix}-huge { border-radius: @round-huge; }
+    .@{prefix}-huge-right {
+        border-top-right-radius: @round-huge;
+        border-bottom-right-radius: @round-huge;
+    }
+    .@{prefix}-huge-left {
+        border-top-left-radius: @round-huge;
+        border-bottom-left-radius: @round-huge;
+    }
+    .@{prefix}-huge-top {
+        border-top-right-radius: @round-huge;
+        border-top-left-radius: @round-huge;
+    }
+    .@{prefix}-huge-top-left {
+        border-top-left-radius: @round-huge;
+    }
+    .@{prefix}-huge-top-right {
+        border-top-right-radius: @round-huge;
+    }
+    .@{prefix}-huge-bottom {
+        border-bottom-right-radius: @round-huge;
+        border-bottom-left-radius: @round-huge;
+    }
+}
+
+.roundedPrefix(rounded);
+
+@media (min-width: @smWidthMin) {
+    .roundedPrefix(sm-rounded);
+}
+@media (min-width: @mdWidthMin) {
+    .roundedPrefix(md-rounded);
+}
+@media (min-width: @lgWidthMin) {
+    .roundedPrefix(lg-rounded);
+}

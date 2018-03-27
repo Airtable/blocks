@@ -1,0 +1,409 @@
+@white: hsl(0, 0%, 100%);
+@dark: hsl(0, 0%, 20%);
+
+@lighten1: hsla(0, 0%, 100%, 0.05);
+@lighten2: hsla(0, 0%, 100%, 0.1);
+@lighten3: hsla(0, 0%, 100%, 0.25);
+@lighten4: hsla(0, 0%, 100%, 0.5);
+
+@darken1: hsla(0, 0%, 0%, 0.05);
+@darken2: hsla(0, 0%, 0%, 0.1);
+@darken3: hsla(0, 0%, 0%, 0.25);
+@darken4: hsla(0, 0%, 0%, 0.5);
+
+// yellow
+@yellowBright:  rgb(252, 180, 0);
+@yellow:        rgb(224, 141, 0);
+@yellowDark1:   rgb(184, 117, 3);
+@yellowLight1:  rgb(255, 214, 110);
+@yellowLight2:  rgb(255, 234, 182);
+// orange
+@orangeBright:  rgb(255, 111, 44);
+@orange:        rgb(247, 101, 59);
+@orangeDark1:   rgb(215, 77, 38);
+@orangeLight1:  rgb(255, 169, 129);
+@orangeLight2:  rgb(254, 226, 213);
+// red
+@redBright:     rgb(248, 43, 96);
+@red:           rgb(229, 46, 77);
+@redDark1:      rgb(186, 30, 69);
+@redLight1:     rgb(255, 158, 183);
+@redLight2:     rgb(255, 220, 229);
+// pink
+@pinkBright:    rgb(255, 8, 194);
+@pink:          rgb(233, 41, 186);
+@pinkDark1:     rgb(178, 21, 139);
+@pinkLight1:    rgb(249, 157, 226);
+@pinkLight2:    rgb(255, 218, 246);
+// purple
+@purpleBright:  rgb(139, 70, 255);
+@purple:        rgb(124, 57, 237);
+@purpleDark1:   rgb(107, 28, 176);
+@purpleLight1:  rgb(205, 176, 255);
+@purpleLight2:  rgb(237, 226, 254);
+// blue
+@blueBright:    rgb(45, 127, 249);
+@blue:          rgb(18, 131, 218);
+@blueDark1:     rgb(39, 80, 174);
+@blueLight1:    rgb(156, 199, 255);
+@blueLight2:    rgb(207, 223, 255);
+// cyan
+@cyanBright:    rgb(24, 191, 255);
+@cyan:          rgb(1, 169, 219);
+@cyanDark1:     rgb(11, 118, 183);
+@cyanLight1:    rgb(119, 209, 243);
+@cyanLight2:    rgb(208, 240, 253);
+// teal
+@tealBright:    rgb(32, 217, 210);
+@teal:          rgb(2, 170, 164);
+@tealDark1:     rgb(6, 160, 155);
+@tealLight1:    rgb(114, 221, 195);
+@tealLight2:    rgb(194, 245, 233);
+// green
+@greenBright:   rgb(32, 201, 51);
+@green:         rgb(17, 175, 34);
+@greenDark1:    rgb(51, 138, 23);
+@greenLight1:   rgb(147, 224, 136);
+@greenLight2:   rgb(209, 247, 196);
+// gray
+@grayBright:    rgb(102, 102, 102);
+@gray:          rgb(102, 102, 102);
+@grayDark1:     rgb(68, 68, 68);
+@grayLight1:    rgb(204, 204, 204);
+@grayLight2:    rgb(238, 238, 238);
+
+@universe-dark: #292A3E;
+@foreign-key-blue: #e9eef9;
+
+.understroke {
+    padding-bottom: 0.14rem;
+    border-bottom: 2px solid @darken2;
+}
+.understroke.thick { border-width: 3px; }
+.understroke.link:hover,
+.understroke.link:focus,
+.understroke.active,
+.hover-container:hover .understroke { border-color: currentColor; }
+.understroke.disabled,
+.understroke.disabled:hover { border-color: transparent; }
+
+a.link { cursor: pointer; }
+.link:hover { color: @dark; }
+.link-quiet:hover,
+.link-quiet-focusable:hover,
+.link-quiet-focusable:focus,
+.hover-container:hover .link-quiet { opacity: 0.85; }
+.link-quieter:hover,
+.link-quieter-focusable:hover,
+.link-quieter-focusable:focus,
+.hover-container:hover .link-quieter { opacity: 0.7; }
+.link-unquiet:hover,
+.link-unquiet-focusable:hover,
+.link-unquiet-focusable:focus,
+.hover-container:hover .link-unquiet { opacity: 1; }
+
+.print-color-exact { -webkit-print-color-adjust: exact; }
+
+.background-color(@color) { background-color: @color; }
+
+.white, .white-focus:focus, .white-hover:hover { .background-color(@white); }
+.dark, .dark-focus:focus, .dark-hover:hover { .background-color(@dark); }
+.gray, .gray-focus:focus, .gray-hover:hover { .background-color(@gray); }
+
+.lighten1, .lighten1-focus:focus, .lighten1-hover:hover { .background-color(@lighten1); }
+.lighten2, .lighten2-focus:focus, .lighten2-hover:hover { .background-color(@lighten2); }
+.lighten3, .lighten3-focus:focus, .lighten3-hover:hover { .background-color(@lighten3); }
+.lighten4, .lighten4-focus:focus, .lighten4-hover:hover { .background-color(@lighten4); }
+.darken1, .darken1-focus:focus, .darken1-hover:hover, .darken1-active:active, .hover-container:hover .parent-hover-darken1 { .background-color(@darken1); }
+.darken2, .darken2-focus:focus, .darken2-hover:hover, .darken2-active:active { .background-color(@darken2); }
+.darken3, .darken3-focus:focus, .darken3-hover:hover, .darken3-active:active { .background-color(@darken3); }
+.darken4, .darken4-focus:focus, .darken4-hover:hover, .darken4-active:active { .background-color(@darken4); }
+
+.stroked { box-shadow: 0 0 0 2px @darken1; }
+.stroked1 { box-shadow: 0 0 0 2px @darken2; }
+.stroked2 { box-shadow: 0 0 0 2px @darken3; }
+.stroked3 { box-shadow: 0 0 0 2px @darken4; }
+.stroked-inset { box-shadow: inset 0 0 0 2px @darken1; }
+.stroked1-inset { box-shadow: inset 0 0 0 2px @darken2; }
+.stroked2-inset { box-shadow: inset 0 0 0 2px @darken3; }
+.text-white.stroked, .text-white .stroked { box-shadow: 0 0 0 2px @lighten1; }
+.text-white.stroked1, .text-white .stroked1 { box-shadow: 0 0 0 2px @lighten2; }
+.text-white.stroked2, .text-white .stroked2 { box-shadow: 0 0 0 2px @lighten3; }
+.stroked-thick { box-shadow: 0 0 0 5px @darken1; }
+.stroked1-thick { box-shadow: 0 0 0 5px @darken2; }
+.stroked2-thick { box-shadow: 0 0 0 5px @darken3; }
+
+.clickable-stroked {
+    box-shadow: 0 0 0 2px transparent;
+    &:hover, &:focus, &:active, &.stroked1 { box-shadow: 0 0 0 2px @darken2; }
+}
+.clickable-stroked-inset {
+    box-shadow: inset 0 0 0 2px transparent;
+    &:hover, &:focus, &:active { box-shadow: inset 0 0 0 2px @darken2; }
+}
+.clickable-stroked1 {
+    box-shadow: 0 0 0 2px transparent;
+    &:hover, &:focus, &:active, &.stroked2 { box-shadow: 0 0 0 2px @darken3; }
+}
+.clickable-stroked1-inset {
+    box-shadow: inset 0 0 0 2px transparent;
+    &:hover, &:focus, &:active { box-shadow: inset 0 0 0 2px @darken3; }
+}
+.clickable-stroked-thick {
+    box-shadow: 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: 0 0 0 5px @darken2; }
+}
+.clickable-stroked1-thick {
+    box-shadow: 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: 0 0 0 5px @darken3; }
+}
+.clickable-stroked1-light-thick {
+    box-shadow: 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: 0 0 0 5px @lighten4; }
+}
+.clickable-stroked-thick-inset {
+    box-shadow: inset 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: inset 0 0 0 5px @darken2; }
+}
+.clickable-stroked2 {
+    box-shadow: 0 0 0 2px transparent;
+    &:hover, &:focus, &:active, &.stroked3 { box-shadow: 0 0 0 2px @darken4; }
+}
+.card-hover-darken1 {
+    box-shadow: 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: 0 0 0 10px @darken1; }
+}
+.card-hover-darken4 {
+    box-shadow: 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: 0 0 0 10px @darken4; }
+}
+.card-hover-white {
+    box-shadow: 0 0 0 5px transparent;
+    &:hover, &:focus, &:active { box-shadow: 0 0 0 10px @white; }
+}
+
+.button-stroked {
+    box-shadow: 0 0 0 2px @darken1;
+    &:hover, &:focus, &:active,
+    .focus-container:focus & { box-shadow: 0 0 0 2px @darken2; }
+    &.stroked2 { box-shadow: 0 0 0 2px @darken3; }
+}
+.button-stroked1 {
+    box-shadow: 0 0 0 2px @darken2;
+    &:hover, &:focus, &:active,
+    .focus-container:focus & { box-shadow: 0 0 0 2px @darken3; }
+}
+
+.border-lighten1 { border-color: @lighten1; }
+.border-lighten2 { border-color: @lighten2; }
+.border-lighten3 { border-color: @lighten3; }
+.border-darken1, .border-darken1-hover:hover { border-color: @darken1; }
+.border-darken2, .border-darken2-hover:hover { border-color: @darken2; }
+.border-darken3, .border-darken3-hover:hover { border-color: @darken3; }
+
+.text-white,
+a.text-white,
+.baymax a.text-white,
+.text-white a,
+.baymax .text-white a {
+    color: @white;
+    fill: @white;
+    &.link:hover { color: hsla(0, 0%, 100%, 0.8); }
+    &.understroke { border-color: @lighten3; }
+    &.understroke.link:hover,
+    &.understroke.link.active { border-color: hsla(0, 0%, 100%, 0.8); }
+}
+
+.text-dark,
+a.text-dark,
+.text-dark a {
+    color: @dark;
+    fill: @dark;
+    &.link:hover { color: hsla(0, 0%, 0%, 0.8); }
+    &.understroke { border-color: @darken3; }
+    &.understroke.link:hover,
+    &.understroke.link.active { border-color: hsla(0, 0%, 0%, 0.8); }
+}
+
+.buildTextColor(@color, @name) {
+    .text-@{name},
+    a.text-@{name},
+    .text-@{name}-focus:focus,
+    .focus-container:focus .text-@{name}-focus,
+    .baymax a.text-@{name},
+    .text-@{name} a,
+    .baymax .text-@{name} a {
+        color: @color;
+        fill: @color;
+        &.link:hover {
+            color: darken(@color, 20%);
+            fill: darken(@color, 20%);
+        }
+        &.understroke { border-color: @color; }
+        &.understroke.link:hover,
+        &.understroke.link.active { border-color: darken(@color, 20%); }
+    }
+}
+
+.universe-dark { .background-color(@universe-dark); };
+.foreign-key-blue { .background-color(@foreign-key-blue); }
+.buildTextColor(@universe-dark, universe-dark);
+
+.buildColor(@name, @brightColor, @baseColor, @dark1Color, @light1Color, @light2Color, @complimentaryBaseColor) {
+    // backgrounds
+    .@{name},
+    .@{name}Bright,
+    .@{name}-focus:focus { background-color: @brightColor; }
+    .@{name}-base,
+    .@{name}Base,
+    .@{name}-base:focus,
+    .hover-container:hover .parent-hover-@{name}-base { background-color: @baseColor; }
+    .@{name}-dark1,
+    .@{name}Dark1,
+    .@{name}Dark1-hover:hover,
+    .@{name}Dark1-focus:focus { background-color: @dark1Color; }
+    .@{name}-light1,
+    .@{name}Light1,
+    .@{name}Light1-hover:hover,
+    .@{name}Light1-focus:focus { background-color: @light1Color; }
+    .@{name}-light2,
+    .@{name}-light,
+    .@{name}Light2,
+    .@{name}Light,
+    .@{name}Light2-hover:hover,
+    .@{name}Light-hover:hover,
+    .@{name}Light2-focus:focus,
+    .@{name}Light-focus:focus { background-color: @light2Color; }
+
+    // border
+    .@{name}-border,
+    .border-@{name} { border-color: @brightColor; }
+    .border-@{name}-base { border-color: @baseColor; }
+    .border-@{name}-focus:focus { border-color: @brightColor; }
+
+    // stroke
+    .stroked-@{name}-light1 { box-shadow: 0 0 0 2px @light1Color; }
+    .stroked-@{name}-light2 { box-shadow: 0 0 0 2px @light2Color; }
+    .stroked-@{name} { box-shadow: 0 0 0 2px @brightColor; }
+    .stroked-@{name}-inset { box-shadow: inset 0 0 0 2px @brightColor; }
+    .stroked-@{name}-light2-inset { box-shadow: inset 0 0 0 2px @light2Color; }
+
+    // bright text
+    .buildTextColor(@brightColor, @name);
+    .text-@{name}-dark1-hover:hover,
+    a.text-@{name}-dark1-hover:hover {
+        color: @dark1Color;
+        fill: @dark1Color;
+    }
+
+    // Legacy
+    [data-color=@{name}] {
+        &.coloredBackground { background-color: @baseColor !important; }
+        &.brightColoredBackground { background-color: @brightColor; }
+        &.lightColoredBackground { background-color: @light2Color; }
+        &.light1ColoredBackground { background-color: @light1Color; }
+        &.darkColoredBackground { background-color: @dark1Color; }
+        &.coloredBorder { border-color: @baseColor; }
+        &.lightColoredBorder { border-color: @light2Color; }
+        &.coloredText { color: @baseColor; fill: @baseColor; }
+        &.darkColoredText { color: @dark1Color; fill: @dark1Color; }
+        .parentColoredBackground { background-color: @baseColor !important; }
+        .parentBrightColoredBackground { background-color: @brightColor; }
+        .parentLightColoredBackground { background-color: @light2Color; }
+        .parentDarkColoredBackground { background-color: @dark1Color; }
+        .parentColoredBorder { border-color: @dark1Color !important; }
+        .parentColoredText { color: @baseColor; }
+        .parentLightColoredText { color: @light2Color; }
+        .parentColoredFill { fill: @baseColor; }
+        .parentColoredLinearGradientFromTransparentToRight {
+            // Use "rgba(red(@color), green(@color), blue(@color), 0)" instead of
+            // "transparent" to work around brower-compatibility issue described here:
+            // https://github.com/jakubpawlowicz/clean-css/issues/315
+            // ("transparent" looks right in Chrome, but not in iOS Safari.)
+            background-image: linear-gradient(to right, rgba(red(@baseColor), green(@baseColor), blue(@baseColor), 0), @baseColor);
+        }
+        .parentColoredLinearGradientFromTransparentToLeft {
+            background-image: linear-gradient(to left, rgba(red(@baseColor), green(@baseColor), blue(@baseColor), 0), @baseColor);
+        }
+        .parentColoredLinearGradientFromTransparentToRightLight {
+            background-image: linear-gradient(to right, rgba(red(@baseColor), green(@baseColor), blue(@baseColor), 0), lighten(@baseColor, 10%));
+        }
+        .parentColoredLinearGradientFromTransparentToLeftLight {
+            background-image: linear-gradient(to left, rgba(red(@baseColor), green(@baseColor), blue(@baseColor), 0), lighten(@baseColor, 10%));
+        }
+        .parentComplementaryColoredBackground { background-color: @complimentaryBaseColor !important; }
+    }
+
+    [data-color="@{name}Light"] {
+        &.coloredBackground { background-color: @light2Color !important; }
+        &.brightColoredBackground { background-color: @light2Color; }
+        &.lightColoredBackground { background-color: @light2Color; }
+        &.light1ColoredBackground { background-color: @light2Color; }
+        &.coloredBorder { border-color: @light2Color; }
+        &.lightColoredBorder { border-color: @light2Color; }
+        &.coloredText { color: @light2Color; fill: @light2Color; }
+        .parentColoredBackground { background-color: @light2Color !important; }
+        .parentBrightColoredBackground { background-color: @light2Color; }
+        .parentLightColoredBackground { background-color: @light2Color; }
+        .parentColoredBorder { border-color: @light2Color !important; }
+        .parentColoredText { color: @light2Color; }
+        .parentLightColoredText { color: @light2Color; }
+        .parentColoredLinearGradientFromTransparentToRight {
+            background-image: linear-gradient(to right, rgba(red(@light2Color), green(@light2Color), blue(@light2Color), 0), @light2Color);
+        }
+        .parentColoredLinearGradientFromTransparentToLeft {
+            background-image: linear-gradient(to left, rgba(red(@light2Color), green(@light2Color), blue(@light2Color), 0), @light2Color);
+        }
+
+        .parentComplementaryColoredBackground { background-color: @complimentaryBaseColor !important; }
+
+        &.appIcon .symbol {
+            color: @dark;
+        }
+    }
+}
+
+.buildColor(yellow,     @yellowBright, @yellow, @yellowDark1, @yellowLight1, @yellowLight2, @blue);
+.buildColor(orange,     @orangeBright, @orange, @orangeDark1, @orangeLight1, @orangeLight2, @blue);
+.buildColor(red,        @redBright, @red, @redDark1, @redLight1, @redLight2, @cyan);
+.buildColor(pink,       @pinkBright, @pink, @pinkDark1, @pinkLight1, @pinkLight2, @yellowBright);
+.buildColor(purple,     @purpleBright, @purple, @purpleDark1, @purpleLight1, @purpleLight2, @yellowBright);
+.buildColor(blue,       @blueBright, @blue, @blueDark1, @blueLight1, @blueLight2, @yellowBright);
+.buildColor(cyan,       @cyanBright, @cyan, @cyanDark1, @cyanLight1, @cyanLight2, @red);
+.buildColor(teal,       @tealBright, @teal, @tealDark1, @tealLight1, @tealLight2, @purple);
+.buildColor(green,      @greenBright, @green, @greenDark1, @greenLight1, @greenLight2, @red);
+.buildColor(gray,       @grayBright, @gray, @grayDark1, @grayLight1, @grayLight2, @yellowBright);
+.buildColor(grey,       @grayBright, @gray, @grayDark1, @grayLight1, @grayLight2, @yellowBright);
+
+// dark colored text
+.buildTextColor(darken(@yellowDark1, 25%), yellow-dark1);
+.buildTextColor(darken(@orangeDark1, 25%), orange-dark1);
+.buildTextColor(darken(@redDark1, 25%), red-dark1);
+.buildTextColor(darken(@pinkDark1, 25%), pink-dark1);
+.buildTextColor(darken(@purpleDark1, 25%), purple-dark1);
+.buildTextColor(darken(@blueDark1, 25%), blue-dark1);
+.buildTextColor(darken(@cyanDark1, 25%), cyan-dark1);
+.buildTextColor(darken(@tealDark1, 25%), teal-dark1);
+.buildTextColor(darken(@greenDark1, 25%), green-dark1);
+.buildTextColor(darken(@grayDark1, 25%), gray-dark1);
+
+// light colored text
+.buildTextColor(@yellowLight2, yellow-light2);
+.buildTextColor(@orangeLight2, orange-light2);
+.buildTextColor(@redLight2, red-light2);
+.buildTextColor(@pinkLight2, pink-light2);
+.buildTextColor(@purpleLight2, purple-light2);
+.buildTextColor(@blueLight2, blue-light2);
+.buildTextColor(@cyanLight2, cyan-light2);
+.buildTextColor(@tealLight2, teal-light2);
+.buildTextColor(@greenLight2, green-light2);
+.buildTextColor(@grayLight2, gray-light2);
+
+.buildTextColor(@darken1, darken1);
+.buildTextColor(@darken2, darken2);
+.buildTextColor(@darken3, darken3);
+.buildTextColor(@darken4, darken4);
+.buildTextColor(@lighten1, lighten1);
+.buildTextColor(@lighten2, lighten2);
+.buildTextColor(@lighten3, lighten3);
+.buildTextColor(@lighten4, lighten4);
