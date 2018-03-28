@@ -1,0 +1,22 @@
+{
+    "name": "baymax-completions",
+    "version": "0.0.1",
+    "description": "Atom Autocomplete+ provider for Baymax, Airtable's CSS framework",
+    "main": "./lib/main.js",
+    "providedServices": {
+        "autocomplete.provider": {
+            "versions": {
+                "2.0.0": "provide"
+            }
+        }
+    },
+    "engines": {
+        "atom": "*"
+    },
+    "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-less": "^4.0.0",
+        "gulp-postcss": "^7.0.1",
+        "list-selectors": "^2.0.0"
+    }
+}
