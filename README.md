@@ -355,3 +355,42 @@ Run flow:
 ```sh
 npm run flow
 ```
+
+## Using React Devtools with Blocks
+
+Since blocks run in an `<iframe>` it is not possible to use React Devtools as a browser extension. However, it is possible to use the [standalone version of react-devtools](https://github.com/facebook/react-devtools/tree/master/packages/react-devtools) with some help from [Tampermonkey](https://tampermonkey.net/).
+
+### Installation
+
+  - Install `react-devtools`: `npm install -g react-devtools`
+  - Install Tampermonkey as an extension to your browser.
+  - Add this userscript to Tampermonkey:
+  ```js
+  // ==UserScript==
+  // @name         Add ReactDev tools script tag
+  // @namespace    https://airtable.com/
+  // @version      0.1
+  // @description  Enables standalone ReactDevTools by inserting a script before the Block bundle
+  // @author       Manuel Aristaran
+  // @match        *://*.airtableblocks.com/__runFrame
+  // @run-at       document-start
+  // @grant        none
+  // ==/UserScript==
+
+  (function() {
+      'use strict';
+
+      var scr = document.createElement('script');
+      scr.type="text/javascript";
+      scr.src="http://localhost:8097";
+      document.head.prepend(scr); 
+   })();
+   ```
+   
+### Usage
+
+  - Run `react-devtools`
+  - Open a table that contains a block
+  - You should see something like this in `react-devtools`:
+  
+  ![react-devtools screenshot](docs/assets/react-devtools-screenshot.png)
