@@ -393,4 +393,4 @@ Since blocks run in an `<iframe>` it is not possible to use React Devtools as a 
   - Open a table that contains a block
   - You should see something like this in `react-devtools`:
   
-  XXX
+  ![react-devtools screenshot](docs/assets/react-devtools-screenshot.png)
