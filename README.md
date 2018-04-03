@@ -373,6 +373,7 @@ Since blocks run in an `<iframe>` it is not possible to use React Devtools as a 
   // @description  Enables standalone ReactDevTools by inserting a script before the Block bundle
   // @author       Manuel Aristaran
   // @match        *://*.airtableblocks.com/__runFrame
+  // @match        *://*.airtableblocks.com/__runFrame?*
   // @run-at       document-start
   // @grant        none
   // ==/UserScript==
