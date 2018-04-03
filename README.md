@@ -390,7 +390,7 @@ Since blocks run in an `<iframe>` it is not possible to use React Devtools as a 
 ### Usage
 
   - Run `react-devtools`
-  - Open a table that contains a block
+  - Open a base that contains a block
   - You should see something like this in `react-devtools`:
   
   ![react-devtools screenshot](docs/assets/react-devtools-screenshot.png)
