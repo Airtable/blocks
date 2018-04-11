@@ -3,10 +3,10 @@ const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const invariant = require('invariant');
 const Select = require('client/blocks/sdk/ui/select');
-const {SelectAndSelectButtonsSyncedPropTypes} = require('client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers');
+const {SelectAndSelectButtonsSyncedPropTypes} = require('client/blocks/sdk/ui/select_and_select_buttons_helpers');
 const Synced = require('client/blocks/sdk/ui/synced');
 
-import type {SelectAndSelectButtonsSyncedProps as SelectSyncedProps} from 'client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers';
+import type {SelectAndSelectButtonsSyncedProps as SelectSyncedProps} from 'client/blocks/sdk/ui/select_and_select_buttons_helpers';
 
 /** */
 class SelectSynced extends React.Component {

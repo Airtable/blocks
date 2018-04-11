@@ -2,10 +2,10 @@
 const {h, u} = require('client_server_shared/hu');
 const React = require('client/blocks/sdk/ui/react');
 const SelectButtons = require('client/blocks/sdk/ui/select_buttons');
-const {SelectAndSelectButtonsSyncedPropTypes} = require('client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers');
+const {SelectAndSelectButtonsSyncedPropTypes} = require('client/blocks/sdk/ui/select_and_select_buttons_helpers');
 const Synced = require('client/blocks/sdk/ui/synced');
 
-import type {SelectAndSelectButtonsSyncedProps as SelectButtonsSyncedProps} from 'client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers';
+import type {SelectAndSelectButtonsSyncedProps as SelectButtonsSyncedProps} from 'client/blocks/sdk/ui/select_and_select_buttons_helpers';
 
 /** */
 class SelectButtonsSynced extends React.Component {
@@ -26,6 +26,10 @@ class SelectButtonsSynced extends React.Component {
                                 this.props.onChange(newValue);
                             }
                         }}
+                        // NOTE: blocks rely on being able to override `value` because
+                        // of this implementation detail. It's helpful when you want the
+                        // reads to go through some getter instead of using the raw globalConfig
+                        // value (e.g. to respect defaults).
                         {...restOfProps}
                     />
                 )}

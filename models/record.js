@@ -78,8 +78,6 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         super(baseData, recordId);
 
         this._parentTable = parentTable;
-
-        Object.freeze(this);
     }
     get _dataOrNullIfDeleted(): RecordDataForBlocks | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];

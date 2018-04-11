@@ -4,9 +4,14 @@ const invariant = require('invariant');
 const React = require('client/blocks/sdk/ui/react');
 const classNames = require('classnames');
 
-const {SelectAndSelectButtonsPropTypes, validateOptions} = require('client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers');
+const {
+    SelectAndSelectButtonsPropTypes,
+    validateOptions,
+    optionValueToString,
+    stringToOptionValue,
+} = require('client/blocks/sdk/ui/select_and_select_buttons_helpers');
 
-import type {SelectAndSelectButtonsProps as SelectProps} from 'client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers';
+import type {SelectAndSelectButtonsProps as SelectProps} from 'client/blocks/sdk/ui/select_and_select_buttons_helpers';
 
 const styleForChevron = {
     backgroundImage: 'url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="mr1" style="shape-rendering: geometricPrecision;"><path fill-rule="evenodd" class="animate" fill="#777" d="M3.6011,4.00002 L8.4011,4.00002 C8.8951,4.00002 9.1771,4.56402 8.8811,4.96002 L6.4811,8.16002 C6.2411,8.48002 5.7611,8.48002 5.5211,8.16002 L3.1211,4.96002 C2.8241,4.56402 3.1071,4.00002 3.6011,4.00002"></path></svg>\')',
@@ -36,7 +41,8 @@ class Select extends React.Component {
         const {onChange} = this.props;
         if (onChange) {
             invariant(e.target instanceof HTMLSelectElement, 'bad input');
-            onChange(JSON.parse(e.target.value));
+            const value = stringToOptionValue(e.target.value);
+            onChange(value);
         }
     }
     focus() {
@@ -103,11 +109,11 @@ class Select extends React.Component {
                     ...styleForChevron,
                     ...style,
                 }}
-                value={JSON.stringify(value)}
+                value={optionValueToString(value)}
                 onChange={this._onChange}
                 {...restOfProps}>
                 {options && options.map(option => {
-                    const valueJson = JSON.stringify(option.value);
+                    const valueJson = optionValueToString(option.value);
                     return (
                         <option key={valueJson} value={valueJson} disabled={option.disabled}>
                             {option.label}

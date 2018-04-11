@@ -8,26 +8,32 @@ const KeyCodes = require('client_server_shared/key_codes');
 // "shared/reusable prop types" pattern:
 // https://github.com/yannickcr/eslint-plugin-react/issues/476
 /* eslint-disable react/prop-types */
-const {SelectAndSelectButtonsPropTypes, validateOptions} = require('client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers');
+const {
+    SelectAndSelectButtonsPropTypes,
+    validateOptions,
+    optionValueToString,
+} = require('client/blocks/sdk/ui/select_and_select_buttons_helpers');
 
-import type {SelectAndSelectButtonsProps as SelectButtonsProps} from 'client/blocks/sdk/ui/select_and_select_buttons_prop_type_helpers';
+import type {
+    SelectOptionValue,
+    SelectAndSelectButtonsProps as SelectButtonsProps,
+} from 'client/blocks/sdk/ui/select_and_select_buttons_helpers';
 
 /** */
 class SelectButtons extends React.Component {
     static propTypes = SelectAndSelectButtonsPropTypes;
     props: SelectButtonsProps;
-    _onChange(valueJson: string) {
+    _onChange(newValue: SelectOptionValue) {
         const {value, onChange} = this.props;
         if (onChange) {
-            const parsedJson = JSON.parse(valueJson);
-            if (parsedJson !== value) {
-                onChange(JSON.parse(valueJson));
+            if (newValue !== value) {
+                onChange(newValue);
             }
         }
     }
-    _onKeyDown(e: KeyboardEvent, valueJson: string) {
+    _onKeyDown(e: KeyboardEvent, value: SelectOptionValue) {
         if (e.which === KeyCodes.ENTER || e.which === KeyCodes.SPACE) {
-            this._onChange(valueJson);
+            this._onChange(value);
         }
     }
     render() {
@@ -58,14 +64,13 @@ class SelectButtons extends React.Component {
                 style={style}
                 {...restOfProps}>
                 {options && options.map(option => {
-                    const valueJson = JSON.stringify(option.value);
                     const isSelected = option.value === value;
                     const isOptionDisabled = disabled || option.disabled;
                     return (
                         <div
-                            key={valueJson}
-                            onClick={!isOptionDisabled && (() => this._onChange(valueJson))}
-                            onKeyDown={!isOptionDisabled && (e => this._onKeyDown(e, valueJson))}
+                            key={optionValueToString(option.value)}
+                            onClick={!isOptionDisabled && (() => this._onChange(option.value))}
+                            onKeyDown={!isOptionDisabled && (e => this._onKeyDown(e, option.value))}
                             tabIndex={isOptionDisabled ? -1 : tabIndex}
                             className={classNames('flex-auto rounded p-half normal center no-outline', {
                                 'link-unquiet pointer focusable': !isOptionDisabled,

@@ -99,10 +99,18 @@ class FieldPicker extends React.Component {
 
         const restOfProps = u.omit(this.props, Object.keys(FieldPicker.propTypes));
 
+        // Fields are only ordered within a view, and views' column orders aren't
+        // loaded by default. So we'll always list the primary field first, followed
+        // by the rest of the fields in alphabetical order.
+        const models = table.fields.filter(field => field !== table.primaryField).sort((a, b) => {
+            return a.name < b.name ? -1 : 1;
+        });
+        models.unshift(table.primaryField);
+
         return (
             <ModelPickerSelect
                 ref={el => this._select = el}
-                models={table.fields}
+                models={models}
                 selectedModelId={selectedField && !selectedField.isDeleted ? selectedField.id : null}
                 shouldAllowPickingModelFn={shouldAllowPickingFieldFn}
                 onChange={this._onChange}
@@ -111,7 +119,7 @@ class FieldPicker extends React.Component {
                 disabled={disabled}
                 placeholder={placeholder}
                 shouldAllowPickingNone={shouldAllowPickingNone}
-                modelKeysToWatch={['name', 'config']}
+                modelKeysToWatch={['config']}
                 {...restOfProps}
             />
         );
@@ -122,6 +130,9 @@ module.exports = createDataContainer(FieldPicker, (props: FieldPickerProps) => {
     return [
         {watch: props.table, key: 'fields'},
         {watch: getSdk().base, key: 'tables'},
+        ...(props.table ? props.table.fields : []).map(
+            field => ({watch: field, key: 'name'})
+        ),
     ];
 }, [
     'focus',

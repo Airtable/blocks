@@ -55,8 +55,6 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         liveappInterface.registerHandler(BlockMessageTypes.HostToBlock.UPDATE_MODELS, data => {
             this.__applyChanges(data.changes);
         });
-
-        Object.freeze(this);
     }
     get _dataOrNullIfDeleted(): BaseDataForBlocks | null {
         return this._baseData;

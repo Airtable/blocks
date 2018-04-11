@@ -6,7 +6,7 @@ const columnTypeProvider = require('client_server_shared/column_types/column_typ
 const Record = require('client/blocks/sdk/models/record');
 const Field = require('client/blocks/sdk/models/field');
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
-const CellContext = require('client_server_shared/cell_context/cell_context');
+const CellReadModeContext = require('client_server_shared/cell_context/cell_read_mode_context');
 const CellContextTypes = require('client_server_shared/cell_context/cell_context_types');
 
 type CellRendererProps = {
@@ -84,7 +84,7 @@ class CellRenderer extends React.Component {
             field.__getRawType(),
             field.__getRawTypeOptions(),
             field.parentTable.parentBase.__appBlanket,
-            CellContext.forContextType(cellContextType),
+            CellReadModeContext.forContextType(cellContextType),
         );
         const attributes: Object = {
             'data-columntype': field.__getRawType(),

@@ -56,14 +56,6 @@ class TablePickerSynced extends React.Component {
         invariant(this._tablePicker, 'No table picker to click');
         this._tablePicker.click();
     }
-    _onChange(table: TableModel | null) {
-        const tableId = table ? table.id : null;
-        getSdk().globalConfig.set(this.props.globalConfigKey, tableId);
-
-        if (this.props.onChange) {
-            this.props.onChange(table);
-        }
-    }
     _getTableFromGlobalConfigValue(tableId: mixed): TableModel | null {
         return (typeof tableId === 'string') ? getSdk().base.getTableById(tableId) : null;
     }

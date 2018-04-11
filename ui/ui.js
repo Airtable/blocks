@@ -12,6 +12,8 @@ const InputSynced = require('client/blocks/sdk/ui/input_synced');
 const RadioSynced = require('client/blocks/sdk/ui/radio_synced');
 const CellRenderer = require('client/blocks/sdk/ui/cell_renderer');
 const expandRecord = require('client/blocks/sdk/ui/expand_record');
+const expandRecordList = require('client/blocks/sdk/ui/expand_record_list');
+const expandRecordPickerAsync = require('client/blocks/sdk/ui/expand_record_picker_async');
 const GlobalAlert = require('client/blocks/sdk/ui/global_alert');
 const FieldIcon = require('client/blocks/sdk/ui/field_icon');
 const Icon = require('client/blocks/sdk/ui/icon');
@@ -53,6 +55,8 @@ const UI = {
     loadScriptFromURLAsync,
     loadCSSFromURLAsync,
     expandRecord,
+    expandRecordList,
+    expandRecordPickerAsync,
     Synced,
     TablePicker,
     TablePickerSynced,

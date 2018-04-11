@@ -11,7 +11,7 @@ const ApiViewTypes = require('client_server_shared/view_types/api_view_types');
 const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
 const hyperIdGenerator = require('client_server_shared/hyper_id/hyper_id_generator');
 
-const models = Object.freeze({
+const models = {
     Base,
     Table,
     Field,
@@ -44,6 +44,6 @@ const models = Object.freeze({
      * const id = models.generateGuid();
      */
     generateGuid: hyperIdGenerator.generateGuid,
-});
+};
 
 module.exports = models;

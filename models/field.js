@@ -33,8 +33,6 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
         super(baseData, fieldId);
 
         this._parentTable = parentTable;
-
-        Object.freeze(this);
     }
     get _dataOrNullIfDeleted(): FieldDataForBlocks | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
