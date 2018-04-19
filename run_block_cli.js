@@ -20,6 +20,12 @@ const Commands = {
     RENAME_ENTRY: 'rename-entry',
 };
 
+const domainByEnvironment = {
+    production: 'airtable.com',
+    staging: 'staging.airtable.com',
+    local: 'hyperbasedev.com:3000',
+};
+
 function _exitWithError(message, err) {
     console.error('Error:', message);
     if (err) {
@@ -110,10 +116,10 @@ const runBlocksCli = function runBlocksCli() {
             type: 'boolean',
             default: false,
         })
-        .option('staging', {
-            description: 'Sync blocks with staging environment',
-            type: 'boolean',
-            default: false,
+        .option('environment', {
+            description: 'Which environment to sync with',
+            choices: ['production', 'staging', 'local'],
+            default: 'production',
         })
         .check(config => {
             const command = config._[0] || '';
@@ -142,8 +148,8 @@ const runBlocksCli = function runBlocksCli() {
         const blockBundleServer = new BlockBundleServer();
         startBlockBundleServer(blockBundleServer, defaultPort, config.local);
     } else if (command === Commands.CLONE) {
-        const environment = config.staging ? 'staging' : 'production';
-        const domain = config.staging ? 'staging.airtable.com' : 'airtable.com';
+        const environment = config.environment;
+        const domain = domainByEnvironment[environment];
         // Prompt for apiKey
         promptAsync({
             name: 'apiKey',
