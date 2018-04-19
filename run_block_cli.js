@@ -13,6 +13,7 @@ const defaultPort = 8000;
 const Commands = {
     RUN: 'run',
     CLONE: 'clone',
+    FORMAT: 'format',
     PUSH: 'push',
     PULL: 'pull',
     LINT: 'lint',
@@ -96,6 +97,7 @@ const runBlocksCli = function runBlocksCli() {
         .command(Commands.RUN, 'Build and run a block')
         .command(Commands.PUSH, 'Push changes to Airtable')
         .command(Commands.PULL, 'Pull changes from Airtable')
+        .command(Commands.FORMAT, 'Format block code')
         .command(Commands.LINT, 'Lint block code')
         .command(`${Commands.RENAME_ENTRY} <newName>`, 'Update the entry module name')
         .option('force', {
@@ -168,13 +170,30 @@ const runBlocksCli = function runBlocksCli() {
         }).catch(err => {
             _exitWithError(err.message);
         });
+    } else if (command === Commands.FORMAT) {
+        const findBlockDirPathAsync = require('./lib/find_block_dir_path');
+        const blockFormat = require('./lib/block_format');
+        findBlockDirPathAsync().then(blockDirPath => {
+            const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
+            const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
+            if (didSetUpDevTools) {
+                console.log('Dev dependencies updated. Please run `npm install` and try again.');
+                process.exit(1);
+            }
+
+            console.log('Formatting...');
+            blockFormat(blockDirPath);
+            console.log('Done');
+        }).catch(err => {
+            _exitWithError(err.message);
+        });
     } else if (command === Commands.LINT) {
         const findBlockDirPathAsync = require('./lib/find_block_dir_path');
         const blockLint = require('./lib/block_lint');
         findBlockDirPathAsync().then(blockDirPath => {
-            const setUpEslintIfNeededSync = require('./lib/set_up_eslint_if_needed_sync');
-            const didSetUpEslint = setUpEslintIfNeededSync(blockDirPath);
-            if (didSetUpEslint) {
+            const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
+            const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
+            if (didSetUpDevTools) {
                 console.log('Dev dependencies updated. Please run `npm install` and try again.');
                 process.exit(1);
             }
