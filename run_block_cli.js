@@ -206,7 +206,7 @@ const runBlocksCli = function runBlocksCli() {
                 const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
                 if (didSetUpDevTools) {
                     console.log(
-                        'Dev dependencies updated. Please run `npm install` and try again.',
+                        'Dev dependencies updated. Please run `yarn` and try again.',
                     );
                     process.exit(1);
                 }
@@ -227,7 +227,7 @@ const runBlocksCli = function runBlocksCli() {
                 const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
                 if (didSetUpDevTools) {
                     console.log(
-                        'Dev dependencies updated. Please run `npm install` and try again.',
+                        'Dev dependencies updated. Please run `yarn` and try again.',
                     );
                     process.exit(1);
                 }

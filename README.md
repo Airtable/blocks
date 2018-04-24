@@ -15,9 +15,9 @@ Copy the clone command and paste into your terminal:
 
 `block clone <applicationId>/<blockId> </path/to/blockDir>`
 
-Once the block is cloned, install the block's npm packages:
+Once the block is cloned, install the block's node modules:
 
-`cd </path/to/blockDir> && npm install`
+`cd </path/to/blockDir> && yarn`
 
 Now would be a good time to set up version control. **Do not check in the .airtableAPIKey file!**
 
