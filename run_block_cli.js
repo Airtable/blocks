@@ -133,6 +133,11 @@ const runBlocksCli = function runBlocksCli() {
             choices: ['production', 'staging', 'local'],
             default: 'production',
         })
+        .option('transpile-all', {
+            description: 'Transpile JS for all browsers airtable supports, rather than a minimal set for development',
+            type: 'boolean',
+            default: false
+        })
         .check(config => {
             const command = config._[0] || '';
             if (command === Commands.CLONE) {
@@ -156,7 +161,7 @@ const runBlocksCli = function runBlocksCli() {
     const command = config._[0] || '';
     if (command === Commands.RUN) {
         const BlockBundleServer = require('./lib/block_bundle_server');
-        const blockBundleServer = new BlockBundleServer();
+        const blockBundleServer = new BlockBundleServer({transpileAll: config.transpileAll});
         startBlockBundleServer(blockBundleServer, defaultPort, config.local);
     } else if (command === Commands.CLONE) {
         const environment = config.environment;
