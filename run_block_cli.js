@@ -55,6 +55,9 @@ function startBlockBundleServerLocal(blockBundleServer, port) {
         );
         console.log(`  - Firefox: go to https://localhost:${port} and add an ssl exception`);
         console.log(
+            `  - Safari: go to https://localhost:${port}, click show details > visit this website, and log in`,
+        );
+        console.log(
             '  - Chrome: go to chrome://flags/#allow-insecure-localhost and click enable. Restart your browser',
         );
         console.log('');
@@ -205,9 +208,7 @@ const runBlocksCli = function runBlocksCli() {
                 const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
                 const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
                 if (didSetUpDevTools) {
-                    console.log(
-                        'Dev dependencies updated. Please run `yarn` and try again.',
-                    );
+                    console.log('Dev dependencies updated. Please run `yarn` and try again.');
                     process.exit(1);
                 }
 
@@ -226,9 +227,7 @@ const runBlocksCli = function runBlocksCli() {
                 const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
                 const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
                 if (didSetUpDevTools) {
-                    console.log(
-                        'Dev dependencies updated. Please run `yarn` and try again.',
-                    );
+                    console.log('Dev dependencies updated. Please run `yarn` and try again.');
                     process.exit(1);
                 }
 
