@@ -39,7 +39,9 @@ function startBlockBundleServerNgrok(blockBundleServer, port) {
         () =>
             new Promise((resolve, reject) => {
                 require('ngrok').connect(port, (err, url) => {
-                    if (err) reject(err);
+                    if (err) {
+                        reject(err);
+                    }
                     resolve(url);
                 });
             }),
@@ -77,7 +79,7 @@ function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
             // first hit
             blockBundleServer.setPublicUrlForLongPoll(url);
             blockBundleServer.bundle(null, () => {
-                console.log(`Serving bundle at ${url}/bundle`);
+                console.log(`Serving bundle at ${url}/__runFrame.js`);
             });
         })
         .catch(err => {
