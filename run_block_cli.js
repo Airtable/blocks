@@ -77,9 +77,10 @@ function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
             // wait for the initial bundle to finish before logging the ngrok
             // url to the user so there's definitely a bundle ready on the
             // first hit
+            blockBundleServer.addBaseTag(url);
             blockBundleServer.setPublicUrlForLongPoll(url);
             blockBundleServer.bundle(null, () => {
-                console.log(`Serving bundle at ${url}/__runFrame.js`);
+                console.log(`Serving bundle at ${url}/__runFrame`);
             });
         })
         .catch(err => {
