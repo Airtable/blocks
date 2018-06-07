@@ -11,15 +11,15 @@ module.exports = {
     GLOBAL_REACT_DOM_SERVER_VARIABLE_NAME: '_airtableReactDOMServer',
     GLOBAL_RUN_BLOCK_FUNCTION_NAME: '_airtableRunBlock',
 
-    // Wrapper file for blocks frontend code
+    // Wrapper file for blocks frontend code.
     CLIENT_WRAPPER_FILE_NAME: 'block_client_wrapper.js',
 
-    // Metadata file for the block cli
+    // Metadata file for the block cli.
     BLOCK_FILE_NAME: 'block.json',
 
-    // File to store the airtable api key
+    // File to store the airtable api key.
     AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',
 
-    // Bundle file
+    // Bundle file.
     BUNDLE_FILE_NAME: 'bundle.js',
 };
