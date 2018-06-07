@@ -143,7 +143,7 @@ const runBlocksCli = function runBlocksCli() {
         .check(configInner => {
             const command = configInner._[0] || '';
             if (command === Commands.CLONE) {
-                const blockIdentifier = configInner.blockIdentifier;
+                const blockIdentifier = String(configInner.blockIdentifier);
                 const blockIdentifierSplit = blockIdentifier.split('/');
                 if (!blockIdentifierSplit[0] || !blockIdentifierSplit[1]) {
                     throw new Error('Block identifier must be of format <applicationId>/<blockId>');
