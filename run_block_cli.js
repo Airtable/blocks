@@ -74,9 +74,9 @@ function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
 
     startPromise
         .then(url => {
-            // wait for the initial bundle to finish before logging the ngrok
+            // Wait for the initial bundle to finish before logging the ngrok
             // url to the user so there's definitely a bundle ready on the
-            // first hit
+            // first hit.
             blockBundleServer.setPublicBaseUrl(url);
             blockBundleServer.bundle(null, () => {
                 console.log(`Serving bundle at ${url}/__runFrame`);
@@ -84,7 +84,7 @@ function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
         })
         .catch(err => {
             // If there was an error due to the port being taken, prompt for an
-            // alternative port and try again
+            // alternative port and try again.
             if (err.code === 'EADDRINUSE') {
                 promptAsync({
                     name: 'port',
@@ -140,16 +140,16 @@ const runBlocksCli = function runBlocksCli() {
             type: 'boolean',
             default: false
         })
-        .check(config => {
-            const command = config._[0] || '';
+        .check(configInner => {
+            const command = configInner._[0] || '';
             if (command === Commands.CLONE) {
-                const blockIdentifier = config.blockIdentifier;
+                const blockIdentifier = String(configInner.blockIdentifier);
                 const blockIdentifierSplit = blockIdentifier.split('/');
                 if (!blockIdentifierSplit[0] || !blockIdentifierSplit[1]) {
                     throw new Error('Block identifier must be of format <applicationId>/<blockId>');
                 }
-                config.appId = blockIdentifierSplit[0];
-                config.blockId = blockIdentifierSplit[1];
+                configInner.appId = blockIdentifierSplit[0];
+                configInner.blockId = blockIdentifierSplit[1];
             }
             return true;
         })
@@ -168,7 +168,7 @@ const runBlocksCli = function runBlocksCli() {
     } else if (command === Commands.CLONE) {
         const environment = config.environment;
         const domain = domainByEnvironment[environment];
-        // Prompt for apiKey
+        // Prompt for apiKey.
         promptAsync({
             name: 'apiKey',
             description: `Please enter your API key. You can generate one at https://${domain}/account`,
