@@ -21,6 +21,7 @@
     "glob": "^7.1.2",
     "lodash": "^4.17.4",
     "ngrok": "^2.2.24",
+    "path-to-regexp": "^2.2.1",
     "prettier": "^1.12.1",
     "prompt": "^1.0.0",
     "request": "^2.83.0",
