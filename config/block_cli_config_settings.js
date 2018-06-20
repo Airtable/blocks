@@ -22,4 +22,7 @@ module.exports = {
 
     // Bundle file.
     BUNDLE_FILE_NAME: 'bundle.js',
+
+    // Transpiled backend code directory.
+    TRANSPILED_BACKEND_DIR: 'backendTranspiled',
 };
