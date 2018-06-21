@@ -24,5 +24,5 @@ module.exports = {
     BUNDLE_FILE_NAME: 'bundle.js',
 
     // Transpiled backend code directory.
-    TRANSPILED_BACKEND_ROUTE_DIR: 'transpiledBackendRoute',
+    BUILD_DIR: 'build',
 };
