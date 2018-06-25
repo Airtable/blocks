@@ -14,6 +14,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babelify": "^8.0.0",
+    "body-parser": "^1.18.3",
     "browserify": "^14.5.0",
     "envify": "^4.1.0",
     "es6-promisify": "^5.0.0",

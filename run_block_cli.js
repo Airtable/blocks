@@ -79,7 +79,7 @@ function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
             // first hit.
             blockBundleServer.setPublicBaseUrl(url);
             blockBundleServer.bundle(null, () => {
-                console.log(`Serving bundle at ${url}/__runFrame`);
+                console.log(`Serving bundle at ${url}`);
             });
         })
         .catch(err => {
