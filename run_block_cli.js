@@ -34,8 +34,8 @@ function _exitWithError(message, err) {
     process.exit(1);
 }
 
-function startBlockBundleServerNgrok(blockBundleServer, port) {
-    return blockBundleServer.startAsync(port).then(
+function startBlockServerNgrok(blockServer, port) {
+    return blockServer.startAsync(port).then(
         () =>
             new Promise((resolve, reject) => {
                 require('ngrok').connect(port, (err, url) => {
@@ -48,8 +48,8 @@ function startBlockBundleServerNgrok(blockBundleServer, port) {
     );
 }
 
-function startBlockBundleServerLocal(blockBundleServer, port) {
-    return blockBundleServer.startLocalAsync(port).then(() => {
+function startBlockServerLocal(blockServer, port) {
+    return blockServer.startLocalAsync(port).then(() => {
         const url = `https://localhost:${port}`;
         console.log('Local mode: serving self-signed https on localhost');
         console.log(
@@ -67,18 +67,18 @@ function startBlockBundleServerLocal(blockBundleServer, port) {
     });
 }
 
-function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
+function startBlockServer(blockServer, port, shouldUseLocalhost) {
     const startPromise = shouldUseLocalhost
-        ? startBlockBundleServerLocal(blockBundleServer, port)
-        : startBlockBundleServerNgrok(blockBundleServer, port);
+        ? startBlockServerLocal(blockServer, port)
+        : startBlockServerNgrok(blockServer, port);
 
     startPromise
         .then(url => {
             // Wait for the initial bundle to finish before logging the ngrok
             // url to the user so there's definitely a bundle ready on the
             // first hit.
-            blockBundleServer.setPublicBaseUrl(url);
-            blockBundleServer.bundle(null, () => {
+            blockServer.setPublicBaseUrl(url);
+            blockServer.bundle(null, () => {
                 console.log(`Serving bundle at ${url}`);
             });
         })
@@ -95,7 +95,7 @@ function startBlockBundleServer(blockBundleServer, port, shouldUseLocalhost) {
                         if (isNaN(newPort)) {
                             _exitWithError('Invalid port number');
                         }
-                        startBlockBundleServer(blockBundleServer, newPort, shouldUseLocalhost);
+                        startBlockServer(blockServer, newPort, shouldUseLocalhost);
                     })
                     .catch(innerErr => {
                         _exitWithError(innerErr.message);
@@ -162,9 +162,9 @@ const runBlocksCli = function runBlocksCli() {
 
     const command = config._[0] || '';
     if (command === Commands.RUN) {
-        const BlockBundleServer = require('./lib/block_bundle_server');
-        const blockBundleServer = new BlockBundleServer({transpileAll: config.transpileAll});
-        startBlockBundleServer(blockBundleServer, defaultPort, config.local);
+        const BlockServer = require('./lib/block_server');
+        const blockServer = new BlockServer({transpileAll: config.transpileAll});
+        startBlockServer(blockServer, defaultPort, config.local);
     } else if (command === Commands.CLONE) {
         const environment = config.environment;
         const domain = domainByEnvironment[environment];
