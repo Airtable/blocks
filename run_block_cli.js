@@ -5,6 +5,7 @@
 const prompt = require('prompt');
 const yargsOuter = require('yargs');
 const promisify = require('es6-promisify');
+const chalk = require('chalk');
 
 const promptAsync = promisify(prompt.get);
 
@@ -79,7 +80,7 @@ function startBlockServer(blockServer, port, shouldUseLocalhost) {
             // first hit.
             blockServer.setPublicBaseUrl(url);
             blockServer.bundle(null, () => {
-                console.log(`Serving bundle at ${url}`);
+                console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
             });
         })
         .catch(err => {
