@@ -79,9 +79,7 @@ function startBlockServer(blockServer, port, shouldUseLocalhost) {
             // url to the user so there's definitely a bundle ready on the
             // first hit.
             blockServer.setPublicBaseUrl(url);
-            if (blockServer.doesBlockHaveBackend()) {
-                blockServer.startBackendProcess();
-            }
+            blockServer.startBackendProcessIfNeeded();
             blockServer.bundle(null, () => {
                 console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
             });
