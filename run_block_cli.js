@@ -6,7 +6,7 @@ const prompt = require('prompt');
 const yargsOuter = require('yargs');
 const promisify = require('es6-promisify');
 const chalk = require('chalk');
-const findBlockDirPath = require('./lib/find_block_dir_path');
+const getBlockDirPath = require('./lib/get_block_dir_path');
 
 const promptAsync = promisify(prompt.get);
 
@@ -213,7 +213,7 @@ const runBlocksCli = function runBlocksCli() {
     } else if (command === Commands.FORMAT) {
         try {
             const blockFormat = require('./lib/block_format');
-            const blockDirPath = findBlockDirPath();
+            const blockDirPath = getBlockDirPath();
             const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
             const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
             if (didSetUpDevTools) {
@@ -230,7 +230,7 @@ const runBlocksCli = function runBlocksCli() {
     } else if (command === Commands.LINT) {
         try {
             const blockLint = require('./lib/block_lint');
-            const blockDirPath = findBlockDirPath();
+            const blockDirPath = getBlockDirPath();
             const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
             const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
             if (didSetUpDevTools) {
