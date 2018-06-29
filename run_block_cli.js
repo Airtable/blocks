@@ -6,6 +6,7 @@ const prompt = require('prompt');
 const yargsOuter = require('yargs');
 const promisify = require('es6-promisify');
 const chalk = require('chalk');
+const findBlockDirPath = require('./lib/find_block_dir_path');
 
 const promptAsync = promisify(prompt.get);
 
@@ -210,44 +211,40 @@ const runBlocksCli = function runBlocksCli() {
                 _exitWithError(err.message);
             });
     } else if (command === Commands.FORMAT) {
-        const findBlockDirPathAsync = require('./lib/find_block_dir_path');
-        const blockFormat = require('./lib/block_format');
-        findBlockDirPathAsync()
-            .then(blockDirPath => {
-                const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
-                const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
-                if (didSetUpDevTools) {
-                    console.log('Dev dependencies updated. Please run `yarn` and try again.');
-                    process.exit(1);
-                }
+        try {
+            const blockFormat = require('./lib/block_format');
+            const blockDirPath = findBlockDirPath();
+            const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
+            const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
+            if (didSetUpDevTools) {
+                console.log('Dev dependencies updated. Please run `yarn` and try again.');
+                process.exit(1);
+            }
 
-                console.log('Formatting...');
-                blockFormat(blockDirPath);
-                console.log('Done');
-            })
-            .catch(err => {
-                _exitWithError(err.message);
-            });
+            console.log('Formatting...');
+            blockFormat(blockDirPath);
+            console.log('Done');
+        } catch (err) {
+            _exitWithError(err.message);
+        }
     } else if (command === Commands.LINT) {
-        const findBlockDirPathAsync = require('./lib/find_block_dir_path');
-        const blockLint = require('./lib/block_lint');
-        findBlockDirPathAsync()
-            .then(blockDirPath => {
-                const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
-                const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
-                if (didSetUpDevTools) {
-                    console.log('Dev dependencies updated. Please run `yarn` and try again.');
-                    process.exit(1);
-                }
+        try {
+            const blockLint = require('./lib/block_lint');
+            const blockDirPath = findBlockDirPath();
+            const setUpDevToolsIfNeededSync = require('./lib/set_up_dev_tools_if_needed_sync');
+            const didSetUpDevTools = setUpDevToolsIfNeededSync(blockDirPath);
+            if (didSetUpDevTools) {
+                console.log('Dev dependencies updated. Please run `yarn` and try again.');
+                process.exit(1);
+            }
 
-                console.log('Linting...');
-                const lint = blockLint(blockDirPath);
-                const report = lint.report;
-                console.log(lint.formatter(report.results));
-            })
-            .catch(err => {
-                _exitWithError(err.message);
-            });
+            console.log('Linting...');
+            const lint = blockLint(blockDirPath);
+            const report = lint.report;
+            console.log(lint.formatter(report.results));
+        } catch (err) {
+            _exitWithError(err.message);
+        }
     } else if (command === Commands.RENAME_ENTRY) {
         const updateEntryModuleName = require('./lib/update_entry_module_name');
         try {
