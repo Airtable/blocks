@@ -338,10 +338,10 @@ unsafe.enable_getters_and_setters=true
 suppress_comment= \\(.\\|\n\\)*flow-disable-next-line
 module.name_mapper='^frontend\/\(.*\)$' -> '<PROJECT_ROOT>/frontend/\1'
 module.name_mapper='^airtable-block$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/flow-index.js'
-module.name_mapper='^airtable-block\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/\1'
-module.name_mapper='^client\/blocks\/sdk\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/\1'
-module.name_mapper='^client\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/stubs/client/\1'
-module.name_mapper='^client_server_shared\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/stubs/client_server_shared/\1'
+module.name_mapper='^airtable-block\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/\1'
+module.name_mapper='^client\/blocks\/sdk\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/\1'
+module.name_mapper='^client\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/stubs/client/\1'
+module.name_mapper='^client_server_shared\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/stubs/client_server_shared/\1'
 ```
 
 Add a flow script to package.json:
