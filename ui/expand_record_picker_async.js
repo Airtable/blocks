@@ -19,6 +19,8 @@ import type Field from 'client/blocks/sdk/models/field';
  * @param opts.fields optionally include an array of fields to control
  * which fields are shown in the record cards. The primary field will always
  * be shown. Duplicate fields will be removed.
+ * @param opts.shouldAllowCreatingRecord set to true to allow the user to create
+ * an empty new record.
  *
  * @returns {Promise<record | null>} a Promise that resolves to the record
  * chosen by the user or null
@@ -41,7 +43,8 @@ async function expandRecordPickerAsync(
     records: Array<Record>,
     opts?: {
         fields?: Array<Field>,
-    }
+        shouldAllowCreatingRecord?: boolean,
+    },
 ): Promise<Record | null> {
     if (records.length === 0) {
         return null;
@@ -67,7 +70,12 @@ async function expandRecordPickerAsync(
 
     const chosenRecordId = await liveappInterface.callHostMethodAsync(
         HostMethodNames.EXPAND_RECORD_PICKER,
-        {tableId, recordIds, fieldIds}
+        {
+            tableId,
+            recordIds,
+            fieldIds,
+            shouldAllowCreatingRecord: opts && opts.shouldAllowCreatingRecord,
+        }
     );
 
     if (!chosenRecordId) {

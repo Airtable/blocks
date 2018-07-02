@@ -8,9 +8,13 @@ const columnTypeProvider = require('client_server_shared/column_types/column_typ
 const cellValueUtils = require('client/blocks/sdk/models/cell_value_utils');
 const airtableUrls = require('client_server_shared/airtable_urls');
 const Sorter = require('client_server_shared/filter_and_sort/sorter');
+const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
+const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
 
+import type {Color} from 'client_server_shared/types/view_config/color_config_obj.js';
 import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
+import type ViewType from 'client/blocks/sdk/models/view';
 
 // A record def is a cellValuesByFieldId object.
 export type RecordDef = {[string]: mixed};
@@ -26,6 +30,8 @@ const WatchableRecordKeys = {
 // cause the CellRenderer component to load cell values, which seems okay,
 // but needs a little more thought.
 const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
+// TODO: load view data when this is watched. see previous comment.
+const WatchableColorInViewKeyPrefix = 'colorInView:';
 // The string case is to accomodate cellValueInField:$FieldId.
 type WatchableRecordKey = $Keys<typeof WatchableRecordKeys> | string;
 
@@ -38,7 +44,8 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     static _className = 'Record';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableRecordKeys, key) ||
-            u.startsWith(key, WatchableCellValueInFieldKeyPrefix);
+            u.startsWith(key, WatchableCellValueInFieldKeyPrefix) ||
+            u.startsWith(key, WatchableColorInViewKeyPrefix);
     }
     /**
      * Static helper to perform a one-time sort of array of records.
@@ -51,13 +58,20 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             return records;
         }
         const table = records[0].parentTable;
+
+        const rowsById = {};
+        records.forEach(record => {
+            rowsById[record.id] = record.__getRawRow();
+        });
+
+        const columnsById = {};
+        table.fields.forEach(field => {
+            columnsById[field.id] = field.__getRawColumn();
+        });
+
         const sorter = new Sorter({
-            rowsArray: records.map(record => {
-                return record.__getRawRow();
-            }),
-            columnsArray: table.fields.map(field => {
-                return field.__getRawColumn();
-            }),
+            rowsById,
+            columnsById,
             sorts: sortConfigs.map(sortConfig => {
                 const field = table.__getFieldMatching(sortConfig.field);
                 if (!field) {
@@ -68,7 +82,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
                     ascending: sortConfig.direction === undefined || sortConfig.direction === 'asc',
                 };
             }),
-            appBlanket: table.parentBase.__appBlanket,
+            appInterface: table.parentBase.__appInterface,
         });
         const sortedRecords = sorter.getSortedRowIds().map(recordId => table.getRecordById(recordId));
         return u.compact(sortedRecords);
@@ -114,6 +128,9 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
         return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
+    _getViewMatching(viewOrViewIdOrViewName: ViewType | string): ViewType | null {
+        return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
+    }
     /** */
     getCellValue(fieldOrFieldIdOrFieldName: Field | string): mixed {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
@@ -148,9 +165,49 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
                 rawCellValue,
                 field.__getRawType(),
                 field.__getRawTypeOptions(),
-                this.parentTable.parentBase.__appBlanket,
+                this.parentTable.parentBase.__appInterface,
             );
         }
+    }
+    /**
+     * Call this method with an attachment ID and URL to get back a URL that is
+     * suitable for rendering on the current client. The URL that is returned
+     * will only work for the current user.
+     */
+    getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
+        const appInterface = this.parentTable.parentBase.__appInterface;
+        const isAttachmentsCdnV3Enabled = appInterface.isFeatureEnabled('attachmentsCdnV3');
+
+        if (isAttachmentsCdnV3Enabled) {
+            const applicationId = appInterface.getApplicationId();
+            const userId = appInterface.getCurrentSessionUserId();
+            // NOTE: normal images must be active in the base. We don't support rendering historical values here. see attachment_object_methods.js for more
+            const imagePathPrefix = 'attV3/';
+            attachmentUrl = attachmentUrl.replace(/^https:\/\/([^\/]+)\//, `${ATTACHMENTS_V3_CDN_BASE_URL}/${imagePathPrefix}${userId}/${applicationId}/${attachmentId}/`);
+        }
+        return attachmentUrl;
+    }
+    /**
+     * Get the color name for this record in the specified view, or null if
+     * no color is available. Watch with the 'colorInView:${ViewId}' key.
+     */
+    getColorInView(viewOrViewIdOrViewName: ViewType | string): Color | null {
+        const view = this._getViewMatching(viewOrViewIdOrViewName);
+        invariant(view, 'View does not exist');
+        invariant(!view.isDeleted, 'View has been deleted');
+
+        return view.getRecordColor(this);
+    }
+    /**
+     * Get a CSS hex string for this record in the specified view, or null if
+     * no color is available. Watch with the 'colorInView:${ViewId}' key
+     */
+    getColorHexInView(viewOrViewIdOrViewName: ViewType | string): string | null {
+        const view = this._getViewMatching(viewOrViewIdOrViewName);
+        invariant(view, 'View does not exist');
+        invariant(!view.isDeleted, 'View has been deleted');
+
+        return view.getRecordColorHex(this);
     }
     /** Returns the URL for this record. */
     get url(): string {
@@ -250,6 +307,9 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         if (commentCount) {
             this._onChange(WatchableRecordKeys.commentCount);
         }
+    }
+    __triggerOnChangeForRecordColorInViewId(viewId: string) {
+        this._onChange(WatchableColorInViewKeyPrefix + viewId);
     }
 }
 

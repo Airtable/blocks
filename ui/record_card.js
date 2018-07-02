@@ -17,6 +17,7 @@ const expandRecord = require('client/blocks/sdk/ui/expand_record');
 const keyCodeUtils = require('client/mylib/key_code_utils');
 
 import type {RecordDef} from 'client/blocks/sdk/models/record';
+import type {AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
 
 const CARD_PADDING = 12;
 
@@ -156,7 +157,7 @@ class RecordCard extends React.Component {
             }
         }
     }
-    _onClick(e: SyntheticMouseEvent) {
+    _onClick(e: SyntheticMouseEvent): void {
         if (this.props.onClick) {
             this.props.onClick(e);
         } else if (this.props.onClick === undefined) {
@@ -326,7 +327,7 @@ class RecordCard extends React.Component {
         });
     }
     render() {
-        const {record, cellValuesByFieldId, width, height, onClick, onMouseEnter, onMouseLeave, className, style} = this.props;
+        const {record, view, cellValuesByFieldId, width, height, onClick, onMouseEnter, onMouseLeave, className, style} = this.props;
 
         if (record && cellValuesByFieldId) {
             console.warn('RecordCard: given record and cellValuesByFieldId, choosing to render based on record'); // eslint-disable-line no-console
@@ -338,8 +339,8 @@ class RecordCard extends React.Component {
 
         const allFields = this._getFields();
         const fieldsToUse = this._getPossibleFieldsForCard();
-        const attachmentObj = this._getAttachmentCover(fieldsToUse);
-        const hasAttachment = !!attachmentObj;
+        const attachmentObjIfAvailable = this._getAttachmentCover(fieldsToUse);
+        const hasAttachment = !!attachmentObjIfAvailable;
 
         const hasOnClick = !!onClick || !!this._getRecordModel();
 
@@ -350,16 +351,24 @@ class RecordCard extends React.Component {
 
         // use height as size in order to get square attachment
         const attachmentSize = hasAttachment ? height : 0;
-        const imageHtml = hasAttachment ?
-            attachmentPreviewRenderer.renderSquarePreview(attachmentObj, {
+        let imageHtml = '';
+        if (hasAttachment) {
+            const attachmentField = this._getAttachmentField(fieldsToUse);
+            invariant(attachmentField, 'attachmentField must be present when we have an attachment');
+            invariant(attachmentObjIfAvailable, 'attachmentObjIfAvailable is defined if hasAttachment');
+
+            const attachmentObj: AttachmentObj = (attachmentObjIfAvailable: any); // eslint-disable-line flowtype/no-weak-types
+
+            const userScopedAppInterface = attachmentField.parentTable.parentBase.__appInterface;
+            imageHtml = attachmentPreviewRenderer.renderSquarePreview(attachmentObj, userScopedAppInterface, {
                 extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
                 extraStyles: {
                     'border-top-right-radius': 2,
                     'border-bottom-right-radius': 2,
                 },
                 size: attachmentSize,
-            }) :
-            '';
+            });
+        }
 
         const containerStyles = {
             ...style,
@@ -372,9 +381,13 @@ class RecordCard extends React.Component {
 
         let primaryCellValueAsString;
         let recordUrl;
+        let recordColorClass;
         if (record && record instanceof RecordModel) {
             recordUrl = record.url;
             primaryCellValueAsString = record.primaryCellValueAsString;
+            if (view) {
+                recordColorClass = record.getColorInView(view);
+            }
         } else {
             const recordDef = this._getRecordDef();
             const primaryField = allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
@@ -387,7 +400,7 @@ class RecordCard extends React.Component {
             primaryValue = primaryCellValueAsString;
             isUnnamed = false;
         }
-        const primaryClasses = classNames('strong relative block cellValue textOverflowEllipsis mt0', {
+        const primaryClasses = classNames('strong relative cellValue mt0 flex items-center', {
             unnamed: isUnnamed,
         });
         const primaryStyles = {
@@ -409,7 +422,15 @@ class RecordCard extends React.Component {
                     background: 'transparent',
                     padding: CARD_PADDING,
                 }}>
-                    <div className={primaryClasses} style={primaryStyles}>{primaryValue}</div>
+                    <div className={primaryClasses} style={primaryStyles}>
+                        {recordColorClass && (
+                            <div
+                                className={`flex-none pill mr-half ${recordColorClass}`}
+                                style={{width: 6, height: 20}}
+                            />
+                        )}
+                        <div className="flex-auto truncate">{primaryValue}</div>
+                    </div>
                     <div className="absolute appFontColorLight" style={{
                         marginTop: 3,
                     }}>
@@ -473,6 +494,7 @@ module.exports = createDataContainer(RecordCard, (props: RecordCardProps) => {
     }
     return [
         {watch: recordModel, key: 'primaryCellValue'},
+        props.view && {watch: recordModel, key: `colorInView:${props.view.id}`},
 
         // It's safe to watch the record's parentTable since a record's
         // parent table never changes.

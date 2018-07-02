@@ -16,7 +16,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     _isDataLoaded: boolean;
     _pendingDataLoadPromise: Promise<Array<WatchableKey>> | null;
     _dataRetainCount: number;
-    _unloadDataTimeoutId: null | number;
+    _unloadDataTimeoutId: null | TimeoutID;
     constructor(baseData: BaseDataForBlocks, modelId: string) {
         super(baseData, modelId);
 

@@ -45,7 +45,7 @@ class LiveappInterface {
     _nextHostMethodCallId: number;
     _pendingHostMethodCallbacksById: {[number]: HostMethodCallback};
     _handlersByMessageType: {[string]: Array<(data: Object) => void>};
-    _batchUpdatesTimeoutId: null | number;
+    _batchUpdatesTimeoutId: null | TimeoutID;
     _batchUpdateQueue: Array<BatchUpdate>;
     constructor() {
         this._nextHostMethodCallId = 0;

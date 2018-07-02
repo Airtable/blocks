@@ -1,4 +1,5 @@
 // @flow
+const invariant = require('invariant');
 const React = require('client/blocks/sdk/ui/react');
 const PropTypes = require('prop-types');
 const Modal = require('client/blocks/sdk/ui/modal');
@@ -11,6 +12,7 @@ class BlockWrapperComponent extends React.Component {
         // so there's no guarantee that it's actually a React component.
         EntryComponent: PropTypes.any,
     };
+    _minSizeBeforeRender: {width: number | null, height: number | null} | null = null;
     constructor(props) {
         super(props);
 
@@ -23,19 +25,52 @@ class BlockWrapperComponent extends React.Component {
         // without having to special case it.
         getSdk().UI.globalAlert.watch('__alertInfo', () => this.forceUpdate());
     }
+    componentWillMount() {
+        this._snapshotMinSizeBeforeRender();
+    }
+    componentDidMount() {
+        this._checkMinSizeConstraintUnchangedAfterRender();
+    }
+    componentWillUpdate() {
+        this._snapshotMinSizeBeforeRender();
+    }
+    componentDidUpdate() {
+        this._checkMinSizeConstraintUnchangedAfterRender();
+    }
+    // usually createDataContainer handles re-rendering when watchable values
+    // change. As minSize can be changed by child components though, it can
+    // change before createDataContainer has a chance to set up watches. To get
+    // around this, we take a snapshot of the minSize before render and call
+    // .forceUpdate() if its changed after render
+    _snapshotMinSizeBeforeRender() {
+        this._minSizeBeforeRender = getSdk().viewport.minSize;
+    }
+    _checkMinSizeConstraintUnchangedAfterRender() {
+        const prevMinSize = this._minSizeBeforeRender;
+        invariant(prevMinSize, 'prevMinSize must be set');
+        const currentMinSize = getSdk().viewport.minSize;
+        if (
+            currentMinSize.width !== prevMinSize.width ||
+            currentMinSize.height !== prevMinSize.height
+        ) {
+            this.forceUpdate();
+        }
+    }
     render() {
         const {UI, viewport} = getSdk();
 
         const globalAlertInfo = UI.globalAlert.__alertInfo;
         if (globalAlertInfo) {
             return (
-                <Modal className="absolute all-0 flex items-center justify-center p2" style={{
-                    animation: 'none',
-                    maxWidth: null,
-                    maxHeight: null,
-                    borderRadius: 0,
-                    boxShadow: 'none',
-                }}>
+                <Modal
+                    className="absolute all-0 flex items-center justify-center p2"
+                    style={{
+                        animation: 'none',
+                        maxWidth: null,
+                        maxHeight: null,
+                        borderRadius: 0,
+                        boxShadow: 'none',
+                    }}>
                     {globalAlertInfo.content}
                 </Modal>
             );
@@ -44,7 +79,11 @@ class BlockWrapperComponent extends React.Component {
         const {EntryComponent} = this.props;
         // TODO: the ReactComponent check doesn't work for legacy React.createClass components.
         // Could fix by using this check: https://github.com/facebook/relay/blob/e918103/src/container/RelayContainerUtils.js#L21
-        if (EntryComponent && (EntryComponent.prototype instanceof React.Component || EntryComponent instanceof Function)) {
+        if (
+            EntryComponent &&
+            (EntryComponent.prototype instanceof React.Component ||
+                EntryComponent instanceof Function)
+        ) {
             return (
                 <div>
                     <EntryComponent />
@@ -55,14 +94,16 @@ class BlockWrapperComponent extends React.Component {
                         having this component manage the modal stack, so it can
                         guarantee that this viewport message is in front of all modals.
                     */}
-                    {viewport.isSmallerThanMinSize &&
-                        <Modal className="absolute all-0 flex items-center justify-center p2" style={{
-                            animation: 'none',
-                            maxWidth: null,
-                            maxHeight: null,
-                            borderRadius: 0,
-                            boxShadow: 'none',
-                        }}>
+                    {viewport.isSmallerThanMinSize && (
+                        <Modal
+                            className="absolute all-0 flex items-center justify-center p2"
+                            style={{
+                                animation: 'none',
+                                maxWidth: null,
+                                maxHeight: null,
+                                borderRadius: 0,
+                                boxShadow: 'none',
+                            }}>
                             <span className="center line-height-4 quiet strong">
                                 <span>Please make this block bigger or </span>
                                 <span
@@ -72,13 +113,21 @@ class BlockWrapperComponent extends React.Component {
                                 </span>
                             </span>
                         </Modal>
-                    }
+                    )}
                 </div>
             );
         } else {
             // TODO: only show this in development mode? Or never?
             return (
-                <div style={{padding: 24, color: '#999', textAlign: 'center', fontFamily: 'sans-serif'}}>Must export a React component.</div>
+                <div
+                    style={{
+                        padding: 24,
+                        color: '#999',
+                        textAlign: 'center',
+                        fontFamily: 'sans-serif',
+                    }}>
+                    Must export a React component.
+                </div>
             );
         }
     }

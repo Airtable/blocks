@@ -1,18 +1,43 @@
 // @flow
+const invariant = require('invariant');
 const Watchable = require('client/blocks/sdk/watchable');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const BlockMessageTypes = require('client/blocks/block_message_types');
 const utils = require('client/blocks/sdk/utils');
 const u = require('client_server_shared/u');
+const warning = require('client/blocks/sdk/warning');
 
 const WatchableViewportKeys = {
     isFullscreen: 'isFullscreen',
     size: 'size',
     minSize: 'minSize',
+    maxFullscreenSize: 'maxFullscreenSize',
 };
 
 type WatchableViewportKey = $Keys<typeof WatchableViewportKeys>;
+type UnsetFn = () => void;
 
+type ViewportSizeConstraint = {
+    width: number | null,
+    height: number | null,
+};
+
+const compareWithNulls = (
+    a: number | null,
+    b: number | null,
+    compare: (number, number) => number
+): number | null => {
+    if (a !== null && b !== null) {
+        return compare(a, b);
+    }
+    if (a === null) {
+        return b;
+    }
+    if (b === null) {
+        return a;
+    }
+    return null;
+};
 /**
  * Information about the current viewport
  *
@@ -24,10 +49,17 @@ class Viewport extends Watchable<WatchableViewportKey> {
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableViewportKeys, key);
     }
+
     _isFullscreen: boolean;
     _sizeWatchCount: number;
     _onSizeChangeDebounced: Function;
-    _minSize: {width: number | null, height: number | null};
+    _minSizes: Set<ViewportSizeConstraint> = new Set();
+    _maxFullscreenSizes: Set<ViewportSizeConstraint> = new Set();
+    _removeLastSetMinSize: UnsetFn | null = null;
+    _removeLastSetFullscreenSize: UnsetFn | null = null;
+    _cachedMaxFullscreenSize: ViewportSizeConstraint | null = null;
+    _cachedMinSize: ViewportSizeConstraint | null = null;
+
     constructor(isFullscreen: boolean) {
         super();
 
@@ -47,11 +79,34 @@ class Viewport extends Watchable<WatchableViewportKey> {
             this._onExitFullscreen();
         });
 
+        liveappInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, () => {
+            const {body, activeElement} = document;
+            // See comment in BlockFrame.focusIframe for why we do this.
+            if (activeElement && activeElement !== body) {
+                // If there's already an activeElement, re-focus it.
+                activeElement.focus();
+            } else if (body) {
+                // If there isn't an activeElement, create a dummy input
+                // to capture focus.
+                const input = document.createElement('input');
+                body.appendChild(input);
+                input.focus();
+                input.remove();
+            }
+        });
+
         this._onSizeChangeDebounced = u.debounce(this._onSizeChange.bind(this), 200);
 
-        this._minSize = Object.freeze({
-            width: null,
-            height: null,
+        // whenever maxFullscreenSize changes, we want to sync it back to the
+        // containing frame
+        this.watch(WatchableViewportKeys.maxFullscreenSize, () => {
+            utils.fireAndForgetPromise(
+                liveappInterface.callHostMethodAsync.bind(
+                    liveappInterface,
+                    BlockMessageTypes.HostMethodNames.SET_FULLSCREEN_MAX_SIZE,
+                    this.maxFullscreenSize
+                )
+            );
         });
     }
     /**
@@ -62,36 +117,147 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * request succeeded.
      */
     enterFullscreen() {
-        utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
-            liveappInterface,
-            BlockMessageTypes.HostMethodNames.ENTER_FULLSCREEN,
-        ));
+        utils.fireAndForgetPromise(
+            liveappInterface.callHostMethodAsync.bind(
+                liveappInterface,
+                BlockMessageTypes.HostMethodNames.ENTER_FULLSCREEN
+            )
+        );
     }
     /** Request to exit fullscreen mode */
     exitFullscreen() {
-        utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
-            liveappInterface,
-            BlockMessageTypes.HostMethodNames.EXIT_FULLSCREEN,
-        ));
+        utils.fireAndForgetPromise(
+            liveappInterface.callHostMethodAsync.bind(
+                liveappInterface,
+                BlockMessageTypes.HostMethodNames.EXIT_FULLSCREEN
+            )
+        );
+    }
+
+    /**
+     * Can be watched. The maximum dimensions of the block when it is in
+     * fullscreen mode. Returns the smallest set of dimensions added with
+     * addMaxFullscreenSize and setMaxFullscreenSize. If `width` or `height`
+     * is null, it means there is no maxSize constraint on that dimension.
+     * If maxFullscreenSize would be smaller than minSize, it is constrained
+     * to be at least that.
+     */
+    get maxFullscreenSize(): ViewportSizeConstraint {
+        if (!this._cachedMaxFullscreenSize) {
+            const maxFullscreenSize = Array.from(this._maxFullscreenSizes).reduce(
+                (memo, size) => ({
+                    width: compareWithNulls(memo.width, size.width, Math.min),
+                    height: compareWithNulls(memo.height, size.height, Math.min),
+                }),
+                {width: null, height: null}
+            );
+
+            const minSize = this.minSize;
+            this._cachedMaxFullscreenSize = {
+                width:
+                    maxFullscreenSize.width !== null && minSize.width !== null ?
+                        Math.max(maxFullscreenSize.width, minSize.width) :
+                        maxFullscreenSize.width,
+                height:
+                    maxFullscreenSize.height !== null && minSize.height !== null ?
+                        Math.max(maxFullscreenSize.height, minSize.height) :
+                        maxFullscreenSize.height,
+            };
+        }
+
+        return this._cachedMaxFullscreenSize;
+    }
+
+    /**
+     * Add a maximum fullscreen size constraint. Returns a function that can be
+     * called to remove the fullscreen size that was added. Use
+     * .maxFullscreenSize to get the aggregate of all added constraints. Both
+     * `width` and `height` are optional - if either is set to null, that means
+     * there is no max size in that dimension.
+     */
+    addMaxFullscreenSize({width, height}: $Shape<ViewportSizeConstraint>): UnsetFn {
+        const size = Object.freeze({
+            width: typeof width === 'number' ? width : null,
+            height: typeof height === 'number' ? height : null,
+        });
+
+        this._cachedMaxFullscreenSize = null;
+        this._maxFullscreenSizes.add(size);
+        this._onChange(WatchableViewportKeys.maxFullscreenSize);
+
+        return () => {
+            invariant(this._maxFullscreenSizes.has(size), 'UnsetFn can only be called once');
+            this._cachedMaxFullscreenSize = null;
+            this._maxFullscreenSizes.delete(size);
+            this._onChange(WatchableViewportKeys.maxFullscreenSize);
+        };
     }
     /**
      * Set the maximum dimensions of the block when it is in fullscreen mode.
-     * Both `width` and `height` are optional. If either is set to `null`, that
-     * means there is not max size in that dimension.
+     * Uses addMaxFullscreenSize to add a contstraint. When called, it removes
+     * the constraint added the last time it was called.
+     *
+     * @deprecated
      */
-    setMaxFullscreenSize(size: {width?: number | null, height?: number | null}) {
-        utils.fireAndForgetPromise(liveappInterface.callHostMethodAsync.bind(
-            liveappInterface,
-            BlockMessageTypes.HostMethodNames.SET_FULLSCREEN_MAX_SIZE,
-            {
-                width: size.width,
-                height: size.height,
-            },
-        ));
+    setMaxFullscreenSize(requestedSize: $Shape<ViewportSizeConstraint>) {
+        warning(
+            'viewport.setMaxFullscreenSize is deprecated. Use viewport.addMaxFullscreenSize or <UI.ViewportConstraint /> instead.'
+        );
+        if (this._removeLastSetFullscreenSize) {
+            this._removeLastSetFullscreenSize();
+        }
+        this._removeLastSetFullscreenSize = this.addMaxFullscreenSize(requestedSize);
     }
-    /** Can be watched. */
-    get minSize(): {width: number | null, height: number | null} {
-        return this._minSize;
+
+    /**
+     * Can be watched. The minimum dimensions of the block - if the viewport
+     * gets smaller than this size, an overlay will be shown asking the user to
+     * resize the block to be bigger. Returns the largest set of dimensions
+     * added with addMinSize and setMinSize. If `width` or `height` is null, it
+     * means there is no minSize constraint on that dimension.
+     */
+    get minSize(): ViewportSizeConstraint {
+        if (!this._cachedMinSize) {
+            this._cachedMinSize = Array.from(this._minSizes).reduce(
+                (memo, size) => ({
+                    width: compareWithNulls(memo.width, size.width, Math.max),
+                    height: compareWithNulls(memo.height, size.height, Math.max),
+                }),
+                {width: null, height: null}
+            );
+        }
+
+        return this._cachedMinSize;
+    }
+
+    /**
+     * Add a minimum frame size constraint. Returns a function that can be
+     * called to remove the added constraint. Use .minSize to get the aggregate
+     * of all added constraints. Both `width` and `height` are optional - if
+     * either is null, there is no minimum size in that dimension.
+     */
+    addMinSize({width, height}: $Shape<ViewportSizeConstraint>): UnsetFn {
+        const size = Object.freeze({
+            width: typeof width === 'number' ? width : null,
+            height: typeof height === 'number' ? height : null,
+        });
+
+        this._cachedMinSize = null;
+        // min size is also a constraint on maxFullscreenSize:
+        this._cachedMaxFullscreenSize = null;
+        this._minSizes.add(size);
+        this._onChange(WatchableViewportKeys.minSize);
+        this._onChange(WatchableViewportKeys.maxFullscreenSize);
+
+        return () => {
+            invariant(this._minSizes.has(size), 'UnsetFn can only be called once');
+            this._cachedMinSize = null;
+            this._cachedMaxFullscreenSize = null;
+            this._minSizes.delete(size);
+            this._onChange(WatchableViewportKeys.minSize);
+            // min size is also a constraint on maxFullscreenSize:
+            this._onChange(WatchableViewportKeys.maxFullscreenSize);
+        };
     }
     /**
      * Set the minimum dimensions of the block. If the viewport gets smaller
@@ -100,19 +266,24 @@ class Viewport extends Watchable<WatchableViewportKey> {
      *
      * Both `width` and `height` and optional. If either is set to `null`, that
      * means there is not a min size in that dimension.
+     *
+     * @deprecated
      */
-    setMinSize(size: {width?: number | null, height?: number | null}) {
-        this._minSize = Object.freeze({
-            ...this._minSize,
-            ...size,
-        });
-        this._onChange(WatchableViewportKeys.minSize);
+    setMinSize(size: $Shape<ViewportSizeConstraint>) {
+        warning(
+            'viewport.setMinSize is deprecated. Use viewport.addMinSize or <UI.ViewportConstraint /> instead.'
+        );
+        if (this._removeLastSetMinSize) {
+            this._removeLastSetMinSize();
+        }
+        this._removeLastSetMinSize = this.addMinSize(size);
     }
+
     /** */
     get isSmallerThanMinSize(): boolean {
         const {width, height} = this.size;
-        const isWidthTooSmall = this._minSize.width !== null && this._minSize.width > width;
-        const isHeightTooSmall = this._minSize.height !== null && this._minSize.height > height;
+        const isWidthTooSmall = this.minSize.width !== null && this.minSize.width > width;
+        const isHeightTooSmall = this.minSize.height !== null && this.minSize.height > height;
         return isWidthTooSmall || isHeightTooSmall;
     }
     /** Can be watched. */
@@ -126,7 +297,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
             height: window.innerHeight,
         };
     }
-    watch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: ?Object): Array<WatchableViewportKey> {
+    watch(
+        keys: WatchableViewportKey | Array<WatchableViewportKey>,
+        callback: Function,
+        context?: ?Object
+    ): Array<WatchableViewportKey> {
         const validKeys = super.watch(keys, callback, context);
 
         if (u.includes(validKeys, WatchableViewportKeys.size)) {
@@ -138,7 +313,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
 
         return validKeys;
     }
-    unwatch(keys: WatchableViewportKey | Array<WatchableViewportKey>, callback: Function, context?: ?Object): Array<WatchableViewportKey> {
+    unwatch(
+        keys: WatchableViewportKey | Array<WatchableViewportKey>,
+        callback: Function,
+        context?: ?Object
+    ): Array<WatchableViewportKey> {
         const validKeys = super.unwatch(keys, callback, context);
 
         if (u.includes(validKeys, WatchableViewportKeys.size)) {

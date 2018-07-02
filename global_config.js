@@ -7,6 +7,7 @@ const getSdk = require('client/blocks/sdk/get_sdk');
 const blockKvHelpers = require('client_server_shared/blocks/block_kv_helpers');
 const PermissionLevels = require('client_server_shared/permissions/permission_levels');
 const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
+const forkObjectPathForWriteByReference = require('client_server_shared/fork_object_path_for_write_by_reference');
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
 
@@ -127,21 +128,35 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         }
 
         const topLevelKeySet = {};
+
+        // Create a working copy of the kvStore so that we can revert changes
+        // in memory if the updates don't pass validation or limit checks.
+        // First, let's shallow clone the starting kvStore.
+        const clonedObjectsSet = new Set();
+        const workingKvStore = u.clone(this._kvStore);
+
+        // Before applying each update, fork the working kvStore so we can roll
+        // back any changes we make.
         for (const update of updates) {
             const updateValidationResult = blockKvHelpers.validateKvStoreUpdate(update, this._kvStore);
             if (!updateValidationResult.isValid) {
                 throw new Error(`Invalid globalConfig update: ${updateValidationResult.reason}`);
             }
-            blockKvHelpers.applyValidatedUpdateToKvStoreByReference(this._kvStore, update);
+
+            forkObjectPathForWriteByReference(workingKvStore, this._kvStore, update.path, clonedObjectsSet);
+            blockKvHelpers.applyValidatedUpdateToKvStoreByReference(workingKvStore, update);
 
             const topLevelKey = update.path[0];
             topLevelKeySet[topLevelKey] = true;
         }
 
-        const limitCheckResult = blockKvHelpers.limitCheckKvStore(this._kvStore, u.keys(topLevelKeySet));
+        const limitCheckResult = blockKvHelpers.limitCheckKvStore(workingKvStore, u.keys(topLevelKeySet));
         if (!limitCheckResult.isValid) {
             throw new Error(`globalConfig over limits: ${limitCheckResult.reason}`);
         }
+
+        // We passed validation and limit checks, so it's safe to persist the updates.
+        this._kvStore = workingKvStore;
 
         // Now loop over the top level keys to fire change events.
         // NOTE: it's important that we do this after the loop above (instead of inline),

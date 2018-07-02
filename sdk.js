@@ -1,8 +1,18 @@
 // @flow
 
-// NOTE: Do not require react or react-dom from the block SDK! React will
-// automatically be included in the block bundle and we don't want two
-// copies of React running on the page.
+// NOTE: The version of React running in the Block SDK is controlled by the block.
+// The SDK should not make too many assumptions about which version of React or
+// ReactDOM is running.
+
+// HACK: make sure React.PropTypes is defined. If the block is using a newer
+// version of React, PropTypes won't be available, but a few SDK components
+// try to reference it. Once grepping React.PropTypes in hyperbase doesn't
+// return any matches, we can remove this hack.
+const React = require('react');
+const PropTypes = require('prop-types');
+if (!React.PropTypes) {
+    React.PropTypes = PropTypes;
+}
 
 const GlobalConfig = require('client/blocks/sdk/global_config');
 const Base = require('client/blocks/sdk/models/base');

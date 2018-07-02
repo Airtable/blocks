@@ -83,7 +83,7 @@ class CellRenderer extends React.Component {
             privateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field.parentTable.parentBase.__appBlanket,
+            field.parentTable.parentBase.__appInterface,
             CellReadModeContext.forContextType(cellContextType),
         );
         const attributes: Object = {

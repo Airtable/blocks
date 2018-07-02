@@ -54,7 +54,7 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
         const {type, options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appBlanket,
+            this.parentTable.parentBase.__appInterface,
             this.parentTable.__getFieldNamesById(),
         );
 
@@ -102,7 +102,7 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
             string,
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this._parentTable._parentBase.__appBlanket,
+            this.parentTable.parentBase.__appInterface,
         );
 
         return cellValueUtils.getPublicCellValueFromPrivateCellValue(privateCellValue, this);

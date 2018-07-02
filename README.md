@@ -277,7 +277,7 @@ if (globalConfig.canSet(ConfigKeys.tableId) && runInfo.isFirstRun && !this.table
     // case just fallback to the first table in the base.
     const table = base.activeTable || base.tables[0];
     this.table = table;
-    
+
     // getDefaultViewOfType will return the active view if there is one and it
     // satisfies allowedViewTypes. Otherwise, it will return the first view that
     // satisified allowedViewTypes, if any. Note that every table has at least 1
@@ -329,6 +329,7 @@ Create a `.flowconfig` file in your repo and add the following:
 [include]
 
 [libs]
+./node_modules/blocks-sdk/flow-typed/
 
 [lints]
 
@@ -384,14 +385,14 @@ Since blocks run in an `<iframe>` it is not possible to use React Devtools as a 
       var scr = document.createElement('script');
       scr.type="text/javascript";
       scr.src="http://localhost:8097";
-      document.head.prepend(scr); 
+      document.head.prepend(scr);
    })();
    ```
-   
+
 ### Usage
 
   - Run `react-devtools`
   - Open a base that contains a block
   - You should see something like this in `react-devtools`:
-  
+
   ![react-devtools screenshot](docs/assets/react-devtools-screenshot.png)

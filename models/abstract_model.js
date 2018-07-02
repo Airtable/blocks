@@ -1,5 +1,6 @@
 // @flow
 const Watchable = require('client/blocks/sdk/watchable');
+const invariant = require('invariant');
 
 import type {BaseDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 
@@ -16,6 +17,8 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     _id: string;
     constructor(baseData: BaseDataForBlocks, modelId: string) {
         super();
+
+        invariant(typeof modelId === 'string', `${this.constructor._className} id should be a string`);
 
         this._baseData = baseData;
         this._id = modelId;

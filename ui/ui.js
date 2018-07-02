@@ -40,6 +40,7 @@ const Toggle = require('client/blocks/sdk/ui/toggle');
 const ToggleSynced = require('client/blocks/sdk/ui/toggle_synced');
 const Popover = require('client/blocks/sdk/ui/popover');
 const AutocompletePopover = require('client/blocks/sdk/ui/autocomplete_popover');
+const ViewportConstraint = require('client/blocks/sdk/ui/viewport_constraint');
 const {
     loadCSSFromString,
     loadCSSFromURLAsync,
@@ -91,6 +92,7 @@ const UI = {
     Modal,
     Toggle,
     ToggleSynced,
+    ViewportConstraint,
     globalAlert: new GlobalAlert(),
 };
 

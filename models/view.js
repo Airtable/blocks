@@ -1,11 +1,13 @@
 // @flow
 const invariant = require('invariant');
 const utils = require('client/blocks/sdk/utils');
-const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data.js');
+const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
+const ColorUtils = require('client/blocks/sdk/ui/color_utils');
 const viewTypeProvider = require('client_server_shared/view_types/view_type_provider');
 const airtableUrls = require('client_server_shared/airtable_urls');
 
+import type {Color} from 'client_server_shared/types/view_config/color_config_obj.js';
 import type {BaseDataForBlocks, ViewDataForBlocks, BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type FieldType from 'client/blocks/sdk/models/field';
@@ -21,6 +23,7 @@ const WatchableViewKeys = {
     visibleRecordIds: 'visibleRecordIds',
     allFields: 'allFields',
     visibleFields: 'visibleFields',
+    recordColors: 'recordColors',
 };
 export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
@@ -38,7 +41,8 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         return key === WatchableViewKeys.visibleRecords ||
             key === WatchableViewKeys.visibleRecordIds ||
             key === WatchableViewKeys.allFields ||
-            key === WatchableViewKeys.visibleFields;
+            key === WatchableViewKeys.visibleFields ||
+            key === WatchableViewKeys.recordColors;
     }
     _parentTable: TableType;
     _mostRecentTableLoadPromise: Promise<*> | null;
@@ -122,11 +126,20 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
 
         this._data.visibleRecordIds = viewData.visibleRecordIds;
         this._data.fieldOrder = viewData.fieldOrder;
+        this._data.colorsByRecordId = viewData.colorsByRecordId;
+
+        for (const record of this.visibleRecords) {
+            if (this._data.colorsByRecordId[record.id]) {
+                record.__triggerOnChangeForRecordColorInViewId(this.id);
+            }
+        }
+
         return [
             WatchableViewKeys.visibleRecords,
             WatchableViewKeys.visibleRecordIds,
             WatchableViewKeys.allFields,
             WatchableViewKeys.visibleFields,
+            WatchableViewKeys.recordColors,
         ];
     }
     unloadData() {
@@ -148,10 +161,11 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         liveappInterface.unsubscribeFromViewData(this.parentTable.id, this._id);
         if (!this.isDeleted) {
             this._data.visibleRecordIds = undefined;
+            this._data.colorsByRecordId = undefined;
         }
     }
     __generateChangesForParentTableAddMultipleRecords(recordIds: Array<string>): Array<BlockModelChange> {
-        const newVisibleRecordIds = this.visibleRecordIds.concat(recordIds);
+        const newVisibleRecordIds = [...this.visibleRecordIds, ...recordIds];
         return [
             {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
         ];
@@ -233,6 +247,34 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         }
         return visibleFields;
     }
+    /**
+     * Get the color name for the specified record in this view, or null if no
+     * color is available. Watch with 'recordColors'
+     */
+    getRecordColor(recordOrRecordId: string | RecordType): Color | null {
+        invariant(this.isDataLoaded, 'View data is not loaded');
+        const colorsByRecordId = this._data.colorsByRecordId;
+        if (!colorsByRecordId) {
+            return null;
+        }
+
+        const recordId = typeof recordOrRecordId === 'string' ?
+            recordOrRecordId :
+            recordOrRecordId.id;
+        const color = colorsByRecordId[recordId];
+        return color || null;
+    }
+    /**
+     * Get the CSS hex color for the specificed record in this view, or null if
+     * no color is available. Watch with 'recordColors'
+     */
+    getRecordColorHex(recordOrRecordId: string | RecordType): string | null {
+        const colorName = this.getRecordColor(recordOrRecordId);
+        if (!colorName) {
+            return null;
+        }
+        return ColorUtils.getHexForColor(colorName);
+    }
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {
             this._onChange(WatchableViewKeys.name);
@@ -245,6 +287,29 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             this._onChange(WatchableViewKeys.allFields);
             // TODO(kasra): only trigger visibleFields if the *visible* field ids changed.
             this._onChange(WatchableViewKeys.visibleFields);
+        }
+        if (dirtyPaths.colorsByRecordId) {
+            const changedRecordIds = dirtyPaths.colorsByRecordId._isDirty ?
+                null :
+                Object.keys(dirtyPaths.colorsByRecordId);
+
+            if (changedRecordIds) {
+                // Checking isRecordMetadataLoaded fixes a timing issue:
+                // When a new table loads in liveapp, we'll receive the record
+                // colors before getting the response to our loadData call.
+                // This is a temporary fix: we need a more general solution to
+                // avoid processing events associated with subscriptions whose
+                // data we haven't received yet.
+                if (this.parentTable.isRecordMetadataLoaded) {
+                    for (const recordId of changedRecordIds) {
+                        const record = this.parentTable.getRecordById(recordId);
+                        invariant(record, 'record must exist');
+                        record.__triggerOnChangeForRecordColorInViewId(this.id);
+                    }
+                }
+            }
+
+            this._onChange(WatchableViewKeys.recordColors, changedRecordIds);
         }
     }
 }

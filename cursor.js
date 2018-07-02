@@ -2,7 +2,7 @@
 const utils = require('client/blocks/sdk/utils');
 const u = require('client_server_shared/u');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
-const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data.js');
+const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data');
 const Record = require('client/blocks/sdk/models/record');
 const invariant = require('invariant');
 

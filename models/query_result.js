@@ -46,7 +46,7 @@ import type FieldModel from 'client/blocks/sdk/models/field';
 import type RecordModel from 'client/blocks/sdk/models/record';
 
 class QueryResultPool {
-    _queryResultsBySourceModelId: {[string]: Array<QueryResult> | void};
+    _queryResultsBySourceModelId: {[string]: Array<QueryResult> | void};  // eslint-disable-line no-use-before-define
     constructor() {
         this._queryResultsBySourceModelId = {};
     }
@@ -72,7 +72,7 @@ class QueryResultPool {
             this._queryResultsBySourceModelId[sourceModelId] = undefined;
         }
     }
-    getQueryResultForReuse(sourceModel: TableModel | ViewModel, normalizedOpts: NormalizedQueryResultOpts): QueryResult | null {
+    getQueryResultForReuse(sourceModel: TableModel | ViewModel, normalizedOpts: NormalizedQueryResultOpts): QueryResult | null {  // eslint-disable-line no-use-before-define
         const queryResults = this._queryResultsBySourceModelId[sourceModel.id];
         if (queryResults) {
             // We expect that there won't be too many QueryResults for a given
@@ -586,7 +586,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
             invariant(record, `No record for id: ${recordId}`);
             const rowJson = record.__getRawRow();
             const groupPath = GroupAssigner.getGroupPathForRow(
-                this._table.parentBase.__appBlanket,
+                this._table.parentBase.__appInterface,
                 this._getGroupLevelsWithDeletedFieldsFiltered(),
                 columnsById,
                 rowJson,
@@ -766,7 +766,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
         const groupLevels = this._getGroupLevelsWithDeletedFieldsFiltered();
 
         const groupAssigner = new GroupAssigner({
-            appBlanket: this._table.parentBase.__appBlanket,
+            appInterface: this._table.parentBase.__appInterface,
             groupLevels,
             rowsById,
             columnsById,

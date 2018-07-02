@@ -14,7 +14,7 @@ const publicCellValueUtils = {
             privateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field._parentTable._parentBase.__appBlanket,
+            field.parentTable.parentBase.__appInterface,
             ApiDisplayFormats.API2,
         );
     },
@@ -28,7 +28,7 @@ const publicCellValueUtils = {
             currentPrivateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field.parentTable.parentBase.__appBlanket,
+            field.parentTable.parentBase.__appInterface,
             ApiDisplayFormats.API2,
         );
         if (!validationResult.isValid) {
@@ -60,7 +60,7 @@ const publicCellValueUtils = {
             currentPrivateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field.parentTable.parentBase.__appBlanket,
+            field.parentTable.parentBase.__appInterface,
             ApiDisplayFormats.API2,
         );
     },

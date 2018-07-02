@@ -3,7 +3,7 @@ const {h, u} = require('client_server_shared/hu');
 const invariant = require('invariant');
 const utils = require('client/blocks/sdk/utils');
 const hyperId = require('client_server_shared/hyper_id');
-const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data.js');
+const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data');
 const View = require('client/blocks/sdk/models/view');
 const Field = require('client/blocks/sdk/models/field');
 const Record = require('client/blocks/sdk/models/record');
@@ -284,6 +284,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     getRecordById(recordId: string): Record | null {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
+        invariant(typeof recordId === 'string', 'getRecordById expects a string');
 
         if (!recordsById[recordId]) {
             return null;
@@ -756,6 +757,16 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                 this.getFieldByName(fieldOrFieldIdOrFieldName);
         }
         return field;
+    }
+    __getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
+        let view: View | null;
+        if (viewOrViewIdOrViewName instanceof View) {
+            view = viewOrViewIdOrViewName;
+        } else {
+            view = this.getViewById(viewOrViewIdOrViewName) ||
+                this.getViewByName(viewOrViewIdOrViewName);
+        }
+        return view;
     }
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {
