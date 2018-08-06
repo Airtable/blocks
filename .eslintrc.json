@@ -133,6 +133,7 @@
         "react/jsx-curly-spacing": "warn",
         "react/jsx-no-duplicate-props": "error",
         "react/jsx-no-undef": "error",
+        "react/jsx-no-target-blank": "error",
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "warn",
         "react/jsx-wrap-multilines": "warn",
