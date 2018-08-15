@@ -12,7 +12,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-3": "6.11.0",
+    "babel-preset-stage-2": "^6.24.1",
     "babel-standalone": "^6.26.0",
     "babelify": "^8.0.0",
     "body-parser": "^1.18.3",
