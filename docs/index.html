@@ -1596,6 +1596,58 @@
               
                 
                 <li><a
+                  href='#linkedrecordsqueryresult'
+                  class=" toggle-sibling">
+                  LinkedRecordsQueryResult
+                  <span class='icon'>▸</span>
+                </a>
+                
+                <div class='toggle-target display-none'>
+                  
+                  
+                    <ul class='list-reset py1-ul pl1'>
+                      <li class='h5'><span>Instance members</span></li>
+                      
+                      <li><a
+                        href='#linkedrecordsqueryresultisvalid'
+                        class='regular pre-open'>
+                        #isValid
+                      </a></li>
+                      
+                      <li><a
+                        href='#linkedrecordsqueryresultparenttable'
+                        class='regular pre-open'>
+                        #parentTable
+                      </a></li>
+                      
+                      <li><a
+                        href='#linkedrecordsqueryresultrecordids'
+                        class='regular pre-open'>
+                        #recordIds
+                      </a></li>
+                      
+                      <li><a
+                        href='#linkedrecordsqueryresultrecords'
+                        class='regular pre-open'>
+                        #records
+                      </a></li>
+                      
+                      <li><a
+                        href='#linkedrecordsqueryresultfields'
+                        class='regular pre-open'>
+                        #fields
+                      </a></li>
+                      
+                    </ul>
+                  
+                  
+                  
+                </div>
+                
+                </li>
+              
+                
+                <li><a
                   href='#fieldtypes'
                   class="">
                   fieldTypes
@@ -11827,7 +11879,7 @@ a publicly shared base, or in development mode.</p>
 <p>Any key can be watched to know when the value of the key changes.</p>
 
 
-  <div class='pre p1 fill-light mt0'>new GlobalConfig(initialKvValuesByKey: {}, isDevelopmentMode: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</div>
+  <div class='pre p1 fill-light mt0'>new GlobalConfig(initialKvValuesByKey: {})</div>
   
   
     <p>
@@ -11852,14 +11904,6 @@ a publicly shared base, or in development mode.</p>
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>initialKvValuesByKey</span> <code class='quiet'>({})</code>
-	    
-          </div>
-          
-        </div>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>isDevelopmentMode</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>)</code>
 	    
           </div>
           
@@ -13178,6 +13222,358 @@ means there is not a min size in that dimension.</p>
   
 
   
+
+  
+
+  
+</section>
+
+          
+        
+          
+            <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='linkedrecordsqueryresult'>
+      LinkedRecordsQueryResult
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Represents a set of records from a LinkedRecord cell value.</p>
+<p>Do not instantiate. You can get instances of this class by calling
+<code>record.getLinkedRecordsFromCell</code>.</p>
+
+
+  <div class='pre p1 fill-light mt0'>new LinkedRecordsQueryResult(record: RecordModel, field: FieldModel, opts: QueryResultOpts)</div>
+  
+  
+    <p>
+      Extends
+      
+        <a href="#abstractmodelwithasyncdata">AbstractModelWithAsyncData</a>
+      
+    </p>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>record</span> <code class='quiet'>(RecordModel)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>field</span> <code class='quiet'>(FieldModel)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>opts</span> <code class='quiet'>(QueryResultOpts)</code>
+	    
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Instance Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='linkedrecordsqueryresultisvalid'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>isValid</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Is the query result currently valid? This value always starts as 'true',
+but can become false if the field config changes to link to a different
+table or a type other than MULTIPLE_RECORD_LINKS. Once <code>isValid</code> has
+become false, it will never become true again. Many fields will throw on
+attempting to access them, and watches will no longer fire.</p>
+
+
+  <div class='pre p1 fill-light mt0'>isValid</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='linkedrecordsqueryresultparenttable'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>parentTable</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The table that the records in the QueryResult are a part of</p>
+
+
+  <div class='pre p1 fill-light mt0'>parentTable</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>TableModel</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='linkedrecordsqueryresultrecordids'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>recordIds</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Ordered array of all the linked record ids.
+Watchable.</p>
+
+
+  <div class='pre p1 fill-light mt0'>recordIds</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='linkedrecordsqueryresultrecords'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>records</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Ordered array of all the linked records.
+Watchable.</p>
+
+
+  <div class='pre p1 fill-light mt0'>records</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;RecordModel></code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='linkedrecordsqueryresultfields'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fields</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>The fields that were used to create this LinkedRecordsQueryResult.</p>
+
+
+  <div class='pre p1 fill-light mt0'>fields</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&#x3C;FieldModel> | null)</code>
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
 
   
 
