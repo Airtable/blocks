@@ -42,11 +42,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return true;
     }
     _kvStore: {[string]: BlockKvValue};
-    _isDevelopmentMode: boolean;
-    constructor(initialKvValuesByKey: {[string]: BlockKvValue}, isDevelopmentMode: boolean) {
+    constructor(initialKvValuesByKey: {[string]: BlockKvValue}) {
         super();
-
-        this._isDevelopmentMode = isDevelopmentMode;
 
         this._kvStore = initialKvValuesByKey;
 
@@ -93,12 +90,6 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             {path, value},
         ]);
     }
-    // TODO(jb): deprecate this in favor of set, now that set accepts a path.
-    setPath(path: Array<string>, value: BlockKvValue) {
-        this.setPaths([
-            {path, value},
-        ]);
-    }
     /** */
     canSetPaths(updates: Array<BlockKvUpdate>) {
         // This takes the updates to future-proof against having per-key
@@ -118,9 +109,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         this._setMultipleKvPaths(updates);
 
         // Now send the update over to liveapp.
-        // TODO(jb): remove the isDevelopmentMode arg once we think enough clients
-        // are updated. New clients don't need it, but we don't want to break old ones.
-        liveappInterface.setMultipleKvPaths(updates, this._isDevelopmentMode);
+        liveappInterface.setMultipleKvPaths(updates);
     }
     _setMultipleKvPaths(updates: Array<BlockKvUpdate>) {
         if (!Array.isArray(updates)) {

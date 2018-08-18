@@ -14,9 +14,10 @@ type ViewportConstraintProps = {
     children?: React.Node,
 };
 
-const didSizeChange = (prev: ?SizeConstraintProp, next: ?SizeConstraintProp): boolean =>
+const didSizeChange = (prev: ?SizeConstraintProp, next: ?SizeConstraintProp): boolean => (
     (prev && prev.width) !== (next && next.width) ||
-    (prev && prev.height) !== (next && next.height);
+        (prev && prev.height) !== (next && next.height)
+);
 
 /**
  * ViewportConstraint - when mounted, applies constraints to the viewport.
@@ -99,7 +100,7 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
         this._removeMaxFullscreenSizeConstraint();
         if (this.props.maxFullscreenSize) {
             this._removeMaxFullscreenSizeConstrainFn = getSdk().viewport.addMaxFullscreenSize(
-                this.props.maxFullscreenSize
+                this.props.maxFullscreenSize,
             );
         }
     }

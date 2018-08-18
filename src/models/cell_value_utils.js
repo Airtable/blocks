@@ -115,7 +115,7 @@ const publicCellValueUtils = {
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
             const foreignRecord = table.getRecordById(foreignRecordId);
-            invariant(foreignRecord, `Foreign record does not exist for id: ${foreignRecordId}`);
+            invariant(foreignRecord, 'Record does not exist in linked table');
 
             // Ignore whatever `name` we were given (if any) and overwrite it
             // with the record's primary cell value. The `name` is effectively

@@ -7,7 +7,7 @@ const ColorUtils = require('client/blocks/sdk/ui/color_utils');
 const viewTypeProvider = require('client_server_shared/view_types/view_type_provider');
 const airtableUrls = require('client_server_shared/airtable_urls');
 
-import type {Color} from 'client_server_shared/types/view_config/color_config_obj.js';
+import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
 import type {BaseDataForBlocks, ViewDataForBlocks, BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type FieldType from 'client/blocks/sdk/models/field';

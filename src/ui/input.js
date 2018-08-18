@@ -11,7 +11,7 @@ type InputProps = {
     value: mixed,
     type?: string,
     placeholder?: string,
-    onChange?: (SyntheticInputEvent) => void,
+    onChange?: (SyntheticInputEvent<>) => void,
     style?: Object,
     className?: string,
     disabled?: boolean,
@@ -65,7 +65,7 @@ class Input extends React.Component {
         tabIndex: 0,
     };
     props: InputProps;
-    _onChange: SyntheticInputEvent => void;
+    _onChange: SyntheticInputEvent<> => void;
     _input: HTMLInputElement | null;
     constructor(props: InputProps) {
         super(props);
@@ -95,7 +95,7 @@ class Input extends React.Component {
     _shouldUseDefaultClassesForType(): boolean {
         return !this.props.type || !typesToExcludeFromDefaultClassesSet[this.props.type];
     }
-    _onChange(e: SyntheticInputEvent) {
+    _onChange(e: SyntheticInputEvent<>) {
         const {onChange} = this.props;
         if (onChange) {
             onChange(e);

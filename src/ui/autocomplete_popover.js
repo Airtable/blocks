@@ -69,8 +69,8 @@ class AutocompletePopover extends React.Component {
     _input: ?HTMLElement;
     _resultsContainer: ?HTMLElement;
     _selectedResult: ?HTMLElement;
-    _onInputChange: SyntheticInputEvent => void;
-    _onKeyDown: SyntheticKeyboardEvent => void;
+    _onInputChange: SyntheticInputEvent<> => void;
+    _onKeyDown: SyntheticKeyboardEvent<> => void;
     _resetResultsPointerEvents: () => void;
     constructor(props: AutocompletePopoverProps) {
         super(props);
@@ -169,7 +169,7 @@ class AutocompletePopover extends React.Component {
             focusedItemIndex: null,
         });
     }
-    _onInputChange(e: SyntheticInputEvent) {
+    _onInputChange(e: SyntheticInputEvent<>) {
         const query = e.target.value;
         const itemsMatchingQuery = this._getItemsMatchingQuery(query);
         const focusedItemIndex = query.length && itemsMatchingQuery.length ? 0 : null;
@@ -181,7 +181,7 @@ class AutocompletePopover extends React.Component {
             this._scrollToSelectedIndex();
         });
     }
-    _onKeyDown(e: SyntheticKeyboardEvent) {
+    _onKeyDown(e: SyntheticKeyboardEvent<>) {
         switch (e.keyCode) {
             case KeyCodes.ENTER:
                 this._onItemSelectFromKeyDown();

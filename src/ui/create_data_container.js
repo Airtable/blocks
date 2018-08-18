@@ -16,7 +16,8 @@ function isReactComponent(component: mixed): boolean {
     );
 }
 function getReactComponent(
-    Component: ReactClass<any> // eslint-disable-line flowtype/no-weak-types
+    // flow-disable-next-line #flow-upgrade
+    Component: ReactClass<any>, // eslint-disable-line flowtype/no-weak-types
 ): ?ReactClass<any> { // eslint-disable-line flowtype/no-weak-types
     if (isReactComponent(Component)) {
         return (Component: any); // eslint-disable-line flowtype/no-weak-types
@@ -132,6 +133,7 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
                 a.context === b.context &&
                 u.isEqual(a.key, b.key);
         }
+        // flow-disable-next-line #flow-upgrade
         _wrapCallback(context: ?ComponentWithProps, unwrappedCallback: Function): Function {
             return (...callbackArguments) => {
                 if (!this._dataContainerIsMounted) {
@@ -249,6 +251,7 @@ function createDataContainer<Props>(Component: ReactClass<Props>, getDependencie
                             callback = this._invokeForceUpdate;
                             context = this; // eslint-disable-line consistent-this
                         }
+                        // flow-disable-next-line #flow-upgrade
                         const watchConfig: WatchConfig = {watchable, key, callback, context};
                         watchConfigs.push(watchConfig);
                     }

@@ -53,9 +53,9 @@ class Tooltip extends React.Component {
         fitInWindowMode: Popover.fitInWindowModes.FLIP,
     };
     props: TooltipProps;
-    _onMouseEnter: SyntheticMouseEvent => void;
-    _onMouseLeave: SyntheticMouseEvent => void;
-    _onClick: SyntheticMouseEvent => void;
+    _onMouseEnter: SyntheticMouseEvent<> => void;
+    _onMouseLeave: SyntheticMouseEvent<> => void;
+    _onClick: SyntheticMouseEvent<> => void;
     _showTooltip: () => void;
     _hideTooltip: () => void;
     _renderTooltipContent: () => React$Element<*>;
@@ -73,21 +73,21 @@ class Tooltip extends React.Component {
         this._hideTooltip = this._hideTooltip.bind(this);
         this._renderTooltipContent = this._renderTooltipContent.bind(this);
     }
-    _onMouseEnter(e: SyntheticMouseEvent) {
+    _onMouseEnter(e: SyntheticMouseEvent<>) {
         this._showTooltip();
         const originalOnMouseEnter = this.props.children.props.onMouseEnter;
         if (originalOnMouseEnter) {
             originalOnMouseEnter(e);
         }
     }
-    _onMouseLeave(e: SyntheticMouseEvent) {
+    _onMouseLeave(e: SyntheticMouseEvent<>) {
         this._hideTooltip();
         const originalOnMouseLeave = this.props.children.props.onMouseLeave;
         if (originalOnMouseLeave) {
             originalOnMouseLeave(e);
         }
     }
-    _onClick(e: SyntheticMouseEvent) {
+    _onClick(e: SyntheticMouseEvent<>) {
         if (this.props.shouldHideTooltipOnClick) {
             this._hideTooltip();
         }

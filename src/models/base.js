@@ -9,7 +9,6 @@ const permissionHelpers = require('client_server_shared/permissions/permission_h
 const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const UserScopedAppInterface = require('client_server_shared/user_scoped_app_interface');
-const invariant = require('invariant');
 const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = require('client_server_shared/client_server_shared_config_settings');
 
 import type {BaseDataForBlocks, Collaborator} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
@@ -171,7 +170,6 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     }
     get __appInterface(): UserScopedAppInterface {
         const userId = this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID;
-        invariant(userId, 'Current user must be available before appInterface is accessed');
         const isFeatureEnabled = featureName => this._isFeatureEnabled(featureName);
         return new UserScopedAppInterface(this.id, this._data.appBlanket, this._data.sortTiebreakerKey, userId, isFeatureEnabled);
     }

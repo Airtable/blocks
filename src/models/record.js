@@ -11,10 +11,11 @@ const Sorter = require('client_server_shared/filter_and_sort/sorter');
 const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
 
-import type {Color} from 'client_server_shared/types/view_config/color_config_obj.js';
+import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
 import type {BaseDataForBlocks, RecordDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'client/blocks/sdk/models/table';
 import type ViewType from 'client/blocks/sdk/models/view';
+import type LinkedRecordsQueryResultType, {LinkedRecordsQueryResultOpts} from 'client/blocks/sdk/models/linked_records_query_result';
 
 // A record def is a cellValuesByFieldId object.
 export type RecordDef = {[string]: mixed};
@@ -209,6 +210,17 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
 
         return view.getRecordColorHex(this);
     }
+    getLinkedRecordsFromCell(
+        fieldOrFieldIdOrFieldName: Field | string,
+        opts: LinkedRecordsQueryResultOpts = {},
+    ): LinkedRecordsQueryResultType {
+        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+        invariant(field, 'Field does not exist');
+        invariant(!field.isDeleted, 'Field has been deleted');
+        // require here to avoid circular import
+        const LinkedRecordsQueryResult = require('client/blocks/sdk/models/linked_records_query_result');
+        return LinkedRecordsQueryResult.__createOrReuseLinkedRecordsQueryResult(this, field, opts);
+    }
     /** Returns the URL for this record. */
     get url(): string {
         return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
@@ -288,7 +300,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         const {cellValuesByFieldId, commentCount} = dirtyPaths;
 
-        if (cellValuesByFieldId && u.size(cellValuesByFieldId) > 0) {
+        if (cellValuesByFieldId && u.isObjectNonEmpty(cellValuesByFieldId)) {
             // TODO: don't trigger changes for fields that aren't supposed to be loaded
             // (in some cases, e.g. record created, liveapp will send cell values
             // that we're not subscribed to).

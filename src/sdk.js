@@ -90,7 +90,7 @@ class BlockSdk {
         blockInstallationId: string,
     }) {
         this.__BlockWrapperComponent = BlockWrapperComponent;
-        this.globalConfig = new GlobalConfig(args.initialKvValuesByKey, args.isDevelopmentMode);
+        this.globalConfig = new GlobalConfig(args.initialKvValuesByKey);
         this.base = new Base(args.baseData);
         this.models = models;
         this.installationId = args.blockInstallationId;

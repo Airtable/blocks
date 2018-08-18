@@ -18,10 +18,6 @@ type CollaboratorTokenProps = {
     className?: string,
 };
 
-const fakeCollaboratorColumnTypeOptions = {
-    shouldNotify: false,
-};
-
 /** */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className} = props;
@@ -45,7 +41,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
         // the private obj and our helpers. We do this so that we can use sized prof pic urls
         // and name helper functions that we couldn't otherwise use.
         profilePicUrl = userObjMethods.getTokenSizedProfilePicUrl(userObj);
-        userName = userObjMethods.getName(userObj, fakeCollaboratorColumnTypeOptions) || 'Unknown';
+        userName = userObjMethods.getName(userObj) || 'Unknown';
     } else {
         // Can't use helpers to get token-sized prof pic url, since we can't be sure we were
         // given an airtable url.

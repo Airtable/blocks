@@ -48,7 +48,6 @@ class Modal extends React.Component {
     componentDidMount() {
         this._container = document.createElement('div');
         const container = this._container;
-        invariant(container, 'No modal container');
 
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';

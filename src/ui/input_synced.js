@@ -13,7 +13,7 @@ type InputSyncedProps = {
     type: ?string,
     globalConfigKey: GlobalConfigKey,
     placeholder?: string,
-    onChange?: (SyntheticInputEvent) => void,
+    onChange?: (SyntheticInputEvent<>) => void,
     style: ?Object,
     className: ?string,
     disabled: ?boolean,
@@ -66,7 +66,7 @@ class InputSynced extends React.Component {
                         // and will throw warnings when it becomes controlled.
                         value={value === null ? '' : value}
                         disabled={this.props.disabled || !canSetValue}
-                        onChange={(e: SyntheticInputEvent) => {
+                        onChange={(e: SyntheticInputEvent<>) => {
                             setValue(e.target.value);
                             if (this.props.onChange) {
                                 this.props.onChange(e);

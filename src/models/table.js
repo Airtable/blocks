@@ -368,7 +368,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     }
     /** */
     createRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): Array<Record> {
-        if (!this.canCreateRecords()) {
+        if (!this.canCreateRecords(recordDefsOrNumberOfRecords)) {
             throw new Error('Your permission level does not allow creating records');
         }
 
@@ -620,7 +620,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             this._data.recordsById = {};
         }
         const {recordsById: existingRecordsById} = this._data;
-        u.each((newRecordsById: {[RecordId]: RecordDataForBlocks}), (newRecordObj, recordId) => {
+        u.unsafeEach((newRecordsById: {[RecordId]: RecordDataForBlocks}), (newRecordObj, recordId) => {
             if (!existingRecordsById.hasOwnProperty(recordId)) {
                 existingRecordsById[recordId] = newRecordObj;
             } else {
@@ -634,7 +634,6 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                     existingRecordObj.cellValuesByFieldId = {};
                 }
                 const existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
-                invariant(existingCellValuesByFieldId, 'existingCellValuesByFieldId');
                 for (let i = 0; i < fieldIds.length; i++) {
                     const fieldId = fieldIds[i];
                     existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId ?
@@ -734,7 +733,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                     const fieldIds = Object.keys(this._data.fieldsById);
                     fieldIdsToClear = fieldIds.filter(fieldId => !this._areCellValuesLoadedByFieldId[fieldId]);
                 }
-                u.each(this._data.recordsById, recordObj => {
+                u.unsafeEach(this._data.recordsById, recordObj => {
                     for (let i = 0; i < fieldIdsToClear.length; i++) {
                         const fieldId = fieldIdsToClear[i];
                         if (recordObj.cellValuesByFieldId) {
@@ -804,8 +803,6 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             for (const [fieldId, dirtyFieldPaths] of u.entries(dirtyPaths.fieldsById)) {
                 if (dirtyFieldPaths._isDirty) {
                     // If the entire field is dirty, it was either created or deleted.
-
-                    invariant(this._data.fieldsById, 'No recordsById');
                     if (this._data.fieldsById.hasOwnProperty(fieldId)) {
                         addedFieldIds.push(fieldId);
                     } else {

@@ -93,7 +93,7 @@ const validateOptions = (options: Array<SelectOption>) => {
 
 function optionValueToString(value: SelectOptionValue): string {
     const valueJson = JSON.stringify(
-        value === undefined ? {isUndefined: true} : {notUndefinedValue: value}
+        value === undefined ? {isUndefined: true} : {notUndefinedValue: value},
     );
     return valueJson;
 }

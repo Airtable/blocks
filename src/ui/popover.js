@@ -107,7 +107,6 @@ class Popover extends React.Component {
 
         this._container = document.createElement('div');
         const container = this._container;
-        invariant(container, 'No popover container');
 
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';

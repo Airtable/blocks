@@ -38,7 +38,6 @@ type BatchUpdate =
     }} |
     {updateType: 'SET_MULTIPLE_KV_PATHS', args: {
         updates: Array<BlockKvUpdate>,
-        isDevelopmentMode: boolean,
     }};
 
 class LiveappInterface {
@@ -177,9 +176,7 @@ class LiveappInterface {
                 return newBatchUpdate.args.tableId === originalBatchUpdate.args.tableId;
 
             case BatchUpdateTypes.SET_MULTIPLE_KV_PATHS:
-                // Can merge as long as they're in the same run environment.
-                invariant(originalBatchUpdate.updateType === newBatchUpdate.updateType, 'Incorrect updateType');
-                return originalBatchUpdate.args.isDevelopmentMode === newBatchUpdate.args.isDevelopmentMode;
+                return true;
 
             default:
                 throw new Error('Unrecognized batch update type: ' + newBatchUpdate.updateType);
@@ -277,12 +274,11 @@ class LiveappInterface {
     unsubscribeFromCursorData() {
         utils.fireAndForgetPromise(this.callHostMethodAsync.bind(this, BlockMessageTypes.HostMethodNames.UNSUBSCRIBE_FROM_CURSOR_DATA, {}));
     }
-    setMultipleKvPaths(updates: Array<BlockKvUpdate>, isDevelopmentMode: boolean) {
+    setMultipleKvPaths(updates: Array<BlockKvUpdate>) {
         this._enqueueBatchUpdate({
             updateType: BatchUpdateTypes.SET_MULTIPLE_KV_PATHS,
             args: {
                 updates,
-                isDevelopmentMode,
             },
         });
     }

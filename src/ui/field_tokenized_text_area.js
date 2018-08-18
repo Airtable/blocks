@@ -46,7 +46,7 @@ class FieldTokenPicker extends React.Component {
                 onSelect={item => {
                     const fieldId = item.value;
                     const field = this.props.table.getFieldById(fieldId);
-                    invariant(field, `No field for id: ${fieldId}`);
+                    invariant(field, 'Field not found');
                     this.props.onSelect(field);
                 }}
                 onClose={onClose}
@@ -142,7 +142,7 @@ class FieldTokenizedTextArea extends React.Component {
     _input: ?HTMLElement;
     _onChange: Function;
     _onInsertFieldTokenForField: FieldModel => void;
-    _onAddFieldTokenButtonClick: SyntheticMouseEvent => void;
+    _onAddFieldTokenButtonClick: SyntheticMouseEvent<> => void;
     _onCloseFieldTokenPicker: () => void;
     focus: () => void;
 
@@ -262,7 +262,7 @@ class FieldTokenizedTextArea extends React.Component {
             shouldShowFieldTokenPicker: false,
         }, this.focus);
     }
-    _onAddFieldTokenButtonClick(e: SyntheticMouseEvent) {
+    _onAddFieldTokenButtonClick(e: SyntheticMouseEvent<>) {
         this.setState(prevState => {
             const quill = this._getQuill();
             invariant(quill, 'quill');

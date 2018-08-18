@@ -131,7 +131,7 @@ module.exports = createDataContainer(FieldPicker, (props: FieldPickerProps) => {
         {watch: props.table, key: 'fields'},
         {watch: getSdk().base, key: 'tables'},
         ...(props.table ? props.table.fields : []).map(
-            field => ({watch: field, key: 'name'})
+            field => ({watch: field, key: 'name'}),
         ),
     ];
 }, [

@@ -62,7 +62,7 @@ async function expandRecordPickerAsync(
             opts.fields.map(field => {
                 invariant(
                     field.parentTable.id === tableId,
-                    'all fields must belong to the same table'
+                    'all fields must belong to the same table',
                 );
                 return field.id;
             }) :
@@ -75,7 +75,7 @@ async function expandRecordPickerAsync(
             recordIds,
             fieldIds,
             shouldAllowCreatingRecord: opts && opts.shouldAllowCreatingRecord,
-        }
+        },
     );
 
     if (!chosenRecordId) {

@@ -106,7 +106,6 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
         );
 
         return cellValueUtils.getPublicCellValueFromPrivateCellValue(privateCellValue, this);
-
     }
     __getRawType(): ColumnType {
         return this._data.type;

@@ -116,7 +116,7 @@ const getFieldResultType = (field: FieldModel): string => {
 
 /** */
 class RecordCard extends React.Component {
-    _onClick: (e: SyntheticMouseEvent) => void;
+    _onClick: (e: SyntheticMouseEvent<>) => void;
     constructor(props: RecordCardProps) {
         super(props);
 
@@ -157,7 +157,7 @@ class RecordCard extends React.Component {
             }
         }
     }
-    _onClick(e: SyntheticMouseEvent): void {
+    _onClick(e: SyntheticMouseEvent<>): void {
         if (this.props.onClick) {
             this.props.onClick(e);
         } else if (this.props.onClick === undefined) {
@@ -194,6 +194,9 @@ class RecordCard extends React.Component {
             const firstAttachmentFieldInView = u.find(fieldsToUse, field => {
                 return this._isAttachment(field);
             });
+            if (firstAttachmentFieldInView === undefined) {
+                return null;
+            }
             return firstAttachmentFieldInView;
         } else {
             return null;
@@ -400,13 +403,12 @@ class RecordCard extends React.Component {
             primaryValue = primaryCellValueAsString;
             isUnnamed = false;
         }
-        const primaryClasses = classNames('strong relative cellValue mt0 flex items-center', {
+        const primaryClasses = classNames('strong relative cellValue mt0 flex items-center line-height-4', {
             unnamed: isUnnamed,
         });
         const primaryStyles = {
             height: 18,
             fontSize: 14,
-            lineHeight: '14px',
         };
 
         return (

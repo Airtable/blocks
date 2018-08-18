@@ -83,7 +83,7 @@ class Button extends React.Component {
                 disabled={disabled}
                 className={classNames('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
                     'pointer link-quiet': !disabled,
-                    quieter: disabled,
+                    'noevents quieter': disabled,
                 })}
                 {...restOfProps}>
                 {children}

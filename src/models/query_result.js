@@ -9,6 +9,7 @@ const ViewModel = require('client/blocks/sdk/models/view');
 const getSdk = require('client/blocks/sdk/get_sdk');
 const invariant = require('invariant');
 const Field = require('client/blocks/sdk/models/field');
+const ObjectPool = require('client/blocks/sdk/models/object_pool');
 
 const WatchableQueryResultKeys = {
     records: 'records',
@@ -17,7 +18,7 @@ const WatchableQueryResultKeys = {
 };
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 // The string case is to accomodate cellValuesInField:$FieldId.
-type WatchableQueryResultKey = $Keys<typeof WatchableQueryResultKeys> | string;
+export type WatchableQueryResultKey = $Keys<typeof WatchableQueryResultKeys> | string;
 type QueryResultData = {
     recordIds: Array<string> | null, // null if data isn't loaded (or if it hasn't been lazily initialized).
 };
@@ -34,7 +35,7 @@ export type QueryResultOpts = {
     fields?: Array<Field | string | void | null | false>,
 };
 
-type NormalizedQueryResultOpts = {
+export type NormalizedQueryResultOpts = {
     sorts: Array<{fieldId: string, direction: 'asc' | 'desc'}> | null,
     fieldIdsOrNullIfAllFields: Array<string> | null,
 };
@@ -45,49 +46,34 @@ import type {WatchableViewKey} from 'client/blocks/sdk/models/view';
 import type FieldModel from 'client/blocks/sdk/models/field';
 import type RecordModel from 'client/blocks/sdk/models/record';
 
-class QueryResultPool {
-    _queryResultsBySourceModelId: {[string]: Array<QueryResult> | void};  // eslint-disable-line no-use-before-define
-    constructor() {
-        this._queryResultsBySourceModelId = {};
-    }
-    registerQueryResultForReuse(queryResult: QueryResult) { // eslint-disable-line no-use-before-define
-        const sourceModelId = queryResult.__sourceModelId;
-        const queryResults = this._queryResultsBySourceModelId[sourceModelId];
-        if (queryResults) {
-            queryResults.push(queryResult);
-        } else {
-            this._queryResultsBySourceModelId[sourceModelId] = [queryResult];
-        }
-    }
-    unregisterQueryResultForReuse(queryResult: QueryResult) { // eslint-disable-line no-use-before-define
-        const sourceModelId = queryResult.__sourceModelId;
-        const queryResults = this._queryResultsBySourceModelId[sourceModelId];
-        invariant(queryResults, 'queryResults');
-        const index = queryResults.indexOf(queryResult);
-        invariant(index !== -1, 'queryResult not registered');
-        queryResults.splice(index, 1);
-        if (queryResults.length === 0) {
-            // `delete` causes de-opts, which slows down subsequent reads,
-            // so set to undefined instead (unverified that this is actually faster).
-            this._queryResultsBySourceModelId[sourceModelId] = undefined;
-        }
-    }
-    getQueryResultForReuse(sourceModel: TableModel | ViewModel, normalizedOpts: NormalizedQueryResultOpts): QueryResult | null {  // eslint-disable-line no-use-before-define
-        const queryResults = this._queryResultsBySourceModelId[sourceModel.id];
-        if (queryResults) {
-            // We expect that there won't be too many QueryResults for a given
-            // model, so iterating over them should be okay. If this assumption
-            // ends up being wrong, we can hash the opts or something.
-            for (const queryResult of queryResults) {
-                if (queryResult.__canBeReusedForNormalizedOpts(normalizedOpts)) {
-                    return queryResult;
-                }
-            }
-        }
-        return null;
-    }
+export interface PublicQueryResult {
+    +recordIds: Array<string>,
+    +records: Array<RecordModel>,
+    +fields: Array<FieldModel> | null,
+    +parentTable: TableModel,
+    watch(
+        key: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        callback: Function
+    ): Array<WatchableQueryResultKey>,
+    unwatch(
+        key: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        callback: Function
+    ): Array<WatchableQueryResultKey>,
+    loadDataAsync(): Promise<void>,
+    unloadData(): void,
 }
-const queryResultPool = new QueryResultPool();
+
+// eslint-disable-next-line no-use-before-define
+const queryResultPool: ObjectPool<QueryResult, {
+    sourceModel: TableModel | ViewModel,
+    normalizedOpts: NormalizedQueryResultOpts,
+}> = new ObjectPool({
+    getKeyFromObject: queryResult => queryResult.__sourceModelId,
+    getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
+    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
+        return queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
+    },
+});
 
 /**
  * Represents a set of records.
@@ -95,8 +81,10 @@ const queryResultPool = new QueryResultPool();
  * Do not instantiate. You can get instances of this class by calling
  * `table.select` or `view.select`.
  */
-class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQueryResultKey> {
+class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQueryResultKey> implements PublicQueryResult {
     static _className = 'QueryResult';
+    static WatchableKeys = WatchableQueryResultKeys;
+    static WatchableCellValuesInFieldKeyPrefix = WatchableCellValuesInFieldKeyPrefix;
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableQueryResultKeys, key) ||
             u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
@@ -110,7 +98,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
     static __createOrReuseQueryResult(sourceModel: TableModel | ViewModel, opts: QueryResultOpts) {
         const tableModel = sourceModel instanceof ViewModel ? sourceModel.parentTable : sourceModel;
         const normalizedOpts = this._normalizeOpts(tableModel, opts);
-        const queryResult = queryResultPool.getQueryResultForReuse(sourceModel, normalizedOpts);
+        const queryResult = queryResultPool.getObjectForReuse({sourceModel, normalizedOpts});
         if (queryResult) {
             return queryResult;
         } else {
@@ -295,7 +283,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
     get records(): Array<RecordModel> {
         return this.recordIds.map(recordId => {
             const record = this._table.getRecordById(recordId);
-            invariant(record, `No record for id: ${recordId}`);
+            invariant(record, 'Record missing in table');
             return record;
         });
     }
@@ -450,7 +438,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
         await super.loadDataAsync();
     }
     async _loadDataAsync(): Promise<Array<WatchableQueryResultKey>> {
-        queryResultPool.registerQueryResultForReuse(this);
+        queryResultPool.registerObjectForReuse(this);
 
         invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
         await this._mostRecentSourceModelLoadPromise;
@@ -569,7 +557,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
         this._visList = null;
         this._orderedRecordIds = null;
 
-        queryResultPool.unregisterQueryResultForReuse(this);
+        queryResultPool.unregisterObjectForReuse(this);
     }
     _getColumnsById(): {[string]: Object} {
         return this._table.fields.reduce((result, field) => {
@@ -583,7 +571,7 @@ class QueryResult extends AbstractModelWithAsyncData<QueryResultData, WatchableQ
         invariant(visList, 'No vis list');
         for (const recordId of recordIds) {
             const record = this._table.getRecordById(recordId);
-            invariant(record, `No record for id: ${recordId}`);
+            invariant(record, 'Record missing in table');
             const rowJson = record.__getRawRow();
             const groupPath = GroupAssigner.getGroupPathForRow(
                 this._table.parentBase.__appInterface,

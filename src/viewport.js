@@ -25,7 +25,7 @@ type ViewportSizeConstraint = {
 const compareWithNulls = (
     a: number | null,
     b: number | null,
-    compare: (number, number) => number
+    compare: (number, number) => number,
 ): number | null => {
     if (a !== null && b !== null) {
         return compare(a, b);
@@ -104,8 +104,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
                 liveappInterface.callHostMethodAsync.bind(
                     liveappInterface,
                     BlockMessageTypes.HostMethodNames.SET_FULLSCREEN_MAX_SIZE,
-                    this.maxFullscreenSize
-                )
+                    this.maxFullscreenSize,
+                ),
             );
         });
     }
@@ -120,8 +120,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
         utils.fireAndForgetPromise(
             liveappInterface.callHostMethodAsync.bind(
                 liveappInterface,
-                BlockMessageTypes.HostMethodNames.ENTER_FULLSCREEN
-            )
+                BlockMessageTypes.HostMethodNames.ENTER_FULLSCREEN,
+            ),
         );
     }
     /** Request to exit fullscreen mode */
@@ -129,8 +129,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
         utils.fireAndForgetPromise(
             liveappInterface.callHostMethodAsync.bind(
                 liveappInterface,
-                BlockMessageTypes.HostMethodNames.EXIT_FULLSCREEN
-            )
+                BlockMessageTypes.HostMethodNames.EXIT_FULLSCREEN,
+            ),
         );
     }
 
@@ -149,7 +149,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
                     width: compareWithNulls(memo.width, size.width, Math.min),
                     height: compareWithNulls(memo.height, size.height, Math.min),
                 }),
-                {width: null, height: null}
+                {width: null, height: null},
             );
 
             const minSize = this.minSize;
@@ -201,7 +201,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      */
     setMaxFullscreenSize(requestedSize: $Shape<ViewportSizeConstraint>) {
         warning(
-            'viewport.setMaxFullscreenSize is deprecated. Use viewport.addMaxFullscreenSize or <UI.ViewportConstraint /> instead.'
+            'viewport.setMaxFullscreenSize is deprecated. Use viewport.addMaxFullscreenSize or <UI.ViewportConstraint /> instead.',
         );
         if (this._removeLastSetFullscreenSize) {
             this._removeLastSetFullscreenSize();
@@ -223,7 +223,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
                     width: compareWithNulls(memo.width, size.width, Math.max),
                     height: compareWithNulls(memo.height, size.height, Math.max),
                 }),
-                {width: null, height: null}
+                {width: null, height: null},
             );
         }
 
@@ -271,7 +271,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      */
     setMinSize(size: $Shape<ViewportSizeConstraint>) {
         warning(
-            'viewport.setMinSize is deprecated. Use viewport.addMinSize or <UI.ViewportConstraint /> instead.'
+            'viewport.setMinSize is deprecated. Use viewport.addMinSize or <UI.ViewportConstraint /> instead.',
         );
         if (this._removeLastSetMinSize) {
             this._removeLastSetMinSize();
@@ -300,7 +300,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     watch(
         keys: WatchableViewportKey | Array<WatchableViewportKey>,
         callback: Function,
-        context?: ?Object
+        context?: ?Object,
     ): Array<WatchableViewportKey> {
         const validKeys = super.watch(keys, callback, context);
 
@@ -316,7 +316,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     unwatch(
         keys: WatchableViewportKey | Array<WatchableViewportKey>,
         callback: Function,
-        context?: ?Object
+        context?: ?Object,
     ): Array<WatchableViewportKey> {
         const validKeys = super.unwatch(keys, callback, context);
 

@@ -1,10 +1,9 @@
 // @flow
 const utils = require('client/blocks/sdk/utils');
-const u = require('client_server_shared/u');
+const {h, u} = require('client_server_shared/hu');
 const liveappInterface = require('client/blocks/sdk/liveapp_interface');
 const AbstractModelWithAsyncData = require('client/blocks/sdk/models/abstract_model_with_async_data');
 const Record = require('client/blocks/sdk/models/record');
-const invariant = require('invariant');
 
 import type {BaseDataForBlocks, CursorDataForBlocks} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
@@ -46,14 +45,13 @@ class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCu
     }
     /** */
     get selectedRecordIds(): Array<RecordId> {
-        invariant(this._data, 'Cursor data is not loaded');
+        h.assert(this._isDataLoaded, 'Cursor data is not loaded');
         const selectedRecordIds = Object.keys(this._data.selectedRecordIdSet);
         return selectedRecordIds;
     }
     /** */
     isRecordSelected(recordOrRecordId: Record | string): boolean {
-        invariant(this._data, 'Cursor data is not loaded');
-
+        h.assert(this._isDataLoaded, 'Cursor data is not loaded');
         let recordId: string;
         if (recordOrRecordId instanceof Record) {
             recordId = recordOrRecordId.id;
