@@ -4,7 +4,7 @@
 
 To install or update the `blocks` cli, run:
 
-    npm install --global https://github.com/Hyperbase/blocks-cli.git
+    npm install --global git+ssh://git@github.com:Hyperbase/blocks-cli.git
 
 ## Usage
 #### Clone a specific block from Airtable
