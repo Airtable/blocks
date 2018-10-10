@@ -14,6 +14,10 @@ module.exports = {
     // Metadata file for the block cli.
     BLOCK_FILE_NAME: 'block.json',
 
+    // Copied over from blockRouterConfigSettings.REQUEST_BODY_LIMIT
+    // in the hyperbase codebase
+    BLOCK_REQUEST_BODY_LIMIT: 5.2 * 1024 * 1024, // 5.2MB
+
     // File to store the airtable api key.
     AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',
 
