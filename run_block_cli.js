@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
-'use  strict';
+'use strict';
 
 const prompt = require('prompt');
 const yargsOuter = require('yargs');
