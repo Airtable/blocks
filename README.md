@@ -309,7 +309,7 @@ if (globalConfig.canSet(ConfigKeys.tableId) && runInfo.isFirstRun && !this.table
 
 ## flow
 
-Supported flow version: 0.52.0.
+Supported flow version: 0.81.0.
 
 The `stubs` folder contains empty stub files so you can run Flow in this
 directory without it complaining.
@@ -319,7 +319,7 @@ directory without it complaining.
 Install flow and the SDK repo:
 
 ```sh
-yarn add --dev flow-bin@0.52 git+ssh://git@github.com:Hyperbase/blocks-sdk.git
+yarn add --dev flow-bin@0.81 git+ssh://git@github.com:Hyperbase/blocks-sdk.git
 ```
 
 Create a `.flowconfig` file in your repo and add the following:
@@ -334,12 +334,12 @@ Create a `.flowconfig` file in your repo and add the following:
 [lints]
 
 [options]
-unsafe.enable_getters_and_setters=true
 suppress_comment= \\(.\\|\n\\)*flow-disable-next-line
 module.name_mapper='^frontend\/\(.*\)$' -> '<PROJECT_ROOT>/frontend/\1'
+module.name_mapper='^shared\/\(.*\)$' -> '<PROJECT_ROOT>/shared/\1'
 module.name_mapper='^airtable-block$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/flow-index.js'
-module.name_mapper='^airtable-block\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/\1'
-module.name_mapper='^client\/blocks\/sdk\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/\1'
+module.name_mapper='^airtable-block\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/shared/\1'
+module.name_mapper='^block_sdk\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/\1'
 module.name_mapper='^client\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/stubs/client/\1'
 module.name_mapper='^client_server_shared\/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/blocks-sdk/src/stubs/client_server_shared/\1'
 ```
