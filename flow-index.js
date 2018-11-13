@@ -1,4 +1,4 @@
 // @flow
-import getSDK from 'client/blocks/sdk/get_sdk';
+import getSDK from 'block_sdk/frontend/get_frontend_sdk';
 
 module.exports = getSDK();

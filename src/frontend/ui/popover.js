@@ -1,0 +1,336 @@
+// @flow
+const {h, u} = require('client_server_shared/hu');
+const React = require('block_sdk/frontend/ui/react');
+const ReactDOM = require('block_sdk/frontend/ui/react-dom');
+const PropTypes = require('prop-types');
+const Geometry = require('client/geometry/geometry');
+const classNames = require('classnames');
+const invariant = require('invariant');
+const createDetectElementResize = require('block_sdk/frontend/ui/create_detect_element_resize');
+
+const PopoverPlacements = {
+    TOP: ('top': 'top'),
+    CENTER: ('center': 'center'),
+    BOTTOM: ('bottom': 'bottom'),
+    LEFT: ('left': 'left'),
+    RIGHT: ('right': 'right'),
+};
+export type PopoverPlacementX = 'left' | 'center' | 'right';
+export type PopoverPlacementY = 'top' | 'center' | 'bottom';
+
+const FitInWindowModes = {
+    NONE: ('none': 'none'),
+    FLIP: ('flip': 'flip'),
+    NUDGE: ('nudge': 'nudge'),
+};
+export type FitInWindowMode = $Values<typeof FitInWindowModes>;
+
+type PopoverProps = {
+    children: React$Element<*>,
+    renderContent: () => React$Element<*>,
+    placementX: PopoverPlacementX,
+    placementY: PopoverPlacementY,
+    placementOffsetX: number,
+    placementOffsetY: number,
+    fitInWindowMode: FitInWindowMode,
+    onClose?: () => void,
+    isOpen: boolean,
+    backgroundClassName?: string,
+    backgroundStyle?: Object,
+};
+
+/** */
+class Popover extends React.Component<PopoverProps> {
+    static placements = PopoverPlacements;
+    static fitInWindowModes = FitInWindowModes;
+
+    static propTypes = {
+        children: PropTypes.element.isRequired,
+        renderContent: PropTypes.func.isRequired,
+        placementX: PropTypes.oneOf([PopoverPlacements.LEFT, PopoverPlacements.CENTER, PopoverPlacements.RIGHT]),
+        placementY: PropTypes.oneOf([PopoverPlacements.TOP, PopoverPlacements.CENTER, PopoverPlacements.BOTTOM]),
+        placementOffsetX: PropTypes.number,
+        placementOffsetY: PropTypes.number,
+        fitInWindowMode: PropTypes.oneOf(u.values(FitInWindowModes)),
+        onClose: PropTypes.func,
+        isOpen: PropTypes.bool,
+        backgroundClassName: PropTypes.string,
+        backgroundStyle: PropTypes.object,
+    };
+    static defaultProps = {
+        placementX: PopoverPlacements.CENTER,
+        placementY: PopoverPlacements.BOTTOM,
+        placementOffsetX: 0,
+        placementOffsetY: 0,
+        fitInWindowMode: FitInWindowModes.FLIP,
+        isOpen: true,
+    };
+    _container: null | HTMLElement;
+    _background: null | HTMLDivElement;
+    _popoverContent: null | HTMLElement;
+    _mouseDownOutsidePopover: boolean;
+    _onMouseDown: Event => void;
+    _onMouseUp: Event => void;
+    _refreshContainerAsync: () => void;
+    _detectElementResize: ?{addResizeListener: Function, removeResizeListener: Function};
+    constructor(props: PopoverProps) {
+        super(props);
+
+        this._container = null;
+        this._background = null;
+        this._popoverContent = null;
+        this._mouseDownOutsidePopover = false;
+
+        this._onMouseDown = this._onMouseDown.bind(this);
+        this._onMouseUp = this._onMouseUp.bind(this);
+        this._refreshContainerAsync = this._refreshContainerAsync.bind(this);
+    }
+    componentDidMount() {
+        if (this.props.isOpen) {
+            this._createContainer();
+        }
+
+        this._refreshContainerAsync();
+    }
+    componentWillReceiveProps(nextProps: PopoverProps) {
+        if (nextProps.isOpen) {
+            this._createContainer();
+        } else {
+            this._destroyContainer();
+        }
+    }
+    componentDidUpdate() {
+        this._refreshContainerAsync();
+    }
+    componentWillUnmount() {
+        this._destroyContainer();
+    }
+    _createContainer() {
+        if (this._container) {
+            return;
+        }
+
+        this._container = document.createElement('div');
+        const container = this._container;
+
+        container.setAttribute('tabIndex', '0');
+        container.style.zIndex = '99999';
+        container.style.position = 'relative';
+        invariant(document.body, 'no document body');
+        document.body.appendChild(container);
+
+        window.addEventListener('scroll', this._refreshContainerAsync);
+
+        this._detectElementResize = createDetectElementResize();
+        this._detectElementResize.addResizeListener(
+            this._anchor,
+            this._refreshContainerAsync,
+        );
+    }
+    _destroyContainer() {
+        const container = this._container;
+        if (!container) {
+            return;
+        }
+
+        window.removeEventListener('scroll', this._refreshContainerAsync);
+
+        if (this._detectElementResize) {
+            this._detectElementResize.removeResizeListener(
+                this._anchor,
+                this._refreshContainerAsync,
+            );
+        }
+
+        ReactDOM.unmountComponentAtNode(container);
+        container.remove();
+
+        this._container = null;
+    }
+    get _anchor() {
+        return ReactDOM.findDOMNode(this);
+    }
+    async _refreshContainerAsync() {
+        if (!this._container) {
+            return;
+        }
+
+        const anchor = this._anchor;
+        invariant(anchor, 'No anchor');
+        const anchorBoundingClientRect = anchor.getBoundingClientRect();
+        const anchorRect = new Geometry.Rect(
+            anchorBoundingClientRect.left,
+            anchorBoundingClientRect.top,
+            anchorBoundingClientRect.width,
+            anchorBoundingClientRect.height,
+        );
+        const viewportRect = new Geometry.Rect(
+            0,
+            0,
+            window.innerWidth,
+            window.innerHeight,
+        );
+
+        // Render the tooltip to measure its size. Render it to the right of the anchor element
+        // to start. Wait for the async render to complete before measuring. Otherwise, the
+        await this._renderPopoverAtPositionAsync(anchorRect.right(), anchorRect.top());
+
+        const measurementPopover = this._popoverContent;
+        invariant(measurementPopover, 'No popover after render');
+        const measurementPopoverBoundingRect = measurementPopover.getBoundingClientRect();
+        const popoverSize = new Geometry.Size(
+            measurementPopoverBoundingRect.width,
+            measurementPopoverBoundingRect.height,
+        );
+
+        let popoverRect = this._getPlacedPopoverRect(popoverSize, anchorRect, this.props.placementX, this.props.placementY);
+
+        if (this.props.fitInWindowMode === FitInWindowModes.FLIP && !this._isRectContainedWithinViewportRect(popoverRect, viewportRect)) {
+            // Popover rect is outside the viewport rect, and fitInWindowMode is flip, so
+            // let's try flipping the popover.
+            let placementX = this.props.placementX;
+            let placementY = this.props.placementY;
+            if (popoverRect.left() < viewportRect.left()) {
+                placementX = PopoverPlacements.RIGHT;
+            } else if (popoverRect.right() > viewportRect.right()) {
+                placementX = PopoverPlacements.LEFT;
+            }
+            if (popoverRect.top() < viewportRect.top()) {
+                placementY = PopoverPlacements.BOTTOM;
+            } else if (popoverRect.bottom() > viewportRect.bottom()) {
+                placementY = PopoverPlacements.TOP;
+            }
+            const flippedPopoverRect = this._getPlacedPopoverRect(popoverSize, anchorRect, placementX, placementY);
+
+            // Check if the flipped rect is within the viewport before using it. If the flipped rect
+            // is also outside the viewport, we might as well just use the original one and then nudge it.
+            if (this._isRectContainedWithinViewportRect(flippedPopoverRect, viewportRect)) {
+                popoverRect = flippedPopoverRect;
+            }
+        }
+
+        if (this.props.fitInWindowMode !== FitInWindowModes.NONE) {
+            // Check again. If flipping didn't bring it inside viewport bounds,
+            // nudge it until it's within the viewport.
+            if (popoverRect.left() < viewportRect.left()) {
+                popoverRect = new Geometry.Rect(
+                    viewportRect.left(),
+                    popoverRect.y,
+                    popoverRect.width,
+                    popoverRect.height,
+                );
+            } else if (popoverRect.right() > viewportRect.right()) {
+                popoverRect = new Geometry.Rect(
+                    viewportRect.right() - popoverRect.width,
+                    popoverRect.y,
+                    popoverRect.width,
+                    popoverRect.height,
+                );
+            }
+
+            if (popoverRect.top() < viewportRect.top()) {
+                popoverRect = new Geometry.Rect(
+                    popoverRect.x,
+                    viewportRect.top(),
+                    popoverRect.width,
+                    popoverRect.height,
+                );
+            } else if (popoverRect.bottom() > viewportRect.bottom()) {
+                popoverRect = new Geometry.Rect(
+                    popoverRect.x,
+                    viewportRect.bottom() - popoverRect.height,
+                    popoverRect.width,
+                    popoverRect.height,
+                );
+            }
+        }
+
+        await this._renderPopoverAtPositionAsync(popoverRect.left(), popoverRect.top());
+    }
+    _isRectContainedWithinViewportRect(rect: Geometry.Rect, viewportRect: Geometry.Rect): boolean {
+        if (rect.left() < viewportRect.left() ||
+            rect.right() > viewportRect.right() ||
+            rect.top() < viewportRect.top() ||
+            rect.bottom() > viewportRect.bottom()) {
+            return false;
+        }
+        return true;
+    }
+    _getPlacedPopoverRect(popoverSize: Geometry.Size, anchorRect: Geometry.Rect, placementX: PopoverPlacementX, placementY: PopoverPlacementY): Geometry.Rect {
+        const anchorCenterPoint = anchorRect.centerPoint();
+
+        let x;
+        if (placementX === PopoverPlacements.LEFT) {
+            x = anchorRect.left() - popoverSize.width - this.props.placementOffsetX;
+        } else if (placementX === PopoverPlacements.RIGHT) {
+            x = anchorRect.right() + this.props.placementOffsetX;
+        } else {
+            x = anchorCenterPoint.x - (popoverSize.width / 2);
+        }
+
+        let y;
+        if (placementY === PopoverPlacements.TOP) {
+            y = anchorRect.top() - popoverSize.height - this.props.placementOffsetY;
+        } else if (placementY === PopoverPlacements.BOTTOM) {
+            y = anchorRect.bottom() + this.props.placementOffsetY;
+        } else {
+            y = anchorCenterPoint.y - (popoverSize.height / 2);
+        }
+
+        return new Geometry.Rect(x, y, popoverSize.width, popoverSize.height);
+    }
+    async _renderPopoverAtPositionAsync(left: number, top: number) {
+        let content = this.props.renderContent();
+        content = React.cloneElement(content, {
+            ref: el => this._popoverContent = el,
+            style: {
+                ...content.props.style,
+                position: 'absolute',
+                top,
+                left,
+            },
+        });
+
+        const backgroundClassName = classNames('fixed all-0', this.props.backgroundClassName);
+        const backgroundStyle = this.props.backgroundStyle;
+
+        return new Promise((resolve, reject) => {
+            // TODO(jb): we'll need to change this to support all versions of ReactDOM.
+            // Probably shouldn't be using unstable methods like this when we release the
+            // editor.
+            ReactDOM.unstable_renderSubtreeIntoContainer(
+                this,
+                <div
+                    ref={el => this._background = el}
+                    className={backgroundClassName}
+                    style={backgroundStyle}
+                    onMouseDown={this._onMouseDown}
+                    onMouseUp={this._onMouseUp}>
+                    {content}
+                </div>,
+                this._container,
+                resolve,
+            );
+        });
+    }
+    _onMouseDown(e: Event) {
+        if (this._shouldClickingOnElementClosePopover(e.target)) {
+            this._mouseDownOutsidePopover = true;
+        }
+    }
+    _onMouseUp(e: Event) {
+        if (this._mouseDownOutsidePopover && this.props.onClose && this._shouldClickingOnElementClosePopover(e.target)) {
+            this.props.onClose();
+        }
+        this._mouseDownOutsidePopover = false;
+    }
+    _shouldClickingOnElementClosePopover(element: EventTarget) {
+        return element === this._background;
+    }
+    render() {
+        // TODO: if children is not a component (e.g. just string), wrap it in a div?
+        return this.props.children;
+    }
+}
+
+module.exports = Popover;

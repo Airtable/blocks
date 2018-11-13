@@ -1,0 +1,396 @@
+// @flow
+const invariant = require('invariant');
+const {h, u} = require('client_server_shared/hu');
+const utils = require('block_sdk/shared/private_utils');
+const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
+const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
+const TableModel = require('block_sdk/shared/models/table');
+const FieldModel = require('block_sdk/shared/models/field');
+const RecordModel = require('block_sdk/shared/models/record');
+const {
+    ModeTypes: RecordColorModeTypes,
+    modes: recordColorModes,
+} = require('block_sdk/shared/models/record_coloring');
+const getSdk = require('block_sdk/shared/get_sdk');
+
+import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
+import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import type {RecordColorMode} from 'block_sdk/shared/models/record_coloring';
+
+const WatchableQueryResultKeys = {
+    records: 'records',
+    recordIds: 'recordIds',
+    cellValues: 'cellValues',
+    recordColors: 'recordColors',
+};
+const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
+
+// The string case is to accomodate cellValuesInField:$FieldId.
+export type WatchableQueryResultKey = $Keys<typeof WatchableQueryResultKeys> | string;
+
+type SortConfig = {
+    field: FieldModel | string,
+    direction?: 'asc' | 'desc',
+};
+
+export type QueryResultOpts = {
+    sorts?: Array<SortConfig>,
+    // Allow falsey values for convenience of including
+    // fields conditionally. They'll be filtered out.
+    fields?: Array<FieldModel | string | void | null | false>,
+    recordColorMode?: null | RecordColorMode,
+};
+
+export type NormalizedQueryResultOpts = {|
+    sorts: Array<{fieldId: string, direction: 'asc' | 'desc'}> | null,
+    fieldIdsOrNullIfAllFields: Array<string> | null,
+    recordColorMode: RecordColorMode,
+|};
+
+class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
+    DataType,
+    WatchableQueryResultKey,
+> {
+    // Abstract properties - classes extending QueryResult must override these:
+    static _className = 'QueryResult';
+
+    /**
+     * The record IDs in this QueryResult.
+     * Throws if data is not loaded yet.
+     */
+    get recordIds(): Array<string> {
+        throw u.spawnAbstractMethodError();
+    }
+    /**
+     * The set of record IDs in this QueryResult.
+     * Throws if data is not loaded yet.
+     */
+    _getOrGenerateRecordIdsSet(): {[string]: true | void} {
+        throw u.spawnAbstractMethodError();
+    }
+    /**
+     * The fields that were used to create this QueryResult.
+     * Null if fields were not specified, which means the QueryResult
+     * will load all fields in the table.
+     */
+    get fields(): Array<FieldModel> | null {
+        throw u.spawnAbstractMethodError();
+    }
+
+    /**
+     * The table that records in this QueryResult are part of
+     */
+    get parentTable(): TableModel {
+        throw u.spawnAbstractMethodError();
+    }
+
+    // provided properties + methods:
+    static WatchableKeys = WatchableQueryResultKeys;
+    static WatchableCellValuesInFieldKeyPrefix = WatchableCellValuesInFieldKeyPrefix;
+    static _isWatchableKey(key: string): boolean {
+        return (
+            utils.isEnumValue(WatchableQueryResultKeys, key) ||
+            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)
+        );
+    }
+    static _shouldLoadDataForKey(key: WatchableQueryResultKey): boolean {
+        return (
+            key === QueryResult.WatchableKeys.records ||
+            key === QueryResult.WatchableKeys.recordIds ||
+            key === QueryResult.WatchableKeys.cellValues ||
+            key === QueryResult.WatchableKeys.recordColors ||
+            u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)
+        );
+    }
+
+    static _normalizeOpts(
+        table: TableModel,
+        opts: QueryResultOpts = {},
+    ): NormalizedQueryResultOpts {
+        const sorts = !opts.sorts ?
+            null :
+            opts.sorts.map(sort => {
+                const field = table.__getFieldMatching(sort.field);
+                if (!field) {
+                    throw new Error(`No field found for sort: ${sort.field.toString()}`);
+                }
+                if (
+                    sort.direction !== undefined &&
+                      sort.direction !== 'asc' &&
+                      sort.direction !== 'desc'
+                ) {
+                    throw new Error(`Invalid sort direction: ${sort.direction}`);
+                }
+                return {
+                    fieldId: field.id,
+                    direction: sort.direction || 'asc',
+                };
+            });
+
+        let fieldIdsOrNullIfAllFields = null;
+        if (opts.fields) {
+            invariant(Array.isArray(opts.fields), 'Must specify an array of fields');
+            fieldIdsOrNullIfAllFields = [];
+            for (const fieldOrFieldIdOrFieldName of opts.fields) {
+                if (!fieldOrFieldIdOrFieldName) {
+                    // Filter out false-y values so users of this API
+                    // can conveniently list conditional fields, e.g. [field1, isFoo && field2]
+                    continue;
+                }
+                if (
+                    typeof fieldOrFieldIdOrFieldName !== 'string' &&
+                    !(fieldOrFieldIdOrFieldName instanceof FieldModel)
+                ) {
+                    throw new Error(
+                        `Invalid value for field, expected a field, id, or name but got: ${fieldOrFieldIdOrFieldName.toString()}`,
+                    );
+                }
+                const field = table.__getFieldMatching(fieldOrFieldIdOrFieldName);
+                if (!field) {
+                    throw new Error(`No field found: ${fieldOrFieldIdOrFieldName.toString()}`);
+                }
+                fieldIdsOrNullIfAllFields.push(field.id);
+            }
+        }
+
+        const recordColorMode = opts.recordColorMode || recordColorModes.none();
+        switch (recordColorMode.type) {
+            case RecordColorModeTypes.NONE:
+                break;
+            case RecordColorModeTypes.BY_SELECT_FIELD:
+                invariant(
+                    recordColorMode.selectField.config.type === ApiFieldTypes.SINGLE_SELECT,
+                    `Invalid field for coloring records by select field: expected a ${
+                        ApiFieldTypes.SINGLE_SELECT
+                    }, but got a ${recordColorMode.selectField.config.type}`,
+                );
+                invariant(
+                    recordColorMode.selectField.parentTable === table,
+                    'Invalid field for coloring records by select field: the single select field is not in the same table as the records',
+                );
+                if (fieldIdsOrNullIfAllFields) {
+                    fieldIdsOrNullIfAllFields.push(recordColorMode.selectField.id);
+                }
+                break;
+            case RecordColorModeTypes.BY_VIEW:
+                invariant(
+                    recordColorMode.view.parentTable === table,
+                    'Invalid view for coloring records from view: the view is not in the same table as the records',
+                );
+                break;
+            default:
+                throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
+        }
+
+        return {
+            sorts,
+            fieldIdsOrNullIfAllFields,
+            recordColorMode,
+        };
+    }
+
+    _normalizedOpts: NormalizedQueryResultOpts;
+    _recordColorChangeHandler: Function | null = null;
+
+    constructor(normalizedOpts: NormalizedQueryResultOpts, baseData: BaseDataForBlocks) {
+        super(baseData, getSdk().models.generateGuid());
+        this._normalizedOpts = normalizedOpts;
+    }
+
+    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedQueryResultOpts): boolean {
+        return u.isEqual(this._normalizedOpts, normalizedOpts);
+    }
+
+    /**
+     * The records in this QueryResult.
+     * Throws if data is not loaded yet.
+     */
+    get records(): Array<RecordModel> {
+        return this.recordIds.map(recordId => {
+            const record = this.parentTable.getRecordById(recordId);
+            invariant(record, 'Record missing in table');
+            return record;
+        });
+    }
+
+    _getRecord(recordOrRecordId: string | RecordModel): RecordModel {
+        const record =
+            typeof recordOrRecordId === 'string' ?
+                this.parentTable.getRecordById(recordOrRecordId) :
+                recordOrRecordId;
+        invariant(record, 'Record does not exist');
+        invariant(this.hasRecord(record), 'Record is not part of this query result');
+        return record;
+    }
+
+    hasRecord(recordOrRecordId: string | RecordModel): boolean {
+        const recordId =
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
+        return this._getOrGenerateRecordIdsSet()[recordId] === true;
+    }
+
+    getRecordColor(recordOrRecordId: string | RecordModel): Color | null {
+        const record = this._getRecord(recordOrRecordId);
+        const recordColorMode = this._normalizedOpts.recordColorMode;
+
+        switch (recordColorMode.type) {
+            case RecordColorModeTypes.NONE:
+                return null;
+            case RecordColorModeTypes.BY_SELECT_FIELD: {
+                if (recordColorMode.selectField.config.type !== ApiFieldTypes.SINGLE_SELECT) {
+                    return null;
+                }
+                const value = record.getCellValue(recordColorMode.selectField);
+                return value && typeof value === 'object' && typeof value.color === 'string' ?
+                    value.color :
+                    null;
+            }
+            case RecordColorModeTypes.BY_VIEW:
+                return recordColorMode.view.getRecordColor(record);
+            default:
+                throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
+        }
+    }
+
+    watch(
+        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableQueryResultKey> {
+        const validKeys = super.watch(keys, callback, context);
+        for (const key of validKeys) {
+            if (key === WatchableQueryResultKeys.recordColors) {
+                this._watchRecordColorsIfNeeded();
+            }
+        }
+        return validKeys;
+    }
+
+    unwatch(
+        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableQueryResultKey> {
+        const validKeys = super.unwatch(keys, callback, context);
+        for (const key of validKeys) {
+            if (key === WatchableQueryResultKeys.recordColors) {
+                this._unwatchRecordColorsIfPossible();
+            }
+        }
+        return validKeys;
+    }
+
+    _watchRecordColorsIfNeeded() {
+        const watchCount = (this._changeWatchersByKey[WatchableQueryResultKeys.recordColors] || [])
+            .length;
+        if (!this._recordColorChangeHandler && watchCount >= 1) {
+            this._watchRecordColors();
+        }
+    }
+
+    _watchRecordColors() {
+        const recordColorMode = this._normalizedOpts.recordColorMode;
+        const handler = (model, key, recordIds) => {
+            if (model === this) {
+                this._onChange(WatchableQueryResultKeys.recordColors, recordIds);
+            } else {
+                this._onChange(WatchableQueryResultKeys.recordColors);
+            }
+        };
+
+        switch (recordColorMode.type) {
+            case RecordColorModeTypes.NONE:
+                break;
+            case RecordColorModeTypes.BY_SELECT_FIELD:
+                this.watch(
+                    `${WatchableCellValuesInFieldKeyPrefix}${recordColorMode.selectField.id}`,
+                    handler,
+                );
+                recordColorMode.selectField.watch('options', handler);
+                break;
+            case RecordColorModeTypes.BY_VIEW: {
+                recordColorMode.view.watch('recordColors', handler);
+                break;
+            }
+            default:
+                throw new Error(`unknown record coloring type ${(recordColorMode.type: empty)}`);
+        }
+
+        this._recordColorChangeHandler = handler;
+    }
+
+    _unwatchRecordColorsIfPossible() {
+        const watchCount = (this._changeWatchersByKey[WatchableQueryResultKeys.recordColors] || [])
+            .length;
+        if (this._recordColorChangeHandler && watchCount === 0) {
+            this._unwatchRecordColors();
+        }
+    }
+
+    _unwatchRecordColors() {
+        const recordColorMode = this._normalizedOpts.recordColorMode;
+        const handler = this._recordColorChangeHandler;
+        invariant(handler, 'record color change handler must exist');
+
+        switch (recordColorMode.type) {
+            case RecordColorModeTypes.NONE:
+                break;
+            case RecordColorModeTypes.BY_SELECT_FIELD:
+                this.unwatch(
+                    `${WatchableCellValuesInFieldKeyPrefix}${recordColorMode.selectField.id}`,
+                    handler,
+                );
+                recordColorMode.selectField.unwatch('options', handler);
+                break;
+            case RecordColorModeTypes.BY_VIEW: {
+                recordColorMode.view.unwatch('recordColors', handler);
+                break;
+            }
+            default:
+                throw new Error(`unknown record coloring type ${(recordColorMode.type: empty)}`);
+        }
+
+        this._recordColorChangeHandler = null;
+    }
+
+    async _loadRecordColorsAsync(): Promise<void> {
+        const recordColorMode = this._normalizedOpts.recordColorMode;
+        switch (recordColorMode.type) {
+            case RecordColorModeTypes.NONE:
+                return;
+            case RecordColorModeTypes.BY_SELECT_FIELD:
+                // The select field id gets added to fieldIdsOrNullIfAllFields,
+                // so we don't need to handle it here
+                return;
+            case RecordColorModeTypes.BY_VIEW:
+                await recordColorMode.view.loadDataAsync();
+                return;
+            default:
+                throw u.spawnUnknownSwitchCaseError(
+                    'record color mode type',
+                    (recordColorMode.type: empty),
+                );
+        }
+    }
+
+    _unloadRecordColors() {
+        const recordColorMode = this._normalizedOpts.recordColorMode;
+        switch (recordColorMode.type) {
+            case RecordColorModeTypes.NONE:
+                return;
+            case RecordColorModeTypes.BY_SELECT_FIELD:
+                // handled as part of fieldIdsOrNullIfAllFields
+                return;
+            case RecordColorModeTypes.BY_VIEW:
+                recordColorMode.view.unloadData();
+                break;
+            default:
+                throw u.spawnUnknownSwitchCaseError(
+                    'record color mode type',
+                    (recordColorMode.type: empty),
+                );
+        }
+    }
+}
+
+module.exports = QueryResult;
