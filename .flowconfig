@@ -8,7 +8,6 @@
 [lints]
 
 [options]
-unsafe.enable_getters_and_setters=true
 suppress_comment= \\(.\\|\n\\)*flow-disable-next-line
 module.name_mapper='^client\/blocks\/sdk\/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
 module.name_mapper='^client\/\(.*\)$' -> '<PROJECT_ROOT>/src/stubs/client/\1'
