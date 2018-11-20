@@ -6,7 +6,8 @@
     "block": "run_block_cli.js"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
@@ -37,6 +38,7 @@
     "eslint": "^4.16.0",
     "eslint-plugin-class-property": "^1.1.0",
     "eslint-plugin-react": "^7.6.0",
+    "mocha": "^5.2.0",
     "prettier": "^1.12.1"
   }
 }
