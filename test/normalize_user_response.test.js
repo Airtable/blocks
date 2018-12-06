@@ -26,7 +26,7 @@ describe('normalizeUserResponse', () => {
     });
 
     it('normalizes a legal status code', function() {
-        for (const statusCode of LEGAL_STATUS_CODES) {
+        for (let statusCode = 100; statusCode <= 599; statusCode++) {
             assert.deepStrictEqual(normalizeUserResponse({statusCode}), {
                 statusCode,
                 headers: {},
@@ -47,8 +47,8 @@ describe('normalizeUserResponse', () => {
 	it('fails when passed an illegal status code', function() {
         assertUnsuccessful(normalizeUserResponse({statusCode: -200}));
         assertUnsuccessful(normalizeUserResponse({statusCode: 0}));
-        assertUnsuccessful(normalizeUserResponse({statusCode: 199}));
-        assertUnsuccessful(normalizeUserResponse({statusCode: 422}));
+        assertUnsuccessful(normalizeUserResponse({statusCode: 99}));
+        assertUnsuccessful(normalizeUserResponse({statusCode: 600}));
 	});
 
     it('normalizes headers in the new format', function() {
