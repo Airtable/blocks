@@ -1,8 +1,6 @@
 const normalizeUserResponse = require('../lib/normalize_user_response');
 const assert = require('assert');
 
-const LEGAL_STATUS_CODES = [200, 201, 202, 204, 302, 400, 401, 403, 404, 500, 502, 503, 504];
-
 describe('normalizeUserResponse', () => {
 	function assertUnsuccessful(value) {
         assert.deepStrictEqual(Object.keys(value), ['statusCode', 'headers', 'body']);
