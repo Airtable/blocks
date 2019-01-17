@@ -57,7 +57,7 @@ class Button extends React.Component<ButtonProps> {
     };
 
     static defaultProps = {
-        theme: themes.GRAY, // eslint-disable-line react/default-props-match-prop-types
+        theme: themes.GRAY,
     };
 
     static themes = themes;
@@ -94,6 +94,7 @@ class Button extends React.Component<ButtonProps> {
         return (
             <button
                 ref={el => this._button = el}
+                type="button" // Default type is "submit", which will submit the parent <form> if it exists.
                 disabled={disabled}
                 className={classNames('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
                     'pointer link-quiet': !disabled,

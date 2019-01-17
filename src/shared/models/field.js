@@ -124,13 +124,28 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
             this.__getRawTypeOptions(),
             this.parentTable.parentBase.__appInterface,
         );
-        return columnTypeProvider.formatCellValueForPublicApi(
+
+        const publicCellValue = columnTypeProvider.formatCellValueForPublicApi(
             privateCellValue,
             this.__getRawType(),
             this.__getRawTypeOptions(),
             this.parentTable.parentBase.__appInterface,
             {cellFormat: ApiCellFormats.JSON, apiVersion: PublicApiVersions.API2},
         );
+        const validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(
+            publicCellValue,
+            null,
+            this.__getRawType(),
+            this.__getRawTypeOptions(),
+            this.parentTable.parentBase.__appInterface,
+            PublicApiVersions.API2,
+        );
+
+        if (validationResult.isValid) {
+            return publicCellValue;
+        } else {
+            return null;
+        }
     }
     __getRawType(): ColumnType {
         return this._data.type;

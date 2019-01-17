@@ -30,7 +30,9 @@ const Cursor = require('block_sdk/frontend/cursor');
 const UI = require('block_sdk/frontend/ui/ui');
 const BlockWrapperComponent = require('block_sdk/frontend/ui/block_wrapper_component');
 const SettingsButton = require('block_sdk/frontend/settings_button');
+const UndoRedo = require('block_sdk/frontend/undo_redo');
 
+import type LiveappInterface from 'block_sdk/frontend/liveapp_interface';
 import type {BlockSdkInitData} from 'client_server_shared/blocks/block_sdk_init_data';
 import type {BlockSdkInterface, RunInfo} from 'block_sdk/shared/block_sdk_interface';
 
@@ -76,8 +78,12 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
     UI: typeof UI;
     /** */
     settingsButton: SettingsButton;
-    constructor(sdkInitData: BlockSdkInitData) {
-        const airtableInterface = new AirtableInterfaceFrontend();
+    /** */
+    undoRedo: UndoRedo;
+    /** */
+    reload: () => void;
+    constructor(sdkInitData: BlockSdkInitData, liveappInterface: LiveappInterface) {
+        const airtableInterface = new AirtableInterfaceFrontend(liveappInterface);
         this.__airtableInterface = airtableInterface;
 
         this.__BlockWrapperComponent = BlockWrapperComponent;
@@ -85,6 +91,11 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
         this.base = new Base(sdkInitData.baseData, airtableInterface);
         this.models = models;
         this.installationId = sdkInitData.blockInstallationId;
+
+        // Bind the public methods on this class so users can import
+        // just the method, e.g.
+        // import {reload} from 'airtable-block';
+        this.reload = this.reload.bind(this);
 
         // When localStorage/sessionStorage aren't availabe (e.g. when
         // "Block third-party cookies" is enabled in Chrome), we provide
@@ -97,6 +108,7 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
+        this.undoRedo = new UndoRedo(airtableInterface);
 
         this.runInfo = Object.freeze({
             isFirstRun: sdkInitData.isFirstRun,

@@ -8,7 +8,6 @@ const invariant = require('invariant');
 export type InputValue = string | boolean | number;
 
 type InputProps = {
-    value: mixed,
     type?: string,
     placeholder?: string,
     onChange?: (SyntheticInputEvent<>) => void,
@@ -49,11 +48,6 @@ class Input extends React.Component<InputProps> {
     static validTypesSet = validTypesSet;
 
     static propTypes = {
-        value: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.bool,
-            PropTypes.number,
-        ]),
         type: PropTypes.oneOf(Object.keys(validTypesSet)),
         placeholder: PropTypes.string,
         onChange: PropTypes.func,
@@ -71,9 +65,7 @@ class Input extends React.Component<InputProps> {
     _input: HTMLInputElement | null;
     constructor(props: InputProps) {
         super(props);
-
         this._input = null;
-        this._onChange = this._onChange.bind(this);
     }
     focus() {
         invariant(this._input, 'No input to focus');
@@ -91,26 +83,10 @@ class Input extends React.Component<InputProps> {
         invariant(this._input, 'No input to select');
         this._input.select();
     }
-    _isCheckbox() {
-        return this.props.type === 'checkbox';
-    }
     _shouldUseDefaultClassesForType(): boolean {
         return !this.props.type || !typesToExcludeFromDefaultClassesSet[this.props.type];
     }
-    _onChange(e: SyntheticInputEvent<>) {
-        const {onChange} = this.props;
-        if (onChange) {
-            onChange(e);
-        }
-    }
     render() {
-        let value = this.props.value;
-        if (value === undefined) {
-            value = this._isCheckbox() ? false : '';
-        }
-
-        const valueObj = this._isCheckbox() ? {checked: value} : {value};
-
         let {type} = this.props;
         if (type && !validTypesSet[type]) {
             type = 'text';
@@ -132,10 +108,9 @@ class Input extends React.Component<InputProps> {
                     'link-quiet': !disabled,
                 }, this.props.className)}
                 disabled={disabled}
-                onChange={this._onChange}
+                onChange={this.props.onChange}
                 spellCheck={this.props.spellCheck}
                 tabIndex={this.props.tabIndex}
-                {...valueObj}
                 {...restOfProps}
             />
         );

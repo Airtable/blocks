@@ -64,23 +64,33 @@ class InputSynced extends React.Component<InputSyncedProps> {
         return (
             <Synced
                 globalConfigKey={this.props.globalConfigKey}
-                render={({value, canSetValue, setValue}) => (
-                    <Input
-                        ref={el => this._input = el}
-                        // If an input gets "null" for value, React treats it as uncontrolled
-                        // and will throw warnings when it becomes controlled.
-                        value={value === null ? '' : value}
-                        disabled={this.props.disabled || !canSetValue}
-                        onChange={(e: SyntheticInputEvent<>) => {
-                            setValue(e.target.value);
-                            if (this.props.onChange) {
-                                this.props.onChange(e);
-                            }
-                        }}
-                        spellCheck={this.props.spellCheck}
-                        {...restOfProps}
-                    />
-                )}
+                render={({value, canSetValue, setValue}) => {
+                    const isCheckbox = this.props.type === 'checkbox';
+
+                    // If an input gets null or undefined for value, React treats it as uncontrolled
+                    // and will throw warnings when it becomes controlled.
+                    const isNullOrUndefined = value === null || value === undefined;
+
+                    const valueObj = isCheckbox ?
+                        {checked: isNullOrUndefined ? false : value} :
+                        {value: isNullOrUndefined ? '' : value};
+
+                    return (
+                        <Input
+                            ref={el => this._input = el}
+                            disabled={this.props.disabled || !canSetValue}
+                            onChange={(e: SyntheticInputEvent<>) => {
+                                setValue(isCheckbox ? e.target.checked : e.target.value);
+                                if (this.props.onChange) {
+                                    this.props.onChange(e);
+                                }
+                            }}
+                            spellCheck={this.props.spellCheck}
+                            {...valueObj}
+                            {...restOfProps}
+                        />
+                    );
+                }}
             />
         );
     }

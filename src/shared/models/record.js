@@ -124,9 +124,14 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         if (this._data.cellValuesByFieldId) {
             cellValuesByColumnId = {};
             for (const [fieldId, publicCellValue] of u.entries(this._data.cellValuesByFieldId)) {
-                const field = this.parentTable.getFieldById(fieldId);
-                invariant(field, 'Should have field');
-                cellValuesByColumnId[fieldId] = cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
+                // When fields are deleted, we set the previously loaded cell value to
+                // undefined (vs deleting the key from the cellValuesByFieldId object, which
+                // would cause de-opts). So ignore undefined cell values, since the field is deleted.
+                if (publicCellValue !== undefined) {
+                    const field = this.parentTable.getFieldById(fieldId);
+                    invariant(field, 'Should have field');
+                    cellValuesByColumnId[fieldId] = cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
+                }
             }
         }
         return {

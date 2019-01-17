@@ -52,6 +52,8 @@ const aggregate = (aggregatorKey: string, records: Array<Record>, field: Field) 
     return liveappSummaryFunctions.aggregateValues(
         aggregatorKey,
         field.__getRawType(),
+        field.__getRawTypeOptions(),
+        getSdk().base.__appInterface,
         values,
         {},
     );

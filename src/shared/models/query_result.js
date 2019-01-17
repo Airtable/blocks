@@ -112,7 +112,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             opts.sorts.map(sort => {
                 const field = table.__getFieldMatching(sort.field);
                 if (!field) {
-                    throw new Error(`No field found for sort: ${sort.field.toString()}`);
+                    throw new Error(`No field found for sort: ${sort.field ? sort.field.toString() : typeof sort.field}`);
                 }
                 if (
                     sort.direction !== undefined &&

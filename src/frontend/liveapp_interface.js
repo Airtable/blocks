@@ -355,4 +355,4 @@ class LiveappInterface {
     }
 }
 
-module.exports = new LiveappInterface();
+module.exports = LiveappInterface;

@@ -105,6 +105,17 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
         // another component are both listening to, this component gets unmounted
         // before we call the callback for this component.
         _dataContainerIsMounted: boolean;
+        _boundSetWrappedComponentRef: (el: React.Component<Props> | null) => void;
+        constructor(props) {
+            super(props);
+            // If the ref callback is defined as an inline function, it will get called twice during updates,
+            // first with null and then again with the DOM element. This is because a new instance of
+            // the function is created with each render, so React needs to clear the old ref and set up the new one.
+
+            // We want to avoid setting _wrappedComponent to null during updates, since that will cause crashes
+            // with custom callbacks, so instead of using an inline ref function, we use this pre-bound function.
+            this._boundSetWrappedComponentRef = this._setWrappedComponentRef.bind(this);
+        }
         componentDidMount() {
             // NOTE: make sure this is the first thing we do here, since all of the
             // functions that deal with watches check this flag.
@@ -132,6 +143,9 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
                 this._recomputeDependencies();
                 this._shouldUpdateDependenciesOnComponentDidUpdate = false;
             }
+        }
+        _setWrappedComponentRef(el: React.Component<Props> | null) {
+            this._wrappedComponent = el;
         }
         _areWatchConfigsEqual(a: WatchConfig, b: WatchConfig): boolean {
             return a.watchable === b.watchable &&
@@ -350,7 +364,9 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
             if (ComponentClass) {
                 return (
                     <ComponentClass
-                        ref={el => this._wrappedComponent = el || null}
+                        // This is incompatible with the flow definition for the React 16 createRef API.
+                        // flow-disable-next-line
+                        ref={this._boundSetWrappedComponentRef}
                         {...this.props}
                     />
                 );
