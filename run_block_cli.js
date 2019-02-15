@@ -160,8 +160,15 @@ const runBlocksCli = function runBlocksCli() {
 
     const command = config._[0] || '';
     if (command === Commands.RUN) {
+        const getBlockDirPath = require('./lib/get_block_dir_path');
+        const getApiKeySync = require('./lib/get_api_key_sync');
+        const apiKey = getApiKeySync(getBlockDirPath());
+
         const BlockServer = require('./lib/block_server');
-        const blockServer = new BlockServer({transpileAll: config.transpileAll});
+        const blockServer = new BlockServer({
+            apiKey,
+            transpileAll: config.transpileAll,
+        });
         startBlockServer(blockServer, defaultPort, config.local);
     } else if (command === Commands.CLONE) {
         const environment = config.environment;
