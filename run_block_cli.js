@@ -129,10 +129,10 @@ const runBlocksCli = function runBlocksCli() {
             default: false,
         })
         .option('environment', {
-            description: 'Which environment to sync with',
             choices: ['production', 'staging', 'local'],
             default: 'production',
         })
+        .hide('environment') // Omit from --help
         .option('transpile-all', {
             description: 'Transpile JS for all browsers airtable supports, rather than a minimal set for development',
             type: 'boolean',
