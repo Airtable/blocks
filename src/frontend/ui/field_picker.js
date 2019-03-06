@@ -119,7 +119,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
                 disabled={disabled}
                 placeholder={placeholder}
                 shouldAllowPickingNone={shouldAllowPickingNone}
-                modelKeysToWatch={['config']}
+                modelKeysToWatch={['name', 'config']}
                 {...restOfProps}
             />
         );
@@ -130,9 +130,6 @@ module.exports = createDataContainer(FieldPicker, (props: FieldPickerProps) => {
     return [
         {watch: props.table, key: 'fields'},
         {watch: getSdk().base, key: 'tables'},
-        ...(props.table ? props.table.fields : []).map(
-            field => ({watch: field, key: 'name'}),
-        ),
     ];
 }, [
     'focus',

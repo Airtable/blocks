@@ -25,8 +25,9 @@ const FieldIcon = (props: FieldIconProps) => {
 
     const type = field.__getRawType();
     const typeOptions = field.__getRawTypeOptions();
+    const appInterface = field.parentTable.parentBase.__appInterface;
 
-    const displayType = columnTypeProvider.getDisplayType(type, typeOptions);
+    const displayType = columnTypeProvider.getDisplayType(type, typeOptions, appInterface);
     const displayTypeConfigs = columnTypeProvider.getDisplayTypeConfigs(type);
     const config = displayTypeConfigs[displayType];
 

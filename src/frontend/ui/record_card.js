@@ -89,14 +89,14 @@ type RecordCardProps = {
     fields?: Array<FieldModel>,
     view?: ViewModel,
     attachmentCoverField?: FieldModel,
-    width: number,
-    height: number,
+    width?: number,
+    height?: number,
     onClick?: Function,
     getExpandRecordOptions?: RecordModel => ExpandRecordOpts,
-    onMouseEnter: mixed,
-    onMouseLeave: mixed,
-    className: string,
-    style: Object,
+    onMouseEnter?: mixed,
+    onMouseLeave?: mixed,
+    className?: string,
+    style?: Object,
 };
 
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
@@ -341,6 +341,7 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
     _renderCellsAndFieldLabels(attachmentSize: number, fieldsToUse: Array<FieldModel>) {
         const {record, width} = this.props;
+        invariant(typeof width === 'number', 'width in defaultProps');
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
         const widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
@@ -378,6 +379,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         }, className);
 
         // use height as size in order to get square attachment
+        invariant(typeof height === 'number', 'height in defaultProps');
         const attachmentSize = hasAttachment ? height : 0;
         let imageHtml = '';
         if (hasAttachment) {
