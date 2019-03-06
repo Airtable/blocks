@@ -11,7 +11,7 @@ import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
 
 type ToggleSyncedProps = {
     globalConfigKey: GlobalConfigKey,
-    label?: React.Element<*>,
+    label?: React.Node,
     theme?: string,
     onChange?: boolean => void,
     disabled?: boolean,
