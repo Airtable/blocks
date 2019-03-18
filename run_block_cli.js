@@ -44,16 +44,6 @@ function setUpYargs() {
     const yargs = require('yargs');
     yargs.usage('Usage: block <command> [options]');
     registerCommands(yargs);
-    yargs.check(config => {
-        const commandConfig = getCommandConfig(config);
-        if (commandConfig && commandConfig.validateConfig) {
-            const validationResult = commandConfig.validateConfig(config);
-            if (!validationResult.pass) {
-                cliHelpers.exitWithError(validationResult.reason);
-            }
-        }
-        return true;
-    });
     yargs.help('help');
     return yargs;
 }
