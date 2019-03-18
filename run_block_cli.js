@@ -2,227 +2,83 @@
 /* eslint-disable no-console */
 'use strict';
 
-const prompt = require('prompt');
-const yargsOuter = require('yargs');
-const promisify = require('es6-promisify');
-const chalk = require('chalk');
+const cliHelpers = require('./lib/helpers/cli_helpers');
+const commandConfigs = require('./lib/commands/command_configs');
 
-const promptAsync = promisify(prompt.get);
-
-const defaultPort = 8000;
-
-const Commands = {
-    RUN: 'run',
-    CLONE: 'clone',
-    PUSH: 'push',
-    PULL: 'pull',
-    RENAME_ENTRY: 'rename-entry',
-};
-
-const domainByEnvironment = {
-    production: 'airtable.com',
-    staging: 'staging.airtable.com',
-    local: 'hyperbasedev.com:3000',
-};
-
-function _exitWithError(message, err) {
-    console.error('Error:', message);
-    if (err) {
-        console.error(err.stack);
-    }
-    process.exit(1);
-}
-
-function startBlockServerNgrok(blockServer, port) {
-    return blockServer.startAsync(port).then(
-        () =>
-            new Promise((resolve, reject) => {
-                require('ngrok').connect(port, (err, url) => {
-                    if (err) {
-                        reject(err);
-                    }
-                    resolve(url);
-                });
-            }),
-    );
-}
-
-function startBlockServerLocal(blockServer, port) {
-    return blockServer.startLocalAsync(port).then(() => {
-        const url = `https://localhost:${port}`;
-        console.log('Local mode: serving self-signed https on localhost');
-        console.log(
-            "If this is the first time you're running this command in local mode, you need to do some extra setup in your browser:",
-        );
-        console.log(`  - Firefox: go to https://localhost:${port} and add an ssl exception`);
-        console.log(
-            `  - Safari: go to https://localhost:${port}, click show details > visit this website, and log in`,
-        );
-        console.log(
-            '  - Chrome: go to chrome://flags/#allow-insecure-localhost and click enable. Restart your browser',
-        );
-        console.log('');
-        return url;
-    });
-}
-
-function startBlockServer(blockServer, port, shouldUseLocalhost) {
-    const startPromise = shouldUseLocalhost
-        ? startBlockServerLocal(blockServer, port)
-        : startBlockServerNgrok(blockServer, port);
-
-    startPromise
-        .then(url => {
-            // Wait for the initial bundle to finish before logging the ngrok
-            // url to the user so there's definitely a bundle ready on the
-            // first hit.
-            blockServer.setPublicBaseUrl(url);
-            blockServer.startBackendProcessIfNeeded();
-            blockServer.bundle(null, () => {
-                console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
-            });
-        })
-        .catch(err => {
-            // If there was an error due to the port being taken, prompt for an
-            // alternative port and try again.
-            if (err.code === 'EADDRINUSE') {
-                promptAsync({
-                    name: 'port',
-                    description: `Port ${port} is taken, please provide an alternative port to run on`,
-                })
-                    .then(result => {
-                        const newPort = result.port;
-                        if (isNaN(newPort)) {
-                            _exitWithError('Invalid port number');
-                        }
-                        startBlockServer(blockServer, newPort, shouldUseLocalhost);
-                    })
-                    .catch(innerErr => {
-                        _exitWithError(innerErr.message);
-                    });
-            } else {
-                _exitWithError(err.message);
+function registerCommandForConfig(yargs, commandConfig) {
+    yargs.command(
+        commandConfig.command,
+        commandConfig.description,
+        yargsInner => {
+            if (commandConfig.argDescriptions) {
+                for (const argName of Object.keys(commandConfig.argDescriptions)) {
+                    const argConfig = commandConfig.argDescriptions[argName];
+                    yargsInner.positional(argName, argConfig);
+                }
             }
-        });
+        },
+    );
+    if (commandConfig.options) {
+        for (const optionName of Object.keys(commandConfig.options)) {
+            const optionConfig = commandConfig.options[optionName];
+            yargs.option(
+                optionName,
+                {
+                    group: commandConfig.name,
+                    ...optionConfig,
+                },
+            );
+        }
+    }
+    yargs.example(commandConfig.example);
+}
+
+function registerCommands(yargs) {
+    for (const commandName of Object.keys(commandConfigs)) {
+        const commandConfig = commandConfigs[commandName];
+        registerCommandForConfig(yargs, commandConfig);
+    }
+}
+
+function setUpYargs() {
+    const yargs = require('yargs');
+    yargs.usage('Usage: block <command> [options]');
+    registerCommands(yargs);
+    yargs.check(config => {
+        const commandConfig = getCommandConfig(config);
+        if (commandConfig && commandConfig.validateConfig) {
+            const validationResult = commandConfig.validateConfig(config);
+            if (!validationResult.pass) {
+                cliHelpers.exitWithError(validationResult.reason);
+            }
+        }
+        return true;
+    });
+    yargs.help('help');
+    return yargs;
+}
+
+function parseCommandNameFromConfig(config) {
+    return config._[0] || '';
+}
+
+function getCommandConfig(config) {
+    const command = parseCommandNameFromConfig(config);
+    return commandConfigs[command];
 }
 
 const runBlocksCli = function runBlocksCli() {
-    const config = yargsOuter
-        .usage('Usage: block <command> [options]')
-        .command(
-            `${Commands.CLONE} <blockIdentifier> <blockDirPath>`,
-            'Clone a block from Airtable',
-        )
-        .command(Commands.RUN, 'Build and run a block')
-        .command(Commands.PUSH, 'Push changes to Airtable')
-        .command(Commands.PULL, 'Pull changes from Airtable')
-        .command(`${Commands.RENAME_ENTRY} <newName>`, 'Update the entry module name')
-        .option('force', {
-            describe: 'Bypass revision check when updating files?',
-            type: 'boolean',
-            default: false,
-        })
-        .option('local', {
-            description:
-                'Run blocks locally on with a self-signed certificate instead of through ngrok.io',
-            type: 'boolean',
-            default: false,
-        })
-        .option('environment', {
-            choices: ['production', 'staging', 'local'],
-            default: 'production',
-        })
-        .hide('environment') // Omit from --help
-        .option('transpile-all', {
-            description: 'Transpile JS for all browsers airtable supports, rather than a minimal set for development',
-            type: 'boolean',
-            default: false
-        })
-        .check(configInner => {
-            const command = configInner._[0] || '';
-            if (command === Commands.CLONE) {
-                const blockIdentifier = String(configInner.blockIdentifier);
-                const blockIdentifierSplit = blockIdentifier.split('/');
-                if (!blockIdentifierSplit[0] || !blockIdentifierSplit[1]) {
-                    throw new Error('Block identifier must be of format <applicationId>/<blockId>');
-                }
-                configInner.appId = blockIdentifierSplit[0];
-                configInner.blockId = blockIdentifierSplit[1];
-            }
-            return true;
-        })
-        .example('block clone app123/blk456 my-block')
-        .example('block run')
-        .example('block push')
-        .example('block pull')
-        .example('block rename-entry newModuleName')
-        .help('help').argv;
-
-    const command = config._[0] || '';
-    if (command === Commands.RUN) {
-        const getBlockDirPath = require('./lib/get_block_dir_path');
-        const getApiKeySync = require('./lib/get_api_key_sync');
-        const apiKey = getApiKeySync(getBlockDirPath());
-
-        const BlockServer = require('./lib/block_server');
-        const blockServer = new BlockServer({
-            apiKey,
-            transpileAll: config.transpileAll,
-        });
-        startBlockServer(blockServer, defaultPort, config.local);
-    } else if (command === Commands.CLONE) {
-        const environment = config.environment;
-        const domain = domainByEnvironment[environment];
-        // Prompt for apiKey.
-        promptAsync({
-            name: 'apiKey',
-            description: `Please enter your API key. You can generate one at https://${domain}/account`,
-        })
-            .then(result => {
-                const blockCloneAsync = require('./lib/block_clone');
-                return blockCloneAsync(
-                    environment,
-                    config.appId,
-                    config.blockId,
-                    config.blockDirPath,
-                    result.apiKey,
-                );
-            })
-            .then(() => {
-                console.log(`Block cloned in ${config.blockDirPath}`);
-            })
+    const yargs = setUpYargs();
+    const config = yargs.argv;
+    const commandConfig = getCommandConfig(config);
+    if (commandConfig) {
+        commandConfig.runCommandAsync(config)
             .catch(err => {
-                _exitWithError(err.message);
+                cliHelpers.exitWithError(err.message);
             });
-    } else if (command === Commands.PUSH) {
-        const blockPushAsync = require('./lib/block_push');
-        blockPushAsync({shouldForceUpdate: config.force})
-            .then(() => {
-                console.log('Remote block updated');
-            })
-            .catch(err => {
-                _exitWithError(err.message);
-            });
-    } else if (command === Commands.PULL) {
-        const blockPullAsync = require('./lib/block_pull');
-        blockPullAsync()
-            .then(() => {
-                console.log('Local block updated');
-            })
-            .catch(err => {
-                _exitWithError(err.message);
-            });
-    } else if (command === Commands.RENAME_ENTRY) {
-        const updateEntryModuleName = require('./lib/update_entry_module_name');
-        try {
-            updateEntryModuleName(config.newName);
-            console.log('Entry module name updated');
-        } catch (err) {
-            _exitWithError(err.message);
-        }
     } else {
-        yargsOuter.showHelp();
-        _exitWithError('Please use a valid command');
+        yargs.showHelp();
+        cliHelpers.exitWithError('Please use a valid command');
     }
 };
 
