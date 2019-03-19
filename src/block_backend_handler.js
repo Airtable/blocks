@@ -84,17 +84,8 @@ async function callUserCodeForEventAsync(event, routes) {
         if (!sdkWrapperInstance) {
             throw new Error('SDK not set on global');
         }
-        // NOTE: we shipped a version of the SDK that had a function called __initializeSdkForEvent
-        // but subsequently updated that function to be __initializeSdkForEventAsync. Temporarily
-        // handle both until the async version hits prod.
-        // TODO: remove this weird switching behavior once __initializeSdkForEventAsync hits prod.
-        if (sdkWrapperInstance.__initializeSdkForEventAsync) {
-            await sdkWrapperInstance.__initializeSdkForEventAsync(event);
-        } else if (sdkWrapperInstance.__initializeSdkForEvent) {
-            sdkWrapperInstance.__initializeSdkForEvent(event);
-        } else {
-            throw new Error('SDK does not have expected initialization function');
-        }
+
+        await sdkWrapperInstance.__initializeSdkForEventAsync(event);
 
         const blockDirPath = getBlockDirPath();
         const routeHandlerModule = require(path.join(blockDirPath, blocksConfigSettings.BUILD_DIR, 'backendRoute', route.metadata.name));
