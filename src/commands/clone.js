@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const blocksConfigSettings = require('../config/block_cli_config_settings');
 const writeFilesFromApiResponseAsync = require('../write_files_from_api_response');
+const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
 const APIClient = require('../api_client');
 const fsUtils = require('../fs_utils');
 const cliHelpers = require('../helpers/cli_helpers');
@@ -53,11 +54,18 @@ async function cloneBlockAsync(
         ),
     );
 
+    // Create a developer credentials json file.
+    const writeBlockDeveloperCredentialsFromApiResponseAsync = writeDeveloperCredentialsFromApiResponseAsync(
+        response.developerCredentialsEncrypted,
+        blockDirPath,
+    );
+
     // Create a .gitignore file.
     const gitignoreContents = [
         'node_modules',
         blocksConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
         blocksConfigSettings.BUILD_DIR,
+        blocksConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME,
     ];
     const writeGitignoreFilePromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, '.gitignore'),
@@ -69,6 +77,7 @@ async function cloneBlockAsync(
         writePackageJsonPromise,
         writeAirtableApiKeyFilePromise,
         writeGitignoreFilePromise,
+        writeBlockDeveloperCredentialsFromApiResponseAsync,
     ]);
 }
 

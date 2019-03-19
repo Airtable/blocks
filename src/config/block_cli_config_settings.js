@@ -27,6 +27,9 @@ module.exports = {
     // Wrapper file for blocks frontend code.
     CLIENT_WRAPPER_FILE_NAME: 'block_client_wrapper.js',
 
+    // File to store developer credentials.
+    DEVELOPER_CREDENTIALS_FILE_NAME: '.developerCredentials.json',
+
     // Bundle file.
     BUNDLE_FILE_NAME: 'bundle.js',
 };

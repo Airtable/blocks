@@ -2,6 +2,7 @@ const path = require('path');
 const getBlockDirPath = require('../get_block_dir_path');
 const blocksConfigSettings = require('../config/block_cli_config_settings');
 const writeFilesFromApiResponseAsync = require('../write_files_from_api_response');
+const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
 const APIClient = require('../api_client');
 const fsUtils = require('../fs_utils');
 const getApiKeySync = require('../get_api_key_sync');
@@ -44,7 +45,17 @@ async function pullBlockAsync() {
         JSON.stringify(packageJsonParsed, null, 4),
     );
 
-    await Promise.all([writeBlockFilesFromApiResponsePromise, writePackageJsonPromise]);
+    // Write developer credential file
+    const writeBlockDeveloperCredentialsFromApiResponseAsync = writeDeveloperCredentialsFromApiResponseAsync(
+        response.developerCredentialsEncrypted,
+        blockDirPath,
+    );
+
+    await Promise.all([
+        writeBlockFilesFromApiResponsePromise,
+        writePackageJsonPromise,
+        writeBlockDeveloperCredentialsFromApiResponseAsync,
+    ]);
     console.log('Local block updated');
 }
 
