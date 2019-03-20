@@ -1,6 +1,6 @@
 const path = require('path');
 const getBlockDirPath = require('../get_block_dir_path');
-const blocksConfigSettings = require('../../config/block_cli_config_settings');
+const blocksConfigSettings = require('../config/block_cli_config_settings');
 const writeFilesFromApiResponseAsync = require('../write_files_from_api_response');
 const APIClient = require('../api_client');
 const fsUtils = require('../fs_utils');

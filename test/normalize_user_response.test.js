@@ -1,4 +1,4 @@
-const normalizeUserResponse = require('../lib/normalize_user_response');
+const normalizeUserResponse = require('../src/normalize_user_response');
 const assert = require('assert');
 
 describe('normalizeUserResponse', () => {

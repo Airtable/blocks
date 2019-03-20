@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blocksConfigSettings = require('./config/block_cli_config_settings');
 
 // eslint-disable-next-line consistent-return
 module.exports = function getApiKeySync(blockDirPath) {

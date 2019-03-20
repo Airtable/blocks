@@ -3,7 +3,7 @@
   "base": "git:merge-base(origin/master)",
   "arc.land.onto.default": "master",
   "load": [
-    "lib/arc/arc-airtable-test-engine"
+    "src/arc/arc-airtable-test-engine"
   ],
   "unit.airtable": {
     "build": {

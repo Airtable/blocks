@@ -1,4 +1,4 @@
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blocksConfigSettings = require('./config/block_cli_config_settings');
 
 module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath) {
     // NOTE: this must return ES5 (so no JSX!) since it won't get transpiled on the client.

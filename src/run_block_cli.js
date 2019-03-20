@@ -1,9 +1,6 @@
-#!/usr/bin/env node
 /* eslint-disable no-console */
-'use strict';
-
-const cliHelpers = require('./lib/helpers/cli_helpers');
-const commandConfigs = require('./lib/commands/command_configs');
+const cliHelpers = require('./helpers/cli_helpers');
+const commandConfigs = require('./commands/command_configs');
 
 function registerCommandForConfig(yargs, commandConfig) {
     yargs.command(
@@ -57,7 +54,7 @@ function getCommandConfig(config) {
     return commandConfigs[command];
 }
 
-const runBlocksCli = function runBlocksCli() {
+function runBlockCli() {
     const yargs = setUpYargs();
     const config = yargs.argv;
     const commandConfig = getCommandConfig(config);
@@ -70,6 +67,6 @@ const runBlocksCli = function runBlocksCli() {
         yargs.showHelp();
         cliHelpers.exitWithError('Please use a valid command');
     }
-};
+}
 
-runBlocksCli();
+module.exports = runBlockCli;

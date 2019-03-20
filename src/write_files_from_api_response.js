@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const path = require('path');
 const fsUtils = require('./fs_utils');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blocksConfigSettings = require('./config/block_cli_config_settings');
 
 module.exports = function writeFilesFromApiResponseAsync(response, blockDirPath, blockMetadata) {
     const modules = response.modules;

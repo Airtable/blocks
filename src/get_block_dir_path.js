@@ -3,7 +3,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blocksConfigSettings = require('./config/block_cli_config_settings');
 
 let blockDirPath = null;
 
