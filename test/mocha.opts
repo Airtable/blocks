@@ -1,2 +1,1 @@
-# mocha.opts
-  --require babel-register
+--require babel-register
