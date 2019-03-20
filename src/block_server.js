@@ -23,6 +23,7 @@ const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const getBlockDirPath = require('./get_block_dir_path');
+const getDeveloperCredentialsEncryptedIfExistsAsync = require('./get_developer_credentials_encrypted_if_exists_async');
 const normalizeUserResponse = require('./normalize_user_response');
 const semver = require('semver');
 
@@ -50,6 +51,7 @@ class BlockServer {
         this._nextRequestId = 0;
         this._pendingBackendResponsesByRequestId = {};
         this._apiKey = apiKey;
+        this._developerCredentialPlaintextByName = null;
 
         this._watchBackendCode();
         this._setUpExpressRoutes();
@@ -374,10 +376,7 @@ class BlockServer {
         // to blocks-cli and to emulate the Lambda environment more closely.
         this._backendProcess = childProcess.fork(path.join(__dirname, 'block_backend_handler'), {
             stdio: 'pipe',
-            env: {
-                FORCE_COLOR: 1,
-                NODE_ENV: 'development',
-            },
+            env: this.generateEnvironmentVariablesForBackendProcess(),
             execArgv: [
                 // HACK: production blocks currently run node 8.10. node 8.14
                 // changed the default max http header size from 80kb to 8kb, so
@@ -446,11 +445,77 @@ class BlockServer {
             }),
         );
     }
+
+    /**
+     * 1. Read and decode the developerCredentialsEncrypted from the local file.
+     * 2. Decrypt by hitting the public Decrypt CRUD route in hyperbase.
+     * 3. Set decrypted values as an instance variable. The startBackendProcessIfNeeded() method
+     *    will set an Environment Variable from the instance variable.
+     *
+     * This only considers the development credential type from the developer credentials
+     * when starting the server. It ignores the release credential type.
+     */
+    async setDevelopmentCredentialPlaintextByNameAsync() {
+        const blockData = JSON.parse(fs.readFileSync(path.join(getBlockDirPath(), blocksConfigSettings.BLOCK_FILE_NAME)));
+        const developerCredentialsEncrypted = await getDeveloperCredentialsEncryptedIfExistsAsync();
+        if (developerCredentialsEncrypted === null) {
+            this._developerCredentialPlaintextByName = null;
+            return;
+        }
+
+        const credentialsEncrypted =
+            developerCredentialsEncrypted
+                .filter(developerCredentialEncrypted => !!developerCredentialEncrypted.developmentCredentialValueEncrypted)
+                .map(developerCredentialEncrypted => {
+                    return {
+                        name: developerCredentialEncrypted.name,
+                        kmsDataKeyId: developerCredentialEncrypted.kmsDataKeyId,
+                        credentialValueEncrypted: developerCredentialEncrypted.developmentCredentialValueEncrypted,
+                    };
+                });
+
+        if (credentialsEncrypted.length === 0) {
+            // No credentials with development credential type exists, so return early.
+            return;
+        }
+
+        if (!this._apiClient) {
+            this._apiClient = new APIClient({
+                environment: blockData.environment,
+                applicationId: blockData.applicationId,
+                blockId: blockData.blockId,
+                apiKey: this._apiKey,
+            });
+        }
+        const credentialsPlaintext = await this._apiClient.decryptCredentialsAsync(credentialsEncrypted);
+
+        if (credentialsPlaintext) {
+            this._developerCredentialPlaintextByName =
+                credentialsPlaintext.reduce((credentialPlaintextByName, credentialPlaintext) => {
+                    credentialPlaintextByName[credentialPlaintext.name] = credentialPlaintext.credentialValuePlaintext;
+                    return credentialPlaintextByName;
+                }, {});
+        } else {
+            this._developerCredentialPlaintextByName = null;
+        }
+    }
+    generateEnvironmentVariablesForBackendProcess() {
+        const env = {
+            FORCE_COLOR: 1,
+            NODE_ENV: 'development',
+        };
+        if (this._developerCredentialPlaintextByName) {
+            env.DEVELOPER_CREDENTIAL_BY_NAME = JSON.stringify(this._developerCredentialPlaintextByName);
+        }
+
+        return env;
+    }
     async startAsync(port, local) {
         const url = local ?
             await this.startLocalAsync(port) :
             await this.startNgrokAsync(port);
         this.setPublicBaseUrl(url);
+        await this.setDevelopmentCredentialPlaintextByNameAsync();
         this.startBackendProcessIfNeeded();
         this.bundle(null, () => {
             console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));

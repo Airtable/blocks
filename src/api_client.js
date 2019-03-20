@@ -5,6 +5,7 @@ const promisify = require('es6-promisify');
 
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
+request.postAsync = promisify(request.post);
 
 const apiDomainsByEnvironment = {
     production: 'api.airtable.com',
@@ -66,6 +67,29 @@ class APIClient {
             }
             return bodyParsed;
         });
+    }
+
+    /**
+     * TODO(richsinn): when flow typing this method:
+     *   - credentialsEncrypted parameter type => Array<CredentialEncrypted>
+     *   - return type => Promise<Array<CredentialPlaintext>>
+     */
+    async decryptCredentialsAsync(credentialsEncrypted) {
+        const options = {
+            url: `${this._getRequestUrl()}/credentials/decrypt`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            body: {credentialsEncrypted},
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            throw new Error(body.error.message);
+        }
+
+        return body;
     }
 
     _getAccessPolicyUrl() {

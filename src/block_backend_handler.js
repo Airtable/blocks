@@ -48,7 +48,7 @@ function getRouteAndParamsForEvent(event, routes) {
     };
 }
 
-async function callUserCodeForEventAsync(event, routes) {
+async function callUserCodeForEventAsync(event, routes, developerCredentialByName) {
     // If an OPTIONS request is sent, send back the necessary cors headers.
     // This is necessary since the block frame is currently served from a different
     // origin than the backend code. Requests get treated like CORS requests, even
@@ -85,7 +85,7 @@ async function callUserCodeForEventAsync(event, routes) {
             throw new Error('SDK not set on global');
         }
 
-        await sdkWrapperInstance.__initializeSdkForEventAsync(event);
+        await sdkWrapperInstance.__initializeSdkForEventAsync(event, developerCredentialByName);
 
         const blockDirPath = getBlockDirPath();
         const routeHandlerModule = require(path.join(blockDirPath, blocksConfigSettings.BUILD_DIR, 'backendRoute', route.metadata.name));
@@ -276,6 +276,34 @@ async function downloadBackendSdkAsync(blockJson, blockDirPath) {
     return BackendBlockSdkWrapper;
 }
 
+/**
+ * In hyperbase, the code to extract and decrypt developer credentials
+ * is handled in the backend wrapper code. But in the blocks-cli world,
+ * we're decrypting the credential values in BlockServer and passing the
+ * values to this forked backend process via Environment Variables.
+ *
+ * Once we extract the credential values via the Environment Variable, we delete
+ * the Environment Variable for a couple reasons:
+ * 1. The hyperbase implementation does not have credential values in process.env.
+ *    Instead credentials are accessed via a similarly named method
+ *    getDeveloperCredentialByName(). In blocks_cli, by encapsulating the credential
+ *    access from the Env Var here, and then immediately deleting the Env Var, we make
+ *    the implementation a tiny, tad bit closer to the hyperbase implementation.
+ * 2. Some libraries unwittingly leak process.env values, and deleting the Env Var
+ *    helps prevent it.
+ */
+function getDeveloperCredentialByName() {
+    let developerCredentialByName;
+    if (process.env.DEVELOPER_CREDENTIAL_BY_NAME) {
+        developerCredentialByName = JSON.parse(process.env.DEVELOPER_CREDENTIAL_BY_NAME);
+    } else {
+        developerCredentialByName = {};
+    }
+
+    delete process.env.DEVELOPER_CREDENTIAL_BY_NAME;
+    return developerCredentialByName;
+}
+
 async function setUpBackend() {
     // Parse block.json.
     const blockDirPath = getBlockDirPath();
@@ -293,6 +321,8 @@ async function setUpBackend() {
     // Create a routes object to store our backend modules so we can call
     // their handlers when we receive a request.
     const routes = await generateRoutesObjectFromModulesAsync(modules);
+    // Get the developer credential values so we can initialize the SDK with it
+    const developerCredentialByName = getDeveloperCredentialByName();
     // Download the backend sdk.
     const BackendBlockSdkWrapper = await downloadBackendSdkAsync(blockJson, blockDirPath);
     const sdkWrapperInstance = new BackendBlockSdkWrapper();
@@ -310,7 +340,7 @@ async function setUpBackend() {
             }
         }
 
-        const response = await callUserCodeForEventAsync(event, routes);
+        const response = await callUserCodeForEventAsync(event, routes, developerCredentialByName);
         process.send({
             messageType: BlockBackendMessageTypes.EVENT_RESPONSE,
             requestId: event.requestId,

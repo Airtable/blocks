@@ -3,6 +3,17 @@ const promisify = require('es6-promisify');
 
 module.exports = {
     readFileAsync: promisify(fs.readFile),
+    readFileIfExistsAsync: async function(path) {
+        try {
+            return await this.readFileAsync(path);
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                return null;
+            }
+            // Unknown error, so throw it.
+            throw err;
+        }
+    },
     writeFileAsync: promisify(fs.writeFile),
     mkdirAsync: promisify(fs.mkdir),
     mkdirIfDoesntAlreadyExistAsync: function(dirPath) {
