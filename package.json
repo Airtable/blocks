@@ -7,6 +7,7 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "flow": "flow",
     "buildOnce": "babel src --out-dir build",
     "build": "yarn buildOnce --watch",
     "postinstall": "yarn buildOnce",
@@ -16,6 +17,7 @@
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-standalone": "^6.26.0",
@@ -42,7 +44,9 @@
     "babel-register": "^6.26.0",
     "eslint": "^4.16.0",
     "eslint-plugin-class-property": "^1.1.0",
+    "eslint-plugin-flowtype": "^3.4.2",
     "eslint-plugin-react": "^7.6.0",
+    "flow-bin": "^0.95.1",
     "mocha": "^5.2.0",
     "prettier": "^1.12.1"
   }

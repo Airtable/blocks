@@ -1,4 +1,4 @@
 {
-    "presets": ["env", "stage-2"],
+    "presets": ["env", "flow", "stage-2"],
     "retainLines": true
 }

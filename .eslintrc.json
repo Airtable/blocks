@@ -4,7 +4,11 @@
         "es6": true,
         "node": true
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:flowtype/recommended",
+        "plugin:react/recommended"
+    ],
     "parser": "babel-eslint",
     "parserOptions": {
         "sourceType": "module",
@@ -19,7 +23,7 @@
             "spread": true
         }
     },
-    "plugins": ["react"],
+    "plugins": ["flowtype", "react"],
     "rules": {
         "no-case-declarations": "warn",
         "no-debugger": "warn",
