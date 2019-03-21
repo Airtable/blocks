@@ -1,4 +1,5 @@
 {
     "presets": ["env", "flow", "stage-2"],
+    "plugins": ["transform-runtime"],
     "retainLines": true
 }
