@@ -48,7 +48,7 @@ async function pullBlockAsync() {
     console.log('Local block updated');
 }
 
-async function runCommandAsync(config) {
+async function runCommandAsync(argv) {
     await pullBlockAsync();
 }
 

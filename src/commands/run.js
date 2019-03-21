@@ -5,9 +5,9 @@ const cliHelpers = require('../helpers/cli_helpers');
 
 const DEFAULT_PORT = 8000;
 
-async function runCommandAsync(config) {
+async function runCommandAsync(argv) {
     const apiKey = getApiKeySync(getBlockDirPath());
-    const {local, transpileAll} = config;
+    const {local, transpileAll} = argv;
 
     const blockServer = new BlockServer({
         apiKey,

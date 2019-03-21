@@ -72,8 +72,8 @@ async function cloneBlockAsync(
     ]);
 }
 
-async function runCommandAsync(config) {
-    const {blockIdentifier, blockDirPath} = config;
+async function runCommandAsync(argv) {
+    const {blockIdentifier, blockDirPath} = argv;
     const blockIdentifierSplit = blockIdentifier.split('/');
     if (
         blockIdentifierSplit.length !== 2 ||
@@ -90,7 +90,7 @@ async function runCommandAsync(config) {
         throw new Error(`A directory already exists at ${blockDirPath}`);
     }
 
-    const environment = config.environment;
+    const environment = argv.environment;
     const domain = domainByEnvironment[environment];
     // Prompt for apiKey.
     const result = await cliHelpers.promptAsync({
@@ -104,7 +104,7 @@ async function runCommandAsync(config) {
         blockDirPath,
         result.apiKey,
     );
-    console.log(`Block cloned in ${config.blockDirPath}`);
+    console.log(`Block cloned in ${argv.blockDirPath}`);
 }
 
 module.exports = {runCommandAsync};

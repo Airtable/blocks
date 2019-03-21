@@ -9,7 +9,7 @@ const getApiKeySync = require('../get_api_key_sync');
 
 const dirsToRead = ['frontend', 'shared', 'backendRoute', 'backendEvent'];
 
-async function convertFileToModuleAsync(file, parentDir, existingModulesByName, config) {
+async function convertFileToModuleAsync(file, parentDir, existingModulesByName, argv) {
     // Ignore non .js files.
     if (!file.match(/.+\.js$/)) {
         return null;
@@ -47,35 +47,35 @@ async function convertFileToModuleAsync(file, parentDir, existingModulesByName, 
         };
         // If revision is provided, the server will reject updates that would clobber changes.
         // If we want to force update, omit revision, else add it.
-        if (!config.force) {
+        if (!argv.force) {
             blockModule.revision = existingModule.revision;
         }
         return blockModule;
     }
 }
 
-async function readModulesInDirectoryAsync(dir, existingModulesByName, config) {
+async function readModulesInDirectoryAsync(dir, existingModulesByName, argv) {
     const blockDirPath = getBlockDirPath();
     const files = await fsUtils.readDirIfExistsAsync(path.join(blockDirPath, dir));
     if (!files) {
         return null;
     }
     const modules = await Promise.all(files.map(file =>
-        convertFileToModuleAsync(file, dir, existingModulesByName, config))
+        convertFileToModuleAsync(file, dir, existingModulesByName, argv))
     );
     return modules;
 }
 
-async function readAllModulesAsync(config, blockFileData) {
+async function readAllModulesAsync(argv, blockFileData) {
     const existingModules = blockFileData.modules;
     const existingModulesByName = _.keyBy(existingModules, module => module.metadata.name);
     const modulesForEachDir = await Promise.all(dirsToRead.map(dir =>
-        readModulesInDirectoryAsync(dir, existingModulesByName, config)
+        readModulesInDirectoryAsync(dir, existingModulesByName, argv)
     ));
     return _.compact(_.flattenDeep(modulesForEachDir));
 }
 
-async function pushBlockAsync(config) {
+async function pushBlockAsync(argv) {
     const blockDirPath = getBlockDirPath();
 
     // We read metadata from the block file.
@@ -85,7 +85,7 @@ async function pushBlockAsync(config) {
     const blockFileData = JSON.parse(blockFileDataJson);
 
     // Read all modules from disk.
-    const modules = await readAllModulesAsync(config, blockFileData);
+    const modules = await readAllModulesAsync(argv, blockFileData);
 
     // Try pushing the modules.
     const apiKey = getApiKeySync(blockDirPath);
@@ -141,8 +141,8 @@ async function pushBlockAsync(config) {
     console.log('Remote block updated!');
 }
 
-async function runCommandAsync(config) {
-    await pushBlockAsync(config);
+async function runCommandAsync(argv) {
+    await pushBlockAsync(argv);
 }
 
 module.exports = {runCommandAsync};

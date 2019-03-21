@@ -45,8 +45,8 @@ async function renameEntryModuleAsync(newNamePath) {
     console.log('Entry module name updated');
 }
 
-async function runCommandAsync(config) {
-    await renameEntryModuleAsync(config.newName);
+async function runCommandAsync(argv) {
+    await renameEntryModuleAsync(argv.newName);
 }
 
 module.exports = {runCommandAsync};

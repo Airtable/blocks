@@ -1,5 +1,5 @@
 // @flow
-const Commands = {
+const CommandNames = {
     RUN: ('run': 'run'),
     CLONE: ('clone': 'clone'),
     PUSH: ('push': 'push'),
@@ -7,4 +7,6 @@ const Commands = {
     RENAME_ENTRY: ('rename-entry': 'rename-entry'),
 };
 
-module.exports = Commands;
+export type CommandName = $Values<typeof CommandNames>;
+
+module.exports = CommandNames;

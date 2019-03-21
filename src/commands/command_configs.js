@@ -1,45 +1,63 @@
-const Commands = require('./commands');
+// @flow
+const CommandNames = require('./command_names');
 const path = require('path');
 
-function commandRunner(name) {
-    return async function(config) {
+import type {CommandName} from './command_names';
+import type {Argv, Options, PositionalOptions} from 'yargs';
+
+type RunCommandFn = (argv: Argv) => Promise<void>;
+
+type CommandConfig = {|
+    name: CommandName,
+    command: string,
+    description: string,
+    example: string,
+    positionalMap?: {[string]: PositionalOptions},
+    optionMap?: {[string]: Options},
+    runCommandAsync: RunCommandFn,
+|};
+
+function commandRunner(name: string): RunCommandFn {
+    return async function(argv: Argv) {
+        // flow-disable-next-line since flow wants us to pass a string literal.
         const command = require(path.join(__dirname, name));
-        await command.runCommandAsync(config);
+        await command.runCommandAsync(argv);
     };
 }
 
-const commandConfigs = {
-    [Commands.CLONE]: {
-        name: Commands.CLONE,
-        command: `${Commands.CLONE} <blockIdentifier> <blockDirPath>`,
+const commandConfigs: {[CommandName]: CommandConfig} = {
+    [CommandNames.CLONE]: {
+        name: CommandNames.CLONE,
+        command: `${CommandNames.CLONE} <blockIdentifier> <blockDirPath>`,
         description: 'Clone a block from Airtable',
-        example: `block ${Commands.CLONE} app123/blk456 my-block`,
-        argDescriptions: {
+        example: `block ${CommandNames.CLONE} app123/blk456 my-block`,
+        positionalMap: {
             blockIdentifier: {
-                describe: 'identifier for the block (of the form <appId>/<blockId>)',
+                description: 'identifier for the block (of the form <appId>/<blockId>)',
                 type: 'string',
             },
             blockDirPath: {
-                describe: 'directory path for the block',
+                description: 'directory path for the block',
                 type: 'string',
             },
         },
-        options: {
+        optionMap: {
             environment: {
+                type: 'string',
                 description: 'Which environment to clone from',
                 choices: ['production', 'staging', 'local'],
                 default: 'production',
                 hidden: true, // hide from --help output
             },
         },
-        runCommandAsync: commandRunner(Commands.CLONE),
+        runCommandAsync: commandRunner(CommandNames.CLONE),
     },
-    [Commands.RUN]: {
-        name: Commands.RUN,
-        command: `${Commands.RUN}`,
+    [CommandNames.RUN]: {
+        name: CommandNames.RUN,
+        command: `${CommandNames.RUN}`,
         description: 'Build and run a block',
-        example: `block ${Commands.RUN}`,
-        options: {
+        example: `block ${CommandNames.RUN}`,
+        optionMap: {
             local: {
                 description:
                     'Run blocks locally on with a self-signed certificate instead of through ngrok.io',
@@ -52,37 +70,37 @@ const commandConfigs = {
                 default: false,
             },
         },
-        runCommandAsync: commandRunner(Commands.RUN),
+        runCommandAsync: commandRunner(CommandNames.RUN),
     },
-    [Commands.PUSH]: {
-        name: Commands.PUSH,
-        command: `${Commands.PUSH}`,
+    [CommandNames.PUSH]: {
+        name: CommandNames.PUSH,
+        command: `${CommandNames.PUSH}`,
         description: 'Push changes to Airtable',
-        example: `block ${Commands.PUSH}`,
-        options: {
+        example: `block ${CommandNames.PUSH}`,
+        optionMap: {
             force: {
-                describe: 'Bypass revision check when updating files?',
+                description: 'Bypass revision check when updating files?',
                 type: 'boolean',
                 default: false,
             },
         },
-        runCommandAsync: commandRunner(Commands.PUSH),
+        runCommandAsync: commandRunner(CommandNames.PUSH),
     },
-    [Commands.PULL]: {
-        name: Commands.PULL,
-        command: `${Commands.PULL}`,
+    [CommandNames.PULL]: {
+        name: CommandNames.PULL,
+        command: `${CommandNames.PULL}`,
         description: 'Pull changes from Airtable',
-        example: `block ${Commands.PULL}`,
-        runCommandAsync: commandRunner(Commands.PULL),
+        example: `block ${CommandNames.PULL}`,
+        runCommandAsync: commandRunner(CommandNames.PULL),
     },
-    [Commands.RENAME_ENTRY]: {
-        name: Commands.RENAME_ENTRY,
-        command: `${Commands.RENAME_ENTRY} <newName>`,
+    [CommandNames.RENAME_ENTRY]: {
+        name: CommandNames.RENAME_ENTRY,
+        command: `${CommandNames.RENAME_ENTRY} <newName>`,
         description: 'Update the entry module name',
-        example: `block ${Commands.RENAME_ENTRY} newModuleName`,
-        argDescriptions: {
+        example: `block ${CommandNames.RENAME_ENTRY} newModuleName`,
+        positionalMap: {
             newName: {
-                describe: 'new name for the frontend entry module',
+                description: 'new name for the frontend entry module',
                 type: 'string',
             },
         },

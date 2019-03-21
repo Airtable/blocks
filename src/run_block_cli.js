@@ -7,17 +7,17 @@ function registerCommandForConfig(yargs, commandConfig) {
         commandConfig.command,
         commandConfig.description,
         yargsInner => {
-            if (commandConfig.argDescriptions) {
-                for (const argName of Object.keys(commandConfig.argDescriptions)) {
-                    const argConfig = commandConfig.argDescriptions[argName];
-                    yargsInner.positional(argName, argConfig);
+            if (commandConfig.positionalMap) {
+                for (const positionalName of Object.keys(commandConfig.positionalMap)) {
+                    const positionalConfig = commandConfig.positionalMap[positionalName];
+                    yargsInner.positional(positionalName, positionalConfig);
                 }
             }
         },
     );
-    if (commandConfig.options) {
-        for (const optionName of Object.keys(commandConfig.options)) {
-            const optionConfig = commandConfig.options[optionName];
+    if (commandConfig.optionMap) {
+        for (const optionName of Object.keys(commandConfig.optionMap)) {
+            const optionConfig = commandConfig.optionMap[optionName];
             yargs.option(
                 optionName,
                 {
