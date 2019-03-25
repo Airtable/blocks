@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 'use strict';
 
-require('regenerator-runtime/runtime');
+require('babel-polyfill');
 
 const runBlockCli = require('./build/run_block_cli');
 runBlockCli();

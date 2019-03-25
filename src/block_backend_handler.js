@@ -1,3 +1,5 @@
+require('babel-polyfill');
+
 const pathToRegexp = require('path-to-regexp');
 const fsUtils = require('./fs_utils');
 const path = require('path');
@@ -10,8 +12,6 @@ const getBlockDirPath = require('./get_block_dir_path');
 const promisify = require('es6-promisify');
 const request = require('request');
 request.getAsync = promisify(request.get);
-
-require('regenerator-runtime/runtime');
 
 function getFormattedProjectPath(folder, name, extension='.js') {
     return chalk.bold(`${path.join(folder, name)}${extension}`);
