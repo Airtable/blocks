@@ -33,6 +33,7 @@
     "es6-promisify": "^5.0.0",
     "express": "~4.15.5",
     "glob": "^7.1.2",
+    "invariant": "^2.2.4",
     "lodash": "^4.17.4",
     "ngrok": "^2.2.24",
     "path-to-regexp": "^2.2.1",
