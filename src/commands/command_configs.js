@@ -108,6 +108,15 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         // in order to conform to our file naming guidelines.
         runCommandAsync: commandRunner('rename_entry'),
     },
+    [CommandNames.SET_CREDENTIAL]: {
+        name: CommandNames.SET_CREDENTIAL,
+        command: `${CommandNames.SET_CREDENTIAL}`,
+        description: 'Set developer credentials',
+        example: `block ${CommandNames.SET_CREDENTIAL}`,
+        // NOTE: the module name (set_credential) doesn't exactly match the command name (set-credential)
+        // in order to conform to our file naming guidelines.
+        runCommandAsync: commandRunner('set_credential'),
+    }
 };
 
 module.exports = commandConfigs;

@@ -30,6 +30,10 @@ module.exports = {
     // File to store developer credentials.
     DEVELOPER_CREDENTIALS_FILE_NAME: '.developerCredentials.json',
 
+    // Copied over from clientServerSharedConfigSettings in the hyperbase codebase
+    MAX_BLOCK_DEVELOPER_CREDENTIAL_NAME_LENGTH: 255,
+    MAX_NUM_CREDENTIALS_PER_BLOCK: 100,
+
     // Bundle file.
     BUNDLE_FILE_NAME: 'bundle.js',
 };

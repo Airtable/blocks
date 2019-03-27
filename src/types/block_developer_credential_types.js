@@ -8,3 +8,9 @@ export type BlockDeveloperCredentialEncrypted = {|
     developmentCredentialValueEncrypted: string | null,
     releaseCredentialValueEncrypted: string | null,
 |};
+
+export type CredentialEncrypted = {|
+    name: string,
+    kmsDataKeyId: string,
+    credentialValueEncrypted: string,
+|};

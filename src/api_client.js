@@ -92,6 +92,66 @@ class APIClient {
         return body;
     }
 
+    /**
+     * TODO(richsinn): when flow typing this method:
+     *   - credentialPlaintext parameter type => CredentialPlaintext
+     *   - kmsDataKeyId parameter type => kmsDataKeyId?: string
+     *   - return type => Promise<CredentialEncrypted>
+     */
+    async encryptCredentialAsync(
+        credentialPlaintext,
+        kmsDataKeyId,
+    ) {
+        const options = {
+            url: `${this._getRequestUrl()}/credential/encrypt`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            body: {
+                credentialPlaintext,
+                kmsDataKeyId,
+            },
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            throw new Error(body.error.message);
+        }
+
+        return body;
+    }
+
+    /**
+     * TODO(richsinn): when flow typing this method:
+     *   - credentialEncrypted parameter type => credentialEncrypted
+     *   - newKmsDataKeyId parameter type => string
+     *   - return type => Promise<CredentialEncrypted>
+     */
+    async reEncryptCredentialAsync(
+        credentialEncrypted,
+        newKmsDataKeyId,
+    ) {
+        const options = {
+            url: `${this._getRequestUrl()}/credential/reEncrypt`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            body: {
+                credentialEncrypted,
+                newKmsDataKeyId,
+            },
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            throw new Error(body.error.message);
+        }
+
+        return body;
+    }
+
     _getAccessPolicyUrl() {
         const domain = apiDomainsByEnvironment[this._environment];
         return `https://${domain}/v2/meta/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`;
