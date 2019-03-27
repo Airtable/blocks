@@ -448,7 +448,7 @@ class BlockServer {
 
     /**
      * 1. Read and decode the developerCredentialsEncrypted from the local file.
-     * 2. Decrypt by hitting the public Decrypt CRUD route in hyperbase.
+     * 2. Decrypt by hitting the public Decrypt API in Airtable.
      * 3. Set decrypted values as an instance variable. The startBackendProcessIfNeeded() method
      *    will set an Environment Variable from the instance variable.
      *

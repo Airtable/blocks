@@ -355,7 +355,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const result: SetCredentialPromptResult = await cliHelpers.promptAsync(promptSchema);
     await blockSetDeveloperCredentialAsync(result);
-    console.log(`Set ${result.developmentOrReleaseType} credential for '${result.name}'. Must run 'block push' to synchronize changes with hyperbase.`);
+    console.log(`Set ${result.developmentOrReleaseType} credential for '${result.name}'. Must run 'block push' to synchronize changes with Airtable.`);
 }
 
 module.exports = {runCommandAsync};

@@ -2,6 +2,8 @@ const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
 const getBlockDirPath = require('../get_block_dir_path');
+const getDeveloperCredentialsEncryptedIfExistsAsync = require('../get_developer_credentials_encrypted_if_exists_async');
+const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
 const blocksConfigSettings = require('../config/block_cli_config_settings');
 const APIClient = require('../api_client');
 const fsUtils = require('../fs_utils');
@@ -84,6 +86,9 @@ async function pushBlockAsync(argv) {
     );
     const blockFileData = JSON.parse(blockFileDataJson);
 
+    // Read developer credentials from disk.
+    const developerCredentialsEncrypted = await getDeveloperCredentialsEncryptedIfExistsAsync();
+
     // Read all modules from disk.
     const modules = await readAllModulesAsync(argv, blockFileData);
 
@@ -99,15 +104,17 @@ async function pushBlockAsync(argv) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
     const dependencies = packageJson.dependencies;
 
-    const putData = {packageVersionByName: dependencies, modules};
+    const putData = {packageVersionByName: dependencies, modules, developerCredentialsEncrypted};
     console.log('Pushing...');
 
     let createdModules;
     let moduleRevisionById;
+    let developerCredentialsEncryptedFromResponse;
     try {
         const response = await apiClient.updateBlockAsync(putData);
         createdModules = response.createdModules;
         moduleRevisionById = response.moduleRevisionById;
+        developerCredentialsEncryptedFromResponse = response.developerCredentialsEncrypted;
     } catch (err) {
         console.log('Push failed!');
 
@@ -134,10 +141,20 @@ async function pushBlockAsync(argv) {
         blockModule.revision = moduleRevisionById[blockModule.id];
     }
 
-    await fsUtils.writeFileAsync(
-        path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
-        JSON.stringify(blockFileData, null, 4),
+    // Write the developer credentials json file from the response.
+    // This clobbers the locally stored file with the API response.
+    const writeBlockDeveloperCredentialsFromApiResponseAsync = writeDeveloperCredentialsFromApiResponseAsync(
+        developerCredentialsEncryptedFromResponse,
+        blockDirPath,
     );
+
+    await Promise.all([
+        fsUtils.writeFileAsync(
+            path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
+            JSON.stringify(blockFileData, null, 4),
+        ),
+        writeBlockDeveloperCredentialsFromApiResponseAsync,
+    ]);
     console.log('Remote block updated!');
 }
 
