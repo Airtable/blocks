@@ -6,6 +6,7 @@ const CommandNames = {
     PULL: ('pull': 'pull'),
     RENAME_ENTRY: ('rename-entry': 'rename-entry'),
     SET_CREDENTIAL: ('set-credential': 'set-credential'),
+    DELETE_CREDENTIAL: ('delete-credential': 'delete-credential'),
 };
 
 export type CommandName = $Values<typeof CommandNames>;

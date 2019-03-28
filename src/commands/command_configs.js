@@ -116,7 +116,22 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         // NOTE: the module name (set_credential) doesn't exactly match the command name (set-credential)
         // in order to conform to our file naming guidelines.
         runCommandAsync: commandRunner('set_credential'),
-    }
+    },
+    [CommandNames.DELETE_CREDENTIAL]: {
+        name: CommandNames.DELETE_CREDENTIAL,
+        command: `${CommandNames.DELETE_CREDENTIAL} <credentialName>`,
+        description: 'Delete a developer credential',
+        example: `block ${CommandNames.DELETE_CREDENTIAL} CREDENTIAL_NAME`,
+        positionalMap: {
+            credentialName: {
+                description: 'name of credential to delete',
+                type: 'string',
+            },
+        },
+        // NOTE: the module name (delete_credential) doesn't exactly match the command name (delete-credential)
+        // in order to conform to our file naming guidelines.
+        runCommandAsync: commandRunner('delete_credential'),
+    },
 };
 
 module.exports = commandConfigs;

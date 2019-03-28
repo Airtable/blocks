@@ -110,7 +110,7 @@ async function _upsertCredentialAsync(
         kmsDataKeyId,
     );
 
-    if (existingDeveloperCredentialEncrypted === null) {
+    if (existingDeveloperCredentialEncrypted === null || existingDeveloperCredentialEncrypted.deleted) {
         // 1. Create (i.e. "Insert") case.
         const newDeveloperCredentialEncrypted = _createNewDeveloperCredentialEncrypted(credentialEncrypted, developmentOrReleaseType);
 
@@ -355,7 +355,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const result: SetCredentialPromptResult = await cliHelpers.promptAsync(promptSchema);
     await blockSetDeveloperCredentialAsync(result);
-    console.log(`Set ${result.developmentOrReleaseType} credential for '${result.name}'. Must run 'block push' to synchronize changes with Airtable.`);
+    console.log(`Set ${result.developmentOrReleaseType} credential for '${result.name}'.`);
 }
 
 module.exports = {runCommandAsync};
