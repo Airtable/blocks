@@ -1,5 +1,5 @@
 {
-    "presets": ["env", "flow", "stage-2"],
-    "plugins": ["transform-runtime"],
+    "presets": ["@babel/env", "@babel/flow"],
+    "plugins": ["@babel/plugin-proposal-class-properties"],
     "retainLines": true
 }

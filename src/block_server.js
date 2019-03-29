@@ -10,9 +10,7 @@ const browserify = require('browserify');
 const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
-const babelPresetEnv = require('babel-preset-env');
-const babelPresetReact = require('babel-preset-react');
-const stage2BabelPreset = require('babel-preset-stage-2');
+const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blocksConfigSettings = require('./config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
 const APIClient = require('./api_client');
@@ -331,22 +329,11 @@ class BlockServer {
                 plugin: [watchify],
                 paths: [blockDirPath],
                 transform: [
-                    babelify.configure({
-                        presets: [
-                            [
-                                babelPresetEnv,
-                                {
-                                    targets: {
-                                        browsers: this._shouldTranspileAll
-                                            ? allSupportedBrowsers
-                                            : developmentBrowsers,
-                                    },
-                                },
-                            ],
-                            babelPresetReact,
-                            stage2BabelPreset,
-                        ],
-                    }),
+                    babelify.configure(generateBlockBabelConfig({
+                        browsers: this._shouldTranspileAll
+                            ? allSupportedBrowsers
+                            : developmentBrowsers,
+                    })),
                 ],
             },
         );

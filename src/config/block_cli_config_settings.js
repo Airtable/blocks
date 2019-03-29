@@ -11,6 +11,9 @@ module.exports = {
     GLOBAL_REACT_DOM_SERVER_VARIABLE_NAME: '_airtableReactDOMServer',
     GLOBAL_RUN_BLOCK_FUNCTION_NAME: '_airtableRunBlock',
 
+    // Blocks currently run on node 8.10 in production.
+    BLOCK_NODE_VERSION: '8.10',
+
     // Metadata file for the block cli.
     BLOCK_FILE_NAME: 'block.json',
 

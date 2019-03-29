@@ -1,12 +1,11 @@
-require('babel-polyfill');
-
+require('@babel/polyfill');
 const pathToRegexp = require('path-to-regexp');
 const fsUtils = require('./fs_utils');
 const path = require('path');
 const BlockBackendMessageTypes = require('./block_backend_message_types');
 const blocksConfigSettings = require('./config/block_cli_config_settings');
-const Babel = require('babel-standalone');
-const blockBabelConfig = require('./block_babel_config');
+const Babel = require('@babel/core');
+const generateBlockBabelConfig = require('./generate_block_babel_config');
 const chalk = require('chalk');
 const getBlockDirPath = require('./get_block_dir_path');
 const promisify = require('es6-promisify');
@@ -173,7 +172,9 @@ async function transpileFileIfNeededAsync(fileName, moduleType, srcDirPath, dest
     }
 
     const code = await fsUtils.readFileAsync(srcFilePath, 'utf8');
-    const transpiledCode = Babel.transform(code, blockBabelConfig).code;
+    const transpiledCode = Babel.transform(code, generateBlockBabelConfig({
+        node: blocksConfigSettings.BLOCK_NODE_VERSION,
+    })).code;
     await fsUtils.writeFileAsync(destFilePath, transpiledCode);
 }
 
