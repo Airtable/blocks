@@ -132,6 +132,15 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         // in order to conform to our file naming guidelines.
         runCommandAsync: commandRunner('delete_credential'),
     },
+    [CommandNames.LIST_CREDENTIALS]: {
+        name: CommandNames.LIST_CREDENTIALS,
+        command: `${CommandNames.LIST_CREDENTIALS}`,
+        description: 'List developer credentials',
+        example: `block ${CommandNames.LIST_CREDENTIALS}`,
+        // NOTE: the module name (list_credentials) doesn't exactly match the command name (list-credentials)
+        // in order to conform to our file naming guidelines.
+        runCommandAsync: commandRunner('list_credentials'),
+    },
 };
 
 module.exports = commandConfigs;
