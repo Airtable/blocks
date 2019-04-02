@@ -1,6 +1,7 @@
+// @flow
 const blocksConfigSettings = require('./config/block_cli_config_settings');
 
-module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath) {
+module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath: string, isDevelopment: boolean): string {
     // NOTE: this must return ES5 (so no JSX!) since it won't get transpiled on the client.
     // This puts React on window so the block SDK can access it.
     return `
@@ -19,14 +20,18 @@ module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath
                 return;
             }
             didRun = true;
+            ${isDevelopment ?
+                // In development mode, make sure requests to relative paths get
+                // routed to the local backend (instead of the block router).
+                `
+                var blockUrl = process.env.BLOCK_BASE_URL;
 
-            var blockUrl = process.env.BLOCK_BASE_URL;
-
-            // Make requests to local backend.
-            var baseTag = document.createElement('base');
-            baseTag.setAttribute('href', blockUrl);
-            document.head.appendChild(baseTag);
-
+                // Make requests to local backend.
+                var baseTag = document.createElement('base');
+                baseTag.setAttribute('href', blockUrl);
+                document.head.appendChild(baseTag);
+                `
+            : ''}
             // Requiring the entry point file runs user code. Be sure to do any setup
             // above this line.
             var BlockWrapperComponent = window['${
@@ -39,27 +44,30 @@ module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath
             ReactDOM.render(React.createElement(BlockWrapperComponent, {
                 EntryComponent: EntryComponent,
             }), container);
-
-            function pollForLiveReload() {
-                // There seems to be a bug where Chrome tries to batch requests to the
-                // same URL, but only one iframe will get the response. We get around it
-                // by adding a random query param to each request. Otherwise, if multiple
-                // dev iframes are running, only one of them will live reload.
-                fetch(blockUrl + '/__runFrame/poll?random=' + Math.random()).then(function(response) {
-                    if (response.status === 200) {
-                        window._airtableBlockSdk.reload();
-                    } else if (response.status === 408) {
-                        pollForLiveReload();
-                    } else {
-                        throw new Error('Unknow error from development server');
-                    }
-                }).catch(err => {
-                    setTimeout(() => {
-                        throw new Error('Disconnected from development server');
+            ${isDevelopment ?
+                `
+                function pollForLiveReload() {
+                    // There seems to be a bug where Chrome tries to batch requests to the
+                    // same URL, but only one iframe will get the response. We get around it
+                    // by adding a random query param to each request. Otherwise, if multiple
+                    // dev iframes are running, only one of them will live reload.
+                    fetch(blockUrl + '/__runFrame/poll?random=' + Math.random()).then(function(response) {
+                        if (response.status === 200) {
+                            window._airtableBlockSdk.reload();
+                        } else if (response.status === 408) {
+                            pollForLiveReload();
+                        } else {
+                            throw new Error('Unknow error from development server');
+                        }
+                    }).catch(err => {
+                        setTimeout(() => {
+                            throw new Error('Disconnected from development server');
+                        });
                     });
-                });
-            }
-            pollForLiveReload();
+                }
+                pollForLiveReload();
+                `
+            : ''}
         };
     `;
 };

@@ -298,7 +298,8 @@ class BlockServer {
             fs.mkdirSync(buildDirPath);
         }
         const clientWrapperFilepath = path.join(buildDirPath, blocksConfigSettings.CLIENT_WRAPPER_FILE_NAME);
-        const clientWrapperCode = generateBlockClientWrapperCode(frontendEntryModulePath, url);
+        const isDevelopment = true;
+        const clientWrapperCode = generateBlockClientWrapperCode(frontendEntryModulePath, isDevelopment);
         fs.writeFileSync(clientWrapperFilepath, clientWrapperCode);
     }
     _setUpBundler() {

@@ -26,6 +26,13 @@ function commandRunner(name: string): RunCommandFn {
 }
 
 const commandConfigs: {[CommandName]: CommandConfig} = {
+    [CommandNames.BUILD]: {
+        name: CommandNames.BUILD,
+        command: `${CommandNames.BUILD}`,
+        description: 'Build a block',
+        example: `block ${CommandNames.BUILD}`,
+        runCommandAsync: commandRunner(CommandNames.BUILD),
+    },
     [CommandNames.CLONE]: {
         name: CommandNames.CLONE,
         command: `${CommandNames.CLONE} <blockIdentifier> <blockDirPath>`,
