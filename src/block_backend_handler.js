@@ -7,6 +7,7 @@ const blocksConfigSettings = require('./config/block_cli_config_settings');
 const Babel = require('@babel/core');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const chalk = require('chalk');
+const generateResponseBodyBase64 = require('./generate_response_body_base64');
 const getBlockDirPath = require('./get_block_dir_path');
 const promisify = require('es6-promisify');
 const request = require('request');
@@ -73,7 +74,7 @@ async function callUserCodeForEventAsync(event, routes, developerCredentialByNam
         // No matching route, so treat this as a 404.
         return {
             statusCode: 404,
-            body: 'NOT_FOUND',
+            ...generateResponseBodyBase64('NOT_FOUND'),
         };
     }
     const {route, params} = routeAndParams;
@@ -93,10 +94,11 @@ async function callUserCodeForEventAsync(event, routes, developerCredentialByNam
             console.warn(errorMessage);
             return {
                 statusCode: 500,
-                body: {
-                    err: errorMessage,
-                    message: 'SERVER_ERROR',
-                },
+                ...generateResponseBodyBase64({
+                        err: errorMessage,
+                        message: 'SERVER_ERROR',
+                    }
+                ),
             };
         }
 
@@ -129,11 +131,11 @@ async function callUserCodeForEventAsync(event, routes, developerCredentialByNam
         console.warn(chalk.red(err.stack));
         return {
             statusCode: 500,
-            body: {
+            ...generateResponseBodyBase64({
                 err: err.toString(),
                 stack: err.stack,
                 message: 'SERVER_ERROR',
-            },
+            }),
         };
     }
 }
