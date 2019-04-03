@@ -104,7 +104,11 @@ async function pushBlockAsync(argv) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
     const dependencies = packageJson.dependencies;
 
-    const putData = {packageVersionByName: dependencies, modules, developerCredentialsEncrypted};
+    const putData = {
+        packageVersionByName: dependencies,
+        modules,
+        ...(developerCredentialsEncrypted ? {developerCredentialsEncrypted} : null),
+    };
     console.log('Pushing...');
 
     let createdModules;
