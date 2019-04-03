@@ -22,11 +22,15 @@ import type {
 type KmsDataKeyId = string;
 type Base64 = string;
 
+type DevelopmentOrReleasePrompt = '1' | '2' | BlockBuildType;
+
 type SetCredentialPromptResult = {|
     developmentOrReleaseType: BlockBuildType,
     name: string,
     credentialValue: string,
 |};
+
+const PROMPT_DEVELOPMENT_OR_RELEASE_REGEX = /^(?:DEVELOPMENT|RELEASE|1|2)$/;
 
 /**
  * This only "upserts" developer credentials to the local filesystem. Specifically, it
@@ -309,26 +313,36 @@ function _getApiClient(
     });
 }
 
+function _promptValueIsDevelopment(value: DevelopmentOrReleasePrompt): boolean %checks {
+    return value === '1' || value === BlockBuildTypes.DEVELOPMENT;
+}
+
+function _promptValueIsRelease(value: DevelopmentOrReleasePrompt): boolean %checks {
+    return value === '2' || value === BlockBuildTypes.RELEASE;
+}
+
 async function runCommandAsync(argv: Argv): Promise<void> {
     const promptSchema = [
         {
             name: 'developmentOrReleaseType',
-            description: 'Select [1] for development or [2] for production credential',
-            type: 'integer',
+            description: `Select [1] for ${BlockBuildTypes.DEVELOPMENT} or [2] for ${BlockBuildTypes.RELEASE} credential`,
             required: true,
-            conform: value => {
-                return value === 1 || value === 2;
-            },
-            message: 'Select 1 or 2',
+            pattern: PROMPT_DEVELOPMENT_OR_RELEASE_REGEX,
+            message: `Input [1] ${BlockBuildTypes.DEVELOPMENT} or [2] ${BlockBuildTypes.RELEASE}`,
             before: value => {
-                if (value === 1) {
-                    return BlockBuildTypes.DEVELOPMENT;
-                } else if (value === 2) {
-                    return BlockBuildTypes.RELEASE;
+                const trimmedValue = value.trim();
+                let buildType;
+                if (_promptValueIsDevelopment(trimmedValue)) {
+                    buildType = BlockBuildTypes.DEVELOPMENT;
+                } else if (_promptValueIsRelease(trimmedValue)) {
+                    buildType = BlockBuildTypes.RELEASE;
                 } else {
-                    // Returning null will be handled by the 'conform' method.
+                    // Returning null will be handled by the 'pattern' check.
                     return null;
                 }
+
+                console.log(`Setting ${buildType} credential...`);
+                return buildType;
             }
         },
         {
@@ -336,8 +350,8 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             description: 'Please enter a name for the credentials',
             message: 'Name must be no more than 255 characters',
             conform: value => {
-                value = value.trim();
-                return value.length <= blocksConfigSettings.MAX_BLOCK_DEVELOPER_CREDENTIAL_NAME_LENGTH;
+                const trimmedValue = value.trim();
+                return trimmedValue.length <= blocksConfigSettings.MAX_BLOCK_DEVELOPER_CREDENTIAL_NAME_LENGTH;
             },
             before: value => {
                 return value.trim();
