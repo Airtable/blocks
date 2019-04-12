@@ -139,6 +139,25 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         // in order to conform to our file naming guidelines.
         runCommandAsync: commandRunner('delete_credential'),
     },
+    [CommandNames.RENAME_CREDENTIAL]: {
+        name: CommandNames.RENAME_CREDENTIAL,
+        command: `${CommandNames.RENAME_CREDENTIAL} <currentName> <newName>`,
+        description: 'Rename a developer credential',
+        example: `block ${CommandNames.RENAME_CREDENTIAL} CURRENT_NAME NEW_NAME`,
+        positionalMap: {
+            currentName: {
+                type: 'string',
+                description: 'Current name for the credential',
+            },
+            newName: {
+                type: 'string',
+                description: 'New name for the credential',
+            },
+        },
+        // NOTE: the module name (rename_credential) doesn't exactly match the command name (rename-credential)
+        // in order to conform to our file naming guidelines.
+        runCommandAsync: commandRunner('rename_credential'),
+    },
     [CommandNames.LIST_CREDENTIALS]: {
         name: CommandNames.LIST_CREDENTIALS,
         command: `${CommandNames.LIST_CREDENTIALS}`,

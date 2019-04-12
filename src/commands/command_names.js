@@ -8,6 +8,7 @@ const CommandNames = {
     SET_CREDENTIAL: ('set-credential': 'set-credential'),
     DELETE_CREDENTIAL: ('delete-credential': 'delete-credential'),
     LIST_CREDENTIALS: ('list-credentials': 'list-credentials'),
+    RENAME_CREDENTIAL: ('rename-credential': 'rename-credential'),
     BUILD: ('build': 'build'),
 };
 
