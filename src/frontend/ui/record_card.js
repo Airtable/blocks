@@ -15,6 +15,7 @@ const classNames = require('classnames');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
 const expandRecord = require('block_sdk/frontend/ui/expand_record');
 const keyCodeUtils = require('client/mylib/key_code_utils');
+const {FALLBACK_ROW_NAME_FOR_DISPLAY} = require('client_server_shared/client_server_shared_config_settings');
 
 import type {RecordDef} from 'block_sdk/shared/models/record';
 import type {AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
@@ -169,7 +170,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         this._onClick = this._onClick.bind(this);
         this._validateProps(props);
     }
-    componentWillReceiveProps(nextProps: RecordCardProps) {
+    UNSAFE_componentWillReceiveProps(nextProps: RecordCardProps) {
         this._validateProps(nextProps);
     }
     _validateProps(props: RecordCardProps) {
@@ -423,7 +424,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             primaryCellValueAsString = (primaryCellValue === null || primaryCellValue === undefined) ? null : String(primaryCellValue);
         }
         if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
-            primaryValue = 'Unnamed record';
+            primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
             isUnnamed = true;
         } else {
             primaryValue = primaryCellValueAsString;

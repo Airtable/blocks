@@ -4,6 +4,7 @@ const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const Popover = require('block_sdk/frontend/ui/popover');
 const classNames = require('classnames');
+const warning = require('block_sdk/frontend/warning');
 
 import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from 'block_sdk/frontend/ui/popover';
 
@@ -20,7 +21,9 @@ type TooltipProps = {
     placementOffsetY?: number,
     fitInWindowMode?: FitInWindowMode,
     shouldHideTooltipOnClick?: boolean,
+    // deprecated in favour of disabled
     isDisabled?: boolean,
+    disabled?: boolean,
     className?: string,
     style?: Object,
 };
@@ -47,7 +50,9 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         placementOffsetY: PropTypes.number,
         fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
         shouldHideTooltipOnClick: PropTypes.bool,
+        // deprecated in favour of disabled
         isDisabled: PropTypes.bool,
+        disabled: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
     };
@@ -133,10 +138,18 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
             </div>
         );
     }
+    _getDisabled() {
+        if (this.props.isDisabled !== undefined) {
+            warning('[UI.Tooltip] the `isDisabled` prop is deprecated - use `disabled` instead');
+            return this.props.isDisabled;
+        }
+        return this.props.disabled;
+    }
     render() {
-        const {children, renderContent, content, isDisabled} = this.props;
+        const {children, renderContent, content} = this.props;
+        const disabled = this._getDisabled();
 
-        if (isDisabled || (!renderContent && !content)) {
+        if (disabled || (!renderContent && !content)) {
             // The tooltip will never show, so just return the children.
             return children;
         }

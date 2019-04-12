@@ -10,8 +10,8 @@
 // return any matches, we can remove this hack.
 const React = require('react');
 const PropTypes = require('prop-types');
-if (!React.PropTypes) {
-    React.PropTypes = PropTypes;
+if (!React.PropTypes) { // eslint-disable-line react/no-deprecated
+    React.PropTypes = PropTypes; // eslint-disable-line react/no-deprecated
 }
 
 const BlockSdkVersions = require('client_server_shared/blocks/block_sdk_versions');

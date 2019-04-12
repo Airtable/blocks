@@ -1,10 +1,10 @@
 // @flow
-const u = require('client_server_shared/u');
+const {h, u} = require('client_server_shared/hu');
 const utils = require('block_sdk/shared/private_utils');
 const AbstractModel = require('block_sdk/shared/models/abstract_model');
 const Table = require('block_sdk/shared/models/table');
 const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
-const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
+const appBlanketUserObjMethods = require('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
 const getSdk = require('block_sdk/shared/get_sdk');
 const UserScopedAppInterface = require('client_server_shared/user_scoped_app_interface');
 const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = require('client_server_shared/client_server_shared_config_settings');
@@ -136,14 +136,17 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     /**
      * The users who have access to this base.
      */
-    get collaborators(): Array<Collaborator> {
+    get activeCollaborators(): Array<Collaborator> {
         const collaborators = [];
         const appBlanket = this.__appBlanket;
         if (appBlanket) {
             const {userInfoById} = appBlanket;
+            // Exclude invites and former collaborators.
             if (userInfoById) {
                 for (const userObj of u.values(userInfoById)) {
-                    collaborators.push(userObjMethods.formatUserObjForPublicApiV2(userObj));
+                    if (appBlanketUserObjMethods.isActive(userObj) && !h.id.isInviteId(userObj.id)) {
+                        collaborators.push(appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj));
+                    }
                 }
             }
         }
@@ -162,15 +165,19 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         if (!userObj) {
             return null;
         }
-        return userObjMethods.formatUserObjForPublicApiV2(userObj);
+        return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
     get __appBlanket(): AppBlanket {
         return this._data.appBlanket;
     }
     get __appInterface(): UserScopedAppInterface {
-        const userId = this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID;
-        const isFeatureEnabled = featureName => this._isFeatureEnabled(featureName);
-        return new UserScopedAppInterface(this.id, this._data.appBlanket, this._data.sortTiebreakerKey, userId, isFeatureEnabled);
+        return new UserScopedAppInterface({
+            applicationId: this.id,
+            appBlanket: this._data.appBlanket,
+            sortTiebreakerKey: this._data.sortTiebreakerKey,
+            currentSessionUserId: this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
+            isFeatureEnabled: featureName => this._isFeatureEnabled(featureName),
+        });
     }
     /**
      * Returns the table matching the given ID, or `null` if that

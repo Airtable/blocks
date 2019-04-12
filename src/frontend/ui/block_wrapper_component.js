@@ -30,13 +30,13 @@ class BlockWrapperComponent extends React.Component<BlockWrapperComponentProps> 
         // without having to special case it.
         getFrontendSdk().UI.globalAlert.watch('__alertInfo', () => this.forceUpdate());
     }
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this._snapshotMinSizeBeforeRender();
     }
     componentDidMount() {
         this._checkMinSizeConstraintUnchangedAfterRender();
     }
-    componentWillUpdate() {
+    UNSAFE_componentWillUpdate() {
         this._snapshotMinSizeBeforeRender();
     }
     componentDidUpdate() {

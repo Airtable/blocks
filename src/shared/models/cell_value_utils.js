@@ -6,7 +6,7 @@ const getSdk = require('block_sdk/shared/get_sdk');
 const invariant = require('invariant');
 
 import type Field from 'block_sdk/shared/models/field';
-import type {ValidationResult} from 'client_server_shared/object_schemas/validation_result';
+import type {CellValueValidationResult} from 'client_server_shared/column_types/deps/column_type_provider_base';
 
 const publicCellValueUtils = {
     parsePublicApiCellValue(publicCellValue: mixed, field: Field): mixed {
@@ -18,7 +18,7 @@ const publicCellValueUtils = {
             PublicApiVersions.API2,
         );
     },
-    validatePublicCellValueForUpdate(newPublicCellValue: mixed, currentPublicCellValue: mixed, field: Field): ValidationResult {
+    validatePublicCellValueForUpdate(newPublicCellValue: mixed, currentPublicCellValue: mixed, field: Field): CellValueValidationResult {
         if (columnTypeProvider.isComputed(field.__getRawType())) {
             return {isValid: false, reason: `${field.config.type} fields cannot be updated`};
         }
@@ -58,7 +58,7 @@ const publicCellValueUtils = {
         }
         return publicCellValue;
     },
-    _validateLinkedRecordCellValueForUpdate(newPublicCellValue: mixed, field: Field): ValidationResult {
+    _validateLinkedRecordCellValueForUpdate(newPublicCellValue: mixed, field: Field): CellValueValidationResult {
         // Special case foreign records to enforce that the foreign table is
         // loaded. This let's us validate recordIds against the foreign
         // table before hitting the server.

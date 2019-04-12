@@ -39,7 +39,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
 
         this._validateProps(props);
     }
-    componentWillReceiveProps(nextProps: CellRendererProps) {
+    UNSAFE_componentWillReceiveProps(nextProps: CellRendererProps) {
         this._validateProps(nextProps);
     }
     _validateProps(props: CellRendererProps) {

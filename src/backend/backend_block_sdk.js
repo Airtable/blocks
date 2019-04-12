@@ -5,6 +5,8 @@ const GlobalConfig = require('block_sdk/shared/global_config');
 const AirtableApiClient = require('./airtable_api_client');
 const AirtableInterfaceBackend = require('block_sdk/backend/airtable_interface_backend');
 const BlockSdkVersions = require('client_server_shared/blocks/block_sdk_versions');
+const BlockNotifications = require('block_sdk/backend/block_notifications');
+const BlockDeveloperCredentials = require('block_sdk/backend/block_developer_credentials');
 const invariant = require('invariant');
 
 import type {BlockSdkInitData} from 'client_server_shared/blocks/block_sdk_init_data';
@@ -25,14 +27,21 @@ class BackendBlockSdk implements BlockSdkInterface<AirtableInterfaceBackend> {
     installationId: string;
     /** */
     runInfo: RunInfo;
+    /** */
+    notifications: BlockNotifications;
+    /** */
+    credentials: BlockDeveloperCredentials;
 
-    static async __constructSdkForEventAsync(eventData: {
-        applicationId: string,
-        blockInstallationId: string,
-        kvValuesByKey: Object | void,
-        apiAccessPolicyString: string,
-        apiBaseUrl: string,
-    }): Promise<BackendBlockSdk> {
+    static async __constructSdkForEventAsync(
+        eventData: {
+            applicationId: string,
+            blockInstallationId: string,
+            kvValuesByKey: Object | void,
+            apiAccessPolicyString: string,
+            apiBaseUrl: string,
+        },
+        developerCredentialByName: {[string]: string},
+    ): Promise<BackendBlockSdk> {
         const {applicationId, blockInstallationId, apiAccessPolicyString, apiBaseUrl} = eventData;
         const airtableApiClient = new AirtableApiClient({
             applicationId,
@@ -61,22 +70,27 @@ class BackendBlockSdk implements BlockSdkInterface<AirtableInterfaceBackend> {
         invariant(kvValuesByKey, 'Should have kvValuesByKey after reading SDK init data');
 
         // Now that we're sure we have everything we need, we can construct the sdk.
-        return new BackendBlockSdk({
-            initialKvValuesByKey: kvValuesByKey,
-            isDevelopmentMode: process.env.NODE_ENV === 'development',
-            baseData,
-            blockInstallationId,
+        return new BackendBlockSdk(
+            {
+                initialKvValuesByKey: kvValuesByKey,
+                isDevelopmentMode: process.env.NODE_ENV === 'development',
+                baseData,
+                blockInstallationId,
 
-            // NOTE: these don't really make sense in the backend. Just default them to false.
-            // TODO: figure out what to do with them.
-            isFirstRun: false,
-            isFullscreen: false,
-        }, airtableInterface);
+                // NOTE: these don't really make sense in the backend. Just default them to false.
+                // TODO: figure out what to do with them.
+                isFirstRun: false,
+                isFullscreen: false,
+            },
+            airtableInterface,
+            developerCredentialByName,
+        );
     }
 
     constructor(
         sdkInitData: BlockSdkInitData,
         airtableInterface: AirtableInterfaceBackend,
+        developerCredentialByName: {[string]: string},
     ) {
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
         this.base = new Base(sdkInitData.baseData, airtableInterface);
@@ -87,6 +101,14 @@ class BackendBlockSdk implements BlockSdkInterface<AirtableInterfaceBackend> {
             isFirstRun: sdkInitData.isFirstRun,
             isDevelopmentMode: sdkInitData.isDevelopmentMode,
         });
+
+        this.notifications = new BlockNotifications(
+            this.base.id,
+            this.installationId,
+            airtableInterface.apiClient,
+        );
+
+        this.credentials = new BlockDeveloperCredentials(developerCredentialByName);
 
         this.__airtableInterface = airtableInterface;
 

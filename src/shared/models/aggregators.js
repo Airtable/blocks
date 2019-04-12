@@ -68,7 +68,7 @@ const aggregateToString = (aggregatorKey: string, records: Array<Record>, field:
         summaryValue,
         columnType,
         field.__getRawTypeOptions(),
-        getSdk().base.__appBlanket,
+        getSdk().base.__appInterface,
     );
 };
 

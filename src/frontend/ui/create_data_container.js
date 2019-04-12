@@ -132,7 +132,7 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
             // mounted.
             this._dataContainerIsMounted = false;
         }
-        componentWillReceiveProps(newProps: Object) {
+        UNSAFE_componentWillReceiveProps(newProps: Object) {
             const shouldUpdateDependencies = !u.isObjectShallowEqual(this.props, newProps);
             if (shouldUpdateDependencies) {
                 this._shouldUpdateDependenciesOnComponentDidUpdate = true;

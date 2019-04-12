@@ -8,6 +8,8 @@ import type GlobalConfig from 'block_sdk/shared/global_config';
 import type AirtableInterfaceBackend from 'block_sdk/backend/airtable_interface_backend';
 import type {RunInfo} from 'block_sdk/shared/block_sdk_interface';
 import type AirtableApiClient from 'block_sdk/backend/airtable_api_client';
+import type BlockNotifications from 'block_sdk/backend/block_notifications';
+import type BlockDeveloperCredentials from 'block_sdk/backend/block_developer_credentials';
 
 // NOTE: we wrap the sdk to get around the following issue:
 // The first time the SDK is required on this lambda instance, node will
@@ -24,14 +26,17 @@ class BackendBlockSdkWrapper {
     constructor() {
         this._sdk = null;
     }
-    async __initializeSdkForEventAsync(eventData: {
-        applicationId: string,
-        blockInstallationId: string,
-        kvValuesByKey: Object | void,
-        apiAccessPolicyString: string,
-        apiBaseUrl: string,
-    }): Promise<void> {
-        this._sdk = await BackendBlockSdk.__constructSdkForEventAsync(eventData);
+    async __initializeSdkForEventAsync(
+        eventData: {
+            applicationId: string,
+            blockInstallationId: string,
+            kvValuesByKey: Object | void,
+            apiAccessPolicyString: string,
+            apiBaseUrl: string,
+        },
+        developerCredentialByName: {[string]: string},
+    ): Promise<void> {
+        this._sdk = await BackendBlockSdk.__constructSdkForEventAsync(eventData, developerCredentialByName);
     }
     _getSdkInstance(): BackendBlockSdk {
         invariant(this._sdk, 'SDK is not initialized');
@@ -57,6 +62,12 @@ class BackendBlockSdkWrapper {
     }
     get runInfo(): RunInfo {
         return this._getSdkInstance().runInfo;
+    }
+    get notifications(): BlockNotifications {
+        return this._getSdkInstance().notifications;
+    }
+    get credentials(): BlockDeveloperCredentials {
+        return this._getSdkInstance().credentials;
     }
     get __airtableInterface(): AirtableInterfaceBackend {
         return this._getSdkInstance().__airtableInterface;

@@ -47,7 +47,7 @@ class ConfirmationModal extends React.Component<ConfirmationModalProps> {
         window.addEventListener('keydown', this._onKeyDown, false);
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         window.removeEventListener('keydown', this._onKeyDown, false);
     }
 

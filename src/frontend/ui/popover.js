@@ -92,7 +92,7 @@ class Popover extends React.Component<PopoverProps> {
 
         this._refreshContainerAsync();
     }
-    componentWillReceiveProps(nextProps: PopoverProps) {
+    UNSAFE_componentWillReceiveProps(nextProps: PopoverProps) {
         if (nextProps.isOpen) {
             this._createContainer();
         } else {

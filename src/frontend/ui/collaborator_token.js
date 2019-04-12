@@ -2,7 +2,7 @@
 const {h, u} = require('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
-const userObjMethods = require('client_server_shared/column_types/helpers/user_obj_methods');
+const appBlanketUserObjMethods = require('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
 const profilePicHelper = require('client_server_shared/profile_pic_helper');
 const _CollaboratorToken = require('client_server_shared/column_types/components/collaborator_token'); // TODO(kasra): don't depend on liveapp components.
 const getSdk = require('block_sdk/shared/get_sdk');
@@ -29,7 +29,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     // formatting it nicely.
     const userInfoById = getSdk().base.__appInterface.getCollaboratorInfoById();
     const userObj = userInfoById && collaborator.id ? userInfoById[collaborator.id] : null;
-    const userObjFormattedForPublicApiV2 = userObj ? userObjMethods.formatUserObjForPublicApiV2(userObj) : null;
+    const userObjFormattedForPublicApiV2 = userObj ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj) : null;
 
     let userName;
     let profilePicUrl;
@@ -40,8 +40,8 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
         // Since the object we got passed and the formatted v2 obj are the same, we can just use
         // the private obj and our helpers. We do this so that we can use sized prof pic urls
         // and name helper functions that we couldn't otherwise use.
-        profilePicUrl = userObjMethods.getTokenSizedProfilePicUrl(userObj);
-        userName = userObjMethods.getName(userObj) || 'Unknown';
+        profilePicUrl = appBlanketUserObjMethods.getTokenSizedProfilePicUrl(userObj);
+        userName = appBlanketUserObjMethods.getName(userObj) || 'Unknown';
     } else {
         // Can't use helpers to get token-sized prof pic url, since we can't be sure we were
         // given an airtable url.
