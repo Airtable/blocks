@@ -13,20 +13,20 @@ function registerCommandForConfig(yargs, commandConfig) {
                     yargsInner.positional(positionalName, positionalConfig);
                 }
             }
+            if (commandConfig.optionMap) {
+                for (const optionName of Object.keys(commandConfig.optionMap)) {
+                    const optionConfig = commandConfig.optionMap[optionName];
+                    yargs.option(
+                        optionName,
+                        {
+                            group: commandConfig.name,
+                            ...optionConfig,
+                        },
+                    );
+                }
+            }
         },
     );
-    if (commandConfig.optionMap) {
-        for (const optionName of Object.keys(commandConfig.optionMap)) {
-            const optionConfig = commandConfig.optionMap[optionName];
-            yargs.option(
-                optionName,
-                {
-                    group: commandConfig.name,
-                    ...optionConfig,
-                },
-            );
-        }
-    }
     yargs.example(commandConfig.example);
 }
 
