@@ -313,14 +313,6 @@ function _getApiClient(
     });
 }
 
-function _promptValueIsDevelopment(value: DevelopmentOrReleasePrompt): boolean %checks {
-    return value === '1' || value === BlockBuildTypes.DEVELOPMENT;
-}
-
-function _promptValueIsRelease(value: DevelopmentOrReleasePrompt): boolean %checks {
-    return value === '2' || value === BlockBuildTypes.RELEASE;
-}
-
 async function runCommandAsync(argv: Argv): Promise<void> {
     const promptSchema = [
         {
@@ -330,18 +322,30 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             pattern: PROMPT_DEVELOPMENT_OR_RELEASE_REGEX,
             message: `Input [1] ${BlockBuildTypes.DEVELOPMENT} or [2] ${BlockBuildTypes.RELEASE}`,
             before: value => {
-                const trimmedValue = value.trim();
+                const trimmedValue: DevelopmentOrReleasePrompt = value.trim();
+
                 let buildType;
-                if (_promptValueIsDevelopment(trimmedValue)) {
-                    buildType = BlockBuildTypes.DEVELOPMENT;
-                } else if (_promptValueIsRelease(trimmedValue)) {
-                    buildType = BlockBuildTypes.RELEASE;
-                } else {
-                    // Returning null will be handled by the 'pattern' check.
-                    return null;
+                switch(trimmedValue) {
+                    case '1':
+                    case BlockBuildTypes.DEVELOPMENT:
+                        buildType = BlockBuildTypes.DEVELOPMENT;
+                        break;
+
+                    case '2':
+                    case BlockBuildTypes.RELEASE:
+                        buildType = BlockBuildTypes.RELEASE;
+                        break;
+
+                    default:
+                        console.log(`Incorrect input: ${trimmedValue}`);
+                        // setting to null will be handled by the 'pattern' check.
+                        buildType = null;
+                        break;
                 }
 
-                console.log(`Setting ${buildType} credential...`);
+                if (buildType) {
+                    console.log(`Setting credential for ${JSON.stringify(buildType)} type...`);
+                }
                 return buildType;
             }
         },
