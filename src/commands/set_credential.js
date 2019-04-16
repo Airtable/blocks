@@ -325,7 +325,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
                 const trimmedValue: DevelopmentOrReleasePrompt = value.trim();
 
                 let buildType;
-                switch(trimmedValue) {
+                switch (trimmedValue) {
                     case '1':
                     case BlockBuildTypes.DEVELOPMENT:
                         buildType = BlockBuildTypes.DEVELOPMENT;

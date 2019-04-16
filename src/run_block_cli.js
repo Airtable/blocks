@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const cliHelpers = require('./helpers/cli_helpers');
 const commandConfigs = require('./commands/command_configs');
 

@@ -5,7 +5,7 @@ const writeDeveloperCredentialsFromApiResponseAsync = require('../write_develope
 
 import type {Argv} from 'yargs';
 
-const CREDENTIAL_NOT_FOUND_MSG = 'Credential not found!'
+const CREDENTIAL_NOT_FOUND_MSG = 'Credential not found!';
 /**
  * This only modifies the developer credentials locally. 'block push' must be used
  * to synchronize changes with the server.

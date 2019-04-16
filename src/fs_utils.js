@@ -4,9 +4,9 @@ const path = require('path');
 
 module.exports = {
     readFileAsync: promisify(fs.readFile),
-    readFileIfExistsAsync: async function(path) {
+    readFileIfExistsAsync: async function(filepath) {
         try {
-            return await this.readFileAsync(path);
+            return await this.readFileAsync(filepath);
         } catch (err) {
             if (err.code === 'ENOENT') {
                 return null;
