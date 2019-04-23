@@ -5,8 +5,8 @@ const path = require('path');
 import type {Argv} from 'yargs';
 
 function _getOutputDirPath(): string {
-    const timestamp = new Date().getTime();
-    return path.join('/tmp', 'build', timestamp);
+    const timestampString = new Date().getTime().toString();
+    return path.join('/tmp', 'build', timestampString);
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
