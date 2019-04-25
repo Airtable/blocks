@@ -1,0 +1,16 @@
+{
+    "extends": [
+        "../.eslintrc",
+    ],
+    "plugins": ["react-hooks"],
+    "settings": {
+        "react": {
+            "version": "16.8.4",
+        },
+    },
+    "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/no-deprecated": "error",
+    },
+}

@@ -7,7 +7,6 @@ const Field = require('block_sdk/shared/models/field');
 const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
 const airtableUrls = require('client_server_shared/airtable_urls');
-const Sorter = require('client_server_shared/filter_and_sort/sorter');
 const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
 const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
@@ -53,46 +52,6 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         return utils.isEnumValue(WatchableRecordKeys, key) ||
             u.startsWith(key, WatchableCellValueInFieldKeyPrefix) ||
             u.startsWith(key, WatchableColorInViewKeyPrefix);
-    }
-    /**
-     * Static helper to perform a one-time sort of array of records.
-     *
-     * If you want a sorted list of records that stays sorted as cell values
-     * change, use QueryResult.
-     */
-    static sortRecords(records: Array<Record>, sortConfigs: Array<{field: string, direction?: 'asc' | 'desc'}>): Array<Record> {
-        if (records.length === 0 || sortConfigs.length === 0) {
-            return records;
-        }
-        const table = records[0].parentTable;
-
-        const rowsById = {};
-        records.forEach(record => {
-            rowsById[record.id] = record.__getRawRow();
-        });
-
-        const columnsById = {};
-        table.fields.forEach(field => {
-            columnsById[field.id] = field.__getRawColumn();
-        });
-
-        const sorter = new Sorter({
-            rowsById,
-            columnsById,
-            sorts: sortConfigs.map(sortConfig => {
-                const field = table.__getFieldMatching(sortConfig.field);
-                if (!field) {
-                    throw new Error('Unknown field for sorting: ' + sortConfig.field);
-                }
-                return {
-                    columnId: field.id,
-                    ascending: sortConfig.direction === undefined || sortConfig.direction === 'asc',
-                };
-            }),
-            appInterface: table.parentBase.__appInterface,
-        });
-        const sortedRecords = sorter.getSortedRowIds().map(recordId => table.getRecordById(recordId));
-        return u.compact(sortedRecords);
     }
     _parentTable: TableType;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, recordId: string) {
@@ -226,7 +185,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             const userId = appInterface.getCurrentSessionUserId();
             // NOTE: normal images must be active in the base. We don't support rendering historical values here. see attachment_object_methods.js for more
             const imagePathPrefix = 'attV3/';
-            attachmentUrl = attachmentUrl.replace(/^https:\/\/([^\/]+)\//, `${ATTACHMENTS_V3_CDN_BASE_URL}/${imagePathPrefix}${userId}/${applicationId}/${attachmentId}/`);
+            attachmentUrl = attachmentUrl.replace(/^https:\/\/([^/]+)\//, `${ATTACHMENTS_V3_CDN_BASE_URL}/${imagePathPrefix}${userId}/${applicationId}/${attachmentId}/`);
         }
         return attachmentUrl;
     }

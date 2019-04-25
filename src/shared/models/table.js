@@ -638,7 +638,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         const {recordsById: existingRecordsById} = this._data;
         u.unsafeEach((newRecordsById: {[RecordId]: RecordDataForBlocks}), (newRecordObj, recordId) => {
-            if (!existingRecordsById.hasOwnProperty(recordId)) {
+            if (!u.has(existingRecordsById, recordId)) {
                 existingRecordsById[recordId] = newRecordObj;
             } else {
                 const existingRecordObj = existingRecordsById[recordId];
@@ -820,7 +820,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             for (const [fieldId, dirtyFieldPaths] of u.entries(dirtyPaths.fieldsById)) {
                 if (dirtyFieldPaths._isDirty) {
                     // If the entire field is dirty, it was either created or deleted.
-                    if (this._data.fieldsById.hasOwnProperty(fieldId)) {
+                    if (u.has(this._data.fieldsById, fieldId)) {
                         addedFieldIds.push(fieldId);
                     } else {
                         removedFieldIds.push(fieldId);
@@ -863,7 +863,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                     // If the entire record is dirty, it was either created or deleted.
 
                     invariant(this._data.recordsById, 'No recordsById');
-                    if (this._data.recordsById.hasOwnProperty(recordId)) {
+                    if (u.has(this._data.recordsById, recordId)) {
                         addedRecordIds.push(recordId);
                     } else {
                         removedRecordIds.push(recordId);

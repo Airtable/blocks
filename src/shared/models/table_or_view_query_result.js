@@ -275,7 +275,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         for (const key of validKeys) {
             if (u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(QueryResult.WatchableCellValuesInFieldKeyPrefix.length);
-                if (this._fieldIdsSetToLoadOrNullIfAllFields && !this._fieldIdsSetToLoadOrNullIfAllFields.hasOwnProperty(fieldId)) {
+                if (this._fieldIdsSetToLoadOrNullIfAllFields && !u.has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)) {
                     throw new Error(`Can't watch field because it wasn't included in QueryResult fields: ${fieldId}`);
                 }
                 this._incrementCellValueKeyWatchCountAndWatchIfNecessary(key, this._onCellValuesInFieldChanged);
@@ -608,7 +608,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         for (const fieldId of addedFieldIds) {
             // If a field that we rely on was created (i.e. it was undeleted), we need to
             // make sure we're watching it's config.
-            if (fieldIdsSet.hasOwnProperty(fieldId)) {
+            if (u.has(fieldIdsSet, fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldById(fieldId);
                 invariant(field, 'Created field does not exist');
@@ -621,7 +621,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
 
         if (!wereAnyFieldsCreatedOrDeleted) {
-            wereAnyFieldsCreatedOrDeleted = u.some(removedFieldIds, fieldId => fieldIdsSet.hasOwnProperty(fieldId));
+            wereAnyFieldsCreatedOrDeleted = u.some(removedFieldIds, fieldId => u.has(fieldIdsSet, fieldId));
         }
 
         if (wereAnyFieldsCreatedOrDeleted) {
