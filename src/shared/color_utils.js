@@ -1,7 +1,7 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const liveappColors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
-const colors = require('block_sdk/shared/colors');
+const colors = require('./colors');
 
 // Construct a set of all the possible color values, so the below
 // methods have constant time lookup when validating that a color

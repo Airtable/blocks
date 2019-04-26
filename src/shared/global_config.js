@@ -1,7 +1,7 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const Watchable = require('block_sdk/shared/watchable');
-const getSdk = require('block_sdk/shared/get_sdk');
+const Watchable = require('./watchable');
+const getSdk = require('./get_sdk');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_kv_helpers',
 );
@@ -16,10 +16,7 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
 );
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {
-    AbstractAirtableInterface,
-    AirtableWriteAction,
-} from 'block_sdk/shared/abstract_airtable_interface';
+import type {AbstractAirtableInterface, AirtableWriteAction} from './abstract_airtable_interface';
 
 export type GlobalConfigKey = string | Array<string>;
 

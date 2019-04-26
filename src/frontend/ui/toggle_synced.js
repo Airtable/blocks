@@ -1,13 +1,13 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const Toggle = require('block_sdk/frontend/ui/toggle');
-const Synced = require('block_sdk/frontend/ui/synced');
+const Toggle = require('./toggle');
+const Synced = require('./synced');
 const invariant = require('invariant');
-const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
+const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
 
-import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
+import type {GlobalConfigKey} from '../../shared/global_config';
 
 type ToggleSyncedProps = {
     globalConfigKey: GlobalConfigKey,

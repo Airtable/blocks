@@ -1,8 +1,8 @@
 // @flow
-const Watchable = require('block_sdk/shared/watchable');
-const utils = require('block_sdk/shared/private_utils');
+const Watchable = require('../shared/watchable');
+const utils = require('../shared/private_utils');
 
-import type AirtableInterfaceFrontend from 'block_sdk/frontend/airtable_interface_frontend';
+import type AirtableInterfaceFrontend from './airtable_interface_frontend';
 
 const WatchableSettingsButtonKeys = {
     isVisible: 'isVisible',

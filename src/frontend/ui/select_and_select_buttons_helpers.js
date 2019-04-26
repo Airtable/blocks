@@ -1,9 +1,9 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
-const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
+const React = require('./react');
+const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
 const PropTypes = require('prop-types');
 
-import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
+import type {GlobalConfigKey} from '../../shared/global_config';
 
 // JSON stringify the value so you can use any primitive.
 // Regular <select> coerces all values to string, which is confusing.

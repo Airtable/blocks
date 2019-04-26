@@ -1,20 +1,20 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const RecordCard = require('block_sdk/frontend/ui/record_card');
-const RecordModel = require('block_sdk/shared/models/record');
-const FieldModel = require('block_sdk/shared/models/field');
-const ViewModel = require('block_sdk/shared/models/view');
+const RecordCard = require('./record_card');
+const RecordModel = require('../../shared/models/record');
+const FieldModel = require('../../shared/models/field');
+const ViewModel = require('../../shared/models/view');
 const invariant = require('invariant');
-const createDetectElementResize = require('block_sdk/frontend/ui/create_detect_element_resize');
+const createDetectElementResize = require('./create_detect_element_resize');
 
 // TODO(jb): don't rely on liveapp components
 const DynamicDraw = window.__requirePrivateModuleFromAirtable(
     'client/react/ui/dynamic_draw/dynamic_draw',
 );
 
-import type {RecordDef} from 'block_sdk/shared/models/record';
+import type {RecordDef} from '../../shared/models/record';
 
 class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProvider {
     _items: Array<{id?: string, size: number, trailingMargin: number}>;

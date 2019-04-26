@@ -1,13 +1,13 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
+const createDataContainer = require('./create_data_container');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const Record = require('block_sdk/shared/models/record');
-const Field = require('block_sdk/shared/models/field');
-const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
+const Record = require('../../shared/models/record');
+const Field = require('../../shared/models/field');
+const cellValueUtils = require('../../shared/models/cell_value_utils');
 const CellReadModeContext = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/cell_context/cell_read_mode_context',
 );

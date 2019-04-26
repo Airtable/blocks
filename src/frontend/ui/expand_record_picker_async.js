@@ -1,9 +1,9 @@
 // @flow
 const invariant = require('invariant');
-const getFrontendSdk = require('block_sdk/frontend/get_frontend_sdk');
+const getFrontendSdk = require('../get_frontend_sdk');
 
-import type Record from 'block_sdk/shared/models/record';
-import type Field from 'block_sdk/shared/models/field';
+import type Record from '../../shared/models/record';
+import type Field from '../../shared/models/field';
 
 /**
  * Expands a list of records in the Airtable UI, and prompts the user to pick

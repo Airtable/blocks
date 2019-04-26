@@ -1,9 +1,9 @@
 // @flow
-const getSdk = require('block_sdk/shared/get_sdk');
+const getSdk = require('../../shared/get_sdk');
 const PropTypes = require('prop-types');
 
-import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
-import type {WatchDependency} from 'block_sdk/frontend/ui/create_data_container';
+import type {GlobalConfigKey} from '../../shared/global_config';
+import type {WatchDependency} from './create_data_container';
 
 const globalConfigSyncedComponentHelpers = {
     globalConfigKeyPropType: PropTypes.oneOfType([

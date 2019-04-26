@@ -1,33 +1,33 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const CellRenderer = require('block_sdk/frontend/ui/cell_renderer');
+const CellRenderer = require('./cell_renderer');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
 const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/api_field_types',
 );
-const FieldModel = require('block_sdk/shared/models/field');
-const RecordModel = require('block_sdk/shared/models/record');
-const ViewModel = require('block_sdk/shared/models/view');
+const FieldModel = require('../../shared/models/field');
+const RecordModel = require('../../shared/models/record');
+const ViewModel = require('../../shared/models/view');
 const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/read_mode_renderers/attachment_preview_renderer',
 );
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
+const createDataContainer = require('./create_data_container');
 const classNames = require('classnames');
-const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
-const expandRecord = require('block_sdk/frontend/ui/expand_record');
+const cellValueUtils = require('../../shared/models/cell_value_utils');
+const expandRecord = require('./expand_record');
 const keyCodeUtils = window.__requirePrivateModuleFromAirtable('client/mylib/key_code_utils');
 const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
 
-import type {RecordDef} from 'block_sdk/shared/models/record';
+import type {RecordDef} from '../../shared/models/record';
 import type {AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
-import type {ExpandRecordOpts} from 'block_sdk/frontend/ui/expand_record';
+import type {ExpandRecordOpts} from './expand_record';
 
 const CARD_PADDING = 12;
 

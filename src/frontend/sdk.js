@@ -18,13 +18,13 @@ if (!React.PropTypes) {
 const BlockSdkVersions = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_sdk_versions',
 );
-const AirtableInterfaceFrontend = require('block_sdk/frontend/airtable_interface_frontend');
+const AirtableInterfaceFrontend = require('./airtable_interface_frontend');
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
-const GlobalConfig = require('block_sdk/shared/global_config');
-const Base = require('block_sdk/shared/models/base');
-const models = require('block_sdk/shared/models/models');
+const GlobalConfig = require('../shared/global_config');
+const Base = require('../shared/models/base');
+const models = require('../shared/models/models');
 const InMemoryStorage = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/in_memory_storage',
 );
@@ -34,16 +34,16 @@ const {
 } = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/is_storage_available',
 );
-const Viewport = require('block_sdk/frontend/viewport');
-const Cursor = require('block_sdk/frontend/cursor');
-const UI = require('block_sdk/frontend/ui/ui');
-const BlockWrapperComponent = require('block_sdk/frontend/ui/block_wrapper_component');
-const SettingsButton = require('block_sdk/frontend/settings_button');
-const UndoRedo = require('block_sdk/frontend/undo_redo');
+const Viewport = require('./viewport');
+const Cursor = require('./cursor');
+const UI = require('./ui/ui');
+const BlockWrapperComponent = require('./ui/block_wrapper_component');
+const SettingsButton = require('./settings_button');
+const UndoRedo = require('./undo_redo');
 
-import type LiveappInterface from 'block_sdk/frontend/liveapp_interface';
+import type LiveappInterface from './liveapp_interface';
 import type {BlockSdkInitData} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {BlockSdkInterface, RunInfo} from 'block_sdk/shared/block_sdk_interface';
+import type {BlockSdkInterface, RunInfo} from '../shared/block_sdk_interface';
 
 /**
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.

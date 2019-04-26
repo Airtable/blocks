@@ -1,12 +1,12 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('block_sdk/shared/private_utils');
-const AbstractModel = require('block_sdk/shared/models/abstract_model');
+const utils = require('../private_utils');
+const AbstractModel = require('./abstract_model');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const Aggregators = require('block_sdk/shared/models/aggregators');
-const liveappSummaryFunctionKeyByAggregatorKey = require('block_sdk/shared/models/liveapp_summary_function_key_by_aggregator_key');
+const Aggregators = require('./aggregators');
+const liveappSummaryFunctionKeyByAggregatorKey = require('./liveapp_summary_function_key_by_aggregator_key');
 const ColumnTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_types',
 );
@@ -21,8 +21,8 @@ import type {
     BaseDataForBlocks,
     FieldDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
-import type TableType from 'block_sdk/shared/models/table';
-import type {Aggregator} from 'block_sdk/shared/models/aggregators';
+import type TableType from './table';
+import type {Aggregator} from './aggregators';
 import type {ColumnType} from 'client_server_shared/column_types/column_types';
 
 // This doesn't follow our enum naming conventions because we want the keys

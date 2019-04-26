@@ -1,6 +1,6 @@
 // @flow
-import type FieldModel from 'block_sdk/shared/models/field';
-import type ViewModel from 'block_sdk/shared/models/view';
+import type FieldModel from './field';
+import type ViewModel from './view';
 
 const ModeTypes = {
     NONE: ('none': 'none'),

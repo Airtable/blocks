@@ -1,12 +1,12 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const getSdk = require('block_sdk/shared/get_sdk');
+const getSdk = require('../../shared/get_sdk');
 const invariant = require('invariant');
-const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
-const Synced = require('block_sdk/frontend/ui/synced');
+const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
+const Synced = require('./synced');
 
-import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
+import type {GlobalConfigKey} from '../../shared/global_config';
 
 type RadioSyncedProps = {
     globalConfigKey: GlobalConfigKey,

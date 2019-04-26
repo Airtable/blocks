@@ -6,23 +6,23 @@ const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
 const GroupAssigner = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/filter_and_sort/group_assigner',
 );
-const TableModel = require('block_sdk/shared/models/table');
-const ViewModel = require('block_sdk/shared/models/view');
+const TableModel = require('./table');
+const ViewModel = require('./view');
 const invariant = require('invariant');
-const QueryResult = require('block_sdk/shared/models/query_result');
-const ObjectPool = require('block_sdk/shared/models/object_pool');
-const {ModeTypes: RecordColorModeTypes} = require('block_sdk/shared/models/record_coloring');
+const QueryResult = require('./query_result');
+const ObjectPool = require('./object_pool');
+const {ModeTypes: RecordColorModeTypes} = require('./record_coloring');
 
 import type {GroupLevelObj} from 'client_server_shared/types/view_config/group_level_obj';
-import type {WatchableTableKey} from 'block_sdk/shared/models/table';
-import type {WatchableViewKey} from 'block_sdk/shared/models/view';
-import type FieldModel from 'block_sdk/shared/models/field';
-import type RecordModel from 'block_sdk/shared/models/record';
+import type {WatchableTableKey} from './table';
+import type {WatchableViewKey} from './view';
+import type FieldModel from './field';
+import type RecordModel from './record';
 import type {
     WatchableQueryResultKey,
     QueryResultOpts,
     NormalizedQueryResultOpts,
-} from 'block_sdk/shared/models/query_result';
+} from './query_result';
 
 type TableOrViewQueryResultData = {
     recordIds: Array<string> | null, // null if data isn't loaded (or if it hasn't been lazily initialized).

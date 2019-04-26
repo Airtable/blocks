@@ -1,5 +1,5 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
 const _ChoiceToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/choice_token',

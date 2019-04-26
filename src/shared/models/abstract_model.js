@@ -1,5 +1,5 @@
 // @flow
-const Watchable = require('block_sdk/shared/watchable');
+const Watchable = require('../watchable');
 const invariant = require('invariant');
 
 import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';

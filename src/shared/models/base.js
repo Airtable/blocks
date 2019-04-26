@@ -1,15 +1,15 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('block_sdk/shared/private_utils');
-const AbstractModel = require('block_sdk/shared/models/abstract_model');
-const Table = require('block_sdk/shared/models/table');
+const utils = require('../private_utils');
+const AbstractModel = require('./abstract_model');
+const Table = require('./table');
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
 );
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
-const getSdk = require('block_sdk/shared/get_sdk');
+const getSdk = require('../get_sdk');
 const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/user_scoped_app_interface',
 );
@@ -18,14 +18,14 @@ const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleF
 );
 const invariant = require('invariant');
 
-import type {AbstractAirtableInterface} from 'block_sdk/shared/abstract_airtable_interface';
+import type {AbstractAirtableInterface} from '../abstract_airtable_interface';
 import type {
     BaseDataForBlocks,
     Collaborator,
 } from 'client_server_shared/blocks/block_sdk_init_data';
 import type {AppBlanket} from 'client_server_shared/types/app_json/app_blanket';
 import type {PermissionLevel} from 'client_server_shared/permissions/permission_levels';
-import type FrontendBlockSdk from 'block_sdk/frontend/sdk';
+import type FrontendBlockSdk from '../../frontend/sdk';
 
 // How these model classes work:
 //

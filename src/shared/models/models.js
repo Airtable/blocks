@@ -1,14 +1,14 @@
 // @flow
-const Base = require('block_sdk/shared/models/base');
-const Table = require('block_sdk/shared/models/table');
-const Field = require('block_sdk/shared/models/field');
-const View = require('block_sdk/shared/models/view');
-const Record = require('block_sdk/shared/models/record');
-const QueryResult = require('block_sdk/shared/models/query_result');
-const TableOrViewQueryResult = require('block_sdk/shared/models/table_or_view_query_result');
-const LinkedRecordsQueryResult = require('block_sdk/shared/models/linked_records_query_result');
-const aggregators = require('block_sdk/shared/models/aggregators');
-const recordColoring = require('block_sdk/shared/models/record_coloring');
+const Base = require('./base');
+const Table = require('./table');
+const Field = require('./field');
+const View = require('./view');
+const Record = require('./record');
+const QueryResult = require('./query_result');
+const TableOrViewQueryResult = require('./table_or_view_query_result');
+const LinkedRecordsQueryResult = require('./linked_records_query_result');
+const aggregators = require('./aggregators');
+const recordColoring = require('./record_coloring');
 const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/api_field_types',
 );

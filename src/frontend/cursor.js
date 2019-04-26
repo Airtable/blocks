@@ -1,15 +1,15 @@
 // @flow
-const utils = require('block_sdk/shared/private_utils');
+const utils = require('../shared/private_utils');
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
-const Record = require('block_sdk/shared/models/record');
+const AbstractModelWithAsyncData = require('../shared/models/abstract_model_with_async_data');
+const Record = require('../shared/models/record');
 
 import type {
     BaseDataForBlocks,
     CursorDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
-import type AirtableInterfaceFrontend from 'block_sdk/frontend/airtable_interface_frontend';
+import type AirtableInterfaceFrontend from './airtable_interface_frontend';
 
 const WatchableCursorKeys = {
     selectedRecordIds: ('selectedRecordIds': 'selectedRecordIds'),

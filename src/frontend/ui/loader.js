@@ -1,5 +1,5 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
 // TODO(kasra): don't depend on liveapp components.
 const _Loader = window.__requirePrivateModuleFromAirtable(

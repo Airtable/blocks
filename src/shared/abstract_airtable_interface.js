@@ -1,6 +1,6 @@
 // @flow
 import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {RecordDef} from 'block_sdk/shared/models/record';
+import type {RecordDef} from './models/record';
 import type {RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 
 export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {

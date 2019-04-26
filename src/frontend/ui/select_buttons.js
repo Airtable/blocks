@@ -1,6 +1,6 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const classNames = require('classnames');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
@@ -12,12 +12,12 @@ const {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
-} = require('block_sdk/frontend/ui/select_and_select_buttons_helpers');
+} = require('./select_and_select_buttons_helpers');
 
 import type {
     SelectOptionValue,
     SelectAndSelectButtonsProps as SelectButtonsProps,
-} from 'block_sdk/frontend/ui/select_and_select_buttons_helpers';
+} from './select_and_select_buttons_helpers';
 
 /** */
 class SelectButtons extends React.Component<SelectButtonsProps> {

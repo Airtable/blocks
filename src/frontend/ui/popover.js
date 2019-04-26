@@ -1,12 +1,12 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
-const ReactDOM = require('block_sdk/frontend/ui/react-dom');
+const React = require('./react');
+const ReactDOM = require('./react-dom');
 const PropTypes = require('prop-types');
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 const classNames = require('classnames');
 const invariant = require('invariant');
-const createDetectElementResize = require('block_sdk/frontend/ui/create_detect_element_resize');
+const createDetectElementResize = require('./create_detect_element_resize');
 
 const PopoverPlacements = {
     TOP: ('top': 'top'),

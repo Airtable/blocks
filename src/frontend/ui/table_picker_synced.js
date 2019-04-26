@@ -1,16 +1,16 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const getSdk = require('block_sdk/shared/get_sdk');
-const TablePicker = require('block_sdk/frontend/ui/table_picker');
-const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
+const createDataContainer = require('./create_data_container');
+const getSdk = require('../../shared/get_sdk');
+const TablePicker = require('./table_picker');
+const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
 const invariant = require('invariant');
-const Synced = require('block_sdk/frontend/ui/synced');
+const Synced = require('./synced');
 
-import type TableModel from 'block_sdk/shared/models/table';
-import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
+import type TableModel from '../../shared/models/table';
+import type {GlobalConfigKey} from '../../shared/global_config';
 
 type TablePickerSyncedProps = {
     globalConfigKey: GlobalConfigKey,

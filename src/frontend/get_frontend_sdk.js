@@ -1,8 +1,8 @@
 // @flow
-const getSdk = require('block_sdk/shared/get_sdk');
+const getSdk = require('../shared/get_sdk');
 const invariant = require('invariant');
 
-import type FrontendBlockSdk from 'block_sdk/frontend/sdk';
+import type FrontendBlockSdk from './sdk';
 
 function getFrontendSdk(): FrontendBlockSdk {
     invariant(typeof window !== 'undefined', 'Should only call getFrontendSdk from the frontend');

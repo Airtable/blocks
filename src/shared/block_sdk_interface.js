@@ -1,9 +1,9 @@
 // @flow
-const models = require('block_sdk/shared/models/models');
+const models = require('./models/models');
 
-import type {AbstractAirtableInterface} from 'block_sdk/shared/abstract_airtable_interface';
-import type Base from 'block_sdk/shared/models/base';
-import type GlobalConfig from 'block_sdk/shared/global_config';
+import type {AbstractAirtableInterface} from './abstract_airtable_interface';
+import type Base from './models/base';
+import type GlobalConfig from './global_config';
 
 /**
  * @example

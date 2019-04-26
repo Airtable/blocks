@@ -1,13 +1,13 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
-const utils = require('block_sdk/shared/private_utils');
-const AbstractModel = require('block_sdk/shared/models/abstract_model');
-const Field = require('block_sdk/shared/models/field');
+const utils = require('../private_utils');
+const AbstractModel = require('./abstract_model');
+const Field = require('./field');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
+const cellValueUtils = require('./cell_value_utils');
 const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
@@ -19,16 +19,16 @@ const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/api_field_types',
 );
 
-import type {AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';
+import type {AirtableWriteAction} from '../abstract_airtable_interface';
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
 import type {
     BaseDataForBlocks,
     RecordDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
-import type TableType from 'block_sdk/shared/models/table';
-import type ViewType from 'block_sdk/shared/models/view';
-import type {QueryResultOpts} from 'block_sdk/shared/models/query_result';
-import type LinkedRecordsQueryResultType from 'block_sdk/shared/models/linked_records_query_result';
+import type TableType from './table';
+import type ViewType from './view';
+import type {QueryResultOpts} from './query_result';
+import type LinkedRecordsQueryResultType from './linked_records_query_result';
 
 // A record def is a cellValuesByFieldId object.
 export type RecordDef = {[string]: mixed};
@@ -253,7 +253,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
         // require here to avoid circular import
-        const LinkedRecordsQueryResult = require('block_sdk/shared/models/linked_records_query_result');
+        const LinkedRecordsQueryResult = require('./linked_records_query_result');
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
     /** Returns the URL for this record. */

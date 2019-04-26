@@ -1,8 +1,8 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
-const utils = require('block_sdk/shared/private_utils');
-const Watchable = require('block_sdk/shared/watchable');
-const getFrontendSdk = require('block_sdk/frontend/get_frontend_sdk');
+const React = require('./react');
+const utils = require('../../shared/private_utils');
+const Watchable = require('../../shared/watchable');
+const getFrontendSdk = require('../get_frontend_sdk');
 
 const WatchableGlobalAlertKeys = {
     __alertInfo: '__alertInfo',

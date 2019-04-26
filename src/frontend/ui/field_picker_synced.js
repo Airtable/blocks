@@ -1,21 +1,21 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const getSdk = require('block_sdk/shared/get_sdk');
-const FieldPicker = require('block_sdk/frontend/ui/field_picker');
-const TableModel = require('block_sdk/shared/models/table');
+const createDataContainer = require('./create_data_container');
+const getSdk = require('../../shared/get_sdk');
+const FieldPicker = require('./field_picker');
+const TableModel = require('../../shared/models/table');
 const invariant = require('invariant');
-const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
+const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
 const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/api_field_types',
 );
-const Synced = require('block_sdk/frontend/ui/synced');
+const Synced = require('./synced');
 
-import type FieldModel from 'block_sdk/shared/models/field';
+import type FieldModel from '../../shared/models/field';
 import type {ApiFieldType} from 'client_server_shared/column_types/api_field_types';
-import type {GlobalConfigKey} from 'block_sdk/shared/global_config';
+import type {GlobalConfigKey} from '../../shared/global_config';
 
 type FieldPickerSyncedProps = {
     table?: TableModel,

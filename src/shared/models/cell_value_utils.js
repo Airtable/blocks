@@ -8,10 +8,10 @@ const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
 const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_versions',
 );
-const getSdk = require('block_sdk/shared/get_sdk');
+const getSdk = require('../get_sdk');
 const invariant = require('invariant');
 
-import type Field from 'block_sdk/shared/models/field';
+import type Field from './field';
 import type {CellValueValidationResult} from 'client_server_shared/column_types/deps/column_type_provider_base';
 
 const publicCellValueUtils = {

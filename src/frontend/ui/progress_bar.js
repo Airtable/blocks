@@ -1,9 +1,9 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const colors = require('block_sdk/shared/colors');
-const colorUtils = require('block_sdk/shared/color_utils');
+const colors = require('../../shared/colors');
+const colorUtils = require('../../shared/color_utils');
 
 type ProgressBarProps = {
     progress: number,

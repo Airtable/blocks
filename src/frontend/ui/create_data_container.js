@@ -1,9 +1,9 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
-const Watchable = require('block_sdk/shared/watchable');
-const Table = require('block_sdk/shared/models/table');
-const View = require('block_sdk/shared/models/view');
+const React = require('./react');
+const Watchable = require('../../shared/watchable');
+const Table = require('../../shared/models/table');
+const View = require('../../shared/models/view');
 
 // These helper functions were taken from
 // https://github.com/facebook/relay/blob/e918103/src/container/RelayContainerUtils.js

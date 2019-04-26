@@ -4,20 +4,20 @@ const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/h
 const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/api_field_types',
 );
-const getSdk = require('block_sdk/shared/get_sdk');
-const ObjectPool = require('block_sdk/shared/models/object_pool');
-const QueryResult = require('block_sdk/shared/models/query_result');
-const TableOrViewQueryResult = require('block_sdk/shared/models/table_or_view_query_result');
-const utils = require('block_sdk/shared/private_utils');
+const getSdk = require('../get_sdk');
+const ObjectPool = require('./object_pool');
+const QueryResult = require('./query_result');
+const TableOrViewQueryResult = require('./table_or_view_query_result');
+const utils = require('../private_utils');
 
-import type TableModel from 'block_sdk/shared/models/table';
-import type FieldModel from 'block_sdk/shared/models/field';
-import type RecordModel from 'block_sdk/shared/models/record';
+import type TableModel from './table';
+import type FieldModel from './field';
+import type RecordModel from './record';
 import type {
     WatchableQueryResultKey,
     QueryResultOpts,
     NormalizedQueryResultOpts,
-} from 'block_sdk/shared/models/query_result';
+} from './query_result';
 
 const getLinkedTableId = (field: FieldModel): string => {
     const options = field.config.options;

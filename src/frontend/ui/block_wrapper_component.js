@@ -1,10 +1,10 @@
 // @flow
 const invariant = require('invariant');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const Modal = require('block_sdk/frontend/ui/modal');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const getFrontendSdk = require('block_sdk/frontend/get_frontend_sdk');
+const Modal = require('./modal');
+const createDataContainer = require('./create_data_container');
+const getFrontendSdk = require('../get_frontend_sdk');
 
 type BlockWrapperComponentProps = {|
     // Note: this is whatever the block exports from the frontend entry point,

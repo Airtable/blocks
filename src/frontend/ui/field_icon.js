@@ -1,9 +1,9 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const Icon = require('block_sdk/frontend/ui/icon');
-const FieldModel = require('block_sdk/shared/models/field');
+const Icon = require('./icon');
+const FieldModel = require('../../shared/models/field');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );

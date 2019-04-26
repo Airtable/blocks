@@ -1,9 +1,9 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
 const classNames = require('classnames');
-const Modal = require('block_sdk/frontend/ui/modal');
-const Button = require('block_sdk/frontend/ui/button');
+const Modal = require('./modal');
+const Button = require('./button');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 type ConfirmationModalProps = {|

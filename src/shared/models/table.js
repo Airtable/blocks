@@ -1,14 +1,14 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
-const utils = require('block_sdk/shared/private_utils');
+const utils = require('../private_utils');
 const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
-const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
-const View = require('block_sdk/shared/models/view');
-const Field = require('block_sdk/shared/models/field');
-const Record = require('block_sdk/shared/models/record');
-const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
-const getSdk = require('block_sdk/shared/get_sdk');
+const AbstractModelWithAsyncData = require('./abstract_model_with_async_data');
+const View = require('./view');
+const Field = require('./field');
+const Record = require('./record');
+const cellValueUtils = require('./cell_value_utils');
+const getSdk = require('../get_sdk');
 const PermissionLevels = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_levels',
 );
@@ -22,21 +22,18 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
 
-import type {
-    AbstractAirtableInterface,
-    AirtableWriteAction,
-} from 'block_sdk/shared/abstract_airtable_interface';
+import type {AbstractAirtableInterface, AirtableWriteAction} from '../abstract_airtable_interface';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
 import type {
     BaseDataForBlocks,
     TableDataForBlocks,
     RecordDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
-import type Base from 'block_sdk/shared/models/base';
+import type Base from './base';
 import type {ApiViewType as ViewType} from 'client_server_shared/view_types/api_view_types';
-import type {RecordDef} from 'block_sdk/shared/models/record';
-import type {QueryResultOpts} from 'block_sdk/shared/models/query_result';
-import type TableOrViewQueryResultType from 'block_sdk/shared/models/table_or_view_query_result';
+import type {RecordDef} from './record';
+import type {QueryResultOpts} from './query_result';
+import type TableOrViewQueryResultType from './table_or_view_query_result';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -285,7 +282,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     /** */
     select(opts?: QueryResultOpts): TableOrViewQueryResultType {
         // require here to avoid circular import
-        const TableOrViewQueryResult = require('block_sdk/shared/models/table_or_view_query_result');
+        const TableOrViewQueryResult = require('./table_or_view_query_result');
         return TableOrViewQueryResult.__createOrReuseQueryResult(this, opts || {});
     }
     /**

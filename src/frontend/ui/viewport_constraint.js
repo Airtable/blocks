@@ -1,7 +1,7 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const getFrontendSdk = require('block_sdk/frontend/get_frontend_sdk');
+const getFrontendSdk = require('../get_frontend_sdk');
 
 type SizeConstraintProp = {
     width?: number | null,

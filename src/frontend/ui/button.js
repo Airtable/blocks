@@ -1,5 +1,5 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
 const classNames = require('classnames');
 const invariant = require('invariant');

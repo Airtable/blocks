@@ -1,7 +1,7 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('block_sdk/shared/private_utils');
-const AbstractModel = require('block_sdk/shared/models/abstract_model');
+const utils = require('../private_utils');
+const AbstractModel = require('./abstract_model');
 
 import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 

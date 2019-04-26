@@ -1,10 +1,10 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const getSdk = require('block_sdk/shared/get_sdk');
-const TableModel = require('block_sdk/shared/models/table');
-const ModelPickerSelect = require('block_sdk/frontend/ui/model_picker_select');
+const createDataContainer = require('./create_data_container');
+const getSdk = require('../../shared/get_sdk');
+const TableModel = require('../../shared/models/table');
+const ModelPickerSelect = require('./model_picker_select');
 const invariant = require('invariant');
 
 type TablePickerProps = {

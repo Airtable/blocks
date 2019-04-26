@@ -1,16 +1,12 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const Popover = require('block_sdk/frontend/ui/popover');
+const Popover = require('./popover');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 const classNames = require('classnames');
 
-import type {
-    PopoverPlacementX,
-    PopoverPlacementY,
-    FitInWindowMode,
-} from 'block_sdk/frontend/ui/popover';
+import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
 
 type AutocompleteItem = {|
     value: string,

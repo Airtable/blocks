@@ -1,15 +1,15 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const getSdk = require('block_sdk/shared/get_sdk');
-const FieldModel = require('block_sdk/shared/models/field');
-const TableModel = require('block_sdk/shared/models/table');
+const createDataContainer = require('./create_data_container');
+const getSdk = require('../../shared/get_sdk');
+const FieldModel = require('../../shared/models/field');
+const TableModel = require('../../shared/models/table');
 const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/api_field_types',
 );
-const ModelPickerSelect = require('block_sdk/frontend/ui/model_picker_select');
+const ModelPickerSelect = require('./model_picker_select');
 const invariant = require('invariant');
 
 import type {ApiFieldType} from 'client_server_shared/column_types/api_field_types';

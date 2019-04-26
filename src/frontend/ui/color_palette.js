@@ -1,8 +1,8 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const colorUtils = require('block_sdk/shared/color_utils');
-const Icon = require('block_sdk/frontend/ui/icon');
+const colorUtils = require('../../shared/color_utils');
+const Icon = require('./icon');
 const classNames = require('classnames');
 
 // TODO: it's confusing that this expects color names, but other components

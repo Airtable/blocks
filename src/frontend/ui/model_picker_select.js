@@ -1,13 +1,13 @@
 // @flow
-const React = require('block_sdk/frontend/ui/react');
-const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const TableModel = require('block_sdk/shared/models/table');
-const ViewModel = require('block_sdk/shared/models/view');
-const FieldModel = require('block_sdk/shared/models/field');
-const Select = require('block_sdk/frontend/ui/select');
+const React = require('./react');
+const createDataContainer = require('./create_data_container');
+const TableModel = require('../../shared/models/table');
+const ViewModel = require('../../shared/models/view');
+const FieldModel = require('../../shared/models/field');
+const Select = require('./select');
 const invariant = require('invariant');
 
-import type {SelectOptionValue} from 'block_sdk/frontend/ui/select_and_select_buttons_helpers';
+import type {SelectOptionValue} from './select_and_select_buttons_helpers';
 
 type AnyModel = TableModel | ViewModel | FieldModel;
 

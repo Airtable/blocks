@@ -1,7 +1,7 @@
 // @flow
-const getFrontendSdk = require('block_sdk/frontend/get_frontend_sdk');
+const getFrontendSdk = require('../get_frontend_sdk');
 
-import type Record from 'block_sdk/shared/models/record';
+import type Record from '../../shared/models/record';
 
 export type ExpandRecordOpts = {
     records?: Array<Record>,

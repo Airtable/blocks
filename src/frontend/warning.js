@@ -1,5 +1,5 @@
 // @flow
-const getSdk = require('block_sdk/shared/get_sdk');
+const getSdk = require('../shared/get_sdk');
 
 const usedWarnings = {};
 module.exports = (msg: string) => {

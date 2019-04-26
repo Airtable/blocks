@@ -3,11 +3,11 @@ const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/summary_functions',
 );
-const liveappSummaryFunctionKeyByAggregatorKey = require('block_sdk/shared/models/liveapp_summary_function_key_by_aggregator_key');
-const getSdk = require('block_sdk/shared/get_sdk');
+const liveappSummaryFunctionKeyByAggregatorKey = require('./liveapp_summary_function_key_by_aggregator_key');
+const getSdk = require('../get_sdk');
 
-import type Record from 'block_sdk/shared/models/record';
-import type Field from 'block_sdk/shared/models/field';
+import type Record from './record';
+import type Field from './field';
 
 /**
  * Aggregators can be used to compute aggregates for cell values.

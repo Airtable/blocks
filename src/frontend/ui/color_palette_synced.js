@@ -1,10 +1,10 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('block_sdk/frontend/ui/react');
+const React = require('./react');
 const PropTypes = require('prop-types');
-const ColorPalette = require('block_sdk/frontend/ui/color_palette');
-const Synced = require('block_sdk/frontend/ui/synced');
-const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
+const ColorPalette = require('./color_palette');
+const Synced = require('./synced');
+const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
 
 type ColorPaletteSyncedProps = {
     globalConfigKey: string,

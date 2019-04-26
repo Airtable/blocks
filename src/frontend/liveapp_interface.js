@@ -1,5 +1,5 @@
 // @flow
-const utils = require('block_sdk/shared/private_utils');
+const utils = require('../shared/private_utils');
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
@@ -16,7 +16,7 @@ import type {
     HostMethodName,
 } from 'client/blocks/block_message_types';
 import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {RecordDef} from 'block_sdk/shared/models/record';
+import type {RecordDef} from '../shared/models/record';
 
 // The origin of the host page. We'll reject all messages that do not come from this origin.
 const hostOrigin = getBaseUrl();

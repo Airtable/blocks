@@ -1,8 +1,8 @@
 // @flow
 const invariant = require('invariant');
-const utils = require('block_sdk/shared/private_utils');
-const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
-const ColorUtils = require('block_sdk/shared/color_utils');
+const utils = require('../private_utils');
+const AbstractModelWithAsyncData = require('./abstract_model_with_async_data');
+const ColorUtils = require('../color_utils');
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
 );
@@ -16,13 +16,13 @@ import type {
     ViewDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
 import type {BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
-import type TableType from 'block_sdk/shared/models/table';
-import type FieldType from 'block_sdk/shared/models/field';
-import type RecordType from 'block_sdk/shared/models/record';
+import type TableType from './table';
+import type FieldType from './field';
+import type RecordType from './record';
 import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
-import type {QueryResultOpts} from 'block_sdk/shared/models/query_result';
-import type TableOrViewQueryResultType from 'block_sdk/shared/models/table_or_view_query_result';
-import type {AbstractAirtableInterface} from 'block_sdk/shared/abstract_airtable_interface';
+import type {QueryResultOpts} from './query_result';
+import type TableOrViewQueryResultType from './table_or_view_query_result';
+import type {AbstractAirtableInterface} from '../abstract_airtable_interface';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -111,7 +111,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     /** */
     select(opts?: QueryResultOpts): TableOrViewQueryResultType {
         // require here to avoid circular import
-        const TableOrViewQueryResult = require('block_sdk/shared/models/table_or_view_query_result');
+        const TableOrViewQueryResult = require('./table_or_view_query_result');
         return TableOrViewQueryResult.__createOrReuseQueryResult(this, opts || {});
     }
     async loadDataAsync() {

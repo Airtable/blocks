@@ -2,15 +2,15 @@
 const {HostMethodNames} = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
-const utils = require('block_sdk/shared/private_utils');
+const utils = require('../shared/private_utils');
 
-import type LiveappInterface from 'block_sdk/frontend/liveapp_interface';
-import type {AbstractAirtableInterface} from 'block_sdk/shared/abstract_airtable_interface';
+import type LiveappInterface from './liveapp_interface';
+import type {AbstractAirtableInterface} from '../shared/abstract_airtable_interface';
 import type {HostToBlockMessageType} from 'client/blocks/block_message_types';
 import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {RecordDef} from 'block_sdk/shared/models/record';
+import type {RecordDef} from '../shared/models/record';
 import type {RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {ViewportSizeConstraint} from 'block_sdk/frontend/viewport';
+import type {ViewportSizeConstraint} from './viewport';
 import type {BlockUndoRedoMode} from 'client/blocks/block_undo_redo_modes';
 
 class AirtableInterfaceFrontend implements AbstractAirtableInterface {
