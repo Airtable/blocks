@@ -9,7 +9,6 @@ const BlockModuleTypes = Object.freeze({
     FRONTEND: ('frontend': 'frontend'),
     SHARED: ('shared': 'shared'),
     BACKEND_ROUTE: ('backendRoute': 'backendRoute'),
-    BACKEND_EVENT: ('backendEvent': 'backendEvent'),
 });
 export type BlockModuleType = $Values<typeof BlockModuleTypes>;
 
@@ -37,3 +36,5 @@ export type BlockModuleWithoutCode = {|
     revision: number,
     metadata: BlockModuleMetadata
 |}
+
+module.exports = BlockModuleTypes;

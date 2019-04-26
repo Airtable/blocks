@@ -7,10 +7,14 @@ const {exec} = require('child_process');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('../generate_block_client_wrapper');
 const generateBlockBabelConfig = require('../generate_block_babel_config');
+const BlockModuleTypes = require('../types/block_module_types');
 const babel = require('@babel/core');
 const browserify = require('browserify');
 const promisify = require('es6-promisify');
 const Terser = require('terser');
+
+import type {BlockFile} from '../types/block_file_type';
+import type {BlockModuleType, BlockModuleWithoutCode} from '../types/block_module_types';
 
 const execAsync = (cmd: string) => new Promise((resolve, reject) => {
     const eventEmitter = exec(cmd, (err, stdout, stderr) => {
@@ -26,9 +30,9 @@ const execAsync = (cmd: string) => new Promise((resolve, reject) => {
 });
 
 const BlockModuleDirectoryNamesByType = Object.freeze({
-    frontend: ('frontend': 'frontend'),
-    shared: ('shared': 'shared'),
-    backendRoute: ('routes': 'routes'),
+    [BlockModuleTypes.FRONTEND]: ('frontend': 'frontend'),
+    [BlockModuleTypes.SHARED]: ('shared': 'shared'),
+    [BlockModuleTypes.BACKEND_ROUTE]: ('routes': 'routes'),
 });
 
 type BuildSuccess = {success: true};
@@ -36,13 +40,14 @@ type BuildFailure = {success: false, error: Error};
 
 type BuildResult = BuildSuccess | BuildFailure;
 
-type BuildStepResult<ResultData: {[string]: mixed}> = (
-    {success: true, ...ResultData} |
+// TODO(richsinn): consider using the Result algebraic type from hyperbase
+type BuildStepResult<+R> = (
+    {|success: true, +value: R|} |
     BuildFailure
 );
+const BUILD_STEP_RESULT_OK = Object.freeze({success: true, value: undefined});
 
-// TODO(jb): flesh this out.
-type BlockJson = {[string]: mixed};
+type BlockJson = BlockFile;
 
 class BlockBuilder {
     _buildFailure(message: string): BuildFailure {
@@ -51,7 +56,7 @@ class BlockBuilder {
             error: new Error(message),
         };
     }
-    async _readAndParseBlockJson(blockDirPath: string): Promise<BuildStepResult<{blockJson: BlockJson}>> {
+    async _readAndParseBlockJson(blockDirPath: string): Promise<BuildStepResult<BlockJson>> {
         const blockJsonPath = path.join(blockDirPath, 'block.json');
         if (!fs.existsSync(blockJsonPath)) {
             return this._buildFailure('must have a block.json file');
@@ -63,25 +68,27 @@ class BlockBuilder {
         } catch (err) {
             return this._buildFailure('invalid block.json file');
         }
-        return {success: true, blockJson};
+        return {success: true, value: blockJson};
     }
-    async _transpileSourceCodeAsync(srcDirPath: string, outputDirPath: string, blockJson: BlockJson): Promise<BuildStepResult<{}>> {
-        const modulesByType = {};
-        for (const module of blockJson.modules) {
-            if (!modulesByType[module.metadata.type]) {
-                modulesByType[module.metadata.type] = [];
+    async _transpileSourceCodeAsync(srcDirPath: string, outputDirPath: string, blockJson: BlockJson): Promise<BuildStepResult<void>> {
+        const modulesByType: Map<BlockModuleType, Array<BlockModuleWithoutCode>> = new Map();
+        for (const blockModule of blockJson.modules) {
+            const {type} = blockModule.metadata;
+            if (!modulesByType.get(type)) {
+                modulesByType.set(type, []);
             }
-            modulesByType[module.metadata.type].push(module);
+            const modules = modulesByType.get(type);
+            invariant(modules, 'modules');
+            modulesByType.set(type, modules.concat());
         }
 
         // Generate a dict of module type to dirpath that we can use to
         // create symlinks for requiring client code.
-        const moduleTypeOutputDirPathByModuleType: {[BlockModuleType]: string} = {};
-
-        for (const [moduleType, blockModules] of Object.entries(modulesByType)) {
+        const moduleTypeOutputDirPathByModuleType: Map<BlockModuleType, string> = new Map();
+        for (const [moduleType, blockModules] of modulesByType) {
             const moduleTypeDirName = BlockModuleDirectoryNamesByType[moduleType];
             const moduleTypeOutputDirPath = path.join(outputDirPath, moduleTypeDirName);
-            moduleTypeOutputDirPathByModuleType[moduleType] = moduleTypeOutputDirPath;
+            moduleTypeOutputDirPathByModuleType.set(moduleType, moduleTypeOutputDirPath);
             await fsUtils.mkdirAsync(moduleTypeOutputDirPath);
 
             for (const blockModule of blockModules) {
@@ -117,7 +124,7 @@ class BlockBuilder {
             await fsUtils.symlinkAsync(moduleTypeDirpath, symlinkPath);
         }
 
-        return {success: true};
+        return BUILD_STEP_RESULT_OK;
     }
     _getErrorFromYarnInstallStderr(stderr: string): Error | null {
         const errorMessageLines = stderr.split('\n')
@@ -127,7 +134,7 @@ class BlockBuilder {
         }
         return null;
     }
-    async _yarnInstallAsync(dirPath: string): Promise<BuildStepResult<{}>> {
+    async _yarnInstallAsync(dirPath: string): Promise<BuildStepResult<void>> {
         const currPath = __dirname;
         const yarnPath = path.join(currPath, '..', '..', 'node_modules', '.bin', 'yarn');
         try {
@@ -139,9 +146,9 @@ class BlockBuilder {
         } catch (error) {
             return {success: false, error};
         }
-        return {success: true};
+        return BUILD_STEP_RESULT_OK;
     }
-    async _browserifyAsync(entryFilePath: string): Promise<BuildStepResult<{bundle: Buffer}>> {
+    async _browserifyAsync(entryFilePath: string): Promise<BuildStepResult<Buffer | null>> {
         // Temporarily set the NODE_ENV to production, regardless of the actual NODE_ENV.
         const originalNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = 'production';
@@ -164,10 +171,10 @@ class BlockBuilder {
             return {success: false, error};
         } else {
             invariant(bundle, 'expects a bundle if there is no error');
-            return {success: true, bundle};
+            return {success: true, value: bundle};
         }
     }
-    _minify(bundle: Buffer): BuildStepResult<{bundle: Buffer}> {
+    _minify(bundle: Buffer): BuildStepResult<Buffer> {
         const options = {
             mangle: false,
             keep_fnames: true,
@@ -185,10 +192,10 @@ class BlockBuilder {
         }
         return {
             success: true,
-            bundle: Buffer.from(result.code),
+            value: Buffer.from(result.code),
         };
     }
-    async _generateFrontendBundleAsync(blockJson: BlockJson, userSrcDirPath: string, buildArtifactsDirPath: string): Promise<BuildStepResult<{}>> {
+    async _generateFrontendBundleAsync(blockJson: BlockJson, userSrcDirPath: string, buildArtifactsDirPath: string): Promise<BuildStepResult<void>> {
         // We need to write our client wrapper file.
         // NOTE: it's a bit weird that we write the client wrapper file in the user
         // source code directory. This is necessary since we can't have multiple copies
@@ -206,13 +213,14 @@ class BlockBuilder {
         if (!browserifyResult.success) {
             return browserifyResult;
         }
+        invariant(browserifyResult.value, 'expects browserifyResult.value if there is no error');
 
-        const minifyResult = this._minify(browserifyResult.bundle);
+        const minifyResult = this._minify(browserifyResult.value);
         if (!minifyResult.success) {
             return minifyResult;
         }
-        await fsUtils.writeFileAsync(path.join(buildArtifactsDirPath, 'bundle.js'), minifyResult.bundle);
-        return {success: true};
+        await fsUtils.writeFileAsync(path.join(buildArtifactsDirPath, 'bundle.js'), minifyResult.value);
+        return BUILD_STEP_RESULT_OK;
     }
     async buildAsync(outputDirPath: string): Promise<BuildResult> {
         if (fs.existsSync(outputDirPath)) {
@@ -230,7 +238,8 @@ class BlockBuilder {
         if (!blockJsonResult.success) {
             return blockJsonResult;
         }
-        const {blockJson} = blockJsonResult;
+        invariant(blockJsonResult.value, 'blockJson.value');
+        const blockJson = blockJsonResult.value;
 
         const srcDirPath = path.join(outputDirPath, 'src');
         await fsUtils.mkdirAsync(srcDirPath);
