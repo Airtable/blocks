@@ -2,7 +2,7 @@
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 // TODO(kasra): don't depend on liveapp components.
-const _Loader = require('client_server_shared/react/ui/loader/loader');
+const _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/react/ui/loader/loader');
 
 type LoaderPropTypes = {fillColor: string, scale: number};
 

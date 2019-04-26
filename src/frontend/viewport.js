@@ -2,7 +2,7 @@
 const invariant = require('invariant');
 const Watchable = require('block_sdk/shared/watchable');
 const utils = require('block_sdk/shared/private_utils');
-const u = require('client_server_shared/u');
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 import type AirtableInterfaceFrontend from 'block_sdk/frontend/airtable_interface_frontend';
 

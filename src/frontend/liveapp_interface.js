@@ -1,9 +1,9 @@
 // @flow
 const utils = require('block_sdk/shared/private_utils');
-const BlockMessageTypes = require('client/blocks/block_message_types');
-const blockMessageParser = require('client/blocks/block_message_parser');
+const BlockMessageTypes = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
+const blockMessageParser = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_parser');
 const invariant = require('invariant');
-const getBaseUrl = require('client_server_shared/get_base_url');
+const getBaseUrl = window.__requirePrivateModuleFromAirtable('client_server_shared/get_base_url');
 
 import type {RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 import type {BlockToHostMessageType, HostToBlockMessageType, HostMethodName} from 'client/blocks/block_message_types';

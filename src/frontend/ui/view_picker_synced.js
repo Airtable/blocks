@@ -1,12 +1,12 @@
 // @flow
-const u = require('client_server_shared/u');
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
 const getSdk = require('block_sdk/shared/get_sdk');
 const ViewPicker = require('block_sdk/frontend/ui/view_picker');
 const TableModel = require('block_sdk/shared/models/table');
-const ApiViewTypes = require('client_server_shared/view_types/api_view_types');
+const ApiViewTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/view_types/api_view_types');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
 const Synced = require('block_sdk/frontend/ui/synced');

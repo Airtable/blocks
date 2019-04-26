@@ -1,15 +1,15 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
 const utils = require('block_sdk/shared/private_utils');
 const AbstractModel = require('block_sdk/shared/models/abstract_model');
 const Field = require('block_sdk/shared/models/field');
-const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
-const airtableUrls = require('client_server_shared/airtable_urls');
-const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
+const airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shared/airtable_urls');
+const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
 
 import type {AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';

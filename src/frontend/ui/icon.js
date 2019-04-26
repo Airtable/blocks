@@ -1,8 +1,8 @@
 // @flow
-const React = require('client_server_shared/react/react');
+const React = window.__requirePrivateModuleFromAirtable('client_server_shared/react/react');
 const PropTypes = require('prop-types');
-const Svg = require('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
-const iconConfig = require('client_server_shared/react/assets/icon_config');
+const Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
+const iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
 
 type IconProps = {
     name: string,

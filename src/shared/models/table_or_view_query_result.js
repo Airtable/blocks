@@ -1,7 +1,7 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
-const GroupedRowVisList = require('client_server_shared/vis_lists/grouped_row_vis_list');
-const GroupAssigner = require('client_server_shared/filter_and_sort/group_assigner');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const GroupedRowVisList = window.__requirePrivateModuleFromAirtable('client_server_shared/vis_lists/grouped_row_vis_list');
+const GroupAssigner = window.__requirePrivateModuleFromAirtable('client_server_shared/filter_and_sort/group_assigner');
 const TableModel = require('block_sdk/shared/models/table');
 const ViewModel = require('block_sdk/shared/models/view');
 const invariant = require('invariant');

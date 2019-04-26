@@ -1,8 +1,8 @@
 // @flow
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
-const _ChoiceToken = require('client_server_shared/column_types/components/choice_token'); // TODO(kasra): don't depend on liveapp components.
-const colors = require('client_server_shared/colors');
+const _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/choice_token'); // TODO(kasra): don't depend on liveapp components.
+const colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 const classNames = require('classnames');
 
 type ChoiceTokenProps = {

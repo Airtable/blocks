@@ -9,10 +9,10 @@ const TableOrViewQueryResult = require('block_sdk/shared/models/table_or_view_qu
 const LinkedRecordsQueryResult = require('block_sdk/shared/models/linked_records_query_result');
 const aggregators = require('block_sdk/shared/models/aggregators');
 const recordColoring = require('block_sdk/shared/models/record_coloring');
-const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
-const ApiViewTypes = require('client_server_shared/view_types/api_view_types');
-const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
-const hyperIdGenerator = require('client_server_shared/hyper_id/hyper_id_generator');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const ApiViewTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/view_types/api_view_types');
+const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
+const hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
 
 const models = {
     Base,

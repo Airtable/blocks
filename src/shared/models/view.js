@@ -3,8 +3,8 @@ const invariant = require('invariant');
 const utils = require('block_sdk/shared/private_utils');
 const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
 const ColorUtils = require('block_sdk/shared/color_utils');
-const viewTypeProvider = require('client_server_shared/view_types/view_type_provider');
-const airtableUrls = require('client_server_shared/airtable_urls');
+const viewTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/view_types/view_type_provider');
+const airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shared/airtable_urls');
 
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
 import type {BaseDataForBlocks, ViewDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';

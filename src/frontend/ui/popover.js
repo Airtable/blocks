@@ -1,9 +1,9 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const ReactDOM = require('block_sdk/frontend/ui/react-dom');
 const PropTypes = require('prop-types');
-const Geometry = require('client/geometry/geometry');
+const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 const classNames = require('classnames');
 const invariant = require('invariant');
 const createDetectElementResize = require('block_sdk/frontend/ui/create_detect_element_resize');

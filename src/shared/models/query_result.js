@@ -1,8 +1,8 @@
 // @flow
 const invariant = require('invariant');
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const utils = require('block_sdk/shared/private_utils');
-const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
 const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
 const TableModel = require('block_sdk/shared/models/table');
 const FieldModel = require('block_sdk/shared/models/field');

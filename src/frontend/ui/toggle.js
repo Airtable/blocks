@@ -2,7 +2,7 @@
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const classNames = require('classnames');
-const KeyCodes = require('client_server_shared/key_codes');
+const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 const invariant = require('invariant');
 
 const onEnterOrSpaceKey = handler => {

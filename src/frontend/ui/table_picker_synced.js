@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const createDataContainer = require('block_sdk/frontend/ui/create_data_container');

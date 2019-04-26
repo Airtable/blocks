@@ -1,7 +1,7 @@
 // @flow
-const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
-const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
-const {PublicApiVersions} = require('client_server_shared/api_versions');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions');
 const getSdk = require('block_sdk/shared/get_sdk');
 const invariant = require('invariant');
 

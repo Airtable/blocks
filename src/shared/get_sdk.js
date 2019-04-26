@@ -1,5 +1,5 @@
 // @flow
-const blocksConfigSettings = require('client_server_shared/blocks/blocks_config_settings');
+const blocksConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/blocks_config_settings');
 
 import type {BlockSdkInterface} from 'block_sdk/shared/block_sdk_interface';
 import type {AbstractAirtableInterface} from 'block_sdk/shared/abstract_airtable_interface';

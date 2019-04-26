@@ -1,18 +1,18 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
 const utils = require('block_sdk/shared/private_utils');
-const hyperId = require('client_server_shared/hyper_id');
+const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
 const View = require('block_sdk/shared/models/view');
 const Field = require('block_sdk/shared/models/field');
 const Record = require('block_sdk/shared/models/record');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
 const getSdk = require('block_sdk/shared/get_sdk');
-const PermissionLevels = require('client_server_shared/permissions/permission_levels');
-const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
-const clientServerSharedConfigSettings = require('client_server_shared/client_server_shared_config_settings');
-const airtableUrls = require('client_server_shared/airtable_urls');
+const PermissionLevels = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_levels');
+const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
+const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
+const airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shared/airtable_urls');
 
 import type {AbstractAirtableInterface, AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';

@@ -1,11 +1,11 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const Watchable = require('block_sdk/shared/watchable');
 const getSdk = require('block_sdk/shared/get_sdk');
-const blockKvHelpers = require('client_server_shared/blocks/block_kv_helpers');
-const PermissionLevels = require('client_server_shared/permissions/permission_levels');
-const permissionHelpers = require('client_server_shared/permissions/permission_helpers');
-const forkObjectPathForWriteByReference = require('client_server_shared/fork_object_path_for_write_by_reference');
+const blockKvHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/block_kv_helpers');
+const PermissionLevels = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_levels');
+const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
+const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtable('client_server_shared/fork_object_path_for_write_by_reference');
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
 import type {AbstractAirtableInterface, AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';

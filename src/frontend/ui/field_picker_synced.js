@@ -1,5 +1,5 @@
 // @flow
-const u = require('client_server_shared/u');
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
@@ -8,7 +8,7 @@ const FieldPicker = require('block_sdk/frontend/ui/field_picker');
 const TableModel = require('block_sdk/shared/models/table');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
-const ApiFieldTypes = require('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
 const Synced = require('block_sdk/frontend/ui/synced');
 
 import type FieldModel from 'block_sdk/shared/models/field';

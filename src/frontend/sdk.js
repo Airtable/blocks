@@ -14,17 +14,17 @@ if (!React.PropTypes) { // eslint-disable-line react/no-deprecated
     React.PropTypes = PropTypes; // eslint-disable-line react/no-deprecated
 }
 
-const BlockSdkVersions = require('client_server_shared/blocks/block_sdk_versions');
+const BlockSdkVersions = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/block_sdk_versions');
 const AirtableInterfaceFrontend = require('block_sdk/frontend/airtable_interface_frontend');
-const BlockMessageTypes = require('client/blocks/block_message_types');
+const BlockMessageTypes = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
 const GlobalConfig = require('block_sdk/shared/global_config');
 const Base = require('block_sdk/shared/models/base');
 const models = require('block_sdk/shared/models/models');
-const InMemoryStorage = require('client/helpers/browser_storage/in_memory_storage');
+const InMemoryStorage = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/in_memory_storage');
 const {
     isLocalStorageAvailable,
     isSessionStorageAvailable,
-} = require('client/helpers/browser_storage/is_storage_available');
+} = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/is_storage_available');
 const Viewport = require('block_sdk/frontend/viewport');
 const Cursor = require('block_sdk/frontend/cursor');
 const UI = require('block_sdk/frontend/ui/ui');

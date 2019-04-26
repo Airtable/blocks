@@ -1,5 +1,5 @@
 // @flow
-const {HostMethodNames} = require('client/blocks/block_message_types');
+const {HostMethodNames} = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
 const utils = require('block_sdk/shared/private_utils');
 
 import type LiveappInterface from 'block_sdk/frontend/liveapp_interface';

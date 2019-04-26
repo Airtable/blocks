@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const Watchable = require('block_sdk/shared/watchable');
 const Table = require('block_sdk/shared/models/table');

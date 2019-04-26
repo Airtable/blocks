@@ -6,7 +6,7 @@
 // Note that this can be *any* version of ReactDOM, depending on what the user's
 // block packages specify.
 
-const blocksConfigSettings = require('client_server_shared/blocks/blocks_config_settings');
+const blocksConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/blocks_config_settings');
 const ReactDOM = window[blocksConfigSettings.GLOBAL_REACT_DOM_VARIABLE_NAME];
 
 // NOTE: we want to add an invariant here, but we cannot depend on ReactDOM being set

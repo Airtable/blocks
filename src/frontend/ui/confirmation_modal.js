@@ -4,7 +4,7 @@ const PropTypes = require('prop-types');
 const classNames = require('classnames');
 const Modal = require('block_sdk/frontend/ui/modal');
 const Button = require('block_sdk/frontend/ui/button');
-const KeyCodes = require('client_server_shared/key_codes');
+const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 type ConfirmationModalProps = {|
     title: string,

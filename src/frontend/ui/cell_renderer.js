@@ -2,12 +2,12 @@
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const columnTypeProvider = require('client_server_shared/column_types/column_type_provider');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
 const Record = require('block_sdk/shared/models/record');
 const Field = require('block_sdk/shared/models/field');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
-const CellReadModeContext = require('client_server_shared/cell_context/cell_read_mode_context');
-const CellContextTypes = require('client_server_shared/cell_context/cell_context_types');
+const CellReadModeContext = window.__requirePrivateModuleFromAirtable('client_server_shared/cell_context/cell_read_mode_context');
+const CellContextTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/cell_context/cell_context_types');
 
 type CellRendererProps = {|
     record?: ?Record,

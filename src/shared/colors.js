@@ -1,6 +1,6 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
-const liveappColors = require('client_server_shared/colors');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const liveappColors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 
 const liveappColorsToInclude = [
     'blueLight2',

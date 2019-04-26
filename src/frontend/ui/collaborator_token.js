@@ -1,10 +1,10 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
-const appBlanketUserObjMethods = require('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
-const profilePicHelper = require('client_server_shared/profile_pic_helper');
-const _CollaboratorToken = require('client_server_shared/column_types/components/collaborator_token'); // TODO(kasra): don't depend on liveapp components.
+const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
+const profilePicHelper = window.__requirePrivateModuleFromAirtable('client_server_shared/profile_pic_helper');
+const _CollaboratorToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/collaborator_token'); // TODO(kasra): don't depend on liveapp components.
 const getSdk = require('block_sdk/shared/get_sdk');
 
 type CollaboratorTokenProps = {

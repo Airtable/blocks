@@ -1,6 +1,6 @@
 // @flow
-const u = require('client_server_shared/u');
-const liveappSummaryFunctions = require('client_server_shared/summary_functions');
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('client_server_shared/summary_functions');
 const liveappSummaryFunctionKeyByAggregatorKey = require('block_sdk/shared/models/liveapp_summary_function_key_by_aggregator_key');
 const getSdk = require('block_sdk/shared/get_sdk');
 

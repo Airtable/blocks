@@ -11,7 +11,7 @@ import * as FlowReact from 'react';
 */
 
 const invariant = require('invariant');
-const blocksConfigSettings = require('client_server_shared/blocks/blocks_config_settings');
+const blocksConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/blocks_config_settings');
 const React /* : null | typeof FlowReact */ =
     window[blocksConfigSettings.GLOBAL_REACT_VARIABLE_NAME];
 

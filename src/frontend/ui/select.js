@@ -1,5 +1,5 @@
 // @flow
-const u = require('client_server_shared/u');
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const invariant = require('invariant');
 const React = require('block_sdk/frontend/ui/react');
 const classNames = require('classnames');

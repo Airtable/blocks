@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = require('client_server_shared/hu');
+const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const RecordCard = require('block_sdk/frontend/ui/record_card');
@@ -10,7 +10,7 @@ const invariant = require('invariant');
 const createDetectElementResize = require('block_sdk/frontend/ui/create_detect_element_resize');
 
 // TODO(jb): don't rely on liveapp components
-const DynamicDraw = require('client/react/ui/dynamic_draw/dynamic_draw');
+const DynamicDraw = window.__requirePrivateModuleFromAirtable('client/react/ui/dynamic_draw/dynamic_draw');
 
 import type {RecordDef} from 'block_sdk/shared/models/record';
 
