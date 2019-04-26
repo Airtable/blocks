@@ -52,5 +52,8 @@
     "flow-typed": "^2.5.1",
     "mocha": "^5.2.0",
     "prettier": "^1.12.1"
+  },
+  "engines": {
+    "node": ">=8.10.0"
   }
 }
