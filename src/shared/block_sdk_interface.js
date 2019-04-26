@@ -22,10 +22,10 @@ export type RunInfo = {
 };
 
 export interface BlockSdkInterface<AirtableInterface: AbstractAirtableInterface> {
-    __airtableInterface: AirtableInterface,
-    globalConfig: GlobalConfig,
-    base: Base,
-    models: typeof models,
-    installationId: string,
-    runInfo: RunInfo,
+    __airtableInterface: AirtableInterface;
+    globalConfig: GlobalConfig;
+    base: Base;
+    models: typeof models;
+    installationId: string;
+    runInfo: RunInfo;
 }

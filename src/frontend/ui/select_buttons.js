@@ -37,14 +37,7 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
         }
     }
     render() {
-        const {
-            className,
-            style,
-            options,
-            disabled,
-            value,
-            tabIndex = 0,
-        } = this.props;
+        const {className, style, options, disabled, value, tabIndex = 0} = this.props;
 
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
@@ -58,33 +51,45 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
 
         return (
             <div
-                className={classNames('flex rounded overflow-hidden p-half darken2', {
-                    quieter: disabled,
-                }, className)}
+                className={classNames(
+                    'flex rounded overflow-hidden p-half darken2',
+                    {
+                        quieter: disabled,
+                    },
+                    className,
+                )}
                 style={style}
-                {...restOfProps}>
-                {options && options.map(option => {
-                    const isSelected = option.value === value;
-                    const isOptionDisabled = disabled || option.disabled;
-                    return (
-                        <div
-                            key={optionValueToString(option.value)}
-                            onClick={!isOptionDisabled && (() => this._onChange(option.value))}
-                            onKeyDown={!isOptionDisabled && (e => this._onKeyDown(e, option.value))}
-                            tabIndex={isOptionDisabled ? -1 : tabIndex}
-                            className={classNames('flex-auto rounded p-half normal center no-outline', {
-                                'link-unquiet pointer focusable': !isOptionDisabled,
-                                'darken4 text-white': isSelected,
-                                'text-dark': !isSelected,
-                                quiet: !isSelected && !disabled,
-                            })}
-                            style={{
-                                flexBasis: 0,
-                            }}>
-                            {option.label}
-                        </div>
-                    );
-                })}
+                {...restOfProps}
+            >
+                {options &&
+                    options.map(option => {
+                        const isSelected = option.value === value;
+                        const isOptionDisabled = disabled || option.disabled;
+                        return (
+                            <div
+                                key={optionValueToString(option.value)}
+                                onClick={!isOptionDisabled && (() => this._onChange(option.value))}
+                                onKeyDown={
+                                    !isOptionDisabled && (e => this._onKeyDown(e, option.value))
+                                }
+                                tabIndex={isOptionDisabled ? -1 : tabIndex}
+                                className={classNames(
+                                    'flex-auto rounded p-half normal center no-outline',
+                                    {
+                                        'link-unquiet pointer focusable': !isOptionDisabled,
+                                        'darken4 text-white': isSelected,
+                                        'text-dark': !isSelected,
+                                        quiet: !isSelected && !disabled,
+                                    },
+                                )}
+                                style={{
+                                    flexBasis: 0,
+                                }}
+                            >
+                                {option.label}
+                            </div>
+                        );
+                    })}
             </div>
         );
     }

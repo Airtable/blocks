@@ -31,7 +31,11 @@ const Link = (props: Props) => {
         if (!hasScheme) {
             // If it's a relative URL (like '/foo'), leave it alone.
             sanitizedHref = href;
-        } else if (reasonableUrlSchemeRegex.test(href) && !(/^javascript:/i.test(href)) && !(/^data:/i.test(href))) {
+        } else if (
+            reasonableUrlSchemeRegex.test(href) &&
+            !/^javascript:/i.test(href) &&
+            !/^data:/i.test(href)
+        ) {
             // If it has a scheme and we can be 100% sure the scheme is
             // not javascript or data, then leave it alone.
             sanitizedHref = href;
@@ -51,7 +55,8 @@ const Link = (props: Props) => {
             rel={rel}
             tabIndex={props.tabIndex}
             className={props.className}
-            style={props.style}>
+            style={props.style}
+        >
             {props.children}
         </a>
     );
@@ -60,10 +65,7 @@ const Link = (props: Props) => {
 Link.propTypes = {
     href: PropTypes.string.isRequired,
     target: PropTypes.string,
-    tabIndex: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-    ]),
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     className: PropTypes.string,
     style: PropTypes.object,
     children: PropTypes.node,

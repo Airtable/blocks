@@ -41,7 +41,8 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
                         className="pointer understroke link-unquiet"
                         onClick={() => {
                             getFrontendSdk().reload();
-                        }}>
+                        }}
+                    >
                         Please reload
                     </span>
                 </span>

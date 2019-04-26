@@ -2,7 +2,9 @@
 const invariant = require('invariant');
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const utils = require('block_sdk/shared/private_utils');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
 const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
 const TableModel = require('block_sdk/shared/models/table');
 const FieldModel = require('block_sdk/shared/models/field');
@@ -107,25 +109,29 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         table: TableModel,
         opts: QueryResultOpts = {},
     ): NormalizedQueryResultOpts {
-        const sorts = !opts.sorts ?
-            null :
-            opts.sorts.map(sort => {
-                const field = table.__getFieldMatching(sort.field);
-                if (!field) {
-                    throw new Error(`No field found for sort: ${sort.field ? sort.field.toString() : typeof sort.field}`);
-                }
-                if (
-                    sort.direction !== undefined &&
+        const sorts = !opts.sorts
+            ? null
+            : opts.sorts.map(sort => {
+                  const field = table.__getFieldMatching(sort.field);
+                  if (!field) {
+                      throw new Error(
+                          `No field found for sort: ${
+                              sort.field ? sort.field.toString() : typeof sort.field
+                          }`,
+                      );
+                  }
+                  if (
+                      sort.direction !== undefined &&
                       sort.direction !== 'asc' &&
                       sort.direction !== 'desc'
-                ) {
-                    throw new Error(`Invalid sort direction: ${sort.direction}`);
-                }
-                return {
-                    fieldId: field.id,
-                    direction: sort.direction || 'asc',
-                };
-            });
+                  ) {
+                      throw new Error(`Invalid sort direction: ${sort.direction}`);
+                  }
+                  return {
+                      fieldId: field.id,
+                      direction: sort.direction || 'asc',
+                  };
+              });
 
         let fieldIdsOrNullIfAllFields = null;
         if (opts.fields) {
@@ -215,9 +221,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
     _getRecord(recordOrRecordId: string | RecordModel): RecordModel {
         const record =
-            typeof recordOrRecordId === 'string' ?
-                this.parentTable.getRecordById(recordOrRecordId) :
-                recordOrRecordId;
+            typeof recordOrRecordId === 'string'
+                ? this.parentTable.getRecordById(recordOrRecordId)
+                : recordOrRecordId;
         invariant(record, 'Record does not exist');
         invariant(this.hasRecord(record), 'Record is not part of this query result');
         return record;
@@ -241,9 +247,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     return null;
                 }
                 const value = record.getCellValue(recordColorMode.selectField);
-                return value && typeof value === 'object' && typeof value.color === 'string' ?
-                    value.color :
-                    null;
+                return value && typeof value === 'object' && typeof value.color === 'string'
+                    ? value.color
+                    : null;
             }
             case RecordColorModeTypes.BY_VIEW:
                 return recordColorMode.view.getRecordColor(record);

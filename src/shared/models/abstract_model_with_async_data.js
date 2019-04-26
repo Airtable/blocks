@@ -6,7 +6,10 @@ const AbstractModel = require('block_sdk/shared/models/abstract_model');
 import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 
 /** Abstract superclass for all block SDK models that need to fetch async data. */
-class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends AbstractModel<DataType, WatchableKey> {
+class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends AbstractModel<
+    DataType,
+    WatchableKey,
+> {
     static __DATA_UNLOAD_DELAY_MS = 1000;
     static _shouldLoadDataForKey(key: WatchableKey): boolean {
         // Override to return whether watching the key should trigger the
@@ -30,7 +33,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
      * cause the data to be fetched. Once the data is available, the callback
      * will be called.
      */
-    watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
+    watch(
+        keys: WatchableKey | Array<WatchableKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableKey> {
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
             if (this.constructor._shouldLoadDataForKey(key)) {
@@ -47,7 +54,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
      * cause the data to be released. Once the data is available, the callback
      * will be called.
      */
-    unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
+    unwatch(
+        keys: WatchableKey | Array<WatchableKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableKey> {
         const validKeys = super.unwatch(keys, callback, context);
         for (const key of validKeys) {
             if (this.constructor._shouldLoadDataForKey(key)) {
@@ -127,7 +138,10 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
             // requests the data, so we can avoid going back to liveapp or
             // the network.
             this._unloadDataTimeoutId = setTimeout(() => {
-                h.assert(this._dataRetainCount === 0, 'Unload data timeout fired with non-zero retain count');
+                h.assert(
+                    this._dataRetainCount === 0,
+                    'Unload data timeout fired with non-zero retain count',
+                );
                 // Set _isDataLoaded to false before calling _unloadData in case
                 // _unloadData reads from isDataLoaded.
                 this._isDataLoaded = false;

@@ -6,7 +6,11 @@ const Popover = require('block_sdk/frontend/ui/popover');
 const classNames = require('classnames');
 const warning = require('block_sdk/frontend/warning');
 
-import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from 'block_sdk/frontend/ui/popover';
+import type {
+    PopoverPlacementX,
+    PopoverPlacementY,
+    FitInWindowMode,
+} from 'block_sdk/frontend/ui/popover';
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
@@ -14,7 +18,7 @@ type TooltipProps = {
     children: React$Element<*>,
     // TODO(jb): remove renderContent in favor of just content.
     renderContent?: () => React$Element<*>,
-    content?: string | () => React$Element<*>,
+    content?: string | (() => React$Element<*>),
     placementX?: PopoverPlacementX,
     placementY?: PopoverPlacementY,
     placementOffsetX?: number,
@@ -40,12 +44,17 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         children: PropTypes.element.isRequired,
         // TODO(jb): remove renderContent in favor of just content.
         renderContent: PropTypes.func,
-        content: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.func,
+        content: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+        placementX: PropTypes.oneOf([
+            Popover.placements.LEFT,
+            Popover.placements.CENTER,
+            Popover.placements.RIGHT,
         ]),
-        placementX: PropTypes.oneOf([Popover.placements.LEFT, Popover.placements.CENTER, Popover.placements.RIGHT]),
-        placementY: PropTypes.oneOf([Popover.placements.TOP, Popover.placements.CENTER, Popover.placements.BOTTOM]),
+        placementY: PropTypes.oneOf([
+            Popover.placements.TOP,
+            Popover.placements.CENTER,
+            Popover.placements.BOTTOM,
+        ]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
         fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
@@ -64,9 +73,9 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         fitInWindowMode: Popover.fitInWindowModes.FLIP,
     };
     props: TooltipProps;
-    _onMouseEnter: SyntheticMouseEvent<> => void;
-    _onMouseLeave: SyntheticMouseEvent<> => void;
-    _onClick: SyntheticMouseEvent<> => void;
+    _onMouseEnter: (SyntheticMouseEvent<>) => void;
+    _onMouseLeave: (SyntheticMouseEvent<>) => void;
+    _onClick: (SyntheticMouseEvent<>) => void;
     _showTooltip: () => void;
     _hideTooltip: () => void;
     _renderTooltipContent: () => React$Element<*>;
@@ -129,11 +138,16 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         }
         return (
             <div
-                className={classNames('relative white rounded stroked1 overflow-hidden', {
-                    // Add padding only when using content.
-                    p1: !isContentAFunction,
-                }, className)}
-                style={style}>
+                className={classNames(
+                    'relative white rounded stroked1 overflow-hidden',
+                    {
+                        // Add padding only when using content.
+                        p1: !isContentAFunction,
+                    },
+                    className,
+                )}
+                style={style}
+            >
                 {renderedContent}
             </div>
         );
@@ -154,14 +168,11 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
             return children;
         }
 
-        const popoverAnchor = React.cloneElement(
-            children,
-            {
-                onMouseEnter: this._onMouseEnter,
-                onMouseLeave: this._onMouseLeave,
-                onClick: this._onClick,
-            },
-        );
+        const popoverAnchor = React.cloneElement(children, {
+            onMouseEnter: this._onMouseEnter,
+            onMouseLeave: this._onMouseLeave,
+            onClick: this._onClick,
+        });
 
         return (
             <Popover
@@ -177,11 +188,15 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
                     // take up any space. If we don't do this, the mouseEnter and mouseLeave
                     // handlers won't work, since showing the Popover would place a div over
                     // the content that we care about.
-                    top: 0, left: 0, width: 0, height: 0,
+                    top: 0,
+                    left: 0,
+                    width: 0,
+                    height: 0,
                     animationName: 'opacityFadeIn',
                     animationDuration: `${FADE_IN_ANIMATION_DURATION}ms`,
                     animationTimingFunction: 'ease-out',
-                }}>
+                }}
+            >
                 {popoverAnchor}
             </Popover>
         );

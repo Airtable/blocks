@@ -3,11 +3,18 @@ const invariant = require('invariant');
 const utils = require('block_sdk/shared/private_utils');
 const AbstractModelWithAsyncData = require('block_sdk/shared/models/abstract_model_with_async_data');
 const ColorUtils = require('block_sdk/shared/color_utils');
-const viewTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/view_types/view_type_provider');
-const airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shared/airtable_urls');
+const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/view_types/view_type_provider',
+);
+const airtableUrls = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/airtable_urls',
+);
 
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
-import type {BaseDataForBlocks, ViewDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import type {
+    BaseDataForBlocks,
+    ViewDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
 import type {BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import type TableType from 'block_sdk/shared/models/table';
 import type FieldType from 'block_sdk/shared/models/field';
@@ -40,16 +47,23 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         return utils.isEnumValue(WatchableViewKeys, key);
     }
     static _shouldLoadDataForKey(key: WatchableViewKey): boolean {
-        return key === WatchableViewKeys.visibleRecords ||
+        return (
+            key === WatchableViewKeys.visibleRecords ||
             key === WatchableViewKeys.visibleRecordIds ||
             key === WatchableViewKeys.allFields ||
             key === WatchableViewKeys.visibleFields ||
-            key === WatchableViewKeys.recordColors;
+            key === WatchableViewKeys.recordColors
+        );
     }
     _parentTable: TableType;
     _mostRecentTableLoadPromise: Promise<*> | null;
     _airtableInterface: AbstractAirtableInterface;
-    constructor(baseData: BaseDataForBlocks, parentTable: TableType, viewId: string, airtableInterface: AbstractAirtableInterface) {
+    constructor(
+        baseData: BaseDataForBlocks,
+        parentTable: TableType,
+        viewId: string,
+        airtableInterface: AbstractAirtableInterface,
+    ) {
         super(baseData, viewId);
 
         this._parentTable = parentTable;
@@ -67,9 +81,9 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     get _isRecordMetadataLoaded(): boolean {
         const parentTable = this.parentTable;
-        const isParentTableLoaded = View.shouldLoadAllCellValuesForRecords ?
-            parentTable.isDataLoaded :
-            parentTable.isRecordMetadataLoaded;
+        const isParentTableLoaded = View.shouldLoadAllCellValuesForRecords
+            ? parentTable.isDataLoaded
+            : parentTable.isRecordMetadataLoaded;
         return isParentTableLoaded;
     }
     /** */
@@ -168,13 +182,20 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             this._data.colorsByRecordId = undefined;
         }
     }
-    __generateChangesForParentTableAddMultipleRecords(recordIds: Array<string>): Array<BlockModelChange> {
+    __generateChangesForParentTableAddMultipleRecords(
+        recordIds: Array<string>,
+    ): Array<BlockModelChange> {
         const newVisibleRecordIds = [...this.visibleRecordIds, ...recordIds];
         return [
-            {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
+            {
+                path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'],
+                value: newVisibleRecordIds,
+            },
         ];
     }
-    __generateChangesForParentTableDeleteMultipleRecords(recordIds: Array<string>): Array<BlockModelChange> {
+    __generateChangesForParentTableDeleteMultipleRecords(
+        recordIds: Array<string>,
+    ): Array<BlockModelChange> {
         const recordIdsToDeleteSet = {};
         for (const recordId of recordIds) {
             recordIdsToDeleteSet[recordId] = true;
@@ -183,7 +204,10 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             return !recordIdsToDeleteSet[recordId];
         });
         return [
-            {path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'], value: newVisibleRecordIds},
+            {
+                path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'],
+                value: newVisibleRecordIds,
+            },
         ];
     }
     /**
@@ -262,9 +286,8 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             return null;
         }
 
-        const recordId = typeof recordOrRecordId === 'string' ?
-            recordOrRecordId :
-            recordOrRecordId.id;
+        const recordId =
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
         const color = colorsByRecordId[recordId];
         return color || null;
     }
@@ -293,9 +316,9 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
             this._onChange(WatchableViewKeys.visibleFields);
         }
         if (dirtyPaths.colorsByRecordId) {
-            const changedRecordIds = dirtyPaths.colorsByRecordId._isDirty ?
-                null :
-                Object.keys(dirtyPaths.colorsByRecordId);
+            const changedRecordIds = dirtyPaths.colorsByRecordId._isDirty
+                ? null
+                : Object.keys(dirtyPaths.colorsByRecordId);
 
             if (changedRecordIds) {
                 // Checking isRecordMetadataLoaded fixes a timing issue:

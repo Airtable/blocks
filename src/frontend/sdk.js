@@ -10,21 +10,30 @@
 // return any matches, we can remove this hack.
 const React = require('react');
 const PropTypes = require('prop-types');
-if (!React.PropTypes) { // eslint-disable-line react/no-deprecated
+if (!React.PropTypes) {
+    // eslint-disable-line react/no-deprecated
     React.PropTypes = PropTypes; // eslint-disable-line react/no-deprecated
 }
 
-const BlockSdkVersions = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/block_sdk_versions');
+const BlockSdkVersions = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/blocks/block_sdk_versions',
+);
 const AirtableInterfaceFrontend = require('block_sdk/frontend/airtable_interface_frontend');
-const BlockMessageTypes = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
+const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
+    'client/blocks/block_message_types',
+);
 const GlobalConfig = require('block_sdk/shared/global_config');
 const Base = require('block_sdk/shared/models/base');
 const models = require('block_sdk/shared/models/models');
-const InMemoryStorage = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/in_memory_storage');
+const InMemoryStorage = window.__requirePrivateModuleFromAirtable(
+    'client/helpers/browser_storage/in_memory_storage',
+);
 const {
     isLocalStorageAvailable,
     isSessionStorageAvailable,
-} = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/is_storage_available');
+} = window.__requirePrivateModuleFromAirtable(
+    'client/helpers/browser_storage/is_storage_available',
+);
 const Viewport = require('block_sdk/frontend/viewport');
 const Cursor = require('block_sdk/frontend/cursor');
 const UI = require('block_sdk/frontend/ui/ui');
@@ -102,7 +111,9 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
         // an in-memory replacement. Otherwise, accessing window.localStorage or
         // window.sessionStorage will throw an exception.
         this.localStorage = isLocalStorageAvailable() ? window.localStorage : new InMemoryStorage();
-        this.sessionStorage = isSessionStorageAvailable() ? window.sessionStorage : new InMemoryStorage();
+        this.sessionStorage = isSessionStorageAvailable()
+            ? window.sessionStorage
+            : new InMemoryStorage();
 
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
@@ -122,31 +133,46 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
     }
     _registerHandlers() {
         // base
-        this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.UPDATE_MODELS, data => {
-            this.base.__applyChanges(data.changes);
-        });
+        this.__airtableInterface.registerHandler(
+            BlockMessageTypes.HostToBlock.UPDATE_MODELS,
+            data => {
+                this.base.__applyChanges(data.changes);
+            },
+        );
 
         // global config
-        this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS, data => {
-            this.globalConfig.__onSetMultipleKvPaths(data.updates);
-        });
+        this.__airtableInterface.registerHandler(
+            BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS,
+            data => {
+                this.globalConfig.__onSetMultipleKvPaths(data.updates);
+            },
+        );
 
         // settings button
-        this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON, () => {
-            if (this.settingsButton.isVisible) {
-                // Since there's an async gap when communicating with liveapp,
-                // no-op if the button has been hidden since it was clicked.
-                this.settingsButton.__onClick();
-            }
-        });
+        this.__airtableInterface.registerHandler(
+            BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON,
+            () => {
+                if (this.settingsButton.isVisible) {
+                    // Since there's an async gap when communicating with liveapp,
+                    // no-op if the button has been hidden since it was clicked.
+                    this.settingsButton.__onClick();
+                }
+            },
+        );
 
         // viewport
-        this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN, () => {
-            this.viewport.__onEnterFullscreen();
-        });
-        this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN, () => {
-            this.viewport.__onExitFullscreen();
-        });
+        this.__airtableInterface.registerHandler(
+            BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN,
+            () => {
+                this.viewport.__onEnterFullscreen();
+            },
+        );
+        this.__airtableInterface.registerHandler(
+            BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN,
+            () => {
+                this.viewport.__onExitFullscreen();
+            },
+        );
         this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, () => {
             this.viewport.__focus();
         });

@@ -17,22 +17,28 @@ export interface AbstractAirtableInterface {
     /*
      * globalConfig
      */
-    setMultipleKvPathsAsync(updates: Array<BlockKvUpdate>): Promise<void>,
+    setMultipleKvPathsAsync(updates: Array<BlockKvUpdate>): Promise<void>;
 
     /*
      * table
      */
-    fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any>, // eslint-disable-line flowtype/no-weak-types
-    unsubscribeFromTableData(tableId: string): void,
-    fetchAndSubscribeToCellValuesInFieldsAsync(tableId: string, fieldIds: Array<string>): Promise<any>, // eslint-disable-line flowtype/no-weak-types
-    unsubscribeFromCellValuesInFields(tableId: string, fieldIds: Array<string>): void,
-    setCellValuesAsync(tableId: string, cellValuesByRecordIdThenFieldId: {[string]: RecordDef}): Promise<void>,
-    deleteRecordsAsync(tableId: string, recordIds: Array<string>): Promise<void>,
-    createRecordsAsync(tableId: string, recordDefs: Array<RecordDataForBlocks>): Promise<void>,
+    fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any>; // eslint-disable-line flowtype/no-weak-types
+    unsubscribeFromTableData(tableId: string): void;
+    fetchAndSubscribeToCellValuesInFieldsAsync(
+        tableId: string,
+        fieldIds: Array<string>,
+    ): Promise<any>; // eslint-disable-line flowtype/no-weak-types
+    unsubscribeFromCellValuesInFields(tableId: string, fieldIds: Array<string>): void;
+    setCellValuesAsync(
+        tableId: string,
+        cellValuesByRecordIdThenFieldId: {[string]: RecordDef},
+    ): Promise<void>;
+    deleteRecordsAsync(tableId: string, recordIds: Array<string>): Promise<void>;
+    createRecordsAsync(tableId: string, recordDefs: Array<RecordDataForBlocks>): Promise<void>;
 
     /*
      * view
      */
-    fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any>, // eslint-disable-line flowtype/no-weak-types
-    unsubscribeFromViewData(tableId: string, viewId: string): void,
+    fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any>; // eslint-disable-line flowtype/no-weak-types
+    unsubscribeFromViewData(tableId: string, viewId: string): void;
 }

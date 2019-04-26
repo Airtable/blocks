@@ -9,14 +9,29 @@ const Field = require('block_sdk/shared/models/field');
 const Record = require('block_sdk/shared/models/record');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
 const getSdk = require('block_sdk/shared/get_sdk');
-const PermissionLevels = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_levels');
-const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
-const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
-const airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shared/airtable_urls');
+const PermissionLevels = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/permissions/permission_levels',
+);
+const permissionHelpers = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/permissions/permission_helpers',
+);
+const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/client_server_shared_config_settings',
+);
+const airtableUrls = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/airtable_urls',
+);
 
-import type {AbstractAirtableInterface, AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';
+import type {
+    AbstractAirtableInterface,
+    AirtableWriteAction,
+} from 'block_sdk/shared/abstract_airtable_interface';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
-import type {BaseDataForBlocks, TableDataForBlocks, RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import type {
+    BaseDataForBlocks,
+    TableDataForBlocks,
+    RecordDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
 import type Base from 'block_sdk/shared/models/base';
 import type {ApiViewType as ViewType} from 'client_server_shared/view_types/api_view_types';
 import type {RecordDef} from 'block_sdk/shared/models/record';
@@ -49,8 +64,10 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
     static _className = 'Table';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableTableKeys, key) ||
-            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
+        return (
+            utils.isEnumValue(WatchableTableKeys, key) ||
+            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)
+        );
     }
     static _shouldLoadDataForKey(key: WatchableTableKey): boolean {
         // "Data" means *all* cell values in the table. If only watching records/recordIds,
@@ -59,9 +76,11 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         // fields. Both of those scenarios are handled manually by this class,
         // instead of relying on AbstractModelWithAsyncData.
         if (Table.shouldLoadAllCellValuesForRecords) {
-            return key === WatchableTableKeys.records ||
+            return (
+                key === WatchableTableKeys.records ||
                 key === WatchableTableKeys.recordIds ||
-                key === WatchableTableKeys.cellValues;
+                key === WatchableTableKeys.cellValues
+            );
         } else {
             return key === WatchableTableKeys.cellValues;
         }
@@ -83,7 +102,12 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     _pendingCellValuesLoadPromiseByFieldId: {[string]: Promise<Array<WatchableTableKey>> | void};
     _cellValuesRetainCountByFieldId: {[string]: number | void};
 
-    constructor(baseData: BaseDataForBlocks, parentBase: Base, tableId: string, airtableInterface: AbstractAirtableInterface) {
+    constructor(
+        baseData: BaseDataForBlocks,
+        parentBase: Base,
+        tableId: string,
+        airtableInterface: AbstractAirtableInterface,
+    ) {
         super(baseData, tableId);
 
         this._parentBase = parentBase;
@@ -106,15 +130,25 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
         Object.seal(this);
     }
-    watch(keys: WatchableTableKey | Array<WatchableTableKey>, callback: Function, context?: ?Object): Array<WatchableTableKey> {
+    watch(
+        keys: WatchableTableKey | Array<WatchableTableKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableTableKey> {
         const validKeys = super.watch(keys, callback, context);
         const fieldIdsToLoad = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToLoad.length > 0) {
-            utils.fireAndForgetPromise(this.loadCellValuesInFieldIdsAsync.bind(this, fieldIdsToLoad));
+            utils.fireAndForgetPromise(
+                this.loadCellValuesInFieldIdsAsync.bind(this, fieldIdsToLoad),
+            );
         }
         return validKeys;
     }
-    unwatch(keys: WatchableTableKey | Array<WatchableTableKey>, callback: Function, context?: ?Object): Array<WatchableTableKey> {
+    unwatch(
+        keys: WatchableTableKey | Array<WatchableTableKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableTableKey> {
         const validKeys = super.unwatch(keys, callback, context);
         const fieldIdsToUnload = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToUnload.length > 0) {
@@ -229,7 +263,12 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return null;
         } else {
             if (!this._viewModelsById[viewId]) {
-                this._viewModelsById[viewId] = new View(this._baseData, this, viewId, this._airtableInterface);
+                this._viewModelsById[viewId] = new View(
+                    this._baseData,
+                    this,
+                    viewId,
+                    this._airtableInterface,
+                );
             }
             return this._viewModelsById[viewId];
         }
@@ -307,7 +346,9 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
-    setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}): AirtableWriteAction<void, {}> {
+    setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {
+        [string]: RecordDef,
+    }): AirtableWriteAction<void, {}> {
         if (this.isDeleted) {
             throw new Error('Table does not exist');
         }
@@ -317,7 +358,9 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
         const changes = [];
         const cellValuesByRecordIdThenFieldId = {};
-        for (const [recordId, cellValuesByFieldIdOrFieldName] of u.entries(cellValuesByRecordIdThenFieldIdOrFieldName)) {
+        for (const [recordId, cellValuesByFieldIdOrFieldName] of u.entries(
+            cellValuesByRecordIdThenFieldIdOrFieldName,
+        )) {
             const record = this.getRecordById(recordId);
             if (!record) {
                 throw new Error('Record does not exist');
@@ -325,19 +368,38 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
             cellValuesByRecordIdThenFieldId[recordId] = {};
 
-            for (const [fieldIdOrFieldName, publicCellValue] of u.entries(cellValuesByFieldIdOrFieldName)) {
+            for (const [fieldIdOrFieldName, publicCellValue] of u.entries(
+                cellValuesByFieldIdOrFieldName,
+            )) {
                 const field = this.__getFieldMatching(fieldIdOrFieldName);
                 invariant(field, 'Field does not exist');
                 invariant(!field.isDeleted, 'Field has been deleted');
 
                 const currentPublicCellValue = record.getCellValue(field);
-                const validationResult = cellValueUtils.validatePublicCellValueForUpdate(publicCellValue, currentPublicCellValue, field);
+                const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                    publicCellValue,
+                    currentPublicCellValue,
+                    field,
+                );
                 if (!validationResult.isValid) {
                     throw new Error(validationResult.reason);
                 }
 
-                const normalizedCellValue = cellValueUtils.normalizePublicCellValueForUpdate(publicCellValue, field);
-                changes.push({path: ['tablesById', this.id, 'recordsById', recordId, 'cellValuesByFieldId', field.id], value: normalizedCellValue});
+                const normalizedCellValue = cellValueUtils.normalizePublicCellValueForUpdate(
+                    publicCellValue,
+                    field,
+                );
+                changes.push({
+                    path: [
+                        'tablesById',
+                        this.id,
+                        'recordsById',
+                        recordId,
+                        'cellValuesByFieldId',
+                        field.id,
+                    ],
+                    value: normalizedCellValue,
+                });
 
                 cellValuesByRecordIdThenFieldId[recordId][field.id] = normalizedCellValue;
             }
@@ -346,19 +408,29 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         this.parentBase.__applyChanges(changes);
 
         // Now send the update to Airtable.
-        const completionPromise = this._airtableInterface.setCellValuesAsync(this.id, cellValuesByRecordIdThenFieldId);
+        const completionPromise = this._airtableInterface.setCellValuesAsync(
+            this.id,
+            cellValuesByRecordIdThenFieldId,
+        );
         return {
             completion: completionPromise,
         };
     }
     /** */
     canCreateRecord(cellValuesByFieldIdOrFieldName: ?RecordDef): boolean {
-        return this.canCreateRecords(cellValuesByFieldIdOrFieldName ? [cellValuesByFieldIdOrFieldName] : 1);
+        return this.canCreateRecords(
+            cellValuesByFieldIdOrFieldName ? [cellValuesByFieldIdOrFieldName] : 1,
+        );
     }
     /** */
-    createRecord(cellValuesByFieldIdOrFieldName: ?RecordDef): AirtableWriteAction<void, {
-        record: Record,
-    }> {
+    createRecord(
+        cellValuesByFieldIdOrFieldName: ?RecordDef,
+    ): AirtableWriteAction<
+        void,
+        {
+            record: Record,
+        },
+    > {
         const recordDef = cellValuesByFieldIdOrFieldName || {};
         const writeAction = this.createRecords([recordDef]);
         const records = writeAction.records;
@@ -377,9 +449,12 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     /** */
     createRecords(
         recordDefsOrNumberOfRecords: Array<RecordDef> | number,
-    ): AirtableWriteAction<void, {
-        records: Array<Record>,
-    }> {
+    ): AirtableWriteAction<
+        void,
+        {
+            records: Array<Record>,
+        },
+    > {
         if (!this.canCreateRecords(recordDefsOrNumberOfRecords)) {
             throw new Error('Your permission level does not allow creating records');
         }
@@ -402,7 +477,9 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
 
         if (this.remainingRecordLimit < recordDefs.length) {
-            throw new Error('Table over record limit. Check remainingRecordLimit before creating records.');
+            throw new Error(
+                'Table over record limit. Check remainingRecordLimit before creating records.',
+            );
         }
 
         const parsedRecordDefs = [];
@@ -416,12 +493,19 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                 invariant(!field.isDeleted, `Field has been deleted: ${fieldIdOrFieldName}`);
 
                 // Current cell value is null since the record doesn't exist.
-                const validationResult = cellValueUtils.validatePublicCellValueForUpdate(cellValue, null, field);
+                const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                    cellValue,
+                    null,
+                    field,
+                );
                 if (!validationResult.isValid) {
                     throw new Error(validationResult.reason);
                 }
 
-                cellValuesByFieldId[field.id] = cellValueUtils.normalizePublicCellValueForUpdate(cellValue, field);
+                cellValuesByFieldId[field.id] = cellValueUtils.normalizePublicCellValueForUpdate(
+                    cellValue,
+                    field,
+                );
             }
             const recordId = hyperId.generateRowId();
             const parsedRecordDef = {
@@ -433,14 +517,15 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             parsedRecordDefs.push(parsedRecordDef);
             recordIds.push(recordId);
 
-            changes.push({path: ['tablesById', this.id, 'recordsById', recordId], value: parsedRecordDef});
+            changes.push({
+                path: ['tablesById', this.id, 'recordsById', recordId],
+                value: parsedRecordDef,
+            });
         }
 
         for (const view of this.views) {
             if (view.isDataLoaded) {
-                changes.push(
-                    ...view.__generateChangesForParentTableAddMultipleRecords(recordIds),
-                );
+                changes.push(...view.__generateChangesForParentTableAddMultipleRecords(recordIds));
             }
         }
 
@@ -505,10 +590,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
 
         this.parentBase.__applyChanges(changes);
 
-        const completionPromise = this._airtableInterface.deleteRecordsAsync(
-            this.id,
-            recordIds,
-        );
+        const completionPromise = this._airtableInterface.deleteRecordsAsync(this.id, recordIds);
         return {
             completion: completionPromise,
         };
@@ -519,9 +601,11 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             allowedViewTypes = ([allowedViewTypes]: Array<ViewType>);
         }
 
-        return u.find(this.views, view => {
-            return u.includes(allowedViewTypes, view.type);
-        }) || null;
+        return (
+            u.find(this.views, view => {
+                return u.includes(allowedViewTypes, view.type);
+            }) || null
+        );
     }
     /**
      * If the activeView's type is in allowedViewTypes, then the activeView
@@ -553,7 +637,9 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
      * metadata is loaded.
      */
     async loadRecordMetadataAsync() {
-        return await this.loadCellValuesInFieldIdsAsync([this._getFieldIdForCausingRecordMetadataToLoad()]);
+        return await this.loadCellValuesInFieldIdsAsync([
+            this._getFieldIdForCausingRecordMetadataToLoad(),
+        ]);
     }
     /** Unloads record metadata. */
     unloadRecordMetadata() {
@@ -606,10 +692,14 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             // pattern from AbstractModelWithAsyncData where the public method
             // is responsible for updating retain counts and the private method
             // actually fetches data.
-            const loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise = this._loadCellValuesInFieldIdsAsync(fieldIdsWhichAreNotAlreadyLoadedOrLoading);
+            const loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise = this._loadCellValuesInFieldIdsAsync(
+                fieldIdsWhichAreNotAlreadyLoadedOrLoading,
+            );
             pendingLoadPromises.push(loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise);
             for (const fieldId of fieldIdsWhichAreNotAlreadyLoadedOrLoading) {
-                this._pendingCellValuesLoadPromiseByFieldId[fieldId] = loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise;
+                this._pendingCellValuesLoadPromiseByFieldId[
+                    fieldId
+                ] = loadFieldsWhichAreNotAlreadyLoadedOrLoadingPromise;
             }
             // Doing `.then` instead of performing these actions directly in
             // _loadCellValuesInFieldIdsAsync so this is similar to
@@ -629,36 +719,52 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         await Promise.all(pendingLoadPromises);
     }
-    async _loadCellValuesInFieldIdsAsync(fieldIds: Array<string>): Promise<Array<WatchableTableKey>> {
-        const {recordsById: newRecordsById} = await this._airtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync(this._id, fieldIds);
+    async _loadCellValuesInFieldIdsAsync(
+        fieldIds: Array<string>,
+    ): Promise<Array<WatchableTableKey>> {
+        const {
+            recordsById: newRecordsById,
+        } = await this._airtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync(
+            this._id,
+            fieldIds,
+        );
 
         // Merge with existing data.
         if (!this._data.recordsById) {
             this._data.recordsById = {};
         }
         const {recordsById: existingRecordsById} = this._data;
-        u.unsafeEach((newRecordsById: {[RecordId]: RecordDataForBlocks}), (newRecordObj, recordId) => {
-            if (!u.has(existingRecordsById, recordId)) {
-                existingRecordsById[recordId] = newRecordObj;
-            } else {
-                const existingRecordObj = existingRecordsById[recordId];
-                // Metadata (createdTime, commentCount) should already be up to date,
-                // but just verify for sanity. If this doesn't catch anything, can
-                // remove it for perf.
-                invariant(existingRecordObj.commentCount === newRecordObj.commentCount, 'comment count out of sync');
-                invariant(existingRecordObj.createdTime === newRecordObj.createdTime, 'created time out of sync');
-                if (!existingRecordObj.cellValuesByFieldId) {
-                    existingRecordObj.cellValuesByFieldId = {};
+        u.unsafeEach(
+            (newRecordsById: {[RecordId]: RecordDataForBlocks}),
+            (newRecordObj, recordId) => {
+                if (!u.has(existingRecordsById, recordId)) {
+                    existingRecordsById[recordId] = newRecordObj;
+                } else {
+                    const existingRecordObj = existingRecordsById[recordId];
+                    // Metadata (createdTime, commentCount) should already be up to date,
+                    // but just verify for sanity. If this doesn't catch anything, can
+                    // remove it for perf.
+                    invariant(
+                        existingRecordObj.commentCount === newRecordObj.commentCount,
+                        'comment count out of sync',
+                    );
+                    invariant(
+                        existingRecordObj.createdTime === newRecordObj.createdTime,
+                        'created time out of sync',
+                    );
+                    if (!existingRecordObj.cellValuesByFieldId) {
+                        existingRecordObj.cellValuesByFieldId = {};
+                    }
+                    const existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
+                    for (let i = 0; i < fieldIds.length; i++) {
+                        const fieldId = fieldIds[i];
+                        existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId
+                            ? newRecordObj.cellValuesByFieldId[fieldId]
+                            : undefined;
+                    }
                 }
-                const existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
-                for (let i = 0; i < fieldIds.length; i++) {
-                    const fieldId = fieldIds[i];
-                    existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId ?
-                        newRecordObj.cellValuesByFieldId[fieldId] :
-                        undefined;
-                }
-            }
-        });
+            },
+        );
 
         const changedKeys = fieldIds.map(fieldId => WatchableCellValuesInFieldKeyPrefix + fieldId);
         // Need to trigger onChange for records and recordIds since watching either
@@ -734,7 +840,9 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         this._afterUnloadDataOrUnloadCellValuesInFieldIds();
     }
     _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds?: Array<string>) {
-        const areAnyFieldsLoaded = this.isDataLoaded || u.some(u.values(this._areCellValuesLoadedByFieldId), isLoaded => isLoaded);
+        const areAnyFieldsLoaded =
+            this.isDataLoaded ||
+            u.some(u.values(this._areCellValuesLoadedByFieldId), isLoaded => isLoaded);
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
                 this._data.recordsById = undefined;
@@ -748,7 +856,9 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
                     // We need to clear out the cell values of every field that was unloaded.
                     // This is kind of slow, but hopefully uncommon.
                     const fieldIds = Object.keys(this._data.fieldsById);
-                    fieldIdsToClear = fieldIds.filter(fieldId => !this._areCellValuesLoadedByFieldId[fieldId]);
+                    fieldIdsToClear = fieldIds.filter(
+                        fieldId => !this._areCellValuesLoadedByFieldId[fieldId],
+                    );
                 }
                 u.unsafeEach(this._data.recordsById, recordObj => {
                     for (let i = 0; i < fieldIdsToClear.length; i++) {
@@ -769,7 +879,8 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         if (fieldOrFieldIdOrFieldName instanceof Field) {
             field = fieldOrFieldIdOrFieldName;
         } else {
-            field = this.getFieldById(fieldOrFieldIdOrFieldName) ||
+            field =
+                this.getFieldById(fieldOrFieldIdOrFieldName) ||
                 this.getFieldByName(fieldOrFieldIdOrFieldName);
         }
         return field;
@@ -779,7 +890,8 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         if (viewOrViewIdOrViewName instanceof View) {
             view = viewOrViewIdOrViewName;
         } else {
-            view = this.getViewById(viewOrViewIdOrViewName) ||
+            view =
+                this.getViewById(viewOrViewIdOrViewName) ||
                 this.getViewByName(viewOrViewIdOrViewName);
         }
         return view;

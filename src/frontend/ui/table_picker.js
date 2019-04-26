@@ -82,7 +82,7 @@ class TablePicker extends React.Component<TablePickerProps> {
 
         return (
             <ModelPickerSelect
-                ref={el => this._select = el}
+                ref={el => (this._select = el)}
                 models={getSdk().base.tables}
                 selectedModelId={selectedTable ? selectedTable.id : null}
                 onChange={this._onChange}
@@ -98,12 +98,10 @@ class TablePicker extends React.Component<TablePickerProps> {
     }
 }
 
-module.exports = createDataContainer(TablePicker, (props: TablePickerProps) => {
-    return [
-        {watch: getSdk().base, key: 'tables'},
-    ];
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    TablePicker,
+    (props: TablePickerProps) => {
+        return [{watch: getSdk().base, key: 'tables'}];
+    },
+    ['focus', 'blur', 'click'],
+);

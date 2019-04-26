@@ -61,7 +61,7 @@ class Input extends React.Component<InputProps> {
         tabIndex: 0,
     };
     props: InputProps;
-    _onChange: SyntheticInputEvent<> => void;
+    _onChange: (SyntheticInputEvent<>) => void;
     _input: HTMLInputElement | null;
     constructor(props: InputProps) {
         super(props);
@@ -93,20 +93,26 @@ class Input extends React.Component<InputProps> {
         }
 
         const {disabled} = this.props;
-        const defaultClassName = this._shouldUseDefaultClassesForType() ? 'styled-input rounded p1 darken1 text-dark normal' : '';
+        const defaultClassName = this._shouldUseDefaultClassesForType()
+            ? 'styled-input rounded p1 darken1 text-dark normal'
+            : '';
 
         const restOfProps = u.omit(this.props, Object.keys(Input.propTypes));
 
         return (
             <input
-                ref={el => this._input = el}
+                ref={el => (this._input = el)}
                 type={type}
                 placeholder={this.props.placeholder}
                 style={this.props.style}
-                className={classNames(defaultClassName, {
-                    quieter: disabled,
-                    'link-quiet': !disabled,
-                }, this.props.className)}
+                className={classNames(
+                    defaultClassName,
+                    {
+                        quieter: disabled,
+                        'link-quiet': !disabled,
+                    },
+                    this.props.className,
+                )}
                 disabled={disabled}
                 onChange={this.props.onChange}
                 spellCheck={this.props.spellCheck}

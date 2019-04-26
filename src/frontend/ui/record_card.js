@@ -4,18 +4,26 @@ const invariant = require('invariant');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const CellRenderer = require('block_sdk/frontend/ui/cell_renderer');
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/column_type_provider',
+);
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
 const FieldModel = require('block_sdk/shared/models/field');
 const RecordModel = require('block_sdk/shared/models/record');
 const ViewModel = require('block_sdk/shared/models/view');
-const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable('client_server_shared/read_mode_renderers/attachment_preview_renderer');
+const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/read_mode_renderers/attachment_preview_renderer',
+);
 const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
 const classNames = require('classnames');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
 const expandRecord = require('block_sdk/frontend/ui/expand_record');
 const keyCodeUtils = window.__requirePrivateModuleFromAirtable('client/mylib/key_code_utils');
-const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
+const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/client_server_shared_config_settings',
+);
 
 import type {RecordDef} from 'block_sdk/shared/models/record';
 import type {AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
@@ -53,10 +61,12 @@ const CellValueAndFieldLabel = createDataContainer(
                 style={{
                     width,
                     ...styles.cellValueAndFieldLabel,
-                }}>
+                }}
+            >
                 <div
                     className="block textOverflowEllipsis uppercase small appFontWeightRegular"
-                    style={styles.fieldLabel}>
+                    style={styles.fieldLabel}
+                >
                     {field.name}
                 </div>
                 <CellRenderer
@@ -130,15 +140,10 @@ const getFieldResultType = (field: FieldModel): string => {
 class RecordCard extends React.Component<RecordCardProps> {
     static propTypes = {
         // Record can either be a record model or a record def (cellValuesByFieldId)
-        record: PropTypes.oneOfType([
-            PropTypes.instanceOf(RecordModel),
-            PropTypes.object,
-        ]),
+        record: PropTypes.oneOfType([PropTypes.instanceOf(RecordModel), PropTypes.object]),
 
         // Should provide one of fields and view
-        fields: PropTypes.arrayOf(
-            PropTypes.instanceOf(FieldModel).isRequired,
-        ),
+        fields: PropTypes.arrayOf(PropTypes.instanceOf(FieldModel).isRequired),
         view: PropTypes.instanceOf(ViewModel),
 
         // This component will always respect attachmentCoverField if one is passed in.
@@ -217,7 +222,9 @@ class RecordCard extends React.Component<RecordCardProps> {
                     // No-op, let the <a> tag handle opening in new tab or window.
                 } else {
                     e.preventDefault();
-                    const opts = this.props.getExpandRecordOptions ? this.props.getExpandRecordOptions(recordModel) : {};
+                    const opts = this.props.getExpandRecordOptions
+                        ? this.props.getExpandRecordOptions(recordModel)
+                        : {};
                     expandRecord(recordModel, opts);
                 }
             }
@@ -230,7 +237,11 @@ class RecordCard extends React.Component<RecordCardProps> {
     _getAttachmentField(fieldsToUse: Array<FieldModel>): FieldModel | null {
         const {attachmentCoverField, fields} = this.props;
 
-        if (attachmentCoverField && !attachmentCoverField.isDeleted && this._isAttachment(attachmentCoverField)) {
+        if (
+            attachmentCoverField &&
+            !attachmentCoverField.isDeleted &&
+            this._isAttachment(attachmentCoverField)
+        ) {
             return attachmentCoverField;
         } else if (attachmentCoverField === undefined && !fields) {
             // The attachment field in this case is either coming from the view
@@ -259,7 +270,10 @@ class RecordCard extends React.Component<RecordCardProps> {
         } else {
             let publicCellValue = record[field.id];
             cellValueUtils.validatePublicCellValueForUpdate(publicCellValue, null, field);
-            publicCellValue = cellValueUtils.normalizePublicCellValueForUpdate(publicCellValue, field);
+            publicCellValue = cellValueUtils.normalizePublicCellValueForUpdate(
+                publicCellValue,
+                field,
+            );
             return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
         }
     }
@@ -267,7 +281,9 @@ class RecordCard extends React.Component<RecordCardProps> {
         let attachmentsInField;
         if (attachmentField.config.type === ApiFieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
-            attachmentsInField = u.flattenDeep(u.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
+            attachmentsInField = u.flattenDeep(
+                u.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),
+            );
         } else {
             attachmentsInField = ((this._getRawCellValue(attachmentField): any): Array<Object>); // eslint-disable-line flowtype/no-weak-types
         }
@@ -361,7 +377,17 @@ class RecordCard extends React.Component<RecordCardProps> {
         });
     }
     render() {
-        const {record, view, width, height, onClick, onMouseEnter, onMouseLeave, className, style} = this.props;
+        const {
+            record,
+            view,
+            width,
+            height,
+            onClick,
+            onMouseEnter,
+            onMouseLeave,
+            className,
+            style,
+        } = this.props;
 
         if (record && record instanceof RecordModel && record.isDeleted) {
             return null;
@@ -374,10 +400,14 @@ class RecordCard extends React.Component<RecordCardProps> {
 
         const hasOnClick = !!onClick || !!this._getRecordModel();
 
-        const containerClasses = classNames('white rounded relative block overflow-hidden', {
-            'pointer cardBoxShadow': hasOnClick,
-            stroked1: !hasOnClick,
-        }, className);
+        const containerClasses = classNames(
+            'white rounded relative block overflow-hidden',
+            {
+                'pointer cardBoxShadow': hasOnClick,
+                stroked1: !hasOnClick,
+            },
+            className,
+        );
 
         // use height as size in order to get square attachment
         invariant(typeof height === 'number', 'height in defaultProps');
@@ -385,19 +415,29 @@ class RecordCard extends React.Component<RecordCardProps> {
         let imageHtml = '';
         if (hasAttachment) {
             const attachmentField = this._getAttachmentField(fieldsToUse);
-            invariant(attachmentField, 'attachmentField must be present when we have an attachment');
-            invariant(attachmentObjIfAvailable, 'attachmentObjIfAvailable is defined if hasAttachment');
+            invariant(
+                attachmentField,
+                'attachmentField must be present when we have an attachment',
+            );
+            invariant(
+                attachmentObjIfAvailable,
+                'attachmentObjIfAvailable is defined if hasAttachment',
+            );
 
             const attachmentObj: AttachmentObj = (attachmentObjIfAvailable: any); // eslint-disable-line flowtype/no-weak-types
             const userScopedAppInterface = attachmentField.parentTable.parentBase.__appInterface;
-            imageHtml = attachmentPreviewRenderer.renderSquarePreview(attachmentObj, userScopedAppInterface, {
-                extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
-                extraStyles: {
-                    'border-top-right-radius': 2,
-                    'border-bottom-right-radius': 2,
+            imageHtml = attachmentPreviewRenderer.renderSquarePreview(
+                attachmentObj,
+                userScopedAppInterface,
+                {
+                    extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
+                    extraStyles: {
+                        'border-top-right-radius': 2,
+                        'border-bottom-right-radius': 2,
+                    },
+                    size: attachmentSize,
                 },
-                size: attachmentSize,
-            });
+            );
         }
 
         const containerStyles = {
@@ -419,9 +459,13 @@ class RecordCard extends React.Component<RecordCardProps> {
                 recordColorClass = record.getColorInView(view);
             }
         } else {
-            const primaryField = allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
+            const primaryField =
+                allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
             const primaryCellValue = primaryField ? record[primaryField.id] : null;
-            primaryCellValueAsString = (primaryCellValue === null || primaryCellValue === undefined) ? null : String(primaryCellValue);
+            primaryCellValueAsString =
+                primaryCellValue === null || primaryCellValue === undefined
+                    ? null
+                    : String(primaryCellValue);
         }
         if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
             primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
@@ -430,9 +474,12 @@ class RecordCard extends React.Component<RecordCardProps> {
             primaryValue = primaryCellValueAsString;
             isUnnamed = false;
         }
-        const primaryClasses = classNames('strong relative cellValue mt0 flex items-center line-height-4', {
-            unnamed: isUnnamed,
-        });
+        const primaryClasses = classNames(
+            'strong relative cellValue mt0 flex items-center line-height-4',
+            {
+                unnamed: isUnnamed,
+            },
+        );
         const primaryStyles = {
             height: 18,
             fontSize: 14,
@@ -445,12 +492,16 @@ class RecordCard extends React.Component<RecordCardProps> {
                 style={containerStyles}
                 onClick={this._onClick}
                 onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}>
-                <div className="absolute top-0 bottom-0 left-0 appFontColor" style={{
-                    right: attachmentSize,
-                    background: 'transparent',
-                    padding: CARD_PADDING,
-                }}>
+                onMouseLeave={onMouseLeave}
+            >
+                <div
+                    className="absolute top-0 bottom-0 left-0 appFontColor"
+                    style={{
+                        right: attachmentSize,
+                        background: 'transparent',
+                        padding: CARD_PADDING,
+                    }}
+                >
                     <div className={primaryClasses} style={primaryStyles}>
                         {recordColorClass && (
                             <div
@@ -460,9 +511,12 @@ class RecordCard extends React.Component<RecordCardProps> {
                         )}
                         <div className="flex-auto truncate">{primaryValue}</div>
                     </div>
-                    <div className="absolute appFontColorLight" style={{
-                        marginTop: 3,
-                    }}>
+                    <div
+                        className="absolute appFontColorLight"
+                        style={{
+                            marginTop: 3,
+                        }}
+                    >
                         {this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse)}
                     </div>
                 </div>

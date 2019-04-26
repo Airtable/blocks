@@ -75,7 +75,8 @@ class BlockWrapperComponent extends React.Component<BlockWrapperComponentProps> 
                         maxHeight: null,
                         borderRadius: 0,
                         boxShadow: 'none',
-                    }}>
+                    }}
+                >
                     {globalAlertInfo.content}
                 </Modal>
             );
@@ -108,12 +109,14 @@ class BlockWrapperComponent extends React.Component<BlockWrapperComponentProps> 
                                 maxHeight: null,
                                 borderRadius: 0,
                                 boxShadow: 'none',
-                            }}>
+                            }}
+                        >
                             <span className="center line-height-4 quiet strong">
                                 <span>Please make this block bigger or </span>
                                 <span
                                     className="pointer understroke link-unquiet"
-                                    onClick={() => viewport.enterFullscreen()}>
+                                    onClick={() => viewport.enterFullscreen()}
+                                >
                                     fullscreen
                                 </span>
                             </span>
@@ -130,7 +133,8 @@ class BlockWrapperComponent extends React.Component<BlockWrapperComponentProps> 
                         color: '#999',
                         textAlign: 'center',
                         fontFamily: 'sans-serif',
-                    }}>
+                    }}
+                >
                     Must export a React component.
                 </div>
             );

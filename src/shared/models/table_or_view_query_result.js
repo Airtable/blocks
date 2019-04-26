@@ -1,7 +1,11 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const GroupedRowVisList = window.__requirePrivateModuleFromAirtable('client_server_shared/vis_lists/grouped_row_vis_list');
-const GroupAssigner = window.__requirePrivateModuleFromAirtable('client_server_shared/filter_and_sort/group_assigner');
+const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/vis_lists/grouped_row_vis_list',
+);
+const GroupAssigner = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/filter_and_sort/group_assigner',
+);
 const TableModel = require('block_sdk/shared/models/table');
 const ViewModel = require('block_sdk/shared/models/view');
 const invariant = require('invariant');
@@ -14,17 +18,24 @@ import type {WatchableTableKey} from 'block_sdk/shared/models/table';
 import type {WatchableViewKey} from 'block_sdk/shared/models/view';
 import type FieldModel from 'block_sdk/shared/models/field';
 import type RecordModel from 'block_sdk/shared/models/record';
-import type {WatchableQueryResultKey, QueryResultOpts, NormalizedQueryResultOpts} from 'block_sdk/shared/models/query_result';
+import type {
+    WatchableQueryResultKey,
+    QueryResultOpts,
+    NormalizedQueryResultOpts,
+} from 'block_sdk/shared/models/query_result';
 
 type TableOrViewQueryResultData = {
     recordIds: Array<string> | null, // null if data isn't loaded (or if it hasn't been lazily initialized).
 };
 
 // eslint-disable-next-line no-use-before-define
-const tableOrViewQueryResultPool: ObjectPool<TableOrViewQueryResult, {
-    sourceModel: TableModel | ViewModel,
-    normalizedOpts: NormalizedQueryResultOpts,
-}> = new ObjectPool({
+const tableOrViewQueryResultPool: ObjectPool<
+    TableOrViewQueryResult,
+    {
+        sourceModel: TableModel | ViewModel,
+        normalizedOpts: NormalizedQueryResultOpts,
+    },
+> = new ObjectPool({
     getKeyFromObject: queryResult => queryResult.__sourceModelId,
     getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
     canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
@@ -44,7 +55,10 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     static __createOrReuseQueryResult(sourceModel: TableModel | ViewModel, opts: QueryResultOpts) {
         const tableModel = sourceModel instanceof ViewModel ? sourceModel.parentTable : sourceModel;
         const normalizedOpts = QueryResult._normalizeOpts(tableModel, opts);
-        const queryResult = tableOrViewQueryResultPool.getObjectForReuse({sourceModel, normalizedOpts});
+        const queryResult = tableOrViewQueryResultPool.getObjectForReuse({
+            sourceModel,
+            normalizedOpts,
+        });
         if (queryResult) {
             return queryResult;
         } else {
@@ -78,10 +92,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     // is undesirable. Instead, we'll store watch counts for each key to make sure we only
     // watch the table once.
     _cellValueKeyWatchCounts: {[string]: number};
-    constructor(
-        sourceModel: TableModel | ViewModel,
-        opts?: QueryResultOpts,
-    ) {
+    constructor(sourceModel: TableModel | ViewModel, opts?: QueryResultOpts) {
         const table = sourceModel instanceof ViewModel ? sourceModel.parentTable : sourceModel;
         const normalizedOpts = QueryResult._normalizeOpts(table, opts);
         super(normalizedOpts, sourceModel.__baseData);
@@ -223,12 +234,16 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
     }
     get _cellValuesForSortWatchKeys(): Array<string> {
-        return this._groupLevels ? u.compact(this._groupLevels.map(groupLevel => {
-            if (groupLevel.isCreatedTime) {
-                return null;
-            }
-            return `cellValuesInField:${groupLevel.columnId}`;
-        })) : [];
+        return this._groupLevels
+            ? u.compact(
+                  this._groupLevels.map(groupLevel => {
+                      if (groupLevel.isCreatedTime) {
+                          return null;
+                      }
+                      return `cellValuesInField:${groupLevel.columnId}`;
+                  }),
+              )
+            : [];
     }
     get _recordsWatchKey(): WatchableTableKey | WatchableViewKey {
         return this._sourceModel instanceof TableModel ? 'records' : 'visibleRecords';
@@ -237,10 +252,14 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         return 'fields';
     }
     get _sourceModelRecordIds(): Array<string> {
-        return this._sourceModel instanceof TableModel ? this._sourceModel.recordIds : this._sourceModel.visibleRecordIds;
+        return this._sourceModel instanceof TableModel
+            ? this._sourceModel.recordIds
+            : this._sourceModel.visibleRecordIds;
     }
     get _sourceModelRecords(): Array<RecordModel> {
-        return this._sourceModel instanceof TableModel ? this._sourceModel.records : this._sourceModel.visibleRecords;
+        return this._sourceModel instanceof TableModel
+            ? this._sourceModel.records
+            : this._sourceModel.visibleRecords;
     }
     _incrementCellValueKeyWatchCountAndWatchIfNecessary(key: string, watchCallback: Function) {
         if (!this._cellValueKeyWatchCounts[key]) {
@@ -266,7 +285,11 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             delete this._cellValueKeyWatchCounts[key];
         }
     }
-    watch(keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>, callback: Function, context?: ?Object): Array<WatchableQueryResultKey> {
+    watch(
+        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableQueryResultKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
@@ -274,27 +297,47 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
 
         for (const key of validKeys) {
             if (u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
-                const fieldId = key.substring(QueryResult.WatchableCellValuesInFieldKeyPrefix.length);
-                if (this._fieldIdsSetToLoadOrNullIfAllFields && !u.has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)) {
-                    throw new Error(`Can't watch field because it wasn't included in QueryResult fields: ${fieldId}`);
+                const fieldId = key.substring(
+                    QueryResult.WatchableCellValuesInFieldKeyPrefix.length,
+                );
+                if (
+                    this._fieldIdsSetToLoadOrNullIfAllFields &&
+                    !u.has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)
+                ) {
+                    throw new Error(
+                        `Can't watch field because it wasn't included in QueryResult fields: ${fieldId}`,
+                    );
                 }
-                this._incrementCellValueKeyWatchCountAndWatchIfNecessary(key, this._onCellValuesInFieldChanged);
+                this._incrementCellValueKeyWatchCountAndWatchIfNecessary(
+                    key,
+                    this._onCellValuesInFieldChanged,
+                );
             }
 
             if (key === QueryResult.WatchableKeys.cellValues) {
                 if (this._fieldIdsSetToLoadOrNullIfAllFields) {
                     for (const fieldId of Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields)) {
-                        this._incrementCellValueKeyWatchCountAndWatchIfNecessary(QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId, this._onCellValuesChanged);
+                        this._incrementCellValueKeyWatchCountAndWatchIfNecessary(
+                            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+                            this._onCellValuesChanged,
+                        );
                     }
                 } else {
-                    this._incrementCellValueKeyWatchCountAndWatchIfNecessary(key, this._onCellValuesChanged);
+                    this._incrementCellValueKeyWatchCountAndWatchIfNecessary(
+                        key,
+                        this._onCellValuesChanged,
+                    );
                 }
             }
         }
 
         return validKeys;
     }
-    unwatch(keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>, callback: Function, context?: ?Object): Array<WatchableQueryResultKey> {
+    unwatch(
+        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableQueryResultKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
@@ -302,16 +345,25 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
 
         for (const key of validKeys) {
             if (u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
-                this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(key, this._onCellValuesInFieldChanged);
+                this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(
+                    key,
+                    this._onCellValuesInFieldChanged,
+                );
             }
 
             if (key === QueryResult.WatchableKeys.cellValues) {
                 if (this._fieldIdsSetToLoadOrNullIfAllFields) {
                     for (const fieldId of Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields)) {
-                        this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId, this._onCellValuesChanged);
+                        this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(
+                            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+                            this._onCellValuesChanged,
+                        );
                     }
                 } else {
-                    this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(key, this._onCellValuesChanged);
+                    this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(
+                        key,
+                        this._onCellValuesChanged,
+                    );
                 }
             }
         }
@@ -323,7 +375,9 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         let cellValuesInFieldsLoadPromise;
 
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
-            cellValuesInFieldsLoadPromise = this._table.loadCellValuesInFieldIdsAsync(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
+            cellValuesInFieldsLoadPromise = this._table.loadCellValuesInFieldIdsAsync(
+                Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields),
+            );
         } else {
             // Load all fields.
             cellValuesInFieldsLoadPromise = this._table.loadDataAsync();
@@ -367,17 +421,9 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             this,
         );
 
-        this._table.watch(
-            this._cellValuesForSortWatchKeys,
-            this._onCellValuesForSortChanged,
-            this,
-        );
+        this._table.watch(this._cellValuesForSortWatchKeys, this._onCellValuesForSortChanged, this);
 
-        this._table.watch(
-            this._fieldsWatchKey,
-            this._onTableFieldsChanged,
-            this,
-        );
+        this._table.watch(this._fieldsWatchKey, this._onTableFieldsChanged, this);
 
         if (this._groupLevels) {
             for (const groupLevel of this._groupLevels) {
@@ -386,11 +432,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 }
                 const field = this._table.getFieldById(groupLevel.columnId);
                 if (field) {
-                    field.watch(
-                        'config',
-                        this._onFieldConfigChanged,
-                        this,
-                    );
+                    field.watch('config', this._onFieldConfigChanged, this);
                 }
             }
         }
@@ -401,7 +443,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             QueryResult.WatchableKeys.cellValues,
         ];
 
-        const fieldIds = this._normalizedOpts.fieldIdsOrNullIfAllFields ||
+        const fieldIds =
+            this._normalizedOpts.fieldIdsOrNullIfAllFields ||
             this._table.fields.map(field => field.id);
 
         for (const fieldId of fieldIds) {
@@ -424,7 +467,9 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
 
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
-            this._table.unloadCellValuesInFieldIds(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
+            this._table.unloadCellValuesInFieldIds(
+                Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields),
+            );
         }
 
         this._unloadRecordColors();
@@ -445,11 +490,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             this,
         );
 
-        this._table.unwatch(
-            this._fieldsWatchKey,
-            this._onTableFieldsChanged,
-            this,
-        );
+        this._table.unwatch(this._fieldsWatchKey, this._onTableFieldsChanged, this);
 
         // If the table is deleted, can't call getFieldById on it below.
         if (!this._table.isDeleted && this._groupLevels) {
@@ -459,11 +500,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 }
                 const field = this._table.getFieldById(groupLevel.columnId);
                 if (field) {
-                    field.unwatch(
-                        'config',
-                        this._onFieldConfigChanged,
-                        this,
-                    );
+                    field.unwatch('config', this._onFieldConfigChanged, this);
                 }
             }
         }
@@ -497,14 +534,21 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             visList.addIdToGroupAtEnd(recordId, true, groupPath);
         }
     }
-    _onRecordsChanged(model: TableModel | ViewModel, key: string, updates: ?{addedRecordIds: Array<string>, removedRecordIds: Array<string>}) {
+    _onRecordsChanged(
+        model: TableModel | ViewModel,
+        key: string,
+        updates: ?{addedRecordIds: Array<string>, removedRecordIds: Array<string>},
+    ) {
         if (model instanceof ViewModel) {
             // For a view model, we don't get updates sent with the onChange event,
             // so we need to manually generate updates based on the old and new
             // recordIds.
             if (this._orderedRecordIds) {
                 const addedRecordIds = u.difference(model.visibleRecordIds, this._orderedRecordIds);
-                const removedRecordIds = u.difference(this._orderedRecordIds, model.visibleRecordIds);
+                const removedRecordIds = u.difference(
+                    this._orderedRecordIds,
+                    model.visibleRecordIds,
+                );
                 updates = {addedRecordIds, removedRecordIds};
             } else {
                 updates = null;
@@ -548,7 +592,12 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         this._onChange(QueryResult.WatchableKeys.records, updates);
         this._onChange(QueryResult.WatchableKeys.recordIds, updates);
     }
-    _onCellValuesForSortChanged(table: TableModel, key: string, recordIds: ?Array<string>, fieldId: ?string) {
+    _onCellValuesForSortChanged(
+        table: TableModel,
+        key: string,
+        recordIds: ?Array<string>,
+        fieldId: ?string,
+    ) {
         if (!recordIds || !fieldId) {
             // If there are no updates, do nothing, since we'll handle the initial
             // callback when the record set is loaded (and we don't want to fire
@@ -586,7 +635,11 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         this._replaceVisList();
         this._orderedRecordIds = this._generateOrderedRecordIds();
     }
-    _onTableFieldsChanged(table: TableModel, key: string, updates: {addedFieldIds: Array<string>, removedFieldIds: Array<string>}) {
+    _onTableFieldsChanged(
+        table: TableModel,
+        key: string,
+        updates: {addedFieldIds: Array<string>, removedFieldIds: Array<string>},
+    ) {
         if (!this._groupLevels) {
             // If we don't have any sorts, we don't have to do anything in response to field changes.
             return;
@@ -612,16 +665,14 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldById(fieldId);
                 invariant(field, 'Created field does not exist');
-                field.watch(
-                    'config',
-                    this._onFieldConfigChanged,
-                    this,
-                );
+                field.watch('config', this._onFieldConfigChanged, this);
             }
         }
 
         if (!wereAnyFieldsCreatedOrDeleted) {
-            wereAnyFieldsCreatedOrDeleted = u.some(removedFieldIds, fieldId => u.has(fieldIdsSet, fieldId));
+            wereAnyFieldsCreatedOrDeleted = u.some(removedFieldIds, fieldId =>
+                u.has(fieldIdsSet, fieldId),
+            );
         }
 
         if (wereAnyFieldsCreatedOrDeleted) {
@@ -645,7 +696,12 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
         this._onChange(QueryResult.WatchableKeys.cellValues, updates);
     }
-    _onCellValuesInFieldChanged(table: TableModel, key: string, recordIds: ?Array<string>, fieldId: ?string) {
+    _onCellValuesInFieldChanged(
+        table: TableModel,
+        key: string,
+        recordIds: ?Array<string>,
+        fieldId: ?string,
+    ) {
         if (!recordIds && !fieldId) {
             // If there are no updates, do nothing, since we'll handle the initial
             // callback when the record set is loaded (and we don't want to fire
@@ -686,7 +742,11 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
 
         const groupKeyComparators = groupAssigner.getGroupKeyComparators();
         const groupPathsByRowId = groupAssigner.getGroupPathsByRowId();
-        this._visList = new GroupedRowVisList(groupKeyComparators, rowVisibilityObjArray, groupPathsByRowId);
+        this._visList = new GroupedRowVisList(
+            groupKeyComparators,
+            rowVisibilityObjArray,
+            groupPathsByRowId,
+        );
     }
     _getGroupLevelsWithDeletedFieldsFiltered(): Array<GroupLevelObj> {
         invariant(this._groupLevels, 'No group levels');

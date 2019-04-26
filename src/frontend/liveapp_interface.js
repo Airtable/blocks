@@ -1,12 +1,20 @@
 // @flow
 const utils = require('block_sdk/shared/private_utils');
-const BlockMessageTypes = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
-const blockMessageParser = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_parser');
+const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
+    'client/blocks/block_message_types',
+);
+const blockMessageParser = window.__requirePrivateModuleFromAirtable(
+    'client/blocks/block_message_parser',
+);
 const invariant = require('invariant');
 const getBaseUrl = window.__requirePrivateModuleFromAirtable('client_server_shared/get_base_url');
 
 import type {RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {BlockToHostMessageType, HostToBlockMessageType, HostMethodName} from 'client/blocks/block_message_types';
+import type {
+    BlockToHostMessageType,
+    HostToBlockMessageType,
+    HostMethodName,
+} from 'client/blocks/block_message_types';
 import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
 import type {RecordDef} from 'block_sdk/shared/models/record';
 
@@ -24,21 +32,33 @@ const BatchUpdateTypes = {
 type BatchUpdateType = $Values<typeof BatchUpdateTypes>;
 
 type BatchUpdate =
-    {updateType: 'SET_CELL_VALUES', args: {
-        tableId: string,
-        cellValuesByRecordIdThenFieldId: {[string]: RecordDef},
-    }} |
-    {updateType: 'CREATE_RECORDS', args: {
-        tableId: string,
-        records: Array<RecordDataForBlocks>,
-    }} |
-    {updateType: 'DELETE_RECORDS', args: {
-        tableId: string,
-        recordIds: Array<string>,
-    }} |
-    {updateType: 'SET_MULTIPLE_KV_PATHS', args: {
-        updates: Array<BlockKvUpdate>,
-    }};
+    | {
+          updateType: 'SET_CELL_VALUES',
+          args: {
+              tableId: string,
+              cellValuesByRecordIdThenFieldId: {[string]: RecordDef},
+          },
+      }
+    | {
+          updateType: 'CREATE_RECORDS',
+          args: {
+              tableId: string,
+              records: Array<RecordDataForBlocks>,
+          },
+      }
+    | {
+          updateType: 'DELETE_RECORDS',
+          args: {
+              tableId: string,
+              recordIds: Array<string>,
+          },
+      }
+    | {
+          updateType: 'SET_MULTIPLE_KV_PATHS',
+          args: {
+              updates: Array<BlockKvUpdate>,
+          },
+      };
 
 const HostCallType = {
     STANDARD: ('standard': 'standard'),
@@ -46,17 +66,18 @@ const HostCallType = {
 };
 
 type HostCall =
-    {
-        type: typeof HostCallType.STANDARD,
-        call: {
-            callId: number,
-            methodName: HostMethodName,
-            args: Object,
-        },
-    } | {
-        type: typeof HostCallType.BATCHED_UPDATE,
-        update: BatchUpdate,
-    };
+    | {
+          type: typeof HostCallType.STANDARD,
+          call: {
+              callId: number,
+              methodName: HostMethodName,
+              args: Object,
+          },
+      }
+    | {
+          type: typeof HostCallType.BATCHED_UPDATE,
+          update: BatchUpdate,
+      };
 
 class LiveappInterface {
     _nextHostMethodCallId: number;
@@ -123,12 +144,16 @@ class LiveappInterface {
     }
     // Use `sendMessageToHost` when you don't need a response from liveapp.
     sendMessageToHost(type: BlockToHostMessageType, data: Object = {}) {
-        window.parent.postMessage({
-            blockFrameMessage: {type, data},
-        }, hostOrigin);
+        window.parent.postMessage(
+            {
+                blockFrameMessage: {type, data},
+            },
+            hostOrigin,
+        );
     }
     // Use `callHostMethodAsync` when you need a response from liveapp.
-    async callHostMethodAsync(methodName: HostMethodName, args: Object): Promise<any> { // eslint-disable-line flowtype/no-weak-types
+    async callHostMethodAsync(methodName: HostMethodName, args: Object): Promise<any> {
+        // eslint-disable-line flowtype/no-weak-types
         return new Promise((resolve, reject) => {
             const callId = this._registerHostMethodCallback((error, result) => {
                 if (error) {
@@ -165,7 +190,10 @@ class LiveappInterface {
         this._hostCallQueueTimeoutId = setTimeout(this._processHostCallQueue.bind(this), 0);
     }
     _processHostCallQueue() {
-        invariant(!this._isHostCallQueueBeingProcessed, 'host call queue must not be being processed');
+        invariant(
+            !this._isHostCallQueueBeingProcessed,
+            'host call queue must not be being processed',
+        );
         this._hostCallQueueTimeoutId = null;
         this._isHostCallQueueBeingProcessed = true;
         utils.fireAndForgetPromise(async () => {
@@ -189,7 +217,10 @@ class LiveappInterface {
         });
     }
     _processBatchedUpdateCallAsync(hostCall: HostCall): Promise<void> {
-        invariant(hostCall.type === HostCallType.BATCHED_UPDATE, 'host call type must be batched update');
+        invariant(
+            hostCall.type === HostCallType.BATCHED_UPDATE,
+            'host call type must be batched update',
+        );
         const batchUpdate = hostCall.update;
         return new Promise((resolve, reject) => {
             const callId = this._registerHostMethodCallback(error => {
@@ -211,13 +242,17 @@ class LiveappInterface {
         this.sendMessageToHost(BlockMessageTypes.BlockToHost.CALL_HOST_METHOD, hostCall.call);
     }
     _enqueueBatchUpdate(batchUpdate: BatchUpdate) {
-        const lastQueuedHostCall = this._hostCallQueue.length > 0 ?
-            this._hostCallQueue[this._hostCallQueue.length - 1] :
-            null;
+        const lastQueuedHostCall =
+            this._hostCallQueue.length > 0
+                ? this._hostCallQueue[this._hostCallQueue.length - 1]
+                : null;
 
         if (lastQueuedHostCall && lastQueuedHostCall.type === HostCallType.BATCHED_UPDATE) {
             const lastBatchUpdate = lastQueuedHostCall.update;
-            const mergedBatchUpdate = this._mergeBatchUpdatesIfPossible(lastBatchUpdate, batchUpdate);
+            const mergedBatchUpdate = this._mergeBatchUpdatesIfPossible(
+                lastBatchUpdate,
+                batchUpdate,
+            );
             if (mergedBatchUpdate) {
                 lastQueuedHostCall.update = mergedBatchUpdate;
                 return;
@@ -240,7 +275,10 @@ class LiveappInterface {
             case BatchUpdateTypes.CREATE_RECORDS:
             case BatchUpdateTypes.DELETE_RECORDS:
                 // Can merge these update types together as long as they are scoped to the same table.
-                invariant(originalBatchUpdate.updateType === newBatchUpdate.updateType, 'Incorrect updateType');
+                invariant(
+                    originalBatchUpdate.updateType === newBatchUpdate.updateType,
+                    'Incorrect updateType',
+                );
                 return newBatchUpdate.args.tableId === originalBatchUpdate.args.tableId;
 
             case BatchUpdateTypes.SET_MULTIPLE_KV_PATHS:
@@ -250,7 +288,10 @@ class LiveappInterface {
                 throw new Error('Unrecognized batch update type: ' + newBatchUpdate.updateType);
         }
     }
-    _mergeBatchUpdatesIfPossible(originalBatchUpdate: BatchUpdate, newBatchUpdate: BatchUpdate): BatchUpdate | null {
+    _mergeBatchUpdatesIfPossible(
+        originalBatchUpdate: BatchUpdate,
+        newBatchUpdate: BatchUpdate,
+    ): BatchUpdate | null {
         if (!this._canMergeBatchUpdates(originalBatchUpdate, newBatchUpdate)) {
             return null;
         }
@@ -258,29 +299,42 @@ class LiveappInterface {
         const mergedBatchUpdate = originalBatchUpdate;
         switch (newBatchUpdate.updateType) {
             case BatchUpdateTypes.SET_CELL_VALUES: {
-                invariant(mergedBatchUpdate.updateType === BatchUpdateTypes.SET_CELL_VALUES, 'Incorrect updateType');
+                invariant(
+                    mergedBatchUpdate.updateType === BatchUpdateTypes.SET_CELL_VALUES,
+                    'Incorrect updateType',
+                );
                 const {cellValuesByRecordIdThenFieldId} = newBatchUpdate.args;
 
-                for (const [recordId, cellValuesByFieldId] of utils.entries(cellValuesByRecordIdThenFieldId)) {
+                for (const [recordId, cellValuesByFieldId] of utils.entries(
+                    cellValuesByRecordIdThenFieldId,
+                )) {
                     for (const [fieldId, value] of utils.entries(cellValuesByFieldId)) {
                         if (!mergedBatchUpdate.args.cellValuesByRecordIdThenFieldId[recordId]) {
                             mergedBatchUpdate.args.cellValuesByRecordIdThenFieldId[recordId] = {};
                         }
-                        mergedBatchUpdate.args.cellValuesByRecordIdThenFieldId[recordId][fieldId] = value;
+                        mergedBatchUpdate.args.cellValuesByRecordIdThenFieldId[recordId][
+                            fieldId
+                        ] = value;
                     }
                 }
                 break;
             }
 
             case BatchUpdateTypes.CREATE_RECORDS: {
-                invariant(mergedBatchUpdate.updateType === BatchUpdateTypes.CREATE_RECORDS, 'Incorrect updateType');
+                invariant(
+                    mergedBatchUpdate.updateType === BatchUpdateTypes.CREATE_RECORDS,
+                    'Incorrect updateType',
+                );
                 const {records} = newBatchUpdate.args;
                 mergedBatchUpdate.args.records.push(...records);
                 break;
             }
 
             case BatchUpdateTypes.DELETE_RECORDS: {
-                invariant(mergedBatchUpdate.updateType === BatchUpdateTypes.DELETE_RECORDS, 'Incorrect updateType');
+                invariant(
+                    mergedBatchUpdate.updateType === BatchUpdateTypes.DELETE_RECORDS,
+                    'Incorrect updateType',
+                );
                 const {recordIds} = newBatchUpdate.args;
                 mergedBatchUpdate.args.recordIds.push(...recordIds);
                 break;
@@ -288,7 +342,10 @@ class LiveappInterface {
 
             case BatchUpdateTypes.SET_MULTIPLE_KV_PATHS: {
                 // TODO(jb): filter out any redundant updates before sending to liveapp.
-                invariant(mergedBatchUpdate.updateType === BatchUpdateTypes.SET_MULTIPLE_KV_PATHS, 'Incorrect updateType');
+                invariant(
+                    mergedBatchUpdate.updateType === BatchUpdateTypes.SET_MULTIPLE_KV_PATHS,
+                    'Incorrect updateType',
+                );
                 const {updates} = newBatchUpdate.args;
                 mergedBatchUpdate.args.updates.push(...updates);
                 break;
@@ -326,7 +383,8 @@ class LiveappInterface {
             },
         });
     }
-    setCellValues(tableId: string, cellValuesByRecordIdThenFieldId: {[string]: {[string]: any}}) { // eslint-disable-line flowtype/no-weak-types
+    setCellValues(tableId: string, cellValuesByRecordIdThenFieldId: {[string]: {[string]: any}}) {
+        // eslint-disable-line flowtype/no-weak-types
         this._enqueueBatchUpdate({
             updateType: BatchUpdateTypes.SET_CELL_VALUES,
             args: {

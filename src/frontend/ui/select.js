@@ -95,32 +95,40 @@ class Select extends React.Component<SelectProps> {
                 value,
                 disabled: true,
             });
-            console.warn(`No option for selected value in <Select>: ${String(value)}`.substr(0, 100)); // eslint-disable-line no-console
+            console.warn(
+                `No option for selected value in <Select>: ${String(value)}`.substr(0, 100),
+            ); // eslint-disable-line no-console
         }
         options.push(...originalOptions);
 
         return (
             <select
-                ref={el => this._select = el}
-                className={classNames('styled-input p1 rounded normal no-outline darken1 text-dark', {
-                    'link-quiet pointer': !this.props.disabled,
-                    quieter: this.props.disabled,
-                }, className)}
+                ref={el => (this._select = el)}
+                className={classNames(
+                    'styled-input p1 rounded normal no-outline darken1 text-dark',
+                    {
+                        'link-quiet pointer': !this.props.disabled,
+                        quieter: this.props.disabled,
+                    },
+                    className,
+                )}
                 style={{
                     ...styleForChevron,
                     ...style,
                 }}
                 value={optionValueToString(value)}
                 onChange={this._onChange}
-                {...restOfProps}>
-                {options && options.map(option => {
-                    const valueJson = optionValueToString(option.value);
-                    return (
-                        <option key={valueJson} value={valueJson} disabled={option.disabled}>
-                            {option.label}
-                        </option>
-                    );
-                })}
+                {...restOfProps}
+            >
+                {options &&
+                    options.map(option => {
+                        const valueJson = optionValueToString(option.value);
+                        return (
+                            <option key={valueJson} value={valueJson} disabled={option.disabled}>
+                                {option.label}
+                            </option>
+                        );
+                    })}
             </select>
         );
     }

@@ -57,7 +57,7 @@ class ToggleSynced extends React.Component<ToggleSyncedProps> {
                 globalConfigKey={this.props.globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <Toggle
-                        ref={el => this._toggle = el}
+                        ref={el => (this._toggle = el)}
                         value={value || false}
                         disabled={this.props.disabled || !canSetValue}
                         onChange={newValue => {

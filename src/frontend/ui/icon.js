@@ -2,7 +2,9 @@
 const React = window.__requirePrivateModuleFromAirtable('client_server_shared/react/react');
 const PropTypes = require('prop-types');
 const Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
-const iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
+const iconConfig = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/react/assets/icon_config',
+);
 
 type IconProps = {
     name: string,
@@ -19,7 +21,7 @@ type IconProps = {
 /** */
 const Icon = ({name, size, scale, fillColor, className, style, pathClassName}: IconProps) => {
     if (size === undefined) {
-        size = 16 * ((scale !== undefined) ? scale : 1);
+        size = 16 * (scale !== undefined ? scale : 1);
     }
 
     const isMicro = size <= 12;
@@ -35,13 +37,9 @@ const Icon = ({name, size, scale, fillColor, className, style, pathClassName}: I
             originalWidth={isMicro ? 12 : 16}
             originalHeight={isMicro ? 12 : 16}
             className={className}
-            style={style}>
-            <path
-                fillRule="evenodd"
-                className={pathClassName}
-                fill={fillColor}
-                d={pathData}
-            />
+            style={style}
+        >
+            <path fillRule="evenodd" className={pathClassName} fill={fillColor} d={pathData} />
         </Svg>
     );
 };

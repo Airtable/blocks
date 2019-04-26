@@ -2,12 +2,18 @@
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const createDataContainer = require('block_sdk/frontend/ui/create_data_container');
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/column_type_provider',
+);
 const Record = require('block_sdk/shared/models/record');
 const Field = require('block_sdk/shared/models/field');
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
-const CellReadModeContext = window.__requirePrivateModuleFromAirtable('client_server_shared/cell_context/cell_read_mode_context');
-const CellContextTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/cell_context/cell_context_types');
+const CellReadModeContext = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/cell_context/cell_read_mode_context',
+);
+const CellContextTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/cell_context/cell_context_types',
+);
 
 type CellRendererProps = {|
     record?: ?Record,
@@ -43,7 +49,12 @@ class CellRenderer extends React.Component<CellRendererProps> {
         this._validateProps(nextProps);
     }
     _validateProps(props: CellRendererProps) {
-        if (props.record && !props.record.isDeleted && !props.field.isDeleted && props.record.parentTable.id !== props.field.parentTable.id) {
+        if (
+            props.record &&
+            !props.record.isDeleted &&
+            !props.field.isDeleted &&
+            props.record.parentTable.id !== props.field.parentTable.id
+        ) {
             throw new Error('CellRenderer: record and field must have the same parent table');
         }
     }
@@ -57,7 +68,9 @@ class CellRenderer extends React.Component<CellRendererProps> {
         let publicCellValue;
         if (record) {
             if (cellValue !== undefined) {
-                console.warn('CellRenderer was given both record and cellValue, choosing to render record value'); // eslint-disable-line
+                console.warn(
+                    'CellRenderer was given both record and cellValue, choosing to render record value',
+                ); // eslint-disable-line
             }
 
             if (record.isDeleted) {
@@ -78,7 +91,9 @@ class CellRenderer extends React.Component<CellRendererProps> {
         }
         const privateCellValue = cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
 
-        const cellContextType = shouldWrap ? CellContextTypes.BLOCKS_READ_WRAP : CellContextTypes.BLOCKS_READ_NO_WRAP;
+        const cellContextType = shouldWrap
+            ? CellContextTypes.BLOCKS_READ_WRAP
+            : CellContextTypes.BLOCKS_READ_NO_WRAP;
 
         const rawHtml = columnTypeProvider.renderReadModeCellValue(
             privateCellValue,

@@ -17,7 +17,11 @@ class Watchable<WatchableKey: string> {
      *
      * Will log a warning if the keys given are invalid.
      */
-    watch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
+    watch(
+        keys: WatchableKey | Array<WatchableKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
@@ -53,7 +57,11 @@ class Watchable<WatchableKey: string> {
      *
      * Will log a warning if the keys given are invalid.
      */
-    unwatch(keys: WatchableKey | Array<WatchableKey>, callback: Function, context?: ?Object): Array<WatchableKey> {
+    unwatch(
+        keys: WatchableKey | Array<WatchableKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }

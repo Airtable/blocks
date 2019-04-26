@@ -47,8 +47,16 @@ class Popover extends React.Component<PopoverProps> {
     static propTypes = {
         children: PropTypes.element.isRequired,
         renderContent: PropTypes.func.isRequired,
-        placementX: PropTypes.oneOf([PopoverPlacements.LEFT, PopoverPlacements.CENTER, PopoverPlacements.RIGHT]),
-        placementY: PropTypes.oneOf([PopoverPlacements.TOP, PopoverPlacements.CENTER, PopoverPlacements.BOTTOM]),
+        placementX: PropTypes.oneOf([
+            PopoverPlacements.LEFT,
+            PopoverPlacements.CENTER,
+            PopoverPlacements.RIGHT,
+        ]),
+        placementY: PropTypes.oneOf([
+            PopoverPlacements.TOP,
+            PopoverPlacements.CENTER,
+            PopoverPlacements.BOTTOM,
+        ]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
         fitInWindowMode: PropTypes.oneOf(u.values(FitInWindowModes)),
@@ -122,10 +130,7 @@ class Popover extends React.Component<PopoverProps> {
         window.addEventListener('scroll', this._refreshContainerAsync);
 
         this._detectElementResize = createDetectElementResize();
-        this._detectElementResize.addResizeListener(
-            this._anchor,
-            this._refreshContainerAsync,
-        );
+        this._detectElementResize.addResizeListener(this._anchor, this._refreshContainerAsync);
     }
     _destroyContainer() {
         const container = this._container;
@@ -164,12 +169,7 @@ class Popover extends React.Component<PopoverProps> {
             anchorBoundingClientRect.width,
             anchorBoundingClientRect.height,
         );
-        const viewportRect = new Geometry.Rect(
-            0,
-            0,
-            window.innerWidth,
-            window.innerHeight,
-        );
+        const viewportRect = new Geometry.Rect(0, 0, window.innerWidth, window.innerHeight);
 
         // Render the tooltip to measure its size. Render it to the right of the anchor element
         // to start. Wait for the async render to complete before measuring. Otherwise, the
@@ -183,9 +183,17 @@ class Popover extends React.Component<PopoverProps> {
             measurementPopoverBoundingRect.height,
         );
 
-        let popoverRect = this._getPlacedPopoverRect(popoverSize, anchorRect, this.props.placementX, this.props.placementY);
+        let popoverRect = this._getPlacedPopoverRect(
+            popoverSize,
+            anchorRect,
+            this.props.placementX,
+            this.props.placementY,
+        );
 
-        if (this.props.fitInWindowMode === FitInWindowModes.FLIP && !this._isRectContainedWithinViewportRect(popoverRect, viewportRect)) {
+        if (
+            this.props.fitInWindowMode === FitInWindowModes.FLIP &&
+            !this._isRectContainedWithinViewportRect(popoverRect, viewportRect)
+        ) {
             // Popover rect is outside the viewport rect, and fitInWindowMode is flip, so
             // let's try flipping the popover.
             let placementX = this.props.placementX;
@@ -200,7 +208,12 @@ class Popover extends React.Component<PopoverProps> {
             } else if (popoverRect.bottom() > viewportRect.bottom()) {
                 placementY = PopoverPlacements.TOP;
             }
-            const flippedPopoverRect = this._getPlacedPopoverRect(popoverSize, anchorRect, placementX, placementY);
+            const flippedPopoverRect = this._getPlacedPopoverRect(
+                popoverSize,
+                anchorRect,
+                placementX,
+                placementY,
+            );
 
             // Check if the flipped rect is within the viewport before using it. If the flipped rect
             // is also outside the viewport, we might as well just use the original one and then nudge it.
@@ -248,15 +261,22 @@ class Popover extends React.Component<PopoverProps> {
         await this._renderPopoverAtPositionAsync(popoverRect.left(), popoverRect.top());
     }
     _isRectContainedWithinViewportRect(rect: Geometry.Rect, viewportRect: Geometry.Rect): boolean {
-        if (rect.left() < viewportRect.left() ||
+        if (
+            rect.left() < viewportRect.left() ||
             rect.right() > viewportRect.right() ||
             rect.top() < viewportRect.top() ||
-            rect.bottom() > viewportRect.bottom()) {
+            rect.bottom() > viewportRect.bottom()
+        ) {
             return false;
         }
         return true;
     }
-    _getPlacedPopoverRect(popoverSize: Geometry.Size, anchorRect: Geometry.Rect, placementX: PopoverPlacementX, placementY: PopoverPlacementY): Geometry.Rect {
+    _getPlacedPopoverRect(
+        popoverSize: Geometry.Size,
+        anchorRect: Geometry.Rect,
+        placementX: PopoverPlacementX,
+        placementY: PopoverPlacementY,
+    ): Geometry.Rect {
         const anchorCenterPoint = anchorRect.centerPoint();
 
         let x;
@@ -265,7 +285,7 @@ class Popover extends React.Component<PopoverProps> {
         } else if (placementX === PopoverPlacements.RIGHT) {
             x = anchorRect.right() + this.props.placementOffsetX;
         } else {
-            x = anchorCenterPoint.x - (popoverSize.width / 2);
+            x = anchorCenterPoint.x - popoverSize.width / 2;
         }
 
         let y;
@@ -274,7 +294,7 @@ class Popover extends React.Component<PopoverProps> {
         } else if (placementY === PopoverPlacements.BOTTOM) {
             y = anchorRect.bottom() + this.props.placementOffsetY;
         } else {
-            y = anchorCenterPoint.y - (popoverSize.height / 2);
+            y = anchorCenterPoint.y - popoverSize.height / 2;
         }
 
         return new Geometry.Rect(x, y, popoverSize.width, popoverSize.height);
@@ -282,7 +302,7 @@ class Popover extends React.Component<PopoverProps> {
     async _renderPopoverAtPositionAsync(left: number, top: number) {
         let content = this.props.renderContent();
         content = React.cloneElement(content, {
-            ref: el => this._popoverContent = el,
+            ref: el => (this._popoverContent = el),
             style: {
                 ...content.props.style,
                 position: 'absolute',
@@ -301,11 +321,12 @@ class Popover extends React.Component<PopoverProps> {
             ReactDOM.unstable_renderSubtreeIntoContainer(
                 this,
                 <div
-                    ref={el => this._background = el}
+                    ref={el => (this._background = el)}
                     className={backgroundClassName}
                     style={backgroundStyle}
                     onMouseDown={this._onMouseDown}
-                    onMouseUp={this._onMouseUp}>
+                    onMouseUp={this._onMouseUp}
+                >
                     {content}
                 </div>,
                 this._container,
@@ -319,7 +340,11 @@ class Popover extends React.Component<PopoverProps> {
         }
     }
     _onMouseUp(e: Event) {
-        if (this._mouseDownOutsidePopover && this.props.onClose && this._shouldClickingOnElementClosePopover(e.target)) {
+        if (
+            this._mouseDownOutsidePopover &&
+            this.props.onClose &&
+            this._shouldClickingOnElementClosePopover(e.target)
+        ) {
             this.props.onClose();
         }
         this._mouseDownOutsidePopover = false;

@@ -21,9 +21,12 @@ import type Field from 'block_sdk/shared/models/field';
  *     fields: [field1, field2],
  * });
  */
-function expandRecordList(records: Array<Record>, opts?: {
-    fields?: Array<Field>,
-}) {
+function expandRecordList(
+    records: Array<Record>,
+    opts?: {
+        fields?: Array<Field>,
+    },
+) {
     if (records.length === 0) {
         return;
     }
@@ -35,16 +38,18 @@ function expandRecordList(records: Array<Record>, opts?: {
         return record.id;
     });
 
-    const fieldIds = opts && opts.fields ? opts.fields.map(field => {
-        invariant(field.parentTable.id === tableId, 'all fields must belong to the same table');
-        return field.id;
-    }) : null;
+    const fieldIds =
+        opts && opts.fields
+            ? opts.fields.map(field => {
+                  invariant(
+                      field.parentTable.id === tableId,
+                      'all fields must belong to the same table',
+                  );
+                  return field.id;
+              })
+            : null;
 
-    getFrontendSdk().__airtableInterface.expandRecordList(
-        tableId,
-        recordIds,
-        fieldIds,
-    );
+    getFrontendSdk().__airtableInterface.expandRecordList(tableId, recordIds, fieldIds);
 }
 
 module.exports = expandRecordList;

@@ -10,7 +10,9 @@ const invariant = require('invariant');
 const createDetectElementResize = require('block_sdk/frontend/ui/create_detect_element_resize');
 
 // TODO(jb): don't rely on liveapp components
-const DynamicDraw = window.__requirePrivateModuleFromAirtable('client/react/ui/dynamic_draw/dynamic_draw');
+const DynamicDraw = window.__requirePrivateModuleFromAirtable(
+    'client/react/ui/dynamic_draw/dynamic_draw',
+);
 
 import type {RecordDef} from 'block_sdk/shared/models/record';
 
@@ -20,28 +22,31 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
     constructor(opts) {
         super();
 
-        this._opts = u.setAndEnforceDefaultOpts({
-            // The height of each row card.
-            rowHeight: 80,
-            // Amount of space between each row card.
-            rowSpacing: 10,
-            // A list of records or recordDefs.
-            records: [],
+        this._opts = u.setAndEnforceDefaultOpts(
+            {
+                // The height of each row card.
+                rowHeight: 80,
+                // Amount of space between each row card.
+                rowSpacing: 10,
+                // A list of records or recordDefs.
+                records: [],
 
-            // Extra space to leave at the bottom, e.g. for add record button
-            // in calendar view sidebar.
-            bottomInset: 0,
+                // Extra space to leave at the bottom, e.g. for add record button
+                // in calendar view sidebar.
+                bottomInset: 0,
 
-            // Passed through to RecordCard
-            fields: null, // array
-            view: null,
-            attachmentCoverField: undefined,
-            onRecordClick: null,
-            onRecordMouseEnter: null,
-            onRecordMouseLeave: null,
-            style: {},
-            className: '',
-        }, opts);
+                // Passed through to RecordCard
+                fields: null, // array
+                view: null,
+                attachmentCoverField: undefined,
+                onRecordClick: null,
+                onRecordMouseEnter: null,
+                onRecordMouseLeave: null,
+                style: {},
+                className: '',
+            },
+            opts,
+        );
 
         this._buildItemsList();
     }
@@ -92,18 +97,25 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
 
         const record = this._opts.records[itemIndex];
         return (
-            <DynamicDraw.ScrollViewItem
-                key={item.id || itemIndex}
-                rect={rect}>
+            <DynamicDraw.ScrollViewItem key={item.id || itemIndex} rect={rect}>
                 <RecordCard
                     record={record}
                     fields={this._opts.fields}
                     view={this._opts.view}
                     attachmentCoverField={this._opts.attachmentCoverField}
-                    onClick={this._opts.onRecordClick && (() => this._opts.onRecordClick(record, itemIndex))}
+                    onClick={
+                        this._opts.onRecordClick &&
+                        (() => this._opts.onRecordClick(record, itemIndex))
+                    }
                     getExpandRecordOptions={this._getExpandRecordOptions}
-                    onMouseEnter={this._opts.onRecordMouseEnter && (() => this._opts.onRecordMouseEnter(record, itemIndex))}
-                    onMouseLeave={this._opts.onRecordMouseLeave && (() => this._opts.onRecordMouseLeave(record, itemIndex))}
+                    onMouseEnter={
+                        this._opts.onRecordMouseEnter &&
+                        (() => this._opts.onRecordMouseEnter(record, itemIndex))
+                    }
+                    onMouseLeave={
+                        this._opts.onRecordMouseLeave &&
+                        (() => this._opts.onRecordMouseLeave(record, itemIndex))
+                    }
                     width={rect.width}
                     height={this._opts.rowHeight}
                     className={this._opts.className}
@@ -164,7 +176,7 @@ class RecordCardListWithItemProvider extends React.Component<RecordCardListWithI
     render() {
         return (
             <DynamicDraw.ScrollView
-                ref={el => this._scrollView = el}
+                ref={el => (this._scrollView = el)}
                 width={this.props.width}
                 height={this.props.height}
                 itemProvider={this.props.itemProvider}
@@ -178,7 +190,7 @@ type RecordCardListProps = {
     records: Array<RecordModel | RecordDef>,
 
     onScroll?: Event => void,
-    onRecordClick?: null | (record: RecordModel | RecordDef, index: number) => void,
+    onRecordClick?: null | ((record: RecordModel | RecordDef, index: number) => void),
     onRecordMouseEnter?: (record: RecordModel | RecordDef, index: number) => void,
     onRecordMouseLeave?: (record: RecordModel | RecordDef, index: number) => void,
 
@@ -197,10 +209,9 @@ type RecordCardListState = {|
 /** */
 class RecordCardList extends React.Component<RecordCardListProps, RecordCardListState> {
     static propTypes = {
-        records: PropTypes.arrayOf(PropTypes.oneOfType([
-            PropTypes.instanceOf(RecordModel),
-            PropTypes.object,
-        ])).isRequired,
+        records: PropTypes.arrayOf(
+            PropTypes.oneOfType([PropTypes.instanceOf(RecordModel), PropTypes.object]),
+        ).isRequired,
 
         onScroll: PropTypes.func,
         onRecordClick: PropTypes.func,
@@ -208,9 +219,7 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
         onRecordMouseLeave: PropTypes.func,
 
         // Passed through to RecordCard.
-        fields: PropTypes.arrayOf(
-            PropTypes.instanceOf(FieldModel).isRequired,
-        ),
+        fields: PropTypes.arrayOf(PropTypes.instanceOf(FieldModel).isRequired),
         view: PropTypes.instanceOf(ViewModel),
         attachmentCoverField: PropTypes.instanceOf(FieldModel),
 
@@ -283,8 +292,10 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
         const cardListWidth = this._container.clientWidth;
         const cardListHeight = this._container.clientHeight;
 
-        if (this.state.cardListWidth !== cardListWidth ||
-            this.state.cardListHeight !== cardListHeight) {
+        if (
+            this.state.cardListWidth !== cardListWidth ||
+            this.state.cardListHeight !== cardListHeight
+        ) {
             this.setState({cardListWidth, cardListHeight});
         }
     }
@@ -304,9 +315,9 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
         });
 
         return (
-            <div ref={el => this._container = el} className={className} style={style}>
+            <div ref={el => (this._container = el)} className={className} style={style}>
                 <RecordCardListWithItemProvider
-                    ref={el => this._cardList = el}
+                    ref={el => (this._cardList = el)}
                     itemProvider={itemProvider}
                     width={this.state.cardListWidth}
                     height={this.state.cardListHeight}

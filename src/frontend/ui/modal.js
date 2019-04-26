@@ -26,10 +26,13 @@ class ModalCloseButton extends React.Component<ModalCloseButtonProps> {
                 onClick={this.context.onModalClose}
                 className={this.props.className || 'pointer link-quiet'}
                 style={this.props.style}
-                tabIndex={-1}>
-                {this.props.children !== null && this.props.children !== undefined ?
-                    this.props.children :
-                    <Icon name="x" size={12} />}
+                tabIndex={-1}
+            >
+                {this.props.children !== null && this.props.children !== undefined ? (
+                    this.props.children
+                ) : (
+                    <Icon name="x" size={12} />
+                )}
             </a>
         );
     }
@@ -107,10 +110,16 @@ class Modal extends React.Component<ModalProps> {
         container.remove();
     }
     _refreshContainer() {
-        const backgroundClassName = classNames('fixed all-0 darken3 flex items-center justify-center', this.props.backgroundClassName);
+        const backgroundClassName = classNames(
+            'fixed all-0 darken3 flex items-center justify-center',
+            this.props.backgroundClassName,
+        );
         const backgroundStyle = this.props.backgroundStyle;
 
-        const contentClassName = classNames('white rounded-big overflow-auto light-scrollbar width-full stroked1 animate-bounce-in', this.props.className);
+        const contentClassName = classNames(
+            'white rounded-big overflow-auto light-scrollbar width-full stroked1 animate-bounce-in',
+            this.props.className,
+        );
         const contentStyle = {
             maxWidth: '95vw',
             maxHeight: '95vh',
@@ -123,12 +132,15 @@ class Modal extends React.Component<ModalProps> {
         ReactDOM.unstable_renderSubtreeIntoContainer(
             this,
             <div
-                ref={el => this._background = el}
+                ref={el => (this._background = el)}
                 className={backgroundClassName}
                 style={backgroundStyle}
                 onMouseDown={this._onMouseDown}
-                onMouseUp={this._onMouseUp}>
-                <div className={contentClassName} style={contentStyle}>{this.props.children}</div>
+                onMouseUp={this._onMouseUp}
+            >
+                <div className={contentClassName} style={contentStyle}>
+                    {this.props.children}
+                </div>
             </div>,
             this._container,
         );
@@ -139,7 +151,11 @@ class Modal extends React.Component<ModalProps> {
         }
     }
     _onMouseUp(e: Event) {
-        if (this._mouseDownOutsideModal && this.props.onClose && this._shouldClickingOnElementCloseModal(e.target)) {
+        if (
+            this._mouseDownOutsideModal &&
+            this.props.onClose &&
+            this._shouldClickingOnElementCloseModal(e.target)
+        ) {
             this.props.onClose();
         }
         this._mouseDownOutsideModal = false;

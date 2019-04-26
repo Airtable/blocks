@@ -8,7 +8,9 @@ const FieldPicker = require('block_sdk/frontend/ui/field_picker');
 const TableModel = require('block_sdk/shared/models/table');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
 const Synced = require('block_sdk/frontend/ui/synced');
 
 import type FieldModel from 'block_sdk/shared/models/field';
@@ -68,7 +70,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
         if (!table || table.isDeleted) {
             return null;
         }
-        return (typeof fieldId === 'string') && table ? table.getFieldById(fieldId) : null;
+        return typeof fieldId === 'string' && table ? table.getFieldById(fieldId) : null;
     }
     render() {
         const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
@@ -77,7 +79,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
                 globalConfigKey={this.props.globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <FieldPicker
-                        ref={el => this._fieldPicker = el}
+                        ref={el => (this._fieldPicker = el)}
                         disabled={this.props.disabled || !canSetValue}
                         field={this._getFieldFromGlobalConfigValue(value)}
                         onChange={field => {
@@ -94,13 +96,10 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
     }
 }
 
-module.exports = createDataContainer(FieldPickerSynced, (props: FieldPickerSyncedProps) => {
-    return [
-        {watch: props.table, key: 'fields'},
-        {watch: getSdk().base, key: 'tables'},
-    ];
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    FieldPickerSynced,
+    (props: FieldPickerSyncedProps) => {
+        return [{watch: props.table, key: 'fields'}, {watch: getSdk().base, key: 'tables'}];
+    },
+    ['focus', 'blur', 'click'],
+);

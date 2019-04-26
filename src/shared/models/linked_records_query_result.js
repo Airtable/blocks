@@ -1,7 +1,9 @@
 // @flow
 const invariant = require('invariant');
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
 const getSdk = require('block_sdk/shared/get_sdk');
 const ObjectPool = require('block_sdk/shared/models/object_pool');
 const QueryResult = require('block_sdk/shared/models/query_result');
@@ -26,20 +28,22 @@ const getLinkedTableId = (field: FieldModel): string => {
 };
 
 // eslint-disable-next-line no-use-before-define
-const pool: ObjectPool<LinkedRecordsQueryResult,
+const pool: ObjectPool<
+    LinkedRecordsQueryResult,
     {
         field: FieldModel,
         record: RecordModel,
         normalizedOpts: NormalizedQueryResultOpts,
-    }> = new ObjectPool({
-        getKeyFromObject: queryResult => queryResult._poolKey,
-        getKeyFromObjectOptions: ({field, record}) => {
-            return `${record.id}::${field.id}::${getLinkedTableId(field)}`;
-        },
-        canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-            return queryResult.isValid && queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-        },
-    });
+    },
+> = new ObjectPool({
+    getKeyFromObject: queryResult => queryResult._poolKey,
+    getKeyFromObjectOptions: ({field, record}) => {
+        return `${record.id}::${field.id}::${getLinkedTableId(field)}`;
+    },
+    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
+        return queryResult.isValid && queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
+    },
+});
 
 /**
  * Represents a set of records from a LinkedRecord cell value.

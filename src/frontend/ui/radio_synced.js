@@ -46,14 +46,16 @@ class RadioSynced extends React.Component<RadioSyncedProps> {
     }
     render() {
         const {globalConfig} = getSdk();
-        const globalConfigPathAsString = globalConfig.__formatKeyAsPath(this.props.globalConfigKey).join('~');
+        const globalConfigPathAsString = globalConfig
+            .__formatKeyAsPath(this.props.globalConfigKey)
+            .join('~');
         const name = `RadioSynced::${globalConfigPathAsString}`;
         return (
             <Synced
                 globalConfigKey={this.props.globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <input
-                        ref={el => this._input = el}
+                        ref={el => (this._input = el)}
                         type="radio"
                         name={name}
                         value={this.props.value}

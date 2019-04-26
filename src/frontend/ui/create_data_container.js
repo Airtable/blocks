@@ -148,10 +148,12 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
             this._wrappedComponent = el;
         }
         _areWatchConfigsEqual(a: WatchConfig, b: WatchConfig): boolean {
-            return a.watchable === b.watchable &&
+            return (
+                a.watchable === b.watchable &&
                 a.callback === b.callback &&
                 a.context === b.context &&
-                u.isEqual(a.key, b.key);
+                u.isEqual(a.key, b.key)
+            );
         }
         _wrapCallback(context: ?React.Component<Props>, unwrappedCallback: Function): Function {
             return (...callbackArguments) => {
@@ -172,7 +174,10 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
                 wrappedCallback: this._wrapCallback(watchConfig.context, watchConfig.callback),
             };
         }
-        _diffWatchConfigs(newWatchConfigs: Array<WatchConfig>, oldWrappedWatchConfigs: Array<WrappedWatchConfig>): {
+        _diffWatchConfigs(
+            newWatchConfigs: Array<WatchConfig>,
+            oldWrappedWatchConfigs: Array<WrappedWatchConfig>,
+        ): {
             wrappedWatchConfigsToAdd: Array<WrappedWatchConfig>,
             wrappedWatchConfigsToRemove: Array<WrappedWatchConfig>,
             resultingWrappedWatchConfigs: Array<WrappedWatchConfig>,
@@ -198,7 +203,9 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
                 const newWatchConfig = newWatchConfigs[i];
                 const oldWrappedWatchConfig = oldWrappedWatchConfigs[i];
 
-                if (!this._areWatchConfigsEqual(oldWrappedWatchConfig.watchConfig, newWatchConfig)) {
+                if (
+                    !this._areWatchConfigsEqual(oldWrappedWatchConfig.watchConfig, newWatchConfig)
+                ) {
                     wrappedWatchConfigsToRemove.push(oldWrappedWatchConfig);
 
                     // Since we're adding a brand new watch config, we need to wrap it.
@@ -278,14 +285,18 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
             return watchConfigs;
         }
         _addWatchesForWrappedWatchConfigs(wrappedWatchConfigsToAdd: Array<WrappedWatchConfig>) {
-            const viewsToWatchById: {[string]: {
-                watchable: View,
-                wrappedWatchConfigs: Array<WrappedWatchConfig>,
-            }} = {};
-            const tablesToWatchById: {[string]: {
-                watchable: Table,
-                wrappedWatchConfigs: Array<WrappedWatchConfig>,
-            }} = {};
+            const viewsToWatchById: {
+                [string]: {
+                    watchable: View,
+                    wrappedWatchConfigs: Array<WrappedWatchConfig>,
+                },
+            } = {};
+            const tablesToWatchById: {
+                [string]: {
+                    watchable: Table,
+                    wrappedWatchConfigs: Array<WrappedWatchConfig>,
+                },
+            } = {};
 
             for (const wrappedWatchConfig of wrappedWatchConfigsToAdd) {
                 const {watchConfig, wrappedCallback} = wrappedWatchConfig;
@@ -327,7 +338,9 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
                 }
             }
         }
-        _removeWatchesForWrappedWatchConfigs(wrappedWatchConfigsToRemove: Array<WrappedWatchConfig>) {
+        _removeWatchesForWrappedWatchConfigs(
+            wrappedWatchConfigsToRemove: Array<WrappedWatchConfig>,
+        ) {
             for (const {watchConfig, wrappedCallback} of wrappedWatchConfigsToRemove) {
                 const {watchable, key, context} = watchConfig;
                 watchable.unwatch(key, wrappedCallback, context);

@@ -113,13 +113,13 @@ class Viewport extends Watchable<WatchableViewportKey> {
             const minSize = this.minSize;
             this._cachedMaxFullscreenSize = {
                 width:
-                    maxFullscreenSize.width !== null && minSize.width !== null ?
-                        Math.max(maxFullscreenSize.width, minSize.width) :
-                        maxFullscreenSize.width,
+                    maxFullscreenSize.width !== null && minSize.width !== null
+                        ? Math.max(maxFullscreenSize.width, minSize.width)
+                        : maxFullscreenSize.width,
                 height:
-                    maxFullscreenSize.height !== null && minSize.height !== null ?
-                        Math.max(maxFullscreenSize.height, minSize.height) :
-                        maxFullscreenSize.height,
+                    maxFullscreenSize.height !== null && minSize.height !== null
+                        ? Math.max(maxFullscreenSize.height, minSize.height)
+                        : maxFullscreenSize.height,
             };
         }
 

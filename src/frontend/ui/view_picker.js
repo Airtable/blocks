@@ -6,7 +6,9 @@ const createDataContainer = require('block_sdk/frontend/ui/create_data_container
 const getSdk = require('block_sdk/shared/get_sdk');
 const ViewModel = require('block_sdk/shared/models/view');
 const TableModel = require('block_sdk/shared/models/table');
-const ApiViewTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/view_types/api_view_types');
+const ApiViewTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/view_types/api_view_types',
+);
 const ModelPickerSelect = require('block_sdk/frontend/ui/model_picker_select');
 const invariant = require('invariant');
 
@@ -101,7 +103,7 @@ class ViewPicker extends React.Component<ViewPickerProps> {
 
         return (
             <ModelPickerSelect
-                ref={el => this._select = el}
+                ref={el => (this._select = el)}
                 models={table.views}
                 selectedModelId={selectedView && !selectedView.isDeleted ? selectedView.id : null}
                 shouldAllowPickingModelFn={shouldAllowPickingViewFn}
@@ -118,13 +120,10 @@ class ViewPicker extends React.Component<ViewPickerProps> {
     }
 }
 
-module.exports = createDataContainer(ViewPicker, (props: ViewPickerProps) => {
-    return [
-        {watch: props.table, key: 'views'},
-        {watch: getSdk().base, key: 'tables'},
-    ];
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    ViewPicker,
+    (props: ViewPickerProps) => {
+        return [{watch: props.table, key: 'views'}, {watch: getSdk().base, key: 'tables'}];
+    },
+    ['focus', 'blur', 'click'],
+);

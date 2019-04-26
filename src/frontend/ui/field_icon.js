@@ -4,7 +4,9 @@ const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
 const Icon = require('block_sdk/frontend/ui/icon');
 const FieldModel = require('block_sdk/shared/models/field');
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/column_type_provider',
+);
 
 type FieldIconProps = {
     field: FieldModel,

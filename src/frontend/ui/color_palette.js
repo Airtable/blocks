@@ -43,14 +43,25 @@ class ColorPalette extends React.Component<ColorPaletteProps> {
         }
     }
     render() {
-        const {color, allowedColors, squareSize, squareMargin, className, style, disabled} = this.props;
+        const {
+            color,
+            allowedColors,
+            squareSize,
+            squareMargin,
+            className,
+            style,
+            disabled,
+        } = this.props;
         return (
             <div className={`${className} overflow-hidden`} style={{style}}>
-                <div className="flex flex-wrap" style={{
-                    // Add a negative margin to offset the margin of each swatch,
-                    // so the color swatches are flush with the outer container.
-                    margin: -squareMargin,
-                }}>
+                <div
+                    className="flex flex-wrap"
+                    style={{
+                        // Add a negative margin to offset the margin of each swatch,
+                        // so the color swatches are flush with the outer container.
+                        margin: -squareMargin,
+                    }}
+                >
                     {allowedColors.map(allowedColor => (
                         <label
                             key={allowedColor}
@@ -64,10 +75,19 @@ class ColorPalette extends React.Component<ColorPaletteProps> {
                             className={classNames('rounded flex items-center justify-center', {
                                 'pointer link-quiet': !disabled,
                                 quieter: disabled,
-                            })}>
-                            {allowedColor === color &&
-                                <Icon name="check" size={25} className={colorUtils.shouldUseLightTextOnColor(allowedColor) ? 'text-white' : 'text-dark'} />
-                            }
+                            })}
+                        >
+                            {allowedColor === color && (
+                                <Icon
+                                    name="check"
+                                    size={25}
+                                    className={
+                                        colorUtils.shouldUseLightTextOnColor(allowedColor)
+                                            ? 'text-white'
+                                            : 'text-dark'
+                                    }
+                                />
+                            )}
                         </label>
                     ))}
                 </div>

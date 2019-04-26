@@ -108,16 +108,21 @@ class Toggle extends React.Component<ToggleProps> {
 
         return (
             <div
-                ref={el => this._container = el}
+                ref={el => (this._container = el)}
                 onClick={onClick}
                 tabIndex={tabIndexToUse}
                 onKeyDown={onEnterOrSpaceKey(onClick)}
-                className={classNames('focusable flex-inline items-center', {
-                    'pointer link-quiet': !disabled,
-                    'noevents quieter': disabled,
-                }, className)}
+                className={classNames(
+                    'focusable flex-inline items-center',
+                    {
+                        'pointer link-quiet': !disabled,
+                        'noevents quieter': disabled,
+                    },
+                    className,
+                )}
                 style={style}
-                {...restOfProps}>
+                {...restOfProps}
+            >
                 <div
                     className={classNames('pill flex animate flex-none', {
                         'justify-start darken2': !value,
@@ -128,15 +133,16 @@ class Toggle extends React.Component<ToggleProps> {
                         height: toggleHeight,
                         width: toggleHeight * 1.6,
                         padding: togglePadding,
-                    }}>
+                    }}
+                >
                     <div
                         className="white circle flex-none"
-                        style={{width: toggleHeight - (2 * togglePadding)}}
+                        style={{width: toggleHeight - 2 * togglePadding}}
                     />
                 </div>
-                {label !== null && label !== undefined && label !== '' &&
+                {label !== null && label !== undefined && label !== '' && (
                     <div className="flex-auto ml1 normal text-dark">{label}</div>
-                }
+                )}
             </div>
         );
     }

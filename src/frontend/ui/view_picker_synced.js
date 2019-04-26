@@ -6,7 +6,9 @@ const createDataContainer = require('block_sdk/frontend/ui/create_data_container
 const getSdk = require('block_sdk/shared/get_sdk');
 const ViewPicker = require('block_sdk/frontend/ui/view_picker');
 const TableModel = require('block_sdk/shared/models/table');
-const ApiViewTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/view_types/api_view_types');
+const ApiViewTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/view_types/api_view_types',
+);
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('block_sdk/frontend/ui/global_config_synced_component_helpers');
 const Synced = require('block_sdk/frontend/ui/synced');
@@ -68,7 +70,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
         if (!table || table.isDeleted) {
             return null;
         }
-        return (typeof viewId === 'string') && table ? table.getViewById(viewId) : null;
+        return typeof viewId === 'string' && table ? table.getViewById(viewId) : null;
     }
     render() {
         const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
@@ -77,7 +79,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
                 globalConfigKey={this.props.globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <ViewPicker
-                        ref={el => this._viewPicker = el}
+                        ref={el => (this._viewPicker = el)}
                         disabled={this.props.disabled || !canSetValue}
                         view={this._getViewFromGlobalConfigValue(value)}
                         onChange={view => {
@@ -94,13 +96,10 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
     }
 }
 
-module.exports = createDataContainer(ViewPickerSynced, (props: ViewPickerSyncedProps) => {
-    return [
-        {watch: props.table, key: 'views'},
-        {watch: getSdk().base, key: 'tables'},
-    ];
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    ViewPickerSynced,
+    (props: ViewPickerSyncedProps) => {
+        return [{watch: props.table, key: 'views'}, {watch: getSdk().base, key: 'tables'}];
+    },
+    ['focus', 'blur', 'click'],
+);

@@ -22,7 +22,7 @@ type ModelPickerSelectProps<Model: AnyModel> = {
     placeholder: string,
     shouldAllowPickingNone?: boolean,
     modelKeysToWatch: Array<string>,
-    shouldAllowPickingModelFn?: (Model) => boolean,
+    shouldAllowPickingModelFn?: Model => boolean,
 };
 
 class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
@@ -68,7 +68,7 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
         } = this.props;
         return (
             <Select
-                ref={el => this._select = el}
+                ref={el => (this._select = el)}
                 value={selectedModelId}
                 onChange={this._onChange}
                 style={style}
@@ -80,7 +80,8 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
                         return {
                             value: model.id,
                             label: model.name,
-                            disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model),
+                            disabled:
+                                shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model),
                         };
                     }),
                 ]}
@@ -90,12 +91,12 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
     }
 }
 
-module.exports = createDataContainer(ModelPickerSelect, props => {
-    return props.models.map(model => {
-        return {watch: model, key: props.modelKeysToWatch};
-    });
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    ModelPickerSelect,
+    props => {
+        return props.models.map(model => {
+            return {watch: model, key: props.modelKeysToWatch};
+        });
+    },
+    ['focus', 'blur', 'click'],
+);

@@ -4,16 +4,27 @@ const invariant = require('invariant');
 const utils = require('block_sdk/shared/private_utils');
 const AbstractModel = require('block_sdk/shared/models/abstract_model');
 const Field = require('block_sdk/shared/models/field');
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/column_type_provider',
+);
 const cellValueUtils = require('block_sdk/shared/models/cell_value_utils');
-const airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shared/airtable_urls');
-const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
+const airtableUrls = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/airtable_urls',
+);
+const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/client_server_shared_config_settings',
+);
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
 
 import type {AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
-import type {BaseDataForBlocks, RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import type {
+    BaseDataForBlocks,
+    RecordDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
 import type TableType from 'block_sdk/shared/models/table';
 import type ViewType from 'block_sdk/shared/models/view';
 import type {QueryResultOpts} from 'block_sdk/shared/models/query_result';
@@ -49,9 +60,11 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
 
     static _className = 'Record';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableRecordKeys, key) ||
+        return (
+            utils.isEnumValue(WatchableRecordKeys, key) ||
             u.startsWith(key, WatchableCellValueInFieldKeyPrefix) ||
-            u.startsWith(key, WatchableColorInViewKeyPrefix);
+            u.startsWith(key, WatchableColorInViewKeyPrefix)
+        );
     }
     _parentTable: TableType;
     constructor(baseData: BaseDataForBlocks, parentTable: TableType, recordId: string) {
@@ -89,7 +102,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
                 if (publicCellValue !== undefined) {
                     const field = this.parentTable.getFieldById(fieldId);
                     invariant(field, 'Should have field');
-                    cellValuesByColumnId[fieldId] = cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
+                    cellValuesByColumnId[fieldId] = cellValueUtils.parsePublicApiCellValue(
+                        publicCellValue,
+                        field,
+                    );
                 }
             }
         }
@@ -110,13 +126,20 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
-        invariant(field.parentTable.id === this.parentTable.id, 'Field must have same parent table as record');
-        invariant(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
+        invariant(
+            field.parentTable.id === this.parentTable.id,
+            'Field must have same parent table as record',
+        );
+        invariant(
+            field.parentTable.areCellValuesLoadedForFieldId(field.id),
+            'Cell values for field are not loaded',
+        );
         const {cellValuesByFieldId} = this._data;
         if (!cellValuesByFieldId) {
             return null;
         }
-        const cellValue = cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
+        const cellValue =
+            cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
 
         if (typeof cellValue === 'object' && cellValue !== null) {
             // HACK: while we migrate our blocks to the new lookup cell value
@@ -127,12 +150,17 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
                 // flow-disable-next-line
                 cellValueForMigration.linkedRecordIds = utils.cloneDeep(cellValue.linkedRecordIds);
                 // flow-disable-next-line
-                cellValueForMigration.valuesByLinkedRecordId = utils.cloneDeep(cellValue.valuesByLinkedRecordId);
+                cellValueForMigration.valuesByLinkedRecordId = utils.cloneDeep(
+                    cellValue.valuesByLinkedRecordId,
+                );
                 invariant(Array.isArray(cellValue.linkedRecordIds), 'linkedRecordIds');
                 for (const linkedRecordId of cellValue.linkedRecordIds) {
                     invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
                     const {valuesByLinkedRecordId} = cellValue;
-                    invariant(valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object', 'valuesByLinkedRecordId');
+                    invariant(
+                        valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
+                        'valuesByLinkedRecordId',
+                    );
                     const value = valuesByLinkedRecordId[linkedRecordId];
                     if (Array.isArray(value)) {
                         for (const v of value) {
@@ -157,7 +185,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
-        invariant(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
+        invariant(
+            field.parentTable.areCellValuesLoadedForFieldId(field.id),
+            'Cell values for field are not loaded',
+        );
         const rawCellValue = this.__getRawCellValue(field.id);
 
         if (rawCellValue === null || rawCellValue === undefined) {
@@ -185,7 +216,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             const userId = appInterface.getCurrentSessionUserId();
             // NOTE: normal images must be active in the base. We don't support rendering historical values here. see attachment_object_methods.js for more
             const imagePathPrefix = 'attV3/';
-            attachmentUrl = attachmentUrl.replace(/^https:\/\/([^/]+)\//, `${ATTACHMENTS_V3_CDN_BASE_URL}/${imagePathPrefix}${userId}/${applicationId}/${attachmentId}/`);
+            attachmentUrl = attachmentUrl.replace(
+                /^https:\/\/([^/]+)\//,
+                `${ATTACHMENTS_V3_CDN_BASE_URL}/${imagePathPrefix}${userId}/${applicationId}/${attachmentId}/`,
+            );
         }
         return attachmentUrl;
     }
@@ -254,7 +288,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
      * specific cell value before calling. Will throw if the user does not have
      * permission.
      */
-    setCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed): AirtableWriteAction<void, {}> {
+    setCellValue(
+        fieldOrFieldIdOrFieldName: Field | string,
+        publicCellValue: mixed,
+    ): AirtableWriteAction<void, {}> {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');

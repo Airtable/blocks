@@ -6,7 +6,9 @@ const createDataContainer = require('block_sdk/frontend/ui/create_data_container
 const getSdk = require('block_sdk/shared/get_sdk');
 const FieldModel = require('block_sdk/shared/models/field');
 const TableModel = require('block_sdk/shared/models/table');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
 const ModelPickerSelect = require('block_sdk/frontend/ui/model_picker_select');
 const invariant = require('invariant');
 
@@ -102,16 +104,20 @@ class FieldPicker extends React.Component<FieldPickerProps> {
         // Fields are only ordered within a view, and views' column orders aren't
         // loaded by default. So we'll always list the primary field first, followed
         // by the rest of the fields in alphabetical order.
-        const models = table.fields.filter(field => field !== table.primaryField).sort((a, b) => {
-            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-        });
+        const models = table.fields
+            .filter(field => field !== table.primaryField)
+            .sort((a, b) => {
+                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+            });
         models.unshift(table.primaryField);
 
         return (
             <ModelPickerSelect
-                ref={el => this._select = el}
+                ref={el => (this._select = el)}
                 models={models}
-                selectedModelId={selectedField && !selectedField.isDeleted ? selectedField.id : null}
+                selectedModelId={
+                    selectedField && !selectedField.isDeleted ? selectedField.id : null
+                }
                 shouldAllowPickingModelFn={shouldAllowPickingFieldFn}
                 onChange={this._onChange}
                 style={style}
@@ -126,13 +132,10 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     }
 }
 
-module.exports = createDataContainer(FieldPicker, (props: FieldPickerProps) => {
-    return [
-        {watch: props.table, key: 'fields'},
-        {watch: getSdk().base, key: 'tables'},
-    ];
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    FieldPicker,
+    (props: FieldPickerProps) => {
+        return [{watch: props.table, key: 'fields'}, {watch: getSdk().base, key: 'tables'}];
+    },
+    ['focus', 'blur', 'click'],
+);

@@ -1,6 +1,8 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const BlockUndoRedoModes = window.__requirePrivateModuleFromAirtable('client/blocks/block_undo_redo_modes');
+const BlockUndoRedoModes = window.__requirePrivateModuleFromAirtable(
+    'client/blocks/block_undo_redo_modes',
+);
 
 import type {BlockUndoRedoMode} from 'client/blocks/block_undo_redo_modes';
 import type AirtableInterfaceFrontend from 'block_sdk/frontend/airtable_interface_frontend';

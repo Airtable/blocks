@@ -18,7 +18,10 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     constructor(baseData: BaseDataForBlocks, modelId: string) {
         super();
 
-        invariant(typeof modelId === 'string', `${this.constructor._className} id should be a string`);
+        invariant(
+            typeof modelId === 'string',
+            `${this.constructor._className} id should be a string`,
+        );
 
         this._baseData = baseData;
         this._id = modelId;

@@ -2,9 +2,15 @@
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('block_sdk/frontend/ui/react');
 const PropTypes = require('prop-types');
-const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
-const profilePicHelper = window.__requirePrivateModuleFromAirtable('client_server_shared/profile_pic_helper');
-const _CollaboratorToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/collaborator_token'); // TODO(kasra): don't depend on liveapp components.
+const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
+);
+const profilePicHelper = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/profile_pic_helper',
+);
+const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/components/collaborator_token',
+); // TODO(kasra): don't depend on liveapp components.
 const getSdk = require('block_sdk/shared/get_sdk');
 
 type CollaboratorTokenProps = {
@@ -29,7 +35,9 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     // formatting it nicely.
     const userInfoById = getSdk().base.__appInterface.getCollaboratorInfoById();
     const userObj = userInfoById && collaborator.id ? userInfoById[collaborator.id] : null;
-    const userObjFormattedForPublicApiV2 = userObj ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj) : null;
+    const userObjFormattedForPublicApiV2 = userObj
+        ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj)
+        : null;
 
     let userName;
     let profilePicUrl;
@@ -45,7 +53,8 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     } else {
         // Can't use helpers to get token-sized prof pic url, since we can't be sure we were
         // given an airtable url.
-        profilePicUrl = collaborator.profilePicUrl || profilePicHelper.getSizedUnknownProfilePicUrl(18);
+        profilePicUrl =
+            collaborator.profilePicUrl || profilePicHelper.getSizedUnknownProfilePicUrl(18);
         userName = collaborator.name || collaborator.email || 'Unknown';
     }
 

@@ -30,11 +30,7 @@ function expandRecord(record: Record, opts?: ExpandRecordOpts) {
         recordIds = opts.records.map(r => r.id);
     }
 
-    getFrontendSdk().__airtableInterface.expandRecord(
-        record.parentTable.id,
-        record.id,
-        recordIds,
-    );
+    getFrontendSdk().__airtableInterface.expandRecord(record.parentTable.id, record.id, recordIds);
 }
 
 module.exports = expandRecord;

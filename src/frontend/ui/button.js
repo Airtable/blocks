@@ -81,26 +81,26 @@ class Button extends React.Component<ButtonProps> {
         this._button.click();
     }
     render() {
-        const {
-            className,
-            theme,
-            disabled,
-            children,
-            ...restOfProps
-        } = this.props;
+        const {className, theme, disabled, children, ...restOfProps} = this.props;
 
         const themeClassNames = classNamesByTheme[theme] || '';
 
         return (
             <button
-                ref={el => this._button = el}
+                ref={el => (this._button = el)}
                 type="button" // Default type is "submit", which will submit the parent <form> if it exists.
                 disabled={disabled}
-                className={classNames('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
-                    'pointer link-quiet': !disabled,
-                    'noevents quieter': disabled,
-                })}
-                {...restOfProps}>
+                className={classNames(
+                    'baymax rounded big strong p1 flex-inline items-center no-outline',
+                    themeClassNames,
+                    className,
+                    {
+                        'pointer link-quiet': !disabled,
+                        'noevents quieter': disabled,
+                    },
+                )}
+                {...restOfProps}
+            >
                 {children}
             </button>
         );

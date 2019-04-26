@@ -28,11 +28,14 @@ const ProgressBar = (props: ProgressBarProps) => {
     const clampedProgress = u.clamp(progress, 0, 1);
 
     return (
-        <div className={`${className} relative pill overflow-hidden`} style={{
-            ...style,
-            height,
-            backgroundColor,
-        }}>
+        <div
+            className={`${className} relative pill overflow-hidden`}
+            style={{
+                ...style,
+                height,
+                backgroundColor,
+            }}
+        >
             <div
                 className="absolute animate top-0 left-0 height-full"
                 style={{

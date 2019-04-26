@@ -1,7 +1,13 @@
 // @flow
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/api_field_types');
-const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions');
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/column_type_provider',
+);
+const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/api_field_types',
+);
+const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/api_versions',
+);
 const getSdk = require('block_sdk/shared/get_sdk');
 const invariant = require('invariant');
 
@@ -18,7 +24,11 @@ const publicCellValueUtils = {
             PublicApiVersions.API2,
         );
     },
-    validatePublicCellValueForUpdate(newPublicCellValue: mixed, currentPublicCellValue: mixed, field: Field): CellValueValidationResult {
+    validatePublicCellValueForUpdate(
+        newPublicCellValue: mixed,
+        currentPublicCellValue: mixed,
+        field: Field,
+    ): CellValueValidationResult {
         if (columnTypeProvider.isComputed(field.__getRawType())) {
             return {isValid: false, reason: `${field.config.type} fields cannot be updated`};
         }
@@ -44,7 +54,10 @@ const publicCellValueUtils = {
         //    rather than allowing the block developer to crash liveapp by passing in a valid but non-existent
         //    record id.
         if (field.config.type === ApiFieldTypes.MULTIPLE_RECORD_LINKS) {
-            const linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(newPublicCellValue, field);
+            const linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(
+                newPublicCellValue,
+                field,
+            );
             if (!linkedRecordValidationResult.isValid) {
                 return linkedRecordValidationResult;
             }
@@ -58,7 +71,10 @@ const publicCellValueUtils = {
         }
         return publicCellValue;
     },
-    _validateLinkedRecordCellValueForUpdate(newPublicCellValue: mixed, field: Field): CellValueValidationResult {
+    _validateLinkedRecordCellValueForUpdate(
+        newPublicCellValue: mixed,
+        field: Field,
+    ): CellValueValidationResult {
         // Special case foreign records to enforce that the foreign table is
         // loaded. This let's us validate recordIds against the foreign
         // table before hitting the server.
@@ -75,18 +91,30 @@ const publicCellValueUtils = {
             return {isValid: false, reason: 'Linked table does not exist'};
         }
         if (!table.isDataLoaded) {
-            return {isValid: false, reason: 'Cannot set a record link cell value if linked table is not loaded'};
+            return {
+                isValid: false,
+                reason: 'Cannot set a record link cell value if linked table is not loaded',
+            };
         }
-        invariant(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
+        invariant(
+            Array.isArray(newPublicCellValue),
+            'Linked record cell value must be an array of objects',
+        );
         for (const foreignRecordObj of newPublicCellValue) {
-            invariant(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
+            invariant(
+                foreignRecordObj && typeof foreignRecordObj === 'object',
+                'Linked record cell value must be an array of objects',
+            );
 
             const foreignRecordId = foreignRecordObj.id;
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
             const foreignRecord = table.getRecordById(foreignRecordId);
             if (!foreignRecord) {
-                return {isValid: false, reason: `Invalid cell value: Linked record does not exist with id: ${foreignRecordId}`};
+                return {
+                    isValid: false,
+                    reason: `Invalid cell value: Linked record does not exist with id: ${foreignRecordId}`,
+                };
             }
         }
         return {isValid: true};
@@ -101,9 +129,15 @@ const publicCellValueUtils = {
         const tableId = field.config.options.linkedTableId;
         const table = getSdk().base.getTableById(tableId);
         invariant(table, 'Linked table does not exist');
-        invariant(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
+        invariant(
+            Array.isArray(newPublicCellValue),
+            'Linked record cell value must be an array of objects',
+        );
         for (const foreignRecordObj of newPublicCellValue) {
-            invariant(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
+            invariant(
+                foreignRecordObj && typeof foreignRecordObj === 'object',
+                'Linked record cell value must be an array of objects',
+            );
 
             const foreignRecordId = foreignRecordObj.id;
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');

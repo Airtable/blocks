@@ -2,13 +2,24 @@
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const Watchable = require('block_sdk/shared/watchable');
 const getSdk = require('block_sdk/shared/get_sdk');
-const blockKvHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/blocks/block_kv_helpers');
-const PermissionLevels = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_levels');
-const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
-const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtable('client_server_shared/fork_object_path_for_write_by_reference');
+const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/blocks/block_kv_helpers',
+);
+const PermissionLevels = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/permissions/permission_levels',
+);
+const permissionHelpers = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/permissions/permission_helpers',
+);
+const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/fork_object_path_for_write_by_reference',
+);
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {AbstractAirtableInterface, AirtableWriteAction} from 'block_sdk/shared/abstract_airtable_interface';
+import type {
+    AbstractAirtableInterface,
+    AirtableWriteAction,
+} from 'block_sdk/shared/abstract_airtable_interface';
 
 export type GlobalConfigKey = string | Array<string>;
 
@@ -42,7 +53,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     }
     _kvStore: {[string]: BlockKvValue};
     _airtableInterface: AbstractAirtableInterface;
-    constructor(initialKvValuesByKey: {[string]: BlockKvValue}, airtableInterface: AbstractAirtableInterface) {
+    constructor(
+        initialKvValuesByKey: {[string]: BlockKvValue},
+        airtableInterface: AbstractAirtableInterface,
+    ) {
         super();
 
         this._kvStore = initialKvValuesByKey;
@@ -83,9 +97,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /** */
     set(key: GlobalConfigKey, value: BlockKvValue): AirtableWriteAction<void, {}> {
         const path = this.__formatKeyAsPath(key);
-        return this.setPaths([
-            {path, value},
-        ]);
+        return this.setPaths([{path, value}]);
     }
     /** */
     canSetPaths(updates: Array<BlockKvUpdate>) {
@@ -127,19 +139,30 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // Before applying each update, fork the working kvStore so we can roll
         // back any changes we make.
         for (const update of updates) {
-            const updateValidationResult = blockKvHelpers.validateKvStoreUpdate(update, this._kvStore);
+            const updateValidationResult = blockKvHelpers.validateKvStoreUpdate(
+                update,
+                this._kvStore,
+            );
             if (!updateValidationResult.isValid) {
                 throw new Error(`Invalid globalConfig update: ${updateValidationResult.reason}`);
             }
 
-            forkObjectPathForWriteByReference(workingKvStore, this._kvStore, update.path, clonedObjectsSet);
+            forkObjectPathForWriteByReference(
+                workingKvStore,
+                this._kvStore,
+                update.path,
+                clonedObjectsSet,
+            );
             blockKvHelpers.applyValidatedUpdateToKvStoreByReference(workingKvStore, update);
 
             const topLevelKey = update.path[0];
             topLevelKeySet[topLevelKey] = true;
         }
 
-        const limitCheckResult = blockKvHelpers.limitCheckKvStore(workingKvStore, u.keys(topLevelKeySet));
+        const limitCheckResult = blockKvHelpers.limitCheckKvStore(
+            workingKvStore,
+            u.keys(topLevelKeySet),
+        );
         if (!limitCheckResult.isValid) {
             throw new Error(`globalConfig over limits: ${limitCheckResult.reason}`);
         }

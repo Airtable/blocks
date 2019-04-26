@@ -57,7 +57,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
         this._tablePicker.click();
     }
     _getTableFromGlobalConfigValue(tableId: mixed): TableModel | null {
-        return (typeof tableId === 'string') ? getSdk().base.getTableById(tableId) : null;
+        return typeof tableId === 'string' ? getSdk().base.getTableById(tableId) : null;
     }
     render() {
         const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
@@ -66,7 +66,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
                 globalConfigKey={this.props.globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <TablePicker
-                        ref={el => this._tablePicker = el}
+                        ref={el => (this._tablePicker = el)}
                         table={this._getTableFromGlobalConfigValue(value)}
                         disabled={this.props.disabled || !canSetValue}
                         onChange={table => {
@@ -83,12 +83,10 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
     }
 }
 
-module.exports = createDataContainer(TablePickerSynced, (props: TablePickerSyncedProps) => {
-    return [
-        {watch: getSdk().base, key: 'tables'},
-    ];
-}, [
-    'focus',
-    'blur',
-    'click',
-]);
+module.exports = createDataContainer(
+    TablePickerSynced,
+    (props: TablePickerSyncedProps) => {
+        return [{watch: getSdk().base, key: 'tables'}];
+    },
+    ['focus', 'blur', 'click'],
+);

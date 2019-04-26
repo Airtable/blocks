@@ -14,10 +14,9 @@ type ViewportConstraintProps = {
     children?: React.Node,
 };
 
-const didSizeChange = (prev: ?SizeConstraintProp, next: ?SizeConstraintProp): boolean => (
+const didSizeChange = (prev: ?SizeConstraintProp, next: ?SizeConstraintProp): boolean =>
     (prev && prev.width) !== (next && next.width) ||
-        (prev && prev.height) !== (next && next.height)
-);
+    (prev && prev.height) !== (next && next.height);
 
 /**
  * ViewportConstraint - when mounted, applies constraints to the viewport.
@@ -92,7 +91,9 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
     _setMinSizeConstraint() {
         this._removeMinSizeConstraint();
         if (this.props.minSize) {
-            this._removeMinSizeConstraintFn = getFrontendSdk().viewport.addMinSize(this.props.minSize);
+            this._removeMinSizeConstraintFn = getFrontendSdk().viewport.addMinSize(
+                this.props.minSize,
+            );
         }
     }
 

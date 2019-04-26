@@ -40,12 +40,12 @@ module.exports = function createDetectElementResize(nonce) {
     if (!attachEvent) {
         var requestFrame = (function() {
             var raf =
-            _window.requestAnimationFrame ||
-            _window.mozRequestAnimationFrame ||
-            _window.webkitRequestAnimationFrame ||
-            function(fn) {
-                return _window.setTimeout(fn, 20);
-            };
+                _window.requestAnimationFrame ||
+                _window.mozRequestAnimationFrame ||
+                _window.webkitRequestAnimationFrame ||
+                function(fn) {
+                    return _window.setTimeout(fn, 20);
+                };
             return function(fn) {
                 return raf(fn);
             };
@@ -53,10 +53,10 @@ module.exports = function createDetectElementResize(nonce) {
 
         var cancelFrame = (function() {
             var cancel =
-            _window.cancelAnimationFrame ||
-            _window.mozCancelAnimationFrame ||
-            _window.webkitCancelAnimationFrame ||
-            _window.clearTimeout;
+                _window.cancelAnimationFrame ||
+                _window.mozCancelAnimationFrame ||
+                _window.webkitCancelAnimationFrame ||
+                _window.clearTimeout;
             return function(id) {
                 return cancel(id);
             };
@@ -117,7 +117,8 @@ module.exports = function createDetectElementResize(nonce) {
         );
         pfx = '';
 
-        { // eslint-disable-line no-lone-blocks
+        {
+            // eslint-disable-line no-lone-blocks
             var elm = document.createElement('fakeelement');
             if (elm.style.animationName !== undefined) {
                 animation = true;
@@ -143,19 +144,18 @@ module.exports = function createDetectElementResize(nonce) {
             'keyframes ' +
             animationName +
             ' { from { opacity: 0; } to { opacity: 0; } } ';
-        animationStyle =
-            keyframeprefix + 'animation: 1ms ' + animationName + '; ';
+        animationStyle = keyframeprefix + 'animation: 1ms ' + animationName + '; ';
     }
 
     var createStyles = function() {
         if (!document.getElementById('detectElementResize')) {
             // opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
             var css =
-                (animationKeyframes ? animationKeyframes : '') +
-                '.resize-triggers { ' +
-                (animationStyle ? animationStyle : '') +
-                'visibility: hidden; opacity: 0; } ' +
-                '.resize-triggers, .resize-triggers > div, .contract-trigger:before { content: " "; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: -1; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }',
+                    (animationKeyframes ? animationKeyframes : '') +
+                    '.resize-triggers { ' +
+                    (animationStyle ? animationStyle : '') +
+                    'visibility: hidden; opacity: 0; } ' +
+                    '.resize-triggers, .resize-triggers > div, .contract-trigger:before { content: " "; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: -1; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }',
                 head = document.head || document.getElementsByTagName('head')[0],
                 style = document.createElement('style');
 
@@ -220,10 +220,7 @@ module.exports = function createDetectElementResize(nonce) {
         if (attachEvent) {
             element.detachEvent('onresize', fn);
         } else {
-            element.__resizeListeners__.splice(
-                element.__resizeListeners__.indexOf(fn),
-                1,
-            );
+            element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
             if (!element.__resizeListeners__.length) {
                 element.removeEventListener('scroll', scrollListener, true);
                 if (element.__resizeTriggers__.__animationListener__) {
@@ -234,9 +231,7 @@ module.exports = function createDetectElementResize(nonce) {
                     element.__resizeTriggers__.__animationListener__ = null;
                 }
                 try {
-                    element.__resizeTriggers__ = !element.removeChild(
-                        element.__resizeTriggers__,
-                    );
+                    element.__resizeTriggers__ = !element.removeChild(element.__resizeTriggers__);
                 } catch (e) {
                     // Preact compat; see developit/preact-compat/issues/228
                 }

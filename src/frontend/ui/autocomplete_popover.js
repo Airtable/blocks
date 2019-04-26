@@ -6,7 +6,11 @@ const Popover = require('block_sdk/frontend/ui/popover');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 const classNames = require('classnames');
 
-import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from 'block_sdk/frontend/ui/popover';
+import type {
+    PopoverPlacementX,
+    PopoverPlacementY,
+    FitInWindowMode,
+} from 'block_sdk/frontend/ui/popover';
 
 type AutocompleteItem = {|
     value: string,
@@ -42,17 +46,22 @@ type AutocompletePopoverState = {|
 |};
 
 /** */
-class AutocompletePopover extends React.Component<AutocompletePopoverProps, AutocompletePopoverState> {
+class AutocompletePopover extends React.Component<
+    AutocompletePopoverProps,
+    AutocompletePopoverState,
+> {
     static placements = Popover.placements;
     static fitInWindowModes = Popover.fitInWindowModes;
 
     static propTypes = {
         children: PropTypes.element.isRequired,
-        items: PropTypes.arrayOf(PropTypes.shape({
-            value: PropTypes.string.isRequired,
-            label: PropTypes.string.isRequired,
-            aliases: PropTypes.arrayOf(PropTypes.string),
-        })).isRequired,
+        items: PropTypes.arrayOf(
+            PropTypes.shape({
+                value: PropTypes.string.isRequired,
+                label: PropTypes.string.isRequired,
+                aliases: PropTypes.arrayOf(PropTypes.string),
+            }),
+        ).isRequired,
         renderItem: PropTypes.func,
         filterItems: PropTypes.func,
         onSelect: PropTypes.func.isRequired,
@@ -62,8 +71,16 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
         style: PropTypes.object,
 
         // Proxied through to Popover
-        placementX: PropTypes.oneOf([Popover.placements.LEFT, Popover.placements.CENTER, Popover.placements.RIGHT]),
-        placementY: PropTypes.oneOf([Popover.placements.TOP, Popover.placements.CENTER, Popover.placements.BOTTOM]),
+        placementX: PropTypes.oneOf([
+            Popover.placements.LEFT,
+            Popover.placements.CENTER,
+            Popover.placements.RIGHT,
+        ]),
+        placementY: PropTypes.oneOf([
+            Popover.placements.TOP,
+            Popover.placements.CENTER,
+            Popover.placements.BOTTOM,
+        ]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
         fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
@@ -78,8 +95,8 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
     _input: ?HTMLElement;
     _resultsContainer: ?HTMLElement;
     _selectedResult: ?HTMLElement;
-    _onInputChange: SyntheticInputEvent<> => void;
-    _onKeyDown: SyntheticKeyboardEvent<> => void;
+    _onInputChange: (SyntheticInputEvent<>) => void;
+    _onKeyDown: (SyntheticKeyboardEvent<>) => void;
     _resetResultsPointerEvents: () => void;
     constructor(props: AutocompletePopoverProps) {
         super(props);
@@ -124,9 +141,13 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
         } else {
             const lowercaseQuery = query.toLowerCase();
             return allItems.filter(item => {
-                return item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 || (item.aliases && u.some(item.aliases, alias => {
-                    return alias.toLowerCase().indexOf(lowercaseQuery) !== -1;
-                }));
+                return (
+                    item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 ||
+                    (item.aliases &&
+                        u.some(item.aliases, alias => {
+                            return alias.toLowerCase().indexOf(lowercaseQuery) !== -1;
+                        }))
+                );
             });
         }
     }
@@ -160,16 +181,20 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
         }
 
         const totalInCycle = itemsMatchingQuery.length + 1;
-        const focusedIndexNonNull = (focusedItemIndex === null) ? totalInCycle - 1 : focusedItemIndex;
+        const focusedIndexNonNull = focusedItemIndex === null ? totalInCycle - 1 : focusedItemIndex;
         const newFocusedIndexNonNull = (focusedIndexNonNull + delta + totalInCycle) % totalInCycle;
 
-        const newFocusedIndex = newFocusedIndexNonNull === totalInCycle - 1 ? null : newFocusedIndexNonNull;
+        const newFocusedIndex =
+            newFocusedIndexNonNull === totalInCycle - 1 ? null : newFocusedIndexNonNull;
 
-        this.setState({
-            focusedItemIndex: newFocusedIndex,
-        }, () => {
-            this._scrollToSelectedIndex();
-        });
+        this.setState(
+            {
+                focusedItemIndex: newFocusedIndex,
+            },
+            () => {
+                this._scrollToSelectedIndex();
+            },
+        );
     }
     _clearQuery() {
         this.setState({
@@ -182,13 +207,16 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
         const query = e.target.value;
         const itemsMatchingQuery = this._getItemsMatchingQuery(query);
         const focusedItemIndex = query.length && itemsMatchingQuery.length ? 0 : null;
-        this.setState({
-            query,
-            itemsMatchingQuery,
-            focusedItemIndex,
-        }, () => {
-            this._scrollToSelectedIndex();
-        });
+        this.setState(
+            {
+                query,
+                itemsMatchingQuery,
+                focusedItemIndex,
+            },
+            () => {
+                this._scrollToSelectedIndex();
+            },
+        );
     }
     _onKeyDown(e: SyntheticKeyboardEvent<>) {
         switch (e.keyCode) {
@@ -249,7 +277,7 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
             if (shouldScrollUp) {
                 resultsContainer.scrollTop += resultTop;
             } else {
-                resultsContainer.scrollTop += (resultBottom - resultsContainer.clientHeight);
+                resultsContainer.scrollTop += resultBottom - resultsContainer.clientHeight;
             }
         }
     }
@@ -257,18 +285,14 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
         if (this.props.renderItem) {
             return this.props.renderItem(item, isFocused);
         } else {
-            return (
-                <div className="p1 flex items-center">
-                    {item.label}
-                </div>
-            );
+            return <div className="p1 flex items-center">{item.label}</div>;
         }
     }
     _renderInput() {
         return (
             <div className="flex flex-auto">
                 <input
-                    ref={el => this._input = el}
+                    ref={el => (this._input = el)}
                     autoComplete="false"
                     className="p1 flex-auto"
                     style={{
@@ -295,13 +319,14 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
             const isFocused = index === this.state.focusedItemIndex;
             return (
                 <div
-                    ref={isFocused ? el => this._selectedResult = el : null}
+                    ref={isFocused ? el => (this._selectedResult = el) : null}
                     key={item.value}
                     className={classNames('pointer', {
                         darken1: isFocused,
                     })}
                     onClick={() => this._onItemSelect(item)}
-                    onMouseEnter={() => this._onMouseEnterItemAtIndex(index)}>
+                    onMouseEnter={() => this._onMouseEnterItemAtIndex(index)}
+                >
                     {this._renderItem(item, isFocused)}
                 </div>
             );
@@ -317,25 +342,32 @@ class AutocompletePopover extends React.Component<AutocompletePopoverProps, Auto
                 isOpen={this.props.isOpen}
                 renderContent={() => (
                     <div
-                        className={classNames('rounded stroked1 white overflow-hidden', this.props.className)}
-                        style={this.props.style}>
+                        className={classNames(
+                            'rounded stroked1 white overflow-hidden',
+                            this.props.className,
+                        )}
+                        style={this.props.style}
+                    >
                         {this._renderInput()}
-                        {items.length > 0 ?
+                        {items.length > 0 ? (
                             <div
-                                ref={el => this._resultsContainer = el}
+                                ref={el => (this._resultsContainer = el)}
                                 style={{maxHeight: 220}}
-                                className="relative overflow-auto">
+                                className="relative overflow-auto"
+                            >
                                 {items}
-                            </div> :
+                            </div>
+                        ) : (
                             <div className="p1 quieter">No results</div>
-                        }
+                        )}
                     </div>
                 )}
                 onClose={() => {
                     if (this.props.onClose) {
                         this.props.onClose({wasFromEscape: false});
                     }
-                }}>
+                }}
+            >
                 {this.props.children}
             </Popover>
         );

@@ -14,7 +14,7 @@ type SyncedProps = {
     render: ({
         value: mixed,
         canSetValue: boolean,
-        setValue: (BlockKvValue) => void,
+        setValue: BlockKvValue => void,
     }) => React.Element<*>,
 };
 
@@ -25,7 +25,7 @@ class Synced extends React.Component<SyncedProps> {
         render: PropTypes.func.isRequired,
     };
     props: SyncedProps;
-    _setValue: (BlockKvValue) => void;
+    _setValue: BlockKvValue => void;
     constructor(props: SyncedProps) {
         super(props);
 
@@ -47,5 +47,7 @@ class Synced extends React.Component<SyncedProps> {
 }
 
 module.exports = createDataContainer(Synced, (props: SyncedProps) => {
-    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
+    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(
+        props.globalConfigKey,
+    );
 });

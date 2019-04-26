@@ -3,7 +3,9 @@ const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/h
 const React = require('block_sdk/frontend/ui/react');
 const invariant = require('invariant');
 const Select = require('block_sdk/frontend/ui/select');
-const {SelectAndSelectButtonsSyncedPropTypes} = require('block_sdk/frontend/ui/select_and_select_buttons_helpers');
+const {
+    SelectAndSelectButtonsSyncedPropTypes,
+} = require('block_sdk/frontend/ui/select_and_select_buttons_helpers');
 const Synced = require('block_sdk/frontend/ui/synced');
 
 import type {SelectAndSelectButtonsSyncedProps as SelectSyncedProps} from 'block_sdk/frontend/ui/select_and_select_buttons_helpers';
@@ -37,7 +39,7 @@ class SelectSynced extends React.Component<SelectSyncedProps> {
                 globalConfigKey={this.props.globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <Select
-                        ref={el => this._select = el}
+                        ref={el => (this._select = el)}
                         disabled={this.props.disabled || !canSetValue}
                         value={value}
                         onChange={newValue => {

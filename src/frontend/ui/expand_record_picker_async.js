@@ -56,15 +56,15 @@ async function expandRecordPickerAsync(
     });
 
     const fieldIds =
-        opts && opts.fields ?
-            opts.fields.map(field => {
-                invariant(
-                    field.parentTable.id === tableId,
-                    'all fields must belong to the same table',
-                );
-                return field.id;
-            }) :
-            null;
+        opts && opts.fields
+            ? opts.fields.map(field => {
+                  invariant(
+                      field.parentTable.id === tableId,
+                      'all fields must belong to the same table',
+                  );
+                  return field.id;
+              })
+            : null;
 
     const sdk = getFrontendSdk();
     const shouldAllowCreatingRecord = !!opts && !!opts.shouldAllowCreatingRecord;

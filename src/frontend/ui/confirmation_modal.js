@@ -98,20 +98,23 @@ class ConfirmationModal extends React.Component<ConfirmationModalProps> {
             <Modal
                 onClose={this._onCancel}
                 className={classNames('p2', className)}
-                style={{width: 400, ...style}}>
+                style={{width: 400, ...style}}
+            >
                 <div className="mb1 strong big line-height-4">{title}</div>
                 {isReactNodeRenderable(body) && <div className="mb2">{body}</div>}
                 <div className="flex items-center justify-end">
                     <Button
                         onClick={this._onCancel}
                         theme={Button.themes.TRANSPARENT}
-                        className="mr1 border-transparent text-blue-focus">
+                        className="mr1 border-transparent text-blue-focus"
+                    >
                         {cancelButtonText}
                     </Button>
                     <Button
                         ref={this._confirmButtonRef}
                         onClick={this._onConfirm}
-                        theme={isConfirmActionDangerous ? Button.themes.RED : Button.themes.BLUE}>
+                        theme={isConfirmActionDangerous ? Button.themes.RED : Button.themes.BLUE}
+                    >
                         {confirmButtonText}
                     </Button>
                 </div>

@@ -71,13 +71,13 @@ class InputSynced extends React.Component<InputSyncedProps> {
                     // and will throw warnings when it becomes controlled.
                     const isNullOrUndefined = value === null || value === undefined;
 
-                    const valueObj = isCheckbox ?
-                        {checked: isNullOrUndefined ? false : value} :
-                        {value: isNullOrUndefined ? '' : value};
+                    const valueObj = isCheckbox
+                        ? {checked: isNullOrUndefined ? false : value}
+                        : {value: isNullOrUndefined ? '' : value};
 
                     return (
                         <Input
-                            ref={el => this._input = el}
+                            ref={el => (this._input = el)}
                             disabled={this.props.disabled || !canSetValue}
                             onChange={(e: SyntheticInputEvent<>) => {
                                 setValue(isCheckbox ? e.target.checked : e.target.value);

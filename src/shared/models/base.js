@@ -3,15 +3,26 @@ const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/h
 const utils = require('block_sdk/shared/private_utils');
 const AbstractModel = require('block_sdk/shared/models/abstract_model');
 const Table = require('block_sdk/shared/models/table');
-const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
-const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
+const permissionHelpers = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/permissions/permission_helpers',
+);
+const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
+);
 const getSdk = require('block_sdk/shared/get_sdk');
-const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable('client_server_shared/user_scoped_app_interface');
-const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
+const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/user_scoped_app_interface',
+);
+const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/client_server_shared_config_settings',
+);
 const invariant = require('invariant');
 
 import type {AbstractAirtableInterface} from 'block_sdk/shared/abstract_airtable_interface';
-import type {BaseDataForBlocks, Collaborator} from 'client_server_shared/blocks/block_sdk_init_data';
+import type {
+    BaseDataForBlocks,
+    Collaborator,
+} from 'client_server_shared/blocks/block_sdk_init_data';
 import type {AppBlanket} from 'client_server_shared/types/app_json/app_blanket';
 import type {PermissionLevel} from 'client_server_shared/permissions/permission_levels';
 import type FrontendBlockSdk from 'block_sdk/frontend/sdk';
@@ -144,8 +155,13 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             // Exclude invites and former collaborators.
             if (userInfoById) {
                 for (const userObj of u.values(userInfoById)) {
-                    if (appBlanketUserObjMethods.isActive(userObj) && !h.id.isInviteId(userObj.id)) {
-                        collaborators.push(appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj));
+                    if (
+                        appBlanketUserObjMethods.isActive(userObj) &&
+                        !h.id.isInviteId(userObj.id)
+                    ) {
+                        collaborators.push(
+                            appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj),
+                        );
                     }
                 }
             }
@@ -175,7 +191,8 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             applicationId: this.id,
             appBlanket: this._data.appBlanket,
             sortTiebreakerKey: this._data.sortTiebreakerKey,
-            currentSessionUserId: this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
+            currentSessionUserId:
+                this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
             isFeatureEnabled: featureName => this._isFeatureEnabled(featureName),
         });
     }
@@ -188,7 +205,12 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
             return null;
         } else {
             if (!this._tableModelsById[tableId]) {
-                this._tableModelsById[tableId] = new Table(this._data, this, tableId, this._airtableInterface);
+                this._tableModelsById[tableId] = new Table(
+                    this._data,
+                    this,
+                    tableId,
+                    this._airtableInterface,
+                );
             }
             return this._tableModelsById[tableId];
         }
@@ -244,12 +266,16 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         // since the Base model is shared, but Cursor exists only on the frontend.
         // TODO: change how cursor data is handled and remove this.
         if (dirtyPaths.cursorData) {
-            invariant(typeof window !== 'undefined', 'Should only update cursor data in frontend SDK');
+            invariant(
+                typeof window !== 'undefined',
+                'Should only update cursor data in frontend SDK',
+            );
             const sdk = ((getSdk(): any): FrontendBlockSdk); // eslint-disable-line flowtype/no-weak-types
             sdk.cursor.__triggerOnChangeForDirtyPaths(dirtyPaths.cursorData);
         }
     }
-    __applyChanges(changes: Array<{path: Array<string>, value: mixed}>) { // Internal method.
+    __applyChanges(changes: Array<{path: Array<string>, value: mixed}>) {
+        // Internal method.
         // After applying all changes, dirtyPaths will have the same shape as
         // the subset of this._data that changed. For example, if some table's
         // name changes, dirtyPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.

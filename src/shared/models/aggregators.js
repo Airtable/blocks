@@ -1,6 +1,8 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('client_server_shared/summary_functions');
+const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/summary_functions',
+);
 const liveappSummaryFunctionKeyByAggregatorKey = require('block_sdk/shared/models/liveapp_summary_function_key_by_aggregator_key');
 const getSdk = require('block_sdk/shared/get_sdk');
 
@@ -38,7 +40,9 @@ const aggregators: {[string]: Aggregator} = {};
 
 const aggregate = (aggregatorKey: string, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
-        throw new Error(`The ${aggregatorKey} aggregator is not available for ${field.config.type} fields`);
+        throw new Error(
+            `The ${aggregatorKey} aggregator is not available for ${field.config.type} fields`,
+        );
     }
 
     if (liveappSummaryFunctions.isNone(aggregatorKey)) {
@@ -76,8 +80,12 @@ for (const key of aggregatorKeys) {
     const liveappSummaryFunctionKey = liveappSummaryFunctionKeyByAggregatorKey[key];
     aggregators[key] = Object.freeze({
         key,
-        displayName: liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey].menuDisplayName,
-        shortDisplayName: liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey].cellDisplayName,
+        displayName:
+            liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey]
+                .menuDisplayName,
+        shortDisplayName:
+            liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey]
+                .cellDisplayName,
         aggregate: aggregate.bind(null, key),
         aggregateToString: aggregateToString.bind(null, key),
     });

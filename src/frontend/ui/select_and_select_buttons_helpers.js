@@ -16,7 +16,7 @@ type SelectOption = {
 };
 
 export type SelectAndSelectButtonsProps = {
-    onChange?: (SelectOptionValue) => void,
+    onChange?: SelectOptionValue => void,
     value: ?SelectOptionValue,
     options: Array<SelectOption>,
     disabled?: boolean,
@@ -46,35 +46,33 @@ const SelectAndSelectButtonsPropTypes = {
     onChange: PropTypes.func,
     value: SelectOptionValueProp,
     // We do more strict checks in render.
-    options: PropTypes.arrayOf(PropTypes.shape({
-        value: SelectOptionValueProp,
-        label: PropTypes.node,
-        disabled: PropTypes.bool,
-    })).isRequired,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: SelectOptionValueProp,
+            label: PropTypes.node,
+            disabled: PropTypes.bool,
+        }),
+    ).isRequired,
     disabled: PropTypes.bool,
     className: PropTypes.string,
     style: PropTypes.object,
-    tabIndex: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-    ]),
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const SelectAndSelectButtonsSyncedPropTypes = {
     globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    options: PropTypes.arrayOf(PropTypes.shape({
-        value: SelectOptionValueProp,
-        label: PropTypes.node,
-        disabled: PropTypes.bool,
-    })).isRequired,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: SelectOptionValueProp,
+            label: PropTypes.node,
+            disabled: PropTypes.bool,
+        }),
+    ).isRequired,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
     style: PropTypes.object,
     className: PropTypes.string,
-    tabIndex: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-    ]),
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const validateOptions = (options: Array<SelectOption>) => {
@@ -84,7 +82,11 @@ const validateOptions = (options: Array<SelectOption>) => {
             // will be JSON-encodable. And undefined gets coerced to the string
             // "undefined" which is confusing.
             if (typeof option.value === 'object' && option.value !== null) {
-                return {isValid: false, reason: 'option value must be a string, number, boolean, null, or undefined. Got an object.'};
+                return {
+                    isValid: false,
+                    reason:
+                        'option value must be a string, number, boolean, null, or undefined. Got an object.',
+                };
             }
         }
     }
