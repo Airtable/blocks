@@ -79,7 +79,7 @@ class BlockBuilder {
             }
             const modules = modulesByType.get(type);
             invariant(modules, 'modules');
-            modulesByType.set(type, modules.concat());
+            modulesByType.set(type, modules.concat(blockModule));
         }
 
         // Generate a dict of module type to dirpath that we can use to
