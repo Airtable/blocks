@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-console */
 const getBlockDirPath = require('../get_block_dir_path');
 const getDeveloperCredentialsEncryptedIfExistsAsync = require('../get_developer_credentials_encrypted_if_exists_async');
 const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
@@ -52,7 +53,7 @@ async function deleteDeveloperCredentialAsync(nameOfCredentialToDelete: string):
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const {credentialName} = argv;
-    const nameOfCredentialToDelete = ((credentialName: any): string);
+    const nameOfCredentialToDelete = ((credentialName: any): string); // eslint-disable-line flowtype/no-weak-types
     await deleteDeveloperCredentialAsync(nameOfCredentialToDelete);
     console.log(`Deleted '${nameOfCredentialToDelete}' credential.`);
 }

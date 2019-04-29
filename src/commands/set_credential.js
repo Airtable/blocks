@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 const invariant = require('invariant');
@@ -269,7 +270,7 @@ async function _inheritOrReEncryptCredentialValueEncryptedAsync(
     parentCredentialEncrypted: {|
         name: string,
         kmsDataKeyId: KmsDataKeyId,
-        credentialValueEncrypted: Base64 | null
+        credentialValueEncrypted: Base64 | null,
     |},
     newCredentialKmsDataKeyId: KmsDataKeyId,
 ): Promise<Base64 | null> {

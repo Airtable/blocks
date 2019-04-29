@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-console */
 const invariant = require('invariant');
 const getBlockDirPath = require('../get_block_dir_path');
 const getDeveloperCredentialsEncryptedIfExistsAsync = require('../get_developer_credentials_encrypted_if_exists_async');

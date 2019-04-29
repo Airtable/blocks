@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 require('@babel/polyfill');
 const pathToRegexp = require('path-to-regexp');
 const fsUtils = require('./fs_utils');

@@ -34,7 +34,7 @@ export type BlockModuleMetadata = BlockFrontendModuleMetadata
 export type BlockModuleWithoutCode = {|
     id: string,
     revision: number,
-    metadata: BlockModuleMetadata
-|}
+    metadata: BlockModuleMetadata,
+|};
 
 module.exports = BlockModuleTypes;

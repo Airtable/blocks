@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const path = require('path');
 const getBlockDirPath = require('../get_block_dir_path');
 const blocksConfigSettings = require('../config/block_cli_config_settings');

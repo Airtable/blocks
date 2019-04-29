@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
 const blocksConfigSettings = require('../config/block_cli_config_settings');

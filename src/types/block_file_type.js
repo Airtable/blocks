@@ -8,4 +8,4 @@ export type BlockFile = {|
     applicationId: string,
     blockId: string,
     modules: Array<BlockModuleWithoutCode>,
-|}
+|};

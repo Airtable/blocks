@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-console */
 const getDeveloperCredentialsEncryptedIfExistsAsync = require('../get_developer_credentials_encrypted_if_exists_async');
 
 import type {Argv} from 'yargs';

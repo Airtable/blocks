@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const prompt = require('prompt');
 const promisify = require('es6-promisify');
 

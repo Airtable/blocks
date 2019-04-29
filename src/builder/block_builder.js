@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');

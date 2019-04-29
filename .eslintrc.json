@@ -35,7 +35,7 @@
         "no-self-assign": "warn",
         "no-sparse-arrays": "warn",
         "no-unreachable": "warn",
-        "no-console": "off",
+        "no-console": "warn",
         "require-yield": "off",
         "array-bracket-spacing": "warn",
         "array-callback-return": "error",
@@ -151,6 +151,24 @@
             {"ignore": ["children", "className", "style"]}
         ],
         "react/react-in-jsx-scope": "error",
-        "react/self-closing-comp": "warn"
+        "react/self-closing-comp": "warn",
+        "flowtype/boolean-style": ["warn", "boolean"],
+        "flowtype/define-flow-type": "warn",
+        "flowtype/delimiter-dangle": ["warn", "always-multiline"],
+        "flowtype/generic-spacing": "warn",
+        "flowtype/no-dupe-keys": "error",
+        "flowtype/no-primitive-constructor-types": "error",
+        "flowtype/no-weak-types": ["error", {
+            "any": true,
+            "Object": false,
+            "Function": false
+        }],
+        "flowtype/object-type-delimiter": "warn",
+        "flowtype/require-valid-file-annotation": "error",
+        "flowtype/semi": "warn",
+        "flowtype/space-after-type-colon": ["warn", "always", {"allowLineBreak": true}],
+        "flowtype/space-before-generic-bracket": "warn",
+        "flowtype/space-before-type-colon": "warn",
+        "flowtype/union-intersection-spacing": "warn"
     }
 }
