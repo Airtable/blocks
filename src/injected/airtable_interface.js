@@ -24,6 +24,8 @@ export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {
 export interface AirtableInterface {
     sdkInitData: SdkInitData;
 
+    assertAllowedSdkPackageVersion(packageName: string, packageVersion: string): void;
+
     /*
      * globalConfig
      */

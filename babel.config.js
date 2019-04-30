@@ -38,5 +38,6 @@ module.exports = {
         '@babel/transform-flow-strip-types',
         '@babel/proposal-class-properties',
         ['@babel/transform-runtime', {corejs: 3}],
+        ['transform-define', require('./global_constants')],
     ],
 };

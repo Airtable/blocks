@@ -15,9 +15,6 @@ if (!React.PropTypes) {
     React.PropTypes = PropTypes; // eslint-disable-line react/no-deprecated
 }
 
-const BlockSdkVersions = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/blocks/block_sdk_versions',
-);
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
@@ -63,7 +60,7 @@ export type RunInfo = {
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
  */
 class BlockSdk {
-    static VERSION = BlockSdkVersions.FRONTEND_VERSION;
+    static VERSION = PACKAGE_VERSION;
 
     __BlockWrapperComponent: typeof BlockWrapperComponent;
 
@@ -107,6 +104,7 @@ class BlockSdk {
     reload: () => void;
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
+        airtableInterface.assertAllowedSdkPackageVersion(PACKAGE_NAME, BlockSdk.VERSION);
 
         this.__BlockWrapperComponent = BlockWrapperComponent;
         const sdkInitData = airtableInterface.sdkInitData;
