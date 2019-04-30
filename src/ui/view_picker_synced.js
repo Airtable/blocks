@@ -6,15 +6,13 @@ const createDataContainer = require('./create_data_container');
 const getSdk = require('../get_sdk');
 const ViewPicker = require('./view_picker');
 const TableModel = require('../models/table');
-const ApiViewTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/view_types/api_view_types',
-);
+const ViewTypes = require('../types/view_types');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
 const Synced = require('./synced');
 
 import type ViewModel from '../models/view';
-import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
+import type {ViewType} from '../types/view_types';
 import type {GlobalConfigKey} from '../global_config';
 
 type ViewPickerSyncedProps = {
@@ -25,7 +23,7 @@ type ViewPickerSyncedProps = {
 
     // Passed through to ViewPicker:
     shouldAllowPickingNone?: boolean,
-    allowedTypes?: Array<ApiViewType>,
+    allowedTypes?: Array<ViewType>,
     placeholder?: string,
     style?: Object,
     className?: string,
@@ -41,7 +39,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
 
         // Passed through to ViewPicker:
         shouldAllowPickingNone: PropTypes.bool,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ApiViewTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ViewTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,

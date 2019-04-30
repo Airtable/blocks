@@ -19,7 +19,7 @@ import type {BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_mo
 import type TableType from './table';
 import type FieldType from './field';
 import type RecordType from './record';
-import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
+import type {ViewType} from '../types/view_types';
 import type {QueryResultOpts} from './query_result';
 import type TableOrViewQueryResultType from './table_or_view_query_result';
 import type {AbstractAirtableInterface} from '../abstract_airtable_interface';
@@ -99,8 +99,8 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         return this._data.name;
     }
     /** The type of the view. Will not change. */
-    get type(): ApiViewType {
-        return viewTypeProvider.getApiViewType(this._data.type);
+    get type(): ViewType {
+        return viewTypeProvider.getViewTypes(this._data.type);
     }
     /** */
     get url(): string {

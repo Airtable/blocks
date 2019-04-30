@@ -7,9 +7,7 @@ const CellRenderer = require('./cell_renderer');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 const FieldModel = require('../models/field');
 const RecordModel = require('../models/record');
 const ViewModel = require('../models/view');
@@ -112,22 +110,22 @@ type RecordCardProps = {
 
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
 const FormulaicFieldTypes = {
-    [ApiFieldTypes.FORMULA]: true,
-    [ApiFieldTypes.ROLLUP]: true,
-    [ApiFieldTypes.LOOKUP]: true,
+    [FieldTypes.FORMULA]: true,
+    [FieldTypes.ROLLUP]: true,
+    [FieldTypes.LOOKUP]: true,
 };
 const isFieldFormulaic = (field: FieldModel): boolean => {
     return !!FormulaicFieldTypes[field.config.type];
 };
 const getFieldResultType = (field: FieldModel): string => {
-    if (field.config.type === ApiFieldTypes.COUNT) {
-        return ApiFieldTypes.NUMBER;
+    if (field.config.type === FieldTypes.COUNT) {
+        return FieldTypes.NUMBER;
     }
     if (isFieldFormulaic(field)) {
         invariant(field.config.options, 'options');
         if (!field.config.options.resultConfig) {
             // Formula is misconfigured.
-            return ApiFieldTypes.SINGLE_LINE_TEXT;
+            return FieldTypes.SINGLE_LINE_TEXT;
         } else {
             return field.config.options.resultConfig.type;
         }
@@ -261,7 +259,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         }
     }
     _isAttachment(field: FieldModel): boolean {
-        return getFieldResultType(field) === ApiFieldTypes.MULTIPLE_ATTACHMENTS;
+        return getFieldResultType(field) === FieldTypes.MULTIPLE_ATTACHMENTS;
     }
     _getRawCellValue(field: FieldModel): mixed {
         const {record} = this.props;
@@ -279,7 +277,7 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
     _getFirstAttachmentInField(attachmentField: FieldModel): Object | null {
         let attachmentsInField;
-        if (attachmentField.config.type === ApiFieldTypes.LOOKUP) {
+        if (attachmentField.config.type === FieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
             attachmentsInField = u.flattenDeep(
                 u.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),

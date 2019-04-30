@@ -9,12 +9,8 @@ const TableOrViewQueryResult = require('./table_or_view_query_result');
 const LinkedRecordsQueryResult = require('./linked_records_query_result');
 const aggregators = require('./aggregators');
 const recordColoring = require('./record_coloring');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
-const ApiViewTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/view_types/api_view_types',
-);
+const FieldTypes = require('../types/field_types');
+const ViewTypes = require('../types/view_types');
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
 );
@@ -41,7 +37,7 @@ const models = {
      *     field.config.type === models.fieldTypes.NUMBER
      * ));
      */
-    fieldTypes: ApiFieldTypes,
+    fieldTypes: FieldTypes,
     /**
      * @example
      * import {models} from 'airtable-block';
@@ -49,7 +45,7 @@ const models = {
      *     view.type === models.viewTypes.GRID
      * ));
      */
-    viewTypes: ApiViewTypes,
+    viewTypes: ViewTypes,
     permissionLevels: permissionHelpers.ApiPermissionLevels,
     /**
      * Helper to generate a GUID

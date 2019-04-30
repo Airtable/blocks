@@ -1,6 +1,6 @@
 // @flow
 class PrivateUtils {
-    cloneDeep<T: Object>(obj: T): T {
+    cloneDeep<T: mixed>(obj: T): T {
         return JSON.parse(JSON.stringify(obj));
     }
     values<V>(obj: {[string]: V}): Array<V> {

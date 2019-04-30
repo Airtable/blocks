@@ -6,20 +6,18 @@ const createDataContainer = require('./create_data_container');
 const getSdk = require('../get_sdk');
 const FieldModel = require('../models/field');
 const TableModel = require('../models/table');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 const ModelPickerSelect = require('./model_picker_select');
 const invariant = require('invariant');
 
-import type {ApiFieldType} from 'client_server_shared/column_types/api_field_types';
+import type {FieldType} from '../types/field_types';
 
 type FieldPickerProps = {
     table?: TableModel,
     field?: FieldModel,
     shouldAllowPickingNone?: boolean,
     onChange?: (fieldModel: FieldModel | null) => void,
-    allowedTypes?: Array<ApiFieldType>,
+    allowedTypes?: Array<FieldType>,
     placeholder?: string,
     style?: Object,
     className?: string,
@@ -33,7 +31,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
         field: PropTypes.instanceOf(FieldModel),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ApiFieldTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(FieldTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,

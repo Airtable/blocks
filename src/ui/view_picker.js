@@ -6,20 +6,18 @@ const createDataContainer = require('./create_data_container');
 const getSdk = require('../get_sdk');
 const ViewModel = require('../models/view');
 const TableModel = require('../models/table');
-const ApiViewTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/view_types/api_view_types',
-);
+const ViewTypes = require('../types/view_types');
 const ModelPickerSelect = require('./model_picker_select');
 const invariant = require('invariant');
 
-import type {ApiViewType} from 'client_server_shared/view_types/api_view_types';
+import type {ViewType} from '../types/view_types';
 
 type ViewPickerProps = {
     table?: TableModel,
     view?: ViewModel,
     shouldAllowPickingNone?: boolean,
     onChange?: (viewModel: ViewModel | null) => void,
-    allowedTypes?: Array<ApiViewType>,
+    allowedTypes?: Array<ViewType>,
     placeholder?: string,
     style?: Object,
     className?: string,
@@ -33,7 +31,7 @@ class ViewPicker extends React.Component<ViewPickerProps> {
         view: PropTypes.instanceOf(ViewModel),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ApiViewTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ViewTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,

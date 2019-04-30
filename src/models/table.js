@@ -30,7 +30,7 @@ import type {
     RecordDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
 import type Base from './base';
-import type {ApiViewType as ViewType} from 'client_server_shared/view_types/api_view_types';
+import type {ViewType} from '../types/view_types';
 import type {RecordDef} from './record';
 import type {QueryResultOpts} from './query_result';
 import type TableOrViewQueryResultType from './table_or_view_query_result';

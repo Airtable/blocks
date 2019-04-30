@@ -2,9 +2,7 @@
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_versions',
 );
@@ -53,7 +51,7 @@ const publicCellValueUtils = {
         //    we hit the server. This way, we can validate the existence of foreign records within the block
         //    rather than allowing the block developer to crash liveapp by passing in a valid but non-existent
         //    record id.
-        if (field.config.type === ApiFieldTypes.MULTIPLE_RECORD_LINKS) {
+        if (field.config.type === FieldTypes.MULTIPLE_RECORD_LINKS) {
             const linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(
                 newPublicCellValue,
                 field,
@@ -66,7 +64,7 @@ const publicCellValueUtils = {
         return {isValid: true};
     },
     normalizePublicCellValueForUpdate(publicCellValue: mixed, field: Field): mixed {
-        if (field.config.type === ApiFieldTypes.MULTIPLE_RECORD_LINKS) {
+        if (field.config.type === FieldTypes.MULTIPLE_RECORD_LINKS) {
             return this._normalizeLinkedRecordCellValueForUpdate(publicCellValue, field);
         }
         return publicCellValue;

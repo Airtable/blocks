@@ -15,9 +15,7 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
     'client_server_shared/client_server_shared_config_settings',
 );
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 
 import type {AirtableWriteAction} from '../abstract_airtable_interface';
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
@@ -145,7 +143,7 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
             // HACK: while we migrate our blocks to the new lookup cell value
             // format, make the public cell value look like an array for
             // backwards compatibility.
-            if (!Record.shouldUseNewLookupFormat && field.type === ApiFieldTypes.LOOKUP) {
+            if (!Record.shouldUseNewLookupFormat && field.type === FieldTypes.LOOKUP) {
                 const cellValueForMigration = [];
                 // flow-disable-next-line
                 cellValueForMigration.linkedRecordIds = utils.cloneDeep(cellValue.linkedRecordIds);

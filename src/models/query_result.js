@@ -2,9 +2,7 @@
 const invariant = require('invariant');
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const utils = require('../private_utils');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 const AbstractModelWithAsyncData = require('./abstract_model_with_async_data');
 const TableModel = require('./table');
 const FieldModel = require('./field');
@@ -162,9 +160,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             case RecordColorModeTypes.BY_SELECT_FIELD:
                 invariant(
-                    recordColorMode.selectField.config.type === ApiFieldTypes.SINGLE_SELECT,
+                    recordColorMode.selectField.config.type === FieldTypes.SINGLE_SELECT,
                     `Invalid field for coloring records by select field: expected a ${
-                        ApiFieldTypes.SINGLE_SELECT
+                        FieldTypes.SINGLE_SELECT
                     }, but got a ${recordColorMode.selectField.config.type}`,
                 );
                 invariant(
@@ -240,7 +238,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 return null;
             case RecordColorModeTypes.BY_SELECT_FIELD: {
-                if (recordColorMode.selectField.config.type !== ApiFieldTypes.SINGLE_SELECT) {
+                if (recordColorMode.selectField.config.type !== FieldTypes.SINGLE_SELECT) {
                     return null;
                 }
                 const value = record.getCellValue(recordColorMode.selectField);

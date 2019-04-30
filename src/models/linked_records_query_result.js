@@ -1,9 +1,7 @@
 // @flow
 const invariant = require('invariant');
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 const getSdk = require('../get_sdk');
 const ObjectPool = require('./object_pool');
 const QueryResult = require('./query_result');
@@ -64,7 +62,7 @@ class LinkedRecordsQueryResult extends QueryResult {
             'record and field must belong to the same table',
         );
         invariant(
-            field.config.type === ApiFieldTypes.MULTIPLE_RECORD_LINKS,
+            field.config.type === FieldTypes.MULTIPLE_RECORD_LINKS,
             'field must be MULTIPLE_RECORD_LINKS',
         );
         const linkedTableId = field.config.options && field.config.options.linkedTableId;
@@ -472,7 +470,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
         const type = this._field.config.type;
 
-        if (type !== ApiFieldTypes.MULTIPLE_RECORD_LINKS) {
+        if (type !== FieldTypes.MULTIPLE_RECORD_LINKS) {
             this._invalidateQueryResult();
             return;
         }

@@ -8,13 +8,11 @@ const FieldPicker = require('./field_picker');
 const TableModel = require('../models/table');
 const invariant = require('invariant');
 const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
-const ApiFieldTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/api_field_types',
-);
+const FieldTypes = require('../types/field_types');
 const Synced = require('./synced');
 
 import type FieldModel from '../models/field';
-import type {ApiFieldType} from 'client_server_shared/column_types/api_field_types';
+import type {FieldType} from '../types/field_types';
 import type {GlobalConfigKey} from '../global_config';
 
 type FieldPickerSyncedProps = {
@@ -25,7 +23,7 @@ type FieldPickerSyncedProps = {
 
     // Passed through to FieldPicker:
     shouldAllowPickingNone?: boolean,
-    allowedTypes?: Array<ApiFieldType>,
+    allowedTypes?: Array<FieldType>,
     placeholder?: string,
     style?: Object,
     className?: string,
@@ -41,7 +39,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
 
         // Passed through to FieldPicker:
         shouldAllowPickingNone: PropTypes.bool,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ApiFieldTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(FieldTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,
