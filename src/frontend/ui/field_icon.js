@@ -16,7 +16,7 @@ type FieldIconProps = {
     style?: Object,
     pathClassName?: string,
 
-    // DEPRECTED (in favor of size).
+    // DEPRECATED (in favor of size).
     scale?: number,
 };
 

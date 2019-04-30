@@ -46,7 +46,7 @@ const WatchableRecordKeys = {
 const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 // TODO: load view data when this is watched. see previous comment.
 const WatchableColorInViewKeyPrefix = 'colorInView:';
-// The string case is to accomodate cellValueInField:$FieldId.
+// The string case is to accommodate cellValueInField:$FieldId.
 type WatchableRecordKey = $Keys<typeof WatchableRecordKeys> | string;
 
 /**

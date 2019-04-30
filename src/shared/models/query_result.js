@@ -24,7 +24,7 @@ const WatchableQueryResultKeys = {
 };
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 
-// The string case is to accomodate cellValuesInField:$FieldId.
+// The string case is to accommodate cellValuesInField:$FieldId.
 export type WatchableQueryResultKey = $Keys<typeof WatchableQueryResultKeys> | string;
 
 type SortConfig = {

@@ -262,7 +262,7 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
             const watchConfigs = [];
             const dependencies = getDependencies(this.props);
             // TODO(kasra): do runtime checks for the value of `dependencies`
-            // to make sure it comforms with its flow type. If it doesn't,
+            // to make sure it conforms with its flow type. If it doesn't,
             // show a helpful error message to the block developer.
             if (dependencies) {
                 for (const dependency of dependencies) {

@@ -181,7 +181,7 @@ export default UI.createDataContainer(RootComponent, props => [
 -   Instead of using `window.localStorage` or `window.sessionStorage`, use `localStorage` and
     `sessionStorage` from `airtable-block`. Those have the same API as the native storage options,
     but will seamlessly fall back to in-memory storage when native localStorage/sessionStorage
-    aren't available due to privacy settings (e.g. when Chrome's “Block third-pary cookies” option
+    aren't available due to privacy settings (e.g. when Chrome's “Block third-party cookies” option
     is turned on). The native APIs will throw in that scenario.
 
 ```js
@@ -330,7 +330,7 @@ if (globalConfig.canSet(ConfigKeys.tableId) && runInfo.isFirstRun && !this.table
 
     // getDefaultViewOfType will return the active view if there is one and it
     // satisfies allowedViewTypes. Otherwise, it will return the first view that
-    // satisified allowedViewTypes, if any. Note that every table has at least 1
+    // satisfied allowedViewTypes, if any. Note that every table has at least 1
     // grid view.
     this.view = table.getDefaultViewOfType(allowedViewTypes);
 

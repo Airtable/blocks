@@ -49,7 +49,7 @@ const WatchableTableKeys = {
     cellValues: 'cellValues',
 };
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
-// The string case is to accomodate cellValuesInField:$FieldId.
+// The string case is to accommodate cellValuesInField:$FieldId.
 // It may also be useful to have cellValuesInView:$ViewId...
 export type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
 

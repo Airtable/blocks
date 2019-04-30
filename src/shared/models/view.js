@@ -292,7 +292,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         return color || null;
     }
     /**
-     * Get the CSS hex color for the specificed record in this view, or null if
+     * Get the CSS hex color for the specified record in this view, or null if
      * no color is available. Watch with 'recordColors'
      */
     getRecordColorHex(recordOrRecordId: string | RecordType): string | null {

@@ -605,7 +605,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             return;
         }
 
-        // NOTE: this will only ever be called if we have sorts, so it's safe to asser that we have
+        // NOTE: this will only ever be called if we have sorts, so it's safe to assert that we have
         // a vis list here.
         const visList = this._visList;
         invariant(visList, 'No vis list');

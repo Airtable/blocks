@@ -106,7 +106,7 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
         // import {reload} from 'airtable-block';
         this.reload = this.reload.bind(this);
 
-        // When localStorage/sessionStorage aren't availabe (e.g. when
+        // When localStorage/sessionStorage aren't available (e.g. when
         // "Block third-party cookies" is enabled in Chrome), we provide
         // an in-memory replacement. Otherwise, accessing window.localStorage or
         // window.sessionStorage will throw an exception.
