@@ -1,3 +1,20 @@
+# @airtable/blocks
+
+## Commands
+
+Run with `npm run <command>` or `yarn run <command>`.
+
+| Command       | Description                                                                                                          |
+| ------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `format`      | Format all files in the project with prettier                                                                        |
+| `build:clean` | Delete any build files                                                                                               |
+| `build:babel` | Transpile the contents of `src` to `dist` using Babel                                                                |
+| `build:flow`  | Use [`flow-copy-source`](https://github.com/Macil/flow-copy-source) to make `src` flowtypes available in `dist`      |
+| `build`       | Build the project. Runs `build:clean`, `build:babel`, and `build:flow`                                               |
+| `watch:babel` | Runs `build:babel` in watch mode to re-transpile files as they change                                                |
+| `watch:flow`  | Runs `build:flow` in watch mode to re-copy files as the change                                                       |
+| `watch`       | Runs `build:clean`, then concurrently runs `watch:babel` and `watch:flow` to keep `dist` up to date as files change. |
+
 ## Links
 
 -   [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
