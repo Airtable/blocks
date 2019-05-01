@@ -9,7 +9,7 @@ import type {
     CursorDataForBlocks,
 } from 'client_server_shared/blocks/block_sdk_init_data';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
-import type AirtableInterfaceFrontend from './airtable_interface_frontend';
+import type {AirtableInterface} from './injected/airtable_interface';
 
 const WatchableCursorKeys = {
     selectedRecordIds: ('selectedRecordIds': 'selectedRecordIds'),
@@ -32,8 +32,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCu
     static _shouldLoadDataForKey(key: WatchableCursorKey): boolean {
         return true;
     }
-    _airtableInterface: AirtableInterfaceFrontend;
-    constructor(baseData: BaseDataForBlocks, airtableInterface: AirtableInterfaceFrontend) {
+    _airtableInterface: AirtableInterface;
+    constructor(baseData: BaseDataForBlocks, airtableInterface: AirtableInterface) {
         super(baseData, 'cursor');
 
         this._airtableInterface = airtableInterface;

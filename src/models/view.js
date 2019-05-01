@@ -22,7 +22,7 @@ import type RecordType from './record';
 import type {ViewType} from '../types/view_types';
 import type {QueryResultOpts} from './query_result';
 import type TableOrViewQueryResultType from './table_or_view_query_result';
-import type {AbstractAirtableInterface} from '../abstract_airtable_interface';
+import type {AirtableInterface} from '../injected/airtable_interface';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -57,12 +57,12 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     _parentTable: TableType;
     _mostRecentTableLoadPromise: Promise<*> | null;
-    _airtableInterface: AbstractAirtableInterface;
+    _airtableInterface: AirtableInterface;
     constructor(
         baseData: BaseDataForBlocks,
         parentTable: TableType,
         viewId: string,
-        airtableInterface: AbstractAirtableInterface,
+        airtableInterface: AirtableInterface,
     ) {
         super(baseData, viewId);
 

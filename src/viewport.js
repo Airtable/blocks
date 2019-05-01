@@ -4,7 +4,7 @@ const Watchable = require('./watchable');
 const utils = require('./private_utils');
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
-import type AirtableInterfaceFrontend from './airtable_interface_frontend';
+import type {AirtableInterface} from './injected/airtable_interface';
 
 const WatchableViewportKeys = {
     isFullscreen: 'isFullscreen',
@@ -50,7 +50,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     _isFullscreen: boolean;
-    _airtableInterface: AirtableInterfaceFrontend;
+    _airtableInterface: AirtableInterface;
     _sizeWatchCount: number;
     _onSizeChangeDebounced: Function;
     _minSizes: Set<ViewportSizeConstraint> = new Set();
@@ -58,7 +58,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     _cachedMaxFullscreenSize: ViewportSizeConstraint | null = null;
     _cachedMinSize: ViewportSizeConstraint | null = null;
 
-    constructor(isFullscreen: boolean, airtableInterface: AirtableInterfaceFrontend) {
+    constructor(isFullscreen: boolean, airtableInterface: AirtableInterface) {
         super();
 
         this._isFullscreen = isFullscreen;

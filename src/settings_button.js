@@ -2,7 +2,7 @@
 const Watchable = require('./watchable');
 const utils = require('./private_utils');
 
-import type AirtableInterfaceFrontend from './airtable_interface_frontend';
+import type {AirtableInterface} from './injected/airtable_interface';
 
 const WatchableSettingsButtonKeys = {
     isVisible: 'isVisible',
@@ -29,8 +29,8 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
         return utils.isEnumValue(WatchableSettingsButtonKeys, key);
     }
     _isVisible: boolean;
-    _airtableInterface: AirtableInterfaceFrontend;
-    constructor(airtableInterface: AirtableInterfaceFrontend) {
+    _airtableInterface: AirtableInterface;
+    constructor(airtableInterface: AirtableInterface) {
         super();
 
         this._isVisible = false;

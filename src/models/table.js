@@ -22,7 +22,7 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
 
-import type {AbstractAirtableInterface, AirtableWriteAction} from '../abstract_airtable_interface';
+import type {AirtableInterface, AirtableWriteAction} from '../injected/airtable_interface';
 import type {RowId as RecordId} from 'client_server_shared/hyper_id';
 import type {
     BaseDataForBlocks,
@@ -88,7 +88,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     _recordModelsById: {[string]: Record};
     _cachedFieldNamesById: {[string]: string} | null;
     _primaryFieldId: string;
-    _airtableInterface: AbstractAirtableInterface;
+    _airtableInterface: AirtableInterface;
 
     // TODO: try making Field models manage their own load state?
     // There is a lot of duplication here and in AbstractModelWithAsyncData.
@@ -103,7 +103,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         baseData: BaseDataForBlocks,
         parentBase: Base,
         tableId: string,
-        airtableInterface: AbstractAirtableInterface,
+        airtableInterface: AirtableInterface,
     ) {
         super(baseData, tableId);
 

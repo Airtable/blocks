@@ -16,7 +16,7 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
 );
 
 import type {BlockKvValue, BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {AbstractAirtableInterface, AirtableWriteAction} from './abstract_airtable_interface';
+import type {AirtableInterface, AirtableWriteAction} from './injected/airtable_interface';
 
 export type GlobalConfigKey = string | Array<string>;
 
@@ -49,10 +49,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return true;
     }
     _kvStore: {[string]: BlockKvValue};
-    _airtableInterface: AbstractAirtableInterface;
+    _airtableInterface: AirtableInterface;
     constructor(
         initialKvValuesByKey: {[string]: BlockKvValue},
-        airtableInterface: AbstractAirtableInterface,
+        airtableInterface: AirtableInterface,
     ) {
         super();
 

@@ -18,7 +18,7 @@ const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleF
 );
 const invariant = require('invariant');
 
-import type {AbstractAirtableInterface} from '../abstract_airtable_interface';
+import type {AirtableInterface} from '../injected/airtable_interface';
 import type {
     BaseDataForBlocks,
     Collaborator,
@@ -61,8 +61,8 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         return utils.isEnumValue(WatchableBaseKeys, key);
     }
     _tableModelsById: {[string]: Table};
-    _airtableInterface: AbstractAirtableInterface;
-    constructor(baseData: BaseDataForBlocks, airtableInterface: AbstractAirtableInterface) {
+    _airtableInterface: AirtableInterface;
+    constructor(baseData: BaseDataForBlocks, airtableInterface: AirtableInterface) {
         super(baseData, baseData.id);
 
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.

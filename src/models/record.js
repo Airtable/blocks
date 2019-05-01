@@ -17,7 +17,7 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
 const FieldTypes = require('../types/field_types');
 
-import type {AirtableWriteAction} from '../abstract_airtable_interface';
+import type {AirtableWriteAction} from '../injected/airtable_interface';
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
 import type {
     BaseDataForBlocks,

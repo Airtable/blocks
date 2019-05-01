@@ -5,15 +5,15 @@ const BlockUndoRedoModes = window.__requirePrivateModuleFromAirtable(
 );
 
 import type {BlockUndoRedoMode} from 'client/blocks/block_undo_redo_modes';
-import type AirtableInterfaceFrontend from './airtable_interface_frontend';
+import type {AirtableInterface} from './injected/airtable_interface';
 
 class UndoRedo {
     modes = BlockUndoRedoModes;
 
-    _airtableInterface: AirtableInterfaceFrontend;
+    _airtableInterface: AirtableInterface;
     _mode: BlockUndoRedoMode = BlockUndoRedoModes.NONE;
 
-    constructor(airtableInterface: AirtableInterfaceFrontend) {
+    constructor(airtableInterface: AirtableInterface) {
         this._airtableInterface = airtableInterface;
     }
     get mode(): BlockUndoRedoMode {

@@ -18,7 +18,6 @@ if (!React.PropTypes) {
 const BlockSdkVersions = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_sdk_versions',
 );
-const AirtableInterfaceFrontend = require('./airtable_interface_frontend');
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
@@ -41,14 +40,29 @@ const BlockWrapperComponent = require('./ui/block_wrapper_component');
 const SettingsButton = require('./settings_button');
 const UndoRedo = require('./undo_redo');
 
-import type LiveappInterface from './liveapp_interface';
+import type {AirtableInterface} from './injected/airtable_interface';
 import type {BlockSdkInitData} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {BlockSdkInterface, RunInfo} from './block_sdk_interface';
+
+/**
+ * @example
+ * import {runInfo} from 'airtable-block';
+ * if (runInfo.isFirstRun) {
+ *     // The current user just installed this block.
+ *     // Take the opportunity to show any onboarding and set
+ *     // sensible defaults if the user has permission.
+ *     // For example, if the block relies on a table, it would
+ *     // make sense to set that to base.activeTable
+ * }
+ */
+export type RunInfo = {
+    isFirstRun: boolean,
+    isDevelopmentMode: boolean,
+};
 
 /**
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
  */
-class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
+class BlockSdk {
     static VERSION = BlockSdkVersions.FRONTEND_VERSION;
 
     __BlockWrapperComponent: typeof BlockWrapperComponent;
@@ -57,7 +71,7 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
     // construct them (to reduce usage of getSdk). But in some cases, that isn't
     // feasible (i.e. expandRecord, since that can be called directly from block code),
     // so we allow accessing it through getSdk().__airtableInterface for convenience.
-    __airtableInterface: AirtableInterfaceFrontend;
+    __airtableInterface: AirtableInterface;
 
     /** */
     globalConfig: GlobalConfig;
@@ -91,11 +105,11 @@ class BlockSdk implements BlockSdkInterface<AirtableInterfaceFrontend> {
     undoRedo: UndoRedo;
     /** */
     reload: () => void;
-    constructor(sdkInitData: BlockSdkInitData, liveappInterface: LiveappInterface) {
-        const airtableInterface = new AirtableInterfaceFrontend(liveappInterface);
+    constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
 
         this.__BlockWrapperComponent = BlockWrapperComponent;
+        const sdkInitData = airtableInterface.sdkInitData;
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
         this.base = new Base(sdkInitData.baseData, airtableInterface);
         this.models = models;
