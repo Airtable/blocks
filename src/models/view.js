@@ -100,7 +100,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     /** The type of the view. Will not change. */
     get type(): ViewType {
-        return viewTypeProvider.getViewTypes(this._data.type);
+        return viewTypeProvider.getApiViewType(this._data.type);
     }
     /** */
     get url(): string {

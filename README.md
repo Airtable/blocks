@@ -15,6 +15,18 @@ Run with `npm run <command>` or `yarn run <command>`.
 | `watch:flow`  | Runs `build:flow` in watch mode to re-copy files as the change                                                       |
 | `watch`       | Runs `build:clean`, then concurrently runs `watch:babel` and `watch:flow` to keep `dist` up to date as files change. |
 
+## Publishing
+
+Publish the package with [`np`](https://github.com/sindresorhus/np), which runs some extra checks
+and makes sure tags etc. get pushed to GitHub. Whilst we're in pre-alpha, every version bump can be
+`patch` - we can start following semver later.
+
+Publish using this command:
+
+```sh
+npx np patch --any-branch
+```
+
 ## Links
 
 -   [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
