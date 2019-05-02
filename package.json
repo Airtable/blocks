@@ -3,6 +3,9 @@
     "version": "0.0.2",
     "description": "Airtable Blocks SDK",
     "main": "dist/cjs/index.js",
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "prepare": "npm run build",
         "flow": "flow",
