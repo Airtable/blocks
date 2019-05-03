@@ -1,6 +1,5 @@
 // @flow
 import getSdk from '../get_sdk';
-
 import type Record from '../models/record';
 
 export type ExpandRecordOpts = {

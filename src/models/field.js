@@ -1,12 +1,19 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+import {
+    type BaseDataForBlocks,
+    type FieldDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type ColumnType} from 'client_server_shared/column_types/column_types';
 import utils from '../private_utils';
 import AbstractModel from './abstract_model';
+import Aggregators, {type Aggregator} from './aggregators';
+import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
+import type TableType from './table';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-import Aggregators from './aggregators';
-import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
 const ColumnTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_types',
 );
@@ -16,14 +23,6 @@ const ApiCellFormats = window.__requirePrivateModuleFromAirtable(
 const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_versions',
 );
-
-import type {
-    BaseDataForBlocks,
-    FieldDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import type TableType from './table';
-import type {Aggregator} from './aggregators';
-import type {ColumnType} from 'client_server_shared/column_types/column_types';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.

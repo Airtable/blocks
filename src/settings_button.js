@@ -1,9 +1,7 @@
 // @flow
 import Watchable from './watchable';
-
 import utils from './private_utils';
-
-import type {AirtableInterface} from './injected/airtable_interface';
+import {type AirtableInterface} from './injected/airtable_interface';
 
 const WatchableSettingsButtonKeys = {
     isVisible: 'isVisible',

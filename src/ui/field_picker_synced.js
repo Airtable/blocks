@@ -1,19 +1,18 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-import React from './react';
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
-import getSdk from '../get_sdk';
-import FieldPicker from './field_picker';
-import TableModel from '../models/table';
 import invariant from 'invariant';
-import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-import FieldTypes from '../types/field_types';
-import Synced from './synced';
-
+import * as React from 'react';
+import TableModel from '../models/table';
+import getSdk from '../get_sdk';
+import FieldTypes, {type FieldType} from '../types/field_types';
 import type FieldModel from '../models/field';
-import type {FieldType} from '../types/field_types';
-import type {GlobalConfigKey} from '../global_config';
+import {type GlobalConfigKey} from '../global_config';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import FieldPicker from './field_picker';
+import Synced from './synced';
+import createDataContainer from './create_data_container';
+
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type FieldPickerSyncedProps = {
     table?: TableModel,

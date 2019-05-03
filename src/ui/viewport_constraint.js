@@ -1,7 +1,7 @@
 // @flow
-import React from './react';
 
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import getSdk from '../get_sdk';
 
 type SizeConstraintProp = {

@@ -1,12 +1,11 @@
 // @flow
-import React from './react';
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
+import {type BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
+import * as React from 'react';
 import getSdk from '../get_sdk';
+import {type GlobalConfigKey} from '../global_config';
+import createDataContainer from './create_data_container';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-
-import type {GlobalConfigKey} from '../global_config';
-import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
 
 type SyncedProps = {
     globalConfigKey: GlobalConfigKey,

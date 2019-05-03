@@ -1,7 +1,6 @@
 // @flow
-import React from './react';
-
 import PropTypes from 'prop-types';
+import * as React from 'react';
 
 type Props = {
     href: string,

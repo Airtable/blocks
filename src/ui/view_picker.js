@@ -1,16 +1,15 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-import React from './react';
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
+import invariant from 'invariant';
+import * as React from 'react';
 import getSdk from '../get_sdk';
 import ViewModel from '../models/view';
 import TableModel from '../models/table';
-import ViewTypes from '../types/view_types';
+import ViewTypes, {type ViewType} from '../types/view_types';
 import ModelPickerSelect from './model_picker_select';
-import invariant from 'invariant';
+import createDataContainer from './create_data_container';
 
-import type {ViewType} from '../types/view_types';
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type ViewPickerProps = {
     table?: TableModel,

@@ -1,9 +1,10 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import invariant from 'invariant';
+import * as React from 'react';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 export type InputValue = string | boolean | number;
 

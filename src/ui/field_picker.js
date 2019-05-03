@@ -1,16 +1,15 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-import React from './react';
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
+import invariant from 'invariant';
+import * as React from 'react';
 import getSdk from '../get_sdk';
 import FieldModel from '../models/field';
 import TableModel from '../models/table';
-import FieldTypes from '../types/field_types';
+import FieldTypes, {type FieldType} from '../types/field_types';
 import ModelPickerSelect from './model_picker_select';
-import invariant from 'invariant';
+import createDataContainer from './create_data_container';
 
-import type {FieldType} from '../types/field_types';
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type FieldPickerProps = {
     table?: TableModel,

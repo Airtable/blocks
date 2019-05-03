@@ -1,7 +1,9 @@
 // @flow
+import PropTypes from 'prop-types'; // TODO(kasra): don't depend on liveapp components.
+import * as React from 'react';
+import getSdk from '../get_sdk';
+
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
-import PropTypes from 'prop-types';
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
@@ -10,8 +12,7 @@ const profilePicHelper = window.__requirePrivateModuleFromAirtable(
 );
 const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/collaborator_token',
-); // TODO(kasra): don't depend on liveapp components.
-import getSdk from '../get_sdk';
+);
 
 type CollaboratorTokenProps = {
     collaborator: {

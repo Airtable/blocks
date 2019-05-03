@@ -1,12 +1,13 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
-import ReactDOM from './react-dom';
 import PropTypes from 'prop-types';
-const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 import classNames from 'classnames';
 import invariant from 'invariant';
+import ReactDOM from 'react-dom';
+import * as React from 'react';
 import createDetectElementResize from './create_detect_element_resize';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 
 const PopoverPlacements = {
     TOP: ('top': 'top'),
@@ -163,7 +164,7 @@ class Popover extends React.Component<PopoverProps> {
         }
 
         const anchor = this._anchor;
-        invariant(anchor, 'No anchor');
+        invariant(anchor instanceof Element, 'No anchor');
         const anchorBoundingClientRect = anchor.getBoundingClientRect();
         const anchorRect = new Geometry.Rect(
             anchorBoundingClientRect.left,

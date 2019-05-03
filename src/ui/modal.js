@@ -1,11 +1,10 @@
 // @flow
-import React from './react';
-
-import ReactDOM from './react-dom';
 import PropTypes from 'prop-types';
-import Icon from './icon';
 import classNames from 'classnames';
 import invariant from 'invariant';
+import * as React from 'react';
+import ReactDOM from 'react-dom';
+import Icon from './icon';
 
 type ModalCloseButtonProps = {|
     className?: string,

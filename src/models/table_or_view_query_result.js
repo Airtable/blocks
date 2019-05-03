@@ -1,4 +1,18 @@
 // @flow
+import invariant from 'invariant';
+import {type GroupLevelObj} from 'client_server_shared/types/view_config/group_level_obj';
+import TableModel, {type WatchableTableKey} from './table';
+import ViewModel, {type WatchableViewKey} from './view';
+import QueryResult, {
+    type WatchableQueryResultKey,
+    type QueryResultOpts,
+    type NormalizedQueryResultOpts,
+} from './query_result';
+import ObjectPool from './object_pool';
+import {ModeTypes as RecordColorModeTypes} from './record_coloring';
+import type FieldModel from './field';
+import type RecordModel from './record';
+
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/vis_lists/grouped_row_vis_list',
@@ -6,23 +20,6 @@ const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
 const GroupAssigner = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/filter_and_sort/group_assigner',
 );
-import TableModel from './table';
-import ViewModel from './view';
-import invariant from 'invariant';
-import QueryResult from './query_result';
-import ObjectPool from './object_pool';
-import {ModeTypes as RecordColorModeTypes} from './record_coloring';
-
-import type {GroupLevelObj} from 'client_server_shared/types/view_config/group_level_obj';
-import type {WatchableTableKey} from './table';
-import type {WatchableViewKey} from './view';
-import type FieldModel from './field';
-import type RecordModel from './record';
-import type {
-    WatchableQueryResultKey,
-    QueryResultOpts,
-    NormalizedQueryResultOpts,
-} from './query_result';
 
 type TableOrViewQueryResultData = {
     recordIds: Array<string> | null, // null if data isn't loaded (or if it hasn't been lazily initialized).

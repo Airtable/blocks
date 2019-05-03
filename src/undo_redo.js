@@ -1,11 +1,11 @@
 // @flow
+import {type BlockUndoRedoMode} from 'client/blocks/block_undo_redo_modes';
+import {type AirtableInterface} from './injected/airtable_interface';
+
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const BlockUndoRedoModes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_undo_redo_modes',
 );
-
-import type {BlockUndoRedoMode} from 'client/blocks/block_undo_redo_modes';
-import type {AirtableInterface} from './injected/airtable_interface';
 
 class UndoRedo {
     modes = BlockUndoRedoModes;

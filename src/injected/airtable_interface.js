@@ -1,7 +1,7 @@
 // @flow
-import type {BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import type {RecordDef} from '../models/record';
-import type {RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
+import {type RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type RecordDef} from '../models/record';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 

@@ -1,16 +1,15 @@
 // @flow
+import {
+    type BaseDataForBlocks,
+    type CursorDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type RowId as RecordId} from 'client_server_shared/hyper_id';
 import utils from './private_utils';
-
-const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
 import Record from './models/record';
+import {type AirtableInterface} from './injected/airtable_interface';
 
-import type {
-    BaseDataForBlocks,
-    CursorDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {RowId as RecordId} from 'client_server_shared/hyper_id';
-import type {AirtableInterface} from './injected/airtable_interface';
+const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 const WatchableCursorKeys = {
     selectedRecordIds: ('selectedRecordIds': 'selectedRecordIds'),

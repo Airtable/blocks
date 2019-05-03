@@ -6,7 +6,7 @@
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "parser": "babel-eslint",
-    "plugins": ["airtable", "react", "flowtype", "react-hooks"],
+    "plugins": ["airtable", "react", "flowtype", "react-hooks", "import"],
     "settings": {
         "react": {
             "version": "16.8"
@@ -33,6 +33,7 @@
         "no-constant-condition": "error",
         "no-debugger": "error",
         "no-div-regex": "error",
+        "no-duplicate-imports": "error",
         "no-empty": "error",
         "no-eq-null": "error",
         "no-eval": "error",
@@ -103,7 +104,11 @@
         "flowtype/no-primitive-constructor-types": "error",
         "flowtype/no-weak-types": "warn",
         "flowtype/require-valid-file-annotation": ["error", "always"],
+        "flowtype/type-import-style": ["error", "identifier", {"ignoreTypeDefault": true}],
         "flowtype/use-flow-type": "error",
+
+        "import/first": "error",
+        "import/order": "error",
 
         "react-hooks/exhaustive-deps": "warn",
         "react-hooks/rules-of-hooks": "error",

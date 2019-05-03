@@ -1,16 +1,14 @@
 // @flow
 import invariant from 'invariant';
-import React from './react';
 import classNames from 'classnames';
-
+import * as React from 'react';
 import {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
     stringToOptionValue,
+    type SelectAndSelectButtonsProps as SelectProps,
 } from './select_and_select_buttons_helpers';
-
-import type {SelectAndSelectButtonsProps as SelectProps} from './select_and_select_buttons_helpers';
 
 const styleForChevron = {
     // eslint-disable-next-line quotes

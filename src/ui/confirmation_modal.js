@@ -1,10 +1,11 @@
 // @flow
-import React from './react';
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import * as React from 'react';
 import Modal from './modal';
 import Button from './button';
+
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 type ConfirmationModalProps = {|

@@ -1,13 +1,13 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
 import PropTypes from 'prop-types';
+import invariant from 'invariant';
+import * as React from 'react';
+import {type GlobalConfigKey} from '../global_config';
 import Input from './input';
 import Synced from './synced';
-import invariant from 'invariant';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-import type {GlobalConfigKey} from '../global_config';
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 type InputSyncedProps = {
     type?: string,

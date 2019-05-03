@@ -1,12 +1,11 @@
 // @flow
-import React from './react';
-
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
+import invariant from 'invariant';
+import * as React from 'react';
 import getSdk from '../get_sdk';
 import TableModel from '../models/table';
+import createDataContainer from './create_data_container';
 import ModelPickerSelect from './model_picker_select';
-import invariant from 'invariant';
 
 type TablePickerProps = {
     table?: TableModel,

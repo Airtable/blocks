@@ -1,13 +1,11 @@
 // @flow
-import React from './react';
-
 import PropTypes from 'prop-types';
-import getSdk from '../get_sdk';
 import invariant from 'invariant';
+import * as React from 'react';
+import getSdk from '../get_sdk';
+import {type GlobalConfigKey} from '../global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
-
-import type {GlobalConfigKey} from '../global_config';
 
 type RadioSyncedProps = {
     globalConfigKey: GlobalConfigKey,

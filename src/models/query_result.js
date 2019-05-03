@@ -1,18 +1,21 @@
 // @flow
 import invariant from 'invariant';
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+import {type Color} from 'client_server_shared/types/view_config/color_config_obj';
+import {type BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 import utils from '../private_utils';
 import FieldTypes from '../types/field_types';
+import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type TableModel from './table';
 import FieldModel from './field';
 import type RecordModel from './record';
-import {ModeTypes as RecordColorModeTypes, modes as recordColorModes} from './record_coloring';
-import getSdk from '../get_sdk';
+import {
+    ModeTypes as RecordColorModeTypes,
+    modes as recordColorModes,
+    type RecordColorMode,
+} from './record_coloring';
 
-import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
-import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {RecordColorMode} from './record_coloring';
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 const WatchableQueryResultKeys = {
     records: 'records',

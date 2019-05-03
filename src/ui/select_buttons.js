@@ -1,8 +1,6 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-import React from './react';
 import classNames from 'classnames';
-const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
+import * as React from 'react';
 
 // Disable the "react/prop-types" rule in this file, since it doesn't support this
 // "shared/reusable prop types" pattern:
@@ -12,12 +10,12 @@ import {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
+    type SelectOptionValue,
+    type SelectAndSelectButtonsProps as SelectButtonsProps,
 } from './select_and_select_buttons_helpers';
 
-import type {
-    SelectOptionValue,
-    SelectAndSelectButtonsProps as SelectButtonsProps,
-} from './select_and_select_buttons_helpers';
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 /** */
 class SelectButtons extends React.Component<SelectButtonsProps> {

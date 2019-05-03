@@ -1,29 +1,28 @@
 // @flow
 import invariant from 'invariant';
-
+import {type Color} from 'client_server_shared/types/view_config/color_config_obj';
+import {
+    type BaseDataForBlocks,
+    type ViewDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
 import utils from '../private_utils';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import ColorUtils from '../color_utils';
+import {type ViewType} from '../types/view_types';
+import {type AirtableInterface} from '../injected/airtable_interface';
+import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import type TableType from './table';
+import type FieldType from './field';
+import type RecordType from './record';
+import {type QueryResultOpts} from './query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
+
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
 );
 const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
-
-import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
-import type {
-    BaseDataForBlocks,
-    ViewDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import type {BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
-import type TableType from './table';
-import type FieldType from './field';
-import type RecordType from './record';
-import type {ViewType} from '../types/view_types';
-import type {QueryResultOpts} from './query_result';
-import TableOrViewQueryResult from './table_or_view_query_result';
-import type {AirtableInterface} from '../injected/airtable_interface';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.

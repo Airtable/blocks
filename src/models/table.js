@@ -1,14 +1,26 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 import invariant from 'invariant';
+import {type RowId as RecordId} from 'client_server_shared/hyper_id';
+import {
+    type BaseDataForBlocks,
+    type TableDataForBlocks,
+    type RecordDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
 import utils from '../private_utils';
-const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
+import getSdk from '../get_sdk';
+import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
+import {type ViewType} from '../types/view_types';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import View from './view';
 import Field from './field';
-import Record from './record';
+import Record, {type RecordDef} from './record';
 import cellValueUtils from './cell_value_utils';
-import getSdk from '../get_sdk';
+import type Base from './base';
+import {type QueryResultOpts} from './query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 const PermissionLevels = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_levels',
 );
@@ -21,19 +33,6 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
 const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
-
-import type {AirtableInterface, AirtableWriteAction} from '../injected/airtable_interface';
-import type {RowId as RecordId} from 'client_server_shared/hyper_id';
-import type {
-    BaseDataForBlocks,
-    TableDataForBlocks,
-    RecordDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import type Base from './base';
-import type {ViewType} from '../types/view_types';
-import type {RecordDef} from './record';
-import type {QueryResultOpts} from './query_result';
-import TableOrViewQueryResult from './table_or_view_query_result';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.

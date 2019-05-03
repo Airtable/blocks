@@ -1,20 +1,19 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
 import PropTypes from 'prop-types';
-import RecordCard from './record_card';
-import RecordModel from '../models/record';
+import invariant from 'invariant';
+import * as React from 'react';
+import RecordModel, {type RecordDef} from '../models/record';
 import FieldModel from '../models/field';
 import ViewModel from '../models/view';
-import invariant from 'invariant';
+import RecordCard from './record_card';
 import createDetectElementResize from './create_detect_element_resize';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 // TODO(jb): don't rely on liveapp components
 const DynamicDraw = window.__requirePrivateModuleFromAirtable(
     'client/react/ui/dynamic_draw/dynamic_draw',
 );
-
-import type {RecordDef} from '../models/record';
 
 class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProvider {
     _items: Array<{id?: string, size: number, trailingMargin: number}>;

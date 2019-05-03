@@ -1,8 +1,6 @@
 // @flow
 import invariant from 'invariant';
-
 import getSdk from '../get_sdk';
-
 import type Record from '../models/record';
 import type Field from '../models/field';
 

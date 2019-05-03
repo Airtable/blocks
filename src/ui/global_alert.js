@@ -1,6 +1,6 @@
 // @flow
-import React from './react';
 
+import * as React from 'react';
 import utils from '../private_utils';
 import Watchable from '../watchable';
 import getSdk from '../get_sdk';

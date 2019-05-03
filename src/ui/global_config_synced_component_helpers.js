@@ -1,10 +1,8 @@
 // @flow
-import getSdk from '../get_sdk';
-
 import PropTypes from 'prop-types';
-
-import type {GlobalConfigKey} from '../global_config';
-import type {WatchDependency} from './create_data_container';
+import getSdk from '../get_sdk';
+import {type GlobalConfigKey} from '../global_config';
+import {type WatchDependency} from './create_data_container';
 
 const globalConfigSyncedComponentHelpers = {
     globalConfigKeyPropType: PropTypes.oneOfType([

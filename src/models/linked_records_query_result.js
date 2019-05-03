@@ -2,19 +2,17 @@
 import invariant from 'invariant';
 import FieldTypes from '../types/field_types';
 import getSdk from '../get_sdk';
-import ObjectPool from './object_pool';
-import QueryResult from './query_result';
-import TableOrViewQueryResult from './table_or_view_query_result';
 import utils from '../private_utils';
-
+import ObjectPool from './object_pool';
+import QueryResult, {
+    type WatchableQueryResultKey,
+    type QueryResultOpts,
+    type NormalizedQueryResultOpts,
+} from './query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
 import type TableModel from './table';
 import type FieldModel from './field';
 import type RecordModel from './record';
-import type {
-    WatchableQueryResultKey,
-    QueryResultOpts,
-    NormalizedQueryResultOpts,
-} from './query_result';
 
 const getLinkedTableId = (field: FieldModel): string => {
     const options = field.config.options;

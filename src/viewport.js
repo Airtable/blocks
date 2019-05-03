@@ -1,11 +1,10 @@
 // @flow
 import invariant from 'invariant';
-
 import Watchable from './watchable';
 import utils from './private_utils';
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+import {type AirtableInterface} from './injected/airtable_interface';
 
-import type {AirtableInterface} from './injected/airtable_interface';
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 const WatchableViewportKeys = {
     isFullscreen: 'isFullscreen',

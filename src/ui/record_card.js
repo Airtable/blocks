@@ -1,31 +1,29 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 import invariant from 'invariant';
-import React from './react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import {type AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
+import * as React from 'react';
+import FieldTypes from '../types/field_types';
+import FieldModel from '../models/field';
+import RecordModel, {type RecordDef} from '../models/record';
+import ViewModel from '../models/view';
+import cellValueUtils from '../models/cell_value_utils';
+import createDataContainer from './create_data_container';
+import expandRecord, {type ExpandRecordOpts} from './expand_record';
 import CellRenderer from './cell_renderer';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-import FieldTypes from '../types/field_types';
-import FieldModel from '../models/field';
-import RecordModel from '../models/record';
-import ViewModel from '../models/view';
 const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/read_mode_renderers/attachment_preview_renderer',
 );
-import createDataContainer from './create_data_container';
-import classNames from 'classnames';
-import cellValueUtils from '../models/cell_value_utils';
-import expandRecord from './expand_record';
 const keyCodeUtils = window.__requirePrivateModuleFromAirtable('client/mylib/key_code_utils');
 const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
-
-import type {RecordDef} from '../models/record';
-import type {AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
-import type {ExpandRecordOpts} from './expand_record';
 
 const CARD_PADDING = 12;
 

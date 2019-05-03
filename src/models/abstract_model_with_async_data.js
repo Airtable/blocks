@@ -1,9 +1,9 @@
 // @flow
-const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+import {type BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 import utils from '../private_utils';
 import AbstractModel from './abstract_model';
 
-import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 /** Abstract superclass for all block SDK models that need to fetch async data. */
 class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends AbstractModel<

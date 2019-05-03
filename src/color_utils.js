@@ -1,7 +1,8 @@
 // @flow
+import colors from './colors';
+
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const liveappColors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
-import colors from './colors';
 
 // Construct a set of all the possible color values, so the below
 // methods have constant time lookup when validating that a color

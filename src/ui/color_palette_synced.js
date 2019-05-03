@@ -1,10 +1,11 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import ColorPalette from './color_palette';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 type ColorPaletteSyncedProps = {
     globalConfigKey: string,

@@ -1,9 +1,10 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
+import * as React from 'react';
 import Watchable from '../watchable';
 import Table from '../models/table';
 import View from '../models/view';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 // These helper functions were taken from
 // https://github.com/facebook/relay/blob/e918103/src/container/RelayContainerUtils.js

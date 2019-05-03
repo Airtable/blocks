@@ -1,7 +1,7 @@
 // @flow
-import React from './react';
-
 import PropTypes from 'prop-types';
+import * as React from 'react';
+
 // TODO(kasra): don't depend on liveapp components.
 const _Loader = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/ui/loader/loader',

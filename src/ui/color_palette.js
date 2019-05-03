@@ -1,10 +1,9 @@
 // @flow
-import React from './react';
-
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import * as React from 'react';
 import colorUtils from '../color_utils';
 import Icon from './icon';
-import classNames from 'classnames';
 
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.

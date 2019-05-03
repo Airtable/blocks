@@ -1,14 +1,15 @@
 // @flow
-import React from './react';
 
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_type_provider',
-);
+import * as React from 'react';
 import Record from '../models/record';
 import Field from '../models/field';
 import cellValueUtils from '../models/cell_value_utils';
+import createDataContainer from './create_data_container';
+
+const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/column_types/column_type_provider',
+);
 const CellReadModeContext = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/cell_context/cell_read_mode_context',
 );

@@ -1,13 +1,13 @@
 // @flow
+import getSdk from '../get_sdk';
+import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
+import type Record from './record';
+import type Field from './field';
+
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/summary_functions',
 );
-import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
-import getSdk from '../get_sdk';
-
-import type Record from './record';
-import type Field from './field';
 
 /**
  * Aggregators can be used to compute aggregates for cell values.

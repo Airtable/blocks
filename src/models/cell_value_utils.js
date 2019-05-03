@@ -1,16 +1,16 @@
 // @flow
+import invariant from 'invariant';
+import {type CellValueValidationResult} from 'client_server_shared/column_types/deps/column_type_provider_base';
+import FieldTypes from '../types/field_types';
+import getSdk from '../get_sdk';
+import type Field from './field';
+
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-import FieldTypes from '../types/field_types';
 const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_versions',
 );
-import getSdk from '../get_sdk';
-import invariant from 'invariant';
-
-import type Field from './field';
-import type {CellValueValidationResult} from 'client_server_shared/column_types/deps/column_type_provider_base';
 
 const publicCellValueUtils = {
     parsePublicApiCellValue(publicCellValue: mixed, field: Field): mixed {

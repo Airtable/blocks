@@ -8,8 +8,18 @@
 // version of React, PropTypes won't be available, but a few SDK components
 // try to reference it. Once grepping React.PropTypes in hyperbase doesn't
 // return any matches, we can remove this hack.
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
+import GlobalConfig from './global_config';
+import Base from './models/base';
+import models from './models/models';
+import Viewport from './viewport';
+import Cursor from './cursor';
+import UI from './ui/ui';
+import BlockWrapperComponent from './ui/block_wrapper_component';
+import SettingsButton from './settings_button';
+import UndoRedo from './undo_redo';
+import {type AirtableInterface} from './injected/airtable_interface';
 
 // eslint-disable-next-line react/no-deprecated
 if (!React.PropTypes) {
@@ -20,9 +30,6 @@ if (!React.PropTypes) {
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
-import GlobalConfig from './global_config';
-import Base from './models/base';
-import models from './models/models';
 const InMemoryStorage = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/in_memory_storage',
 );
@@ -32,14 +39,6 @@ const {
 } = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/is_storage_available',
 );
-import Viewport from './viewport';
-import Cursor from './cursor';
-import UI from './ui/ui';
-import BlockWrapperComponent from './ui/block_wrapper_component';
-import SettingsButton from './settings_button';
-import UndoRedo from './undo_redo';
-
-import type {AirtableInterface} from './injected/airtable_interface';
 
 /**
  * @example

@@ -1,9 +1,9 @@
 // @flow
-import React from './react';
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import invariant from 'invariant';
+import * as React from 'react';
 
 const themes = Object.freeze({
     RED: 'red',

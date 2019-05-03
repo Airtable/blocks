@@ -1,19 +1,18 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-import React from './react';
 import PropTypes from 'prop-types';
-import createDataContainer from './create_data_container';
-import getSdk from '../get_sdk';
-import ViewPicker from './view_picker';
-import TableModel from '../models/table';
-import ViewTypes from '../types/view_types';
 import invariant from 'invariant';
+import * as React from 'react';
+import getSdk from '../get_sdk';
+import TableModel from '../models/table';
+import ViewTypes, {type ViewType} from '../types/view_types';
+import type ViewModel from '../models/view';
+import {type GlobalConfigKey} from '../global_config';
+import createDataContainer from './create_data_container';
+import ViewPicker from './view_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
 
-import type ViewModel from '../models/view';
-import type {ViewType} from '../types/view_types';
-import type {GlobalConfigKey} from '../global_config';
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type ViewPickerSyncedProps = {
     table?: TableModel,

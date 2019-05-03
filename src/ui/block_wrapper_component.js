@@ -1,11 +1,10 @@
 // @flow
 import invariant from 'invariant';
-
-import React from './react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
+import getSdk from '../get_sdk';
 import Modal from './modal';
 import createDataContainer from './create_data_container';
-import getSdk from '../get_sdk';
 
 type BlockWrapperComponentProps = {|
     // Note: this is whatever the block exports from the frontend entry point,

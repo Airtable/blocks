@@ -1,9 +1,10 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-import React from './react';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import colors from '../colors';
 import colorUtils from '../color_utils';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 type ProgressBarProps = {
     progress: number,

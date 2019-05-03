@@ -1,9 +1,10 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-import React from './react';
 import PropTypes from 'prop-types';
-import Icon from './icon';
+import * as React from 'react';
 import FieldModel from '../models/field';
+import Icon from './icon';
+
+const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );

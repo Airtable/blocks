@@ -1,9 +1,8 @@
 // @flow
-import Watchable from '../watchable';
 
 import invariant from 'invariant';
-
-import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import Watchable from '../watchable';
 
 /**
  * Abstract superclass for all models.

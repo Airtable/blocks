@@ -1,14 +1,12 @@
 // @flow
-import React from './react';
-
-import createDataContainer from './create_data_container';
+import invariant from 'invariant';
+import * as React from 'react';
 import TableModel from '../models/table';
 import ViewModel from '../models/view';
 import FieldModel from '../models/field';
+import createDataContainer from './create_data_container';
 import Select from './select';
-import invariant from 'invariant';
-
-import type {SelectOptionValue} from './select_and_select_buttons_helpers';
+import {type SelectOptionValue} from './select_and_select_buttons_helpers';
 
 type AnyModel = TableModel | ViewModel | FieldModel;
 

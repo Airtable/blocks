@@ -1,10 +1,11 @@
 // @flow
-import React from './react';
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 import invariant from 'invariant';
+import * as React from 'react';
+
+const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 const onEnterOrSpaceKey = handler => {
     return function(e) {

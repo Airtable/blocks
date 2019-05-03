@@ -1,6 +1,7 @@
 // @flow
+import colors from '../colors';
+import colorUtils from '../color_utils';
 import createDataContainer from './create_data_container';
-
 import Synced from './synced';
 import TablePicker from './table_picker';
 import TablePickerSynced from './table_picker_synced';
@@ -22,8 +23,6 @@ import Loader from './loader';
 import Tooltip from './tooltip';
 import CollaboratorToken from './collaborator_token';
 import ChoiceToken from './choice_token';
-import colors from '../colors';
-import colorUtils from '../color_utils';
 import ColorPalette from './color_palette';
 import ColorPaletteSynced from './color_palette_synced';
 import ProgressBar from './progress_bar';

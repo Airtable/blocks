@@ -1,13 +1,25 @@
 // @flow
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 import invariant from 'invariant';
+import {type Color} from 'client_server_shared/types/view_config/color_config_obj';
+import {
+    type BaseDataForBlocks,
+    type RecordDataForBlocks,
+} from 'client_server_shared/blocks/block_sdk_init_data';
 import utils from '../private_utils';
+import FieldTypes from '../types/field_types';
+import {type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModel from './abstract_model';
 import Field from './field';
+import cellValueUtils from './cell_value_utils';
+import type TableType from './table';
+import type ViewType from './view';
+import {type QueryResultOpts} from './query_result';
+import LinkedRecordsQueryResult from './linked_records_query_result';
+
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-import cellValueUtils from './cell_value_utils';
 const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
@@ -15,18 +27,6 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
     'client_server_shared/client_server_shared_config_settings',
 );
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-import FieldTypes from '../types/field_types';
-
-import type {AirtableWriteAction} from '../injected/airtable_interface';
-import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
-import type {
-    BaseDataForBlocks,
-    RecordDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import type TableType from './table';
-import type ViewType from './view';
-import type {QueryResultOpts} from './query_result';
-import LinkedRecordsQueryResult from './linked_records_query_result';
 
 // A record def is a cellValuesByFieldId object.
 export type RecordDef = {[string]: mixed};

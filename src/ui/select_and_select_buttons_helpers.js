@@ -1,10 +1,8 @@
 // @flow
-import React from './react';
-
-import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import PropTypes from 'prop-types';
-
-import type {GlobalConfigKey} from '../global_config';
+import * as React from 'react';
+import {type GlobalConfigKey} from '../global_config';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 // JSON stringify the value so you can use any primitive.
 // Regular <select> coerces all values to string, which is confusing.
