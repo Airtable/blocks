@@ -53,6 +53,10 @@ export interface AirtableInterface {
      */
     fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any>; // eslint-disable-line flowtype/no-weak-types
     unsubscribeFromViewData(tableId: string, viewId: string): void;
+    fetchDefaultCellValuesByFieldIdAsync(
+        tableId: string,
+        viewId: string | null,
+    ): Promise<{[string]: mixed}>;
 
     // frontend only:
     registerHandler(type: HostToBlockMessageType, handlerFn: (data: Object) => void): void;

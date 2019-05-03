@@ -619,6 +619,18 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             return this.getFirstViewOfType(allowedViewTypes);
         }
     }
+    // Experimental, do not document yet. Allows fetching default cell values for
+    // a table or view. Before documenting, we should explore making this synchronous.
+    async getDefaultCellValuesByFieldIdAsync(opts?: {
+        view?: View | null,
+    }): Promise<{[string]: mixed}> {
+        const viewId = opts && opts.view ? opts.view.id : null;
+        const cellValuesByFieldId = await this._airtableInterface.fetchDefaultCellValuesByFieldIdAsync(
+            this._id,
+            viewId,
+        );
+        return cellValuesByFieldId;
+    }
     /**
      * Record metadata means record IDs, createdTime, and commentCount are loaded.
      * Record metadata must be loaded before creating, deleting, or updating records.
