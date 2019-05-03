@@ -96,9 +96,13 @@ class Modal extends React.Component<ModalProps> {
 
         this._refreshContainer();
 
-        // Focus the container. Next time the user presses tab, it will focus the first
-        // focusable element in the modal.
-        container.focus();
+        // If the frame is focused, move focus to the modal's container.
+        // Next time the user presses tab, it will focus the first focusable element in the modal.
+        // We only do this if the document is focused to avoid the frame becoming
+        // programmatically focused if a modal is displayed without user interaction.
+        if (document.hasFocus()) {
+            container.focus();
+        }
     }
     componentDidUpdate() {
         this._refreshContainer();
