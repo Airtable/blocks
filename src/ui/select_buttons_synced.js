@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('./react');
 const SelectButtons = require('./select_buttons');
 const {SelectAndSelectButtonsSyncedPropTypes} = require('./select_and_select_buttons_helpers');

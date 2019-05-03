@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('./react');
 const ReactDOM = require('./react-dom');
 const PropTypes = require('prop-types');
@@ -153,6 +153,8 @@ class Popover extends React.Component<PopoverProps> {
         this._container = null;
     }
     get _anchor() {
+        // TODO: use a ref
+        // eslint-disable-next-line react/no-find-dom-node
         return ReactDOM.findDOMNode(this);
     }
     async _refreshContainerAsync() {

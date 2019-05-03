@@ -68,9 +68,10 @@ class CellRenderer extends React.Component<CellRendererProps> {
         let publicCellValue;
         if (record) {
             if (cellValue !== undefined) {
+                // eslint-disable-next-line
                 console.warn(
                     'CellRenderer was given both record and cellValue, choosing to render record value',
-                ); // eslint-disable-line
+                );
             }
 
             if (record.isDeleted) {

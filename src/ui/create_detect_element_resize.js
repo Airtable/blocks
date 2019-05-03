@@ -1,3 +1,5 @@
+// @noflow
+
 // Detect Element Resize.
 // https://github.com/sdecima/javascript-detect-element-resize
 // Sebastian Decima
@@ -117,8 +119,8 @@ module.exports = function createDetectElementResize(nonce) {
         );
         pfx = '';
 
+        // eslint-disable-next-line no-lone-blocks
         {
-            // eslint-disable-line no-lone-blocks
             var elm = document.createElement('fakeelement');
             if (elm.style.animationName !== undefined) {
                 animation = true;

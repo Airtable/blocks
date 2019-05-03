@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const React = require('./react');
 const PropTypes = require('prop-types');
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(

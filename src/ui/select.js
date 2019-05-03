@@ -1,5 +1,4 @@
 // @flow
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const invariant = require('invariant');
 const React = require('./react');
 const classNames = require('classnames');
@@ -95,9 +94,10 @@ class Select extends React.Component<SelectProps> {
                 value,
                 disabled: true,
             });
+            // eslint-disable-next-line no-console
             console.warn(
                 `No option for selected value in <Select>: ${String(value)}`.substr(0, 100),
-            ); // eslint-disable-line no-console
+            );
         }
         options.push(...originalOptions);
 

@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
 const React = require('./react');
 const PropTypes = require('prop-types');

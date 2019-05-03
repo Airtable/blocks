@@ -1,3 +1,5 @@
+// @noflow
+
 // The minimum supported node version for this project is 8.10. This gives us a fairly minimal set
 // of transforms to run. Further transpilation (e.g. for browser environments) is left up to the
 // consumer to give the most flexibility.

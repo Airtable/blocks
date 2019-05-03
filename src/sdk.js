@@ -10,9 +10,10 @@
 // return any matches, we can remove this hack.
 const React = require('react');
 const PropTypes = require('prop-types');
+// eslint-disable-next-line react/no-deprecated
 if (!React.PropTypes) {
-    // eslint-disable-line react/no-deprecated
-    React.PropTypes = PropTypes; // eslint-disable-line react/no-deprecated
+    // eslint-disable-next-line react/no-deprecated
+    React.PropTypes = PropTypes;
 }
 
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
@@ -38,7 +39,6 @@ const SettingsButton = require('./settings_button');
 const UndoRedo = require('./undo_redo');
 
 import type {AirtableInterface} from './injected/airtable_interface';
-import type {BlockSdkInitData} from 'client_server_shared/blocks/block_sdk_init_data';
 
 /**
  * @example

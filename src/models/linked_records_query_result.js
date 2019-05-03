@@ -1,6 +1,5 @@
 // @flow
 const invariant = require('invariant');
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const FieldTypes = require('../types/field_types');
 const getSdk = require('../get_sdk');
 const ObjectPool = require('./object_pool');

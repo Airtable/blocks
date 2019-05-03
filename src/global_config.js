@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const Watchable = require('./watchable');
 const getSdk = require('./get_sdk');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(

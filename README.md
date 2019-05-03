@@ -7,6 +7,8 @@ Run with `npm run <command>` or `yarn run <command>`.
 | Command       | Description                                                                                                          |
 | ------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `format`      | Format all files in the project with prettier                                                                        |
+| `lint`        | Run eslint on all source files in the project                                                                        |
+| `lint:quiet`  | Run eslint on all source files, but only report errors - not warnings.                                               |
 | `build:clean` | Delete any build files                                                                                               |
 | `build:babel` | Transpile the contents of `src` to `dist` using Babel                                                                |
 | `build:flow`  | Use [`flow-copy-source`](https://github.com/Macil/flow-copy-source) to make `src` flowtypes available in `dist`      |

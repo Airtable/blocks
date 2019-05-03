@@ -1,5 +1,5 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const invariant = require('invariant');
 const utils = require('../private_utils');
 const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
