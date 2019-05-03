@@ -1,22 +1,22 @@
 // @flow
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('../private_utils');
-const AbstractModel = require('./abstract_model');
-const Table = require('./table');
+import utils from '../private_utils';
+import AbstractModel from './abstract_model';
+import Table from './table';
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
 );
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
-const getSdk = require('../get_sdk');
+import getSdk from '../get_sdk';
 const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/user_scoped_app_interface',
 );
 const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
-const invariant = require('invariant');
+import invariant from 'invariant';
 
 import type {AirtableInterface} from '../injected/airtable_interface';
 import type {
@@ -321,4 +321,4 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     }
 }
 
-module.exports = Base;
+export default Base;

@@ -1,7 +1,8 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const getSdk = require('../get_sdk');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import getSdk from '../get_sdk';
 
 type SizeConstraintProp = {
     width?: number | null,
@@ -123,4 +124,4 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
     }
 }
 
-module.exports = ViewportConstraint;
+export default ViewportConstraint;

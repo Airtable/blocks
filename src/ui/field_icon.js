@@ -1,9 +1,9 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const Icon = require('./icon');
-const FieldModel = require('../models/field');
+import React from './react';
+import PropTypes from 'prop-types';
+import Icon from './icon';
+import FieldModel from '../models/field';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
@@ -43,4 +43,4 @@ FieldIcon.propTypes = {
     field: PropTypes.instanceOf(FieldModel).isRequired,
 };
 
-module.exports = FieldIcon;
+export default FieldIcon;

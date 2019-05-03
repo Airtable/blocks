@@ -1,8 +1,9 @@
 // @flow
-const React = require('./react');
-const utils = require('../private_utils');
-const Watchable = require('../watchable');
-const getSdk = require('../get_sdk');
+import React from './react';
+
+import utils from '../private_utils';
+import Watchable from '../watchable';
+import getSdk from '../get_sdk';
 
 const WatchableGlobalAlertKeys = {
     __alertInfo: '__alertInfo',
@@ -52,4 +53,4 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     }
 }
 
-module.exports = GlobalAlert;
+export default GlobalAlert;

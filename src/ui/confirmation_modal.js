@@ -1,9 +1,10 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const classNames = require('classnames');
-const Modal = require('./modal');
-const Button = require('./button');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import Modal from './modal';
+import Button from './button';
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 type ConfirmationModalProps = {|
@@ -123,4 +124,4 @@ class ConfirmationModal extends React.Component<ConfirmationModalProps> {
     }
 }
 
-module.exports = ConfirmationModal;
+export default ConfirmationModal;

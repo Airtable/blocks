@@ -1,7 +1,7 @@
 // @flow
 const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('../private_utils');
-const AbstractModel = require('./abstract_model');
+import utils from '../private_utils';
+import AbstractModel from './abstract_model';
 
 import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 
@@ -151,4 +151,4 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     }
 }
 
-module.exports = AbstractModelWithAsyncData;
+export default AbstractModelWithAsyncData;

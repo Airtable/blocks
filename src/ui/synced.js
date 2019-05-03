@@ -1,9 +1,9 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
+import React from './react';
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 import type {GlobalConfigKey} from '../global_config';
 import type {BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
@@ -45,7 +45,7 @@ class Synced extends React.Component<SyncedProps> {
     }
 }
 
-module.exports = createDataContainer(Synced, (props: SyncedProps) => {
+export default createDataContainer(Synced, (props: SyncedProps) => {
     return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(
         props.globalConfigKey,
     );

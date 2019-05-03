@@ -1,16 +1,17 @@
 // @flow
-const Base = require('./base');
-const Table = require('./table');
-const Field = require('./field');
-const View = require('./view');
-const Record = require('./record');
-const QueryResult = require('./query_result');
-const TableOrViewQueryResult = require('./table_or_view_query_result');
-const LinkedRecordsQueryResult = require('./linked_records_query_result');
-const aggregators = require('./aggregators');
-const recordColoring = require('./record_coloring');
-const FieldTypes = require('../types/field_types');
-const ViewTypes = require('../types/view_types');
+import Base from './base';
+
+import Table from './table';
+import Field from './field';
+import View from './view';
+import Record from './record';
+import QueryResult from './query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
+import LinkedRecordsQueryResult from './linked_records_query_result';
+import aggregators from './aggregators';
+import * as recordColoring from './record_coloring';
+import FieldTypes from '../types/field_types';
+import ViewTypes from '../types/view_types';
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
 );
@@ -56,4 +57,4 @@ const models = {
     generateGuid: hyperIdGenerator.generateGuid,
 };
 
-module.exports = models;
+export default models;

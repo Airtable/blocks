@@ -9,4 +9,4 @@ const ViewTypes = {
 
 export type ViewType = $Values<typeof ViewTypes>;
 
-module.exports = ViewTypes;
+export default ViewTypes;

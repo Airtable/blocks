@@ -1,9 +1,10 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const classNames = require('classnames');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
-const invariant = require('invariant');
+import invariant from 'invariant';
 
 const onEnterOrSpaceKey = handler => {
     return function(e) {
@@ -148,4 +149,4 @@ class Toggle extends React.Component<ToggleProps> {
     }
 }
 
-module.exports = Toggle;
+export default Toggle;

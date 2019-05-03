@@ -1,5 +1,5 @@
 // @flow
-const getSdk = require('./get_sdk');
+import getSdk from './get_sdk';
 
 // we need to use module.exports syntax here because we want people to be able to do destructuring
 // imports. Usually, this isn't possible when exporting a class with ESM - it's a quirk of how

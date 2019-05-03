@@ -1,13 +1,14 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const Record = require('../models/record');
-const Field = require('../models/field');
-const cellValueUtils = require('../models/cell_value_utils');
+import Record from '../models/record';
+import Field from '../models/field';
+import cellValueUtils from '../models/cell_value_utils';
 const CellReadModeContext = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/cell_context/cell_read_mode_context',
 );
@@ -123,7 +124,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
     }
 }
 
-module.exports = createDataContainer(CellRenderer, (props: CellRendererProps) => {
+export default createDataContainer(CellRenderer, (props: CellRendererProps) => {
     return [
         {watch: props.record, key: `cellValueInField:${props.field.id}`},
         {watch: props.field, key: 'config'},

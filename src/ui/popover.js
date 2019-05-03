@@ -1,12 +1,12 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const ReactDOM = require('./react-dom');
-const PropTypes = require('prop-types');
+import React from './react';
+import ReactDOM from './react-dom';
+import PropTypes from 'prop-types';
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
-const classNames = require('classnames');
-const invariant = require('invariant');
-const createDetectElementResize = require('./create_detect_element_resize');
+import classNames from 'classnames';
+import invariant from 'invariant';
+import createDetectElementResize from './create_detect_element_resize';
 
 const PopoverPlacements = {
     TOP: ('top': 'top'),
@@ -360,4 +360,4 @@ class Popover extends React.Component<PopoverProps> {
     }
 }
 
-module.exports = Popover;
+export default Popover;

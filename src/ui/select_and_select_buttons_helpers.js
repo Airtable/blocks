@@ -1,7 +1,8 @@
 // @flow
-const React = require('./react');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
-const PropTypes = require('prop-types');
+import React from './react';
+
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import PropTypes from 'prop-types';
 
 import type {GlobalConfigKey} from '../global_config';
 
@@ -42,7 +43,7 @@ const SelectOptionValueProp = PropTypes.oneOfType([
     PropTypes.bool,
 ]);
 
-const SelectAndSelectButtonsPropTypes = {
+export const SelectAndSelectButtonsPropTypes = {
     onChange: PropTypes.func,
     value: SelectOptionValueProp,
     // We do more strict checks in render.
@@ -59,7 +60,7 @@ const SelectAndSelectButtonsPropTypes = {
     tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-const SelectAndSelectButtonsSyncedPropTypes = {
+export const SelectAndSelectButtonsSyncedPropTypes = {
     globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
     options: PropTypes.arrayOf(
         PropTypes.shape({
@@ -75,7 +76,7 @@ const SelectAndSelectButtonsSyncedPropTypes = {
     tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-const validateOptions = (options: Array<SelectOption>) => {
+export const validateOptions = (options: Array<SelectOption>) => {
     if (options) {
         for (const option of options) {
             // These are hard errors because we can't guarantee that other values
@@ -93,22 +94,14 @@ const validateOptions = (options: Array<SelectOption>) => {
     return {isValid: true};
 };
 
-function optionValueToString(value: SelectOptionValue): string {
+export function optionValueToString(value: SelectOptionValue): string {
     const valueJson = JSON.stringify(
         value === undefined ? {isUndefined: true} : {notUndefinedValue: value},
     );
     return valueJson;
 }
-function stringToOptionValue(valueJson: string): SelectOptionValue {
+export function stringToOptionValue(valueJson: string): SelectOptionValue {
     const parsed = JSON.parse(valueJson);
     const value = parsed.isUndefined ? undefined : parsed.notUndefinedValue;
     return value;
 }
-
-module.exports = {
-    SelectAndSelectButtonsPropTypes,
-    SelectAndSelectButtonsSyncedPropTypes,
-    validateOptions,
-    optionValueToString,
-    stringToOptionValue,
-};

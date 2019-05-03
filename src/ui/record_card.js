@@ -1,23 +1,23 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const invariant = require('invariant');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const CellRenderer = require('./cell_renderer');
+import invariant from 'invariant';
+import React from './react';
+import PropTypes from 'prop-types';
+import CellRenderer from './cell_renderer';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const FieldTypes = require('../types/field_types');
-const FieldModel = require('../models/field');
-const RecordModel = require('../models/record');
-const ViewModel = require('../models/view');
+import FieldTypes from '../types/field_types';
+import FieldModel from '../models/field';
+import RecordModel from '../models/record';
+import ViewModel from '../models/view';
 const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/read_mode_renderers/attachment_preview_renderer',
 );
-const createDataContainer = require('./create_data_container');
-const classNames = require('classnames');
-const cellValueUtils = require('../models/cell_value_utils');
-const expandRecord = require('./expand_record');
+import createDataContainer from './create_data_container';
+import classNames from 'classnames';
+import cellValueUtils from '../models/cell_value_utils';
+import expandRecord from './expand_record';
 const keyCodeUtils = window.__requirePrivateModuleFromAirtable('client/mylib/key_code_utils');
 const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
@@ -524,7 +524,7 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
 }
 
-module.exports = createDataContainer(RecordCard, (props: RecordCardProps) => {
+export default createDataContainer(RecordCard, (props: RecordCardProps) => {
     const recordModel = props.record && props.record instanceof RecordModel ? props.record : null;
     let parentTable;
     if (recordModel) {

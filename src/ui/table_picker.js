@@ -1,11 +1,12 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
-const TableModel = require('../models/table');
-const ModelPickerSelect = require('./model_picker_select');
-const invariant = require('invariant');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
+import TableModel from '../models/table';
+import ModelPickerSelect from './model_picker_select';
+import invariant from 'invariant';
 
 type TablePickerProps = {
     table?: TableModel,
@@ -98,7 +99,7 @@ class TablePicker extends React.Component<TablePickerProps> {
     }
 }
 
-module.exports = createDataContainer(
+export default createDataContainer(
     TablePicker,
     (props: TablePickerProps) => {
         return [{watch: getSdk().base, key: 'tables'}];

@@ -29,4 +29,4 @@ class UndoRedo {
     }
 }
 
-module.exports = UndoRedo;
+export default UndoRedo;

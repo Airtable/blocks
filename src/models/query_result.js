@@ -1,14 +1,14 @@
 // @flow
-const invariant = require('invariant');
+import invariant from 'invariant';
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('../private_utils');
-const FieldTypes = require('../types/field_types');
-const AbstractModelWithAsyncData = require('./abstract_model_with_async_data');
-const TableModel = require('./table');
-const FieldModel = require('./field');
-const RecordModel = require('./record');
-const {ModeTypes: RecordColorModeTypes, modes: recordColorModes} = require('./record_coloring');
-const getSdk = require('../get_sdk');
+import utils from '../private_utils';
+import FieldTypes from '../types/field_types';
+import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import type TableModel from './table';
+import FieldModel from './field';
+import type RecordModel from './record';
+import {ModeTypes as RecordColorModeTypes, modes as recordColorModes} from './record_coloring';
+import getSdk from '../get_sdk';
 
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
 import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
@@ -394,4 +394,4 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 }
 
-module.exports = QueryResult;
+export default QueryResult;

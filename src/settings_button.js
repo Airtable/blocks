@@ -1,6 +1,7 @@
 // @flow
-const Watchable = require('./watchable');
-const utils = require('./private_utils');
+import Watchable from './watchable';
+
+import utils from './private_utils';
 
 import type {AirtableInterface} from './injected/airtable_interface';
 
@@ -56,4 +57,4 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     }
 }
 
-module.exports = SettingsButton;
+export default SettingsButton;

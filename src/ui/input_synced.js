@@ -1,11 +1,11 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const Input = require('./input');
-const Synced = require('./synced');
-const invariant = require('invariant');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
+import React from './react';
+import PropTypes from 'prop-types';
+import Input from './input';
+import Synced from './synced';
+import invariant from 'invariant';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 import type {GlobalConfigKey} from '../global_config';
 
@@ -96,4 +96,4 @@ class InputSynced extends React.Component<InputSyncedProps> {
     }
 }
 
-module.exports = InputSynced;
+export default InputSynced;

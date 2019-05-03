@@ -1,14 +1,14 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const invariant = require('invariant');
-const utils = require('../private_utils');
+import invariant from 'invariant';
+import utils from '../private_utils';
 const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
-const AbstractModelWithAsyncData = require('./abstract_model_with_async_data');
-const View = require('./view');
-const Field = require('./field');
-const Record = require('./record');
-const cellValueUtils = require('./cell_value_utils');
-const getSdk = require('../get_sdk');
+import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import View from './view';
+import Field from './field';
+import Record from './record';
+import cellValueUtils from './cell_value_utils';
+import getSdk from '../get_sdk';
 const PermissionLevels = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_levels',
 );
@@ -33,7 +33,7 @@ import type Base from './base';
 import type {ViewType} from '../types/view_types';
 import type {RecordDef} from './record';
 import type {QueryResultOpts} from './query_result';
-import type TableOrViewQueryResultType from './table_or_view_query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
@@ -280,9 +280,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         return null;
     }
     /** */
-    select(opts?: QueryResultOpts): TableOrViewQueryResultType {
-        // require here to avoid circular import
-        const TableOrViewQueryResult = require('./table_or_view_query_result');
+    select(opts?: QueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(this, opts || {});
     }
     /**
@@ -1046,4 +1044,4 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     }
 }
 
-module.exports = Table;
+export default Table;

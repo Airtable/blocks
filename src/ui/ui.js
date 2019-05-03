@@ -1,47 +1,48 @@
 // @flow
-const createDataContainer = require('./create_data_container');
-const Synced = require('./synced');
-const TablePicker = require('./table_picker');
-const TablePickerSynced = require('./table_picker_synced');
-const FieldPicker = require('./field_picker');
-const FieldPickerSynced = require('./field_picker_synced');
-const ViewPicker = require('./view_picker');
-const ViewPickerSynced = require('./view_picker_synced');
-const Input = require('./input');
-const InputSynced = require('./input_synced');
-const RadioSynced = require('./radio_synced');
-const CellRenderer = require('./cell_renderer');
-const expandRecord = require('./expand_record');
-const expandRecordList = require('./expand_record_list');
-const expandRecordPickerAsync = require('./expand_record_picker_async');
-const GlobalAlert = require('./global_alert');
-const FieldIcon = require('./field_icon');
-const Icon = require('./icon');
-const Loader = require('./loader');
-const Tooltip = require('./tooltip');
-const CollaboratorToken = require('./collaborator_token');
-const ChoiceToken = require('./choice_token');
-const colors = require('../colors');
-const colorUtils = require('../color_utils');
-const ColorPalette = require('./color_palette');
-const ColorPaletteSynced = require('./color_palette_synced');
-const ProgressBar = require('./progress_bar');
-const Button = require('./button');
-const RecordCard = require('./record_card');
-const RecordCardList = require('./record_card_list');
-const Select = require('./select');
-const SelectSynced = require('./select_synced');
-const SelectButtons = require('./select_buttons');
-const SelectButtonsSynced = require('./select_buttons_synced');
-const Modal = require('./modal');
-const ConfirmationModal = require('./confirmation_modal');
-const Toggle = require('./toggle');
-const ToggleSynced = require('./toggle_synced');
-const Popover = require('./popover');
-const AutocompletePopover = require('./autocomplete_popover');
-const ViewportConstraint = require('./viewport_constraint');
-const Link = require('./link');
-const {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} = require('./remote_utils');
+import createDataContainer from './create_data_container';
+
+import Synced from './synced';
+import TablePicker from './table_picker';
+import TablePickerSynced from './table_picker_synced';
+import FieldPicker from './field_picker';
+import FieldPickerSynced from './field_picker_synced';
+import ViewPicker from './view_picker';
+import ViewPickerSynced from './view_picker_synced';
+import Input from './input';
+import InputSynced from './input_synced';
+import RadioSynced from './radio_synced';
+import CellRenderer from './cell_renderer';
+import expandRecord from './expand_record';
+import expandRecordList from './expand_record_list';
+import expandRecordPickerAsync from './expand_record_picker_async';
+import GlobalAlert from './global_alert';
+import FieldIcon from './field_icon';
+import Icon from './icon';
+import Loader from './loader';
+import Tooltip from './tooltip';
+import CollaboratorToken from './collaborator_token';
+import ChoiceToken from './choice_token';
+import colors from '../colors';
+import colorUtils from '../color_utils';
+import ColorPalette from './color_palette';
+import ColorPaletteSynced from './color_palette_synced';
+import ProgressBar from './progress_bar';
+import Button from './button';
+import RecordCard from './record_card';
+import RecordCardList from './record_card_list';
+import Select from './select';
+import SelectSynced from './select_synced';
+import SelectButtons from './select_buttons';
+import SelectButtonsSynced from './select_buttons_synced';
+import Modal from './modal';
+import ConfirmationModal from './confirmation_modal';
+import Toggle from './toggle';
+import ToggleSynced from './toggle_synced';
+import Popover from './popover';
+import AutocompletePopover from './autocomplete_popover';
+import ViewportConstraint from './viewport_constraint';
+import Link from './link';
+import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 
 // TODO: freeze this object before we ship the code editor.
 const UI = {
@@ -92,4 +93,4 @@ const UI = {
     globalAlert: new GlobalAlert(),
 };
 
-module.exports = UI;
+export default UI;

@@ -6,17 +6,14 @@
 // Note that this can be *any* version of React, depending on what the user's
 // block packages specify.
 
-/* ::
-import * as FlowReact from 'react';
-*/
-
-const invariant = require('invariant');
+// eslint-disable-next-line no-unused-vars
+import invariant from 'invariant';
 const blocksConfigSettings = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/blocks_config_settings',
 );
-const React /* : null | typeof FlowReact */ =
+const React /*: null | $Exports<'react'> */ =
     window[blocksConfigSettings.GLOBAL_REACT_VARIABLE_NAME];
 
 invariant(React, 'React is not available on window');
 
-module.exports = React;
+export default React;

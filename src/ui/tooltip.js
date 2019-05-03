@@ -1,10 +1,10 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const Popover = require('./popover');
-const classNames = require('classnames');
-const warning = require('../warning');
+import React from './react';
+import PropTypes from 'prop-types';
+import Popover from './popover';
+import classNames from 'classnames';
+import warning from '../warning';
 
 import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
 
@@ -199,4 +199,4 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
     }
 }
 
-module.exports = Tooltip;
+export default Tooltip;

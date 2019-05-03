@@ -6,12 +6,12 @@ const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
 const GroupAssigner = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/filter_and_sort/group_assigner',
 );
-const TableModel = require('./table');
-const ViewModel = require('./view');
-const invariant = require('invariant');
-const QueryResult = require('./query_result');
-const ObjectPool = require('./object_pool');
-const {ModeTypes: RecordColorModeTypes} = require('./record_coloring');
+import TableModel from './table';
+import ViewModel from './view';
+import invariant from 'invariant';
+import QueryResult from './query_result';
+import ObjectPool from './object_pool';
+import {ModeTypes as RecordColorModeTypes} from './record_coloring';
 
 import type {GroupLevelObj} from 'client_server_shared/types/view_config/group_level_obj';
 import type {WatchableTableKey} from './table';
@@ -769,4 +769,4 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     }
 }
 
-module.exports = TableOrViewQueryResult;
+export default TableOrViewQueryResult;

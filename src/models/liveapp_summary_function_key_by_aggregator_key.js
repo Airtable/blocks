@@ -29,4 +29,4 @@ const liveappSummaryFunctionKeyByAggregatorKey = {
     // the format of the histogram object to external users.
 };
 
-module.exports = liveappSummaryFunctionKeyByAggregatorKey;
+export default liveappSummaryFunctionKeyByAggregatorKey;

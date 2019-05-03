@@ -1,6 +1,6 @@
 // @flow
 const React = window.__requirePrivateModuleFromAirtable('client_server_shared/react/react');
-const PropTypes = require('prop-types');
+import PropTypes from 'prop-types';
 const Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
 const iconConfig = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/assets/icon_config',
@@ -59,4 +59,4 @@ Icon.propTypes = {
 // TODO(jb): once we remove the scale prop type completely, we should add a default
 // value for the size prop.
 
-module.exports = Icon;
+export default Icon;

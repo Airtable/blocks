@@ -2,12 +2,12 @@
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const FieldTypes = require('../types/field_types');
+import FieldTypes from '../types/field_types';
 const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_versions',
 );
-const getSdk = require('../get_sdk');
-const invariant = require('invariant');
+import getSdk from '../get_sdk';
+import invariant from 'invariant';
 
 import type Field from './field';
 import type {CellValueValidationResult} from 'client_server_shared/column_types/deps/column_type_provider_base';
@@ -156,4 +156,4 @@ const publicCellValueUtils = {
     },
 };
 
-module.exports = publicCellValueUtils;
+export default publicCellValueUtils;

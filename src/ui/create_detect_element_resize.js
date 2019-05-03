@@ -14,7 +14,7 @@
 // https://github.com/bvaughn/react-virtualized/blob/master/source/vendor/detectElementResize.js
 //
 // TODO: make this file conform to our styleguide.
-module.exports = function createDetectElementResize(nonce) {
+export default function createDetectElementResize(nonce) {
     // Check `document` and `window` in case of server-side rendering
     var _window;
     if (typeof window !== 'undefined') {
@@ -245,4 +245,4 @@ module.exports = function createDetectElementResize(nonce) {
         addResizeListener,
         removeResizeListener,
     };
-};
+}

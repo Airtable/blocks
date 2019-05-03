@@ -32,4 +32,4 @@ class PrivateUtils {
     }
 }
 
-module.exports = new PrivateUtils();
+export default new PrivateUtils();

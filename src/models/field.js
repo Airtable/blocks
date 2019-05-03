@@ -1,12 +1,12 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const utils = require('../private_utils');
-const AbstractModel = require('./abstract_model');
+import utils from '../private_utils';
+import AbstractModel from './abstract_model';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const Aggregators = require('./aggregators');
-const liveappSummaryFunctionKeyByAggregatorKey = require('./liveapp_summary_function_key_by_aggregator_key');
+import Aggregators from './aggregators';
+import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
 const ColumnTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_types',
 );
@@ -207,4 +207,4 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
     }
 }
 
-module.exports = Field;
+export default Field;

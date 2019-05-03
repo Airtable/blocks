@@ -1,7 +1,7 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const Watchable = require('./watchable');
-const getSdk = require('./get_sdk');
+import Watchable from './watchable';
+import getSdk from './get_sdk';
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_kv_helpers',
 );
@@ -179,4 +179,4 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     }
 }
 
-module.exports = GlobalConfig;
+export default GlobalConfig;

@@ -1,8 +1,9 @@
 // @flow
-const invariant = require('invariant');
-const utils = require('../private_utils');
-const AbstractModelWithAsyncData = require('./abstract_model_with_async_data');
-const ColorUtils = require('../color_utils');
+import invariant from 'invariant';
+
+import utils from '../private_utils';
+import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import ColorUtils from '../color_utils';
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
 );
@@ -21,7 +22,7 @@ import type FieldType from './field';
 import type RecordType from './record';
 import type {ViewType} from '../types/view_types';
 import type {QueryResultOpts} from './query_result';
-import type TableOrViewQueryResultType from './table_or_view_query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
 import type {AirtableInterface} from '../injected/airtable_interface';
 
 // This doesn't follow our enum naming conventions because we want the keys
@@ -109,9 +110,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
         });
     }
     /** */
-    select(opts?: QueryResultOpts): TableOrViewQueryResultType {
-        // require here to avoid circular import
-        const TableOrViewQueryResult = require('./table_or_view_query_result');
+    select(opts?: QueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(this, opts || {});
     }
     async loadDataAsync() {
@@ -341,4 +340,4 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
 }
 
-module.exports = View;
+export default View;

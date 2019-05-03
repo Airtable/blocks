@@ -1,13 +1,13 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const RecordCard = require('./record_card');
-const RecordModel = require('../models/record');
-const FieldModel = require('../models/field');
-const ViewModel = require('../models/view');
-const invariant = require('invariant');
-const createDetectElementResize = require('./create_detect_element_resize');
+import React from './react';
+import PropTypes from 'prop-types';
+import RecordCard from './record_card';
+import RecordModel from '../models/record';
+import FieldModel from '../models/field';
+import ViewModel from '../models/view';
+import invariant from 'invariant';
+import createDetectElementResize from './create_detect_element_resize';
 
 // TODO(jb): don't rely on liveapp components
 const DynamicDraw = window.__requirePrivateModuleFromAirtable(
@@ -328,4 +328,4 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
     }
 }
 
-module.exports = RecordCardList;
+export default RecordCardList;

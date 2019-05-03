@@ -1,11 +1,12 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
+import React from './react';
+
+import PropTypes from 'prop-types';
 const _ChoiceToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/choice_token',
 ); // TODO(kasra): don't depend on liveapp components.
 const colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 type ChoiceTokenProps = {
     choice: {
@@ -44,4 +45,4 @@ ChoiceToken.propTypes = {
     className: PropTypes.string,
 };
 
-module.exports = ChoiceToken;
+export default ChoiceToken;

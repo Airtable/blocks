@@ -1,11 +1,11 @@
 // @flow
-const invariant = require('invariant');
-const FieldTypes = require('../types/field_types');
-const getSdk = require('../get_sdk');
-const ObjectPool = require('./object_pool');
-const QueryResult = require('./query_result');
-const TableOrViewQueryResult = require('./table_or_view_query_result');
-const utils = require('../private_utils');
+import invariant from 'invariant';
+import FieldTypes from '../types/field_types';
+import getSdk from '../get_sdk';
+import ObjectPool from './object_pool';
+import QueryResult from './query_result';
+import TableOrViewQueryResult from './table_or_view_query_result';
+import utils from '../private_utils';
 
 import type TableModel from './table';
 import type FieldModel from './field';
@@ -557,4 +557,4 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 }
 
-module.exports = LinkedRecordsQueryResult;
+export default LinkedRecordsQueryResult;

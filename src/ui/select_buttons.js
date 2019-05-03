@@ -1,18 +1,18 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('./react');
-const classNames = require('classnames');
+import React from './react';
+import classNames from 'classnames';
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 // Disable the "react/prop-types" rule in this file, since it doesn't support this
 // "shared/reusable prop types" pattern:
 // https://github.com/yannickcr/eslint-plugin-react/issues/476
 /* eslint-disable react/prop-types */
-const {
+import {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
-} = require('./select_and_select_buttons_helpers');
+} from './select_and_select_buttons_helpers';
 
 import type {
     SelectOptionValue,
@@ -95,4 +95,4 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
     }
 }
 
-module.exports = SelectButtons;
+export default SelectButtons;

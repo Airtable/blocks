@@ -1,15 +1,15 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
-const FieldPicker = require('./field_picker');
-const TableModel = require('../models/table');
-const invariant = require('invariant');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
-const FieldTypes = require('../types/field_types');
-const Synced = require('./synced');
+import React from './react';
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
+import FieldPicker from './field_picker';
+import TableModel from '../models/table';
+import invariant from 'invariant';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import FieldTypes from '../types/field_types';
+import Synced from './synced';
 
 import type FieldModel from '../models/field';
 import type {FieldType} from '../types/field_types';
@@ -94,7 +94,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
     }
 }
 
-module.exports = createDataContainer(
+export default createDataContainer(
     FieldPickerSynced,
     (props: FieldPickerSyncedProps) => {
         return [{watch: props.table, key: 'fields'}, {watch: getSdk().base, key: 'tables'}];

@@ -2,7 +2,7 @@
 import type FieldModel from './field';
 import type ViewModel from './view';
 
-const ModeTypes = {
+export const ModeTypes = {
     NONE: ('none': 'none'),
     BY_SELECT_FIELD: ('bySelectField': 'bySelectField'),
     BY_VIEW: ('byView': 'byView'),
@@ -31,7 +31,7 @@ export type RecordColorMode =
  * // with a query result:
  * const queryResult = table.select({ recordColorMode });
  */
-const modes = {
+export const modes = {
     none: () => ({
         type: ModeTypes.NONE,
     }),
@@ -44,8 +44,3 @@ const modes = {
         view,
     }),
 };
-
-module.exports = Object.freeze({
-    ModeTypes,
-    modes,
-});

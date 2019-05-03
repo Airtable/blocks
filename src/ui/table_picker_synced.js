@@ -1,13 +1,13 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
-const TablePicker = require('./table_picker');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
-const invariant = require('invariant');
-const Synced = require('./synced');
+import React from './react';
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
+import TablePicker from './table_picker';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import invariant from 'invariant';
+import Synced from './synced';
 
 import type TableModel from '../models/table';
 import type {GlobalConfigKey} from '../global_config';
@@ -83,7 +83,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
     }
 }
 
-module.exports = createDataContainer(
+export default createDataContainer(
     TablePickerSynced,
     (props: TablePickerSyncedProps) => {
         return [{watch: getSdk().base, key: 'tables'}];

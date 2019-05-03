@@ -31,4 +31,4 @@ const FieldTypes = {
 
 export type FieldType = $Values<typeof FieldTypes>;
 
-module.exports = FieldTypes;
+export default FieldTypes;

@@ -1,6 +1,7 @@
 // @flow
-const invariant = require('invariant');
-const getSdk = require('../get_sdk');
+import invariant from 'invariant';
+
+import getSdk from '../get_sdk';
 
 import type Record from '../models/record';
 import type Field from '../models/field';
@@ -52,4 +53,4 @@ function expandRecordList(
     getSdk().__airtableInterface.expandRecordList(tableId, recordIds, fieldIds);
 }
 
-module.exports = expandRecordList;
+export default expandRecordList;

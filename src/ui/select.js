@@ -1,14 +1,14 @@
 // @flow
-const invariant = require('invariant');
-const React = require('./react');
-const classNames = require('classnames');
+import invariant from 'invariant';
+import React from './react';
+import classNames from 'classnames';
 
-const {
+import {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
     stringToOptionValue,
-} = require('./select_and_select_buttons_helpers');
+} from './select_and_select_buttons_helpers';
 
 import type {SelectAndSelectButtonsProps as SelectProps} from './select_and_select_buttons_helpers';
 
@@ -134,4 +134,4 @@ class Select extends React.Component<SelectProps> {
     }
 }
 
-module.exports = Select;
+export default Select;

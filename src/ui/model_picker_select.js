@@ -1,11 +1,12 @@
 // @flow
-const React = require('./react');
-const createDataContainer = require('./create_data_container');
-const TableModel = require('../models/table');
-const ViewModel = require('../models/view');
-const FieldModel = require('../models/field');
-const Select = require('./select');
-const invariant = require('invariant');
+import React from './react';
+
+import createDataContainer from './create_data_container';
+import TableModel from '../models/table';
+import ViewModel from '../models/view';
+import FieldModel from '../models/field';
+import Select from './select';
+import invariant from 'invariant';
 
 import type {SelectOptionValue} from './select_and_select_buttons_helpers';
 
@@ -91,7 +92,7 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
     }
 }
 
-module.exports = createDataContainer(
+export default createDataContainer(
     ModelPickerSelect,
     props => {
         return props.models.map(model => {

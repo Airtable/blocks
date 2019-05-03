@@ -1,10 +1,11 @@
 // @flow
-const React = require('./react');
-const ReactDOM = require('./react-dom');
-const PropTypes = require('prop-types');
-const Icon = require('./icon');
-const classNames = require('classnames');
-const invariant = require('invariant');
+import React from './react';
+
+import ReactDOM from './react-dom';
+import PropTypes from 'prop-types';
+import Icon from './icon';
+import classNames from 'classnames';
+import invariant from 'invariant';
 
 type ModalCloseButtonProps = {|
     className?: string,
@@ -168,4 +169,4 @@ class Modal extends React.Component<ModalProps> {
     }
 }
 
-module.exports = Modal;
+export default Modal;

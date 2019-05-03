@@ -1,10 +1,11 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const getSdk = require('../get_sdk');
-const invariant = require('invariant');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
-const Synced = require('./synced');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import getSdk from '../get_sdk';
+import invariant from 'invariant';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import Synced from './synced';
 
 import type {GlobalConfigKey} from '../global_config';
 
@@ -76,4 +77,4 @@ class RadioSynced extends React.Component<RadioSyncedProps> {
     }
 }
 
-module.exports = RadioSynced;
+export default RadioSynced;

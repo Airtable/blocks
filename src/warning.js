@@ -1,8 +1,9 @@
 // @flow
-const getSdk = require('./get_sdk');
+import getSdk from './get_sdk';
 
 const usedWarnings = {};
-module.exports = (msg: string) => {
+
+export default (msg: string) => {
     if (getSdk().runInfo.isDevelopmentMode && usedWarnings[msg] !== true) {
         usedWarnings[msg] = true;
 

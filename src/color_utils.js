@@ -1,7 +1,7 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const liveappColors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
-const colors = require('./colors');
+import colors from './colors';
 
 // Construct a set of all the possible color values, so the below
 // methods have constant time lookup when validating that a color
@@ -49,4 +49,4 @@ const colorUtils = {
     },
 };
 
-module.exports = colorUtils;
+export default colorUtils;

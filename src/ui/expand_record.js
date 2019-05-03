@@ -1,5 +1,5 @@
 // @flow
-const getSdk = require('../get_sdk');
+import getSdk from '../get_sdk';
 
 import type Record from '../models/record';
 
@@ -33,4 +33,4 @@ function expandRecord(record: Record, opts?: ExpandRecordOpts) {
     getSdk().__airtableInterface.expandRecord(record.parentTable.id, record.id, recordIds);
 }
 
-module.exports = expandRecord;
+export default expandRecord;

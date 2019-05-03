@@ -1,6 +1,7 @@
 // @flow
-const getSdk = require('../get_sdk');
-const PropTypes = require('prop-types');
+import getSdk from '../get_sdk';
+
+import PropTypes from 'prop-types';
 
 import type {GlobalConfigKey} from '../global_config';
 import type {WatchDependency} from './create_data_container';
@@ -19,4 +20,4 @@ const globalConfigSyncedComponentHelpers = {
     },
 };
 
-module.exports = globalConfigSyncedComponentHelpers;
+export default globalConfigSyncedComponentHelpers;

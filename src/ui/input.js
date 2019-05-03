@@ -1,9 +1,9 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const classNames = require('classnames');
-const invariant = require('invariant');
+import React from './react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import invariant from 'invariant';
 
 export type InputValue = string | boolean | number;
 
@@ -123,4 +123,4 @@ class Input extends React.Component<InputProps> {
     }
 }
 
-module.exports = Input;
+export default Input;

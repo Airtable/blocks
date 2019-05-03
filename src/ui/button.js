@@ -1,8 +1,9 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const classNames = require('classnames');
-const invariant = require('invariant');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import invariant from 'invariant';
 
 const themes = Object.freeze({
     RED: 'red',
@@ -107,4 +108,4 @@ class Button extends React.Component<ButtonProps> {
     }
 }
 
-module.exports = Button;
+export default Button;

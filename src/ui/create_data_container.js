@@ -1,9 +1,9 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const Watchable = require('../watchable');
-const Table = require('../models/table');
-const View = require('../models/view');
+import React from './react';
+import Watchable from '../watchable';
+import Table from '../models/table';
+import View from '../models/view';
 
 // These helper functions were taken from
 // https://github.com/facebook/relay/blob/e918103/src/container/RelayContainerUtils.js
@@ -408,4 +408,4 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
     return DataContainer;
 }
 
-module.exports = createDataContainer;
+export default createDataContainer;

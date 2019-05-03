@@ -1,7 +1,8 @@
 // @flow
-const invariant = require('invariant');
-const Watchable = require('./watchable');
-const utils = require('./private_utils');
+import invariant from 'invariant';
+
+import Watchable from './watchable';
+import utils from './private_utils';
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 import type {AirtableInterface} from './injected/airtable_interface';
@@ -284,4 +285,4 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 }
 
-module.exports = Viewport;
+export default Viewport;

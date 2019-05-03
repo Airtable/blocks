@@ -1,14 +1,14 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
-const ViewModel = require('../models/view');
-const TableModel = require('../models/table');
-const ViewTypes = require('../types/view_types');
-const ModelPickerSelect = require('./model_picker_select');
-const invariant = require('invariant');
+import React from './react';
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
+import ViewModel from '../models/view';
+import TableModel from '../models/table';
+import ViewTypes from '../types/view_types';
+import ModelPickerSelect from './model_picker_select';
+import invariant from 'invariant';
 
 import type {ViewType} from '../types/view_types';
 
@@ -118,7 +118,7 @@ class ViewPicker extends React.Component<ViewPickerProps> {
     }
 }
 
-module.exports = createDataContainer(
+export default createDataContainer(
     ViewPicker,
     (props: ViewPickerProps) => {
         return [{watch: props.table, key: 'views'}, {watch: getSdk().base, key: 'tables'}];

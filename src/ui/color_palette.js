@@ -1,9 +1,10 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
-const colorUtils = require('../color_utils');
-const Icon = require('./icon');
-const classNames = require('classnames');
+import React from './react';
+
+import PropTypes from 'prop-types';
+import colorUtils from '../color_utils';
+import Icon from './icon';
+import classNames from 'classnames';
 
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
@@ -96,4 +97,4 @@ class ColorPalette extends React.Component<ColorPaletteProps> {
     }
 }
 
-module.exports = ColorPalette;
+export default ColorPalette;

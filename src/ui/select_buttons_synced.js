@@ -1,9 +1,9 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const SelectButtons = require('./select_buttons');
-const {SelectAndSelectButtonsSyncedPropTypes} = require('./select_and_select_buttons_helpers');
-const Synced = require('./synced');
+import React from './react';
+import SelectButtons from './select_buttons';
+import {SelectAndSelectButtonsSyncedPropTypes} from './select_and_select_buttons_helpers';
+import Synced from './synced';
 
 import type {SelectAndSelectButtonsSyncedProps as SelectButtonsSyncedProps} from './select_and_select_buttons_helpers';
 
@@ -38,4 +38,4 @@ class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {
     }
 }
 
-module.exports = SelectButtonsSynced;
+export default SelectButtonsSynced;

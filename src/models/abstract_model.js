@@ -1,6 +1,7 @@
 // @flow
-const Watchable = require('../watchable');
-const invariant = require('invariant');
+import Watchable from '../watchable';
+
+import invariant from 'invariant';
 
 import type {BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
 
@@ -64,4 +65,4 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     }
 }
 
-module.exports = AbstractModel;
+export default AbstractModel;

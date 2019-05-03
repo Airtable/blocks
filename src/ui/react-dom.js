@@ -15,4 +15,4 @@ const ReactDOM = window[blocksConfigSettings.GLOBAL_REACT_DOM_VARIABLE_NAME];
 // until all the currently released blocks have been rebuilt.
 // TODO(jb): after rebuilding all blocks, add back invariant here.
 
-module.exports = ReactDOM;
+export default ReactDOM;

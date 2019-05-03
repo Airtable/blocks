@@ -1,14 +1,13 @@
 // @flow
-import type SdkType from './sdk';
+import Sdk from './sdk';
+import airtableInterface from './injected/airtable_interface';
 
 // TODO(alex): prevent sdk sharing across invocations of the same lambda container
 let sdk;
-module.exports = function getSdk(): SdkType {
+export default function getSdk(): Sdk {
     if (!sdk) {
-        const Sdk = require('./sdk');
-        const airtableInterface = require('./injected/airtable_interface');
         sdk = new Sdk(airtableInterface);
     }
 
     return sdk;
-};
+}

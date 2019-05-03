@@ -1,10 +1,10 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const Popover = require('./popover');
+import React from './react';
+import PropTypes from 'prop-types';
+import Popover from './popover';
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 import type {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
 
@@ -373,4 +373,4 @@ class AutocompletePopover extends React.Component<
     }
 }
 
-module.exports = AutocompletePopover;
+export default AutocompletePopover;

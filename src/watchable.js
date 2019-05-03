@@ -98,4 +98,4 @@ class Watchable<WatchableKey: string> {
     }
 }
 
-module.exports = Watchable;
+export default Watchable;

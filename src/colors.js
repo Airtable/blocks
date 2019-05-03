@@ -69,4 +69,4 @@ for (const color of liveappColorsToInclude) {
     colors[enumNameForColor] = color;
 }
 
-module.exports = colors;
+export default colors;

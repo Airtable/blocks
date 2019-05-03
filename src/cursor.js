@@ -1,8 +1,9 @@
 // @flow
-const utils = require('./private_utils');
+import utils from './private_utils';
+
 const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const AbstractModelWithAsyncData = require('./models/abstract_model_with_async_data');
-const Record = require('./models/record');
+import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
+import Record from './models/record';
 
 import type {
     BaseDataForBlocks,
@@ -77,4 +78,4 @@ class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCu
     }
 }
 
-module.exports = Cursor;
+export default Cursor;

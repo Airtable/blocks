@@ -1,9 +1,9 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const colors = require('../colors');
-const colorUtils = require('../color_utils');
+import React from './react';
+import PropTypes from 'prop-types';
+import colors from '../colors';
+import colorUtils from '../color_utils';
 
 type ProgressBarProps = {
     progress: number,
@@ -56,4 +56,4 @@ ProgressBar.propTypes = {
     style: PropTypes.object,
 };
 
-module.exports = ProgressBar;
+export default ProgressBar;

@@ -1,10 +1,10 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const ColorPalette = require('./color_palette');
-const Synced = require('./synced');
-const globalConfigSyncedComponentHelpers = require('./global_config_synced_component_helpers');
+import React from './react';
+import PropTypes from 'prop-types';
+import ColorPalette from './color_palette';
+import Synced from './synced';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 type ColorPaletteSyncedProps = {
     globalConfigKey: string,
@@ -44,4 +44,4 @@ class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
     }
 }
 
-module.exports = ColorPaletteSynced;
+export default ColorPaletteSynced;

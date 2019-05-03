@@ -1,14 +1,14 @@
 // @flow
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
-const FieldModel = require('../models/field');
-const TableModel = require('../models/table');
-const FieldTypes = require('../types/field_types');
-const ModelPickerSelect = require('./model_picker_select');
-const invariant = require('invariant');
+import React from './react';
+import PropTypes from 'prop-types';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
+import FieldModel from '../models/field';
+import TableModel from '../models/table';
+import FieldTypes from '../types/field_types';
+import ModelPickerSelect from './model_picker_select';
+import invariant from 'invariant';
 
 import type {FieldType} from '../types/field_types';
 
@@ -130,7 +130,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     }
 }
 
-module.exports = createDataContainer(
+export default createDataContainer(
     FieldPicker,
     (props: FieldPickerProps) => {
         return [{watch: props.table, key: 'fields'}, {watch: getSdk().base, key: 'tables'}];

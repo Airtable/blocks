@@ -1,10 +1,11 @@
 // @flow
-const invariant = require('invariant');
-const React = require('./react');
-const PropTypes = require('prop-types');
-const Modal = require('./modal');
-const createDataContainer = require('./create_data_container');
-const getSdk = require('../get_sdk');
+import invariant from 'invariant';
+
+import React from './react';
+import PropTypes from 'prop-types';
+import Modal from './modal';
+import createDataContainer from './create_data_container';
+import getSdk from '../get_sdk';
 
 type BlockWrapperComponentProps = {|
     // Note: this is whatever the block exports from the frontend entry point,
@@ -142,6 +143,6 @@ class BlockWrapperComponent extends React.Component<BlockWrapperComponentProps> 
     }
 }
 
-module.exports = createDataContainer(BlockWrapperComponent, () => [
+export default createDataContainer(BlockWrapperComponent, () => [
     {watch: getSdk().viewport, key: ['size', 'minSize']},
 ]);

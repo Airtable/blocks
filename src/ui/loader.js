@@ -1,6 +1,7 @@
 // @flow
-const React = require('./react');
-const PropTypes = require('prop-types');
+import React from './react';
+
+import PropTypes from 'prop-types';
 // TODO(kasra): don't depend on liveapp components.
 const _Loader = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/ui/loader/loader',
@@ -19,4 +20,4 @@ Loader.propTypes = {
     scale: PropTypes.number,
 };
 
-module.exports = Loader;
+export default Loader;

@@ -1,5 +1,5 @@
 // @flow
-const invariant = require('invariant');
+import invariant from 'invariant';
 
 type ObjectPoolOptions<T, Opts> = {|
     getKeyFromObject: T => string,
@@ -58,4 +58,4 @@ class ObjectPool<T, Opts> {
     }
 }
 
-module.exports = ObjectPool;
+export default ObjectPool;

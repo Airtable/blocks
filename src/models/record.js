@@ -1,13 +1,13 @@
 // @flow
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const invariant = require('invariant');
-const utils = require('../private_utils');
-const AbstractModel = require('./abstract_model');
-const Field = require('./field');
+import invariant from 'invariant';
+import utils from '../private_utils';
+import AbstractModel from './abstract_model';
+import Field from './field';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const cellValueUtils = require('./cell_value_utils');
+import cellValueUtils from './cell_value_utils';
 const airtableUrls = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/airtable_urls',
 );
@@ -15,7 +15,7 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
     'client_server_shared/client_server_shared_config_settings',
 );
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-const FieldTypes = require('../types/field_types');
+import FieldTypes from '../types/field_types';
 
 import type {AirtableWriteAction} from '../injected/airtable_interface';
 import type {Color} from 'client_server_shared/types/view_config/color_config_obj';
@@ -26,7 +26,7 @@ import type {
 import type TableType from './table';
 import type ViewType from './view';
 import type {QueryResultOpts} from './query_result';
-import type LinkedRecordsQueryResultType from './linked_records_query_result';
+import LinkedRecordsQueryResult from './linked_records_query_result';
 
 // A record def is a cellValuesByFieldId object.
 export type RecordDef = {[string]: mixed};
@@ -246,12 +246,10 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     getLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | string,
         opts: QueryResultOpts = {},
-    ): LinkedRecordsQueryResultType {
+    ): LinkedRecordsQueryResult {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
-        // require here to avoid circular import
-        const LinkedRecordsQueryResult = require('./linked_records_query_result');
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
     /** Returns the URL for this record. */
@@ -361,4 +359,4 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
     }
 }
 
-module.exports = Record;
+export default Record;

@@ -8,8 +8,9 @@
 // version of React, PropTypes won't be available, but a few SDK components
 // try to reference it. Once grepping React.PropTypes in hyperbase doesn't
 // return any matches, we can remove this hack.
-const React = require('react');
-const PropTypes = require('prop-types');
+import React from 'react';
+import PropTypes from 'prop-types';
+
 // eslint-disable-next-line react/no-deprecated
 if (!React.PropTypes) {
     // eslint-disable-next-line react/no-deprecated
@@ -19,9 +20,9 @@ if (!React.PropTypes) {
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
-const GlobalConfig = require('./global_config');
-const Base = require('./models/base');
-const models = require('./models/models');
+import GlobalConfig from './global_config';
+import Base from './models/base';
+import models from './models/models';
 const InMemoryStorage = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/in_memory_storage',
 );
@@ -31,12 +32,12 @@ const {
 } = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/is_storage_available',
 );
-const Viewport = require('./viewport');
-const Cursor = require('./cursor');
-const UI = require('./ui/ui');
-const BlockWrapperComponent = require('./ui/block_wrapper_component');
-const SettingsButton = require('./settings_button');
-const UndoRedo = require('./undo_redo');
+import Viewport from './viewport';
+import Cursor from './cursor';
+import UI from './ui/ui';
+import BlockWrapperComponent from './ui/block_wrapper_component';
+import SettingsButton from './settings_button';
+import UndoRedo from './undo_redo';
 
 import type {AirtableInterface} from './injected/airtable_interface';
 
@@ -195,4 +196,4 @@ class BlockSdk {
     }
 }
 
-module.exports = BlockSdk;
+export default BlockSdk;

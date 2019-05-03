@@ -85,4 +85,4 @@ if (!getAirtableInterfaceAtVersion) {
     throw new Error('@airtable/blocks can only run inside the block frame');
 }
 
-module.exports = getAirtableInterfaceAtVersion(AIRTABLE_INTERFACE_VERSION);
+export default getAirtableInterfaceAtVersion(AIRTABLE_INTERFACE_VERSION);
