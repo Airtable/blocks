@@ -2,20 +2,21 @@
 
 const request = require('request');
 const promisify = require('es6-promisify');
+const Environments = require('./types/environments');
 
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
 
 const apiDomainsByEnvironment = {
-    production: 'api.airtable.com',
-    staging: 'api-staging.airtable.com',
-    local: 'api.hyperbasedev.com:3000',
+    [Environments.PRODUCTION]: 'api.airtable.com',
+    [Environments.STAGING]: 'api-staging.airtable.com',
+    [Environments.LOCAL]: 'api.hyperbasedev.com:3000',
 };
 
 class APIClient {
     constructor(opts) {
-        this._environment = opts.environment || 'production';
+        this._environment = opts.environment || Environments.PRODUCTION;
         this._applicationId = opts.applicationId;
         this._blockInstallationId = opts.blockInstallationId;
         this._blockId = opts.blockId;

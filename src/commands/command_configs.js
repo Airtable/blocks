@@ -1,6 +1,8 @@
 // @flow
 const CommandNames = require('./command_names');
+const Environments = require('../types/environments');
 const path = require('path');
+const _ = require('lodash');
 
 import type {CommandName} from './command_names';
 import type {Argv, Options, PositionalOptions} from 'yargs';
@@ -26,6 +28,32 @@ function commandRunner(name: string): RunCommandFn {
 }
 
 const commandConfigs: {[CommandName]: CommandConfig} = {
+    [CommandNames.INIT]: {
+        name: CommandNames.INIT,
+        command: `${CommandNames.INIT} <blockIdentifier> <blockDirPath>`,
+        description: 'Initialize a block repo',
+        example: `block ${CommandNames.INIT} app123/blk456 my-block`,
+        positionalMap: {
+            blockIdentifier: {
+                description: 'identifier for the block (of the form <baseId>/<blockId>)',
+                type: 'string',
+            },
+            blockDirPath: {
+                description: 'directory path for the block',
+                type: 'string',
+            },
+        },
+        optionMap: {
+            environment: {
+                type: 'string',
+                description: 'Which environment the block lives on',
+                choices: _.values(Environments),
+                default: Environments.PRODUCTION,
+                hidden: true, // hide from --help output
+            },
+        },
+        runCommandAsync: commandRunner(CommandNames.INIT),
+    },
     [CommandNames.BUILD]: {
         name: CommandNames.BUILD,
         command: `${CommandNames.BUILD}`,
@@ -40,7 +68,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         example: `block ${CommandNames.CLONE} app123/blk456 my-block`,
         positionalMap: {
             blockIdentifier: {
-                description: 'identifier for the block (of the form <appId>/<blockId>)',
+                description: 'identifier for the block (of the form <baseId>/<blockId>)',
                 type: 'string',
             },
             blockDirPath: {
@@ -52,8 +80,8 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             environment: {
                 type: 'string',
                 description: 'Which environment to clone from',
-                choices: ['production', 'staging', 'local'],
-                default: 'production',
+                choices: _.values(Environments),
+                default: Environments.PRODUCTION,
                 hidden: true, // hide from --help output
             },
         },

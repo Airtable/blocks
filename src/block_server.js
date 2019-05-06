@@ -23,6 +23,7 @@ const chokidar = require('chokidar');
 const getBlockDirPath = require('./get_block_dir_path');
 const getDeveloperCredentialsEncryptedIfExistsAsync = require('./get_developer_credentials_encrypted_if_exists_async');
 const normalizeUserResponse = require('./normalize_user_response');
+const Environments = require('./types/environments');
 const semver = require('semver');
 
 const events = require('events');
@@ -179,11 +180,11 @@ class BlockServer {
     }
     _getApiBaseUrlForEnvironment(environment) {
         switch (environment) {
-            case 'local':
+            case Environments.LOCAL:
                 return 'https://api.hyperbasedev.com:3000';
-            case 'staging':
+            case Environments.STAGING:
                 return 'https://api-staging.airtable.com';
-            case 'production':
+            case Environments.PRODUCTION:
             default:
                 return 'https://api.airtable.com';
         }

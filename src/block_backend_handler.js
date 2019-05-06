@@ -10,6 +10,7 @@ const generateBlockBabelConfig = require('./generate_block_babel_config');
 const chalk = require('chalk');
 const generateResponseBodyBase64 = require('./generate_response_body_base64');
 const getBlockDirPath = require('./get_block_dir_path');
+const Environments = require('./types/environments');
 const promisify = require('es6-promisify');
 const request = require('request');
 request.getAsync = promisify(request.get);
@@ -243,20 +244,20 @@ function requireFromString(src) {
 
 async function downloadBackendSdkAsync(blockJson, blockDirPath) {
     let baseUrl;
-    const environment = blockJson.environment || 'production';
+    const environment = blockJson.environment || Environments.PRODUCTION;
     switch (environment) {
-        case 'production':
+        case Environments.PRODUCTION:
             // NOTE: this should probably download from the cdn, but we can't do that
             // right now, since the cdn url contains the hyperbase code version. In
             // the future, we should add a public endpoint to fetch the cdn url, so
             // we could hit that endpoint and then download the sdk from the cdn.
             baseUrl = 'https://airtable.com/js/compiled';
             break;
-        case 'staging':
+        case Environments.STAGING:
             // NOTE: see comment above.
             baseUrl = 'https://staging.airtable.com/js/compiled';
             break;
-        case 'local':
+        case Environments.LOCAL:
             baseUrl = 'https://hyperbasedev.com:3000/js/build';
             break;
         default:

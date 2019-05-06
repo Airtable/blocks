@@ -1,5 +1,6 @@
 // @flow
 const CommandNames = {
+    INIT: ('init': 'init'),
     RUN: ('run': 'run'),
     CLONE: ('clone': 'clone'),
     PUSH: ('push': 'push'),

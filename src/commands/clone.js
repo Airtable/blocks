@@ -6,13 +6,8 @@ const writeFilesFromApiResponseAsync = require('../write_files_from_api_response
 const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
 const APIClient = require('../api_client');
 const fsUtils = require('../fs_utils');
-const cliHelpers = require('../helpers/cli_helpers');
-
-const domainByEnvironment = {
-    production: 'airtable.com',
-    staging: 'staging.airtable.com',
-    local: 'hyperbasedev.com:3000',
-};
+const parseBlockIdentifier = require('../helpers/parse_block_identifier');
+const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
 
 async function cloneBlockAsync(
     environment,
@@ -84,15 +79,11 @@ async function cloneBlockAsync(
 
 async function runCommandAsync(argv) {
     const {blockIdentifier, blockDirPath} = argv;
-    const blockIdentifierSplit = blockIdentifier.split('/');
-    if (
-        blockIdentifierSplit.length !== 2 ||
-        !blockIdentifierSplit[0].startsWith('app') ||
-        !blockIdentifierSplit[1].startsWith('blk')
-    ) {
-        throw new Error('Block identifier must be of format <applicationId>/<blockId>');
+    const blockIdentifierParseResult = parseBlockIdentifier(blockIdentifier);
+    if (!blockIdentifierParseResult.success) {
+        throw blockIdentifierParseResult.error;
     }
-    const [appId, blockId] = blockIdentifierSplit;
+    const {baseId, blockId} = blockIdentifierParseResult.value;
 
     // Lets validate that the given blockDir doesn't already have something in it.
     const doesBlockDirExist = fs.existsSync(blockDirPath);
@@ -101,18 +92,13 @@ async function runCommandAsync(argv) {
     }
 
     const environment = argv.environment;
-    const domain = domainByEnvironment[environment];
-    // Prompt for apiKey.
-    const result = await cliHelpers.promptAsync({
-        name: 'apiKey',
-        description: `Please enter your API key. You can generate one at https://${domain}/account`,
-    });
+    const apiKey = await promptForApiKeyAsync(environment);
     await cloneBlockAsync(
         environment,
-        appId,
+        baseId,
         blockId,
         blockDirPath,
-        result.apiKey,
+        apiKey,
     );
     console.log(`Block cloned in ${argv.blockDirPath}`);
 }
