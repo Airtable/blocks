@@ -4,7 +4,6 @@ import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function
 import type Record from './record';
 import type Field from './field';
 
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/summary_functions',
 );
@@ -34,7 +33,7 @@ export type Aggregator = {
     aggregateToString: (records: Array<Record>, field: Field) => string,
 };
 
-const aggregatorKeys = u.keys(liveappSummaryFunctionKeyByAggregatorKey);
+const aggregatorKeys = Object.keys(liveappSummaryFunctionKeyByAggregatorKey);
 
 const aggregators: {[string]: Aggregator} = {};
 

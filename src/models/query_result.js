@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {FieldTypes} from '../types/field';
-import utils from '../private_utils';
+import {isEnumValue, assertEnumValue} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type TableModel from './table';
@@ -90,7 +90,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     static WatchableCellValuesInFieldKeyPrefix = WatchableCellValuesInFieldKeyPrefix;
     static _isWatchableKey(key: string): boolean {
         return (
-            utils.isEnumValue(WatchableQueryResultKeys, key) ||
+            isEnumValue(WatchableQueryResultKeys, key) ||
             u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)
         );
     }
@@ -247,7 +247,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 }
                 const value = record.getCellValue(recordColorMode.selectField);
                 return value && typeof value === 'object' && typeof value.color === 'string'
-                    ? utils.assertEnumValue(Colors, value.color)
+                    ? assertEnumValue(Colors, value.color)
                     : null;
             }
             case RecordColorModeTypes.BY_VIEW:

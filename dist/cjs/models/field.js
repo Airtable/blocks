@@ -26,7 +26,7 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
@@ -63,7 +63,7 @@ function (_AbstractModel) {
   (0, _createClass2.default)(Field, null, [{
     key: "_isWatchableKey",
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableFieldKeys, key);
+      return (0, _private_utils.isEnumValue)(WatchableFieldKeys, key);
     }
   }]);
 
@@ -86,7 +86,7 @@ function (_AbstractModel) {
 
       return {
         type: type,
-        options: options ? _private_utils.default.cloneDeep(options) : null
+        options: options ? (0, _private_utils.cloneDeep)(options) : null
       };
     }
     /** */
@@ -221,7 +221,7 @@ function (_AbstractModel) {
       var _columnTypeProvider$g3 = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
           options = _columnTypeProvider$g3.options;
 
-      return options ? _private_utils.default.cloneDeep(options) : null;
+      return options ? (0, _private_utils.cloneDeep)(options) : null;
     }
     /** */
 

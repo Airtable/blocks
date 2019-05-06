@@ -20,13 +20,11 @@ var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable
 
 var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
 
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/keys"));
+var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
 var _liveapp_summary_function_key_by_aggregator_key = _interopRequireDefault(require("./liveapp_summary_function_key_by_aggregator_key"));
-
-var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 var liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('client_server_shared/summary_functions');
 /**
@@ -44,7 +42,7 @@ var liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('client_
  */
 
 
-var aggregatorKeys = (0, _keys.default)(u).call(u, _liveapp_summary_function_key_by_aggregator_key.default);
+var aggregatorKeys = (0, _keys.default)(_liveapp_summary_function_key_by_aggregator_key.default);
 var aggregators = {};
 
 var aggregate = function aggregate(aggregatorKey, records, field) {

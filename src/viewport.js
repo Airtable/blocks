@@ -1,7 +1,7 @@
 // @flow
 import invariant from 'invariant';
 import Watchable from './watchable';
-import utils from './private_utils';
+import {isEnumValue} from './private_utils';
 import {type AirtableInterface} from './injected/airtable_interface';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
@@ -46,7 +46,7 @@ const compareWithNulls = (
 class Viewport extends Watchable<WatchableViewportKey> {
     static _className = 'Viewport';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableViewportKeys, key);
+        return isEnumValue(WatchableViewportKeys, key);
     }
 
     _isFullscreen: boolean;

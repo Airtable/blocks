@@ -1,5 +1,5 @@
 // @flow
-import utils from './private_utils';
+import {getEnumValueIfExists} from './private_utils';
 import Colors, {type Color, rgbTuplesByColor} from './colors';
 
 type RGB = {|r: number, g: number, b: number|};
@@ -16,7 +16,7 @@ type GetRgbForColorType = (Color => RGB) & (string => RGB | null);
 const colorUtils = {
     /** */
     getHexForColor: (colorString => {
-        const color = utils.getEnumValueIfExists(Colors, colorString);
+        const color = getEnumValueIfExists(Colors, colorString);
         if (!color) {
             // flow-disable-next-line returning null doesn't work with the overload
             return null;
@@ -28,7 +28,7 @@ const colorUtils = {
     }: GetHexForColorType),
     /** */
     getRgbForColor: (colorString => {
-        const color = utils.getEnumValueIfExists(Colors, colorString);
+        const color = getEnumValueIfExists(Colors, colorString);
         if (!color) {
             // flow-disable-next-line returning null doesn't work with the overload
             return null;

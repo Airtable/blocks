@@ -36,7 +36,7 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
@@ -94,7 +94,7 @@ function (_AbstractModel) {
             // Note: for simplicity, we will call loadData for every key that needs
             // needs data, relying on the retain count to unload once all keys have
             // been unwatched.
-            _private_utils.default.fireAndForgetPromise((0, _bind.default)(_context = this.loadDataAsync).call(_context, this));
+            (0, _private_utils.fireAndForgetPromise)((0, _bind.default)(_context = this.loadDataAsync).call(_context, this));
           }
         }
       } catch (err) {

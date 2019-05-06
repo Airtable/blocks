@@ -8,6 +8,8 @@ require("core-js/modules/es.function.name");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
@@ -19,8 +21,6 @@ var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/e
 var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
 
 var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/filter"));
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/find"));
 
@@ -53,6 +53,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _classnames = _interopRequireDefault(require("classnames"));
 
 var React = _interopRequireWildcard(require("react"));
+
+var _private_utils = require("../private_utils");
 
 var _field = require("../types/field");
 
@@ -335,7 +337,7 @@ function (_React$Component) {
         var rawCellValue = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
 
 
-        attachmentsInField = u.flattenDeep((0, _values.default)(u).call(u, rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
+        attachmentsInField = u.flattenDeep((0, _valuesInstanceProperty(_private_utils))(rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
       } else {
         attachmentsInField = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
       }

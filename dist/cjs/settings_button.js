@@ -24,7 +24,7 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/he
 
 var _watchable = _interopRequireDefault(require("./watchable"));
 
-var _private_utils = _interopRequireDefault(require("./private_utils"));
+var _private_utils = require("./private_utils");
 
 var WatchableSettingsButtonKeys = {
   isVisible: 'isVisible',
@@ -50,7 +50,7 @@ function (_Watchable) {
   (0, _createClass2.default)(SettingsButton, null, [{
     key: "_isWatchableKey",
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableSettingsButtonKeys, key);
+      return (0, _private_utils.isEnumValue)(WatchableSettingsButtonKeys, key);
     }
   }]);
 

@@ -42,7 +42,7 @@ var _settings_button = _interopRequireDefault(require("./settings_button"));
 
 var _undo_redo = _interopRequireDefault(require("./undo_redo"));
 
-var _private_utils = _interopRequireDefault(require("./private_utils"));
+var _private_utils = require("./private_utils");
 
 // NOTE: The version of React running in the Block SDK is controlled by the block.
 // The SDK should not make too many assumptions about which version of React or
@@ -94,8 +94,7 @@ function () {
     } // TODO(alex): remove initial data fallback once hyperbase is deployed
 
 
-    var sdkInitData = _private_utils.default.cloneDeep(airtableInterface.sdkInitData || airtableInterface.initialData);
-
+    var sdkInitData = (0, _private_utils.cloneDeep)(airtableInterface.sdkInitData || airtableInterface.initialData);
     this.globalConfig = new _global_config.default(sdkInitData.initialKvValuesByKey, airtableInterface);
     this.base = new _base.default(sdkInitData.baseData, airtableInterface);
     this.models = _models.default;

@@ -20,6 +20,10 @@ require("core-js/modules/web.url.to-json");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
+var _entriesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/entries");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
@@ -28,15 +32,11 @@ exports.default = void 0;
 
 var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/for-each"));
 
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/keys"));
-
 var _freeze = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/freeze"));
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _some = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/some"));
 
-var _keys2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
+var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
 
 var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/filter"));
 
@@ -61,8 +61,6 @@ var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs3
 var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/slicedToArray"));
-
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/entries"));
 
 var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
 
@@ -92,7 +90,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
 
 var _permission_levels = require("../types/permission_levels");
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
@@ -145,7 +143,7 @@ function (_AbstractModelWithAsy) {
     // Once all blocks that current set this flag to true are migrated,
     // remove this flag.
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableTableKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix);
+      return (0, _private_utils.isEnumValue)(WatchableTableKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix);
     }
   }, {
     key: "_shouldLoadDataForKey",
@@ -199,7 +197,7 @@ function (_AbstractModelWithAsy) {
       if (fieldIdsToLoad.length > 0) {
         var _context;
 
-        _private_utils.default.fireAndForgetPromise((0, _bind.default)(_context = this.loadCellValuesInFieldIdsAsync).call(_context, this, fieldIdsToLoad));
+        (0, _private_utils.fireAndForgetPromise)((0, _bind.default)(_context = this.loadCellValuesInFieldIdsAsync).call(_context, this, fieldIdsToLoad));
       }
 
       return validKeys;
@@ -280,7 +278,7 @@ function (_AbstractModelWithAsy) {
       var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator2 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._data.fieldsById)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        for (var _iterator2 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._data.fieldsById)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           var _step2$value = (0, _slicedToArray2.default)(_step2.value, 2),
               fieldId = _step2$value[0],
               fieldData = _step2$value[1];
@@ -337,7 +335,7 @@ function (_AbstractModelWithAsy) {
       var _iteratorError3 = undefined;
 
       try {
-        for (var _iterator3 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._data.viewsById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        for (var _iterator3 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._data.viewsById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
           var _step3$value = (0, _slicedToArray2.default)(_step3.value, 2),
               viewId = _step3$value[0],
               viewData = _step3$value[1];
@@ -426,7 +424,7 @@ function (_AbstractModelWithAsy) {
       var _iteratorError4 = undefined;
 
       try {
-        for (var _iterator4 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, cellValuesByRecordIdThenFieldIdOrFieldName)), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+        for (var _iterator4 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(cellValuesByRecordIdThenFieldIdOrFieldName)), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
           var _step4$value = (0, _slicedToArray2.default)(_step4.value, 2),
               recordId = _step4$value[0],
               cellValuesByFieldIdOrFieldName = _step4$value[1];
@@ -443,7 +441,7 @@ function (_AbstractModelWithAsy) {
           var _iteratorError5 = undefined;
 
           try {
-            for (var _iterator5 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, cellValuesByFieldIdOrFieldName)), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            for (var _iterator5 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(cellValuesByFieldIdOrFieldName)), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
               var _step5$value = (0, _slicedToArray2.default)(_step5.value, 2),
                   fieldIdOrFieldName = _step5$value[0],
                   publicCellValue = _step5$value[1];
@@ -589,7 +587,7 @@ function (_AbstractModelWithAsy) {
           var _iteratorError8 = undefined;
 
           try {
-            for (var _iterator8 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, recordDef)), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+            for (var _iterator8 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(recordDef)), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
               var _step8$value = (0, _slicedToArray2.default)(_step8.value, 2),
                   fieldIdOrFieldName = _step8$value[0],
                   cellValue = _step8$value[1];
@@ -1260,7 +1258,7 @@ function (_AbstractModelWithAsy) {
                 this._data.recordsById = tableData.recordsById;
                 changedKeys = [WatchableTableKeys.records, WatchableTableKeys.recordIds, WatchableTableKeys.cellValues];
 
-                for (_i3 = 0, _Object$keys = (0, _keys2.default)(this._data.fieldsById); _i3 < _Object$keys.length; _i3++) {
+                for (_i3 = 0, _Object$keys = (0, _keys.default)(this._data.fieldsById); _i3 < _Object$keys.length; _i3++) {
                   fieldId = _Object$keys[_i3];
                   changedKeys.push(WatchableCellValuesInFieldKeyPrefix + fieldId);
                 }
@@ -1293,7 +1291,7 @@ function (_AbstractModelWithAsy) {
     value: function _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds) {
       var _this6 = this;
 
-      var areAnyFieldsLoaded = this.isDataLoaded || (0, _some.default)(u).call(u, (0, _values.default)(u).call(u, this._areCellValuesLoadedByFieldId), function (isLoaded) {
+      var areAnyFieldsLoaded = this.isDataLoaded || (0, _some.default)(u).call(u, (0, _valuesInstanceProperty(_private_utils))(this._areCellValuesLoadedByFieldId), function (isLoaded) {
         return isLoaded;
       });
 
@@ -1310,7 +1308,7 @@ function (_AbstractModelWithAsy) {
             // The entire table was unloaded, but some individual fields are still loaded.
             // We need to clear out the cell values of every field that was unloaded.
             // This is kind of slow, but hopefully uncommon.
-            var fieldIds = (0, _keys2.default)(this._data.fieldsById);
+            var fieldIds = (0, _keys.default)(this._data.fieldsById);
             fieldIdsToClear = (0, _filter.default)(fieldIds).call(fieldIds, function (fieldId) {
               return !_this6._areCellValuesLoadedByFieldId[fieldId];
             });
@@ -1378,7 +1376,7 @@ function (_AbstractModelWithAsy) {
         var _iteratorError14 = undefined;
 
         try {
-          for (var _iterator14 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._viewModelsById)), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+          for (var _iterator14 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._viewModelsById)), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
             var _step14$value = (0, _slicedToArray2.default)(_step14.value, 2),
                 viewId = _step14$value[0],
                 viewModel = _step14$value[1];
@@ -1409,7 +1407,7 @@ function (_AbstractModelWithAsy) {
         var _iteratorError15 = undefined;
 
         try {
-          for (var _iterator15 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, dirtyPaths.viewsById)), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+          for (var _iterator15 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(dirtyPaths.viewsById)), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
             var _step15$value = (0, _slicedToArray2.default)(_step15.value, 2),
                 viewId = _step15$value[0],
                 dirtyViewPaths = _step15$value[1];
@@ -1449,7 +1447,7 @@ function (_AbstractModelWithAsy) {
         var _iteratorError16 = undefined;
 
         try {
-          for (var _iterator16 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, dirtyPaths.fieldsById)), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
+          for (var _iterator16 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(dirtyPaths.fieldsById)), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
             var _step16$value = (0, _slicedToArray2.default)(_step16.value, 2),
                 fieldId = _step16$value[0],
                 dirtyFieldPaths = _step16$value[1];
@@ -1515,7 +1513,7 @@ function (_AbstractModelWithAsy) {
         var _iteratorError17 = undefined;
 
         try {
-          for (var _iterator17 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, dirtyPaths.recordsById)), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
+          for (var _iterator17 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(dirtyPaths.recordsById)), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
             var _step17$value = (0, _slicedToArray2.default)(_step17.value, 2),
                 recordId = _step17$value[0],
                 dirtyRecordPaths = _step17$value[1];
@@ -1546,28 +1544,9 @@ function (_AbstractModelWithAsy) {
             var cellValuesByFieldId = dirtyRecordPaths.cellValuesByFieldId;
 
             if (cellValuesByFieldId) {
-              var _iteratorNormalCompletion19 = true;
-              var _didIteratorError19 = false;
-              var _iteratorError19 = undefined;
-
-              try {
-                for (var _iterator19 = (0, _getIterator2.default)((0, _keys.default)(u).call(u, cellValuesByFieldId)), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
-                  var fieldId = _step19.value;
-                  dirtyFieldIdsSet[fieldId] = true;
-                }
-              } catch (err) {
-                _didIteratorError19 = true;
-                _iteratorError19 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion19 && _iterator19.return != null) {
-                    _iterator19.return();
-                  }
-                } finally {
-                  if (_didIteratorError19) {
-                    throw _iteratorError19;
-                  }
-                }
+              for (var _i4 = 0, _Object$keys3 = (0, _keys.default)(cellValuesByFieldId); _i4 < _Object$keys3.length; _i4++) {
+                var fieldId = _Object$keys3[_i4];
+                dirtyFieldIdsSet[fieldId] = true;
               }
             }
           } // Now that we've composed our created/deleted record ids arrays, let's fire
@@ -1609,8 +1588,8 @@ function (_AbstractModelWithAsy) {
         // that we're not subscribed to).
 
 
-        var fieldIds = (0, _freeze.default)((0, _keys2.default)(dirtyFieldIdsSet));
-        var recordIds = (0, _freeze.default)((0, _keys2.default)(dirtyPaths.recordsById));
+        var fieldIds = (0, _freeze.default)((0, _keys.default)(dirtyFieldIdsSet));
+        var recordIds = (0, _freeze.default)((0, _keys.default)(dirtyPaths.recordsById));
 
         if (fieldIds.length > 0 && recordIds.length > 0) {
           this._onChange(WatchableTableKeys.cellValues, {
@@ -1650,29 +1629,29 @@ function (_AbstractModelWithAsy) {
     value: function __getFieldNamesById() {
       if (!this._cachedFieldNamesById) {
         var fieldNamesById = {};
-        var _iteratorNormalCompletion20 = true;
-        var _didIteratorError20 = false;
-        var _iteratorError20 = undefined;
+        var _iteratorNormalCompletion19 = true;
+        var _didIteratorError19 = false;
+        var _iteratorError19 = undefined;
 
         try {
-          for (var _iterator20 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._data.fieldsById)), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {
-            var _step20$value = (0, _slicedToArray2.default)(_step20.value, 2),
-                fieldId = _step20$value[0],
-                fieldData = _step20$value[1];
+          for (var _iterator19 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._data.fieldsById)), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+            var _step19$value = (0, _slicedToArray2.default)(_step19.value, 2),
+                fieldId = _step19$value[0],
+                fieldData = _step19$value[1];
 
             fieldNamesById[fieldId] = fieldData.name;
           }
         } catch (err) {
-          _didIteratorError20 = true;
-          _iteratorError20 = err;
+          _didIteratorError19 = true;
+          _iteratorError19 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion20 && _iterator20.return != null) {
-              _iterator20.return();
+            if (!_iteratorNormalCompletion19 && _iterator19.return != null) {
+              _iterator19.return();
             }
           } finally {
-            if (_didIteratorError20) {
-              throw _iteratorError20;
+            if (_didIteratorError19) {
+              throw _iteratorError19;
             }
           }
         }
@@ -1736,30 +1715,12 @@ function (_AbstractModelWithAsy) {
       // is arbitrary?
       // TODO(kasra): cache and freeze this so it isn't O(n)
       var fields = [];
-      var _iteratorNormalCompletion21 = true;
-      var _didIteratorError21 = false;
-      var _iteratorError21 = undefined;
 
-      try {
-        for (var _iterator21 = (0, _getIterator2.default)((0, _keys.default)(u).call(u, this._data.fieldsById)), _step21; !(_iteratorNormalCompletion21 = (_step21 = _iterator21.next()).done); _iteratorNormalCompletion21 = true) {
-          var fieldId = _step21.value;
-          var field = this.getFieldById(fieldId);
-          (0, _invariant.default)(field, 'no field model' + fieldId);
-          fields.push(field);
-        }
-      } catch (err) {
-        _didIteratorError21 = true;
-        _iteratorError21 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion21 && _iterator21.return != null) {
-            _iterator21.return();
-          }
-        } finally {
-          if (_didIteratorError21) {
-            throw _iteratorError21;
-          }
-        }
+      for (var _i5 = 0, _Object$keys4 = (0, _keys.default)(this._data.fieldsById); _i5 < _Object$keys4.length; _i5++) {
+        var fieldId = _Object$keys4[_i5];
+        var field = this.getFieldById(fieldId);
+        (0, _invariant.default)(field, 'no field model' + fieldId);
+        fields.push(field);
       }
 
       return fields;
@@ -1799,7 +1760,7 @@ function (_AbstractModelWithAsy) {
 
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
-      var records = (0, _map.default)(_context8 = (0, _keys2.default)(recordsById)).call(_context8, function (recordId) {
+      var records = (0, _map.default)(_context8 = (0, _keys.default)(recordsById)).call(_context8, function (recordId) {
         var record = _this8.getRecordById(recordId);
 
         (0, _invariant.default)(record, 'record');
@@ -1817,7 +1778,7 @@ function (_AbstractModelWithAsy) {
     get: function get() {
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
-      return (0, _keys2.default)(recordsById);
+      return (0, _keys.default)(recordsById);
     }
     /** Number of records in the table */
 

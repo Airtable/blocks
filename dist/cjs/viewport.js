@@ -42,7 +42,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
 
 var _watchable = _interopRequireDefault(require("./watchable"));
 
-var _private_utils = _interopRequireDefault(require("./private_utils"));
+var _private_utils = require("./private_utils");
 
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
@@ -83,7 +83,7 @@ function (_Watchable) {
   (0, _createClass2.default)(Viewport, null, [{
     key: "_isWatchableKey",
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableViewportKeys, key);
+      return (0, _private_utils.isEnumValue)(WatchableViewportKeys, key);
     }
   }]);
 

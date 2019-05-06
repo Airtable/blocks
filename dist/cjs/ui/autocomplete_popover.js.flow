@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
+import {values} from '../private_utils';
 import Popover, {
     type PopoverPlacementX,
     type PopoverPlacementY,
@@ -82,7 +83,7 @@ class AutocompletePopover extends React.Component<
         ]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
+        fitInWindowMode: PropTypes.oneOf(values(Popover.fitInWindowModes)),
         isOpen: PropTypes.bool,
         onClose: PropTypes.func,
     };

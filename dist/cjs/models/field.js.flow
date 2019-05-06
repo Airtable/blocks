@@ -1,7 +1,7 @@
 // @flow
 import {type BaseData} from '../types/base';
 import {type FieldData, type PrivateColumnType} from '../types/field';
-import utils from '../private_utils';
+import {isEnumValue, cloneDeep} from '../private_utils';
 import AbstractModel from './abstract_model';
 import Aggregators, {type Aggregator} from './aggregators';
 import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
@@ -36,7 +36,7 @@ export type WatchableFieldKey = $Keys<typeof WatchableFieldKeys>;
 class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     static _className = 'Field';
     static _isWatchableKey(key: string) {
-        return utils.isEnumValue(WatchableFieldKeys, key);
+        return isEnumValue(WatchableFieldKeys, key);
     }
     _parentTable: TableType;
     constructor(baseData: BaseData, parentTable: TableType, fieldId: string) {
@@ -70,7 +70,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
 
         return {
             type,
-            options: options ? utils.cloneDeep(options) : null,
+            options: options ? cloneDeep(options) : null,
         };
     }
     /** */
@@ -93,7 +93,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             this.parentTable.__getFieldNamesById(),
         );
 
-        return options ? utils.cloneDeep(options) : null;
+        return options ? cloneDeep(options) : null;
     }
     /** */
     get isComputed(): boolean {

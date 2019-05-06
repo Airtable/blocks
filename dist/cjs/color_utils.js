@@ -20,7 +20,7 @@ var _endsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-s
 
 var _padStart = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/pad-start"));
 
-var _private_utils = _interopRequireDefault(require("./private_utils"));
+var _private_utils = require("./private_utils");
 
 var _colors = _interopRequireWildcard(require("./colors"));
 
@@ -34,7 +34,7 @@ var colorUtils = {
   getHexForColor: function (colorString) {
     var _context;
 
-    var color = _private_utils.default.getEnumValueIfExists(_colors.default, colorString);
+    var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
     if (!color) {
       // flow-disable-next-line returning null doesn't work with the overload
@@ -48,7 +48,7 @@ var colorUtils = {
 
   /** */
   getRgbForColor: function (colorString) {
-    var color = _private_utils.default.getEnumValueIfExists(_colors.default, colorString);
+    var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
     if (!color) {
       // flow-disable-next-line returning null doesn't work with the overload

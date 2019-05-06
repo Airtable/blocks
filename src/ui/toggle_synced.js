@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
+import {values} from '../private_utils';
 import {type GlobalConfigKey} from '../global_config';
 import Toggle from './toggle';
 import Synced from './synced';
@@ -25,7 +26,7 @@ class ToggleSynced extends React.Component<ToggleSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         label: PropTypes.node,
-        theme: PropTypes.oneOf(u.values(Toggle.themes)),
+        theme: PropTypes.oneOf(values(Toggle.themes)),
         onChange: PropTypes.func,
         disabled: PropTypes.bool,
         className: PropTypes.string,

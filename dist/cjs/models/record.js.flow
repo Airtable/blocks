@@ -4,7 +4,7 @@ import {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
 import {FieldTypes} from '../types/field';
-import utils from '../private_utils';
+import {isEnumValue, cloneDeep, entries} from '../private_utils';
 import {type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModel from './abstract_model';
 import Field from './field';
@@ -54,7 +54,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     static _className = 'Record';
     static _isWatchableKey(key: string): boolean {
         return (
-            utils.isEnumValue(WatchableRecordKeys, key) ||
+            isEnumValue(WatchableRecordKeys, key) ||
             u.startsWith(key, WatchableCellValueInFieldKeyPrefix) ||
             u.startsWith(key, WatchableColorInViewKeyPrefix)
         );
@@ -86,9 +86,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     }
     __getRawRow(): {id: string, createdTime: string, cellValuesByColumnId?: RecordDef} {
         let cellValuesByColumnId;
-        if (this._data.cellValuesByFieldId) {
+        const cellValuesByFieldId = this._data.cellValuesByFieldId;
+        if (cellValuesByFieldId) {
             cellValuesByColumnId = {};
-            for (const [fieldId, publicCellValue] of u.entries(this._data.cellValuesByFieldId)) {
+            for (const [fieldId, publicCellValue] of entries(cellValuesByFieldId)) {
                 // When fields are deleted, we set the previously loaded cell value to
                 // undefined (vs deleting the key from the cellValuesByFieldId object, which
                 // would cause de-opts). So ignore undefined cell values, since the field is deleted.
@@ -141,9 +142,9 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             if (!Record.shouldUseNewLookupFormat && field.type === FieldTypes.LOOKUP) {
                 const cellValueForMigration = [];
                 // flow-disable-next-line
-                cellValueForMigration.linkedRecordIds = utils.cloneDeep(cellValue.linkedRecordIds);
+                cellValueForMigration.linkedRecordIds = cloneDeep(cellValue.linkedRecordIds);
                 // flow-disable-next-line
-                cellValueForMigration.valuesByLinkedRecordId = utils.cloneDeep(
+                cellValueForMigration.valuesByLinkedRecordId = cloneDeep(
                     cellValue.valuesByLinkedRecordId,
                 );
                 invariant(Array.isArray(cellValue.linkedRecordIds), 'linkedRecordIds');
@@ -168,7 +169,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
 
             // Copy non-primitives.
             // TODO(kasra): maybe freezeDeep instead?
-            return utils.cloneDeep(cellValue);
+            return cloneDeep(cellValue);
         } else {
             return cellValue;
         }
@@ -340,7 +341,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
                 this._onChange(WatchableRecordKeys.primaryCellValue);
             }
 
-            for (const fieldId of u.keys(cellValuesByFieldId)) {
+            for (const fieldId of Object.keys(cellValuesByFieldId)) {
                 this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
             }
         }

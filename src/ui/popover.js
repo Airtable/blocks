@@ -1,12 +1,12 @@
 // @flow
+import ReactDOM from 'react-dom';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import invariant from 'invariant';
-import ReactDOM from 'react-dom';
-import * as React from 'react';
+import {values} from '../private_utils';
 import createDetectElementResize from './create_detect_element_resize';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 
 const PopoverPlacements = {
@@ -60,7 +60,7 @@ class Popover extends React.Component<PopoverProps> {
         ]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(u.values(FitInWindowModes)),
+        fitInWindowMode: PropTypes.oneOf(values(FitInWindowModes)),
         onClose: PropTypes.func,
         isOpen: PropTypes.bool,
         backgroundClassName: PropTypes.string,

@@ -10,11 +10,9 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports.default = void 0;
 
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
-
 var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
 
-var _keys2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/keys"));
+var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
 
 var _set = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/set"));
 
@@ -230,7 +228,7 @@ function (_Watchable) {
         }
       }
 
-      var limitCheckResult = blockKvHelpers.limitCheckKvStore(workingKvStore, (0, _keys2.default)(u).call(u, topLevelKeySet));
+      var limitCheckResult = blockKvHelpers.limitCheckKvStore(workingKvStore, (0, _keys.default)(topLevelKeySet));
 
       if (!limitCheckResult.isValid) {
         throw new Error("globalConfig over limits: ".concat(limitCheckResult.reason));
@@ -241,8 +239,8 @@ function (_Watchable) {
       // NOTE: it's important that we do this after the loop above (instead of inline),
       // so that all of the changes are reflected by the time we trigger change events.
 
-      for (var _i = 0, _Object$keys = (0, _keys.default)(topLevelKeySet); _i < _Object$keys.length; _i++) {
-        var key = _Object$keys[_i];
+      for (var _i = 0, _Object$keys2 = (0, _keys.default)(topLevelKeySet); _i < _Object$keys2.length; _i++) {
+        var key = _Object$keys2[_i];
 
         this._onChange(key);
       }

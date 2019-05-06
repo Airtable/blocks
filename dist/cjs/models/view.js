@@ -68,7 +68,7 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/he
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _color_utils = _interopRequireDefault(require("../color_utils"));
 
@@ -101,7 +101,7 @@ function (_AbstractModelWithAsy) {
     // Once all blocks that current set this flag to true are migrated,
     // remove this flag.
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableViewKeys, key);
+      return (0, _private_utils.isEnumValue)(WatchableViewKeys, key);
     }
   }, {
     key: "_shouldLoadDataForKey",

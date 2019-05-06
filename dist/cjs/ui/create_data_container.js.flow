@@ -3,6 +3,7 @@ import * as React from 'react';
 import Watchable from '../watchable';
 import Table from '../models/table';
 import View from '../models/view';
+import {values} from '../private_utils';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
@@ -322,14 +323,14 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
             // that view's data in a single request.
             // TODO(kasra): improve this by moving this logic into liveapp so
             // it can batch multiple view and table loads.
-            for (const {watchable, wrappedWatchConfigs} of u.values(viewsToWatchById)) {
+            for (const {watchable, wrappedWatchConfigs} of values(viewsToWatchById)) {
                 for (const wrappedWatchConfig of wrappedWatchConfigs) {
                     const {watchConfig, wrappedCallback} = wrappedWatchConfig;
                     const key: any = watchConfig.key; // eslint-disable-line flowtype/no-weak-types
                     watchable.watch(key, wrappedCallback, watchConfig.context);
                 }
             }
-            for (const {watchable, wrappedWatchConfigs} of u.values(tablesToWatchById)) {
+            for (const {watchable, wrappedWatchConfigs} of values(tablesToWatchById)) {
                 for (const wrappedWatchConfig of wrappedWatchConfigs) {
                     const {watchConfig, wrappedCallback} = wrappedWatchConfig;
                     const key: any = watchConfig.key; // eslint-disable-line flowtype/no-weak-types

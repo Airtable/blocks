@@ -2,141 +2,126 @@
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/web.dom-collections.iterator");
+
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.default = void 0;
-
-var _setTimeout2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/set-timeout"));
+exports.cloneDeep = cloneDeep;
+exports.values = values;
+exports.entries = entries;
+exports.fireAndForgetPromise = fireAndForgetPromise;
+exports.has = has;
+exports.getEnumValueIfExists = getEnumValueIfExists;
+exports.assertEnumValue = assertEnumValue;
+exports.isEnumValue = isEnumValue;
 
 var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
 
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
+var _weakMap = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/weak-map"));
+
+var _setTimeout2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/set-timeout"));
+
+var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/entries"));
+
+var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/values"));
 
 var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/json/stringify"));
 
-var _weakMap = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/weak-map"));
+function cloneDeep(obj) {
+  var jsonString = (0, _stringify.default)(obj);
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
-
-var PrivateUtils =
-/*#__PURE__*/
-function () {
-  function PrivateUtils() {
-    (0, _classCallCheck2.default)(this, PrivateUtils);
-    (0, _defineProperty2.default)(this, "_invertedEnumCache", new _weakMap.default());
+  if (jsonString === undefined) {
+    return obj;
   }
 
-  (0, _createClass2.default)(PrivateUtils, [{
-    key: "cloneDeep",
-    value: function cloneDeep(obj) {
-      var jsonString = (0, _stringify.default)(obj);
+  return JSON.parse(jsonString);
+} // flow has a stricter definition for Object.values and Object.entries that return mixed in place
+// of the actual values. This is because for non-exact objects, that's the only sound definition.
+// You can call Object.values with a value typed as {x: number} that actually looks like
+// {x: number, y: string}, for example. Returning mixed isn't particularly useful though, so we
+// provide these unsound wrappers instead.
+// TODO: consider renaming these with unsound_ prefixes.
 
-      if (jsonString === undefined) {
-        return obj;
-      }
 
-      return JSON.parse(jsonString);
-    }
-  }, {
-    key: "values",
-    value: function values(obj) {
-      var _context;
+function values(obj) {
+  // flow-disable-next-line
+  return (0, _values.default)(obj);
+}
 
-      return (0, _map.default)(_context = (0, _keys.default)(obj)).call(_context, function (key) {
-        return obj[key];
-      });
-    }
-  }, {
-    key: "entries",
-    value: function entries(obj) {
-      var _context2;
+function entries(obj) {
+  // flow-disable-next-line
+  return (0, _entries.default)(obj);
+} // Result values are discarded and errors are thrown asynchronously.
+// NOTE: this is different from the one in u: the function passed
+// in must be fully bound with all of its arguments and will be immediately
+// called (this does not return a function). This makes it work better with
+// Flow: you get argument type checking by using `.bind`.
 
-      return (0, _map.default)(_context2 = (0, _keys.default)(obj)).call(_context2, function (key) {
-        return [key, obj[key]];
-      });
-    } // Result values are discarded and errors are thrown asynchronously.
-    // NOTE: this is different from the one in u: the function passed
-    // in must be fully bound with all of its arguments and will be immediately
-    // called (this does not return a function). This makes it work better with
-    // Flow: you get argument type checking by using `.bind`.
 
-  }, {
-    key: "fireAndForgetPromise",
-    value: function fireAndForgetPromise(fn) {
-      fn().catch(function (err) {
-        // Defer til later, so the error doesn't cause the promise to be rejected.
-        (0, _setTimeout2.default)(function () {
-          throw err;
-        }, 0);
-      });
-    }
-  }, {
-    key: "has",
-    value: function has(obj, key) {
-      return Object.prototype.hasOwnProperty.call(obj, key);
-    }
-  }, {
-    key: "_getInvertedEnumMemoized",
-    value: function _getInvertedEnumMemoized(enumObj) {
-      var existingInvertedEnum = this._invertedEnumCache.get(enumObj);
+function fireAndForgetPromise(fn) {
+  fn().catch(function (err) {
+    // Defer til later, so the error doesn't cause the promise to be rejected.
+    (0, _setTimeout2.default)(function () {
+      throw err;
+    }, 0);
+  });
+}
 
-      if (existingInvertedEnum) {
-        // flow-disable-next-line flow can't type WeakMap precisely enough to know that it's being used as this sort of cache
-        return existingInvertedEnum;
-      }
+function has(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
 
-      var invertedEnum = {};
+var invertedEnumCache = new _weakMap.default();
 
-      for (var _i = 0, _Object$keys2 = (0, _keys.default)(enumObj); _i < _Object$keys2.length; _i++) {
-        var enumKey = _Object$keys2[_i];
-        var enumValue = enumObj[enumKey];
-        invertedEnum[enumValue] = enumKey;
-      }
+function getInvertedEnumMemoized(enumObj) {
+  var existingInvertedEnum = invertedEnumCache.get(enumObj);
 
-      this._invertedEnumCache.set(enumObj, invertedEnum);
+  if (existingInvertedEnum) {
+    // flow-disable-next-line flow can't type WeakMap precisely enough to know that it's being used as this sort of cache
+    return existingInvertedEnum;
+  }
 
-      return invertedEnum;
-    }
-  }, {
-    key: "getEnumValueIfExists",
-    value: function getEnumValueIfExists(enumObj, valueToCheck) {
-      var invertedEnum = this._getInvertedEnumMemoized(enumObj);
+  var invertedEnum = {};
 
-      if (this.has(invertedEnum, valueToCheck) && invertedEnum[valueToCheck]) {
-        var enumKey = invertedEnum[valueToCheck];
-        return enumObj[enumKey];
-      }
+  for (var _i = 0, _Object$keys = (0, _keys.default)(enumObj); _i < _Object$keys.length; _i++) {
+    var enumKey = _Object$keys[_i];
+    var enumValue = enumObj[enumKey];
+    invertedEnum[enumValue] = enumKey;
+  }
 
-      return null;
-    }
-  }, {
-    key: "assertEnumValue",
-    value: function assertEnumValue(enumObj, valueToCheck) {
-      var enumValue = this.getEnumValueIfExists(enumObj, valueToCheck);
+  invertedEnumCache.set(enumObj, invertedEnum);
+  return invertedEnum;
+}
 
-      if (!enumValue) {
-        throw new Error("Unknown enum value ".concat(valueToCheck));
-      }
+function getEnumValueIfExists(enumObj, valueToCheck) {
+  var invertedEnum = getInvertedEnumMemoized(enumObj);
 
-      return enumValue;
-    }
-  }, {
-    key: "isEnumValue",
-    value: function isEnumValue(enumObj, valueToCheck) {
-      return this.getEnumValueIfExists(enumObj, valueToCheck) !== null;
-    }
-  }]);
-  return PrivateUtils;
-}();
+  if (this.has(invertedEnum, valueToCheck) && invertedEnum[valueToCheck]) {
+    var enumKey = invertedEnum[valueToCheck];
+    return enumObj[enumKey];
+  }
 
-var _default = new PrivateUtils();
+  return null;
+}
 
-exports.default = _default;
+function assertEnumValue(enumObj, valueToCheck) {
+  var enumValue = this.getEnumValueIfExists(enumObj, valueToCheck);
+
+  if (!enumValue) {
+    throw new Error("Unknown enum value ".concat(valueToCheck));
+  }
+
+  return enumValue;
+}
+
+function isEnumValue(enumObj, valueToCheck) {
+  return this.getEnumValueIfExists(enumObj, valueToCheck) !== null;
+}

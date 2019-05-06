@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
+import {values} from '../private_utils';
 import getSdk from '../get_sdk';
 import FieldModel from '../models/field';
 import TableModel from '../models/table';
@@ -30,7 +31,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
         field: PropTypes.instanceOf(FieldModel),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(FieldTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,

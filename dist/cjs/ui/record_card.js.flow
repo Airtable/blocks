@@ -3,6 +3,7 @@ import invariant from 'invariant';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
+import {values} from '../private_utils';
 import {type AttachmentData} from '../types/attachment';
 import {FieldTypes} from '../types/field';
 import {type RecordDef} from '../types/record';
@@ -282,7 +283,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (attachmentField.type === FieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
             attachmentsInField = u.flattenDeep(
-                u.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),
+                values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),
             );
         } else {
             attachmentsInField = ((this._getRawCellValue(attachmentField): any): Array<Object>); // eslint-disable-line flowtype/no-weak-types

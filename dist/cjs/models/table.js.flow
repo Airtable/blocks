@@ -5,7 +5,7 @@ import {type BaseData} from '../types/base';
 import {type TableData} from '../types/table';
 import {type ViewType} from '../types/view';
 import {PermissionLevels} from '../types/permission_levels';
-import utils from '../private_utils';
+import {isEnumValue, fireAndForgetPromise, values, entries} from '../private_utils';
 import getSdk from '../get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -56,7 +56,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     static _className = 'Table';
     static _isWatchableKey(key: string): boolean {
         return (
-            utils.isEnumValue(WatchableTableKeys, key) ||
+            isEnumValue(WatchableTableKeys, key) ||
             u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)
         );
     }
@@ -129,9 +129,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         const validKeys = super.watch(keys, callback, context);
         const fieldIdsToLoad = this._getFieldIdsToLoadFromWatchableKeys(validKeys);
         if (fieldIdsToLoad.length > 0) {
-            utils.fireAndForgetPromise(
-                this.loadCellValuesInFieldIdsAsync.bind(this, fieldIdsToLoad),
-            );
+            fireAndForgetPromise(this.loadCellValuesInFieldIdsAsync.bind(this, fieldIdsToLoad));
         }
         return validKeys;
     }
@@ -198,7 +196,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // is arbitrary?
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const fields = [];
-        for (const fieldId of u.keys(this._data.fieldsById)) {
+        for (const fieldId of Object.keys(this._data.fieldsById)) {
             const field = this.getFieldById(fieldId);
             invariant(field, 'no field model' + fieldId);
             fields.push(field);
@@ -218,7 +216,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     }
     /** */
     getFieldByName(fieldName: string): Field | null {
-        for (const [fieldId, fieldData] of u.entries(this._data.fieldsById)) {
+        for (const [fieldId, fieldData] of entries(this._data.fieldsById)) {
             if (fieldData.name === fieldName) {
                 return this.getFieldById(fieldId);
             }
@@ -266,7 +264,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     }
     /** */
     getViewByName(viewName: string): View | null {
-        for (const [viewId, viewData] of u.entries(this._data.viewsById)) {
+        for (const [viewId, viewData] of entries(this._data.viewsById)) {
             if (viewData.name === viewName) {
                 return this.getViewById(viewId);
             }
@@ -347,7 +345,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
 
         const changes = [];
         const cellValuesByRecordIdThenFieldId = {};
-        for (const [recordId, cellValuesByFieldIdOrFieldName] of u.entries(
+        for (const [recordId, cellValuesByFieldIdOrFieldName] of entries(
             cellValuesByRecordIdThenFieldIdOrFieldName,
         )) {
             const record = this.getRecordById(recordId);
@@ -357,7 +355,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
 
             cellValuesByRecordIdThenFieldId[recordId] = {};
 
-            for (const [fieldIdOrFieldName, publicCellValue] of u.entries(
+            for (const [fieldIdOrFieldName, publicCellValue] of entries(
                 cellValuesByFieldIdOrFieldName,
             )) {
                 const field = this.__getFieldMatching(fieldIdOrFieldName);
@@ -476,7 +474,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         const changes = [];
         for (const recordDef of recordDefs) {
             const cellValuesByFieldId = {};
-            for (const [fieldIdOrFieldName, cellValue] of u.entries(recordDef)) {
+            for (const [fieldIdOrFieldName, cellValue] of entries(recordDef)) {
                 const field = this.__getFieldMatching(fieldIdOrFieldName);
                 invariant(field, `Field does not exist: ${fieldIdOrFieldName}`);
                 invariant(!field.isDeleted, `Field has been deleted: ${fieldIdOrFieldName}`);
@@ -840,7 +838,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds?: Array<string>) {
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
-            u.some(u.values(this._areCellValuesLoadedByFieldId), isLoaded => isLoaded);
+            u.some(values(this._areCellValuesLoadedByFieldId), isLoaded => isLoaded);
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
                 this._data.recordsById = undefined;
@@ -905,14 +903,14 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             this._onChange(WatchableTableKeys.views);
 
             // Clean up deleted views
-            for (const [viewId, viewModel] of u.entries(this._viewModelsById)) {
+            for (const [viewId, viewModel] of entries(this._viewModelsById)) {
                 if (viewModel.isDeleted) {
                     delete this._viewModelsById[viewId];
                 }
             }
         }
         if (dirtyPaths.viewsById) {
-            for (const [viewId, dirtyViewPaths] of u.entries(dirtyPaths.viewsById)) {
+            for (const [viewId, dirtyViewPaths] of entries(dirtyPaths.viewsById)) {
                 // Directly access from _viewModelsById to avoid creating
                 // a view model if it doesn't already exist. If it doesn't exist,
                 // nothing can be subscribed to any events on it.
@@ -927,7 +925,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             // was created or deleted and trigger onChange for fields.
             const addedFieldIds = [];
             const removedFieldIds = [];
-            for (const [fieldId, dirtyFieldPaths] of u.entries(dirtyPaths.fieldsById)) {
+            for (const [fieldId, dirtyFieldPaths] of entries(dirtyPaths.fieldsById)) {
                 if (dirtyFieldPaths._isDirty) {
                     // If the entire field is dirty, it was either created or deleted.
                     if (u.has(this._data.fieldsById, fieldId)) {
@@ -968,7 +966,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             const dirtyFieldIdsSet = {};
             const addedRecordIds = [];
             const removedRecordIds = [];
-            for (const [recordId, dirtyRecordPaths] of u.entries(dirtyPaths.recordsById)) {
+            for (const [recordId, dirtyRecordPaths] of entries(dirtyPaths.recordsById)) {
                 if (dirtyRecordPaths._isDirty) {
                     // If the entire record is dirty, it was either created or deleted.
 
@@ -993,7 +991,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
 
                 const {cellValuesByFieldId} = dirtyRecordPaths;
                 if (cellValuesByFieldId) {
-                    for (const fieldId of u.keys(cellValuesByFieldId)) {
+                    for (const fieldId of Object.keys(cellValuesByFieldId)) {
                         dirtyFieldIdsSet[fieldId] = true;
                     }
                 }
@@ -1038,7 +1036,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     __getFieldNamesById(): {[string]: string} {
         if (!this._cachedFieldNamesById) {
             const fieldNamesById = {};
-            for (const [fieldId, fieldData] of u.entries(this._data.fieldsById)) {
+            for (const [fieldId, fieldData] of entries(this._data.fieldsById)) {
                 fieldNamesById[fieldId] = fieldData.name;
             }
             this._cachedFieldNamesById = fieldNamesById;

@@ -8,6 +8,8 @@ require("core-js/modules/es.function.name");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
@@ -15,8 +17,6 @@ _Object$defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
 
@@ -53,6 +53,8 @@ var _watchable = _interopRequireDefault(require("../watchable"));
 var _table = _interopRequireDefault(require("../models/table"));
 
 var _view = _interopRequireDefault(require("../models/view"));
+
+var _private_utils = require("../private_utils");
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u; // These helper functions were taken from
@@ -428,7 +430,7 @@ function createDataContainer(Component, getDependencies, passthruMethodNames) {
         var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator3 = (0, _getIterator2.default)((0, _values.default)(u).call(u, viewsToWatchById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          for (var _iterator3 = (0, _getIterator2.default)((0, _valuesInstanceProperty(_private_utils))(viewsToWatchById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
             var _step3$value = _step3.value,
                 watchable = _step3$value.watchable,
                 wrappedWatchConfigs = _step3$value.wrappedWatchConfigs;
@@ -480,7 +482,7 @@ function createDataContainer(Component, getDependencies, passthruMethodNames) {
         var _iteratorError4 = undefined;
 
         try {
-          for (var _iterator4 = (0, _getIterator2.default)((0, _values.default)(u).call(u, tablesToWatchById)), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          for (var _iterator4 = (0, _getIterator2.default)((0, _valuesInstanceProperty(_private_utils))(tablesToWatchById)), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var _step4$value = _step4.value,
                 watchable = _step4$value.watchable,
                 wrappedWatchConfigs = _step4$value.wrappedWatchConfigs;

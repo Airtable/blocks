@@ -70,7 +70,7 @@ var _field = require("../types/field");
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _object_pool = _interopRequireDefault(require("./object_pool"));
 
@@ -192,8 +192,7 @@ function (_QueryResult) {
           var _context5;
 
           var key = _step.value;
-
-          _private_utils.default.fireAndForgetPromise((0, _bind.default)(_context5 = this.loadDataAsync).call(_context5, this));
+          (0, _private_utils.fireAndForgetPromise)((0, _bind.default)(_context5 = this.loadDataAsync).call(_context5, this));
 
           if (key === _query_result.default.WatchableKeys.cellValues) {
             this._watchLinkedQueryCellValuesIfNeededAfterWatch();

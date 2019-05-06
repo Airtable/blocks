@@ -2,13 +2,12 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
+import {values} from '../private_utils';
 import Popover, {
     type PopoverPlacementX,
     type PopoverPlacementY,
     type FitInWindowMode,
 } from './popover';
-
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
@@ -53,7 +52,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         ]),
         placementOffsetX: PropTypes.number,
         placementOffsetY: PropTypes.number,
-        fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
+        fitInWindowMode: PropTypes.oneOf(values(Popover.fitInWindowModes)),
         shouldHideTooltipOnClick: PropTypes.bool,
         disabled: PropTypes.bool,
         className: PropTypes.string,

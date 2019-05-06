@@ -1,6 +1,6 @@
 // @flow
 import {type BaseData} from '../types/base';
-import utils from '../private_utils';
+import {fireAndForgetPromise} from '../private_utils';
 import AbstractModel from './abstract_model';
 
 const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
@@ -44,7 +44,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
                 // Note: for simplicity, we will call loadData for every key that needs
                 // needs data, relying on the retain count to unload once all keys have
                 // been unwatched.
-                utils.fireAndForgetPromise(this.loadDataAsync.bind(this));
+                fireAndForgetPromise(this.loadDataAsync.bind(this));
             }
         }
         return validKeys;

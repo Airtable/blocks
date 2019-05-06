@@ -1,4 +1,5 @@
 // @flow
+import {values} from './private_utils';
 import {UndoRedoModes, type UndoRedoMode} from './types/undo_redo';
 import {type AirtableInterface} from './injected/airtable_interface';
 
@@ -17,7 +18,7 @@ class UndoRedo {
         return this._mode;
     }
     set mode(mode: UndoRedoMode) {
-        if (!u.includes(u.values(UndoRedoModes), mode)) {
+        if (!u.includes(values(UndoRedoModes), mode)) {
             throw new Error('Unexpected UndoRedo mode');
         }
         this._mode = mode;

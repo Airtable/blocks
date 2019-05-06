@@ -6,13 +6,13 @@ var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequ
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
 
@@ -33,6 +33,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _invariant = _interopRequireDefault(require("invariant"));
 
 var React = _interopRequireWildcard(require("react"));
+
+var _private_utils = require("../private_utils");
 
 var _toggle = _interopRequireDefault(require("./toggle"));
 
@@ -115,7 +117,7 @@ function (_React$Component) {
 (0, _defineProperty2.default)(ToggleSynced, "propTypes", {
   globalConfigKey: _global_config_synced_component_helpers.default.globalConfigKeyPropType,
   label: _propTypes.default.node,
-  theme: _propTypes.default.oneOf((0, _values.default)(u).call(u, _toggle.default.themes)),
+  theme: _propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(_toggle.default.themes)),
   onChange: _propTypes.default.func,
   disabled: _propTypes.default.bool,
   className: _propTypes.default.string,

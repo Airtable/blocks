@@ -2,7 +2,7 @@
 import {type CursorData} from './types/cursor';
 import {type BaseData} from './types/base';
 import {type RecordId} from './types/record';
-import utils from './private_utils';
+import {isEnumValue} from './private_utils';
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
 import Record from './models/record';
 import {type AirtableInterface} from './injected/airtable_interface';
@@ -25,7 +25,7 @@ type WatchableCursorKey = $Values<typeof WatchableCursorKeys>;
 class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
     static _className = 'Cursor';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableCursorKeys, key);
+        return isEnumValue(WatchableCursorKeys, key);
     }
     static _shouldLoadDataForKey(key: WatchableCursorKey): boolean {
         return true;

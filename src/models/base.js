@@ -5,7 +5,7 @@ import {type CollaboratorData} from '../types/collaborator';
 import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import getSdk from '../get_sdk';
-import utils from '../private_utils';
+import {isEnumValue, values, entries} from '../private_utils';
 import type FrontendBlockSdk from '../sdk';
 import Table from './table';
 import AbstractModel from './abstract_model';
@@ -55,7 +55,7 @@ const WatchableBaseKeys = {
 class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
     static _className = 'Base';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableBaseKeys, key);
+        return isEnumValue(WatchableBaseKeys, key);
     }
     _tableModelsById: {[string]: Table};
     _airtableInterface: AirtableInterface;
@@ -151,7 +151,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
             const {userInfoById} = appBlanket;
             // Exclude invites and former collaborators.
             if (userInfoById) {
-                for (const userObj of u.values(userInfoById)) {
+                for (const userObj of values(userInfoById)) {
                     if (
                         appBlanketUserObjMethods.isActive(userObj) &&
                         !h.id.isInviteId(userObj.id)
@@ -217,7 +217,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
      * exists with that name in this base.
      */
     getTableByName(tableName: string): Table | null {
-        for (const [tableId, tableData] of u.entries(this._data.tablesById)) {
+        for (const [tableId, tableData] of entries(this._data.tablesById)) {
             if (tableData.name === tableName) {
                 return this.getTableById(tableId);
             }
@@ -235,7 +235,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
             this._onChange(WatchableBaseKeys.tables);
 
             // Clean up deleted tables
-            for (const [tableId, tableModel] of u.entries(this._tableModelsById)) {
+            for (const [tableId, tableModel] of entries(this._tableModelsById)) {
                 if (tableModel.isDeleted) {
                     delete this._tableModelsById[tableId];
                 }
@@ -245,7 +245,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
             this._onChange(WatchableBaseKeys.activeTable);
         }
         if (dirtyPaths.tablesById) {
-            for (const [tableId, dirtyTablePaths] of u.entries(dirtyPaths.tablesById)) {
+            for (const [tableId, dirtyTablePaths] of entries(dirtyPaths.tablesById)) {
                 // Directly access from _tableModelsById to avoid creating
                 // a table model if it doesn't already exist. If it doesn't exist,
                 // nothing can be subscribed to any events on it.

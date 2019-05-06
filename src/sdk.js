@@ -19,7 +19,7 @@ import UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {type AirtableInterface} from './injected/airtable_interface';
-import utils from './private_utils';
+import {cloneDeep} from './private_utils';
 
 // eslint-disable-next-line react/no-deprecated
 if (!React.PropTypes) {
@@ -108,7 +108,7 @@ class BlockSdk {
         }
 
         // TODO(alex): remove initial data fallback once hyperbase is deployed
-        const sdkInitData = utils.cloneDeep(
+        const sdkInitData = cloneDeep(
             airtableInterface.sdkInitData || airtableInterface.initialData,
         );
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);

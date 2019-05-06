@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import {type Color} from '../colors';
 import {type BaseData, type ModelChange} from '../types/base';
 import {type ViewData, type ViewType} from '../types/view';
-import utils from '../private_utils';
+import {isEnumValue} from '../private_utils';
 import ColorUtils from '../color_utils';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -40,7 +40,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
 
     static _className = 'View';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableViewKeys, key);
+        return isEnumValue(WatchableViewKeys, key);
     }
     static _shouldLoadDataForKey(key: WatchableViewKey): boolean {
         return (

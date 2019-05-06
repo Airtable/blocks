@@ -2,7 +2,7 @@
 import invariant from 'invariant';
 import {FieldTypes} from '../types/field';
 import getSdk from '../get_sdk';
-import utils from '../private_utils';
+import {fireAndForgetPromise} from '../private_utils';
 import ObjectPool from './object_pool';
 import QueryResult, {
     type WatchableQueryResultKey,
@@ -10,6 +10,7 @@ import QueryResult, {
     type NormalizedQueryResultOpts,
 } from './query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
+
 import type TableModel from './table';
 import type FieldModel from './field';
 import type RecordModel from './record';
@@ -196,7 +197,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
-            utils.fireAndForgetPromise(this.loadDataAsync.bind(this));
+            fireAndForgetPromise(this.loadDataAsync.bind(this));
 
             if (key === QueryResult.WatchableKeys.cellValues) {
                 this._watchLinkedQueryCellValuesIfNeededAfterWatch();

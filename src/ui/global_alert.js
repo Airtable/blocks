@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react';
-import utils from '../private_utils';
+import {isEnumValue} from '../private_utils';
 import Watchable from '../watchable';
 import getSdk from '../get_sdk';
 
@@ -22,7 +22,7 @@ type AlertInfo = {
 class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     static _className = 'GlobalAlert';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableGlobalAlertKeys, key);
+        return isEnumValue(WatchableGlobalAlertKeys, key);
     }
     _alertInfo: AlertInfo | null;
     constructor() {

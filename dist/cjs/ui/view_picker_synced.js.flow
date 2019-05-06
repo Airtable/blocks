@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
+import {values} from '../private_utils';
 import getSdk from '../get_sdk';
 import TableModel from '../models/table';
 import {ViewTypes, type ViewType} from '../types/view';
@@ -38,7 +39,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
 
         // Passed through to ViewPicker:
         shouldAllowPickingNone: PropTypes.bool,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(ViewTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,

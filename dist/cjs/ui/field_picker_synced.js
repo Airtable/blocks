@@ -6,13 +6,13 @@ var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequ
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
 
@@ -39,6 +39,8 @@ var _table = _interopRequireDefault(require("../models/table"));
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
 var _field = require("../types/field");
+
+var _private_utils = require("../private_utils");
 
 var _global_config_synced_component_helpers = _interopRequireDefault(require("./global_config_synced_component_helpers"));
 
@@ -137,7 +139,7 @@ function (_React$Component) {
   disabled: _propTypes.default.bool,
   // Passed through to FieldPicker:
   shouldAllowPickingNone: _propTypes.default.bool,
-  allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _values.default)(u).call(u, _field.FieldTypes))),
+  allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(_field.FieldTypes))),
   placeholder: _propTypes.default.string,
   style: _propTypes.default.object,
   className: _propTypes.default.string

@@ -7,6 +7,7 @@ import getSdk from '../get_sdk';
 import {FieldTypes, type FieldType} from '../types/field';
 import type FieldModel from '../models/field';
 import {type GlobalConfigKey} from '../global_config';
+import {values} from '../private_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import FieldPicker from './field_picker';
 import Synced from './synced';
@@ -38,7 +39,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
 
         // Passed through to FieldPicker:
         shouldAllowPickingNone: PropTypes.bool,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(u.values(FieldTypes))),
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
         placeholder: PropTypes.string,
         style: PropTypes.object,
         className: PropTypes.string,

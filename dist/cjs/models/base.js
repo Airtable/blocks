@@ -6,19 +6,19 @@ require("core-js/modules/es.function.name");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
+var _entriesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/entries");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
 
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
-
 var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/for-each"));
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/slicedToArray"));
-
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/entries"));
 
 var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
 
@@ -40,7 +40,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _table = _interopRequireDefault(require("./table"));
 
@@ -93,7 +93,7 @@ function (_AbstractModel) {
   (0, _createClass2.default)(Base, null, [{
     key: "_isWatchableKey",
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableBaseKeys, key);
+      return (0, _private_utils.isEnumValue)(WatchableBaseKeys, key);
     }
   }]);
 
@@ -166,7 +166,7 @@ function (_AbstractModel) {
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._data.tablesById)), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        for (var _iterator = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._data.tablesById)), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var _step$value = (0, _slicedToArray2.default)(_step.value, 2),
               tableId = _step$value[0],
               tableData = _step$value[1];
@@ -212,7 +212,7 @@ function (_AbstractModel) {
         var _iteratorError2 = undefined;
 
         try {
-          for (var _iterator2 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._tableModelsById)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          for (var _iterator2 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._tableModelsById)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
             var _step2$value = (0, _slicedToArray2.default)(_step2.value, 2),
                 tableId = _step2$value[0],
                 tableModel = _step2$value[1];
@@ -247,7 +247,7 @@ function (_AbstractModel) {
         var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator3 = (0, _getIterator2.default)((0, _entries.default)(u).call(u, dirtyPaths.tablesById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          for (var _iterator3 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(dirtyPaths.tablesById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
             var _step3$value = (0, _slicedToArray2.default)(_step3.value, 2),
                 tableId = _step3$value[0],
                 dirtyTablePaths = _step3$value[1];
@@ -484,7 +484,7 @@ function (_AbstractModel) {
           var _iteratorError5 = undefined;
 
           try {
-            for (var _iterator5 = (0, _getIterator2.default)((0, _values.default)(u).call(u, userInfoById)), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            for (var _iterator5 = (0, _getIterator2.default)((0, _valuesInstanceProperty(_private_utils))(userInfoById)), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
               var userObj = _step5.value;
 
               if (appBlanketUserObjMethods.isActive(userObj) && !h.id.isInviteId(userObj.id)) {

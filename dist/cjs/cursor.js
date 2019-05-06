@@ -34,7 +34,7 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
 
-var _private_utils = _interopRequireDefault(require("./private_utils"));
+var _private_utils = require("./private_utils");
 
 var _abstract_model_with_async_data = _interopRequireDefault(require("./models/abstract_model_with_async_data"));
 
@@ -62,7 +62,7 @@ function (_AbstractModelWithAsy) {
   (0, _createClass2.default)(Cursor, null, [{
     key: "_isWatchableKey",
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableCursorKeys, key);
+      return (0, _private_utils.isEnumValue)(WatchableCursorKeys, key);
     }
   }, {
     key: "_shouldLoadDataForKey",

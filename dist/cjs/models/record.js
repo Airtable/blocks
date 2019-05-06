@@ -6,15 +6,15 @@ require("core-js/modules/es.string.replace");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _entriesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/entries");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
 
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/keys"));
-
-var _keys2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
+var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
 
 var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
 
@@ -23,8 +23,6 @@ var _isArray = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-st
 var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/typeof"));
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/slicedToArray"));
-
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/entries"));
 
 var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
 
@@ -46,7 +44,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
 
 var _field = require("../types/field");
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
@@ -93,7 +91,7 @@ function (_AbstractModel) {
     key: "_isWatchableKey",
     // Once all blocks set this flag to true, remove this flag.
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableRecordKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValueInFieldKeyPrefix) || (0, _startsWith.default)(u).call(u, key, WatchableColorInViewKeyPrefix);
+      return (0, _private_utils.isEnumValue)(WatchableRecordKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValueInFieldKeyPrefix) || (0, _startsWith.default)(u).call(u, key, WatchableColorInViewKeyPrefix);
     }
   }]);
 
@@ -118,15 +116,16 @@ function (_AbstractModel) {
     key: "__getRawRow",
     value: function __getRawRow() {
       var cellValuesByColumnId;
+      var cellValuesByFieldId = this._data.cellValuesByFieldId;
 
-      if (this._data.cellValuesByFieldId) {
+      if (cellValuesByFieldId) {
         cellValuesByColumnId = {};
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
 
         try {
-          for (var _iterator = (0, _getIterator2.default)((0, _entries.default)(u).call(u, this._data.cellValuesByFieldId)), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          for (var _iterator = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(cellValuesByFieldId)), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var _step$value = (0, _slicedToArray2.default)(_step.value, 2),
                 fieldId = _step$value[0],
                 publicCellValue = _step$value[1];
@@ -198,9 +197,9 @@ function (_AbstractModel) {
         if (!Record.shouldUseNewLookupFormat && field.type === _field.FieldTypes.LOOKUP) {
           var cellValueForMigration = []; // flow-disable-next-line
 
-          cellValueForMigration.linkedRecordIds = _private_utils.default.cloneDeep(cellValue.linkedRecordIds); // flow-disable-next-line
+          cellValueForMigration.linkedRecordIds = (0, _private_utils.cloneDeep)(cellValue.linkedRecordIds); // flow-disable-next-line
 
-          cellValueForMigration.valuesByLinkedRecordId = _private_utils.default.cloneDeep(cellValue.valuesByLinkedRecordId);
+          cellValueForMigration.valuesByLinkedRecordId = (0, _private_utils.cloneDeep)(cellValue.valuesByLinkedRecordId);
           (0, _invariant.default)((0, _isArray.default)(cellValue.linkedRecordIds), 'linkedRecordIds');
           var _iteratorNormalCompletion2 = true;
           var _didIteratorError2 = false;
@@ -262,7 +261,7 @@ function (_AbstractModel) {
         // TODO(kasra): maybe freezeDeep instead?
 
 
-        return _private_utils.default.cloneDeep(cellValue);
+        return (0, _private_utils.cloneDeep)(cellValue);
       } else {
         return cellValue;
       }
@@ -427,35 +426,16 @@ function (_AbstractModel) {
         // TODO: don't trigger changes for fields that aren't supposed to be loaded
         // (in some cases, e.g. record created, liveapp will send cell values
         // that we're not subscribed to).
-        this._onChange(WatchableRecordKeys.cellValues, (0, _keys2.default)(cellValuesByFieldId));
+        this._onChange(WatchableRecordKeys.cellValues, (0, _keys.default)(cellValuesByFieldId));
 
         if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
           this._onChange(WatchableRecordKeys.primaryCellValue);
         }
 
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
+        for (var _i = 0, _Object$keys2 = (0, _keys.default)(cellValuesByFieldId); _i < _Object$keys2.length; _i++) {
+          var fieldId = _Object$keys2[_i];
 
-        try {
-          for (var _iterator4 = (0, _getIterator2.default)((0, _keys.default)(u).call(u, cellValuesByFieldId)), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-            var fieldId = _step4.value;
-
-            this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
-          }
-        } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-              _iterator4.return();
-            }
-          } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
-            }
-          }
+          this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
         }
       }
 

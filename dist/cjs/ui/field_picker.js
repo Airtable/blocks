@@ -8,13 +8,13 @@ require("core-js/modules/es.function.name");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
 
@@ -47,6 +47,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _invariant = _interopRequireDefault(require("invariant"));
 
 var React = _interopRequireWildcard(require("react"));
+
+var _private_utils = require("../private_utils");
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
@@ -210,7 +212,7 @@ function (_React$Component) {
   field: _propTypes.default.instanceOf(_field.default),
   shouldAllowPickingNone: _propTypes.default.bool,
   onChange: _propTypes.default.func,
-  allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _values.default)(u).call(u, _field2.FieldTypes))),
+  allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(_field2.FieldTypes))),
   placeholder: _propTypes.default.string,
   style: _propTypes.default.object,
   className: _propTypes.default.string,

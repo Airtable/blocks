@@ -6,13 +6,13 @@ var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequ
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
 
@@ -36,10 +36,9 @@ var _classnames = _interopRequireDefault(require("classnames"));
 
 var React = _interopRequireWildcard(require("react"));
 
-var _popover = _interopRequireDefault(require("./popover"));
+var _private_utils = require("../private_utils");
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
+var _popover = _interopRequireDefault(require("./popover"));
 
 var FADE_IN_ANIMATION_DURATION = 150;
 
@@ -204,7 +203,7 @@ function (_React$Component) {
   placementY: _propTypes.default.oneOf([_popover.default.placements.TOP, _popover.default.placements.CENTER, _popover.default.placements.BOTTOM]),
   placementOffsetX: _propTypes.default.number,
   placementOffsetY: _propTypes.default.number,
-  fitInWindowMode: _propTypes.default.oneOf((0, _values.default)(u).call(u, _popover.default.fitInWindowModes)),
+  fitInWindowMode: _propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(_popover.default.fitInWindowModes)),
   shouldHideTooltipOnClick: _propTypes.default.bool,
   disabled: _propTypes.default.bool,
   className: _propTypes.default.string,

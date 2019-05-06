@@ -1,6 +1,6 @@
 // @flow
 import Watchable from './watchable';
-import utils from './private_utils';
+import {isEnumValue} from './private_utils';
 import {type AirtableInterface} from './injected/airtable_interface';
 
 const WatchableSettingsButtonKeys = {
@@ -25,7 +25,7 @@ type WatchableSettingsButtonKey = $Keys<typeof WatchableSettingsButtonKeys>;
 class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     static _className = 'SettingsButton';
     static _isWatchableKey(key: string): boolean {
-        return utils.isEnumValue(WatchableSettingsButtonKeys, key);
+        return isEnumValue(WatchableSettingsButtonKeys, key);
     }
     _isVisible: boolean;
     _airtableInterface: AirtableInterface;

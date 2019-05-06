@@ -6,13 +6,13 @@ var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequ
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
+var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+
 _Object$defineProperty(exports, "__esModule", {
   value: true
 });
 
 exports.default = void 0;
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/values"));
 
 var _promise = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/promise"));
 
@@ -40,20 +40,19 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
 
+var _reactDom = _interopRequireDefault(require("react-dom"));
+
+var React = _interopRequireWildcard(require("react"));
+
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _classnames = _interopRequireDefault(require("classnames"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
-var _reactDom = _interopRequireDefault(require("react-dom"));
-
-var React = _interopRequireWildcard(require("react"));
+var _private_utils = require("../private_utils");
 
 var _create_detect_element_resize = _interopRequireDefault(require("./create_detect_element_resize"));
-
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
 
 var Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 
@@ -392,7 +391,7 @@ function (_React$Component) {
   placementY: _propTypes.default.oneOf([PopoverPlacements.TOP, PopoverPlacements.CENTER, PopoverPlacements.BOTTOM]),
   placementOffsetX: _propTypes.default.number,
   placementOffsetY: _propTypes.default.number,
-  fitInWindowMode: _propTypes.default.oneOf((0, _values.default)(u).call(u, FitInWindowModes)),
+  fitInWindowMode: _propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(FitInWindowModes)),
   onClose: _propTypes.default.func,
   isOpen: _propTypes.default.bool,
   backgroundClassName: _propTypes.default.string,

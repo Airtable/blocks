@@ -54,7 +54,7 @@ var _colors = _interopRequireDefault(require("../colors"));
 
 var _field = require("../types/field");
 
-var _private_utils = _interopRequireDefault(require("../private_utils"));
+var _private_utils = require("../private_utils");
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
@@ -125,7 +125,7 @@ function (_AbstractModelWithAsy) {
   }], [{
     key: "_isWatchableKey",
     value: function _isWatchableKey(key) {
-      return _private_utils.default.isEnumValue(WatchableQueryResultKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix);
+      return (0, _private_utils.isEnumValue)(WatchableQueryResultKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix);
     }
   }, {
     key: "_shouldLoadDataForKey",
@@ -285,7 +285,7 @@ function (_AbstractModelWithAsy) {
             }
 
             var value = record.getCellValue(recordColorMode.selectField);
-            return value && (0, _typeof2.default)(value) === 'object' && typeof value.color === 'string' ? _private_utils.default.assertEnumValue(_colors.default, value.color) : null;
+            return value && (0, _typeof2.default)(value) === 'object' && typeof value.color === 'string' ? (0, _private_utils.assertEnumValue)(_colors.default, value.color) : null;
           }
 
         case _record_coloring.ModeTypes.BY_VIEW:

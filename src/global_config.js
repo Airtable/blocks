@@ -157,7 +157,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
 
         const limitCheckResult = blockKvHelpers.limitCheckKvStore(
             workingKvStore,
-            u.keys(topLevelKeySet),
+            Object.keys(topLevelKeySet),
         );
         if (!limitCheckResult.isValid) {
             throw new Error(`globalConfig over limits: ${limitCheckResult.reason}`);
