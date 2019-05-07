@@ -15,7 +15,7 @@ const blocksConfigSettings = require('./config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
 const APIClient = require('./api_client');
 const fsUtils = require('./fs_utils');
-const childProcess = require('child_process');
+const childProcessHelpers = require('./helpers/child_process_helpers');
 const BlockBackendMessageTypes = require('./block_backend_message_types');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
@@ -363,8 +363,7 @@ class BlockServer {
         console.log('Updating backend...');
         // Create a new process to run the user's backend code so errors do not propagate
         // to blocks-cli and to emulate the Lambda environment more closely.
-        this._backendProcess = childProcess.fork(path.join(__dirname, 'block_backend_handler'), {
-            stdio: 'pipe',
+        this._backendProcess = childProcessHelpers.fork(path.join(__dirname, 'block_backend_handler'), {
             env: this.generateEnvironmentVariablesForBackendProcess(),
             execArgv: [
                 // HACK: production blocks currently run node 8.10. node 8.14
@@ -375,19 +374,9 @@ class BlockServer {
                 // production.
                 semver.gte(process.versions.node, '8.14.0') ? '--max-http-header-size=80000' : null,
             ].filter(arg => !!arg),
+            prefix: 'backend',
         });
-        // Pipe logs from the backend process into this one and prefix them with [backend].
-        const pipeStdio = (pipe, prefix) => {
-            pipe.on('data', chunk =>
-                chunk
-                    .toString('utf-8')
-                    .replace(/\n$/, '')
-                    .split('\n')
-                    .forEach(line => console.log(`${prefix} ${line}`)),
-            );
-        };
-        pipeStdio(this._backendProcess.stdout, chalk.blue('[backend]'));
-        pipeStdio(this._backendProcess.stderr, chalk.yellow('[backend]'));
+
         // Configure the block server to handle event responses sent by the backend process.
         this._pendingBackendResponsesByRequestId = {};
         this._backendProcess.on('message', response => {

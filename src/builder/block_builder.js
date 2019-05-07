@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const invariant = require('invariant');
-const {exec} = require('child_process');
+const {execFileAsync} = require('../helpers/child_process_helpers');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('../generate_block_client_wrapper');
 const generateBlockBabelConfig = require('../generate_block_babel_config');
@@ -16,19 +16,6 @@ const Terser = require('terser');
 
 import type {BlockFile} from '../types/block_file_type';
 import type {BlockModuleType, BlockModuleWithoutCode} from '../types/block_module_types';
-
-const execAsync = (cmd: string) => new Promise((resolve, reject) => {
-    const eventEmitter = exec(cmd, (err, stdout, stderr) => {
-        if (err) {
-            reject(err);
-        } else {
-            resolve({stdout, stderr});
-        }
-    });
-    // Pipe the child process's stdout and stderr to this process's stdout and stderr.
-    eventEmitter.stdout.pipe(process.stdout);
-    eventEmitter.stderr.pipe(process.stderr);
-});
 
 const BlockModuleDirectoryNamesByType = Object.freeze({
     [BlockModuleTypes.FRONTEND]: ('frontend': 'frontend'),
@@ -139,8 +126,11 @@ class BlockBuilder {
         const currPath = __dirname;
         const yarnPath = path.join(currPath, '..', '..', 'node_modules', '.bin', 'yarn');
         try {
-            const {stderr} = await execAsync(`cd ${dirPath}; ${yarnPath} --prod --non-interactive; cd ${currPath}`);
-            const yarnInstallError = this._getErrorFromYarnInstallStderr(stderr);
+            const {stderr} = await execFileAsync(yarnPath, ['--prod', '--non-interactive'], {
+                cwd: dirPath,
+                prefix: 'yarn',
+            });
+            const yarnInstallError = this._getErrorFromYarnInstallStderr(stderr.toString());
             if (yarnInstallError) {
                 return {success: false, error: yarnInstallError};
             }
