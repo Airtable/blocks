@@ -75,8 +75,8 @@ async function initBlockAsync(
 
     // Create a minimal package json so the user can yarn install.
     const defaultDependencies = {
-        react: '^16.0.0',
-        'react-dom': '^16.0.0',
+        react: '^16.8.0',
+        'react-dom': '^16.8.0',
     };
     const writePackageJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, 'package.json'),
