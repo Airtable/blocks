@@ -100,9 +100,16 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: false,
             },
             'transpile-all': {
-                description: 'Transpile JS for all browsers airtable supports, rather than a minimal set for development',
+                description:
+                    'Transpile JS for all browsers airtable supports, rather than a minimal set for development',
                 type: 'boolean',
                 default: false,
+            },
+            'sdk-repo': {
+                description:
+                    'Path to a local copy of @airtable/blocks to use instead of the npm one',
+                type: 'string',
+                hidden: true,
             },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),

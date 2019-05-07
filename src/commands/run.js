@@ -1,13 +1,16 @@
 const getBlockDirPath = require('../get_block_dir_path');
 const getApiKeySync = require('../get_api_key_sync');
 const BlockServer = require('../block_server');
+const LocalSdkBuilder = require('../local_sdk_builder');
 const cliHelpers = require('../helpers/cli_helpers');
 
 const DEFAULT_PORT = 8000;
 
 async function runCommandAsync(argv) {
     const apiKey = getApiKeySync(getBlockDirPath());
-    const {local, transpileAll} = argv;
+    const {local, transpileAll, sdkRepo} = argv;
+
+    await LocalSdkBuilder.startIfNeededAsync(sdkRepo || null);
 
     const blockServer = new BlockServer({
         apiKey,

@@ -80,4 +80,9 @@ module.exports = {
         });
     },
     renameAsync: promisify(fs.rename),
+    existsAsync: function(filePath) {
+        return this.statIfExistsAsync(filePath).then(result => {
+            return result !== null;
+        });
+    },
 };
