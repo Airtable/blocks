@@ -45,6 +45,7 @@
     "yarn": "^1.13.0"
   },
   "devDependencies": {
+    "@babel/register": "^7.4.4",
     "babel-eslint": "^8.2.1",
     "eslint": "^4.16.0",
     "eslint-plugin-class-property": "^1.1.0",
