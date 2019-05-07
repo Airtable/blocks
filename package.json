@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "bin": {
-    "block": "index.js"
+    "block": "bin/block.js"
   },
   "scripts": {
     "lint": "eslint .",
