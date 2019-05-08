@@ -39,11 +39,18 @@ module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath
             }'].__BlockWrapperComponent;
             var EntryComponent = require('${frontendEntryModulePath}').default;
 
-            var container = document.createElement('div');
-            document.body.appendChild(container);
-            ReactDOM.render(React.createElement(BlockWrapperComponent, {
-                EntryComponent: EntryComponent,
-            }), container);
+            var isEntryReactComponent = EntryComponent && (
+                EntryComponent.prototype instanceof React.Component ||
+                EntryComponent instanceof Function
+            );
+            if (isEntryReactComponent) {
+                var container = document.createElement('div');
+                document.body.appendChild(container);
+                ReactDOM.render(React.createElement(BlockWrapperComponent, {
+                    EntryComponent: EntryComponent,
+                }), container);
+            }
+            
             ${isDevelopment ?
                 `
                 function pollForLiveReload() {
