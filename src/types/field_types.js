@@ -5,6 +5,7 @@ const FieldTypes = {
     URL: ('url': 'url'),
     MULTILINE_TEXT: ('multilineText': 'multilineText'),
     NUMBER: ('number': 'number'),
+    PERCENT: ('percent': 'percent'),
     CURRENCY: ('currency': 'currency'),
     SINGLE_SELECT: ('singleSelect': 'singleSelect'),
     MULTIPLE_SELECTS: ('multipleSelects': 'multipleSelects'),
