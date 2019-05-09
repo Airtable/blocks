@@ -37,4 +37,9 @@ export type BlockModuleWithoutCode = {|
     metadata: BlockModuleMetadata,
 |};
 
+export type BlockModuleValueAndRevision = {|
+    revision: number,
+    value: string,
+|};
+
 module.exports = BlockModuleTypes;

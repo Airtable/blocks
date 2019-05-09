@@ -1,12 +1,27 @@
-'use strict';
-
+// @flow
+const invariant = require('invariant');
 const request = require('request');
 const promisify = require('es6-promisify');
 const Environments = require('./types/environments');
-
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
+
+import type {
+    CredentialEncrypted,
+    CredentialPlaintext,
+} from './types/block_developer_credential_types';
+import type {Environment} from './types/environments';
+import type {
+    UpdateBlockParams,
+    UpdateBlockResponse,
+    FetchBlockResponse
+} from './types/api_client_types';
+
+type ApplicationId = string;
+type BlockInstallationId = string;
+type BlockId = string;
+type KmsDataKeyId = string;
 
 const apiDomainsByEnvironment = {
     [Environments.PRODUCTION]: 'api.airtable.com',
@@ -15,20 +30,32 @@ const apiDomainsByEnvironment = {
 };
 
 class APIClient {
-    constructor(opts) {
+    _environment: Environment;
+    _applicationId: ApplicationId;
+    _blockInstallationId: BlockInstallationId | null;
+    _blockId: BlockId;
+    _apiKey: string;
+
+    constructor(opts: {|
+        environment?: Environment,
+        applicationId: ApplicationId,
+        blockInstallationId?: BlockInstallationId,
+        blockId: BlockId,
+        apiKey: string,
+    |}) {
         this._environment = opts.environment || Environments.PRODUCTION;
         this._applicationId = opts.applicationId;
-        this._blockInstallationId = opts.blockInstallationId;
+        this._blockInstallationId = opts.blockInstallationId || null;
         this._blockId = opts.blockId;
         this._apiKey = opts.apiKey;
     }
 
-    _getRequestUrl() {
+    _getRequestUrl(): string {
         const domain = apiDomainsByEnvironment[this._environment];
         return `https://${domain}/v2/meta/${this._applicationId}/blocks/${this._blockId}`;
     }
 
-    updateBlockAsync(data) {
+    async updateBlockAsync(data: UpdateBlockParams): Promise<UpdateBlockResponse> {
         const options = {
             url: this._getRequestUrl(),
             headers: {
@@ -37,45 +64,40 @@ class APIClient {
             body: data,
             json: true,
         };
-        return request.putAsync(options).then(response => {
-            const body = response.body;
-            const statusCode = response.statusCode;
-            if (statusCode !== 200) {
-                throw new Error(body.error.message);
-            }
-            return body;
-        });
+        const response = await request.putAsync(options);
+        const body = response.body;
+        const statusCode = response.statusCode;
+        if (statusCode !== 200) {
+            throw new Error(body.error.message);
+        }
+        return body;
     }
 
-    fetchBlockAsync() {
+    async fetchBlockAsync(): Promise<FetchBlockResponse> {
         const options = {
             url: this._getRequestUrl(),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
             },
         };
-        return request.getAsync(options).then(response => {
-            const body = response.body;
-            const statusCode = response.statusCode;
-            // If we got a 404, return incorrect app or block id error.
-            if (statusCode === 404) {
-                throw new Error('Incorrect application or block id');
-            }
-            const bodyParsed = JSON.parse(body);
-            // If we got anything else other than 200 and 404, return whatever error we got.
-            if (statusCode !== 200) {
-                throw new Error(bodyParsed.error.message);
-            }
-            return bodyParsed;
-        });
+        const response = await request.getAsync(options);
+        const body = response.body;
+        const statusCode = response.statusCode;
+        // If we got a 404, return incorrect app or block id error.
+        if (statusCode === 404) {
+            throw new Error('Incorrect application or block id');
+        }
+        const bodyParsed = JSON.parse(body);
+        // If we got anything else other than 200 and 404, return whatever error we got.
+        if (statusCode !== 200) {
+            throw new Error(bodyParsed.error.message);
+        }
+        return bodyParsed;
     }
 
-    /**
-     * TODO(richsinn): when flow typing this method:
-     *   - credentialsEncrypted parameter type => Array<CredentialEncrypted>
-     *   - return type => Promise<Array<CredentialPlaintext>>
-     */
-    async decryptCredentialsAsync(credentialsEncrypted) {
+    async decryptCredentialsAsync(
+        credentialsEncrypted: Array<CredentialEncrypted>,
+    ): Promise<Array<CredentialPlaintext>> {
         const options = {
             url: `${this._getRequestUrl()}/credentials/decrypt`,
             headers: {
@@ -93,16 +115,10 @@ class APIClient {
         return body;
     }
 
-    /**
-     * TODO(richsinn): when flow typing this method:
-     *   - credentialPlaintext parameter type => CredentialPlaintext
-     *   - kmsDataKeyId parameter type => kmsDataKeyId?: string
-     *   - return type => Promise<CredentialEncrypted>
-     */
     async encryptCredentialAsync(
-        credentialPlaintext,
-        kmsDataKeyId,
-    ) {
+        credentialPlaintext: CredentialPlaintext,
+        kmsDataKeyId?: KmsDataKeyId,
+    ): Promise<CredentialEncrypted> {
         const options = {
             url: `${this._getRequestUrl()}/credential/encrypt`,
             headers: {
@@ -123,16 +139,10 @@ class APIClient {
         return body;
     }
 
-    /**
-     * TODO(richsinn): when flow typing this method:
-     *   - credentialEncrypted parameter type => credentialEncrypted
-     *   - newKmsDataKeyId parameter type => string
-     *   - return type => Promise<CredentialEncrypted>
-     */
     async reEncryptCredentialAsync(
-        credentialEncrypted,
-        newKmsDataKeyId,
-    ) {
+        credentialEncrypted: CredentialEncrypted,
+        newKmsDataKeyId: KmsDataKeyId,
+    ): Promise<CredentialEncrypted> {
         const options = {
             url: `${this._getRequestUrl()}/credential/reEncrypt`,
             headers: {
@@ -153,43 +163,43 @@ class APIClient {
         return body;
     }
 
-    _getAccessPolicyUrl() {
+    _getAccessPolicyUrl(): string {
+        invariant(this._blockInstallationId, '_blockInstallationId');
         const domain = apiDomainsByEnvironment[this._environment];
         return `https://${domain}/v2/meta/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`;
     }
 
-    fetchAccessPolicyAsync() {
+    async fetchAccessPolicyAsync(): Promise<string> {
         const options = {
             url: this._getAccessPolicyUrl(),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
             },
         };
-        return request.getAsync(options).then(response => {
-            const body = response.body;
-            const statusCode = response.statusCode;
-            // If we got a 404, return incorrect app or block id error.
-            if (statusCode === 404) {
-                throw new Error('Incorrect application or block installation id');
-            }
-            const bodyParsed = JSON.parse(body);
-            // If we got anything else other than 200 and 404, return whatever error we got.
-            if (statusCode !== 200) {
-                throw new Error(bodyParsed.error.message);
-            }
-            return bodyParsed;
-        });
+        const response = request.getAsync(options);
+        const body = response.body;
+        const statusCode = response.statusCode;
+        // If we got a 404, return incorrect app or block id error.
+        if (statusCode === 404) {
+            throw new Error('Incorrect application or block installation id');
+        }
+        const bodyParsed = JSON.parse(body);
+        // If we got anything else other than 200 and 404, return whatever error we got.
+        if (statusCode !== 200) {
+            throw new Error(bodyParsed.error.message);
+        }
+        return bodyParsed;
     }
 
-    get applicationId() {
+    get applicationId(): ApplicationId {
         return this._applicationId;
     }
 
-    get blockInstallationId() {
+    get blockInstallationId(): BlockInstallationId | null {
         return this._blockInstallationId;
     }
 
-    get environment() {
+    get environment(): Environment {
         return this._environment;
     }
 }

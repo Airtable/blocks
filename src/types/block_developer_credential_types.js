@@ -15,3 +15,8 @@ export type CredentialEncrypted = {|
     kmsDataKeyId: string,
     credentialValueEncrypted: string,
 |};
+
+export type CredentialPlaintext = {|
+    name: string,
+    credentialValuePlaintext: string,
+|};
