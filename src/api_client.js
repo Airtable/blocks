@@ -33,24 +33,25 @@ class APIClient {
     _environment: Environment;
     _applicationId: ApplicationId;
     _blockInstallationId: BlockInstallationId | null;
-    _blockId: BlockId;
+    _blockId: BlockId | null;
     _apiKey: string;
 
     constructor(opts: {|
         environment?: Environment,
         applicationId: ApplicationId,
         blockInstallationId?: BlockInstallationId,
-        blockId: BlockId,
+        blockId?: BlockId,
         apiKey: string,
     |}) {
         this._environment = opts.environment || Environments.PRODUCTION;
         this._applicationId = opts.applicationId;
         this._blockInstallationId = opts.blockInstallationId || null;
-        this._blockId = opts.blockId;
+        this._blockId = opts.blockId || null;
         this._apiKey = opts.apiKey;
     }
 
     _getRequestUrl(): string {
+        invariant(this._blockId, '_blockId');
         const domain = apiDomainsByEnvironment[this._environment];
         return `https://${domain}/v2/meta/${this._applicationId}/blocks/${this._blockId}`;
     }
