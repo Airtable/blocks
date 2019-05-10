@@ -1,3 +1,4 @@
+// @flow
 const normalizeUserResponse = require('../src/normalize_user_response');
 const assert = require('assert');
 
