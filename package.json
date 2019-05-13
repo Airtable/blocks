@@ -10,6 +10,7 @@
     "flow": "flow",
     "buildOnce": "babel src --out-dir build",
     "build": "yarn buildOnce --watch",
+    "pretest": "yarn run lint",
     "postinstall": "yarn buildOnce",
     "test": "mocha"
   },
