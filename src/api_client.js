@@ -70,7 +70,10 @@ class APIClient {
         const response = await request.putAsync(options);
         const body = response.body;
         const statusCode = response.statusCode;
-        if (statusCode !== 200) {
+        // If we got a 404, return incorrect app or block id error.
+        if (statusCode === 404) {
+            throw new Error('Incorrect application or block id');
+        } else if (statusCode !== 200) {
             throw new Error(body.error.message);
         }
         return body;
