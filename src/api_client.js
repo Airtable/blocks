@@ -183,7 +183,7 @@ class APIClient {
                 Authorization: `Bearer ${this._apiKey}`,
             },
         };
-        const response = request.getAsync(options);
+        const response = await request.getAsync(options);
         const body = response.body;
         const statusCode = response.statusCode;
         // If we got a 404, return incorrect app or block id error.
@@ -195,7 +195,7 @@ class APIClient {
         if (statusCode !== 200) {
             throw new Error(bodyParsed.error.message);
         }
-        return bodyParsed;
+        return bodyParsed.accessPolicy;
     }
 
     get applicationId(): ApplicationId {

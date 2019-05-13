@@ -199,9 +199,7 @@ class BlockServer {
 
         // Fetch an access policy for this invocation, so the backend code can make requests
         // to Airtable.
-        this._apiClient.fetchAccessPolicyAsync().then(accessPolicyBody => {
-            const apiAccessPolicyString = accessPolicyBody.accessPolicy;
-
+        this._apiClient.fetchAccessPolicyAsync().then(apiAccessPolicyString => {
             const event = {
                 requestId: req.requestId,
                 method: req.method,
