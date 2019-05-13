@@ -16,7 +16,6 @@ import models from './models/models';
 import Viewport from './viewport';
 import Cursor from './cursor';
 import UI from './ui/ui';
-import BlockWrapperComponent from './ui/block_wrapper_component';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {type AirtableInterface} from './injected/airtable_interface';
@@ -62,8 +61,6 @@ export type RunInfo = {
 class BlockSdk {
     static VERSION = PACKAGE_VERSION;
 
-    __BlockWrapperComponent: typeof BlockWrapperComponent;
-
     // NOTE: in most cases, we should pass the Airtable interface to models when we
     // construct them (to reduce usage of getSdk). But in some cases, that isn't
     // feasible (i.e. expandRecord, since that can be called directly from block code),
@@ -106,7 +103,6 @@ class BlockSdk {
         this.__airtableInterface = airtableInterface;
         airtableInterface.assertAllowedSdkPackageVersion(PACKAGE_NAME, BlockSdk.VERSION);
 
-        this.__BlockWrapperComponent = BlockWrapperComponent;
         const sdkInitData = airtableInterface.sdkInitData;
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
         this.base = new Base(sdkInitData.baseData, airtableInterface);

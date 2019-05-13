@@ -42,6 +42,7 @@ import AutocompletePopover from './autocomplete_popover';
 import ViewportConstraint from './viewport_constraint';
 import Link from './link';
 import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
+import initializeBlock from './initialize_block';
 
 // TODO: freeze this object before we ship the code editor.
 const UI = {
@@ -90,6 +91,7 @@ const UI = {
     ToggleSynced,
     ViewportConstraint,
     globalAlert: new GlobalAlert(),
+    initializeBlock,
 };
 
 export default UI;
