@@ -180,6 +180,8 @@ class BlockServer {
     }
     _getApiBaseUrlForEnvironment(environment) {
         switch (environment) {
+            case Environments.TEST:
+                return 'http://localhost:' + blocksConfigSettings.TEST_SERVER_PORT;
             case Environments.LOCAL:
                 return 'https://api.hyperbasedev.com:3000';
             case Environments.STAGING:

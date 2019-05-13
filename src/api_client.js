@@ -3,6 +3,8 @@ const invariant = require('invariant');
 const request = require('request');
 const promisify = require('es6-promisify');
 const Environments = require('./types/environments');
+const {URL} = require('url');
+const {TEST_SERVER_PORT} = require('./config/block_cli_config_settings');
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
@@ -23,10 +25,11 @@ type BlockInstallationId = string;
 type BlockId = string;
 type KmsDataKeyId = string;
 
-const apiDomainsByEnvironment = {
-    [Environments.PRODUCTION]: 'api.airtable.com',
-    [Environments.STAGING]: 'api-staging.airtable.com',
-    [Environments.LOCAL]: 'api.hyperbasedev.com:3000',
+const apiBaseUrlsByEnvironment = {
+    [Environments.PRODUCTION]: 'https://api.airtable.com',
+    [Environments.STAGING]: 'https://api-staging.airtable.com',
+    [Environments.LOCAL]: 'https://api.hyperbasedev.com:3000',
+    [Environments.TEST]: 'http://localhost:' + TEST_SERVER_PORT,
 };
 
 class APIClient {
@@ -52,8 +55,7 @@ class APIClient {
 
     _getRequestUrl(): string {
         invariant(this._blockId, '_blockId');
-        const domain = apiDomainsByEnvironment[this._environment];
-        return `https://${domain}/v2/meta/${this._applicationId}/blocks/${this._blockId}`;
+        return this._getUrl(`/v2/meta/${this._applicationId}/blocks/${this._blockId}`);
     }
 
     async updateBlockAsync(data: UpdateBlockParams): Promise<UpdateBlockResponse> {
@@ -166,8 +168,12 @@ class APIClient {
 
     _getAccessPolicyUrl(): string {
         invariant(this._blockInstallationId, '_blockInstallationId');
-        const domain = apiDomainsByEnvironment[this._environment];
-        return `https://${domain}/v2/meta/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`;
+        return this._getUrl(`/v2/meta/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`);
+    }
+
+    _getUrl(path: string): string {
+        const baseUrl = apiBaseUrlsByEnvironment[this._environment];
+        return new URL(path, baseUrl).href;
     }
 
     async fetchAccessPolicyAsync(): Promise<string> {

@@ -260,6 +260,9 @@ async function downloadBackendSdkAsync(blockJson, blockDirPath) {
         case Environments.LOCAL:
             baseUrl = 'https://hyperbasedev.com:3000/js/build';
             break;
+        case Environments.TEST:
+            baseUrl = `http://localhost:${blocksConfigSettings.TEST_SERVER_PORT}/js/compiled`;
+            break;
         default:
             throw new Error(`Unrecognized environment: ${environment}`);
     }

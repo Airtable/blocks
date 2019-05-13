@@ -39,4 +39,6 @@ module.exports = {
 
     // Bundle file.
     BUNDLE_FILE_NAME: 'bundle.js',
+
+    TEST_SERVER_PORT: 7132,
 };

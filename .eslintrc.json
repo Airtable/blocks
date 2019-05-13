@@ -76,7 +76,6 @@
         "no-iterator": "error",
         "no-labels": "error",
         "no-label-var": "error",
-        "no-loop-func": "error",
         "no-lone-blocks": "error",
         "no-native-reassign": "error",
         "no-mixed-operators": ["warn", {"groups": [["&&", "||"]]}],
