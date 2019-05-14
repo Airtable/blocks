@@ -44,7 +44,7 @@ class BlockBuilder {
             error: new Error(message),
         };
     }
-    async _readAndParseBlockJson(blockDirPath: string): Promise<BuildStepResult<BlockJson>> {
+    async _readAndParseBlockJsonAsync(blockDirPath: string): Promise<BuildStepResult<BlockJson>> {
         const blockJsonPath = path.join(blockDirPath, 'block.json');
         if (!fs.existsSync(blockJsonPath)) {
             return this._buildFailure('must have a block.json file');
@@ -225,7 +225,7 @@ class BlockBuilder {
         const blockDirPath = process.cwd();
 
         console.log('reading block json');
-        const blockJsonResult = await this._readAndParseBlockJson(blockDirPath);
+        const blockJsonResult = await this._readAndParseBlockJsonAsync(blockDirPath);
         if (!blockJsonResult.success) {
             return blockJsonResult;
         }

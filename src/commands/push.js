@@ -148,7 +148,7 @@ async function pushBlockAsync(argv) {
 
     // Write the developer credentials json file from the response.
     // This clobbers the locally stored file with the API response.
-    const writeBlockDeveloperCredentialsFromApiResponseAsync = writeDeveloperCredentialsFromApiResponseAsync(
+    const writeBlockDeveloperCredentialsFromApiResponseAsync = await writeDeveloperCredentialsFromApiResponseAsync(
         developerCredentialsEncryptedFromResponse,
         blockDirPath,
     );

@@ -7,7 +7,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:flowtype/recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:airtable/recommended"
     ],
     "parser": "babel-eslint",
     "parserOptions": {
@@ -23,7 +24,7 @@
             "spread": true
         }
     },
-    "plugins": ["flowtype", "react"],
+    "plugins": ["airtable", "flowtype", "react"],
     "rules": {
         "no-case-declarations": "warn",
         "no-debugger": "warn",
@@ -132,6 +133,14 @@
         "space-unary-ops": "warn",
         "spaced-comment": "warn",
         "yoda": "warn",
+
+        "airtable/is-returns-boolean": "warn",
+        "airtable/no-missing-await": "warn",
+        "airtable/no-process-domain": "warn",
+        "airtable/background-image-url-double-quotes": "warn",
+        "airtable/noopener-noreferrer": "warn",
+        "airtable/no-missing-async-suffix": "warn",
+
         "react/jsx-boolean-value": ["warn", "always"],
         "react/jsx-curly-spacing": "warn",
         "react/jsx-no-duplicate-props": "error",

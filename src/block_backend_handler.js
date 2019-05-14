@@ -158,7 +158,7 @@ async function symlinkBackendAndSharedFoldersAsync() {
     for (const folderName of folderNames) {
         const folderPath = path.join(buildDirPath, folderName);
         const nodeModulesPath = path.join(blockDirPath, 'node_modules', folderName);
-        fsUtils.symlinkIfNeededAsync(folderPath, nodeModulesPath);
+        await fsUtils.symlinkIfNeededAsync(folderPath, nodeModulesPath);
     }
 }
 
@@ -213,7 +213,7 @@ async function transpileBackendAndSharedCodeAsync() {
     await Promise.all(transpilationPromises);
 }
 
-async function checkIfBackendRoutesExistInBlockJson(modules) {
+async function checkIfBackendRoutesExistInBlockJsonAsync(modules) {
     const blockDirPath = getBlockDirPath();
 
     const blockJsonBackendRouteFiles = new Set();
@@ -312,7 +312,7 @@ function getDeveloperCredentialByName() {
     return developerCredentialByName;
 }
 
-async function setUpBackend() {
+async function setUpBackendAsync() {
     // Parse block.json.
     const blockDirPath = getBlockDirPath();
     const rawBlockJson = await fsUtils.readFileAsync(path.join(blockDirPath, 'block.json'));
@@ -320,7 +320,7 @@ async function setUpBackend() {
     const modules = blockJson.modules;
     // Check if all files in backendRoute exist in block.json, and issue
     // warnings otherwise.
-    await checkIfBackendRoutesExistInBlockJson(modules);
+    await checkIfBackendRoutesExistInBlockJsonAsync(modules);
     // Transpile all backend modules.
     await transpileBackendAndSharedCodeAsync();
     // Symlink our backend and shared folders into node_modules so that
@@ -363,4 +363,4 @@ async function setUpBackend() {
     });
 }
 
-setUpBackend();
+setUpBackendAsync();

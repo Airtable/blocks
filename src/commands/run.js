@@ -33,7 +33,7 @@ async function runCommandAsync(argv) {
                     name: 'port',
                     description: `Port ${port} is taken, please provide an alternative port to run on`,
                 });
-                if (isNaN(result.port)) {
+                if (Number.isNaN(result.port)) {
                     throw new Error('Invalid port number');
                 }
                 // Set our port and re-enter the loop.

@@ -47,7 +47,7 @@ async function pullBlockAsync() {
     );
 
     // Write developer credential file
-    const writeBlockDeveloperCredentialsFromApiResponseAsync = writeDeveloperCredentialsFromApiResponseAsync(
+    const writeBlockDeveloperCredentialsFromApiResponseAsync = await writeDeveloperCredentialsFromApiResponseAsync(
         response.developerCredentialsEncrypted,
         blockDirPath,
     );

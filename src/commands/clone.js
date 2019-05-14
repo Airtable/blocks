@@ -51,7 +51,7 @@ async function cloneBlockAsync(
     );
 
     // Create a developer credentials json file.
-    const writeBlockDeveloperCredentialsFromApiResponseAsync = writeDeveloperCredentialsFromApiResponseAsync(
+    const writeBlockDeveloperCredentialsFromApiResponseAsync = await writeDeveloperCredentialsFromApiResponseAsync(
         response.developerCredentialsEncrypted,
         blockDirPath,
     );
