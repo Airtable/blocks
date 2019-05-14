@@ -244,9 +244,9 @@ class BlockBuilder {
         console.log('copying package.json and block.json files');
         const packageJsonPath = path.join(blockDirPath, 'package.json');
         if (fs.existsSync(packageJsonPath)) {
-            fsUtils.copyFileAsync(packageJsonPath, path.join(userSrcDirPath, 'package.json'));
+            await fsUtils.copyFileAsync(packageJsonPath, path.join(userSrcDirPath, 'package.json'));
         }
-        fsUtils.writeFileAsync(path.join(userSrcDirPath, 'block.json'), JSON.stringify(blockJson, null, 4));
+        await fsUtils.writeFileAsync(path.join(userSrcDirPath, 'block.json'), JSON.stringify(blockJson, null, 4));
 
         console.log('installing node modules');
         const yarnInstallResult = await this._yarnInstallAsync(userSrcDirPath);
