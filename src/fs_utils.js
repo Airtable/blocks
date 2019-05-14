@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const promisify = require('es6-promisify');
 const path = require('path');
 
@@ -59,6 +60,12 @@ module.exports = {
     copyFileAsync: async function(sourceFile, targetFile) {
         const contents = await this.readFileAsync(sourceFile);
         await this.writeFileAsync(targetFile, contents);
+    },
+    /**
+     * Like cp -r
+     */
+    copyAsync: async function(fromPath, toPath) {
+        await fsExtra.copy(fromPath, toPath);
     },
     symlinkAsync: promisify(fs.symlink),
     symlinkIfNeededAsync: function(target, filePath) {

@@ -2,4 +2,5 @@ block_client_wrapper.js
 bundle.js
 **/node_modules/*
 build/**
+transpiled/**
 **/flow-typed/*

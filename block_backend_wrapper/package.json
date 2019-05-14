@@ -1,0 +1,15 @@
+{
+    "name": "block_backend_wrapper",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "@babel/plugin-proposal-json-strings": "^7.2.0",
+        "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+        "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+        "@babel/plugin-syntax-import-meta": "^7.2.0",
+        "@babel/plugin-transform-flow-strip-types": "^7.4.0",
+        "invariant": "2.2.2",
+        "path-to-regexp": "2.0.0",
+        "request": "2.87.0"
+    }
+}

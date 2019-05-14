@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-console */
+const archiver = require('archiver');
 const path = require('path');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
@@ -8,34 +9,56 @@ const {execFileAsync} = require('../helpers/child_process_helpers');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('../generate_block_client_wrapper');
 const generateBlockBabelConfig = require('../generate_block_babel_config');
+const getBackendSdkUrl = require('../get_backend_sdk_url');
 const BlockModuleTypes = require('../types/block_module_types');
+const Environments = require('../types/environments');
 const babel = require('@babel/core');
 const browserify = require('browserify');
 const promisify = require('es6-promisify');
+const request = require('request');
 const Terser = require('terser');
 
 import type {BlockFile} from '../types/block_file_type';
-import type {BlockModuleType, BlockModuleWithoutCode} from '../types/block_module_types';
+import type {
+    BlockBackendRouteModuleMetadata,
+    BlockModuleType,
+    BlockModuleWithoutCode,
+} from '../types/block_module_types';
+
+type BlockJson = BlockFile;
+type BackendDeploymentPackagePath = string;
+type BlockModuleId = string;
+type BackendRoutesManifest = {
+    [string]: {|
+        id: BlockModuleId,
+        metadata: BlockBackendRouteModuleMetadata,
+    |},
+};
+
+type BuildSuccess = {success: true};
+type BuildFailure = {success: false, error: Error};
+type BuildResult = BuildSuccess | BuildFailure;
+// TODO(richsinn): consider using the Result algebraic type from hyperbase
+type BuildStepResult<+R> = (
+    {|success: true, +value: R|} |
+    BuildFailure
+);
+
+const BUILD_STEP_RESULT_OK = Object.freeze({success: true, value: undefined});
+const BLOCK_BACKEND_WRAPPER_CONTENTS = new Set([
+    'backend.js',
+    'handle_event_async.js',
+    '.babelrc',
+    'package.json',
+    'yarn.lock',
+    'node_modules',
+]);
 
 const BlockModuleDirectoryNamesByType = Object.freeze({
     [BlockModuleTypes.FRONTEND]: ('frontend': 'frontend'),
     [BlockModuleTypes.SHARED]: ('shared': 'shared'),
     [BlockModuleTypes.BACKEND_ROUTE]: ('routes': 'routes'),
 });
-
-type BuildSuccess = {success: true};
-type BuildFailure = {success: false, error: Error};
-
-type BuildResult = BuildSuccess | BuildFailure;
-
-// TODO(richsinn): consider using the Result algebraic type from hyperbase
-type BuildStepResult<+R> = (
-    {|success: true, +value: R|} |
-    BuildFailure
-);
-const BUILD_STEP_RESULT_OK = Object.freeze({success: true, value: undefined});
-
-type BlockJson = BlockFile;
 
 class BlockBuilder {
     _buildFailure(message: string): BuildFailure {
@@ -93,6 +116,9 @@ class BlockBuilder {
 
                 let compiledCode: string;
                 try {
+                    // TODO(richsinn): Add stage-2 preset here? In hyperbase's block_babel_config.js
+                    //   it uses stage-2. If we do want to use stage-2 here, we'd have to
+                    //   use Babel7 style: https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2
                     compiledCode = babel.transform(moduleValue, {
                         ...generateBlockBabelConfig(),
                         filename: moduleOutputFilePath,
@@ -213,6 +239,170 @@ class BlockBuilder {
         await fsUtils.writeFileAsync(path.join(buildArtifactsDirPath, 'bundle.js'), minifyResult.value);
         return BUILD_STEP_RESULT_OK;
     }
+    _hasBackendCode(blockJson: BlockJson): boolean {
+        return blockJson.modules.some(blockModule => {
+            return blockModule.metadata.type === BlockModuleTypes.BACKEND_ROUTE;
+        });
+    }
+    _validateBlockBackendWrapperDirectoryContents(
+        blockBackendWrapperContents: Array<string>,
+    ): BuildStepResult<void> {
+        const validContents = blockBackendWrapperContents.every(content => BLOCK_BACKEND_WRAPPER_CONTENTS.has(content));
+        if (validContents) {
+            return BUILD_STEP_RESULT_OK;
+        }
+
+        return this._buildFailure(`unexpected block_backend_wrapper contents ${JSON.stringify(blockBackendWrapperContents)}`);
+    }
+    async _writeBackendSdkAsync(backendWrapperSrcDirPath: string): Promise<BuildStepResult<void>> {
+        // TODO(richsinn): We want to eventually get the Backend SDK from the versioned
+        //   SDK source (i.e. as a package dependency).
+        const backendSdkUrl = getBackendSdkUrl(Environments.PRODUCTION);
+
+        return new Promise((resolve, reject) => {
+            request.get({url: backendSdkUrl})
+                .on('response', response => {
+                    // Handle the case where the request fails.
+                    if (response.statusCode !== 200) {
+                        resolve(this._buildFailure('Failed to download backend SDK.'));
+                    }
+                })
+                // Pipe the response straight to the file we're trying to create.
+                .pipe(fs.createWriteStream(path.join(backendWrapperSrcDirPath, 'block_backend_sdk.js')))
+                // Resolve when we finish successfully.
+                .on('finish', () => {
+                    resolve(BUILD_STEP_RESULT_OK);
+                })
+                // Handle write errors.
+                .on('error', () => {
+                    resolve(this._buildFailure('Failed to write backend SDK.'));
+                });
+        });
+    }
+    async _zipBackendDeploymentPackageAsync(srcDirPath: string, outputPath: string): Promise<BuildStepResult<void>> {
+        const output = fs.createWriteStream(outputPath);
+        const zip = archiver('zip');
+
+        try {
+            await new Promise((resolve, reject) => {
+                output.on('close', resolve);
+                zip.on('error', reject);
+
+                zip.pipe(output);
+
+                const patterns = [
+                    'backend_wrapper/**/*',
+                    // Instead of just using user/**/*, let's explicitly specify
+                    // a few paths so that we can ignore frontend modules in the
+                    // backend deployment package.
+                    'user/node_modules/**/*',
+                    'user/package.json',
+                ];
+                for (const moduleType of [BlockModuleTypes.SHARED, BlockModuleTypes.BACKEND_ROUTE]) {
+                    patterns.push(`user/${BlockModuleDirectoryNamesByType[moduleType]}/**`);
+                }
+
+                for (const pattern of patterns) {
+                    zip.glob(pattern, {
+                        cwd: srcDirPath,
+                    });
+                }
+
+                zip.finalize();
+            });
+            return BUILD_STEP_RESULT_OK;
+        } catch (err) {
+            return this._buildFailure(err.message);
+        }
+    }
+    async _generateBackendDeploymentPackageAsync(
+        blockJson: BlockJson,
+        srcDirPath: string,
+        backendWrapperSrcDirPath: string,
+        buildArtifactsDirPath: string,
+    ): Promise<BuildStepResult<BackendDeploymentPackagePath>> {
+        const blocksCliProjectRoot = path.join(__dirname, '..', '..');
+        const blockBackendWrapperDirPath = path.join(blocksCliProjectRoot, 'block_backend_wrapper');
+
+        // Install the block_backend_wrapper directory
+        const yarnInstallResultForBlockBackendWrapper =
+            await this._yarnInstallAsync(blockBackendWrapperDirPath);
+        if (!yarnInstallResultForBlockBackendWrapper.success) {
+            return yarnInstallResultForBlockBackendWrapper;
+        }
+
+        const blockBackendWrapperContents = await fsUtils.readDirAsync(blockBackendWrapperDirPath);
+        const validateBlockBackendWrapperResult =
+            this._validateBlockBackendWrapperDirectoryContents(blockBackendWrapperContents);
+        if (!validateBlockBackendWrapperResult.success) {
+            return validateBlockBackendWrapperResult;
+        }
+
+        // Copy over the block_backend_wrapper's node_modules and other config files
+        // into the backend_wrapper directory. Collect transform functions for '.js' files.
+        const configFilesToCopy = [];
+        const babelTransformFns = [];
+        for (const fileOrDirectoryName of blockBackendWrapperContents) {
+            const contentPath = path.join(blockBackendWrapperDirPath, fileOrDirectoryName);
+            if (fileOrDirectoryName.endsWith('.js')) {
+                babelTransformFns.push(
+                    babel.transformFileAsync(contentPath, {
+                        cwd: blockBackendWrapperDirPath,
+                    })
+                );
+            } else if (fileOrDirectoryName === 'node_modules') {
+                configFilesToCopy.push(
+                    fsUtils.copyAsync(contentPath, path.join(backendWrapperSrcDirPath, 'node_modules'))
+                );
+            } else {
+                configFilesToCopy.push(
+                    fsUtils.copyFileAsync(contentPath, path.join(backendWrapperSrcDirPath, fileOrDirectoryName))
+                );
+            }
+        }
+        await Promise.all(configFilesToCopy);
+
+        // Transpile the block_backend_wrapper source code and write the transpiled
+        // results into the backend_wrapper directory.
+        const transpiledBlockBackendWrapperFileResults = await Promise.all(babelTransformFns);
+        await Promise.all(
+            transpiledBlockBackendWrapperFileResults.map(async transpiledResult => {
+                const fileName = transpiledResult.options.generatorOpts.sourceFileName;
+                await fsUtils.writeFileAsync(
+                    path.join(backendWrapperSrcDirPath, fileName),
+                    transpiledResult.code,
+                );
+            })
+        );
+
+        // Write the backend SDK file.
+        const backendSdkResult = await this._writeBackendSdkAsync(backendWrapperSrcDirPath);
+        if (!backendSdkResult.success) {
+            return backendSdkResult;
+        }
+
+        // Write the routes manifest file
+        const backendRouteModulesById: BackendRoutesManifest = {};
+        for (const blockModule of blockJson.modules) {
+            if (blockModule.metadata.type === BlockModuleTypes.BACKEND_ROUTE) {
+                const {id, metadata} = blockModule;
+                backendRouteModulesById[blockModule.id] = {id, metadata};
+            }
+        }
+        await fsUtils.writeFileAsync(path.join(backendWrapperSrcDirPath, 'routes.json'), JSON.stringify(backendRouteModulesById, null, 4));
+
+        // Zip everything up.
+        const outputPath = path.join(buildArtifactsDirPath, 'backend.zip');
+        const zipResult = await this._zipBackendDeploymentPackageAsync(srcDirPath, outputPath);
+        if (!zipResult.success) {
+            return zipResult;
+        }
+
+        return {
+            success: true,
+            value: outputPath,
+        };
+    }
     async buildAsync(outputDirPath: string): Promise<BuildResult> {
         if (fs.existsSync(outputDirPath)) {
             return this._buildFailure(`directory already exists at ${outputDirPath}`);
@@ -248,6 +438,7 @@ class BlockBuilder {
         }
         await fsUtils.writeFileAsync(path.join(userSrcDirPath, 'block.json'), JSON.stringify(blockJson, null, 4));
 
+        // Install user packages.
         console.log('installing node modules');
         const yarnInstallResult = await this._yarnInstallAsync(userSrcDirPath);
         if (!yarnInstallResult.success) {
@@ -283,6 +474,25 @@ class BlockBuilder {
         const bundleResult = await this._generateFrontendBundleAsync(blockJson, userSrcDirPath, buildArtifactsDirPath);
         if (!bundleResult.success) {
             return bundleResult;
+        }
+
+        // Generate backend bundle.
+        if (this._hasBackendCode(blockJson)) {
+            const backendWrapperSrcDirPath = path.join(srcDirPath, 'backend_wrapper');
+            await fsUtils.mkdirAsync(backendWrapperSrcDirPath);
+
+            console.log('generating backend bundle');
+            const backendDeploymentPackageResult = await this._generateBackendDeploymentPackageAsync(
+                blockJson,
+                srcDirPath,
+                backendWrapperSrcDirPath,
+                buildArtifactsDirPath,
+            );
+            if (!backendDeploymentPackageResult.success) {
+                return backendDeploymentPackageResult;
+            }
+
+            // TODO(richsinn): Upload backendDeploymentPackageResult.value to S3
         }
 
         return {success: true};
