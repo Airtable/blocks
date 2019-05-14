@@ -1,3 +1,4 @@
+// @flow
 module.exports = {
     // The name to `import` when referencing the blocks sdk.
     SDK_PACKAGE_NAME: 'airtable-block',
