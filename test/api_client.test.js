@@ -23,7 +23,8 @@ describe('APIClient', function() {
         testApp = express();
 
         testApp.use((req: express$Request, res: express$Response, next: express$NextFunction) => {
-            assert(req.get('Authorization'), 'Bearer key123');
+            assert.strictEqual(req.get('Authorization'), 'Bearer key123');
+
             next();
         });
 
