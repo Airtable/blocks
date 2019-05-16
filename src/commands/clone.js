@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 const path = require('path');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const writeFilesFromApiResponseAsync = require('../write_files_from_api_response');
 const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
 const APIClient = require('../api_client');
@@ -36,7 +36,7 @@ async function cloneBlockAsync(
     );
 
     const writeAirtableApiKeyFilePromise = fsUtils.writeFileAsync(
-        path.join(blockDirPath, blocksConfigSettings.AIRTABLE_API_KEY_FILE_NAME),
+        path.join(blockDirPath, blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME),
         apiKey,
     );
 
@@ -59,9 +59,9 @@ async function cloneBlockAsync(
     // Create a .gitignore file.
     const gitignoreContents = [
         'node_modules',
-        blocksConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
-        blocksConfigSettings.BUILD_DIR,
-        blocksConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME,
+        blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
+        blockCliConfigSettings.BUILD_DIR,
+        blockCliConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME,
     ];
     const writeGitignoreFilePromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, '.gitignore'),

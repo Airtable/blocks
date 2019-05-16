@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const invariant = require('invariant');
 const BlockBuildTypes = require('../types/block_build_types');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const cliHelpers = require('../helpers/cli_helpers');
 const APIClient = require('../api_client');
 const getApiKeySync = require('../get_api_key_sync');
@@ -35,7 +35,7 @@ const PROMPT_DEVELOPMENT_OR_RELEASE_REGEX = /^(?:DEVELOPMENT|RELEASE|1|2)$/;
 
 /**
  * This only "upserts" developer credentials to the local filesystem. Specifically, it
- * mutates the blocksConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME file. It does NOT
+ * mutates the blockCliConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME file. It does NOT
  * synchronize credential values with the server.
  *
  * The developer will have to execute the `block push` command to synchronize
@@ -44,7 +44,7 @@ const PROMPT_DEVELOPMENT_OR_RELEASE_REGEX = /^(?:DEVELOPMENT|RELEASE|1|2)$/;
 async function blockSetDeveloperCredentialAsync(promptInput: SetCredentialPromptResult): Promise<void> {
     const blockDirPath = getBlockDirPath();
     const blockFileDataJson = fs.readFileSync(
-        path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
+        path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
         'utf8'
     );
     const blockFileData = JSON.parse(blockFileDataJson);
@@ -143,7 +143,7 @@ function _getExistingDeveloperCredentialEncryptedIfExists(
     developerCredentialsEncrypted: Array<BlockDeveloperCredentialEncrypted>,
 ): BlockDeveloperCredentialEncrypted | null {
     let existingDeveloperCredentialEncrypted;
-    if (existingCredentialIndex === -1 && developerCredentialsEncrypted.length === blocksConfigSettings.MAX_NUM_CREDENTIALS_PER_BLOCK) {
+    if (existingCredentialIndex === -1 && developerCredentialsEncrypted.length === blockCliConfigSettings.MAX_NUM_CREDENTIALS_PER_BLOCK) {
         // If existingCredentialIndex is not found, it means we are creating a new credential
         // and we should check to see if creating will exceed the limit.
         console.log('Cannot create credential because it would exceed the maximum number of credentials per block');
@@ -356,7 +356,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             message: 'Name must be no more than 255 characters',
             conform: value => {
                 const trimmedValue = value.trim();
-                return trimmedValue.length <= blocksConfigSettings.MAX_BLOCK_DEVELOPER_CREDENTIAL_NAME_LENGTH;
+                return trimmedValue.length <= blockCliConfigSettings.MAX_BLOCK_DEVELOPER_CREDENTIAL_NAME_LENGTH;
             },
             before: value => {
                 return value.trim();

@@ -3,13 +3,13 @@
 
 const fs = require('fs');
 const path = require('path');
-const blocksConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('./config/block_cli_config_settings');
 
 // eslint-disable-next-line consistent-return
 module.exports = function getApiKeySync(blockDirPath) {
     try {
         const apiKey = fs.readFileSync(
-            path.join(blockDirPath, blocksConfigSettings.AIRTABLE_API_KEY_FILE_NAME),
+            path.join(blockDirPath, blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME),
             'utf8',
         ).trim();
 
@@ -19,7 +19,7 @@ module.exports = function getApiKeySync(blockDirPath) {
                 'The Airtable API key looks invalid.\n' +
                     'Please go to https://airtable.com/account, copy your API key,\n' +
                     'and put it in a file called ' +
-                    blocksConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
+                    blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
             );
             process.exit(1);
         }
@@ -31,7 +31,7 @@ module.exports = function getApiKeySync(blockDirPath) {
                 "There doesn't seem to be an API key configured.\n" +
                     'Please go to https://airtable.com/account, copy your API key,\n' +
                     'and put it in a file called ' +
-                    blocksConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
+                    blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
             );
             process.exit(1);
         } else {

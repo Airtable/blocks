@@ -5,7 +5,7 @@ const path = require('path');
 const getBlockDirPath = require('../get_block_dir_path');
 const getDeveloperCredentialsEncryptedIfExistsAsync = require('../get_developer_credentials_encrypted_if_exists_async');
 const writeDeveloperCredentialsFromApiResponseAsync = require('../write_developer_credentials_from_api_response_async');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const APIClient = require('../api_client');
 const fsUtils = require('../fs_utils');
 const getApiKeySync = require('../get_api_key_sync');
@@ -83,7 +83,7 @@ async function pushBlockAsync(argv) {
 
     // We read metadata from the block file.
     const blockFileDataJson = fs.readFileSync(
-        path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
+        path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
     );
     const blockFileData = JSON.parse(blockFileDataJson);
 
@@ -155,7 +155,7 @@ async function pushBlockAsync(argv) {
 
     await Promise.all([
         fsUtils.writeFileAsync(
-            path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
+            path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
             JSON.stringify(blockFileData, null, 4),
         ),
         writeBlockDeveloperCredentialsFromApiResponseAsync,

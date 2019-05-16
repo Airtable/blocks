@@ -11,7 +11,7 @@ const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
-const blocksConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('./config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
 const APIClient = require('./api_client');
 const fsUtils = require('./fs_utils');
@@ -71,7 +71,7 @@ class BlockServer {
     }
     _watchBackendCode() {
         const blockDirPath = getBlockDirPath();
-        const blockJsonPath = path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME);
+        const blockJsonPath = path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME);
         const backendRoutePath = path.join(blockDirPath, 'backendRoute');
         const sharedPath = path.join(blockDirPath, 'shared');
         // Unlike fs.watch, chokidar lets us watch paths that may not exist yet.
@@ -96,12 +96,12 @@ class BlockServer {
         const runFrameRoutes = express.Router();
 
         // Use body parser for JSON payloads.
-        runFrameRoutes.use(bodyParser.json({limit: blocksConfigSettings.BLOCK_REQUEST_BODY_LIMIT}));
+        runFrameRoutes.use(bodyParser.json({limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT}));
 
         // Serve the bundle file.
         runFrameRoutes.get('/bundle.js', (req, res) => {
-            res.sendFile(blocksConfigSettings.BUNDLE_FILE_NAME, {
-                root: path.join(blockDirPath, blocksConfigSettings.BUILD_DIR),
+            res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
+                root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
             });
         });
 
@@ -152,7 +152,7 @@ class BlockServer {
         const backendRoutes = express.Router();
         const textBodyParser = bodyParser.text({
             type: () => true,
-            limit: blocksConfigSettings.BLOCK_REQUEST_BODY_LIMIT,
+            limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT,
         });
         backendRoutes.use(textBodyParser);
 
@@ -181,7 +181,7 @@ class BlockServer {
     _getApiBaseUrlForEnvironment(environment) {
         switch (environment) {
             case Environments.TEST:
-                return 'http://localhost:' + blocksConfigSettings.TEST_SERVER_PORT;
+                return 'http://localhost:' + blockCliConfigSettings.TEST_SERVER_PORT;
             case Environments.LOCAL:
                 return 'https://api.hyperbasedev.com:3000';
             case Environments.STAGING:
@@ -252,7 +252,7 @@ class BlockServer {
         let frontendEntryModulePath;
         try {
             const blockMetadataJson = fs.readFileSync(
-                path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
+                path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
             );
             const blockMetadata = JSON.parse(blockMetadataJson);
             frontendEntryModulePath = path.join(
@@ -282,23 +282,23 @@ class BlockServer {
         const blockSdkDirPath = path.join(
             blockDirPath,
             'node_modules',
-            blocksConfigSettings.SDK_PACKAGE_NAME,
+            blockCliConfigSettings.SDK_PACKAGE_NAME,
         );
         const blockSdkExists = fs.existsSync(blockSdkDirPath);
         if (!blockSdkExists) {
             fs.mkdirSync(blockSdkDirPath);
             fs.writeFileSync(
                 path.join(blockSdkDirPath, 'index.js'),
-                `module.exports = (typeof window !== 'undefined' ? window : global)['${blocksConfigSettings.GLOBAL_SDK_VARIABLE_NAME}'];`,
+                `module.exports = (typeof window !== 'undefined' ? window : global)['${blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME}'];`,
             );
         }
 
         // Write the client wrapper file.
-        const buildDirPath = path.join(blockDirPath, blocksConfigSettings.BUILD_DIR);
+        const buildDirPath = path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR);
         if (!fs.existsSync(buildDirPath)) {
             fs.mkdirSync(buildDirPath);
         }
-        const clientWrapperFilepath = path.join(buildDirPath, blocksConfigSettings.CLIENT_WRAPPER_FILE_NAME);
+        const clientWrapperFilepath = path.join(buildDirPath, blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME);
         const isDevelopment = true;
         const clientWrapperCode = generateBlockClientWrapperCode(frontendEntryModulePath, isDevelopment);
         fs.writeFileSync(clientWrapperFilepath, clientWrapperCode);
@@ -321,8 +321,8 @@ class BlockServer {
         this._bundler = browserify(
             path.join(
                 blockDirPath,
-                blocksConfigSettings.BUILD_DIR,
-                blocksConfigSettings.CLIENT_WRAPPER_FILE_NAME
+                blockCliConfigSettings.BUILD_DIR,
+                blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME
             ),
             {
                 cache: {},
@@ -434,7 +434,7 @@ class BlockServer {
      * when starting the server. It ignores the release credential type.
      */
     async setDevelopmentCredentialPlaintextByNameAsync() {
-        const blockData = JSON.parse(fs.readFileSync(path.join(getBlockDirPath(), blocksConfigSettings.BLOCK_FILE_NAME)));
+        const blockData = JSON.parse(fs.readFileSync(path.join(getBlockDirPath(), blockCliConfigSettings.BLOCK_FILE_NAME)));
         const developerCredentialsEncrypted = await getDeveloperCredentialsEncryptedIfExistsAsync();
         if (developerCredentialsEncrypted === null) {
             this._developerCredentialPlaintextByName = null;
@@ -560,8 +560,8 @@ class BlockServer {
         const blockDirPath = getBlockDirPath();
         var fsStream = fs.createWriteStream(path.join(
             blockDirPath,
-            blocksConfigSettings.BUILD_DIR,
-            blocksConfigSettings.BUNDLE_FILE_NAME
+            blockCliConfigSettings.BUILD_DIR,
+            blockCliConfigSettings.BUNDLE_FILE_NAME
         ));
         fsStream.on('finish', function() {
             if (fsStream.bytesWritten > 0) {

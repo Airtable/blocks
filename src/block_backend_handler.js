@@ -4,7 +4,7 @@ const pathToRegexp = require('path-to-regexp');
 const fsUtils = require('./fs_utils');
 const path = require('path');
 const BlockBackendMessageTypes = require('./block_backend_message_types');
-const blocksConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('./config/block_cli_config_settings');
 const Babel = require('@babel/core');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const chalk = require('chalk');
@@ -83,7 +83,7 @@ async function callUserCodeForEventAsync(event, routes, developerCredentialByNam
     const {route, params} = routeAndParams;
 
     try {
-        const sdkWrapperInstance = global[blocksConfigSettings.GLOBAL_SDK_VARIABLE_NAME];
+        const sdkWrapperInstance = global[blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME];
         if (!sdkWrapperInstance) {
             throw new Error('SDK not set on global');
         }
@@ -91,7 +91,7 @@ async function callUserCodeForEventAsync(event, routes, developerCredentialByNam
         await sdkWrapperInstance.__initializeSdkForEventAsync(event, developerCredentialByName);
 
         const blockDirPath = getBlockDirPath();
-        const routeHandlerModule = require(path.join(blockDirPath, blocksConfigSettings.BUILD_DIR, 'backendRoute', route.metadata.name));
+        const routeHandlerModule = require(path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR, 'backendRoute', route.metadata.name));
         if (!routeHandlerModule || typeof routeHandlerModule !== 'object' || typeof routeHandlerModule.default !== 'function') {
             const errorMessage = `${getFormattedProjectPath('backendRoute', route.metadata.name)} does not export a default function!`;
             console.warn(errorMessage);
@@ -154,7 +154,7 @@ async function generateRoutesObjectFromModulesAsync(modules) {
 
 async function symlinkBackendAndSharedFoldersAsync() {
     const blockDirPath = getBlockDirPath();
-    const buildDirPath = path.join(blockDirPath, blocksConfigSettings.BUILD_DIR);
+    const buildDirPath = path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR);
     const folderNames = ['backendRoute', 'shared'];
     for (const folderName of folderNames) {
         const folderPath = path.join(buildDirPath, folderName);
@@ -178,7 +178,7 @@ async function transpileFileIfNeededAsync(fileName, moduleType, srcDirPath, dest
 
     const code = await fsUtils.readFileAsync(srcFilePath, 'utf8');
     const transpiledCode = Babel.transform(code, generateBlockBabelConfig({
-        node: blocksConfigSettings.BLOCK_NODE_VERSION,
+        node: blockCliConfigSettings.BLOCK_NODE_VERSION,
     })).code;
     await fsUtils.writeFileAsync(destFilePath, transpiledCode);
 }
@@ -193,7 +193,7 @@ async function transpileBackendAndSharedCodeAsync() {
         backendRoute: backendRouteFiles,
     };
 
-    const buildDirPath = path.join(blockDirPath, blocksConfigSettings.BUILD_DIR);
+    const buildDirPath = path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR);
     await fsUtils.mkdirIfDoesntAlreadyExistAsync(buildDirPath);
     const backendBuildDirPath = path.join(buildDirPath, 'backendRoute');
     await fsUtils.mkdirIfDoesntAlreadyExistAsync(backendBuildDirPath);
@@ -249,7 +249,7 @@ async function downloadBackendSdkAsync(blockJson) {
     const response = await request.getAsync({
         uri: sdkUrl,
         headers: {
-            'User-Agent': blocksConfigSettings.USER_AGENT,
+            'User-Agent': blockCliConfigSettings.USER_AGENT,
         },
     });
     if (response.statusCode !== 200) {
@@ -323,10 +323,10 @@ async function setUpBackendAsync() {
             // NOTE: in hyperbase, this code is inside callUserCodeForEventAsync, but
             // hyperbase doesn't have to deal with downloading the SDK, so for more
             // organizational clarity, we'll do this step here.
-            if (global[blocksConfigSettings.GLOBAL_SDK_VARIABLE_NAME] !== sdkWrapperInstance) {
+            if (global[blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME] !== sdkWrapperInstance) {
                 // If this isn't assigned yet, or the user's code replaced it for
                 // some reason in the previous invocation, set it to the SDK wrapper.
-                global[blocksConfigSettings.GLOBAL_SDK_VARIABLE_NAME] = sdkWrapperInstance;
+                global[blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME] = sdkWrapperInstance;
             }
         }
 

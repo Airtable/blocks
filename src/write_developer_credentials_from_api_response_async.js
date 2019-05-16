@@ -1,7 +1,7 @@
 // @flow
 const path = require('path');
 const fsUtils = require('./fs_utils');
-const blocksConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('./config/block_cli_config_settings');
 
 import type {BlockDeveloperCredentialEncrypted} from './types/block_developer_credential_types';
 
@@ -26,7 +26,7 @@ async function writeDeveloperCredentialsFromApiResponseAsync(
     }
 
     await fsUtils.writeFileAsync(
-        path.join(blockDirPath, blocksConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME),
+        path.join(blockDirPath, blockCliConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME),
         JSON.stringify(
             {
                 developerCredentials: developerCredentialsBase64,

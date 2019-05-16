@@ -134,8 +134,8 @@ async function callUserCodeForEventAsync(event: LambdaEvent): Promise<HandlerRes
     const {route, params} = routeAndParams;
 
     try {
-        // Keep this in sync with blocksConfigSettings.GLOBAL_PACKAGES_VARIABLE_NAME.
-        // Can't import blocksConfigSettings here because it won't get copied into the
+        // Keep this in sync with blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME.
+        // Can't import blockCliConfigSettings here because it won't get copied into the
         // deployment bundle.
         // NOTE: it's important that we do this before we require the route module below,
         // since once we require a route module, we'll start running user code (which may

@@ -4,7 +4,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
-const blocksConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('./config/block_cli_config_settings');
 
 let blockDirPath = null;
 
@@ -13,7 +13,7 @@ function getBlockDirPath() {
         let currentDirPath = process.cwd();
         while (currentDirPath !== '/') {
             const currentDirFiles = fs.readdirSync(currentDirPath);
-            if (_.includes(currentDirFiles, blocksConfigSettings.BLOCK_FILE_NAME)) {
+            if (_.includes(currentDirFiles, blockCliConfigSettings.BLOCK_FILE_NAME)) {
                 // Cache and return the blockDirPath.
                 blockDirPath = currentDirPath;
                 return blockDirPath;

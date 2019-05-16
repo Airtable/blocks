@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const path = require('path');
 const fsUtils = require('./fs_utils');
-const blocksConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('./config/block_cli_config_settings');
 
 module.exports = function writeFilesFromApiResponseAsync(response, blockDirPath, blockMetadata) {
     const modules = response.modules;
@@ -29,7 +29,7 @@ module.exports = function writeFilesFromApiResponseAsync(response, blockDirPath,
         const frontendEntryModuleName = `${frontendEntryModule.metadata.name}.js`;
 
         const writeBlockFilePromise = fsUtils.writeFileAsync(
-            path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
+            path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
             JSON.stringify(
                 {
                     frontendEntryModuleName,
