@@ -60,7 +60,7 @@ export type RunInfo = {
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
  */
 class BlockSdk {
-    static VERSION = PACKAGE_VERSION;
+    static VERSION = global.PACKAGE_VERSION;
 
     // NOTE: in most cases, we should pass the Airtable interface to models when we
     // construct them (to reduce usage of getSdk). But in some cases, that isn't
@@ -104,7 +104,7 @@ class BlockSdk {
         this.__airtableInterface = airtableInterface;
         // TODO(alex): remove check once hyperbase is deployed
         if (airtableInterface.assertAllowedSdkPackageVersion) {
-            airtableInterface.assertAllowedSdkPackageVersion(PACKAGE_NAME, BlockSdk.VERSION);
+            airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);
         }
 
         // TODO(alex): remove initial data fallback once hyperbase is deployed
