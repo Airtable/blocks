@@ -4,7 +4,7 @@ const request = require('request');
 const {promisify} = require('util');
 const Environments = require('./types/environments');
 const {URL} = require('url');
-const {TEST_SERVER_PORT} = require('./config/block_cli_config_settings');
+const {USER_AGENT, TEST_SERVER_PORT} = require('./config/block_cli_config_settings');
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
@@ -63,6 +63,7 @@ class APIClient {
             url: this._getRequestUrl(),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: data,
             json: true,
@@ -84,6 +85,7 @@ class APIClient {
             url: this._getRequestUrl(),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
         };
         const response = await request.getAsync(options);
@@ -108,6 +110,7 @@ class APIClient {
             url: `${this._getRequestUrl()}/credentials/decrypt`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: {credentialsEncrypted},
             json: true,
@@ -129,6 +132,7 @@ class APIClient {
             url: `${this._getRequestUrl()}/credential/encrypt`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: {
                 credentialPlaintext,
@@ -153,6 +157,7 @@ class APIClient {
             url: `${this._getRequestUrl()}/credential/reEncrypt`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: {
                 credentialEncrypted,
@@ -184,6 +189,7 @@ class APIClient {
             url: this._getAccessPolicyUrl(),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
         };
         const response = await request.getAsync(options);

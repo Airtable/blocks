@@ -260,7 +260,12 @@ class BlockBuilder {
         const backendSdkUrl = getBackendSdkUrl(Environments.PRODUCTION);
 
         return new Promise((resolve, reject) => {
-            request.get({url: backendSdkUrl})
+            request.get({
+                url: backendSdkUrl,
+                headers: {
+                    'User-Agent': blockCliConfigSettings.USER_AGENT,
+                },
+            })
                 .on('response', response => {
                     // Handle the case where the request fails.
                     if (response.statusCode !== 200) {

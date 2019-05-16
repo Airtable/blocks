@@ -5,6 +5,8 @@ const {TEST_SERVER_PORT} = require('../src/config/block_cli_config_settings');
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
+const UserAgentBag = require('user-agent-bag');
+const packageJson = require('../package.json');
 const assert = (require('assert'): any); // eslint-disable-line flowtype/no-weak-types
 
 describe('APIClient', function() {
@@ -24,6 +26,11 @@ describe('APIClient', function() {
 
         testApp.use((req: express$Request, res: express$Response, next: express$NextFunction) => {
             assert.strictEqual(req.get('Authorization'), 'Bearer key123');
+
+            const userAgentBag = new UserAgentBag(req.get('User-Agent'));
+            assert.strictEqual(userAgentBag.get('airtable-blocks-cli'), packageJson.version);
+            assert(userAgentBag.has('Node'));
+            assert(userAgentBag.has('OS'));
 
             next();
         });

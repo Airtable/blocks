@@ -248,6 +248,9 @@ async function downloadBackendSdkAsync(blockJson) {
     const sdkUrl = getBackendSdkUrl(environment);
     const response = await request.getAsync({
         uri: sdkUrl,
+        headers: {
+            'User-Agent': blocksConfigSettings.USER_AGENT,
+        },
     });
     if (response.statusCode !== 200) {
         throw new Error(`Failed to download backend SDK with statusCode: ${response.statusCode}`);
