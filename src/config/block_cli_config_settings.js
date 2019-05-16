@@ -1,4 +1,7 @@
 // @flow
+const UserAgentBag = require('user-agent-bag');
+const packageJson = require('../../package.json');
+
 module.exports = {
     // The name to `import` when referencing the blocks sdk.
     SDK_PACKAGE_NAME: 'airtable-block',
@@ -21,6 +24,13 @@ module.exports = {
     // Copied over from blockRouterConfigSettings.REQUEST_BODY_LIMIT
     // in the hyperbase codebase
     BLOCK_REQUEST_BODY_LIMIT: 5.2 * 1024 * 1024, // 5.2MB
+
+    // The request user agent.
+    USER_AGENT: new UserAgentBag([
+        ['airtable-blocks-cli', packageJson.version],
+        ['Node', process.version.substring(1)],
+        ['OS', process.platform],
+    ]).toString(),
 
     // File to store the airtable api key.
     AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',

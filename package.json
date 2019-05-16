@@ -43,6 +43,7 @@
     "request": "^2.83.0",
     "semver": "^5.6.0",
     "terser": "^3.17.0",
+    "user-agent-bag": "0.2.0",
     "watchify": "^3.9.0",
     "yargs": "^13.2.0",
     "yarn": "^1.13.0"

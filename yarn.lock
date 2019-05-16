@@ -6075,6 +6075,11 @@ use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
 
+user-agent-bag@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/user-agent-bag/-/user-agent-bag-0.2.0.tgz#94a7cc24de24a31aa61655e1cb5f9a4bf353adc2"
+  integrity sha512-3eRiHsgaydNCMX2XExTktN2N2xlVqEiQQPQAdVgCcexS5eXNaZsa5+kTZnNNHGfZoJgQPmZW8BrGwuIGJK6YxQ==
+
 user-home@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/user-home/-/user-home-2.0.0.tgz#9c70bfd8169bc1dcbf48604e0f04b8b49cde9e9f"
