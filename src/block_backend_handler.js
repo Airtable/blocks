@@ -12,7 +12,7 @@ const generateResponseBodyBase64 = require('./generate_response_body_base64');
 const getBlockDirPath = require('./get_block_dir_path');
 const getBackendSdkUrl = require('./get_backend_sdk_url');
 const Environments = require('./types/environments');
-const promisify = require('es6-promisify');
+const {promisify} = require('util');
 const request = require('request');
 request.getAsync = promisify(request.get);
 

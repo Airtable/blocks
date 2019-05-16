@@ -1,6 +1,6 @@
 const fs = require('fs');
 const fsExtra = require('fs-extra');
-const promisify = require('es6-promisify');
+const {promisify} = require('util');
 const path = require('path');
 
 module.exports = {

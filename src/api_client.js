@@ -1,7 +1,7 @@
 // @flow
 const invariant = require('invariant');
 const request = require('request');
-const promisify = require('es6-promisify');
+const {promisify} = require('util');
 const Environments = require('./types/environments');
 const {URL} = require('url');
 const {TEST_SERVER_PORT} = require('./config/block_cli_config_settings');

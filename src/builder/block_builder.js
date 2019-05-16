@@ -14,7 +14,7 @@ const BlockModuleTypes = require('../types/block_module_types');
 const Environments = require('../types/environments');
 const babel = require('@babel/core');
 const browserify = require('browserify');
-const promisify = require('es6-promisify');
+const {promisify} = require('util');
 const request = require('request');
 const Terser = require('terser');
 

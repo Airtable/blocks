@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const prompt = require('prompt');
-const promisify = require('es6-promisify');
+const {promisify} = require('util');
 
 const helpers = {
     promptAsync: promisify(prompt.get),
