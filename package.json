@@ -58,7 +58,8 @@
     "flow-bin": "^0.95.1",
     "flow-typed": "^2.5.1",
     "mocha": "^5.2.0",
-    "prettier": "^1.12.1"
+    "prettier": "^1.12.1",
+    "sinon": "^7.3.2"
   },
   "engines": {
     "node": ">=8.10.0"
