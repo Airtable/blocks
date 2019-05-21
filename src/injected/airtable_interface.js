@@ -32,9 +32,13 @@ export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {
  * but the interface should remain consistent.
  */
 export interface AirtableInterface {
+    // TODO(alex): initialData has been renamed in favor of sdkInitData. We should remove it once
+    // that version of hyperbase reaches prod.
+    initialData: SdkInitData;
     sdkInitData: SdkInitData;
 
-    assertAllowedSdkPackageVersion(packageName: string, packageVersion: string): void;
+    // TODO(alex): make this non-optional once hyperbase is fully deployed
+    assertAllowedSdkPackageVersion?: (packageName: string, packageVersion: string) => void;
 
     /*
      * globalConfig

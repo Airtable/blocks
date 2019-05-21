@@ -19,6 +19,7 @@ import UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {type AirtableInterface} from './injected/airtable_interface';
+import utils from './private_utils';
 
 // eslint-disable-next-line react/no-deprecated
 if (!React.PropTypes) {
@@ -101,9 +102,15 @@ class BlockSdk {
     reload: () => void;
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
-        airtableInterface.assertAllowedSdkPackageVersion(PACKAGE_NAME, BlockSdk.VERSION);
+        // TODO(alex): remove check once hyperbase is deployed
+        if (airtableInterface.assertAllowedSdkPackageVersion) {
+            airtableInterface.assertAllowedSdkPackageVersion(PACKAGE_NAME, BlockSdk.VERSION);
+        }
 
-        const sdkInitData = airtableInterface.sdkInitData;
+        // TODO(alex): remove initial data fallback once hyperbase is deployed
+        const sdkInitData = utils.cloneDeep(
+            airtableInterface.sdkInitData || airtableInterface.initialData,
+        );
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
         this.base = new Base(sdkInitData.baseData, airtableInterface);
         this.models = models;
