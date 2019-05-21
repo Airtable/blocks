@@ -352,7 +352,10 @@ class RecordCard extends React.Component<RecordCardProps> {
             return null;
         }
     }
-    _renderCellsAndFieldLabels(attachmentSize: number, fieldsToUse: Array<FieldModel>) {
+    _renderCellsAndFieldLabels(
+        attachmentSize: number,
+        fieldsToUse: Array<FieldModel>,
+    ): Array<React.Element<typeof CellValueAndFieldLabel>> {
         const {record, width} = this.props;
         invariant(typeof width === 'number', 'width in defaultProps');
 

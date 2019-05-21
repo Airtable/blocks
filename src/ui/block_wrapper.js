@@ -11,7 +11,7 @@ type BlockWrapperProps = {|
 
 class BlockWrapper extends React.Component<BlockWrapperProps> {
     _minSizeBeforeRender: {width: number | null, height: number | null} | null = null;
-    constructor(props) {
+    constructor(props: BlockWrapperProps) {
         super(props);
 
         // We watch globalAlert in constructor, instead of using createDataContainer,

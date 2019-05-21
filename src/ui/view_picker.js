@@ -39,7 +39,7 @@ class ViewPicker extends React.Component<ViewPickerProps> {
     props: ViewPickerProps;
     _onChange: (string | null) => void;
     _select: ModelPickerSelect<ViewModel> | null;
-    constructor(props) {
+    constructor(props: ViewPickerProps) {
         super(props);
         this._select = null;
         this._onChange = this._onChange.bind(this);

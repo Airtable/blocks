@@ -39,7 +39,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     props: FieldPickerProps;
     _onChange: (string | null) => void;
     _select: ModelPickerSelect<FieldModel> | null;
-    constructor(props) {
+    constructor(props: FieldPickerProps) {
         super(props);
         this._select = null;
         this._onChange = this._onChange.bind(this);

@@ -91,16 +91,18 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
 
     _setMinSizeConstraint() {
         this._removeMinSizeConstraint();
-        if (this.props.minSize) {
-            this._removeMinSizeConstraintFn = getSdk().viewport.addMinSize(this.props.minSize);
+        const {minSize} = this.props;
+        if (minSize) {
+            this._removeMinSizeConstraintFn = getSdk().viewport.addMinSize(minSize);
         }
     }
 
     _setMaxFullscreenSizeConstraint() {
         this._removeMaxFullscreenSizeConstraint();
-        if (this.props.maxFullscreenSize) {
+        const {maxFullscreenSize} = this.props;
+        if (maxFullscreenSize) {
             this._removeMaxFullscreenSizeConstrainFn = getSdk().viewport.addMaxFullscreenSize(
-                this.props.maxFullscreenSize,
+                maxFullscreenSize,
             );
         }
     }

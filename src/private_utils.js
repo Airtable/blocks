@@ -1,7 +1,11 @@
 // @flow
 class PrivateUtils {
     cloneDeep<T: mixed>(obj: T): T {
-        return JSON.parse(JSON.stringify(obj));
+        const jsonString = JSON.stringify(obj);
+        if (jsonString === undefined) {
+            return obj;
+        }
+        return JSON.parse(jsonString);
     }
     values<V>(obj: {[string]: V}): Array<V> {
         return Object.keys(obj).map(key => obj[key]);

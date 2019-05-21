@@ -31,7 +31,7 @@ class TablePicker extends React.Component<TablePickerProps> {
     props: TablePickerProps;
     _select: ModelPickerSelect<TableModel> | null;
     _onChange: (string | null) => void;
-    constructor(props) {
+    constructor(props: TablePickerProps) {
         super(props);
 
         this._select = null;

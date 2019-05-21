@@ -27,7 +27,7 @@ type ModelPickerSelectProps<Model: AnyModel> = {
 class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
     _select: Select | null;
     _onChange: SelectOptionValue => void;
-    constructor(props) {
+    constructor(props: ModelPickerSelectProps<Model>) {
         super(props);
 
         this._onChange = this._onChange.bind(this);

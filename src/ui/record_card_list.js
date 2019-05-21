@@ -8,45 +8,42 @@ import ViewModel from '../models/view';
 import RecordCard from './record_card';
 import createDetectElementResize from './create_detect_element_resize';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-
 // TODO(jb): don't rely on liveapp components
 const DynamicDraw = window.__requirePrivateModuleFromAirtable(
     'client/react/ui/dynamic_draw/dynamic_draw',
 );
 
+// TODO(alex): Remove this. This is a hyperbase `Rect`, but we don't want to import more hyperbase
+// code. We should remove DynamicDraw entirely in favour of a standard solution like react-window.
+type DynamicDrawRect = mixed;
+type DynamicDrawSize = mixed;
+
+type RecordCardListItemProviderOpts = {|
+    // A list of records or recordDefs.
+    records: Array<RecordModel | RecordDef>,
+    fields: Array<FieldModel> | null,
+    view: ViewModel | null,
+    attachmentCoverField: FieldModel | void,
+    // The height of each row card.
+    rowHeight: number,
+    // Amount of space between each row card.
+    rowSpacing: number,
+    // Extra space to leave at the bottom, e.g. for add record button
+    // in calendar view sidebar.
+    bottomInset: number,
+    onRecordClick: null | ((RecordModel | RecordDef, number) => void),
+    onRecordMouseEnter: null | ((RecordModel | RecordDef, number) => void),
+    onRecordMouseLeave: null | ((RecordModel | RecordDef, number) => void),
+    style: {[string]: mixed},
+    className: '',
+|};
+
 class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProvider {
     _items: Array<{id?: string, size: number, trailingMargin: number}>;
     _layout: DynamicDraw.LinearLayout;
-    constructor(opts) {
+    constructor(opts: RecordCardListItemProviderOpts) {
         super();
-
-        this._opts = u.setAndEnforceDefaultOpts(
-            {
-                // The height of each row card.
-                rowHeight: 80,
-                // Amount of space between each row card.
-                rowSpacing: 10,
-                // A list of records or recordDefs.
-                records: [],
-
-                // Extra space to leave at the bottom, e.g. for add record button
-                // in calendar view sidebar.
-                bottomInset: 0,
-
-                // Passed through to RecordCard
-                fields: null, // array
-                view: null,
-                attachmentCoverField: undefined,
-                onRecordClick: null,
-                onRecordMouseEnter: null,
-                onRecordMouseLeave: null,
-                style: {},
-                className: '',
-            },
-            opts,
-        );
-
+        this._opts = opts;
         this._buildItemsList();
     }
 
@@ -82,15 +79,18 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
         return this._opts.records.length;
     }
 
-    getVisibleItemIndicesInRect(containerRect) {
+    getVisibleItemIndicesInRect(containerRect: DynamicDrawRect) {
         return this._layout.getVisibleItemIndicesInRect(containerRect);
     }
 
-    getContentSize(containerSize) {
+    getContentSize(containerSize: DynamicDrawSize) {
         return this._layout.getContentSize(containerSize);
     }
 
-    getComponentForItemAtIndex(itemIndex, containerSize): DynamicDraw.ScrollViewItem {
+    getComponentForItemAtIndex(
+        itemIndex: number,
+        containerSize: DynamicDrawSize,
+    ): DynamicDraw.ScrollViewItem {
         const item = this._items[itemIndex];
         const rect = this._layout.getRectForItemAtIndex(itemIndex, containerSize);
 
@@ -124,7 +124,7 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
         );
     }
 
-    getScrollTopForRowAtIndex(targetRowIndex): number {
+    getScrollTopForRowAtIndex(targetRowIndex: number): number {
         if (this.getNumberOfItems() === 0) {
             return 0;
         }
@@ -303,14 +303,17 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
 
         const itemProvider = new RecordCardListItemProvider({
             records,
-            fields,
-            view,
+            fields: fields || null,
+            view: view || null,
             attachmentCoverField,
             rowHeight: 80,
             rowSpacing: 10,
-            onRecordClick: this.props.onRecordClick,
-            onRecordMouseEnter: this.props.onRecordMouseEnter,
-            onRecordMouseLeave: this.props.onRecordMouseLeave,
+            bottomInset: 0,
+            onRecordClick: this.props.onRecordClick || null,
+            onRecordMouseEnter: this.props.onRecordMouseEnter || null,
+            onRecordMouseLeave: this.props.onRecordMouseLeave || null,
+            style: {},
+            className: '',
         });
 
         return (

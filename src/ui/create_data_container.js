@@ -27,17 +27,15 @@ function getReactComponent<Props: {}>(
     }
 }
 function getComponentName<Props: {}>(Component: React.ComponentType<Props>): string {
-    let name;
     const ComponentClass = getReactComponent(Component);
     if (ComponentClass) {
-        name = ComponentClass.displayName || ComponentClass.name;
+        return ComponentClass.displayName || ComponentClass.name || 'ClassComponent';
     } else if (typeof Component === 'function') {
         // This is a stateless functional component.
-        name = Component.displayName || Component.name || 'StatelessComponent';
+        return Component.displayName || Component.name || 'StatelessComponent';
     } else {
-        name = 'ReactElement';
+        return 'ReactElement';
     }
-    return name;
 }
 
 // Using 'watch' as a key is kind of strange from an internal perspective, but is

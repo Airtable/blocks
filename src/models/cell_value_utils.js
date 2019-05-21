@@ -131,7 +131,7 @@ const publicCellValueUtils = {
             Array.isArray(newPublicCellValue),
             'Linked record cell value must be an array of objects',
         );
-        for (const foreignRecordObj of newPublicCellValue) {
+        return newPublicCellValue.map(foreignRecordObj => {
             invariant(
                 foreignRecordObj && typeof foreignRecordObj === 'object',
                 'Linked record cell value must be an array of objects',
@@ -150,9 +150,8 @@ const publicCellValueUtils = {
             // but the strictness is annoying (e.g. if you generate an updated cell value,
             // then the record's primary cell value changes before you run it, it's better
             // for it to succeed than to throw an error).
-            foreignRecordObj.name = foreignRecord.primaryCellValueAsString;
-        }
-        return newPublicCellValue;
+            return {...foreignRecordObj, name: foreignRecord.primaryCellValueAsString};
+        });
     },
 };
 
