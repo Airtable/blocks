@@ -15,6 +15,7 @@ type InputProps = {
     style?: Object,
     className?: string,
     disabled?: boolean,
+    required?: boolean,
     spellCheck?: boolean,
     tabIndex?: number,
 };
@@ -55,6 +56,7 @@ class Input extends React.Component<InputProps> {
         style: PropTypes.object,
         className: PropTypes.string,
         disabled: PropTypes.bool,
+        required: PropTypes.bool,
         spellCheck: PropTypes.bool,
         tabIndex: PropTypes.number,
     };
@@ -93,7 +95,7 @@ class Input extends React.Component<InputProps> {
             type = 'text';
         }
 
-        const {disabled} = this.props;
+        const {disabled, required} = this.props;
         const defaultClassName = this._shouldUseDefaultClassesForType()
             ? 'styled-input rounded p1 darken1 text-dark normal'
             : '';
@@ -115,6 +117,7 @@ class Input extends React.Component<InputProps> {
                     this.props.className,
                 )}
                 disabled={disabled}
+                required={required}
                 onChange={this.props.onChange}
                 spellCheck={this.props.spellCheck}
                 tabIndex={this.props.tabIndex}
