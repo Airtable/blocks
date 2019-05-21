@@ -1,15 +1,25 @@
 // @flow
-import {type BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
-import {type RecordDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
-import {type RecordDef} from '../models/record';
+import {type BaseData} from '../types/base';
+import {type BlockInstallationId} from '../types/block';
+import {type HostToBlockMessageType} from '../types/block_frame';
+import {type GlobalConfigUpdate, type GlobalConfigData} from '../types/global_config';
+import {type RecordData, type RecordDef} from '../types/record';
+import {type UndoRedoMode} from '../types/undo_redo';
+import {type ViewportSizeConstraint} from '../types/viewport';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 
-// TODO(alex): add actual types
-type HostToBlockMessageType = any;
-type BlockUndoRedoMode = any;
-type ViewportSizeConstraint = any;
-type SdkInitData = any;
+export type SdkInitData = {|
+    initialKvValuesByKey: GlobalConfigData,
+    isDevelopmentMode: boolean,
+    baseData: BaseData,
+    blockInstallationId: BlockInstallationId,
+
+    // NOTE: these don't really make much sense in backend blocks.
+    // TODO: figure out what to do with them.
+    isFullscreen: boolean,
+    isFirstRun: boolean,
+|};
 
 export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {
     completion: Promise<CompletionResponseData>,
@@ -29,7 +39,7 @@ export interface AirtableInterface {
     /*
      * globalConfig
      */
-    setMultipleKvPathsAsync(updates: Array<BlockKvUpdate>): Promise<void>;
+    setMultipleKvPathsAsync(updates: Array<GlobalConfigUpdate>): Promise<void>;
 
     /*
      * table
@@ -46,7 +56,7 @@ export interface AirtableInterface {
         cellValuesByRecordIdThenFieldId: {[string]: RecordDef},
     ): Promise<void>;
     deleteRecordsAsync(tableId: string, recordIds: Array<string>): Promise<void>;
-    createRecordsAsync(tableId: string, recordDefs: Array<RecordDataForBlocks>): Promise<void>;
+    createRecordsAsync(tableId: string, recordDefs: Array<RecordData>): Promise<void>;
 
     /*
      * view
@@ -76,7 +86,7 @@ export interface AirtableInterface {
     ): Promise<string | null>;
     reloadFrame(): void;
     setSettingsButtonVisibility(isVisible: boolean): void;
-    setUndoRedoMode(mode: BlockUndoRedoMode): void;
+    setUndoRedoMode(mode: UndoRedoMode): void;
     setFullscreenMaxSize(maxFullscreenSize: ViewportSizeConstraint): void;
     enterFullscreen(): void;
     exitFullscreen(): void;

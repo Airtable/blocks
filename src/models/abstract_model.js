@@ -1,7 +1,7 @@
 // @flow
 
 import invariant from 'invariant';
-import {type BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type BaseData} from '../types/base';
 import Watchable from '../watchable';
 
 /**
@@ -13,9 +13,9 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
         // Override to return whether `key` is a valid watchable key.
         return false;
     }
-    _baseData: BaseDataForBlocks;
+    _baseData: BaseData;
     _id: string;
-    constructor(baseData: BaseDataForBlocks, modelId: string) {
+    constructor(baseData: BaseData, modelId: string) {
         super();
 
         invariant(
@@ -53,7 +53,7 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     get isDeleted(): boolean {
         return this._dataOrNullIfDeleted === null;
     }
-    get __baseData(): BaseDataForBlocks {
+    get __baseData(): BaseData {
         return this._baseData;
     }
     _getErrorMessageForDeletion(): string {

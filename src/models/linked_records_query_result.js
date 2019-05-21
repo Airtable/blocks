@@ -1,6 +1,6 @@
 // @flow
 import invariant from 'invariant';
-import FieldTypes from '../types/field_types';
+import {FieldTypes} from '../types/field';
 import getSdk from '../get_sdk';
 import utils from '../private_utils';
 import ObjectPool from './object_pool';

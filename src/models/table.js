@@ -1,19 +1,17 @@
 // @flow
 import invariant from 'invariant';
-import {type RowId as RecordId} from 'client_server_shared/hyper_id';
-import {
-    type BaseDataForBlocks,
-    type TableDataForBlocks,
-    type RecordDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type RecordId, type RecordData, type RecordDef} from '../types/record';
+import {type BaseData} from '../types/base';
+import {type TableData} from '../types/table';
+import {type ViewType} from '../types/view';
+import {PermissionLevels} from '../types/permission_levels';
 import utils from '../private_utils';
 import getSdk from '../get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
-import {type ViewType} from '../types/view_types';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import View from './view';
 import Field from './field';
-import Record, {type RecordDef} from './record';
+import Record from './record';
 import cellValueUtils from './cell_value_utils';
 import type Base from './base';
 import {type QueryResultOpts} from './query_result';
@@ -21,9 +19,6 @@ import TableOrViewQueryResult from './table_or_view_query_result';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
-const PermissionLevels = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_levels',
-);
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
 );
@@ -53,7 +48,7 @@ const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 export type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
 
 /** Model class representing a table in the base. */
-class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTableKey> {
+class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     // Once all blocks that current set this flag to true are migrated,
     // remove this flag.
     static shouldLoadAllCellValuesForRecords = false;
@@ -99,7 +94,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
     _cellValuesRetainCountByFieldId: {[string]: number | void};
 
     constructor(
-        baseData: BaseDataForBlocks,
+        baseData: BaseData,
         parentBase: Base,
         tableId: string,
         airtableInterface: AirtableInterface,
@@ -166,7 +161,7 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
         }
         return fieldIdsToLoad;
     }
-    get _dataOrNullIfDeleted(): TableDataForBlocks | null {
+    get _dataOrNullIfDeleted(): TableData | null {
         return this._baseData.tablesById[this._id] || null;
     }
     /** */
@@ -740,37 +735,34 @@ class Table extends AbstractModelWithAsyncData<TableDataForBlocks, WatchableTabl
             this._data.recordsById = {};
         }
         const {recordsById: existingRecordsById} = this._data;
-        u.unsafeEach(
-            (newRecordsById: {[RecordId]: RecordDataForBlocks}),
-            (newRecordObj, recordId) => {
-                if (!u.has(existingRecordsById, recordId)) {
-                    existingRecordsById[recordId] = newRecordObj;
-                } else {
-                    const existingRecordObj = existingRecordsById[recordId];
-                    // Metadata (createdTime, commentCount) should already be up to date,
-                    // but just verify for sanity. If this doesn't catch anything, can
-                    // remove it for perf.
-                    invariant(
-                        existingRecordObj.commentCount === newRecordObj.commentCount,
-                        'comment count out of sync',
-                    );
-                    invariant(
-                        existingRecordObj.createdTime === newRecordObj.createdTime,
-                        'created time out of sync',
-                    );
-                    if (!existingRecordObj.cellValuesByFieldId) {
-                        existingRecordObj.cellValuesByFieldId = {};
-                    }
-                    const existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
-                    for (let i = 0; i < fieldIds.length; i++) {
-                        const fieldId = fieldIds[i];
-                        existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId
-                            ? newRecordObj.cellValuesByFieldId[fieldId]
-                            : undefined;
-                    }
+        u.unsafeEach((newRecordsById: {[RecordId]: RecordData}), (newRecordObj, recordId) => {
+            if (!u.has(existingRecordsById, recordId)) {
+                existingRecordsById[recordId] = newRecordObj;
+            } else {
+                const existingRecordObj = existingRecordsById[recordId];
+                // Metadata (createdTime, commentCount) should already be up to date,
+                // but just verify for sanity. If this doesn't catch anything, can
+                // remove it for perf.
+                invariant(
+                    existingRecordObj.commentCount === newRecordObj.commentCount,
+                    'comment count out of sync',
+                );
+                invariant(
+                    existingRecordObj.createdTime === newRecordObj.createdTime,
+                    'created time out of sync',
+                );
+                if (!existingRecordObj.cellValuesByFieldId) {
+                    existingRecordObj.cellValuesByFieldId = {};
                 }
-            },
-        );
+                const existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
+                for (let i = 0; i < fieldIds.length; i++) {
+                    const fieldId = fieldIds[i];
+                    existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId
+                        ? newRecordObj.cellValuesByFieldId[fieldId]
+                        : undefined;
+                }
+            }
+        });
 
         const changedKeys = fieldIds.map(fieldId => WatchableCellValuesInFieldKeyPrefix + fieldId);
         // Need to trigger onChange for records and recordIds since watching either

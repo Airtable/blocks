@@ -1,9 +1,6 @@
 // @flow
-import {
-    type BaseDataForBlocks,
-    type FieldDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import {type ColumnType} from 'client_server_shared/column_types/column_types';
+import {type BaseData} from '../types/base';
+import {type FieldData, type PrivateColumnType} from '../types/field';
 import utils from '../private_utils';
 import AbstractModel from './abstract_model';
 import Aggregators, {type Aggregator} from './aggregators';
@@ -37,18 +34,18 @@ const WatchableFieldKeys = {
 export type WatchableFieldKey = $Keys<typeof WatchableFieldKeys>;
 
 /** Model class representing a field in a table. */
-class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
+class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     static _className = 'Field';
     static _isWatchableKey(key: string) {
         return utils.isEnumValue(WatchableFieldKeys, key);
     }
     _parentTable: TableType;
-    constructor(baseData: BaseDataForBlocks, parentTable: TableType, fieldId: string) {
+    constructor(baseData: BaseData, parentTable: TableType, fieldId: string) {
         super(baseData, fieldId);
 
         this._parentTable = parentTable;
     }
-    get _dataOrNullIfDeleted(): FieldDataForBlocks | null {
+    get _dataOrNullIfDeleted(): FieldData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
         if (!tableData) {
             return null;
@@ -158,7 +155,7 @@ class Field extends AbstractModel<FieldDataForBlocks, WatchableFieldKey> {
             return null;
         }
     }
-    __getRawType(): ColumnType {
+    __getRawType(): PrivateColumnType {
         return this._data.type;
     }
     __getRawTypeOptions(): ?Object {

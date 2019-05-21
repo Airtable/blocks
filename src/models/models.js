@@ -1,6 +1,6 @@
 // @flow
-import FieldTypes from '../types/field_types';
-import ViewTypes from '../types/view_types';
+import {FieldTypes} from '../types/field';
+import {ViewTypes} from '../types/view';
 import Base from './base';
 import Table from './table';
 import Field from './field';

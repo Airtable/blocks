@@ -1,26 +1,23 @@
 // @flow
-import {type BlockUndoRedoMode} from 'client/blocks/block_undo_redo_modes';
+import {UndoRedoModes, type UndoRedoMode} from './types/undo_redo';
 import {type AirtableInterface} from './injected/airtable_interface';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const BlockUndoRedoModes = window.__requirePrivateModuleFromAirtable(
-    'client/blocks/block_undo_redo_modes',
-);
 
 class UndoRedo {
-    modes = BlockUndoRedoModes;
+    modes = UndoRedoModes;
 
     _airtableInterface: AirtableInterface;
-    _mode: BlockUndoRedoMode = BlockUndoRedoModes.NONE;
+    _mode: UndoRedoMode = UndoRedoModes.NONE;
 
     constructor(airtableInterface: AirtableInterface) {
         this._airtableInterface = airtableInterface;
     }
-    get mode(): BlockUndoRedoMode {
+    get mode(): UndoRedoMode {
         return this._mode;
     }
-    set mode(mode: BlockUndoRedoMode) {
-        if (!u.includes(u.values(BlockUndoRedoModes), mode)) {
+    set mode(mode: UndoRedoMode) {
+        if (!u.includes(u.values(UndoRedoModes), mode)) {
             throw new Error('Unexpected UndoRedo mode');
         }
         this._mode = mode;

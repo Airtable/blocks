@@ -1,12 +1,10 @@
 // @flow
 import invariant from 'invariant';
-import {type Color} from 'client_server_shared/types/view_config/color_config_obj';
-import {
-    type BaseDataForBlocks,
-    type RecordDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type Color} from '../types/color';
+import {type BaseData} from '../types/base';
+import {type RecordData, type RecordDef} from '../types/record';
+import {FieldTypes} from '../types/field';
 import utils from '../private_utils';
-import FieldTypes from '../types/field_types';
 import {type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModel from './abstract_model';
 import Field from './field';
@@ -27,9 +25,6 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
     'client_server_shared/client_server_shared_config_settings',
 );
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-
-// A record def is a cellValuesByFieldId object.
-export type RecordDef = {[string]: mixed};
 
 const WatchableRecordKeys = {
     primaryCellValue: 'primaryCellValue',
@@ -52,7 +47,7 @@ type WatchableRecordKey = $Keys<typeof WatchableRecordKeys> | string;
  *
  * Do not instantiate. To create a new record, use `table.createRecord`.
  */
-class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
+class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     // Once all blocks set this flag to true, remove this flag.
     static shouldUseNewLookupFormat = false;
 
@@ -65,12 +60,12 @@ class Record extends AbstractModel<RecordDataForBlocks, WatchableRecordKey> {
         );
     }
     _parentTable: TableType;
-    constructor(baseData: BaseDataForBlocks, parentTable: TableType, recordId: string) {
+    constructor(baseData: BaseData, parentTable: TableType, recordId: string) {
         super(baseData, recordId);
 
         this._parentTable = parentTable;
     }
-    get _dataOrNullIfDeleted(): RecordDataForBlocks | null {
+    get _dataOrNullIfDeleted(): RecordData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
         if (!tableData) {
             return null;

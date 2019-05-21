@@ -4,7 +4,7 @@ import invariant from 'invariant';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import TableModel from '../models/table';
-import ViewTypes, {type ViewType} from '../types/view_types';
+import {ViewTypes, type ViewType} from '../types/view';
 import type ViewModel from '../models/view';
 import {type GlobalConfigKey} from '../global_config';
 import createDataContainer from './create_data_container';

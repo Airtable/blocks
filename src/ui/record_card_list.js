@@ -2,7 +2,8 @@
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
-import RecordModel, {type RecordDef} from '../models/record';
+import {type RecordDef} from '../types/record';
+import RecordModel from '../models/record';
 import FieldModel from '../models/field';
 import ViewModel from '../models/view';
 import RecordCard from './record_card';

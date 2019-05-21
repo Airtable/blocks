@@ -1,9 +1,7 @@
 // @flow
-import {
-    type BaseDataForBlocks,
-    type CursorDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import {type RowId as RecordId} from 'client_server_shared/hyper_id';
+import {type CursorData} from './types/cursor';
+import {type BaseData} from './types/base';
+import {type RecordId} from './types/record';
 import utils from './private_utils';
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
 import Record from './models/record';
@@ -24,7 +22,7 @@ type WatchableCursorKey = $Values<typeof WatchableCursorKeys>;
  * @example
  * import {cursor} from 'airtable-block';
  */
-class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCursorKey> {
+class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
     static _className = 'Cursor';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableCursorKeys, key);
@@ -33,14 +31,14 @@ class Cursor extends AbstractModelWithAsyncData<CursorDataForBlocks, WatchableCu
         return true;
     }
     _airtableInterface: AirtableInterface;
-    constructor(baseData: BaseDataForBlocks, airtableInterface: AirtableInterface) {
+    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
         super(baseData, 'cursor');
 
         this._airtableInterface = airtableInterface;
 
         Object.seal(this);
     }
-    get _dataOrNullIfDeleted(): CursorDataForBlocks | null {
+    get _dataOrNullIfDeleted(): CursorData | null {
         return this._baseData.cursorData;
     }
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {

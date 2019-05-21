@@ -4,7 +4,7 @@ import invariant from 'invariant';
 import * as React from 'react';
 import TableModel from '../models/table';
 import getSdk from '../get_sdk';
-import FieldTypes, {type FieldType} from '../types/field_types';
+import {FieldTypes, type FieldType} from '../types/field';
 import type FieldModel from '../models/field';
 import {type GlobalConfigKey} from '../global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';

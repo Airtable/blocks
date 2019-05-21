@@ -5,7 +5,7 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import FieldModel from '../models/field';
 import TableModel from '../models/table';
-import FieldTypes, {type FieldType} from '../types/field_types';
+import {FieldTypes, type FieldType} from '../types/field';
 import ModelPickerSelect from './model_picker_select';
 import createDataContainer from './create_data_container';
 

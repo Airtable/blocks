@@ -1,6 +1,6 @@
 // @flow
 import invariant from 'invariant';
-import {type GroupLevelObj} from 'client_server_shared/types/view_config/group_level_obj';
+import {type FieldId} from '../types/field';
 import TableModel, {type WatchableTableKey} from './table';
 import ViewModel, {type WatchableViewKey} from './view';
 import QueryResult, {
@@ -20,6 +20,22 @@ const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
 const GroupAssigner = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/filter_and_sort/group_assigner',
 );
+
+type GroupLevelOrderType = 'ascending' | 'descending';
+type GroupLevelId = string;
+type GroupLevelObj =
+    | {|
+          id: GroupLevelId,
+          columnId: FieldId,
+          order: GroupLevelOrderType,
+          groupingOptions?: Object,
+      |}
+    | {|
+          id: GroupLevelId,
+          isCreatedTime: true,
+          order: GroupLevelOrderType,
+          groupingOptions?: Object,
+      |};
 
 type TableOrViewQueryResultData = {
     recordIds: Array<string> | null, // null if data isn't loaded (or if it hasn't been lazily initialized).

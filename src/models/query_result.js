@@ -1,9 +1,9 @@
 // @flow
 import invariant from 'invariant';
-import {type Color} from 'client_server_shared/types/view_config/color_config_obj';
-import {type BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type Color} from '../types/color';
+import {type BaseData} from '../types/base';
+import {FieldTypes} from '../types/field';
 import utils from '../private_utils';
-import FieldTypes from '../types/field_types';
 import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type TableModel from './table';
@@ -196,7 +196,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     _normalizedOpts: NormalizedQueryResultOpts;
     _recordColorChangeHandler: Function | null = null;
 
-    constructor(normalizedOpts: NormalizedQueryResultOpts, baseData: BaseDataForBlocks) {
+    constructor(normalizedOpts: NormalizedQueryResultOpts, baseData: BaseData) {
         super(baseData, getSdk().models.generateGuid());
         this._normalizedOpts = normalizedOpts;
     }

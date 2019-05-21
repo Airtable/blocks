@@ -1,11 +1,8 @@
 // @flow
 import invariant from 'invariant';
-import {
-    type BaseDataForBlocks,
-    type Collaborator,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import {type AppBlanket} from 'client_server_shared/types/app_json/app_blanket';
-import {type PermissionLevel} from 'client_server_shared/permissions/permission_levels';
+import {type BaseData, type AppBlanketData} from '../types/base';
+import {type CollaboratorData} from '../types/collaborator';
+import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import getSdk from '../get_sdk';
 import utils from '../private_utils';
@@ -55,20 +52,20 @@ const WatchableBaseKeys = {
  * @example
  * import {base} from 'airtable-blocks';
  */
-class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKeys>> {
+class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
     static _className = 'Base';
     static _isWatchableKey(key: string): boolean {
         return utils.isEnumValue(WatchableBaseKeys, key);
     }
     _tableModelsById: {[string]: Table};
     _airtableInterface: AirtableInterface;
-    constructor(baseData: BaseDataForBlocks, airtableInterface: AirtableInterface) {
+    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
         super(baseData, baseData.id);
 
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.
         this._airtableInterface = airtableInterface;
     }
-    get _dataOrNullIfDeleted(): BaseDataForBlocks | null {
+    get _dataOrNullIfDeleted(): BaseData | null {
         return this._baseData;
     }
     /** The name of the base. */
@@ -78,7 +75,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     /**
      * The current user, or `null` if the block is running in a publicly shared base.
      */
-    get currentUser(): Collaborator | null {
+    get currentUser(): CollaboratorData | null {
         const userId = this._data.currentUserId;
         if (!userId) {
             return null;
@@ -147,7 +144,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
     /**
      * The users who have access to this base.
      */
-    get activeCollaborators(): Array<Collaborator> {
+    get activeCollaborators(): Array<CollaboratorData> {
         const collaborators = [];
         const appBlanket = this.__appBlanket;
         if (appBlanket) {
@@ -172,7 +169,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
      * Returns the user matching the given ID, or `null` if that
      * user does not exist or does not have access to this base.
      */
-    getCollaboratorById(collaboratorId: string): Collaborator | null {
+    getCollaboratorById(collaboratorId: string): CollaboratorData | null {
         const appBlanket = this.__appBlanket;
         if (!appBlanket || !appBlanket.userInfoById) {
             return null;
@@ -183,7 +180,7 @@ class Base extends AbstractModel<BaseDataForBlocks, $Keys<typeof WatchableBaseKe
         }
         return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
-    get __appBlanket(): AppBlanket {
+    get __appBlanket(): AppBlanketData {
         return this._data.appBlanket;
     }
     get __appInterface(): UserScopedAppInterface {

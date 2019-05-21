@@ -1,14 +1,10 @@
 // @flow
 import invariant from 'invariant';
-import {type Color} from 'client_server_shared/types/view_config/color_config_obj';
-import {
-    type BaseDataForBlocks,
-    type ViewDataForBlocks,
-} from 'client_server_shared/blocks/block_sdk_init_data';
-import {type BlockModelChange} from 'client/blocks/blocks_model_bridge/blocks_model_bridge';
+import {type Color} from '../types/color';
+import {type BaseData, type ModelChange} from '../types/base';
+import {type ViewData, type ViewType} from '../types/view';
 import utils from '../private_utils';
 import ColorUtils from '../color_utils';
-import {type ViewType} from '../types/view_types';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type TableType from './table';
@@ -37,7 +33,7 @@ const WatchableViewKeys = {
 export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
 /** Model class representing a view in a table. */
-class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKey> {
+class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     // Once all blocks that current set this flag to true are migrated,
     // remove this flag.
     static shouldLoadAllCellValuesForRecords = false;
@@ -59,7 +55,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     _mostRecentTableLoadPromise: Promise<*> | null;
     _airtableInterface: AirtableInterface;
     constructor(
-        baseData: BaseDataForBlocks,
+        baseData: BaseData,
         parentTable: TableType,
         viewId: string,
         airtableInterface: AirtableInterface,
@@ -72,7 +68,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
 
         Object.seal(this);
     }
-    get _dataOrNullIfDeleted(): ViewDataForBlocks | null {
+    get _dataOrNullIfDeleted(): ViewData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
         if (!tableData) {
             return null;
@@ -182,7 +178,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     __generateChangesForParentTableAddMultipleRecords(
         recordIds: Array<string>,
-    ): Array<BlockModelChange> {
+    ): Array<ModelChange> {
         const newVisibleRecordIds = [...this.visibleRecordIds, ...recordIds];
         return [
             {
@@ -193,7 +189,7 @@ class View extends AbstractModelWithAsyncData<ViewDataForBlocks, WatchableViewKe
     }
     __generateChangesForParentTableDeleteMultipleRecords(
         recordIds: Array<string>,
-    ): Array<BlockModelChange> {
+    ): Array<ModelChange> {
         const recordIdsToDeleteSet = {};
         for (const recordId of recordIds) {
             recordIdsToDeleteSet[recordId] = true;

@@ -5,7 +5,7 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import ViewModel from '../models/view';
 import TableModel from '../models/table';
-import ViewTypes, {type ViewType} from '../types/view_types';
+import {ViewTypes, type ViewType} from '../types/view';
 import ModelPickerSelect from './model_picker_select';
 import createDataContainer from './create_data_container';
 

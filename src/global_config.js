@@ -1,5 +1,10 @@
 // @flow
-import {type BlockKvValue, type BlockKvUpdate} from 'client_server_shared/blocks/block_kv_helpers';
+import {
+    type GlobalConfigValue,
+    type GlobalConfigUpdate,
+    type GlobalConfigData,
+} from './types/global_config';
+import {PermissionLevels} from './types/permission_levels';
 import Watchable from './watchable';
 import getSdk from './get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from './injected/airtable_interface';
@@ -7,9 +12,6 @@ import {type AirtableInterface, type AirtableWriteAction} from './injected/airta
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_kv_helpers',
-);
-const PermissionLevels = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_levels',
 );
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
@@ -48,12 +50,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // not much we can do here to check if a key is valid.
         return true;
     }
-    _kvStore: {[string]: BlockKvValue};
+    _kvStore: GlobalConfigData;
     _airtableInterface: AirtableInterface;
-    constructor(
-        initialKvValuesByKey: {[string]: BlockKvValue},
-        airtableInterface: AirtableInterface,
-    ) {
+    constructor(initialKvValuesByKey: GlobalConfigData, airtableInterface: AirtableInterface) {
         super();
 
         this._kvStore = initialKvValuesByKey;
@@ -72,7 +71,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return key;
     }
     /** */
-    get(key: GlobalConfigKey): BlockKvValue {
+    get(key: GlobalConfigKey): GlobalConfigValue {
         const path = this.__formatKeyAsPath(key);
 
         const pathValidationResult = blockKvHelpers.validateKvKeyPath(path, this._kvStore);
@@ -92,12 +91,12 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
-    set(key: GlobalConfigKey, value: BlockKvValue): AirtableWriteAction<void, {}> {
+    set(key: GlobalConfigKey, value: GlobalConfigValue): AirtableWriteAction<void, {}> {
         const path = this.__formatKeyAsPath(key);
         return this.setPaths([{path, value}]);
     }
     /** */
-    canSetPaths(updates: Array<BlockKvUpdate>) {
+    canSetPaths(updates: Array<GlobalConfigUpdate>) {
         // This takes the updates to future-proof against having per-key
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.
@@ -105,7 +104,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /** */
-    setPaths(updates: Array<BlockKvUpdate>): AirtableWriteAction<void, {}> {
+    setPaths(updates: Array<GlobalConfigUpdate>): AirtableWriteAction<void, {}> {
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
         if (!this.canSetPaths(updates)) {
@@ -120,7 +119,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             completion: completionPromise,
         };
     }
-    _setMultipleKvPaths(updates: Array<BlockKvUpdate>) {
+    _setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
         if (!Array.isArray(updates)) {
             throw new Error('globalConfig updates must be an array');
         }
@@ -174,7 +173,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             this._onChange(key);
         }
     }
-    __onSetMultipleKvPaths(updates: Array<BlockKvUpdate>) {
+    __onSetMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
         this._setMultipleKvPaths(updates);
     }
 }

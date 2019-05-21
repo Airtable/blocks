@@ -2,11 +2,12 @@
 import invariant from 'invariant';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {type AttachmentObj} from 'client_server_shared/types/app_json/attachment_obj';
 import * as React from 'react';
-import FieldTypes from '../types/field_types';
+import {type AttachmentData} from '../types/attachment';
+import {FieldTypes} from '../types/field';
+import {type RecordDef} from '../types/record';
 import FieldModel from '../models/field';
-import RecordModel, {type RecordDef} from '../models/record';
+import RecordModel from '../models/record';
 import ViewModel from '../models/view';
 import cellValueUtils from '../models/cell_value_utils';
 import createDataContainer from './create_data_container';
@@ -423,7 +424,7 @@ class RecordCard extends React.Component<RecordCardProps> {
                 'attachmentObjIfAvailable is defined if hasAttachment',
             );
 
-            const attachmentObj: AttachmentObj = (attachmentObjIfAvailable: any); // eslint-disable-line flowtype/no-weak-types
+            const attachmentObj: AttachmentData = (attachmentObjIfAvailable: any); // eslint-disable-line flowtype/no-weak-types
             const userScopedAppInterface = attachmentField.parentTable.parentBase.__appInterface;
             imageHtml = attachmentPreviewRenderer.renderSquarePreview(
                 attachmentObj,

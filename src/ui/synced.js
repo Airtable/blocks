@@ -1,7 +1,7 @@
 // @flow
 import PropTypes from 'prop-types';
-import {type BlockKvValue} from 'client_server_shared/blocks/block_kv_helpers';
 import * as React from 'react';
+import {type GlobalConfigValue} from '../types/global_config';
 import getSdk from '../get_sdk';
 import {type GlobalConfigKey} from '../global_config';
 import createDataContainer from './create_data_container';
@@ -12,7 +12,7 @@ type SyncedProps = {
     render: ({
         value: mixed,
         canSetValue: boolean,
-        setValue: BlockKvValue => void,
+        setValue: GlobalConfigValue => void,
     }) => React.Element<*>,
 };
 
@@ -23,13 +23,13 @@ class Synced extends React.Component<SyncedProps> {
         render: PropTypes.func.isRequired,
     };
     props: SyncedProps;
-    _setValue: BlockKvValue => void;
+    _setValue: GlobalConfigValue => void;
     constructor(props: SyncedProps) {
         super(props);
 
         this._setValue = this._setValue.bind(this);
     }
-    _setValue(newValue: BlockKvValue) {
+    _setValue(newValue: GlobalConfigValue) {
         getSdk().globalConfig.set(this.props.globalConfigKey, newValue);
     }
     render() {

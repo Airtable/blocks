@@ -1,5 +1,5 @@
 // @flow
-import {type BaseDataForBlocks} from 'client_server_shared/blocks/block_sdk_init_data';
+import {type BaseData} from '../types/base';
 import utils from '../private_utils';
 import AbstractModel from './abstract_model';
 
@@ -20,7 +20,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     _pendingDataLoadPromise: Promise<Array<WatchableKey>> | null;
     _dataRetainCount: number;
     _unloadDataTimeoutId: null | TimeoutID;
-    constructor(baseData: BaseDataForBlocks, modelId: string) {
+    constructor(baseData: BaseData, modelId: string) {
         super(baseData, modelId);
 
         this._isDataLoaded = false;
