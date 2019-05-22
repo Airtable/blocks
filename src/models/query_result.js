@@ -47,6 +47,7 @@ export type NormalizedQueryResultOpts = {|
     recordColorMode: RecordColorMode,
 |};
 
+/** */
 class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,
     WatchableQueryResultKey,

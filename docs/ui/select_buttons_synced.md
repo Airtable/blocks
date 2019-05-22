@@ -1,0 +1,3 @@
+## SelectButtonsSynced
+
+**Extends React.Component**

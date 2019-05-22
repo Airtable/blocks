@@ -1,0 +1,3 @@
+## ColorPalette
+
+**Extends React.Component**
