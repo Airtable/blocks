@@ -14,17 +14,10 @@ type IconProps = {
     className?: string,
     style?: Object,
     pathClassName?: string,
-
-    // DEPRECATED (in favor of size).
-    scale?: number,
 };
 
 /** */
-const Icon = ({name, size, scale, fillColor, className, style, pathClassName}: IconProps) => {
-    if (size === undefined) {
-        size = 16 * (scale !== undefined ? scale : 1);
-    }
-
+const Icon = ({name, size = 16, fillColor, className, style, pathClassName}: IconProps) => {
     const isMicro = size <= 12;
     const pathData = iconConfig[`${name}${isMicro ? 'Micro' : ''}`];
     if (!pathData) {
@@ -52,12 +45,6 @@ Icon.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     pathClassName: PropTypes.string,
-
-    // DEPRECATED (in favor of size).
-    scale: PropTypes.number,
 };
-
-// TODO(jb): once we remove the scale prop type completely, we should add a default
-// value for the size prop.
 
 export default Icon;

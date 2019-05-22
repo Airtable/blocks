@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
-import warning from '../warning';
 import Popover, {
     type PopoverPlacementX,
     type PopoverPlacementY,
@@ -24,8 +23,6 @@ type TooltipProps = {
     placementOffsetY?: number,
     fitInWindowMode?: FitInWindowMode,
     shouldHideTooltipOnClick?: boolean,
-    // deprecated in favour of disabled
-    isDisabled?: boolean,
     disabled?: boolean,
     className?: string,
     style?: Object,
@@ -58,8 +55,6 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         placementOffsetY: PropTypes.number,
         fitInWindowMode: PropTypes.oneOf(u.values(Popover.fitInWindowModes)),
         shouldHideTooltipOnClick: PropTypes.bool,
-        // deprecated in favour of disabled
-        isDisabled: PropTypes.bool,
         disabled: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
@@ -151,16 +146,8 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
             </div>
         );
     }
-    _getDisabled() {
-        if (this.props.isDisabled !== undefined) {
-            warning('[UI.Tooltip] the `isDisabled` prop is deprecated - use `disabled` instead');
-            return this.props.isDisabled;
-        }
-        return this.props.disabled;
-    }
     render() {
-        const {children, renderContent, content} = this.props;
-        const disabled = this._getDisabled();
+        const {children, renderContent, content, disabled} = this.props;
 
         if (disabled || (!renderContent && !content)) {
             // The tooltip will never show, so just return the children.

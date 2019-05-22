@@ -60,11 +60,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     get name(): string {
         return this._data.name;
     }
-    /** Deprecated. Use field.type and field.options instead. */
-    get config(): {type: string, options: Object | null} {
+    _getConfig(): {type: string, options: Object | null} {
         // TODO: add separate methods for getting type and options and
-        // use them in the type and options getters below. We're currently
-        // doing unnecessary work when `get type()` is called.
         const {type, options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
             this.__getRawTypeOptions(),
@@ -79,11 +76,25 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
     /** */
     get type(): string {
-        return this.config.type;
+        // TODO: add separate methods for getting type and options and
+        const {type} = columnTypeProvider.getConfigForPublicApi(
+            this.__getRawType(),
+            this.__getRawTypeOptions(),
+            this.parentTable.parentBase.__appInterface,
+            this.parentTable.__getFieldNamesById(),
+        );
+        return type;
     }
     /** */
-    get options(): Object | null {
-        return this.config.options;
+    get options(): {[string]: mixed} | null {
+        const {options} = columnTypeProvider.getConfigForPublicApi(
+            this.__getRawType(),
+            this.__getRawTypeOptions(),
+            this.parentTable.parentBase.__appInterface,
+            this.parentTable.__getFieldNamesById(),
+        );
+
+        return options ? utils.cloneDeep(options) : null;
     }
     /** */
     get isComputed(): boolean {
