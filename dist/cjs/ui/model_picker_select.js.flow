@@ -1,0 +1,101 @@
+// @flow
+import invariant from 'invariant';
+import * as React from 'react';
+import TableModel from '../models/table';
+import ViewModel from '../models/view';
+import FieldModel from '../models/field';
+import createDataContainer from './create_data_container';
+import Select from './select';
+import {type SelectOptionValue} from './select_and_select_buttons_helpers';
+
+type AnyModel = TableModel | ViewModel | FieldModel;
+
+// Private component used by TablePicker, ViewPicker, FieldPicker.
+type ModelPickerSelectProps<Model: AnyModel> = {
+    models: Array<Model>,
+    selectedModelId: string | null,
+    onChange: (string | null) => void,
+    style?: Object,
+    className?: string,
+    disabled?: boolean,
+    placeholder: string,
+    shouldAllowPickingNone?: boolean,
+    modelKeysToWatch: Array<string>,
+    shouldAllowPickingModelFn?: Model => boolean,
+};
+
+class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
+    _select: Select | null;
+    _onChange: SelectOptionValue => void;
+    constructor(props: ModelPickerSelectProps<Model>) {
+        super(props);
+
+        this._onChange = this._onChange.bind(this);
+        this._select = null;
+    }
+    _onChange(value: SelectOptionValue) {
+        invariant(value === null || typeof value === 'string', 'value must be null or model id');
+        this.props.onChange(value);
+    }
+    focus() {
+        invariant(this._select, 'No select to focus');
+        this._select.focus();
+    }
+    blur() {
+        invariant(this._select, 'No select to blur');
+        this._select.blur();
+    }
+    click() {
+        invariant(this._select, 'No select to click');
+        this._select.click();
+    }
+    render() {
+        const {
+            models,
+            selectedModelId,
+            style,
+            className,
+            disabled,
+            placeholder,
+            shouldAllowPickingNone,
+            shouldAllowPickingModelFn,
+            // Filter these out so they're not
+            // included in restOfProps:
+            modelKeysToWatch, // eslint-disable-line no-unused-vars
+            onChange, // eslint-disable-line no-unused-vars
+            ...restOfProps
+        } = this.props;
+        return (
+            <Select
+                ref={el => (this._select = el)}
+                value={selectedModelId}
+                onChange={this._onChange}
+                style={style}
+                className={className}
+                disabled={disabled}
+                options={[
+                    {value: null, label: placeholder, disabled: !shouldAllowPickingNone},
+                    ...models.map(model => {
+                        return {
+                            value: model.id,
+                            label: model.name,
+                            disabled:
+                                shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model),
+                        };
+                    }),
+                ]}
+                {...restOfProps}
+            />
+        );
+    }
+}
+
+export default createDataContainer(
+    ModelPickerSelect,
+    props => {
+        return props.models.map(model => {
+            return {watch: model, key: props.modelKeysToWatch};
+        });
+    },
+    ['focus', 'blur', 'click'],
+);

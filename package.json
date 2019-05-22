@@ -65,11 +65,11 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "pretty-quick --staged && lint-staged"
+            "pre-commit": "pretty-quick --staged && lint-staged && npm run prepare && git add dist"
         }
     },
     "lint-staged": {
-        "*.js": [
+        "*.js,!dist": [
             "eslint --quiet"
         ]
     }

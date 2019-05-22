@@ -1,0 +1,90 @@
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.loadCSSFromString = loadCSSFromString;
+exports.loadCSSFromURLAsync = loadCSSFromURLAsync;
+exports.loadScriptFromURLAsync = loadScriptFromURLAsync;
+
+var _promise = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/promise"));
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+/**
+ * Injects CSS from a string into the page.
+ *
+ * @returns the style tag inserted into the page.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.loadCSSFromString('body { background: red; }');
+ */
+function loadCSSFromString(string) {
+  const styleTag = document.createElement('style');
+  styleTag.innerHTML = string;
+  (0, _invariant.default)(document.head, 'no document head');
+  document.head.appendChild(styleTag);
+  return styleTag;
+}
+/**
+ * Injects CSS from a remote URL.
+ *
+ * @returns a Promise that resolves to the style tag inserted into the page.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.loadCSSFromURLAsync('https://example.com/style.css');
+ */
+
+
+function loadCSSFromURLAsync(url) {
+  // Pre-create the error for a nicer stack trace.
+  const loadError = new Error('Failed to load remote CSS: ' + url);
+  return new _promise.default((resolve, reject) => {
+    const linkTag = document.createElement('link');
+    linkTag.setAttribute('rel', 'stylesheet');
+    linkTag.setAttribute('href', url);
+    linkTag.addEventListener('load', () => {
+      resolve(linkTag);
+    });
+    linkTag.addEventListener('error', event => {
+      reject(loadError);
+    });
+    (0, _invariant.default)(document.head, 'no document head');
+    document.head.appendChild(linkTag);
+  });
+}
+/**
+ * Injects Javascript from a remote URL.
+ *
+ * @returns a Promise that resolves to the script tag inserted into the page.
+ *
+ * @example
+ * import {UI} from 'airtable-block';
+ * UI.loadScriptFromURLAsync('https://example.com/script.js');
+ */
+
+
+function loadScriptFromURLAsync(url) {
+  // Pre-create the error for a nicer stack trace.
+  const loadError = new Error('Failed to load remote script: ' + url);
+  return new _promise.default((resolve, reject) => {
+    const scriptTag = document.createElement('script');
+    scriptTag.addEventListener('load', () => {
+      resolve(scriptTag);
+    });
+    scriptTag.addEventListener('error', event => {
+      reject(loadError);
+    });
+    scriptTag.setAttribute('src', url);
+    (0, _invariant.default)(document.head, 'no document head');
+    document.head.appendChild(scriptTag);
+  });
+}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91aS9yZW1vdGVfdXRpbHMuanMiXSwibmFtZXMiOlsibG9hZENTU0Zyb21TdHJpbmciLCJzdHJpbmciLCJzdHlsZVRhZyIsImRvY3VtZW50IiwiY3JlYXRlRWxlbWVudCIsImlubmVySFRNTCIsImhlYWQiLCJhcHBlbmRDaGlsZCIsImxvYWRDU1NGcm9tVVJMQXN5bmMiLCJ1cmwiLCJsb2FkRXJyb3IiLCJFcnJvciIsInJlc29sdmUiLCJyZWplY3QiLCJsaW5rVGFnIiwic2V0QXR0cmlidXRlIiwiYWRkRXZlbnRMaXN0ZW5lciIsImV2ZW50IiwibG9hZFNjcmlwdEZyb21VUkxBc3luYyIsInNjcmlwdFRhZyJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7OztBQUNBOztBQUVBOzs7Ozs7Ozs7QUFTTyxTQUFTQSxpQkFBVCxDQUEyQkMsTUFBM0IsRUFBNkQ7QUFDaEUsUUFBTUMsUUFBUSxHQUFHQyxRQUFRLENBQUNDLGFBQVQsQ0FBdUIsT0FBdkIsQ0FBakI7QUFDQUYsRUFBQUEsUUFBUSxDQUFDRyxTQUFULEdBQXFCSixNQUFyQjtBQUNBLDBCQUFVRSxRQUFRLENBQUNHLElBQW5CLEVBQXlCLGtCQUF6QjtBQUNBSCxFQUFBQSxRQUFRLENBQUNHLElBQVQsQ0FBY0MsV0FBZCxDQUEwQkwsUUFBMUI7QUFDQSxTQUFPQSxRQUFQO0FBQ0g7QUFFRDs7Ozs7Ozs7Ozs7QUFTTyxTQUFTTSxtQkFBVCxDQUE2QkMsR0FBN0IsRUFBb0U7QUFDdkU7QUFDQSxRQUFNQyxTQUFTLEdBQUcsSUFBSUMsS0FBSixDQUFVLGdDQUFnQ0YsR0FBMUMsQ0FBbEI7QUFDQSxTQUFPLHFCQUFZLENBQUNHLE9BQUQsRUFBVUMsTUFBVixLQUFxQjtBQUNwQyxVQUFNQyxPQUFPLEdBQUdYLFFBQVEsQ0FBQ0MsYUFBVCxDQUF1QixNQUF2QixDQUFoQjtBQUNBVSxJQUFBQSxPQUFPLENBQUNDLFlBQVIsQ0FBcUIsS0FBckIsRUFBNEIsWUFBNUI7QUFDQUQsSUFBQUEsT0FBTyxDQUFDQyxZQUFSLENBQXFCLE1BQXJCLEVBQTZCTixHQUE3QjtBQUNBSyxJQUFBQSxPQUFPLENBQUNFLGdCQUFSLENBQXlCLE1BQXpCLEVBQWlDLE1BQU07QUFDbkNKLE1BQUFBLE9BQU8sQ0FBQ0UsT0FBRCxDQUFQO0FBQ0gsS0FGRDtBQUdBQSxJQUFBQSxPQUFPLENBQUNFLGdCQUFSLENBQXlCLE9BQXpCLEVBQW1DQyxLQUFELElBQWtCO0FBQ2hESixNQUFBQSxNQUFNLENBQUNILFNBQUQsQ0FBTjtBQUNILEtBRkQ7QUFHQSw0QkFBVVAsUUFBUSxDQUFDRyxJQUFuQixFQUF5QixrQkFBekI7QUFDQUgsSUFBQUEsUUFBUSxDQUFDRyxJQUFULENBQWNDLFdBQWQsQ0FBMEJPLE9BQTFCO0FBQ0gsR0FaTSxDQUFQO0FBYUg7QUFFRDs7Ozs7Ozs7Ozs7QUFTTyxTQUFTSSxzQkFBVCxDQUFnQ1QsR0FBaEMsRUFBeUU7QUFDNUU7QUFDQSxRQUFNQyxTQUFTLEdBQUcsSUFBSUMsS0FBSixDQUFVLG1DQUFtQ0YsR0FBN0MsQ0FBbEI7QUFDQSxTQUFPLHFCQUFZLENBQUNHLE9BQUQsRUFBVUMsTUFBVixLQUFxQjtBQUNwQyxVQUFNTSxTQUFTLEdBQUdoQixRQUFRLENBQUNDLGFBQVQsQ0FBdUIsUUFBdkIsQ0FBbEI7QUFDQWUsSUFBQUEsU0FBUyxDQUFDSCxnQkFBVixDQUEyQixNQUEzQixFQUFtQyxNQUFNO0FBQ3JDSixNQUFBQSxPQUFPLENBQUNPLFNBQUQsQ0FBUDtBQUNILEtBRkQ7QUFHQUEsSUFBQUEsU0FBUyxDQUFDSCxnQkFBVixDQUEyQixPQUEzQixFQUFxQ0MsS0FBRCxJQUFrQjtBQUNsREosTUFBQUEsTUFBTSxDQUFDSCxTQUFELENBQU47QUFDSCxLQUZEO0FBR0FTLElBQUFBLFNBQVMsQ0FBQ0osWUFBVixDQUF1QixLQUF2QixFQUE4Qk4sR0FBOUI7QUFDQSw0QkFBVU4sUUFBUSxDQUFDRyxJQUFuQixFQUF5QixrQkFBekI7QUFDQUgsSUFBQUEsUUFBUSxDQUFDRyxJQUFULENBQWNDLFdBQWQsQ0FBMEJZLFNBQTFCO0FBQ0gsR0FYTSxDQUFQO0FBWUgiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBAZmxvd1xuaW1wb3J0IGludmFyaWFudCBmcm9tICdpbnZhcmlhbnQnO1xuXG4vKipcbiAqIEluamVjdHMgQ1NTIGZyb20gYSBzdHJpbmcgaW50byB0aGUgcGFnZS5cbiAqXG4gKiBAcmV0dXJucyB0aGUgc3R5bGUgdGFnIGluc2VydGVkIGludG8gdGhlIHBhZ2UuXG4gKlxuICogQGV4YW1wbGVcbiAqIGltcG9ydCB7VUl9IGZyb20gJ2FpcnRhYmxlLWJsb2NrJztcbiAqIFVJLmxvYWRDU1NGcm9tU3RyaW5nKCdib2R5IHsgYmFja2dyb3VuZDogcmVkOyB9Jyk7XG4gKi9cbmV4cG9ydCBmdW5jdGlvbiBsb2FkQ1NTRnJvbVN0cmluZyhzdHJpbmc6IHN0cmluZyk6IEhUTUxTdHlsZUVsZW1lbnQge1xuICAgIGNvbnN0IHN0eWxlVGFnID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnc3R5bGUnKTtcbiAgICBzdHlsZVRhZy5pbm5lckhUTUwgPSBzdHJpbmc7XG4gICAgaW52YXJpYW50KGRvY3VtZW50LmhlYWQsICdubyBkb2N1bWVudCBoZWFkJyk7XG4gICAgZG9jdW1lbnQuaGVhZC5hcHBlbmRDaGlsZChzdHlsZVRhZyk7XG4gICAgcmV0dXJuIHN0eWxlVGFnO1xufVxuXG4vKipcbiAqIEluamVjdHMgQ1NTIGZyb20gYSByZW1vdGUgVVJMLlxuICpcbiAqIEByZXR1cm5zIGEgUHJvbWlzZSB0aGF0IHJlc29sdmVzIHRvIHRoZSBzdHlsZSB0YWcgaW5zZXJ0ZWQgaW50byB0aGUgcGFnZS5cbiAqXG4gKiBAZXhhbXBsZVxuICogaW1wb3J0IHtVSX0gZnJvbSAnYWlydGFibGUtYmxvY2snO1xuICogVUkubG9hZENTU0Zyb21VUkxBc3luYygnaHR0cHM6Ly9leGFtcGxlLmNvbS9zdHlsZS5jc3MnKTtcbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGxvYWRDU1NGcm9tVVJMQXN5bmModXJsOiBzdHJpbmcpOiBQcm9taXNlPEhUTUxMaW5rRWxlbWVudD4ge1xuICAgIC8vIFByZS1jcmVhdGUgdGhlIGVycm9yIGZvciBhIG5pY2VyIHN0YWNrIHRyYWNlLlxuICAgIGNvbnN0IGxvYWRFcnJvciA9IG5ldyBFcnJvcignRmFpbGVkIHRvIGxvYWQgcmVtb3RlIENTUzogJyArIHVybCk7XG4gICAgcmV0dXJuIG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHtcbiAgICAgICAgY29uc3QgbGlua1RhZyA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2xpbmsnKTtcbiAgICAgICAgbGlua1RhZy5zZXRBdHRyaWJ1dGUoJ3JlbCcsICdzdHlsZXNoZWV0Jyk7XG4gICAgICAgIGxpbmtUYWcuc2V0QXR0cmlidXRlKCdocmVmJywgdXJsKTtcbiAgICAgICAgbGlua1RhZy5hZGRFdmVudExpc3RlbmVyKCdsb2FkJywgKCkgPT4ge1xuICAgICAgICAgICAgcmVzb2x2ZShsaW5rVGFnKTtcbiAgICAgICAgfSk7XG4gICAgICAgIGxpbmtUYWcuYWRkRXZlbnRMaXN0ZW5lcignZXJyb3InLCAoZXZlbnQ6IEV2ZW50KSA9PiB7XG4gICAgICAgICAgICByZWplY3QobG9hZEVycm9yKTtcbiAgICAgICAgfSk7XG4gICAgICAgIGludmFyaWFudChkb2N1bWVudC5oZWFkLCAnbm8gZG9jdW1lbnQgaGVhZCcpO1xuICAgICAgICBkb2N1bWVudC5oZWFkLmFwcGVuZENoaWxkKGxpbmtUYWcpO1xuICAgIH0pO1xufVxuXG4vKipcbiAqIEluamVjdHMgSmF2YXNjcmlwdCBmcm9tIGEgcmVtb3RlIFVSTC5cbiAqXG4gKiBAcmV0dXJucyBhIFByb21pc2UgdGhhdCByZXNvbHZlcyB0byB0aGUgc2NyaXB0IHRhZyBpbnNlcnRlZCBpbnRvIHRoZSBwYWdlLlxuICpcbiAqIEBleGFtcGxlXG4gKiBpbXBvcnQge1VJfSBmcm9tICdhaXJ0YWJsZS1ibG9jayc7XG4gKiBVSS5sb2FkU2NyaXB0RnJvbVVSTEFzeW5jKCdodHRwczovL2V4YW1wbGUuY29tL3NjcmlwdC5qcycpO1xuICovXG5leHBvcnQgZnVuY3Rpb24gbG9hZFNjcmlwdEZyb21VUkxBc3luYyh1cmw6IHN0cmluZyk6IFByb21pc2U8SFRNTFNjcmlwdEVsZW1lbnQ+IHtcbiAgICAvLyBQcmUtY3JlYXRlIHRoZSBlcnJvciBmb3IgYSBuaWNlciBzdGFjayB0cmFjZS5cbiAgICBjb25zdCBsb2FkRXJyb3IgPSBuZXcgRXJyb3IoJ0ZhaWxlZCB0byBsb2FkIHJlbW90ZSBzY3JpcHQ6ICcgKyB1cmwpO1xuICAgIHJldHVybiBuZXcgUHJvbWlzZSgocmVzb2x2ZSwgcmVqZWN0KSA9PiB7XG4gICAgICAgIGNvbnN0IHNjcmlwdFRhZyA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ3NjcmlwdCcpO1xuICAgICAgICBzY3JpcHRUYWcuYWRkRXZlbnRMaXN0ZW5lcignbG9hZCcsICgpID0+IHtcbiAgICAgICAgICAgIHJlc29sdmUoc2NyaXB0VGFnKTtcbiAgICAgICAgfSk7XG4gICAgICAgIHNjcmlwdFRhZy5hZGRFdmVudExpc3RlbmVyKCdlcnJvcicsIChldmVudDogRXZlbnQpID0+IHtcbiAgICAgICAgICAgIHJlamVjdChsb2FkRXJyb3IpO1xuICAgICAgICB9KTtcbiAgICAgICAgc2NyaXB0VGFnLnNldEF0dHJpYnV0ZSgnc3JjJywgdXJsKTtcbiAgICAgICAgaW52YXJpYW50KGRvY3VtZW50LmhlYWQsICdubyBkb2N1bWVudCBoZWFkJyk7XG4gICAgICAgIGRvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQoc2NyaXB0VGFnKTtcbiAgICB9KTtcbn1cbiJdfQ==

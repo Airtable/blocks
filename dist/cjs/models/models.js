@@ -1,0 +1,86 @@
+"use strict";
+
+var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = void 0;
+
+var _field = require("../types/field");
+
+var _view = require("../types/view");
+
+var _base = _interopRequireDefault(require("./base"));
+
+var _table = _interopRequireDefault(require("./table"));
+
+var _field2 = _interopRequireDefault(require("./field"));
+
+var _view2 = _interopRequireDefault(require("./view"));
+
+var _record = _interopRequireDefault(require("./record"));
+
+var _query_result = _interopRequireDefault(require("./query_result"));
+
+var _table_or_view_query_result = _interopRequireDefault(require("./table_or_view_query_result"));
+
+var _linked_records_query_result = _interopRequireDefault(require("./linked_records_query_result"));
+
+var _aggregators = _interopRequireDefault(require("./aggregators"));
+
+var recordColoring = _interopRequireWildcard(require("./record_coloring"));
+
+const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
+
+const hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
+
+const models = {
+  Base: _base.default,
+  Table: _table.default,
+  Field: _field2.default,
+  View: _view2.default,
+  Record: _record.default,
+  RecordList: _query_result.default,
+  // RecordList has been renamed to QueryResult.
+  QueryResult: _query_result.default,
+  TableOrViewQueryResult: _table_or_view_query_result.default,
+  LinkedRecordsQueryResult: _linked_records_query_result.default,
+  aggregators: _aggregators.default,
+  recordColoring,
+
+  /**
+   * @example
+   * import {models} from 'airtable-block';
+   * const numberFields = myTable.fields.filter(field => (
+   *     field.config.type === models.fieldTypes.NUMBER
+   * ));
+   */
+  fieldTypes: _field.FieldTypes,
+
+  /**
+   * @example
+   * import {models} from 'airtable-block';
+   * const gridViews = myTable.views.filter(view => (
+   *     view.type === models.viewTypes.GRID
+   * ));
+   */
+  viewTypes: _view.ViewTypes,
+  permissionLevels: permissionHelpers.ApiPermissionLevels,
+
+  /**
+   * Helper to generate a GUID
+   * @example
+   * import {models} from 'airtable-block';
+   * const id = models.generateGuid();
+   */
+  generateGuid: hyperIdGenerator.generateGuid
+};
+var _default = models;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvbW9kZWxzLmpzIl0sIm5hbWVzIjpbInBlcm1pc3Npb25IZWxwZXJzIiwid2luZG93IiwiX19yZXF1aXJlUHJpdmF0ZU1vZHVsZUZyb21BaXJ0YWJsZSIsImh5cGVySWRHZW5lcmF0b3IiLCJtb2RlbHMiLCJCYXNlIiwiVGFibGUiLCJGaWVsZCIsIlZpZXciLCJSZWNvcmQiLCJSZWNvcmRMaXN0IiwiUXVlcnlSZXN1bHQiLCJUYWJsZU9yVmlld1F1ZXJ5UmVzdWx0IiwiTGlua2VkUmVjb3Jkc1F1ZXJ5UmVzdWx0IiwiYWdncmVnYXRvcnMiLCJyZWNvcmRDb2xvcmluZyIsImZpZWxkVHlwZXMiLCJGaWVsZFR5cGVzIiwidmlld1R5cGVzIiwiVmlld1R5cGVzIiwicGVybWlzc2lvbkxldmVscyIsIkFwaVBlcm1pc3Npb25MZXZlbHMiLCJnZW5lcmF0ZUd1aWQiXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBRUEsTUFBTUEsaUJBQWlCLEdBQUdDLE1BQU0sQ0FBQ0Msa0NBQVAsQ0FDdEIscURBRHNCLENBQTFCOztBQUdBLE1BQU1DLGdCQUFnQixHQUFHRixNQUFNLENBQUNDLGtDQUFQLENBQ3JCLGtEQURxQixDQUF6Qjs7QUFJQSxNQUFNRSxNQUFNLEdBQUc7QUFDWEMsRUFBQUEsSUFBSSxFQUFKQSxhQURXO0FBRVhDLEVBQUFBLEtBQUssRUFBTEEsY0FGVztBQUdYQyxFQUFBQSxLQUFLLEVBQUxBLGVBSFc7QUFJWEMsRUFBQUEsSUFBSSxFQUFKQSxjQUpXO0FBS1hDLEVBQUFBLE1BQU0sRUFBTkEsZUFMVztBQU1YQyxFQUFBQSxVQUFVLEVBQUVDLHFCQU5EO0FBTWM7QUFDekJBLEVBQUFBLFdBQVcsRUFBWEEscUJBUFc7QUFRWEMsRUFBQUEsc0JBQXNCLEVBQXRCQSxtQ0FSVztBQVNYQyxFQUFBQSx3QkFBd0IsRUFBeEJBLG9DQVRXO0FBVVhDLEVBQUFBLFdBQVcsRUFBWEEsb0JBVlc7QUFXWEMsRUFBQUEsY0FYVzs7QUFZWDs7Ozs7OztBQU9BQyxFQUFBQSxVQUFVLEVBQUVDLGlCQW5CRDs7QUFvQlg7Ozs7Ozs7QUFPQUMsRUFBQUEsU0FBUyxFQUFFQyxlQTNCQTtBQTRCWEMsRUFBQUEsZ0JBQWdCLEVBQUVwQixpQkFBaUIsQ0FBQ3FCLG1CQTVCekI7O0FBNkJYOzs7Ozs7QUFNQUMsRUFBQUEsWUFBWSxFQUFFbkIsZ0JBQWdCLENBQUNtQjtBQW5DcEIsQ0FBZjtlQXNDZWxCLE0iLCJzb3VyY2VzQ29udGVudCI6WyIvLyBAZmxvd1xuaW1wb3J0IHtGaWVsZFR5cGVzfSBmcm9tICcuLi90eXBlcy9maWVsZCc7XG5pbXBvcnQge1ZpZXdUeXBlc30gZnJvbSAnLi4vdHlwZXMvdmlldyc7XG5pbXBvcnQgQmFzZSBmcm9tICcuL2Jhc2UnO1xuaW1wb3J0IFRhYmxlIGZyb20gJy4vdGFibGUnO1xuaW1wb3J0IEZpZWxkIGZyb20gJy4vZmllbGQnO1xuaW1wb3J0IFZpZXcgZnJvbSAnLi92aWV3JztcbmltcG9ydCBSZWNvcmQgZnJvbSAnLi9yZWNvcmQnO1xuaW1wb3J0IFF1ZXJ5UmVzdWx0IGZyb20gJy4vcXVlcnlfcmVzdWx0JztcbmltcG9ydCBUYWJsZU9yVmlld1F1ZXJ5UmVzdWx0IGZyb20gJy4vdGFibGVfb3Jfdmlld19xdWVyeV9yZXN1bHQnO1xuaW1wb3J0IExpbmtlZFJlY29yZHNRdWVyeVJlc3VsdCBmcm9tICcuL2xpbmtlZF9yZWNvcmRzX3F1ZXJ5X3Jlc3VsdCc7XG5pbXBvcnQgYWdncmVnYXRvcnMgZnJvbSAnLi9hZ2dyZWdhdG9ycyc7XG5pbXBvcnQgKiBhcyByZWNvcmRDb2xvcmluZyBmcm9tICcuL3JlY29yZF9jb2xvcmluZyc7XG5cbmNvbnN0IHBlcm1pc3Npb25IZWxwZXJzID0gd2luZG93Ll9fcmVxdWlyZVByaXZhdGVNb2R1bGVGcm9tQWlydGFibGUoXG4gICAgJ2NsaWVudF9zZXJ2ZXJfc2hhcmVkL3Blcm1pc3Npb25zL3Blcm1pc3Npb25faGVscGVycycsXG4pO1xuY29uc3QgaHlwZXJJZEdlbmVyYXRvciA9IHdpbmRvdy5fX3JlcXVpcmVQcml2YXRlTW9kdWxlRnJvbUFpcnRhYmxlKFxuICAgICdjbGllbnRfc2VydmVyX3NoYXJlZC9oeXBlcl9pZC9oeXBlcl9pZF9nZW5lcmF0b3InLFxuKTtcblxuY29uc3QgbW9kZWxzID0ge1xuICAgIEJhc2UsXG4gICAgVGFibGUsXG4gICAgRmllbGQsXG4gICAgVmlldyxcbiAgICBSZWNvcmQsXG4gICAgUmVjb3JkTGlzdDogUXVlcnlSZXN1bHQsIC8vIFJlY29yZExpc3QgaGFzIGJlZW4gcmVuYW1lZCB0byBRdWVyeVJlc3VsdC5cbiAgICBRdWVyeVJlc3VsdCxcbiAgICBUYWJsZU9yVmlld1F1ZXJ5UmVzdWx0LFxuICAgIExpbmtlZFJlY29yZHNRdWVyeVJlc3VsdCxcbiAgICBhZ2dyZWdhdG9ycyxcbiAgICByZWNvcmRDb2xvcmluZyxcbiAgICAvKipcbiAgICAgKiBAZXhhbXBsZVxuICAgICAqIGltcG9ydCB7bW9kZWxzfSBmcm9tICdhaXJ0YWJsZS1ibG9jayc7XG4gICAgICogY29uc3QgbnVtYmVyRmllbGRzID0gbXlUYWJsZS5maWVsZHMuZmlsdGVyKGZpZWxkID0+IChcbiAgICAgKiAgICAgZmllbGQuY29uZmlnLnR5cGUgPT09IG1vZGVscy5maWVsZFR5cGVzLk5VTUJFUlxuICAgICAqICkpO1xuICAgICAqL1xuICAgIGZpZWxkVHlwZXM6IEZpZWxkVHlwZXMsXG4gICAgLyoqXG4gICAgICogQGV4YW1wbGVcbiAgICAgKiBpbXBvcnQge21vZGVsc30gZnJvbSAnYWlydGFibGUtYmxvY2snO1xuICAgICAqIGNvbnN0IGdyaWRWaWV3cyA9IG15VGFibGUudmlld3MuZmlsdGVyKHZpZXcgPT4gKFxuICAgICAqICAgICB2aWV3LnR5cGUgPT09IG1vZGVscy52aWV3VHlwZXMuR1JJRFxuICAgICAqICkpO1xuICAgICAqL1xuICAgIHZpZXdUeXBlczogVmlld1R5cGVzLFxuICAgIHBlcm1pc3Npb25MZXZlbHM6IHBlcm1pc3Npb25IZWxwZXJzLkFwaVBlcm1pc3Npb25MZXZlbHMsXG4gICAgLyoqXG4gICAgICogSGVscGVyIHRvIGdlbmVyYXRlIGEgR1VJRFxuICAgICAqIEBleGFtcGxlXG4gICAgICogaW1wb3J0IHttb2RlbHN9IGZyb20gJ2FpcnRhYmxlLWJsb2NrJztcbiAgICAgKiBjb25zdCBpZCA9IG1vZGVscy5nZW5lcmF0ZUd1aWQoKTtcbiAgICAgKi9cbiAgICBnZW5lcmF0ZUd1aWQ6IGh5cGVySWRHZW5lcmF0b3IuZ2VuZXJhdGVHdWlkLFxufTtcblxuZXhwb3J0IGRlZmF1bHQgbW9kZWxzO1xuIl19

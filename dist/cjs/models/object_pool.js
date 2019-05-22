@@ -1,0 +1,82 @@
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+
+require("core-js/modules/es.array.iterator");
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = void 0;
+
+var _splice = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/splice"));
+
+var _indexOf = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/index-of"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+
+var _invariant = _interopRequireDefault(require("invariant"));
+
+class ObjectPool {
+  constructor(config) {
+    (0, _defineProperty2.default)(this, "_objectsByKey", {});
+    this._getKeyFromObject = config.getKeyFromObject;
+    this._getKeyFromObjectOptions = config.getKeyFromObjectOptions;
+    this._canObjectBeReusedForOptions = config.canObjectBeReusedForOptions;
+  }
+
+  registerObjectForReuse(object) {
+    const objectKey = this._getKeyFromObject(object);
+
+    const pooledObjects = this._objectsByKey[objectKey];
+
+    if (pooledObjects) {
+      pooledObjects.push(object);
+    } else {
+      this._objectsByKey[objectKey] = [object];
+    }
+  }
+
+  unregisterObjectForReuse(object) {
+    const objectKey = this._getKeyFromObject(object);
+
+    const pooledObjects = this._objectsByKey[objectKey];
+    (0, _invariant.default)(pooledObjects, 'pooledObjects');
+    const index = (0, _indexOf.default)(pooledObjects).call(pooledObjects, object);
+    (0, _invariant.default)(index !== -1, 'object not registered');
+    (0, _splice.default)(pooledObjects).call(pooledObjects, index, 1);
+
+    if (pooledObjects.length === 0) {
+      // `delete` causes de-opts, which slows down subsequent reads,
+      // so set to undefined instead (unverified that this is actually faster).
+      this._objectsByKey[objectKey] = undefined;
+    }
+  }
+
+  getObjectForReuse(objectOptions) {
+    const key = this._getKeyFromObjectOptions(objectOptions);
+
+    const pooledObjects = this._objectsByKey[key];
+
+    if (pooledObjects) {
+      // We expect that there won't be too many QueryResults for a given
+      // model, so iterating over them should be okay. If this assumption
+      // ends up being wrong, we can hash the opts or something.
+      for (const object of pooledObjects) {
+        if (this._canObjectBeReusedForOptions(object, objectOptions)) {
+          return object;
+        }
+      }
+    }
+
+    return null;
+  }
+
+}
+
+var _default = ObjectPool;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvb2JqZWN0X3Bvb2wuanMiXSwibmFtZXMiOlsiT2JqZWN0UG9vbCIsImNvbnN0cnVjdG9yIiwiY29uZmlnIiwiX2dldEtleUZyb21PYmplY3QiLCJnZXRLZXlGcm9tT2JqZWN0IiwiX2dldEtleUZyb21PYmplY3RPcHRpb25zIiwiZ2V0S2V5RnJvbU9iamVjdE9wdGlvbnMiLCJfY2FuT2JqZWN0QmVSZXVzZWRGb3JPcHRpb25zIiwiY2FuT2JqZWN0QmVSZXVzZWRGb3JPcHRpb25zIiwicmVnaXN0ZXJPYmplY3RGb3JSZXVzZSIsIm9iamVjdCIsIm9iamVjdEtleSIsInBvb2xlZE9iamVjdHMiLCJfb2JqZWN0c0J5S2V5IiwicHVzaCIsInVucmVnaXN0ZXJPYmplY3RGb3JSZXVzZSIsImluZGV4IiwibGVuZ3RoIiwidW5kZWZpbmVkIiwiZ2V0T2JqZWN0Rm9yUmV1c2UiLCJvYmplY3RPcHRpb25zIiwia2V5Il0sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUNBOztBQVFBLE1BQU1BLFVBQU4sQ0FBMEI7QUFNdEJDLEVBQUFBLFdBQVcsQ0FBQ0MsTUFBRCxFQUFxQztBQUFBLHlEQUxILEVBS0c7QUFDNUMsU0FBS0MsaUJBQUwsR0FBeUJELE1BQU0sQ0FBQ0UsZ0JBQWhDO0FBQ0EsU0FBS0Msd0JBQUwsR0FBZ0NILE1BQU0sQ0FBQ0ksdUJBQXZDO0FBQ0EsU0FBS0MsNEJBQUwsR0FBb0NMLE1BQU0sQ0FBQ00sMkJBQTNDO0FBQ0g7O0FBRURDLEVBQUFBLHNCQUFzQixDQUFDQyxNQUFELEVBQVk7QUFDOUIsVUFBTUMsU0FBUyxHQUFHLEtBQUtSLGlCQUFMLENBQXVCTyxNQUF2QixDQUFsQjs7QUFDQSxVQUFNRSxhQUFhLEdBQUcsS0FBS0MsYUFBTCxDQUFtQkYsU0FBbkIsQ0FBdEI7O0FBQ0EsUUFBSUMsYUFBSixFQUFtQjtBQUNmQSxNQUFBQSxhQUFhLENBQUNFLElBQWQsQ0FBbUJKLE1BQW5CO0FBQ0gsS0FGRCxNQUVPO0FBQ0gsV0FBS0csYUFBTCxDQUFtQkYsU0FBbkIsSUFBZ0MsQ0FBQ0QsTUFBRCxDQUFoQztBQUNIO0FBQ0o7O0FBQ0RLLEVBQUFBLHdCQUF3QixDQUFDTCxNQUFELEVBQVk7QUFDaEMsVUFBTUMsU0FBUyxHQUFHLEtBQUtSLGlCQUFMLENBQXVCTyxNQUF2QixDQUFsQjs7QUFDQSxVQUFNRSxhQUFhLEdBQUcsS0FBS0MsYUFBTCxDQUFtQkYsU0FBbkIsQ0FBdEI7QUFDQSw0QkFBVUMsYUFBVixFQUF5QixlQUF6QjtBQUNBLFVBQU1JLEtBQUssR0FBRyxzQkFBQUosYUFBYSxNQUFiLENBQUFBLGFBQWEsRUFBU0YsTUFBVCxDQUEzQjtBQUNBLDRCQUFVTSxLQUFLLEtBQUssQ0FBQyxDQUFyQixFQUF3Qix1QkFBeEI7QUFDQSx5QkFBQUosYUFBYSxNQUFiLENBQUFBLGFBQWEsRUFBUUksS0FBUixFQUFlLENBQWYsQ0FBYjs7QUFDQSxRQUFJSixhQUFhLENBQUNLLE1BQWQsS0FBeUIsQ0FBN0IsRUFBZ0M7QUFDNUI7QUFDQTtBQUNBLFdBQUtKLGFBQUwsQ0FBbUJGLFNBQW5CLElBQWdDTyxTQUFoQztBQUNIO0FBQ0o7O0FBQ0RDLEVBQUFBLGlCQUFpQixDQUFDQyxhQUFELEVBQWdDO0FBQzdDLFVBQU1DLEdBQUcsR0FBRyxLQUFLaEIsd0JBQUwsQ0FBOEJlLGFBQTlCLENBQVo7O0FBQ0EsVUFBTVIsYUFBYSxHQUFHLEtBQUtDLGFBQUwsQ0FBbUJRLEdBQW5CLENBQXRCOztBQUNBLFFBQUlULGFBQUosRUFBbUI7QUFDZjtBQUNBO0FBQ0E7QUFDQSxXQUFLLE1BQU1GLE1BQVgsSUFBcUJFLGFBQXJCLEVBQW9DO0FBQ2hDLFlBQUksS0FBS0wsNEJBQUwsQ0FBa0NHLE1BQWxDLEVBQTBDVSxhQUExQyxDQUFKLEVBQThEO0FBQzFELGlCQUFPVixNQUFQO0FBQ0g7QUFDSjtBQUNKOztBQUNELFdBQU8sSUFBUDtBQUNIOztBQWhEcUI7O2VBbURYVixVIiwic291cmNlc0NvbnRlbnQiOlsiLy8gQGZsb3dcbmltcG9ydCBpbnZhcmlhbnQgZnJvbSAnaW52YXJpYW50JztcblxudHlwZSBPYmplY3RQb29sT3B0aW9uczxULCBPcHRzPiA9IHt8XG4gICAgZ2V0S2V5RnJvbU9iamVjdDogVCA9PiBzdHJpbmcsXG4gICAgZ2V0S2V5RnJvbU9iamVjdE9wdGlvbnM6IE9wdHMgPT4gc3RyaW5nLFxuICAgIGNhbk9iamVjdEJlUmV1c2VkRm9yT3B0aW9uczogKFQsIE9wdHMpID0+IGJvb2xlYW4sXG58fTtcblxuY2xhc3MgT2JqZWN0UG9vbDxULCBPcHRzPiB7XG4gICAgX29iamVjdHNCeUtleToge1tzdHJpbmddOiBBcnJheTxUPiB8IHZvaWR9ID0ge307XG4gICAgX2dldEtleUZyb21PYmplY3Q6IFQgPT4gc3RyaW5nO1xuICAgIF9nZXRLZXlGcm9tT2JqZWN0T3B0aW9uczogT3B0cyA9PiBzdHJpbmc7XG4gICAgX2Nhbk9iamVjdEJlUmV1c2VkRm9yT3B0aW9uczogKFQsIE9wdHMpID0+IGJvb2xlYW47XG5cbiAgICBjb25zdHJ1Y3Rvcihjb25maWc6IE9iamVjdFBvb2xPcHRpb25zPFQsIE9wdHM+KSB7XG4gICAgICAgIHRoaXMuX2dldEtleUZyb21PYmplY3QgPSBjb25maWcuZ2V0S2V5RnJvbU9iamVjdDtcbiAgICAgICAgdGhpcy5fZ2V0S2V5RnJvbU9iamVjdE9wdGlvbnMgPSBjb25maWcuZ2V0S2V5RnJvbU9iamVjdE9wdGlvbnM7XG4gICAgICAgIHRoaXMuX2Nhbk9iamVjdEJlUmV1c2VkRm9yT3B0aW9ucyA9IGNvbmZpZy5jYW5PYmplY3RCZVJldXNlZEZvck9wdGlvbnM7XG4gICAgfVxuXG4gICAgcmVnaXN0ZXJPYmplY3RGb3JSZXVzZShvYmplY3Q6IFQpIHtcbiAgICAgICAgY29uc3Qgb2JqZWN0S2V5ID0gdGhpcy5fZ2V0S2V5RnJvbU9iamVjdChvYmplY3QpO1xuICAgICAgICBjb25zdCBwb29sZWRPYmplY3RzID0gdGhpcy5fb2JqZWN0c0J5S2V5W29iamVjdEtleV07XG4gICAgICAgIGlmIChwb29sZWRPYmplY3RzKSB7XG4gICAgICAgICAgICBwb29sZWRPYmplY3RzLnB1c2gob2JqZWN0KTtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIHRoaXMuX29iamVjdHNCeUtleVtvYmplY3RLZXldID0gW29iamVjdF07XG4gICAgICAgIH1cbiAgICB9XG4gICAgdW5yZWdpc3Rlck9iamVjdEZvclJldXNlKG9iamVjdDogVCkge1xuICAgICAgICBjb25zdCBvYmplY3RLZXkgPSB0aGlzLl9nZXRLZXlGcm9tT2JqZWN0KG9iamVjdCk7XG4gICAgICAgIGNvbnN0IHBvb2xlZE9iamVjdHMgPSB0aGlzLl9vYmplY3RzQnlLZXlbb2JqZWN0S2V5XTtcbiAgICAgICAgaW52YXJpYW50KHBvb2xlZE9iamVjdHMsICdwb29sZWRPYmplY3RzJyk7XG4gICAgICAgIGNvbnN0IGluZGV4ID0gcG9vbGVkT2JqZWN0cy5pbmRleE9mKG9iamVjdCk7XG4gICAgICAgIGludmFyaWFudChpbmRleCAhPT0gLTEsICdvYmplY3Qgbm90IHJlZ2lzdGVyZWQnKTtcbiAgICAgICAgcG9vbGVkT2JqZWN0cy5zcGxpY2UoaW5kZXgsIDEpO1xuICAgICAgICBpZiAocG9vbGVkT2JqZWN0cy5sZW5ndGggPT09IDApIHtcbiAgICAgICAgICAgIC8vIGBkZWxldGVgIGNhdXNlcyBkZS1vcHRzLCB3aGljaCBzbG93cyBkb3duIHN1YnNlcXVlbnQgcmVhZHMsXG4gICAgICAgICAgICAvLyBzbyBzZXQgdG8gdW5kZWZpbmVkIGluc3RlYWQgKHVudmVyaWZpZWQgdGhhdCB0aGlzIGlzIGFjdHVhbGx5IGZhc3RlcikuXG4gICAgICAgICAgICB0aGlzLl9vYmplY3RzQnlLZXlbb2JqZWN0S2V5XSA9IHVuZGVmaW5lZDtcbiAgICAgICAgfVxuICAgIH1cbiAgICBnZXRPYmplY3RGb3JSZXVzZShvYmplY3RPcHRpb25zOiBPcHRzKTogVCB8IG51bGwge1xuICAgICAgICBjb25zdCBrZXkgPSB0aGlzLl9nZXRLZXlGcm9tT2JqZWN0T3B0aW9ucyhvYmplY3RPcHRpb25zKTtcbiAgICAgICAgY29uc3QgcG9vbGVkT2JqZWN0cyA9IHRoaXMuX29iamVjdHNCeUtleVtrZXldO1xuICAgICAgICBpZiAocG9vbGVkT2JqZWN0cykge1xuICAgICAgICAgICAgLy8gV2UgZXhwZWN0IHRoYXQgdGhlcmUgd29uJ3QgYmUgdG9vIG1hbnkgUXVlcnlSZXN1bHRzIGZvciBhIGdpdmVuXG4gICAgICAgICAgICAvLyBtb2RlbCwgc28gaXRlcmF0aW5nIG92ZXIgdGhlbSBzaG91bGQgYmUgb2theS4gSWYgdGhpcyBhc3N1bXB0aW9uXG4gICAgICAgICAgICAvLyBlbmRzIHVwIGJlaW5nIHdyb25nLCB3ZSBjYW4gaGFzaCB0aGUgb3B0cyBvciBzb21ldGhpbmcuXG4gICAgICAgICAgICBmb3IgKGNvbnN0IG9iamVjdCBvZiBwb29sZWRPYmplY3RzKSB7XG4gICAgICAgICAgICAgICAgaWYgKHRoaXMuX2Nhbk9iamVjdEJlUmV1c2VkRm9yT3B0aW9ucyhvYmplY3QsIG9iamVjdE9wdGlvbnMpKSB7XG4gICAgICAgICAgICAgICAgICAgIHJldHVybiBvYmplY3Q7XG4gICAgICAgICAgICAgICAgfVxuICAgICAgICAgICAgfVxuICAgICAgICB9XG4gICAgICAgIHJldHVybiBudWxsO1xuICAgIH1cbn1cblxuZXhwb3J0IGRlZmF1bHQgT2JqZWN0UG9vbDtcbiJdfQ==

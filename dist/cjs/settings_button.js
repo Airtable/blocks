@@ -1,0 +1,74 @@
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = void 0;
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+
+var _watchable = _interopRequireDefault(require("./watchable"));
+
+var _private_utils = _interopRequireDefault(require("./private_utils"));
+
+const WatchableSettingsButtonKeys = {
+  isVisible: 'isVisible',
+  click: 'click'
+};
+
+/**
+ * Interface to the settings button that lives outside the block's viewport.
+ *
+ * Watch `click` to handle click events on the button.
+ *
+ * @example
+ * import {settingsButton} from 'airtable-block';
+ * settingsButton.isVisible = true;
+ * settingsButton.watch('click', () => {
+ *     alert('Clicked!');
+ * })
+ */
+class SettingsButton extends _watchable.default {
+  static _isWatchableKey(key) {
+    return _private_utils.default.isEnumValue(WatchableSettingsButtonKeys, key);
+  }
+
+  constructor(airtableInterface) {
+    super();
+    this._isVisible = false;
+    this._airtableInterface = airtableInterface;
+  }
+  /**
+   * Whether the settings button is being shown.
+   * Set to `true` to show the settings button.
+   * Can be watched.
+   */
+
+
+  get isVisible() {
+    return this._isVisible;
+  }
+
+  set isVisible(isVisible) {
+    this._isVisible = isVisible;
+
+    this._onChange(WatchableSettingsButtonKeys.isVisible, isVisible);
+
+    this._airtableInterface.setSettingsButtonVisibility(isVisible);
+  }
+
+  __onClick() {
+    this._onChange(WatchableSettingsButtonKeys.click);
+  }
+
+}
+
+(0, _defineProperty2.default)(SettingsButton, "_className", 'SettingsButton');
+var _default = SettingsButton;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9zZXR0aW5nc19idXR0b24uanMiXSwibmFtZXMiOlsiV2F0Y2hhYmxlU2V0dGluZ3NCdXR0b25LZXlzIiwiaXNWaXNpYmxlIiwiY2xpY2siLCJTZXR0aW5nc0J1dHRvbiIsIldhdGNoYWJsZSIsIl9pc1dhdGNoYWJsZUtleSIsImtleSIsInV0aWxzIiwiaXNFbnVtVmFsdWUiLCJjb25zdHJ1Y3RvciIsImFpcnRhYmxlSW50ZXJmYWNlIiwiX2lzVmlzaWJsZSIsIl9haXJ0YWJsZUludGVyZmFjZSIsIl9vbkNoYW5nZSIsInNldFNldHRpbmdzQnV0dG9uVmlzaWJpbGl0eSIsIl9fb25DbGljayJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7QUFDQTs7QUFDQTs7QUFHQSxNQUFNQSwyQkFBMkIsR0FBRztBQUNoQ0MsRUFBQUEsU0FBUyxFQUFFLFdBRHFCO0FBRWhDQyxFQUFBQSxLQUFLLEVBQUU7QUFGeUIsQ0FBcEM7O0FBT0E7Ozs7Ozs7Ozs7OztBQVlBLE1BQU1DLGNBQU4sU0FBNkJDLGtCQUE3QixDQUFtRTtBQUUvRCxTQUFPQyxlQUFQLENBQXVCQyxHQUF2QixFQUE2QztBQUN6QyxXQUFPQyx1QkFBTUMsV0FBTixDQUFrQlIsMkJBQWxCLEVBQStDTSxHQUEvQyxDQUFQO0FBQ0g7O0FBR0RHLEVBQUFBLFdBQVcsQ0FBQ0MsaUJBQUQsRUFBdUM7QUFDOUM7QUFFQSxTQUFLQyxVQUFMLEdBQWtCLEtBQWxCO0FBQ0EsU0FBS0Msa0JBQUwsR0FBMEJGLGlCQUExQjtBQUNIO0FBQ0Q7Ozs7Ozs7QUFLQSxNQUFJVCxTQUFKLEdBQXlCO0FBQ3JCLFdBQU8sS0FBS1UsVUFBWjtBQUNIOztBQUNELE1BQUlWLFNBQUosQ0FBY0EsU0FBZCxFQUFrQztBQUM5QixTQUFLVSxVQUFMLEdBQWtCVixTQUFsQjs7QUFFQSxTQUFLWSxTQUFMLENBQWViLDJCQUEyQixDQUFDQyxTQUEzQyxFQUFzREEsU0FBdEQ7O0FBRUEsU0FBS1csa0JBQUwsQ0FBd0JFLDJCQUF4QixDQUFvRGIsU0FBcEQ7QUFDSDs7QUFDRGMsRUFBQUEsU0FBUyxHQUFHO0FBQ1IsU0FBS0YsU0FBTCxDQUFlYiwyQkFBMkIsQ0FBQ0UsS0FBM0M7QUFDSDs7QUE5QjhEOzs4QkFBN0RDLGMsZ0JBQ2tCLGdCO2VBZ0NUQSxjIiwic291cmNlc0NvbnRlbnQiOlsiLy8gQGZsb3dcbmltcG9ydCBXYXRjaGFibGUgZnJvbSAnLi93YXRjaGFibGUnO1xuaW1wb3J0IHV0aWxzIGZyb20gJy4vcHJpdmF0ZV91dGlscyc7XG5pbXBvcnQge3R5cGUgQWlydGFibGVJbnRlcmZhY2V9IGZyb20gJy4vaW5qZWN0ZWQvYWlydGFibGVfaW50ZXJmYWNlJztcblxuY29uc3QgV2F0Y2hhYmxlU2V0dGluZ3NCdXR0b25LZXlzID0ge1xuICAgIGlzVmlzaWJsZTogJ2lzVmlzaWJsZScsXG4gICAgY2xpY2s6ICdjbGljaycsXG59O1xuXG50eXBlIFdhdGNoYWJsZVNldHRpbmdzQnV0dG9uS2V5ID0gJEtleXM8dHlwZW9mIFdhdGNoYWJsZVNldHRpbmdzQnV0dG9uS2V5cz47XG5cbi8qKlxuICogSW50ZXJmYWNlIHRvIHRoZSBzZXR0aW5ncyBidXR0b24gdGhhdCBsaXZlcyBvdXRzaWRlIHRoZSBibG9jaydzIHZpZXdwb3J0LlxuICpcbiAqIFdhdGNoIGBjbGlja2AgdG8gaGFuZGxlIGNsaWNrIGV2ZW50cyBvbiB0aGUgYnV0dG9uLlxuICpcbiAqIEBleGFtcGxlXG4gKiBpbXBvcnQge3NldHRpbmdzQnV0dG9ufSBmcm9tICdhaXJ0YWJsZS1ibG9jayc7XG4gKiBzZXR0aW5nc0J1dHRvbi5pc1Zpc2libGUgPSB0cnVlO1xuICogc2V0dGluZ3NCdXR0b24ud2F0Y2goJ2NsaWNrJywgKCkgPT4ge1xuICogICAgIGFsZXJ0KCdDbGlja2VkIScpO1xuICogfSlcbiAqL1xuY2xhc3MgU2V0dGluZ3NCdXR0b24gZXh0ZW5kcyBXYXRjaGFibGU8V2F0Y2hhYmxlU2V0dGluZ3NCdXR0b25LZXk+IHtcbiAgICBzdGF0aWMgX2NsYXNzTmFtZSA9ICdTZXR0aW5nc0J1dHRvbic7XG4gICAgc3RhdGljIF9pc1dhdGNoYWJsZUtleShrZXk6IHN0cmluZyk6IGJvb2xlYW4ge1xuICAgICAgICByZXR1cm4gdXRpbHMuaXNFbnVtVmFsdWUoV2F0Y2hhYmxlU2V0dGluZ3NCdXR0b25LZXlzLCBrZXkpO1xuICAgIH1cbiAgICBfaXNWaXNpYmxlOiBib29sZWFuO1xuICAgIF9haXJ0YWJsZUludGVyZmFjZTogQWlydGFibGVJbnRlcmZhY2U7XG4gICAgY29uc3RydWN0b3IoYWlydGFibGVJbnRlcmZhY2U6IEFpcnRhYmxlSW50ZXJmYWNlKSB7XG4gICAgICAgIHN1cGVyKCk7XG5cbiAgICAgICAgdGhpcy5faXNWaXNpYmxlID0gZmFsc2U7XG4gICAgICAgIHRoaXMuX2FpcnRhYmxlSW50ZXJmYWNlID0gYWlydGFibGVJbnRlcmZhY2U7XG4gICAgfVxuICAgIC8qKlxuICAgICAqIFdoZXRoZXIgdGhlIHNldHRpbmdzIGJ1dHRvbiBpcyBiZWluZyBzaG93bi5cbiAgICAgKiBTZXQgdG8gYHRydWVgIHRvIHNob3cgdGhlIHNldHRpbmdzIGJ1dHRvbi5cbiAgICAgKiBDYW4gYmUgd2F0Y2hlZC5cbiAgICAgKi9cbiAgICBnZXQgaXNWaXNpYmxlKCk6IGJvb2xlYW4ge1xuICAgICAgICByZXR1cm4gdGhpcy5faXNWaXNpYmxlO1xuICAgIH1cbiAgICBzZXQgaXNWaXNpYmxlKGlzVmlzaWJsZTogYm9vbGVhbikge1xuICAgICAgICB0aGlzLl9pc1Zpc2libGUgPSBpc1Zpc2libGU7XG5cbiAgICAgICAgdGhpcy5fb25DaGFuZ2UoV2F0Y2hhYmxlU2V0dGluZ3NCdXR0b25LZXlzLmlzVmlzaWJsZSwgaXNWaXNpYmxlKTtcblxuICAgICAgICB0aGlzLl9haXJ0YWJsZUludGVyZmFjZS5zZXRTZXR0aW5nc0J1dHRvblZpc2liaWxpdHkoaXNWaXNpYmxlKTtcbiAgICB9XG4gICAgX19vbkNsaWNrKCkge1xuICAgICAgICB0aGlzLl9vbkNoYW5nZShXYXRjaGFibGVTZXR0aW5nc0J1dHRvbktleXMuY2xpY2spO1xuICAgIH1cbn1cblxuZXhwb3J0IGRlZmF1bHQgU2V0dGluZ3NCdXR0b247XG4iXX0=

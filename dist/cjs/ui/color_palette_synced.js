@@ -1,0 +1,70 @@
+"use strict";
+
+var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _color_palette = _interopRequireDefault(require("./color_palette"));
+
+var _synced = _interopRequireDefault(require("./synced"));
+
+var _global_config_synced_component_helpers = _interopRequireDefault(require("./global_config_synced_component_helpers"));
+
+const {
+  u
+} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+
+/** */
+class ColorPaletteSynced extends React.Component {
+  render() {
+    const {
+      globalConfigKey,
+      disabled
+    } = this.props;
+    const restOfProps = u.omit(this.props, ['globalConfigKey', 'disabled', 'onChange']);
+    return React.createElement(_synced.default, {
+      globalConfigKey: globalConfigKey,
+      render: ({
+        value,
+        canSetValue,
+        setValue
+      }) => React.createElement(_color_palette.default, (0, _extends2.default)({
+        color: value,
+        onChange: newValue => {
+          setValue(newValue);
+
+          if (this.props.onChange) {
+            this.props.onChange(newValue);
+          }
+        },
+        disabled: disabled || !canSetValue
+      }, restOfProps))
+    });
+  }
+
+}
+
+(0, _defineProperty2.default)(ColorPaletteSynced, "propTypes", {
+  globalConfigKey: _global_config_synced_component_helpers.default.globalConfigKeyPropType,
+  disabled: _propTypes.default.bool,
+  onChange: _propTypes.default.func
+});
+var _default = ColorPaletteSynced;
+exports.default = _default;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91aS9jb2xvcl9wYWxldHRlX3N5bmNlZC5qcyJdLCJuYW1lcyI6WyJ1Iiwid2luZG93IiwiX19yZXF1aXJlUHJpdmF0ZU1vZHVsZUZyb21BaXJ0YWJsZSIsIkNvbG9yUGFsZXR0ZVN5bmNlZCIsIlJlYWN0IiwiQ29tcG9uZW50IiwicmVuZGVyIiwiZ2xvYmFsQ29uZmlnS2V5IiwiZGlzYWJsZWQiLCJwcm9wcyIsInJlc3RPZlByb3BzIiwib21pdCIsInZhbHVlIiwiY2FuU2V0VmFsdWUiLCJzZXRWYWx1ZSIsIm5ld1ZhbHVlIiwib25DaGFuZ2UiLCJnbG9iYWxDb25maWdTeW5jZWRDb21wb25lbnRIZWxwZXJzIiwiZ2xvYmFsQ29uZmlnS2V5UHJvcFR5cGUiLCJQcm9wVHlwZXMiLCJib29sIiwiZnVuYyJdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBQ0E7O0FBRUEsTUFBTTtBQUFDQSxFQUFBQTtBQUFELElBQU1DLE1BQU0sQ0FBQ0Msa0NBQVAsQ0FBMEMseUJBQTFDLENBQVo7O0FBUUE7QUFDQSxNQUFNQyxrQkFBTixTQUFpQ0MsS0FBSyxDQUFDQyxTQUF2QyxDQUEwRTtBQU10RUMsRUFBQUEsTUFBTSxHQUFHO0FBQ0wsVUFBTTtBQUFDQyxNQUFBQSxlQUFEO0FBQWtCQyxNQUFBQTtBQUFsQixRQUE4QixLQUFLQyxLQUF6QztBQUNBLFVBQU1DLFdBQVcsR0FBR1YsQ0FBQyxDQUFDVyxJQUFGLENBQU8sS0FBS0YsS0FBWixFQUFtQixDQUFDLGlCQUFELEVBQW9CLFVBQXBCLEVBQWdDLFVBQWhDLENBQW5CLENBQXBCO0FBQ0EsV0FDSSxvQkFBQyxlQUFEO0FBQ0ksTUFBQSxlQUFlLEVBQUVGLGVBRHJCO0FBRUksTUFBQSxNQUFNLEVBQUUsQ0FBQztBQUFDSyxRQUFBQSxLQUFEO0FBQVFDLFFBQUFBLFdBQVI7QUFBcUJDLFFBQUFBO0FBQXJCLE9BQUQsS0FDSixvQkFBQyxzQkFBRDtBQUNJLFFBQUEsS0FBSyxFQUFFRixLQURYO0FBRUksUUFBQSxRQUFRLEVBQUVHLFFBQVEsSUFBSTtBQUNsQkQsVUFBQUEsUUFBUSxDQUFDQyxRQUFELENBQVI7O0FBRUEsY0FBSSxLQUFLTixLQUFMLENBQVdPLFFBQWYsRUFBeUI7QUFDckIsaUJBQUtQLEtBQUwsQ0FBV08sUUFBWCxDQUFvQkQsUUFBcEI7QUFDSDtBQUNKLFNBUkw7QUFTSSxRQUFBLFFBQVEsRUFBRVAsUUFBUSxJQUFJLENBQUNLO0FBVDNCLFNBVVFILFdBVlI7QUFIUixNQURKO0FBbUJIOztBQTVCcUU7OzhCQUFwRVAsa0IsZUFDaUI7QUFDZkksRUFBQUEsZUFBZSxFQUFFVSxnREFBbUNDLHVCQURyQztBQUVmVixFQUFBQSxRQUFRLEVBQUVXLG1CQUFVQyxJQUZMO0FBR2ZKLEVBQUFBLFFBQVEsRUFBRUcsbUJBQVVFO0FBSEwsQztlQThCUmxCLGtCIiwic291cmNlc0NvbnRlbnQiOlsiLy8gQGZsb3dcbmltcG9ydCBQcm9wVHlwZXMgZnJvbSAncHJvcC10eXBlcyc7XG5pbXBvcnQgKiBhcyBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgQ29sb3JQYWxldHRlIGZyb20gJy4vY29sb3JfcGFsZXR0ZSc7XG5pbXBvcnQgU3luY2VkIGZyb20gJy4vc3luY2VkJztcbmltcG9ydCBnbG9iYWxDb25maWdTeW5jZWRDb21wb25lbnRIZWxwZXJzIGZyb20gJy4vZ2xvYmFsX2NvbmZpZ19zeW5jZWRfY29tcG9uZW50X2hlbHBlcnMnO1xuXG5jb25zdCB7dX0gPSB3aW5kb3cuX19yZXF1aXJlUHJpdmF0ZU1vZHVsZUZyb21BaXJ0YWJsZSgnY2xpZW50X3NlcnZlcl9zaGFyZWQvaHUnKTtcblxudHlwZSBDb2xvclBhbGV0dGVTeW5jZWRQcm9wcyA9IHtcbiAgICBnbG9iYWxDb25maWdLZXk6IHN0cmluZyxcbiAgICBkaXNhYmxlZD86IGJvb2xlYW4sXG4gICAgb25DaGFuZ2U/OiBzdHJpbmcgPT4gbWl4ZWQsXG59O1xuXG4vKiogKi9cbmNsYXNzIENvbG9yUGFsZXR0ZVN5bmNlZCBleHRlbmRzIFJlYWN0LkNvbXBvbmVudDxDb2xvclBhbGV0dGVTeW5jZWRQcm9wcz4ge1xuICAgIHN0YXRpYyBwcm9wVHlwZXMgPSB7XG4gICAgICAgIGdsb2JhbENvbmZpZ0tleTogZ2xvYmFsQ29uZmlnU3luY2VkQ29tcG9uZW50SGVscGVycy5nbG9iYWxDb25maWdLZXlQcm9wVHlwZSxcbiAgICAgICAgZGlzYWJsZWQ6IFByb3BUeXBlcy5ib29sLFxuICAgICAgICBvbkNoYW5nZTogUHJvcFR5cGVzLmZ1bmMsXG4gICAgfTtcbiAgICByZW5kZXIoKSB7XG4gICAgICAgIGNvbnN0IHtnbG9iYWxDb25maWdLZXksIGRpc2FibGVkfSA9IHRoaXMucHJvcHM7XG4gICAgICAgIGNvbnN0IHJlc3RPZlByb3BzID0gdS5vbWl0KHRoaXMucHJvcHMsIFsnZ2xvYmFsQ29uZmlnS2V5JywgJ2Rpc2FibGVkJywgJ29uQ2hhbmdlJ10pO1xuICAgICAgICByZXR1cm4gKFxuICAgICAgICAgICAgPFN5bmNlZFxuICAgICAgICAgICAgICAgIGdsb2JhbENvbmZpZ0tleT17Z2xvYmFsQ29uZmlnS2V5fVxuICAgICAgICAgICAgICAgIHJlbmRlcj17KHt2YWx1ZSwgY2FuU2V0VmFsdWUsIHNldFZhbHVlfSkgPT4gKFxuICAgICAgICAgICAgICAgICAgICA8Q29sb3JQYWxldHRlXG4gICAgICAgICAgICAgICAgICAgICAgICBjb2xvcj17dmFsdWV9XG4gICAgICAgICAgICAgICAgICAgICAgICBvbkNoYW5nZT17bmV3VmFsdWUgPT4ge1xuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNldFZhbHVlKG5ld1ZhbHVlKTtcblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmICh0aGlzLnByb3BzLm9uQ2hhbmdlKSB7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRoaXMucHJvcHMub25DaGFuZ2UobmV3VmFsdWUpO1xuICAgICAgICAgICAgICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICAgICAgICAgIH19XG4gICAgICAgICAgICAgICAgICAgICAgICBkaXNhYmxlZD17ZGlzYWJsZWQgfHwgIWNhblNldFZhbHVlfVxuICAgICAgICAgICAgICAgICAgICAgICAgey4uLnJlc3RPZlByb3BzfVxuICAgICAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgICl9XG4gICAgICAgICAgICAvPlxuICAgICAgICApO1xuICAgIH1cbn1cblxuZXhwb3J0IGRlZmF1bHQgQ29sb3JQYWxldHRlU3luY2VkO1xuIl19

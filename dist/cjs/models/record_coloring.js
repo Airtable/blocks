@@ -1,0 +1,47 @@
+"use strict";
+
+var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.modes = exports.ModeTypes = void 0;
+const ModeTypes = {
+  NONE: 'none',
+  BY_SELECT_FIELD: 'bySelectField',
+  BY_VIEW: 'byView'
+};
+exports.ModeTypes = ModeTypes;
+
+/**
+ * create a record coloring mode object
+ *
+ * @example
+ * import {models} from 'airtable-block';
+ *
+ * // no record coloring:
+ * const recordColorMode = models.recordColoring.modes.none();
+ * // color by select field:
+ * const recordColorMode = models.recordColoring.modes.bySelectField(someSelectField);
+ * // color from view:
+ * const recordColorMode = models.recordColoring.modes.fromView(someView);
+ *
+ * // with a query result:
+ * const queryResult = table.select({ recordColorMode });
+ */
+const modes = {
+  none: () => ({
+    type: ModeTypes.NONE
+  }),
+  bySelectField: selectField => ({
+    type: ModeTypes.BY_SELECT_FIELD,
+    selectField
+  }),
+  byView: view => ({
+    type: ModeTypes.BY_VIEW,
+    view
+  })
+};
+exports.modes = modes;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9tb2RlbHMvcmVjb3JkX2NvbG9yaW5nLmpzIl0sIm5hbWVzIjpbIk1vZGVUeXBlcyIsIk5PTkUiLCJCWV9TRUxFQ1RfRklFTEQiLCJCWV9WSUVXIiwibW9kZXMiLCJub25lIiwidHlwZSIsImJ5U2VsZWN0RmllbGQiLCJzZWxlY3RGaWVsZCIsImJ5VmlldyIsInZpZXciXSwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUlPLE1BQU1BLFNBQVMsR0FBRztBQUNyQkMsRUFBQUEsSUFBSSxFQUFHLE1BRGM7QUFFckJDLEVBQUFBLGVBQWUsRUFBRyxlQUZHO0FBR3JCQyxFQUFBQSxPQUFPLEVBQUc7QUFIVyxDQUFsQjs7O0FBYVA7Ozs7Ozs7Ozs7Ozs7Ozs7QUFnQk8sTUFBTUMsS0FBSyxHQUFHO0FBQ2pCQyxFQUFBQSxJQUFJLEVBQUUsT0FBTztBQUNUQyxJQUFBQSxJQUFJLEVBQUVOLFNBQVMsQ0FBQ0M7QUFEUCxHQUFQLENBRFc7QUFJakJNLEVBQUFBLGFBQWEsRUFBR0MsV0FBRCxLQUE4QjtBQUN6Q0YsSUFBQUEsSUFBSSxFQUFFTixTQUFTLENBQUNFLGVBRHlCO0FBRXpDTSxJQUFBQTtBQUZ5QyxHQUE5QixDQUpFO0FBUWpCQyxFQUFBQSxNQUFNLEVBQUdDLElBQUQsS0FBc0I7QUFDMUJKLElBQUFBLElBQUksRUFBRU4sU0FBUyxDQUFDRyxPQURVO0FBRTFCTyxJQUFBQTtBQUYwQixHQUF0QjtBQVJTLENBQWQiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBAZmxvd1xuaW1wb3J0IHR5cGUgRmllbGRNb2RlbCBmcm9tICcuL2ZpZWxkJztcbmltcG9ydCB0eXBlIFZpZXdNb2RlbCBmcm9tICcuL3ZpZXcnO1xuXG5leHBvcnQgY29uc3QgTW9kZVR5cGVzID0ge1xuICAgIE5PTkU6ICgnbm9uZSc6ICdub25lJyksXG4gICAgQllfU0VMRUNUX0ZJRUxEOiAoJ2J5U2VsZWN0RmllbGQnOiAnYnlTZWxlY3RGaWVsZCcpLFxuICAgIEJZX1ZJRVc6ICgnYnlWaWV3JzogJ2J5VmlldycpLFxufTtcblxuZXhwb3J0IHR5cGUgUmVjb3JkQ29sb3JNb2RlVHlwZSA9ICRWYWx1ZXM8dHlwZW9mIE1vZGVUeXBlcz47XG5cbmV4cG9ydCB0eXBlIFJlY29yZENvbG9yTW9kZSA9XG4gICAgfCB7fHR5cGU6IHR5cGVvZiBNb2RlVHlwZXMuTk9ORXx9XG4gICAgfCB7fHR5cGU6IHR5cGVvZiBNb2RlVHlwZXMuQllfU0VMRUNUX0ZJRUxELCBzZWxlY3RGaWVsZDogRmllbGRNb2RlbHx9XG4gICAgfCB7fHR5cGU6IHR5cGVvZiBNb2RlVHlwZXMuQllfVklFVywgdmlldzogVmlld01vZGVsfH07XG5cbi8qKlxuICogY3JlYXRlIGEgcmVjb3JkIGNvbG9yaW5nIG1vZGUgb2JqZWN0XG4gKlxuICogQGV4YW1wbGVcbiAqIGltcG9ydCB7bW9kZWxzfSBmcm9tICdhaXJ0YWJsZS1ibG9jayc7XG4gKlxuICogLy8gbm8gcmVjb3JkIGNvbG9yaW5nOlxuICogY29uc3QgcmVjb3JkQ29sb3JNb2RlID0gbW9kZWxzLnJlY29yZENvbG9yaW5nLm1vZGVzLm5vbmUoKTtcbiAqIC8vIGNvbG9yIGJ5IHNlbGVjdCBmaWVsZDpcbiAqIGNvbnN0IHJlY29yZENvbG9yTW9kZSA9IG1vZGVscy5yZWNvcmRDb2xvcmluZy5tb2Rlcy5ieVNlbGVjdEZpZWxkKHNvbWVTZWxlY3RGaWVsZCk7XG4gKiAvLyBjb2xvciBmcm9tIHZpZXc6XG4gKiBjb25zdCByZWNvcmRDb2xvck1vZGUgPSBtb2RlbHMucmVjb3JkQ29sb3JpbmcubW9kZXMuZnJvbVZpZXcoc29tZVZpZXcpO1xuICpcbiAqIC8vIHdpdGggYSBxdWVyeSByZXN1bHQ6XG4gKiBjb25zdCBxdWVyeVJlc3VsdCA9IHRhYmxlLnNlbGVjdCh7IHJlY29yZENvbG9yTW9kZSB9KTtcbiAqL1xuZXhwb3J0IGNvbnN0IG1vZGVzID0ge1xuICAgIG5vbmU6ICgpID0+ICh7XG4gICAgICAgIHR5cGU6IE1vZGVUeXBlcy5OT05FLFxuICAgIH0pLFxuICAgIGJ5U2VsZWN0RmllbGQ6IChzZWxlY3RGaWVsZDogRmllbGRNb2RlbCkgPT4gKHtcbiAgICAgICAgdHlwZTogTW9kZVR5cGVzLkJZX1NFTEVDVF9GSUVMRCxcbiAgICAgICAgc2VsZWN0RmllbGQsXG4gICAgfSksXG4gICAgYnlWaWV3OiAodmlldzogVmlld01vZGVsKSA9PiAoe1xuICAgICAgICB0eXBlOiBNb2RlVHlwZXMuQllfVklFVyxcbiAgICAgICAgdmlldyxcbiAgICB9KSxcbn07XG4iXX0=
