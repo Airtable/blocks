@@ -7,7 +7,7 @@ _Object$defineProperty(exports, "__esModule", {
 });
 
 exports.FieldTypes = void 0;
-const FieldTypes = {
+var FieldTypes = {
   SINGLE_LINE_TEXT: 'singleLineText',
   EMAIL: 'email',
   URL: 'url',

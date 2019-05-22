@@ -7,7 +7,7 @@ _Object$defineProperty(exports, "__esModule", {
 });
 
 exports.modes = exports.ModeTypes = void 0;
-const ModeTypes = {
+var ModeTypes = {
   NONE: 'none',
   BY_SELECT_FIELD: 'bySelectField',
   BY_VIEW: 'byView'
@@ -30,17 +30,23 @@ exports.ModeTypes = ModeTypes;
  * // with a query result:
  * const queryResult = table.select({ recordColorMode });
  */
-const modes = {
-  none: () => ({
-    type: ModeTypes.NONE
-  }),
-  bySelectField: selectField => ({
-    type: ModeTypes.BY_SELECT_FIELD,
-    selectField
-  }),
-  byView: view => ({
-    type: ModeTypes.BY_VIEW,
-    view
-  })
+var modes = {
+  none: function none() {
+    return {
+      type: ModeTypes.NONE
+    };
+  },
+  bySelectField: function bySelectField(selectField) {
+    return {
+      type: ModeTypes.BY_SELECT_FIELD,
+      selectField: selectField
+    };
+  },
+  byView: function byView(view) {
+    return {
+      type: ModeTypes.BY_VIEW,
+      view: view
+    };
+  }
 };
 exports.modes = modes;

@@ -2,6 +2,8 @@
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
+require("core-js/modules/es.string.split");
+
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -74,7 +76,7 @@ function createDetectElementResize(nonce) {
       };
     }();
 
-    resetTriggers = function (element) {
+    resetTriggers = function resetTriggers(element) {
       var triggers = element.__resizeTriggers__,
           expand = triggers.firstElementChild,
           contract = triggers.lastElementChild,
@@ -87,11 +89,11 @@ function createDetectElementResize(nonce) {
       expand.scrollTop = expand.scrollHeight;
     };
 
-    checkTriggers = function (element) {
+    checkTriggers = function checkTriggers(element) {
       return element.offsetWidth !== element.__resizeLast__.width || element.offsetHeight !== element.__resizeLast__.height;
     };
 
-    scrollListener = function (e) {
+    scrollListener = function scrollListener(e) {
       var _context, _context2;
 
       // Don't measure (which forces) reflow for scrolls that happen inside of children!
@@ -153,7 +155,7 @@ function createDetectElementResize(nonce) {
     animationStyle = keyframeprefix + 'animation: 1ms ' + animationName + '; ';
   }
 
-  var createStyles = function () {
+  var createStyles = function createStyles() {
     if (!document.getElementById('detectElementResize')) {
       // opacity:0 works around a chrome bug https://code.google.com/p/chromium/issues/detail?id=286360
       var css = (animationKeyframes ? animationKeyframes : '') + '.resize-triggers { ' + (animationStyle ? animationStyle : '') + 'visibility: hidden; opacity: 0; } ' + '.resize-triggers, .resize-triggers > div, .contract-trigger:before { content: " "; display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; z-index: -1; } .resize-triggers > div { background: #eee; overflow: auto; } .contract-trigger:before { width: 200%; height: 200%; }',
@@ -176,7 +178,7 @@ function createDetectElementResize(nonce) {
     }
   };
 
-  var addResizeListener = function (element, fn) {
+  var addResizeListener = function addResizeListener(element, fn) {
     if (attachEvent) {
       element.attachEvent('onresize', fn);
     } else {
@@ -212,7 +214,7 @@ function createDetectElementResize(nonce) {
     }
   };
 
-  var removeResizeListener = function (element, fn) {
+  var removeResizeListener = function removeResizeListener(element, fn) {
     if (attachEvent) {
       element.detachEvent('onresize', fn);
     } else {
@@ -238,7 +240,7 @@ function createDetectElementResize(nonce) {
   };
 
   return {
-    addResizeListener,
-    removeResizeListener
+    addResizeListener: addResizeListener,
+    removeResizeListener: removeResizeListener
   };
 }

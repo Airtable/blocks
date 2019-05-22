@@ -7,8 +7,8 @@ _Object$defineProperty(exports, "__esModule", {
 });
 
 exports.default = void 0;
-const AIRTABLE_INTERFACE_VERSION = 0;
-const getAirtableInterfaceAtVersion = window.__getAirtableInterfaceAtVersion;
+var AIRTABLE_INTERFACE_VERSION = 0;
+var getAirtableInterfaceAtVersion = window.__getAirtableInterfaceAtVersion;
 
 if (!getAirtableInterfaceAtVersion) {
   throw new Error('@airtable/blocks can only run inside the block frame');

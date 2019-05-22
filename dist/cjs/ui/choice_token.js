@@ -4,6 +4,8 @@ var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopReq
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
+require("core-js/modules/es.function.name");
+
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -18,18 +20,17 @@ var _classnames = _interopRequireDefault(require("classnames"));
 
 var React = _interopRequireWildcard(require("react"));
 
-const _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/choice_token'); // TODO(kasra): don't depend on liveapp components.
+var _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/choice_token'); // TODO(kasra): don't depend on liveapp components.
 
 
-const colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
+var colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 
 /** */
-const ChoiceToken = ({
-  choice,
-  className
-}) => {
+var ChoiceToken = function ChoiceToken(_ref) {
+  var choice = _ref.choice,
+      className = _ref.className;
   // Convert the choice color back to a private api choice color.
-  const color = choice.color ? colors.getColorForColorClass(choice.color) : colors.DEFAULT_CHOICE_COLOR;
+  var color = choice.color ? colors.getColorForColorClass(choice.color) : colors.DEFAULT_CHOICE_COLOR;
   return React.createElement(_ChoiceToken, {
     color: color,
     className: (0, _classnames.default)('border-box truncate pill px1 cellToken choiceToken line-height-4 inline-block', className)

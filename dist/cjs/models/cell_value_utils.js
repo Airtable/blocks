@@ -2,8 +2,6 @@
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
-require("core-js/modules/es.array.iterator");
-
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -12,7 +10,13 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports.default = void 0;
 
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectSpread"));
+
 var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/typeof"));
+
+var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
 
 var _isArray = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/array/is-array"));
 
@@ -22,32 +26,30 @@ var _field = require("../types/field");
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
+var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
 
-const {
-  PublicApiVersions
-} = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions');
+var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions'),
+    PublicApiVersions = _window$__requirePriv.PublicApiVersions;
 
-const publicCellValueUtils = {
-  parsePublicApiCellValue(publicCellValue, field) {
+var publicCellValueUtils = {
+  parsePublicApiCellValue: function parsePublicApiCellValue(publicCellValue, field) {
     return columnTypeProvider.parsePublicApiCellValue(publicCellValue, field.__getRawType(), field.__getRawTypeOptions(), field.parentTable.parentBase.__appInterface, PublicApiVersions.API2);
   },
-
-  validatePublicCellValueForUpdate(newPublicCellValue, currentPublicCellValue, field) {
+  validatePublicCellValueForUpdate: function validatePublicCellValueForUpdate(newPublicCellValue, currentPublicCellValue, field) {
     if (columnTypeProvider.isComputed(field.__getRawType())) {
       return {
         isValid: false,
-        reason: `${field.type} fields cannot be updated`
+        reason: "".concat(field.type, " fields cannot be updated")
       };
     }
 
-    const currentPrivateCellValue = this.parsePublicApiCellValue(currentPublicCellValue, field);
-    const validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(newPublicCellValue, currentPrivateCellValue, field.__getRawType(), field.__getRawTypeOptions(), field.parentTable.parentBase.__appInterface, PublicApiVersions.API2);
+    var currentPrivateCellValue = this.parsePublicApiCellValue(currentPublicCellValue, field);
+    var validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(newPublicCellValue, currentPrivateCellValue, field.__getRawType(), field.__getRawTypeOptions(), field.parentTable.parentBase.__appInterface, PublicApiVersions.API2);
 
     if (!validationResult.isValid) {
       return {
         isValid: false,
-        reason: `Invalid cell value: ${validationResult.reason}`
+        reason: "Invalid cell value: ".concat(validationResult.reason)
       };
     } // Special case foreign records. This is a bit strange, but necessary for the following reasons:
     // 1) columnTypeProvider is completely unaware of whether it's being used from within the block sdk,
@@ -59,7 +61,7 @@ const publicCellValueUtils = {
 
 
     if (field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
-      const linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(newPublicCellValue, field);
+      var linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(newPublicCellValue, field);
 
       if (!linkedRecordValidationResult.isValid) {
         return linkedRecordValidationResult;
@@ -70,16 +72,14 @@ const publicCellValueUtils = {
       isValid: true
     };
   },
-
-  normalizePublicCellValueForUpdate(publicCellValue, field) {
+  normalizePublicCellValueForUpdate: function normalizePublicCellValueForUpdate(publicCellValue, field) {
     if (field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
       return this._normalizeLinkedRecordCellValueForUpdate(publicCellValue, field);
     }
 
     return publicCellValue;
   },
-
-  _validateLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
+  _validateLinkedRecordCellValueForUpdate: function _validateLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
     // Special case foreign records to enforce that the foreign table is
     // loaded. This let's us validate recordIds against the foreign
     // table before hitting the server.
@@ -91,9 +91,9 @@ const publicCellValueUtils = {
     }
 
     (0, _invariant.default)(field.options, 'Invalid field type');
-    const tableId = field.options.linkedTableId;
+    var tableId = field.options.linkedTableId;
     (0, _invariant.default)(typeof tableId === 'string', 'linkedTableId must be string');
-    const table = (0, _get_sdk.default)().base.getTableById(tableId);
+    var table = (0, _get_sdk.default)().base.getTableById(tableId);
 
     if (!table) {
       return {
@@ -110,18 +110,37 @@ const publicCellValueUtils = {
     }
 
     (0, _invariant.default)((0, _isArray.default)(newPublicCellValue), 'Linked record cell value must be an array of objects');
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
 
-    for (const foreignRecordObj of newPublicCellValue) {
-      (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
-      const foreignRecordId = foreignRecordObj.id;
-      (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
-      const foreignRecord = table.getRecordById(foreignRecordId);
+    try {
+      for (var _iterator = (0, _getIterator2.default)(newPublicCellValue), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var foreignRecordObj = _step.value;
+        (0, _invariant.default)(foreignRecordObj && (0, _typeof2.default)(foreignRecordObj) === 'object', 'Linked record cell value must be an array of objects');
+        var foreignRecordId = foreignRecordObj.id;
+        (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
+        var foreignRecord = table.getRecordById(foreignRecordId);
 
-      if (!foreignRecord) {
-        return {
-          isValid: false,
-          reason: `Invalid cell value: Linked record does not exist with id: ${foreignRecordId}`
-        };
+        if (!foreignRecord) {
+          return {
+            isValid: false,
+            reason: "Invalid cell value: Linked record does not exist with id: ".concat(foreignRecordId)
+          };
+        }
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
       }
     }
 
@@ -129,24 +148,23 @@ const publicCellValueUtils = {
       isValid: true
     };
   },
-
-  _normalizeLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
+  _normalizeLinkedRecordCellValueForUpdate: function _normalizeLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
     if (newPublicCellValue === null || newPublicCellValue === undefined) {
       // Null and undefined need no normalization.
       return newPublicCellValue;
     }
 
     (0, _invariant.default)(field.options, 'Invalid field type');
-    const tableId = field.options.linkedTableId;
+    var tableId = field.options.linkedTableId;
     (0, _invariant.default)(typeof tableId === 'string', 'no linkedTableId');
-    const table = (0, _get_sdk.default)().base.getTableById(tableId);
+    var table = (0, _get_sdk.default)().base.getTableById(tableId);
     (0, _invariant.default)(table, 'Linked table does not exist');
     (0, _invariant.default)((0, _isArray.default)(newPublicCellValue), 'Linked record cell value must be an array of objects');
-    return (0, _map.default)(newPublicCellValue).call(newPublicCellValue, foreignRecordObj => {
-      (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
-      const foreignRecordId = foreignRecordObj.id;
+    return (0, _map.default)(newPublicCellValue).call(newPublicCellValue, function (foreignRecordObj) {
+      (0, _invariant.default)(foreignRecordObj && (0, _typeof2.default)(foreignRecordObj) === 'object', 'Linked record cell value must be an array of objects');
+      var foreignRecordId = foreignRecordObj.id;
       (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
-      const foreignRecord = table.getRecordById(foreignRecordId);
+      var foreignRecord = table.getRecordById(foreignRecordId);
       (0, _invariant.default)(foreignRecord, 'Record does not exist in linked table'); // Ignore whatever `name` we were given (if any) and overwrite it
       // with the record's primary cell value. The `name` is effectively
       // read-only (i.e. you can't update a record primary cell value through
@@ -155,12 +173,11 @@ const publicCellValueUtils = {
       // then the record's primary cell value changes before you run it, it's better
       // for it to succeed than to throw an error).
 
-      return { ...foreignRecordObj,
+      return (0, _objectSpread2.default)({}, foreignRecordObj, {
         name: foreignRecord.primaryCellValueAsString
-      };
+      });
     });
   }
-
 };
 var _default = publicCellValueUtils;
 exports.default = _default;

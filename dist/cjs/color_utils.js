@@ -4,6 +4,10 @@ var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopReq
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.regexp.to-string");
+
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -25,33 +29,33 @@ var _colors = _interopRequireWildcard(require("./colors"));
  * import {UI} from 'airtable-block';
  * UI.colorUtils.getHexForColor(UI.colors.RED);
  */
-const colorUtils = {
+var colorUtils = {
   /** */
-  getHexForColor: colorString => {
+  getHexForColor: function (colorString) {
     var _context;
 
-    const color = _private_utils.default.getEnumValueIfExists(_colors.default, colorString);
+    var color = _private_utils.default.getEnumValueIfExists(_colors.default, colorString);
 
     if (!color) {
       // flow-disable-next-line returning null doesn't work with the overload
       return null;
     }
 
-    const rgbTuple = _colors.rgbTuplesByColor[color];
-    const hexNumber = rgbTuple[0] << 16 | rgbTuple[1] << 8 | rgbTuple[2];
-    return `#${(0, _padStart.default)(_context = hexNumber.toString(16)).call(_context, 6, '0')}`;
+    var rgbTuple = _colors.rgbTuplesByColor[color];
+    var hexNumber = rgbTuple[0] << 16 | rgbTuple[1] << 8 | rgbTuple[2];
+    return "#".concat((0, _padStart.default)(_context = hexNumber.toString(16)).call(_context, 6, '0'));
   },
 
   /** */
-  getRgbForColor: colorString => {
-    const color = _private_utils.default.getEnumValueIfExists(_colors.default, colorString);
+  getRgbForColor: function (colorString) {
+    var color = _private_utils.default.getEnumValueIfExists(_colors.default, colorString);
 
     if (!color) {
       // flow-disable-next-line returning null doesn't work with the overload
       return null;
     }
 
-    const rgbTuple = _colors.rgbTuplesByColor[color];
+    var rgbTuple = _colors.rgbTuplesByColor[color];
     return {
       r: rgbTuple[0],
       g: rgbTuple[1],
@@ -60,7 +64,7 @@ const colorUtils = {
   },
 
   /** */
-  shouldUseLightTextOnColor(color) {
+  shouldUseLightTextOnColor: function shouldUseLightTextOnColor(color) {
     if (!_colors.rgbTuplesByColor[color]) {
       // Don't have a color for this. Let's just return false as a default
       // instead of throwing.
@@ -71,10 +75,9 @@ const colorUtils = {
     // checking the suffix easier, since no suffix uses light text.
 
 
-    const shouldUseDarkText = (0, _endsWith.default)(color).call(color, 'Light1') || (0, _endsWith.default)(color).call(color, 'Light2');
+    var shouldUseDarkText = (0, _endsWith.default)(color).call(color, 'Light1') || (0, _endsWith.default)(color).call(color, 'Light2');
     return !shouldUseDarkText;
   }
-
 };
 var _default = colorUtils;
 exports.default = _default;

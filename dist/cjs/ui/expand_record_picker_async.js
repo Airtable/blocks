@@ -2,8 +2,6 @@
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
-require("core-js/modules/es.promise");
-
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -12,7 +10,13 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports.default = void 0;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs3/regenerator"));
+
 var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
+
+require("regenerator-runtime/runtime");
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/asyncToGenerator"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -50,38 +54,74 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  *     fields: [field1, field2],
  * });
  */
-async function expandRecordPickerAsync(records, opts) {
-  var _context;
+function expandRecordPickerAsync(_x, _x2) {
+  return _expandRecordPickerAsync.apply(this, arguments);
+}
 
-  if (records.length === 0) {
-    return null;
-  }
+function _expandRecordPickerAsync() {
+  _expandRecordPickerAsync = (0, _asyncToGenerator2.default)(
+  /*#__PURE__*/
+  _regenerator.default.mark(function _callee(records, opts) {
+    var _context;
 
-  const tableId = records[0].parentTable.id;
-  const recordIds = (0, _map.default)(records).call(records, record => {
-    (0, _invariant.default)(record.parentTable.id === tableId, 'all records must belong to the same table');
-    return record.id;
-  });
-  const fieldIds = opts && opts.fields ? (0, _map.default)(_context = opts.fields).call(_context, field => {
-    (0, _invariant.default)(field.parentTable.id === tableId, 'all fields must belong to the same table');
-    return field.id;
-  }) : null;
-  const sdk = (0, _get_sdk.default)();
-  const shouldAllowCreatingRecord = !!opts && !!opts.shouldAllowCreatingRecord;
-  const chosenRecordId = await sdk.__airtableInterface.expandRecordPickerAsync(tableId, recordIds, fieldIds, shouldAllowCreatingRecord);
+    var tableId, recordIds, fieldIds, sdk, shouldAllowCreatingRecord, chosenRecordId, table;
+    return _regenerator.default.wrap(function _callee$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            if (!(records.length === 0)) {
+              _context2.next = 2;
+              break;
+            }
 
-  if (!chosenRecordId) {
-    return null;
-  }
+            return _context2.abrupt("return", null);
 
-  const table = sdk.base.getTableById(tableId);
+          case 2:
+            tableId = records[0].parentTable.id;
+            recordIds = (0, _map.default)(records).call(records, function (record) {
+              (0, _invariant.default)(record.parentTable.id === tableId, 'all records must belong to the same table');
+              return record.id;
+            });
+            fieldIds = opts && opts.fields ? (0, _map.default)(_context = opts.fields).call(_context, function (field) {
+              (0, _invariant.default)(field.parentTable.id === tableId, 'all fields must belong to the same table');
+              return field.id;
+            }) : null;
+            sdk = (0, _get_sdk.default)();
+            shouldAllowCreatingRecord = !!opts && !!opts.shouldAllowCreatingRecord;
+            _context2.next = 9;
+            return sdk.__airtableInterface.expandRecordPickerAsync(tableId, recordIds, fieldIds, shouldAllowCreatingRecord);
 
-  if (!table) {
-    // table has probably been deleted
-    return null;
-  }
+          case 9:
+            chosenRecordId = _context2.sent;
 
-  return table.getRecordById(chosenRecordId);
+            if (chosenRecordId) {
+              _context2.next = 12;
+              break;
+            }
+
+            return _context2.abrupt("return", null);
+
+          case 12:
+            table = sdk.base.getTableById(tableId);
+
+            if (table) {
+              _context2.next = 15;
+              break;
+            }
+
+            return _context2.abrupt("return", null);
+
+          case 15:
+            return _context2.abrupt("return", table.getRecordById(chosenRecordId));
+
+          case 16:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _expandRecordPickerAsync.apply(this, arguments);
 }
 
 var _default = expandRecordPickerAsync;

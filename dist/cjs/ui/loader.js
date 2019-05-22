@@ -17,15 +17,16 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var React = _interopRequireWildcard(require("react"));
 
 // TODO(kasra): don't depend on liveapp components.
-const _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/react/ui/loader/loader');
+var _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/react/ui/loader/loader');
 
 // Override the default props and then just proxy through to our loader.
 
 /** */
-const Loader = ({
-  fillColor = '#888',
-  scale = 0.3
-}) => {
+var Loader = function Loader(_ref) {
+  var _ref$fillColor = _ref.fillColor,
+      fillColor = _ref$fillColor === void 0 ? '#888' : _ref$fillColor,
+      _ref$scale = _ref.scale,
+      scale = _ref$scale === void 0 ? 0.3 : _ref$scale;
   return React.createElement(_Loader, {
     fillColor: fillColor,
     scale: scale

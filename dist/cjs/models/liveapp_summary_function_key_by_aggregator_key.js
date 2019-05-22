@@ -11,7 +11,7 @@ exports.default = void 0;
 // to explicitly define this mapping so we have more control over the SDK.
 // For instance, if we decide to change a key on the liveapp side, we can just update the
 // value here without breaking existing blocks.
-const liveappSummaryFunctionKeyByAggregatorKey = {
+var liveappSummaryFunctionKeyByAggregatorKey = {
   none: 'none',
   sum: 'sum',
   average: 'average',

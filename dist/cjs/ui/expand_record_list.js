@@ -39,12 +39,12 @@ function expandRecordList(records, opts) {
     return;
   }
 
-  const tableId = records[0].parentTable.id;
-  const recordIds = (0, _map.default)(records).call(records, record => {
+  var tableId = records[0].parentTable.id;
+  var recordIds = (0, _map.default)(records).call(records, function (record) {
     (0, _invariant.default)(record.parentTable.id === tableId, 'all records must belong to the same table');
     return record.id;
   });
-  const fieldIds = opts && opts.fields ? (0, _map.default)(_context = opts.fields).call(_context, field => {
+  var fieldIds = opts && opts.fields ? (0, _map.default)(_context = opts.fields).call(_context, function (field) {
     (0, _invariant.default)(field.parentTable.id === tableId, 'all fields must belong to the same table');
     return field.id;
   }) : null;

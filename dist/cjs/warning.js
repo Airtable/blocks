@@ -12,13 +12,13 @@ exports.default = void 0;
 
 var _get_sdk = _interopRequireDefault(require("./get_sdk"));
 
-const usedWarnings = {};
+var usedWarnings = {};
 
-var _default = msg => {
+var _default = function _default(msg) {
   if ((0, _get_sdk.default)().runInfo.isDevelopmentMode && usedWarnings[msg] !== true) {
     usedWarnings[msg] = true; // eslint-disable-next-line no-console
 
-    console.warn(`[airtable-block] ${msg}`);
+    console.warn("[airtable-block] ".concat(msg));
   }
 };
 

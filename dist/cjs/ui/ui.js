@@ -99,7 +99,7 @@ var _remote_utils = require("./remote_utils");
 var _initialize_block = _interopRequireDefault(require("./initialize_block"));
 
 // TODO: freeze this object before we ship the code editor.
-const UI = {
+var UI = {
   Popover: _popover.default,
   AutocompletePopover: _autocomplete_popover.default,
   createDataContainer: _create_data_container.default,

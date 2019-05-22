@@ -15,7 +15,7 @@ var _sdk = _interopRequireDefault(require("./sdk"));
 var _airtable_interface = _interopRequireDefault(require("./injected/airtable_interface"));
 
 // TODO(alex): prevent sdk sharing across invocations of the same lambda container
-let sdk;
+var sdk;
 
 function getSdk() {
   if (!sdk) {

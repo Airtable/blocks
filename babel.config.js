@@ -1,10 +1,11 @@
 // @noflow
 
-// The minimum supported node version for this project is 8.10. This gives us a fairly minimal set
-// of transforms to run. Further transpilation (e.g. for browser environments) is left up to the
-// consumer to give the most flexibility.
+// Transpile for node 8 and the set of browsers currently supported by Airtable
+// TODO(alex): once we're moved onto blocks-cli for builds and it supports transpiling node_modules,
+// replace this with a set of lighter-weight transforms.
 const targets = {
     node: '8.10',
+    browsers: ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'],
 };
 
 // We also use @babel/preset-env with useBuiltIns set to 'usage', and @babel/plugin-transform-runtime.

@@ -26,7 +26,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
  * UI.loadCSSFromString('body { background: red; }');
  */
 function loadCSSFromString(string) {
-  const styleTag = document.createElement('style');
+  var styleTag = document.createElement('style');
   styleTag.innerHTML = string;
   (0, _invariant.default)(document.head, 'no document head');
   document.head.appendChild(styleTag);
@@ -45,15 +45,15 @@ function loadCSSFromString(string) {
 
 function loadCSSFromURLAsync(url) {
   // Pre-create the error for a nicer stack trace.
-  const loadError = new Error('Failed to load remote CSS: ' + url);
-  return new _promise.default((resolve, reject) => {
-    const linkTag = document.createElement('link');
+  var loadError = new Error('Failed to load remote CSS: ' + url);
+  return new _promise.default(function (resolve, reject) {
+    var linkTag = document.createElement('link');
     linkTag.setAttribute('rel', 'stylesheet');
     linkTag.setAttribute('href', url);
-    linkTag.addEventListener('load', () => {
+    linkTag.addEventListener('load', function () {
       resolve(linkTag);
     });
-    linkTag.addEventListener('error', event => {
+    linkTag.addEventListener('error', function (event) {
       reject(loadError);
     });
     (0, _invariant.default)(document.head, 'no document head');
@@ -73,13 +73,13 @@ function loadCSSFromURLAsync(url) {
 
 function loadScriptFromURLAsync(url) {
   // Pre-create the error for a nicer stack trace.
-  const loadError = new Error('Failed to load remote script: ' + url);
-  return new _promise.default((resolve, reject) => {
-    const scriptTag = document.createElement('script');
-    scriptTag.addEventListener('load', () => {
+  var loadError = new Error('Failed to load remote script: ' + url);
+  return new _promise.default(function (resolve, reject) {
+    var scriptTag = document.createElement('script');
+    scriptTag.addEventListener('load', function () {
       resolve(scriptTag);
     });
-    scriptTag.addEventListener('error', event => {
+    scriptTag.addEventListener('error', function (event) {
       reject(loadError);
     });
     scriptTag.setAttribute('src', url);

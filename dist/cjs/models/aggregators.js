@@ -2,8 +2,6 @@
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
-require("core-js/modules/es.array.iterator");
-
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -14,9 +12,13 @@ exports.default = void 0;
 
 var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
 
+var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
+
 var _freeze = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/freeze"));
 
 var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
+
+var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
 
 var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/keys"));
 
@@ -24,9 +26,9 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
 var _liveapp_summary_function_key_by_aggregator_key = _interopRequireDefault(require("./liveapp_summary_function_key_by_aggregator_key"));
 
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
-const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('client_server_shared/summary_functions');
+var liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('client_server_shared/summary_functions');
 /**
  * Aggregators can be used to compute aggregates for cell values.
  *
@@ -42,42 +44,64 @@ const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable('clien
  */
 
 
-const aggregatorKeys = (0, _keys.default)(u).call(u, _liveapp_summary_function_key_by_aggregator_key.default);
-const aggregators = {};
+var aggregatorKeys = (0, _keys.default)(u).call(u, _liveapp_summary_function_key_by_aggregator_key.default);
+var aggregators = {};
 
-const aggregate = (aggregatorKey, records, field) => {
+var aggregate = function aggregate(aggregatorKey, records, field) {
   if (!field.isAggregatorAvailable(aggregatorKey)) {
-    throw new Error(`The ${aggregatorKey} aggregator is not available for ${field.type} fields`);
+    var _context;
+
+    throw new Error((0, _concat.default)(_context = "The ".concat(aggregatorKey, " aggregator is not available for ")).call(_context, field.type, " fields"));
   }
 
   if (liveappSummaryFunctions.isNone(aggregatorKey)) {
     return null;
   }
 
-  const values = (0, _map.default)(records).call(records, record => {
+  var values = (0, _map.default)(records).call(records, function (record) {
     return record.__getRawCellValue(field.id);
   });
   return liveappSummaryFunctions.aggregateValues(aggregatorKey, field.__getRawType(), field.__getRawTypeOptions(), (0, _get_sdk.default)().base.__appInterface, values, {});
 };
 
-const aggregateToString = (aggregatorKey, records, field) => {
-  const summaryValue = aggregate(aggregatorKey, records, field);
-  const summaryFunction = _liveapp_summary_function_key_by_aggregator_key.default[aggregatorKey];
+var aggregateToString = function aggregateToString(aggregatorKey, records, field) {
+  var summaryValue = aggregate(aggregatorKey, records, field);
+  var summaryFunction = _liveapp_summary_function_key_by_aggregator_key.default[aggregatorKey];
 
-  const columnType = field.__getRawFormulaicResultType() || field.__getRawType();
+  var columnType = field.__getRawFormulaicResultType() || field.__getRawType();
 
   return liveappSummaryFunctions.formatSummaryValueAsString(summaryFunction, summaryValue, columnType, field.__getRawTypeOptions(), (0, _get_sdk.default)().base.__appInterface);
 };
 
-for (const key of aggregatorKeys) {
-  const liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[key];
-  aggregators[key] = (0, _freeze.default)({
-    key,
-    displayName: liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey].menuDisplayName,
-    shortDisplayName: liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey].cellDisplayName,
-    aggregate: (0, _bind.default)(aggregate).call(aggregate, null, key),
-    aggregateToString: (0, _bind.default)(aggregateToString).call(aggregateToString, null, key)
-  });
+var _iteratorNormalCompletion = true;
+var _didIteratorError = false;
+var _iteratorError = undefined;
+
+try {
+  for (var _iterator = (0, _getIterator2.default)(aggregatorKeys), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    var key = _step.value;
+    var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[key];
+    aggregators[key] = (0, _freeze.default)({
+      key: key,
+      displayName: liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey].menuDisplayName,
+      shortDisplayName: liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey].cellDisplayName,
+      aggregate: (0, _bind.default)(aggregate).call(aggregate, null, key),
+      aggregateToString: (0, _bind.default)(aggregateToString).call(aggregateToString, null, key)
+    });
+  }
+} catch (err) {
+  _didIteratorError = true;
+  _iteratorError = err;
+} finally {
+  try {
+    if (!_iteratorNormalCompletion && _iterator.return != null) {
+      _iterator.return();
+    }
+  } finally {
+    if (_didIteratorError) {
+      throw _iteratorError;
+    }
+  }
 }
 
 (0, _freeze.default)(aggregators);

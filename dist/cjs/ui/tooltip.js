@@ -16,6 +16,18 @@ var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-sta
 
 var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
+
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/assertThisInitialized"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -26,146 +38,160 @@ var React = _interopRequireWildcard(require("react"));
 
 var _popover = _interopRequireDefault(require("./popover"));
 
-const {
-  u
-} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
+    u = _window$__requirePriv.u;
 
-const FADE_IN_ANIMATION_DURATION = 150;
+var FADE_IN_ANIMATION_DURATION = 150;
 
 /** */
-class Tooltip extends React.Component {
-  constructor(props) {
+var Tooltip =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(Tooltip, _React$Component);
+
+  function Tooltip(props) {
     var _context, _context2, _context3, _context4, _context5, _context6;
 
-    super(props);
-    this.state = {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, Tooltip);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Tooltip).call(this, props));
+    _this.state = {
       isShowingTooltip: false
     };
-    this._onMouseEnter = (0, _bind.default)(_context = this._onMouseEnter).call(_context, this);
-    this._onMouseLeave = (0, _bind.default)(_context2 = this._onMouseLeave).call(_context2, this);
-    this._onClick = (0, _bind.default)(_context3 = this._onClick).call(_context3, this);
-    this._showTooltip = (0, _bind.default)(_context4 = this._showTooltip).call(_context4, this);
-    this._hideTooltip = (0, _bind.default)(_context5 = this._hideTooltip).call(_context5, this);
-    this._renderTooltipContent = (0, _bind.default)(_context6 = this._renderTooltipContent).call(_context6, this);
+    _this._onMouseEnter = (0, _bind.default)(_context = _this._onMouseEnter).call(_context, (0, _assertThisInitialized2.default)(_this));
+    _this._onMouseLeave = (0, _bind.default)(_context2 = _this._onMouseLeave).call(_context2, (0, _assertThisInitialized2.default)(_this));
+    _this._onClick = (0, _bind.default)(_context3 = _this._onClick).call(_context3, (0, _assertThisInitialized2.default)(_this));
+    _this._showTooltip = (0, _bind.default)(_context4 = _this._showTooltip).call(_context4, (0, _assertThisInitialized2.default)(_this));
+    _this._hideTooltip = (0, _bind.default)(_context5 = _this._hideTooltip).call(_context5, (0, _assertThisInitialized2.default)(_this));
+    _this._renderTooltipContent = (0, _bind.default)(_context6 = _this._renderTooltipContent).call(_context6, (0, _assertThisInitialized2.default)(_this));
+    return _this;
   }
 
-  _onMouseEnter(e) {
-    this._showTooltip();
+  (0, _createClass2.default)(Tooltip, [{
+    key: "_onMouseEnter",
+    value: function _onMouseEnter(e) {
+      this._showTooltip();
 
-    const originalOnMouseEnter = this.props.children.props.onMouseEnter;
+      var originalOnMouseEnter = this.props.children.props.onMouseEnter;
 
-    if (originalOnMouseEnter) {
-      originalOnMouseEnter(e);
-    }
-  }
-
-  _onMouseLeave(e) {
-    this._hideTooltip();
-
-    const originalOnMouseLeave = this.props.children.props.onMouseLeave;
-
-    if (originalOnMouseLeave) {
-      originalOnMouseLeave(e);
-    }
-  }
-
-  _onClick(e) {
-    if (this.props.shouldHideTooltipOnClick) {
-      this._hideTooltip();
-    }
-
-    const originalOnClick = this.props.children.props.onClick;
-
-    if (originalOnClick) {
-      originalOnClick(e);
-    }
-  }
-
-  _showTooltip() {
-    this.setState({
-      isShowingTooltip: true
-    });
-  }
-
-  _hideTooltip() {
-    this.setState({
-      isShowingTooltip: false
-    });
-  }
-
-  _renderTooltipContent() {
-    const {
-      renderContent,
-      content,
-      className,
-      style
-    } = this.props;
-    let renderedContent;
-    let isContentAFunction;
-
-    if (renderContent) {
-      renderedContent = renderContent();
-      isContentAFunction = true;
-    } else if (typeof content === 'function') {
-      renderedContent = content();
-      isContentAFunction = true;
-    } else {
-      renderedContent = content;
-      isContentAFunction = false;
-    }
-
-    return React.createElement("div", {
-      className: (0, _classnames.default)('relative white rounded stroked1 overflow-hidden', {
-        // Add padding only when using content.
-        p1: !isContentAFunction
-      }, className),
-      style: style
-    }, renderedContent);
-  }
-
-  render() {
-    const {
-      children,
-      renderContent,
-      content,
-      disabled
-    } = this.props;
-
-    if (disabled || !renderContent && !content) {
-      // The tooltip will never show, so just return the children.
-      return children;
-    }
-
-    const popoverAnchor = React.cloneElement(children, {
-      onMouseEnter: this._onMouseEnter,
-      onMouseLeave: this._onMouseLeave,
-      onClick: this._onClick
-    });
-    return React.createElement(_popover.default, {
-      renderContent: this._renderTooltipContent,
-      placementX: this.props.placementX,
-      placementY: this.props.placementY,
-      placementOffsetX: this.props.placementOffsetX,
-      placementOffsetY: this.props.placementOffsetY,
-      fitInWindowMode: this.props.fitInWindowMode,
-      isOpen: this.state.isShowingTooltip,
-      backgroundStyle: {
-        // Override the background style of the popover so that it doesn't
-        // take up any space. If we don't do this, the mouseEnter and mouseLeave
-        // handlers won't work, since showing the Popover would place a div over
-        // the content that we care about.
-        top: 0,
-        left: 0,
-        width: 0,
-        height: 0,
-        animationName: 'opacityFadeIn',
-        animationDuration: `${FADE_IN_ANIMATION_DURATION}ms`,
-        animationTimingFunction: 'ease-out'
+      if (originalOnMouseEnter) {
+        originalOnMouseEnter(e);
       }
-    }, popoverAnchor);
-  }
+    }
+  }, {
+    key: "_onMouseLeave",
+    value: function _onMouseLeave(e) {
+      this._hideTooltip();
 
-}
+      var originalOnMouseLeave = this.props.children.props.onMouseLeave;
+
+      if (originalOnMouseLeave) {
+        originalOnMouseLeave(e);
+      }
+    }
+  }, {
+    key: "_onClick",
+    value: function _onClick(e) {
+      if (this.props.shouldHideTooltipOnClick) {
+        this._hideTooltip();
+      }
+
+      var originalOnClick = this.props.children.props.onClick;
+
+      if (originalOnClick) {
+        originalOnClick(e);
+      }
+    }
+  }, {
+    key: "_showTooltip",
+    value: function _showTooltip() {
+      this.setState({
+        isShowingTooltip: true
+      });
+    }
+  }, {
+    key: "_hideTooltip",
+    value: function _hideTooltip() {
+      this.setState({
+        isShowingTooltip: false
+      });
+    }
+  }, {
+    key: "_renderTooltipContent",
+    value: function _renderTooltipContent() {
+      var _this$props = this.props,
+          renderContent = _this$props.renderContent,
+          content = _this$props.content,
+          className = _this$props.className,
+          style = _this$props.style;
+      var renderedContent;
+      var isContentAFunction;
+
+      if (renderContent) {
+        renderedContent = renderContent();
+        isContentAFunction = true;
+      } else if (typeof content === 'function') {
+        renderedContent = content();
+        isContentAFunction = true;
+      } else {
+        renderedContent = content;
+        isContentAFunction = false;
+      }
+
+      return React.createElement("div", {
+        className: (0, _classnames.default)('relative white rounded stroked1 overflow-hidden', {
+          // Add padding only when using content.
+          p1: !isContentAFunction
+        }, className),
+        style: style
+      }, renderedContent);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          children = _this$props2.children,
+          renderContent = _this$props2.renderContent,
+          content = _this$props2.content,
+          disabled = _this$props2.disabled;
+
+      if (disabled || !renderContent && !content) {
+        // The tooltip will never show, so just return the children.
+        return children;
+      }
+
+      var popoverAnchor = React.cloneElement(children, {
+        onMouseEnter: this._onMouseEnter,
+        onMouseLeave: this._onMouseLeave,
+        onClick: this._onClick
+      });
+      return React.createElement(_popover.default, {
+        renderContent: this._renderTooltipContent,
+        placementX: this.props.placementX,
+        placementY: this.props.placementY,
+        placementOffsetX: this.props.placementOffsetX,
+        placementOffsetY: this.props.placementOffsetY,
+        fitInWindowMode: this.props.fitInWindowMode,
+        isOpen: this.state.isShowingTooltip,
+        backgroundStyle: {
+          // Override the background style of the popover so that it doesn't
+          // take up any space. If we don't do this, the mouseEnter and mouseLeave
+          // handlers won't work, since showing the Popover would place a div over
+          // the content that we care about.
+          top: 0,
+          left: 0,
+          width: 0,
+          height: 0,
+          animationName: 'opacityFadeIn',
+          animationDuration: "".concat(FADE_IN_ANIMATION_DURATION, "ms"),
+          animationTimingFunction: 'ease-out'
+        }
+      }, popoverAnchor);
+    }
+  }]);
+  return Tooltip;
+}(React.Component);
 
 (0, _defineProperty2.default)(Tooltip, "placements", _popover.default.placements);
 (0, _defineProperty2.default)(Tooltip, "fitInWindowModes", _popover.default.fitInWindowModes);

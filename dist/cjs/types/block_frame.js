@@ -8,7 +8,7 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports.HostMethodNames = exports.HostToBlock = exports.BlockToHost = void 0;
 // TODO(alex): Remove npm SDK knowledge of these details
-const BlockToHost = {
+var BlockToHost = {
   SCRIPT_LOAD_ERROR: 'SCRIPT_LOAD_ERROR',
   SCRIPT_RUNTIME_ERROR: 'SCRIPT_RUNTIME_ERROR',
   CALL_HOST_METHOD: 'CALL_HOST_METHOD',
@@ -18,7 +18,7 @@ const BlockToHost = {
   ON_KEY_DOWN: 'ON_KEY_DOWN'
 };
 exports.BlockToHost = BlockToHost;
-const HostToBlock = {
+var HostToBlock = {
   SET_MULTIPLE_KV_PATHS: 'SET_MULTIPLE_KV_PATHS',
   UPDATE_MODELS: 'UPDATE_MODELS',
   HOST_METHOD_RESPONSE: 'HOST_METHOD_RESPONSE',
@@ -28,7 +28,7 @@ const HostToBlock = {
   DID_CLICK_SETTINGS_BUTTON: 'DID_CLICK_SETTINGS_BUTTON'
 };
 exports.HostToBlock = HostToBlock;
-const HostMethodNames = {
+var HostMethodNames = {
   REGISTER_FRAME: 'REGISTER_FRAME',
   ALL_SCRIPTS_LOADED: 'ALL_SCRIPTS_LOADED',
   RELOAD_FRAME: 'RELOAD_FRAME',

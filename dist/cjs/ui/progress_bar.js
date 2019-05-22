@@ -12,6 +12,8 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports.default = void 0;
 
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectSpread"));
+
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var React = _interopRequireWildcard(require("react"));
@@ -20,31 +22,32 @@ var _colors = _interopRequireDefault(require("../colors"));
 
 var _color_utils = _interopRequireDefault(require("../color_utils"));
 
-const {
-  u
-} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
+    u = _window$__requirePriv.u;
 
 /** */
-const ProgressBar = props => {
-  const {
-    progress,
-    barColor = _color_utils.default.getHexForColor(_colors.default.BLUE_BRIGHT),
-    backgroundColor = _color_utils.default.getHexForColor(_colors.default.GRAY_LIGHT_1),
-    height = 4,
-    className = '',
-    style
-  } = props;
-  const clampedProgress = u.clamp(progress, 0, 1);
+var ProgressBar = function ProgressBar(props) {
+  var progress = props.progress,
+      _props$barColor = props.barColor,
+      barColor = _props$barColor === void 0 ? _color_utils.default.getHexForColor(_colors.default.BLUE_BRIGHT) : _props$barColor,
+      _props$backgroundColo = props.backgroundColor,
+      backgroundColor = _props$backgroundColo === void 0 ? _color_utils.default.getHexForColor(_colors.default.GRAY_LIGHT_1) : _props$backgroundColo,
+      _props$height = props.height,
+      height = _props$height === void 0 ? 4 : _props$height,
+      _props$className = props.className,
+      className = _props$className === void 0 ? '' : _props$className,
+      style = props.style;
+  var clampedProgress = u.clamp(progress, 0, 1);
   return React.createElement("div", {
-    className: `${className} relative pill overflow-hidden`,
-    style: { ...style,
-      height,
-      backgroundColor
-    }
+    className: "".concat(className, " relative pill overflow-hidden"),
+    style: (0, _objectSpread2.default)({}, style, {
+      height: height,
+      backgroundColor: backgroundColor
+    })
   }, React.createElement("div", {
     className: "absolute animate top-0 left-0 height-full",
     style: {
-      width: `${clampedProgress * 100}%`,
+      width: "".concat(clampedProgress * 100, "%"),
       backgroundColor: barColor
     }
   }));

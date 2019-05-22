@@ -4,7 +4,7 @@ var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopReq
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
-require("core-js/modules/es.array.iterator");
+require("core-js/modules/es.function.name");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
@@ -18,7 +18,25 @@ var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/e
 
 var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
 
+var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/toConsumableArray"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectWithoutProperties"));
+
 var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
+
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/assertThisInitialized"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -34,83 +52,98 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
 
 var _select = _interopRequireDefault(require("./select"));
 
-class ModelPickerSelect extends React.Component {
-  constructor(props) {
+var ModelPickerSelect =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(ModelPickerSelect, _React$Component);
+
+  function ModelPickerSelect(props) {
     var _context;
 
-    super(props);
-    this._onChange = (0, _bind.default)(_context = this._onChange).call(_context, this);
-    this._select = null;
+    var _this;
+
+    (0, _classCallCheck2.default)(this, ModelPickerSelect);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ModelPickerSelect).call(this, props));
+    _this._onChange = (0, _bind.default)(_context = _this._onChange).call(_context, (0, _assertThisInitialized2.default)(_this));
+    _this._select = null;
+    return _this;
   }
 
-  _onChange(value) {
-    (0, _invariant.default)(value === null || typeof value === 'string', 'value must be null or model id');
-    this.props.onChange(value);
-  }
+  (0, _createClass2.default)(ModelPickerSelect, [{
+    key: "_onChange",
+    value: function _onChange(value) {
+      (0, _invariant.default)(value === null || typeof value === 'string', 'value must be null or model id');
+      this.props.onChange(value);
+    }
+  }, {
+    key: "focus",
+    value: function focus() {
+      (0, _invariant.default)(this._select, 'No select to focus');
 
-  focus() {
-    (0, _invariant.default)(this._select, 'No select to focus');
+      this._select.focus();
+    }
+  }, {
+    key: "blur",
+    value: function blur() {
+      (0, _invariant.default)(this._select, 'No select to blur');
 
-    this._select.focus();
-  }
+      this._select.blur();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      (0, _invariant.default)(this._select, 'No select to click');
 
-  blur() {
-    (0, _invariant.default)(this._select, 'No select to blur');
+      this._select.click();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this,
+          _context2;
 
-    this._select.blur();
-  }
+      var _this$props = this.props,
+          models = _this$props.models,
+          selectedModelId = _this$props.selectedModelId,
+          style = _this$props.style,
+          className = _this$props.className,
+          disabled = _this$props.disabled,
+          placeholder = _this$props.placeholder,
+          shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
+          shouldAllowPickingModelFn = _this$props.shouldAllowPickingModelFn,
+          modelKeysToWatch = _this$props.modelKeysToWatch,
+          onChange = _this$props.onChange,
+          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["models", "selectedModelId", "style", "className", "disabled", "placeholder", "shouldAllowPickingNone", "shouldAllowPickingModelFn", "modelKeysToWatch", "onChange"]);
+      return React.createElement(_select.default, (0, _extends2.default)({
+        ref: function ref(el) {
+          return _this2._select = el;
+        },
+        value: selectedModelId,
+        onChange: this._onChange,
+        style: style,
+        className: className,
+        disabled: disabled,
+        options: (0, _concat.default)(_context2 = [{
+          value: null,
+          label: placeholder,
+          disabled: !shouldAllowPickingNone
+        }]).call(_context2, (0, _toConsumableArray2.default)((0, _map.default)(models).call(models, function (model) {
+          return {
+            value: model.id,
+            label: model.name,
+            disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model)
+          };
+        })))
+      }, restOfProps));
+    }
+  }]);
+  return ModelPickerSelect;
+}(React.Component);
 
-  click() {
-    (0, _invariant.default)(this._select, 'No select to click');
+var _default = (0, _create_data_container.default)(ModelPickerSelect, function (props) {
+  var _context3;
 
-    this._select.click();
-  }
-
-  render() {
-    const {
-      models,
-      selectedModelId,
-      style,
-      className,
-      disabled,
-      placeholder,
-      shouldAllowPickingNone,
-      shouldAllowPickingModelFn,
-      // Filter these out so they're not
-      // included in restOfProps:
-      modelKeysToWatch,
-      // eslint-disable-line no-unused-vars
-      onChange,
-      // eslint-disable-line no-unused-vars
-      ...restOfProps
-    } = this.props;
-    return React.createElement(_select.default, (0, _extends2.default)({
-      ref: el => this._select = el,
-      value: selectedModelId,
-      onChange: this._onChange,
-      style: style,
-      className: className,
-      disabled: disabled,
-      options: [{
-        value: null,
-        label: placeholder,
-        disabled: !shouldAllowPickingNone
-      }, ...(0, _map.default)(models).call(models, model => {
-        return {
-          value: model.id,
-          label: model.name,
-          disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model)
-        };
-      })]
-    }, restOfProps));
-  }
-
-}
-
-var _default = (0, _create_data_container.default)(ModelPickerSelect, props => {
-  var _context2;
-
-  return (0, _map.default)(_context2 = props.models).call(_context2, model => {
+  return (0, _map.default)(_context3 = props.models).call(_context3, function (model) {
     return {
       watch: model,
       key: props.modelKeysToWatch

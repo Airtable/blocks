@@ -18,10 +18,10 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _block_wrapper = _interopRequireDefault(require("./block_wrapper"));
 
-let hasBeenInitialized = false;
+var hasBeenInitialized = false;
 
 function initializeBlock(getEntryElement) {
-  const body = typeof document !== 'undefined' ? document.body : null;
+  var body = typeof document !== 'undefined' ? document.body : null;
 
   if (!body) {
     throw new Error('initializeBlock should only be called from browser environments');
@@ -37,13 +37,13 @@ function initializeBlock(getEntryElement) {
     throw new Error('The first argument to initializeBlock should be a function returning a React element');
   }
 
-  const entryElement = getEntryElement();
+  var entryElement = getEntryElement();
 
   if (!React.isValidElement(entryElement)) {
     throw new Error("The first argument to initializeBlock didn't return a valid React element");
   }
 
-  const container = document.createElement('div');
+  var container = document.createElement('div');
   body.appendChild(container);
 
   _reactDom.default.render(React.createElement(_block_wrapper.default, null, entryElement), container);

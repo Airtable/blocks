@@ -23,20 +23,18 @@ var React = _interopRequireWildcard(require("react"));
 // scheme is not "javascript://" to avoid XSS. Otherwise, "javascript" may be encoded
 // as "&#106avascript://" or any other permutation of escaped characters.
 // Ref: https://tools.ietf.org/html/rfc3986#section-3.1
-const reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
+var reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
 /** */
 
-const Link = props => {
+var Link = function Link(props) {
   // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
   // https://www.owasp.org/index.php/Reverse_Tabnabbing
-  const rel = props.target ? 'noopener noreferrer' : null;
-  const {
-    href
-  } = props;
-  let sanitizedHref;
+  var rel = props.target ? 'noopener noreferrer' : null;
+  var href = props.href;
+  var sanitizedHref;
 
   if (href) {
-    const hasScheme = (0, _indexOf.default)(href).call(href, '://') !== -1;
+    var hasScheme = (0, _indexOf.default)(href).call(href, '://') !== -1;
 
     if (!hasScheme) {
       // If it's a relative URL (like '/foo'), leave it alone.

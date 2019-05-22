@@ -7,7 +7,7 @@ _Object$defineProperty(exports, "__esModule", {
 });
 
 exports.ViewTypes = void 0;
-const ViewTypes = {
+var ViewTypes = {
   GRID: 'grid',
   FORM: 'form',
   CALENDAR: 'calendar',

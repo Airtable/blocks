@@ -7,7 +7,7 @@ _Object$defineProperty(exports, "__esModule", {
 });
 
 exports.UndoRedoModes = void 0;
-const UndoRedoModes = {
+var UndoRedoModes = {
   NONE: 'none',
   AUTO: 'auto'
 };

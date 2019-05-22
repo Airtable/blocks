@@ -2,6 +2,8 @@
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
+require("core-js/modules/es.function.name");
+
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -10,26 +12,30 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports.default = void 0;
 
+var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
+
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-const React = window.__requirePrivateModuleFromAirtable('client_server_shared/react/react');
+var React = window.__requirePrivateModuleFromAirtable('client_server_shared/react/react');
 
-const Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
+var Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
 
 
-const iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
+var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
 
 /** */
-const Icon = ({
-  name,
-  size = 16,
-  fillColor,
-  className,
-  style,
-  pathClassName
-}) => {
-  const isMicro = size <= 12;
-  const pathData = iconConfig[`${name}${isMicro ? 'Micro' : ''}`];
+var Icon = function Icon(_ref) {
+  var _context;
+
+  var name = _ref.name,
+      _ref$size = _ref.size,
+      size = _ref$size === void 0 ? 16 : _ref$size,
+      fillColor = _ref.fillColor,
+      className = _ref.className,
+      style = _ref.style,
+      pathClassName = _ref.pathClassName;
+  var isMicro = size <= 12;
+  var pathData = iconConfig[(0, _concat.default)(_context = "".concat(name)).call(_context, isMicro ? 'Micro' : '')];
 
   if (!pathData) {
     return null;

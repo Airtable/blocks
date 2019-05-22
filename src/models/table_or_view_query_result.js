@@ -445,7 +445,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 }
                 const field = this._table.getFieldById(groupLevel.columnId);
                 if (field) {
-                    field.watch('config', this._onFieldConfigChanged, this);
+                    field.watch('type', this._onFieldConfigChanged, this);
+                    field.watch('options', this._onFieldConfigChanged, this);
                 }
             }
         }
@@ -513,7 +514,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 }
                 const field = this._table.getFieldById(groupLevel.columnId);
                 if (field) {
-                    field.unwatch('config', this._onFieldConfigChanged, this);
+                    field.unwatch('type', this._onFieldConfigChanged, this);
+                    field.unwatch('options', this._onFieldConfigChanged, this);
                 }
             }
         }
@@ -678,7 +680,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldById(fieldId);
                 invariant(field, 'Created field does not exist');
-                field.watch('config', this._onFieldConfigChanged, this);
+                field.watch('type', this._onFieldConfigChanged, this);
+                field.watch('options', this._onFieldConfigChanged, this);
             }
         }
 

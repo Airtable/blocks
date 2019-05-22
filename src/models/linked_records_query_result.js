@@ -338,7 +338,8 @@ class LinkedRecordsQueryResult extends QueryResult {
         );
         // if the field config changes, we need to invalidate cached data,
         // and potentially start watching a different table
-        this._field.watch('config', this._onOriginFieldConfigChange, this);
+        this._field.watch('type', this._onOriginFieldConfigChange, this);
+        this._field.watch('options', this._onOriginFieldConfigChange, this);
     }
 
     _unwatchOrigin() {
@@ -347,7 +348,8 @@ class LinkedRecordsQueryResult extends QueryResult {
             this._onOriginCellValueChange,
             this,
         );
-        this._field.unwatch('config', this._onOriginFieldConfigChange, this);
+        this._field.unwatch('type', this._onOriginFieldConfigChange, this);
+        this._field.unwatch('options', this._onOriginFieldConfigChange, this);
     }
 
     _watchLinkedQueryResult() {

@@ -36,11 +36,11 @@ var _aggregators = _interopRequireDefault(require("./aggregators"));
 
 var recordColoring = _interopRequireWildcard(require("./record_coloring"));
 
-const permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
+var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
 
-const hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
+var hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
 
-const models = {
+var models = {
   Base: _base.default,
   Table: _table.default,
   Field: _field2.default,
@@ -52,7 +52,7 @@ const models = {
   TableOrViewQueryResult: _table_or_view_query_result.default,
   LinkedRecordsQueryResult: _linked_records_query_result.default,
   aggregators: _aggregators.default,
-  recordColoring,
+  recordColoring: recordColoring,
 
   /**
    * @example

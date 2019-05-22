@@ -7,7 +7,7 @@ _Object$defineProperty(exports, "__esModule", {
 });
 
 exports.PermissionLevels = void 0;
-const PermissionLevels = {
+var PermissionLevels = {
   NONE: 'none',
   READ: 'read',
   COMMENT: 'comment',

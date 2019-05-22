@@ -16,6 +16,10 @@ var _freeze = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-sta
 
 var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
 
 var React = _interopRequireWildcard(require("react"));
@@ -53,14 +57,13 @@ if (!React.PropTypes) {
   React.PropTypes = _propTypes.default;
 }
 
-const BlockMessageTypes = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
+var BlockMessageTypes = window.__requirePrivateModuleFromAirtable('client/blocks/block_message_types');
 
-const InMemoryStorage = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/in_memory_storage');
+var InMemoryStorage = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/in_memory_storage');
 
-const {
-  isLocalStorageAvailable,
-  isSessionStorageAvailable
-} = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/is_storage_available');
+var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/is_storage_available'),
+    isLocalStorageAvailable = _window$__requirePriv.isLocalStorageAvailable,
+    isSessionStorageAvailable = _window$__requirePriv.isSessionStorageAvailable;
 /**
  * @example
  * import {runInfo} from 'airtable-block';
@@ -77,10 +80,13 @@ const {
 /**
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
  */
-class BlockSdk {
-  constructor(airtableInterface) {
+var BlockSdk =
+/*#__PURE__*/
+function () {
+  function BlockSdk(airtableInterface) {
     var _context;
 
+    (0, _classCallCheck2.default)(this, BlockSdk);
     this.__airtableInterface = airtableInterface; // TODO(alex): remove check once hyperbase is deployed
 
     if (airtableInterface.assertAllowedSdkPackageVersion) {
@@ -88,7 +94,7 @@ class BlockSdk {
     } // TODO(alex): remove initial data fallback once hyperbase is deployed
 
 
-    const sdkInitData = _private_utils.default.cloneDeep(airtableInterface.sdkInitData || airtableInterface.initialData);
+    var sdkInitData = _private_utils.default.cloneDeep(airtableInterface.sdkInitData || airtableInterface.initialData);
 
     this.globalConfig = new _global_config.default(sdkInitData.initialKvValuesByKey, airtableInterface);
     this.base = new _base.default(sdkInitData.baseData, airtableInterface);
@@ -118,47 +124,53 @@ class BlockSdk {
 
   }
 
-  _registerHandlers() {
-    // base
-    this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.UPDATE_MODELS, data => {
-      this.base.__applyChanges(data.changes);
-    }); // global config
+  (0, _createClass2.default)(BlockSdk, [{
+    key: "_registerHandlers",
+    value: function _registerHandlers() {
+      var _this = this;
+
+      // base
+      this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.UPDATE_MODELS, function (data) {
+        _this.base.__applyChanges(data.changes);
+      }); // global config
 
 
-    this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS, data => {
-      this.globalConfig.__onSetMultipleKvPaths(data.updates);
-    }); // settings button
+      this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS, function (data) {
+        _this.globalConfig.__onSetMultipleKvPaths(data.updates);
+      }); // settings button
 
 
-    this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON, () => {
-      if (this.settingsButton.isVisible) {
-        // Since there's an async gap when communicating with liveapp,
-        // no-op if the button has been hidden since it was clicked.
-        this.settingsButton.__onClick();
-      }
-    }); // viewport
+      this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON, function () {
+        if (_this.settingsButton.isVisible) {
+          // Since there's an async gap when communicating with liveapp,
+          // no-op if the button has been hidden since it was clicked.
+          _this.settingsButton.__onClick();
+        }
+      }); // viewport
 
 
-    this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN, () => {
-      this.viewport.__onEnterFullscreen();
-    });
+      this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN, function () {
+        _this.viewport.__onEnterFullscreen();
+      });
 
-    this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN, () => {
-      this.viewport.__onExitFullscreen();
-    });
+      this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN, function () {
+        _this.viewport.__onExitFullscreen();
+      });
 
-    this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, () => {
-      this.viewport.__focus();
-    });
-  }
-  /** */
+      this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, function () {
+        _this.viewport.__focus();
+      });
+    }
+    /** */
 
-
-  reload() {
-    this.__airtableInterface.reloadFrame();
-  }
-
-}
+  }, {
+    key: "reload",
+    value: function reload() {
+      this.__airtableInterface.reloadFrame();
+    }
+  }]);
+  return BlockSdk;
+}();
 
 (0, _defineProperty2.default)(BlockSdk, "VERSION", "0.0.3");
 var _default = BlockSdk;

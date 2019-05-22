@@ -4,6 +4,8 @@ var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopReq
 
 var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
+require("core-js/modules/es.function.name");
+
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
 
 _Object$defineProperty(exports, "__esModule", {
@@ -19,33 +21,30 @@ var React = _interopRequireWildcard(require("react"));
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
 // TODO(kasra): don't depend on liveapp components.
-const {
-  u
-} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
+    u = _window$__requirePriv.u;
 
-const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
+var appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/helpers/app_blanket_user_obj_methods');
 
-const profilePicHelper = window.__requirePrivateModuleFromAirtable('client_server_shared/profile_pic_helper');
+var profilePicHelper = window.__requirePrivateModuleFromAirtable('client_server_shared/profile_pic_helper');
 
-const _CollaboratorToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/collaborator_token');
+var _CollaboratorToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/collaborator_token');
 
 /** */
-const CollaboratorToken = props => {
-  const {
-    collaborator,
-    className
-  } = props; // NOTE: this is a bit strange. We pull the user obj out of app blanket, format it for api v2,
+var CollaboratorToken = function CollaboratorToken(props) {
+  var collaborator = props.collaborator,
+      className = props.className; // NOTE: this is a bit strange. We pull the user obj out of app blanket, format it for api v2,
   // and then compare it to the user obj that got passed in. This way, if they are equal, we can
   // do some nice things like use our helper methods and get token-sized prof pic urls. If the two
   // objects are not equal, then we can't use these, so we'll just render what we were given without
   // formatting it nicely.
 
-  const userInfoById = (0, _get_sdk.default)().base.__appInterface.getCollaboratorInfoById();
+  var userInfoById = (0, _get_sdk.default)().base.__appInterface.getCollaboratorInfoById();
 
-  const userObj = userInfoById && collaborator.id ? userInfoById[collaborator.id] : null;
-  const userObjFormattedForPublicApiV2 = userObj ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj) : null;
-  let userName;
-  let profilePicUrl;
+  var userObj = userInfoById && collaborator.id ? userInfoById[collaborator.id] : null;
+  var userObjFormattedForPublicApiV2 = userObj ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj) : null;
+  var userName;
+  var profilePicUrl;
 
   if (userObj === null) {
     profilePicUrl = profilePicHelper.getSizedUnknownProfilePicUrl(18);

@@ -31,12 +31,14 @@ function expandRecord(record, opts) {
   // TODO(kasra): this will cause the liveapp page to force a refresh if the
   // tableId and recordId are both valid, but the recordId does not
   // exist in the table.
-  let recordIds = null;
+  var recordIds = null;
 
   if (opts && opts.records) {
     var _context;
 
-    recordIds = (0, _map.default)(_context = opts.records).call(_context, r => r.id);
+    recordIds = (0, _map.default)(_context = opts.records).call(_context, function (r) {
+      return r.id;
+    });
   }
 
   (0, _get_sdk.default)().__airtableInterface.expandRecord(record.parentTable.id, record.id, recordIds);
