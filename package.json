@@ -14,7 +14,7 @@
         "lint:quiet": "npm run lint -- --quiet",
         "format": "prettier --write 'src/**/*.js' '*.{json,js,md}'",
         "build:clean": "rm -rf dist",
-        "build:babel": "babel src --out-dir dist/cjs --source-maps inline",
+        "build:babel": "babel src --out-dir dist/cjs",
         "watch:babel": "npm run build:babel -- --watch",
         "build:flow": "flow-copy-source src dist/cjs",
         "watch:flow": "npm run build:flow -- --watch",
