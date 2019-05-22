@@ -1,6 +1,6 @@
 // @flow
 import invariant from 'invariant';
-import {type Color} from '../types/color';
+import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {FieldTypes} from '../types/field';
 import utils from '../private_utils';
@@ -246,7 +246,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 }
                 const value = record.getCellValue(recordColorMode.selectField);
                 return value && typeof value === 'object' && typeof value.color === 'string'
-                    ? value.color
+                    ? utils.assertEnumValue(Colors, value.color)
                     : null;
             }
             case RecordColorModeTypes.BY_VIEW:

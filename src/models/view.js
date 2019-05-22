@@ -1,6 +1,6 @@
 // @flow
 import invariant from 'invariant';
-import {type Color} from '../types/color';
+import {type Color} from '../colors';
 import {type BaseData, type ModelChange} from '../types/base';
 import {type ViewData, type ViewType} from '../types/view';
 import utils from '../private_utils';

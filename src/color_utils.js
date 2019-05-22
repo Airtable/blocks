@@ -1,13 +1,12 @@
 // @flow
-import colors from './colors';
+import utils from './private_utils';
+import Colors, {type Color, rgbTuplesByColor} from './colors';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const liveappColors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
+type RGB = {|r: number, g: number, b: number|};
 
-// Construct a set of all the possible color values, so the below
-// methods have constant time lookup when validating that a color
-// exists.
-const colorValuesSet = u.arrayToSet(u.values(colors));
+// overload return signatures to avoid null checks if type of input is Color:
+type GetHexForColorType = (Color => string) & (string => string | null);
+type GetRgbForColorType = (Color => RGB) & (string => RGB | null);
 
 /**
  * @example
@@ -16,24 +15,30 @@ const colorValuesSet = u.arrayToSet(u.values(colors));
  */
 const colorUtils = {
     /** */
-    getHexForColor(color: string): string | null {
-        if (!colorValuesSet[color]) {
+    getHexForColor: (colorString => {
+        const color = utils.getEnumValueIfExists(Colors, colorString);
+        if (!color) {
+            // flow-disable-next-line returning null doesn't work with the overload
             return null;
         }
+        const rgbTuple = rgbTuplesByColor[color];
 
-        return liveappColors.getHexForColor(color);
-    },
+        const hexNumber = (rgbTuple[0] << 16) | (rgbTuple[1] << 8) | rgbTuple[2];
+        return `#${hexNumber.toString(16).padStart(6, '0')}`;
+    }: GetHexForColorType),
     /** */
-    getRgbForColor(color: string): {r: number, g: number, b: number} | null {
-        if (!colorValuesSet[color]) {
+    getRgbForColor: (colorString => {
+        const color = utils.getEnumValueIfExists(Colors, colorString);
+        if (!color) {
+            // flow-disable-next-line returning null doesn't work with the overload
             return null;
         }
-
-        return liveappColors.getRgbObjForColor(color);
-    },
+        const rgbTuple = rgbTuplesByColor[color];
+        return {r: rgbTuple[0], g: rgbTuple[1], b: rgbTuple[2]};
+    }: GetRgbForColorType),
     /** */
     shouldUseLightTextOnColor(color: string): boolean {
-        if (!colorValuesSet[color]) {
+        if (!rgbTuplesByColor[color]) {
             // Don't have a color for this. Let's just return false as a default
             // instead of throwing.
             return false;
@@ -43,9 +48,7 @@ const colorUtils = {
         // Bright, Dark1 and no suffix colors use light text.
         // NOTE: use shouldUseDarkText instead of shouldUseLightText just to make
         // checking the suffix easier, since no suffix uses light text.
-        const shouldUseDarkText = u.some(['Light1', 'Light2'], suffix => {
-            return u.endsWith(color, suffix);
-        });
+        const shouldUseDarkText = color.endsWith('Light1') || color.endsWith('Light2');
         return !shouldUseDarkText;
     },
 };

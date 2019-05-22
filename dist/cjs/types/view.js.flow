@@ -1,5 +1,5 @@
 // @flow
-import {type Color} from './color';
+import {type Color} from '../colors';
 import {type FieldId} from './field';
 import {type RecordId} from './record';
 

@@ -1,72 +1,127 @@
 // @flow
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const liveappColors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
+const Colors = {
+    BLUE_BRIGHT: ('blueBright': 'blueBright'),
+    BLUE_DARK_1: ('blueDark1': 'blueDark1'),
+    BLUE_LIGHT_1: ('blueLight1': 'blueLight1'),
+    BLUE_LIGHT_2: ('blueLight2': 'blueLight2'),
+    BLUE: ('blue': 'blue'),
 
-const liveappColorsToInclude = [
-    'blueLight2',
-    'cyanLight2',
-    'tealLight2',
-    'pinkLight2',
-    'redLight2',
-    'orangeLight2',
-    'yellowLight2',
-    'greenLight2',
-    'purpleLight2',
-    'grayLight2',
+    CYAN_BRIGHT: ('cyanBright': 'cyanBright'),
+    CYAN_DARK_1: ('cyanDark1': 'cyanDark1'),
+    CYAN_LIGHT_1: ('cyanLight1': 'cyanLight1'),
+    CYAN_LIGHT_2: ('cyanLight2': 'cyanLight2'),
+    CYAN: ('cyan': 'cyan'),
 
-    'blueLight1',
-    'cyanLight1',
-    'tealLight1',
-    'pinkLight1',
-    'redLight1',
-    'orangeLight1',
-    'yellowLight1',
-    'greenLight1',
-    'purpleLight1',
-    'grayLight1',
+    GRAY_BRIGHT: ('grayBright': 'grayBright'),
+    GRAY_DARK_1: ('grayDark1': 'grayDark1'),
+    GRAY_LIGHT_1: ('grayLight1': 'grayLight1'),
+    GRAY_LIGHT_2: ('grayLight2': 'grayLight2'),
+    GRAY: ('gray': 'gray'),
 
-    'blueBright',
-    'cyanBright',
-    'tealBright',
-    'pinkBright',
-    'redBright',
-    'orangeBright',
-    'yellowBright',
-    'greenBright',
-    'purpleBright',
-    'grayBright',
+    GREEN_BRIGHT: ('greenBright': 'greenBright'),
+    GREEN_DARK_1: ('greenDark1': 'greenDark1'),
+    GREEN_LIGHT_1: ('greenLight1': 'greenLight1'),
+    GREEN_LIGHT_2: ('greenLight2': 'greenLight2'),
+    GREEN: ('green': 'green'),
 
-    'blue',
-    'cyan',
-    'teal',
-    'pink',
-    'red',
-    'orange',
-    'yellow',
-    'green',
-    'purple',
-    'gray',
+    ORANGE_BRIGHT: ('orangeBright': 'orangeBright'),
+    ORANGE_DARK_1: ('orangeDark1': 'orangeDark1'),
+    ORANGE_LIGHT_1: ('orangeLight1': 'orangeLight1'),
+    ORANGE_LIGHT_2: ('orangeLight2': 'orangeLight2'),
+    ORANGE: ('orange': 'orange'),
 
-    'blueDark1',
-    'cyanDark1',
-    'tealDark1',
-    'pinkDark1',
-    'redDark1',
-    'orangeDark1',
-    'yellowDark1',
-    'greenDark1',
-    'purpleDark1',
-    'grayDark1',
-];
+    PINK_BRIGHT: ('pinkBright': 'pinkBright'),
+    PINK_DARK_1: ('pinkDark1': 'pinkDark1'),
+    PINK_LIGHT_1: ('pinkLight1': 'pinkLight1'),
+    PINK_LIGHT_2: ('pinkLight2': 'pinkLight2'),
+    PINK: ('pink': 'pink'),
 
-const colors: {[string]: string} = {};
-for (const color of liveappColorsToInclude) {
-    h.assert(liveappColors.ALL_COLORS[color], 'Liveapp color names out of sync');
+    PURPLE_BRIGHT: ('purpleBright': 'purpleBright'),
+    PURPLE_DARK_1: ('purpleDark1': 'purpleDark1'),
+    PURPLE_LIGHT_1: ('purpleLight1': 'purpleLight1'),
+    PURPLE_LIGHT_2: ('purpleLight2': 'purpleLight2'),
+    PURPLE: ('purple': 'purple'),
 
-    // The name of the enum is the snakecased and uppercased version of the color
-    // name. i.e. redDark1 -> RED_DARK_1
-    const enumNameForColor = u.snakeCase(color).toUpperCase();
-    colors[enumNameForColor] = color;
-}
+    RED_BRIGHT: ('redBright': 'redBright'),
+    RED_DARK_1: ('redDark1': 'redDark1'),
+    RED_LIGHT_1: ('redLight1': 'redLight1'),
+    RED_LIGHT_2: ('redLight2': 'redLight2'),
+    RED: ('red': 'red'),
 
-export default colors;
+    TEAL_BRIGHT: ('tealBright': 'tealBright'),
+    TEAL_DARK_1: ('tealDark1': 'tealDark1'),
+    TEAL_LIGHT_1: ('tealLight1': 'tealLight1'),
+    TEAL_LIGHT_2: ('tealLight2': 'tealLight2'),
+    TEAL: ('teal': 'teal'),
+
+    YELLOW_BRIGHT: ('yellowBright': 'yellowBright'),
+    YELLOW_DARK_1: ('yellowDark1': 'yellowDark1'),
+    YELLOW_LIGHT_1: ('yellowLight1': 'yellowLight1'),
+    YELLOW_LIGHT_2: ('yellowLight2': 'yellowLight2'),
+    YELLOW: ('yellow': 'yellow'),
+};
+
+export default Colors;
+export type Color = $Values<typeof Colors>;
+
+export const rgbTuplesByColor = {
+    [Colors.BLUE_BRIGHT]: [45, 127, 249],
+    [Colors.BLUE_DARK_1]: [39, 80, 174],
+    [Colors.BLUE_LIGHT_1]: [156, 199, 255],
+    [Colors.BLUE_LIGHT_2]: [207, 223, 255],
+    [Colors.BLUE]: [18, 131, 218],
+
+    [Colors.CYAN_BRIGHT]: [24, 191, 255],
+    [Colors.CYAN_DARK_1]: [11, 118, 183],
+    [Colors.CYAN_LIGHT_1]: [119, 209, 243],
+    [Colors.CYAN_LIGHT_2]: [208, 240, 253],
+    [Colors.CYAN]: [1, 169, 219],
+
+    [Colors.GRAY_BRIGHT]: [102, 102, 102],
+    [Colors.GRAY_DARK_1]: [68, 68, 68],
+    [Colors.GRAY_LIGHT_1]: [204, 204, 204],
+    [Colors.GRAY_LIGHT_2]: [238, 238, 238],
+    [Colors.GRAY]: [102, 102, 102],
+
+    [Colors.GREEN_BRIGHT]: [32, 201, 51],
+    [Colors.GREEN_DARK_1]: [51, 138, 23],
+    [Colors.GREEN_LIGHT_1]: [147, 224, 136],
+    [Colors.GREEN_LIGHT_2]: [209, 247, 196],
+    [Colors.GREEN]: [17, 175, 34],
+
+    [Colors.ORANGE_BRIGHT]: [255, 111, 44],
+    [Colors.ORANGE_DARK_1]: [215, 77, 38],
+    [Colors.ORANGE_LIGHT_1]: [255, 169, 129],
+    [Colors.ORANGE_LIGHT_2]: [254, 226, 213],
+    [Colors.ORANGE]: [247, 101, 59],
+
+    [Colors.PINK_BRIGHT]: [255, 8, 194],
+    [Colors.PINK_DARK_1]: [178, 21, 139],
+    [Colors.PINK_LIGHT_1]: [249, 157, 226],
+    [Colors.PINK_LIGHT_2]: [255, 218, 246],
+    [Colors.PINK]: [233, 41, 186],
+
+    [Colors.PURPLE_BRIGHT]: [139, 70, 255],
+    [Colors.PURPLE_DARK_1]: [107, 28, 176],
+    [Colors.PURPLE_LIGHT_1]: [205, 176, 255],
+    [Colors.PURPLE_LIGHT_2]: [237, 226, 254],
+    [Colors.PURPLE]: [124, 57, 237],
+
+    [Colors.RED_BRIGHT]: [248, 43, 96],
+    [Colors.RED_DARK_1]: [186, 30, 69],
+    [Colors.RED_LIGHT_1]: [255, 158, 183],
+    [Colors.RED_LIGHT_2]: [255, 220, 229],
+    [Colors.RED]: [239, 48, 97],
+
+    [Colors.TEAL_BRIGHT]: [32, 217, 210],
+    [Colors.TEAL_DARK_1]: [6, 160, 155],
+    [Colors.TEAL_LIGHT_1]: [114, 221, 195],
+    [Colors.TEAL_LIGHT_2]: [194, 245, 233],
+    [Colors.TEAL]: [2, 170, 164],
+
+    [Colors.YELLOW_BRIGHT]: [252, 180, 0],
+    [Colors.YELLOW_DARK_1]: [184, 117, 3],
+    [Colors.YELLOW_LIGHT_1]: [255, 214, 110],
+    [Colors.YELLOW_LIGHT_2]: [255, 234, 182],
+    [Colors.YELLOW]: [224, 141, 0],
+};

@@ -1,6 +1,6 @@
 // @flow
 import invariant from 'invariant';
-import {type Color} from '../types/color';
+import {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
 import {FieldTypes} from '../types/field';
