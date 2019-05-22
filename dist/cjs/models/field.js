@@ -40,7 +40,6 @@ const {
 
 const WatchableFieldKeys = {
   name: 'name',
-  config: 'config',
   type: 'type',
   options: 'options',
   isComputed: 'isComputed'
@@ -202,10 +201,6 @@ class Field extends _abstract_model.default {
   __triggerOnChangeForDirtyPaths(dirtyPaths) {
     if (dirtyPaths.name) {
       this._onChange(WatchableFieldKeys.name);
-    }
-
-    if (dirtyPaths.type || dirtyPaths.typeOptions) {
-      this._onChange(WatchableFieldKeys.config);
     }
 
     if (dirtyPaths.type) {

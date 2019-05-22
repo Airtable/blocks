@@ -151,7 +151,7 @@ class QueryResult extends _abstract_model_with_async_data.default {
         break;
 
       case _record_coloring.ModeTypes.BY_SELECT_FIELD:
-        (0, _invariant.default)(recordColorMode.selectField.config.type === _field.FieldTypes.SINGLE_SELECT, `Invalid field for coloring records by select field: expected a ${_field.FieldTypes.SINGLE_SELECT}, but got a ${recordColorMode.selectField.config.type}`);
+        (0, _invariant.default)(recordColorMode.selectField.type === _field.FieldTypes.SINGLE_SELECT, `Invalid field for coloring records by select field: expected a ${_field.FieldTypes.SINGLE_SELECT}, but got a ${recordColorMode.selectField.type}`);
         (0, _invariant.default)(recordColorMode.selectField.parentTable === table, 'Invalid field for coloring records by select field: the single select field is not in the same table as the records');
 
         if (fieldIdsOrNullIfAllFields) {
@@ -223,7 +223,7 @@ class QueryResult extends _abstract_model_with_async_data.default {
 
       case _record_coloring.ModeTypes.BY_SELECT_FIELD:
         {
-          if (recordColorMode.selectField.config.type !== _field.FieldTypes.SINGLE_SELECT) {
+          if (recordColorMode.selectField.type !== _field.FieldTypes.SINGLE_SELECT) {
             return null;
           }
 

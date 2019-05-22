@@ -47,7 +47,7 @@ const aggregators = {};
 
 const aggregate = (aggregatorKey, records, field) => {
   if (!field.isAggregatorAvailable(aggregatorKey)) {
-    throw new Error(`The ${aggregatorKey} aggregator is not available for ${field.config.type} fields`);
+    throw new Error(`The ${aggregatorKey} aggregator is not available for ${field.type} fields`);
   }
 
   if (liveappSummaryFunctions.isNone(aggregatorKey)) {

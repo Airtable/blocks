@@ -93,7 +93,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
             }
         }
         const shouldAllowPickingFieldFn = field => {
-            return !allowedTypes || allowedTypes[field.config.type];
+            return !allowedTypes || allowedTypes[field.type];
         };
 
         const restOfProps = u.omit(this.props, Object.keys(FieldPicker.propTypes));

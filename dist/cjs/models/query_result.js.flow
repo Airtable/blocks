@@ -164,10 +164,10 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             case RecordColorModeTypes.BY_SELECT_FIELD:
                 invariant(
-                    recordColorMode.selectField.config.type === FieldTypes.SINGLE_SELECT,
+                    recordColorMode.selectField.type === FieldTypes.SINGLE_SELECT,
                     `Invalid field for coloring records by select field: expected a ${
                         FieldTypes.SINGLE_SELECT
-                    }, but got a ${recordColorMode.selectField.config.type}`,
+                    }, but got a ${recordColorMode.selectField.type}`,
                 );
                 invariant(
                     recordColorMode.selectField.parentTable === table,
@@ -242,7 +242,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 return null;
             case RecordColorModeTypes.BY_SELECT_FIELD: {
-                if (recordColorMode.selectField.config.type !== FieldTypes.SINGLE_SELECT) {
+                if (recordColorMode.selectField.type !== FieldTypes.SINGLE_SELECT) {
                     return null;
                 }
                 const value = record.getCellValue(recordColorMode.selectField);

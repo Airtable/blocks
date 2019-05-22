@@ -58,7 +58,7 @@ const models = {
    * @example
    * import {models} from 'airtable-block';
    * const numberFields = myTable.fields.filter(field => (
-   *     field.config.type === models.fieldTypes.NUMBER
+   *     field.type === models.fieldTypes.NUMBER
    * ));
    */
   fieldTypes: _field.FieldTypes,

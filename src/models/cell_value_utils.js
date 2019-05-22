@@ -29,7 +29,7 @@ const publicCellValueUtils = {
         field: Field,
     ): CellValueValidationResult {
         if (columnTypeProvider.isComputed(field.__getRawType())) {
-            return {isValid: false, reason: `${field.config.type} fields cannot be updated`};
+            return {isValid: false, reason: `${field.type} fields cannot be updated`};
         }
 
         const currentPrivateCellValue = this.parsePublicApiCellValue(currentPublicCellValue, field);
@@ -52,7 +52,7 @@ const publicCellValueUtils = {
         //    we hit the server. This way, we can validate the existence of foreign records within the block
         //    rather than allowing the block developer to crash liveapp by passing in a valid but non-existent
         //    record id.
-        if (field.config.type === FieldTypes.MULTIPLE_RECORD_LINKS) {
+        if (field.type === FieldTypes.MULTIPLE_RECORD_LINKS) {
             const linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(
                 newPublicCellValue,
                 field,
@@ -65,7 +65,7 @@ const publicCellValueUtils = {
         return {isValid: true};
     },
     normalizePublicCellValueForUpdate(publicCellValue: mixed, field: Field): mixed {
-        if (field.config.type === FieldTypes.MULTIPLE_RECORD_LINKS) {
+        if (field.type === FieldTypes.MULTIPLE_RECORD_LINKS) {
             return this._normalizeLinkedRecordCellValueForUpdate(publicCellValue, field);
         }
         return publicCellValue;
@@ -83,8 +83,9 @@ const publicCellValueUtils = {
             return {isValid: true};
         }
 
-        invariant(field.config.options, 'Invalid field type');
-        const tableId = field.config.options.linkedTableId;
+        invariant(field.options, 'Invalid field type');
+        const tableId = field.options.linkedTableId;
+        invariant(typeof tableId === 'string', 'linkedTableId must be string');
         const table = getSdk().base.getTableById(tableId);
         if (!table) {
             return {isValid: false, reason: 'Linked table does not exist'};
@@ -124,8 +125,9 @@ const publicCellValueUtils = {
             return newPublicCellValue;
         }
 
-        invariant(field.config.options, 'Invalid field type');
-        const tableId = field.config.options.linkedTableId;
+        invariant(field.options, 'Invalid field type');
+        const tableId = field.options.linkedTableId;
+        invariant(typeof tableId === 'string', 'no linkedTableId');
         const table = getSdk().base.getTableById(tableId);
         invariant(table, 'Linked table does not exist');
         invariant(

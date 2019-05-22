@@ -15,9 +15,9 @@ import type FieldModel from './field';
 import type RecordModel from './record';
 
 const getLinkedTableId = (field: FieldModel): string => {
-    const options = field.config.options;
+    const options = field.options;
     const linkedTableId = options && options.linkedTableId;
-    invariant(linkedTableId, 'linkedTableId must exist');
+    invariant(typeof linkedTableId === 'string', 'linkedTableId must exist');
 
     return linkedTableId;
 };
@@ -59,11 +59,11 @@ class LinkedRecordsQueryResult extends QueryResult {
             'record and field must belong to the same table',
         );
         invariant(
-            field.config.type === FieldTypes.MULTIPLE_RECORD_LINKS,
+            field.type === FieldTypes.MULTIPLE_RECORD_LINKS,
             'field must be MULTIPLE_RECORD_LINKS',
         );
-        const linkedTableId = field.config.options && field.config.options.linkedTableId;
-        invariant(linkedTableId, 'linkedTableId must be set');
+        const linkedTableId = field.options && field.options.linkedTableId;
+        invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
 
         const linkedTable = getSdk().base.getTableById(linkedTableId);
         invariant(linkedTable, 'linkedTable must exist');
@@ -465,7 +465,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     _onOriginFieldConfigChange() {
         invariant(this.isValid, 'watch key change event whilst invalid');
 
-        const type = this._field.config.type;
+        const type = this._field.type;
 
         if (type !== FieldTypes.MULTIPLE_RECORD_LINKS) {
             this._invalidateQueryResult();

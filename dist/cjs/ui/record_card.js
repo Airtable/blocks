@@ -126,25 +126,28 @@ const FormulaicFieldTypes = {
 };
 
 const isFieldFormulaic = field => {
-  return !!FormulaicFieldTypes[field.config.type];
+  return !!FormulaicFieldTypes[field.type];
 };
 
 const getFieldResultType = field => {
-  if (field.config.type === _field.FieldTypes.COUNT) {
+  if (field.type === _field.FieldTypes.COUNT) {
     return _field.FieldTypes.NUMBER;
   }
 
   if (isFieldFormulaic(field)) {
-    (0, _invariant.default)(field.config.options, 'options');
+    (0, _invariant.default)(field.options, 'options');
+    const resultConfig = field.options.resultConfig;
 
-    if (!field.config.options.resultConfig) {
+    if (resultConfig && typeof resultConfig === 'object') {
+      const resultConfigType = resultConfig.type;
+      (0, _invariant.default)(typeof resultConfigType === 'string', 'resultConfigType must be string');
+      return resultConfigType;
+    } else {
       // Formula is misconfigured.
       return _field.FieldTypes.SINGLE_LINE_TEXT;
-    } else {
-      return field.config.options.resultConfig.type;
     }
   } else {
-    return field.config.type;
+    return field.type;
   }
 };
 /** */
@@ -280,7 +283,7 @@ class RecordCard extends React.Component {
   _getFirstAttachmentInField(attachmentField) {
     let attachmentsInField;
 
-    if (attachmentField.config.type === _field.FieldTypes.LOOKUP) {
+    if (attachmentField.type === _field.FieldTypes.LOOKUP) {
       const rawCellValue = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
 
 

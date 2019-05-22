@@ -25,7 +25,6 @@ const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
 // to mirror the method/getter names on the model class.
 const WatchableFieldKeys = {
     name: 'name',
-    config: 'config',
     type: 'type',
     options: 'options',
     isComputed: 'isComputed',
@@ -197,9 +196,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {
             this._onChange(WatchableFieldKeys.name);
-        }
-        if (dirtyPaths.type || dirtyPaths.typeOptions) {
-            this._onChange(WatchableFieldKeys.config);
         }
         if (dirtyPaths.type) {
             this._onChange(WatchableFieldKeys.type);

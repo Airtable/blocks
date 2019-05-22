@@ -41,7 +41,7 @@ const aggregators: {[string]: Aggregator} = {};
 const aggregate = (aggregatorKey: string, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
         throw new Error(
-            `The ${aggregatorKey} aggregator is not available for ${field.config.type} fields`,
+            `The ${aggregatorKey} aggregator is not available for ${field.type} fields`,
         );
     }
 

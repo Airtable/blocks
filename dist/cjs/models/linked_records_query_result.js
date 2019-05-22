@@ -47,9 +47,9 @@ var _query_result = _interopRequireDefault(require("./query_result"));
 var _table_or_view_query_result = _interopRequireDefault(require("./table_or_view_query_result"));
 
 const getLinkedTableId = field => {
-  const options = field.config.options;
+  const options = field.options;
   const linkedTableId = options && options.linkedTableId;
-  (0, _invariant.default)(linkedTableId, 'linkedTableId must exist');
+  (0, _invariant.default)(typeof linkedTableId === 'string', 'linkedTableId must exist');
   return linkedTableId;
 }; // eslint-disable-next-line no-use-before-define
 
@@ -78,9 +78,9 @@ const pool = new _object_pool.default({
 class LinkedRecordsQueryResult extends _query_result.default {
   static __createOrReuseQueryResult(record, field, opts) {
     (0, _invariant.default)(record.parentTable === field.parentTable, 'record and field must belong to the same table');
-    (0, _invariant.default)(field.config.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS, 'field must be MULTIPLE_RECORD_LINKS');
-    const linkedTableId = field.config.options && field.config.options.linkedTableId;
-    (0, _invariant.default)(linkedTableId, 'linkedTableId must be set');
+    (0, _invariant.default)(field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS, 'field must be MULTIPLE_RECORD_LINKS');
+    const linkedTableId = field.options && field.options.linkedTableId;
+    (0, _invariant.default)(typeof linkedTableId === 'string', 'linkedTableId must be set');
     const linkedTable = (0, _get_sdk.default)().base.getTableById(linkedTableId);
     (0, _invariant.default)(linkedTable, 'linkedTable must exist');
 
@@ -446,7 +446,7 @@ class LinkedRecordsQueryResult extends _query_result.default {
 
   _onOriginFieldConfigChange() {
     (0, _invariant.default)(this.isValid, 'watch key change event whilst invalid');
-    const type = this._field.config.type;
+    const type = this._field.type;
 
     if (type !== _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
       this._invalidateQueryResult();

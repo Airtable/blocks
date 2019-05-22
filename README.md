@@ -205,18 +205,20 @@ import {localStorage, sessionStorage} from 'airtable-block';
 ## Field types and cell values
 
 Each field in a table has a type and associated configuration. You can inspect this information by
-looking at `field.config`. For example, a date field's `config` looks like this:
+looking at `field.type` & `field.options`. For example, a date field's `type` & `options` looks like
+this:
 
-```json
-{
-    "type": "date",
-    "options": {
-        "dateFormat": {
-            "name": "us",
-            "format": "M/D/YYYY"
-        }
-    }
-}
+```js
+myField.type;
+// => "date"
+
+myField.options;
+// => {
+//     "dateFormat": {
+//         "name": "us",
+//         "format": "M/D/YYYY"
+//     }
+// }
 ```
 
 The cell values depend on the type of the field. You can use the "Inspector" block to look at the
@@ -259,9 +261,10 @@ models.fieldTypes = {
 
 Rollups, formulas, and lookups are computed fields, which means they can't be updated manually and
 their cell format is ultimately based on some other non-computed field. For these computed fields,
-you can inspect `field.config.options.resultConfig` to see what the underlying format is. The
-`resultConfig` will be equivalent to the `field.config` of the underlying field type. For example, a
-rollup's `resultConfig` can be `{type: 'date', ...}` or `{type: 'dateTime', ...}`.
+you can inspect `field.options.resultConfig` to see what the underlying format is. The
+`resultConfig` will be equivalent to `{type: field.type, options: field.options}` of the underlying
+field type. For example, a rollup's `resultConfig` can be `{type: 'date', ...}` or
+`{type: 'dateTime', ...}`.
 
 There are currently some rough edges to be aware of:
 
@@ -272,9 +275,9 @@ There are currently some rough edges to be aware of:
     `field.options.resultConfig === {type: 'singleLineText'}` but each cell value will actually be
     an array of strings.
 -   Before inspecting the `resultConfig` of computed fields, you should first check
-    `field.config.options.isError`. If `isError` is true, there won't be a `resultConfig` (usually
-    as a result of an error in the formula, or if one of the fields the computed field depends on
-    has been deleted).
+    `field.options.isError`. If `isError` is true, there won't be a `resultConfig` (usually as a
+    result of an error in the formula, or if one of the fields the computed field depends on has
+    been deleted).
 
 ## Blocks testing checklist
 
@@ -354,8 +357,8 @@ if (globalConfig.canSet(ConfigKeys.tableId) && runInfo.isFirstRun && !this.table
     // select or single collaborator field it finds.
     for (const field of table.fields) {
         if (
-            field.config.type === models.fieldTypes.SINGLE_SELECT ||
-            field.config.type === models.fieldTypes.SINGLE_COLLABORATOR
+            field.type === models.fieldTypes.SINGLE_SELECT ||
+            field.type === models.fieldTypes.SINGLE_COLLABORATOR
         ) {
             this.xField = field;
             break;

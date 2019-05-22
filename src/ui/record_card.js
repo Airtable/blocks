@@ -114,22 +114,25 @@ const FormulaicFieldTypes = {
     [FieldTypes.LOOKUP]: true,
 };
 const isFieldFormulaic = (field: FieldModel): boolean => {
-    return !!FormulaicFieldTypes[field.config.type];
+    return !!FormulaicFieldTypes[field.type];
 };
 const getFieldResultType = (field: FieldModel): string => {
-    if (field.config.type === FieldTypes.COUNT) {
+    if (field.type === FieldTypes.COUNT) {
         return FieldTypes.NUMBER;
     }
     if (isFieldFormulaic(field)) {
-        invariant(field.config.options, 'options');
-        if (!field.config.options.resultConfig) {
+        invariant(field.options, 'options');
+        const resultConfig = field.options.resultConfig;
+        if (resultConfig && typeof resultConfig === 'object') {
+            const resultConfigType = resultConfig.type;
+            invariant(typeof resultConfigType === 'string', 'resultConfigType must be string');
+            return resultConfigType;
+        } else {
             // Formula is misconfigured.
             return FieldTypes.SINGLE_LINE_TEXT;
-        } else {
-            return field.config.options.resultConfig.type;
         }
     } else {
-        return field.config.type;
+        return field.type;
     }
 };
 
@@ -276,7 +279,7 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
     _getFirstAttachmentInField(attachmentField: FieldModel): Object | null {
         let attachmentsInField;
-        if (attachmentField.config.type === FieldTypes.LOOKUP) {
+        if (attachmentField.type === FieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
             attachmentsInField = u.flattenDeep(
                 u.values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),

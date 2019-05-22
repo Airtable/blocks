@@ -125,7 +125,7 @@ class FieldPicker extends React.Component {
     }
 
     const shouldAllowPickingFieldFn = field => {
-      return !allowedTypes || allowedTypes[field.config.type];
+      return !allowedTypes || allowedTypes[field.type];
     };
 
     const restOfProps = u.omit(this.props, (0, _keys.default)(FieldPicker.propTypes)); // Fields are only ordered within a view, and views' column orders aren't

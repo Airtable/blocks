@@ -4,7 +4,7 @@
 
 ```javascript
 import {models} from 'airtable-block';
-const numberFields = myTable.fields.filter(field => field.config.type === models.fieldTypes.NUMBER);
+const numberFields = myTable.fields.filter(field => field.type === models.fieldTypes.NUMBER);
 ```
 
 ## viewTypes

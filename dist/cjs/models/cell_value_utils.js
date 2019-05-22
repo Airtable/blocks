@@ -37,7 +37,7 @@ const publicCellValueUtils = {
     if (columnTypeProvider.isComputed(field.__getRawType())) {
       return {
         isValid: false,
-        reason: `${field.config.type} fields cannot be updated`
+        reason: `${field.type} fields cannot be updated`
       };
     }
 
@@ -58,7 +58,7 @@ const publicCellValueUtils = {
     //    record id.
 
 
-    if (field.config.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
+    if (field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
       const linkedRecordValidationResult = this._validateLinkedRecordCellValueForUpdate(newPublicCellValue, field);
 
       if (!linkedRecordValidationResult.isValid) {
@@ -72,7 +72,7 @@ const publicCellValueUtils = {
   },
 
   normalizePublicCellValueForUpdate(publicCellValue, field) {
-    if (field.config.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
+    if (field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
       return this._normalizeLinkedRecordCellValueForUpdate(publicCellValue, field);
     }
 
@@ -90,8 +90,9 @@ const publicCellValueUtils = {
       };
     }
 
-    (0, _invariant.default)(field.config.options, 'Invalid field type');
-    const tableId = field.config.options.linkedTableId;
+    (0, _invariant.default)(field.options, 'Invalid field type');
+    const tableId = field.options.linkedTableId;
+    (0, _invariant.default)(typeof tableId === 'string', 'linkedTableId must be string');
     const table = (0, _get_sdk.default)().base.getTableById(tableId);
 
     if (!table) {
@@ -135,8 +136,9 @@ const publicCellValueUtils = {
       return newPublicCellValue;
     }
 
-    (0, _invariant.default)(field.config.options, 'Invalid field type');
-    const tableId = field.config.options.linkedTableId;
+    (0, _invariant.default)(field.options, 'Invalid field type');
+    const tableId = field.options.linkedTableId;
+    (0, _invariant.default)(typeof tableId === 'string', 'no linkedTableId');
     const table = (0, _get_sdk.default)().base.getTableById(tableId);
     (0, _invariant.default)(table, 'Linked table does not exist');
     (0, _invariant.default)((0, _isArray.default)(newPublicCellValue), 'Linked record cell value must be an array of objects');
