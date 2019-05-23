@@ -170,7 +170,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
      * will not change.
      */
     get primaryField(): Field {
-        const primaryField = this.getFieldById(this._data.primaryFieldId);
+        const primaryField = this.getFieldByIdIfExists(this._data.primaryFieldId);
         invariant(primaryField, 'no primary field');
         return primaryField;
     }
@@ -186,14 +186,14 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const fields = [];
         for (const fieldId of Object.keys(this._data.fieldsById)) {
-            const field = this.getFieldById(fieldId);
+            const field = this.getFieldByIdIfExists(fieldId);
             invariant(field, 'no field model' + fieldId);
             fields.push(field);
         }
         return fields;
     }
     /** */
-    getFieldById(fieldId: string): Field | null {
+    getFieldByIdIfExists(fieldId: string): Field | null {
         if (!this._data.fieldsById[fieldId]) {
             return null;
         } else {
@@ -204,10 +204,10 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         }
     }
     /** */
-    getFieldByName(fieldName: string): Field | null {
+    getFieldByNameIfExists(fieldName: string): Field | null {
         for (const [fieldId, fieldData] of entries(this._data.fieldsById)) {
             if (fieldData.name === fieldName) {
-                return this.getFieldById(fieldId);
+                return this.getFieldByIdIfExists(fieldId);
             }
         }
         return null;
@@ -219,7 +219,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
      */
     get activeView(): View | null {
         const {activeViewId} = this._data;
-        return activeViewId ? this.getViewById(activeViewId) : null;
+        return activeViewId ? this.getViewByIdIfExists(activeViewId) : null;
     }
     /**
      * The views in the table. Can be watched to know when views are created,
@@ -229,14 +229,14 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const views = [];
         this._data.viewOrder.forEach(viewId => {
-            const view = this.getViewById(viewId);
+            const view = this.getViewByIdIfExists(viewId);
             invariant(view, 'no view matching id in view order');
             views.push(view);
         });
         return views;
     }
     /** */
-    getViewById(viewId: string): View | null {
+    getViewByIdIfExists(viewId: string): View | null {
         if (!this._data.viewsById[viewId]) {
             return null;
         } else {
@@ -252,10 +252,10 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         }
     }
     /** */
-    getViewByName(viewName: string): View | null {
+    getViewByNameIfExists(viewName: string): View | null {
         for (const [viewId, viewData] of entries(this._data.viewsById)) {
             if (viewData.name === viewName) {
-                return this.getViewById(viewId);
+                return this.getViewByIdIfExists(viewId);
             }
         }
         return null;
@@ -272,7 +272,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
         const records = Object.keys(recordsById).map(recordId => {
-            const record = this.__getRecordById(recordId);
+            const record = this.__getRecordByIdIfExists(recordId);
             invariant(record, 'record');
             return record;
         });
@@ -291,7 +291,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     get recordLimit(): number {
         return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
     }
-    __getRecordById(recordId: string): Record | null {
+    __getRecordByIdIfExists(recordId: string): Record | null {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
         invariant(typeof recordId === 'string', 'getRecordById expects a string');
@@ -328,7 +328,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         for (const [recordId, cellValuesByFieldIdOrFieldName] of entries(
             cellValuesByRecordIdThenFieldIdOrFieldName,
         )) {
-            const record = this.__getRecordById(recordId);
+            const record = this.__getRecordByIdIfExists(recordId);
             if (!record) {
                 throw new Error('Record does not exist');
             }
@@ -504,7 +504,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         );
 
         const recordModels = recordIds.map(recordId => {
-            const recordModel = this.__getRecordById(recordId);
+            const recordModel = this.__getRecordByIdIfExists(recordId);
             invariant(recordModel, 'Newly created record does not exist');
             return recordModel;
         });
@@ -856,8 +856,8 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             field = fieldOrFieldIdOrFieldName;
         } else {
             field =
-                this.getFieldById(fieldOrFieldIdOrFieldName) ||
-                this.getFieldByName(fieldOrFieldIdOrFieldName);
+                this.getFieldByIdIfExists(fieldOrFieldIdOrFieldName) ||
+                this.getFieldByNameIfExists(fieldOrFieldIdOrFieldName);
         }
         return field;
     }
@@ -867,8 +867,8 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             view = viewOrViewIdOrViewName;
         } else {
             view =
-                this.getViewById(viewOrViewIdOrViewName) ||
-                this.getViewByName(viewOrViewIdOrViewName);
+                this.getViewByIdIfExists(viewOrViewIdOrViewName) ||
+                this.getViewByNameIfExists(viewOrViewIdOrViewName);
         }
         return view;
     }

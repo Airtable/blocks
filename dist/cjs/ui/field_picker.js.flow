@@ -60,7 +60,8 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     _onChange(fieldId: string | null) {
         const {onChange, table} = this.props;
         if (onChange) {
-            const field = table && !table.isDeleted && fieldId ? table.getFieldById(fieldId) : null;
+            const field =
+                table && !table.isDeleted && fieldId ? table.getFieldByIdIfExists(fieldId) : null;
             onChange(field);
         }
     }

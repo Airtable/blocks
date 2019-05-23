@@ -84,7 +84,7 @@ function (_React$Component) {
       var onChange = this.props.onChange;
 
       if (onChange) {
-        var table = tableId ? (0, _get_sdk.default)().base.getTableById(tableId) : null;
+        var table = tableId ? (0, _get_sdk.default)().base.getTableByIdIfExists(tableId) : null;
         onChange(table);
       }
     }

@@ -98,7 +98,7 @@ function (_React$Component) {
         return null;
       }
 
-      return typeof fieldId === 'string' && table ? table.getFieldById(fieldId) : null;
+      return typeof fieldId === 'string' && table ? table.getFieldByIdIfExists(fieldId) : null;
     }
   }, {
     key: "render",

@@ -213,14 +213,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      */
     get records(): Array<RecordModel> {
         return this.recordIds.map(recordId => {
-            const record = this.parentTable.__getRecordById(recordId);
+            const record = this.parentTable.__getRecordByIdIfExists(recordId);
             invariant(record, 'Record missing in table');
             return record;
         });
     }
 
-    getRecordById(recordId: RecordId): RecordModel | null {
-        const record = this.parentTable.__getRecordById(recordId);
+    getRecordByIdIfExists(recordId: RecordId): RecordModel | null {
+        const record = this.parentTable.__getRecordByIdIfExists(recordId);
         if (!record || !this.hasRecord(record)) {
             return null;
         }
@@ -229,7 +229,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     _getRecord(recordOrRecordId: RecordId | RecordModel): RecordModel {
-        const record = this.getRecordById(
+        const record = this.getRecordByIdIfExists(
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
         invariant(record, 'record must exist');

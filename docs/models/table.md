@@ -50,7 +50,7 @@ Type: [Array][2]&lt;Field>
 
 Returns **[Array][2]&lt;Field>**
 
-### getFieldById
+### getFieldByIdIfExists
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Returns **[Array][2]&lt;Field>**
 
 Returns **(Field | null)**
 
-### getFieldByName
+### getFieldByNameIfExists
 
 #### Parameters
 
@@ -83,7 +83,7 @@ Type: [Array][2]&lt;View>
 
 Returns **[Array][2]&lt;View>**
 
-### getViewById
+### getViewByIdIfExists
 
 #### Parameters
 
@@ -91,7 +91,7 @@ Returns **[Array][2]&lt;View>**
 
 Returns **(View | null)**
 
-### getViewByName
+### getViewByNameIfExists
 
 #### Parameters
 

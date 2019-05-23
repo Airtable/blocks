@@ -78,13 +78,13 @@ async function expandRecordPickerAsync(
         return null;
     }
 
-    const table = sdk.base.getTableById(tableId);
+    const table = sdk.base.getTableByIdIfExists(tableId);
     if (!table) {
         // table has probably been deleted
         return null;
     }
 
-    return table.__getRecordById(chosenRecordId);
+    return table.__getRecordByIdIfExists(chosenRecordId);
 }
 
 export default expandRecordPickerAsync;

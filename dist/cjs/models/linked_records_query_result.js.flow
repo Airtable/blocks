@@ -66,7 +66,7 @@ class LinkedRecordsQueryResult extends QueryResult {
         const linkedTableId = field.options && field.options.linkedTableId;
         invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
 
-        const linkedTable = getSdk().base.getTableById(linkedTableId);
+        const linkedTable = getSdk().base.getTableByIdIfExists(linkedTableId);
         invariant(linkedTable, 'linkedTable must exist');
 
         const normalizedOpts = TableOrViewQueryResult._normalizeOpts(linkedTable, opts);
@@ -104,7 +104,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
     constructor(record: RecordModel, field: FieldModel, opts: QueryResultOpts) {
         const linkedTableId = getLinkedTableId(field);
-        const linkedTable = getSdk().base.getTableById(linkedTableId);
+        const linkedTable = getSdk().base.getTableByIdIfExists(linkedTableId);
         invariant(linkedTable, 'table must exist');
 
         const normalizedOpts = QueryResult._normalizeOpts(linkedTable, opts);
@@ -173,7 +173,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
         const linkedTable = this._linkedTable;
         return this.recordIds.map(recordId => {
-            const record = linkedTable.__getRecordById(recordId);
+            const record = linkedTable.__getRecordByIdIfExists(recordId);
             invariant(record, `No record for id: ${recordId}`);
             return record;
         });

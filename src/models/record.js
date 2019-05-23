@@ -80,7 +80,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     }
     __getRawCellValue(fieldId: string): mixed {
         const publicCellValue = this.getCellValue(fieldId);
-        const field = this.parentTable.getFieldById(fieldId);
+        const field = this.parentTable.getFieldByIdIfExists(fieldId);
         invariant(field, 'Should have field');
         return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
     }
@@ -94,7 +94,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
                 // undefined (vs deleting the key from the cellValuesByFieldId object, which
                 // would cause de-opts). So ignore undefined cell values, since the field is deleted.
                 if (publicCellValue !== undefined) {
-                    const field = this.parentTable.getFieldById(fieldId);
+                    const field = this.parentTable.getFieldByIdIfExists(fieldId);
                     invariant(field, 'Should have field');
                     cellValuesByColumnId[fieldId] = cellValueUtils.parsePublicApiCellValue(
                         publicCellValue,

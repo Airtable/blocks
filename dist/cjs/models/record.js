@@ -105,7 +105,7 @@ function (_AbstractModel) {
     key: "__getRawCellValue",
     value: function __getRawCellValue(fieldId) {
       var publicCellValue = this.getCellValue(fieldId);
-      var field = this.parentTable.getFieldById(fieldId);
+      var field = this.parentTable.getFieldByIdIfExists(fieldId);
       (0, _invariant.default)(field, 'Should have field');
       return _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
     }
@@ -131,7 +131,7 @@ function (_AbstractModel) {
             // undefined (vs deleting the key from the cellValuesByFieldId object, which
             // would cause de-opts). So ignore undefined cell values, since the field is deleted.
             if (publicCellValue !== undefined) {
-              var field = this.parentTable.getFieldById(fieldId);
+              var field = this.parentTable.getFieldByIdIfExists(fieldId);
               (0, _invariant.default)(field, 'Should have field');
               cellValuesByColumnId[fieldId] = _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
             }

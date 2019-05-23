@@ -510,7 +510,7 @@ function (_QueryResult) {
                 return _context2.abrupt("continue", 21);
 
               case 19:
-                field = this._table.getFieldById(groupLevel.columnId);
+                field = this._table.getFieldByIdIfExists(groupLevel.columnId);
 
                 if (field) {
                   field.watch('type', this._onFieldConfigChanged, this);
@@ -666,7 +666,7 @@ function (_QueryResult) {
               continue;
             }
 
-            var field = this._table.getFieldById(groupLevel.columnId);
+            var field = this._table.getFieldByIdIfExists(groupLevel.columnId);
 
             if (field) {
               field.unwatch('type', this._onFieldConfigChanged, this);
@@ -717,7 +717,7 @@ function (_QueryResult) {
         for (var _iterator9 = recordIds[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
           var recordId = _step9.value;
 
-          var record = this._table.__getRecordById(recordId);
+          var record = this._table.__getRecordByIdIfExists(recordId);
 
           (0, _invariant.default)(record, 'Record missing in table');
 
@@ -929,7 +929,7 @@ function (_QueryResult) {
           if (u.has(fieldIdsSet, fieldId)) {
             wereAnyFieldsCreatedOrDeleted = true;
 
-            var field = this._table.getFieldById(fieldId);
+            var field = this._table.getFieldByIdIfExists(fieldId);
 
             (0, _invariant.default)(field, 'Created field does not exist');
             field.watch('type', this._onFieldConfigChanged, this);
@@ -1070,7 +1070,7 @@ function (_QueryResult) {
           return true;
         }
 
-        var field = this._table.getFieldById(groupLevel.columnId);
+        var field = this._table.getFieldByIdIfExists(groupLevel.columnId);
 
         return !!field;
       });
@@ -1146,7 +1146,7 @@ function (_QueryResult) {
           for (var _iterator14 = fieldIdsOrNullIfAllFields[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
             var fieldId = _step14.value;
 
-            var field = this._table.getFieldById(fieldId);
+            var field = this._table.getFieldByIdIfExists(fieldId);
 
             if (field !== null) {
               fields.push(field);

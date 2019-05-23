@@ -98,7 +98,7 @@ function (_React$Component) {
         return null;
       }
 
-      return typeof viewId === 'string' && table ? table.getViewById(viewId) : null;
+      return typeof viewId === 'string' && table ? table.getViewByIdIfExists(viewId) : null;
     }
   }, {
     key: "render",

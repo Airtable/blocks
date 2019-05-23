@@ -52,7 +52,7 @@ class TablePicker extends React.Component<TablePickerProps> {
     _onChange(tableId: string | null) {
         const {onChange} = this.props;
         if (onChange) {
-            const table = tableId ? getSdk().base.getTableById(tableId) : null;
+            const table = tableId ? getSdk().base.getTableByIdIfExists(tableId) : null;
             onChange(table);
         }
     }

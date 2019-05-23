@@ -103,7 +103,7 @@ function (_QueryResult) {
       (0, _invariant.default)(field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS, 'field must be MULTIPLE_RECORD_LINKS');
       var linkedTableId = field.options && field.options.linkedTableId;
       (0, _invariant.default)(typeof linkedTableId === 'string', 'linkedTableId must be set');
-      var linkedTable = (0, _get_sdk.default)().base.getTableById(linkedTableId);
+      var linkedTable = (0, _get_sdk.default)().base.getTableByIdIfExists(linkedTableId);
       (0, _invariant.default)(linkedTable, 'linkedTable must exist');
 
       var normalizedOpts = _table_or_view_query_result.default._normalizeOpts(linkedTable, opts);
@@ -128,7 +128,7 @@ function (_QueryResult) {
 
     (0, _classCallCheck2.default)(this, LinkedRecordsQueryResult);
     var linkedTableId = getLinkedTableId(field);
-    var linkedTable = (0, _get_sdk.default)().base.getTableById(linkedTableId);
+    var linkedTable = (0, _get_sdk.default)().base.getTableByIdIfExists(linkedTableId);
     (0, _invariant.default)(linkedTable, 'table must exist');
 
     var normalizedOpts = _query_result.default._normalizeOpts(linkedTable, opts);
@@ -670,7 +670,7 @@ function (_QueryResult) {
       (0, _invariant.default)(this.isValid, 'LinkedRecordQueryResult is no longer valid');
       var linkedTable = this._linkedTable;
       return this.recordIds.map(recordId => {
-        var record = linkedTable.__getRecordById(recordId);
+        var record = linkedTable.__getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(record, "No record for id: ".concat(recordId));
         return record;

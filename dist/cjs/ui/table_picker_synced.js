@@ -81,7 +81,7 @@ function (_React$Component) {
   }, {
     key: "_getTableFromGlobalConfigValue",
     value: function _getTableFromGlobalConfigValue(tableId) {
-      return typeof tableId === 'string' ? (0, _get_sdk.default)().base.getTableById(tableId) : null;
+      return typeof tableId === 'string' ? (0, _get_sdk.default)().base.getTableByIdIfExists(tableId) : null;
     }
   }, {
     key: "render",

@@ -85,7 +85,7 @@ Type: [Array][2]&lt;CollaboratorData>
 
 Returns **[Array][2]&lt;CollaboratorData>**
 
-### getCollaboratorById
+### getCollaboratorByIdIfExists
 
 Returns the user matching the given ID, or `null` if that user does not exist or does not have
 access to this base.
@@ -96,7 +96,7 @@ access to this base.
 
 Returns **(CollaboratorData | null)**
 
-### getTableById
+### getTableByIdIfExists
 
 Returns the table matching the given ID, or `null` if that table does not exist in this base.
 
@@ -106,7 +106,7 @@ Returns the table matching the given ID, or `null` if that table does not exist 
 
 Returns **(Table | null)**
 
-### getTableByName
+### getTableByNameIfExists
 
 Returns the table matching the given name, or `null` if no table exists with that name in this base.
 

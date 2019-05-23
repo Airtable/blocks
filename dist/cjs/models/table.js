@@ -217,10 +217,10 @@ function (_AbstractModelWithAsy) {
       return fieldIdsToLoad;
     }
   }, {
-    key: "getFieldById",
+    key: "getFieldByIdIfExists",
 
     /** */
-    value: function getFieldById(fieldId) {
+    value: function getFieldByIdIfExists(fieldId) {
       if (!this._data.fieldsById[fieldId]) {
         return null;
       } else {
@@ -234,8 +234,8 @@ function (_AbstractModelWithAsy) {
     /** */
 
   }, {
-    key: "getFieldByName",
-    value: function getFieldByName(fieldName) {
+    key: "getFieldByNameIfExists",
+    value: function getFieldByNameIfExists(fieldName) {
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
       var _iteratorError2 = undefined;
@@ -247,7 +247,7 @@ function (_AbstractModelWithAsy) {
               fieldData = _step2$value[1];
 
           if (fieldData.name === fieldName) {
-            return this.getFieldById(fieldId);
+            return this.getFieldByIdIfExists(fieldId);
           }
         }
       } catch (err) {
@@ -274,10 +274,10 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "getViewById",
+    key: "getViewByIdIfExists",
 
     /** */
-    value: function getViewById(viewId) {
+    value: function getViewByIdIfExists(viewId) {
       if (!this._data.viewsById[viewId]) {
         return null;
       } else {
@@ -291,8 +291,8 @@ function (_AbstractModelWithAsy) {
     /** */
 
   }, {
-    key: "getViewByName",
-    value: function getViewByName(viewName) {
+    key: "getViewByNameIfExists",
+    value: function getViewByNameIfExists(viewName) {
       var _iteratorNormalCompletion3 = true;
       var _didIteratorError3 = false;
       var _iteratorError3 = undefined;
@@ -304,7 +304,7 @@ function (_AbstractModelWithAsy) {
               viewData = _step3$value[1];
 
           if (viewData.name === viewName) {
-            return this.getViewById(viewId);
+            return this.getViewByIdIfExists(viewId);
           }
         }
       } catch (err) {
@@ -337,8 +337,8 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "__getRecordById",
-    value: function __getRecordById(recordId) {
+    key: "__getRecordByIdIfExists",
+    value: function __getRecordByIdIfExists(recordId) {
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
       (0, _invariant.default)(typeof recordId === 'string', 'getRecordById expects a string');
@@ -390,7 +390,7 @@ function (_AbstractModelWithAsy) {
               recordId = _step4$value[0],
               cellValuesByFieldIdOrFieldName = _step4$value[1];
 
-          var record = this.__getRecordById(recordId);
+          var record = this.__getRecordByIdIfExists(recordId);
 
           if (!record) {
             throw new Error('Record does not exist');
@@ -640,7 +640,7 @@ function (_AbstractModelWithAsy) {
       var completionPromise = this._airtableInterface.createRecordsAsync(this.id, parsedRecordDefs);
 
       var recordModels = recordIds.map(recordId => {
-        var recordModel = this.__getRecordById(recordId);
+        var recordModel = this.__getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(recordModel, 'Newly created record does not exist');
         return recordModel;
@@ -1281,7 +1281,7 @@ function (_AbstractModelWithAsy) {
       if (fieldOrFieldIdOrFieldName instanceof _field.default) {
         field = fieldOrFieldIdOrFieldName;
       } else {
-        field = this.getFieldById(fieldOrFieldIdOrFieldName) || this.getFieldByName(fieldOrFieldIdOrFieldName);
+        field = this.getFieldByIdIfExists(fieldOrFieldIdOrFieldName) || this.getFieldByNameIfExists(fieldOrFieldIdOrFieldName);
       }
 
       return field;
@@ -1294,7 +1294,7 @@ function (_AbstractModelWithAsy) {
       if (viewOrViewIdOrViewName instanceof _view.default) {
         view = viewOrViewIdOrViewName;
       } else {
-        view = this.getViewById(viewOrViewIdOrViewName) || this.getViewByName(viewOrViewIdOrViewName);
+        view = this.getViewByIdIfExists(viewOrViewIdOrViewName) || this.getViewByNameIfExists(viewOrViewIdOrViewName);
       }
 
       return view;
@@ -1640,7 +1640,7 @@ function (_AbstractModelWithAsy) {
   }, {
     key: "primaryField",
     get: function get() {
-      var primaryField = this.getFieldById(this._data.primaryFieldId);
+      var primaryField = this.getFieldByIdIfExists(this._data.primaryFieldId);
       (0, _invariant.default)(primaryField, 'no primary field');
       return primaryField;
     }
@@ -1661,7 +1661,7 @@ function (_AbstractModelWithAsy) {
 
       for (var _i5 = 0, _Object$keys3 = Object.keys(this._data.fieldsById); _i5 < _Object$keys3.length; _i5++) {
         var fieldId = _Object$keys3[_i5];
-        var field = this.getFieldById(fieldId);
+        var field = this.getFieldByIdIfExists(fieldId);
         (0, _invariant.default)(field, 'no field model' + fieldId);
         fields.push(field);
       }
@@ -1672,7 +1672,7 @@ function (_AbstractModelWithAsy) {
     key: "activeView",
     get: function get() {
       var activeViewId = this._data.activeViewId;
-      return activeViewId ? this.getViewById(activeViewId) : null;
+      return activeViewId ? this.getViewByIdIfExists(activeViewId) : null;
     }
     /**
      * The views in the table. Can be watched to know when views are created,
@@ -1686,7 +1686,7 @@ function (_AbstractModelWithAsy) {
       var views = [];
 
       this._data.viewOrder.forEach(viewId => {
-        var view = this.getViewById(viewId);
+        var view = this.getViewByIdIfExists(viewId);
         (0, _invariant.default)(view, 'no view matching id in view order');
         views.push(view);
       });
@@ -1699,7 +1699,7 @@ function (_AbstractModelWithAsy) {
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
       var records = Object.keys(recordsById).map(recordId => {
-        var record = this.__getRecordById(recordId);
+        var record = this.__getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(record, 'record');
         return record;

@@ -60,7 +60,8 @@ class ViewPicker extends React.Component<ViewPickerProps> {
     _onChange(viewId: string | null) {
         const {onChange, table} = this.props;
         if (onChange) {
-            const view = table && !table.isDeleted && viewId ? table.getViewById(viewId) : null;
+            const view =
+                table && !table.isDeleted && viewId ? table.getViewByIdIfExists(viewId) : null;
             onChange(view);
         }
     }

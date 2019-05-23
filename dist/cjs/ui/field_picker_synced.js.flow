@@ -68,7 +68,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
         if (!table || table.isDeleted) {
             return null;
         }
-        return typeof fieldId === 'string' && table ? table.getFieldById(fieldId) : null;
+        return typeof fieldId === 'string' && table ? table.getFieldByIdIfExists(fieldId) : null;
     }
     render() {
         const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);

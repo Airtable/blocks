@@ -86,7 +86,7 @@ const publicCellValueUtils = {
         invariant(field.options, 'Invalid field type');
         const tableId = field.options.linkedTableId;
         invariant(typeof tableId === 'string', 'linkedTableId must be string');
-        const table = getSdk().base.getTableById(tableId);
+        const table = getSdk().base.getTableByIdIfExists(tableId);
         if (!table) {
             return {isValid: false, reason: 'Linked table does not exist'};
         }
@@ -109,7 +109,7 @@ const publicCellValueUtils = {
             const foreignRecordId = foreignRecordObj.id;
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
-            const foreignRecord = table.__getRecordById(foreignRecordId);
+            const foreignRecord = table.__getRecordByIdIfExists(foreignRecordId);
             if (!foreignRecord) {
                 return {
                     isValid: false,
@@ -128,7 +128,7 @@ const publicCellValueUtils = {
         invariant(field.options, 'Invalid field type');
         const tableId = field.options.linkedTableId;
         invariant(typeof tableId === 'string', 'no linkedTableId');
-        const table = getSdk().base.getTableById(tableId);
+        const table = getSdk().base.getTableByIdIfExists(tableId);
         invariant(table, 'Linked table does not exist');
         invariant(
             Array.isArray(newPublicCellValue),
@@ -143,7 +143,7 @@ const publicCellValueUtils = {
             const foreignRecordId = foreignRecordObj.id;
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
-            const foreignRecord = table.__getRecordById(foreignRecordId);
+            const foreignRecord = table.__getRecordByIdIfExists(foreignRecordId);
             invariant(foreignRecord, 'Record does not exist in linked table');
 
             // Ignore whatever `name` we were given (if any) and overwrite it

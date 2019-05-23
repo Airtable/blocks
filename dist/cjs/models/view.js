@@ -380,7 +380,7 @@ function (_AbstractModelWithAsy) {
               for (var _iterator3 = changedRecordIds[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                 var recordId = _step3.value;
 
-                var record = this.parentTable.__getRecordById(recordId);
+                var record = this.parentTable.__getRecordByIdIfExists(recordId);
 
                 (0, _invariant.default)(record, 'record must exist');
 
@@ -489,7 +489,7 @@ function (_AbstractModelWithAsy) {
       var visibleRecordIds = this._data.visibleRecordIds;
       (0, _invariant.default)(visibleRecordIds, 'View data is not loaded');
       return visibleRecordIds.map(recordId => {
-        var record = parentTable.__getRecordById(recordId);
+        var record = parentTable.__getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(record, 'Record in view does not exist');
         return record;
@@ -506,7 +506,7 @@ function (_AbstractModelWithAsy) {
       var fieldOrder = this._data.fieldOrder;
       (0, _invariant.default)(fieldOrder, 'View data is not loaded');
       return fieldOrder.fieldIds.map(fieldId => {
-        var field = this.parentTable.getFieldById(fieldId);
+        var field = this.parentTable.getFieldByIdIfExists(fieldId);
         (0, _invariant.default)(field, 'Field in view does not exist');
         return field;
       });
@@ -525,7 +525,7 @@ function (_AbstractModelWithAsy) {
       var visibleFields = [];
 
       for (var i = 0; i < fieldOrder.visibleFieldCount; i++) {
-        var field = this.parentTable.getFieldById(fieldIds[i]);
+        var field = this.parentTable.getFieldByIdIfExists(fieldIds[i]);
         (0, _invariant.default)(field, 'Field in view does not exist');
         visibleFields.push(field);
       }

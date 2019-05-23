@@ -217,7 +217,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         invariant(visibleRecordIds, 'View data is not loaded');
 
         return visibleRecordIds.map(recordId => {
-            const record = parentTable.__getRecordById(recordId);
+            const record = parentTable.__getRecordByIdIfExists(recordId);
             invariant(record, 'Record in view does not exist');
             return record;
         });
@@ -230,7 +230,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');
         return fieldOrder.fieldIds.map(fieldId => {
-            const field = this.parentTable.getFieldById(fieldId);
+            const field = this.parentTable.getFieldByIdIfExists(fieldId);
             invariant(field, 'Field in view does not exist');
             return field;
         });
@@ -245,7 +245,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         const {fieldIds} = fieldOrder;
         const visibleFields = [];
         for (let i = 0; i < fieldOrder.visibleFieldCount; i++) {
-            const field = this.parentTable.getFieldById(fieldIds[i]);
+            const field = this.parentTable.getFieldByIdIfExists(fieldIds[i]);
             invariant(field, 'Field in view does not exist');
             visibleFields.push(field);
         }
@@ -305,7 +305,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
                 // data we haven't received yet.
                 if (this.parentTable.isRecordMetadataLoaded) {
                     for (const recordId of changedRecordIds) {
-                        const record = this.parentTable.__getRecordById(recordId);
+                        const record = this.parentTable.__getRecordByIdIfExists(recordId);
                         invariant(record, 'record must exist');
                         record.__triggerOnChangeForRecordColorInViewId(this.id);
                     }

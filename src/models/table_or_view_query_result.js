@@ -236,7 +236,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             // using QueryResult) if the user had to manually watch for deletion
             // on all the fields and recreate the QueryResult.
             for (const fieldId of fieldIdsOrNullIfAllFields) {
-                const field = this._table.getFieldById(fieldId);
+                const field = this._table.getFieldByIdIfExists(fieldId);
                 if (field !== null) {
                     fields.push(field);
                 }
@@ -443,7 +443,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 if (groupLevel.isCreatedTime) {
                     continue;
                 }
-                const field = this._table.getFieldById(groupLevel.columnId);
+                const field = this._table.getFieldByIdIfExists(groupLevel.columnId);
                 if (field) {
                     field.watch('type', this._onFieldConfigChanged, this);
                     field.watch('options', this._onFieldConfigChanged, this);
@@ -512,7 +512,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 if (groupLevel.isCreatedTime) {
                     continue;
                 }
-                const field = this._table.getFieldById(groupLevel.columnId);
+                const field = this._table.getFieldByIdIfExists(groupLevel.columnId);
                 if (field) {
                     field.unwatch('type', this._onFieldConfigChanged, this);
                     field.unwatch('options', this._onFieldConfigChanged, this);
@@ -537,7 +537,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         const visList = this._visList;
         invariant(visList, 'No vis list');
         for (const recordId of recordIds) {
-            const record = this._table.__getRecordById(recordId);
+            const record = this._table.__getRecordByIdIfExists(recordId);
             invariant(record, 'Record missing in table');
             const rowJson = record.__getRawRow();
             const groupPath = GroupAssigner.getGroupPathForRow(
@@ -681,7 +681,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             // make sure we're watching it's config.
             if (u.has(fieldIdsSet, fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
-                const field = this._table.getFieldById(fieldId);
+                const field = this._table.getFieldByIdIfExists(fieldId);
                 invariant(field, 'Created field does not exist');
                 field.watch('type', this._onFieldConfigChanged, this);
                 field.watch('options', this._onFieldConfigChanged, this);
@@ -778,7 +778,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             if (groupLevel.isCreatedTime) {
                 return true;
             }
-            const field = this._table.getFieldById(groupLevel.columnId);
+            const field = this._table.getFieldByIdIfExists(groupLevel.columnId);
             return !!field;
         });
     }

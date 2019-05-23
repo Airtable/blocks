@@ -80,7 +80,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
         if (!userId) {
             return null;
         } else {
-            return this.getCollaboratorById(userId);
+            return this.getCollaboratorByIdIfExists(userId);
         }
     }
     _isFeatureEnabled(featureName: string): boolean {
@@ -120,7 +120,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
      */
     get activeTable(): Table | null {
         const {activeTableId} = this._data;
-        return activeTableId ? this.getTableById(activeTableId) : null;
+        return activeTableId ? this.getTableByIdIfExists(activeTableId) : null;
     }
     /**
      * The tables in this base. Can be watched to know when tables are created,
@@ -130,7 +130,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const tables = [];
         this._data.tableOrder.forEach(tableId => {
-            const table = this.getTableById(tableId);
+            const table = this.getTableByIdIfExists(tableId);
             // NOTE: A table's ID may be in tableOrder without the table appearing
             // in tablesById, in which case getTableById will return null. This
             // happens if table was just created by the user, since we
@@ -169,7 +169,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
      * Returns the user matching the given ID, or `null` if that
      * user does not exist or does not have access to this base.
      */
-    getCollaboratorById(collaboratorId: string): CollaboratorData | null {
+    getCollaboratorByIdIfExists(collaboratorId: string): CollaboratorData | null {
         const appBlanket = this.__appBlanket;
         if (!appBlanket || !appBlanket.userInfoById) {
             return null;
@@ -197,7 +197,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
      * Returns the table matching the given ID, or `null` if that
      * table does not exist in this base.
      */
-    getTableById(tableId: string): Table | null {
+    getTableByIdIfExists(tableId: string): Table | null {
         if (!this._data.tablesById[tableId]) {
             return null;
         } else {
@@ -216,10 +216,10 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
      * Returns the table matching the given name, or `null` if no table
      * exists with that name in this base.
      */
-    getTableByName(tableName: string): Table | null {
+    getTableByNameIfExists(tableName: string): Table | null {
         for (const [tableId, tableData] of entries(this._data.tablesById)) {
             if (tableData.name === tableName) {
-                return this.getTableById(tableId);
+                return this.getTableByIdIfExists(tableId);
             }
         }
         return null;

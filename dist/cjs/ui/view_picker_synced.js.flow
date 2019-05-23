@@ -68,7 +68,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
         if (!table || table.isDeleted) {
             return null;
         }
-        return typeof viewId === 'string' && table ? table.getViewById(viewId) : null;
+        return typeof viewId === 'string' && table ? table.getViewByIdIfExists(viewId) : null;
     }
     render() {
         const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);

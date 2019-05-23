@@ -40,7 +40,7 @@ Type: [Array][1]&lt;RecordModel>
 
 Returns **[Array][1]&lt;RecordModel>**
 
-### getRecordById
+### getRecordByIdIfExists
 
 #### Parameters
 

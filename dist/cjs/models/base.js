@@ -115,13 +115,13 @@ function (_AbstractModel) {
       return this._data.enabledFeatureNames.includes(featureName);
     }
   }, {
-    key: "getCollaboratorById",
+    key: "getCollaboratorByIdIfExists",
 
     /**
      * Returns the user matching the given ID, or `null` if that
      * user does not exist or does not have access to this base.
      */
-    value: function getCollaboratorById(collaboratorId) {
+    value: function getCollaboratorByIdIfExists(collaboratorId) {
       var appBlanket = this.__appBlanket;
 
       if (!appBlanket || !appBlanket.userInfoById) {
@@ -137,13 +137,13 @@ function (_AbstractModel) {
       return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
   }, {
-    key: "getTableById",
+    key: "getTableByIdIfExists",
 
     /**
      * Returns the table matching the given ID, or `null` if that
      * table does not exist in this base.
      */
-    value: function getTableById(tableId) {
+    value: function getTableByIdIfExists(tableId) {
       if (!this._data.tablesById[tableId]) {
         return null;
       } else {
@@ -160,8 +160,8 @@ function (_AbstractModel) {
      */
 
   }, {
-    key: "getTableByName",
-    value: function getTableByName(tableName) {
+    key: "getTableByNameIfExists",
+    value: function getTableByNameIfExists(tableName) {
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -173,7 +173,7 @@ function (_AbstractModel) {
               tableData = _step$value[1];
 
           if (tableData.name === tableName) {
-            return this.getTableById(tableId);
+            return this.getTableByIdIfExists(tableId);
           }
         }
       } catch (err) {
@@ -393,7 +393,7 @@ function (_AbstractModel) {
       if (!userId) {
         return null;
       } else {
-        return this.getCollaboratorById(userId);
+        return this.getCollaboratorByIdIfExists(userId);
       }
     }
   }, {
@@ -438,7 +438,7 @@ function (_AbstractModel) {
     key: "activeTable",
     get: function get() {
       var activeTableId = this._data.activeTableId;
-      return activeTableId ? this.getTableById(activeTableId) : null;
+      return activeTableId ? this.getTableByIdIfExists(activeTableId) : null;
     }
     /**
      * The tables in this base. Can be watched to know when tables are created,
@@ -452,7 +452,7 @@ function (_AbstractModel) {
       var tables = [];
 
       this._data.tableOrder.forEach(tableId => {
-        var table = this.getTableById(tableId); // NOTE: A table's ID may be in tableOrder without the table appearing
+        var table = this.getTableByIdIfExists(tableId); // NOTE: A table's ID may be in tableOrder without the table appearing
         // in tablesById, in which case getTableById will return null. This
         // happens if table was just created by the user, since we
         // wait for the push payload to deliver the table schema.

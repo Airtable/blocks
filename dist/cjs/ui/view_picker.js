@@ -102,7 +102,7 @@ function (_React$Component) {
           table = _this$props.table;
 
       if (onChange) {
-        var view = table && !table.isDeleted && viewId ? table.getViewById(viewId) : null;
+        var view = table && !table.isDeleted && viewId ? table.getViewByIdIfExists(viewId) : null;
         onChange(view);
       }
     }

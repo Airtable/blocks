@@ -57,7 +57,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
         this._tablePicker.click();
     }
     _getTableFromGlobalConfigValue(tableId: mixed): TableModel | null {
-        return typeof tableId === 'string' ? getSdk().base.getTableById(tableId) : null;
+        return typeof tableId === 'string' ? getSdk().base.getTableByIdIfExists(tableId) : null;
     }
     render() {
         const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);

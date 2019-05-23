@@ -251,9 +251,9 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "getRecordById",
-    value: function getRecordById(recordId) {
-      var record = this.parentTable.__getRecordById(recordId);
+    key: "getRecordByIdIfExists",
+    value: function getRecordByIdIfExists(recordId) {
+      var record = this.parentTable.__getRecordByIdIfExists(recordId);
 
       if (!record || !this.hasRecord(record)) {
         return null;
@@ -264,7 +264,7 @@ function (_AbstractModelWithAsy) {
   }, {
     key: "_getRecord",
     value: function _getRecord(recordOrRecordId) {
-      var record = this.getRecordById(typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id);
+      var record = this.getRecordByIdIfExists(typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id);
       (0, _invariant.default)(record, 'record must exist');
       return record;
     }
@@ -519,7 +519,7 @@ function (_AbstractModelWithAsy) {
     key: "records",
     get: function get() {
       return this.recordIds.map(recordId => {
-        var record = this.parentTable.__getRecordById(recordId);
+        var record = this.parentTable.__getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(record, 'Record missing in table');
         return record;

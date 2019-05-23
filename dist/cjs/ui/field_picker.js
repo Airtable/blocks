@@ -106,7 +106,7 @@ function (_React$Component) {
           table = _this$props.table;
 
       if (onChange) {
-        var field = table && !table.isDeleted && fieldId ? table.getFieldById(fieldId) : null;
+        var field = table && !table.isDeleted && fieldId ? table.getFieldByIdIfExists(fieldId) : null;
         onChange(field);
       }
     }

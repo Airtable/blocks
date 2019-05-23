@@ -97,7 +97,7 @@ var publicCellValueUtils = {
     (0, _invariant.default)(field.options, 'Invalid field type');
     var tableId = field.options.linkedTableId;
     (0, _invariant.default)(typeof tableId === 'string', 'linkedTableId must be string');
-    var table = (0, _get_sdk.default)().base.getTableById(tableId);
+    var table = (0, _get_sdk.default)().base.getTableByIdIfExists(tableId);
 
     if (!table) {
       return {
@@ -125,7 +125,7 @@ var publicCellValueUtils = {
         var foreignRecordId = foreignRecordObj.id;
         (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
-        var foreignRecord = table.__getRecordById(foreignRecordId);
+        var foreignRecord = table.__getRecordByIdIfExists(foreignRecordId);
 
         if (!foreignRecord) {
           return {
@@ -163,7 +163,7 @@ var publicCellValueUtils = {
     (0, _invariant.default)(field.options, 'Invalid field type');
     var tableId = field.options.linkedTableId;
     (0, _invariant.default)(typeof tableId === 'string', 'no linkedTableId');
-    var table = (0, _get_sdk.default)().base.getTableById(tableId);
+    var table = (0, _get_sdk.default)().base.getTableByIdIfExists(tableId);
     (0, _invariant.default)(table, 'Linked table does not exist');
     (0, _invariant.default)(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
     return newPublicCellValue.map(foreignRecordObj => {
@@ -171,7 +171,7 @@ var publicCellValueUtils = {
       var foreignRecordId = foreignRecordObj.id;
       (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
-      var foreignRecord = table.__getRecordById(foreignRecordId);
+      var foreignRecord = table.__getRecordByIdIfExists(foreignRecordId);
 
       (0, _invariant.default)(foreignRecord, 'Record does not exist in linked table'); // Ignore whatever `name` we were given (if any) and overwrite it
       // with the record's primary cell value. The `name` is effectively
