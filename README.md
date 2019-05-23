@@ -2,7 +2,7 @@
 
 ## Installation
 
-To install or update the `blocks` cli, run:
+To install or update the `block` cli, run:
 
     npm install --global git+ssh://git@github.com:Hyperbase/blocks-cli.git
 
