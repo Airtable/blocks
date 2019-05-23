@@ -2,6 +2,7 @@
 import invariant from 'invariant';
 import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
+import {type RecordId} from '../types/record';
 import {FieldTypes} from '../types/field';
 import {isEnumValue, assertEnumValue} from '../private_utils';
 import getSdk from '../get_sdk';
@@ -59,14 +60,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * The record IDs in this QueryResult.
      * Throws if data is not loaded yet.
      */
-    get recordIds(): Array<string> {
+    get recordIds(): Array<RecordId> {
         throw u.spawnAbstractMethodError();
     }
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
      */
-    _getOrGenerateRecordIdsSet(): {[string]: true | void} {
+    _getOrGenerateRecordIdsSet(): {[RecordId]: true | void} {
         throw u.spawnAbstractMethodError();
     }
     /**
@@ -212,29 +213,36 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      */
     get records(): Array<RecordModel> {
         return this.recordIds.map(recordId => {
-            const record = this.parentTable.getRecordById(recordId);
+            const record = this.parentTable.__getRecordById(recordId);
             invariant(record, 'Record missing in table');
             return record;
         });
     }
 
-    _getRecord(recordOrRecordId: string | RecordModel): RecordModel {
-        const record =
-            typeof recordOrRecordId === 'string'
-                ? this.parentTable.getRecordById(recordOrRecordId)
-                : recordOrRecordId;
-        invariant(record, 'Record does not exist');
-        invariant(this.hasRecord(record), 'Record is not part of this query result');
+    getRecordById(recordId: RecordId): RecordModel | null {
+        const record = this.parentTable.__getRecordById(recordId);
+        if (!record || !this.hasRecord(record)) {
+            return null;
+        }
+
         return record;
     }
 
-    hasRecord(recordOrRecordId: string | RecordModel): boolean {
+    _getRecord(recordOrRecordId: RecordId | RecordModel): RecordModel {
+        const record = this.getRecordById(
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
+        );
+        invariant(record, 'record must exist');
+        return record;
+    }
+
+    hasRecord(recordOrRecordId: RecordId | RecordModel): boolean {
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
         return this._getOrGenerateRecordIdsSet()[recordId] === true;
     }
 
-    getRecordColor(recordOrRecordId: string | RecordModel): Color | null {
+    getRecordColor(recordOrRecordId: RecordId | RecordModel): Color | null {
         const record = this._getRecord(recordOrRecordId);
         const recordColorMode = this._normalizedOpts.recordColorMode;
 
@@ -251,7 +259,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     : null;
             }
             case RecordColorModeTypes.BY_VIEW:
-                return recordColorMode.view.getRecordColor(record);
+                return recordColorMode.view.__getRecordColor(record);
             default:
                 throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
         }
@@ -314,7 +322,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 recordColorMode.selectField.watch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                recordColorMode.view.watch('recordColors', handler);
+                recordColorMode.view.watch('__recordColors', handler);
                 break;
             }
             default:
@@ -348,7 +356,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 recordColorMode.selectField.unwatch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                recordColorMode.view.unwatch('recordColors', handler);
+                recordColorMode.view.unwatch('__recordColors', handler);
                 break;
             }
             default:

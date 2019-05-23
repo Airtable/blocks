@@ -24,11 +24,11 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
 // to mirror the method/getter names on the model class.
 const WatchableViewKeys = {
     name: 'name',
-    visibleRecords: 'visibleRecords',
-    visibleRecordIds: 'visibleRecordIds',
+    __visibleRecords: '__visibleRecords',
+    __visibleRecordIds: '__visibleRecordIds',
     allFields: 'allFields',
     visibleFields: 'visibleFields',
-    recordColors: 'recordColors',
+    __recordColors: '__recordColors',
 };
 export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
@@ -40,11 +40,11 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     }
     static _shouldLoadDataForKey(key: WatchableViewKey): boolean {
         return (
-            key === WatchableViewKeys.visibleRecords ||
-            key === WatchableViewKeys.visibleRecordIds ||
+            key === WatchableViewKeys.__visibleRecords ||
+            key === WatchableViewKeys.__visibleRecordIds ||
             key === WatchableViewKeys.allFields ||
             key === WatchableViewKeys.visibleFields ||
-            key === WatchableViewKeys.recordColors
+            key === WatchableViewKeys.__recordColors
         );
     }
     _parentTable: TableType;
@@ -128,18 +128,18 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         this._data.fieldOrder = viewData.fieldOrder;
         this._data.colorsByRecordId = viewData.colorsByRecordId;
 
-        for (const record of this.visibleRecords) {
+        for (const record of this.__visibleRecords) {
             if (this._data.colorsByRecordId[record.id]) {
                 record.__triggerOnChangeForRecordColorInViewId(this.id);
             }
         }
 
         return [
-            WatchableViewKeys.visibleRecords,
-            WatchableViewKeys.visibleRecordIds,
+            WatchableViewKeys.__visibleRecords,
+            WatchableViewKeys.__visibleRecordIds,
             WatchableViewKeys.allFields,
             WatchableViewKeys.visibleFields,
-            WatchableViewKeys.recordColors,
+            WatchableViewKeys.__recordColors,
         ];
     }
     unloadData() {
@@ -161,7 +161,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     __generateChangesForParentTableAddMultipleRecords(
         recordIds: Array<string>,
     ): Array<ModelChange> {
-        const newVisibleRecordIds = [...this.visibleRecordIds, ...recordIds];
+        const newVisibleRecordIds = [...this.__visibleRecordIds, ...recordIds];
         return [
             {
                 path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'],
@@ -176,7 +176,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         for (const recordId of recordIds) {
             recordIdsToDeleteSet[recordId] = true;
         }
-        const newVisibleRecordIds = this.visibleRecordIds.filter(recordId => {
+        const newVisibleRecordIds = this.__visibleRecordIds.filter(recordId => {
             return !recordIdsToDeleteSet[recordId];
         });
         return [
@@ -191,7 +191,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * Can be watched to know when records are created, deleted, reordered, or
      * filtered in and out of this view.
      */
-    get visibleRecordIds(): Array<string> {
+    get __visibleRecordIds(): Array<string> {
         const visibleRecordIds = this._data.visibleRecordIds;
         invariant(visibleRecordIds, 'View data is not loaded');
 
@@ -209,7 +209,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * Can be watched to know when records are created, deleted, reordered, or
      * filtered in and out of this view.
      */
-    get visibleRecords(): Array<RecordType> {
+    get __visibleRecords(): Array<RecordType> {
         const {parentTable} = this;
         invariant(this._isRecordMetadataLoaded, 'Table data is not loaded');
 
@@ -217,7 +217,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         invariant(visibleRecordIds, 'View data is not loaded');
 
         return visibleRecordIds.map(recordId => {
-            const record = parentTable.getRecordById(recordId);
+            const record = parentTable.__getRecordById(recordId);
             invariant(record, 'Record in view does not exist');
             return record;
         });
@@ -253,9 +253,9 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     }
     /**
      * Get the color name for the specified record in this view, or null if no
-     * color is available. Watch with 'recordColors'
+     * color is available. Watch with '__recordColors'
      */
-    getRecordColor(recordOrRecordId: string | RecordType): Color | null {
+    __getRecordColor(recordOrRecordId: string | RecordType): Color | null {
         invariant(this.isDataLoaded, 'View data is not loaded');
         const colorsByRecordId = this._data.colorsByRecordId;
         if (!colorsByRecordId) {
@@ -269,10 +269,10 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     }
     /**
      * Get the CSS hex color for the specified record in this view, or null if
-     * no color is available. Watch with 'recordColors'
+     * no color is available. Watch with '__recordColors'
      */
-    getRecordColorHex(recordOrRecordId: string | RecordType): string | null {
-        const colorName = this.getRecordColor(recordOrRecordId);
+    __getRecordColorHex(recordOrRecordId: string | RecordType): string | null {
+        const colorName = this.__getRecordColor(recordOrRecordId);
         if (!colorName) {
             return null;
         }
@@ -283,8 +283,8 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
             this._onChange(WatchableViewKeys.name);
         }
         if (dirtyPaths.visibleRecordIds) {
-            this._onChange(WatchableViewKeys.visibleRecords);
-            this._onChange(WatchableViewKeys.visibleRecordIds);
+            this._onChange(WatchableViewKeys.__visibleRecords);
+            this._onChange(WatchableViewKeys.__visibleRecordIds);
         }
         if (dirtyPaths.fieldOrder) {
             this._onChange(WatchableViewKeys.allFields);
@@ -305,14 +305,14 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
                 // data we haven't received yet.
                 if (this.parentTable.isRecordMetadataLoaded) {
                     for (const recordId of changedRecordIds) {
-                        const record = this.parentTable.getRecordById(recordId);
+                        const record = this.parentTable.__getRecordById(recordId);
                         invariant(record, 'record must exist');
                         record.__triggerOnChangeForRecordColorInViewId(this.id);
                     }
                 }
             }
 
-            this._onChange(WatchableViewKeys.recordColors, changedRecordIds);
+            this._onChange(WatchableViewKeys.__recordColors, changedRecordIds);
         }
     }
 }

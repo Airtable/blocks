@@ -705,7 +705,8 @@ function (_QueryResult) {
       (0, _invariant.default)(this.isValid, 'LinkedRecordQueryResult is no longer valid');
       var linkedTable = this._linkedTable;
       return (0, _map.default)(_context10 = this.recordIds).call(_context10, function (recordId) {
-        var record = linkedTable.getRecordById(recordId);
+        var record = linkedTable.__getRecordById(recordId);
+
         (0, _invariant.default)(record, "No record for id: ".concat(recordId));
         return record;
       });

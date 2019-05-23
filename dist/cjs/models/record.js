@@ -321,7 +321,7 @@ function (_AbstractModel) {
 
       (0, _invariant.default)(view, 'View does not exist');
       (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
-      return view.getRecordColor(this);
+      return view.__getRecordColor(this);
     }
     /**
      * Get a CSS hex string for this record in the specified view, or null if
@@ -335,7 +335,7 @@ function (_AbstractModel) {
 
       (0, _invariant.default)(view, 'View does not exist');
       (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
-      return view.getRecordColorHex(this);
+      return view.__getRecordColorHex(this);
     }
   }, {
     key: "getLinkedRecordsFromCell",

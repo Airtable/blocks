@@ -173,7 +173,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
         const linkedTable = this._linkedTable;
         return this.recordIds.map(recordId => {
-            const record = linkedTable.getRecordById(recordId);
+            const record = linkedTable.__getRecordById(recordId);
             invariant(record, `No record for id: ${recordId}`);
             return record;
         });

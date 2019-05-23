@@ -226,7 +226,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         invariant(view, 'View does not exist');
         invariant(!view.isDeleted, 'View has been deleted');
 
-        return view.getRecordColor(this);
+        return view.__getRecordColor(this);
     }
     /**
      * Get a CSS hex string for this record in the specified view, or null if
@@ -237,7 +237,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         invariant(view, 'View does not exist');
         invariant(!view.isDeleted, 'View has been deleted');
 
-        return view.getRecordColorHex(this);
+        return view.__getRecordColorHex(this);
     }
     getLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | string,

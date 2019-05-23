@@ -124,11 +124,11 @@ var WatchableTableKeys = {
   activeView: 'activeView',
   views: 'views',
   fields: 'fields',
-  records: 'records',
-  recordIds: 'recordIds',
+  __records: '__records',
+  __recordIds: '__recordIds',
   // TODO(kasra): these keys don't have matching getters (not that they should
   // it's just inconsistent...)
-  cellValues: 'cellValues'
+  __cellValues: '__cellValues'
 };
 var WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:'; // The string case is to accommodate cellValuesInField:$FieldId.
 // It may also be useful to have cellValuesInView:$ViewId...
@@ -151,7 +151,7 @@ function (_AbstractModelWithAsy) {
       // If only watching specific fields, we'll just load cell values in those
       // fields. Both of those scenarios are handled manually by this class,
       // instead of relying on AbstractModelWithAsyncData.
-      return key === WatchableTableKeys.cellValues;
+      return key === WatchableTableKeys.__cellValues;
     }
   }]);
 
@@ -224,7 +224,7 @@ function (_AbstractModelWithAsy) {
           if ((0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix)) {
             var fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
             fieldIdsToLoad.push(fieldId);
-          } else if (key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds) {
+          } else if (key === WatchableTableKeys.__records || key === WatchableTableKeys.__recordIds) {
             fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
           }
         }
@@ -366,10 +366,8 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "getRecordById",
-
-    /** */
-    value: function getRecordById(recordId) {
+    key: "__getRecordById",
+    value: function __getRecordById(recordId) {
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
       (0, _invariant.default)(typeof recordId === 'string', 'getRecordById expects a string');
@@ -421,7 +419,7 @@ function (_AbstractModelWithAsy) {
               recordId = _step4$value[0],
               cellValuesByFieldIdOrFieldName = _step4$value[1];
 
-          var record = this.getRecordById(recordId);
+          var record = this.__getRecordById(recordId);
 
           if (!record) {
             throw new Error('Record does not exist');
@@ -559,7 +557,7 @@ function (_AbstractModelWithAsy) {
         recordDefs = recordDefsOrNumberOfRecords;
       }
 
-      if (this.remainingRecordLimit < recordDefs.length) {
+      if (this.recordLimit - this.__recordIds.length < recordDefs.length) {
         throw new Error('Table over record limit. Check remainingRecordLimit before creating records.');
       }
 
@@ -673,7 +671,7 @@ function (_AbstractModelWithAsy) {
       var completionPromise = this._airtableInterface.createRecordsAsync(this.id, parsedRecordDefs);
 
       var recordModels = (0, _map.default)(recordIds).call(recordIds, function (recordId) {
-        var recordModel = _this2.getRecordById(recordId);
+        var recordModel = _this2.__getRecordById(recordId);
 
         (0, _invariant.default)(recordModel, 'Newly created record does not exist');
         return recordModel;
@@ -1114,11 +1112,11 @@ function (_AbstractModelWithAsy) {
                 // of those causes record metadata to be loaded (via _getFieldIdForCausingRecordMetadataToLoad)
                 // and by convention we trigger a change event when data loads.
 
-                changedKeys.push(WatchableTableKeys.records);
-                changedKeys.push(WatchableTableKeys.recordIds); // Also trigger cellValues changes since the cell values in the fields
+                changedKeys.push(WatchableTableKeys.__records);
+                changedKeys.push(WatchableTableKeys.__recordIds); // Also trigger cellValues changes since the cell values in the fields
                 // are now loaded.
 
-                changedKeys.push(WatchableTableKeys.cellValues);
+                changedKeys.push(WatchableTableKeys.__cellValues);
                 return _context5.abrupt("return", changedKeys);
 
               case 12:
@@ -1248,7 +1246,7 @@ function (_AbstractModelWithAsy) {
               case 2:
                 tableData = _context6.sent;
                 this._data.recordsById = tableData.recordsById;
-                changedKeys = [WatchableTableKeys.records, WatchableTableKeys.recordIds, WatchableTableKeys.cellValues];
+                changedKeys = [WatchableTableKeys.__records, WatchableTableKeys.__recordIds, WatchableTableKeys.__cellValues];
 
                 for (_i3 = 0, _Object$keys = (0, _keys.default)(this._data.fieldsById); _i3 < _Object$keys.length; _i3++) {
                   fieldId = _Object$keys[_i3];
@@ -1560,12 +1558,12 @@ function (_AbstractModelWithAsy) {
         }
 
         if (addedRecordIds.length > 0 || removedRecordIds.length > 0) {
-          this._onChange(WatchableTableKeys.records, {
+          this._onChange(WatchableTableKeys.__records, {
             addedRecordIds: addedRecordIds,
             removedRecordIds: removedRecordIds
           });
 
-          this._onChange(WatchableTableKeys.recordIds, {
+          this._onChange(WatchableTableKeys.__recordIds, {
             addedRecordIds: addedRecordIds,
             removedRecordIds: removedRecordIds
           });
@@ -1584,7 +1582,7 @@ function (_AbstractModelWithAsy) {
         var recordIds = (0, _freeze.default)((0, _keys.default)(dirtyPaths.recordsById));
 
         if (fieldIds.length > 0 && recordIds.length > 0) {
-          this._onChange(WatchableTableKeys.cellValues, {
+          this._onChange(WatchableTableKeys.__cellValues, {
             recordIds: recordIds,
             fieldIds: fieldIds
           });
@@ -1745,7 +1743,7 @@ function (_AbstractModelWithAsy) {
       return views;
     }
   }, {
-    key: "records",
+    key: "__records",
     get: function get() {
       var _context8,
           _this8 = this;
@@ -1753,7 +1751,7 @@ function (_AbstractModelWithAsy) {
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
       var records = (0, _map.default)(_context8 = (0, _keys.default)(recordsById)).call(_context8, function (recordId) {
-        var record = _this8.getRecordById(recordId);
+        var record = _this8.__getRecordById(recordId);
 
         (0, _invariant.default)(record, 'record');
         return record;
@@ -1766,18 +1764,11 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "recordIds",
+    key: "__recordIds",
     get: function get() {
       var recordsById = this._data.recordsById;
       (0, _invariant.default)(recordsById, 'Record metadata is not loaded');
       return (0, _keys.default)(recordsById);
-    }
-    /** Number of records in the table */
-
-  }, {
-    key: "recordCount",
-    get: function get() {
-      return this.recordIds.length;
     }
     /** Maximum number of records that the table can contain */
 
@@ -1785,13 +1776,6 @@ function (_AbstractModelWithAsy) {
     key: "recordLimit",
     get: function get() {
       return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
-    }
-    /** Maximum number of additional records that can be created in the table */
-
-  }, {
-    key: "remainingRecordLimit",
-    get: function get() {
-      return this.recordLimit - this.recordCount;
     }
   }, {
     key: "isRecordMetadataLoaded",

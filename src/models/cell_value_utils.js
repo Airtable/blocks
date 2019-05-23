@@ -109,7 +109,7 @@ const publicCellValueUtils = {
             const foreignRecordId = foreignRecordObj.id;
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
-            const foreignRecord = table.getRecordById(foreignRecordId);
+            const foreignRecord = table.__getRecordById(foreignRecordId);
             if (!foreignRecord) {
                 return {
                     isValid: false,
@@ -143,7 +143,7 @@ const publicCellValueUtils = {
             const foreignRecordId = foreignRecordObj.id;
             invariant(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
-            const foreignRecord = table.getRecordById(foreignRecordId);
+            const foreignRecord = table.__getRecordById(foreignRecordId);
             invariant(foreignRecord, 'Record does not exist in linked table');
 
             // Ignore whatever `name` we were given (if any) and overwrite it

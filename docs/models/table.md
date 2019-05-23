@@ -107,32 +107,6 @@ Returns **(View | null)**
 
 Returns **TableOrViewQueryResult**
 
-### records
-
-The records in this table. The order is arbitrary since records are only ordered in the context of a
-specific view.
-
-Type: [Array][2]&lt;Record>
-
-Returns **[Array][2]&lt;Record>**
-
-### recordIds
-
-The record IDs in this table. The order is arbitrary since records are only ordered in the context
-of a specific view.
-
-Type: [Array][2]&lt;[string][1]>
-
-Returns **[Array][2]&lt;[string][1]>**
-
-### recordCount
-
-Number of records in the table
-
-Type: [number][3]
-
-Returns **[number][3]**
-
 ### recordLimit
 
 Maximum number of records that the table can contain
@@ -141,21 +115,9 @@ Type: [number][3]
 
 Returns **[number][3]**
 
-### remainingRecordLimit
-
-Maximum number of additional records that can be created in the table
-
 Type: [number][3]
 
 Returns **[number][3]**
-
-### getRecordById
-
-#### Parameters
-
--   `recordId` **[string][1]**
-
-Returns **(Record | null)**
 
 ### canSetCellValues
 

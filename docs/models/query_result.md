@@ -15,12 +15,6 @@ Type: [Array][1]&lt;[string][2]>
 
 Returns **[Array][1]&lt;[string][2]>**
 
-### \_getOrGenerateRecordIdsSet
-
-The set of record IDs in this QueryResult. Throws if data is not loaded yet.
-
-Returns **{}**
-
 ### fields
 
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
@@ -45,6 +39,14 @@ The records in this QueryResult. Throws if data is not loaded yet.
 Type: [Array][1]&lt;RecordModel>
 
 Returns **[Array][1]&lt;RecordModel>**
+
+### getRecordById
+
+#### Parameters
+
+-   `recordId` RecordId
+
+Returns `Record | null`
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String

@@ -84,11 +84,11 @@ var airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shar
 
 var WatchableViewKeys = {
   name: 'name',
-  visibleRecords: 'visibleRecords',
-  visibleRecordIds: 'visibleRecordIds',
+  __visibleRecords: '__visibleRecords',
+  __visibleRecordIds: '__visibleRecordIds',
   allFields: 'allFields',
   visibleFields: 'visibleFields',
-  recordColors: 'recordColors'
+  __recordColors: '__recordColors'
 };
 
 /** Model class representing a view in a table. */
@@ -104,7 +104,7 @@ function (_AbstractModelWithAsy) {
   }, {
     key: "_shouldLoadDataForKey",
     value: function _shouldLoadDataForKey(key) {
-      return key === WatchableViewKeys.visibleRecords || key === WatchableViewKeys.visibleRecordIds || key === WatchableViewKeys.allFields || key === WatchableViewKeys.visibleFields || key === WatchableViewKeys.recordColors;
+      return key === WatchableViewKeys.__visibleRecords || key === WatchableViewKeys.__visibleRecordIds || key === WatchableViewKeys.allFields || key === WatchableViewKeys.visibleFields || key === WatchableViewKeys.__recordColors;
     }
   }]);
 
@@ -193,7 +193,7 @@ function (_AbstractModelWithAsy) {
                 _iteratorError = undefined;
                 _context2.prev = 13;
 
-                for (_iterator = (0, _getIterator2.default)(this.visibleRecords); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                for (_iterator = (0, _getIterator2.default)(this.__visibleRecords); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                   record = _step.value;
 
                   if (this._data.colorsByRecordId[record.id]) {
@@ -235,7 +235,7 @@ function (_AbstractModelWithAsy) {
                 return _context2.finish(21);
 
               case 29:
-                return _context2.abrupt("return", [WatchableViewKeys.visibleRecords, WatchableViewKeys.visibleRecordIds, WatchableViewKeys.allFields, WatchableViewKeys.visibleFields, WatchableViewKeys.recordColors]);
+                return _context2.abrupt("return", [WatchableViewKeys.__visibleRecords, WatchableViewKeys.__visibleRecordIds, WatchableViewKeys.allFields, WatchableViewKeys.visibleFields, WatchableViewKeys.__recordColors]);
 
               case 30:
               case "end":
@@ -278,7 +278,7 @@ function (_AbstractModelWithAsy) {
     value: function __generateChangesForParentTableAddMultipleRecords(recordIds) {
       var _context3;
 
-      var newVisibleRecordIds = (0, _concat.default)(_context3 = []).call(_context3, (0, _toConsumableArray2.default)(this.visibleRecordIds), (0, _toConsumableArray2.default)(recordIds));
+      var newVisibleRecordIds = (0, _concat.default)(_context3 = []).call(_context3, (0, _toConsumableArray2.default)(this.__visibleRecordIds), (0, _toConsumableArray2.default)(recordIds));
       return [{
         path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'],
         value: newVisibleRecordIds
@@ -314,7 +314,7 @@ function (_AbstractModelWithAsy) {
         }
       }
 
-      var newVisibleRecordIds = (0, _filter.default)(_context4 = this.visibleRecordIds).call(_context4, function (recordId) {
+      var newVisibleRecordIds = (0, _filter.default)(_context4 = this.__visibleRecordIds).call(_context4, function (recordId) {
         return !recordIdsToDeleteSet[recordId];
       });
       return [{
@@ -329,13 +329,13 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "getRecordColor",
+    key: "__getRecordColor",
 
     /**
      * Get the color name for the specified record in this view, or null if no
-     * color is available. Watch with 'recordColors'
+     * color is available. Watch with '__recordColors'
      */
-    value: function getRecordColor(recordOrRecordId) {
+    value: function __getRecordColor(recordOrRecordId) {
       (0, _invariant.default)(this.isDataLoaded, 'View data is not loaded');
       var colorsByRecordId = this._data.colorsByRecordId;
 
@@ -349,13 +349,13 @@ function (_AbstractModelWithAsy) {
     }
     /**
      * Get the CSS hex color for the specified record in this view, or null if
-     * no color is available. Watch with 'recordColors'
+     * no color is available. Watch with '__recordColors'
      */
 
   }, {
-    key: "getRecordColorHex",
-    value: function getRecordColorHex(recordOrRecordId) {
-      var colorName = this.getRecordColor(recordOrRecordId);
+    key: "__getRecordColorHex",
+    value: function __getRecordColorHex(recordOrRecordId) {
+      var colorName = this.__getRecordColor(recordOrRecordId);
 
       if (!colorName) {
         return null;
@@ -371,9 +371,9 @@ function (_AbstractModelWithAsy) {
       }
 
       if (dirtyPaths.visibleRecordIds) {
-        this._onChange(WatchableViewKeys.visibleRecords);
+        this._onChange(WatchableViewKeys.__visibleRecords);
 
-        this._onChange(WatchableViewKeys.visibleRecordIds);
+        this._onChange(WatchableViewKeys.__visibleRecordIds);
       }
 
       if (dirtyPaths.fieldOrder) {
@@ -401,7 +401,9 @@ function (_AbstractModelWithAsy) {
             try {
               for (var _iterator3 = (0, _getIterator2.default)(changedRecordIds), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                 var recordId = _step3.value;
-                var record = this.parentTable.getRecordById(recordId);
+
+                var record = this.parentTable.__getRecordById(recordId);
+
                 (0, _invariant.default)(record, 'record must exist');
 
                 record.__triggerOnChangeForRecordColorInViewId(this.id);
@@ -423,7 +425,7 @@ function (_AbstractModelWithAsy) {
           }
         }
 
-        this._onChange(WatchableViewKeys.recordColors, changedRecordIds);
+        this._onChange(WatchableViewKeys.__recordColors, changedRecordIds);
       }
     }
   }, {
@@ -482,7 +484,7 @@ function (_AbstractModelWithAsy) {
       });
     }
   }, {
-    key: "visibleRecordIds",
+    key: "__visibleRecordIds",
     get: function get() {
       var visibleRecordIds = this._data.visibleRecordIds;
       (0, _invariant.default)(visibleRecordIds, 'View data is not loaded'); // Freeze visibleRecordIds so users can't mutate it.
@@ -502,14 +504,15 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
-    key: "visibleRecords",
+    key: "__visibleRecords",
     get: function get() {
       var parentTable = this.parentTable;
       (0, _invariant.default)(this._isRecordMetadataLoaded, 'Table data is not loaded');
       var visibleRecordIds = this._data.visibleRecordIds;
       (0, _invariant.default)(visibleRecordIds, 'View data is not loaded');
       return (0, _map.default)(visibleRecordIds).call(visibleRecordIds, function (recordId) {
-        var record = parentTable.getRecordById(recordId);
+        var record = parentTable.__getRecordById(recordId);
+
         (0, _invariant.default)(record, 'Record in view does not exist');
         return record;
       });

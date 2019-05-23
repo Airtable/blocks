@@ -740,7 +740,7 @@ function (_QueryResult) {
         for (var _iterator9 = (0, _getIterator2.default)(recordIds), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
           var recordId = _step9.value;
 
-          var record = this._table.getRecordById(recordId);
+          var record = this._table.__getRecordById(recordId);
 
           (0, _invariant.default)(record, 'Record missing in table');
 
@@ -772,9 +772,9 @@ function (_QueryResult) {
         // so we need to manually generate updates based on the old and new
         // recordIds.
         if (this._orderedRecordIds) {
-          var _addedRecordIds = u.difference(model.visibleRecordIds, this._orderedRecordIds);
+          var _addedRecordIds = u.difference(model.__visibleRecordIds, this._orderedRecordIds);
 
-          var _removedRecordIds = u.difference(this._orderedRecordIds, model.visibleRecordIds);
+          var _removedRecordIds = u.difference(this._orderedRecordIds, model.__visibleRecordIds);
 
           updates = {
             addedRecordIds: _addedRecordIds,
@@ -1220,7 +1220,7 @@ function (_QueryResult) {
   }, {
     key: "_recordsWatchKey",
     get: function get() {
-      return this._sourceModel instanceof _table.default ? 'records' : 'visibleRecords';
+      return this._sourceModel instanceof _table.default ? '__records' : '__visibleRecords';
     }
   }, {
     key: "_fieldsWatchKey",
@@ -1230,12 +1230,12 @@ function (_QueryResult) {
   }, {
     key: "_sourceModelRecordIds",
     get: function get() {
-      return this._sourceModel instanceof _table.default ? this._sourceModel.recordIds : this._sourceModel.visibleRecordIds;
+      return this._sourceModel instanceof _table.default ? this._sourceModel.__recordIds : this._sourceModel.__visibleRecordIds;
     }
   }, {
     key: "_sourceModelRecords",
     get: function get() {
-      return this._sourceModel instanceof _table.default ? this._sourceModel.records : this._sourceModel.visibleRecords;
+      return this._sourceModel instanceof _table.default ? this._sourceModel.__records : this._sourceModel.__visibleRecords;
     }
   }]);
   return TableOrViewQueryResult;

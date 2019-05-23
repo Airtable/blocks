@@ -259,20 +259,20 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             : [];
     }
     get _recordsWatchKey(): WatchableTableKey | WatchableViewKey {
-        return this._sourceModel instanceof TableModel ? 'records' : 'visibleRecords';
+        return this._sourceModel instanceof TableModel ? '__records' : '__visibleRecords';
     }
     get _fieldsWatchKey(): WatchableTableKey {
         return 'fields';
     }
     get _sourceModelRecordIds(): Array<string> {
         return this._sourceModel instanceof TableModel
-            ? this._sourceModel.recordIds
-            : this._sourceModel.visibleRecordIds;
+            ? this._sourceModel.__recordIds
+            : this._sourceModel.__visibleRecordIds;
     }
     get _sourceModelRecords(): Array<RecordModel> {
         return this._sourceModel instanceof TableModel
-            ? this._sourceModel.records
-            : this._sourceModel.visibleRecords;
+            ? this._sourceModel.__records
+            : this._sourceModel.__visibleRecords;
     }
     _incrementCellValueKeyWatchCountAndWatchIfNecessary(key: string, watchCallback: Function) {
         if (!this._cellValueKeyWatchCounts[key]) {
@@ -537,7 +537,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         const visList = this._visList;
         invariant(visList, 'No vis list');
         for (const recordId of recordIds) {
-            const record = this._table.getRecordById(recordId);
+            const record = this._table.__getRecordById(recordId);
             invariant(record, 'Record missing in table');
             const rowJson = record.__getRawRow();
             const groupPath = GroupAssigner.getGroupPathForRow(
@@ -559,10 +559,13 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             // so we need to manually generate updates based on the old and new
             // recordIds.
             if (this._orderedRecordIds) {
-                const addedRecordIds = u.difference(model.visibleRecordIds, this._orderedRecordIds);
+                const addedRecordIds = u.difference(
+                    model.__visibleRecordIds,
+                    this._orderedRecordIds,
+                );
                 const removedRecordIds = u.difference(
                     this._orderedRecordIds,
-                    model.visibleRecordIds,
+                    model.__visibleRecordIds,
                 );
                 updates = {addedRecordIds, removedRecordIds};
             } else {

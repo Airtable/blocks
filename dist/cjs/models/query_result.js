@@ -254,11 +254,21 @@ function (_AbstractModelWithAsy) {
      */
 
   }, {
+    key: "getRecordById",
+    value: function getRecordById(recordId) {
+      var record = this.parentTable.__getRecordById(recordId);
+
+      if (!record || !this.hasRecord(record)) {
+        return null;
+      }
+
+      return record;
+    }
+  }, {
     key: "_getRecord",
     value: function _getRecord(recordOrRecordId) {
-      var record = typeof recordOrRecordId === 'string' ? this.parentTable.getRecordById(recordOrRecordId) : recordOrRecordId;
-      (0, _invariant.default)(record, 'Record does not exist');
-      (0, _invariant.default)(this.hasRecord(record), 'Record is not part of this query result');
+      var record = this.getRecordById(typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id);
+      (0, _invariant.default)(record, 'record must exist');
       return record;
     }
   }, {
@@ -289,7 +299,7 @@ function (_AbstractModelWithAsy) {
           }
 
         case _record_coloring.ModeTypes.BY_VIEW:
-          return recordColorMode.view.getRecordColor(record);
+          return recordColorMode.view.__getRecordColor(record);
 
         default:
           throw new Error("Unknown record coloring mode: ".concat(recordColorMode.type));
@@ -397,7 +407,7 @@ function (_AbstractModelWithAsy) {
 
         case _record_coloring.ModeTypes.BY_VIEW:
           {
-            recordColorMode.view.watch('recordColors', handler);
+            recordColorMode.view.watch('__recordColors', handler);
             break;
           }
 
@@ -436,7 +446,7 @@ function (_AbstractModelWithAsy) {
 
         case _record_coloring.ModeTypes.BY_VIEW:
           {
-            recordColorMode.view.unwatch('recordColors', handler);
+            recordColorMode.view.unwatch('__recordColors', handler);
             break;
           }
 
@@ -520,7 +530,7 @@ function (_AbstractModelWithAsy) {
           _this3 = this;
 
       return (0, _map.default)(_context6 = this.recordIds).call(_context6, function (recordId) {
-        var record = _this3.parentTable.getRecordById(recordId);
+        var record = _this3.parentTable.__getRecordById(recordId);
 
         (0, _invariant.default)(record, 'Record missing in table');
         return record;

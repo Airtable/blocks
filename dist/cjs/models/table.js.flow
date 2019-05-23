@@ -36,11 +36,11 @@ const WatchableTableKeys = {
     activeView: 'activeView',
     views: 'views',
     fields: 'fields',
-    records: 'records',
-    recordIds: 'recordIds',
+    __records: '__records',
+    __recordIds: '__recordIds',
     // TODO(kasra): these keys don't have matching getters (not that they should
     // it's just inconsistent...)
-    cellValues: 'cellValues',
+    __cellValues: '__cellValues',
 };
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 // The string case is to accommodate cellValuesInField:$FieldId.
@@ -62,7 +62,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // If only watching specific fields, we'll just load cell values in those
         // fields. Both of those scenarios are handled manually by this class,
         // instead of relying on AbstractModelWithAsyncData.
-        return key === WatchableTableKeys.cellValues;
+        return key === WatchableTableKeys.__cellValues;
     }
     _parentBase: Base;
     _viewModelsById: {[string]: View};
@@ -139,7 +139,10 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
                 fieldIdsToLoad.push(fieldId);
-            } else if (key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds) {
+            } else if (
+                key === WatchableTableKeys.__records ||
+                key === WatchableTableKeys.__recordIds
+            ) {
                 fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
             }
         }
@@ -265,11 +268,11 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
      * The records in this table. The order is arbitrary since records are
      * only ordered in the context of a specific view.
      */
-    get records(): Array<Record> {
+    get __records(): Array<Record> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
         const records = Object.keys(recordsById).map(recordId => {
-            const record = this.getRecordById(recordId);
+            const record = this.__getRecordById(recordId);
             invariant(record, 'record');
             return record;
         });
@@ -279,25 +282,16 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
      * The record IDs in this table. The order is arbitrary since records are
      * only ordered in the context of a specific view.
      */
-    get recordIds(): Array<string> {
+    get __recordIds(): Array<string> {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
         return Object.keys(recordsById);
-    }
-    /** Number of records in the table */
-    get recordCount(): number {
-        return this.recordIds.length;
     }
     /** Maximum number of records that the table can contain */
     get recordLimit(): number {
         return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
     }
-    /** Maximum number of additional records that can be created in the table */
-    get remainingRecordLimit(): number {
-        return this.recordLimit - this.recordCount;
-    }
-    /** */
-    getRecordById(recordId: string): Record | null {
+    __getRecordById(recordId: string): Record | null {
         const recordsById = this._data.recordsById;
         invariant(recordsById, 'Record metadata is not loaded');
         invariant(typeof recordId === 'string', 'getRecordById expects a string');
@@ -334,7 +328,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         for (const [recordId, cellValuesByFieldIdOrFieldName] of entries(
             cellValuesByRecordIdThenFieldIdOrFieldName,
         )) {
-            const record = this.getRecordById(recordId);
+            const record = this.__getRecordById(recordId);
             if (!record) {
                 throw new Error('Record does not exist');
             }
@@ -449,7 +443,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             recordDefs = recordDefsOrNumberOfRecords;
         }
 
-        if (this.remainingRecordLimit < recordDefs.length) {
+        if (this.recordLimit - this.__recordIds.length < recordDefs.length) {
             throw new Error(
                 'Table over record limit. Check remainingRecordLimit before creating records.',
             );
@@ -510,7 +504,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         );
 
         const recordModels = recordIds.map(recordId => {
-            const recordModel = this.getRecordById(recordId);
+            const recordModel = this.__getRecordById(recordId);
             invariant(recordModel, 'Newly created record does not exist');
             return recordModel;
         });
@@ -752,11 +746,11 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // Need to trigger onChange for records and recordIds since watching either
         // of those causes record metadata to be loaded (via _getFieldIdForCausingRecordMetadataToLoad)
         // and by convention we trigger a change event when data loads.
-        changedKeys.push(WatchableTableKeys.records);
-        changedKeys.push(WatchableTableKeys.recordIds);
+        changedKeys.push(WatchableTableKeys.__records);
+        changedKeys.push(WatchableTableKeys.__recordIds);
         // Also trigger cellValues changes since the cell values in the fields
         // are now loaded.
-        changedKeys.push(WatchableTableKeys.cellValues);
+        changedKeys.push(WatchableTableKeys.__cellValues);
         return changedKeys;
     }
     /** */
@@ -806,9 +800,9 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         this._data.recordsById = tableData.recordsById;
 
         const changedKeys = [
-            WatchableTableKeys.records,
-            WatchableTableKeys.recordIds,
-            WatchableTableKeys.cellValues,
+            WatchableTableKeys.__records,
+            WatchableTableKeys.__recordIds,
+            WatchableTableKeys.__cellValues,
         ];
 
         for (const fieldId of Object.keys(this._data.fieldsById)) {
@@ -986,12 +980,12 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             // Now that we've composed our created/deleted record ids arrays, let's fire
             // the records onChange event if any records were created or deleted.
             if (addedRecordIds.length > 0 || removedRecordIds.length > 0) {
-                this._onChange(WatchableTableKeys.records, {
+                this._onChange(WatchableTableKeys.__records, {
                     addedRecordIds,
                     removedRecordIds,
                 });
 
-                this._onChange(WatchableTableKeys.recordIds, {
+                this._onChange(WatchableTableKeys.__recordIds, {
                     addedRecordIds,
                     removedRecordIds,
                 });
@@ -1009,7 +1003,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             const fieldIds = Object.freeze(Object.keys(dirtyFieldIdsSet));
             const recordIds = Object.freeze(Object.keys(dirtyPaths.recordsById));
             if (fieldIds.length > 0 && recordIds.length > 0) {
-                this._onChange(WatchableTableKeys.cellValues, {
+                this._onChange(WatchableTableKeys.__cellValues, {
                     recordIds,
                     fieldIds,
                 });

@@ -112,7 +112,7 @@ function _expandRecordPickerAsync() {
             return _context2.abrupt("return", null);
 
           case 15:
-            return _context2.abrupt("return", table.getRecordById(chosenRecordId));
+            return _context2.abrupt("return", table.__getRecordById(chosenRecordId));
 
           case 16:
           case "end":

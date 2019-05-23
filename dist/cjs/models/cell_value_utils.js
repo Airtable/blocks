@@ -120,7 +120,8 @@ var publicCellValueUtils = {
         (0, _invariant.default)(foreignRecordObj && (0, _typeof2.default)(foreignRecordObj) === 'object', 'Linked record cell value must be an array of objects');
         var foreignRecordId = foreignRecordObj.id;
         (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
-        var foreignRecord = table.getRecordById(foreignRecordId);
+
+        var foreignRecord = table.__getRecordById(foreignRecordId);
 
         if (!foreignRecord) {
           return {
@@ -164,7 +165,9 @@ var publicCellValueUtils = {
       (0, _invariant.default)(foreignRecordObj && (0, _typeof2.default)(foreignRecordObj) === 'object', 'Linked record cell value must be an array of objects');
       var foreignRecordId = foreignRecordObj.id;
       (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
-      var foreignRecord = table.getRecordById(foreignRecordId);
+
+      var foreignRecord = table.__getRecordById(foreignRecordId);
+
       (0, _invariant.default)(foreignRecord, 'Record does not exist in linked table'); // Ignore whatever `name` we were given (if any) and overwrite it
       // with the record's primary cell value. The `name` is effectively
       // read-only (i.e. you can't update a record primary cell value through

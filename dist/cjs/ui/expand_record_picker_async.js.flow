@@ -84,7 +84,7 @@ async function expandRecordPickerAsync(
         return null;
     }
 
-    return table.getRecordById(chosenRecordId);
+    return table.__getRecordById(chosenRecordId);
 }
 
 export default expandRecordPickerAsync;
