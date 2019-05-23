@@ -34,10 +34,6 @@ export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
 
 /** Model class representing a view in a table. */
 class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
-    // Once all blocks that current set this flag to true are migrated,
-    // remove this flag.
-    static shouldLoadAllCellValuesForRecords = false;
-
     static _className = 'View';
     static _isWatchableKey(key: string): boolean {
         return isEnumValue(WatchableViewKeys, key);
@@ -77,9 +73,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     }
     get _isRecordMetadataLoaded(): boolean {
         const parentTable = this.parentTable;
-        const isParentTableLoaded = View.shouldLoadAllCellValuesForRecords
-            ? parentTable.isDataLoaded
-            : parentTable.isRecordMetadataLoaded;
+        const isParentTableLoaded = parentTable.isRecordMetadataLoaded;
         return isParentTableLoaded;
     }
     /** */
@@ -114,14 +108,8 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         // _loadDataAsync since we want the retain counts for the view and table to increase/decrease
         // in lock-step. If we load table data in _loadDataAsync, the table's retain
         // count only increments some of the time, which leads to unexpected behavior.
-        if (View.shouldLoadAllCellValuesForRecords) {
-            // Legacy behavior.
-            const tableLoadPromise = this.parentTable.loadDataAsync();
-            this._mostRecentTableLoadPromise = tableLoadPromise;
-        } else {
-            const tableLoadPromise = this.parentTable.loadRecordMetadataAsync();
-            this._mostRecentTableLoadPromise = tableLoadPromise;
-        }
+        const tableLoadPromise = this.parentTable.loadRecordMetadataAsync();
+        this._mostRecentTableLoadPromise = tableLoadPromise;
 
         await super.loadDataAsync();
     }
@@ -160,13 +148,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         // retain counts to increment/decrement in lock-step. If we unload the table's
         // data in _unloadData, it leads to unexpected behavior.
         super.unloadData();
-
-        if (View.shouldLoadAllCellValuesForRecords) {
-            // Legacy behavior.
-            this.parentTable.unloadData();
-        } else {
-            this.parentTable.unloadRecordMetadata();
-        }
+        this.parentTable.unloadRecordMetadata();
     }
     _unloadData() {
         this._mostRecentTableLoadPromise = null;

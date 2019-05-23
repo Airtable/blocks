@@ -140,8 +140,6 @@ function (_AbstractModelWithAsy) {
   (0, _inherits2.default)(Table, _AbstractModelWithAsy);
   (0, _createClass2.default)(Table, null, [{
     key: "_isWatchableKey",
-    // Once all blocks that current set this flag to true are migrated,
-    // remove this flag.
     value: function _isWatchableKey(key) {
       return (0, _private_utils.isEnumValue)(WatchableTableKeys, key) || (0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix);
     }
@@ -153,11 +151,7 @@ function (_AbstractModelWithAsy) {
       // If only watching specific fields, we'll just load cell values in those
       // fields. Both of those scenarios are handled manually by this class,
       // instead of relying on AbstractModelWithAsyncData.
-      if (Table.shouldLoadAllCellValuesForRecords) {
-        return key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds || key === WatchableTableKeys.cellValues;
-      } else {
-        return key === WatchableTableKeys.cellValues;
-      }
+      return key === WatchableTableKeys.cellValues;
     }
   }]);
 
@@ -230,10 +224,8 @@ function (_AbstractModelWithAsy) {
           if ((0, _startsWith.default)(u).call(u, key, WatchableCellValuesInFieldKeyPrefix)) {
             var fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
             fieldIdsToLoad.push(fieldId);
-          } else if (!Table.shouldLoadAllCellValuesForRecords) {
-            if (key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds) {
-              fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
-            }
+          } else if (key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds) {
+            fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
           }
         }
       } catch (err) {
@@ -1810,7 +1802,6 @@ function (_AbstractModelWithAsy) {
   return Table;
 }(_abstract_model_with_async_data.default);
 
-(0, _defineProperty2.default)(Table, "shouldLoadAllCellValuesForRecords", false);
 (0, _defineProperty2.default)(Table, "_className", 'Table');
 var _default = Table;
 exports.default = _default;

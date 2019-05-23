@@ -98,8 +98,6 @@ function (_AbstractModelWithAsy) {
   (0, _inherits2.default)(View, _AbstractModelWithAsy);
   (0, _createClass2.default)(View, null, [{
     key: "_isWatchableKey",
-    // Once all blocks that current set this flag to true are migrated,
-    // remove this flag.
     value: function _isWatchableKey(key) {
       return (0, _private_utils.isEnumValue)(WatchableViewKeys, key);
     }
@@ -135,8 +133,7 @@ function (_AbstractModelWithAsy) {
       var _loadDataAsync2 = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
       _regenerator.default.mark(function _callee() {
-        var tableLoadPromise, _tableLoadPromise;
-
+        var tableLoadPromise;
         return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -146,19 +143,12 @@ function (_AbstractModelWithAsy) {
                 // _loadDataAsync since we want the retain counts for the view and table to increase/decrease
                 // in lock-step. If we load table data in _loadDataAsync, the table's retain
                 // count only increments some of the time, which leads to unexpected behavior.
-                if (View.shouldLoadAllCellValuesForRecords) {
-                  // Legacy behavior.
-                  tableLoadPromise = this.parentTable.loadDataAsync();
-                  this._mostRecentTableLoadPromise = tableLoadPromise;
-                } else {
-                  _tableLoadPromise = this.parentTable.loadRecordMetadataAsync();
-                  this._mostRecentTableLoadPromise = _tableLoadPromise;
-                }
-
-                _context.next = 3;
+                tableLoadPromise = this.parentTable.loadRecordMetadataAsync();
+                this._mostRecentTableLoadPromise = tableLoadPromise;
+                _context.next = 4;
                 return (0, _get2.default)((0, _getPrototypeOf2.default)(View.prototype), "loadDataAsync", this).call(this);
 
-              case 3:
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -269,13 +259,7 @@ function (_AbstractModelWithAsy) {
       // retain counts to increment/decrement in lock-step. If we unload the table's
       // data in _unloadData, it leads to unexpected behavior.
       (0, _get2.default)((0, _getPrototypeOf2.default)(View.prototype), "unloadData", this).call(this);
-
-      if (View.shouldLoadAllCellValuesForRecords) {
-        // Legacy behavior.
-        this.parentTable.unloadData();
-      } else {
-        this.parentTable.unloadRecordMetadata();
-      }
+      this.parentTable.unloadRecordMetadata();
     }
   }, {
     key: "_unloadData",
@@ -457,7 +441,7 @@ function (_AbstractModelWithAsy) {
     key: "_isRecordMetadataLoaded",
     get: function get() {
       var parentTable = this.parentTable;
-      var isParentTableLoaded = View.shouldLoadAllCellValuesForRecords ? parentTable.isDataLoaded : parentTable.isRecordMetadataLoaded;
+      var isParentTableLoaded = parentTable.isRecordMetadataLoaded;
       return isParentTableLoaded;
     }
     /** */
@@ -575,7 +559,6 @@ function (_AbstractModelWithAsy) {
   return View;
 }(_abstract_model_with_async_data.default);
 
-(0, _defineProperty2.default)(View, "shouldLoadAllCellValuesForRecords", false);
 (0, _defineProperty2.default)(View, "_className", 'View');
 var _default = View;
 exports.default = _default;

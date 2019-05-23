@@ -49,10 +49,6 @@ export type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
 
 /** Model class representing a table in the base. */
 class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
-    // Once all blocks that current set this flag to true are migrated,
-    // remove this flag.
-    static shouldLoadAllCellValuesForRecords = false;
-
     static _className = 'Table';
     static _isWatchableKey(key: string): boolean {
         return (
@@ -66,15 +62,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // If only watching specific fields, we'll just load cell values in those
         // fields. Both of those scenarios are handled manually by this class,
         // instead of relying on AbstractModelWithAsyncData.
-        if (Table.shouldLoadAllCellValuesForRecords) {
-            return (
-                key === WatchableTableKeys.records ||
-                key === WatchableTableKeys.recordIds ||
-                key === WatchableTableKeys.cellValues
-            );
-        } else {
-            return key === WatchableTableKeys.cellValues;
-        }
+        return key === WatchableTableKeys.cellValues;
     }
     _parentBase: Base;
     _viewModelsById: {[string]: View};
@@ -151,10 +139,8 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
                 fieldIdsToLoad.push(fieldId);
-            } else if (!Table.shouldLoadAllCellValuesForRecords) {
-                if (key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds) {
-                    fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
-                }
+            } else if (key === WatchableTableKeys.records || key === WatchableTableKeys.recordIds) {
+                fieldIdsToLoad.push(this._getFieldIdForCausingRecordMetadataToLoad());
             }
         }
         return fieldIdsToLoad;
