@@ -1,6 +1,11 @@
 **/node_modules/*
-/build/
+
 /transpiled/
+
 npm-debug.log
 .DS_Store
 .idea
+
+# The 'build' directory was renamed to 'transpiled', but
+# we still ignore it for anyone who hasn't upgraded.
+/build/
