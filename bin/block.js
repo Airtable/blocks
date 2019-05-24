@@ -3,5 +3,5 @@
 
 require('@babel/polyfill');
 
-const runBlockCli = require('../transpiled/run_block_cli');
-runBlockCli();
+const runBlockCliAsync = require('../transpiled/run_block_cli_async');
+runBlockCliAsync();

@@ -1,5 +1,6 @@
 const cliHelpers = require('./helpers/cli_helpers');
 const commandConfigs = require('./commands/command_configs');
+const setUpRollbarAsync = require('./helpers/set_up_rollbar_async');
 
 function registerCommandForConfig(yargs, commandConfig) {
     yargs.command(
@@ -53,7 +54,9 @@ function getCommandConfig(config) {
     return commandConfigs[command];
 }
 
-function runBlockCli() {
+async function runBlockCliAsync() {
+    await setUpRollbarAsync();
+
     const yargs = setUpYargs();
     const config = yargs.argv;
     const commandConfig = getCommandConfig(config);
@@ -68,4 +71,4 @@ function runBlockCli() {
     }
 }
 
-module.exports = runBlockCli;
+module.exports = runBlockCliAsync;
