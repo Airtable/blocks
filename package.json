@@ -1,7 +1,7 @@
 {
   "name": "@airtable/blocks-cli",
   "description": "Official command line tool for Airtable blocks development",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "bin": {
     "block": "bin/block.js"
   },
@@ -16,12 +16,12 @@
     "test": "mocha"
   },
   "files": [
-      "/README.md",
-      "/bin/block.js",
-      "/block_backend_wrapper/",
-      "/keys/",
-      "/src/",
-      ".babelrc"
+    "/README.md",
+    "/bin/block.js",
+    "/block_backend_wrapper/",
+    "/keys/",
+    "/src/",
+    ".babelrc"
   ],
   "dependencies": {
     "@babel/cli": "^7.2.3",
