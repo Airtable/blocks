@@ -14,6 +14,14 @@
     "postinstall": "yarn buildOnce",
     "test": "mocha"
   },
+  "files": [
+      "/README.md",
+      "/bin/block.js",
+      "/block_backend_wrapper/",
+      "/keys/",
+      "/src/",
+      ".babelrc"
+  ],
   "dependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.4.0",
