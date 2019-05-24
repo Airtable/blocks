@@ -1,4 +1,4 @@
-# Command line tool for local Blocks development
+# Command line tool for Airtable Blocks development
 
 ## Installation
 
