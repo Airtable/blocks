@@ -1,15 +1,12 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -22,7 +19,7 @@ var _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/re
 // Override the default props and then just proxy through to our loader.
 
 /** */
-var Loader = function Loader(_ref) {
+var Loader = (_ref) => {
   var _ref$fillColor = _ref.fillColor,
       fillColor = _ref$fillColor === void 0 ? '#888' : _ref$fillColor,
       _ref$scale = _ref.scale,

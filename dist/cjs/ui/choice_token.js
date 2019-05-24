@@ -1,17 +1,12 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -26,7 +21,7 @@ var _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shar
 var colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 
 /** */
-var ChoiceToken = function ChoiceToken(_ref) {
+var ChoiceToken = (_ref) => {
   var choice = _ref.choice,
       className = _ref.className;
   // Convert the choice color back to a private api choice color.

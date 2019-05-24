@@ -1,17 +1,12 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
-
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -31,7 +26,7 @@ var profilePicHelper = window.__requirePrivateModuleFromAirtable('client_server_
 var _CollaboratorToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/collaborator_token');
 
 /** */
-var CollaboratorToken = function CollaboratorToken(props) {
+var CollaboratorToken = props => {
   var collaborator = props.collaborator,
       className = props.className; // NOTE: this is a bit strange. We pull the user obj out of app blanket, format it for api v2,
   // and then compare it to the user obj that got passed in. This way, if they are equal, we can

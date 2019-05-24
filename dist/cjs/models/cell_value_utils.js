@@ -1,24 +1,25 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.symbol");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/es.symbol.description");
+
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectSpread"));
-
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
-
-var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/typeof"));
-
-var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
-
-var _isArray = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/array/is-array"));
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -32,10 +33,11 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     PublicApiVersions = _window$__requirePriv.PublicApiVersions;
 
 var publicCellValueUtils = {
-  parsePublicApiCellValue: function parsePublicApiCellValue(publicCellValue, field) {
+  parsePublicApiCellValue(publicCellValue, field) {
     return columnTypeProvider.parsePublicApiCellValue(publicCellValue, field.__getRawType(), field.__getRawTypeOptions(), field.parentTable.parentBase.__appInterface, PublicApiVersions.API2);
   },
-  validatePublicCellValueForUpdate: function validatePublicCellValueForUpdate(newPublicCellValue, currentPublicCellValue, field) {
+
+  validatePublicCellValueForUpdate(newPublicCellValue, currentPublicCellValue, field) {
     if (columnTypeProvider.isComputed(field.__getRawType())) {
       return {
         isValid: false,
@@ -72,14 +74,16 @@ var publicCellValueUtils = {
       isValid: true
     };
   },
-  normalizePublicCellValueForUpdate: function normalizePublicCellValueForUpdate(publicCellValue, field) {
+
+  normalizePublicCellValueForUpdate(publicCellValue, field) {
     if (field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS) {
       return this._normalizeLinkedRecordCellValueForUpdate(publicCellValue, field);
     }
 
     return publicCellValue;
   },
-  _validateLinkedRecordCellValueForUpdate: function _validateLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
+
+  _validateLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
     // Special case foreign records to enforce that the foreign table is
     // loaded. This let's us validate recordIds against the foreign
     // table before hitting the server.
@@ -109,15 +113,15 @@ var publicCellValueUtils = {
       };
     }
 
-    (0, _invariant.default)((0, _isArray.default)(newPublicCellValue), 'Linked record cell value must be an array of objects');
+    (0, _invariant.default)(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = (0, _getIterator2.default)(newPublicCellValue), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (var _iterator = newPublicCellValue[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var foreignRecordObj = _step.value;
-        (0, _invariant.default)(foreignRecordObj && (0, _typeof2.default)(foreignRecordObj) === 'object', 'Linked record cell value must be an array of objects');
+        (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
         var foreignRecordId = foreignRecordObj.id;
         (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
@@ -149,7 +153,8 @@ var publicCellValueUtils = {
       isValid: true
     };
   },
-  _normalizeLinkedRecordCellValueForUpdate: function _normalizeLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
+
+  _normalizeLinkedRecordCellValueForUpdate(newPublicCellValue, field) {
     if (newPublicCellValue === null || newPublicCellValue === undefined) {
       // Null and undefined need no normalization.
       return newPublicCellValue;
@@ -160,9 +165,9 @@ var publicCellValueUtils = {
     (0, _invariant.default)(typeof tableId === 'string', 'no linkedTableId');
     var table = (0, _get_sdk.default)().base.getTableById(tableId);
     (0, _invariant.default)(table, 'Linked table does not exist');
-    (0, _invariant.default)((0, _isArray.default)(newPublicCellValue), 'Linked record cell value must be an array of objects');
-    return (0, _map.default)(newPublicCellValue).call(newPublicCellValue, function (foreignRecordObj) {
-      (0, _invariant.default)(foreignRecordObj && (0, _typeof2.default)(foreignRecordObj) === 'object', 'Linked record cell value must be an array of objects');
+    (0, _invariant.default)(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
+    return newPublicCellValue.map(foreignRecordObj => {
+      (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
       var foreignRecordId = foreignRecordObj.id;
       (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
 
@@ -181,6 +186,7 @@ var publicCellValueUtils = {
       });
     });
   }
+
 };
 var _default = publicCellValueUtils;
 exports.default = _default;

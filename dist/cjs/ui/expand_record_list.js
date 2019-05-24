@@ -1,16 +1,13 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.map");
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
-
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -33,18 +30,16 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  * });
  */
 function expandRecordList(records, opts) {
-  var _context;
-
   if (records.length === 0) {
     return;
   }
 
   var tableId = records[0].parentTable.id;
-  var recordIds = (0, _map.default)(records).call(records, function (record) {
+  var recordIds = records.map(record => {
     (0, _invariant.default)(record.parentTable.id === tableId, 'all records must belong to the same table');
     return record.id;
   });
-  var fieldIds = opts && opts.fields ? (0, _map.default)(_context = opts.fields).call(_context, function (field) {
+  var fieldIds = opts && opts.fields ? opts.fields.map(field => {
     (0, _invariant.default)(field.parentTable.id === tableId, 'all fields must belong to the same table');
     return field.id;
   }) : null;

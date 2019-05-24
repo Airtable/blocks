@@ -1,30 +1,17 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.map");
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -37,74 +24,55 @@ var _color_utils = _interopRequireDefault(require("../color_utils"));
 var _icon = _interopRequireDefault(require("./icon"));
 
 /** */
-var ColorPalette =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(ColorPalette, _React$Component);
-
-  function ColorPalette() {
-    (0, _classCallCheck2.default)(this, ColorPalette);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ColorPalette).apply(this, arguments));
+class ColorPalette extends React.Component {
+  _onChange(color) {
+    if (this.props.onChange) {
+      this.props.onChange(color);
+    }
   }
 
-  (0, _createClass2.default)(ColorPalette, [{
-    key: "_onChange",
-    value: function _onChange(color) {
-      if (this.props.onChange) {
-        this.props.onChange(color);
+  render() {
+    var _this$props = this.props,
+        color = _this$props.color,
+        allowedColors = _this$props.allowedColors,
+        squareSize = _this$props.squareSize,
+        squareMargin = _this$props.squareMargin,
+        className = _this$props.className,
+        style = _this$props.style,
+        disabled = _this$props.disabled;
+    return React.createElement("div", {
+      className: "".concat(className, " overflow-hidden"),
+      style: {
+        style
       }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this = this;
+    }, React.createElement("div", {
+      className: "flex flex-wrap",
+      style: {
+        // Add a negative margin to offset the margin of each swatch,
+        // so the color swatches are flush with the outer container.
+        margin: -squareMargin
+      }
+    }, allowedColors.map(allowedColor => React.createElement("label", {
+      key: allowedColor,
+      onClick: !disabled && (() => this._onChange(allowedColor)),
+      style: {
+        backgroundColor: _color_utils.default.getHexForColor(allowedColor),
+        height: squareSize,
+        width: squareSize,
+        margin: squareMargin
+      },
+      className: (0, _classnames.default)('rounded flex items-center justify-center', {
+        'pointer link-quiet': !disabled,
+        quieter: disabled
+      })
+    }, allowedColor === color && React.createElement(_icon.default, {
+      name: "check",
+      size: 25,
+      className: _color_utils.default.shouldUseLightTextOnColor(allowedColor) ? 'text-white' : 'text-dark'
+    })))));
+  }
 
-      var _this$props = this.props,
-          color = _this$props.color,
-          allowedColors = _this$props.allowedColors,
-          squareSize = _this$props.squareSize,
-          squareMargin = _this$props.squareMargin,
-          className = _this$props.className,
-          style = _this$props.style,
-          disabled = _this$props.disabled;
-      return React.createElement("div", {
-        className: "".concat(className, " overflow-hidden"),
-        style: {
-          style: style
-        }
-      }, React.createElement("div", {
-        className: "flex flex-wrap",
-        style: {
-          // Add a negative margin to offset the margin of each swatch,
-          // so the color swatches are flush with the outer container.
-          margin: -squareMargin
-        }
-      }, (0, _map.default)(allowedColors).call(allowedColors, function (allowedColor) {
-        return React.createElement("label", {
-          key: allowedColor,
-          onClick: !disabled && function () {
-            return _this._onChange(allowedColor);
-          },
-          style: {
-            backgroundColor: _color_utils.default.getHexForColor(allowedColor),
-            height: squareSize,
-            width: squareSize,
-            margin: squareMargin
-          },
-          className: (0, _classnames.default)('rounded flex items-center justify-center', {
-            'pointer link-quiet': !disabled,
-            quieter: disabled
-          })
-        }, allowedColor === color && React.createElement(_icon.default, {
-          name: "check",
-          size: 25,
-          className: _color_utils.default.shouldUseLightTextOnColor(allowedColor) ? 'text-white' : 'text-dark'
-        }));
-      })));
-    }
-  }]);
-  return ColorPalette;
-}(React.Component);
+}
 
 (0, _defineProperty2.default)(ColorPalette, "propTypes", {
   color: _propTypes.default.string,

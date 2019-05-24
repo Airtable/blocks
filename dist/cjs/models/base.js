@@ -1,40 +1,31 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
+require("core-js/modules/es.symbol");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.symbol.description");
 
-var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+require("core-js/modules/es.array.includes");
 
-var _entriesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/entries");
+require("core-js/modules/es.array.iterator");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/es.string.includes");
+
+require("core-js/modules/web.dom-collections.for-each");
+
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/for-each"));
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
-var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/slicedToArray"));
-
-var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
-
-var _includes = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/includes"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -86,229 +77,310 @@ var WatchableBaseKeys = {
  * import {base} from 'airtable-blocks';
  */
 
-var Base =
-/*#__PURE__*/
-function (_AbstractModel) {
-  (0, _inherits2.default)(Base, _AbstractModel);
-  (0, _createClass2.default)(Base, null, [{
-    key: "_isWatchableKey",
-    value: function _isWatchableKey(key) {
-      return (0, _private_utils.isEnumValue)(WatchableBaseKeys, key);
-    }
-  }]);
-
-  function Base(baseData, airtableInterface) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, Base);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Base).call(this, baseData, baseData.id));
-    _this._tableModelsById = {}; // Table instances are lazily created by getTableById.
-
-    _this._airtableInterface = airtableInterface;
-    return _this;
+class Base extends _abstract_model.default {
+  static _isWatchableKey(key) {
+    return (0, _private_utils.isEnumValue)(WatchableBaseKeys, key);
   }
 
-  (0, _createClass2.default)(Base, [{
-    key: "_isFeatureEnabled",
-    value: function _isFeatureEnabled(featureName) {
-      return (0, _includes.default)(u).call(u, this._data.enabledFeatureNames, featureName);
+  constructor(baseData, airtableInterface) {
+    super(baseData, baseData.id);
+    this._tableModelsById = {}; // Table instances are lazily created by getTableById.
+
+    this._airtableInterface = airtableInterface;
+  }
+
+  get _dataOrNullIfDeleted() {
+    return this._baseData;
+  }
+  /** The name of the base. */
+
+
+  get name() {
+    return this._data.name;
+  }
+  /**
+   * The current user, or `null` if the block is running in a publicly shared base.
+   */
+
+
+  get currentUser() {
+    var userId = this._data.currentUserId;
+
+    if (!userId) {
+      return null;
+    } else {
+      return this.getCollaboratorById(userId);
     }
-  }, {
-    key: "getCollaboratorById",
+  }
 
-    /**
-     * Returns the user matching the given ID, or `null` if that
-     * user does not exist or does not have access to this base.
-     */
-    value: function getCollaboratorById(collaboratorId) {
-      var appBlanket = this.__appBlanket;
+  _isFeatureEnabled(featureName) {
+    return u.includes(this._data.enabledFeatureNames, featureName);
+  }
 
-      if (!appBlanket || !appBlanket.userInfoById) {
-        return null;
+  get __rawPermissionLevel() {
+    return this._data.permissionLevel;
+  }
+  /**
+   * The current user's permission level.
+   *
+   * The value of this should not be consumed and will be deprecated.
+   * To know whether a user can perform an action, use the more specific
+   * `can` method.
+   *
+   * Can be watched to know when the user's permission level changes. Usually,
+   * you'll want to watch this in your root component and re-render your whole
+   * block when the permission level changes.
+   *
+   * @example
+   * if (globalConfig.canSet('foo')) {
+   *     globalConfig.set('foo', 'bar');
+   * }
+   *
+   * @example
+   * if (record.canSetCellValue('Name', 'Chair')) {
+   *     record.setCellValue('Name', 'Chair');
+   * }
+   */
+
+
+  get permissionLevel() {
+    return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
+  }
+  /**
+   * The table model corresponding to the table the user is currently
+   * viewing in Airtable. May be `null` if the user is switching between
+   * tables. Can be watched.
+   */
+
+
+  get activeTable() {
+    var activeTableId = this._data.activeTableId;
+    return activeTableId ? this.getTableById(activeTableId) : null;
+  }
+  /**
+   * The tables in this base. Can be watched to know when tables are created,
+   * deleted, or reordered in the base.
+   */
+
+
+  get tables() {
+    // TODO(kasra): cache and freeze this so it isn't O(n)
+    var tables = [];
+
+    this._data.tableOrder.forEach(tableId => {
+      var table = this.getTableById(tableId); // NOTE: A table's ID may be in tableOrder without the table appearing
+      // in tablesById, in which case getTableById will return null. This
+      // happens if table was just created by the user, since we
+      // wait for the push payload to deliver the table schema.
+
+      if (table) {
+        tables.push(table);
       }
+    });
 
-      var userObj = appBlanket.userInfoById[collaboratorId];
+    return tables;
+  }
+  /**
+   * The users who have access to this base.
+   */
 
-      if (!userObj) {
-        return null;
-      }
 
-      return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
-    }
-  }, {
-    key: "getTableById",
+  get activeCollaborators() {
+    var collaborators = [];
+    var appBlanket = this.__appBlanket;
 
-    /**
-     * Returns the table matching the given ID, or `null` if that
-     * table does not exist in this base.
-     */
-    value: function getTableById(tableId) {
-      if (!this._data.tablesById[tableId]) {
-        return null;
-      } else {
-        if (!this._tableModelsById[tableId]) {
-          this._tableModelsById[tableId] = new _table.default(this._data, this, tableId, this._airtableInterface);
+    if (appBlanket) {
+      var userInfoById = appBlanket.userInfoById; // Exclude invites and former collaborators.
+
+      if (userInfoById) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = (0, _private_utils.values)(userInfoById)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var userObj = _step.value;
+
+            if (appBlanketUserObjMethods.isActive(userObj) && !h.id.isInviteId(userObj.id)) {
+              collaborators.push(appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj));
+            }
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
         }
-
-        return this._tableModelsById[tableId];
       }
     }
-    /**
-     * Returns the table matching the given name, or `null` if no table
-     * exists with that name in this base.
-     */
 
-  }, {
-    key: "getTableByName",
-    value: function getTableByName(tableName) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+    return collaborators;
+  }
+  /**
+   * Returns the user matching the given ID, or `null` if that
+   * user does not exist or does not have access to this base.
+   */
+
+
+  getCollaboratorById(collaboratorId) {
+    var appBlanket = this.__appBlanket;
+
+    if (!appBlanket || !appBlanket.userInfoById) {
+      return null;
+    }
+
+    var userObj = appBlanket.userInfoById[collaboratorId];
+
+    if (!userObj) {
+      return null;
+    }
+
+    return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
+  }
+
+  get __appBlanket() {
+    return this._data.appBlanket;
+  }
+
+  get __appInterface() {
+    return new UserScopedAppInterface({
+      applicationId: this.id,
+      appBlanket: this._data.appBlanket,
+      sortTiebreakerKey: this._data.sortTiebreakerKey,
+      currentSessionUserId: this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
+      isFeatureEnabled: featureName => this._isFeatureEnabled(featureName)
+    });
+  }
+  /**
+   * Returns the table matching the given ID, or `null` if that
+   * table does not exist in this base.
+   */
+
+
+  getTableById(tableId) {
+    if (!this._data.tablesById[tableId]) {
+      return null;
+    } else {
+      if (!this._tableModelsById[tableId]) {
+        this._tableModelsById[tableId] = new _table.default(this._data, this, tableId, this._airtableInterface);
+      }
+
+      return this._tableModelsById[tableId];
+    }
+  }
+  /**
+   * Returns the table matching the given name, or `null` if no table
+   * exists with that name in this base.
+   */
+
+
+  getTableByName(tableName) {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = (0, _private_utils.entries)(this._data.tablesById)[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var _step2$value = (0, _slicedToArray2.default)(_step2.value, 2),
+            tableId = _step2$value[0],
+            tableData = _step2$value[1];
+
+        if (tableData.name === tableName) {
+          return this.getTableById(tableId);
+        }
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  _triggerOnChangeForDirtyPaths(dirtyPaths) {
+    if (dirtyPaths.name) {
+      this._onChange(WatchableBaseKeys.name);
+    }
+
+    if (dirtyPaths.permissionLevel) {
+      this._onChange(WatchableBaseKeys.permissionLevel);
+    }
+
+    if (dirtyPaths.tableOrder) {
+      this._onChange(WatchableBaseKeys.tables); // Clean up deleted tables
+
+
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
 
       try {
-        for (var _iterator = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._data.tablesById)), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _step$value = (0, _slicedToArray2.default)(_step.value, 2),
-              tableId = _step$value[0],
-              tableData = _step$value[1];
+        for (var _iterator3 = (0, _private_utils.entries)(this._tableModelsById)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var _step3$value = (0, _slicedToArray2.default)(_step3.value, 2),
+              tableId = _step3$value[0],
+              tableModel = _step3$value[1];
 
-          if (tableData.name === tableName) {
-            return this.getTableById(tableId);
+          if (tableModel.isDeleted) {
+            delete this._tableModelsById[tableId];
           }
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
+          if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+            _iterator3.return();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError3) {
+            throw _iteratorError3;
           }
         }
-      }
-
-      return null;
-    }
-  }, {
-    key: "_triggerOnChangeForDirtyPaths",
-    value: function _triggerOnChangeForDirtyPaths(dirtyPaths) {
-      if (dirtyPaths.name) {
-        this._onChange(WatchableBaseKeys.name);
-      }
-
-      if (dirtyPaths.permissionLevel) {
-        this._onChange(WatchableBaseKeys.permissionLevel);
-      }
-
-      if (dirtyPaths.tableOrder) {
-        this._onChange(WatchableBaseKeys.tables); // Clean up deleted tables
-
-
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(this._tableModelsById)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var _step2$value = (0, _slicedToArray2.default)(_step2.value, 2),
-                tableId = _step2$value[0],
-                tableModel = _step2$value[1];
-
-            if (tableModel.isDeleted) {
-              delete this._tableModelsById[tableId];
-            }
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-      }
-
-      if (dirtyPaths.activeTableId) {
-        this._onChange(WatchableBaseKeys.activeTable);
-      }
-
-      if (dirtyPaths.tablesById) {
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          for (var _iterator3 = (0, _getIterator2.default)((0, _entriesInstanceProperty(_private_utils))(dirtyPaths.tablesById)), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var _step3$value = (0, _slicedToArray2.default)(_step3.value, 2),
-                tableId = _step3$value[0],
-                dirtyTablePaths = _step3$value[1];
-
-            // Directly access from _tableModelsById to avoid creating
-            // a table model if it doesn't already exist. If it doesn't exist,
-            // nothing can be subscribed to any events on it.
-            var table = this._tableModelsById[tableId];
-
-            if (table) {
-              table.__triggerOnChangeForDirtyPaths(dirtyTablePaths);
-            }
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-              _iterator3.return();
-            }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
-            }
-          }
-        }
-      }
-
-      if (dirtyPaths.appBlanket) {
-        this._onChange(WatchableBaseKeys.collaborators);
-      } // HACK: it's an anti-pattern that the Base model manages cursorData at all,
-      // since the Base model is shared, but Cursor exists only on the frontend.
-      // TODO: change how cursor data is handled and remove this.
-
-
-      if (dirtyPaths.cursorData) {
-        (0, _invariant.default)(typeof window !== 'undefined', 'Should only update cursor data in frontend SDK');
-        var sdk = (0, _get_sdk.default)(); // eslint-disable-line flowtype/no-weak-types
-
-        sdk.cursor.__triggerOnChangeForDirtyPaths(dirtyPaths.cursorData);
       }
     }
-  }, {
-    key: "__applyChanges",
-    value: function __applyChanges(changes) {
-      // Internal method.
-      // After applying all changes, dirtyPaths will have the same shape as
-      // the subset of this._data that changed. For example, if some table's
-      // name changes, dirtyPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
-      // It is used to trigger change events for affected models.
-      var dirtyPaths = {};
+
+    if (dirtyPaths.activeTableId) {
+      this._onChange(WatchableBaseKeys.activeTable);
+    }
+
+    if (dirtyPaths.tablesById) {
       var _iteratorNormalCompletion4 = true;
       var _didIteratorError4 = false;
       var _iteratorError4 = undefined;
 
       try {
-        for (var _iterator4 = (0, _getIterator2.default)(changes), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var change = _step4.value;
+        for (var _iterator4 = (0, _private_utils.entries)(dirtyPaths.tablesById)[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var _step4$value = (0, _slicedToArray2.default)(_step4.value, 2),
+              tableId = _step4$value[0],
+              dirtyTablePaths = _step4$value[1];
 
-          this._applyChange(change.path, change.value, dirtyPaths);
+          // Directly access from _tableModelsById to avoid creating
+          // a table model if it doesn't already exist. If it doesn't exist,
+          // nothing can be subscribed to any events on it.
+          var table = this._tableModelsById[tableId];
+
+          if (table) {
+            table.__triggerOnChangeForDirtyPaths(dirtyTablePaths);
+          }
         }
       } catch (err) {
         _didIteratorError4 = true;
@@ -324,215 +396,99 @@ function (_AbstractModel) {
           }
         }
       }
-
-      this._triggerOnChangeForDirtyPaths(dirtyPaths);
     }
-  }, {
-    key: "_applyChange",
-    value: function _applyChange(path, value, dirtyPathsByRef) {
-      var dataSubtree = this._data;
-      var dirtySubtree = dirtyPathsByRef;
 
-      for (var i = 0; i < path.length - 1; i++) {
-        var part = path[i];
+    if (dirtyPaths.appBlanket) {
+      this._onChange(WatchableBaseKeys.collaborators);
+    } // HACK: it's an anti-pattern that the Base model manages cursorData at all,
+    // since the Base model is shared, but Cursor exists only on the frontend.
+    // TODO: change how cursor data is handled and remove this.
 
-        if (!dataSubtree[part]) {
-          // Certain fields are stored sparsely (e.g. cellValuesByFieldId),
-          // so create an object on demand if needed.
-          dataSubtree[part] = {};
-        }
 
-        dataSubtree = dataSubtree[part];
+    if (dirtyPaths.cursorData) {
+      (0, _invariant.default)(typeof window !== 'undefined', 'Should only update cursor data in frontend SDK');
+      var sdk = (0, _get_sdk.default)(); // eslint-disable-line flowtype/no-weak-types
 
-        if (!dirtySubtree[part]) {
-          dirtySubtree[part] = {};
-        }
+      sdk.cursor.__triggerOnChangeForDirtyPaths(dirtyPaths.cursorData);
+    }
+  }
 
-        dirtySubtree = dirtySubtree[part];
+  __applyChanges(changes) {
+    // Internal method.
+    // After applying all changes, dirtyPaths will have the same shape as
+    // the subset of this._data that changed. For example, if some table's
+    // name changes, dirtyPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
+    // It is used to trigger change events for affected models.
+    var dirtyPaths = {};
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
+
+    try {
+      for (var _iterator5 = changes[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+        var change = _step5.value;
+
+        this._applyChange(change.path, change.value, dirtyPaths);
       }
-
-      var lastPathPart = path[path.length - 1];
-      var didChange = !u.isEqual(dataSubtree[lastPathPart], value);
-
-      if (value === undefined) {
-        delete dataSubtree[lastPathPart];
-      } else {
-        dataSubtree[lastPathPart] = value;
-      }
-
-      if (didChange) {
-        if (!dirtySubtree[lastPathPart]) {
-          dirtySubtree[lastPathPart] = {};
+    } catch (err) {
+      _didIteratorError5 = true;
+      _iteratorError5 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+          _iterator5.return();
         }
-
-        dirtySubtree[lastPathPart]._isDirty = true;
-      }
-    }
-  }, {
-    key: "_dataOrNullIfDeleted",
-    get: function get() {
-      return this._baseData;
-    }
-    /** The name of the base. */
-
-  }, {
-    key: "name",
-    get: function get() {
-      return this._data.name;
-    }
-    /**
-     * The current user, or `null` if the block is running in a publicly shared base.
-     */
-
-  }, {
-    key: "currentUser",
-    get: function get() {
-      var userId = this._data.currentUserId;
-
-      if (!userId) {
-        return null;
-      } else {
-        return this.getCollaboratorById(userId);
+      } finally {
+        if (_didIteratorError5) {
+          throw _iteratorError5;
+        }
       }
     }
-  }, {
-    key: "__rawPermissionLevel",
-    get: function get() {
-      return this._data.permissionLevel;
-    }
-    /**
-     * The current user's permission level.
-     *
-     * The value of this should not be consumed and will be deprecated.
-     * To know whether a user can perform an action, use the more specific
-     * `can` method.
-     *
-     * Can be watched to know when the user's permission level changes. Usually,
-     * you'll want to watch this in your root component and re-render your whole
-     * block when the permission level changes.
-     *
-     * @example
-     * if (globalConfig.canSet('foo')) {
-     *     globalConfig.set('foo', 'bar');
-     * }
-     *
-     * @example
-     * if (record.canSetCellValue('Name', 'Chair')) {
-     *     record.setCellValue('Name', 'Chair');
-     * }
-     */
 
-  }, {
-    key: "permissionLevel",
-    get: function get() {
-      return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
-    }
-    /**
-     * The table model corresponding to the table the user is currently
-     * viewing in Airtable. May be `null` if the user is switching between
-     * tables. Can be watched.
-     */
+    this._triggerOnChangeForDirtyPaths(dirtyPaths);
+  }
 
-  }, {
-    key: "activeTable",
-    get: function get() {
-      var activeTableId = this._data.activeTableId;
-      return activeTableId ? this.getTableById(activeTableId) : null;
-    }
-    /**
-     * The tables in this base. Can be watched to know when tables are created,
-     * deleted, or reordered in the base.
-     */
+  _applyChange(path, value, dirtyPathsByRef) {
+    var dataSubtree = this._data;
+    var dirtySubtree = dirtyPathsByRef;
 
-  }, {
-    key: "tables",
-    get: function get() {
-      var _context,
-          _this2 = this;
+    for (var i = 0; i < path.length - 1; i++) {
+      var part = path[i];
 
-      // TODO(kasra): cache and freeze this so it isn't O(n)
-      var tables = [];
-      (0, _forEach.default)(_context = this._data.tableOrder).call(_context, function (tableId) {
-        var table = _this2.getTableById(tableId); // NOTE: A table's ID may be in tableOrder without the table appearing
-        // in tablesById, in which case getTableById will return null. This
-        // happens if table was just created by the user, since we
-        // wait for the push payload to deliver the table schema.
-
-
-        if (table) {
-          tables.push(table);
-        }
-      });
-      return tables;
-    }
-    /**
-     * The users who have access to this base.
-     */
-
-  }, {
-    key: "activeCollaborators",
-    get: function get() {
-      var collaborators = [];
-      var appBlanket = this.__appBlanket;
-
-      if (appBlanket) {
-        var userInfoById = appBlanket.userInfoById; // Exclude invites and former collaborators.
-
-        if (userInfoById) {
-          var _iteratorNormalCompletion5 = true;
-          var _didIteratorError5 = false;
-          var _iteratorError5 = undefined;
-
-          try {
-            for (var _iterator5 = (0, _getIterator2.default)((0, _valuesInstanceProperty(_private_utils))(userInfoById)), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-              var userObj = _step5.value;
-
-              if (appBlanketUserObjMethods.isActive(userObj) && !h.id.isInviteId(userObj.id)) {
-                collaborators.push(appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj));
-              }
-            }
-          } catch (err) {
-            _didIteratorError5 = true;
-            _iteratorError5 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-                _iterator5.return();
-              }
-            } finally {
-              if (_didIteratorError5) {
-                throw _iteratorError5;
-              }
-            }
-          }
-        }
+      if (!dataSubtree[part]) {
+        // Certain fields are stored sparsely (e.g. cellValuesByFieldId),
+        // so create an object on demand if needed.
+        dataSubtree[part] = {};
       }
 
-      return collaborators;
-    }
-  }, {
-    key: "__appBlanket",
-    get: function get() {
-      return this._data.appBlanket;
-    }
-  }, {
-    key: "__appInterface",
-    get: function get() {
-      var _this3 = this;
+      dataSubtree = dataSubtree[part];
 
-      return new UserScopedAppInterface({
-        applicationId: this.id,
-        appBlanket: this._data.appBlanket,
-        sortTiebreakerKey: this._data.sortTiebreakerKey,
-        currentSessionUserId: this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
-        isFeatureEnabled: function isFeatureEnabled(featureName) {
-          return _this3._isFeatureEnabled(featureName);
-        }
-      });
+      if (!dirtySubtree[part]) {
+        dirtySubtree[part] = {};
+      }
+
+      dirtySubtree = dirtySubtree[part];
     }
-  }]);
-  return Base;
-}(_abstract_model.default);
+
+    var lastPathPart = path[path.length - 1];
+    var didChange = !u.isEqual(dataSubtree[lastPathPart], value);
+
+    if (value === undefined) {
+      delete dataSubtree[lastPathPart];
+    } else {
+      dataSubtree[lastPathPart] = value;
+    }
+
+    if (didChange) {
+      if (!dirtySubtree[lastPathPart]) {
+        dirtySubtree[lastPathPart] = {};
+      }
+
+      dirtySubtree[lastPathPart]._isDirty = true;
+    }
+  }
+
+}
 
 (0, _defineProperty2.default)(Base, "_className", 'Base');
 var _default = Base;

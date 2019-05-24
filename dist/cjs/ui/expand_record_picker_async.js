@@ -1,22 +1,19 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.map");
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs3/regenerator"));
-
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 require("regenerator-runtime/runtime");
 
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/asyncToGenerator"));
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -62,61 +59,59 @@ function _expandRecordPickerAsync() {
   _expandRecordPickerAsync = (0, _asyncToGenerator2.default)(
   /*#__PURE__*/
   _regenerator.default.mark(function _callee(records, opts) {
-    var _context;
-
     var tableId, recordIds, fieldIds, sdk, shouldAllowCreatingRecord, chosenRecordId, table;
-    return _regenerator.default.wrap(function _callee$(_context2) {
+    return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context.prev = _context.next) {
           case 0:
             if (!(records.length === 0)) {
-              _context2.next = 2;
+              _context.next = 2;
               break;
             }
 
-            return _context2.abrupt("return", null);
+            return _context.abrupt("return", null);
 
           case 2:
             tableId = records[0].parentTable.id;
-            recordIds = (0, _map.default)(records).call(records, function (record) {
+            recordIds = records.map(record => {
               (0, _invariant.default)(record.parentTable.id === tableId, 'all records must belong to the same table');
               return record.id;
             });
-            fieldIds = opts && opts.fields ? (0, _map.default)(_context = opts.fields).call(_context, function (field) {
+            fieldIds = opts && opts.fields ? opts.fields.map(field => {
               (0, _invariant.default)(field.parentTable.id === tableId, 'all fields must belong to the same table');
               return field.id;
             }) : null;
             sdk = (0, _get_sdk.default)();
             shouldAllowCreatingRecord = !!opts && !!opts.shouldAllowCreatingRecord;
-            _context2.next = 9;
+            _context.next = 9;
             return sdk.__airtableInterface.expandRecordPickerAsync(tableId, recordIds, fieldIds, shouldAllowCreatingRecord);
 
           case 9:
-            chosenRecordId = _context2.sent;
+            chosenRecordId = _context.sent;
 
             if (chosenRecordId) {
-              _context2.next = 12;
+              _context.next = 12;
               break;
             }
 
-            return _context2.abrupt("return", null);
+            return _context.abrupt("return", null);
 
           case 12:
             table = sdk.base.getTableById(tableId);
 
             if (table) {
-              _context2.next = 15;
+              _context.next = 15;
               break;
             }
 
-            return _context2.abrupt("return", null);
+            return _context.abrupt("return", null);
 
           case 15:
-            return _context2.abrupt("return", table.__getRecordById(chosenRecordId));
+            return _context.abrupt("return", table.__getRecordById(chosenRecordId));
 
           case 16:
           case "end":
-            return _context2.stop();
+            return _context.stop();
         }
       }
     }, _callee);

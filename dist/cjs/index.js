@@ -1,6 +1,6 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 var _get_sdk = _interopRequireDefault(require("./get_sdk"));
 

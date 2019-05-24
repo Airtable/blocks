@@ -1,30 +1,15 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
+require("core-js/modules/es.array.filter");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/filter"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _private_utils = require("../private_utils");
 
@@ -56,205 +41,177 @@ var WatchableFieldKeys = {
 };
 
 /** Model class representing a field in a table. */
-var Field =
-/*#__PURE__*/
-function (_AbstractModel) {
-  (0, _inherits2.default)(Field, _AbstractModel);
-  (0, _createClass2.default)(Field, null, [{
-    key: "_isWatchableKey",
-    value: function _isWatchableKey(key) {
-      return (0, _private_utils.isEnumValue)(WatchableFieldKeys, key);
-    }
-  }]);
-
-  function Field(baseData, parentTable, fieldId) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, Field);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Field).call(this, baseData, fieldId));
-    _this._parentTable = parentTable;
-    return _this;
+class Field extends _abstract_model.default {
+  static _isWatchableKey(key) {
+    return (0, _private_utils.isEnumValue)(WatchableFieldKeys, key);
   }
 
-  (0, _createClass2.default)(Field, [{
-    key: "_getConfig",
-    value: function _getConfig() {
-      // TODO: add separate methods for getting type and options and
-      var _columnTypeProvider$g = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
-          type = _columnTypeProvider$g.type,
-          options = _columnTypeProvider$g.options;
+  constructor(baseData, parentTable, fieldId) {
+    super(baseData, fieldId);
+    this._parentTable = parentTable;
+  }
 
-      return {
-        type: type,
-        options: options ? (0, _private_utils.cloneDeep)(options) : null
-      };
+  get _dataOrNullIfDeleted() {
+    var tableData = this._baseData.tablesById[this.parentTable.id];
+
+    if (!tableData) {
+      return null;
     }
-    /** */
 
-  }, {
-    key: "isAggregatorAvailable",
+    return tableData.fieldsById[this._id] || null;
+  }
+  /** */
 
-    /** */
-    value: function isAggregatorAvailable(aggregator) {
-      var aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
-      var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregatorKey];
-      var possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(this.__getRawType(), this.__getRawTypeOptions());
+
+  get parentTable() {
+    return this._parentTable;
+  }
+  /** */
+
+
+  get name() {
+    return this._data.name;
+  }
+
+  _getConfig() {
+    // TODO: add separate methods for getting type and options and
+    var _columnTypeProvider$g = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
+        type = _columnTypeProvider$g.type,
+        options = _columnTypeProvider$g.options;
+
+    return {
+      type,
+      options: options ? (0, _private_utils.cloneDeep)(options) : null
+    };
+  }
+  /** */
+
+
+  get type() {
+    // TODO: add separate methods for getting type and options and
+    var _columnTypeProvider$g2 = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
+        type = _columnTypeProvider$g2.type;
+
+    return type;
+  }
+  /** */
+
+
+  get options() {
+    var _columnTypeProvider$g3 = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
+        options = _columnTypeProvider$g3.options;
+
+    return options ? (0, _private_utils.cloneDeep)(options) : null;
+  }
+  /** */
+
+
+  get isComputed() {
+    var isComputed = columnTypeProvider.isComputed(this.__getRawType());
+    return isComputed;
+  }
+  /**
+   * Every table has exactly one primary field. True if this field is
+   * its parent table's primary field.
+   */
+
+
+  get isPrimaryField() {
+    return this.id === this.parentTable.primaryField.id;
+  }
+  /** */
+
+
+  get availableAggregators() {
+    var possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(this.__getRawType(), this.__getRawTypeOptions());
+    return u.filter(_aggregators.default, aggregator => {
+      var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregator.key];
       return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
+    });
+  }
+  /** */
+
+
+  isAggregatorAvailable(aggregator) {
+    var aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
+    var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregatorKey];
+    var possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(this.__getRawType(), this.__getRawTypeOptions());
+    return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
+  }
+  /**
+   * Given a string, will attempt to parse it and return a valid cell value for
+   * the field's current config.
+   */
+
+
+  convertStringToCellValue(string) {
+    // TODO(jb): figure out 'cacheForBulkConversion'
+    var privateCellValue = columnTypeProvider.convertStringToCellValue(string, this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface);
+    var publicCellValue = columnTypeProvider.formatCellValueForPublicApi(privateCellValue, this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, {
+      cellFormat: ApiCellFormats.JSON,
+      apiVersion: PublicApiVersions.API2
+    });
+    var validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(publicCellValue, null, this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, PublicApiVersions.API2);
+
+    if (validationResult.isValid) {
+      return publicCellValue;
+    } else {
+      return null;
     }
-    /**
-     * Given a string, will attempt to parse it and return a valid cell value for
-     * the field's current config.
-     */
+  }
 
-  }, {
-    key: "convertStringToCellValue",
-    value: function convertStringToCellValue(string) {
-      // TODO(jb): figure out 'cacheForBulkConversion'
-      var privateCellValue = columnTypeProvider.convertStringToCellValue(string, this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface);
-      var publicCellValue = columnTypeProvider.formatCellValueForPublicApi(privateCellValue, this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, {
-        cellFormat: ApiCellFormats.JSON,
-        apiVersion: PublicApiVersions.API2
-      });
-      var validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(publicCellValue, null, this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, PublicApiVersions.API2);
+  __getRawType() {
+    return this._data.type;
+  }
 
-      if (validationResult.isValid) {
-        return publicCellValue;
-      } else {
+  __getRawTypeOptions() {
+    return this._data.typeOptions;
+  }
+
+  __getRawFormulaicResultType() {
+    // Copied from liveapp column model.
+    // We don't store resultType for count, for all intents and purposes on the
+    // client side, counts should use a "number" resultType.
+    if (this.__getRawType() === ColumnTypes.COUNT) {
+      return ColumnTypes.NUMBER;
+    } else {
+      var typeOptions = this.__getRawTypeOptions();
+
+      if (!typeOptions || typeOptions.resultType === undefined) {
         return null;
-      }
-    }
-  }, {
-    key: "__getRawType",
-    value: function __getRawType() {
-      return this._data.type;
-    }
-  }, {
-    key: "__getRawTypeOptions",
-    value: function __getRawTypeOptions() {
-      return this._data.typeOptions;
-    }
-  }, {
-    key: "__getRawFormulaicResultType",
-    value: function __getRawFormulaicResultType() {
-      // Copied from liveapp column model.
-      // We don't store resultType for count, for all intents and purposes on the
-      // client side, counts should use a "number" resultType.
-      if (this.__getRawType() === ColumnTypes.COUNT) {
-        return ColumnTypes.NUMBER;
       } else {
-        var typeOptions = this.__getRawTypeOptions();
-
-        if (!typeOptions || typeOptions.resultType === undefined) {
-          return null;
-        } else {
-          return typeOptions.resultType;
-        }
+        return typeOptions.resultType;
       }
     }
-  }, {
-    key: "__getRawColumn",
-    value: function __getRawColumn() {
-      return {
-        id: this.id,
-        type: this.__getRawType(),
-        typeOptions: this.__getRawTypeOptions()
-      };
+  }
+
+  __getRawColumn() {
+    return {
+      id: this.id,
+      type: this.__getRawType(),
+      typeOptions: this.__getRawTypeOptions()
+    };
+  }
+
+  __triggerOnChangeForDirtyPaths(dirtyPaths) {
+    if (dirtyPaths.name) {
+      this._onChange(WatchableFieldKeys.name);
     }
-  }, {
-    key: "__triggerOnChangeForDirtyPaths",
-    value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
-      if (dirtyPaths.name) {
-        this._onChange(WatchableFieldKeys.name);
-      }
 
-      if (dirtyPaths.type) {
-        this._onChange(WatchableFieldKeys.type); // TODO: it would be better if we only trigger this when
-        // we know isComputed changed.
+    if (dirtyPaths.type) {
+      this._onChange(WatchableFieldKeys.type); // TODO: it would be better if we only trigger this when
+      // we know isComputed changed.
 
 
-        this._onChange(WatchableFieldKeys.isComputed);
-      }
-
-      if (dirtyPaths.typeOptions) {
-        this._onChange(WatchableFieldKeys.options);
-      }
+      this._onChange(WatchableFieldKeys.isComputed);
     }
-  }, {
-    key: "_dataOrNullIfDeleted",
-    get: function get() {
-      var tableData = this._baseData.tablesById[this.parentTable.id];
 
-      if (!tableData) {
-        return null;
-      }
-
-      return tableData.fieldsById[this._id] || null;
+    if (dirtyPaths.typeOptions) {
+      this._onChange(WatchableFieldKeys.options);
     }
-    /** */
+  }
 
-  }, {
-    key: "parentTable",
-    get: function get() {
-      return this._parentTable;
-    }
-    /** */
-
-  }, {
-    key: "name",
-    get: function get() {
-      return this._data.name;
-    }
-  }, {
-    key: "type",
-    get: function get() {
-      // TODO: add separate methods for getting type and options and
-      var _columnTypeProvider$g2 = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
-          type = _columnTypeProvider$g2.type;
-
-      return type;
-    }
-    /** */
-
-  }, {
-    key: "options",
-    get: function get() {
-      var _columnTypeProvider$g3 = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
-          options = _columnTypeProvider$g3.options;
-
-      return options ? (0, _private_utils.cloneDeep)(options) : null;
-    }
-    /** */
-
-  }, {
-    key: "isComputed",
-    get: function get() {
-      var isComputed = columnTypeProvider.isComputed(this.__getRawType());
-      return isComputed;
-    }
-    /**
-     * Every table has exactly one primary field. True if this field is
-     * its parent table's primary field.
-     */
-
-  }, {
-    key: "isPrimaryField",
-    get: function get() {
-      return this.id === this.parentTable.primaryField.id;
-    }
-    /** */
-
-  }, {
-    key: "availableAggregators",
-    get: function get() {
-      var possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(this.__getRawType(), this.__getRawTypeOptions());
-      return (0, _filter.default)(u).call(u, _aggregators.default, function (aggregator) {
-        var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregator.key];
-        return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
-      });
-    }
-  }]);
-  return Field;
-}(_abstract_model.default);
+}
 
 (0, _defineProperty2.default)(Field, "_className", 'Field');
 var _default = Field;

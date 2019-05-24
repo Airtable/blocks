@@ -5,7 +5,7 @@
 // replace this with a set of lighter-weight transforms.
 const targets = {
     node: '8.10',
-    browsers: ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'],
+    browsers: ['firefox >= 45', 'chrome >= 49', 'safari >= 10', 'edge >= 25'],
 };
 
 // We also use @babel/preset-env with useBuiltIns set to 'usage', and @babel/plugin-transform-runtime.
@@ -40,7 +40,7 @@ module.exports = {
         '@babel/syntax-flow',
         '@babel/transform-flow-strip-types',
         '@babel/proposal-class-properties',
-        ['@babel/transform-runtime', {corejs: 3}],
+        '@babel/transform-runtime',
         ['transform-define', require('./global_constants')],
     ],
 };

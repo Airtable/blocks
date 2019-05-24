@@ -1,50 +1,35 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
+require("core-js/modules/es.symbol");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.symbol.description");
 
-var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+require("core-js/modules/es.array.filter");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.array.map");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
-var _filter = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/filter"));
-
-var _find = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/find"));
-
-var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js/get-iterator"));
-
-var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/typeof"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
-
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectSpread"));
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -71,8 +56,6 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
 var _expand_record = _interopRequireDefault(require("./expand_record"));
 
 var _cell_renderer = _interopRequireDefault(require("./cell_renderer"));
-
-var _FormulaicFieldTypes;
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
@@ -101,7 +84,7 @@ var styles = {
     fontSize: 12
   }
 };
-var CellValueAndFieldLabel = (0, _create_data_container.default)(function (_ref) {
+var CellValueAndFieldLabel = (0, _create_data_container.default)((_ref) => {
   var record = _ref.record,
       cellValue = _ref.cellValue,
       field = _ref.field,
@@ -109,7 +92,7 @@ var CellValueAndFieldLabel = (0, _create_data_container.default)(function (_ref)
   return React.createElement("div", {
     className: "borderBoxSizing relative inline-block m0 pr1",
     style: (0, _objectSpread2.default)({
-      width: width
+      width
     }, styles.cellValueAndFieldLabel)
   }, React.createElement("div", {
     className: "block textOverflowEllipsis uppercase small appFontWeightRegular",
@@ -122,12 +105,10 @@ var CellValueAndFieldLabel = (0, _create_data_container.default)(function (_ref)
     className: "recordCardCellValue block textOverflowEllipsis",
     style: styles.cellValue
   }));
-}, function (props) {
-  return [{
-    watch: props.field,
-    key: ['name', 'config']
-  }];
-});
+}, props => [{
+  watch: props.field,
+  key: ['name', 'config']
+}]);
 CellValueAndFieldLabel.propTypes = {
   record: _propTypes.default.instanceOf(_record.default),
   // NOTE: this currently will not work for linked record fields, since CellRenderer
@@ -139,13 +120,17 @@ CellValueAndFieldLabel.propTypes = {
   width: _propTypes.default.number.isRequired
 };
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
-var FormulaicFieldTypes = (_FormulaicFieldTypes = {}, (0, _defineProperty2.default)(_FormulaicFieldTypes, _field.FieldTypes.FORMULA, true), (0, _defineProperty2.default)(_FormulaicFieldTypes, _field.FieldTypes.ROLLUP, true), (0, _defineProperty2.default)(_FormulaicFieldTypes, _field.FieldTypes.LOOKUP, true), _FormulaicFieldTypes);
+var FormulaicFieldTypes = {
+  [_field.FieldTypes.FORMULA]: true,
+  [_field.FieldTypes.ROLLUP]: true,
+  [_field.FieldTypes.LOOKUP]: true
+};
 
-var isFieldFormulaic = function isFieldFormulaic(field) {
+var isFieldFormulaic = field => {
   return !!FormulaicFieldTypes[field.type];
 };
 
-var getFieldResultType = function getFieldResultType(field) {
+var getFieldResultType = field => {
   if (field.type === _field.FieldTypes.COUNT) {
     return _field.FieldTypes.NUMBER;
   }
@@ -154,7 +139,7 @@ var getFieldResultType = function getFieldResultType(field) {
     (0, _invariant.default)(field.options, 'options');
     var resultConfig = field.options.resultConfig;
 
-    if (resultConfig && (0, _typeof2.default)(resultConfig) === 'object') {
+    if (resultConfig && typeof resultConfig === 'object') {
       var resultConfigType = resultConfig.type;
       (0, _invariant.default)(typeof resultConfigType === 'string', 'resultConfigType must be string');
       return resultConfigType;
@@ -169,443 +154,408 @@ var getFieldResultType = function getFieldResultType(field) {
 /** */
 
 
-var RecordCard =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(RecordCard, _React$Component);
+class RecordCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onClick = this._onClick.bind(this);
 
-  function RecordCard(props) {
-    var _context;
-
-    var _this;
-
-    (0, _classCallCheck2.default)(this, RecordCard);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(RecordCard).call(this, props));
-    _this._onClick = (0, _bind.default)(_context = _this._onClick).call(_context, (0, _assertThisInitialized2.default)(_this));
-
-    _this._validateProps(props);
-
-    return _this;
+    this._validateProps(props);
   }
 
-  (0, _createClass2.default)(RecordCard, [{
-    key: "UNSAFE_componentWillReceiveProps",
-    value: function UNSAFE_componentWillReceiveProps(nextProps) {
-      this._validateProps(nextProps);
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    this._validateProps(nextProps);
+  }
+
+  _validateProps(props) {
+    var record = props.record,
+        view = props.view,
+        fields = props.fields,
+        attachmentCoverField = props.attachmentCoverField;
+
+    if (record && record instanceof _record.default && record.isDeleted) {
+      throw new Error('Record is deleted');
     }
-  }, {
-    key: "_validateProps",
-    value: function _validateProps(props) {
-      var record = props.record,
-          view = props.view,
-          fields = props.fields,
-          attachmentCoverField = props.attachmentCoverField;
 
-      if (record && record instanceof _record.default && record.isDeleted) {
-        throw new Error('Record is deleted');
-      }
+    if (!record) {
+      throw new Error('Must provide record');
+    }
 
-      if (!record) {
-        throw new Error('Must provide record');
-      }
-
-      if (record && record instanceof _record.default && attachmentCoverField) {
-        if (attachmentCoverField.parentTable.id !== record.parentTable.id) {
-          throw new Error('Attachment cover field must have the same parent table as record');
-        }
-      }
-
-      if (record && record instanceof _record.default && fields) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = (0, _getIterator2.default)(fields), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var field = _step.value;
-
-            if (!field.isDeleted && field.parentTable.id !== record.parentTable.id) {
-              throw new Error('All fields must have the same parent table as record');
-            }
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-      }
-
-      if (record && record instanceof _record.default && view && !view.isDeleted) {
-        if (view.parentTable.id !== record.parentTable.id) {
-          throw new Error('View must have the same parent table as record');
-        }
+    if (record && record instanceof _record.default && attachmentCoverField) {
+      if (attachmentCoverField.parentTable.id !== record.parentTable.id) {
+        throw new Error('Attachment cover field must have the same parent table as record');
       }
     }
-  }, {
-    key: "_onClick",
-    value: function _onClick(e) {
-      if (this.props.onClick) {
-        this.props.onClick(e);
-      } else if (this.props.onClick === undefined) {
-        // NOTE: `null` disables the default click behavior.
-        var record = this.props.record;
-        var recordModel = record && record instanceof _record.default ? record : null;
 
-        if (recordModel) {
-          if (keyCodeUtils.isCommandModifierKeyEvent(e) || e.shiftKey) {// No-op, let the <a> tag handle opening in new tab or window.
-          } else {
-            e.preventDefault();
-            var opts = this.props.getExpandRecordOptions ? this.props.getExpandRecordOptions(recordModel) : {};
-            (0, _expand_record.default)(recordModel, opts);
-          }
-        }
-      }
-    }
-  }, {
-    key: "_getAttachmentCover",
-    value: function _getAttachmentCover(fieldsToUse) {
-      var attachmentField = this._getAttachmentField(fieldsToUse);
-
-      return attachmentField ? this._getFirstAttachmentInField(attachmentField) : null;
-    }
-  }, {
-    key: "_getAttachmentField",
-    value: function _getAttachmentField(fieldsToUse) {
-      var _this2 = this;
-
-      var _this$props = this.props,
-          attachmentCoverField = _this$props.attachmentCoverField,
-          fields = _this$props.fields;
-
-      if (attachmentCoverField && !attachmentCoverField.isDeleted && this._isAttachment(attachmentCoverField)) {
-        return attachmentCoverField;
-      } else if (attachmentCoverField === undefined && !fields) {
-        // The attachment field in this case is either coming from the view
-        // if there is a view, or from the table's arbitrary field ordering
-        // if there is no view.
-        // TODO: use the real cover field if the view is gallery or kanban instead of
-        // the first attachment field
-        var firstAttachmentFieldInView = (0, _find.default)(u).call(u, fieldsToUse, function (field) {
-          return _this2._isAttachment(field);
-        });
-
-        if (firstAttachmentFieldInView === undefined) {
-          return null;
-        }
-
-        return firstAttachmentFieldInView;
-      } else {
-        return null;
-      }
-    }
-  }, {
-    key: "_isAttachment",
-    value: function _isAttachment(field) {
-      return getFieldResultType(field) === _field.FieldTypes.MULTIPLE_ATTACHMENTS;
-    }
-  }, {
-    key: "_getRawCellValue",
-    value: function _getRawCellValue(field) {
-      var record = this.props.record;
-
-      if (record && record instanceof _record.default) {
-        return record.__getRawCellValue(field.id);
-      } else {
-        var publicCellValue = record[field.id];
-
-        _cell_value_utils.default.validatePublicCellValueForUpdate(publicCellValue, null, field);
-
-        publicCellValue = _cell_value_utils.default.normalizePublicCellValueForUpdate(publicCellValue, field);
-        return _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
-      }
-    }
-  }, {
-    key: "_getFirstAttachmentInField",
-    value: function _getFirstAttachmentInField(attachmentField) {
-      var attachmentsInField;
-
-      if (attachmentField.type === _field.FieldTypes.LOOKUP) {
-        var rawCellValue = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
-
-
-        attachmentsInField = u.flattenDeep((0, _valuesInstanceProperty(_private_utils))(rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
-      } else {
-        attachmentsInField = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
-      }
-
-      return attachmentsInField && attachmentsInField.length > 0 ? attachmentsInField[0] : null;
-    }
-  }, {
-    key: "_getFields",
-    value: function _getFields() {
-      var _this$props2 = this.props,
-          view = _this$props2.view,
-          fields = _this$props2.fields,
-          record = _this$props2.record;
-      var fieldsToUse;
-
-      if (fields) {
-        fieldsToUse = (0, _filter.default)(fields).call(fields, function (field) {
-          return !field.isDeleted;
-        });
-      } else if (view && !view.isDeleted) {
-        fieldsToUse = view.visibleFields;
-      } else if (record && record instanceof _record.default && !record.isDeleted) {
-        var parentTable = record.parentTable;
-        fieldsToUse = parentTable.fields;
-      } else {
-        console.warn('RecordCard: no fields, view, or record, so rendering an empty card'); // eslint-disable-line no-console
-
-        fieldsToUse = [];
-      }
-
-      return u.uniqBy(fieldsToUse, function (field) {
-        return field.id;
-      });
-    }
-  }, {
-    key: "_getPossibleFieldsForCard",
-    value: function _getPossibleFieldsForCard() {
-      var fields = this._getFields(); // remove primary field if it exists
-
-
-      return (0, _filter.default)(fields).call(fields, function (field) {
-        return !field.isPrimaryField;
-      });
-    }
-  }, {
-    key: "_getWidthAndFieldIdArray",
-    value: function _getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse) {
-      var widthAndFieldIdArray = [];
-      var runningWidth = 0;
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
+    if (record && record instanceof _record.default && fields) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
       try {
-        for (var _iterator2 = (0, _getIterator2.default)(fieldsToUse), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var field = _step2.value;
-          var desiredWidth = columnTypeProvider.getDesiredCellWidthForRowCard(field.__getRawType(), field.__getRawTypeOptions());
+        for (var _iterator = fields[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var field = _step.value;
 
-          if (runningWidth + desiredWidth < cellContainerWidth) {
-            widthAndFieldIdArray.push({
-              width: desiredWidth,
-              fieldId: field.id
-            });
-            runningWidth += desiredWidth;
-          } else {
-            var minWidth = columnTypeProvider.getMinCellWidthForRowCard(field.__getRawType(), field.__getRawTypeOptions());
-
-            if (runningWidth + minWidth < cellContainerWidth) {
-              widthAndFieldIdArray.push({
-                width: minWidth,
-                fieldId: field.id
-              });
-              runningWidth += minWidth;
-            } else {
-              break;
-            }
+          if (!field.isDeleted && field.parentTable.id !== record.parentTable.id) {
+            throw new Error('All fields must have the same parent table as record');
           }
         }
       } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError = true;
+        _iteratorError = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-            _iterator2.return();
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
           }
         } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
+          if (_didIteratorError) {
+            throw _iteratorError;
           }
         }
       }
-
-      if (runningWidth < cellContainerWidth && widthAndFieldIdArray.length > 0) {
-        var lastWidthAndFieldId = widthAndFieldIdArray[widthAndFieldIdArray.length - 1];
-        lastWidthAndFieldId.width += cellContainerWidth - runningWidth;
-      }
-
-      return widthAndFieldIdArray;
     }
-  }, {
-    key: "_getRecordModel",
-    value: function _getRecordModel() {
+
+    if (record && record instanceof _record.default && view && !view.isDeleted) {
+      if (view.parentTable.id !== record.parentTable.id) {
+        throw new Error('View must have the same parent table as record');
+      }
+    }
+  }
+
+  _onClick(e) {
+    if (this.props.onClick) {
+      this.props.onClick(e);
+    } else if (this.props.onClick === undefined) {
+      // NOTE: `null` disables the default click behavior.
       var record = this.props.record;
+      var recordModel = record && record instanceof _record.default ? record : null;
 
-      if (record && record instanceof _record.default) {
-        return record;
-      } else {
-        return null;
+      if (recordModel) {
+        if (keyCodeUtils.isCommandModifierKeyEvent(e) || e.shiftKey) {// No-op, let the <a> tag handle opening in new tab or window.
+        } else {
+          e.preventDefault();
+          var opts = this.props.getExpandRecordOptions ? this.props.getExpandRecordOptions(recordModel) : {};
+          (0, _expand_record.default)(recordModel, opts);
+        }
       }
     }
-  }, {
-    key: "_renderCellsAndFieldLabels",
-    value: function _renderCellsAndFieldLabels(attachmentSize, fieldsToUse) {
-      var _this$props3 = this.props,
-          record = _this$props3.record,
-          width = _this$props3.width;
-      (0, _invariant.default)(typeof width === 'number', 'width in defaultProps');
-      var cellContainerWidth = width - CARD_PADDING - attachmentSize;
+  }
 
-      var widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
+  _getAttachmentCover(fieldsToUse) {
+    var attachmentField = this._getAttachmentField(fieldsToUse);
 
-      var fieldsById = u.keyBy(fieldsToUse, function (o) {
-        return o.id;
+    return attachmentField ? this._getFirstAttachmentInField(attachmentField) : null;
+  }
+
+  _getAttachmentField(fieldsToUse) {
+    var _this$props = this.props,
+        attachmentCoverField = _this$props.attachmentCoverField,
+        fields = _this$props.fields;
+
+    if (attachmentCoverField && !attachmentCoverField.isDeleted && this._isAttachment(attachmentCoverField)) {
+      return attachmentCoverField;
+    } else if (attachmentCoverField === undefined && !fields) {
+      // The attachment field in this case is either coming from the view
+      // if there is a view, or from the table's arbitrary field ordering
+      // if there is no view.
+      // TODO: use the real cover field if the view is gallery or kanban instead of
+      // the first attachment field
+      var firstAttachmentFieldInView = u.find(fieldsToUse, field => {
+        return this._isAttachment(field);
       });
-      return (0, _map.default)(widthAndFieldIdArray).call(widthAndFieldIdArray, function (widthAndFieldId) {
-        var field = fieldsById[widthAndFieldId.fieldId];
-        return React.createElement(CellValueAndFieldLabel, (0, _extends2.default)({
-          key: field.id,
-          field: field,
-          width: widthAndFieldId.width
-        }, record instanceof _record.default ? {
-          record: record
-        } : {
-          cellValue: record[field.id]
-        }));
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props4 = this.props,
-          record = _this$props4.record,
-          view = _this$props4.view,
-          width = _this$props4.width,
-          height = _this$props4.height,
-          onClick = _this$props4.onClick,
-          onMouseEnter = _this$props4.onMouseEnter,
-          onMouseLeave = _this$props4.onMouseLeave,
-          className = _this$props4.className,
-          style = _this$props4.style;
 
-      if (record && record instanceof _record.default && record.isDeleted) {
+      if (firstAttachmentFieldInView === undefined) {
         return null;
       }
 
-      var allFields = this._getFields();
+      return firstAttachmentFieldInView;
+    } else {
+      return null;
+    }
+  }
 
-      var fieldsToUse = this._getPossibleFieldsForCard();
+  _isAttachment(field) {
+    return getFieldResultType(field) === _field.FieldTypes.MULTIPLE_ATTACHMENTS;
+  }
 
-      var attachmentObjIfAvailable = this._getAttachmentCover(fieldsToUse);
+  _getRawCellValue(field) {
+    var record = this.props.record;
 
-      var hasAttachment = !!attachmentObjIfAvailable;
-      var hasOnClick = !!onClick || !!this._getRecordModel();
-      var containerClasses = (0, _classnames.default)('white rounded relative block overflow-hidden', {
-        'pointer cardBoxShadow': hasOnClick,
-        stroked1: !hasOnClick
-      }, className); // use height as size in order to get square attachment
+    if (record && record instanceof _record.default) {
+      return record.__getRawCellValue(field.id);
+    } else {
+      var publicCellValue = record[field.id];
 
-      (0, _invariant.default)(typeof height === 'number', 'height in defaultProps');
-      var attachmentSize = hasAttachment ? height : 0;
-      var imageHtml = '';
+      _cell_value_utils.default.validatePublicCellValueForUpdate(publicCellValue, null, field);
 
-      if (hasAttachment) {
-        var attachmentField = this._getAttachmentField(fieldsToUse);
+      publicCellValue = _cell_value_utils.default.normalizePublicCellValueForUpdate(publicCellValue, field);
+      return _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
+    }
+  }
 
-        (0, _invariant.default)(attachmentField, 'attachmentField must be present when we have an attachment');
-        (0, _invariant.default)(attachmentObjIfAvailable, 'attachmentObjIfAvailable is defined if hasAttachment');
-        var attachmentObj = attachmentObjIfAvailable; // eslint-disable-line flowtype/no-weak-types
+  _getFirstAttachmentInField(attachmentField) {
+    var attachmentsInField;
 
-        var userScopedAppInterface = attachmentField.parentTable.parentBase.__appInterface;
-        imageHtml = attachmentPreviewRenderer.renderSquarePreview(attachmentObj, userScopedAppInterface, {
-          extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
-          extraStyles: {
-            'border-top-right-radius': 2,
-            'border-bottom-right-radius': 2
-          },
-          size: attachmentSize
-        });
+    if (attachmentField.type === _field.FieldTypes.LOOKUP) {
+      var rawCellValue = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
+
+
+      attachmentsInField = u.flattenDeep((0, _private_utils.values)(rawCellValue ? rawCellValue.valuesByForeignRowId : {}));
+    } else {
+      attachmentsInField = this._getRawCellValue(attachmentField); // eslint-disable-line flowtype/no-weak-types
+    }
+
+    return attachmentsInField && attachmentsInField.length > 0 ? attachmentsInField[0] : null;
+  }
+
+  _getFields() {
+    var _this$props2 = this.props,
+        view = _this$props2.view,
+        fields = _this$props2.fields,
+        record = _this$props2.record;
+    var fieldsToUse;
+
+    if (fields) {
+      fieldsToUse = fields.filter(field => !field.isDeleted);
+    } else if (view && !view.isDeleted) {
+      fieldsToUse = view.visibleFields;
+    } else if (record && record instanceof _record.default && !record.isDeleted) {
+      var parentTable = record.parentTable;
+      fieldsToUse = parentTable.fields;
+    } else {
+      console.warn('RecordCard: no fields, view, or record, so rendering an empty card'); // eslint-disable-line no-console
+
+      fieldsToUse = [];
+    }
+
+    return u.uniqBy(fieldsToUse, field => field.id);
+  }
+
+  _getPossibleFieldsForCard() {
+    var fields = this._getFields(); // remove primary field if it exists
+
+
+    return fields.filter(field => {
+      return !field.isPrimaryField;
+    });
+  }
+
+  _getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse) {
+    var widthAndFieldIdArray = [];
+    var runningWidth = 0;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = fieldsToUse[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var field = _step2.value;
+        var desiredWidth = columnTypeProvider.getDesiredCellWidthForRowCard(field.__getRawType(), field.__getRawTypeOptions());
+
+        if (runningWidth + desiredWidth < cellContainerWidth) {
+          widthAndFieldIdArray.push({
+            width: desiredWidth,
+            fieldId: field.id
+          });
+          runningWidth += desiredWidth;
+        } else {
+          var minWidth = columnTypeProvider.getMinCellWidthForRowCard(field.__getRawType(), field.__getRawTypeOptions());
+
+          if (runningWidth + minWidth < cellContainerWidth) {
+            widthAndFieldIdArray.push({
+              width: minWidth,
+              fieldId: field.id
+            });
+            runningWidth += minWidth;
+          } else {
+            break;
+          }
+        }
       }
-
-      var containerStyles = (0, _objectSpread2.default)({}, style, {
-        width: width,
-        height: height
-      });
-      var primaryValue;
-      var isUnnamed;
-      var primaryCellValueAsString;
-      var recordUrl;
-      var recordColorClass;
-
-      if (record instanceof _record.default) {
-        recordUrl = record.url;
-        primaryCellValueAsString = record.primaryCellValueAsString;
-
-        if (view) {
-          recordColorClass = record.getColorInView(view);
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+          _iterator2.return();
         }
-      } else {
-        var primaryField = allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
-        var primaryCellValue = primaryField ? record[primaryField.id] : null;
-        primaryCellValueAsString = primaryCellValue === null || primaryCellValue === undefined ? null : String(primaryCellValue);
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
       }
+    }
 
-      if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
-        primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
-        isUnnamed = true;
-      } else {
-        primaryValue = primaryCellValueAsString;
-        isUnnamed = false;
-      }
+    if (runningWidth < cellContainerWidth && widthAndFieldIdArray.length > 0) {
+      var lastWidthAndFieldId = widthAndFieldIdArray[widthAndFieldIdArray.length - 1];
+      lastWidthAndFieldId.width += cellContainerWidth - runningWidth;
+    }
 
-      var primaryClasses = (0, _classnames.default)('strong relative cellValue mt0 flex items-center line-height-4', {
-        unnamed: isUnnamed
-      });
-      var primaryStyles = {
-        height: 18,
-        fontSize: 14
-      };
-      return React.createElement("a", {
-        href: onClick === undefined && recordUrl ? recordUrl : undefined,
-        className: containerClasses,
-        style: containerStyles,
-        onClick: this._onClick,
-        onMouseEnter: onMouseEnter,
-        onMouseLeave: onMouseLeave
-      }, React.createElement("div", {
-        className: "absolute top-0 bottom-0 left-0 appFontColor",
-        style: {
-          right: attachmentSize,
-          background: 'transparent',
-          padding: CARD_PADDING
-        }
-      }, React.createElement("div", {
-        className: primaryClasses,
-        style: primaryStyles
-      }, recordColorClass && React.createElement("div", {
-        className: "flex-none pill mr-half ".concat(recordColorClass),
-        style: {
-          width: 6,
-          height: 20
-        }
-      }), React.createElement("div", {
-        className: "flex-auto truncate"
-      }, primaryValue)), React.createElement("div", {
-        className: "absolute appFontColorLight",
-        style: {
-          marginTop: 3
-        }
-      }, this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse))), React.createElement("div", {
-        dangerouslySetInnerHTML: {
-          __html: imageHtml
-        }
+    return widthAndFieldIdArray;
+  }
+
+  _getRecordModel() {
+    var record = this.props.record;
+
+    if (record && record instanceof _record.default) {
+      return record;
+    } else {
+      return null;
+    }
+  }
+
+  _renderCellsAndFieldLabels(attachmentSize, fieldsToUse) {
+    var _this$props3 = this.props,
+        record = _this$props3.record,
+        width = _this$props3.width;
+    (0, _invariant.default)(typeof width === 'number', 'width in defaultProps');
+    var cellContainerWidth = width - CARD_PADDING - attachmentSize;
+
+    var widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
+
+    var fieldsById = u.keyBy(fieldsToUse, o => o.id);
+    return widthAndFieldIdArray.map(widthAndFieldId => {
+      var field = fieldsById[widthAndFieldId.fieldId];
+      return React.createElement(CellValueAndFieldLabel, (0, _extends2.default)({
+        key: field.id,
+        field: field,
+        width: widthAndFieldId.width
+      }, record instanceof _record.default ? {
+        record
+      } : {
+        cellValue: record[field.id]
       }));
+    });
+  }
+
+  render() {
+    var _this$props4 = this.props,
+        record = _this$props4.record,
+        view = _this$props4.view,
+        width = _this$props4.width,
+        height = _this$props4.height,
+        onClick = _this$props4.onClick,
+        onMouseEnter = _this$props4.onMouseEnter,
+        onMouseLeave = _this$props4.onMouseLeave,
+        className = _this$props4.className,
+        style = _this$props4.style;
+
+    if (record && record instanceof _record.default && record.isDeleted) {
+      return null;
     }
-  }]);
-  return RecordCard;
-}(React.Component);
+
+    var allFields = this._getFields();
+
+    var fieldsToUse = this._getPossibleFieldsForCard();
+
+    var attachmentObjIfAvailable = this._getAttachmentCover(fieldsToUse);
+
+    var hasAttachment = !!attachmentObjIfAvailable;
+    var hasOnClick = !!onClick || !!this._getRecordModel();
+    var containerClasses = (0, _classnames.default)('white rounded relative block overflow-hidden', {
+      'pointer cardBoxShadow': hasOnClick,
+      stroked1: !hasOnClick
+    }, className); // use height as size in order to get square attachment
+
+    (0, _invariant.default)(typeof height === 'number', 'height in defaultProps');
+    var attachmentSize = hasAttachment ? height : 0;
+    var imageHtml = '';
+
+    if (hasAttachment) {
+      var attachmentField = this._getAttachmentField(fieldsToUse);
+
+      (0, _invariant.default)(attachmentField, 'attachmentField must be present when we have an attachment');
+      (0, _invariant.default)(attachmentObjIfAvailable, 'attachmentObjIfAvailable is defined if hasAttachment');
+      var attachmentObj = attachmentObjIfAvailable; // eslint-disable-line flowtype/no-weak-types
+
+      var userScopedAppInterface = attachmentField.parentTable.parentBase.__appInterface;
+      imageHtml = attachmentPreviewRenderer.renderSquarePreview(attachmentObj, userScopedAppInterface, {
+        extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
+        extraStyles: {
+          'border-top-right-radius': 2,
+          'border-bottom-right-radius': 2
+        },
+        size: attachmentSize
+      });
+    }
+
+    var containerStyles = (0, _objectSpread2.default)({}, style, {
+      width,
+      height
+    });
+    var primaryValue;
+    var isUnnamed;
+    var primaryCellValueAsString;
+    var recordUrl;
+    var recordColorClass;
+
+    if (record instanceof _record.default) {
+      recordUrl = record.url;
+      primaryCellValueAsString = record.primaryCellValueAsString;
+
+      if (view) {
+        recordColorClass = record.getColorInView(view);
+      }
+    } else {
+      var primaryField = allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
+      var primaryCellValue = primaryField ? record[primaryField.id] : null;
+      primaryCellValueAsString = primaryCellValue === null || primaryCellValue === undefined ? null : String(primaryCellValue);
+    }
+
+    if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
+      primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
+      isUnnamed = true;
+    } else {
+      primaryValue = primaryCellValueAsString;
+      isUnnamed = false;
+    }
+
+    var primaryClasses = (0, _classnames.default)('strong relative cellValue mt0 flex items-center line-height-4', {
+      unnamed: isUnnamed
+    });
+    var primaryStyles = {
+      height: 18,
+      fontSize: 14
+    };
+    return React.createElement("a", {
+      href: onClick === undefined && recordUrl ? recordUrl : undefined,
+      className: containerClasses,
+      style: containerStyles,
+      onClick: this._onClick,
+      onMouseEnter: onMouseEnter,
+      onMouseLeave: onMouseLeave
+    }, React.createElement("div", {
+      className: "absolute top-0 bottom-0 left-0 appFontColor",
+      style: {
+        right: attachmentSize,
+        background: 'transparent',
+        padding: CARD_PADDING
+      }
+    }, React.createElement("div", {
+      className: primaryClasses,
+      style: primaryStyles
+    }, recordColorClass && React.createElement("div", {
+      className: "flex-none pill mr-half ".concat(recordColorClass),
+      style: {
+        width: 6,
+        height: 20
+      }
+    }), React.createElement("div", {
+      className: "flex-auto truncate"
+    }, primaryValue)), React.createElement("div", {
+      className: "absolute appFontColorLight",
+      style: {
+        marginTop: 3
+      }
+    }, this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse))), React.createElement("div", {
+      dangerouslySetInnerHTML: {
+        __html: imageHtml
+      }
+    }));
+  }
+
+}
 
 (0, _defineProperty2.default)(RecordCard, "propTypes", {
   // Record can either be a record model or a record def (cellValuesByFieldId)
@@ -635,7 +585,7 @@ function (_React$Component) {
   style: {}
 });
 
-var _default = (0, _create_data_container.default)(RecordCard, function (props) {
+var _default = (0, _create_data_container.default)(RecordCard, props => {
   var recordModel = props.record && props.record instanceof _record.default ? props.record : null;
   var parentTable;
 

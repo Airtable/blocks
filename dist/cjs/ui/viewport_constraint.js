@@ -1,32 +1,19 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.iterator");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -34,9 +21,7 @@ var React = _interopRequireWildcard(require("react"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-var didSizeChange = function didSizeChange(prev, next) {
-  return (prev && prev.width) !== (next && next.width) || (prev && prev.height) !== (next && next.height);
-};
+var didSizeChange = (prev, next) => (prev && prev.width) !== (next && next.width) || (prev && prev.height) !== (next && next.height);
 /**
  * ViewportConstraint - when mounted, applies constraints to the viewport.
  *
@@ -51,120 +36,94 @@ var didSizeChange = function didSizeChange(prev, next) {
  */
 
 
-var ViewportConstraint =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(ViewportConstraint, _React$Component);
-
-  function ViewportConstraint() {
-    var _getPrototypeOf2, _context;
-
-    var _this;
-
-    (0, _classCallCheck2.default)(this, ViewportConstraint);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(ViewportConstraint)).call.apply(_getPrototypeOf2, (0, _concat.default)(_context = [this]).call(_context, args)));
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_removeMinSizeConstraintFn", null);
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_removeMaxFullscreenSizeConstrainFn", null);
-    return _this;
+class ViewportConstraint extends React.Component {
+  constructor() {
+    super(...arguments);
+    (0, _defineProperty2.default)(this, "_removeMinSizeConstraintFn", null);
+    (0, _defineProperty2.default)(this, "_removeMaxFullscreenSizeConstrainFn", null);
   }
 
-  (0, _createClass2.default)(ViewportConstraint, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this._setMinSizeConstraint();
+  componentDidMount() {
+    this._setMinSizeConstraint();
 
+    this._setMaxFullscreenSizeConstraint();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.children !== nextProps.children || didSizeChange(this.props.minSize, nextProps.minSize) || didSizeChange(this.props.maxFullscreenSize, nextProps.maxFullscreenSize);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (didSizeChange(prevProps.minSize, this.props.minSize)) {
+      this._setMinSizeConstraint();
+    }
+
+    if (didSizeChange(prevProps.maxFullscreenSize, this.props.maxFullscreenSize)) {
       this._setMaxFullscreenSizeConstraint();
     }
-  }, {
-    key: "shouldComponentUpdate",
-    value: function shouldComponentUpdate(nextProps) {
-      return this.props.children !== nextProps.children || didSizeChange(this.props.minSize, nextProps.minSize) || didSizeChange(this.props.maxFullscreenSize, nextProps.maxFullscreenSize);
+  }
+
+  componentWillUnmount() {
+    this._removeMinSizeConstraint();
+
+    this._removeMaxFullscreenSizeConstraint();
+  }
+
+  _removeMinSizeConstraint() {
+    if (this._removeMinSizeConstraintFn) {
+      this._removeMinSizeConstraintFn();
+
+      this._removeMinSizeConstraintFn = null;
     }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      if (didSizeChange(prevProps.minSize, this.props.minSize)) {
-        this._setMinSizeConstraint();
-      }
+  }
 
-      if (didSizeChange(prevProps.maxFullscreenSize, this.props.maxFullscreenSize)) {
-        this._setMaxFullscreenSizeConstraint();
-      }
+  _removeMaxFullscreenSizeConstraint() {
+    if (this._removeMaxFullscreenSizeConstrainFn) {
+      this._removeMaxFullscreenSizeConstrainFn();
+
+      this._removeMaxFullscreenSizeConstrainFn = null;
     }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this._removeMinSizeConstraint();
+  }
 
-      this._removeMaxFullscreenSizeConstraint();
+  _setMinSizeConstraint() {
+    this._removeMinSizeConstraint();
+
+    var minSize = this.props.minSize;
+
+    if (minSize) {
+      this._removeMinSizeConstraintFn = (0, _get_sdk.default)().viewport.addMinSize(minSize);
     }
-  }, {
-    key: "_removeMinSizeConstraint",
-    value: function _removeMinSizeConstraint() {
-      if (this._removeMinSizeConstraintFn) {
-        this._removeMinSizeConstraintFn();
+  }
 
-        this._removeMinSizeConstraintFn = null;
-      }
+  _setMaxFullscreenSizeConstraint() {
+    this._removeMaxFullscreenSizeConstraint();
+
+    var maxFullscreenSize = this.props.maxFullscreenSize;
+
+    if (maxFullscreenSize) {
+      this._removeMaxFullscreenSizeConstrainFn = (0, _get_sdk.default)().viewport.addMaxFullscreenSize(maxFullscreenSize);
     }
-  }, {
-    key: "_removeMaxFullscreenSizeConstraint",
-    value: function _removeMaxFullscreenSizeConstraint() {
-      if (this._removeMaxFullscreenSizeConstrainFn) {
-        this._removeMaxFullscreenSizeConstrainFn();
+  }
 
-        this._removeMaxFullscreenSizeConstrainFn = null;
-      }
+  render() {
+    var children = this.props.children;
+
+    if (children === null || children === undefined) {
+      return null;
+    } // In React 16+, Fragment is available, so we can allow this component
+    // to accept one or more child. As we have to support React 15 as well,
+    // we fall back to asserting there is only one child if Fragment is\
+    // unavailable
+
+
+    if (React.Fragment) {
+      return React.createElement(React.Fragment, null, children);
     }
-  }, {
-    key: "_setMinSizeConstraint",
-    value: function _setMinSizeConstraint() {
-      this._removeMinSizeConstraint();
 
-      var minSize = this.props.minSize;
+    return React.Children.only(children);
+  }
 
-      if (minSize) {
-        this._removeMinSizeConstraintFn = (0, _get_sdk.default)().viewport.addMinSize(minSize);
-      }
-    }
-  }, {
-    key: "_setMaxFullscreenSizeConstraint",
-    value: function _setMaxFullscreenSizeConstraint() {
-      this._removeMaxFullscreenSizeConstraint();
-
-      var maxFullscreenSize = this.props.maxFullscreenSize;
-
-      if (maxFullscreenSize) {
-        this._removeMaxFullscreenSizeConstrainFn = (0, _get_sdk.default)().viewport.addMaxFullscreenSize(maxFullscreenSize);
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var children = this.props.children;
-
-      if (children === null || children === undefined) {
-        return null;
-      } // In React 16+, Fragment is available, so we can allow this component
-      // to accept one or more child. As we have to support React 15 as well,
-      // we fall back to asserting there is only one child if Fragment is\
-      // unavailable
-
-
-      if (React.Fragment) {
-        return React.createElement(React.Fragment, null, children);
-      }
-
-      return React.Children.only(children);
-    }
-  }]);
-  return ViewportConstraint;
-}(React.Component);
+}
 
 (0, _defineProperty2.default)(ViewportConstraint, "propTypes", {
   minSize: _propTypes.default.shape({

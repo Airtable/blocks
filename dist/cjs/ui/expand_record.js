@@ -1,16 +1,13 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.map");
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
-
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
@@ -34,11 +31,7 @@ function expandRecord(record, opts) {
   var recordIds = null;
 
   if (opts && opts.records) {
-    var _context;
-
-    recordIds = (0, _map.default)(_context = opts.records).call(_context, function (r) {
-      return r.id;
-    });
+    recordIds = opts.records.map(r => r.id);
   }
 
   (0, _get_sdk.default)().__airtableInterface.expandRecord(record.parentTable.id, record.id, recordIds);

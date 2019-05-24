@@ -1,24 +1,19 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.regexp.to-string");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.string.ends-with");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/es.string.pad-start");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
-
-var _endsWith = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/ends-with"));
-
-var _padStart = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/pad-start"));
 
 var _private_utils = require("./private_utils");
 
@@ -31,9 +26,7 @@ var _colors = _interopRequireWildcard(require("./colors"));
  */
 var colorUtils = {
   /** */
-  getHexForColor: function (colorString) {
-    var _context;
-
+  getHexForColor: colorString => {
     var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
     if (!color) {
@@ -43,11 +36,11 @@ var colorUtils = {
 
     var rgbTuple = _colors.rgbTuplesByColor[color];
     var hexNumber = rgbTuple[0] << 16 | rgbTuple[1] << 8 | rgbTuple[2];
-    return "#".concat((0, _padStart.default)(_context = hexNumber.toString(16)).call(_context, 6, '0'));
+    return "#".concat(hexNumber.toString(16).padStart(6, '0'));
   },
 
   /** */
-  getRgbForColor: function (colorString) {
+  getRgbForColor: colorString => {
     var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
     if (!color) {
@@ -64,7 +57,7 @@ var colorUtils = {
   },
 
   /** */
-  shouldUseLightTextOnColor: function shouldUseLightTextOnColor(color) {
+  shouldUseLightTextOnColor(color) {
     if (!_colors.rgbTuplesByColor[color]) {
       // Don't have a color for this. Let's just return false as a default
       // instead of throwing.
@@ -75,9 +68,10 @@ var colorUtils = {
     // checking the suffix easier, since no suffix uses light text.
 
 
-    var shouldUseDarkText = (0, _endsWith.default)(color).call(color, 'Light1') || (0, _endsWith.default)(color).call(color, 'Light2');
+    var shouldUseDarkText = color.endsWith('Light1') || color.endsWith('Light2');
     return !shouldUseDarkText;
   }
+
 };
 var _default = colorUtils;
 exports.default = _default;

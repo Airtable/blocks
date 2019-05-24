@@ -1,11 +1,8 @@
 "use strict";
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.HostMethodNames = exports.HostToBlock = exports.BlockToHost = void 0;
 // TODO(alex): Remove npm SDK knowledge of these details
 var BlockToHost = {

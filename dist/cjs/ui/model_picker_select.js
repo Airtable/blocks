@@ -1,42 +1,23 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
+require("core-js/modules/es.array.iterator");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.map");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _map = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/map"));
-
-var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
-
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/toConsumableArray"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectWithoutProperties"));
-
-var _bind = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/bind"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/assertThisInitialized"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -52,98 +33,74 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
 
 var _select = _interopRequireDefault(require("./select"));
 
-var ModelPickerSelect =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(ModelPickerSelect, _React$Component);
-
-  function ModelPickerSelect(props) {
-    var _context;
-
-    var _this;
-
-    (0, _classCallCheck2.default)(this, ModelPickerSelect);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ModelPickerSelect).call(this, props));
-    _this._onChange = (0, _bind.default)(_context = _this._onChange).call(_context, (0, _assertThisInitialized2.default)(_this));
-    _this._select = null;
-    return _this;
+class ModelPickerSelect extends React.Component {
+  constructor(props) {
+    super(props);
+    this._onChange = this._onChange.bind(this);
+    this._select = null;
   }
 
-  (0, _createClass2.default)(ModelPickerSelect, [{
-    key: "_onChange",
-    value: function _onChange(value) {
-      (0, _invariant.default)(value === null || typeof value === 'string', 'value must be null or model id');
-      this.props.onChange(value);
-    }
-  }, {
-    key: "focus",
-    value: function focus() {
-      (0, _invariant.default)(this._select, 'No select to focus');
+  _onChange(value) {
+    (0, _invariant.default)(value === null || typeof value === 'string', 'value must be null or model id');
+    this.props.onChange(value);
+  }
 
-      this._select.focus();
-    }
-  }, {
-    key: "blur",
-    value: function blur() {
-      (0, _invariant.default)(this._select, 'No select to blur');
+  focus() {
+    (0, _invariant.default)(this._select, 'No select to focus');
 
-      this._select.blur();
-    }
-  }, {
-    key: "click",
-    value: function click() {
-      (0, _invariant.default)(this._select, 'No select to click');
+    this._select.focus();
+  }
 
-      this._select.click();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this,
-          _context2;
+  blur() {
+    (0, _invariant.default)(this._select, 'No select to blur');
 
-      var _this$props = this.props,
-          models = _this$props.models,
-          selectedModelId = _this$props.selectedModelId,
-          style = _this$props.style,
-          className = _this$props.className,
-          disabled = _this$props.disabled,
-          placeholder = _this$props.placeholder,
-          shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
-          shouldAllowPickingModelFn = _this$props.shouldAllowPickingModelFn,
-          modelKeysToWatch = _this$props.modelKeysToWatch,
-          onChange = _this$props.onChange,
-          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["models", "selectedModelId", "style", "className", "disabled", "placeholder", "shouldAllowPickingNone", "shouldAllowPickingModelFn", "modelKeysToWatch", "onChange"]);
-      return React.createElement(_select.default, (0, _extends2.default)({
-        ref: function ref(el) {
-          return _this2._select = el;
-        },
-        value: selectedModelId,
-        onChange: this._onChange,
-        style: style,
-        className: className,
-        disabled: disabled,
-        options: (0, _concat.default)(_context2 = [{
-          value: null,
-          label: placeholder,
-          disabled: !shouldAllowPickingNone
-        }]).call(_context2, (0, _toConsumableArray2.default)((0, _map.default)(models).call(models, function (model) {
-          return {
-            value: model.id,
-            label: model.name,
-            disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model)
-          };
-        })))
-      }, restOfProps));
-    }
-  }]);
-  return ModelPickerSelect;
-}(React.Component);
+    this._select.blur();
+  }
 
-var _default = (0, _create_data_container.default)(ModelPickerSelect, function (props) {
-  var _context3;
+  click() {
+    (0, _invariant.default)(this._select, 'No select to click');
 
-  return (0, _map.default)(_context3 = props.models).call(_context3, function (model) {
+    this._select.click();
+  }
+
+  render() {
+    var _this$props = this.props,
+        models = _this$props.models,
+        selectedModelId = _this$props.selectedModelId,
+        style = _this$props.style,
+        className = _this$props.className,
+        disabled = _this$props.disabled,
+        placeholder = _this$props.placeholder,
+        shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
+        shouldAllowPickingModelFn = _this$props.shouldAllowPickingModelFn,
+        modelKeysToWatch = _this$props.modelKeysToWatch,
+        onChange = _this$props.onChange,
+        restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["models", "selectedModelId", "style", "className", "disabled", "placeholder", "shouldAllowPickingNone", "shouldAllowPickingModelFn", "modelKeysToWatch", "onChange"]);
+    return React.createElement(_select.default, (0, _extends2.default)({
+      ref: el => this._select = el,
+      value: selectedModelId,
+      onChange: this._onChange,
+      style: style,
+      className: className,
+      disabled: disabled,
+      options: [{
+        value: null,
+        label: placeholder,
+        disabled: !shouldAllowPickingNone
+      }, ...models.map(model => {
+        return {
+          value: model.id,
+          label: model.name,
+          disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model)
+        };
+      })]
+    }, restOfProps));
+  }
+
+}
+
+var _default = (0, _create_data_container.default)(ModelPickerSelect, props => {
+  return props.models.map(model => {
     return {
       watch: model,
       key: props.modelKeysToWatch

@@ -1,19 +1,20 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
-
 require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.object.entries");
 
 require("core-js/modules/es.object.to-string");
 
+require("core-js/modules/es.object.values");
+
+require("core-js/modules/es.weak-map");
+
 require("core-js/modules/web.dom-collections.iterator");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.cloneDeep = cloneDeep;
 exports.values = values;
 exports.entries = entries;
@@ -23,20 +24,8 @@ exports.getEnumValueIfExists = getEnumValueIfExists;
 exports.assertEnumValue = assertEnumValue;
 exports.isEnumValue = isEnumValue;
 
-var _keys = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/keys"));
-
-var _weakMap = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/weak-map"));
-
-var _setTimeout2 = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/set-timeout"));
-
-var _entries = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/entries"));
-
-var _values = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/object/values"));
-
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/json/stringify"));
-
 function cloneDeep(obj) {
-  var jsonString = (0, _stringify.default)(obj);
+  var jsonString = JSON.stringify(obj);
 
   if (jsonString === undefined) {
     return obj;
@@ -53,12 +42,12 @@ function cloneDeep(obj) {
 
 function values(obj) {
   // flow-disable-next-line
-  return (0, _values.default)(obj);
+  return Object.values(obj);
 }
 
 function entries(obj) {
   // flow-disable-next-line
-  return (0, _entries.default)(obj);
+  return Object.entries(obj);
 } // Result values are discarded and errors are thrown asynchronously.
 // NOTE: this is different from the one in u: the function passed
 // in must be fully bound with all of its arguments and will be immediately
@@ -67,9 +56,9 @@ function entries(obj) {
 
 
 function fireAndForgetPromise(fn) {
-  fn().catch(function (err) {
+  fn().catch(err => {
     // Defer til later, so the error doesn't cause the promise to be rejected.
-    (0, _setTimeout2.default)(function () {
+    setTimeout(() => {
       throw err;
     }, 0);
   });
@@ -79,7 +68,7 @@ function has(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-var invertedEnumCache = new _weakMap.default();
+var invertedEnumCache = new WeakMap();
 
 function getInvertedEnumMemoized(enumObj) {
   var existingInvertedEnum = invertedEnumCache.get(enumObj);
@@ -91,7 +80,7 @@ function getInvertedEnumMemoized(enumObj) {
 
   var invertedEnum = {};
 
-  for (var _i = 0, _Object$keys = (0, _keys.default)(enumObj); _i < _Object$keys.length; _i++) {
+  for (var _i = 0, _Object$keys = Object.keys(enumObj); _i < _Object$keys.length; _i++) {
     var enumKey = _Object$keys[_i];
     var enumValue = enumObj[enumKey];
     invertedEnum[enumValue] = enumKey;

@@ -1,18 +1,17 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.object.to-string");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/es.promise");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.loadCSSFromString = loadCSSFromString;
 exports.loadCSSFromURLAsync = loadCSSFromURLAsync;
 exports.loadScriptFromURLAsync = loadScriptFromURLAsync;
-
-var _promise = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/promise"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
@@ -46,14 +45,14 @@ function loadCSSFromString(string) {
 function loadCSSFromURLAsync(url) {
   // Pre-create the error for a nicer stack trace.
   var loadError = new Error('Failed to load remote CSS: ' + url);
-  return new _promise.default(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     var linkTag = document.createElement('link');
     linkTag.setAttribute('rel', 'stylesheet');
     linkTag.setAttribute('href', url);
-    linkTag.addEventListener('load', function () {
+    linkTag.addEventListener('load', () => {
       resolve(linkTag);
     });
-    linkTag.addEventListener('error', function (event) {
+    linkTag.addEventListener('error', event => {
       reject(loadError);
     });
     (0, _invariant.default)(document.head, 'no document head');
@@ -74,12 +73,12 @@ function loadCSSFromURLAsync(url) {
 function loadScriptFromURLAsync(url) {
   // Pre-create the error for a nicer stack trace.
   var loadError = new Error('Failed to load remote script: ' + url);
-  return new _promise.default(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     var scriptTag = document.createElement('script');
-    scriptTag.addEventListener('load', function () {
+    scriptTag.addEventListener('load', () => {
       resolve(scriptTag);
     });
-    scriptTag.addEventListener('error', function (event) {
+    scriptTag.addEventListener('error', event => {
       reject(loadError);
     });
     scriptTag.setAttribute('src', url);

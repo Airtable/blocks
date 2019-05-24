@@ -1,30 +1,17 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -46,78 +33,59 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     u = _window$__requirePriv.u;
 
 /** */
-var TablePickerSynced =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(TablePickerSynced, _React$Component);
-
-  function TablePickerSynced(props) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, TablePickerSynced);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TablePickerSynced).call(this, props));
-    _this._tablePicker = null;
-    return _this;
+class TablePickerSynced extends React.Component {
+  constructor(props) {
+    super(props);
+    this._tablePicker = null;
   }
 
-  (0, _createClass2.default)(TablePickerSynced, [{
-    key: "focus",
-    value: function focus() {
-      (0, _invariant.default)(this._tablePicker, 'No table picker to focus');
+  focus() {
+    (0, _invariant.default)(this._tablePicker, 'No table picker to focus');
 
-      this._tablePicker.focus();
-    }
-  }, {
-    key: "blur",
-    value: function blur() {
-      (0, _invariant.default)(this._tablePicker, 'No table picker to blur');
+    this._tablePicker.focus();
+  }
 
-      this._tablePicker.blur();
-    }
-  }, {
-    key: "click",
-    value: function click() {
-      (0, _invariant.default)(this._tablePicker, 'No table picker to click');
+  blur() {
+    (0, _invariant.default)(this._tablePicker, 'No table picker to blur');
 
-      this._tablePicker.click();
-    }
-  }, {
-    key: "_getTableFromGlobalConfigValue",
-    value: function _getTableFromGlobalConfigValue(tableId) {
-      return typeof tableId === 'string' ? (0, _get_sdk.default)().base.getTableById(tableId) : null;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
+    this._tablePicker.blur();
+  }
 
-      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
-      return React.createElement(_synced.default, {
-        globalConfigKey: this.props.globalConfigKey,
-        render: function render(_ref) {
-          var value = _ref.value,
-              canSetValue = _ref.canSetValue,
-              setValue = _ref.setValue;
-          return React.createElement(_table_picker.default, (0, _extends2.default)({
-            ref: function ref(el) {
-              return _this2._tablePicker = el;
-            },
-            table: _this2._getTableFromGlobalConfigValue(value),
-            disabled: _this2.props.disabled || !canSetValue,
-            onChange: function onChange(table) {
-              setValue(table ? table.id : null);
+  click() {
+    (0, _invariant.default)(this._tablePicker, 'No table picker to click');
 
-              if (_this2.props.onChange) {
-                _this2.props.onChange(table);
-              }
+    this._tablePicker.click();
+  }
+
+  _getTableFromGlobalConfigValue(tableId) {
+    return typeof tableId === 'string' ? (0, _get_sdk.default)().base.getTableById(tableId) : null;
+  }
+
+  render() {
+    var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+    return React.createElement(_synced.default, {
+      globalConfigKey: this.props.globalConfigKey,
+      render: (_ref) => {
+        var value = _ref.value,
+            canSetValue = _ref.canSetValue,
+            setValue = _ref.setValue;
+        return React.createElement(_table_picker.default, (0, _extends2.default)({
+          ref: el => this._tablePicker = el,
+          table: this._getTableFromGlobalConfigValue(value),
+          disabled: this.props.disabled || !canSetValue,
+          onChange: table => {
+            setValue(table ? table.id : null);
+
+            if (this.props.onChange) {
+              this.props.onChange(table);
             }
-          }, restOfProps));
-        }
-      });
-    }
-  }]);
-  return TablePickerSynced;
-}(React.Component);
+          }
+        }, restOfProps));
+      }
+    });
+  }
+
+}
 
 (0, _defineProperty2.default)(TablePickerSynced, "propTypes", {
   globalConfigKey: _global_config_synced_component_helpers.default.globalConfigKeyPropType,
@@ -130,7 +98,7 @@ function (_React$Component) {
   className: _propTypes.default.string
 });
 
-var _default = (0, _create_data_container.default)(TablePickerSynced, function (props) {
+var _default = (0, _create_data_container.default)(TablePickerSynced, props => {
   return [{
     watch: (0, _get_sdk.default)().base,
     key: 'tables'

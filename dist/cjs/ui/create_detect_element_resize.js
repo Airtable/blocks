@@ -1,22 +1,17 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+require("core-js/modules/es.array.index-of");
+
+require("core-js/modules/es.array.splice");
 
 require("core-js/modules/es.string.split");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/web.dom-collections.for-each");
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = createDetectElementResize;
-
-var _splice = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/splice"));
-
-var _forEach = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/for-each"));
-
-var _indexOf = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/index-of"));
 
 // Detect Element Resize.
 // https://github.com/sdecima/javascript-detect-element-resize
@@ -94,10 +89,8 @@ function createDetectElementResize(nonce) {
     };
 
     scrollListener = function scrollListener(e) {
-      var _context, _context2;
-
       // Don't measure (which forces) reflow for scrolls that happen inside of children!
-      if ((0, _indexOf.default)(_context = e.target.className).call(_context, 'contract-trigger') < 0 && (0, _indexOf.default)(_context2 = e.target.className).call(_context2, 'expand-trigger') < 0) {
+      if (e.target.className.indexOf('contract-trigger') < 0 && e.target.className.indexOf('expand-trigger') < 0) {
         return;
       }
 
@@ -111,11 +104,10 @@ function createDetectElementResize(nonce) {
 
       this.__resizeRAF__ = requestFrame(function () {
         if (checkTriggers(element)) {
-          var _context3;
-
           element.__resizeLast__.width = element.offsetWidth;
           element.__resizeLast__.height = element.offsetHeight;
-          (0, _forEach.default)(_context3 = element.__resizeListeners__).call(_context3, function (fn) {
+
+          element.__resizeListeners__.forEach(function (fn) {
             fn.call(element, e);
           });
         }
@@ -218,9 +210,7 @@ function createDetectElementResize(nonce) {
     if (attachEvent) {
       element.detachEvent('onresize', fn);
     } else {
-      var _context4, _context5;
-
-      (0, _splice.default)(_context4 = element.__resizeListeners__).call(_context4, (0, _indexOf.default)(_context5 = element.__resizeListeners__).call(_context5, fn), 1);
+      element.__resizeListeners__.splice(element.__resizeListeners__.indexOf(fn), 1);
 
       if (!element.__resizeListeners__.length) {
         element.removeEventListener('scroll', scrollListener, true);
@@ -240,7 +230,7 @@ function createDetectElementResize(nonce) {
   };
 
   return {
-    addResizeListener: addResizeListener,
-    removeResizeListener: removeResizeListener
+    addResizeListener,
+    removeResizeListener
   };
 }

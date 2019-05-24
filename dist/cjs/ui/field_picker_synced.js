@@ -1,32 +1,23 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.iterator");
 
-var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+require("core-js/modules/es.object.to-string");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -53,84 +44,65 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 /** */
-var FieldPickerSynced =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(FieldPickerSynced, _React$Component);
-
-  function FieldPickerSynced(props) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, FieldPickerSynced);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(FieldPickerSynced).call(this, props));
-    _this._fieldPicker = null;
-    return _this;
+class FieldPickerSynced extends React.Component {
+  constructor(props) {
+    super(props);
+    this._fieldPicker = null;
   }
 
-  (0, _createClass2.default)(FieldPickerSynced, [{
-    key: "focus",
-    value: function focus() {
-      (0, _invariant.default)(this._fieldPicker, 'No field picker to focus');
+  focus() {
+    (0, _invariant.default)(this._fieldPicker, 'No field picker to focus');
 
-      this._fieldPicker.focus();
+    this._fieldPicker.focus();
+  }
+
+  blur() {
+    (0, _invariant.default)(this._fieldPicker, 'No field picker to blur');
+
+    this._fieldPicker.blur();
+  }
+
+  click() {
+    (0, _invariant.default)(this._fieldPicker, 'No field picker to click');
+
+    this._fieldPicker.click();
+  }
+
+  _getFieldFromGlobalConfigValue(fieldId) {
+    var table = this.props.table;
+
+    if (!table || table.isDeleted) {
+      return null;
     }
-  }, {
-    key: "blur",
-    value: function blur() {
-      (0, _invariant.default)(this._fieldPicker, 'No field picker to blur');
 
-      this._fieldPicker.blur();
-    }
-  }, {
-    key: "click",
-    value: function click() {
-      (0, _invariant.default)(this._fieldPicker, 'No field picker to click');
+    return typeof fieldId === 'string' && table ? table.getFieldById(fieldId) : null;
+  }
 
-      this._fieldPicker.click();
-    }
-  }, {
-    key: "_getFieldFromGlobalConfigValue",
-    value: function _getFieldFromGlobalConfigValue(fieldId) {
-      var table = this.props.table;
+  render() {
+    var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+    return React.createElement(_synced.default, {
+      globalConfigKey: this.props.globalConfigKey,
+      render: (_ref) => {
+        var value = _ref.value,
+            canSetValue = _ref.canSetValue,
+            setValue = _ref.setValue;
+        return React.createElement(_field_picker.default, (0, _extends2.default)({
+          ref: el => this._fieldPicker = el,
+          disabled: this.props.disabled || !canSetValue,
+          field: this._getFieldFromGlobalConfigValue(value),
+          onChange: field => {
+            setValue(field ? field.id : null);
 
-      if (!table || table.isDeleted) {
-        return null;
-      }
-
-      return typeof fieldId === 'string' && table ? table.getFieldById(fieldId) : null;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
-      return React.createElement(_synced.default, {
-        globalConfigKey: this.props.globalConfigKey,
-        render: function render(_ref) {
-          var value = _ref.value,
-              canSetValue = _ref.canSetValue,
-              setValue = _ref.setValue;
-          return React.createElement(_field_picker.default, (0, _extends2.default)({
-            ref: function ref(el) {
-              return _this2._fieldPicker = el;
-            },
-            disabled: _this2.props.disabled || !canSetValue,
-            field: _this2._getFieldFromGlobalConfigValue(value),
-            onChange: function onChange(field) {
-              setValue(field ? field.id : null);
-
-              if (_this2.props.onChange) {
-                _this2.props.onChange(field);
-              }
+            if (this.props.onChange) {
+              this.props.onChange(field);
             }
-          }, restOfProps));
-        }
-      });
-    }
-  }]);
-  return FieldPickerSynced;
-}(React.Component);
+          }
+        }, restOfProps));
+      }
+    });
+  }
+
+}
 
 (0, _defineProperty2.default)(FieldPickerSynced, "propTypes", {
   table: _propTypes.default.instanceOf(_table.default),
@@ -139,13 +111,13 @@ function (_React$Component) {
   disabled: _propTypes.default.bool,
   // Passed through to FieldPicker:
   shouldAllowPickingNone: _propTypes.default.bool,
-  allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(_field.FieldTypes))),
+  allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _private_utils.values)(_field.FieldTypes))),
   placeholder: _propTypes.default.string,
   style: _propTypes.default.object,
   className: _propTypes.default.string
 });
 
-var _default = (0, _create_data_container.default)(FieldPickerSynced, function (props) {
+var _default = (0, _create_data_container.default)(FieldPickerSynced, props => {
   return [{
     watch: props.table,
     key: 'fields'

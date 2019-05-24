@@ -1,18 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/objectSpread"));
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -26,7 +23,7 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     u = _window$__requirePriv.u;
 
 /** */
-var ProgressBar = function ProgressBar(props) {
+var ProgressBar = props => {
   var progress = props.progress,
       _props$barColor = props.barColor,
       barColor = _props$barColor === void 0 ? _color_utils.default.getHexForColor(_colors.default.BLUE_BRIGHT) : _props$barColor,
@@ -41,8 +38,8 @@ var ProgressBar = function ProgressBar(props) {
   return React.createElement("div", {
     className: "".concat(className, " relative pill overflow-hidden"),
     style: (0, _objectSpread2.default)({}, style, {
-      height: height,
-      backgroundColor: backgroundColor
+      height,
+      backgroundColor
     })
   }, React.createElement("div", {
     className: "absolute animate top-0 left-0 height-full",

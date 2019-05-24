@@ -1,11 +1,8 @@
 "use strict";
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.FieldTypes = void 0;
 var FieldTypes = {
   SINGLE_LINE_TEXT: 'singleLineText',

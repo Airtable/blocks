@@ -1,11 +1,8 @@
 "use strict";
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.modes = exports.ModeTypes = void 0;
 var ModeTypes = {
   NONE: 'none',
@@ -31,22 +28,16 @@ exports.ModeTypes = ModeTypes;
  * const queryResult = table.select({ recordColorMode });
  */
 var modes = {
-  none: function none() {
-    return {
-      type: ModeTypes.NONE
-    };
-  },
-  bySelectField: function bySelectField(selectField) {
-    return {
-      type: ModeTypes.BY_SELECT_FIELD,
-      selectField: selectField
-    };
-  },
-  byView: function byView(view) {
-    return {
-      type: ModeTypes.BY_VIEW,
-      view: view
-    };
-  }
+  none: () => ({
+    type: ModeTypes.NONE
+  }),
+  bySelectField: selectField => ({
+    type: ModeTypes.BY_SELECT_FIELD,
+    selectField
+  }),
+  byView: view => ({
+    type: ModeTypes.BY_VIEW,
+    view
+  })
 };
 exports.modes = modes;

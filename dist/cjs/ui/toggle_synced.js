@@ -1,32 +1,23 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.iterator");
 
-var _valuesInstanceProperty = require("@babel/runtime-corejs3/core-js-stable/instance/values");
+require("core-js/modules/es.object.to-string");
 
-_Object$defineProperty(exports, "__esModule", {
+require("core-js/modules/web.dom-collections.iterator");
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/extends"));
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/inherits"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs3/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -46,78 +37,60 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     u = _window$__requirePriv.u;
 
 /** */
-var ToggleSynced =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(ToggleSynced, _React$Component);
-
-  function ToggleSynced(props) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, ToggleSynced);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ToggleSynced).call(this, props));
-    _this._toggle = null;
-    return _this;
+class ToggleSynced extends React.Component {
+  constructor(props) {
+    super(props);
+    this._toggle = null;
   }
 
-  (0, _createClass2.default)(ToggleSynced, [{
-    key: "focus",
-    value: function focus() {
-      (0, _invariant.default)(this._toggle, 'No toggle to focus');
+  focus() {
+    (0, _invariant.default)(this._toggle, 'No toggle to focus');
 
-      this._toggle.focus();
-    }
-  }, {
-    key: "blur",
-    value: function blur() {
-      (0, _invariant.default)(this._toggle, 'No toggle to blur');
+    this._toggle.focus();
+  }
 
-      this._toggle.blur();
-    }
-  }, {
-    key: "click",
-    value: function click() {
-      (0, _invariant.default)(this._toggle, 'No toggle to click');
+  blur() {
+    (0, _invariant.default)(this._toggle, 'No toggle to blur');
 
-      this._toggle.click();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
+    this._toggle.blur();
+  }
 
-      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
-      return React.createElement(_synced.default, {
-        globalConfigKey: this.props.globalConfigKey,
-        render: function render(_ref) {
-          var value = _ref.value,
-              canSetValue = _ref.canSetValue,
-              setValue = _ref.setValue;
-          return React.createElement(_toggle.default, (0, _extends2.default)({
-            ref: function ref(el) {
-              return _this2._toggle = el;
-            },
-            value: value || false,
-            disabled: _this2.props.disabled || !canSetValue,
-            onChange: function onChange(newValue) {
-              setValue(newValue);
+  click() {
+    (0, _invariant.default)(this._toggle, 'No toggle to click');
 
-              if (_this2.props.onChange) {
-                _this2.props.onChange(newValue);
-              }
+    this._toggle.click();
+  }
+
+  render() {
+    var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+    return React.createElement(_synced.default, {
+      globalConfigKey: this.props.globalConfigKey,
+      render: (_ref) => {
+        var value = _ref.value,
+            canSetValue = _ref.canSetValue,
+            setValue = _ref.setValue;
+        return React.createElement(_toggle.default, (0, _extends2.default)({
+          ref: el => this._toggle = el,
+          value: value || false,
+          disabled: this.props.disabled || !canSetValue,
+          onChange: newValue => {
+            setValue(newValue);
+
+            if (this.props.onChange) {
+              this.props.onChange(newValue);
             }
-          }, restOfProps));
-        }
-      });
-    }
-  }]);
-  return ToggleSynced;
-}(React.Component);
+          }
+        }, restOfProps));
+      }
+    });
+  }
+
+}
 
 (0, _defineProperty2.default)(ToggleSynced, "propTypes", {
   globalConfigKey: _global_config_synced_component_helpers.default.globalConfigKeyPropType,
   label: _propTypes.default.node,
-  theme: _propTypes.default.oneOf((0, _valuesInstanceProperty(_private_utils))(_toggle.default.themes)),
+  theme: _propTypes.default.oneOf((0, _private_utils.values)(_toggle.default.themes)),
   onChange: _propTypes.default.func,
   disabled: _propTypes.default.bool,
   className: _propTypes.default.string,

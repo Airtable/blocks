@@ -1,18 +1,13 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-require("core-js/modules/es.function.name");
+require("core-js/modules/es.array.concat");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
-
-var _concat = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/concat"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -24,9 +19,7 @@ var Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/
 var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
 
 /** */
-var Icon = function Icon(_ref) {
-  var _context;
-
+var Icon = (_ref) => {
   var name = _ref.name,
       _ref$size = _ref.size,
       size = _ref$size === void 0 ? 16 : _ref$size,
@@ -35,7 +28,7 @@ var Icon = function Icon(_ref) {
       style = _ref.style,
       pathClassName = _ref.pathClassName;
   var isMicro = size <= 12;
-  var pathData = iconConfig[(0, _concat.default)(_context = "".concat(name)).call(_context, isMicro ? 'Micro' : '')];
+  var pathData = iconConfig["".concat(name).concat(isMicro ? 'Micro' : '')];
 
   if (!pathData) {
     return null;

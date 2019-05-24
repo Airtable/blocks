@@ -1,18 +1,15 @@
 "use strict";
 
-var _interopRequireWildcard = require("@babel/runtime-corejs3/helpers/interopRequireWildcard");
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
+require("core-js/modules/es.array.index-of");
 
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
-
-var _indexOf = _interopRequireDefault(require("@babel/runtime-corejs3/core-js-stable/instance/index-of"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -26,7 +23,7 @@ var React = _interopRequireWildcard(require("react"));
 var reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
 /** */
 
-var Link = function Link(props) {
+var Link = props => {
   // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
   // https://www.owasp.org/index.php/Reverse_Tabnabbing
   var rel = props.target ? 'noopener noreferrer' : null;
@@ -34,7 +31,7 @@ var Link = function Link(props) {
   var sanitizedHref;
 
   if (href) {
-    var hasScheme = (0, _indexOf.default)(href).call(href, '://') !== -1;
+    var hasScheme = href.indexOf('://') !== -1;
 
     if (!hasScheme) {
       // If it's a relative URL (like '/foo'), leave it alone.

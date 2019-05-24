@@ -1,11 +1,8 @@
 "use strict";
 
-var _Object$defineProperty = require("@babel/runtime-corejs3/core-js-stable/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 exports.default = void 0;
 // NOTE: for the most part, these are going to have identical keys and values, but we want
 // to explicitly define this mapping so we have more control over the SDK.
