@@ -3,8 +3,6 @@ import {values} from './private_utils';
 import {UndoRedoModes, type UndoRedoMode} from './types/undo_redo';
 import {type AirtableInterface} from './injected/airtable_interface';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-
 class UndoRedo {
     modes = UndoRedoModes;
 
@@ -18,7 +16,7 @@ class UndoRedo {
         return this._mode;
     }
     set mode(mode: UndoRedoMode) {
-        if (!u.includes(values(UndoRedoModes), mode)) {
+        if (!values(UndoRedoModes).includes(mode)) {
             throw new Error('Unexpected UndoRedo mode');
         }
         this._mode = mode;

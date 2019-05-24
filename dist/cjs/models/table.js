@@ -95,7 +95,7 @@ var WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:'; // The string ca
 /** Model class representing a table in the base. */
 class Table extends _abstract_model_with_async_data.default {
   static _isWatchableKey(key) {
-    return (0, _private_utils.isEnumValue)(WatchableTableKeys, key) || u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
+    return (0, _private_utils.isEnumValue)(WatchableTableKeys, key) || key.startsWith(WatchableCellValuesInFieldKeyPrefix);
   }
 
   static _shouldLoadDataForKey(key) {
@@ -163,7 +163,7 @@ class Table extends _abstract_model_with_async_data.default {
       for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var key = _step.value;
 
-        if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
+        if (key.startsWith(WatchableCellValuesInFieldKeyPrefix)) {
           var fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
           fieldIdsToLoad.push(fieldId);
         } else if (key === WatchableTableKeys.__records || key === WatchableTableKeys.__recordIds) {
@@ -825,7 +825,7 @@ class Table extends _abstract_model_with_async_data.default {
 
     var activeView = this.activeView;
 
-    if (activeView && u.includes(allowedViewTypes, activeView.type)) {
+    if (activeView && allowedViewTypes.includes(activeView.type)) {
       return activeView;
     } else {
       return this.getFirstViewOfType(allowedViewTypes);
@@ -1273,7 +1273,7 @@ class Table extends _abstract_model_with_async_data.default {
   }
 
   _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds) {
-    var areAnyFieldsLoaded = this.isDataLoaded || u.some((0, _private_utils.values)(this._areCellValuesLoadedByFieldId), isLoaded => isLoaded);
+    var areAnyFieldsLoaded = this.isDataLoaded || (0, _private_utils.values)(this._areCellValuesLoadedByFieldId).some(isLoaded => isLoaded);
 
     if (!this.isDeleted) {
       if (!areAnyFieldsLoaded) {

@@ -88,7 +88,7 @@ class AutocompletePopover extends React.Component {
     } else {
       var lowercaseQuery = query.toLowerCase();
       return allItems.filter(item => {
-        return item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 || item.aliases && u.some(item.aliases, alias => {
+        return item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 || item.aliases && item.aliases.some(alias => {
           return alias.toLowerCase().indexOf(lowercaseQuery) !== -1;
         });
       });
@@ -277,7 +277,7 @@ class AutocompletePopover extends React.Component {
       return null;
     }
 
-    var items = u.map(itemsMatchingQuery, (item, index) => {
+    var items = itemsMatchingQuery.map((item, index) => {
       var isFocused = index === this.state.focusedItemIndex;
       return React.createElement("div", {
         ref: isFocused ? el => this._selectedResult = el : null,

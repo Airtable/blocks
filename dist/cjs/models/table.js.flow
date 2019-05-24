@@ -53,7 +53,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableTableKeys, key) ||
-            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
     static _shouldLoadDataForKey(key: WatchableTableKey): boolean {
@@ -136,7 +136,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     _getFieldIdsToLoadFromWatchableKeys(keys: Array<WatchableTableKey>): Array<string> {
         const fieldIdsToLoad = [];
         for (const key of keys) {
-            if (u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(WatchableCellValuesInFieldKeyPrefix.length);
                 fieldIdsToLoad.push(fieldId);
             } else if (
@@ -586,7 +586,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         }
 
         const activeView = this.activeView;
-        if (activeView && u.includes(allowedViewTypes, activeView.type)) {
+        if (activeView && allowedViewTypes.includes(activeView.type)) {
             return activeView;
         } else {
             return this.getFirstViewOfType(allowedViewTypes);
@@ -818,7 +818,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds?: Array<string>) {
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
-            u.some(values(this._areCellValuesLoadedByFieldId), isLoaded => isLoaded);
+            values(this._areCellValuesLoadedByFieldId).some(isLoaded => isLoaded);
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
                 this._data.recordsById = undefined;

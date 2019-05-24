@@ -101,11 +101,11 @@ class QueryResult extends _abstract_model_with_async_data.default {
 
 
   static _isWatchableKey(key) {
-    return (0, _private_utils.isEnumValue)(WatchableQueryResultKeys, key) || u.startsWith(key, WatchableCellValuesInFieldKeyPrefix);
+    return (0, _private_utils.isEnumValue)(WatchableQueryResultKeys, key) || key.startsWith(WatchableCellValuesInFieldKeyPrefix);
   }
 
   static _shouldLoadDataForKey(key) {
-    return key === QueryResult.WatchableKeys.records || key === QueryResult.WatchableKeys.recordIds || key === QueryResult.WatchableKeys.cellValues || key === QueryResult.WatchableKeys.recordColors || u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix);
+    return key === QueryResult.WatchableKeys.records || key === QueryResult.WatchableKeys.recordIds || key === QueryResult.WatchableKeys.cellValues || key === QueryResult.WatchableKeys.recordColors || key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix);
   }
 
   static _normalizeOpts(table) {

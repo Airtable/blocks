@@ -92,7 +92,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableQueryResultKeys, key) ||
-            u.startsWith(key, WatchableCellValuesInFieldKeyPrefix)
+            key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
     static _shouldLoadDataForKey(key: WatchableQueryResultKey): boolean {
@@ -101,7 +101,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             key === QueryResult.WatchableKeys.recordIds ||
             key === QueryResult.WatchableKeys.cellValues ||
             key === QueryResult.WatchableKeys.recordColors ||
-            u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)
+            key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)
         );
     }
 

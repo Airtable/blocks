@@ -23,9 +23,6 @@ var _private_utils = require("./private_utils");
 
 var _undo_redo = require("./types/undo_redo");
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
-
 class UndoRedo {
   constructor(airtableInterface) {
     (0, _defineProperty2.default)(this, "modes", _undo_redo.UndoRedoModes);
@@ -38,7 +35,7 @@ class UndoRedo {
   }
 
   set mode(mode) {
-    if (!u.includes((0, _private_utils.values)(_undo_redo.UndoRedoModes), mode)) {
+    if (!(0, _private_utils.values)(_undo_redo.UndoRedoModes).includes(mode)) {
       throw new Error('Unexpected UndoRedo mode');
     }
 

@@ -1,13 +1,12 @@
 // @flow
 import {type BaseData} from '../types/base';
 import {type FieldData, type PrivateColumnType} from '../types/field';
-import {isEnumValue, cloneDeep} from '../private_utils';
+import {isEnumValue, cloneDeep, values} from '../private_utils';
 import AbstractModel from './abstract_model';
 import Aggregators, {type Aggregator} from './aggregators';
 import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
 import type TableType from './table';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
@@ -113,7 +112,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             this.__getRawType(),
             this.__getRawTypeOptions(),
         );
-        return u.filter(Aggregators, aggregator => {
+        return values(Aggregators).filter(aggregator => {
             const liveappSummaryFunctionKey =
                 liveappSummaryFunctionKeyByAggregatorKey[aggregator.key];
             return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];

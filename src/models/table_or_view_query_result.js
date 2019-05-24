@@ -309,7 +309,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         const validKeys = super.watch(keys, callback, context);
 
         for (const key of validKeys) {
-            if (u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(
                     QueryResult.WatchableCellValuesInFieldKeyPrefix.length,
                 );
@@ -357,7 +357,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
-            if (u.startsWith(key, QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(
                     key,
                     this._onCellValuesInFieldChanged,
@@ -689,7 +689,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
 
         if (!wereAnyFieldsCreatedOrDeleted) {
-            wereAnyFieldsCreatedOrDeleted = u.some(removedFieldIds, fieldId =>
+            wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId =>
                 u.has(fieldIdsSet, fieldId),
             );
         }

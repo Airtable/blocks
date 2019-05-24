@@ -4,6 +4,12 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 
 require("core-js/modules/es.array.filter");
 
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.object.to-string");
+
+require("core-js/modules/web.dom-collections.iterator");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -19,17 +25,14 @@ var _aggregators = _interopRequireDefault(require("./aggregators"));
 
 var _liveapp_summary_function_key_by_aggregator_key = _interopRequireDefault(require("./liveapp_summary_function_key_by_aggregator_key"));
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
-
 var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
 
 var ColumnTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_types');
 
 var ApiCellFormats = window.__requirePrivateModuleFromAirtable('client_server_shared/api_cell_formats');
 
-var _window$__requirePriv2 = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions'),
-    PublicApiVersions = _window$__requirePriv2.PublicApiVersions; // This doesn't follow our enum naming conventions because we want the keys
+var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions'),
+    PublicApiVersions = _window$__requirePriv.PublicApiVersions; // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
 
 
@@ -124,7 +127,7 @@ class Field extends _abstract_model.default {
 
   get availableAggregators() {
     var possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(this.__getRawType(), this.__getRawTypeOptions());
-    return u.filter(_aggregators.default, aggregator => {
+    return (0, _private_utils.values)(_aggregators.default).filter(aggregator => {
       var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregator.key];
       return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
     });

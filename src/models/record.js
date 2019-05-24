@@ -55,8 +55,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableRecordKeys, key) ||
-            u.startsWith(key, WatchableCellValueInFieldKeyPrefix) ||
-            u.startsWith(key, WatchableColorInViewKeyPrefix)
+            key.startsWith(WatchableCellValueInFieldKeyPrefix) ||
+            key.startsWith(WatchableColorInViewKeyPrefix)
         );
     }
     _parentTable: TableType;

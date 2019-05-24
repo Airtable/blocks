@@ -114,7 +114,7 @@ class Base extends _abstract_model.default {
   }
 
   _isFeatureEnabled(featureName) {
-    return u.includes(this._data.enabledFeatureNames, featureName);
+    return this._data.enabledFeatureNames.includes(featureName);
   }
 
   get __rawPermissionLevel() {

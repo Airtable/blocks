@@ -144,7 +144,7 @@ class AutocompletePopover extends React.Component<
                 return (
                     item.label.toLowerCase().indexOf(lowercaseQuery) !== -1 ||
                     (item.aliases &&
-                        u.some(item.aliases, alias => {
+                        item.aliases.some(alias => {
                             return alias.toLowerCase().indexOf(lowercaseQuery) !== -1;
                         }))
                 );
@@ -315,7 +315,7 @@ class AutocompletePopover extends React.Component<
             return null;
         }
 
-        const items = u.map((itemsMatchingQuery: Array<AutocompleteItem>), (item, index) => {
+        const items = itemsMatchingQuery.map((item: AutocompleteItem, index) => {
             const isFocused = index === this.state.focusedItemIndex;
             return (
                 <div

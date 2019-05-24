@@ -73,7 +73,7 @@ var WatchableColorInViewKeyPrefix = 'colorInView:'; // The string case is to acc
 class Record extends _abstract_model.default {
   // Once all blocks set this flag to true, remove this flag.
   static _isWatchableKey(key) {
-    return (0, _private_utils.isEnumValue)(WatchableRecordKeys, key) || u.startsWith(key, WatchableCellValueInFieldKeyPrefix) || u.startsWith(key, WatchableColorInViewKeyPrefix);
+    return (0, _private_utils.isEnumValue)(WatchableRecordKeys, key) || key.startsWith(WatchableCellValueInFieldKeyPrefix) || key.startsWith(WatchableColorInViewKeyPrefix);
   }
 
   constructor(baseData, parentTable, recordId) {

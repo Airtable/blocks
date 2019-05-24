@@ -227,7 +227,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     ): Array<WatchableViewportKey> {
         const validKeys = super.watch(keys, callback, context);
 
-        if (u.includes(validKeys, WatchableViewportKeys.size)) {
+        if (validKeys.includes(WatchableViewportKeys.size)) {
             if (this._sizeWatchCount === 0) {
                 window.addEventListener('resize', this._onSizeChangeDebounced, false);
             }
@@ -243,7 +243,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     ): Array<WatchableViewportKey> {
         const validKeys = super.unwatch(keys, callback, context);
 
-        if (u.includes(validKeys, WatchableViewportKeys.size)) {
+        if (validKeys.includes(WatchableViewportKeys.size)) {
             this._sizeWatchCount--;
             if (this._sizeWatchCount === 0) {
                 window.removeEventListener('resize', this._onSizeChangeDebounced, false);

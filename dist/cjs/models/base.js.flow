@@ -84,7 +84,7 @@ class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
         }
     }
     _isFeatureEnabled(featureName: string): boolean {
-        return u.includes(this._data.enabledFeatureNames, featureName);
+        return this._data.enabledFeatureNames.includes(featureName);
     }
     get __rawPermissionLevel(): PermissionLevel {
         return this._data.permissionLevel;

@@ -398,7 +398,7 @@ class TableOrViewQueryResult extends _query_result.default {
       for (var _iterator5 = validKeys[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
         var key = _step5.value;
 
-        if (u.startsWith(key, _query_result.default.WatchableCellValuesInFieldKeyPrefix)) {
+        if (key.startsWith(_query_result.default.WatchableCellValuesInFieldKeyPrefix)) {
           var fieldId = key.substring(_query_result.default.WatchableCellValuesInFieldKeyPrefix.length);
 
           if (this._fieldIdsSetToLoadOrNullIfAllFields && !u.has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)) {
@@ -452,7 +452,7 @@ class TableOrViewQueryResult extends _query_result.default {
       for (var _iterator6 = validKeys[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
         var key = _step6.value;
 
-        if (u.startsWith(key, _query_result.default.WatchableCellValuesInFieldKeyPrefix)) {
+        if (key.startsWith(_query_result.default.WatchableCellValuesInFieldKeyPrefix)) {
           this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(key, this._onCellValuesInFieldChanged);
         }
 
@@ -1018,7 +1018,7 @@ class TableOrViewQueryResult extends _query_result.default {
     }
 
     if (!wereAnyFieldsCreatedOrDeleted) {
-      wereAnyFieldsCreatedOrDeleted = u.some(removedFieldIds, fieldId => u.has(fieldIdsSet, fieldId));
+      wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId => u.has(fieldIdsSet, fieldId));
     }
 
     if (wereAnyFieldsCreatedOrDeleted) {
