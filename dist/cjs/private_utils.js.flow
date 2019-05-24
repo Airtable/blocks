@@ -65,7 +65,7 @@ export function getEnumValueIfExists<EnumValue: string, EnumObj: {+[string]: Enu
     valueToCheck: string,
 ): EnumValue | null {
     const invertedEnum = getInvertedEnumMemoized(enumObj);
-    if (this.has(invertedEnum, valueToCheck) && invertedEnum[valueToCheck]) {
+    if (has(invertedEnum, valueToCheck) && invertedEnum[valueToCheck]) {
         const enumKey = invertedEnum[valueToCheck];
         return enumObj[enumKey];
     }
@@ -76,7 +76,7 @@ export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValu
     enumObj: EnumObj,
     valueToCheck: string,
 ): EnumValue {
-    const enumValue = this.getEnumValueIfExists(enumObj, valueToCheck);
+    const enumValue = getEnumValueIfExists(enumObj, valueToCheck);
     if (!enumValue) {
         throw new Error(`Unknown enum value ${valueToCheck}`);
     }
@@ -84,5 +84,5 @@ export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValu
 }
 
 export function isEnumValue(enumObj: {[string]: string}, valueToCheck: string): boolean {
-    return this.getEnumValueIfExists(enumObj, valueToCheck) !== null;
+    return getEnumValueIfExists(enumObj, valueToCheck) !== null;
 }

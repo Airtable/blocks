@@ -104,7 +104,7 @@ function getInvertedEnumMemoized(enumObj) {
 function getEnumValueIfExists(enumObj, valueToCheck) {
   var invertedEnum = getInvertedEnumMemoized(enumObj);
 
-  if (this.has(invertedEnum, valueToCheck) && invertedEnum[valueToCheck]) {
+  if (has(invertedEnum, valueToCheck) && invertedEnum[valueToCheck]) {
     var enumKey = invertedEnum[valueToCheck];
     return enumObj[enumKey];
   }
@@ -113,7 +113,7 @@ function getEnumValueIfExists(enumObj, valueToCheck) {
 }
 
 function assertEnumValue(enumObj, valueToCheck) {
-  var enumValue = this.getEnumValueIfExists(enumObj, valueToCheck);
+  var enumValue = getEnumValueIfExists(enumObj, valueToCheck);
 
   if (!enumValue) {
     throw new Error("Unknown enum value ".concat(valueToCheck));
@@ -123,5 +123,5 @@ function assertEnumValue(enumObj, valueToCheck) {
 }
 
 function isEnumValue(enumObj, valueToCheck) {
-  return this.getEnumValueIfExists(enumObj, valueToCheck) !== null;
+  return getEnumValueIfExists(enumObj, valueToCheck) !== null;
 }
