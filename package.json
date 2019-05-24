@@ -5,6 +5,7 @@
   "bin": {
     "block": "bin/block.js"
   },
+  "license": "MIT",
   "scripts": {
     "lint": "eslint .",
     "flow": "flow",
