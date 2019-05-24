@@ -17,6 +17,16 @@ exports.default = void 0;
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -37,55 +47,69 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     u = _window$__requirePriv.u;
 
 /** */
-class ToggleSynced extends React.Component {
-  constructor(props) {
-    super(props);
-    this._toggle = null;
+var ToggleSynced =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(ToggleSynced, _React$Component);
+
+  function ToggleSynced(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, ToggleSynced);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ToggleSynced).call(this, props));
+    _this._toggle = null;
+    return _this;
   }
 
-  focus() {
-    (0, _invariant.default)(this._toggle, 'No toggle to focus');
+  (0, _createClass2.default)(ToggleSynced, [{
+    key: "focus",
+    value: function focus() {
+      (0, _invariant.default)(this._toggle, 'No toggle to focus');
 
-    this._toggle.focus();
-  }
+      this._toggle.focus();
+    }
+  }, {
+    key: "blur",
+    value: function blur() {
+      (0, _invariant.default)(this._toggle, 'No toggle to blur');
 
-  blur() {
-    (0, _invariant.default)(this._toggle, 'No toggle to blur');
+      this._toggle.blur();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      (0, _invariant.default)(this._toggle, 'No toggle to click');
 
-    this._toggle.blur();
-  }
+      this._toggle.click();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+      return React.createElement(_synced.default, {
+        globalConfigKey: this.props.globalConfigKey,
+        render: (_ref) => {
+          var value = _ref.value,
+              canSetValue = _ref.canSetValue,
+              setValue = _ref.setValue;
+          return React.createElement(_toggle.default, (0, _extends2.default)({
+            ref: el => this._toggle = el,
+            value: value || false,
+            disabled: this.props.disabled || !canSetValue,
+            onChange: newValue => {
+              setValue(newValue);
 
-  click() {
-    (0, _invariant.default)(this._toggle, 'No toggle to click');
-
-    this._toggle.click();
-  }
-
-  render() {
-    var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
-    return React.createElement(_synced.default, {
-      globalConfigKey: this.props.globalConfigKey,
-      render: (_ref) => {
-        var value = _ref.value,
-            canSetValue = _ref.canSetValue,
-            setValue = _ref.setValue;
-        return React.createElement(_toggle.default, (0, _extends2.default)({
-          ref: el => this._toggle = el,
-          value: value || false,
-          disabled: this.props.disabled || !canSetValue,
-          onChange: newValue => {
-            setValue(newValue);
-
-            if (this.props.onChange) {
-              this.props.onChange(newValue);
+              if (this.props.onChange) {
+                this.props.onChange(newValue);
+              }
             }
-          }
-        }, restOfProps));
-      }
-    });
-  }
-
-}
+          }, restOfProps));
+        }
+      });
+    }
+  }]);
+  return ToggleSynced;
+}(React.Component);
 
 (0, _defineProperty2.default)(ToggleSynced, "propTypes", {
   globalConfigKey: _global_config_synced_component_helpers.default.globalConfigKeyPropType,

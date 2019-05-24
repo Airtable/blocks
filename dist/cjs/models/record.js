@@ -25,6 +25,16 @@ exports.default = void 0;
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _invariant = _interopRequireDefault(require("invariant"));
@@ -70,396 +80,433 @@ var WatchableColorInViewKeyPrefix = 'colorInView:'; // The string case is to acc
  *
  * Do not instantiate. To create a new record, use `table.createRecord`.
  */
-class Record extends _abstract_model.default {
-  // Once all blocks set this flag to true, remove this flag.
-  static _isWatchableKey(key) {
-    return (0, _private_utils.isEnumValue)(WatchableRecordKeys, key) || key.startsWith(WatchableCellValueInFieldKeyPrefix) || key.startsWith(WatchableColorInViewKeyPrefix);
-  }
-
-  constructor(baseData, parentTable, recordId) {
-    super(baseData, recordId);
-    this._parentTable = parentTable;
-  }
-
-  get _dataOrNullIfDeleted() {
-    var tableData = this._baseData.tablesById[this.parentTable.id];
-
-    if (!tableData) {
-      return null;
+var Record =
+/*#__PURE__*/
+function (_AbstractModel) {
+  (0, _inherits2.default)(Record, _AbstractModel);
+  (0, _createClass2.default)(Record, null, [{
+    key: "_isWatchableKey",
+    // Once all blocks set this flag to true, remove this flag.
+    value: function _isWatchableKey(key) {
+      return (0, _private_utils.isEnumValue)(WatchableRecordKeys, key) || key.startsWith(WatchableCellValueInFieldKeyPrefix) || key.startsWith(WatchableColorInViewKeyPrefix);
     }
+  }]);
 
-    var recordsById = tableData.recordsById;
-    (0, _invariant.default)(recordsById, 'Record data is not loaded');
-    return recordsById[this._id] || null;
-  }
-  /** */
+  function Record(baseData, parentTable, recordId) {
+    var _this;
 
-
-  get parentTable() {
-    return this._parentTable;
-  }
-
-  __getRawCellValue(fieldId) {
-    var publicCellValue = this.getCellValue(fieldId);
-    var field = this.parentTable.getFieldById(fieldId);
-    (0, _invariant.default)(field, 'Should have field');
-    return _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
+    (0, _classCallCheck2.default)(this, Record);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Record).call(this, baseData, recordId));
+    _this._parentTable = parentTable;
+    return _this;
   }
 
-  __getRawRow() {
-    var cellValuesByColumnId;
-    var cellValuesByFieldId = this._data.cellValuesByFieldId;
-
-    if (cellValuesByFieldId) {
-      cellValuesByColumnId = {};
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = (0, _private_utils.entries)(cellValuesByFieldId)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _step$value = (0, _slicedToArray2.default)(_step.value, 2),
-              fieldId = _step$value[0],
-              publicCellValue = _step$value[1];
-
-          // When fields are deleted, we set the previously loaded cell value to
-          // undefined (vs deleting the key from the cellValuesByFieldId object, which
-          // would cause de-opts). So ignore undefined cell values, since the field is deleted.
-          if (publicCellValue !== undefined) {
-            var field = this.parentTable.getFieldById(fieldId);
-            (0, _invariant.default)(field, 'Should have field');
-            cellValuesByColumnId[fieldId] = _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
+  (0, _createClass2.default)(Record, [{
+    key: "__getRawCellValue",
+    value: function __getRawCellValue(fieldId) {
+      var publicCellValue = this.getCellValue(fieldId);
+      var field = this.parentTable.getFieldById(fieldId);
+      (0, _invariant.default)(field, 'Should have field');
+      return _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
     }
+  }, {
+    key: "__getRawRow",
+    value: function __getRawRow() {
+      var cellValuesByColumnId;
+      var cellValuesByFieldId = this._data.cellValuesByFieldId;
 
-    return {
-      id: this.id,
-      createdTime: this._data.createdTime,
-      cellValuesByColumnId
-    };
-  }
-
-  _getFieldMatching(fieldOrFieldIdOrFieldName) {
-    return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
-  }
-
-  _getViewMatching(viewOrViewIdOrViewName) {
-    return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
-  }
-  /** */
-
-
-  getCellValue(fieldOrFieldIdOrFieldName) {
-    var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-
-    (0, _invariant.default)(field, 'Field does not exist');
-    (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
-    (0, _invariant.default)(field.parentTable.id === this.parentTable.id, 'Field must have same parent table as record');
-    (0, _invariant.default)(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
-    var cellValuesByFieldId = this._data.cellValuesByFieldId;
-
-    if (!cellValuesByFieldId) {
-      return null;
-    }
-
-    var cellValue = cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
-
-    if (typeof cellValue === 'object' && cellValue !== null) {
-      // HACK: while we migrate our blocks to the new lookup cell value
-      // format, make the public cell value look like an array for
-      // backwards compatibility.
-      if (!Record.shouldUseNewLookupFormat && field.type === _field.FieldTypes.LOOKUP) {
-        var cellValueForMigration = []; // flow-disable-next-line
-
-        cellValueForMigration.linkedRecordIds = (0, _private_utils.cloneDeep)(cellValue.linkedRecordIds); // flow-disable-next-line
-
-        cellValueForMigration.valuesByLinkedRecordId = (0, _private_utils.cloneDeep)(cellValue.valuesByLinkedRecordId);
-        (0, _invariant.default)(Array.isArray(cellValue.linkedRecordIds), 'linkedRecordIds');
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+      if (cellValuesByFieldId) {
+        cellValuesByColumnId = {};
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
         try {
-          for (var _iterator2 = cellValue.linkedRecordIds[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var linkedRecordId = _step2.value;
-            (0, _invariant.default)(typeof linkedRecordId === 'string', 'linkedRecordId');
-            var valuesByLinkedRecordId = cellValue.valuesByLinkedRecordId;
-            (0, _invariant.default)(valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object', 'valuesByLinkedRecordId');
-            var value = valuesByLinkedRecordId[linkedRecordId];
+          for (var _iterator = (0, _private_utils.entries)(cellValuesByFieldId)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var _step$value = (0, _slicedToArray2.default)(_step.value, 2),
+                fieldId = _step$value[0],
+                publicCellValue = _step$value[1];
 
-            if (Array.isArray(value)) {
-              var _iteratorNormalCompletion3 = true;
-              var _didIteratorError3 = false;
-              var _iteratorError3 = undefined;
-
-              try {
-                for (var _iterator3 = value[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                  var v = _step3.value;
-                  cellValueForMigration.push(v);
-                }
-              } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-                    _iterator3.return();
-                  }
-                } finally {
-                  if (_didIteratorError3) {
-                    throw _iteratorError3;
-                  }
-                }
-              }
-            } else {
-              cellValueForMigration.push(value);
+            // When fields are deleted, we set the previously loaded cell value to
+            // undefined (vs deleting the key from the cellValuesByFieldId object, which
+            // would cause de-opts). So ignore undefined cell values, since the field is deleted.
+            if (publicCellValue !== undefined) {
+              var field = this.parentTable.getFieldById(fieldId);
+              (0, _invariant.default)(field, 'Should have field');
+              cellValuesByColumnId[fieldId] = _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
             }
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError) {
+              throw _iteratorError;
             }
           }
         }
-
-        return cellValueForMigration;
-      } // Copy non-primitives.
-      // TODO(kasra): maybe freezeDeep instead?
-
-
-      return (0, _private_utils.cloneDeep)(cellValue);
-    } else {
-      return cellValue;
-    }
-  }
-  /** */
-
-
-  getCellValueAsString(fieldOrFieldIdOrFieldName) {
-    var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-
-    (0, _invariant.default)(field, 'Field does not exist');
-    (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
-    (0, _invariant.default)(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
-
-    var rawCellValue = this.__getRawCellValue(field.id);
-
-    if (rawCellValue === null || rawCellValue === undefined) {
-      return '';
-    } else {
-      return columnTypeProvider.convertCellValueToString(rawCellValue, field.__getRawType(), field.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface);
-    }
-  }
-  /**
-   * Call this method with an attachment ID and URL to get back a URL that is
-   * suitable for rendering on the current client. The URL that is returned
-   * will only work for the current user.
-   */
-
-
-  getAttachmentClientUrlFromCellValueUrl(attachmentId, attachmentUrl) {
-    var appInterface = this.parentTable.parentBase.__appInterface;
-    var isAttachmentsCdnV3Enabled = appInterface.isFeatureEnabled('attachmentsCdnV3');
-
-    if (isAttachmentsCdnV3Enabled) {
-      var applicationId = appInterface.getApplicationId();
-      var userId = appInterface.getCurrentSessionUserId(); // NOTE: normal images must be active in the base. We don't support rendering historical values here. see attachment_object_methods.js for more
-
-      var imagePathPrefix = 'attV3/';
-      attachmentUrl = attachmentUrl.replace(/^https:\/\/([^/]+)\//, "".concat(ATTACHMENTS_V3_CDN_BASE_URL, "/").concat(imagePathPrefix).concat(userId, "/").concat(applicationId, "/").concat(attachmentId, "/"));
-    }
-
-    return attachmentUrl;
-  }
-  /**
-   * Get the color name for this record in the specified view, or null if
-   * no color is available. Watch with the 'colorInView:${ViewId}' key.
-   */
-
-
-  getColorInView(viewOrViewIdOrViewName) {
-    var view = this._getViewMatching(viewOrViewIdOrViewName);
-
-    (0, _invariant.default)(view, 'View does not exist');
-    (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
-    return view.__getRecordColor(this);
-  }
-  /**
-   * Get a CSS hex string for this record in the specified view, or null if
-   * no color is available. Watch with the 'colorInView:${ViewId}' key
-   */
-
-
-  getColorHexInView(viewOrViewIdOrViewName) {
-    var view = this._getViewMatching(viewOrViewIdOrViewName);
-
-    (0, _invariant.default)(view, 'View does not exist');
-    (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
-    return view.__getRecordColorHex(this);
-  }
-
-  getLinkedRecordsFromCell(fieldOrFieldIdOrFieldName) {
-    var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-
-    (0, _invariant.default)(field, 'Field does not exist');
-    (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
-    return _linked_records_query_result.default.__createOrReuseQueryResult(this, field, opts);
-  }
-  /** Returns the URL for this record. */
-
-
-  get url() {
-    return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
-      absolute: true
-    });
-  }
-  /** */
-
-
-  get primaryCellValue() {
-    return this.getCellValue(this.parentTable.primaryField);
-  }
-  /** */
-
-
-  get primaryCellValueAsString() {
-    return this.getCellValueAsString(this.parentTable.primaryField);
-  }
-  /**
-   * Use this to check if the current user has permission to update a
-   * specific cell value before calling `setCellValue`.
-   */
-
-
-  canSetCellValue(fieldOrFieldIdOrFieldName, publicCellValue) {
-    var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-
-    (0, _invariant.default)(field, 'Field does not exist');
-    (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
-    return this.canSetCellValues({
-      [field.id]: publicCellValue
-    });
-  }
-  /**
-   * Use `canSetCellValue` to check if the current user has permission to update a
-   * specific cell value before calling. Will throw if the user does not have
-   * permission.
-   */
-
-
-  setCellValue(fieldOrFieldIdOrFieldName, publicCellValue) {
-    var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-
-    (0, _invariant.default)(field, 'Field does not exist');
-    (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
-    return this.setCellValues({
-      [field.id]: publicCellValue
-    });
-  }
-  /**
-   * Use this to check if the current user has permission to update a
-   * set of cell values before calling `setCellValues`.
-   */
-
-
-  canSetCellValues(cellValuesByFieldIdOrFieldName) {
-    return this.parentTable.canSetCellValues({
-      [this.id]: cellValuesByFieldIdOrFieldName
-    });
-  }
-  /**
-   * Use `canSetCellValues` to check if the current user has permission to update
-   * the cell values before calling. Will throw if the user does not have
-   * permission.
-   */
-
-
-  setCellValues(cellValuesByFieldIdOrFieldName) {
-    return this.parentTable.setCellValues({
-      [this.id]: cellValuesByFieldIdOrFieldName
-    });
-  }
-  /** */
-
-
-  canDelete() {
-    return this.parentTable.canDeleteRecord(this);
-  }
-  /** */
-
-
-  delete() {
-    return this.parentTable.deleteRecord(this);
-  }
-  /** */
-
-
-  get commentCount() {
-    return this._data.commentCount;
-  }
-  /** */
-
-
-  get createdTime() {
-    return new Date(this._data.createdTime);
-  }
-
-  __triggerOnChangeForDirtyPaths(dirtyPaths) {
-    var cellValuesByFieldId = dirtyPaths.cellValuesByFieldId,
-        commentCount = dirtyPaths.commentCount;
-
-    if (cellValuesByFieldId && u.isObjectNonEmpty(cellValuesByFieldId)) {
-      // TODO: don't trigger changes for fields that aren't supposed to be loaded
-      // (in some cases, e.g. record created, liveapp will send cell values
-      // that we're not subscribed to).
-      this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
-
-      if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
-        this._onChange(WatchableRecordKeys.primaryCellValue);
       }
 
-      for (var _i = 0, _Object$keys = Object.keys(cellValuesByFieldId); _i < _Object$keys.length; _i++) {
-        var fieldId = _Object$keys[_i];
+      return {
+        id: this.id,
+        createdTime: this._data.createdTime,
+        cellValuesByColumnId
+      };
+    }
+  }, {
+    key: "_getFieldMatching",
+    value: function _getFieldMatching(fieldOrFieldIdOrFieldName) {
+      return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
+    }
+  }, {
+    key: "_getViewMatching",
+    value: function _getViewMatching(viewOrViewIdOrViewName) {
+      return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
+    }
+    /** */
 
-        this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
+  }, {
+    key: "getCellValue",
+    value: function getCellValue(fieldOrFieldIdOrFieldName) {
+      var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+
+      (0, _invariant.default)(field, 'Field does not exist');
+      (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
+      (0, _invariant.default)(field.parentTable.id === this.parentTable.id, 'Field must have same parent table as record');
+      (0, _invariant.default)(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
+      var cellValuesByFieldId = this._data.cellValuesByFieldId;
+
+      if (!cellValuesByFieldId) {
+        return null;
+      }
+
+      var cellValue = cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
+
+      if (typeof cellValue === 'object' && cellValue !== null) {
+        // HACK: while we migrate our blocks to the new lookup cell value
+        // format, make the public cell value look like an array for
+        // backwards compatibility.
+        if (!Record.shouldUseNewLookupFormat && field.type === _field.FieldTypes.LOOKUP) {
+          var cellValueForMigration = []; // flow-disable-next-line
+
+          cellValueForMigration.linkedRecordIds = (0, _private_utils.cloneDeep)(cellValue.linkedRecordIds); // flow-disable-next-line
+
+          cellValueForMigration.valuesByLinkedRecordId = (0, _private_utils.cloneDeep)(cellValue.valuesByLinkedRecordId);
+          (0, _invariant.default)(Array.isArray(cellValue.linkedRecordIds), 'linkedRecordIds');
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = cellValue.linkedRecordIds[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var linkedRecordId = _step2.value;
+              (0, _invariant.default)(typeof linkedRecordId === 'string', 'linkedRecordId');
+              var valuesByLinkedRecordId = cellValue.valuesByLinkedRecordId;
+              (0, _invariant.default)(valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object', 'valuesByLinkedRecordId');
+              var value = valuesByLinkedRecordId[linkedRecordId];
+
+              if (Array.isArray(value)) {
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                  for (var _iterator3 = value[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var v = _step3.value;
+                    cellValueForMigration.push(v);
+                  }
+                } catch (err) {
+                  _didIteratorError3 = true;
+                  _iteratorError3 = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                      _iterator3.return();
+                    }
+                  } finally {
+                    if (_didIteratorError3) {
+                      throw _iteratorError3;
+                    }
+                  }
+                }
+              } else {
+                cellValueForMigration.push(value);
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+
+          return cellValueForMigration;
+        } // Copy non-primitives.
+        // TODO(kasra): maybe freezeDeep instead?
+
+
+        return (0, _private_utils.cloneDeep)(cellValue);
+      } else {
+        return cellValue;
       }
     }
+    /** */
 
-    if (commentCount) {
-      this._onChange(WatchableRecordKeys.commentCount);
+  }, {
+    key: "getCellValueAsString",
+    value: function getCellValueAsString(fieldOrFieldIdOrFieldName) {
+      var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+
+      (0, _invariant.default)(field, 'Field does not exist');
+      (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
+      (0, _invariant.default)(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
+
+      var rawCellValue = this.__getRawCellValue(field.id);
+
+      if (rawCellValue === null || rawCellValue === undefined) {
+        return '';
+      } else {
+        return columnTypeProvider.convertCellValueToString(rawCellValue, field.__getRawType(), field.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface);
+      }
     }
-  }
+    /**
+     * Call this method with an attachment ID and URL to get back a URL that is
+     * suitable for rendering on the current client. The URL that is returned
+     * will only work for the current user.
+     */
 
-  __triggerOnChangeForRecordColorInViewId(viewId) {
-    this._onChange(WatchableColorInViewKeyPrefix + viewId);
-  }
+  }, {
+    key: "getAttachmentClientUrlFromCellValueUrl",
+    value: function getAttachmentClientUrlFromCellValueUrl(attachmentId, attachmentUrl) {
+      var appInterface = this.parentTable.parentBase.__appInterface;
+      var isAttachmentsCdnV3Enabled = appInterface.isFeatureEnabled('attachmentsCdnV3');
 
-}
+      if (isAttachmentsCdnV3Enabled) {
+        var applicationId = appInterface.getApplicationId();
+        var userId = appInterface.getCurrentSessionUserId(); // NOTE: normal images must be active in the base. We don't support rendering historical values here. see attachment_object_methods.js for more
+
+        var imagePathPrefix = 'attV3/';
+        attachmentUrl = attachmentUrl.replace(/^https:\/\/([^/]+)\//, "".concat(ATTACHMENTS_V3_CDN_BASE_URL, "/").concat(imagePathPrefix).concat(userId, "/").concat(applicationId, "/").concat(attachmentId, "/"));
+      }
+
+      return attachmentUrl;
+    }
+    /**
+     * Get the color name for this record in the specified view, or null if
+     * no color is available. Watch with the 'colorInView:${ViewId}' key.
+     */
+
+  }, {
+    key: "getColorInView",
+    value: function getColorInView(viewOrViewIdOrViewName) {
+      var view = this._getViewMatching(viewOrViewIdOrViewName);
+
+      (0, _invariant.default)(view, 'View does not exist');
+      (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
+      return view.__getRecordColor(this);
+    }
+    /**
+     * Get a CSS hex string for this record in the specified view, or null if
+     * no color is available. Watch with the 'colorInView:${ViewId}' key
+     */
+
+  }, {
+    key: "getColorHexInView",
+    value: function getColorHexInView(viewOrViewIdOrViewName) {
+      var view = this._getViewMatching(viewOrViewIdOrViewName);
+
+      (0, _invariant.default)(view, 'View does not exist');
+      (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
+      return view.__getRecordColorHex(this);
+    }
+  }, {
+    key: "getLinkedRecordsFromCell",
+    value: function getLinkedRecordsFromCell(fieldOrFieldIdOrFieldName) {
+      var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+
+      (0, _invariant.default)(field, 'Field does not exist');
+      (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
+      return _linked_records_query_result.default.__createOrReuseQueryResult(this, field, opts);
+    }
+    /** Returns the URL for this record. */
+
+  }, {
+    key: "canSetCellValue",
+
+    /**
+     * Use this to check if the current user has permission to update a
+     * specific cell value before calling `setCellValue`.
+     */
+    value: function canSetCellValue(fieldOrFieldIdOrFieldName, publicCellValue) {
+      var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+
+      (0, _invariant.default)(field, 'Field does not exist');
+      (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
+      return this.canSetCellValues({
+        [field.id]: publicCellValue
+      });
+    }
+    /**
+     * Use `canSetCellValue` to check if the current user has permission to update a
+     * specific cell value before calling. Will throw if the user does not have
+     * permission.
+     */
+
+  }, {
+    key: "setCellValue",
+    value: function setCellValue(fieldOrFieldIdOrFieldName, publicCellValue) {
+      var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+
+      (0, _invariant.default)(field, 'Field does not exist');
+      (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
+      return this.setCellValues({
+        [field.id]: publicCellValue
+      });
+    }
+    /**
+     * Use this to check if the current user has permission to update a
+     * set of cell values before calling `setCellValues`.
+     */
+
+  }, {
+    key: "canSetCellValues",
+    value: function canSetCellValues(cellValuesByFieldIdOrFieldName) {
+      return this.parentTable.canSetCellValues({
+        [this.id]: cellValuesByFieldIdOrFieldName
+      });
+    }
+    /**
+     * Use `canSetCellValues` to check if the current user has permission to update
+     * the cell values before calling. Will throw if the user does not have
+     * permission.
+     */
+
+  }, {
+    key: "setCellValues",
+    value: function setCellValues(cellValuesByFieldIdOrFieldName) {
+      return this.parentTable.setCellValues({
+        [this.id]: cellValuesByFieldIdOrFieldName
+      });
+    }
+    /** */
+
+  }, {
+    key: "canDelete",
+    value: function canDelete() {
+      return this.parentTable.canDeleteRecord(this);
+    }
+    /** */
+
+  }, {
+    key: "delete",
+    value: function _delete() {
+      return this.parentTable.deleteRecord(this);
+    }
+    /** */
+
+  }, {
+    key: "__triggerOnChangeForDirtyPaths",
+    value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
+      var cellValuesByFieldId = dirtyPaths.cellValuesByFieldId,
+          commentCount = dirtyPaths.commentCount;
+
+      if (cellValuesByFieldId && u.isObjectNonEmpty(cellValuesByFieldId)) {
+        // TODO: don't trigger changes for fields that aren't supposed to be loaded
+        // (in some cases, e.g. record created, liveapp will send cell values
+        // that we're not subscribed to).
+        this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
+
+        if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
+          this._onChange(WatchableRecordKeys.primaryCellValue);
+        }
+
+        for (var _i = 0, _Object$keys = Object.keys(cellValuesByFieldId); _i < _Object$keys.length; _i++) {
+          var fieldId = _Object$keys[_i];
+
+          this._onChange(WatchableCellValueInFieldKeyPrefix + fieldId, fieldId);
+        }
+      }
+
+      if (commentCount) {
+        this._onChange(WatchableRecordKeys.commentCount);
+      }
+    }
+  }, {
+    key: "__triggerOnChangeForRecordColorInViewId",
+    value: function __triggerOnChangeForRecordColorInViewId(viewId) {
+      this._onChange(WatchableColorInViewKeyPrefix + viewId);
+    }
+  }, {
+    key: "_dataOrNullIfDeleted",
+    get: function get() {
+      var tableData = this._baseData.tablesById[this.parentTable.id];
+
+      if (!tableData) {
+        return null;
+      }
+
+      var recordsById = tableData.recordsById;
+      (0, _invariant.default)(recordsById, 'Record data is not loaded');
+      return recordsById[this._id] || null;
+    }
+    /** */
+
+  }, {
+    key: "parentTable",
+    get: function get() {
+      return this._parentTable;
+    }
+  }, {
+    key: "url",
+    get: function get() {
+      return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
+        absolute: true
+      });
+    }
+    /** */
+
+  }, {
+    key: "primaryCellValue",
+    get: function get() {
+      return this.getCellValue(this.parentTable.primaryField);
+    }
+    /** */
+
+  }, {
+    key: "primaryCellValueAsString",
+    get: function get() {
+      return this.getCellValueAsString(this.parentTable.primaryField);
+    }
+  }, {
+    key: "commentCount",
+    get: function get() {
+      return this._data.commentCount;
+    }
+    /** */
+
+  }, {
+    key: "createdTime",
+    get: function get() {
+      return new Date(this._data.createdTime);
+    }
+  }]);
+  return Record;
+}(_abstract_model.default);
 
 (0, _defineProperty2.default)(Record, "shouldUseNewLookupFormat", false);
 (0, _defineProperty2.default)(Record, "_className", 'Record');

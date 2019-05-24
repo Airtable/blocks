@@ -17,34 +17,43 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _private_utils = require("./private_utils");
 
 var _undo_redo = require("./types/undo_redo");
 
-class UndoRedo {
-  constructor(airtableInterface) {
+var UndoRedo =
+/*#__PURE__*/
+function () {
+  function UndoRedo(airtableInterface) {
+    (0, _classCallCheck2.default)(this, UndoRedo);
     (0, _defineProperty2.default)(this, "modes", _undo_redo.UndoRedoModes);
     (0, _defineProperty2.default)(this, "_mode", _undo_redo.UndoRedoModes.NONE);
     this._airtableInterface = airtableInterface;
   }
 
-  get mode() {
-    return this._mode;
-  }
+  (0, _createClass2.default)(UndoRedo, [{
+    key: "mode",
+    get: function get() {
+      return this._mode;
+    },
+    set: function set(mode) {
+      if (!(0, _private_utils.values)(_undo_redo.UndoRedoModes).includes(mode)) {
+        throw new Error('Unexpected UndoRedo mode');
+      }
 
-  set mode(mode) {
-    if (!(0, _private_utils.values)(_undo_redo.UndoRedoModes).includes(mode)) {
-      throw new Error('Unexpected UndoRedo mode');
+      this._mode = mode;
+
+      this._airtableInterface.setUndoRedoMode(mode);
     }
-
-    this._mode = mode;
-
-    this._airtableInterface.setUndoRedoMode(mode);
-  }
-
-}
+  }]);
+  return UndoRedo;
+}();
 
 var _default = UndoRedo;
 exports.default = _default;

@@ -17,6 +17,16 @@ exports.default = void 0;
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -44,65 +54,80 @@ var _synced = _interopRequireDefault(require("./synced"));
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 /** */
-class ViewPickerSynced extends React.Component {
-  constructor(props) {
-    super(props);
-    this._viewPicker = null;
+var ViewPickerSynced =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(ViewPickerSynced, _React$Component);
+
+  function ViewPickerSynced(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, ViewPickerSynced);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ViewPickerSynced).call(this, props));
+    _this._viewPicker = null;
+    return _this;
   }
 
-  focus() {
-    (0, _invariant.default)(this._viewPicker, 'No view picker to focus');
+  (0, _createClass2.default)(ViewPickerSynced, [{
+    key: "focus",
+    value: function focus() {
+      (0, _invariant.default)(this._viewPicker, 'No view picker to focus');
 
-    this._viewPicker.focus();
-  }
-
-  blur() {
-    (0, _invariant.default)(this._viewPicker, 'No view picker to blur');
-
-    this._viewPicker.blur();
-  }
-
-  click() {
-    (0, _invariant.default)(this._viewPicker, 'No view picker to click');
-
-    this._viewPicker.click();
-  }
-
-  _getViewFromGlobalConfigValue(viewId) {
-    var table = this.props.table;
-
-    if (!table || table.isDeleted) {
-      return null;
+      this._viewPicker.focus();
     }
+  }, {
+    key: "blur",
+    value: function blur() {
+      (0, _invariant.default)(this._viewPicker, 'No view picker to blur');
 
-    return typeof viewId === 'string' && table ? table.getViewById(viewId) : null;
-  }
+      this._viewPicker.blur();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      (0, _invariant.default)(this._viewPicker, 'No view picker to click');
 
-  render() {
-    var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
-    return React.createElement(_synced.default, {
-      globalConfigKey: this.props.globalConfigKey,
-      render: (_ref) => {
-        var value = _ref.value,
-            canSetValue = _ref.canSetValue,
-            setValue = _ref.setValue;
-        return React.createElement(_view_picker.default, (0, _extends2.default)({
-          ref: el => this._viewPicker = el,
-          disabled: this.props.disabled || !canSetValue,
-          view: this._getViewFromGlobalConfigValue(value),
-          onChange: view => {
-            setValue(view ? view.id : null);
+      this._viewPicker.click();
+    }
+  }, {
+    key: "_getViewFromGlobalConfigValue",
+    value: function _getViewFromGlobalConfigValue(viewId) {
+      var table = this.props.table;
 
-            if (this.props.onChange) {
-              this.props.onChange(view);
-            }
-          }
-        }, restOfProps));
+      if (!table || table.isDeleted) {
+        return null;
       }
-    });
-  }
 
-}
+      return typeof viewId === 'string' && table ? table.getViewById(viewId) : null;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+      return React.createElement(_synced.default, {
+        globalConfigKey: this.props.globalConfigKey,
+        render: (_ref) => {
+          var value = _ref.value,
+              canSetValue = _ref.canSetValue,
+              setValue = _ref.setValue;
+          return React.createElement(_view_picker.default, (0, _extends2.default)({
+            ref: el => this._viewPicker = el,
+            disabled: this.props.disabled || !canSetValue,
+            view: this._getViewFromGlobalConfigValue(value),
+            onChange: view => {
+              setValue(view ? view.id : null);
+
+              if (this.props.onChange) {
+                this.props.onChange(view);
+              }
+            }
+          }, restOfProps));
+        }
+      });
+    }
+  }]);
+  return ViewPickerSynced;
+}(React.Component);
 
 (0, _defineProperty2.default)(ViewPickerSynced, "propTypes", {
   table: _propTypes.default.instanceOf(_table.default),

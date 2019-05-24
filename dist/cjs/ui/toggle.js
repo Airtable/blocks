@@ -13,6 +13,18 @@ var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends")
 
 var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -50,89 +62,104 @@ var classNamesByTheme = {
 };
 
 /** */
-class Toggle extends React.Component {
-  constructor(props) {
-    super(props);
-    this._container = null;
-    this._toggleValue = this._toggleValue.bind(this);
+var Toggle =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(Toggle, _React$Component);
+
+  function Toggle(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, Toggle);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Toggle).call(this, props));
+    _this._container = null;
+    _this._toggleValue = _this._toggleValue.bind((0, _assertThisInitialized2.default)(_this));
+    return _this;
   }
 
-  focus() {
-    (0, _invariant.default)(this._container, 'No toggle to focus');
+  (0, _createClass2.default)(Toggle, [{
+    key: "focus",
+    value: function focus() {
+      (0, _invariant.default)(this._container, 'No toggle to focus');
 
-    this._container.focus();
-  }
-
-  blur() {
-    (0, _invariant.default)(this._container, 'No toggle to blur');
-
-    this._container.blur();
-  }
-
-  click() {
-    (0, _invariant.default)(this._container, 'No toggle to click');
-
-    this._container.click();
-  }
-
-  _toggleValue() {
-    var _this$props = this.props,
-        value = _this$props.value,
-        onChange = _this$props.onChange;
-
-    if (onChange) {
-      onChange(!value);
+      this._container.focus();
     }
-  }
+  }, {
+    key: "blur",
+    value: function blur() {
+      (0, _invariant.default)(this._container, 'No toggle to blur');
 
-  render() {
-    var _this$props2 = this.props,
-        value = _this$props2.value,
-        label = _this$props2.label,
-        theme = _this$props2.theme,
-        disabled = _this$props2.disabled,
-        className = _this$props2.className,
-        style = _this$props2.style,
-        tabIndex = _this$props2.tabIndex,
-        onChange = _this$props2.onChange,
-        restOfProps = (0, _objectWithoutProperties2.default)(_this$props2, ["value", "label", "theme", "disabled", "className", "style", "tabIndex", "onChange"]);
-    var onClick = disabled ? null : this._toggleValue;
-    var tabIndexToUse = disabled ? -1 : tabIndex;
-    var toggleHeight = 12;
-    var togglePadding = 2;
-    var toggleClassNameForTheme = theme && classNamesByTheme[theme];
-    return React.createElement("div", (0, _extends2.default)({
-      ref: el => this._container = el,
-      onClick: onClick,
-      tabIndex: tabIndexToUse,
-      onKeyDown: onEnterOrSpaceKey(onClick),
-      className: (0, _classnames.default)('focusable flex-inline items-center', {
-        'pointer link-quiet': !disabled,
-        'noevents quieter': disabled
-      }, className),
-      style: style
-    }, restOfProps), React.createElement("div", {
-      className: (0, _classnames.default)('pill flex animate flex-none', {
-        'justify-start darken2': !value,
-        'justify-end': value,
-        [toggleClassNameForTheme || '']: value
-      }),
-      style: {
-        height: toggleHeight,
-        width: toggleHeight * 1.6,
-        padding: togglePadding
-      }
-    }, React.createElement("div", {
-      className: "white circle flex-none",
-      style: {
-        width: toggleHeight - 2 * togglePadding
-      }
-    })), label !== null && label !== undefined && label !== '' && React.createElement("div", {
-      className: "flex-auto ml1 normal text-dark"
-    }, label));
-  }
+      this._container.blur();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      (0, _invariant.default)(this._container, 'No toggle to click');
 
-}
+      this._container.click();
+    }
+  }, {
+    key: "_toggleValue",
+    value: function _toggleValue() {
+      var _this$props = this.props,
+          value = _this$props.value,
+          onChange = _this$props.onChange;
+
+      if (onChange) {
+        onChange(!value);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          value = _this$props2.value,
+          label = _this$props2.label,
+          theme = _this$props2.theme,
+          disabled = _this$props2.disabled,
+          className = _this$props2.className,
+          style = _this$props2.style,
+          tabIndex = _this$props2.tabIndex,
+          onChange = _this$props2.onChange,
+          restOfProps = (0, _objectWithoutProperties2.default)(_this$props2, ["value", "label", "theme", "disabled", "className", "style", "tabIndex", "onChange"]);
+      var onClick = disabled ? null : this._toggleValue;
+      var tabIndexToUse = disabled ? -1 : tabIndex;
+      var toggleHeight = 12;
+      var togglePadding = 2;
+      var toggleClassNameForTheme = theme && classNamesByTheme[theme];
+      return React.createElement("div", (0, _extends2.default)({
+        ref: el => this._container = el,
+        onClick: onClick,
+        tabIndex: tabIndexToUse,
+        onKeyDown: onEnterOrSpaceKey(onClick),
+        className: (0, _classnames.default)('focusable flex-inline items-center', {
+          'pointer link-quiet': !disabled,
+          'noevents quieter': disabled
+        }, className),
+        style: style
+      }, restOfProps), React.createElement("div", {
+        className: (0, _classnames.default)('pill flex animate flex-none', {
+          'justify-start darken2': !value,
+          'justify-end': value,
+          [toggleClassNameForTheme || '']: value
+        }),
+        style: {
+          height: toggleHeight,
+          width: toggleHeight * 1.6,
+          padding: togglePadding
+        }
+      }, React.createElement("div", {
+        className: "white circle flex-none",
+        style: {
+          width: toggleHeight - 2 * togglePadding
+        }
+      })), label !== null && label !== undefined && label !== '' && React.createElement("div", {
+        className: "flex-auto ml1 normal text-dark"
+      }, label));
+    }
+  }]);
+  return Toggle;
+}(React.Component);
 
 (0, _defineProperty2.default)(Toggle, "themes", themes);
 (0, _defineProperty2.default)(Toggle, "propTypes", {

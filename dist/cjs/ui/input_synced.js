@@ -11,6 +11,16 @@ exports.default = void 0;
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -29,70 +39,85 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     u = _window$__requirePriv.u;
 
 /** */
-class InputSynced extends React.Component {
-  constructor(props) {
-    super(props);
-    this._input = null;
+var InputSynced =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(InputSynced, _React$Component);
+
+  function InputSynced(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, InputSynced);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(InputSynced).call(this, props));
+    _this._input = null;
+    return _this;
   }
 
-  focus() {
-    (0, _invariant.default)(this._input, 'No input to focus');
+  (0, _createClass2.default)(InputSynced, [{
+    key: "focus",
+    value: function focus() {
+      (0, _invariant.default)(this._input, 'No input to focus');
 
-    this._input.focus();
-  }
+      this._input.focus();
+    }
+  }, {
+    key: "blur",
+    value: function blur() {
+      (0, _invariant.default)(this._input, 'No input to blur');
 
-  blur() {
-    (0, _invariant.default)(this._input, 'No input to blur');
+      this._input.blur();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      (0, _invariant.default)(this._input, 'No input to click');
 
-    this._input.blur();
-  }
+      this._input.click();
+    }
+  }, {
+    key: "select",
+    value: function select() {
+      (0, _invariant.default)(this._input, 'No input to select');
 
-  click() {
-    (0, _invariant.default)(this._input, 'No input to click');
+      this._input.select();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+      return React.createElement(_synced.default, {
+        globalConfigKey: this.props.globalConfigKey,
+        render: (_ref) => {
+          var value = _ref.value,
+              canSetValue = _ref.canSetValue,
+              setValue = _ref.setValue;
+          var isCheckbox = this.props.type === 'checkbox'; // If an input gets null or undefined for value, React treats it as uncontrolled
+          // and will throw warnings when it becomes controlled.
 
-    this._input.click();
-  }
+          var isNullOrUndefined = value === null || value === undefined;
+          var valueObj = isCheckbox ? {
+            checked: isNullOrUndefined ? false : value
+          } : {
+            value: isNullOrUndefined ? '' : value
+          };
+          return React.createElement(_input.default, (0, _extends2.default)({
+            ref: el => this._input = el,
+            disabled: this.props.disabled || !canSetValue,
+            onChange: e => {
+              setValue(isCheckbox ? e.target.checked : e.target.value);
 
-  select() {
-    (0, _invariant.default)(this._input, 'No input to select');
-
-    this._input.select();
-  }
-
-  render() {
-    var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
-    return React.createElement(_synced.default, {
-      globalConfigKey: this.props.globalConfigKey,
-      render: (_ref) => {
-        var value = _ref.value,
-            canSetValue = _ref.canSetValue,
-            setValue = _ref.setValue;
-        var isCheckbox = this.props.type === 'checkbox'; // If an input gets null or undefined for value, React treats it as uncontrolled
-        // and will throw warnings when it becomes controlled.
-
-        var isNullOrUndefined = value === null || value === undefined;
-        var valueObj = isCheckbox ? {
-          checked: isNullOrUndefined ? false : value
-        } : {
-          value: isNullOrUndefined ? '' : value
-        };
-        return React.createElement(_input.default, (0, _extends2.default)({
-          ref: el => this._input = el,
-          disabled: this.props.disabled || !canSetValue,
-          onChange: e => {
-            setValue(isCheckbox ? e.target.checked : e.target.value);
-
-            if (this.props.onChange) {
-              this.props.onChange(e);
-            }
-          },
-          spellCheck: this.props.spellCheck
-        }, valueObj, restOfProps));
-      }
-    });
-  }
-
-}
+              if (this.props.onChange) {
+                this.props.onChange(e);
+              }
+            },
+            spellCheck: this.props.spellCheck
+          }, valueObj, restOfProps));
+        }
+      });
+    }
+  }]);
+  return InputSynced;
+}(React.Component);
 
 (0, _defineProperty2.default)(InputSynced, "defaultProps", {
   type: 'text',

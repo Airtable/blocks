@@ -13,6 +13,18 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -36,94 +48,118 @@ var didSizeChange = (prev, next) => (prev && prev.width) !== (next && next.width
  */
 
 
-class ViewportConstraint extends React.Component {
-  constructor() {
-    super(...arguments);
-    (0, _defineProperty2.default)(this, "_removeMinSizeConstraintFn", null);
-    (0, _defineProperty2.default)(this, "_removeMaxFullscreenSizeConstrainFn", null);
-  }
+var ViewportConstraint =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(ViewportConstraint, _React$Component);
 
-  componentDidMount() {
-    this._setMinSizeConstraint();
+  function ViewportConstraint() {
+    var _this;
 
-    this._setMaxFullscreenSizeConstraint();
-  }
+    (0, _classCallCheck2.default)(this, ViewportConstraint);
 
-  shouldComponentUpdate(nextProps) {
-    return this.props.children !== nextProps.children || didSizeChange(this.props.minSize, nextProps.minSize) || didSizeChange(this.props.maxFullscreenSize, nextProps.maxFullscreenSize);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (didSizeChange(prevProps.minSize, this.props.minSize)) {
-      this._setMinSizeConstraint();
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    if (didSizeChange(prevProps.maxFullscreenSize, this.props.maxFullscreenSize)) {
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ViewportConstraint).call(this, ...args));
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_removeMinSizeConstraintFn", null);
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_removeMaxFullscreenSizeConstrainFn", null);
+    return _this;
+  }
+
+  (0, _createClass2.default)(ViewportConstraint, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this._setMinSizeConstraint();
+
       this._setMaxFullscreenSizeConstraint();
     }
-  }
-
-  componentWillUnmount() {
-    this._removeMinSizeConstraint();
-
-    this._removeMaxFullscreenSizeConstraint();
-  }
-
-  _removeMinSizeConstraint() {
-    if (this._removeMinSizeConstraintFn) {
-      this._removeMinSizeConstraintFn();
-
-      this._removeMinSizeConstraintFn = null;
+  }, {
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps) {
+      return this.props.children !== nextProps.children || didSizeChange(this.props.minSize, nextProps.minSize) || didSizeChange(this.props.maxFullscreenSize, nextProps.maxFullscreenSize);
     }
-  }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      if (didSizeChange(prevProps.minSize, this.props.minSize)) {
+        this._setMinSizeConstraint();
+      }
 
-  _removeMaxFullscreenSizeConstraint() {
-    if (this._removeMaxFullscreenSizeConstrainFn) {
-      this._removeMaxFullscreenSizeConstrainFn();
-
-      this._removeMaxFullscreenSizeConstrainFn = null;
+      if (didSizeChange(prevProps.maxFullscreenSize, this.props.maxFullscreenSize)) {
+        this._setMaxFullscreenSizeConstraint();
+      }
     }
-  }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this._removeMinSizeConstraint();
 
-  _setMinSizeConstraint() {
-    this._removeMinSizeConstraint();
-
-    var minSize = this.props.minSize;
-
-    if (minSize) {
-      this._removeMinSizeConstraintFn = (0, _get_sdk.default)().viewport.addMinSize(minSize);
+      this._removeMaxFullscreenSizeConstraint();
     }
-  }
+  }, {
+    key: "_removeMinSizeConstraint",
+    value: function _removeMinSizeConstraint() {
+      if (this._removeMinSizeConstraintFn) {
+        this._removeMinSizeConstraintFn();
 
-  _setMaxFullscreenSizeConstraint() {
-    this._removeMaxFullscreenSizeConstraint();
-
-    var maxFullscreenSize = this.props.maxFullscreenSize;
-
-    if (maxFullscreenSize) {
-      this._removeMaxFullscreenSizeConstrainFn = (0, _get_sdk.default)().viewport.addMaxFullscreenSize(maxFullscreenSize);
+        this._removeMinSizeConstraintFn = null;
+      }
     }
-  }
+  }, {
+    key: "_removeMaxFullscreenSizeConstraint",
+    value: function _removeMaxFullscreenSizeConstraint() {
+      if (this._removeMaxFullscreenSizeConstrainFn) {
+        this._removeMaxFullscreenSizeConstrainFn();
 
-  render() {
-    var children = this.props.children;
-
-    if (children === null || children === undefined) {
-      return null;
-    } // In React 16+, Fragment is available, so we can allow this component
-    // to accept one or more child. As we have to support React 15 as well,
-    // we fall back to asserting there is only one child if Fragment is\
-    // unavailable
-
-
-    if (React.Fragment) {
-      return React.createElement(React.Fragment, null, children);
+        this._removeMaxFullscreenSizeConstrainFn = null;
+      }
     }
+  }, {
+    key: "_setMinSizeConstraint",
+    value: function _setMinSizeConstraint() {
+      this._removeMinSizeConstraint();
 
-    return React.Children.only(children);
-  }
+      var minSize = this.props.minSize;
 
-}
+      if (minSize) {
+        this._removeMinSizeConstraintFn = (0, _get_sdk.default)().viewport.addMinSize(minSize);
+      }
+    }
+  }, {
+    key: "_setMaxFullscreenSizeConstraint",
+    value: function _setMaxFullscreenSizeConstraint() {
+      this._removeMaxFullscreenSizeConstraint();
+
+      var maxFullscreenSize = this.props.maxFullscreenSize;
+
+      if (maxFullscreenSize) {
+        this._removeMaxFullscreenSizeConstrainFn = (0, _get_sdk.default)().viewport.addMaxFullscreenSize(maxFullscreenSize);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var children = this.props.children;
+
+      if (children === null || children === undefined) {
+        return null;
+      } // In React 16+, Fragment is available, so we can allow this component
+      // to accept one or more child. As we have to support React 15 as well,
+      // we fall back to asserting there is only one child if Fragment is\
+      // unavailable
+
+
+      if (React.Fragment) {
+        return React.createElement(React.Fragment, null, children);
+      }
+
+      return React.Children.only(children);
+    }
+  }]);
+  return ViewportConstraint;
+}(React.Component);
 
 (0, _defineProperty2.default)(ViewportConstraint, "propTypes", {
   minSize: _propTypes.default.shape({

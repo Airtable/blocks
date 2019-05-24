@@ -13,6 +13,16 @@ var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends")
 
 var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
 
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -58,51 +68,65 @@ var classNamesByTheme = {
  * );
  */
 
-class Button extends React.Component {
-  constructor(props) {
-    super(props);
-    this._button = null;
+var Button =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(Button, _React$Component);
+
+  function Button(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, Button);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, props));
+    _this._button = null;
+    return _this;
   }
 
-  focus() {
-    (0, _invariant.default)(this._button, 'No button to focus');
+  (0, _createClass2.default)(Button, [{
+    key: "focus",
+    value: function focus() {
+      (0, _invariant.default)(this._button, 'No button to focus');
 
-    this._button.focus();
-  }
+      this._button.focus();
+    }
+  }, {
+    key: "blur",
+    value: function blur() {
+      (0, _invariant.default)(this._button, 'No button to blur');
 
-  blur() {
-    (0, _invariant.default)(this._button, 'No button to blur');
+      this._button.blur();
+    }
+  }, {
+    key: "click",
+    value: function click() {
+      (0, _invariant.default)(this._button, 'No button to click');
 
-    this._button.blur();
-  }
-
-  click() {
-    (0, _invariant.default)(this._button, 'No button to click');
-
-    this._button.click();
-  }
-
-  render() {
-    var _this$props = this.props,
-        className = _this$props.className,
-        theme = _this$props.theme,
-        disabled = _this$props.disabled,
-        children = _this$props.children,
-        restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["className", "theme", "disabled", "children"]);
-    var themeClassNames = classNamesByTheme[theme] || '';
-    return React.createElement("button", (0, _extends2.default)({
-      ref: el => this._button = el,
-      type: "button" // Default type is "submit", which will submit the parent <form> if it exists.
-      ,
-      disabled: disabled,
-      className: (0, _classnames.default)('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
-        'pointer link-quiet': !disabled,
-        'noevents quieter': disabled
-      })
-    }, restOfProps), children);
-  }
-
-}
+      this._button.click();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          className = _this$props.className,
+          theme = _this$props.theme,
+          disabled = _this$props.disabled,
+          children = _this$props.children,
+          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["className", "theme", "disabled", "children"]);
+      var themeClassNames = classNamesByTheme[theme] || '';
+      return React.createElement("button", (0, _extends2.default)({
+        ref: el => this._button = el,
+        type: "button" // Default type is "submit", which will submit the parent <form> if it exists.
+        ,
+        disabled: disabled,
+        className: (0, _classnames.default)('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
+          'pointer link-quiet': !disabled,
+          'noevents quieter': disabled
+        })
+      }, restOfProps), children);
+    }
+  }]);
+  return Button;
+}(React.Component);
 
 (0, _defineProperty2.default)(Button, "propTypes", {
   className: _propTypes.default.string,
