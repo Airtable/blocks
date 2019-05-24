@@ -1,7 +1,7 @@
 {
   "phabricator.uri" : "https://airtable.phacility.com/",
-  "base": "git:merge-base(origin/vNext)",
-  "arc.land.onto.default": "vNext",
+  "base": "git:merge-base(origin/master)",
+  "arc.land.onto.default": "master",
   "aliases": {
     "airdiff": [
       "!branchname=`git branch  | grep '\\*' | cut -d' ' -f2`",
