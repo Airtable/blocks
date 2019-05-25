@@ -64,7 +64,7 @@ module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath
                         } else if (response.status === 408) {
                             pollForLiveReload();
                         } else {
-                            throw new Error('Unknow error from development server');
+                            throw new Error('Unknown error from development server');
                         }
                     }).catch(err => {
                         setTimeout(() => {

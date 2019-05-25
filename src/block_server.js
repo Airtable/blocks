@@ -137,6 +137,14 @@ class BlockServer {
             }
         });
 
+        /**
+         * This endpoint is used by the block frame to check if the
+         * local block server is responding or not.
+         */
+        runFrameRoutes.head('/ping', (req, res) => {
+            res.sendStatus(200);
+        });
+
         runFrameRoutes.get('/poll', (req, res) => {
             // After 30 sec, send a request timeout to tell the client to retry.
             res.setTimeout(30000, () => {
