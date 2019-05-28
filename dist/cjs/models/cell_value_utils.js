@@ -163,8 +163,7 @@ var publicCellValueUtils = {
     (0, _invariant.default)(field.options, 'Invalid field type');
     var tableId = field.options.linkedTableId;
     (0, _invariant.default)(typeof tableId === 'string', 'no linkedTableId');
-    var table = (0, _get_sdk.default)().base.getTableByIdIfExists(tableId);
-    (0, _invariant.default)(table, 'Linked table does not exist');
+    var table = (0, _get_sdk.default)().base.getTableById(tableId);
     (0, _invariant.default)(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
     return newPublicCellValue.map(foreignRecordObj => {
       (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');

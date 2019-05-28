@@ -229,11 +229,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     get allFields(): Array<FieldType> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');
-        return fieldOrder.fieldIds.map(fieldId => {
-            const field = this.parentTable.getFieldByIdIfExists(fieldId);
-            invariant(field, 'Field in view does not exist');
-            return field;
-        });
+        return fieldOrder.fieldIds.map(fieldId => this.parentTable.getFieldById(fieldId));
     }
     /**
      * The fields that are not hidden in this view.
@@ -243,13 +239,9 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');
         const {fieldIds} = fieldOrder;
-        const visibleFields = [];
-        for (let i = 0; i < fieldOrder.visibleFieldCount; i++) {
-            const field = this.parentTable.getFieldByIdIfExists(fieldIds[i]);
-            invariant(field, 'Field in view does not exist');
-            visibleFields.push(field);
-        }
-        return visibleFields;
+        return fieldIds
+            .slice(0, fieldOrder.visibleFieldCount)
+            .map(fieldId => this.parentTable.getFieldById(fieldId));
     }
     /**
      * Get the color name for the specified record in this view, or null if no

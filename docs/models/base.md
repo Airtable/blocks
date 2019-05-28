@@ -96,6 +96,17 @@ access to this base.
 
 Returns **(CollaboratorData | null)**
 
+### getCollaboratorById
+
+Returns the user matching the given ID, or throws if that user does not exist or does not have
+access to this base.
+
+#### Parameters
+
+-   `collaboratorId` **[string][1]**
+
+Returns **CollaboratorData**
+
 ### getTableByIdIfExists
 
 Returns the table matching the given ID, or `null` if that table does not exist in this base.
@@ -106,6 +117,16 @@ Returns the table matching the given ID, or `null` if that table does not exist 
 
 Returns **(Table | null)**
 
+### getTableById
+
+Returns the table matching the given ID, or throws if that table does not exist in this base.
+
+#### Parameters
+
+-   `tableId` **[string][1]**
+
+Returns **Table**
+
 ### getTableByNameIfExists
 
 Returns the table matching the given name, or `null` if no table exists with that name in this base.
@@ -115,6 +136,16 @@ Returns the table matching the given name, or `null` if no table exists with tha
 -   `tableName` **[string][1]**
 
 Returns **(Table | null)**
+
+### getTableByName
+
+Returns the table matching the given name, or throws if no table exists with that name in this base.
+
+#### Parameters
+
+-   `tableName` **[string][1]**
+
+Returns **Table**
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array

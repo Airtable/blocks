@@ -103,8 +103,7 @@ function (_QueryResult) {
       (0, _invariant.default)(field.type === _field.FieldTypes.MULTIPLE_RECORD_LINKS, 'field must be MULTIPLE_RECORD_LINKS');
       var linkedTableId = field.options && field.options.linkedTableId;
       (0, _invariant.default)(typeof linkedTableId === 'string', 'linkedTableId must be set');
-      var linkedTable = (0, _get_sdk.default)().base.getTableByIdIfExists(linkedTableId);
-      (0, _invariant.default)(linkedTable, 'linkedTable must exist');
+      var linkedTable = (0, _get_sdk.default)().base.getTableById(linkedTableId);
 
       var normalizedOpts = _table_or_view_query_result.default._normalizeOpts(linkedTable, opts);
 
@@ -128,8 +127,7 @@ function (_QueryResult) {
 
     (0, _classCallCheck2.default)(this, LinkedRecordsQueryResult);
     var linkedTableId = getLinkedTableId(field);
-    var linkedTable = (0, _get_sdk.default)().base.getTableByIdIfExists(linkedTableId);
-    (0, _invariant.default)(linkedTable, 'table must exist');
+    var linkedTable = (0, _get_sdk.default)().base.getTableById(linkedTableId);
 
     var normalizedOpts = _query_result.default._normalizeOpts(linkedTable, opts);
 

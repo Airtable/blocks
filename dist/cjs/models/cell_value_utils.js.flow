@@ -128,8 +128,7 @@ const publicCellValueUtils = {
         invariant(field.options, 'Invalid field type');
         const tableId = field.options.linkedTableId;
         invariant(typeof tableId === 'string', 'no linkedTableId');
-        const table = getSdk().base.getTableByIdIfExists(tableId);
-        invariant(table, 'Linked table does not exist');
+        const table = getSdk().base.getTableById(tableId);
         invariant(
             Array.isArray(newPublicCellValue),
             'Linked record cell value must be an array of objects',

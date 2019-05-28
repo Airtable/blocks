@@ -66,8 +66,7 @@ class LinkedRecordsQueryResult extends QueryResult {
         const linkedTableId = field.options && field.options.linkedTableId;
         invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
 
-        const linkedTable = getSdk().base.getTableByIdIfExists(linkedTableId);
-        invariant(linkedTable, 'linkedTable must exist');
+        const linkedTable = getSdk().base.getTableById(linkedTableId);
 
         const normalizedOpts = TableOrViewQueryResult._normalizeOpts(linkedTable, opts);
         const queryResult = pool.getObjectForReuse({record, field, normalizedOpts});
@@ -104,8 +103,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
     constructor(record: RecordModel, field: FieldModel, opts: QueryResultOpts) {
         const linkedTableId = getLinkedTableId(field);
-        const linkedTable = getSdk().base.getTableByIdIfExists(linkedTableId);
-        invariant(linkedTable, 'table must exist');
+        const linkedTable = getSdk().base.getTableById(linkedTableId);
 
         const normalizedOpts = QueryResult._normalizeOpts(linkedTable, opts);
 

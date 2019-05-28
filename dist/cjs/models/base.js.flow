@@ -1,7 +1,7 @@
 // @flow
 import invariant from 'invariant';
 import {type BaseData, type AppBlanketData} from '../types/base';
-import {type CollaboratorData} from '../types/collaborator';
+import {type CollaboratorData, type UserId} from '../types/collaborator';
 import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import getSdk from '../get_sdk';
@@ -171,7 +171,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * Returns the user matching the given ID, or `null` if that
      * user does not exist or does not have access to this base.
      */
-    getCollaboratorByIdIfExists(collaboratorId: string): CollaboratorData | null {
+    getCollaboratorByIdIfExists(collaboratorId: UserId): CollaboratorData | null {
         const appBlanket = this.__appBlanket;
         if (!appBlanket || !appBlanket.userInfoById) {
             return null;
@@ -181,6 +181,15 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             return null;
         }
         return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
+    }
+    getCollaboratorById(collaboratorId: UserId): CollaboratorData {
+        const collaborator = this.getCollaboratorByIdIfExists(collaboratorId);
+        if (!collaborator) {
+            throw new Error(
+                `No collaborator with ID ${collaboratorId} has access to base ${this.id}`,
+            );
+        }
+        return collaborator;
     }
     get __appBlanket(): AppBlanketData {
         return this._data.appBlanket;
@@ -214,6 +223,13 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             return this._tableModelsById[tableId];
         }
     }
+    getTableById(tableId: string): Table {
+        const table = this.getTableByIdIfExists(tableId);
+        if (!table) {
+            throw new Error(`No table with ID ${tableId} in base ${this.id}`);
+        }
+        return table;
+    }
     /**
      * Returns the table matching the given name, or `null` if no table
      * exists with that name in this base.
@@ -225,6 +241,13 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             }
         }
         return null;
+    }
+    getTableByName(tableName: string): Table {
+        const table = this.getTableByNameIfExists(tableName);
+        if (!table) {
+            throw new Error(`No table named ${tableName} in base ${this.id}`);
+        }
+        return table;
     }
     _triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {

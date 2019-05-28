@@ -6,6 +6,8 @@ require("core-js/modules/es.symbol");
 
 require("core-js/modules/es.symbol.description");
 
+require("core-js/modules/es.array.concat");
+
 require("core-js/modules/es.array.includes");
 
 require("core-js/modules/es.array.iterator");
@@ -137,6 +139,17 @@ function (_AbstractModel) {
       return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
   }, {
+    key: "getCollaboratorById",
+    value: function getCollaboratorById(collaboratorId) {
+      var collaborator = this.getCollaboratorByIdIfExists(collaboratorId);
+
+      if (!collaborator) {
+        throw new Error("No collaborator with ID ".concat(collaboratorId, " has access to base ").concat(this.id));
+      }
+
+      return collaborator;
+    }
+  }, {
     key: "getTableByIdIfExists",
 
     /**
@@ -153,6 +166,17 @@ function (_AbstractModel) {
 
         return this._tableModelsById[tableId];
       }
+    }
+  }, {
+    key: "getTableById",
+    value: function getTableById(tableId) {
+      var table = this.getTableByIdIfExists(tableId);
+
+      if (!table) {
+        throw new Error("No table with ID ".concat(tableId, " in base ").concat(this.id));
+      }
+
+      return table;
     }
     /**
      * Returns the table matching the given name, or `null` if no table
@@ -192,6 +216,17 @@ function (_AbstractModel) {
       }
 
       return null;
+    }
+  }, {
+    key: "getTableByName",
+    value: function getTableByName(tableName) {
+      var table = this.getTableByNameIfExists(tableName);
+
+      if (!table) {
+        throw new Error("No table named ".concat(tableName, " in base ").concat(this.id));
+      }
+
+      return table;
     }
   }, {
     key: "_triggerOnChangeForDirtyPaths",

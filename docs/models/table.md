@@ -58,6 +58,14 @@ Returns **[Array][2]&lt;Field>**
 
 Returns **(Field | null)**
 
+### getFieldById
+
+#### Parameters
+
+-   `fieldId` **[string][1]**
+
+Returns **Field**
+
 ### getFieldByNameIfExists
 
 #### Parameters
@@ -65,6 +73,14 @@ Returns **(Field | null)**
 -   `fieldName` **[string][1]**
 
 Returns **(Field | null)**
+
+### getFieldByName
+
+#### Parameters
+
+-   `fieldName` **[string][1]**
+
+Returns **Field**
 
 ### activeView
 
@@ -91,6 +107,14 @@ Returns **[Array][2]&lt;View>**
 
 Returns **(View | null)**
 
+### getViewById
+
+#### Parameters
+
+-   `viewId` **[string][1]**
+
+Returns **View**
+
 ### getViewByNameIfExists
 
 #### Parameters
@@ -98,6 +122,14 @@ Returns **(View | null)**
 -   `viewName` **[string][1]**
 
 Returns **(View | null)**
+
+### getViewByName
+
+#### Parameters
+
+-   `viewName` **[string][1]**
+
+Returns **View**
 
 ### select
 

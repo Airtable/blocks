@@ -3,7 +3,8 @@ import invariant from 'invariant';
 import {type RecordId, type RecordData, type RecordDef} from '../types/record';
 import {type BaseData} from '../types/base';
 import {type TableData} from '../types/table';
-import {type ViewType} from '../types/view';
+import {type ViewType, type ViewId} from '../types/view';
+import {type FieldId} from '../types/field';
 import {PermissionLevels} from '../types/permission_levels';
 import {isEnumValue, fireAndForgetPromise, values, entries, has} from '../private_utils';
 import getSdk from '../get_sdk';
@@ -169,8 +170,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
      * will not change.
      */
     get primaryField(): Field {
-        const primaryField = this.getFieldByIdIfExists(this._data.primaryFieldId);
-        invariant(primaryField, 'no primary field');
+        const primaryField = this.getFieldById(this._data.primaryFieldId);
         return primaryField;
     }
     /**
@@ -185,14 +185,13 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const fields = [];
         for (const fieldId of Object.keys(this._data.fieldsById)) {
-            const field = this.getFieldByIdIfExists(fieldId);
-            invariant(field, 'no field model' + fieldId);
+            const field = this.getFieldById(fieldId);
             fields.push(field);
         }
         return fields;
     }
     /** */
-    getFieldByIdIfExists(fieldId: string): Field | null {
+    getFieldByIdIfExists(fieldId: FieldId): Field | null {
         if (!this._data.fieldsById[fieldId]) {
             return null;
         } else {
@@ -202,6 +201,13 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             return this._fieldModelsById[fieldId];
         }
     }
+    getFieldById(fieldId: FieldId): Field {
+        const field = this.getFieldByIdIfExists(fieldId);
+        if (!field) {
+            throw new Error(`No field with ID ${fieldId} in table ${this.id}`);
+        }
+        return field;
+    }
     /** */
     getFieldByNameIfExists(fieldName: string): Field | null {
         for (const [fieldId, fieldData] of entries(this._data.fieldsById)) {
@@ -210,6 +216,13 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             }
         }
         return null;
+    }
+    getFieldByName(fieldName: string): Field {
+        const field = this.getFieldByNameIfExists(fieldName);
+        if (!field) {
+            throw new Error(`No field named ${fieldName} in table ${this.id}`);
+        }
+        return field;
     }
     /**
      * The view model corresponding to the view the user is currently viewing
@@ -228,14 +241,13 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
         const views = [];
         this._data.viewOrder.forEach(viewId => {
-            const view = this.getViewByIdIfExists(viewId);
-            invariant(view, 'no view matching id in view order');
+            const view = this.getViewById(viewId);
             views.push(view);
         });
         return views;
     }
     /** */
-    getViewByIdIfExists(viewId: string): View | null {
+    getViewByIdIfExists(viewId: ViewId): View | null {
         if (!this._data.viewsById[viewId]) {
             return null;
         } else {
@@ -250,6 +262,13 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             return this._viewModelsById[viewId];
         }
     }
+    getViewById(viewId: ViewId): View {
+        const view = this.getViewByIdIfExists(viewId);
+        if (!view) {
+            throw new Error(`No view with ID ${viewId} in table ${this.id}`);
+        }
+        return view;
+    }
     /** */
     getViewByNameIfExists(viewName: string): View | null {
         for (const [viewId, viewData] of entries(this._data.viewsById)) {
@@ -258,6 +277,13 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             }
         }
         return null;
+    }
+    getViewByName(viewName: string): View {
+        const view = this.getViewByNameIfExists(viewName);
+        if (!view) {
+            throw new Error(`No view named ${viewName} in table ${this.id}`);
+        }
+        return view;
     }
     /** */
     select(opts?: QueryResultOpts): TableOrViewQueryResult {

@@ -262,11 +262,20 @@ function (_AbstractModelWithAsy) {
       return record;
     }
   }, {
+    key: "getRecordById",
+    value: function getRecordById(recordId) {
+      var record = this.getRecordByIdIfExists(recordId);
+
+      if (!record) {
+        throw new Error("No record with ID ".concat(recordId, " in this query result"));
+      }
+
+      return record;
+    }
+  }, {
     key: "_getRecord",
     value: function _getRecord(recordOrRecordId) {
-      var record = this.getRecordByIdIfExists(typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id);
-      (0, _invariant.default)(record, 'record must exist');
-      return record;
+      return this.getRecordById(typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id);
     }
   }, {
     key: "hasRecord",

@@ -232,13 +232,18 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
         return record;
     }
+    getRecordById(recordId: RecordId): RecordModel {
+        const record = this.getRecordByIdIfExists(recordId);
+        if (!record) {
+            throw new Error(`No record with ID ${recordId} in this query result`);
+        }
+        return record;
+    }
 
     _getRecord(recordOrRecordId: RecordId | RecordModel): RecordModel {
-        const record = this.getRecordByIdIfExists(
+        return this.getRecordById(
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
-        invariant(record, 'record must exist');
-        return record;
     }
 
     hasRecord(recordOrRecordId: RecordId | RecordModel): boolean {

@@ -12,6 +12,8 @@ require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.array.map");
 
+require("core-js/modules/es.array.slice");
+
 require("core-js/modules/es.object.to-string");
 
 require("core-js/modules/es.promise");
@@ -505,11 +507,7 @@ function (_AbstractModelWithAsy) {
     get: function get() {
       var fieldOrder = this._data.fieldOrder;
       (0, _invariant.default)(fieldOrder, 'View data is not loaded');
-      return fieldOrder.fieldIds.map(fieldId => {
-        var field = this.parentTable.getFieldByIdIfExists(fieldId);
-        (0, _invariant.default)(field, 'Field in view does not exist');
-        return field;
-      });
+      return fieldOrder.fieldIds.map(fieldId => this.parentTable.getFieldById(fieldId));
     }
     /**
      * The fields that are not hidden in this view.
@@ -522,15 +520,7 @@ function (_AbstractModelWithAsy) {
       var fieldOrder = this._data.fieldOrder;
       (0, _invariant.default)(fieldOrder, 'View data is not loaded');
       var fieldIds = fieldOrder.fieldIds;
-      var visibleFields = [];
-
-      for (var i = 0; i < fieldOrder.visibleFieldCount; i++) {
-        var field = this.parentTable.getFieldByIdIfExists(fieldIds[i]);
-        (0, _invariant.default)(field, 'Field in view does not exist');
-        visibleFields.push(field);
-      }
-
-      return visibleFields;
+      return fieldIds.slice(0, fieldOrder.visibleFieldCount).map(fieldId => this.parentTable.getFieldById(fieldId));
     }
   }]);
   return View;

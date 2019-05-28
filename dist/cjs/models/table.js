@@ -6,6 +6,8 @@ require("core-js/modules/es.symbol");
 
 require("core-js/modules/es.symbol.description");
 
+require("core-js/modules/es.array.concat");
+
 require("core-js/modules/es.array.filter");
 
 require("core-js/modules/es.array.find");
@@ -228,6 +230,17 @@ function (_AbstractModelWithAsy) {
         return this._fieldModelsById[fieldId];
       }
     }
+  }, {
+    key: "getFieldById",
+    value: function getFieldById(fieldId) {
+      var field = this.getFieldByIdIfExists(fieldId);
+
+      if (!field) {
+        throw new Error("No field with ID ".concat(fieldId, " in table ").concat(this.id));
+      }
+
+      return field;
+    }
     /** */
 
   }, {
@@ -264,6 +277,17 @@ function (_AbstractModelWithAsy) {
 
       return null;
     }
+  }, {
+    key: "getFieldByName",
+    value: function getFieldByName(fieldName) {
+      var field = this.getFieldByNameIfExists(fieldName);
+
+      if (!field) {
+        throw new Error("No field named ".concat(fieldName, " in table ").concat(this.id));
+      }
+
+      return field;
+    }
     /**
      * The view model corresponding to the view the user is currently viewing
      * in Airtable. May be `null` if the user is switching between
@@ -284,6 +308,17 @@ function (_AbstractModelWithAsy) {
 
         return this._viewModelsById[viewId];
       }
+    }
+  }, {
+    key: "getViewById",
+    value: function getViewById(viewId) {
+      var view = this.getViewByIdIfExists(viewId);
+
+      if (!view) {
+        throw new Error("No view with ID ".concat(viewId, " in table ").concat(this.id));
+      }
+
+      return view;
     }
     /** */
 
@@ -320,6 +355,17 @@ function (_AbstractModelWithAsy) {
       }
 
       return null;
+    }
+  }, {
+    key: "getViewByName",
+    value: function getViewByName(viewName) {
+      var view = this.getViewByNameIfExists(viewName);
+
+      if (!view) {
+        throw new Error("No view named ".concat(viewName, " in table ").concat(this.id));
+      }
+
+      return view;
     }
     /** */
 
@@ -1701,8 +1747,7 @@ function (_AbstractModelWithAsy) {
   }, {
     key: "primaryField",
     get: function get() {
-      var primaryField = this.getFieldByIdIfExists(this._data.primaryFieldId);
-      (0, _invariant.default)(primaryField, 'no primary field');
+      var primaryField = this.getFieldById(this._data.primaryFieldId);
       return primaryField;
     }
     /**
@@ -1722,8 +1767,7 @@ function (_AbstractModelWithAsy) {
 
       for (var _i5 = 0, _Object$keys3 = Object.keys(this._data.fieldsById); _i5 < _Object$keys3.length; _i5++) {
         var fieldId = _Object$keys3[_i5];
-        var field = this.getFieldByIdIfExists(fieldId);
-        (0, _invariant.default)(field, 'no field model' + fieldId);
+        var field = this.getFieldById(fieldId);
         fields.push(field);
       }
 
@@ -1747,8 +1791,7 @@ function (_AbstractModelWithAsy) {
       var views = [];
 
       this._data.viewOrder.forEach(viewId => {
-        var view = this.getViewByIdIfExists(viewId);
-        (0, _invariant.default)(view, 'no view matching id in view order');
+        var view = this.getViewById(viewId);
         views.push(view);
       });
 
