@@ -23,16 +23,16 @@ import {
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
-const WatchableQueryResultKeys = {
-    records: 'records',
-    recordIds: 'recordIds',
-    cellValues: 'cellValues',
-    recordColors: 'recordColors',
-};
+const WatchableQueryResultKeys = Object.freeze({
+    records: ('records': 'records'),
+    recordIds: ('recordIds': 'recordIds'),
+    cellValues: ('cellValues': 'cellValues'),
+    recordColors: ('recordColors': 'recordColors'),
+});
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 
 // The string case is to accommodate cellValuesInField:$FieldId.
-export type WatchableQueryResultKey = $Keys<typeof WatchableQueryResultKeys> | string;
+export type WatchableQueryResultKey = $Values<typeof WatchableQueryResultKeys> | string;
 
 type SortConfig = {
     field: FieldModel | string,

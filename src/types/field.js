@@ -2,7 +2,7 @@
 export type FieldId = string;
 export type PrivateColumnType = string;
 
-export const FieldTypes = {
+export const FieldTypes = Object.freeze({
     SINGLE_LINE_TEXT: ('singleLineText': 'singleLineText'),
     EMAIL: ('email': 'email'),
     URL: ('url': 'url'),
@@ -31,7 +31,7 @@ export const FieldTypes = {
     RICH_TEXT: ('richText': 'richText'),
     DURATION: ('duration': 'duration'),
     LAST_MODIFIED_TIME: ('lastModifiedTime': 'lastModifiedTime'),
-};
+});
 
 export type FieldType = $Values<typeof FieldTypes>;
 

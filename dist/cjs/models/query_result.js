@@ -66,12 +66,12 @@ var _record_coloring = require("./record_coloring");
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
 
-var WatchableQueryResultKeys = {
+var WatchableQueryResultKeys = Object.freeze({
   records: 'records',
   recordIds: 'recordIds',
   cellValues: 'cellValues',
   recordColors: 'recordColors'
-};
+});
 var WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:'; // The string case is to accommodate cellValuesInField:$FieldId.
 
 /** */

@@ -22,15 +22,15 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
-const WatchableViewKeys = {
-    name: 'name',
-    __visibleRecords: '__visibleRecords',
-    __visibleRecordIds: '__visibleRecordIds',
-    allFields: 'allFields',
-    visibleFields: 'visibleFields',
-    __recordColors: '__recordColors',
-};
-export type WatchableViewKey = $Keys<typeof WatchableViewKeys>;
+const WatchableViewKeys = Object.freeze({
+    name: ('name': 'name'),
+    __visibleRecords: ('__visibleRecords': '__visibleRecords'),
+    __visibleRecordIds: ('__visibleRecordIds': '__visibleRecordIds'),
+    allFields: ('allFields': 'allFields'),
+    visibleFields: ('visibleFields': 'visibleFields'),
+    __recordColors: ('__recordColors': '__recordColors'),
+});
+export type WatchableViewKey = $Values<typeof WatchableViewKeys>;
 
 /** Model class representing a view in a table. */
 class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {

@@ -2,11 +2,11 @@
 import type FieldModel from './field';
 import type ViewModel from './view';
 
-export const ModeTypes = {
+export const ModeTypes = Object.freeze({
     NONE: ('none': 'none'),
     BY_SELECT_FIELD: ('bySelectField': 'bySelectField'),
     BY_VIEW: ('byView': 'byView'),
-};
+});
 
 export type RecordColorModeType = $Values<typeof ModeTypes>;
 

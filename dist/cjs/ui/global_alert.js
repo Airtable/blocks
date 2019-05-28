@@ -31,9 +31,9 @@ var _watchable = _interopRequireDefault(require("../watchable"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-var WatchableGlobalAlertKeys = {
+var WatchableGlobalAlertKeys = Object.freeze({
   __alertInfo: '__alertInfo'
-};
+});
 
 /**
  * @example

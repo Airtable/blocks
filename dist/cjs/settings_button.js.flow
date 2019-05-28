@@ -3,12 +3,12 @@ import Watchable from './watchable';
 import {isEnumValue} from './private_utils';
 import {type AirtableInterface} from './injected/airtable_interface';
 
-const WatchableSettingsButtonKeys = {
-    isVisible: 'isVisible',
-    click: 'click',
-};
+const WatchableSettingsButtonKeys = Object.freeze({
+    isVisible: ('isVisible': 'isVisible'),
+    click: ('click': 'click'),
+});
 
-type WatchableSettingsButtonKey = $Keys<typeof WatchableSettingsButtonKeys>;
+type WatchableSettingsButtonKey = $Values<typeof WatchableSettingsButtonKeys>;
 
 /**
  * Interface to the settings button that lives outside the block's viewport.

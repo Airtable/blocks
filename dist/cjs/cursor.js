@@ -36,9 +36,9 @@ var _record = _interopRequireDefault(require("./models/record"));
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     h = _window$__requirePriv.h;
 
-var WatchableCursorKeys = {
+var WatchableCursorKeys = Object.freeze({
   selectedRecordIds: 'selectedRecordIds'
-};
+});
 
 // NOTE: cursor is an AbstractModel because it needs access to the base data.
 

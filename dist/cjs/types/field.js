@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.FieldTypes = void 0;
-var FieldTypes = {
+var FieldTypes = Object.freeze({
   SINGLE_LINE_TEXT: 'singleLineText',
   EMAIL: 'email',
   URL: 'url',
@@ -33,5 +33,5 @@ var FieldTypes = {
   RICH_TEXT: 'richText',
   DURATION: 'duration',
   LAST_MODIFIED_TIME: 'lastModifiedTime'
-};
+});
 exports.FieldTypes = FieldTypes;

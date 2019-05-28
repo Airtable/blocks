@@ -5,13 +5,13 @@ import {type RecordId} from './record';
 
 export type ViewId = string;
 
-export const ViewTypes = {
+export const ViewTypes = Object.freeze({
     GRID: ('grid': 'grid'),
     FORM: ('form': 'form'),
     CALENDAR: ('calendar': 'calendar'),
     GALLERY: ('gallery': 'gallery'),
     KANBAN: ('kanban': 'kanban'),
-};
+});
 
 export type ViewType = $Values<typeof ViewTypes>;
 

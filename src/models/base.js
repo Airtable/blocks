@@ -38,13 +38,15 @@ const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleF
 // since the block developer could mutate it and we'll end up out of sync with
 // liveapp.
 
-const WatchableBaseKeys = {
-    name: 'name',
-    permissionLevel: 'permissionLevel',
-    tables: 'tables',
-    activeTable: 'activeTable',
-    collaborators: 'collaborators',
-};
+const WatchableBaseKeys = Object.freeze({
+    name: ('name': 'name'),
+    permissionLevel: ('permissionLevel': 'permissionLevel'),
+    tables: ('tables': 'tables'),
+    activeTable: ('activeTable': 'activeTable'),
+    collaborators: ('collaborators': 'collaborators'),
+});
+
+type WatchableBaseKey = $Values<typeof WatchableBaseKeys>;
 
 /**
  * Model class representing a base.
@@ -52,7 +54,7 @@ const WatchableBaseKeys = {
  * @example
  * import {base} from 'airtable-blocks';
  */
-class Base extends AbstractModel<BaseData, $Keys<typeof WatchableBaseKeys>> {
+class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     static _className = 'Base';
     static _isWatchableKey(key: string): boolean {
         return isEnumValue(WatchableBaseKeys, key);

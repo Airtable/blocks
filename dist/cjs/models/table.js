@@ -89,7 +89,7 @@ var airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shar
 // to mirror the method/getter names on the model class.
 
 
-var WatchableTableKeys = {
+var WatchableTableKeys = Object.freeze({
   name: 'name',
   activeView: 'activeView',
   views: 'views',
@@ -99,7 +99,7 @@ var WatchableTableKeys = {
   // TODO(kasra): these keys don't have matching getters (not that they should
   // it's just inconsistent...)
   __cellValues: '__cellValues'
-};
+});
 var WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:'; // The string case is to accommodate cellValuesInField:$FieldId.
 // It may also be useful to have cellValuesInView:$ViewId...
 

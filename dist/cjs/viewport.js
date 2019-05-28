@@ -45,12 +45,12 @@ var _private_utils = require("./private_utils");
 
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
-var WatchableViewportKeys = {
+var WatchableViewportKeys = Object.freeze({
   isFullscreen: 'isFullscreen',
   size: 'size',
   minSize: 'minSize',
   maxFullscreenSize: 'maxFullscreenSize'
-};
+});
 
 var compareWithNulls = (a, b, compare) => {
   if (a !== null && b !== null) {

@@ -23,10 +23,10 @@ var _watchable = _interopRequireDefault(require("./watchable"));
 
 var _private_utils = require("./private_utils");
 
-var WatchableSettingsButtonKeys = {
+var WatchableSettingsButtonKeys = Object.freeze({
   isVisible: 'isVisible',
   click: 'click'
-};
+});
 
 /**
  * Interface to the settings button that lives outside the block's viewport.

@@ -30,21 +30,21 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
-const WatchableTableKeys = {
-    name: 'name',
-    activeView: 'activeView',
-    views: 'views',
-    fields: 'fields',
-    __records: '__records',
-    __recordIds: '__recordIds',
+const WatchableTableKeys = Object.freeze({
+    name: ('name': 'name'),
+    activeView: ('activeView': 'activeView'),
+    views: ('views': 'views'),
+    fields: ('fields': 'fields'),
+    __records: ('__records': '__records'),
+    __recordIds: ('__recordIds': '__recordIds'),
     // TODO(kasra): these keys don't have matching getters (not that they should
     // it's just inconsistent...)
-    __cellValues: '__cellValues',
-};
+    __cellValues: ('__cellValues': '__cellValues'),
+});
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 // The string case is to accommodate cellValuesInField:$FieldId.
 // It may also be useful to have cellValuesInView:$ViewId...
-export type WatchableTableKey = $Keys<typeof WatchableTableKeys> | string;
+export type WatchableTableKey = $Values<typeof WatchableTableKeys> | string;
 
 /** Model class representing a table in the base. */
 class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {

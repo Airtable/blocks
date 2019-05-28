@@ -4,11 +4,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.modes = exports.ModeTypes = void 0;
-var ModeTypes = {
+var ModeTypes = Object.freeze({
   NONE: 'none',
   BY_SELECT_FIELD: 'bySelectField',
   BY_VIEW: 'byView'
-};
+});
 exports.ModeTypes = ModeTypes;
 
 /**

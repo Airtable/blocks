@@ -9,9 +9,9 @@ import {type AirtableInterface} from './injected/airtable_interface';
 
 const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
-const WatchableCursorKeys = {
+const WatchableCursorKeys = Object.freeze({
     selectedRecordIds: ('selectedRecordIds': 'selectedRecordIds'),
-};
+});
 
 type WatchableCursorKey = $Values<typeof WatchableCursorKeys>;
 

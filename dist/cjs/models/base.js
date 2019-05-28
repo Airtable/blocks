@@ -73,20 +73,20 @@ var _window$__requirePriv2 = window.__requirePrivateModuleFromAirtable('client_s
 // liveapp.
 
 
-var WatchableBaseKeys = {
+var WatchableBaseKeys = Object.freeze({
   name: 'name',
   permissionLevel: 'permissionLevel',
   tables: 'tables',
   activeTable: 'activeTable',
   collaborators: 'collaborators'
-};
+});
+
 /**
  * Model class representing a base.
  *
  * @example
  * import {base} from 'airtable-blocks';
  */
-
 var Base =
 /*#__PURE__*/
 function (_AbstractModel) {

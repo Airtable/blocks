@@ -5,10 +5,10 @@ import {isEnumValue} from '../private_utils';
 import Watchable from '../watchable';
 import getSdk from '../get_sdk';
 
-const WatchableGlobalAlertKeys = {
-    __alertInfo: '__alertInfo',
-};
-type WatchableGlobalAlertKey = $Keys<typeof WatchableGlobalAlertKeys>;
+const WatchableGlobalAlertKeys = Object.freeze({
+    __alertInfo: ('__alertInfo': '__alertInfo'),
+});
+type WatchableGlobalAlertKey = $Values<typeof WatchableGlobalAlertKeys>;
 
 type AlertInfo = {
     content: React$Element<*>,

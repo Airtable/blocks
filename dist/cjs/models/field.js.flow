@@ -22,14 +22,14 @@ const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
 
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
-const WatchableFieldKeys = {
-    name: 'name',
-    type: 'type',
-    options: 'options',
-    isComputed: 'isComputed',
-};
+const WatchableFieldKeys = Object.freeze({
+    name: ('name': 'name'),
+    type: ('type': 'type'),
+    options: ('options': 'options'),
+    isComputed: ('isComputed': 'isComputed'),
+});
 
-export type WatchableFieldKey = $Keys<typeof WatchableFieldKeys>;
+export type WatchableFieldKey = $Values<typeof WatchableFieldKeys>;
 
 /** Model class representing a field in a table. */
 class Field extends AbstractModel<FieldData, WatchableFieldKey> {

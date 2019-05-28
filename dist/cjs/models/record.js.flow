@@ -26,13 +26,13 @@ const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtab
 );
 const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
 
-const WatchableRecordKeys = {
-    primaryCellValue: 'primaryCellValue',
-    commentCount: 'commentCount',
+const WatchableRecordKeys = Object.freeze({
+    primaryCellValue: ('primaryCellValue': 'primaryCellValue'),
+    commentCount: ('commentCount': 'commentCount'),
     // TODO(kasra): these keys don't have matching getters (not that they should
     // it's just inconsistent...)
-    cellValues: 'cellValues',
-};
+    cellValues: ('cellValues': 'cellValues'),
+});
 // TODO: load cell values in field when this is watched? This will
 // cause the CellRenderer component to load cell values, which seems okay,
 // but needs a little more thought.
@@ -40,7 +40,7 @@ const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 // TODO: load view data when this is watched. see previous comment.
 const WatchableColorInViewKeyPrefix = 'colorInView:';
 // The string case is to accommodate cellValueInField:$FieldId.
-type WatchableRecordKey = $Keys<typeof WatchableRecordKeys> | string;
+type WatchableRecordKey = $Values<typeof WatchableRecordKeys> | string;
 
 /**
  * Model class representing a record in a table.

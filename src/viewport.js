@@ -6,14 +6,14 @@ import {type AirtableInterface} from './injected/airtable_interface';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
-const WatchableViewportKeys = {
-    isFullscreen: 'isFullscreen',
-    size: 'size',
-    minSize: 'minSize',
-    maxFullscreenSize: 'maxFullscreenSize',
-};
+const WatchableViewportKeys = Object.freeze({
+    isFullscreen: ('isFullscreen': 'isFullscreen'),
+    size: ('size': 'size'),
+    minSize: ('minSize': 'minSize'),
+    maxFullscreenSize: ('maxFullscreenSize': 'maxFullscreenSize'),
+});
 
-type WatchableViewportKey = $Keys<typeof WatchableViewportKeys>;
+type WatchableViewportKey = $Values<typeof WatchableViewportKeys>;
 type UnsetFn = () => void;
 
 export type ViewportSizeConstraint = {

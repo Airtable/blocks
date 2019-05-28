@@ -63,14 +63,14 @@ var airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shar
 // to mirror the method/getter names on the model class.
 
 
-var WatchableViewKeys = {
+var WatchableViewKeys = Object.freeze({
   name: 'name',
   __visibleRecords: '__visibleRecords',
   __visibleRecordIds: '__visibleRecordIds',
   allFields: 'allFields',
   visibleFields: 'visibleFields',
   __recordColors: '__recordColors'
-};
+});
 
 /** Model class representing a view in a table. */
 var View =

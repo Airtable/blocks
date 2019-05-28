@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.HostMethodNames = exports.HostToBlock = exports.BlockToHost = void 0;
 // TODO(alex): Remove npm SDK knowledge of these details
-var BlockToHost = {
+var BlockToHost = Object.freeze({
   SCRIPT_LOAD_ERROR: 'SCRIPT_LOAD_ERROR',
   SCRIPT_RUNTIME_ERROR: 'SCRIPT_RUNTIME_ERROR',
   CALL_HOST_METHOD: 'CALL_HOST_METHOD',
@@ -13,9 +13,9 @@ var BlockToHost = {
   ON_FOCUS: 'ON_FOCUS',
   ON_BLUR: 'ON_BLUR',
   ON_KEY_DOWN: 'ON_KEY_DOWN'
-};
+});
 exports.BlockToHost = BlockToHost;
-var HostToBlock = {
+var HostToBlock = Object.freeze({
   SET_MULTIPLE_KV_PATHS: 'SET_MULTIPLE_KV_PATHS',
   UPDATE_MODELS: 'UPDATE_MODELS',
   HOST_METHOD_RESPONSE: 'HOST_METHOD_RESPONSE',
@@ -23,9 +23,9 @@ var HostToBlock = {
   DID_ENTER_FULLSCREEN: 'DID_ENTER_FULLSCREEN',
   DID_EXIT_FULLSCREEN: 'DID_EXIT_FULLSCREEN',
   DID_CLICK_SETTINGS_BUTTON: 'DID_CLICK_SETTINGS_BUTTON'
-};
+});
 exports.HostToBlock = HostToBlock;
-var HostMethodNames = {
+var HostMethodNames = Object.freeze({
   REGISTER_FRAME: 'REGISTER_FRAME',
   ALL_SCRIPTS_LOADED: 'ALL_SCRIPTS_LOADED',
   RELOAD_FRAME: 'RELOAD_FRAME',
@@ -50,5 +50,5 @@ var HostMethodNames = {
   SET_FULLSCREEN_MAX_SIZE: 'SET_FULLSCREEN_MAX_SIZE',
   SET_SETTINGS_BUTTON_VISIBILITY: 'SET_SETTINGS_BUTTON_VISIBILITY',
   SET_UNDO_REDO_MODE: 'SET_UNDO_REDO_MODE'
-};
+});
 exports.HostMethodNames = HostMethodNames;

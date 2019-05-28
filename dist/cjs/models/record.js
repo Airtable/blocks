@@ -61,13 +61,13 @@ var airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shar
 var clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable('client_server_shared/client_server_shared_config_settings');
 
 var ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
-var WatchableRecordKeys = {
+var WatchableRecordKeys = Object.freeze({
   primaryCellValue: 'primaryCellValue',
   commentCount: 'commentCount',
   // TODO(kasra): these keys don't have matching getters (not that they should
   // it's just inconsistent...)
   cellValues: 'cellValues'
-}; // TODO: load cell values in field when this is watched? This will
+}); // TODO: load cell values in field when this is watched? This will
 // cause the CellRenderer component to load cell values, which seems okay,
 // but needs a little more thought.
 

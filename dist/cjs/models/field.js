@@ -46,12 +46,12 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
 // to mirror the method/getter names on the model class.
 
 
-var WatchableFieldKeys = {
+var WatchableFieldKeys = Object.freeze({
   name: 'name',
   type: 'type',
   options: 'options',
   isComputed: 'isComputed'
-};
+});
 
 /** Model class representing a field in a table. */
 var Field =
