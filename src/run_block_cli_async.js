@@ -27,7 +27,11 @@ function registerCommandForConfig(yargs, commandConfig) {
             }
         },
     );
-    yargs.example(commandConfig.example);
+
+    const isCommandShown = commandConfig.description !== false;
+    if (isCommandShown) {
+        yargs.example(commandConfig.example);
+    }
 }
 
 function registerCommands(yargs) {

@@ -12,7 +12,8 @@ type RunCommandFn = (argv: Argv) => Promise<void>;
 type CommandConfig = {|
     name: CommandName,
     command: string,
-    description: string,
+    // A description of `false` hides the command.
+    description: string | false,
     example: string,
     positionalMap?: {[string]: PositionalOptions},
     optionMap?: {[string]: Options},
@@ -153,7 +154,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.SET_CREDENTIAL]: {
         name: CommandNames.SET_CREDENTIAL,
         command: `${CommandNames.SET_CREDENTIAL}`,
-        description: 'Set developer credentials',
+        description: false,
         example: `block ${CommandNames.SET_CREDENTIAL}`,
         // NOTE: the module name (set_credential) doesn't exactly match the command name (set-credential)
         // in order to conform to our file naming guidelines.
@@ -162,7 +163,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.DELETE_CREDENTIAL]: {
         name: CommandNames.DELETE_CREDENTIAL,
         command: `${CommandNames.DELETE_CREDENTIAL} <credentialName>`,
-        description: 'Delete a developer credential',
+        description: false,
         example: `block ${CommandNames.DELETE_CREDENTIAL} CREDENTIAL_NAME`,
         positionalMap: {
             credentialName: {
@@ -177,7 +178,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.RENAME_CREDENTIAL]: {
         name: CommandNames.RENAME_CREDENTIAL,
         command: `${CommandNames.RENAME_CREDENTIAL} <currentName> <newName>`,
-        description: 'Rename a developer credential',
+        description: false,
         example: `block ${CommandNames.RENAME_CREDENTIAL} CURRENT_NAME NEW_NAME`,
         positionalMap: {
             currentName: {
@@ -196,7 +197,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.LIST_CREDENTIALS]: {
         name: CommandNames.LIST_CREDENTIALS,
         command: `${CommandNames.LIST_CREDENTIALS}`,
-        description: 'List developer credentials',
+        description: false,
         example: `block ${CommandNames.LIST_CREDENTIALS}`,
         // NOTE: the module name (list_credentials) doesn't exactly match the command name (list-credentials)
         // in order to conform to our file naming guidelines.
