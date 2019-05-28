@@ -1,6 +1,7 @@
 // @flow
 import invariant from 'invariant';
 import {type FieldId} from '../types/field';
+import {has} from '../private_utils';
 import TableModel, {type WatchableTableKey} from './table';
 import ViewModel, {type WatchableViewKey} from './view';
 import QueryResult, {
@@ -315,7 +316,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 );
                 if (
                     this._fieldIdsSetToLoadOrNullIfAllFields &&
-                    !u.has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)
+                    !has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)
                 ) {
                     throw new Error(
                         `Can't watch field because it wasn't included in QueryResult fields: ${fieldId}`,
@@ -679,7 +680,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         for (const fieldId of addedFieldIds) {
             // If a field that we rely on was created (i.e. it was undeleted), we need to
             // make sure we're watching it's config.
-            if (u.has(fieldIdsSet, fieldId)) {
+            if (has(fieldIdsSet, fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldByIdIfExists(fieldId);
                 invariant(field, 'Created field does not exist');
@@ -690,7 +691,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
 
         if (!wereAnyFieldsCreatedOrDeleted) {
             wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId =>
-                u.has(fieldIdsSet, fieldId),
+                has(fieldIdsSet, fieldId),
             );
         }
 

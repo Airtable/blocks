@@ -5,7 +5,7 @@ import {type BaseData} from '../types/base';
 import {type TableData} from '../types/table';
 import {type ViewType} from '../types/view';
 import {PermissionLevels} from '../types/permission_levels';
-import {isEnumValue, fireAndForgetPromise, values, entries} from '../private_utils';
+import {isEnumValue, fireAndForgetPromise, values, entries, has} from '../private_utils';
 import getSdk from '../get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -17,7 +17,6 @@ import type Base from './base';
 import {type QueryResultOpts} from './query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
@@ -569,8 +568,8 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         }
 
         return (
-            u.find(this.views, view => {
-                return u.includes(allowedViewTypes, view.type);
+            this.views.find(view => {
+                return allowedViewTypes.includes(view.type);
             }) || null
         );
     }
@@ -713,8 +712,10 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             this._data.recordsById = {};
         }
         const {recordsById: existingRecordsById} = this._data;
-        u.unsafeEach((newRecordsById: {[RecordId]: RecordData}), (newRecordObj, recordId) => {
-            if (!u.has(existingRecordsById, recordId)) {
+        for (const [recordId, newRecordObj] of entries(
+            (newRecordsById: {[RecordId]: RecordData}),
+        )) {
+            if (!has(existingRecordsById, recordId)) {
                 existingRecordsById[recordId] = newRecordObj;
             } else {
                 const existingRecordObj = existingRecordsById[recordId];
@@ -740,7 +741,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
                         : undefined;
                 }
             }
-        });
+        }
 
         const changedKeys = fieldIds.map(fieldId => WatchableCellValuesInFieldKeyPrefix + fieldId);
         // Need to trigger onChange for records and recordIds since watching either
@@ -836,14 +837,15 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
                         fieldId => !this._areCellValuesLoadedByFieldId[fieldId],
                     );
                 }
-                u.unsafeEach(this._data.recordsById, recordObj => {
+                const {recordsById} = this._data;
+                for (const recordObj of values(recordsById || {})) {
                     for (let i = 0; i < fieldIdsToClear.length; i++) {
                         const fieldId = fieldIdsToClear[i];
                         if (recordObj.cellValuesByFieldId) {
                             recordObj.cellValuesByFieldId[fieldId] = undefined;
                         }
                     }
-                });
+                }
             }
         }
         if (!areAnyFieldsLoaded) {
@@ -908,7 +910,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             for (const [fieldId, dirtyFieldPaths] of entries(dirtyPaths.fieldsById)) {
                 if (dirtyFieldPaths._isDirty) {
                     // If the entire field is dirty, it was either created or deleted.
-                    if (u.has(this._data.fieldsById, fieldId)) {
+                    if (has(this._data.fieldsById, fieldId)) {
                         addedFieldIds.push(fieldId);
                     } else {
                         removedFieldIds.push(fieldId);
@@ -951,7 +953,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
                     // If the entire record is dirty, it was either created or deleted.
 
                     invariant(this._data.recordsById, 'No recordsById');
-                    if (u.has(this._data.recordsById, recordId)) {
+                    if (has(this._data.recordsById, recordId)) {
                         addedRecordIds.push(recordId);
                     } else {
                         removedRecordIds.push(recordId);

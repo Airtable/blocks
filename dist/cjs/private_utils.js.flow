@@ -86,3 +86,50 @@ export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValu
 export function isEnumValue(enumObj: {[string]: string}, valueToCheck: string): boolean {
     return getEnumValueIfExists(enumObj, valueToCheck) !== null;
 }
+
+export function spawnUnknownSwitchCaseError(valueDescription: string, providedValue: mixed): Error {
+    const providedValueString =
+        providedValue !== null && providedValue !== undefined ? providedValue : 'null';
+    return spawnError(
+        `Unknown value ${String(providedValueString)} for ${valueDescription}`,
+        spawnUnknownSwitchCaseError,
+    );
+}
+
+export function spawnAbstractMethodError(): Error {
+    return spawnError('Abstract method', spawnAbstractMethodError);
+}
+
+// If errorOriginFn is specified, all frames above and including the call to errorOriginFn
+// will be omitted from the strack trace.
+export function spawnError(errName: string, errorOriginFn?: (...args: Array<any>) => mixed): Error {
+    const err = new Error(errName);
+
+    // captureStackTrace is only available on v8. It captures the current stack trace
+    // and sets the .stack property of the first argument. It will omit all frames above
+    // and including "errorOriginFn", which is useful for hiding implementation details of our
+    // error throwing helpers (e.g. assert and spawn variants).
+    if (Error.captureStackTrace && errorOriginFn) {
+        Error.captureStackTrace(err, errorOriginFn);
+    }
+
+    return err;
+}
+
+export function isObjectEmpty(obj: {+[string]: mixed}): boolean {
+    for (const key in obj) {
+        if (has(obj, key)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+export function isNullOrUndefinedOrEmpty(value: mixed): boolean %checks {
+    return (
+        value === null ||
+        value === undefined ||
+        ((typeof value === 'string' || Array.isArray(value)) && value.length === 0) ||
+        (typeof value === 'object' && isObjectEmpty(value))
+    );
+}

@@ -4,7 +4,12 @@ import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordId} from '../types/record';
 import {FieldTypes} from '../types/field';
-import {isEnumValue, assertEnumValue} from '../private_utils';
+import {
+    isEnumValue,
+    assertEnumValue,
+    spawnAbstractMethodError,
+    spawnUnknownSwitchCaseError,
+} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type TableModel from './table';
@@ -61,14 +66,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Throws if data is not loaded yet.
      */
     get recordIds(): Array<RecordId> {
-        throw u.spawnAbstractMethodError();
+        throw spawnAbstractMethodError();
     }
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
      */
     _getOrGenerateRecordIdsSet(): {[RecordId]: true | void} {
-        throw u.spawnAbstractMethodError();
+        throw spawnAbstractMethodError();
     }
     /**
      * The fields that were used to create this QueryResult.
@@ -76,14 +81,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * will load all fields in the table.
      */
     get fields(): Array<FieldModel> | null {
-        throw u.spawnAbstractMethodError();
+        throw spawnAbstractMethodError();
     }
 
     /**
      * The table that records in this QueryResult are part of
      */
     get parentTable(): TableModel {
-        throw u.spawnAbstractMethodError();
+        throw spawnAbstractMethodError();
     }
 
     // provided properties + methods:
@@ -379,7 +384,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 await recordColorMode.view.loadDataAsync();
                 return;
             default:
-                throw u.spawnUnknownSwitchCaseError(
+                throw spawnUnknownSwitchCaseError(
                     'record color mode type',
                     (recordColorMode.type: empty),
                 );
@@ -398,7 +403,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 recordColorMode.view.unloadData();
                 break;
             default:
-                throw u.spawnUnknownSwitchCaseError(
+                throw spawnUnknownSwitchCaseError(
                     'record color mode type',
                     (recordColorMode.type: empty),
                 );

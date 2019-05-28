@@ -79,9 +79,6 @@ var _cell_value_utils = _interopRequireDefault(require("./cell_value_utils"));
 
 var _table_or_view_query_result = _interopRequireDefault(require("./table_or_view_query_result"));
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
-
 var hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 
 var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
@@ -742,8 +739,8 @@ function (_AbstractModelWithAsy) {
         allowedViewTypes = [allowedViewTypes];
       }
 
-      return u.find(this.views, view => {
-        return u.includes(allowedViewTypes, view.type);
+      return this.views.find(view => {
+        return allowedViewTypes.includes(view.type);
       }) || null;
     }
     /**
@@ -1027,7 +1024,7 @@ function (_AbstractModelWithAsy) {
       var _loadCellValuesInFieldIdsAsync3 = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
       _regenerator.default.mark(function _callee4(fieldIds) {
-        var _ref, newRecordsById, existingRecordsById, changedKeys;
+        var _ref, newRecordsById, existingRecordsById, _iteratorNormalCompletion12, _didIteratorError12, _iteratorError12, _iterator12, _step12, _step12$value, recordId, newRecordObj, existingRecordObj, existingCellValuesByFieldId, i, fieldId, changedKeys;
 
         return _regenerator.default.wrap(function _callee4$(_context4) {
           while (1) {
@@ -1046,11 +1043,18 @@ function (_AbstractModelWithAsy) {
                 }
 
                 existingRecordsById = this._data.recordsById;
-                u.unsafeEach(newRecordsById, (newRecordObj, recordId) => {
-                  if (!u.has(existingRecordsById, recordId)) {
+                _iteratorNormalCompletion12 = true;
+                _didIteratorError12 = false;
+                _iteratorError12 = undefined;
+                _context4.prev = 9;
+
+                for (_iterator12 = (0, _private_utils.entries)(newRecordsById)[Symbol.iterator](); !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+                  _step12$value = (0, _slicedToArray2.default)(_step12.value, 2), recordId = _step12$value[0], newRecordObj = _step12$value[1];
+
+                  if (!(0, _private_utils.has)(existingRecordsById, recordId)) {
                     existingRecordsById[recordId] = newRecordObj;
                   } else {
-                    var existingRecordObj = existingRecordsById[recordId]; // Metadata (createdTime, commentCount) should already be up to date,
+                    existingRecordObj = existingRecordsById[recordId]; // Metadata (createdTime, commentCount) should already be up to date,
                     // but just verify for sanity. If this doesn't catch anything, can
                     // remove it for perf.
 
@@ -1061,14 +1065,49 @@ function (_AbstractModelWithAsy) {
                       existingRecordObj.cellValuesByFieldId = {};
                     }
 
-                    var existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
+                    existingCellValuesByFieldId = existingRecordObj.cellValuesByFieldId;
 
-                    for (var i = 0; i < fieldIds.length; i++) {
-                      var fieldId = fieldIds[i];
+                    for (i = 0; i < fieldIds.length; i++) {
+                      fieldId = fieldIds[i];
                       existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId ? newRecordObj.cellValuesByFieldId[fieldId] : undefined;
                     }
                   }
-                });
+                }
+
+                _context4.next = 17;
+                break;
+
+              case 13:
+                _context4.prev = 13;
+                _context4.t0 = _context4["catch"](9);
+                _didIteratorError12 = true;
+                _iteratorError12 = _context4.t0;
+
+              case 17:
+                _context4.prev = 17;
+                _context4.prev = 18;
+
+                if (!_iteratorNormalCompletion12 && _iterator12.return != null) {
+                  _iterator12.return();
+                }
+
+              case 20:
+                _context4.prev = 20;
+
+                if (!_didIteratorError12) {
+                  _context4.next = 23;
+                  break;
+                }
+
+                throw _iteratorError12;
+
+              case 23:
+                return _context4.finish(20);
+
+              case 24:
+                return _context4.finish(17);
+
+              case 25:
                 changedKeys = fieldIds.map(fieldId => WatchableCellValuesInFieldKeyPrefix + fieldId); // Need to trigger onChange for records and recordIds since watching either
                 // of those causes record metadata to be loaded (via _getFieldIdForCausingRecordMetadataToLoad)
                 // and by convention we trigger a change event when data loads.
@@ -1080,12 +1119,12 @@ function (_AbstractModelWithAsy) {
                 changedKeys.push(WatchableTableKeys.__cellValues);
                 return _context4.abrupt("return", changedKeys);
 
-              case 12:
+              case 30:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee4, this, [[9, 13, 17, 25], [18,, 20, 24]]);
       }));
 
       function _loadCellValuesInFieldIdsAsync(_x3) {
@@ -1100,13 +1139,13 @@ function (_AbstractModelWithAsy) {
     key: "unloadCellValuesInFieldIds",
     value: function unloadCellValuesInFieldIds(fieldIds) {
       var fieldIdsWithZeroRetainCount = [];
-      var _iteratorNormalCompletion12 = true;
-      var _didIteratorError12 = false;
-      var _iteratorError12 = undefined;
+      var _iteratorNormalCompletion13 = true;
+      var _didIteratorError13 = false;
+      var _iteratorError13 = undefined;
 
       try {
-        for (var _iterator12 = fieldIds[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
-          var fieldId = _step12.value;
+        for (var _iterator13 = fieldIds[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+          var fieldId = _step13.value;
           var fieldRetainCount = this._cellValuesRetainCountByFieldId[fieldId] || 0;
           fieldRetainCount--;
 
@@ -1123,16 +1162,16 @@ function (_AbstractModelWithAsy) {
           }
         }
       } catch (err) {
-        _didIteratorError12 = true;
-        _iteratorError12 = err;
+        _didIteratorError13 = true;
+        _iteratorError13 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion12 && _iterator12.return != null) {
-            _iterator12.return();
+          if (!_iteratorNormalCompletion13 && _iterator13.return != null) {
+            _iterator13.return();
           }
         } finally {
-          if (_didIteratorError12) {
-            throw _iteratorError12;
+          if (_didIteratorError13) {
+            throw _iteratorError13;
           }
         }
       }
@@ -1151,26 +1190,26 @@ function (_AbstractModelWithAsy) {
           if (fieldIdsToUnload.length > 0) {
             // Set _areCellValuesLoadedByFieldId to false before calling _unloadCellValuesInFieldIds
             // since _unloadCellValuesInFieldIds will check if *any* fields are still loaded.
-            var _iteratorNormalCompletion13 = true;
-            var _didIteratorError13 = false;
-            var _iteratorError13 = undefined;
+            var _iteratorNormalCompletion14 = true;
+            var _didIteratorError14 = false;
+            var _iteratorError14 = undefined;
 
             try {
-              for (var _iterator13 = fieldIdsToUnload[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
-                var fieldId = _step13.value;
+              for (var _iterator14 = fieldIdsToUnload[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+                var fieldId = _step14.value;
                 this._areCellValuesLoadedByFieldId[fieldId] = false;
               }
             } catch (err) {
-              _didIteratorError13 = true;
-              _iteratorError13 = err;
+              _didIteratorError14 = true;
+              _iteratorError14 = err;
             } finally {
               try {
-                if (!_iteratorNormalCompletion13 && _iterator13.return != null) {
-                  _iterator13.return();
+                if (!_iteratorNormalCompletion14 && _iterator14.return != null) {
+                  _iterator14.return();
                 }
               } finally {
-                if (_didIteratorError13) {
-                  throw _iteratorError13;
+                if (_didIteratorError14) {
+                  throw _iteratorError14;
                 }
               }
             }
@@ -1257,15 +1296,37 @@ function (_AbstractModelWithAsy) {
             fieldIdsToClear = fieldIds.filter(fieldId => !this._areCellValuesLoadedByFieldId[fieldId]);
           }
 
-          u.unsafeEach(this._data.recordsById, recordObj => {
-            for (var i = 0; i < fieldIdsToClear.length; i++) {
-              var fieldId = fieldIdsToClear[i];
+          var recordsById = this._data.recordsById;
+          var _iteratorNormalCompletion15 = true;
+          var _didIteratorError15 = false;
+          var _iteratorError15 = undefined;
 
-              if (recordObj.cellValuesByFieldId) {
-                recordObj.cellValuesByFieldId[fieldId] = undefined;
+          try {
+            for (var _iterator15 = (0, _private_utils.values)(recordsById || {})[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+              var recordObj = _step15.value;
+
+              for (var i = 0; i < fieldIdsToClear.length; i++) {
+                var fieldId = fieldIdsToClear[i];
+
+                if (recordObj.cellValuesByFieldId) {
+                  recordObj.cellValuesByFieldId[fieldId] = undefined;
+                }
               }
             }
-          });
+          } catch (err) {
+            _didIteratorError15 = true;
+            _iteratorError15 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion15 && _iterator15.return != null) {
+                _iterator15.return();
+              }
+            } finally {
+              if (_didIteratorError15) {
+                throw _iteratorError15;
+              }
+            }
+          }
         }
       }
 
@@ -1314,46 +1375,46 @@ function (_AbstractModelWithAsy) {
         this._onChange(WatchableTableKeys.views); // Clean up deleted views
 
 
-        var _iteratorNormalCompletion14 = true;
-        var _didIteratorError14 = false;
-        var _iteratorError14 = undefined;
+        var _iteratorNormalCompletion16 = true;
+        var _didIteratorError16 = false;
+        var _iteratorError16 = undefined;
 
         try {
-          for (var _iterator14 = (0, _private_utils.entries)(this._viewModelsById)[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
-            var _step14$value = (0, _slicedToArray2.default)(_step14.value, 2),
-                viewId = _step14$value[0],
-                viewModel = _step14$value[1];
+          for (var _iterator16 = (0, _private_utils.entries)(this._viewModelsById)[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
+            var _step16$value = (0, _slicedToArray2.default)(_step16.value, 2),
+                viewId = _step16$value[0],
+                viewModel = _step16$value[1];
 
             if (viewModel.isDeleted) {
               delete this._viewModelsById[viewId];
             }
           }
         } catch (err) {
-          _didIteratorError14 = true;
-          _iteratorError14 = err;
+          _didIteratorError16 = true;
+          _iteratorError16 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion14 && _iterator14.return != null) {
-              _iterator14.return();
+            if (!_iteratorNormalCompletion16 && _iterator16.return != null) {
+              _iterator16.return();
             }
           } finally {
-            if (_didIteratorError14) {
-              throw _iteratorError14;
+            if (_didIteratorError16) {
+              throw _iteratorError16;
             }
           }
         }
       }
 
       if (dirtyPaths.viewsById) {
-        var _iteratorNormalCompletion15 = true;
-        var _didIteratorError15 = false;
-        var _iteratorError15 = undefined;
+        var _iteratorNormalCompletion17 = true;
+        var _didIteratorError17 = false;
+        var _iteratorError17 = undefined;
 
         try {
-          for (var _iterator15 = (0, _private_utils.entries)(dirtyPaths.viewsById)[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
-            var _step15$value = (0, _slicedToArray2.default)(_step15.value, 2),
-                viewId = _step15$value[0],
-                dirtyViewPaths = _step15$value[1];
+          for (var _iterator17 = (0, _private_utils.entries)(dirtyPaths.viewsById)[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
+            var _step17$value = (0, _slicedToArray2.default)(_step17.value, 2),
+                viewId = _step17$value[0],
+                dirtyViewPaths = _step17$value[1];
 
             // Directly access from _viewModelsById to avoid creating
             // a view model if it doesn't already exist. If it doesn't exist,
@@ -1365,16 +1426,16 @@ function (_AbstractModelWithAsy) {
             }
           }
         } catch (err) {
-          _didIteratorError15 = true;
-          _iteratorError15 = err;
+          _didIteratorError17 = true;
+          _iteratorError17 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion15 && _iterator15.return != null) {
-              _iterator15.return();
+            if (!_iteratorNormalCompletion17 && _iterator17.return != null) {
+              _iterator17.return();
             }
           } finally {
-            if (_didIteratorError15) {
-              throw _iteratorError15;
+            if (_didIteratorError17) {
+              throw _iteratorError17;
             }
           }
         }
@@ -1385,19 +1446,19 @@ function (_AbstractModelWithAsy) {
         // was created or deleted and trigger onChange for fields.
         var addedFieldIds = [];
         var removedFieldIds = [];
-        var _iteratorNormalCompletion16 = true;
-        var _didIteratorError16 = false;
-        var _iteratorError16 = undefined;
+        var _iteratorNormalCompletion18 = true;
+        var _didIteratorError18 = false;
+        var _iteratorError18 = undefined;
 
         try {
-          for (var _iterator16 = (0, _private_utils.entries)(dirtyPaths.fieldsById)[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
-            var _step16$value = (0, _slicedToArray2.default)(_step16.value, 2),
-                fieldId = _step16$value[0],
-                dirtyFieldPaths = _step16$value[1];
+          for (var _iterator18 = (0, _private_utils.entries)(dirtyPaths.fieldsById)[Symbol.iterator](), _step18; !(_iteratorNormalCompletion18 = (_step18 = _iterator18.next()).done); _iteratorNormalCompletion18 = true) {
+            var _step18$value = (0, _slicedToArray2.default)(_step18.value, 2),
+                fieldId = _step18$value[0],
+                dirtyFieldPaths = _step18$value[1];
 
             if (dirtyFieldPaths._isDirty) {
               // If the entire field is dirty, it was either created or deleted.
-              if (u.has(this._data.fieldsById, fieldId)) {
+              if ((0, _private_utils.has)(this._data.fieldsById, fieldId)) {
                 addedFieldIds.push(fieldId);
               } else {
                 removedFieldIds.push(fieldId);
@@ -1420,16 +1481,16 @@ function (_AbstractModelWithAsy) {
             }
           }
         } catch (err) {
-          _didIteratorError16 = true;
-          _iteratorError16 = err;
+          _didIteratorError18 = true;
+          _iteratorError18 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion16 && _iterator16.return != null) {
-              _iterator16.return();
+            if (!_iteratorNormalCompletion18 && _iterator18.return != null) {
+              _iterator18.return();
             }
           } finally {
-            if (_didIteratorError16) {
-              throw _iteratorError16;
+            if (_didIteratorError18) {
+              throw _iteratorError18;
             }
           }
         }
@@ -1451,21 +1512,21 @@ function (_AbstractModelWithAsy) {
         var dirtyFieldIdsSet = {};
         var addedRecordIds = [];
         var removedRecordIds = [];
-        var _iteratorNormalCompletion17 = true;
-        var _didIteratorError17 = false;
-        var _iteratorError17 = undefined;
+        var _iteratorNormalCompletion19 = true;
+        var _didIteratorError19 = false;
+        var _iteratorError19 = undefined;
 
         try {
-          for (var _iterator17 = (0, _private_utils.entries)(dirtyPaths.recordsById)[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
-            var _step17$value = (0, _slicedToArray2.default)(_step17.value, 2),
-                recordId = _step17$value[0],
-                dirtyRecordPaths = _step17$value[1];
+          for (var _iterator19 = (0, _private_utils.entries)(dirtyPaths.recordsById)[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+            var _step19$value = (0, _slicedToArray2.default)(_step19.value, 2),
+                recordId = _step19$value[0],
+                dirtyRecordPaths = _step19$value[1];
 
             if (dirtyRecordPaths._isDirty) {
               // If the entire record is dirty, it was either created or deleted.
               (0, _invariant.default)(this._data.recordsById, 'No recordsById');
 
-              if (u.has(this._data.recordsById, recordId)) {
+              if ((0, _private_utils.has)(this._data.recordsById, recordId)) {
                 addedRecordIds.push(recordId);
               } else {
                 removedRecordIds.push(recordId);
@@ -1496,16 +1557,16 @@ function (_AbstractModelWithAsy) {
           // the records onChange event if any records were created or deleted.
 
         } catch (err) {
-          _didIteratorError17 = true;
-          _iteratorError17 = err;
+          _didIteratorError19 = true;
+          _iteratorError19 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion17 && _iterator17.return != null) {
-              _iterator17.return();
+            if (!_iteratorNormalCompletion19 && _iterator19.return != null) {
+              _iterator19.return();
             }
           } finally {
-            if (_didIteratorError17) {
-              throw _iteratorError17;
+            if (_didIteratorError19) {
+              throw _iteratorError19;
             }
           }
         }
@@ -1541,27 +1602,27 @@ function (_AbstractModelWithAsy) {
           });
         }
 
-        var _iteratorNormalCompletion18 = true;
-        var _didIteratorError18 = false;
-        var _iteratorError18 = undefined;
+        var _iteratorNormalCompletion20 = true;
+        var _didIteratorError20 = false;
+        var _iteratorError20 = undefined;
 
         try {
-          for (var _iterator18 = fieldIds[Symbol.iterator](), _step18; !(_iteratorNormalCompletion18 = (_step18 = _iterator18.next()).done); _iteratorNormalCompletion18 = true) {
-            var _fieldId2 = _step18.value;
+          for (var _iterator20 = fieldIds[Symbol.iterator](), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {
+            var _fieldId2 = _step20.value;
 
             this._onChange(WatchableCellValuesInFieldKeyPrefix + _fieldId2, recordIds, _fieldId2);
           }
         } catch (err) {
-          _didIteratorError18 = true;
-          _iteratorError18 = err;
+          _didIteratorError20 = true;
+          _iteratorError20 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion18 && _iterator18.return != null) {
-              _iterator18.return();
+            if (!_iteratorNormalCompletion20 && _iterator20.return != null) {
+              _iterator20.return();
             }
           } finally {
-            if (_didIteratorError18) {
-              throw _iteratorError18;
+            if (_didIteratorError20) {
+              throw _iteratorError20;
             }
           }
         }
@@ -1572,29 +1633,29 @@ function (_AbstractModelWithAsy) {
     value: function __getFieldNamesById() {
       if (!this._cachedFieldNamesById) {
         var fieldNamesById = {};
-        var _iteratorNormalCompletion19 = true;
-        var _didIteratorError19 = false;
-        var _iteratorError19 = undefined;
+        var _iteratorNormalCompletion21 = true;
+        var _didIteratorError21 = false;
+        var _iteratorError21 = undefined;
 
         try {
-          for (var _iterator19 = (0, _private_utils.entries)(this._data.fieldsById)[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
-            var _step19$value = (0, _slicedToArray2.default)(_step19.value, 2),
-                fieldId = _step19$value[0],
-                fieldData = _step19$value[1];
+          for (var _iterator21 = (0, _private_utils.entries)(this._data.fieldsById)[Symbol.iterator](), _step21; !(_iteratorNormalCompletion21 = (_step21 = _iterator21.next()).done); _iteratorNormalCompletion21 = true) {
+            var _step21$value = (0, _slicedToArray2.default)(_step21.value, 2),
+                fieldId = _step21$value[0],
+                fieldData = _step21$value[1];
 
             fieldNamesById[fieldId] = fieldData.name;
           }
         } catch (err) {
-          _didIteratorError19 = true;
-          _iteratorError19 = err;
+          _didIteratorError21 = true;
+          _iteratorError21 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion19 && _iterator19.return != null) {
-              _iterator19.return();
+            if (!_iteratorNormalCompletion21 && _iterator21.return != null) {
+              _iterator21.return();
             }
           } finally {
-            if (_didIteratorError19) {
-              throw _iteratorError19;
+            if (_didIteratorError21) {
+              throw _iteratorError21;
             }
           }
         }

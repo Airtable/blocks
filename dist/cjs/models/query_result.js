@@ -87,7 +87,7 @@ function (_AbstractModelWithAsy) {
      * Throws if data is not loaded yet.
      */
     value: function _getOrGenerateRecordIdsSet() {
-      throw u.spawnAbstractMethodError();
+      throw (0, _private_utils.spawnAbstractMethodError)();
     }
     /**
      * The fields that were used to create this QueryResult.
@@ -104,12 +104,12 @@ function (_AbstractModelWithAsy) {
      * Throws if data is not loaded yet.
      */
     get: function get() {
-      throw u.spawnAbstractMethodError();
+      throw (0, _private_utils.spawnAbstractMethodError)();
     }
   }, {
     key: "fields",
     get: function get() {
-      throw u.spawnAbstractMethodError();
+      throw (0, _private_utils.spawnAbstractMethodError)();
     }
     /**
      * The table that records in this QueryResult are part of
@@ -118,7 +118,7 @@ function (_AbstractModelWithAsy) {
   }, {
     key: "parentTable",
     get: function get() {
-      throw u.spawnAbstractMethodError();
+      throw (0, _private_utils.spawnAbstractMethodError)();
     } // provided properties + methods:
 
   }], [{
@@ -478,7 +478,7 @@ function (_AbstractModelWithAsy) {
                 return _context.abrupt("return");
 
               case 9:
-                throw u.spawnUnknownSwitchCaseError('record color mode type', recordColorMode.type);
+                throw (0, _private_utils.spawnUnknownSwitchCaseError)('record color mode type', recordColorMode.type);
 
               case 10:
               case "end":
@@ -512,7 +512,7 @@ function (_AbstractModelWithAsy) {
           break;
 
         default:
-          throw u.spawnUnknownSwitchCaseError('record color mode type', recordColorMode.type);
+          throw (0, _private_utils.spawnUnknownSwitchCaseError)('record color mode type', recordColorMode.type);
       }
     }
   }, {

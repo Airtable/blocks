@@ -539,7 +539,7 @@ function (_React$Component) {
         primaryCellValueAsString = primaryCellValue === null || primaryCellValue === undefined ? null : String(primaryCellValue);
       }
 
-      if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
+      if ((0, _private_utils.isNullOrUndefinedOrEmpty)(primaryCellValueAsString)) {
         primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
         isUnnamed = true;
       } else {

@@ -1,5 +1,7 @@
 "use strict";
 
+require("core-js/modules/es.array.concat");
+
 require("core-js/modules/es.array.iterator");
 
 require("core-js/modules/es.object.entries");
@@ -23,6 +25,11 @@ exports.has = has;
 exports.getEnumValueIfExists = getEnumValueIfExists;
 exports.assertEnumValue = assertEnumValue;
 exports.isEnumValue = isEnumValue;
+exports.spawnUnknownSwitchCaseError = spawnUnknownSwitchCaseError;
+exports.spawnAbstractMethodError = spawnAbstractMethodError;
+exports.spawnError = spawnError;
+exports.isObjectEmpty = isObjectEmpty;
+exports.isNullOrUndefinedOrEmpty = isNullOrUndefinedOrEmpty;
 
 function cloneDeep(obj) {
   var jsonString = JSON.stringify(obj);
@@ -113,4 +120,42 @@ function assertEnumValue(enumObj, valueToCheck) {
 
 function isEnumValue(enumObj, valueToCheck) {
   return getEnumValueIfExists(enumObj, valueToCheck) !== null;
+}
+
+function spawnUnknownSwitchCaseError(valueDescription, providedValue) {
+  var providedValueString = providedValue !== null && providedValue !== undefined ? providedValue : 'null';
+  return spawnError("Unknown value ".concat(String(providedValueString), " for ").concat(valueDescription), spawnUnknownSwitchCaseError);
+}
+
+function spawnAbstractMethodError() {
+  return spawnError('Abstract method', spawnAbstractMethodError);
+} // If errorOriginFn is specified, all frames above and including the call to errorOriginFn
+// will be omitted from the strack trace.
+
+
+function spawnError(errName, errorOriginFn) {
+  var err = new Error(errName); // captureStackTrace is only available on v8. It captures the current stack trace
+  // and sets the .stack property of the first argument. It will omit all frames above
+  // and including "errorOriginFn", which is useful for hiding implementation details of our
+  // error throwing helpers (e.g. assert and spawn variants).
+
+  if (Error.captureStackTrace && errorOriginFn) {
+    Error.captureStackTrace(err, errorOriginFn);
+  }
+
+  return err;
+}
+
+function isObjectEmpty(obj) {
+  for (var key in obj) {
+    if (has(obj, key)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isNullOrUndefinedOrEmpty(value) {
+  return value === null || value === undefined || (typeof value === 'string' || Array.isArray(value)) && value.length === 0 || typeof value === 'object' && isObjectEmpty(value);
 }

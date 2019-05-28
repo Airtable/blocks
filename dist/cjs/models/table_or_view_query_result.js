@@ -49,6 +49,8 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
+var _private_utils = require("../private_utils");
+
 var _table = _interopRequireDefault(require("./table"));
 
 var _view = _interopRequireDefault(require("./view"));
@@ -319,7 +321,7 @@ function (_QueryResult) {
           if (key.startsWith(_query_result.default.WatchableCellValuesInFieldKeyPrefix)) {
             var fieldId = key.substring(_query_result.default.WatchableCellValuesInFieldKeyPrefix.length);
 
-            if (this._fieldIdsSetToLoadOrNullIfAllFields && !u.has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)) {
+            if (this._fieldIdsSetToLoadOrNullIfAllFields && !(0, _private_utils.has)(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)) {
               throw new Error("Can't watch field because it wasn't included in QueryResult fields: ".concat(fieldId));
             }
 
@@ -926,7 +928,7 @@ function (_QueryResult) {
 
           // If a field that we rely on was created (i.e. it was undeleted), we need to
           // make sure we're watching it's config.
-          if (u.has(fieldIdsSet, fieldId)) {
+          if ((0, _private_utils.has)(fieldIdsSet, fieldId)) {
             wereAnyFieldsCreatedOrDeleted = true;
 
             var field = this._table.getFieldByIdIfExists(fieldId);
@@ -952,7 +954,7 @@ function (_QueryResult) {
       }
 
       if (!wereAnyFieldsCreatedOrDeleted) {
-        wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId => u.has(fieldIdsSet, fieldId));
+        wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId => (0, _private_utils.has)(fieldIdsSet, fieldId));
       }
 
       if (wereAnyFieldsCreatedOrDeleted) {

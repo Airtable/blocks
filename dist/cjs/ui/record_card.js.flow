@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
-import {values} from '../private_utils';
+import {values, isNullOrUndefinedOrEmpty} from '../private_utils';
 import {type AttachmentData} from '../types/attachment';
 import {FieldTypes} from '../types/field';
 import {type RecordDef} from '../types/record';
@@ -471,7 +471,7 @@ class RecordCard extends React.Component<RecordCardProps> {
                     ? null
                     : String(primaryCellValue);
         }
-        if (u.isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
+        if (isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
             primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
             isUnnamed = true;
         } else {
