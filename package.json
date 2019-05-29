@@ -24,16 +24,8 @@
         "build": "npm run build:clean && npm run build:babel && npm run build:flow",
         "watch": "npm run build:clean && concurrently npm:watch:babel npm:watch:flow"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Hyperbase/blocks-sdk.git"
-    },
     "author": "",
     "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Hyperbase/blocks-sdk/issues"
-    },
-    "homepage": "https://github.com/Hyperbase/blocks-sdk#readme",
     "devDependencies": {
         "@babel/cli": "^7.4.4",
         "@babel/core": "^7.4.4",

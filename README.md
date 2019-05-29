@@ -36,8 +36,6 @@ npx np patch --any-branch
 ## Links
 
 -   [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
--   [Local development tool](https://github.com/Hyperbase/blocks-cli)
--   [Airtable styleguide](https://airtable.com/styleguide)
 
 ## Blocks development best practices
 
@@ -396,7 +394,7 @@ complaining.
 Install flow and the SDK repo:
 
 ```sh
-yarn add --dev flow-bin@0.81 git+ssh://git@github.com:Hyperbase/blocks-sdk.git
+yarn add --dev flow-bin@0.98.1
 ```
 
 Create a `.flowconfig` file in your repo and add the following:
