@@ -25,6 +25,19 @@ const pipeChildProcessWithPrefix = (child, prefix) => {
     pipeStdio(child.stderr, chalk.yellow(`[${prefix}]`));
 };
 
+function ensureCleanExit(child: childProcess.ChildProcess, name: string) {
+    const killChild = () => {
+        // eslint-disable-next-line no-console
+        console.log(`Stopping ${name}`);
+        child.kill();
+    };
+
+    process.addListener('exit', killChild);
+    child.once('exit', () => {
+        process.removeListener('exit', killChild);
+    });
+}
+
 function fork(
     modulePath: string,
     {
@@ -41,6 +54,7 @@ function fork(
         execArgv,
     });
 
+    ensureCleanExit(child, prefix);
     pipeChildProcessWithPrefix(child, prefix);
     return child;
 }
@@ -51,6 +65,7 @@ function spawn(
     {env = process.env, cwd = process.cwd(), prefix = filePath}: ChildProcessOptions = {},
 ): childProcess.ChildProcess {
     const child = childProcess.spawn(filePath, args, {stdio: 'pipe', env, cwd});
+    ensureCleanExit(child, prefix);
     pipeChildProcessWithPrefix(child, prefix);
     return child;
 }
@@ -77,6 +92,7 @@ function execFileAsync(
             },
         );
 
+        ensureCleanExit(child, prefix);
         pipeChildProcessWithPrefix(child, prefix);
     });
 }

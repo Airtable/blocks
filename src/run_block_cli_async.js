@@ -58,7 +58,13 @@ function getCommandConfig(config) {
     return commandConfigs[command];
 }
 
+function ensureCleanExit() {
+    process.addListener('SIGINT', () => process.exit(0));
+    process.addListener('SIGTERM', () => process.exit(1));
+}
+
 async function runBlockCliAsync() {
+    ensureCleanExit();
     await setUpRollbarAsync();
 
     const yargs = setUpYargs();
