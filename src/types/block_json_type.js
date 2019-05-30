@@ -3,7 +3,7 @@
 import type {BlockModuleWithoutCode} from './block_module_types';
 import type {Environment} from './environments';
 
-export type BlockFile = {|
+export type BlockJson = {|
     frontendEntryModuleName: string,
     environment?: Environment,
     applicationId: string,

@@ -10,7 +10,7 @@ const CommandNames = {
     DELETE_CREDENTIAL: ('delete-credential': 'delete-credential'),
     LIST_CREDENTIALS: ('list-credentials': 'list-credentials'),
     RENAME_CREDENTIAL: ('rename-credential': 'rename-credential'),
-    BUILD: ('build': 'build'),
+    RELEASE: ('release': 'release'),
 };
 
 export type CommandName = $Values<typeof CommandNames>;

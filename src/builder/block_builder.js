@@ -18,14 +18,13 @@ const {promisify} = require('util');
 const request = require('request');
 const Terser = require('terser');
 
-import type {BlockFile} from '../types/block_file_type';
+import type {BlockJson} from '../types/block_json_type';
 import type {
     BlockBackendRouteModuleMetadata,
     BlockModuleType,
     BlockModuleWithoutCode,
 } from '../types/block_module_types';
 
-type BlockJson = BlockFile;
 type BackendDeploymentPackagePath = string;
 type BlockModuleId = string;
 type BackendRoutesManifest = {
@@ -35,16 +34,32 @@ type BackendRoutesManifest = {
     |},
 };
 
-type BuildSuccess = {success: true};
-type BuildFailure = {success: false, error: Error};
-type BuildResult = BuildSuccess | BuildFailure;
+type BuildStepSuccess<+R> = {|success: true, +value: R|};
+type BuildStepFailure = {|success: false, error: Error|};
+
 // TODO(richsinn): consider using the Result algebraic type from hyperbase
 type BuildStepResult<+R> = (
-    {|success: true, +value: R|} |
-    BuildFailure
+    BuildStepSuccess<R> |
+    BuildStepFailure
 );
 
-const BUILD_STEP_RESULT_OK = Object.freeze({success: true, value: undefined});
+type FilePath = string;
+type DirectoryPath = string;
+type BuildResult = BuildStepResult<{|frontendBundlePath: FilePath, backendDeploymentPackagePath: FilePath | null|}>;
+
+function buildStepSuccess<R>(value: R): BuildStepSuccess<R> {
+    return {
+        success: true,
+        value,
+    };
+}
+function buildStepFailure(message: string): BuildStepFailure {
+    return {
+        success: false,
+        error: new Error(message),
+    };
+}
+
 const BLOCK_BACKEND_WRAPPER_CONTENTS = new Set([
     'backend.js',
     'handle_event_async.js',
@@ -61,27 +76,21 @@ const BlockModuleDirectoryNamesByType = Object.freeze({
 });
 
 class BlockBuilder {
-    _buildFailure(message: string): BuildFailure {
-        return {
-            success: false,
-            error: new Error(message),
-        };
-    }
-    async _readAndParseBlockJsonAsync(blockDirPath: string): Promise<BuildStepResult<BlockJson>> {
+    async _readAndParseBlockJsonAsync(blockDirPath: DirectoryPath): Promise<BuildStepResult<BlockJson>> {
         const blockJsonPath = path.join(blockDirPath, 'block.json');
         if (!fs.existsSync(blockJsonPath)) {
-            return this._buildFailure('must have a block.json file');
+            return buildStepFailure('must have a block.json file');
         }
         const blockJsonStr = await fsUtils.readFileAsync(blockJsonPath, 'utf8');
         let blockJson;
         try {
             blockJson = JSON.parse(blockJsonStr);
         } catch (err) {
-            return this._buildFailure('invalid block.json file');
+            return buildStepFailure('invalid block.json file');
         }
         return {success: true, value: blockJson};
     }
-    async _transpileSourceCodeAsync(srcDirPath: string, outputDirPath: string, blockJson: BlockJson): Promise<BuildStepResult<void>> {
+    async _transpileSourceCodeAsync(srcDirPath: DirectoryPath, outputDirPath: DirectoryPath, blockJson: BlockJson): Promise<BuildStepResult<void>> {
         const modulesByType: Map<BlockModuleType, Array<BlockModuleWithoutCode>> = new Map();
         for (const blockModule of blockJson.modules) {
             const {type} = blockModule.metadata;
@@ -95,7 +104,7 @@ class BlockBuilder {
 
         // Generate a dict of module type to dirpath that we can use to
         // create symlinks for requiring client code.
-        const moduleTypeOutputDirPathByModuleType: Map<BlockModuleType, string> = new Map();
+        const moduleTypeOutputDirPathByModuleType: Map<BlockModuleType, DirectoryPath> = new Map();
         for (const [moduleType, blockModules] of modulesByType) {
             const moduleTypeDirName = BlockModuleDirectoryNamesByType[moduleType];
             const moduleTypeOutputDirPath = path.join(outputDirPath, moduleTypeDirName);
@@ -110,7 +119,7 @@ class BlockBuilder {
                 // (not our canonical dir names for each module type).
                 const srcModuleFilePath = path.join(srcDirPath, moduleType, `${moduleName}.js`);
                 if (!fs.existsSync(srcModuleFilePath)) {
-                    return this._buildFailure(`module does not exist: ${srcModuleFilePath}`);
+                    return buildStepFailure(`module does not exist: ${srcModuleFilePath}`);
                 }
                 const moduleValue = await fsUtils.readFileAsync(srcModuleFilePath);
 
@@ -138,7 +147,7 @@ class BlockBuilder {
             await fsUtils.symlinkAsync(moduleTypeDirpath, symlinkPath);
         }
 
-        return BUILD_STEP_RESULT_OK;
+        return buildStepSuccess();
     }
     _getErrorFromYarnInstallStderr(stderr: string): Error | null {
         const errorMessageLines = stderr.split('\n')
@@ -148,7 +157,7 @@ class BlockBuilder {
         }
         return null;
     }
-    async _yarnInstallAsync(dirPath: string): Promise<BuildStepResult<void>> {
+    async _yarnInstallAsync(dirPath: DirectoryPath): Promise<BuildStepResult<void>> {
         const currPath = __dirname;
         const yarnPath = path.join(currPath, '..', '..', 'node_modules', '.bin', 'yarn');
         try {
@@ -163,9 +172,9 @@ class BlockBuilder {
         } catch (error) {
             return {success: false, error};
         }
-        return BUILD_STEP_RESULT_OK;
+        return buildStepSuccess();
     }
-    async _browserifyAsync(entryFilePath: string): Promise<BuildStepResult<Buffer | null>> {
+    async _browserifyAsync(entryFilePath: FilePath): Promise<BuildStepResult<Buffer | null>> {
         // Temporarily set the NODE_ENV to production, regardless of the actual NODE_ENV.
         const originalNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = 'production';
@@ -212,7 +221,7 @@ class BlockBuilder {
             value: Buffer.from(result.code),
         };
     }
-    async _generateFrontendBundleAsync(blockJson: BlockJson, userSrcDirPath: string, buildArtifactsDirPath: string): Promise<BuildStepResult<void>> {
+    async _generateFrontendBundleAsync(blockJson: BlockJson, userSrcDirPath: DirectoryPath, buildArtifactsDirPath: DirectoryPath): Promise<BuildStepResult<FilePath>> {
         // We need to write our client wrapper file.
         // NOTE: it's a bit weird that we write the client wrapper file in the user
         // source code directory. This is necessary since we can't have multiple copies
@@ -236,8 +245,9 @@ class BlockBuilder {
         if (!minifyResult.success) {
             return minifyResult;
         }
-        await fsUtils.writeFileAsync(path.join(buildArtifactsDirPath, 'bundle.js'), minifyResult.value);
-        return BUILD_STEP_RESULT_OK;
+        const frontendBundlePath = path.join(buildArtifactsDirPath, 'bundle.js');
+        await fsUtils.writeFileAsync(frontendBundlePath, minifyResult.value);
+        return buildStepSuccess(frontendBundlePath);
     }
     _hasBackendCode(blockJson: BlockJson): boolean {
         return blockJson.modules.some(blockModule => {
@@ -249,10 +259,10 @@ class BlockBuilder {
     ): BuildStepResult<void> {
         const validContents = blockBackendWrapperContents.every(content => BLOCK_BACKEND_WRAPPER_CONTENTS.has(content));
         if (validContents) {
-            return BUILD_STEP_RESULT_OK;
+            return buildStepSuccess();
         }
 
-        return this._buildFailure(`unexpected block_backend_wrapper contents ${JSON.stringify(blockBackendWrapperContents)}`);
+        return buildStepFailure(`unexpected block_backend_wrapper contents ${JSON.stringify(blockBackendWrapperContents)}`);
     }
     async _writeBackendSdkAsync(backendWrapperSrcDirPath: string): Promise<BuildStepResult<void>> {
         // TODO(richsinn): We want to eventually get the Backend SDK from the versioned
@@ -269,18 +279,18 @@ class BlockBuilder {
                 .on('response', response => {
                     // Handle the case where the request fails.
                     if (response.statusCode !== 200) {
-                        resolve(this._buildFailure('Failed to download backend SDK.'));
+                        resolve(buildStepFailure('Failed to download backend SDK.'));
                     }
                 })
                 // Pipe the response straight to the file we're trying to create.
                 .pipe(fs.createWriteStream(path.join(backendWrapperSrcDirPath, 'block_backend_sdk.js')))
                 // Resolve when we finish successfully.
                 .on('finish', () => {
-                    resolve(BUILD_STEP_RESULT_OK);
+                    resolve(buildStepSuccess());
                 })
                 // Handle write errors.
                 .on('error', () => {
-                    resolve(this._buildFailure('Failed to write backend SDK.'));
+                    resolve(buildStepFailure('Failed to write backend SDK.'));
                 });
         });
     }
@@ -315,9 +325,9 @@ class BlockBuilder {
 
                 zip.finalize();
             });
-            return BUILD_STEP_RESULT_OK;
+            return buildStepSuccess();
         } catch (err) {
-            return this._buildFailure(err.message);
+            return buildStepFailure(err.message);
         }
     }
     async _generateBackendDeploymentPackageAsync(
@@ -408,12 +418,11 @@ class BlockBuilder {
             value: outputPath,
         };
     }
-    async buildAsync(outputDirPath: string): Promise<BuildResult> {
+    async buildAsync(outputDirPath: DirectoryPath): Promise<BuildResult> {
         if (fs.existsSync(outputDirPath)) {
-            return this._buildFailure(`directory already exists at ${outputDirPath}`);
+            return buildStepFailure(`directory already exists at ${outputDirPath}`);
         }
 
-        console.log(`building in ${outputDirPath}`);
         await fsUtils.mkdirPathAsync(outputDirPath);
 
         // TODO(jb): be smarter about this? (see get_block_dir_path).
@@ -452,7 +461,7 @@ class BlockBuilder {
 
         const userSrcNodeModulesPath = path.join(userSrcDirPath, 'node_modules');
         if (!fs.existsSync(userSrcNodeModulesPath)) {
-            return this._buildFailure('No modules installed. react and react-dom are required.');
+            return buildStepFailure('No modules installed. react and react-dom are required.');
         }
 
         // Drop in the stub for the Block SDK.
@@ -496,11 +505,13 @@ class BlockBuilder {
             if (!backendDeploymentPackageResult.success) {
                 return backendDeploymentPackageResult;
             }
-
-            // TODO(richsinn): Upload backendDeploymentPackageResult.value to S3
         }
 
-        return {success: true};
+        return buildStepSuccess({
+            frontendBundlePath: bundleResult.value,
+            // TODO(richsinn): return deployment package path and upload to S3 in release command.
+            backendDeploymentPackagePath: null,
+        });
     }
 }
 

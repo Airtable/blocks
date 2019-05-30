@@ -55,13 +55,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         },
         runCommandAsync: commandRunner(CommandNames.INIT),
     },
-    [CommandNames.BUILD]: {
-        name: CommandNames.BUILD,
-        command: `${CommandNames.BUILD}`,
-        description: 'Build a block',
-        example: `block ${CommandNames.BUILD}`,
-        runCommandAsync: commandRunner(CommandNames.BUILD),
-    },
     [CommandNames.CLONE]: {
         name: CommandNames.CLONE,
         command: `${CommandNames.CLONE} <blockIdentifier> <blockDirPath>`,
@@ -114,6 +107,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),
+    },
+    [CommandNames.RELEASE]: {
+        name: CommandNames.RELEASE,
+        command: `${CommandNames.RELEASE}`,
+        description: 'Release a block',
+        example: `block ${CommandNames.RELEASE}`,
+        runCommandAsync: commandRunner(CommandNames.RELEASE),
     },
     [CommandNames.PUSH]: {
         name: CommandNames.PUSH,

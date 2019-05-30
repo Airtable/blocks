@@ -14,7 +14,7 @@ const writeDeveloperCredentialsFromApiResponseAsync = require('../write_develope
 
 import type {Argv} from 'yargs';
 import type {BlockBuildType} from '../types/block_build_types';
-import type {BlockFile} from '../types/block_file_type';
+import type {BlockJson} from '../types/block_json_type';
 import type {
     BlockDeveloperCredentialEncrypted,
     CredentialEncrypted,
@@ -302,14 +302,14 @@ async function _inheritOrReEncryptCredentialValueEncryptedAsync(
 }
 
 function _getApiClient(
-    blockFileData: BlockFile,
+    blockJson: BlockJson,
     blockDirPath: string,
 ): APIClient {
     const apiKey = getApiKeySync(blockDirPath);
     return new APIClient({
-        environment: blockFileData.environment,
-        applicationId: blockFileData.applicationId,
-        blockId: blockFileData.blockId,
+        environment: blockJson.environment,
+        applicationId: blockJson.applicationId,
+        blockId: blockJson.blockId,
         apiKey,
     });
 }

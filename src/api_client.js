@@ -23,7 +23,9 @@ import type {
 type ApplicationId = string;
 type BlockInstallationId = string;
 type BlockId = string;
+type BuildId = string;
 type KmsDataKeyId = string;
+type ReleaseId = string;
 
 const apiBaseUrlsByEnvironment = {
     [Environments.PRODUCTION]: 'https://api.airtable.com',
@@ -31,6 +33,14 @@ const apiBaseUrlsByEnvironment = {
     [Environments.LOCAL]: 'https://api.hyperbasedev.com:3000',
     [Environments.TEST]: 'http://localhost:' + TEST_SERVER_PORT,
 };
+
+// TODO(jb): realistically, all of these endpoints should be using `bases` and not `meta`.
+// If/when we update the endpoints, we should get rid of support for `meta` here.
+const ApiTypes = Object.freeze({
+    BASES: ('bases': 'bases'),
+    META: ('meta': 'meta'),
+});
+type ApiType = $Values<typeof ApiTypes>;
 
 class APIClient {
     _environment: Environment;
@@ -53,14 +63,24 @@ class APIClient {
         this._apiKey = opts.apiKey;
     }
 
-    _getRequestUrl(): string {
-        invariant(this._blockId, '_blockId');
-        return this._getUrl(`/v2/meta/${this._applicationId}/blocks/${this._blockId}`);
+    _getBlockBaseUrl(apiType: ApiType): string {
+        invariant(this._blockId, 'this._blockId');
+        return this._getUrl(`/v2/${apiType}/${this._applicationId}/blocks/${this._blockId}`);
+    }
+
+    _getAccessPolicyUrl(): string {
+        invariant(this._blockInstallationId, '_blockInstallationId');
+        return this._getUrl(`/v2/${ApiTypes.META}/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`);
+    }
+
+    _getUrl(path: string): string {
+        const baseUrl = apiBaseUrlsByEnvironment[this._environment];
+        return new URL(path, baseUrl).href;
     }
 
     async updateBlockAsync(data: UpdateBlockParams): Promise<UpdateBlockResponse> {
         const options = {
-            url: this._getRequestUrl(),
+            url: this._getBlockBaseUrl(ApiTypes.META),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -82,7 +102,7 @@ class APIClient {
 
     async fetchBlockAsync(): Promise<FetchBlockResponse> {
         const options = {
-            url: this._getRequestUrl(),
+            url: this._getBlockBaseUrl(ApiTypes.META),
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -107,7 +127,7 @@ class APIClient {
         credentialsEncrypted: Array<CredentialEncrypted>,
     ): Promise<Array<CredentialPlaintext>> {
         const options = {
-            url: `${this._getRequestUrl()}/credentials/decrypt`,
+            url: `${this._getBlockBaseUrl(ApiTypes.META)}/credentials/decrypt`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -129,7 +149,7 @@ class APIClient {
         kmsDataKeyId?: KmsDataKeyId,
     ): Promise<CredentialEncrypted> {
         const options = {
-            url: `${this._getRequestUrl()}/credential/encrypt`,
+            url: `${this._getBlockBaseUrl(ApiTypes.META)}/credential/encrypt`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -154,7 +174,7 @@ class APIClient {
         newKmsDataKeyId: KmsDataKeyId,
     ): Promise<CredentialEncrypted> {
         const options = {
-            url: `${this._getRequestUrl()}/credential/reEncrypt`,
+            url: `${this._getBlockBaseUrl(ApiTypes.META)}/credential/reEncrypt`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
@@ -174,14 +194,76 @@ class APIClient {
         return body;
     }
 
-    _getAccessPolicyUrl(): string {
-        invariant(this._blockInstallationId, '_blockInstallationId');
-        return this._getUrl(`/v2/meta/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`);
+    async startBuildAsync(hasBackend: boolean): Promise<{buildId: BuildId, frontendBundleUploadUrl: string, backendDeploymentPackageUploadUrl: string | null}> {
+        invariant(this._blockId, '_blockId');
+        const options = {
+            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/start`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            body: {hasBackend},
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = body.errors.map(o => o.message).join('\n');
+            throw new Error(errorMessage);
+        }
+        return body;
     }
 
-    _getUrl(path: string): string {
-        const baseUrl = apiBaseUrlsByEnvironment[this._environment];
-        return new URL(path, baseUrl).href;
+    async succeedBuildAsync(buildId: BuildId): Promise<void> {
+        invariant(this._blockId, '_blockId');
+        const options = {
+            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/${buildId}/succeed`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = body.errors.map(o => o.message).join('\n');
+            throw new Error(errorMessage);
+        }
+    }
+
+    async failBuildAsync(buildId: BuildId): Promise<void> {
+        invariant(this._blockId, '_blockId');
+        const options = {
+            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/${buildId}/fail`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = body.errors.map(o => o.message).join('\n');
+            throw new Error(errorMessage);
+        }
+    }
+
+    async createReleaseAsync(buildId: BuildId): Promise<{releaseId: ReleaseId}> {
+        invariant(this._blockId, '_blockId');
+        const options = {
+            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/releases/create`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            body: {buildId},
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = body.errors.map(o => o.message).join('\n');
+            throw new Error(errorMessage);
+        }
+        return body;
     }
 
     async fetchAccessPolicyAsync(): Promise<string> {
