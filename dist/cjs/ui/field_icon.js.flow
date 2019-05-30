@@ -1,7 +1,7 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import FieldModel from '../models/field';
+import Field from '../models/field';
 import Icon from './icon';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
@@ -10,7 +10,7 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
 );
 
 type FieldIconProps = {
-    field: FieldModel,
+    field: Field,
     size?: number,
     fillColor?: string,
     className?: string,
@@ -38,7 +38,7 @@ const FieldIcon = (props: FieldIconProps) => {
 const iconPropsWithoutName = u.omit(Icon.propTypes, 'name');
 FieldIcon.propTypes = {
     ...iconPropsWithoutName,
-    field: PropTypes.instanceOf(FieldModel).isRequired,
+    field: PropTypes.instanceOf(Field).isRequired,
 };
 
 export default FieldIcon;

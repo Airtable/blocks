@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
 import getSdk from '../get_sdk';
-import type TableModel from '../models/table';
+import type Table from '../models/table';
 import {type GlobalConfigKey} from '../global_config';
 import createDataContainer from './create_data_container';
 import TablePicker from './table_picker';
@@ -14,7 +14,7 @@ const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu')
 
 type TablePickerSyncedProps = {
     globalConfigKey: GlobalConfigKey,
-    onChange?: (tableModel: TableModel | null) => void,
+    onChange?: (tableModel: Table | null) => void,
     disabled?: boolean,
 
     // Passed through to TablePicker.
@@ -56,7 +56,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
         invariant(this._tablePicker, 'No table picker to click');
         this._tablePicker.click();
     }
-    _getTableFromGlobalConfigValue(tableId: mixed): TableModel | null {
+    _getTableFromGlobalConfigValue(tableId: mixed): Table | null {
         return typeof tableId === 'string' ? getSdk().base.getTableByIdIfExists(tableId) : null;
     }
     render() {

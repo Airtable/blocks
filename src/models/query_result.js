@@ -12,9 +12,9 @@ import {
 } from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
-import type TableModel from './table';
-import FieldModel from './field';
-import type RecordModel from './record';
+import type Table from './table';
+import Field from './field';
+import type Record from './record';
 import {
     ModeTypes as RecordColorModeTypes,
     modes as recordColorModes,
@@ -35,7 +35,7 @@ const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 export type WatchableQueryResultKey = $Values<typeof WatchableQueryResultKeys> | string;
 
 type SortConfig = {
-    field: FieldModel | string,
+    field: Field | string,
     direction?: 'asc' | 'desc',
 };
 
@@ -43,7 +43,7 @@ export type QueryResultOpts = {
     sorts?: Array<SortConfig>,
     // Allow falsey values for convenience of including
     // fields conditionally. They'll be filtered out.
-    fields?: Array<FieldModel | string | void | null | false>,
+    fields?: Array<Field | string | void | null | false>,
     recordColorMode?: null | RecordColorMode,
 };
 
@@ -80,14 +80,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Null if fields were not specified, which means the QueryResult
      * will load all fields in the table.
      */
-    get fields(): Array<FieldModel> | null {
+    get fields(): Array<Field> | null {
         throw spawnAbstractMethodError();
     }
 
     /**
      * The table that records in this QueryResult are part of
      */
-    get parentTable(): TableModel {
+    get parentTable(): Table {
         throw spawnAbstractMethodError();
     }
 
@@ -110,10 +110,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         );
     }
 
-    static _normalizeOpts(
-        table: TableModel,
-        opts: QueryResultOpts = {},
-    ): NormalizedQueryResultOpts {
+    static _normalizeOpts(table: Table, opts: QueryResultOpts = {}): NormalizedQueryResultOpts {
         const sorts = !opts.sorts
             ? null
             : opts.sorts.map(sort => {
@@ -150,7 +147,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 }
                 if (
                     typeof fieldOrFieldIdOrFieldName !== 'string' &&
-                    !(fieldOrFieldIdOrFieldName instanceof FieldModel)
+                    !(fieldOrFieldIdOrFieldName instanceof Field)
                 ) {
                     throw new Error(
                         `Invalid value for field, expected a field, id, or name but got: ${fieldOrFieldIdOrFieldName.toString()}`,
@@ -216,7 +213,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * The records in this QueryResult.
      * Throws if data is not loaded yet.
      */
-    get records(): Array<RecordModel> {
+    get records(): Array<Record> {
         return this.recordIds.map(recordId => {
             const record = this.parentTable.__getRecordByIdIfExists(recordId);
             invariant(record, 'Record missing in table');
@@ -224,7 +221,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         });
     }
 
-    getRecordByIdIfExists(recordId: RecordId): RecordModel | null {
+    getRecordByIdIfExists(recordId: RecordId): Record | null {
         const record = this.parentTable.__getRecordByIdIfExists(recordId);
         if (!record || !this.hasRecord(record)) {
             return null;
@@ -232,7 +229,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
         return record;
     }
-    getRecordById(recordId: RecordId): RecordModel {
+    getRecordById(recordId: RecordId): Record {
         const record = this.getRecordByIdIfExists(recordId);
         if (!record) {
             throw new Error(`No record with ID ${recordId} in this query result`);
@@ -240,19 +237,19 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         return record;
     }
 
-    _getRecord(recordOrRecordId: RecordId | RecordModel): RecordModel {
+    _getRecord(recordOrRecordId: RecordId | Record): Record {
         return this.getRecordById(
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
     }
 
-    hasRecord(recordOrRecordId: RecordId | RecordModel): boolean {
+    hasRecord(recordOrRecordId: RecordId | Record): boolean {
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
         return this._getOrGenerateRecordIdsSet()[recordId] === true;
     }
 
-    getRecordColor(recordOrRecordId: RecordId | RecordModel): Color | null {
+    getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
         const record = this._getRecord(recordOrRecordId);
         const recordColorMode = this._normalizedOpts.recordColorMode;
 

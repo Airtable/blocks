@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
 import {type RecordDef} from '../types/record';
-import RecordModel from '../models/record';
-import FieldModel from '../models/field';
-import ViewModel from '../models/view';
+import Record from '../models/record';
+import Field from '../models/field';
+import View from '../models/view';
 import RecordCard from './record_card';
 import createDetectElementResize from './create_detect_element_resize';
 
@@ -21,10 +21,10 @@ type DynamicDrawSize = mixed;
 
 type RecordCardListItemProviderOpts = {|
     // A list of records or recordDefs.
-    records: Array<RecordModel | RecordDef>,
-    fields: Array<FieldModel> | null,
-    view: ViewModel | null,
-    attachmentCoverField: FieldModel | void,
+    records: Array<Record | RecordDef>,
+    fields: Array<Field> | null,
+    view: View | null,
+    attachmentCoverField: Field | void,
     // The height of each row card.
     rowHeight: number,
     // Amount of space between each row card.
@@ -32,9 +32,9 @@ type RecordCardListItemProviderOpts = {|
     // Extra space to leave at the bottom, e.g. for add record button
     // in calendar view sidebar.
     bottomInset: number,
-    onRecordClick: null | ((RecordModel | RecordDef, number) => void),
-    onRecordMouseEnter: null | ((RecordModel | RecordDef, number) => void),
-    onRecordMouseLeave: null | ((RecordModel | RecordDef, number) => void),
+    onRecordClick: null | ((Record | RecordDef, number) => void),
+    onRecordMouseEnter: null | ((Record | RecordDef, number) => void),
+    onRecordMouseLeave: null | ((Record | RecordDef, number) => void),
     style: {[string]: mixed},
     className: '',
 |};
@@ -59,7 +59,7 @@ class RecordCardListItemProvider extends DynamicDraw.AbstractDynamicDrawItemProv
 
         for (const record of opts.records) {
             this._items.push({
-                id: record instanceof RecordModel ? record.id : undefined,
+                id: record instanceof Record ? record.id : undefined,
                 size: opts.rowHeight,
                 trailingMargin: opts.rowSpacing,
             });
@@ -187,16 +187,16 @@ class RecordCardListWithItemProvider extends React.Component<RecordCardListWithI
 }
 
 type RecordCardListProps = {
-    records: Array<RecordModel | RecordDef>,
+    records: Array<Record | RecordDef>,
 
     onScroll?: Event => void,
-    onRecordClick?: null | ((record: RecordModel | RecordDef, index: number) => void),
-    onRecordMouseEnter?: (record: RecordModel | RecordDef, index: number) => void,
-    onRecordMouseLeave?: (record: RecordModel | RecordDef, index: number) => void,
+    onRecordClick?: null | ((record: Record | RecordDef, index: number) => void),
+    onRecordMouseEnter?: (record: Record | RecordDef, index: number) => void,
+    onRecordMouseLeave?: (record: Record | RecordDef, index: number) => void,
 
-    fields?: Array<FieldModel>,
-    view?: ViewModel,
-    attachmentCoverField?: FieldModel,
+    fields?: Array<Field>,
+    view?: View,
+    attachmentCoverField?: Field,
     className?: string,
     style?: Object,
 };
@@ -210,7 +210,7 @@ type RecordCardListState = {|
 class RecordCardList extends React.Component<RecordCardListProps, RecordCardListState> {
     static propTypes = {
         records: PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.instanceOf(RecordModel), PropTypes.object]),
+            PropTypes.oneOfType([PropTypes.instanceOf(Record), PropTypes.object]),
         ).isRequired,
 
         onScroll: PropTypes.func,
@@ -219,9 +219,9 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
         onRecordMouseLeave: PropTypes.func,
 
         // Passed through to RecordCard.
-        fields: PropTypes.arrayOf(PropTypes.instanceOf(FieldModel).isRequired),
-        view: PropTypes.instanceOf(ViewModel),
-        attachmentCoverField: PropTypes.instanceOf(FieldModel),
+        fields: PropTypes.arrayOf(PropTypes.instanceOf(Field).isRequired),
+        view: PropTypes.instanceOf(View),
+        attachmentCoverField: PropTypes.instanceOf(Field),
 
         className: PropTypes.string,
         style: PropTypes.object,

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
 import getSdk from '../get_sdk';
-import TableModel from '../models/table';
+import Table from '../models/table';
 import createDataContainer from './create_data_container';
 import ModelPickerSelect from './model_picker_select';
 
 type TablePickerProps = {
-    table?: TableModel,
+    table?: Table,
     shouldAllowPickingNone?: boolean,
-    onChange?: (tableModel: TableModel | null) => void,
+    onChange?: (tableModel: Table | null) => void,
     placeholder?: string,
     style?: Object,
     className?: string,
@@ -20,7 +20,7 @@ type TablePickerProps = {
 /** */
 class TablePicker extends React.Component<TablePickerProps> {
     static propTypes = {
-        table: PropTypes.instanceOf(TableModel),
+        table: PropTypes.instanceOf(Table),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
         placeholder: PropTypes.string,
@@ -29,7 +29,7 @@ class TablePicker extends React.Component<TablePickerProps> {
         disabled: PropTypes.bool,
     };
     props: TablePickerProps;
-    _select: ModelPickerSelect<TableModel> | null;
+    _select: ModelPickerSelect<Table> | null;
     _onChange: (string | null) => void;
     constructor(props: TablePickerProps) {
         super(props);

@@ -4,9 +4,9 @@ import invariant from 'invariant';
 import * as React from 'react';
 import {values} from '../private_utils';
 import getSdk from '../get_sdk';
-import TableModel from '../models/table';
+import Table from '../models/table';
 import {ViewTypes, type ViewType} from '../types/view';
-import type ViewModel from '../models/view';
+import type View from '../models/view';
 import {type GlobalConfigKey} from '../global_config';
 import createDataContainer from './create_data_container';
 import ViewPicker from './view_picker';
@@ -16,9 +16,9 @@ import Synced from './synced';
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type ViewPickerSyncedProps = {
-    table?: TableModel,
+    table?: Table,
     globalConfigKey: GlobalConfigKey,
-    onChange?: (viewModel: ViewModel | null) => void,
+    onChange?: (viewModel: View | null) => void,
     disabled?: boolean,
 
     // Passed through to ViewPicker:
@@ -32,7 +32,7 @@ type ViewPickerSyncedProps = {
 /** */
 class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
     static propTypes = {
-        table: PropTypes.instanceOf(TableModel),
+        table: PropTypes.instanceOf(Table),
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         onChange: PropTypes.func,
         disabled: PropTypes.bool,
@@ -63,7 +63,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
         invariant(this._viewPicker, 'No view picker to click');
         this._viewPicker.click();
     }
-    _getViewFromGlobalConfigValue(viewId: mixed): ViewModel | null {
+    _getViewFromGlobalConfigValue(viewId: mixed): View | null {
         const {table} = this.props;
         if (!table || table.isDeleted) {
             return null;

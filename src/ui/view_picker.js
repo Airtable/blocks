@@ -4,8 +4,8 @@ import invariant from 'invariant';
 import * as React from 'react';
 import {values} from '../private_utils';
 import getSdk from '../get_sdk';
-import ViewModel from '../models/view';
-import TableModel from '../models/table';
+import View from '../models/view';
+import Table from '../models/table';
 import {ViewTypes, type ViewType} from '../types/view';
 import ModelPickerSelect from './model_picker_select';
 import createDataContainer from './create_data_container';
@@ -13,10 +13,10 @@ import createDataContainer from './create_data_container';
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type ViewPickerProps = {
-    table?: TableModel,
-    view?: ViewModel,
+    table?: Table,
+    view?: View,
     shouldAllowPickingNone?: boolean,
-    onChange?: (viewModel: ViewModel | null) => void,
+    onChange?: (viewModel: View | null) => void,
     allowedTypes?: Array<ViewType>,
     placeholder?: string,
     style?: Object,
@@ -27,8 +27,8 @@ type ViewPickerProps = {
 /** */
 class ViewPicker extends React.Component<ViewPickerProps> {
     static propTypes = {
-        table: PropTypes.instanceOf(TableModel),
-        view: PropTypes.instanceOf(ViewModel),
+        table: PropTypes.instanceOf(Table),
+        view: PropTypes.instanceOf(View),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
         allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewTypes))),
@@ -39,7 +39,7 @@ class ViewPicker extends React.Component<ViewPickerProps> {
     };
     props: ViewPickerProps;
     _onChange: (string | null) => void;
-    _select: ModelPickerSelect<ViewModel> | null;
+    _select: ModelPickerSelect<View> | null;
     constructor(props: ViewPickerProps) {
         super(props);
         this._select = null;

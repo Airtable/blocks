@@ -1,6 +1,6 @@
 // @flow
-import type FieldModel from './field';
-import type ViewModel from './view';
+import type Field from './field';
+import type View from './view';
 
 export const ModeTypes = Object.freeze({
     NONE: ('none': 'none'),
@@ -12,8 +12,8 @@ export type RecordColorModeType = $Values<typeof ModeTypes>;
 
 export type RecordColorMode =
     | {|type: typeof ModeTypes.NONE|}
-    | {|type: typeof ModeTypes.BY_SELECT_FIELD, selectField: FieldModel|}
-    | {|type: typeof ModeTypes.BY_VIEW, view: ViewModel|};
+    | {|type: typeof ModeTypes.BY_SELECT_FIELD, selectField: Field|}
+    | {|type: typeof ModeTypes.BY_VIEW, view: View|};
 
 /**
  * create a record coloring mode object
@@ -35,11 +35,11 @@ export const modes = {
     none: () => ({
         type: ModeTypes.NONE,
     }),
-    bySelectField: (selectField: FieldModel) => ({
+    bySelectField: (selectField: Field) => ({
         type: ModeTypes.BY_SELECT_FIELD,
         selectField,
     }),
-    byView: (view: ViewModel) => ({
+    byView: (view: View) => ({
         type: ModeTypes.BY_VIEW,
         view,
     }),

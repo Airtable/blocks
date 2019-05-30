@@ -428,8 +428,8 @@ function (_React$Component) {
       return widthAndFieldIdArray;
     }
   }, {
-    key: "_getRecordModel",
-    value: function _getRecordModel() {
+    key: "_getRecord",
+    value: function _getRecord() {
       var record = this.props.record;
 
       if (record && record instanceof _record.default) {
@@ -488,7 +488,7 @@ function (_React$Component) {
       var attachmentObjIfAvailable = this._getAttachmentCover(fieldsToUse);
 
       var hasAttachment = !!attachmentObjIfAvailable;
-      var hasOnClick = !!onClick || !!this._getRecordModel();
+      var hasOnClick = !!onClick || !!this._getRecord();
       var containerClasses = (0, _classnames.default)('white rounded relative block overflow-hidden', {
         'pointer cardBoxShadow': hasOnClick,
         stroked1: !hasOnClick

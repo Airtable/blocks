@@ -7,9 +7,9 @@ import {isEnumValue} from '../private_utils';
 import ColorUtils from '../color_utils';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
-import type TableType from './table';
-import type FieldType from './field';
-import type RecordType from './record';
+import type Table from './table';
+import type Field from './field';
+import type Record from './record';
 import {type QueryResultOpts} from './query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 
@@ -47,12 +47,12 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
             key === WatchableViewKeys.__recordColors
         );
     }
-    _parentTable: TableType;
+    _parentTable: Table;
     _mostRecentTableLoadPromise: Promise<*> | null;
     _airtableInterface: AirtableInterface;
     constructor(
         baseData: BaseData,
-        parentTable: TableType,
+        parentTable: Table,
         viewId: string,
         airtableInterface: AirtableInterface,
     ) {
@@ -81,7 +81,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
         return this._isDataLoaded && this._isRecordMetadataLoaded;
     }
     /** */
-    get parentTable(): TableType {
+    get parentTable(): Table {
         return this._parentTable;
     }
     /** The name of the view. Can be watched. */
@@ -209,7 +209,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * Can be watched to know when records are created, deleted, reordered, or
      * filtered in and out of this view.
      */
-    get __visibleRecords(): Array<RecordType> {
+    get __visibleRecords(): Array<Record> {
         const {parentTable} = this;
         invariant(this._isRecordMetadataLoaded, 'Table data is not loaded');
 
@@ -226,7 +226,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * All the fields in the table, including fields that are hidden in this
      * view. Can be watched to know when fields are created, deleted, or reordered.
      */
-    get allFields(): Array<FieldType> {
+    get allFields(): Array<Field> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');
         return fieldOrder.fieldIds.map(fieldId => this.parentTable.getFieldById(fieldId));
@@ -235,7 +235,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * The fields that are not hidden in this view.
      * view. Can be watched to know when fields are created, deleted, or reordered.
      */
-    get visibleFields(): Array<FieldType> {
+    get visibleFields(): Array<Field> {
         const fieldOrder = this._data.fieldOrder;
         invariant(fieldOrder, 'View data is not loaded');
         const {fieldIds} = fieldOrder;
@@ -247,7 +247,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * Get the color name for the specified record in this view, or null if no
      * color is available. Watch with '__recordColors'
      */
-    __getRecordColor(recordOrRecordId: string | RecordType): Color | null {
+    __getRecordColor(recordOrRecordId: string | Record): Color | null {
         invariant(this.isDataLoaded, 'View data is not loaded');
         const colorsByRecordId = this._data.colorsByRecordId;
         if (!colorsByRecordId) {
@@ -263,7 +263,7 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
      * Get the CSS hex color for the specified record in this view, or null if
      * no color is available. Watch with '__recordColors'
      */
-    __getRecordColorHex(recordOrRecordId: string | RecordType): string | null {
+    __getRecordColorHex(recordOrRecordId: string | Record): string | null {
         const colorName = this.__getRecordColor(recordOrRecordId);
         if (!colorName) {
             return null;

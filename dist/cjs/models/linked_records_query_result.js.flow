@@ -11,11 +11,11 @@ import QueryResult, {
 } from './query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 
-import type TableModel from './table';
-import type FieldModel from './field';
-import type RecordModel from './record';
+import type Table from './table';
+import type Field from './field';
+import type Record from './record';
 
-const getLinkedTableId = (field: FieldModel): string => {
+const getLinkedTableId = (field: Field): string => {
     const options = field.options;
     const linkedTableId = options && options.linkedTableId;
     invariant(typeof linkedTableId === 'string', 'linkedTableId must exist');
@@ -27,8 +27,8 @@ const getLinkedTableId = (field: FieldModel): string => {
 const pool: ObjectPool<
     LinkedRecordsQueryResult,
     {
-        field: FieldModel,
-        record: RecordModel,
+        field: Field,
+        record: Record,
         normalizedOpts: NormalizedQueryResultOpts,
     },
 > = new ObjectPool({
@@ -51,8 +51,8 @@ class LinkedRecordsQueryResult extends QueryResult {
     static _className = 'LinkedRecordsQueryResult';
 
     static __createOrReuseQueryResult(
-        record: RecordModel,
-        field: FieldModel,
+        record: Record,
+        field: Field,
         opts: QueryResultOpts,
     ): LinkedRecordsQueryResult {
         invariant(
@@ -78,13 +78,13 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     // the record containing the linked-record cell this is a query of.
-    _record: RecordModel;
+    _record: Record;
     // the cell's field in the record
-    _field: FieldModel;
+    _field: Field;
     // the key used to identify this query result in ObjectPool
     _poolKey: string;
     // the table we're linking to
-    _linkedTable: TableModel;
+    _linkedTable: Table;
     // a QueryResult containing all the rows in the linked table
     _linkedQueryResult: TableOrViewQueryResult;
     // is the query result currently valid. if the field config changes to link
@@ -101,7 +101,7 @@ class LinkedRecordsQueryResult extends QueryResult {
         [string]: (TableOrViewQueryResult, string, mixed) => void,
     } = {};
 
-    constructor(record: RecordModel, field: FieldModel, opts: QueryResultOpts) {
+    constructor(record: Record, field: Field, opts: QueryResultOpts) {
         const linkedTableId = getLinkedTableId(field);
         const linkedTable = getSdk().base.getTableById(linkedTableId);
 
@@ -142,7 +142,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     /**
      * The table that the records in the QueryResult are a part of
      */
-    get parentTable(): TableModel {
+    get parentTable(): Table {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
         return this._linkedTable;
     }
@@ -166,7 +166,7 @@ class LinkedRecordsQueryResult extends QueryResult {
      * Ordered array of all the linked records.
      * Watchable.
      */
-    get records(): Array<RecordModel> {
+    get records(): Array<Record> {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
 
         const linkedTable = this._linkedTable;
@@ -180,7 +180,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     /**
      * The fields that were used to create this LinkedRecordsQueryResult.
      */
-    get fields(): Array<FieldModel> | null {
+    get fields(): Array<Field> | null {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
 
         return this._linkedQueryResult.fields;

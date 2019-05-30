@@ -4,8 +4,8 @@ import invariant from 'invariant';
 import * as React from 'react';
 import {values} from '../private_utils';
 import getSdk from '../get_sdk';
-import FieldModel from '../models/field';
-import TableModel from '../models/table';
+import Field from '../models/field';
+import Table from '../models/table';
 import {FieldTypes, type FieldType} from '../types/field';
 import ModelPickerSelect from './model_picker_select';
 import createDataContainer from './create_data_container';
@@ -13,10 +13,10 @@ import createDataContainer from './create_data_container';
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type FieldPickerProps = {
-    table?: TableModel,
-    field?: FieldModel,
+    table?: Table,
+    field?: Field,
     shouldAllowPickingNone?: boolean,
-    onChange?: (fieldModel: FieldModel | null) => void,
+    onChange?: (fieldModel: Field | null) => void,
     allowedTypes?: Array<FieldType>,
     placeholder?: string,
     style?: Object,
@@ -27,8 +27,8 @@ type FieldPickerProps = {
 /** */
 class FieldPicker extends React.Component<FieldPickerProps> {
     static propTypes = {
-        table: PropTypes.instanceOf(TableModel),
-        field: PropTypes.instanceOf(FieldModel),
+        table: PropTypes.instanceOf(Table),
+        field: PropTypes.instanceOf(Field),
         shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
         allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
@@ -39,7 +39,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     };
     props: FieldPickerProps;
     _onChange: (string | null) => void;
-    _select: ModelPickerSelect<FieldModel> | null;
+    _select: ModelPickerSelect<Field> | null;
     constructor(props: FieldPickerProps) {
         super(props);
         this._select = null;

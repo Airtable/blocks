@@ -1,14 +1,14 @@
 // @flow
 import invariant from 'invariant';
 import * as React from 'react';
-import TableModel from '../models/table';
-import ViewModel from '../models/view';
-import FieldModel from '../models/field';
+import Table from '../models/table';
+import View from '../models/view';
+import Field from '../models/field';
 import createDataContainer from './create_data_container';
 import Select from './select';
 import {type SelectOptionValue} from './select_and_select_buttons_helpers';
 
-type AnyModel = TableModel | ViewModel | FieldModel;
+type AnyModel = Table | View | Field;
 
 // Private component used by TablePicker, ViewPicker, FieldPicker.
 type ModelPickerSelectProps<Model: AnyModel> = {

@@ -9,8 +9,8 @@ import {type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModel from './abstract_model';
 import Field from './field';
 import cellValueUtils from './cell_value_utils';
-import type TableType from './table';
-import type ViewType from './view';
+import type Table from './table';
+import type View from './view';
 import {type QueryResultOpts} from './query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 
@@ -59,8 +59,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             key.startsWith(WatchableColorInViewKeyPrefix)
         );
     }
-    _parentTable: TableType;
-    constructor(baseData: BaseData, parentTable: TableType, recordId: string) {
+    _parentTable: Table;
+    constructor(baseData: BaseData, parentTable: Table, recordId: string) {
         super(baseData, recordId);
 
         this._parentTable = parentTable;
@@ -75,7 +75,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return recordsById[this._id] || null;
     }
     /** */
-    get parentTable(): TableType {
+    get parentTable(): Table {
         return this._parentTable;
     }
     __getRawCellValue(fieldId: string): mixed {
@@ -110,7 +110,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
         return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
-    _getViewMatching(viewOrViewIdOrViewName: ViewType | string): ViewType | null {
+    _getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
     /** */
@@ -219,7 +219,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * Get the color name for this record in the specified view, or null if
      * no color is available. Watch with the 'colorInView:${ViewId}' key.
      */
-    getColorInView(viewOrViewIdOrViewName: ViewType | string): Color | null {
+    getColorInView(viewOrViewIdOrViewName: View | string): Color | null {
         const view = this._getViewMatching(viewOrViewIdOrViewName);
         invariant(view, 'View does not exist');
         invariant(!view.isDeleted, 'View has been deleted');
@@ -230,7 +230,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * Get a CSS hex string for this record in the specified view, or null if
      * no color is available. Watch with the 'colorInView:${ViewId}' key
      */
-    getColorHexInView(viewOrViewIdOrViewName: ViewType | string): string | null {
+    getColorHexInView(viewOrViewIdOrViewName: View | string): string | null {
         const view = this._getViewMatching(viewOrViewIdOrViewName);
         invariant(view, 'View does not exist');
         invariant(!view.isDeleted, 'View has been deleted');

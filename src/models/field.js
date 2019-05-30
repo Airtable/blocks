@@ -5,7 +5,7 @@ import {isEnumValue, cloneDeep, values} from '../private_utils';
 import AbstractModel from './abstract_model';
 import Aggregators, {type Aggregator} from './aggregators';
 import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
-import type TableType from './table';
+import type Table from './table';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -37,8 +37,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     static _isWatchableKey(key: string) {
         return isEnumValue(WatchableFieldKeys, key);
     }
-    _parentTable: TableType;
-    constructor(baseData: BaseData, parentTable: TableType, fieldId: string) {
+    _parentTable: Table;
+    constructor(baseData: BaseData, parentTable: Table, fieldId: string) {
         super(baseData, fieldId);
 
         this._parentTable = parentTable;
@@ -51,7 +51,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return tableData.fieldsById[this._id] || null;
     }
     /** */
-    get parentTable(): TableType {
+    get parentTable(): Table {
         return this._parentTable;
     }
     /** */

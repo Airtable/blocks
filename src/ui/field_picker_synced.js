@@ -2,10 +2,10 @@
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
 import * as React from 'react';
-import TableModel from '../models/table';
+import Table from '../models/table';
 import getSdk from '../get_sdk';
 import {FieldTypes, type FieldType} from '../types/field';
-import type FieldModel from '../models/field';
+import type Field from '../models/field';
 import {type GlobalConfigKey} from '../global_config';
 import {values} from '../private_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
@@ -16,9 +16,9 @@ import createDataContainer from './create_data_container';
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 type FieldPickerSyncedProps = {
-    table?: TableModel,
+    table?: Table,
     globalConfigKey: GlobalConfigKey,
-    onChange?: (fieldModel: FieldModel | null) => void,
+    onChange?: (fieldModel: Field | null) => void,
     disabled?: boolean,
 
     // Passed through to FieldPicker:
@@ -32,7 +32,7 @@ type FieldPickerSyncedProps = {
 /** */
 class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
     static propTypes = {
-        table: PropTypes.instanceOf(TableModel),
+        table: PropTypes.instanceOf(Table),
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         onChange: PropTypes.func,
         disabled: PropTypes.bool,
@@ -63,7 +63,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
         invariant(this._fieldPicker, 'No field picker to click');
         this._fieldPicker.click();
     }
-    _getFieldFromGlobalConfigValue(fieldId: mixed): FieldModel | null {
+    _getFieldFromGlobalConfigValue(fieldId: mixed): Field | null {
         const {table} = this.props;
         if (!table || table.isDeleted) {
             return null;
