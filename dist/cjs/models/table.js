@@ -776,40 +776,24 @@ function (_AbstractModelWithAsy) {
         completion: completionPromise
       };
     }
-    /** */
-
   }, {
     key: "getFirstViewOfType",
-    value: function getFirstViewOfType(allowedViewTypes) {
+    value: function getFirstViewOfType(allowedViewTypes, preferredViewOrViewId) {
       if (!Array.isArray(allowedViewTypes)) {
         allowedViewTypes = [allowedViewTypes];
+      }
+
+      if (preferredViewOrViewId) {
+        var preferredView = this.getViewByIdIfExists(typeof preferredViewOrViewId === 'string' ? preferredViewOrViewId : preferredViewOrViewId.id);
+
+        if (preferredView && allowedViewTypes.includes(preferredView.type)) {
+          return preferredView;
+        }
       }
 
       return this.views.find(view => {
         return allowedViewTypes.includes(view.type);
       }) || null;
-    }
-    /**
-     * If the activeView's type is in allowedViewTypes, then the activeView
-     * is returned. Otherwise, the first view whose type is in allowedViewTypes
-     * will be returned. Returns null if no view satisfying allowedViewTypes
-     * exists.
-     */
-
-  }, {
-    key: "getDefaultViewOfType",
-    value: function getDefaultViewOfType(allowedViewTypes) {
-      if (!Array.isArray(allowedViewTypes)) {
-        allowedViewTypes = [allowedViewTypes];
-      }
-
-      var activeView = this.activeView;
-
-      if (activeView && allowedViewTypes.includes(activeView.type)) {
-        return activeView;
-      } else {
-        return this.getFirstViewOfType(allowedViewTypes);
-      }
     } // Experimental, do not document yet. Allows fetching default cell values for
     // a table or view. Before documenting, we should explore making this synchronous.
 

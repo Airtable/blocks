@@ -9,6 +9,6 @@
 [lints]
 
 [options]
-suppress_comment= \\(.\\|\n\\)*flow-disable-next-line
+suppress_comment= \\(.\\|\n\\)*\\(flow-disable-next-line\\|flow-expect-error\\)
 module.name_mapper='^client\/\(.*\)$' -> '<PROJECT_ROOT>/stubs/client/\1'
 module.name_mapper='^client_server_shared\/\(.*\)$' -> '<PROJECT_ROOT>/stubs/client_server_shared/\1'

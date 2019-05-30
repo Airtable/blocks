@@ -6,7 +6,9 @@ import {
     spawnUnknownSwitchCaseError,
     isObjectEmpty,
     isNullOrUndefinedOrEmpty,
+    compact,
 } from '../src/private_utils';
+import {flowTest} from './test_helpers';
 
 describe('has', () => {
     it('returns true if the key is an "own" property of the object', () => {
@@ -117,5 +119,28 @@ describe('isNullOrUndefinedOrEmpty', () => {
         expect(isNullOrUndefinedOrEmpty([undefined])).toBe(false);
         expect(isNullOrUndefinedOrEmpty({foo: true})).toBe(false);
         expect(isNullOrUndefinedOrEmpty({foo: undefined})).toBe(false);
+    });
+});
+
+describe('compact', () => {
+    it('removes null and undefined values from the passed array', () => {
+        expect(compact([1, 2, 'hello', {}, null, false, '', undefined, true])).toEqual([
+            1,
+            2,
+            'hello',
+            {},
+            false,
+            '',
+            true,
+        ]);
+    });
+
+    flowTest('refines the flow type of its return value', () => {
+        const inputArray = [1, 2, null, 3, undefined];
+
+        const compacted = compact(inputArray);
+        (compacted: Array<number>);
+        // flow-expect-error
+        (compacted: Array<?number>);
     });
 });

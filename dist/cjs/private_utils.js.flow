@@ -133,3 +133,13 @@ export function isNullOrUndefinedOrEmpty(value: mixed): boolean %checks {
         (typeof value === 'object' && isObjectEmpty(value))
     );
 }
+
+export function compact<T>(array: $ReadOnlyArray<?T>): Array<T> {
+    const result = [];
+    for (const item of array) {
+        if (item !== null && item !== undefined) {
+            result.push(item);
+        }
+    }
+    return result;
+}

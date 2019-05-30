@@ -229,23 +229,23 @@ Returns **AirtableWriteAction&lt;void, {}>**
 
 ### getFirstViewOfType
 
-#### Parameters
-
--   `allowedViewTypes` **([Array][2]&lt;ViewType> | ViewType)**
-
-Returns **(View | null)**
-
-### getDefaultViewOfType
-
-If the activeView's type is in allowedViewTypes, then the activeView is returned. Otherwise, the
-first view whose type is in allowedViewTypes will be returned. Returns null if no view satisfying
-allowedViewTypes exists.
+Returns the first view in the table where the type is one of `allowedViewTypes`. If a
+`preferredViewOrViewId` is supplied and that view exists & has the correct type, that view will be
+returned before checking the other views in the table.
 
 #### Parameters
 
 -   `allowedViewTypes` **([Array][2]&lt;ViewType> | ViewType)**
+-   `preferredViewOrViewId?` **(View | ViewId | null)**
 
 Returns **(View | null)**
+
+#### Examples
+
+```js
+// get the first grid view, and prefer the currently active view:
+const defaultView = table.getFirstViewOfType([viewTypes.GRID], table.activeView);
+```
 
 ### isRecordMetadataLoaded
 

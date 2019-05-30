@@ -1,5 +1,9 @@
 "use strict";
 
+require("core-js/modules/es.symbol");
+
+require("core-js/modules/es.symbol.description");
+
 require("core-js/modules/es.array.concat");
 
 require("core-js/modules/es.array.iterator");
@@ -30,6 +34,7 @@ exports.spawnAbstractMethodError = spawnAbstractMethodError;
 exports.spawnError = spawnError;
 exports.isObjectEmpty = isObjectEmpty;
 exports.isNullOrUndefinedOrEmpty = isNullOrUndefinedOrEmpty;
+exports.compact = compact;
 
 function cloneDeep(obj) {
   var jsonString = JSON.stringify(obj);
@@ -158,4 +163,36 @@ function isObjectEmpty(obj) {
 
 function isNullOrUndefinedOrEmpty(value) {
   return value === null || value === undefined || (typeof value === 'string' || Array.isArray(value)) && value.length === 0 || typeof value === 'object' && isObjectEmpty(value);
+}
+
+function compact(array) {
+  var result = [];
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = array[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var item = _step.value;
+
+      if (item !== null && item !== undefined) {
+        result.push(item);
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return result;
 }

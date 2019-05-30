@@ -6,7 +6,7 @@ import {type TableData} from '../types/table';
 import {type ViewType, type ViewId} from '../types/view';
 import {type FieldId} from '../types/field';
 import {PermissionLevels} from '../types/permission_levels';
-import {isEnumValue, fireAndForgetPromise, values, entries, has} from '../private_utils';
+import {isEnumValue, fireAndForgetPromise, values, entries, has, compact} from '../private_utils';
 import getSdk from '../get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -587,10 +587,23 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             completion: completionPromise,
         };
     }
-    /** */
-    getFirstViewOfType(allowedViewTypes: Array<ViewType> | ViewType): View | null {
+    getFirstViewOfType(
+        allowedViewTypes: Array<ViewType> | ViewType,
+        preferredViewOrViewId?: View | ViewId | null,
+    ): View | null {
         if (!Array.isArray(allowedViewTypes)) {
             allowedViewTypes = ([allowedViewTypes]: Array<ViewType>);
+        }
+
+        if (preferredViewOrViewId) {
+            const preferredView = this.getViewByIdIfExists(
+                typeof preferredViewOrViewId === 'string'
+                    ? preferredViewOrViewId
+                    : preferredViewOrViewId.id,
+            );
+            if (preferredView && allowedViewTypes.includes(preferredView.type)) {
+                return preferredView;
+            }
         }
 
         return (
@@ -598,24 +611,6 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
                 return allowedViewTypes.includes(view.type);
             }) || null
         );
-    }
-    /**
-     * If the activeView's type is in allowedViewTypes, then the activeView
-     * is returned. Otherwise, the first view whose type is in allowedViewTypes
-     * will be returned. Returns null if no view satisfying allowedViewTypes
-     * exists.
-     */
-    getDefaultViewOfType(allowedViewTypes: Array<ViewType> | ViewType): View | null {
-        if (!Array.isArray(allowedViewTypes)) {
-            allowedViewTypes = ([allowedViewTypes]: Array<ViewType>);
-        }
-
-        const activeView = this.activeView;
-        if (activeView && allowedViewTypes.includes(activeView.type)) {
-            return activeView;
-        } else {
-            return this.getFirstViewOfType(allowedViewTypes);
-        }
     }
     // Experimental, do not document yet. Allows fetching default cell values for
     // a table or view. Before documenting, we should explore making this synchronous.
