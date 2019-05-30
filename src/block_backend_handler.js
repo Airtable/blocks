@@ -61,14 +61,21 @@ async function callUserCodeForEventAsync(event, routes, developerCredentialByNam
     // only handle OPTIONS requests if the origins match. Right now, we're being *more*
     // lenient than the block router.
     if (event.method.toUpperCase() === 'OPTIONS') {
+        const headers = [
+            'access-control-allow-origin', '*',
+            'access-control-max-age', '86400',
+        ];
+
+        if (event.headers['access-control-request-headers']) {
+            headers.push('access-control-allow-headers', event.headers['access-control-request-headers']);
+        }
+        if (event.headers['access-control-request-method']) {
+            headers.push('access-control-allow-methods', event.headers['access-control-request-method']);
+        }
+
         return {
             statusCode: 200,
-            headers: [
-                'access-control-allow-origin', '*',
-                'access-control-allow-methods', '*',
-                'access-control-max-age', '86400',
-                'access-control-allow-headers', '*',
-            ],
+            headers,
         };
     }
 
