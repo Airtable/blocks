@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const request = require('request');
-const promisify = require('es6-promisify');
+const {promisify} = require('util');
 request.putAsync = promisify(request.put);
 
 import type {Argv} from 'yargs';
