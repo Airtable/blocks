@@ -6,7 +6,7 @@ import {type TableData} from '../types/table';
 import {type ViewType, type ViewId} from '../types/view';
 import {type FieldId} from '../types/field';
 import {PermissionLevels} from '../types/permission_levels';
-import {isEnumValue, fireAndForgetPromise, values, entries, has, compact} from '../private_utils';
+import {isEnumValue, fireAndForgetPromise, values, entries, has} from '../private_utils';
 import getSdk from '../get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
