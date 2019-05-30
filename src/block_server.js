@@ -3,6 +3,7 @@
 
 const _ = require('lodash');
 const express = require('express');
+const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
@@ -41,6 +42,8 @@ const developmentBrowsers = [
 
 // From https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable.
 const allSupportedBrowsers = ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'];
+
+const NON_TLS_HTTP_PORT = 80;
 
 class BlockServer {
     constructor({transpileAll = false, apiKey} = {}) {
@@ -97,6 +100,15 @@ class BlockServer {
 
         // Use body parser for JSON payloads.
         runFrameRoutes.use(bodyParser.json({limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT}));
+
+        runFrameRoutes.use((req, res, next) => {
+            // Only allow the '/ping' route for HTTP requests without TLS.
+            if (req.secure || req.path === '/ping') {
+                next();
+            } else {
+                res.sendStatus(404);
+            }
+        });
 
         // Serve the bundle file.
         runFrameRoutes.get('/bundle.js', (req, res) => {
@@ -525,34 +537,59 @@ class BlockServer {
             });
         });
     }
+
+    /**
+     * Starts both a local http and https server.
+     */
     async startLocalAsync(port) {
+        await Promise.all([
+            this._startLocalHttpsServerAsync(port),
+            this._startLocalHttpServerAsync(),
+        ]);
+        const url = `https://localhost:${port}`;
+        // TODO(richsinn): Display this message on the block frame itself instead of the console output.
+        const consoleMessageForLocalTlsSetup = `
+Local mode: serving self-signed https on localhost
+If this is the first time you're running this command in local mode, you need to do some extra setup in your browser:
+  - Firefox: go to https://localhost:${port} and add an ssl exception
+  - Safari: go to https://localhost:${port}, click show details > visit this website, and log in
+  - Chrome: go to chrome://flags/#allow-insecure-localhost and click enable. Restart your browser
+`;
+        console.log(consoleMessageForLocalTlsSetup);
+        return url;
+    }
+    async _startLocalHttpsServerAsync(port) {
         // Read certs
         const [key, cert] = await Promise.all([
             fsUtils.readFileAsync(path.join(__dirname, '../keys/server.key'), 'utf8'),
             fsUtils.readFileAsync(path.join(__dirname, '../keys/server.crt'), 'utf8'),
         ]);
-        // Start the local server using those certs
+        // Start the local https server using those certs
         await new Promise((resolve, reject) => {
             const server = https.createServer({cert, key}, this._expressApp);
             server
-            .listen(port)
-            .on('error', reject)
-            .on('listening', resolve);
+                .listen(port)
+                .on('error', reject)
+                .on('listening', resolve);
         });
-        const url = `https://localhost:${port}`;
-        console.log('Local mode: serving self-signed https on localhost');
-        console.log(
-            "If this is the first time you're running this command in local mode, you need to do some extra setup in your browser:",
-        );
-        console.log(`  - Firefox: go to https://localhost:${port} and add an ssl exception`);
-        console.log(
-            `  - Safari: go to https://localhost:${port}, click show details > visit this website, and log in`,
-        );
-        console.log(
-            '  - Chrome: go to chrome://flags/#allow-insecure-localhost and click enable. Restart your browser',
-        );
-        console.log('');
-        return url;
+    }
+
+    /**
+     * Starts a local HTTP server (non-TLS). This will allow the backend routes to
+     * also be accessible via non-TLS HTTP. There is also logic for the '__runFrame'
+     * routes to only allow the'__runFrame/ping' endpoint via non-TLS HTTP.
+     *
+     * @see _setUpRunFrameRoutes
+     * @see _setUpBackendRoutes
+     */
+    async _startLocalHttpServerAsync() {
+        await new Promise((resolve, reject) => {
+            const server = http.createServer(this._expressApp);
+            server
+                .listen(NON_TLS_HTTP_PORT)
+                .on('error', reject)
+                .on('listening', resolve);
+        });
     }
     bundle(files, callback) {
         if (files && files.findIndex(file => file.includes('package.json')) !== -1) {
