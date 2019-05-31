@@ -10,15 +10,15 @@ export type UpdateBlockParams = {|
     developerCredentialsEncrypted?: Array<BlockDeveloperCredentialEncrypted>,
 |};
 
-export type UpdateBlockResponse = {|
+export type UpdateBlockResponse = {
     createdModules: Array<{|id: BlockModuleId, metadata: BlockModuleMetadata|}>,
     moduleRevisionById: {[BlockModuleId]: BlockModuleValueAndRevision},
     developerCredentialsEncrypted: Array<BlockDeveloperCredentialEncrypted>,
-|};
+};
 
-export type FetchBlockResponse = {|
+export type FetchBlockResponse = {
     modules: Array<{id: BlockModuleId, code: string, revision: number, metadata: BlockModuleMetadata}>,
     packageVersionByName: {[string]: string},
     frontendEntryModuleId: BlockModuleId,
     developerCredentialsEncrypted?: Array<BlockDeveloperCredentialEncrypted>,
-|};
+};
