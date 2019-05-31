@@ -156,7 +156,7 @@ var _default = (0, _create_data_container.default)(CellRenderer, props => {
     key: "cellValueInField:".concat(props.field.id)
   }, {
     watch: props.field,
-    key: 'config'
+    key: ['type', 'options']
   }];
 });
 

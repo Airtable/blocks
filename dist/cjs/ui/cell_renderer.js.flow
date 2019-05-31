@@ -128,6 +128,6 @@ class CellRenderer extends React.Component<CellRendererProps> {
 export default createDataContainer(CellRenderer, (props: CellRendererProps) => {
     return [
         {watch: props.record, key: `cellValueInField:${props.field.id}`},
-        {watch: props.field, key: 'config'},
+        {watch: props.field, key: ['type', 'options']},
     ];
 });

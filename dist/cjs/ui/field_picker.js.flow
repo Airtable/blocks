@@ -124,7 +124,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
                 disabled={disabled}
                 placeholder={placeholder}
                 shouldAllowPickingNone={shouldAllowPickingNone}
-                modelKeysToWatch={['name', 'config']}
+                modelKeysToWatch={['name', 'type', 'options']}
                 {...restOfProps}
             />
         );

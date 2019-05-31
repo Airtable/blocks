@@ -78,7 +78,7 @@ const CellValueAndFieldLabel = createDataContainer(
             </div>
         );
     },
-    props => [{watch: props.field, key: ['name', 'config']}],
+    props => [{watch: props.field, key: ['name', 'type', 'options']}],
 );
 
 CellValueAndFieldLabel.propTypes = {

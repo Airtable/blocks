@@ -119,7 +119,7 @@ var CellValueAndFieldLabel = (0, _create_data_container.default)((_ref) => {
   }));
 }, props => [{
   watch: props.field,
-  key: ['name', 'config']
+  key: ['name', 'type', 'options']
 }]);
 CellValueAndFieldLabel.propTypes = {
   record: _propTypes.default.instanceOf(_record.default),

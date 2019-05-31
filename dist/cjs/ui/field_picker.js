@@ -187,7 +187,7 @@ function (_React$Component) {
         disabled: disabled,
         placeholder: placeholder,
         shouldAllowPickingNone: shouldAllowPickingNone,
-        modelKeysToWatch: ['name', 'config']
+        modelKeysToWatch: ['name', 'type', 'options']
       }, restOfProps));
     }
   }]);
