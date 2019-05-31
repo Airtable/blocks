@@ -44,6 +44,7 @@ const developmentBrowsers = [
 const allSupportedBrowsers = ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'];
 
 const NON_TLS_HTTP_PORT = 80;
+const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 
 class BlockServer {
     constructor({transpileAll = false, apiKey} = {}) {
@@ -54,6 +55,7 @@ class BlockServer {
         this._pendingBackendResponsesByRequestId = {};
         this._apiKey = apiKey;
         this._developerCredentialPlaintextByName = null;
+        this._bundlePromiseIfExists = null;
 
         this._watchBackendCode();
         this._setUpExpressRoutes();
@@ -94,6 +96,38 @@ class BlockServer {
             next(null, req, res, next);
         });
     }
+    async _ensureBundleIsReadyAsync() {
+        if (this._bundlePromiseIfExists === null) {
+            // Bundle already ready.
+            return;
+        }
+
+        await this._bundlePromiseIfExists;
+
+        // During the async gap, another bundling process may have kicked off, so
+        // we recurse here to check. If the bundle is ready, the recursive call
+        // will return immediately.
+        await this._ensureBundleIsReadyAsync();
+    }
+    _ensureBundleIsReadyMiddleware() {
+        return (req, res, next) => {
+            Promise.race([
+                this._ensureBundleIsReadyAsync(),
+                new Promise((resolve, reject) => {
+                    setTimeout(
+                        () => resolve('timeout _ensureBundleIsReadyAsync'),
+                        BUNDLE_TIMEOUT_MS,
+                    );
+                }),
+            ]).then((value) => {
+                if (value === 'timeout _ensureBundleIsReadyAsync') {
+                    res.sendStatus(408);
+                    return;
+                }
+                next();
+            });
+        };
+    }
     _setUpRunFrameRoutes() {
         const blockDirPath = getBlockDirPath();
         const runFrameRoutes = express.Router();
@@ -110,8 +144,8 @@ class BlockServer {
             }
         });
 
-        // Serve the bundle file.
-        runFrameRoutes.get('/bundle.js', (req, res) => {
+        // Serve the bundle file if ready.
+        runFrameRoutes.get('/bundle.js', this._ensureBundleIsReadyMiddleware(), (req, res) => {
             res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
                 root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
             });
@@ -247,7 +281,7 @@ class BlockServer {
             console.log(err);
         });
     }
-    _setUpBlockSdkAndWrapper(url) {
+    _setUpBlockSdkAndWrapper() {
         const blockDirPath = getBlockDirPath();
 
         // Check if react and react-dom are listed in package.json.
@@ -360,7 +394,7 @@ class BlockServer {
             },
         );
 
-        this._bundler.on('update', this.bundle.bind(this));
+        this._bundler.on('update', this.bundleAsync.bind(this));
         this._bundler.on('bundle', () => console.log('Updating bundle...'));
     }
     _doesBlockHaveBackend() {
@@ -515,9 +549,8 @@ class BlockServer {
         this.setPublicBaseUrl(url);
         await this.setDevelopmentCredentialPlaintextByNameAsync();
         this.startBackendProcessIfNeeded();
-        this.bundle(null, () => {
-            console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
-        });
+        await this.bundleAsync(null);
+        console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
     }
     async startNgrokAsync(port) {
         // Start our express server.
@@ -591,7 +624,7 @@ If this is the first time you're running this command in local mode, you need to
                 .on('listening', resolve);
         });
     }
-    bundle(files, callback) {
+    bundleAsync(files) {
         if (files && files.findIndex(file => file.includes('package.json')) !== -1) {
             // When yarn adds or removes packages, it deletes the symlinks
             // and SDK stub we add to node_modules. As a temporary fix, we
@@ -602,31 +635,58 @@ If this is the first time you're running this command in local mode, you need to
             process.exit(0);
         }
 
+        let resolve;
+        let reject;
+        const bundlePromise = new Promise((resolveInner, rejectInner) => {
+            resolve = resolveInner;
+            reject = rejectInner;
+        });
+        // NOTE: In the case where `bundleAsync` is triggered multiple times,
+        // this assignment to the `this._bundlePromiseIfExists` instance variable
+        // will be the latest Promise. This mechanism allows us to serve the
+        // most recently updated bundle.js file.
+        this._bundlePromiseIfExists = bundlePromise;
+
         const blockDirPath = getBlockDirPath();
-        var fsStream = fs.createWriteStream(path.join(
+        const fsStream = fs.createWriteStream(path.join(
             blockDirPath,
             blockCliConfigSettings.BUILD_DIR,
             blockCliConfigSettings.BUNDLE_FILE_NAME
         ));
-        fsStream.on('finish', function() {
+        fsStream.on('finish', () => {
             if (fsStream.bytesWritten > 0) {
                 console.log('Bundle updated');
                 bundleMessageBus.emit('bundleUpdated');
-                if (callback) {
-                    callback();
-                }
             }
+            // NOTE: A null value for the `this._bundlePromiseIfExists`
+            // instance variable means the bundle is ready to serve.
+            // If `bundleAsync` is quickly triggered multiple times:
+            //   1) It's possible the earlier Promises have not resolved yet.
+            //   2) We only want to serve the bundle for the latest Promise.
+            // Because the instance variable always stores the latest Promise, we
+            // check the local Promise against the instance variable to determine
+            // if this is the latest Promise and the bundle is ready.
+            if (this._bundlePromiseIfExists === bundlePromise) {
+                this._bundlePromiseIfExists = null;
+            }
+            resolve();
         });
         this._bundler
             .bundle()
-            .on('error', function(err) {
+            .on('error', (err) => {
                 console.error(err.message);
                 if (err.codeFrame) {
                     console.error(err.codeFrame);
                 }
                 this.emit('end');
+                if (this._bundlePromiseIfExists === bundlePromise) {
+                    this._bundlePromiseIfExists = null;
+                }
+                reject(err);
             })
             .pipe(fsStream);
+
+        return bundlePromise;
     }
 }
 
