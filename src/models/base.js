@@ -277,7 +277,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         // After applying all changes, changedPaths will have the same shape as
         // the subset of this._data that changed. For example, if some table's
         // name changes, changedPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
-        // It is used to trigger change events for affected models.
+        // Use it to call __triggerOnChangeForChangedPaths to trigger change events for
+        // effected models
         const changedPaths = {};
         for (const change of changes) {
             this._applyChange(change.path, change.value, changedPaths);

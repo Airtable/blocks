@@ -70,14 +70,32 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client/he
  */
 
 
+function defaultUpdateBatcher(applyUpdates) {
+  applyUpdates();
+}
 /**
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
  */
+
+
 var BlockSdk =
 /*#__PURE__*/
 function () {
+  // When models are updated on the frontend, we want to batch them together and have React do a
+  // single render.
+  //
+  // Without this, in sync-mode React (the current default), anything that triggers an update
+  // (like .setState or .forceUpdate) will instantly, synchronously re-render. So if you have an
+  // update that triggers multiple updates across your tree, you get multiple renders in an
+  // unpredictable order. This is bad because it's unnecessary work and the update order can
+  // contradict react's normal top-down data flow which can cause subtle bugs.
+  //
+  // We set _runWithUpdateBatching to ReactDOM.unstable_batchedUpdates to facilitate this. We
+  // don't know for sure though that React is in use on the page, so we leave actually setting
+  // this when the developer sets up their block with React, in UI.initializeBlock.
   function BlockSdk(airtableInterface) {
     (0, _classCallCheck2.default)(this, BlockSdk);
+    (0, _defineProperty2.default)(this, "_runWithUpdateBatching", defaultUpdateBatcher);
     this.__airtableInterface = airtableInterface; // TODO(alex): remove check once hyperbase is deployed
 
     if (airtableInterface.assertAllowedSdkPackageVersion) {
@@ -117,13 +135,22 @@ function () {
   (0, _createClass2.default)(BlockSdk, [{
     key: "__applyModelChanges",
     value: function __applyModelChanges(changes) {
-      var changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
+      this._runWithUpdateBatching(() => {
+        var changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
 
-      var changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
+        var changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
 
-      this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
+        this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
 
-      this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+        this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+      });
+    }
+  }, {
+    key: "__applyGlobalConfigUpdates",
+    value: function __applyGlobalConfigUpdates(updates) {
+      this._runWithUpdateBatching(() => {
+        this.globalConfig.__setMultipleKvPaths(updates);
+      });
     }
   }, {
     key: "_registerHandlers",
@@ -135,29 +162,37 @@ function () {
 
 
       this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS, data => {
-        this.globalConfig.__onSetMultipleKvPaths(data.updates);
+        this.__applyGlobalConfigUpdates(data.updates);
       }); // settings button
 
 
       this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON, () => {
         if (this.settingsButton.isVisible) {
-          // Since there's an async gap when communicating with liveapp,
-          // no-op if the button has been hidden since it was clicked.
-          this.settingsButton.__onClick();
+          this._runWithUpdateBatching(() => {
+            // Since there's an async gap when communicating with liveapp,
+            // no-op if the button has been hidden since it was clicked.
+            this.settingsButton.__onClick();
+          });
         }
       }); // viewport
 
 
       this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN, () => {
-        this.viewport.__onEnterFullscreen();
+        this._runWithUpdateBatching(() => {
+          this.viewport.__onEnterFullscreen();
+        });
       });
 
       this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN, () => {
-        this.viewport.__onExitFullscreen();
+        this._runWithUpdateBatching(() => {
+          this.viewport.__onExitFullscreen();
+        });
       });
 
       this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, () => {
-        this.viewport.__focus();
+        this._runWithUpdateBatching(() => {
+          this.viewport.__focus();
+        });
       });
     }
     /** */
@@ -166,6 +201,11 @@ function () {
     key: "reload",
     value: function reload() {
       this.__airtableInterface.reloadFrame();
+    }
+  }, {
+    key: "__setBatchedUpdatesFn",
+    value: function __setBatchedUpdatesFn(newUpdateBatcher) {
+      this._runWithUpdateBatching = newUpdateBatcher;
     }
   }]);
   return BlockSdk;

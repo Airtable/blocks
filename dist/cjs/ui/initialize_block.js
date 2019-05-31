@@ -13,6 +13,8 @@ var React = _interopRequireWildcard(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
+var _get_sdk = _interopRequireDefault(require("../get_sdk"));
+
 var _block_wrapper = _interopRequireDefault(require("./block_wrapper"));
 
 var hasBeenInitialized = false;
@@ -39,6 +41,8 @@ function initializeBlock(getEntryElement) {
   if (!React.isValidElement(entryElement)) {
     throw new Error("The first argument to initializeBlock didn't return a valid React element");
   }
+
+  (0, _get_sdk.default)().__setBatchedUpdatesFn(_reactDom.default.unstable_batchedUpdates);
 
   var container = document.createElement('div');
   body.appendChild(container);

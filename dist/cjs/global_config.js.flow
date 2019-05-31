@@ -111,7 +111,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             throw new Error('Your permission level does not allow setting globalConfig values');
         }
 
-        this._setMultipleKvPaths(updates);
+        getSdk().__applyGlobalConfigUpdates(updates);
 
         // Now send the update to Airtable.
         const completionPromise = this._airtableInterface.setMultipleKvPathsAsync(updates);
@@ -119,7 +119,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             completion: completionPromise,
         };
     }
-    _setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
+    /** this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates() */
+    __setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
         if (!Array.isArray(updates)) {
             throw new Error('globalConfig updates must be an array');
         }
@@ -172,9 +173,6 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         for (const key of Object.keys(topLevelKeySet)) {
             this._onChange(key);
         }
-    }
-    __onSetMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
-        this._setMultipleKvPaths(updates);
     }
 }
 

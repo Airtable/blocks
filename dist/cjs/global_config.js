@@ -172,7 +172,7 @@ function (_Watchable) {
         throw new Error('Your permission level does not allow setting globalConfig values');
       }
 
-      this._setMultipleKvPaths(updates); // Now send the update to Airtable.
+      (0, _get_sdk.default)().__applyGlobalConfigUpdates(updates); // Now send the update to Airtable.
 
 
       var completionPromise = this._airtableInterface.setMultipleKvPathsAsync(updates);
@@ -181,9 +181,11 @@ function (_Watchable) {
         completion: completionPromise
       };
     }
+    /** this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates() */
+
   }, {
-    key: "_setMultipleKvPaths",
-    value: function _setMultipleKvPaths(updates) {
+    key: "__setMultipleKvPaths",
+    value: function __setMultipleKvPaths(updates) {
       if (!Array.isArray(updates)) {
         throw new Error('globalConfig updates must be an array');
       }
@@ -245,11 +247,6 @@ function (_Watchable) {
 
         this._onChange(key);
       }
-    }
-  }, {
-    key: "__onSetMultipleKvPaths",
-    value: function __onSetMultipleKvPaths(updates) {
-      this._setMultipleKvPaths(updates);
     }
   }]);
   return GlobalConfig;

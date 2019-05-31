@@ -319,7 +319,8 @@ function (_AbstractModel) {
       // After applying all changes, changedPaths will have the same shape as
       // the subset of this._data that changed. For example, if some table's
       // name changes, changedPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
-      // It is used to trigger change events for affected models.
+      // Use it to call __triggerOnChangeForChangedPaths to trigger change events for
+      // effected models
       var changedPaths = {};
       var _iteratorNormalCompletion4 = true;
       var _didIteratorError4 = false;

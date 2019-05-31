@@ -11,6 +11,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {type ModelChange} from './types/base';
+import {type GlobalConfigUpdate} from './types/global_config';
 import GlobalConfig from './global_config';
 import Base from './models/base';
 import models from './models/models';
@@ -57,6 +58,11 @@ export type RunInfo = {
     isDevelopmentMode: boolean,
 };
 
+type UpdateBatcher = (applyUpdates: () => void) => void;
+function defaultUpdateBatcher(applyUpdates: () => void) {
+    applyUpdates();
+}
+
 /**
  * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
  */
@@ -101,6 +107,21 @@ class BlockSdk {
     undoRedo: UndoRedo;
     /** */
     reload: () => void;
+
+    // When models are updated on the frontend, we want to batch them together and have React do a
+    // single render.
+    //
+    // Without this, in sync-mode React (the current default), anything that triggers an update
+    // (like .setState or .forceUpdate) will instantly, synchronously re-render. So if you have an
+    // update that triggers multiple updates across your tree, you get multiple renders in an
+    // unpredictable order. This is bad because it's unnecessary work and the update order can
+    // contradict react's normal top-down data flow which can cause subtle bugs.
+    //
+    // We set _runWithUpdateBatching to ReactDOM.unstable_batchedUpdates to facilitate this. We
+    // don't know for sure though that React is in use on the page, so we leave actually setting
+    // this when the developer sets up their block with React, in UI.initializeBlock.
+    _runWithUpdateBatching: UpdateBatcher = defaultUpdateBatcher;
+
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
         // TODO(alex): remove check once hyperbase is deployed
@@ -148,10 +169,17 @@ class BlockSdk {
         // TODO: freeze this object before we ship the code editor.
     }
     __applyModelChanges(changes: Array<ModelChange>) {
-        const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
-        const changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
-        this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
-        this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+        this._runWithUpdateBatching(() => {
+            const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
+            const changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
+            this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
+            this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+        });
+    }
+    __applyGlobalConfigUpdates(updates: Array<GlobalConfigUpdate>) {
+        this._runWithUpdateBatching(() => {
+            this.globalConfig.__setMultipleKvPaths(updates);
+        });
     }
     _registerHandlers() {
         // base
@@ -166,7 +194,7 @@ class BlockSdk {
         this.__airtableInterface.registerHandler(
             BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS,
             data => {
-                this.globalConfig.__onSetMultipleKvPaths(data.updates);
+                this.__applyGlobalConfigUpdates(data.updates);
             },
         );
 
@@ -175,9 +203,11 @@ class BlockSdk {
             BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON,
             () => {
                 if (this.settingsButton.isVisible) {
-                    // Since there's an async gap when communicating with liveapp,
-                    // no-op if the button has been hidden since it was clicked.
-                    this.settingsButton.__onClick();
+                    this._runWithUpdateBatching(() => {
+                        // Since there's an async gap when communicating with liveapp,
+                        // no-op if the button has been hidden since it was clicked.
+                        this.settingsButton.__onClick();
+                    });
                 }
             },
         );
@@ -186,22 +216,31 @@ class BlockSdk {
         this.__airtableInterface.registerHandler(
             BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN,
             () => {
-                this.viewport.__onEnterFullscreen();
+                this._runWithUpdateBatching(() => {
+                    this.viewport.__onEnterFullscreen();
+                });
             },
         );
         this.__airtableInterface.registerHandler(
             BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN,
             () => {
-                this.viewport.__onExitFullscreen();
+                this._runWithUpdateBatching(() => {
+                    this.viewport.__onExitFullscreen();
+                });
             },
         );
         this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, () => {
-            this.viewport.__focus();
+            this._runWithUpdateBatching(() => {
+                this.viewport.__focus();
+            });
         });
     }
     /** */
     reload() {
         this.__airtableInterface.reloadFrame();
+    }
+    __setBatchedUpdatesFn(newUpdateBatcher: UpdateBatcher) {
+        this._runWithUpdateBatching = newUpdateBatcher;
     }
 }
 

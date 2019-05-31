@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+import getSdk from '../get_sdk';
 import BlockWrapper from './block_wrapper';
 
 let hasBeenInitialized = false;
@@ -27,6 +28,8 @@ function initializeBlock(getEntryElement: () => React.Node) {
             "The first argument to initializeBlock didn't return a valid React element",
         );
     }
+
+    getSdk().__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
 
     const container = document.createElement('div');
     body.appendChild(container);
