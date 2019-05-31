@@ -8,7 +8,7 @@ const DEFAULT_PORT = 8000;
 
 async function runCommandAsync(argv) {
     const apiKey = getApiKeySync(getBlockDirPath());
-    const {local, transpileAll, sdkRepo} = argv;
+    const {ngrok, transpileAll, sdkRepo} = argv;
 
     await LocalSdkBuilder.startIfNeededAsync(sdkRepo || null);
 
@@ -21,7 +21,7 @@ async function runCommandAsync(argv) {
     while (true) { // eslint-disable-line no-constant-condition
         try {
             // Try starting the server on this port.
-            await blockServer.startAsync(port, local);
+            await blockServer.startAsync(port, ngrok);
 
             // Ran successfully, so break out of our loop.
             break;

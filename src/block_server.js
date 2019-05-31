@@ -508,10 +508,10 @@ class BlockServer {
 
         return env;
     }
-    async startAsync(port, local) {
-        const url = local ?
-            await this.startLocalAsync(port) :
-            await this.startNgrokAsync(port);
+    async startAsync(port, ngrok) {
+        const url = ngrok ?
+            await this.startNgrokAsync(port) :
+            await this.startLocalAsync(port);
         this.setPublicBaseUrl(url);
         await this.setDevelopmentCredentialPlaintextByNameAsync();
         this.startBackendProcessIfNeeded();

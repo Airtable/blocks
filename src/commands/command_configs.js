@@ -87,10 +87,11 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         description: 'Build and run a block',
         example: `block ${CommandNames.RUN}`,
         optionMap: {
-            local: {
+            ngrok: {
                 description:
-                    'Run blocks locally on with a self-signed certificate instead of through ngrok.io',
+                    'Run blocks through ngrok.io',
                 type: 'boolean',
+                hidden: true, // hide from --help output
                 default: false,
             },
             'transpile-all': {
