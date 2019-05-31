@@ -24,6 +24,7 @@ type ApplicationId = string;
 type BlockInstallationId = string;
 type BlockId = string;
 type BuildId = string;
+type DeployId = string;
 type KmsDataKeyId = string;
 type ReleaseId = string;
 
@@ -195,7 +196,6 @@ class APIClient {
     }
 
     async startBuildAsync(hasBackend: boolean): Promise<{buildId: BuildId, frontendBundleUploadUrl: string, backendDeploymentPackageUploadUrl: string | null}> {
-        invariant(this._blockId, '_blockId');
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/start`,
             headers: {
@@ -214,7 +214,6 @@ class APIClient {
     }
 
     async succeedBuildAsync(buildId: BuildId): Promise<void> {
-        invariant(this._blockId, '_blockId');
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/${buildId}/succeed`,
             headers: {
@@ -231,7 +230,6 @@ class APIClient {
     }
 
     async failBuildAsync(buildId: BuildId): Promise<void> {
-        invariant(this._blockId, '_blockId');
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/${buildId}/fail`,
             headers: {
@@ -247,14 +245,51 @@ class APIClient {
         }
     }
 
-    async createReleaseAsync(buildId: BuildId): Promise<{releaseId: ReleaseId}> {
-        invariant(this._blockId, '_blockId');
+    async createDeployAsync(buildId: BuildId): Promise<{deployId: DeployId}> {
+        const options = {
+            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/deploys/create`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            body: {buildId},
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = body.errors.map(o => o.message).join('\n');
+            throw new Error(errorMessage);
+        }
+        return body;
+    }
+
+    async getDeployStatusAsync(deployId: DeployId): Promise<{status: string}> {
+        const options = {
+            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/deploys/${deployId}/status`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+            },
+            json: true,
+        };
+        const response = await request.getAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = body.errors.map(o => o.message).join('\n');
+            throw new Error(errorMessage);
+        }
+        return body;
+    }
+
+    async createReleaseAsync(buildId: BuildId, deployId: DeployId | null): Promise<{releaseId: ReleaseId}> {
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/releases/create`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
             },
-            body: {buildId},
+            body: {
+                buildId,
+                deployId,
+            },
             json: true,
         };
         const response = await request.postAsync(options);

@@ -491,6 +491,7 @@ class BlockBuilder {
         }
 
         // Generate backend bundle.
+        let backendDeploymentPackagePath;
         if (this._hasBackendCode(blockJson)) {
             const backendWrapperSrcDirPath = path.join(srcDirPath, 'backend_wrapper');
             await fsUtils.mkdirAsync(backendWrapperSrcDirPath);
@@ -505,12 +506,14 @@ class BlockBuilder {
             if (!backendDeploymentPackageResult.success) {
                 return backendDeploymentPackageResult;
             }
+            backendDeploymentPackagePath = backendDeploymentPackageResult.value;
+        } else {
+            backendDeploymentPackagePath = null;
         }
 
         return buildStepSuccess({
             frontendBundlePath: bundleResult.value,
-            // TODO(richsinn): return deployment package path and upload to S3 in release command.
-            backendDeploymentPackagePath: null,
+            backendDeploymentPackagePath,
         });
     }
 }

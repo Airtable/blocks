@@ -9,6 +9,7 @@ const fsUtils = require('../fs_utils');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const invariant = require('invariant');
 const request = require('request');
 const {promisify} = require('util');
 request.putAsync = promisify(request.put);
@@ -16,6 +17,7 @@ request.putAsync = promisify(request.put);
 import type {Argv} from 'yargs';
 
 type BuildId = string;
+type DeployId = string;
 
 function _getApiClient(): APIClient {
     const blockDirPath = getBlockDirPath();
@@ -65,15 +67,61 @@ async function _uploadFrontendBundleAsync(frontendBundlePath: string, frontendBu
     }
 }
 
-async function _buildAsync(apiClient: APIClient): Promise<BuildId> {
+async function setTimeoutAsync(timeoutMs: number): Promise<void> {
+    return new Promise((resolve, reject) => setTimeout(resolve, timeoutMs));
+}
+
+async function _createDeployAndWaitUntilCompletionAsync(apiClient: APIClient, buildId: BuildId): Promise<DeployId> {
+    console.log('deploying backend');
+    const {deployId} = await apiClient.createDeployAsync(buildId);
+
+    while (true) { // eslint-disable-line no-constant-condition
+        const {status} = await apiClient.getDeployStatusAsync(deployId);
+        if (status === 'success') {
+            console.log('successfully deployed backend');
+            break;
+        } else if (status !== 'deploying') {
+            throw new Error('Backend deploy did not finish successfully');
+        }
+
+        // Wait a bit before trying again.
+        await setTimeoutAsync(500);
+    }
+
+    return deployId;
+}
+
+async function _uploadBackendDeploymentPackageAsync(backendDeploymentPackagePath: string, backendDeploymentPackageUploadUrl: string): Promise<void> {
+    const backendDeploymentPackage = await fsUtils.readFileAsync(backendDeploymentPackagePath);
+    const response = await request.putAsync({
+        url: backendDeploymentPackageUploadUrl,
+        body: backendDeploymentPackage,
+        headers: {'x-amz-server-side-encryption': 'AES256'},
+    });
+    if (response.statusCode !== 200 && response.statusCode !== 204) {
+        throw new Error('Failed to upload backend deployment package');
+    }
+}
+
+async function _buildAndDeployAsync(apiClient: APIClient): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
     const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync();
 
     const hasBackend = !!backendDeploymentPackagePath;
-    const {buildId, frontendBundleUploadUrl} = await apiClient.startBuildAsync(hasBackend);
+    const {
+        buildId,
+        frontendBundleUploadUrl,
+        backendDeploymentPackageUploadUrl,
+    } = await apiClient.startBuildAsync(hasBackend);
 
     try {
         console.log('uploading build artifacts');
         await _uploadFrontendBundleAsync(frontendBundlePath, frontendBundleUploadUrl);
+
+        if (hasBackend) {
+            invariant(backendDeploymentPackagePath, 'backendDeploymentPackagePath');
+            invariant(backendDeploymentPackageUploadUrl, 'backendDeploymentPackageUploadUrl');
+            await _uploadBackendDeploymentPackageAsync(backendDeploymentPackagePath, backendDeploymentPackageUploadUrl);
+        }
     } catch (err) {
         console.log('failed to upload build artifacts', err);
         await apiClient.failBuildAsync(buildId);
@@ -81,17 +129,24 @@ async function _buildAsync(apiClient: APIClient): Promise<BuildId> {
     }
     await apiClient.succeedBuildAsync(buildId);
 
-    return buildId;
+    let deployId;
+    if (hasBackend) {
+        deployId = await _createDeployAndWaitUntilCompletionAsync(apiClient, buildId);
+    } else {
+        deployId = null;
+    }
+
+    return {buildId, deployId};
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const apiClient = _getApiClient();
 
     console.log('building');
-    const buildId = await _buildAsync(apiClient);
+    const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
 
     console.log('releasing');
-    await apiClient.createReleaseAsync(buildId);
+    await apiClient.createReleaseAsync(buildId, deployId);
 
     console.log('successfully released block!');
 }
