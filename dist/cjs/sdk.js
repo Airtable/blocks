@@ -25,9 +25,9 @@ var _base = _interopRequireDefault(require("./models/base"));
 
 var _models = _interopRequireDefault(require("./models/models"));
 
-var _viewport = _interopRequireDefault(require("./viewport"));
+var _cursor = _interopRequireDefault(require("./models/cursor"));
 
-var _cursor = _interopRequireDefault(require("./cursor"));
+var _viewport = _interopRequireDefault(require("./viewport"));
 
 var _ui = _interopRequireDefault(require("./ui/ui"));
 
@@ -65,7 +65,7 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client/he
  *     // Take the opportunity to show any onboarding and set
  *     // sensible defaults if the user has permission.
  *     // For example, if the block relies on a table, it would
- *     // make sense to set that to base.activeTable
+ *     // make sense to set that to cursor.activeTableId
  * }
  */
 
@@ -115,11 +115,22 @@ function () {
   }
 
   (0, _createClass2.default)(BlockSdk, [{
+    key: "__applyModelChanges",
+    value: function __applyModelChanges(changes) {
+      var changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
+
+      var changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
+
+      this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
+
+      this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+    }
+  }, {
     key: "_registerHandlers",
     value: function _registerHandlers() {
       // base
       this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.UPDATE_MODELS, data => {
-        this.base.__applyChanges(data.changes);
+        this.__applyModelChanges(data.changes);
       }); // global config
 
 

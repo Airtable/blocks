@@ -41,8 +41,6 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
-var _get_sdk = _interopRequireDefault(require("../get_sdk"));
-
 var _private_utils = require("../private_utils");
 
 var _table = _interopRequireDefault(require("./table"));
@@ -79,7 +77,6 @@ var WatchableBaseKeys = Object.freeze({
   name: 'name',
   permissionLevel: 'permissionLevel',
   tables: 'tables',
-  activeTable: 'activeTable',
   collaborators: 'collaborators'
 });
 
@@ -229,17 +226,17 @@ function (_AbstractModel) {
       return table;
     }
   }, {
-    key: "_triggerOnChangeForDirtyPaths",
-    value: function _triggerOnChangeForDirtyPaths(dirtyPaths) {
-      if (dirtyPaths.name) {
+    key: "__triggerOnChangeForChangedPaths",
+    value: function __triggerOnChangeForChangedPaths(changedPaths) {
+      if (changedPaths.name) {
         this._onChange(WatchableBaseKeys.name);
       }
 
-      if (dirtyPaths.permissionLevel) {
+      if (changedPaths.permissionLevel) {
         this._onChange(WatchableBaseKeys.permissionLevel);
       }
 
-      if (dirtyPaths.tableOrder) {
+      if (changedPaths.tableOrder) {
         this._onChange(WatchableBaseKeys.tables); // Clean up deleted tables
 
 
@@ -273,17 +270,15 @@ function (_AbstractModel) {
         }
       }
 
-      if (dirtyPaths.activeTableId) {
-        this._onChange(WatchableBaseKeys.activeTable);
-      }
+      var tablesById = changedPaths.tablesById;
 
-      if (dirtyPaths.tablesById) {
+      if (tablesById) {
         var _iteratorNormalCompletion3 = true;
         var _didIteratorError3 = false;
         var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator3 = (0, _private_utils.entries)(dirtyPaths.tablesById)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          for (var _iterator3 = (0, _private_utils.entries)(tablesById)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
             var _step3$value = (0, _slicedToArray2.default)(_step3.value, 2),
                 tableId = _step3$value[0],
                 dirtyTablePaths = _step3$value[1];
@@ -313,29 +308,19 @@ function (_AbstractModel) {
         }
       }
 
-      if (dirtyPaths.appBlanket) {
+      if (changedPaths.appBlanket) {
         this._onChange(WatchableBaseKeys.collaborators);
-      } // HACK: it's an anti-pattern that the Base model manages cursorData at all,
-      // since the Base model is shared, but Cursor exists only on the frontend.
-      // TODO: change how cursor data is handled and remove this.
-
-
-      if (dirtyPaths.cursorData) {
-        (0, _invariant.default)(typeof window !== 'undefined', 'Should only update cursor data in frontend SDK');
-        var sdk = (0, _get_sdk.default)(); // eslint-disable-line flowtype/no-weak-types
-
-        sdk.cursor.__triggerOnChangeForDirtyPaths(dirtyPaths.cursorData);
       }
     }
   }, {
-    key: "__applyChanges",
-    value: function __applyChanges(changes) {
+    key: "__applyChangesWithoutTriggeringEvents",
+    value: function __applyChangesWithoutTriggeringEvents(changes) {
       // Internal method.
-      // After applying all changes, dirtyPaths will have the same shape as
+      // After applying all changes, changedPaths will have the same shape as
       // the subset of this._data that changed. For example, if some table's
-      // name changes, dirtyPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
+      // name changes, changedPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
       // It is used to trigger change events for affected models.
-      var dirtyPaths = {};
+      var changedPaths = {};
       var _iteratorNormalCompletion4 = true;
       var _didIteratorError4 = false;
       var _iteratorError4 = undefined;
@@ -344,7 +329,7 @@ function (_AbstractModel) {
         for (var _iterator4 = changes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
           var change = _step4.value;
 
-          this._applyChange(change.path, change.value, dirtyPaths);
+          this._applyChange(change.path, change.value, changedPaths);
         }
       } catch (err) {
         _didIteratorError4 = true;
@@ -361,13 +346,13 @@ function (_AbstractModel) {
         }
       }
 
-      this._triggerOnChangeForDirtyPaths(dirtyPaths);
+      return changedPaths;
     }
   }, {
     key: "_applyChange",
-    value: function _applyChange(path, value, dirtyPathsByRef) {
+    value: function _applyChange(path, value, changedPathsByRef) {
       var dataSubtree = this._data;
-      var dirtySubtree = dirtyPathsByRef;
+      var dirtySubtree = changedPathsByRef;
 
       for (var i = 0; i < path.length - 1; i++) {
         var part = path[i];
@@ -384,6 +369,7 @@ function (_AbstractModel) {
           dirtySubtree[part] = {};
         }
 
+        (0, _invariant.default)(dirtySubtree[part], 'dirtySubtree');
         dirtySubtree = dirtySubtree[part];
       }
 
@@ -401,6 +387,7 @@ function (_AbstractModel) {
           dirtySubtree[lastPathPart] = {};
         }
 
+        (0, _invariant.default)(dirtySubtree[lastPathPart], 'dirtySubtree');
         dirtySubtree[lastPathPart]._isDirty = true;
       }
     }
@@ -462,18 +449,6 @@ function (_AbstractModel) {
     key: "permissionLevel",
     get: function get() {
       return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
-    }
-    /**
-     * The table model corresponding to the table the user is currently
-     * viewing in Airtable. May be `null` if the user is switching between
-     * tables. Can be watched.
-     */
-
-  }, {
-    key: "activeTable",
-    get: function get() {
-      var activeTableId = this._data.activeTableId;
-      return activeTableId ? this.getTableByIdIfExists(activeTableId) : null;
     }
     /**
      * The tables in this base. Can be watched to know when tables are created,

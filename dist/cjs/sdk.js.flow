@@ -10,11 +10,12 @@
 // return any matches, we can remove this hack.
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import {type ModelChange} from './types/base';
 import GlobalConfig from './global_config';
 import Base from './models/base';
 import models from './models/models';
+import Cursor from './models/cursor';
 import Viewport from './viewport';
-import Cursor from './cursor';
 import UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
@@ -48,7 +49,7 @@ const {
  *     // Take the opportunity to show any onboarding and set
  *     // sensible defaults if the user has permission.
  *     // For example, if the block relies on a table, it would
- *     // make sense to set that to base.activeTable
+ *     // make sense to set that to cursor.activeTableId
  * }
  */
 export type RunInfo = {
@@ -146,12 +147,18 @@ class BlockSdk {
 
         // TODO: freeze this object before we ship the code editor.
     }
+    __applyModelChanges(changes: Array<ModelChange>) {
+        const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
+        const changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
+        this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
+        this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+    }
     _registerHandlers() {
         // base
         this.__airtableInterface.registerHandler(
             BlockMessageTypes.HostToBlock.UPDATE_MODELS,
             data => {
-                this.base.__applyChanges(data.changes);
+                this.__applyModelChanges(data.changes);
             },
         );
 

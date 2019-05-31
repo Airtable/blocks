@@ -13,12 +13,11 @@ export function cloneDeep<T: mixed>(obj: T): T {
 // {x: number, y: string}, for example. Returning mixed isn't particularly useful though, so we
 // provide these unsound wrappers instead.
 // TODO: consider renaming these with unsound_ prefixes.
-export function values<V>(obj: {[string]: V}): Array<V> {
-    // flow-disable-next-line
+export function values<Obj: {+[string]: mixed}>(obj: Obj): Array<$Values<Obj>> {
     return Object.values(obj);
 }
 
-export function entries<V>(obj: {[string]: V}): Array<[string, V]> {
+export function entries<Obj: {+[string]: mixed}>(obj: Obj): Array<[$Keys<Obj>, $Values<Obj>]> {
     // flow-disable-next-line
     return Object.entries(obj);
 }

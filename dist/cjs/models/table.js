@@ -93,7 +93,6 @@ var airtableUrls = window.__requirePrivateModuleFromAirtable('client_server_shar
 
 var WatchableTableKeys = Object.freeze({
   name: 'name',
-  activeView: 'activeView',
   views: 'views',
   fields: 'fields',
   __records: '__records',
@@ -289,9 +288,8 @@ function (_AbstractModelWithAsy) {
       return field;
     }
     /**
-     * The view model corresponding to the view the user is currently viewing
-     * in Airtable. May be `null` if the user is switching between
-     * tables or views. Can be watched.
+     * The views in the table. Can be watched to know when views are created,
+     * deleted, or reordered.
      */
 
   }, {
@@ -500,7 +498,7 @@ function (_AbstractModelWithAsy) {
         }
       }
 
-      this.parentBase.__applyChanges(changes); // Now send the update to Airtable.
+      (0, _get_sdk.default)().__applyModelChanges(changes); // Now send the update to Airtable.
 
 
       var completionPromise = this._airtableInterface.setCellValuesAsync(this.id, cellValuesByRecordIdThenFieldId);
@@ -678,7 +676,7 @@ function (_AbstractModelWithAsy) {
         }
       }
 
-      this.parentBase.__applyChanges(changes);
+      (0, _get_sdk.default)().__applyModelChanges(changes);
 
       var completionPromise = this._airtableInterface.createRecordsAsync(this.id, parsedRecordDefs);
 
@@ -768,7 +766,7 @@ function (_AbstractModelWithAsy) {
         }
       }
 
-      this.parentBase.__applyChanges(changes);
+      (0, _get_sdk.default)().__applyModelChanges(changes);
 
       var completionPromise = this._airtableInterface.deleteRecordsAsync(this.id, recordIds);
 
@@ -1397,10 +1395,6 @@ function (_AbstractModelWithAsy) {
         this._onChange(WatchableTableKeys.name);
       }
 
-      if (dirtyPaths.activeViewId) {
-        this._onChange(WatchableTableKeys.activeView);
-      }
-
       if (dirtyPaths.viewOrder) {
         this._onChange(WatchableTableKeys.views); // Clean up deleted views
 
@@ -1757,17 +1751,6 @@ function (_AbstractModelWithAsy) {
 
       return fields;
     }
-  }, {
-    key: "activeView",
-    get: function get() {
-      var activeViewId = this._data.activeViewId;
-      return activeViewId ? this.getViewByIdIfExists(activeViewId) : null;
-    }
-    /**
-     * The views in the table. Can be watched to know when views are created,
-     * deleted, or reordered.
-     */
-
   }, {
     key: "views",
     get: function get() {

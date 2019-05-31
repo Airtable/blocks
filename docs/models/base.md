@@ -59,15 +59,6 @@ if (record.canSetCellValue('Name', 'Chair')) {
 
 Returns **[string][1]**
 
-### activeTable
-
-The table model corresponding to the table the user is currently viewing in Airtable. May be `null`
-if the user is switching between tables. Can be watched.
-
-Type: (Table | null)
-
-Returns **(Table | null)**
-
 ### tables
 
 The tables in this base. Can be watched to know when tables are created, deleted, or reordered in

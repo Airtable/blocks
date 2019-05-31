@@ -1,12 +1,10 @@
 // @flow
 import invariant from 'invariant';
-import {type BaseData, type AppBlanketData} from '../types/base';
+import {type BaseData, type AppBlanketData, type ModelChange} from '../types/base';
 import {type CollaboratorData, type UserId} from '../types/collaborator';
 import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
-import getSdk from '../get_sdk';
 import {isEnumValue, values, entries} from '../private_utils';
-import type FrontendBlockSdk from '../sdk';
 import Table from './table';
 import AbstractModel from './abstract_model';
 
@@ -42,11 +40,12 @@ const WatchableBaseKeys = Object.freeze({
     name: ('name': 'name'),
     permissionLevel: ('permissionLevel': 'permissionLevel'),
     tables: ('tables': 'tables'),
-    activeTable: ('activeTable': 'activeTable'),
     collaborators: ('collaborators': 'collaborators'),
 });
 
 type WatchableBaseKey = $Values<typeof WatchableBaseKeys>;
+
+type ChangedPaths = {_isDirty?: true, [string]: ?ChangedPaths};
 
 /**
  * Model class representing a base.
@@ -114,15 +113,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      */
     get permissionLevel(): string {
         return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
-    }
-    /**
-     * The table model corresponding to the table the user is currently
-     * viewing in Airtable. May be `null` if the user is switching between
-     * tables. Can be watched.
-     */
-    get activeTable(): Table | null {
-        const {activeTableId} = this._data;
-        return activeTableId ? this.getTableByIdIfExists(activeTableId) : null;
     }
     /**
      * The tables in this base. Can be watched to know when tables are created,
@@ -249,14 +239,14 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return table;
     }
-    _triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
-        if (dirtyPaths.name) {
+    __triggerOnChangeForChangedPaths(changedPaths: ChangedPaths) {
+        if (changedPaths.name) {
             this._onChange(WatchableBaseKeys.name);
         }
-        if (dirtyPaths.permissionLevel) {
+        if (changedPaths.permissionLevel) {
             this._onChange(WatchableBaseKeys.permissionLevel);
         }
-        if (dirtyPaths.tableOrder) {
+        if (changedPaths.tableOrder) {
             this._onChange(WatchableBaseKeys.tables);
 
             // Clean up deleted tables
@@ -266,11 +256,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                 }
             }
         }
-        if (dirtyPaths.activeTableId) {
-            this._onChange(WatchableBaseKeys.activeTable);
-        }
-        if (dirtyPaths.tablesById) {
-            for (const [tableId, dirtyTablePaths] of entries(dirtyPaths.tablesById)) {
+        const {tablesById} = changedPaths;
+        if (tablesById) {
+            for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
                 // Directly access from _tableModelsById to avoid creating
                 // a table model if it doesn't already exist. If it doesn't exist,
                 // nothing can be subscribed to any events on it.
@@ -280,37 +268,25 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                 }
             }
         }
-        if (dirtyPaths.appBlanket) {
+        if (changedPaths.appBlanket) {
             this._onChange(WatchableBaseKeys.collaborators);
         }
-
-        // HACK: it's an anti-pattern that the Base model manages cursorData at all,
-        // since the Base model is shared, but Cursor exists only on the frontend.
-        // TODO: change how cursor data is handled and remove this.
-        if (dirtyPaths.cursorData) {
-            invariant(
-                typeof window !== 'undefined',
-                'Should only update cursor data in frontend SDK',
-            );
-            const sdk = ((getSdk(): any): FrontendBlockSdk); // eslint-disable-line flowtype/no-weak-types
-            sdk.cursor.__triggerOnChangeForDirtyPaths(dirtyPaths.cursorData);
-        }
     }
-    __applyChanges(changes: Array<{path: Array<string>, value: mixed}>) {
+    __applyChangesWithoutTriggeringEvents(changes: Array<ModelChange>): ChangedPaths {
         // Internal method.
-        // After applying all changes, dirtyPaths will have the same shape as
+        // After applying all changes, changedPaths will have the same shape as
         // the subset of this._data that changed. For example, if some table's
-        // name changes, dirtyPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
+        // name changes, changedPaths will be {tablesById: {tbl123: name: {_isDirty: true}}}.
         // It is used to trigger change events for affected models.
-        const dirtyPaths = {};
+        const changedPaths = {};
         for (const change of changes) {
-            this._applyChange(change.path, change.value, dirtyPaths);
+            this._applyChange(change.path, change.value, changedPaths);
         }
-        this._triggerOnChangeForDirtyPaths(dirtyPaths);
+        return changedPaths;
     }
-    _applyChange(path: Array<string>, value: mixed, dirtyPathsByRef: Object) {
+    _applyChange(path: Array<string>, value: mixed, changedPathsByRef: ChangedPaths) {
         let dataSubtree = this._data;
-        let dirtySubtree = dirtyPathsByRef;
+        let dirtySubtree = changedPathsByRef;
         for (let i = 0; i < path.length - 1; i++) {
             const part = path[i];
 
@@ -324,6 +300,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             if (!dirtySubtree[part]) {
                 dirtySubtree[part] = {};
             }
+            invariant(dirtySubtree[part], 'dirtySubtree');
             dirtySubtree = dirtySubtree[part];
         }
         const lastPathPart = path[path.length - 1];
@@ -338,6 +315,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             if (!dirtySubtree[lastPathPart]) {
                 dirtySubtree[lastPathPart] = {};
             }
+            invariant(dirtySubtree[lastPathPart], 'dirtySubtree');
             dirtySubtree[lastPathPart]._isDirty = true;
         }
     }

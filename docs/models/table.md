@@ -82,15 +82,6 @@ Returns **(Field | null)**
 
 Returns **Field**
 
-### activeView
-
-The view model corresponding to the view the user is currently viewing in Airtable. May be `null` if
-the user is switching between tables or views. Can be watched.
-
-Type: (View | null)
-
-Returns **(View | null)**
-
 ### views
 
 The views in the table. Can be watched to know when views are created, deleted, or reordered.

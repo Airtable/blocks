@@ -33,7 +33,6 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
 // to mirror the method/getter names on the model class.
 const WatchableTableKeys = Object.freeze({
     name: ('name': 'name'),
-    activeView: ('activeView': 'activeView'),
     views: ('views': 'views'),
     fields: ('fields': 'fields'),
     __records: ('__records': '__records'),
@@ -225,15 +224,6 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
         return field;
     }
     /**
-     * The view model corresponding to the view the user is currently viewing
-     * in Airtable. May be `null` if the user is switching between
-     * tables or views. Can be watched.
-     */
-    get activeView(): View | null {
-        const {activeViewId} = this._data;
-        return activeViewId ? this.getViewByIdIfExists(activeViewId) : null;
-    }
-    /**
      * The views in the table. Can be watched to know when views are created,
      * deleted, or reordered.
      */
@@ -397,7 +387,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             }
         }
 
-        this.parentBase.__applyChanges(changes);
+        getSdk().__applyModelChanges(changes);
 
         // Now send the update to Airtable.
         const completionPromise = this._airtableInterface.setCellValuesAsync(
@@ -521,7 +511,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             }
         }
 
-        this.parentBase.__applyChanges(changes);
+        getSdk().__applyModelChanges(changes);
 
         const completionPromise = this._airtableInterface.createRecordsAsync(
             this.id,
@@ -580,7 +570,7 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
             }
         }
 
-        this.parentBase.__applyChanges(changes);
+        getSdk().__applyModelChanges(changes);
 
         const completionPromise = this._airtableInterface.deleteRecordsAsync(this.id, recordIds);
         return {
@@ -898,9 +888,6 @@ class Table extends AbstractModelWithAsyncData<TableData, WatchableTableKey> {
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {
             this._onChange(WatchableTableKeys.name);
-        }
-        if (dirtyPaths.activeViewId) {
-            this._onChange(WatchableTableKeys.activeView);
         }
         if (dirtyPaths.viewOrder) {
             this._onChange(WatchableTableKeys.views);

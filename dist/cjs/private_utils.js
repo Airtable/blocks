@@ -53,7 +53,6 @@ function cloneDeep(obj) {
 
 
 function values(obj) {
-  // flow-disable-next-line
   return Object.values(obj);
 }
 
