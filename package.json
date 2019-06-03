@@ -3,7 +3,7 @@
   "description": "Official command line tool for Airtable blocks development",
   "version": "0.0.2",
   "bin": {
-    "block": "bin/block.js"
+    "block": "bin/block"
   },
   "license": "MIT",
   "scripts": {
