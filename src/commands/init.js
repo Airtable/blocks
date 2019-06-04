@@ -82,7 +82,10 @@ async function initBlockAsync(
     const writePackageJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, 'package.json'),
         JSON.stringify(
-            {dependencies: defaultDependencies},
+            {
+                private: true,
+                dependencies: defaultDependencies,
+            },
             null,
             4,
         ),
