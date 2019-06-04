@@ -384,7 +384,7 @@ if (globalConfig.canSet(ConfigKeys.tableId) && runInfo.isFirstRun && !this.table
 
 ## flow
 
-Supported flow version: 0.81.0.
+Supported flow version: 0.98.1.
 
 The `stubs` folder contains empty stub files so you can run Flow in this directory without it
 complaining.
