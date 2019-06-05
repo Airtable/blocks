@@ -18,14 +18,14 @@ const DEFAULT_FRONTEND_ENTRY_MODULE_METADATA = {
     type: BlockModuleTypes.FRONTEND,
     name: DEFAULT_FRONTEND_ENTRY_MODULE_NAME,
 };
-const DEFAULT_FRONTEND_CODE = `import Block from 'airtable-block';
+const DEFAULT_FRONTEND_CODE = `import Block from '@airtable/blocks';
 import React from 'react';
 
-class Component extends React.Component {
-    render() {
-        // YOUR CODE GOES HERE
-        return <div>Hello world 🚀</div>;
-    }
+function Component() {
+    // YOUR CODE GOES HERE
+    return (
+        <div>Hello world 🚀</div>
+    );
 }
 
 export default Component;
@@ -75,6 +75,7 @@ async function initBlockAsync(
 
     // Create a minimal package json so the user can yarn install.
     const defaultDependencies = {
+        '@airtable/blocks': '^0.0.3',
         react: '^16.8.0',
         'react-dom': '^16.8.0',
     };
