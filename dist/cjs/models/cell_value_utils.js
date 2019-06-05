@@ -106,7 +106,9 @@ var publicCellValueUtils = {
       };
     }
 
-    if (!table.isDataLoaded) {
+    var recordStore = (0, _get_sdk.default)().base.__getRecordStore(tableId);
+
+    if (!recordStore.isDataLoaded) {
       return {
         isValid: false,
         reason: 'Cannot set a record link cell value if linked table is not loaded'
@@ -124,8 +126,7 @@ var publicCellValueUtils = {
         (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
         var foreignRecordId = foreignRecordObj.id;
         (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
-
-        var foreignRecord = table.__getRecordByIdIfExists(foreignRecordId);
+        var foreignRecord = recordStore.getRecordByIdIfExists(foreignRecordId);
 
         if (!foreignRecord) {
           return {
@@ -163,15 +164,15 @@ var publicCellValueUtils = {
     (0, _invariant.default)(field.options, 'Invalid field type');
     var tableId = field.options.linkedTableId;
     (0, _invariant.default)(typeof tableId === 'string', 'no linkedTableId');
-    var table = (0, _get_sdk.default)().base.getTableById(tableId);
+
+    var recordStore = (0, _get_sdk.default)().base.__getRecordStore(tableId);
+
     (0, _invariant.default)(Array.isArray(newPublicCellValue), 'Linked record cell value must be an array of objects');
     return newPublicCellValue.map(foreignRecordObj => {
       (0, _invariant.default)(foreignRecordObj && typeof foreignRecordObj === 'object', 'Linked record cell value must be an array of objects');
       var foreignRecordId = foreignRecordObj.id;
       (0, _invariant.default)(typeof foreignRecordId === 'string', 'Linked record id must be a string');
-
-      var foreignRecord = table.__getRecordByIdIfExists(foreignRecordId);
-
+      var foreignRecord = recordStore.getRecordByIdIfExists(foreignRecordId);
       (0, _invariant.default)(foreignRecord, 'Record does not exist in linked table'); // Ignore whatever `name` we were given (if any) and overwrite it
       // with the record's primary cell value. The `name` is effectively
       // read-only (i.e. you can't update a record primary cell value through

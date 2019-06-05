@@ -14,6 +14,7 @@ import TableOrViewQueryResult from './table_or_view_query_result';
 import type Table from './table';
 import type Field from './field';
 import type Record from './record';
+import type RecordStore from './record_store';
 
 const getLinkedTableId = (field: Field): string => {
     const options = field.options;
@@ -85,6 +86,8 @@ class LinkedRecordsQueryResult extends QueryResult {
     _poolKey: string;
     // the table we're linking to
     _linkedTable: Table;
+    // the records store for the linked table
+    _linkedRecordStore: RecordStore;
     // a QueryResult containing all the rows in the linked table
     _linkedQueryResult: TableOrViewQueryResult;
     // is the query result currently valid. if the field config changes to link
@@ -104,10 +107,11 @@ class LinkedRecordsQueryResult extends QueryResult {
     constructor(record: Record, field: Field, opts: QueryResultOpts) {
         const linkedTableId = getLinkedTableId(field);
         const linkedTable = getSdk().base.getTableById(linkedTableId);
+        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
 
         const normalizedOpts = QueryResult._normalizeOpts(linkedTable, opts);
 
-        super(normalizedOpts, record.parentTable.__baseData);
+        super(linkedRecordStore, normalizedOpts, record.parentTable.__baseData);
 
         invariant(
             record.parentTable === field.parentTable,
@@ -116,6 +120,7 @@ class LinkedRecordsQueryResult extends QueryResult {
         this._record = record;
         this._field = field;
         this._linkedTable = linkedTable;
+        this._linkedRecordStore = linkedRecordStore;
         this._poolKey = `${record.id}::${field.id}::${linkedTableId}`;
 
         // we could rely on QueryResult's reuse pool to make sure we get back
@@ -124,6 +129,7 @@ class LinkedRecordsQueryResult extends QueryResult {
         // the field config changes to point at a different table
         this._linkedQueryResult = TableOrViewQueryResult.__createOrReuseQueryResult(
             linkedTable,
+            linkedRecordStore,
             opts,
         );
     }
@@ -169,9 +175,8 @@ class LinkedRecordsQueryResult extends QueryResult {
     get records(): Array<Record> {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
 
-        const linkedTable = this._linkedTable;
         return this.recordIds.map(recordId => {
-            const record = linkedTable.__getRecordByIdIfExists(recordId);
+            const record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
             invariant(record, `No record for id: ${recordId}`);
             return record;
         });
@@ -255,7 +260,9 @@ class LinkedRecordsQueryResult extends QueryResult {
         this._watchLinkedQueryResult();
 
         await Promise.all([
-            this._record.parentTable.loadCellValuesInFieldIdsAsync([this._field.id]),
+            getSdk()
+                .base.__getRecordStore(this._record.parentTable.id)
+                .loadCellValuesInFieldIdsAsync([this._field.id]),
             this._linkedQueryResult.loadDataAsync(),
             this._loadRecordColorsAsync(),
         ]);
@@ -271,7 +278,9 @@ class LinkedRecordsQueryResult extends QueryResult {
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
 
-            this._record.parentTable.unloadCellValuesInFieldIds([this._field.id]);
+            getSdk()
+                .base.__getRecordStore(this._record.parentTable.id)
+                .unloadCellValuesInFieldIds([this._field.id]);
             this._linkedQueryResult.unloadData();
             this._unloadRecordColors();
 

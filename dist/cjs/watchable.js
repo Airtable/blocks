@@ -65,13 +65,13 @@ function () {
 
       try {
         for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var key = _step.value;
+          var _key = _step.value;
 
-          if (this.constructor._isWatchableKey(key)) {
-            validKeys.push(key);
+          if (this.constructor._isWatchableKey(_key)) {
+            validKeys.push(_key);
 
-            if (!this._changeWatchersByKey[key]) {
-              this._changeWatchersByKey[key] = [];
+            if (!this._changeWatchersByKey[_key]) {
+              this._changeWatchersByKey[_key] = [];
             } // Rather than pushing onto this array, we initialize a new array.
             // This is necessary since watches can change as a result of an
             // event getting triggered. It would be bad if as we iterate over
@@ -81,12 +81,12 @@ function () {
             // as long as we are not in the middle of iterating over it.
 
 
-            this._changeWatchersByKey[key] = [...this._changeWatchersByKey[key], {
+            this._changeWatchersByKey[_key] = [...this._changeWatchersByKey[_key], {
               callback,
               context
             }];
           } else {
-            console.warn("Invalid key to watch for ".concat(this.constructor._className, ": ").concat(key)); // eslint-disable-line no-console
+            console.warn("Invalid key to watch for ".concat(this.constructor._className, ": ").concat(_key)); // eslint-disable-line no-console
           }
         }
       } catch (err) {
@@ -127,11 +127,11 @@ function () {
 
       try {
         for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var key = _step2.value;
+          var _key2 = _step2.value;
 
-          if (this.constructor._isWatchableKey(key)) {
-            validKeys.push(key);
-            var watchers = this._changeWatchersByKey[key];
+          if (this.constructor._isWatchableKey(_key2)) {
+            validKeys.push(_key2);
+            var watchers = this._changeWatchersByKey[_key2];
 
             if (watchers) {
               var filteredWatchers = watchers.filter(watcher => {
@@ -139,13 +139,13 @@ function () {
               });
 
               if (filteredWatchers.length > 0) {
-                this._changeWatchersByKey[key] = filteredWatchers;
+                this._changeWatchersByKey[_key2] = filteredWatchers;
               } else {
-                delete this._changeWatchersByKey[key];
+                delete this._changeWatchersByKey[_key2];
               }
             }
           } else {
-            console.warn("Invalid key to unwatch for ".concat(this.constructor._className, ": ").concat(key)); // eslint-disable-line no-console
+            console.warn("Invalid key to unwatch for ".concat(this.constructor._className, ": ").concat(_key2)); // eslint-disable-line no-console
           }
         }
       } catch (err) {
@@ -171,8 +171,8 @@ function () {
       var watchers = this._changeWatchersByKey[key];
 
       if (watchers) {
-        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-          args[_key - 1] = arguments[_key];
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key3 = 1; _key3 < _len; _key3++) {
+          args[_key3 - 1] = arguments[_key3];
         }
 
         var _iteratorNormalCompletion3 = true;

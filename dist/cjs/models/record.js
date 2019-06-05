@@ -43,6 +43,8 @@ var _field = require("../types/field");
 
 var _private_utils = require("../private_utils");
 
+var _color_utils = _interopRequireDefault(require("../color_utils"));
+
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
 var _field2 = _interopRequireDefault(require("./field"));
@@ -50,6 +52,8 @@ var _field2 = _interopRequireDefault(require("./field"));
 var _cell_value_utils = _interopRequireDefault(require("./cell_value_utils"));
 
 var _linked_records_query_result = _interopRequireDefault(require("./linked_records_query_result"));
+
+var _record_store = _interopRequireDefault(require("./record_store"));
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
@@ -92,11 +96,12 @@ function (_AbstractModel) {
     }
   }]);
 
-  function Record(baseData, parentTable, recordId) {
+  function Record(baseData, parentRecordStore, parentTable, recordId) {
     var _this;
 
     (0, _classCallCheck2.default)(this, Record);
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Record).call(this, baseData, recordId));
+    _this._parentRecordStore = parentRecordStore;
     _this._parentTable = parentTable;
     return _this;
   }
@@ -176,7 +181,7 @@ function (_AbstractModel) {
       (0, _invariant.default)(field, 'Field does not exist');
       (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
       (0, _invariant.default)(field.parentTable.id === this.parentTable.id, 'Field must have same parent table as record');
-      (0, _invariant.default)(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
+      (0, _invariant.default)(this._parentRecordStore.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
       var cellValuesByFieldId = this._data.cellValuesByFieldId;
 
       if (!cellValuesByFieldId) {
@@ -270,7 +275,7 @@ function (_AbstractModel) {
 
       (0, _invariant.default)(field, 'Field does not exist');
       (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
-      (0, _invariant.default)(field.parentTable.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
+      (0, _invariant.default)(this._parentRecordStore.areCellValuesLoadedForFieldId(field.id), 'Cell values for field are not loaded');
 
       var rawCellValue = this.__getRawCellValue(field.id);
 
@@ -314,7 +319,7 @@ function (_AbstractModel) {
 
       (0, _invariant.default)(view, 'View does not exist');
       (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
-      return view.__getRecordColor(this);
+      return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
     /**
      * Get a CSS hex string for this record in the specified view, or null if
@@ -324,11 +329,13 @@ function (_AbstractModel) {
   }, {
     key: "getColorHexInView",
     value: function getColorHexInView(viewOrViewIdOrViewName) {
-      var view = this._getViewMatching(viewOrViewIdOrViewName);
+      var color = this.getColorInView(viewOrViewIdOrViewName);
 
-      (0, _invariant.default)(view, 'View does not exist');
-      (0, _invariant.default)(!view.isDeleted, 'View has been deleted');
-      return view.__getRecordColorHex(this);
+      if (!color) {
+        return null;
+      }
+
+      return _color_utils.default.getHexForColor(color);
     }
   }, {
     key: "getLinkedRecordsFromCell",

@@ -7,7 +7,12 @@ class Watchable<WatchableKey: string> {
         // Override to return whether `key` is a valid watchable key.
         return false;
     }
-    _changeWatchersByKey: {[string]: Array<{callback: Function, context: ?Object}>};
+    _changeWatchersByKey: {
+        [string]: Array<{
+            callback: (model: Watchable<*>, key: WatchableKey, ...args: Array<any>) => mixed,
+            context: ?Object,
+        }>,
+    };
     constructor() {
         this._changeWatchersByKey = {};
     }
@@ -19,7 +24,7 @@ class Watchable<WatchableKey: string> {
      */
     watch(
         keys: WatchableKey | Array<WatchableKey>,
-        callback: Function,
+        callback: (model: this, key: WatchableKey, ...args: Array<any>) => mixed,
         context?: ?Object,
     ): Array<WatchableKey> {
         if (!Array.isArray(keys)) {
@@ -59,7 +64,7 @@ class Watchable<WatchableKey: string> {
      */
     unwatch(
         keys: WatchableKey | Array<WatchableKey>,
-        callback: Function,
+        callback: (model: this, key: WatchableKey, ...args: Array<any>) => mixed,
         context?: ?Object,
     ): Array<WatchableKey> {
         if (!Array.isArray(keys)) {

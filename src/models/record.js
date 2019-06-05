@@ -6,6 +6,7 @@ import {type RecordData, type RecordDef} from '../types/record';
 import {FieldTypes} from '../types/field';
 import {isEnumValue, cloneDeep, entries} from '../private_utils';
 import {type AirtableWriteAction} from '../injected/airtable_interface';
+import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';
 import Field from './field';
 import cellValueUtils from './cell_value_utils';
@@ -13,6 +14,7 @@ import type Table from './table';
 import type View from './view';
 import {type QueryResultOpts} from './query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
+import RecordStore from './record_store';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
@@ -59,10 +61,17 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             key.startsWith(WatchableColorInViewKeyPrefix)
         );
     }
+    _parentRecordStore: RecordStore;
     _parentTable: Table;
-    constructor(baseData: BaseData, parentTable: Table, recordId: string) {
+    constructor(
+        baseData: BaseData,
+        parentRecordStore: RecordStore,
+        parentTable: Table,
+        recordId: string,
+    ) {
         super(baseData, recordId);
 
+        this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
     }
     get _dataOrNullIfDeleted(): RecordData | null {
@@ -123,7 +132,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             'Field must have same parent table as record',
         );
         invariant(
-            field.parentTable.areCellValuesLoadedForFieldId(field.id),
+            this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field are not loaded',
         );
         const {cellValuesByFieldId} = this._data;
@@ -178,7 +187,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
         invariant(
-            field.parentTable.areCellValuesLoadedForFieldId(field.id),
+            this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field are not loaded',
         );
         const rawCellValue = this.__getRawCellValue(field.id);
@@ -224,18 +233,18 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         invariant(view, 'View does not exist');
         invariant(!view.isDeleted, 'View has been deleted');
 
-        return view.__getRecordColor(this);
+        return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
     /**
      * Get a CSS hex string for this record in the specified view, or null if
      * no color is available. Watch with the 'colorInView:${ViewId}' key
      */
     getColorHexInView(viewOrViewIdOrViewName: View | string): string | null {
-        const view = this._getViewMatching(viewOrViewIdOrViewName);
-        invariant(view, 'View does not exist');
-        invariant(!view.isDeleted, 'View has been deleted');
-
-        return view.__getRecordColorHex(this);
+        const color = this.getColorInView(viewOrViewIdOrViewName);
+        if (!color) {
+            return null;
+        }
+        return colorUtils.getHexForColor(color);
     }
     getLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | string,

@@ -33,6 +33,8 @@ var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime
 
 var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
 
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
+
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
 var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
@@ -44,6 +46,8 @@ var _invariant = _interopRequireDefault(require("invariant"));
 var _private_utils = require("../private_utils");
 
 var _table = _interopRequireDefault(require("./table"));
+
+var _record_store = _interopRequireDefault(require("./record_store"));
 
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
@@ -102,6 +106,7 @@ function (_AbstractModel) {
 
     (0, _classCallCheck2.default)(this, Base);
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Base).call(this, baseData, baseData.id));
+    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_tableRecordStoresByTableId", {});
     _this._tableModelsById = {}; // Table instances are lazily created by getTableById.
 
     _this._airtableInterface = airtableInterface;
@@ -147,18 +152,30 @@ function (_AbstractModel) {
       return collaborator;
     }
   }, {
-    key: "getTableByIdIfExists",
+    key: "__getRecordStore",
+    value: function __getRecordStore(tableId) {
+      if (this._tableRecordStoresByTableId[tableId]) {
+        return this._tableRecordStoresByTableId[tableId];
+      }
 
+      (0, _invariant.default)(this._data.tablesById[tableId], 'table must exist');
+      var newRecordStore = new _record_store.default(this._baseData, this._airtableInterface, tableId);
+      this._tableRecordStoresByTableId[tableId] = newRecordStore;
+      return newRecordStore;
+    }
     /**
      * Returns the table matching the given ID, or `null` if that
      * table does not exist in this base.
      */
+
+  }, {
+    key: "getTableByIdIfExists",
     value: function getTableByIdIfExists(tableId) {
       if (!this._data.tablesById[tableId]) {
         return null;
       } else {
         if (!this._tableModelsById[tableId]) {
-          this._tableModelsById[tableId] = new _table.default(this._data, this, tableId, this._airtableInterface);
+          this._tableModelsById[tableId] = new _table.default(this._data, this, this.__getRecordStore(tableId), tableId, this._airtableInterface);
         }
 
         return this._tableModelsById[tableId];

@@ -107,7 +107,7 @@ function _expandRecordPickerAsync() {
             return _context.abrupt("return", null);
 
           case 15:
-            return _context.abrupt("return", table.__getRecordByIdIfExists(chosenRecordId));
+            return _context.abrupt("return", sdk.base.__getRecordStore(table.id).getRecordByIdIfExists(chosenRecordId));
 
           case 16:
           case "end":

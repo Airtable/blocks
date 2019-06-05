@@ -15,6 +15,7 @@ import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type Table from './table';
 import Field from './field';
 import type Record from './record';
+import type RecordStore from './record_store';
 import {
     ModeTypes as RecordColorModeTypes,
     modes as recordColorModes,
@@ -198,11 +199,17 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     _normalizedOpts: NormalizedQueryResultOpts;
+    _recordStore: RecordStore;
     _recordColorChangeHandler: Function | null = null;
 
-    constructor(normalizedOpts: NormalizedQueryResultOpts, baseData: BaseData) {
+    constructor(
+        recordStore: RecordStore,
+        normalizedOpts: NormalizedQueryResultOpts,
+        baseData: BaseData,
+    ) {
         super(baseData, getSdk().models.generateGuid());
         this._normalizedOpts = normalizedOpts;
+        this._recordStore = recordStore;
     }
 
     __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedQueryResultOpts): boolean {
@@ -215,14 +222,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      */
     get records(): Array<Record> {
         return this.recordIds.map(recordId => {
-            const record = this.parentTable.__getRecordByIdIfExists(recordId);
+            const record = this._recordStore.getRecordByIdIfExists(recordId);
             invariant(record, 'Record missing in table');
             return record;
         });
     }
 
     getRecordByIdIfExists(recordId: RecordId): Record | null {
-        const record = this.parentTable.__getRecordByIdIfExists(recordId);
+        const record = this._recordStore.getRecordByIdIfExists(recordId);
         if (!record || !this.hasRecord(record)) {
             return null;
         }
@@ -266,7 +273,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     : null;
             }
             case RecordColorModeTypes.BY_VIEW:
-                return recordColorMode.view.__getRecordColor(record);
+                return this._recordStore
+                    .getViewDataStore(recordColorMode.view.id)
+                    .getRecordColor(record);
             default:
                 throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
         }
@@ -329,7 +338,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 recordColorMode.selectField.watch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                recordColorMode.view.watch('__recordColors', handler);
+                this._recordStore
+                    .getViewDataStore(recordColorMode.view.id)
+                    .watch('recordColors', handler);
                 break;
             }
             default:
@@ -363,7 +374,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 recordColorMode.selectField.unwatch('options', handler);
                 break;
             case RecordColorModeTypes.BY_VIEW: {
-                recordColorMode.view.unwatch('__recordColors', handler);
+                this._recordStore
+                    .getViewDataStore(recordColorMode.view.id)
+                    .unwatch('recordColors', handler);
                 break;
             }
             default:
@@ -383,7 +396,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 // so we don't need to handle it here
                 return;
             case RecordColorModeTypes.BY_VIEW:
-                await recordColorMode.view.loadDataAsync();
+                await this._recordStore.getViewDataStore(recordColorMode.view.id).loadDataAsync();
                 return;
             default:
                 throw spawnUnknownSwitchCaseError(
@@ -402,7 +415,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 // handled as part of fieldIdsOrNullIfAllFields
                 return;
             case RecordColorModeTypes.BY_VIEW:
-                recordColorMode.view.unloadData();
+                this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
                 break;
             default:
                 throw spawnUnknownSwitchCaseError(

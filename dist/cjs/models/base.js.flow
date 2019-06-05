@@ -2,10 +2,12 @@
 import invariant from 'invariant';
 import {type BaseData, type AppBlanketData, type ModelChange} from '../types/base';
 import {type CollaboratorData, type UserId} from '../types/collaborator';
+import {type TableId} from '../types/table';
 import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, values, entries} from '../private_utils';
 import Table from './table';
+import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
 
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
@@ -59,6 +61,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return isEnumValue(WatchableBaseKeys, key);
     }
     _tableModelsById: {[string]: Table};
+    _tableRecordStoresByTableId: {[TableId]: RecordStore | void} = {};
     _airtableInterface: AirtableInterface;
     constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
         super(baseData, baseData.id);
@@ -194,6 +197,15 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             isFeatureEnabled: featureName => this._isFeatureEnabled(featureName),
         });
     }
+    __getRecordStore(tableId: TableId): RecordStore {
+        if (this._tableRecordStoresByTableId[tableId]) {
+            return this._tableRecordStoresByTableId[tableId];
+        }
+        invariant(this._data.tablesById[tableId], 'table must exist');
+        const newRecordStore = new RecordStore(this._baseData, this._airtableInterface, tableId);
+        this._tableRecordStoresByTableId[tableId] = newRecordStore;
+        return newRecordStore;
+    }
     /**
      * Returns the table matching the given ID, or `null` if that
      * table does not exist in this base.
@@ -206,6 +218,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                 this._tableModelsById[tableId] = new Table(
                     this._data,
                     this,
+                    this.__getRecordStore(tableId),
                     tableId,
                     this._airtableInterface,
                 );

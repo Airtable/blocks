@@ -84,7 +84,7 @@ async function expandRecordPickerAsync(
         return null;
     }
 
-    return table.__getRecordByIdIfExists(chosenRecordId);
+    return sdk.base.__getRecordStore(table.id).getRecordByIdIfExists(chosenRecordId);
 }
 
 export default expandRecordPickerAsync;

@@ -230,13 +230,14 @@ function (_AbstractModelWithAsy) {
     }
   }]);
 
-  function QueryResult(normalizedOpts, baseData) {
+  function QueryResult(recordStore, normalizedOpts, baseData) {
     var _this;
 
     (0, _classCallCheck2.default)(this, QueryResult);
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(QueryResult).call(this, baseData, (0, _get_sdk.default)().models.generateGuid()));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_recordColorChangeHandler", null);
     _this._normalizedOpts = normalizedOpts;
+    _this._recordStore = recordStore;
     return _this;
   }
 
@@ -253,7 +254,7 @@ function (_AbstractModelWithAsy) {
   }, {
     key: "getRecordByIdIfExists",
     value: function getRecordByIdIfExists(recordId) {
-      var record = this.parentTable.__getRecordByIdIfExists(recordId);
+      var record = this._recordStore.getRecordByIdIfExists(recordId);
 
       if (!record || !this.hasRecord(record)) {
         return null;
@@ -305,7 +306,7 @@ function (_AbstractModelWithAsy) {
           }
 
         case _record_coloring.ModeTypes.BY_VIEW:
-          return recordColorMode.view.__getRecordColor(record);
+          return this._recordStore.getViewDataStore(recordColorMode.view.id).getRecordColor(record);
 
         default:
           throw new Error("Unknown record coloring mode: ".concat(recordColorMode.type));
@@ -410,7 +411,8 @@ function (_AbstractModelWithAsy) {
 
         case _record_coloring.ModeTypes.BY_VIEW:
           {
-            recordColorMode.view.watch('__recordColors', handler);
+            this._recordStore.getViewDataStore(recordColorMode.view.id).watch('recordColors', handler);
+
             break;
           }
 
@@ -447,7 +449,8 @@ function (_AbstractModelWithAsy) {
 
         case _record_coloring.ModeTypes.BY_VIEW:
           {
-            recordColorMode.view.unwatch('__recordColors', handler);
+            this._recordStore.getViewDataStore(recordColorMode.view.id).unwatch('recordColors', handler);
+
             break;
           }
 
@@ -481,7 +484,7 @@ function (_AbstractModelWithAsy) {
 
               case 6:
                 _context.next = 8;
-                return recordColorMode.view.loadDataAsync();
+                return this._recordStore.getViewDataStore(recordColorMode.view.id).loadDataAsync();
 
               case 8:
                 return _context.abrupt("return");
@@ -517,7 +520,8 @@ function (_AbstractModelWithAsy) {
           return;
 
         case _record_coloring.ModeTypes.BY_VIEW:
-          recordColorMode.view.unloadData();
+          this._recordStore.getViewDataStore(recordColorMode.view.id).unloadData();
+
           break;
 
         default:
@@ -528,7 +532,7 @@ function (_AbstractModelWithAsy) {
     key: "records",
     get: function get() {
       return this.recordIds.map(recordId => {
-        var record = this.parentTable.__getRecordByIdIfExists(recordId);
+        var record = this._recordStore.getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(record, 'Record missing in table');
         return record;

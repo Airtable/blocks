@@ -1,5 +1,7 @@
 "use strict";
 
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 require("core-js/modules/es.symbol");
@@ -51,7 +53,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
 
 var _private_utils = require("../private_utils");
 
-var _table = _interopRequireDefault(require("./table"));
+var _table = _interopRequireWildcard(require("./table"));
 
 var _view = _interopRequireDefault(require("./view"));
 
@@ -60,6 +62,10 @@ var _query_result = _interopRequireDefault(require("./query_result"));
 var _object_pool = _interopRequireDefault(require("./object_pool"));
 
 var _record_coloring = require("./record_coloring");
+
+var _record_store = _interopRequireWildcard(require("./record_store"));
+
+var _view_data_store = _interopRequireWildcard(require("./view_data_store"));
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     h = _window$__requirePriv.h,
@@ -94,7 +100,7 @@ function (_QueryResult) {
   (0, _inherits2.default)(TableOrViewQueryResult, _QueryResult);
   (0, _createClass2.default)(TableOrViewQueryResult, null, [{
     key: "__createOrReuseQueryResult",
-    value: function __createOrReuseQueryResult(sourceModel, opts) {
+    value: function __createOrReuseQueryResult(sourceModel, recordStore, opts) {
       var tableModel = sourceModel instanceof _view.default ? sourceModel.parentTable : sourceModel;
 
       var normalizedOpts = _query_result.default._normalizeOpts(tableModel, opts);
@@ -107,20 +113,21 @@ function (_QueryResult) {
       if (queryResult) {
         return queryResult;
       } else {
-        return new TableOrViewQueryResult(sourceModel, opts);
+        return new TableOrViewQueryResult(sourceModel, recordStore, opts);
       }
     }
   }]);
 
-  function TableOrViewQueryResult(sourceModel, opts) {
+  function TableOrViewQueryResult(sourceModel, recordStore, opts) {
     var _this;
 
     (0, _classCallCheck2.default)(this, TableOrViewQueryResult);
     var table = sourceModel instanceof _view.default ? sourceModel.parentTable : sourceModel;
+    (0, _invariant.default)(table.id === recordStore.tableId, 'record store must belong to QueryResult table');
 
     var normalizedOpts = _query_result.default._normalizeOpts(table, opts);
 
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TableOrViewQueryResult).call(this, normalizedOpts, sourceModel.__baseData));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TableOrViewQueryResult).call(this, recordStore, normalizedOpts, sourceModel.__baseData));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_recordIdsSet", null);
     _this._sourceModel = sourceModel;
     _this._mostRecentSourceModelLoadPromise = null;
@@ -279,7 +286,7 @@ function (_QueryResult) {
       if (!this._cellValueKeyWatchCounts[key]) {
         this._cellValueKeyWatchCounts[key] = 0;
 
-        this._table.watch(key, watchCallback, this);
+        this._recordStore.watch(key, watchCallback, this);
       }
 
       this._cellValueKeyWatchCounts[key]++;
@@ -297,7 +304,7 @@ function (_QueryResult) {
 
       if (this._cellValueKeyWatchCounts[key] === 0) {
         // We're down to zero watches for this key, so we can actually unwatch it now.
-        this._table.unwatch(key, watchCallback, this);
+        this._recordStore.unwatch(key, watchCallback, this);
 
         delete this._cellValueKeyWatchCounts[key];
       }
@@ -418,22 +425,22 @@ function (_QueryResult) {
             switch (_context.prev = _context.next) {
               case 0:
                 if (this._fieldIdsSetToLoadOrNullIfAllFields) {
-                  cellValuesInFieldsLoadPromise = this._table.loadCellValuesInFieldIdsAsync(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
+                  cellValuesInFieldsLoadPromise = this._recordStore.loadCellValuesInFieldIdsAsync(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
                 } else {
                   // Load all fields.
-                  cellValuesInFieldsLoadPromise = this._table.loadDataAsync();
+                  cellValuesInFieldsLoadPromise = this._recordStore.loadDataAsync();
                 }
 
                 if (this._sourceModel instanceof _table.default) {
                   if (this._fieldIdsSetToLoadOrNullIfAllFields) {
-                    sourceModelLoadPromise = this._table.loadRecordMetadataAsync();
+                    sourceModelLoadPromise = this._recordStore.loadRecordMetadataAsync();
                   } else {
                     // table.loadDataAsync is a superset of loadRecordMetadataAsync,
                     // so no need to load record metadata again.
                     sourceModelLoadPromise = null;
                   }
                 } else {
-                  sourceModelLoadPromise = this._sourceModel.loadDataAsync();
+                  sourceModelLoadPromise = this._recordStore.getViewDataStore(this._sourceModel.id).loadDataAsync();
                 }
 
                 this._mostRecentSourceModelLoadPromise = Promise.all([sourceModelLoadPromise, cellValuesInFieldsLoadPromise, this._loadRecordColorsAsync()]);
@@ -478,12 +485,15 @@ function (_QueryResult) {
 
                 this._orderedRecordIds = this._generateOrderedRecordIds();
 
-                this._sourceModel.watch( // flow-disable-next-line since we know this watch key is valid.
-                this._recordsWatchKey, this._onRecordsChanged, this);
+                if (this._sourceModel instanceof _table.default) {
+                  this._recordStore.watch(_record_store.WatchableRecordStoreKeys.records, this._onRecordsChanged, this);
+                } else {
+                  this._recordStore.getViewDataStore(this._sourceModel.id).watch(_view_data_store.WatchableViewDataStoreKeys.visibleRecords, this._onRecordsChanged, this);
+                }
 
-                this._table.watch(this._cellValuesForSortWatchKeys, this._onCellValuesForSortChanged, this);
+                this._recordStore.watch(this._cellValuesForSortWatchKeys, this._onCellValuesForSortChanged, this);
 
-                this._table.watch(this._fieldsWatchKey, this._onTableFieldsChanged, this);
+                this._table.watch(_table.WatchableTableKeys.fields, this._onTableFieldsChanged, this);
 
                 if (!this._groupLevels) {
                   _context2.next = 38;
@@ -628,16 +638,16 @@ function (_QueryResult) {
 
       if (this._sourceModel instanceof _table.default) {
         if (this._fieldIdsSetToLoadOrNullIfAllFields) {
-          this._sourceModel.unloadRecordMetadata();
+          this._recordStore.unloadRecordMetadata();
         } else {
-          this._sourceModel.unloadData();
+          this._recordStore.unloadData();
         }
       } else {
-        this._sourceModel.unloadData();
+        this._recordStore.getViewDataStore(this._sourceModel.id).unloadData();
       }
 
       if (this._fieldIdsSetToLoadOrNullIfAllFields) {
-        this._table.unloadCellValuesInFieldIds(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
+        this._recordStore.unloadCellValuesInFieldIds(Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields));
       }
 
       this._unloadRecordColors();
@@ -647,12 +657,15 @@ function (_QueryResult) {
     value: function _unloadData() {
       this._mostRecentSourceModelLoadPromise = null;
 
-      this._sourceModel.unwatch( // flow-disable-next-line since we know this watch key is valid.
-      this._recordsWatchKey, this._onRecordsChanged, this);
+      if (this._sourceModel instanceof _table.default) {
+        this._recordStore.unwatch(_record_store.WatchableRecordStoreKeys.records, this._onRecordsChanged, this);
+      } else {
+        this._recordStore.getViewDataStore(this._sourceModel.id).unwatch(_view_data_store.WatchableViewDataStoreKeys.visibleRecords, this._onRecordsChanged, this);
+      }
 
-      this._table.unwatch(this._cellValuesForSortWatchKeys, this._onCellValuesForSortChanged, this);
+      this._recordStore.unwatch(this._cellValuesForSortWatchKeys, this._onCellValuesForSortChanged, this);
 
-      this._table.unwatch(this._fieldsWatchKey, this._onTableFieldsChanged, this); // If the table is deleted, can't call getFieldById on it below.
+      this._table.unwatch(_table.WatchableTableKeys.fields, this._onTableFieldsChanged, this); // If the table is deleted, can't call getFieldById on it below.
 
 
       if (!this._table.isDeleted && this._groupLevels) {
@@ -719,7 +732,7 @@ function (_QueryResult) {
         for (var _iterator9 = recordIds[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
           var recordId = _step9.value;
 
-          var record = this._table.__getRecordByIdIfExists(recordId);
+          var record = this._recordStore.getRecordByIdIfExists(recordId);
 
           (0, _invariant.default)(record, 'Record missing in table');
 
@@ -746,14 +759,16 @@ function (_QueryResult) {
   }, {
     key: "_onRecordsChanged",
     value: function _onRecordsChanged(model, key, updates) {
-      if (model instanceof _view.default) {
+      if (model instanceof _view_data_store.default) {
         // For a view model, we don't get updates sent with the onChange event,
         // so we need to manually generate updates based on the old and new
         // recordIds.
         if (this._orderedRecordIds) {
-          var _addedRecordIds = u.difference(model.__visibleRecordIds, this._orderedRecordIds);
+          var visibleRecordIds = this._recordStore.getViewDataStore(model.viewId).visibleRecordIds;
 
-          var _removedRecordIds = u.difference(this._orderedRecordIds, model.__visibleRecordIds);
+          var _addedRecordIds = u.difference(visibleRecordIds, this._orderedRecordIds);
+
+          var _removedRecordIds = u.difference(this._orderedRecordIds, visibleRecordIds);
 
           updates = {
             addedRecordIds: _addedRecordIds,
@@ -847,7 +862,7 @@ function (_QueryResult) {
     }
   }, {
     key: "_onCellValuesForSortChanged",
-    value: function _onCellValuesForSortChanged(table, key, recordIds, fieldId) {
+    value: function _onCellValuesForSortChanged(recordStore, key, recordIds, fieldId) {
       if (!recordIds || !fieldId) {
         // If there are no updates, do nothing, since we'll handle the initial
         // callback when the record set is loaded (and we don't want to fire
@@ -1186,24 +1201,14 @@ function (_QueryResult) {
       })) : [];
     }
   }, {
-    key: "_recordsWatchKey",
-    get: function get() {
-      return this._sourceModel instanceof _table.default ? '__records' : '__visibleRecords';
-    }
-  }, {
-    key: "_fieldsWatchKey",
-    get: function get() {
-      return 'fields';
-    }
-  }, {
     key: "_sourceModelRecordIds",
     get: function get() {
-      return this._sourceModel instanceof _table.default ? this._sourceModel.__recordIds : this._sourceModel.__visibleRecordIds;
+      return this._sourceModel instanceof _table.default ? this._recordStore.recordIds : this._recordStore.getViewDataStore(this._sourceModel.id).visibleRecordIds;
     }
   }, {
     key: "_sourceModelRecords",
     get: function get() {
-      return this._sourceModel instanceof _table.default ? this._sourceModel.__records : this._sourceModel.__visibleRecords;
+      return this._sourceModel instanceof _table.default ? this._recordStore.records : this._recordStore.getViewDataStore(this._sourceModel.id).visibleRecords;
     }
   }]);
   return TableOrViewQueryResult;

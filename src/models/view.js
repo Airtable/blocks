@@ -1,17 +1,13 @@
 // @flow
-import invariant from 'invariant';
-import {type Color} from '../colors';
-import {type BaseData, type ModelChange} from '../types/base';
+import {type BaseData} from '../types/base';
 import {type ViewData, type ViewType} from '../types/view';
 import {isEnumValue} from '../private_utils';
-import ColorUtils from '../color_utils';
-import {type AirtableInterface} from '../injected/airtable_interface';
-import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import AbstractModel from './abstract_model';
 import type Table from './table';
 import type Field from './field';
-import type Record from './record';
 import {type QueryResultOpts} from './query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
+import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
@@ -24,43 +20,29 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
 // to mirror the method/getter names on the model class.
 const WatchableViewKeys = Object.freeze({
     name: ('name': 'name'),
-    __visibleRecords: ('__visibleRecords': '__visibleRecords'),
-    __visibleRecordIds: ('__visibleRecordIds': '__visibleRecordIds'),
-    allFields: ('allFields': 'allFields'),
     visibleFields: ('visibleFields': 'visibleFields'),
-    __recordColors: ('__recordColors': '__recordColors'),
+    allFields: ('allFields': 'allFields'),
 });
 export type WatchableViewKey = $Values<typeof WatchableViewKeys>;
 
 /** Model class representing a view in a table. */
-class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
+class View extends AbstractModel<ViewData, WatchableViewKey> {
     static _className = 'View';
     static _isWatchableKey(key: string): boolean {
         return isEnumValue(WatchableViewKeys, key);
     }
-    static _shouldLoadDataForKey(key: WatchableViewKey): boolean {
-        return (
-            key === WatchableViewKeys.__visibleRecords ||
-            key === WatchableViewKeys.__visibleRecordIds ||
-            key === WatchableViewKeys.allFields ||
-            key === WatchableViewKeys.visibleFields ||
-            key === WatchableViewKeys.__recordColors
-        );
-    }
     _parentTable: Table;
-    _mostRecentTableLoadPromise: Promise<*> | null;
-    _airtableInterface: AirtableInterface;
+    _viewDataStore: ViewDataStore;
     constructor(
         baseData: BaseData,
         parentTable: Table,
+        viewDataStore: ViewDataStore,
         viewId: string,
-        airtableInterface: AirtableInterface,
     ) {
         super(baseData, viewId);
 
         this._parentTable = parentTable;
-        this._mostRecentTableLoadPromise = null;
-        this._airtableInterface = airtableInterface;
+        this._viewDataStore = viewDataStore;
 
         Object.seal(this);
     }
@@ -70,15 +52,6 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
             return null;
         }
         return tableData.viewsById[this._id] || null;
-    }
-    get _isRecordMetadataLoaded(): boolean {
-        const parentTable = this.parentTable;
-        const isParentTableLoaded = parentTable.isRecordMetadataLoaded;
-        return isParentTableLoaded;
-    }
-    /** */
-    get isDataLoaded(): boolean {
-        return this._isDataLoaded && this._isRecordMetadataLoaded;
     }
     /** */
     get parentTable(): Table {
@@ -100,211 +73,89 @@ class View extends AbstractModelWithAsyncData<ViewData, WatchableViewKey> {
     }
     /** */
     select(opts?: QueryResultOpts): TableOrViewQueryResult {
-        return TableOrViewQueryResult.__createOrReuseQueryResult(this, opts || {});
-    }
-    async loadDataAsync() {
-        // Override this method to also load table data.
-        // NOTE: it's important that we call loadDataAsync on the table here and not in
-        // _loadDataAsync since we want the retain counts for the view and table to increase/decrease
-        // in lock-step. If we load table data in _loadDataAsync, the table's retain
-        // count only increments some of the time, which leads to unexpected behavior.
-        const tableLoadPromise = this.parentTable.loadRecordMetadataAsync();
-        this._mostRecentTableLoadPromise = tableLoadPromise;
-
-        await super.loadDataAsync();
-    }
-    async _loadDataAsync(): Promise<Array<WatchableViewKey>> {
-        // We need to be sure that the table data is loaded *before* we return
-        // from this method.
-        invariant(this._mostRecentTableLoadPromise, 'No table load promise');
-        const tableLoadPromise = this._mostRecentTableLoadPromise;
-
-        const [viewData] = await Promise.all([
-            this._airtableInterface.fetchAndSubscribeToViewDataAsync(this.parentTable.id, this._id),
-            tableLoadPromise,
-        ]);
-
-        this._data.visibleRecordIds = viewData.visibleRecordIds;
-        this._data.fieldOrder = viewData.fieldOrder;
-        this._data.colorsByRecordId = viewData.colorsByRecordId;
-
-        for (const record of this.__visibleRecords) {
-            if (this._data.colorsByRecordId[record.id]) {
-                record.__triggerOnChangeForRecordColorInViewId(this.id);
-            }
-        }
-
-        return [
-            WatchableViewKeys.__visibleRecords,
-            WatchableViewKeys.__visibleRecordIds,
-            WatchableViewKeys.allFields,
-            WatchableViewKeys.visibleFields,
-            WatchableViewKeys.__recordColors,
-        ];
-    }
-    unloadData() {
-        // Override this method to also unload the table's data.
-        // NOTE: it's important that we do this here, since we want the view and table's
-        // retain counts to increment/decrement in lock-step. If we unload the table's
-        // data in _unloadData, it leads to unexpected behavior.
-        super.unloadData();
-        this.parentTable.unloadRecordMetadata();
-    }
-    _unloadData() {
-        this._mostRecentTableLoadPromise = null;
-        this._airtableInterface.unsubscribeFromViewData(this.parentTable.id, this._id);
-        if (!this.isDeleted) {
-            this._data.visibleRecordIds = undefined;
-            this._data.colorsByRecordId = undefined;
-        }
-    }
-    __generateChangesForParentTableAddMultipleRecords(
-        recordIds: Array<string>,
-    ): Array<ModelChange> {
-        const newVisibleRecordIds = [...this.__visibleRecordIds, ...recordIds];
-        return [
-            {
-                path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'],
-                value: newVisibleRecordIds,
-            },
-        ];
-    }
-    __generateChangesForParentTableDeleteMultipleRecords(
-        recordIds: Array<string>,
-    ): Array<ModelChange> {
-        const recordIdsToDeleteSet = {};
-        for (const recordId of recordIds) {
-            recordIdsToDeleteSet[recordId] = true;
-        }
-        const newVisibleRecordIds = this.__visibleRecordIds.filter(recordId => {
-            return !recordIdsToDeleteSet[recordId];
-        });
-        return [
-            {
-                path: ['tablesById', this.parentTable.id, 'viewsById', this.id, 'visibleRecordIds'],
-                value: newVisibleRecordIds,
-            },
-        ];
-    }
-    /**
-     * The record IDs that are not filtered out of this view.
-     * Can be watched to know when records are created, deleted, reordered, or
-     * filtered in and out of this view.
-     */
-    get __visibleRecordIds(): Array<string> {
-        const visibleRecordIds = this._data.visibleRecordIds;
-        invariant(visibleRecordIds, 'View data is not loaded');
-
-        // Freeze visibleRecordIds so users can't mutate it.
-        // If it changes from liveapp, we get an entire new array which will
-        // replace this one, so it's okay to freeze it.
-        if (!Object.isFrozen(visibleRecordIds)) {
-            Object.freeze(visibleRecordIds);
-        }
-
-        return visibleRecordIds;
-    }
-    /**
-     * The records that are not filtered out of this view.
-     * Can be watched to know when records are created, deleted, reordered, or
-     * filtered in and out of this view.
-     */
-    get __visibleRecords(): Array<Record> {
-        const {parentTable} = this;
-        invariant(this._isRecordMetadataLoaded, 'Table data is not loaded');
-
-        const visibleRecordIds = this._data.visibleRecordIds;
-        invariant(visibleRecordIds, 'View data is not loaded');
-
-        return visibleRecordIds.map(recordId => {
-            const record = parentTable.__getRecordByIdIfExists(recordId);
-            invariant(record, 'Record in view does not exist');
-            return record;
-        });
+        return TableOrViewQueryResult.__createOrReuseQueryResult(
+            this,
+            this._viewDataStore.parentRecordStore,
+            opts || {},
+        );
     }
     /**
      * All the fields in the table, including fields that are hidden in this
      * view. Can be watched to know when fields are created, deleted, or reordered.
      */
     get allFields(): Array<Field> {
-        const fieldOrder = this._data.fieldOrder;
-        invariant(fieldOrder, 'View data is not loaded');
-        return fieldOrder.fieldIds.map(fieldId => this.parentTable.getFieldById(fieldId));
+        return this._viewDataStore.allFieldIds.map(fieldId =>
+            this.parentTable.getFieldById(fieldId),
+        );
     }
     /**
      * The fields that are not hidden in this view.
      * view. Can be watched to know when fields are created, deleted, or reordered.
      */
     get visibleFields(): Array<Field> {
-        const fieldOrder = this._data.fieldOrder;
-        invariant(fieldOrder, 'View data is not loaded');
-        const {fieldIds} = fieldOrder;
-        return fieldIds
-            .slice(0, fieldOrder.visibleFieldCount)
-            .map(fieldId => this.parentTable.getFieldById(fieldId));
+        return this._viewDataStore.visibleFieldIds.map(fieldId =>
+            this.parentTable.getFieldById(fieldId),
+        );
     }
-    /**
-     * Get the color name for the specified record in this view, or null if no
-     * color is available. Watch with '__recordColors'
-     */
-    __getRecordColor(recordOrRecordId: string | Record): Color | null {
-        invariant(this.isDataLoaded, 'View data is not loaded');
-        const colorsByRecordId = this._data.colorsByRecordId;
-        if (!colorsByRecordId) {
-            return null;
+
+    watch(
+        keys: WatchableViewKey | Array<WatchableViewKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableViewKey> {
+        const validKeys = super.watch(keys, callback, context);
+
+        for (const validKey of validKeys) {
+            if (validKey === WatchableViewKeys.visibleFields) {
+                this._viewDataStore.watch(
+                    WatchableViewDataStoreKeys.visibleFieldIds,
+                    callback,
+                    context,
+                );
+            }
+            if (validKey === WatchableViewKeys.allFields) {
+                this._viewDataStore.watch(
+                    WatchableViewDataStoreKeys.allFieldIds,
+                    callback,
+                    context,
+                );
+            }
         }
 
-        const recordId =
-            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
-        const color = colorsByRecordId[recordId];
-        return color || null;
+        return validKeys;
     }
-    /**
-     * Get the CSS hex color for the specified record in this view, or null if
-     * no color is available. Watch with '__recordColors'
-     */
-    __getRecordColorHex(recordOrRecordId: string | Record): string | null {
-        const colorName = this.__getRecordColor(recordOrRecordId);
-        if (!colorName) {
-            return null;
+
+    unwatch(
+        keys: WatchableViewKey | Array<WatchableViewKey>,
+        callback: Function,
+        context?: ?Object,
+    ): Array<WatchableViewKey> {
+        const validKeys = super.unwatch(keys, callback, context);
+
+        for (const validKey of validKeys) {
+            if (validKey === WatchableViewKeys.visibleFields) {
+                this._viewDataStore.unwatch(
+                    WatchableViewDataStoreKeys.visibleFieldIds,
+                    callback,
+                    context,
+                );
+            }
+            if (validKey === WatchableViewKeys.allFields) {
+                this._viewDataStore.unwatch(
+                    WatchableViewDataStoreKeys.allFieldIds,
+                    callback,
+                    context,
+                );
+            }
         }
-        return ColorUtils.getHexForColor(colorName);
+
+        return validKeys;
     }
+
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
+        this._viewDataStore.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.name) {
             this._onChange(WatchableViewKeys.name);
-        }
-        if (dirtyPaths.visibleRecordIds) {
-            this._onChange(WatchableViewKeys.__visibleRecords);
-            this._onChange(WatchableViewKeys.__visibleRecordIds);
-        }
-        if (dirtyPaths.fieldOrder) {
-            this._onChange(WatchableViewKeys.allFields);
-            // TODO(kasra): only trigger visibleFields if the *visible* field ids changed.
-            this._onChange(WatchableViewKeys.visibleFields);
-        }
-        if (dirtyPaths.colorsByRecordId) {
-            const changedRecordIds = dirtyPaths.colorsByRecordId._isDirty
-                ? null
-                : Object.keys(dirtyPaths.colorsByRecordId);
-
-            if (changedRecordIds) {
-                // Checking isRecordMetadataLoaded fixes a timing issue:
-                // When a new table loads in liveapp, we'll receive the record
-                // colors before getting the response to our loadData call.
-                // This is a temporary fix: we need a more general solution to
-                // avoid processing events associated with subscriptions whose
-                // data we haven't received yet.
-                if (this.parentTable.isRecordMetadataLoaded) {
-                    for (const recordId of changedRecordIds) {
-                        const record = this.parentTable.__getRecordByIdIfExists(recordId);
-                        invariant(record, 'record must exist');
-                        record.__triggerOnChangeForRecordColorInViewId(this.id);
-                    }
-                }
-            }
-
-            this._onChange(WatchableViewKeys.__recordColors, changedRecordIds);
         }
     }
 }

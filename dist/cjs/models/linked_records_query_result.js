@@ -129,9 +129,11 @@ function (_QueryResult) {
     var linkedTableId = getLinkedTableId(field);
     var linkedTable = (0, _get_sdk.default)().base.getTableById(linkedTableId);
 
+    var linkedRecordStore = (0, _get_sdk.default)().base.__getRecordStore(linkedTableId);
+
     var normalizedOpts = _query_result.default._normalizeOpts(linkedTable, opts);
 
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(LinkedRecordsQueryResult).call(this, normalizedOpts, record.parentTable.__baseData));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(LinkedRecordsQueryResult).call(this, linkedRecordStore, normalizedOpts, record.parentTable.__baseData));
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_isValid", true);
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_computedRecordIdsSet", null);
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)(_this), "_computedFilteredSortedRecordIds", null);
@@ -140,12 +142,13 @@ function (_QueryResult) {
     _this._record = record;
     _this._field = field;
     _this._linkedTable = linkedTable;
+    _this._linkedRecordStore = linkedRecordStore;
     _this._poolKey = "".concat(record.id, "::").concat(field.id, "::").concat(linkedTableId); // we could rely on QueryResult's reuse pool to make sure we get back
     // the same QueryResult every time, but that would make it much harder
     // to make sure we unwatch everything from the old QueryResult if e.g.
     // the field config changes to point at a different table
 
-    _this._linkedQueryResult = _table_or_view_query_result.default.__createOrReuseQueryResult(linkedTable, opts);
+    _this._linkedQueryResult = _table_or_view_query_result.default.__createOrReuseQueryResult(linkedTable, linkedRecordStore, opts);
     return _this;
   }
   /**
@@ -296,7 +299,7 @@ function (_QueryResult) {
                 this._watchLinkedQueryResult();
 
                 _context2.next = 5;
-                return Promise.all([this._record.parentTable.loadCellValuesInFieldIdsAsync([this._field.id]), this._linkedQueryResult.loadDataAsync(), this._loadRecordColorsAsync()]);
+                return Promise.all([(0, _get_sdk.default)().base.__getRecordStore(this._record.parentTable.id).loadCellValuesInFieldIdsAsync([this._field.id]), this._linkedQueryResult.loadDataAsync(), this._loadRecordColorsAsync()]);
 
               case 5:
                 this._invalidateComputedData();
@@ -327,7 +330,7 @@ function (_QueryResult) {
 
         this._unwatchLinkedQueryResult();
 
-        this._record.parentTable.unloadCellValuesInFieldIds([this._field.id]);
+        (0, _get_sdk.default)().base.__getRecordStore(this._record.parentTable.id).unloadCellValuesInFieldIds([this._field.id]);
 
         this._linkedQueryResult.unloadData();
 
@@ -666,9 +669,8 @@ function (_QueryResult) {
     key: "records",
     get: function get() {
       (0, _invariant.default)(this.isValid, 'LinkedRecordQueryResult is no longer valid');
-      var linkedTable = this._linkedTable;
       return this.recordIds.map(recordId => {
-        var record = linkedTable.__getRecordByIdIfExists(recordId);
+        var record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
 
         (0, _invariant.default)(record, "No record for id: ".concat(recordId));
         return record;
