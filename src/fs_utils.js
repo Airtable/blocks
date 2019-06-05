@@ -92,4 +92,5 @@ module.exports = {
             return result !== null;
         });
     },
+    unlinkAsync: promisify(fs.unlink),
 };

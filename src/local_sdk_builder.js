@@ -82,7 +82,9 @@ class LocalSdkBuilder {
 
     async startAsync(): Promise<void> {
         console.log(`Installing local SDK from ${this.sdkPath}...`);
-        await this._installLocalSdkAsync();
+        const tempPackagePath = await this._createTemporarySdkPackageAsync();
+        await this._installLocalSdkAsync(tempPackagePath);
+        await fsUtils.unlinkAsync(tempPackagePath);
 
         console.log(`Building local SDK in ${this.sdkPath}...`);
         await this._buildAndWatchSourceAsync();
@@ -93,13 +95,23 @@ class LocalSdkBuilder {
         await this._copyAndWatchBuildAsync(copySourcePath, copyDestPath);
     }
 
-    async _installLocalSdkAsync(): Promise<void> {
+    async _createTemporarySdkPackageAsync(): Promise<string> {
+        const {stdout} = await execFileAsync('npm', ['pack'], {cwd: this.sdkPath, prefix: 'npm pack'});
+        
+        // npm pack prints the location of the package to stdout before exiting
+        const lines = stdout.trim().split('\n');
+        const packedPackagePath = lines[lines.length - 1];
+
+        return path.join(this.sdkPath, packedPackagePath);
+    }
+
+    async _installLocalSdkAsync(packagePath: string): Promise<void> {
         const blockDir = getBlockDirPath();
         const shouldUseYarn = await fsUtils.existsAsync(path.join(blockDir, 'yarn.lock'));
 
         await execFileAsync(
             shouldUseYarn ? 'yarn' : 'npm',
-            shouldUseYarn ? ['add', this.sdkPath, '--non-interactive'] : ['install', this.sdkPath],
+            shouldUseYarn ? ['add', packagePath, '--non-interactive'] : ['install', packagePath],
             {
                 prefix: shouldUseYarn ? 'yarn add' : 'npm install',
                 cwd: getBlockDirPath(),
