@@ -45,7 +45,7 @@ const classNamesByTheme = {
  *     <UI.Button
  *        disabled={false}
  *        theme={UI.Button.themes.BLUE}
- *        onClick={() = alert('Clicked!')}>
+ *        onClick={() => alert('Clicked!')}>
  *         Done
  *     </UI.Button>
  * );
