@@ -9,6 +9,7 @@ const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const path = require('path');
 const invariant = require('invariant');
+const {camelCase, upperFirst} = require('lodash');
 
 import type {Argv} from 'yargs';
 import type {Environment} from '../types/environments';
@@ -18,25 +19,33 @@ const DEFAULT_FRONTEND_ENTRY_MODULE_METADATA = {
     type: BlockModuleTypes.FRONTEND,
     name: DEFAULT_FRONTEND_ENTRY_MODULE_NAME,
 };
-const DEFAULT_FRONTEND_CODE = `import Block from '@airtable/blocks';
+
+function getDefaultFrontendCode(blockDirPath: string): string {
+    let componentName = upperFirst(camelCase(path.basename(blockDirPath)));
+    if (!componentName.includes('Block')) {
+        componentName = `${componentName}Block`;
+    }
+
+    return `import {UI} from '@airtable/blocks';
 import React from 'react';
 
-function Component() {
+function ${componentName}() {
     // YOUR CODE GOES HERE
     return (
         <div>Hello world 🚀</div>
     );
 }
 
-export default Component;
+UI.initializeBlock(() => <${componentName} />);
 `;
+}
 
 async function writeDefaultFilesAsync(blockDirPath: string): Promise<void> {
     const frontendDirPath = path.join(blockDirPath, BlockModuleTypes.FRONTEND);
     await fsUtils.mkdirAsync(frontendDirPath);
     await fsUtils.writeFileAsync(
         path.join(frontendDirPath, `${DEFAULT_FRONTEND_ENTRY_MODULE_NAME}.js`),
-        DEFAULT_FRONTEND_CODE,
+        getDefaultFrontendCode(blockDirPath),
     );
 }
 
@@ -75,7 +84,7 @@ async function initBlockAsync(
 
     // Create a minimal package json so the user can yarn install.
     const defaultDependencies = {
-        '@airtable/blocks': '^0.0.3',
+        '@airtable/blocks': '^0.0.5',
         react: '^16.8.0',
         'react-dom': '^16.8.0',
     };
