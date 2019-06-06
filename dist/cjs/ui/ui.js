@@ -99,6 +99,8 @@ var _with_hooks = _interopRequireDefault(require("./with_hooks"));
 
 var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
+var _use_viewport = _interopRequireDefault(require("./use_viewport"));
+
 // TODO: freeze this object before we ship the code editor.
 var UI = {
   Popover: _popover.default,
@@ -148,6 +150,7 @@ var UI = {
   globalAlert: new _global_alert.default(),
   initializeBlock: _initialize_block.default,
   withHooks: _with_hooks.default,
+  useViewport: _use_viewport.default,
   useWatchable: _use_watchable.default
 };
 var _default = UI;

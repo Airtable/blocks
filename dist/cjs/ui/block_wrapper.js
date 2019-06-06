@@ -128,7 +128,7 @@ function (_React$Component) {
         className: "center line-height-4 quiet strong"
       }, React.createElement("span", null, "Please make this block bigger or "), React.createElement("span", {
         className: "pointer understroke link-unquiet",
-        onClick: () => viewport.enterFullscreen()
+        onClick: () => viewport.enterFullscreenIfPossible()
       }, "fullscreen"))));
     }
   }]);

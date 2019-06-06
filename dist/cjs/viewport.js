@@ -121,8 +121,8 @@ function (_Watchable) {
 
 
   (0, _createClass2.default)(Viewport, [{
-    key: "enterFullscreen",
-    value: function enterFullscreen() {
+    key: "enterFullscreenIfPossible",
+    value: function enterFullscreenIfPossible() {
       this._airtableInterface.enterFullscreen();
     }
     /** Request to exit fullscreen mode */

@@ -45,6 +45,7 @@ import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './
 import initializeBlock from './initialize_block';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
+import useViewport from './use_viewport';
 
 // TODO: freeze this object before we ship the code editor.
 const UI = {
@@ -95,6 +96,7 @@ const UI = {
     globalAlert: new GlobalAlert(),
     initializeBlock,
     withHooks,
+    useViewport,
     useWatchable,
 };
 

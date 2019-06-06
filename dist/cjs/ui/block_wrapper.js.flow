@@ -96,7 +96,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
                             <span>Please make this block bigger or </span>
                             <span
                                 className="pointer understroke link-unquiet"
-                                onClick={() => viewport.enterFullscreen()}
+                                onClick={() => viewport.enterFullscreenIfPossible()}
                             >
                                 fullscreen
                             </span>

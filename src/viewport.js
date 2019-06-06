@@ -85,7 +85,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * permission to fullscreen itself. Watch `isFullscreen` to know if the
      * request succeeded.
      */
-    enterFullscreen() {
+    enterFullscreenIfPossible() {
         this._airtableInterface.enterFullscreen();
     }
     /** Request to exit fullscreen mode */
