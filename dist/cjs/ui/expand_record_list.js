@@ -17,7 +17,8 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  * Expands a list of records in the Airtable UI
  *
  * @param records the records to expand. Duplicate records will be removed.
- * @param opts.fields optionally include an array of fields to control
+ * @param [opts] An optional options object.
+ * @param [opts.fields] optionally include an array of fields to control
  * which fields are shown in the record cards. The primary field will always
  * be shown. Duplicate fields will be removed.
  *

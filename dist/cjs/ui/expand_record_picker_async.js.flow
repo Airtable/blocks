@@ -13,10 +13,11 @@ import type Field from '../models/field';
  * has been closed, it will return null.
  *
  * @param records the records the user can pick from. Duplicate records will be removed.
- * @param opts.fields optionally include an array of fields to control
+ * @param [opts] An optional options object.
+ * @param [opts.fields] optionally include an array of fields to control
  * which fields are shown in the record cards. The primary field will always
  * be shown. Duplicate fields will be removed.
- * @param opts.shouldAllowCreatingRecord set to true to allow the user to create
+ * @param [opts.shouldAllowCreatingRecord] set to true to allow the user to create
  * an empty new record.
  *
  * @returns {Promise<record | null>} a Promise that resolves to the record
