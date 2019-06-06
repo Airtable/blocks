@@ -43,6 +43,8 @@ import ViewportConstraint from './viewport_constraint';
 import Link from './link';
 import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 import initializeBlock from './initialize_block';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 // TODO: freeze this object before we ship the code editor.
 const UI = {
@@ -92,6 +94,8 @@ const UI = {
     ViewportConstraint,
     globalAlert: new GlobalAlert(),
     initializeBlock,
+    withHooks,
+    useWatchable,
 };
 
 export default UI;

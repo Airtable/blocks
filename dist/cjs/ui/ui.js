@@ -95,6 +95,10 @@ var _remote_utils = require("./remote_utils");
 
 var _initialize_block = _interopRequireDefault(require("./initialize_block"));
 
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
+
 // TODO: freeze this object before we ship the code editor.
 var UI = {
   Popover: _popover.default,
@@ -142,7 +146,9 @@ var UI = {
   ToggleSynced: _toggle_synced.default,
   ViewportConstraint: _viewport_constraint.default,
   globalAlert: new _global_alert.default(),
-  initializeBlock: _initialize_block.default
+  initializeBlock: _initialize_block.default,
+  withHooks: _with_hooks.default,
+  useWatchable: _use_watchable.default
 };
 var _default = UI;
 exports.default = _default;

@@ -27,7 +27,15 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
+var idCount = 0;
+
+function getId() {
+  idCount++;
+  return idCount;
+}
 /** */
+
+
 var Watchable =
 /*#__PURE__*/
 function () {
@@ -41,17 +49,29 @@ function () {
 
   function Watchable() {
     (0, _classCallCheck2.default)(this, Watchable);
+    (0, _defineProperty2.default)(this, "_changeCount", 0);
+    (0, _defineProperty2.default)(this, "_watchableId", getId());
     this._changeWatchersByKey = {};
-  }
-  /**
-   * Start watching the given key or keys. The callback will be called when the
-   * value changes. Every call to `watch` should have a matching call to `unwatch`.
-   *
-   * Will log a warning if the keys given are invalid.
-   */
+  } // React integrations (e.g. useSubscription) rely on referential equality (===) to determine
+  // when things have changed. This doesn't work with our mutable models, since the identity
+  // of the model doesn't change, but the data inside it might. Rather than never returning two equal values
+  // those integrations can use __getWatchableKey, a string key that is guaranteed to be unique
+  // to each watchable and will change whenever the watch keys are fired.
 
 
   (0, _createClass2.default)(Watchable, [{
+    key: "__getWatchableKey",
+    value: function __getWatchableKey() {
+      return "".concat(this._watchableId, " ").concat(this._changeCount);
+    }
+    /**
+     * Start watching the given key or keys. The callback will be called when the
+     * value changes. Every call to `watch` should have a matching call to `unwatch`.
+     *
+     * Will log a warning if the keys given are invalid.
+     */
+
+  }, {
     key: "watch",
     value: function watch(keys, callback, context) {
       if (!Array.isArray(keys)) {
@@ -168,6 +188,7 @@ function () {
   }, {
     key: "_onChange",
     value: function _onChange(key) {
+      this._changeCount += 1;
       var watchers = this._changeWatchersByKey[key];
 
       if (watchers) {

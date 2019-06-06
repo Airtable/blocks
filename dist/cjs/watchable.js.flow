@@ -1,5 +1,11 @@
 // @flow
 
+let idCount = 0;
+function getId() {
+    idCount++;
+    return idCount;
+}
+
 /** */
 class Watchable<WatchableKey: string> {
     static _className = 'Watchable';
@@ -7,6 +13,8 @@ class Watchable<WatchableKey: string> {
         // Override to return whether `key` is a valid watchable key.
         return false;
     }
+    _changeCount = 0;
+    +_watchableId = getId();
     _changeWatchersByKey: {
         [string]: Array<{
             callback: (model: Watchable<*>, key: WatchableKey, ...args: Array<any>) => mixed,
@@ -15,6 +23,14 @@ class Watchable<WatchableKey: string> {
     };
     constructor() {
         this._changeWatchersByKey = {};
+    }
+    // React integrations (e.g. useSubscription) rely on referential equality (===) to determine
+    // when things have changed. This doesn't work with our mutable models, since the identity
+    // of the model doesn't change, but the data inside it might. Rather than never returning two equal values
+    // those integrations can use __getWatchableKey, a string key that is guaranteed to be unique
+    // to each watchable and will change whenever the watch keys are fired.
+    __getWatchableKey(): string {
+        return `${this._watchableId} ${this._changeCount}`;
     }
     /**
      * Start watching the given key or keys. The callback will be called when the
@@ -94,6 +110,7 @@ class Watchable<WatchableKey: string> {
         return validKeys;
     }
     _onChange(key: WatchableKey, ...args: Array<mixed>) {
+        this._changeCount += 1;
         const watchers = this._changeWatchersByKey[key];
         if (watchers) {
             for (const watcher of watchers) {
