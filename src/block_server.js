@@ -26,9 +26,6 @@ const normalizeUserResponse = require('./normalize_user_response');
 const Environments = require('./types/environments');
 const semver = require('semver');
 
-const events = require('events');
-const bundleMessageBus = new events.EventEmitter();
-
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
 const developmentBrowsers = [
@@ -43,10 +40,11 @@ const developmentBrowsers = [
 const allSupportedBrowsers = ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'];
 
 const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
+const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
 class BlockServer {
     constructor({transpileAll = false, apiKey} = {}) {
-        this._pendingLongPollResponsesByRequestId = {};
+        this._pendingLongPollResolveByRequestId = {};
         this._expressApp = express();
         this._shouldTranspileAll = transpileAll;
         this._nextRequestId = 0;
@@ -61,16 +59,6 @@ class BlockServer {
         this._setUpBackendRoutes();
         this._setUpBlockSdkAndWrapper();
         this._setUpBundler();
-
-        bundleMessageBus.on('bundleUpdated', () => {
-            // Whenever the bundle gets updated, return 200 to all the pending
-            // long poll requests to automatically reload the page.
-            Object.keys(this._pendingLongPollResponsesByRequestId).forEach(requestId => {
-                const res = this._pendingLongPollResponsesByRequestId[requestId];
-                res.sendStatus(200);
-                delete this._pendingLongPollResponsesByRequestId[requestId];
-            });
-        });
     }
     _watchBackendCode() {
         const blockDirPath = getBlockDirPath();
@@ -181,12 +169,21 @@ class BlockServer {
         });
 
         runFrameRoutes.get('/poll', (req, res) => {
-            // After 30 sec, send a request timeout to tell the client to retry.
-            res.setTimeout(30000, () => {
-                delete this._pendingLongPollResponsesByRequestId[req.requestId];
-                res.sendStatus(408);
+            // This promise will resolve whenever the bundle we're serving changes.
+            const bundleChangePromise = new Promise((resolve, reject) => {
+                this._pendingLongPollResolveByRequestId[req.requestId] = {resolve};
             });
-            this._pendingLongPollResponsesByRequestId[req.requestId] = res;
+            // After the LONG_POLL_TIMEOUT_MS, send a request timeout to tell the client to retry.
+            const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => resolve('timeout'), LONG_POLL_TIMEOUT_MS));
+
+            Promise.race([
+                bundleChangePromise,
+                timeoutPromise,
+            ]).then(result => {
+                delete this._pendingLongPollResolveByRequestId[req.requestId];
+                const statusCode = result === 'timeout' ? 408 : 200;
+                res.sendStatus(statusCode);
+            });
         });
 
         this._expressApp.use('/__runFrame', runFrameRoutes);
@@ -618,10 +615,7 @@ class BlockServer {
             blockCliConfigSettings.BUNDLE_FILE_NAME
         ));
         fsStream.on('finish', () => {
-            if (fsStream.bytesWritten > 0) {
-                console.log('Bundle updated');
-                bundleMessageBus.emit('bundleUpdated');
-            }
+            console.log('Bundle updated');
             // NOTE: A null value for the `this._bundlePromiseIfExists`
             // instance variable means the bundle is ready to serve.
             // If `bundleAsync` is quickly triggered multiple times:
@@ -633,6 +627,11 @@ class BlockServer {
             if (this._bundlePromiseIfExists === bundlePromise) {
                 this._bundlePromiseIfExists = null;
             }
+            // Resolve any long poll promises that were listening for bundle changes.
+            for (const {resolve: longPollResolve} of Object.values(this._pendingLongPollResolveByRequestId)) {
+                longPollResolve();
+            }
+            // Resolve our primary bundle promise.
             resolve();
         });
         this._bundler
