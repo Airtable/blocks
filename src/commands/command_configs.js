@@ -1,6 +1,7 @@
 // @flow
 const CommandNames = require('./command_names');
 const Environments = require('../types/environments');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const path = require('path');
 const _ = require('lodash');
 
@@ -26,6 +27,10 @@ function commandRunner(name: string): RunCommandFn {
         const command = require(path.join(__dirname, name));
         await command.runCommandAsync(argv);
     };
+}
+
+async function runUnsupportedCommandAsync(argv: Argv) {
+    throw new Error(`The ${argv._[0]} command is no longer supported. If you are working on a block that is not yet migrated to the new block.json format, you may need to use an old version of blocks-cli`);
 }
 
 const commandConfigs: {[CommandName]: CommandConfig} = {
@@ -55,32 +60,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         },
         runCommandAsync: commandRunner(CommandNames.INIT),
     },
-    [CommandNames.CLONE]: {
-        name: CommandNames.CLONE,
-        command: `${CommandNames.CLONE} <blockIdentifier> <blockDirPath>`,
-        description: 'Clone a block from Airtable',
-        example: `block ${CommandNames.CLONE} app123/blk456 my-block`,
-        positionalMap: {
-            blockIdentifier: {
-                description: 'identifier for the block (of the form <baseId>/<blockId>)',
-                type: 'string',
-            },
-            blockDirPath: {
-                description: 'directory path for the block',
-                type: 'string',
-            },
-        },
-        optionMap: {
-            environment: {
-                type: 'string',
-                description: 'Which environment to clone from',
-                choices: _.values(Environments),
-                default: Environments.PRODUCTION,
-                hidden: true, // hide from --help output
-            },
-        },
-        runCommandAsync: commandRunner(CommandNames.CLONE),
-    },
     [CommandNames.RUN]: {
         name: CommandNames.RUN,
         command: `${CommandNames.RUN}`,
@@ -106,6 +85,12 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 type: 'string',
                 hidden: true,
             },
+            remote: {
+                description: 'Configure which remote to use',
+                type: 'string',
+                hidden: true, // hide from --help output
+                default: blockCliConfigSettings.DEFAULT_REMOTE_NAME,
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),
     },
@@ -114,95 +99,74 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         command: `${CommandNames.RELEASE}`,
         description: 'Release a block',
         example: `block ${CommandNames.RELEASE}`,
+        optionMap: {
+            remote: {
+                description: 'Configure which remote to use',
+                type: 'string',
+                hidden: true, // hide from --help output
+                default: blockCliConfigSettings.DEFAULT_REMOTE_NAME,
+            },
+        },
         runCommandAsync: commandRunner(CommandNames.RELEASE),
+    },
+
+    // THE FOLLOWING COMMANDS ARE NO LONGER SUPPORTED.
+    // TODO(jb): remove them once all blocks are migrated to the standalone CLI world.
+    [CommandNames.CLONE]: {
+        name: CommandNames.CLONE,
+        command: `${CommandNames.CLONE}`, // Doesn't specify the positionals here so that even doing `block clone` will show the unsupported command error.
+        description: false, // UNSUPPORTED, so hide this from help output.
+        example: `block ${CommandNames.CLONE} app123/blk456 my-block`,
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.PUSH]: {
         name: CommandNames.PUSH,
         command: `${CommandNames.PUSH}`,
-        description: 'Push changes to Airtable',
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.PUSH}`,
-        optionMap: {
-            force: {
-                description: 'Bypass revision check when updating files?',
-                type: 'boolean',
-                default: false,
-            },
-        },
-        runCommandAsync: commandRunner(CommandNames.PUSH),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.PULL]: {
         name: CommandNames.PULL,
         command: `${CommandNames.PULL}`,
-        description: 'Pull changes from Airtable',
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.PULL}`,
-        runCommandAsync: commandRunner(CommandNames.PULL),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.RENAME_ENTRY]: {
         name: CommandNames.RENAME_ENTRY,
-        command: `${CommandNames.RENAME_ENTRY} <newName>`,
-        description: 'Update the entry module name',
+        command: `${CommandNames.RENAME_ENTRY}`, // Doesn't specify the positionals here so that even doing `block rename-entry` will show the unsupported command error.
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.RENAME_ENTRY} newModuleName`,
-        positionalMap: {
-            newName: {
-                description: 'new name for the frontend entry module',
-                type: 'string',
-            },
-        },
-        // NOTE: the module name (rename_entry) doesn't exactly match the command name (rename-entry)
-        // in order to conform to our file naming guidelines.
-        runCommandAsync: commandRunner('rename_entry'),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.SET_CREDENTIAL]: {
         name: CommandNames.SET_CREDENTIAL,
         command: `${CommandNames.SET_CREDENTIAL}`,
-        description: false,
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.SET_CREDENTIAL}`,
-        // NOTE: the module name (set_credential) doesn't exactly match the command name (set-credential)
-        // in order to conform to our file naming guidelines.
-        runCommandAsync: commandRunner('set_credential'),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.DELETE_CREDENTIAL]: {
         name: CommandNames.DELETE_CREDENTIAL,
-        command: `${CommandNames.DELETE_CREDENTIAL} <credentialName>`,
-        description: false,
+        command: `${CommandNames.DELETE_CREDENTIAL}`, // Doesn't specify the positionals here so that even doing `block rename-entry` will show the unsupported command error.
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.DELETE_CREDENTIAL} CREDENTIAL_NAME`,
-        positionalMap: {
-            credentialName: {
-                description: 'name of credential to delete',
-                type: 'string',
-            },
-        },
-        // NOTE: the module name (delete_credential) doesn't exactly match the command name (delete-credential)
-        // in order to conform to our file naming guidelines.
-        runCommandAsync: commandRunner('delete_credential'),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.RENAME_CREDENTIAL]: {
         name: CommandNames.RENAME_CREDENTIAL,
-        command: `${CommandNames.RENAME_CREDENTIAL} <currentName> <newName>`,
-        description: false,
+        command: `${CommandNames.RENAME_CREDENTIAL}`, // Doesn't specify the positionals here so that even doing `block rename-entry` will show the unsupported command error.
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.RENAME_CREDENTIAL} CURRENT_NAME NEW_NAME`,
-        positionalMap: {
-            currentName: {
-                type: 'string',
-                description: 'Current name for the credential',
-            },
-            newName: {
-                type: 'string',
-                description: 'New name for the credential',
-            },
-        },
-        // NOTE: the module name (rename_credential) doesn't exactly match the command name (rename-credential)
-        // in order to conform to our file naming guidelines.
-        runCommandAsync: commandRunner('rename_credential'),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
     [CommandNames.LIST_CREDENTIALS]: {
         name: CommandNames.LIST_CREDENTIALS,
         command: `${CommandNames.LIST_CREDENTIALS}`,
-        description: false,
+        description: false, // UNSUPPORTED, so hide this from help output.
         example: `block ${CommandNames.LIST_CREDENTIALS}`,
-        // NOTE: the module name (list_credentials) doesn't exactly match the command name (list-credentials)
-        // in order to conform to our file naming guidelines.
-        runCommandAsync: commandRunner('list_credentials'),
+        runCommandAsync: runUnsupportedCommandAsync,
     },
 };
 

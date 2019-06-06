@@ -6,14 +6,18 @@ const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const cliHelpers = require('../../src/helpers/cli_helpers');
+const yarnHelpers = require('../../src/helpers/yarn_helpers');
 const sinon = require('sinon');
 const assert = require('assert');
 
 describe('init command', function() {
+    let yarnInstallAsyncStub;
     beforeEach(function() {
         sinon.stub(cliHelpers, 'promptAsync').resolves({
             apiKey: 'key123ABC'
         });
+
+        yarnInstallAsyncStub = sinon.stub(yarnHelpers, 'yarnInstallAsync').resolves();
     });
 
     it('writes a directory of files', async function() {
@@ -42,9 +46,14 @@ describe('init command', function() {
 
         assert(fs.existsSync(path.join(blockDirPath, 'frontend', 'index.js')));
 
+        assert(yarnInstallAsyncStub.calledOnce);
+
         const blockJson = await fsExtra.readJson(path.join(blockDirPath, 'block.json'));
-        assert.strictEqual(blockJson.applicationId, 'app123');
-        assert.strictEqual(blockJson.blockId, 'blkABC');
+        assert.strictEqual(blockJson.frontendEntry, './frontend/index.js');
+
+        const remoteJson = await fsExtra.readJson(path.join(blockDirPath, '.block', 'remote.json'));
+        assert.strictEqual(remoteJson.baseId, 'app123');
+        assert.strictEqual(remoteJson.blockId, 'blkABC');
 
         const packageJson = await fsExtra.readJson(path.join(blockDirPath, 'package.json'));
         assert.strictEqual(packageJson.private, true);

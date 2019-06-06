@@ -1,20 +1,50 @@
+// @flow
+const invariant = require('invariant');
 const getBlockDirPath = require('../get_block_dir_path');
 const getApiKeySync = require('../get_api_key_sync');
 const BlockServer = require('../block_server');
 const LocalSdkBuilder = require('../local_sdk_builder');
 const cliHelpers = require('../helpers/cli_helpers');
+const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
+const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
+
+import type {Argv} from 'yargs';
 
 const DEFAULT_PORT = 8000;
 
-async function runCommandAsync(argv) {
+async function runCommandAsync(argv: Argv): Promise<void> {
     const apiKey = getApiKeySync(getBlockDirPath());
-    const {ngrok, transpileAll, sdkRepo} = argv;
+    const {ngrok, transpileAll, sdkRepo, remote} = argv;
+    invariant(typeof ngrok === 'boolean', 'expects ngrok to be a boolean');
+    invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
+    invariant(typeof remote === 'string', 'expects remote to be a string');
 
-    await LocalSdkBuilder.startIfNeededAsync(sdkRepo || null);
+    const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
+    if (blockJsonValidationResult.err) {
+        throw blockJsonValidationResult.err;
+    }
+    const blockJson = blockJsonValidationResult.value;
+
+    const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remote);
+    if (parseRemoteResult.err) {
+        throw parseRemoteResult.err;
+    }
+    const remoteJson = parseRemoteResult.value;
+
+    let sdkPath;
+    if (sdkRepo) {
+        invariant(typeof sdkRepo === 'string', 'expects sdkRepo to be a string');
+        sdkPath = sdkRepo;
+    } else {
+        sdkPath = null;
+    }
+    await LocalSdkBuilder.startIfNeededAsync(sdkPath);
 
     const blockServer = new BlockServer({
         apiKey,
         transpileAll,
+        blockJson,
+        remoteJson,
     });
 
     let port = DEFAULT_PORT;

@@ -38,7 +38,7 @@ describe('APIClient', function() {
         testApp.use(bodyParser.json());
 
         apiClient = new APIClient({
-            environment: Environments.TEST,
+            apiBaseUrl: APIClient.apiBaseUrlsByEnvironment[Environments.TEST],
             applicationId: 'app123',
             blockInstallationId: 'bli123',
             blockId: 'blk123',
@@ -48,112 +48,6 @@ describe('APIClient', function() {
 
     after(function(done) {
         testServer.close(done);
-    });
-
-    describe('updateBlockAsync', function() {
-        it('makes a PUT request to Airtable and returns its body if successful', async function() {
-            testApp.put('/v2/meta/app123/blocks/blk123', (req: express$Request, res: express$Response) => {
-                assert.deepStrictEqual(req.body, {
-                    packageVersionByName: {coinflip: '1.0.0'},
-                    modules: [],
-                });
-                res.json({
-                    createdModules: [],
-                    moduleRevisionsById: {},
-                    developerCredentialsEncrypted: [],
-                });
-            });
-
-            const result = await apiClient.updateBlockAsync({
-                packageVersionByName: {coinflip: '1.0.0'},
-                modules: [],
-            });
-            assert.deepStrictEqual(result, {
-                createdModules: [],
-                moduleRevisionsById: {},
-                developerCredentialsEncrypted: [],
-            });
-        });
-
-        it('throws an error if Airtable returns a 404', async function() {
-            testApp.put('/v2/meta/app123/blocks/blk123', (req: express$Request, res: express$Response) => {
-                res.status(404).json({});
-            });
-            await assert.rejects(async () => {
-                await apiClient.updateBlockAsync({
-                    packageVersionByName: {coinflip: '1.0.0'},
-                    modules: [],
-                });
-            }, /Incorrect application or block id/);
-        });
-
-        it('throws the returned error message for other responses', async function() {
-            const badStatusCodes = [201, 302, 400, 401, 500];
-            // flow-disable-next-line because Flow doesn't support symbols
-            const statusCodesIterator = badStatusCodes[Symbol.iterator]();
-
-            testApp.put('/v2/meta/app123/blocks/blk123', (req: express$Request, res: express$Response) => {
-                res.status(statusCodesIterator.next().value);
-                res.json({
-                    error: {message: 'foo bar'}
-                });
-            });
-
-            for (let i = 0; i < badStatusCodes.length; i++) {
-                await assert.rejects(async () => {
-                    await apiClient.updateBlockAsync({
-                        packageVersionByName: {coinflip: '1.0.0'},
-                        modules: [],
-                    });
-                }, /foo bar/);
-            }
-        });
-    });
-
-    describe('fetchBlockAsync', function() {
-        it('makes a GET request to Airtable and returns its body if successful', async function() {
-            testApp.get('/v2/meta/app123/blocks/blk123', (req: express$Request, res: express$Response) => {
-                res.json({
-                    modules: [],
-                    packageVersionByName: {},
-                    frontendEntryModuleId: 'blm123',
-                });
-            });
-            const result = await apiClient.fetchBlockAsync();
-            assert.deepStrictEqual(result, {
-                modules: [],
-                packageVersionByName: {},
-                frontendEntryModuleId: 'blm123',
-            });
-        });
-
-        it('throws an error if Airtable returns a 404', async function() {
-            testApp.get('/v2/meta/app123/blocks/blk123', (req: express$Request, res: express$Response) => {
-                res.status(404).json({});
-            });
-            await assert.rejects(async () => {
-                await apiClient.fetchBlockAsync();
-            }, /Incorrect application or block id/);
-        });
-
-        it('throws the returned error message for other responses', async function() {
-            const badStatusCodes = [201, 302, 400, 401, 500];
-            // flow-disable-next-line because Flow doesn't support symbols
-            const statusCodesIterator = badStatusCodes[Symbol.iterator]();
-
-            testApp.get('/v2/meta/app123/blocks/blk123', (req: express$Request, res: express$Response) => {
-                res.status(statusCodesIterator.next().value);
-                res.json({
-                    error: {message: 'foo bar'}
-                });
-            });
-
-            for (let i = 0; i < badStatusCodes.length; i++) {
-                await assert.rejects(async () => {
-                    await apiClient.fetchBlockAsync();
-                }, /foo bar/);
-            }
-        });
     });
 
     describe('fetchAccessPolicyAsync', function() {

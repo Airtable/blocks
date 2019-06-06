@@ -5,35 +5,28 @@ const {promisify} = require('util');
 const Environments = require('./types/environments');
 const {URL} = require('url');
 const {USER_AGENT, TEST_SERVER_PORT} = require('./config/block_cli_config_settings');
+const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_remote_json_async');
+const getBlockDirPath = require('./get_block_dir_path');
+const getApiKeySync = require('./get_api_key_sync');
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
 
-import type {
-    CredentialEncrypted,
-    CredentialPlaintext,
-} from './types/block_developer_credential_types';
-import type {Environment} from './types/environments';
-import type {
-    UpdateBlockParams,
-    UpdateBlockResponse,
-    FetchBlockResponse
-} from './types/api_client_types';
+import type {Result} from './types/result';
 
 type ApplicationId = string;
 type BlockInstallationId = string;
 type BlockId = string;
 type BuildId = string;
 type DeployId = string;
-type KmsDataKeyId = string;
 type ReleaseId = string;
 
-const apiBaseUrlsByEnvironment = {
+const apiBaseUrlsByEnvironment = Object.freeze({
     [Environments.PRODUCTION]: 'https://api.airtable.com',
     [Environments.STAGING]: 'https://api-staging.airtable.com',
     [Environments.LOCAL]: 'https://api.hyperbasedev.com:3000',
     [Environments.TEST]: 'http://localhost:' + TEST_SERVER_PORT,
-};
+});
 
 // TODO(jb): realistically, all of these endpoints should be using `bases` and not `meta`.
 // If/when we update the endpoints, we should get rid of support for `meta` here.
@@ -44,20 +37,38 @@ const ApiTypes = Object.freeze({
 type ApiType = $Values<typeof ApiTypes>;
 
 class APIClient {
-    _environment: Environment;
+    _apiBaseUrl: string;
     _applicationId: ApplicationId;
     _blockInstallationId: BlockInstallationId | null;
     _blockId: BlockId | null;
     _apiKey: string;
 
+    static apiBaseUrlsByEnvironment = apiBaseUrlsByEnvironment;
+
+    static async constructAPIClientForRemoteAsync(remoteName: string): Promise<Result<APIClient>> {
+        const parseResult = await parseAndValidateRemoteJsonAsync(remoteName);
+        if (parseResult.err) {
+            return parseResult;
+        }
+        const remoteJson = parseResult.value;
+        const apiKey = getApiKeySync(getBlockDirPath());
+        const apiClient = new APIClient({
+            applicationId: remoteJson.baseId,
+            blockId: remoteJson.blockId,
+            apiBaseUrl: remoteJson.server,
+            apiKey,
+        });
+        return {value: apiClient};
+    }
+
     constructor(opts: {|
-        environment?: Environment,
+        apiBaseUrl: ?string,
         applicationId: ApplicationId,
         blockInstallationId?: BlockInstallationId,
         blockId?: BlockId,
         apiKey: string,
     |}) {
-        this._environment = opts.environment || Environments.PRODUCTION;
+        this._apiBaseUrl = opts.apiBaseUrl || apiBaseUrlsByEnvironment[Environments.PRODUCTION];
         this._applicationId = opts.applicationId;
         this._blockInstallationId = opts.blockInstallationId || null;
         this._blockId = opts.blockId || null;
@@ -75,124 +86,7 @@ class APIClient {
     }
 
     _getUrl(path: string): string {
-        const baseUrl = apiBaseUrlsByEnvironment[this._environment];
-        return new URL(path, baseUrl).href;
-    }
-
-    async updateBlockAsync(data: UpdateBlockParams): Promise<UpdateBlockResponse> {
-        const options = {
-            url: this._getBlockBaseUrl(ApiTypes.META),
-            headers: {
-                Authorization: `Bearer ${this._apiKey}`,
-                'User-Agent': USER_AGENT,
-            },
-            body: data,
-            json: true,
-        };
-        const response = await request.putAsync(options);
-        const body = response.body;
-        const statusCode = response.statusCode;
-        // If we got a 404, return incorrect app or block id error.
-        if (statusCode === 404) {
-            throw new Error('Incorrect application or block id');
-        } else if (statusCode !== 200) {
-            throw new Error(body.error.message);
-        }
-        return body;
-    }
-
-    async fetchBlockAsync(): Promise<FetchBlockResponse> {
-        const options = {
-            url: this._getBlockBaseUrl(ApiTypes.META),
-            headers: {
-                Authorization: `Bearer ${this._apiKey}`,
-                'User-Agent': USER_AGENT,
-            },
-        };
-        const response = await request.getAsync(options);
-        const body = response.body;
-        const statusCode = response.statusCode;
-        // If we got a 404, return incorrect app or block id error.
-        if (statusCode === 404) {
-            throw new Error('Incorrect application or block id');
-        }
-        const bodyParsed = JSON.parse(body);
-        // If we got anything else other than 200 and 404, return whatever error we got.
-        if (statusCode !== 200) {
-            throw new Error(bodyParsed.error.message);
-        }
-        return bodyParsed;
-    }
-
-    async decryptCredentialsAsync(
-        credentialsEncrypted: Array<CredentialEncrypted>,
-    ): Promise<Array<CredentialPlaintext>> {
-        const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.META)}/credentials/decrypt`,
-            headers: {
-                Authorization: `Bearer ${this._apiKey}`,
-                'User-Agent': USER_AGENT,
-            },
-            body: {credentialsEncrypted},
-            json: true,
-        };
-        const response = await request.postAsync(options);
-        const {body, statusCode} = response;
-        if (statusCode !== 200) {
-            throw new Error(body.error.message);
-        }
-
-        return body;
-    }
-
-    async encryptCredentialAsync(
-        credentialPlaintext: CredentialPlaintext,
-        kmsDataKeyId?: KmsDataKeyId,
-    ): Promise<CredentialEncrypted> {
-        const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.META)}/credential/encrypt`,
-            headers: {
-                Authorization: `Bearer ${this._apiKey}`,
-                'User-Agent': USER_AGENT,
-            },
-            body: {
-                credentialPlaintext,
-                kmsDataKeyId,
-            },
-            json: true,
-        };
-        const response = await request.postAsync(options);
-        const {body, statusCode} = response;
-        if (statusCode !== 200) {
-            throw new Error(body.error.message);
-        }
-
-        return body;
-    }
-
-    async reEncryptCredentialAsync(
-        credentialEncrypted: CredentialEncrypted,
-        newKmsDataKeyId: KmsDataKeyId,
-    ): Promise<CredentialEncrypted> {
-        const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.META)}/credential/reEncrypt`,
-            headers: {
-                Authorization: `Bearer ${this._apiKey}`,
-                'User-Agent': USER_AGENT,
-            },
-            body: {
-                credentialEncrypted,
-                newKmsDataKeyId,
-            },
-            json: true,
-        };
-        const response = await request.postAsync(options);
-        const {body, statusCode} = response;
-        if (statusCode !== 200) {
-            throw new Error(body.error.message);
-        }
-
-        return body;
+        return new URL(path, this._apiBaseUrl).href;
     }
 
     async startBuildAsync(hasBackend: boolean): Promise<{buildId: BuildId, frontendBundleUploadUrl: string, backendDeploymentPackageUploadUrl: string | null}> {
@@ -332,8 +226,8 @@ class APIClient {
         return this._blockInstallationId;
     }
 
-    get environment(): Environment {
-        return this._environment;
+    get apiBaseUrl(): string {
+        return this._apiBaseUrl;
     }
 }
 

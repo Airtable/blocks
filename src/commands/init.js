@@ -1,10 +1,10 @@
 // @flow
 /* eslint-disable no-console */
-const BlockModuleTypes = require('../types/block_module_types');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
+const yarnHelpers = require('../helpers/yarn_helpers');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
-const Environments = require('../types/environments');
+const SupportedTopLevelDirectoryNames = require('../types/supported_top_level_directory_names');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const path = require('path');
@@ -13,12 +13,10 @@ const {camelCase, upperFirst} = require('lodash');
 
 import type {Argv} from 'yargs';
 import type {Environment} from '../types/environments';
+import type {BlockJsonNew} from '../types/block_json_new_type';
+import type {RemoteJson} from '../types/remote_json_type';
 
-const DEFAULT_FRONTEND_ENTRY_MODULE_NAME = 'index';
-const DEFAULT_FRONTEND_ENTRY_MODULE_METADATA = {
-    type: BlockModuleTypes.FRONTEND,
-    name: DEFAULT_FRONTEND_ENTRY_MODULE_NAME,
-};
+const DEFAULT_FRONTEND_ENTRY_NAME = 'index';
 
 function getDefaultFrontendCode(blockDirPath: string): string {
     let componentName = upperFirst(camelCase(path.basename(blockDirPath)));
@@ -40,11 +38,11 @@ UI.initializeBlock(() => <${componentName} />);
 `;
 }
 
-async function writeDefaultFilesAsync(blockDirPath: string): Promise<void> {
-    const frontendDirPath = path.join(blockDirPath, BlockModuleTypes.FRONTEND);
+async function _writeDefaultFrontendFilesAsync(blockDirPath: string): Promise<void> {
+    const frontendDirPath = path.join(blockDirPath, SupportedTopLevelDirectoryNames.FRONTEND);
     await fsUtils.mkdirAsync(frontendDirPath);
     await fsUtils.writeFileAsync(
-        path.join(frontendDirPath, `${DEFAULT_FRONTEND_ENTRY_MODULE_NAME}.js`),
+        path.join(frontendDirPath, `${DEFAULT_FRONTEND_ENTRY_NAME}.js`),
         getDefaultFrontendCode(blockDirPath),
     );
 }
@@ -54,27 +52,33 @@ async function initBlockAsync(
     blockId: string,
     blockDirPath: string,
     apiKey: string,
-    environment: string,
 ): Promise<void> {
     // Make a new directory for the block.
     await fsUtils.mkdirAsync(blockDirPath);
 
     // Create the block.json file.
-    const blockJson = {
-        frontendEntryModuleName: `${DEFAULT_FRONTEND_ENTRY_MODULE_NAME}.js`,
-        applicationId: baseId,
-        blockId,
-        ...(environment === Environments.PRODUCTION ? {} : {environment}),
-        modules: [
-            {revision: 0, metadata: DEFAULT_FRONTEND_ENTRY_MODULE_METADATA},
-        ],
+    // TODO(richsinn): Add workflow to scaffold 'backend' routes with default files here.
+    const blockJson: BlockJsonNew = {
+        frontendEntry: `./${SupportedTopLevelDirectoryNames.FRONTEND}/${DEFAULT_FRONTEND_ENTRY_NAME}.js`,
     };
     const writeBlockJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
         JSON.stringify(blockJson, null, 4),
     );
 
-    const writeDefaultFilesPromise = writeDefaultFilesAsync(blockDirPath);
+    const writeDefaultFrontendFilesPromise = _writeDefaultFrontendFilesAsync(blockDirPath);
+
+    // Create the .block/remote.json file.
+    const remoteJson: RemoteJson = {
+        blockId,
+        baseId,
+    };
+    const blockConfigDirPath = path.join(blockDirPath, blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME);
+    await fsUtils.mkdirPathAsync(blockConfigDirPath);
+    const writeRemoteJsonPromise = fsUtils.writeFileAsync(
+        path.join(blockConfigDirPath, `${blockCliConfigSettings.DEFAULT_REMOTE_NAME}.json`),
+        JSON.stringify(remoteJson, null, 4),
+    );
 
     // Write the API key to the file system.
     const writeAirtableApiKeyFilePromise = fsUtils.writeFileAsync(
@@ -105,7 +109,6 @@ async function initBlockAsync(
         'node_modules',
         blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
         blockCliConfigSettings.BUILD_DIR,
-        blockCliConfigSettings.DEVELOPER_CREDENTIALS_FILE_NAME,
     ];
     const writeGitignoreFilePromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, '.gitignore'),
@@ -114,11 +117,14 @@ async function initBlockAsync(
 
     await Promise.all([
         writeBlockJsonPromise,
-        writeDefaultFilesPromise,
+        writeRemoteJsonPromise,
+        writeDefaultFrontendFilesPromise,
         writePackageJsonPromise,
         writeGitignoreFilePromise,
         writeAirtableApiKeyFilePromise,
     ]);
+
+    await yarnHelpers.yarnInstallAsync(blockDirPath, ['--non-interactive']);
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
@@ -149,7 +155,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockId,
         blockDirPath,
         apiKey,
-        environment,
     );
     console.log('Your block is ready!');
 }

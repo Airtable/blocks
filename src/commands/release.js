@@ -1,12 +1,9 @@
 // @flow
 /* eslint-disable no-console */
 const BlockBuilder = require('../builder/block_builder');
-const getBlockDirPath = require('../get_block_dir_path');
-const getApiKeySync = require('../get_api_key_sync');
-const blocksConfigSettings = require('../config/block_cli_config_settings');
 const APIClient = require('../api_client');
+const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const fsUtils = require('../fs_utils');
-const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const invariant = require('invariant');
@@ -18,23 +15,6 @@ import type {Argv} from 'yargs';
 
 type BuildId = string;
 type DeployId = string;
-
-function _getApiClient(): APIClient {
-    const blockDirPath = getBlockDirPath();
-    const blockFileDataJson = fs.readFileSync(
-        path.join(blockDirPath, blocksConfigSettings.BLOCK_FILE_NAME),
-        'utf8'
-    );
-    const blockFileData = JSON.parse(blockFileDataJson);
-    const apiKey = getApiKeySync(blockDirPath);
-    const apiClient = new APIClient({
-        environment: blockFileData.environment,
-        applicationId: blockFileData.applicationId,
-        blockId: blockFileData.blockId,
-        apiKey,
-    });
-    return apiClient;
-}
 
 function _getOutputDirPath(): string {
     const timestampString = new Date().getTime().toString();
@@ -140,7 +120,17 @@ async function _buildAndDeployAsync(apiClient: APIClient): Promise<{|buildId: Bu
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
-    const apiClient = _getApiClient();
+    const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
+    if (blockJsonValidationResult.err) {
+        throw blockJsonValidationResult.err;
+    }
+
+    invariant(typeof argv.remote === 'string', 'expects remote to be a string');
+    const apiClientResult = await APIClient.constructAPIClientForRemoteAsync(argv.remote);
+    if (apiClientResult.err) {
+        throw apiClientResult.err;
+    }
+    const apiClient = apiClientResult.value;
 
     console.log('building');
     const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
