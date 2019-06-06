@@ -391,7 +391,6 @@ class BlockServer {
                 if (err.codeFrame) {
                     console.error(err.codeFrame);
                 }
-                this.emit('end');
                 if (this._bundlePromiseIfExists === bundlePromise) {
                     this._bundlePromiseIfExists = null;
                 }
