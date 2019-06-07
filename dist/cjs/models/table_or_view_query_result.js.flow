@@ -183,6 +183,10 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
         this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields;
 
+        // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
+        // so register this instance weakly with the object pool. it'll be automatically
+        // unregistered if it hasn't been used after a few seconds
+        tableOrViewQueryResultPool.registerObjectForReuseWeak(this);
         Object.seal(this);
     }
     get _dataOrNullIfDeleted(): TableOrViewQueryResultData | null {
@@ -424,7 +428,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         await super.loadDataAsync();
     }
     async _loadDataAsync(): Promise<Array<WatchableQueryResultKey>> {
-        tableOrViewQueryResultPool.registerObjectForReuse(this);
+        tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
 
         invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
         await this._mostRecentSourceModelLoadPromise;
@@ -541,7 +545,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         this._orderedRecordIds = null;
         this._recordIdsSet = null;
 
-        tableOrViewQueryResultPool.unregisterObjectForReuse(this);
+        tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
     }
     _getColumnsById(): {[string]: Object} {
         return this._table.fields.reduce((result, field) => {

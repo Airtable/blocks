@@ -7,8 +7,11 @@ type ObjectPoolOptions<T, Opts> = {|
     canObjectBeReusedForOptions: (T, Opts) => boolean,
 |};
 
+const WEAK_RETAIN_TIME_MS = 10000;
+
 class ObjectPool<T, Opts> {
     _objectsByKey: {[string]: Array<T> | void} = {};
+    _weakObjectsByKey: {[string]: Array<{|object: T, timeoutId: TimeoutID|}> | void} = {};
     _getKeyFromObject: T => string;
     _getKeyFromObjectOptions: Opts => string;
     _canObjectBeReusedForOptions: (T, Opts) => boolean;
@@ -19,7 +22,10 @@ class ObjectPool<T, Opts> {
         this._canObjectBeReusedForOptions = config.canObjectBeReusedForOptions;
     }
 
-    registerObjectForReuse(object: T) {
+    // we have two different ways we can register an object for reuse - weak and strong. This one,
+    // strong, will make sure that the object is kept in the pool until it is explicitly removed.
+    registerObjectForReuseStrong(object: T) {
+        this._unregisterObjectForReuseWeakIfExists(object);
         const objectKey = this._getKeyFromObject(object);
         const pooledObjects = this._objectsByKey[objectKey];
         if (pooledObjects) {
@@ -28,7 +34,7 @@ class ObjectPool<T, Opts> {
             this._objectsByKey[objectKey] = [object];
         }
     }
-    unregisterObjectForReuse(object: T) {
+    unregisterObjectForReuseStrong(object: T) {
         const objectKey = this._getKeyFromObject(object);
         const pooledObjects = this._objectsByKey[objectKey];
         invariant(pooledObjects, 'pooledObjects');
@@ -41,7 +47,59 @@ class ObjectPool<T, Opts> {
             this._objectsByKey[objectKey] = undefined;
         }
     }
-    getObjectForReuse(objectOptions: Opts): T | null {
+
+    // we have two different ways we can register an object for reuse - weak and strong. This one,
+    // weak, will automatically unregister the object after a few seconds go by without it being
+    // used.
+    registerObjectForReuseWeak(object: T) {
+        const objectKey = this._getKeyFromObject(object);
+        const pooledObjects = this._weakObjectsByKey[objectKey];
+
+        const toStore = {
+            object,
+            timeoutId: setTimeout(
+                () => this.unregisterObjectForReuseWeak(object),
+                WEAK_RETAIN_TIME_MS,
+            ),
+        };
+
+        if (pooledObjects) {
+            pooledObjects.push(toStore);
+        } else {
+            this._weakObjectsByKey[objectKey] = [toStore];
+        }
+    }
+    unregisterObjectForReuseWeak(object: T) {
+        const didExist = this._unregisterObjectForReuseWeakIfExists(object);
+        if (!didExist) {
+            throw new Error('Object was not registered for reuse');
+        }
+    }
+    _unregisterObjectForReuseWeakIfExists(object: T): boolean {
+        const objectKey = this._getKeyFromObject(object);
+        const pooledObjects = this._weakObjectsByKey[objectKey];
+        if (!pooledObjects) {
+            return false;
+        }
+        const index = pooledObjects.findIndex(stored => stored.object === object);
+        if (index === -1) {
+            return false;
+        }
+
+        const stored = pooledObjects[index];
+        clearTimeout(stored.timeoutId);
+
+        pooledObjects.splice(index, 1);
+        if (pooledObjects.length === 0) {
+            // `delete` causes de-opts, which slows down subsequent reads,
+            // so set to undefined instead (unverified that this is actually faster).
+            this._objectsByKey[objectKey] = undefined;
+        }
+
+        return true;
+    }
+
+    _getObjectForReuseStrong(objectOptions: Opts): T | null {
         const key = this._getKeyFromObjectOptions(objectOptions);
         const pooledObjects = this._objectsByKey[key];
         if (pooledObjects) {
@@ -55,6 +113,39 @@ class ObjectPool<T, Opts> {
             }
         }
         return null;
+    }
+    _getObjectForReuseWeak(objectOptions: Opts): T | null {
+        const key = this._getKeyFromObjectOptions(objectOptions);
+        const pooledObjects = this._weakObjectsByKey[key];
+        if (!pooledObjects) {
+            return null;
+        }
+
+        const stored = pooledObjects.find(({object}) =>
+            this._canObjectBeReusedForOptions(object, objectOptions),
+        );
+        if (!stored) {
+            return null;
+        }
+
+        const {object, timeoutId} = stored;
+
+        // reset the timer on this object if it's reused
+        clearTimeout(timeoutId);
+        stored.timeoutId = setTimeout(
+            () => this.unregisterObjectForReuseWeak(object),
+            WEAK_RETAIN_TIME_MS,
+        );
+
+        return object;
+    }
+    getObjectForReuse(objectOptions: Opts): T | null {
+        const strongObject = this._getObjectForReuseStrong(objectOptions);
+        if (strongObject) {
+            return strongObject;
+        }
+
+        return this._getObjectForReuseWeak(objectOptions);
     }
 }
 

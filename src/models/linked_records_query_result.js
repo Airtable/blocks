@@ -132,6 +132,11 @@ class LinkedRecordsQueryResult extends QueryResult {
             linkedRecordStore,
             opts,
         );
+
+        // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
+        // so register this instance weakly with the object pool. it'll be automatically
+        // unregistered if it hasn't been used after a few seconds
+        pool.registerObjectForReuseWeak(this);
     }
 
     /**
@@ -255,7 +260,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     async _loadDataAsync(): Promise<Array<WatchableQueryResultKey>> {
-        pool.registerObjectForReuse(this);
+        pool.registerObjectForReuseStrong(this);
         this._watchOrigin();
         this._watchLinkedQueryResult();
 
@@ -274,7 +279,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
     _unloadData() {
         if (this.isValid) {
-            pool.unregisterObjectForReuse(this);
+            pool.unregisterObjectForReuseStrong(this);
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
 

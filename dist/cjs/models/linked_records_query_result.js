@@ -148,7 +148,11 @@ function (_QueryResult) {
     // to make sure we unwatch everything from the old QueryResult if e.g.
     // the field config changes to point at a different table
 
-    _this._linkedQueryResult = _table_or_view_query_result.default.__createOrReuseQueryResult(linkedTable, linkedRecordStore, opts);
+    _this._linkedQueryResult = _table_or_view_query_result.default.__createOrReuseQueryResult(linkedTable, linkedRecordStore, opts); // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
+    // so register this instance weakly with the object pool. it'll be automatically
+    // unregistered if it hasn't been used after a few seconds
+
+    pool.registerObjectForReuseWeak((0, _assertThisInitialized2.default)(_this));
     return _this;
   }
   /**
@@ -292,7 +296,7 @@ function (_QueryResult) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                pool.registerObjectForReuse(this);
+                pool.registerObjectForReuseStrong(this);
 
                 this._watchOrigin();
 
@@ -324,7 +328,7 @@ function (_QueryResult) {
     key: "_unloadData",
     value: function _unloadData() {
       if (this.isValid) {
-        pool.unregisterObjectForReuse(this);
+        pool.unregisterObjectForReuseStrong(this);
 
         this._unwatchOrigin();
 

@@ -6,6 +6,10 @@ require("core-js/modules/es.symbol");
 
 require("core-js/modules/es.symbol.description");
 
+require("core-js/modules/es.array.find");
+
+require("core-js/modules/es.array.find-index");
+
 require("core-js/modules/es.array.index-of");
 
 require("core-js/modules/es.array.iterator");
@@ -29,20 +33,27 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _invariant = _interopRequireDefault(require("invariant"));
 
+var WEAK_RETAIN_TIME_MS = 10000;
+
 var ObjectPool =
 /*#__PURE__*/
 function () {
   function ObjectPool(config) {
     (0, _classCallCheck2.default)(this, ObjectPool);
     (0, _defineProperty2.default)(this, "_objectsByKey", {});
+    (0, _defineProperty2.default)(this, "_weakObjectsByKey", {});
     this._getKeyFromObject = config.getKeyFromObject;
     this._getKeyFromObjectOptions = config.getKeyFromObjectOptions;
     this._canObjectBeReusedForOptions = config.canObjectBeReusedForOptions;
-  }
+  } // we have two different ways we can register an object for reuse - weak and strong. This one,
+  // strong, will make sure that the object is kept in the pool until it is explicitly removed.
+
 
   (0, _createClass2.default)(ObjectPool, [{
-    key: "registerObjectForReuse",
-    value: function registerObjectForReuse(object) {
+    key: "registerObjectForReuseStrong",
+    value: function registerObjectForReuseStrong(object) {
+      this._unregisterObjectForReuseWeakIfExists(object);
+
       var objectKey = this._getKeyFromObject(object);
 
       var pooledObjects = this._objectsByKey[objectKey];
@@ -54,8 +65,8 @@ function () {
       }
     }
   }, {
-    key: "unregisterObjectForReuse",
-    value: function unregisterObjectForReuse(object) {
+    key: "unregisterObjectForReuseStrong",
+    value: function unregisterObjectForReuseStrong(object) {
       var objectKey = this._getKeyFromObject(object);
 
       var pooledObjects = this._objectsByKey[objectKey];
@@ -69,10 +80,68 @@ function () {
         // so set to undefined instead (unverified that this is actually faster).
         this._objectsByKey[objectKey] = undefined;
       }
+    } // we have two different ways we can register an object for reuse - weak and strong. This one,
+    // weak, will automatically unregister the object after a few seconds go by without it being
+    // used.
+
+  }, {
+    key: "registerObjectForReuseWeak",
+    value: function registerObjectForReuseWeak(object) {
+      var objectKey = this._getKeyFromObject(object);
+
+      var pooledObjects = this._weakObjectsByKey[objectKey];
+      var toStore = {
+        object,
+        timeoutId: setTimeout(() => this.unregisterObjectForReuseWeak(object), WEAK_RETAIN_TIME_MS)
+      };
+
+      if (pooledObjects) {
+        pooledObjects.push(toStore);
+      } else {
+        this._weakObjectsByKey[objectKey] = [toStore];
+      }
     }
   }, {
-    key: "getObjectForReuse",
-    value: function getObjectForReuse(objectOptions) {
+    key: "unregisterObjectForReuseWeak",
+    value: function unregisterObjectForReuseWeak(object) {
+      var didExist = this._unregisterObjectForReuseWeakIfExists(object);
+
+      if (!didExist) {
+        throw new Error('Object was not registered for reuse');
+      }
+    }
+  }, {
+    key: "_unregisterObjectForReuseWeakIfExists",
+    value: function _unregisterObjectForReuseWeakIfExists(object) {
+      var objectKey = this._getKeyFromObject(object);
+
+      var pooledObjects = this._weakObjectsByKey[objectKey];
+
+      if (!pooledObjects) {
+        return false;
+      }
+
+      var index = pooledObjects.findIndex(stored => stored.object === object);
+
+      if (index === -1) {
+        return false;
+      }
+
+      var stored = pooledObjects[index];
+      clearTimeout(stored.timeoutId);
+      pooledObjects.splice(index, 1);
+
+      if (pooledObjects.length === 0) {
+        // `delete` causes de-opts, which slows down subsequent reads,
+        // so set to undefined instead (unverified that this is actually faster).
+        this._objectsByKey[objectKey] = undefined;
+      }
+
+      return true;
+    }
+  }, {
+    key: "_getObjectForReuseStrong",
+    value: function _getObjectForReuseStrong(objectOptions) {
       var key = this._getKeyFromObjectOptions(objectOptions);
 
       var pooledObjects = this._objectsByKey[key];
@@ -110,6 +179,44 @@ function () {
       }
 
       return null;
+    }
+  }, {
+    key: "_getObjectForReuseWeak",
+    value: function _getObjectForReuseWeak(objectOptions) {
+      var key = this._getKeyFromObjectOptions(objectOptions);
+
+      var pooledObjects = this._weakObjectsByKey[key];
+
+      if (!pooledObjects) {
+        return null;
+      }
+
+      var stored = pooledObjects.find((_ref) => {
+        var object = _ref.object;
+        return this._canObjectBeReusedForOptions(object, objectOptions);
+      });
+
+      if (!stored) {
+        return null;
+      }
+
+      var object = stored.object,
+          timeoutId = stored.timeoutId; // reset the timer on this object if it's reused
+
+      clearTimeout(timeoutId);
+      stored.timeoutId = setTimeout(() => this.unregisterObjectForReuseWeak(object), WEAK_RETAIN_TIME_MS);
+      return object;
+    }
+  }, {
+    key: "getObjectForReuse",
+    value: function getObjectForReuse(objectOptions) {
+      var strongObject = this._getObjectForReuseStrong(objectOptions);
+
+      if (strongObject) {
+        return strongObject;
+      }
+
+      return this._getObjectForReuseWeak(objectOptions);
     }
   }]);
   return ObjectPool;

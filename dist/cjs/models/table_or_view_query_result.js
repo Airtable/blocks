@@ -230,7 +230,11 @@ function (_QueryResult) {
       }
     }
 
-    _this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields;
+    _this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields; // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
+    // so register this instance weakly with the object pool. it'll be automatically
+    // unregistered if it hasn't been used after a few seconds
+
+    tableOrViewQueryResultPool.registerObjectForReuseWeak((0, _assertThisInitialized2.default)(_this));
     Object.seal((0, _assertThisInitialized2.default)(_this));
     return _this;
   }
@@ -473,7 +477,7 @@ function (_QueryResult) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                tableOrViewQueryResultPool.registerObjectForReuse(this);
+                tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
                 (0, _invariant.default)(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
                 _context2.next = 4;
                 return this._mostRecentSourceModelLoadPromise;
@@ -707,7 +711,7 @@ function (_QueryResult) {
       this._visList = null;
       this._orderedRecordIds = null;
       this._recordIdsSet = null;
-      tableOrViewQueryResultPool.unregisterObjectForReuse(this);
+      tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
     }
   }, {
     key: "_getColumnsById",
