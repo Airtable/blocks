@@ -1,6 +1,5 @@
+// @flow
 /* eslint-disable no-console */
-'use strict';
-
 const _ = require('lodash');
 const express = require('express');
 const https = require('https');
@@ -19,6 +18,10 @@ const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const getBlockDirPath = require('./get_block_dir_path');
 
+import type {$Application, $Request, $Response, NextFunction} from 'express';
+import type {BlockJsonNew} from './types/block_json_new_type';
+import type {RemoteJson} from './types/remote_json_type';
+
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
 const developmentBrowsers = [
@@ -36,12 +39,28 @@ const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
 class BlockServer {
-    constructor({
-        transpileAll = false,
+    _pendingLongPollResolveByRequestId: {[number]: Promise<mixed>};
+    _expressApp: $Application;
+    _shouldTranspileAll: boolean;
+    _nextRequestId: number;
+    _apiKey: string;
+    _bundlePromiseIfExists: Promise<void> | null;
+    _blockJson: BlockJsonNew;
+    _remoteJson: RemoteJson;
+
+    constructor(args: {
+        transpileAll,
         apiKey,
         blockJson,
         remoteJson,
-    } = {}) {
+    }) {
+        const {
+            transpileAll = false,
+            apiKey,
+            blockJson,
+            remoteJson,
+        } = args;
+
         this._pendingLongPollResolveByRequestId = {};
         this._expressApp = express();
         this._shouldTranspileAll = transpileAll;
@@ -56,7 +75,7 @@ class BlockServer {
         this._setUpBlockSdkAndWrapper();
         this._setUpBundler();
     }
-    _setUpExpressRoutes() {
+    _setUpExpressRoutes(): void {
         // Set Access-Control-Allow-Origin on all requests.
         this._expressApp.use((req, res, next) => {
             res.header('Access-Control-Allow-Origin', '*');
@@ -70,7 +89,7 @@ class BlockServer {
             next(null, req, res, next);
         });
     }
-    async _ensureBundleIsReadyAsync() {
+    async _ensureBundleIsReadyAsync(): void {
         if (this._bundlePromiseIfExists === null) {
             // Bundle already ready.
             return;
@@ -83,8 +102,8 @@ class BlockServer {
         // will return immediately.
         await this._ensureBundleIsReadyAsync();
     }
-    _ensureBundleIsReadyMiddleware() {
-        return (req, res, next) => {
+    _ensureBundleIsReadyMiddleware(): ($Request, $Response, NextFunction) => Promise<void> {
+        return (req: $Request, res: Response, next: NextFunction) => {
             Promise.race([
                 this._ensureBundleIsReadyAsync(),
                 new Promise((resolve, reject) => {
@@ -102,7 +121,7 @@ class BlockServer {
             });
         };
     }
-    _setUpRunFrameRoutes() {
+    _setUpRunFrameRoutes(): void {
         const blockDirPath = getBlockDirPath();
         const runFrameRoutes = express.Router();
 
