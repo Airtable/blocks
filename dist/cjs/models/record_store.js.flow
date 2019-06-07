@@ -134,6 +134,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return this._baseData.tablesById[this.tableId] || null;
     }
 
+    _onChangeIsDataLoaded() {
+        // noop
+    }
+
     /**
      * The records in this table. The order is arbitrary since records are
      * only ordered in the context of a specific view.

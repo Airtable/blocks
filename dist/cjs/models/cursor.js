@@ -50,7 +50,8 @@ var _record = _interopRequireDefault(require("./record"));
 var WatchableCursorKeys = Object.freeze({
   selectedRecordIds: 'selectedRecordIds',
   activeTableId: 'activeTableId',
-  activeViewId: 'activeViewId'
+  activeViewId: 'activeViewId',
+  isDataLoaded: 'isDataLoaded'
 });
 
 // NOTE: cursor is an AbstractModel because it includes loadable data.
@@ -96,6 +97,11 @@ function (_AbstractModelWithAsy) {
   }
 
   (0, _createClass2.default)(Cursor, [{
+    key: "_onChangeIsDataLoaded",
+    value: function _onChangeIsDataLoaded() {
+      this._onChange(WatchableCursorKeys.isDataLoaded);
+    }
+  }, {
     key: "_loadDataAsync",
     value: function () {
       var _loadDataAsync2 = (0, _asyncToGenerator2.default)(

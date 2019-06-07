@@ -29,6 +29,7 @@ const WatchableQueryResultKeys = Object.freeze({
     recordIds: ('recordIds': 'recordIds'),
     cellValues: ('cellValues': 'cellValues'),
     recordColors: ('recordColors': 'recordColors'),
+    isDataLoaded: ('isDataLoaded': 'isDataLoaded'),
 });
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 
@@ -279,6 +280,10 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             default:
                 throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
         }
+    }
+
+    _onChangeIsDataLoaded() {
+        this._onChange(WatchableQueryResultKeys.isDataLoaded);
     }
 
     watch(

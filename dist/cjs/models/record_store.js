@@ -189,6 +189,15 @@ function (_AbstractModelWithAsy) {
       return fieldIdsToLoad;
     }
   }, {
+    key: "_onChangeIsDataLoaded",
+    value: function _onChangeIsDataLoaded() {} // noop
+
+    /**
+     * The records in this table. The order is arbitrary since records are
+     * only ordered in the context of a specific view.
+     */
+
+  }, {
     key: "getRecordByIdIfExists",
     value: function getRecordByIdIfExists(recordId) {
       var recordsById = this._data.recordsById;
@@ -855,11 +864,6 @@ function (_AbstractModelWithAsy) {
     get: function get() {
       return this._baseData.tablesById[this.tableId] || null;
     }
-    /**
-     * The records in this table. The order is arbitrary since records are
-     * only ordered in the context of a specific view.
-     */
-
   }, {
     key: "records",
     get: function get() {

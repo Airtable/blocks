@@ -4,6 +4,7 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import Modal from './modal';
 import createDataContainer from './create_data_container';
+import Loader from './loader';
 
 type BlockWrapperProps = {|
     children: React.Node,
@@ -77,7 +78,15 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
 
         return (
             <>
-                {this.props.children}
+                <React.Suspense
+                    fallback={
+                        <div className="absolute all-0 flex items-center justify-center">
+                            <Loader />
+                        </div>
+                    }
+                >
+                    {this.props.children}
+                </React.Suspense>
 
                 {/*
                     TODO: if a modal is presented after we show this viewport

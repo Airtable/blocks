@@ -57,6 +57,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return tableData.viewsById[this.viewId] || null;
     }
 
+    _onChangeIsDataLoaded() {
+        // noop
+    }
+
     get isDataLoaded(): boolean {
         return this._isDataLoaded && this.parentRecordStore.isRecordMetadataLoaded;
     }

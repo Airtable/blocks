@@ -7,7 +7,10 @@ const _Loader = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/ui/loader/loader',
 );
 
-type LoaderPropTypes = {fillColor: string, scale: number};
+type LoaderPropTypes = {|
+    fillColor?: string,
+    scale?: number,
+|};
 
 // Override the default props and then just proxy through to our loader.
 /** */

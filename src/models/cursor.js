@@ -13,6 +13,7 @@ const WatchableCursorKeys = Object.freeze({
     selectedRecordIds: ('selectedRecordIds': 'selectedRecordIds'),
     activeTableId: ('activeTableId': 'activeTableId'),
     activeViewId: ('activeViewId': 'activeViewId'),
+    isDataLoaded: ('isDataLoaded': 'isDataLoaded'),
 });
 
 type WatchableCursorKey = $Values<typeof WatchableCursorKeys>;
@@ -60,6 +61,9 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
     get _dataOrNullIfDeleted(): CursorData {
         return this._cursorData;
+    }
+    _onChangeIsDataLoaded() {
+        this._onChange(WatchableCursorKeys.isDataLoaded);
     }
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {
         const cursorData = await this._airtableInterface.fetchAndSubscribeToCursorDataAsync();

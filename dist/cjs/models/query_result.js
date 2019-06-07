@@ -70,7 +70,8 @@ var WatchableQueryResultKeys = Object.freeze({
   records: 'records',
   recordIds: 'recordIds',
   cellValues: 'cellValues',
-  recordColors: 'recordColors'
+  recordColors: 'recordColors',
+  isDataLoaded: 'isDataLoaded'
 });
 var WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:'; // The string case is to accommodate cellValuesInField:$FieldId.
 
@@ -311,6 +312,11 @@ function (_AbstractModelWithAsy) {
         default:
           throw new Error("Unknown record coloring mode: ".concat(recordColorMode.type));
       }
+    }
+  }, {
+    key: "_onChangeIsDataLoaded",
+    value: function _onChangeIsDataLoaded() {
+      this._onChange(WatchableQueryResultKeys.isDataLoaded);
     }
   }, {
     key: "watch",

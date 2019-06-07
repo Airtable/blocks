@@ -33,6 +33,8 @@ var _modal = _interopRequireDefault(require("./modal"));
 
 var _create_data_container = _interopRequireDefault(require("./create_data_container"));
 
+var _loader = _interopRequireDefault(require("./loader"));
+
 var BlockWrapper =
 /*#__PURE__*/
 function (_React$Component) {
@@ -118,7 +120,11 @@ function (_React$Component) {
         }, globalAlertInfo.content);
       }
 
-      return React.createElement(React.Fragment, null, this.props.children, viewport.isSmallerThanMinSize && React.createElement("div", {
+      return React.createElement(React.Fragment, null, React.createElement(React.Suspense, {
+        fallback: React.createElement("div", {
+          className: "absolute all-0 flex items-center justify-center"
+        }, React.createElement(_loader.default, null))
+      }, this.props.children), viewport.isSmallerThanMinSize && React.createElement("div", {
         className: "absolute all-0 flex items-center justify-center p2 white",
         style: {
           zIndex: 2147483647 // largest 32-bit signed integer (maximum z-index)

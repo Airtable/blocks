@@ -97,6 +97,10 @@ var _initialize_block = _interopRequireDefault(require("./initialize_block"));
 
 var _with_hooks = _interopRequireDefault(require("./with_hooks"));
 
+var _use_loadable = _interopRequireDefault(require("./use_loadable"));
+
+var _use_records = require("./use_records");
+
 var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
 var _use_viewport = _interopRequireDefault(require("./use_viewport"));
@@ -151,7 +155,11 @@ var UI = {
   initializeBlock: _initialize_block.default,
   withHooks: _with_hooks.default,
   useViewport: _use_viewport.default,
-  useWatchable: _use_watchable.default
+  useWatchable: _use_watchable.default,
+  useLoadable: _use_loadable.default,
+  useRecordIds: _use_records.useRecordIds,
+  useRecords: _use_records.useRecords,
+  useRecordById: _use_records.useRecordById
 };
 var _default = UI;
 exports.default = _default;

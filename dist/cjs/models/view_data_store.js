@@ -93,6 +93,10 @@ function (_AbstractModelWithAsy) {
   }
 
   (0, _createClass2.default)(ViewDataStore, [{
+    key: "_onChangeIsDataLoaded",
+    value: function _onChangeIsDataLoaded() {// noop
+    }
+  }, {
     key: "loadDataAsync",
     value: function () {
       var _loadDataAsync2 = (0, _asyncToGenerator2.default)(

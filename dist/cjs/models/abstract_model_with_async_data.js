@@ -37,15 +37,13 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
+var _invariant = _interopRequireDefault(require("invariant"));
+
 var _private_utils = require("../private_utils");
 
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    h = _window$__requirePriv.h;
 /** Abstract superclass for all block SDK models that need to fetch async data. */
-
-
 var AbstractModelWithAsyncData =
 /*#__PURE__*/
 function (_AbstractModel) {
@@ -157,6 +155,12 @@ function (_AbstractModel) {
     /** */
 
   }, {
+    key: "_onChangeIsDataLoaded",
+    value: function _onChangeIsDataLoaded() {
+      // Override this to get notified of changes to .isDataLoaded e.g to fire watch keys
+      throw new Error('abstract method');
+    }
+  }, {
     key: "_loadDataAsync",
     value: function () {
       var _loadDataAsync2 = (0, _asyncToGenerator2.default)(
@@ -258,6 +262,8 @@ function (_AbstractModel) {
                         }
                       }
                     }
+
+                    this._onChangeIsDataLoaded();
                   });
                 }
 
@@ -300,12 +306,14 @@ function (_AbstractModel) {
         // requests the data, so we can avoid going back to liveapp or
         // the network.
         this._unloadDataTimeoutId = setTimeout(() => {
-          h.assert(this._dataRetainCount === 0, 'Unload data timeout fired with non-zero retain count'); // Set _isDataLoaded to false before calling _unloadData in case
+          (0, _invariant.default)(this._dataRetainCount === 0, 'Unload data timeout fired with non-zero retain count'); // Set _isDataLoaded to false before calling _unloadData in case
           // _unloadData reads from isDataLoaded.
 
           this._isDataLoaded = false;
 
           this._unloadData();
+
+          this._onChangeIsDataLoaded();
         }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
       }
     }

@@ -1,9 +1,8 @@
 // @flow
+import invariant from 'invariant';
 import {type BaseData} from '../types/base';
 import {fireAndForgetPromise} from '../private_utils';
 import AbstractModel from './abstract_model';
-
-const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 /** Abstract superclass for all block SDK models that need to fetch async data. */
 class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends AbstractModel<
@@ -73,6 +72,10 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     get isDataLoaded(): boolean {
         return this._isDataLoaded;
     }
+    _onChangeIsDataLoaded() {
+        // Override this to get notified of changes to .isDataLoaded e.g to fire watch keys
+        throw new Error('abstract method');
+    }
     async _loadDataAsync(): Promise<Array<WatchableKey>> {
         // Override this to fetch the data.
         // It should return an array of watchable keys that changed
@@ -117,6 +120,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
                 for (const key of changedKeys) {
                     this._onChange(key);
                 }
+                this._onChangeIsDataLoaded();
             });
         }
         await this._pendingDataLoadPromise;
@@ -138,7 +142,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
             // requests the data, so we can avoid going back to liveapp or
             // the network.
             this._unloadDataTimeoutId = setTimeout(() => {
-                h.assert(
+                invariant(
                     this._dataRetainCount === 0,
                     'Unload data timeout fired with non-zero retain count',
                 );
@@ -146,6 +150,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
                 // _unloadData reads from isDataLoaded.
                 this._isDataLoaded = false;
                 this._unloadData();
+                this._onChangeIsDataLoaded();
             }, AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
         }
     }
