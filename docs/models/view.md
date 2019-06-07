@@ -45,7 +45,7 @@ Type: [string][1]
 
 Returns **[string][1]**
 
-### select
+### selectRecords
 
 #### Parameters
 

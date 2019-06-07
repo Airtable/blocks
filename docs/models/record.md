@@ -68,6 +68,15 @@ with the 'colorInView:\${ViewId}' key
 
 Returns **([string][1] | null)**
 
+### selectLinkedRecordsFromCell
+
+#### Parameters
+
+-   `fieldOrFieldIdOrFieldName` **Field | string**
+-   `opts` **QueryResultOpts?**
+
+Returns **LinkedRecordsQueryResult**
+
 ### url
 
 Returns the URL for this record.

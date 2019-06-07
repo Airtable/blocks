@@ -246,7 +246,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         }
         return colorUtils.getHexForColor(color);
     }
-    getLinkedRecordsFromCell(
+    /** */
+    selectLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | string,
         opts: QueryResultOpts = {},
     ): LinkedRecordsQueryResult {

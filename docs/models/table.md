@@ -122,7 +122,7 @@ Returns **(View | null)**
 
 Returns **View**
 
-### select
+### selectRecords
 
 #### Parameters
 

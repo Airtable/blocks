@@ -273,8 +273,8 @@ function (_AbstractModel) {
     /** */
 
   }, {
-    key: "select",
-    value: function select(opts) {
+    key: "selectRecords",
+    value: function selectRecords(opts) {
       return _table_or_view_query_result.default.__createOrReuseQueryResult(this, this._recordStore, opts || {});
     }
     /** Maximum number of records that the table can contain */

@@ -337,9 +337,11 @@ function (_AbstractModel) {
 
       return _color_utils.default.getHexForColor(color);
     }
+    /** */
+
   }, {
-    key: "getLinkedRecordsFromCell",
-    value: function getLinkedRecordsFromCell(fieldOrFieldIdOrFieldName) {
+    key: "selectLinkedRecordsFromCell",
+    value: function selectLinkedRecordsFromCell(fieldOrFieldIdOrFieldName) {
       var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);

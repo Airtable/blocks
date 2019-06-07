@@ -91,7 +91,7 @@ var tableOrViewQueryResultPool = new _object_pool.default({
  * Represents a set of records directly from a view or table.
  *
  * Do not instantiate. You can get instances of this class by calling
- * `table.select` or `view.select`.
+ * `table.selectRecords` or `view.selectRecords`.
  */
 
 var TableOrViewQueryResult =
@@ -1127,8 +1127,8 @@ function (_QueryResult) {
     }
     /**
      * The view that was used to obtain this QueryResult by calling
-     * `view.select`. Null if the QueryResult was obtained by calling
-     * `table.select`.
+     * `view.selectRecords`. Null if the QueryResult was obtained by calling
+     * `table.selectRecords`.
      */
 
   }, {

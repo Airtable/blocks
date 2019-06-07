@@ -81,10 +81,10 @@ function (_AbstractModel) {
   }
 
   (0, _createClass2.default)(View, [{
-    key: "select",
+    key: "selectRecords",
 
     /** */
-    value: function select(opts) {
+    value: function selectRecords(opts) {
       return _table_or_view_query_result.default.__createOrReuseQueryResult(this, this._viewDataStore.parentRecordStore, opts || {});
     }
     /**

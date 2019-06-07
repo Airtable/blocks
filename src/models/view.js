@@ -72,7 +72,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         });
     }
     /** */
-    select(opts?: QueryResultOpts): TableOrViewQueryResult {
+    selectRecords(opts?: QueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(
             this,
             this._viewDataStore.parentRecordStore,

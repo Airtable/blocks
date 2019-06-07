@@ -201,7 +201,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return view;
     }
     /** */
-    select(opts?: QueryResultOpts): TableOrViewQueryResult {
+    selectRecords(opts?: QueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(
             this,
             this._recordStore,

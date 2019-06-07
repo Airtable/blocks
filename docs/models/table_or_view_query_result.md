@@ -4,7 +4,8 @@
 
 Represents a set of records directly from a view or table.
 
-Do not instantiate. You can get instances of this class by calling `table.select` or `view.select`.
+Do not instantiate. You can get instances of this class by calling `table.selectRecords` or
+`view.selectRecords`.
 
 ### Parameters
 
@@ -19,8 +20,8 @@ Returns **TableModel**
 
 ### parentView
 
-The view that was used to obtain this QueryResult by calling `view.select`. Null if the QueryResult
-was obtained by calling `table.select`.
+The view that was used to obtain this QueryResult by calling `view.selectRecords`. Null if the
+QueryResult was obtained by calling `table.selectRecords`.
 
 Type: (ViewModel | null)
 

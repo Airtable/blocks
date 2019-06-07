@@ -15,5 +15,5 @@ const recordColorMode = models.recordColoring.modes.bySelectField(someSelectFiel
 const recordColorMode = models.recordColoring.modes.fromView(someView);
 
 // with a query result:
-const queryResult = table.select({recordColorMode});
+const queryResult = table.selectRecords({recordColorMode});
 ```
