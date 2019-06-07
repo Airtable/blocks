@@ -96,7 +96,25 @@ class LocalSdkBuilder {
     }
 
     async _createTemporarySdkPackageAsync(): Promise<string> {
-        const {stdout} = await execFileAsync('npm', ['pack'], {cwd: this.sdkPath, prefix: 'npm pack'});
+        // temporarily rewrite package.json to get a unique version. without this, we might corrupt
+        // yarn's cache by having two distinct tarballs at the same version
+        const sdkPackageJsonPath = path.join(this.sdkPath, 'package.json');
+        const initialPackageJsonString = await fsUtils.readFileAsync(sdkPackageJsonPath, 'utf-8');
+        const initialPackageJson = JSON.parse(initialPackageJsonString);
+
+        const tempPackageJson = {
+            ...initialPackageJson,
+            version: `${initialPackageJson.version}-local.${Date.now()}`,
+        };
+        await fsUtils.writeFileAsync(sdkPackageJsonPath, JSON.stringify(tempPackageJson), 'utf-8');
+
+        const {stdout} = await execFileAsync('npm', ['pack', '--quiet'], {
+            cwd: this.sdkPath,
+            prefix: 'npm pack',
+        });
+
+        // now that we've packed everything, rewrite package.json back to the original
+        await fsUtils.writeFileAsync(sdkPackageJsonPath, initialPackageJsonString, 'utf-8');
         
         // npm pack prints the location of the package to stdout before exiting
         const lines = stdout.trim().split('\n');
@@ -111,7 +129,9 @@ class LocalSdkBuilder {
 
         await execFileAsync(
             shouldUseYarn ? 'yarn' : 'npm',
-            shouldUseYarn ? ['add', packagePath, '--non-interactive'] : ['install', packagePath],
+            shouldUseYarn
+                ? ['add', `${SDK_PACKAGE_NAME}@${packagePath}`, '--non-interactive']
+                : ['install', `${SDK_PACKAGE_NAME}@${packagePath}`],
             {
                 prefix: shouldUseYarn ? 'yarn add' : 'npm install',
                 cwd: getBlockDirPath(),
