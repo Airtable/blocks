@@ -17,8 +17,7 @@
   },
   "files": [
     "/README.md",
-    "/bin/block.js",
-    "/block_backend_wrapper/",
+    "/bin/block",
     "/keys/",
     "/src/",
     ".babelrc"
