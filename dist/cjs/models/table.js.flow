@@ -476,6 +476,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             completion: completionPromise,
         };
     }
+    /**
+     * Returns the first view in the table where the type is one of `allowedViewTypes`. If a
+     * `preferredViewOrViewId` is supplied and that view exists & has the correct type, that view
+     * will be returned before checking the other views in the table.
+     */
     getFirstViewOfType(
         allowedViewTypes: Array<ViewType> | ViewType,
         preferredViewOrViewId?: View | ViewId | null,

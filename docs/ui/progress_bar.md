@@ -1,5 +1,0 @@
-## ProgressBar
-
-### Parameters
-
--   `props` **ProgressBarProps**

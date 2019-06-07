@@ -1,3 +1,0 @@
-## SelectButtons
-
-**Extends React.Component**

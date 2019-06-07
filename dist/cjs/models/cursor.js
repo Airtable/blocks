@@ -156,6 +156,11 @@ function (_AbstractModelWithAsy) {
 
       return !!selectedRecordIdSet[recordId];
     }
+    /**
+     * Returns the currently active table ID. Can return null when the active table has changed and
+     * is not yet loaded.
+     */
+
   }, {
     key: "__applyChangesWithoutTriggeringEvents",
     value: function __applyChangesWithoutTriggeringEvents(changes) {
@@ -264,6 +269,11 @@ function (_AbstractModelWithAsy) {
     get: function get() {
       return this._data.activeTableId;
     }
+    /**
+     * Returns the currently active view ID. This will always be a view belonging to
+     * `activeTableId`. Returns `null` when the active view has changed and is not yet loaded.
+     */
+
   }, {
     key: "activeViewId",
     get: function get() {

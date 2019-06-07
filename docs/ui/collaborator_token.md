@@ -1,5 +1,0 @@
-## CollaboratorToken
-
-### Parameters
-
--   `props` **CollaboratorTokenProps**

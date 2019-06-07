@@ -1,5 +1,0 @@
-## FieldIcon
-
-### Parameters
-
--   `props` **FieldIconProps**

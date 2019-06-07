@@ -47,9 +47,9 @@ console.log(installationId);
 
 ### localStorage
 
-Wrapper for [`window.localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) which will automatically fall back to in-memory storage when
-`window.localStorage` is unavailable.
-
+Wrapper for
+[`window.localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) which
+will automatically fall back to in-memory storage when `window.localStorage` is unavailable.
 
 ```javascript
 import {localStorage} from '@airtable/blocks';
@@ -58,8 +58,9 @@ localStorage.setItem('lastScrollTop', 0);
 
 ### sessionStorage
 
-Wrapper for [`window.sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) which will automatically fall back to in-memory storage when
-`window.sessionStorage` is unavailable.
+Wrapper for
+[`window.sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)
+which will automatically fall back to in-memory storage when `window.sessionStorage` is unavailable.
 
 ```javascript
 import {sessionStorage} from '@airtable/blocks';

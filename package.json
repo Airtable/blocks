@@ -12,7 +12,7 @@
         "flow": "flow",
         "lint": "eslint *.js src",
         "lint:quiet": "npm run lint -- --quiet",
-        "format": "prettier --write 'src/**/*.js' 'test/**/*.js' '*.{json,js,md}'",
+        "format": "prettier --write 'src/**/*.js' 'test/**/*.js' '*.{json,js,md}' 'docs/**/*.md'",
         "jest": "jest",
         "jest:watch": "jest --watch",
         "test": "npm run jest",
@@ -21,7 +21,9 @@
         "watch:babel": "npm run build:babel -- --watch",
         "build:flow": "flow-copy-source src dist/cjs",
         "watch:flow": "npm run build:flow -- --watch",
-        "build": "npm run build:clean && npm run build:babel && npm run build:flow",
+        "build:docs": "documentation build src/index.js --format md --markdown-toc --markdown-toc-max-depth 3 --config documentation_config.yml --infer-private '^_' --output docs/api.md && prettier --write docs/api.md",
+        "watch:docs": "npm run build:docs -- --watch",
+        "build": "npm run build:clean && npm run build:babel && npm run build:flow && npm run build:docs",
         "watch": "npm run build:clean && concurrently npm:watch:babel npm:watch:flow"
     },
     "author": "",
@@ -38,6 +40,7 @@
         "babel-eslint": "^10.0.1",
         "babel-plugin-transform-define": "^1.3.1",
         "concurrently": "^4.1.0",
+        "documentation": "^11.0.0",
         "enzyme": "^3.10.0",
         "enzyme-adapter-react-16": "^1.14.0",
         "eslint": "5.16.0",
@@ -48,6 +51,8 @@
         "eslint-plugin-react-hooks": "^1.6.0",
         "flow-bin": "0.98.1",
         "flow-copy-source": "^2.0.6",
+        "fs-extra": "^8.0.1",
+        "glob": "^7.1.4",
         "husky": "^2.3.0",
         "jest": "^24.8.0",
         "lint-staged": "^8.1.7",
@@ -69,7 +74,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "pretty-quick --staged && lint-staged && npm run prepare && git add dist"
+            "pre-commit": "pretty-quick --staged && lint-staged && npm run prepare && git add docs/api.md dist"
         }
     },
     "lint-staged": {

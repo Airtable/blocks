@@ -1,3 +1,0 @@
-## ColorPaletteSynced
-
-**Extends React.Component**

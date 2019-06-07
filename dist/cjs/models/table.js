@@ -663,6 +663,12 @@ function (_AbstractModel) {
         completion: completionPromise
       };
     }
+    /**
+     * Returns the first view in the table where the type is one of `allowedViewTypes`. If a
+     * `preferredViewOrViewId` is supplied and that view exists & has the correct type, that view
+     * will be returned before checking the other views in the table.
+     */
+
   }, {
     key: "getFirstViewOfType",
     value: function getFirstViewOfType(allowedViewTypes, preferredViewOrViewId) {

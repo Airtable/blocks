@@ -1,5 +1,0 @@
-## Link
-
-### Parameters
-
--   `props` **Props**

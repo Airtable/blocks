@@ -18,6 +18,11 @@ const themes = Object.freeze({
 
 type ButtonTheme = $Values<typeof themes>;
 
+/**
+ * @typedef
+ * @type {object}
+ * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme] The color theme for the button.
+ */
 type ButtonProps = {
     className?: string,
     disabled?: boolean,
