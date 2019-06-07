@@ -752,15 +752,20 @@ function (_AbstractModel) {
   }, {
     key: "__triggerOnChangeForDirtyPaths",
     value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
+      var didTableSchemaChange = false;
+
       this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
 
       if (dirtyPaths.name) {
         this._onChange(WatchableTableKeys.name);
+
+        didTableSchemaChange = true;
       }
 
       if (dirtyPaths.viewOrder) {
-        this._onChange(WatchableTableKeys.views); // Clean up deleted views
+        this._onChange(WatchableTableKeys.views);
 
+        didTableSchemaChange = true; // Clean up deleted views
 
         var _iteratorNormalCompletion9 = true;
         var _didIteratorError9 = false;
@@ -809,7 +814,11 @@ function (_AbstractModel) {
             var view = this._viewModelsById[viewId];
 
             if (view) {
-              view.__triggerOnChangeForDirtyPaths(dirtyViewPaths);
+              var didViewSchemaChange = view.__triggerOnChangeForDirtyPaths(dirtyViewPaths);
+
+              if (didViewSchemaChange) {
+                didTableSchemaChange = true;
+              }
             }
           }
         } catch (err) {
@@ -829,8 +838,12 @@ function (_AbstractModel) {
       }
 
       if (dirtyPaths.fieldsById) {
-        // Since tables don't have a field order, need to detect if a field
+        // TODO: don't trigger schema change when autonumber typeOptions change.
+        // That currently happens every time you create a row in a table with an
+        // autonumber field.
+        didTableSchemaChange = true; // Since tables don't have a field order, need to detect if a field
         // was created or deleted and trigger onChange for fields.
+
         var addedFieldIds = [];
         var removedFieldIds = [];
         var _iteratorNormalCompletion11 = true;
@@ -892,6 +905,8 @@ function (_AbstractModel) {
 
         this._cachedFieldNamesById = null;
       }
+
+      return didTableSchemaChange;
     }
   }, {
     key: "__getFieldNamesById",

@@ -541,13 +541,16 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return view;
     }
-    __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
+    __triggerOnChangeForDirtyPaths(dirtyPaths: Object): boolean {
+        let didTableSchemaChange = false;
         this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.name) {
             this._onChange(WatchableTableKeys.name);
+            didTableSchemaChange = true;
         }
         if (dirtyPaths.viewOrder) {
             this._onChange(WatchableTableKeys.views);
+            didTableSchemaChange = true;
 
             // Clean up deleted views
             for (const [viewId, viewModel] of entries(this._viewModelsById)) {
@@ -563,11 +566,19 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 // nothing can be subscribed to any events on it.
                 const view = this._viewModelsById[viewId];
                 if (view) {
-                    view.__triggerOnChangeForDirtyPaths(dirtyViewPaths);
+                    const didViewSchemaChange = view.__triggerOnChangeForDirtyPaths(dirtyViewPaths);
+                    if (didViewSchemaChange) {
+                        didTableSchemaChange = true;
+                    }
                 }
             }
         }
         if (dirtyPaths.fieldsById) {
+            // TODO: don't trigger schema change when autonumber typeOptions change.
+            // That currently happens every time you create a row in a table with an
+            // autonumber field.
+            didTableSchemaChange = true;
+
             // Since tables don't have a field order, need to detect if a field
             // was created or deleted and trigger onChange for fields.
             const addedFieldIds = [];
@@ -607,6 +618,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             // Clear out cached field names in case a field was added/removed/renamed.
             this._cachedFieldNamesById = null;
         }
+        return didTableSchemaChange;
     }
     __getFieldNamesById(): {[string]: string} {
         if (!this._cachedFieldNamesById) {

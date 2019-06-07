@@ -101,6 +101,8 @@ var _use_loadable = _interopRequireDefault(require("./use_loadable"));
 
 var _use_records = require("./use_records");
 
+var _use_base = _interopRequireDefault(require("./use_base"));
+
 var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
 var _use_viewport = _interopRequireDefault(require("./use_viewport"));
@@ -154,6 +156,7 @@ var UI = {
   globalAlert: new _global_alert.default(),
   initializeBlock: _initialize_block.default,
   withHooks: _with_hooks.default,
+  useBase: _use_base.default,
   useViewport: _use_viewport.default,
   useWatchable: _use_watchable.default,
   useLoadable: _use_loadable.default,

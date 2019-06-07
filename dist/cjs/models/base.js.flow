@@ -43,6 +43,7 @@ const WatchableBaseKeys = Object.freeze({
     permissionLevel: ('permissionLevel': 'permissionLevel'),
     tables: ('tables': 'tables'),
     collaborators: ('collaborators': 'collaborators'),
+    __schema: ('__schema': '__schema'),
 });
 
 type WatchableBaseKey = $Values<typeof WatchableBaseKeys>;
@@ -253,14 +254,18 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return table;
     }
     __triggerOnChangeForChangedPaths(changedPaths: ChangedPaths) {
+        let didSchemaChange = false;
         if (changedPaths.name) {
             this._onChange(WatchableBaseKeys.name);
+            didSchemaChange = true;
         }
         if (changedPaths.permissionLevel) {
             this._onChange(WatchableBaseKeys.permissionLevel);
+            didSchemaChange = true;
         }
         if (changedPaths.tableOrder) {
             this._onChange(WatchableBaseKeys.tables);
+            didSchemaChange = true;
 
             // Clean up deleted tables
             for (const [tableId, tableModel] of entries(this._tableModelsById)) {
@@ -277,12 +282,21 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                 // nothing can be subscribed to any events on it.
                 const table = this._tableModelsById[tableId];
                 if (table) {
-                    table.__triggerOnChangeForDirtyPaths(dirtyTablePaths);
+                    const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
+                        dirtyTablePaths,
+                    );
+                    if (didTableSchemaChange) {
+                        didSchemaChange = true;
+                    }
                 }
             }
         }
         if (changedPaths.appBlanket) {
             this._onChange(WatchableBaseKeys.collaborators);
+            didSchemaChange = true;
+        }
+        if (didSchemaChange) {
+            this._onChange(WatchableBaseKeys.__schema);
         }
     }
     __applyChangesWithoutTriggeringEvents(changes: Array<ModelChange>): ChangedPaths {

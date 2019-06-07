@@ -46,6 +46,7 @@ import initializeBlock from './initialize_block';
 import withHooks from './with_hooks';
 import useLoadable from './use_loadable';
 import {useRecordIds, useRecords, useRecordById} from './use_records';
+import useBase from './use_base';
 import useWatchable from './use_watchable';
 import useViewport from './use_viewport';
 
@@ -98,6 +99,7 @@ const UI = {
     globalAlert: new GlobalAlert(),
     initializeBlock,
     withHooks,
+    useBase,
     useViewport,
     useWatchable,
     useLoadable,

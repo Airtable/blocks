@@ -169,11 +169,17 @@ function (_AbstractModel) {
   }, {
     key: "__triggerOnChangeForDirtyPaths",
     value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
+      var didViewSchemaChange = false;
+
       this._viewDataStore.triggerOnChangeForDirtyPaths(dirtyPaths);
 
       if (dirtyPaths.name) {
         this._onChange(WatchableViewKeys.name);
+
+        didViewSchemaChange = true;
       }
+
+      return didViewSchemaChange;
     }
   }, {
     key: "_dataOrNullIfDeleted",

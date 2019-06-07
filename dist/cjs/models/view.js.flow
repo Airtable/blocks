@@ -152,11 +152,14 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return validKeys;
     }
 
-    __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
+    __triggerOnChangeForDirtyPaths(dirtyPaths: Object): boolean {
+        let didViewSchemaChange = false;
         this._viewDataStore.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.name) {
             this._onChange(WatchableViewKeys.name);
+            didViewSchemaChange = true;
         }
+        return didViewSchemaChange;
     }
 }
 

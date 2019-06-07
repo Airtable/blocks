@@ -81,7 +81,8 @@ var WatchableBaseKeys = Object.freeze({
   name: 'name',
   permissionLevel: 'permissionLevel',
   tables: 'tables',
-  collaborators: 'collaborators'
+  collaborators: 'collaborators',
+  __schema: '__schema'
 });
 
 /**
@@ -245,17 +246,24 @@ function (_AbstractModel) {
   }, {
     key: "__triggerOnChangeForChangedPaths",
     value: function __triggerOnChangeForChangedPaths(changedPaths) {
+      var didSchemaChange = false;
+
       if (changedPaths.name) {
         this._onChange(WatchableBaseKeys.name);
+
+        didSchemaChange = true;
       }
 
       if (changedPaths.permissionLevel) {
         this._onChange(WatchableBaseKeys.permissionLevel);
+
+        didSchemaChange = true;
       }
 
       if (changedPaths.tableOrder) {
-        this._onChange(WatchableBaseKeys.tables); // Clean up deleted tables
+        this._onChange(WatchableBaseKeys.tables);
 
+        didSchemaChange = true; // Clean up deleted tables
 
         var _iteratorNormalCompletion2 = true;
         var _didIteratorError2 = false;
@@ -306,7 +314,11 @@ function (_AbstractModel) {
             var table = this._tableModelsById[tableId];
 
             if (table) {
-              table.__triggerOnChangeForDirtyPaths(dirtyTablePaths);
+              var didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(dirtyTablePaths);
+
+              if (didTableSchemaChange) {
+                didSchemaChange = true;
+              }
             }
           }
         } catch (err) {
@@ -327,6 +339,12 @@ function (_AbstractModel) {
 
       if (changedPaths.appBlanket) {
         this._onChange(WatchableBaseKeys.collaborators);
+
+        didSchemaChange = true;
+      }
+
+      if (didSchemaChange) {
+        this._onChange(WatchableBaseKeys.__schema);
       }
     }
   }, {
