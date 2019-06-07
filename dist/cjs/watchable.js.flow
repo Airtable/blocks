@@ -66,7 +66,7 @@ class Watchable<WatchableKey: string> {
                     {callback, context},
                 ];
             } else {
-                console.warn(`Invalid key to watch for ${this.constructor._className}: ${key}`); // eslint-disable-line no-console
+                throw new Error(`Invalid key to watch for ${this.constructor._className}: ${key}`); // eslint-disable-line no-console
             }
         }
 

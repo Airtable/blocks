@@ -106,7 +106,7 @@ function () {
               context
             }];
           } else {
-            console.warn("Invalid key to watch for ".concat(this.constructor._className, ": ").concat(_key)); // eslint-disable-line no-console
+            throw new Error("Invalid key to watch for ".concat(this.constructor._className, ": ").concat(_key)); // eslint-disable-line no-console
           }
         }
       } catch (err) {
