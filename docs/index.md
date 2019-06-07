@@ -4,7 +4,7 @@ Import the SDK from `'@airtable/blocks'`.
 
 The SDK is made up of the following parts:
 
-### [base](/docs/models/global_config.md)
+### [base](/docs/models/base.md)
 
 An instance of [Base](/docs/models/base.md) representing the current Airtable base.
 
@@ -12,7 +12,7 @@ An instance of [Base](/docs/models/base.md) representing the current Airtable ba
 
 Returns information about the active table, active view, and selected records.
 
-### [globalConfig](/docs/models/global_config.md)
+### [globalConfig](/docs/global_config.md)
 
 Storage for this block installation's configuration.
 
