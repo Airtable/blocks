@@ -1,21 +1,6 @@
 import {UI} from '@airtable/blocks';
 import React from 'react';
 
-// Renders a single record.
-function Task({record}) {
-    return (
-        <div style={{fontSize: 18, padding: 12, borderBottom: '1px solid #ddd'}}>
-            <a
-                onClick={() => {
-                    UI.expandRecord(record);
-                }}
-            >
-                {record.primaryCellValueAsString || 'Unnamed record'}
-            </a>
-        </div>
-    );
-}
-
 // Renders all the records in the "Grid view" in the "Tasks" table.
 function TodoBlock() {
     const base = UI.useBase();
@@ -31,6 +16,21 @@ function TodoBlock() {
     });
 
     return <div>{tasks}</div>;
+}
+
+// Renders a single record.
+function Task({record}) {
+    return (
+        <div style={{fontSize: 18, padding: 12, borderBottom: '1px solid #ddd'}}>
+            <a
+                onClick={() => {
+                    UI.expandRecord(record);
+                }}
+            >
+                {record.primaryCellValueAsString || 'Unnamed record'}
+            </a>
+        </div>
+    );
 }
 
 UI.initializeBlock(() => <TodoBlock />);
