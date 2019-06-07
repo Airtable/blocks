@@ -6,18 +6,25 @@ The SDK is made up of the following parts:
 
 ### globalConfig
 
+Storage for this block installation's configuration.
+
 ### base
+
+An instance of Base representing the current Airtable base.
 
 ### models
 
+Contains the model classes, field types, view types, and utilities for working with record coloring
+and record aggregation.
+
 ### installationId
+
+Returns the ID for the current block installation.
 
 ### localStorage
 
-Wrapper for window.localStorage which will automatically fall back to in-memory storage when
-window.localStorage is unavailable.
-
-Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
+Wrapper for `window.localStorage` which will automatically fall back to in-memory storage when
+`window.localStorage` is unavailable.
 
 ### sessionStorage
 
@@ -26,11 +33,20 @@ window.sessionStorage is unavailable.
 
 ### viewport
 
+Controls the block's viewport. You can fullscreen the block and add size constrains using
+`viewport`.
+
 ### cursor
+
+Returns information about the active table, active view, and selected records.
 
 ### UI
 
+React components, hooks, and UI helpers.
+
 ### settingsButton
+
+Controls the block's settings button.
 
 ### reload
 
