@@ -65,4 +65,5 @@ function TodoBlock() {
         </div>
     );
 }
-export default TodoBlock;
+
+UI.initializeBlock(() => <TodoBlock />);

@@ -34,4 +34,5 @@ function TodoBlock() {
 
     return <div>{tasks}</div>;
 }
-export default TodoBlock;
+
+UI.initializeBlock(() => <TodoBlock />);
