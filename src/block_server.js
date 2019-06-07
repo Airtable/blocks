@@ -1,7 +1,7 @@
+// @flow
 /* eslint-disable no-console */
-'use strict';
-
 const _ = require('lodash');
+const invariant = require('invariant');
 const express = require('express');
 const https = require('https');
 const path = require('path');
@@ -20,6 +20,22 @@ const chalk = require('chalk');
 const getBlockDirPath = require('./get_block_dir_path');
 const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
 
+import type {
+    $Application,
+    $Request,
+    $Response,
+    Middleware,
+    NextFunction,
+} from 'express';
+import type {BlockJsonNew} from './types/block_json_new_type';
+import type {RemoteJson} from './types/remote_json_type';
+
+type RequestWithRequestId = $Request & {
+    requestId: number,
+};
+
+type PromiseResolveFunction = <R>(Promise<R> | R) => void;
+
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
 const developmentBrowsers = [
@@ -37,13 +53,31 @@ const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
 class BlockServer {
-    constructor({
-        transpileAll = false,
-        apiKey,
-        blockJson,
-        remoteJson,
-    } = {}) {
-        this._pendingLongPollResolveByRequestId = {};
+    _pendingLongPollResolveByRequestId: Map<number, PromiseResolveFunction>;
+    _expressApp: $Application;
+    _shouldTranspileAll: boolean;
+    _nextRequestId: number;
+    _apiKey: string;
+    _bundlePromiseIfExists: Promise<void> | null;
+    _blockJson: BlockJsonNew;
+    _remoteJson: RemoteJson;
+    _apiClient: APIClient;
+    _bundler: browserify;
+
+    constructor(args: {
+        transpileAll: boolean,
+        apiKey: string,
+        blockJson: BlockJsonNew,
+        remoteJson: RemoteJson,
+    }) {
+        const {
+            transpileAll = false,
+            apiKey,
+            blockJson,
+            remoteJson,
+        } = args;
+
+        this._pendingLongPollResolveByRequestId = new Map();
         this._expressApp = express();
         this._shouldTranspileAll = transpileAll;
         this._nextRequestId = 0;
@@ -57,21 +91,24 @@ class BlockServer {
         this._setUpBlockSdkAndWrapper();
         this._setUpBundler();
     }
-    _setUpExpressRoutes() {
+    _setUpExpressRoutes(): void {
         // Set Access-Control-Allow-Origin on all requests.
-        this._expressApp.use((req, res, next) => {
+        this._expressApp.use((req: $Request, res: $Response, next: NextFunction) => {
             res.header('Access-Control-Allow-Origin', '*');
-            next(null, req, res, next);
+            next();
         });
 
         // Set a requestId on each request.
-        this._expressApp.use((req, res, next) => {
-            req.requestId = this._nextRequestId;
+        this._expressApp.use((req: $Request, res: $Response, next: NextFunction) => {
+            // Flow typecasting the `req` const to be `RequestWithRequestId`
+            // because all request objects after this middleware should
+            // have the "requestId" attribute defined to `req`.
+            ((req: any): RequestWithRequestId).requestId = this._nextRequestId; // eslint-disable-line flowtype/no-weak-types
             this._nextRequestId++;
-            next(null, req, res, next);
+            next();
         });
     }
-    async _ensureBundleIsReadyAsync() {
+    async _ensureBundleIsReadyAsync(): Promise<void> {
         if (this._bundlePromiseIfExists === null) {
             // Bundle already ready.
             return;
@@ -84,8 +121,8 @@ class BlockServer {
         // will return immediately.
         await this._ensureBundleIsReadyAsync();
     }
-    _ensureBundleIsReadyMiddleware() {
-        return (req, res, next) => {
+    _ensureBundleIsReadyMiddleware(): Middleware {
+        return (req: $Request, res: $Response, next: NextFunction) => {
             Promise.race([
                 this._ensureBundleIsReadyAsync(),
                 new Promise((resolve, reject) => {
@@ -103,7 +140,7 @@ class BlockServer {
             });
         };
     }
-    _setUpRunFrameRoutes() {
+    _setUpRunFrameRoutes(): void {
         const blockDirPath = getBlockDirPath();
         const runFrameRoutes = express.Router();
 
@@ -111,22 +148,22 @@ class BlockServer {
         runFrameRoutes.use(bodyParser.json({limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT}));
 
         // Serve the bundle file if ready.
-        runFrameRoutes.get('/bundle.js', this._ensureBundleIsReadyMiddleware(), (req, res) => {
+        runFrameRoutes.get('/bundle.js', this._ensureBundleIsReadyMiddleware(), (req: $Request, res: $Response) => {
             res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
                 root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
             });
         });
 
-        runFrameRoutes.options('/registerBlockInstallationMetadata', (req, res) => {
+        runFrameRoutes.options('/registerBlockInstallationMetadata', (req: $Request, res: $Response) => {
             res.set({
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': '*',
-                'Access-Control-Max-Age': 86400,
+                'Access-Control-Max-Age': '86400',
                 'Access-Control-Allow-Headers': 'Content-Type',
             }).status(200).end();
         });
 
-        runFrameRoutes.post('/registerBlockInstallationMetadata', (req, res) => {
+        runFrameRoutes.post('/registerBlockInstallationMetadata', (req: $Request, res: $Response) => {
             if (!req.body || !req.body.applicationId || !req.body.blockInstallationId) {
                 res.status(400).send({
                     error: 'BAD_REQUEST',
@@ -136,7 +173,8 @@ class BlockServer {
                 if (!this._apiClient || this._apiClient.blockInstallationId !== req.body.blockInstallationId) {
                     console.log('Switched to a new block installation.');
                 }
-
+                invariant(typeof req.body.applicationId === 'string', 'expects req.body.applicationId to be a string');
+                invariant(typeof req.body.blockInstallationId === 'string', 'req.body.blockInstallationId to be a string');
                 this._apiClient = new APIClient({
                     apiBaseUrl: this._remoteJson.server,
                     applicationId: req.body.applicationId,
@@ -151,14 +189,14 @@ class BlockServer {
          * This endpoint is used by the block frame to check if the
          * local block server is responding or not.
          */
-        runFrameRoutes.head('/ping', (req, res) => {
+        runFrameRoutes.head('/ping', (req: $Request, res: $Response) => {
             res.sendStatus(200);
         });
 
-        runFrameRoutes.get('/poll', (req, res) => {
+        runFrameRoutes.get('/poll', (req: RequestWithRequestId, res: $Response) => {
             // This promise will resolve whenever the bundle we're serving changes.
             const bundleChangePromise = new Promise((resolve, reject) => {
-                this._pendingLongPollResolveByRequestId[req.requestId] = {resolve};
+                this._pendingLongPollResolveByRequestId.set(req.requestId, resolve);
             });
             // After the LONG_POLL_TIMEOUT_MS, send a request timeout to tell the client to retry.
             const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => resolve('timeout'), LONG_POLL_TIMEOUT_MS));
@@ -167,7 +205,7 @@ class BlockServer {
                 bundleChangePromise,
                 timeoutPromise,
             ]).then(result => {
-                delete this._pendingLongPollResolveByRequestId[req.requestId];
+                this._pendingLongPollResolveByRequestId.delete(req.requestId);
                 const statusCode = result === 'timeout' ? 408 : 200;
                 res.sendStatus(statusCode);
             });
@@ -179,7 +217,7 @@ class BlockServer {
         const blockDirPath = getBlockDirPath();
 
         // Check if react and react-dom are listed in package.json.
-        const packageJson = fs.readFileSync(path.join(blockDirPath, 'package.json'));
+        const packageJson = fs.readFileSync(path.join(blockDirPath, 'package.json'), 'utf8');
         const dependencies = JSON.parse(packageJson).dependencies;
         const dependenciesList = Object.keys(dependencies);
         if (!_.includes(dependenciesList, 'react') || !_.includes(dependenciesList, 'react-dom')) {
@@ -273,7 +311,7 @@ class BlockServer {
         this._bundler.on('update', this.bundleAsync.bind(this));
         this._bundler.on('bundle', () => console.log('Updating bundle...'));
     }
-    setPublicBaseUrl(publicBaseUrl) {
+    setPublicBaseUrl(publicBaseUrl: string): void {
         // Use process.env to provide the base URL.
         this._bundler.transform(
             envify({
@@ -281,7 +319,7 @@ class BlockServer {
             }),
         );
     }
-    async startAsync(port, ngrok) {
+    async startAsync(port: number, ngrok: boolean): Promise<void> {
         const url = ngrok ?
             await this.startNgrokAsync(port) :
             await this.startLocalAsync(port);
@@ -289,11 +327,12 @@ class BlockServer {
         await this.bundleAsync(null);
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
     }
-    async startNgrokAsync(port) {
+    async startNgrokAsync(port: number): Promise<string> {
         // Start our express server.
         await new Promise((resolve, reject) => {
-            this._expressApp
-                .listen(port)
+            const expressServer = this._expressApp.listen(port);
+            invariant(expressServer, 'expressServer');
+            expressServer
                 .on('error', reject)
                 .on('listening', resolve);
         });
@@ -307,7 +346,7 @@ class BlockServer {
             });
         });
     }
-    async startLocalAsync(port) {
+    async startLocalAsync(port: number): Promise<string> {
         // Read certs
         const [key, cert] = await Promise.all([
             fsUtils.readFileAsync(path.join(getBlocksCliProjectRootPath(), 'keys', 'server.key'), 'utf8'),
@@ -315,11 +354,12 @@ class BlockServer {
         ]);
         // Start the local server using those certs
         await new Promise((resolve, reject) => {
+            // flow-disable-next-line because flow confuses Socket types for createServer
             const server = https.createServer({cert, key}, this._expressApp);
             server
-            .listen(port)
-            .on('error', reject)
-            .on('listening', resolve);
+                .listen(port)
+                .on('error', reject)
+                .on('listening', resolve);
         });
         const url = `https://localhost:${port}`;
         console.log('Local mode: serving self-signed https on localhost');
@@ -336,7 +376,7 @@ class BlockServer {
         console.log('');
         return url;
     }
-    bundleAsync(files) {
+    bundleAsync(files: Array<string> | null): Promise<void> {
         if (files && files.findIndex(file => file.includes('package.json')) !== -1) {
             // When yarn adds or removes packages, it deletes the symlinks
             // and SDK stub we add to node_modules. As a temporary fix, we
@@ -379,7 +419,7 @@ class BlockServer {
                 this._bundlePromiseIfExists = null;
             }
             // Resolve any long poll promises that were listening for bundle changes.
-            for (const {resolve: longPollResolve} of Object.values(this._pendingLongPollResolveByRequestId)) {
+            for (const longPollResolve of this._pendingLongPollResolveByRequestId.values()) {
                 longPollResolve();
             }
             // Resolve our primary bundle promise.
