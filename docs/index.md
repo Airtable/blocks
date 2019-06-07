@@ -4,55 +4,71 @@ Import the SDK from `'@airtable/blocks'`.
 
 The SDK is made up of the following parts:
 
-### globalConfig
+### [base](/docs/models/global_config.md)
+
+An instance of [Base](/docs/models/base.md) representing the current Airtable base.
+
+### [cursor](/docs/cursor.md)
+
+Returns information about the active table, active view, and selected records.
+
+### [globalConfig](/docs/models/global_config.md)
 
 Storage for this block installation's configuration.
 
-### base
-
-An instance of Base representing the current Airtable base.
-
-### models
+### [models](/docs/models/models)
 
 Contains the model classes, field types, view types, and utilities for working with record coloring
 and record aggregation.
+
+### [settingsButton](/docs/settings_button.md)
+
+Controls the block's settings button.
+
+### [UI](/docs/ui.md)
+
+React components, hooks, and UI helpers.
+
+### [viewport](/docs/viewport.md)
+
+Controls the block's viewport. You can fullscreen the block and add size constrains using
+`viewport`.
+
+## Top-level helpers
 
 ### installationId
 
 Returns the ID for the current block installation.
 
+```javascript
+import {installationId} from '@airtable/blocks';
+console.log(installationId);
+```
+
 ### localStorage
 
-Wrapper for `window.localStorage` which will automatically fall back to in-memory storage when
+Wrapper for [`window.localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) which will automatically fall back to in-memory storage when
 `window.localStorage` is unavailable.
+
+
+```javascript
+import {localStorage} from '@airtable/blocks';
+localStorage.setItem('lastScrollTop', 0);
+```
 
 ### sessionStorage
 
-Wrapper for window.sessionStorage which will automatically fall back to in-memory storage when
-window.sessionStorage is unavailable.
+Wrapper for [`window.sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) which will automatically fall back to in-memory storage when
+`window.sessionStorage` is unavailable.
 
-### viewport
-
-Controls the block's viewport. You can fullscreen the block and add size constrains using
-`viewport`.
-
-### cursor
-
-Returns information about the active table, active view, and selected records.
-
-### UI
-
-React components, hooks, and UI helpers.
-
-### settingsButton
-
-Controls the block's settings button.
+```javascript
+import {sessionStorage} from '@airtable/blocks';
+sessionStorage.setItem('lastScrollTop', 0);
+```
 
 ### reload
 
 Call this function to reload your block.
-
-Example:
 
 ```javascript
 import React from 'react';
