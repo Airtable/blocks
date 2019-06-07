@@ -16,7 +16,7 @@ Returns information about the active table, active view, and selected records.
 
 Storage for this block installation's configuration.
 
-### [models](/docs/models/models)
+### [models](/docs/models/models.md)
 
 Contains the model classes, field types, view types, and utilities for working with record coloring
 and record aggregation.
