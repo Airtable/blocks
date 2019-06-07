@@ -23,6 +23,7 @@ function Task({record}) {
     return (
         <div style={{fontSize: 18, padding: 12, borderBottom: '1px solid #ddd'}}>
             <a
+                style={{cursor: 'pointer'}}
                 onClick={() => {
                     UI.expandRecord(record);
                 }}
