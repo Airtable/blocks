@@ -1,4 +1,4 @@
-import {base, globalConfig, models, UI} from '@airtable/blocks';
+import {globalConfig, models, UI} from '@airtable/blocks';
 import React from 'react';
 
 // Keys we're storing in globalConfig. Using an enum instead of
@@ -18,6 +18,7 @@ const allowedFieldTypes = [
 
 // Gets the selected table based on the table id in globalConfig.
 function getSelectedTable() {
+    const base = UI.useBase();
     const tableId = globalConfig.get(GlobalConfigKeys.TABLE_ID);
     return base.getTableByIdIfExists(tableId);
 }
@@ -49,22 +50,6 @@ function getQueryResult() {
     }
 }
 
-// Wrapper component for labeled model pickers.
-function Label({text, children}) {
-    return (
-        <label
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                marginBottom: 16,
-            }}
-        >
-            <p style={{fontWeight: 500, marginBottom: 8}}>{text}</p>
-            {children}
-        </label>
-    );
-}
-
 // Adds 1 to the cell values for the specified records and field.
 function onAddClick(records, field) {
     let amountToAdd;
@@ -82,6 +67,7 @@ function onAddClick(records, field) {
 // Index component. Adds 1 to all records in a selected table or view
 // in a selected number/percent/currency field.
 function BatchAdder() {
+    const base = UI.useBase();
     const table = getSelectedTable();
     const queryResult = getQueryResult();
     const field = getSelectedField();
@@ -93,7 +79,7 @@ function BatchAdder() {
     // (3) The current user's permission level changes
     // (4) The selected field's type changes
     UI.useWatchable(globalConfig, Object.values(GlobalConfigKeys));
-    UI.useWatchable(queryResult, ['recordIds']);
+    UI.useRecords(queryResult);
     UI.useWatchable(base, ['permissionLevel']);
     UI.useWatchable(field, ['type']);
 
@@ -140,6 +126,22 @@ function BatchAdder() {
                 + Add
             </UI.Button>
         </div>
+    );
+}
+
+// Wrapper component for labeled model pickers.
+function Label({text, children}) {
+    return (
+        <label
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                marginBottom: 16,
+            }}
+        >
+            <p style={{fontWeight: 500, marginBottom: 8}}>{text}</p>
+            {children}
+        </label>
     );
 }
 
