@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const cliHelpers = require('../../src/helpers/cli_helpers');
-const yarnHelpers = require('../../src/helpers/yarn_helpers');
+const nodeModulesCommandHelpers = require('../../src/helpers/node_modules_command_helpers');
 const sinon = require('sinon');
 const assert = require('assert');
 
@@ -17,7 +17,7 @@ describe('init command', function() {
             apiKey: 'key123ABC'
         });
 
-        yarnInstallAsyncStub = sinon.stub(yarnHelpers, 'yarnInstallAsync').resolves();
+        yarnInstallAsyncStub = sinon.stub(nodeModulesCommandHelpers, 'yarnInstallAsync').resolves();
     });
 
     it('writes a directory of files', async function() {

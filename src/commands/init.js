@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-console */
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
-const yarnHelpers = require('../helpers/yarn_helpers');
+const nodeModulesCommandHelpers = require('../helpers/node_modules_command_helpers');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
 const SupportedTopLevelDirectoryNames = require('../types/supported_top_level_directory_names');
@@ -124,7 +124,7 @@ async function initBlockAsync(
         writeAirtableApiKeyFilePromise,
     ]);
 
-    await yarnHelpers.yarnInstallAsync(blockDirPath, ['--non-interactive']);
+    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['--non-interactive']);
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {

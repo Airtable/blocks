@@ -3,6 +3,7 @@ const Rollbar = require('rollbar');
 const {ROLLBAR_ACCESS_TOKEN} = require('../config/block_cli_config_settings');
 const path = require('path');
 const fsExtra = require('fs-extra');
+const getBlocksCliProjectRootPath = require('./get_blocks_cli_project_root_path');
 
 async function setUpRollbarAsync(): Promise<void> {
     if (await isInDevelopmentRepositoryAsync()) {
@@ -23,9 +24,7 @@ module.exports = setUpRollbarAsync;
 // In the future, we may wish to set a flag at publish time to accomplish this.
 async function isInDevelopmentRepositoryAsync(): Promise<boolean> {
     const possibleGitPath = path.join(
-        __dirname,
-        '..',
-        '..',
+        getBlocksCliProjectRootPath(),
         '.git'
     );
     return await fsExtra.pathExists(possibleGitPath);

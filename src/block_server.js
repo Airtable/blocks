@@ -18,6 +18,7 @@ const fsUtils = require('./fs_utils');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const getBlockDirPath = require('./get_block_dir_path');
+const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
@@ -309,8 +310,8 @@ class BlockServer {
     async startLocalAsync(port) {
         // Read certs
         const [key, cert] = await Promise.all([
-            fsUtils.readFileAsync(path.join(__dirname, '../keys/server.key'), 'utf8'),
-            fsUtils.readFileAsync(path.join(__dirname, '../keys/server.crt'), 'utf8'),
+            fsUtils.readFileAsync(path.join(getBlocksCliProjectRootPath(), 'keys', 'server.key'), 'utf8'),
+            fsUtils.readFileAsync(path.join(getBlocksCliProjectRootPath(), 'keys', 'server.crt'), 'utf8'),
         ]);
         // Start the local server using those certs
         await new Promise((resolve, reject) => {
@@ -362,7 +363,7 @@ class BlockServer {
         const fsStream = fs.createWriteStream(path.join(
             blockDirPath,
             blockCliConfigSettings.BUILD_DIR,
-            blockCliConfigSettings.BUNDLE_FILE_NAME
+            blockCliConfigSettings.BUNDLE_FILE_NAME,
         ));
         fsStream.on('finish', () => {
             console.log('Bundle updated');

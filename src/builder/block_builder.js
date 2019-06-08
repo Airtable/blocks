@@ -4,8 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const invariant = require('invariant');
-const {execFileAsync} = require('../helpers/child_process_helpers');
-const {yarnInstallAsync} = require('../helpers/yarn_helpers');
+const {babelAsync, yarnInstallAsync} = require('../helpers/node_modules_command_helpers');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('../generate_block_client_wrapper');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
@@ -73,8 +72,6 @@ class BlockBuilder {
         return buildStepSuccess();
     }
     async _transpileDirectoryAsync(srcDirPath: DirectoryPath, outputDirPath: DirectoryPath): Promise<BuildStepResult<void>> {
-        const currPath = __dirname;
-        const babelPath = path.join(currPath, '..', '..', 'node_modules', '.bin', 'babel');
         try {
             const presets = [
                 '@babel/preset-env',
@@ -84,25 +81,19 @@ class BlockBuilder {
             const plugins = [
                 '@babel/proposal-class-properties',
             ];
-            await execFileAsync(
-                babelPath,
-                [
-                    srcDirPath,
-                    `--out-dir=${outputDirPath}`,
-                    '--copy-files',
-                    '--no-babelrc',
-                    `--presets=${presets.join(',')}`,
-                    `--plugins=${plugins.join(',')}`,
-                    '--retain-lines',
-                    '--minified',
-                ],
-                {
-                    // Use the blocks-cli dir as the cwd so babel can properly find
-                    // presets/plugins.
-                    cwd: __dirname,
-                    prefix: 'babel',
-                },
-            );
+
+            // Use the blocks-cli dir as the cwd so babel can properly find
+            // presets/plugins.
+            await babelAsync(__dirname, [
+                srcDirPath,
+                `--out-dir=${outputDirPath}`,
+                '--copy-files',
+                '--no-babelrc',
+                `--presets=${presets.join(',')}`,
+                `--plugins=${plugins.join(',')}`,
+                '--retain-lines',
+                '--minified',
+            ]);
         } catch (error) {
             return {success: false, error};
         }
