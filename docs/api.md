@@ -16,161 +16,161 @@
 -   [@airtable/blocks/ui][12]
     -   [Button][13]
     -   [Icon][14]
--   [records][15]
--   [recordIds][16]
--   [isRecordMetadataLoaded][17]
--   [visibleRecordIds][18]
--   [visibleRecords][19]
--   [getRecordColor][20]
-    -   [Parameters][21]
--   [AbstractModel][22]
-    -   [Parameters][23]
-    -   [id][24]
-    -   [isDeleted][25]
--   [fieldTypes][26]
-    -   [Examples][27]
--   [viewTypes][28]
-    -   [Examples][29]
--   [generateGuid][30]
-    -   [Examples][31]
--   [TableOrViewQueryResult][32]
-    -   [Parameters][33]
-    -   [parentTable][34]
-    -   [parentView][35]
-    -   [recordIds][36]
-    -   [fields][37]
--   [LinkedRecordsQueryResult][38]
-    -   [Parameters][39]
-    -   [isValid][40]
-    -   [parentTable][41]
-    -   [recordIds][42]
-    -   [records][43]
-    -   [fields][44]
--   [Aggregator][45]
-    -   [Properties][46]
-    -   [Examples][47]
--   [modes][48]
-    -   [Examples][49]
--   [Cursor][50]
-    -   [Parameters][51]
+-   [Watchable][15]
+    -   [watch][16]
+    -   [unwatch][17]
+-   [records][18]
+-   [recordIds][19]
+-   [isRecordMetadataLoaded][20]
+-   [visibleRecordIds][21]
+-   [visibleRecords][22]
+-   [getRecordColor][23]
+    -   [Parameters][24]
+-   [AbstractModel][25]
+    -   [Parameters][26]
+    -   [id][27]
+    -   [isDeleted][28]
+-   [fieldTypes][29]
+    -   [Examples][30]
+-   [viewTypes][31]
+    -   [Examples][32]
+-   [generateGuid][33]
+    -   [Examples][34]
+-   [TableOrViewQueryResult][35]
+    -   [Parameters][36]
+    -   [parentTable][37]
+    -   [parentView][38]
+    -   [recordIds][39]
+    -   [fields][40]
+-   [LinkedRecordsQueryResult][41]
+    -   [Parameters][42]
+    -   [isValid][43]
+    -   [parentTable][44]
+    -   [recordIds][45]
+    -   [records][46]
+    -   [fields][47]
+-   [Aggregator][48]
+    -   [Properties][49]
+    -   [Examples][50]
+-   [modes][51]
     -   [Examples][52]
-    -   [activeTableId][53]
-    -   [activeViewId][54]
--   [AbstractModelWithAsyncData][55]
-    -   [Parameters][56]
-    -   [watch][57]
-    -   [unwatch][58]
-    -   [isDataLoaded][59]
-    -   [loadDataAsync][60]
-    -   [unloadData][61]
--   [Viewport][62]
-    -   [Parameters][63]
-    -   [Examples][64]
-    -   [enterFullscreenIfPossible][65]
-    -   [exitFullscreen][66]
-    -   [maxFullscreenSize][67]
-    -   [addMaxFullscreenSize][68]
-    -   [minSize][69]
-    -   [addMinSize][70]
-    -   [isSmallerThanMinSize][71]
-    -   [isFullscreen][72]
-    -   [size][73]
--   [colorUtils][74]
-    -   [Examples][75]
-    -   [getHexForColor][76]
-    -   [getRgbForColor][77]
-    -   [shouldUseLightTextOnColor][78]
--   [createDataContainer][79]
-    -   [Parameters][80]
-    -   [Examples][81]
--   [Synced][82]
+-   [Cursor][53]
+    -   [Parameters][54]
+    -   [Examples][55]
+    -   [activeTableId][56]
+    -   [activeViewId][57]
+-   [AbstractModelWithAsyncData][58]
+    -   [Parameters][59]
+    -   [watch][60]
+    -   [unwatch][61]
+    -   [isDataLoaded][62]
+    -   [loadDataAsync][63]
+    -   [unloadData][64]
+-   [Viewport][65]
+    -   [Parameters][66]
+    -   [Examples][67]
+    -   [enterFullscreenIfPossible][68]
+    -   [exitFullscreen][69]
+    -   [maxFullscreenSize][70]
+    -   [addMaxFullscreenSize][71]
+    -   [minSize][72]
+    -   [addMinSize][73]
+    -   [isSmallerThanMinSize][74]
+    -   [isFullscreen][75]
+    -   [size][76]
+-   [colorUtils][77]
+    -   [Examples][78]
+    -   [getHexForColor][79]
+    -   [getRgbForColor][80]
+    -   [shouldUseLightTextOnColor][81]
+-   [createDataContainer][82]
     -   [Parameters][83]
--   [TablePicker][84]
-    -   [Parameters][85]
--   [TablePickerSynced][86]
-    -   [Parameters][87]
--   [FieldPicker][88]
-    -   [Parameters][89]
--   [FieldPickerSynced][90]
-    -   [Parameters][91]
--   [ViewPicker][92]
-    -   [Parameters][93]
--   [ViewPickerSynced][94]
-    -   [Parameters][95]
--   [Input][96]
-    -   [Parameters][97]
--   [InputSynced][98]
-    -   [Parameters][99]
--   [RadioSynced][100]
-    -   [Parameters][101]
--   [CellRenderer][102]
-    -   [Parameters][103]
--   [expandRecord][104]
-    -   [Parameters][105]
-    -   [Examples][106]
--   [expandRecordList][107]
+    -   [Examples][84]
+-   [Synced][85]
+    -   [Parameters][86]
+-   [TablePicker][87]
+    -   [Parameters][88]
+-   [TablePickerSynced][89]
+    -   [Parameters][90]
+-   [FieldPicker][91]
+    -   [Parameters][92]
+-   [FieldPickerSynced][93]
+    -   [Parameters][94]
+-   [ViewPicker][95]
+    -   [Parameters][96]
+-   [ViewPickerSynced][97]
+    -   [Parameters][98]
+-   [Input][99]
+    -   [Parameters][100]
+-   [InputSynced][101]
+    -   [Parameters][102]
+-   [RadioSynced][103]
+    -   [Parameters][104]
+-   [CellRenderer][105]
+    -   [Parameters][106]
+-   [expandRecord][107]
     -   [Parameters][108]
     -   [Examples][109]
--   [expandRecordPickerAsync][110]
+-   [expandRecordList][110]
     -   [Parameters][111]
     -   [Examples][112]
--   [GlobalAlert][113]
-    -   [Examples][114]
-    -   [showReloadPrompt][115]
--   [FieldIcon][116]
-    -   [Parameters][117]
--   [Loader][118]
-    -   [Parameters][119]
--   [Tooltip][120]
-    -   [Parameters][121]
--   [CollaboratorToken][122]
-    -   [Parameters][123]
--   [ChoiceToken][124]
-    -   [Parameters][125]
--   [ColorPalette][126]
--   [ColorPaletteSynced][127]
--   [ProgressBar][128]
-    -   [Parameters][129]
--   [RecordCard][130]
-    -   [Parameters][131]
--   [RecordCardList][132]
-    -   [Parameters][133]
--   [Select][134]
-    -   [Parameters][135]
--   [SelectSynced][136]
-    -   [Parameters][137]
--   [SelectButtons][138]
--   [SelectButtonsSynced][139]
--   [Modal][140]
-    -   [Parameters][141]
--   [Toggle][142]
-    -   [Parameters][143]
--   [ToggleSynced][144]
-    -   [Parameters][145]
--   [Popover][146]
-    -   [Parameters][147]
--   [AutocompletePopover][148]
-    -   [Parameters][149]
--   [ViewportConstraint][150]
-    -   [Examples][151]
--   [Link][152]
-    -   [Parameters][153]
--   [loadCSSFromString][154]
-    -   [Parameters][155]
-    -   [Examples][156]
--   [loadCSSFromURLAsync][157]
+-   [expandRecordPickerAsync][113]
+    -   [Parameters][114]
+    -   [Examples][115]
+-   [GlobalAlert][116]
+    -   [Examples][117]
+    -   [showReloadPrompt][118]
+-   [FieldIcon][119]
+    -   [Parameters][120]
+-   [Loader][121]
+    -   [Parameters][122]
+-   [Tooltip][123]
+    -   [Parameters][124]
+-   [CollaboratorToken][125]
+    -   [Parameters][126]
+-   [ChoiceToken][127]
+    -   [Parameters][128]
+-   [ColorPalette][129]
+-   [ColorPaletteSynced][130]
+-   [ProgressBar][131]
+    -   [Parameters][132]
+-   [RecordCard][133]
+    -   [Parameters][134]
+-   [RecordCardList][135]
+    -   [Parameters][136]
+-   [Select][137]
+    -   [Parameters][138]
+-   [SelectSynced][139]
+    -   [Parameters][140]
+-   [SelectButtons][141]
+-   [SelectButtonsSynced][142]
+-   [Modal][143]
+    -   [Parameters][144]
+-   [Toggle][145]
+    -   [Parameters][146]
+-   [ToggleSynced][147]
+    -   [Parameters][148]
+-   [Popover][149]
+    -   [Parameters][150]
+-   [AutocompletePopover][151]
+    -   [Parameters][152]
+-   [ViewportConstraint][153]
+    -   [Examples][154]
+-   [Link][155]
+    -   [Parameters][156]
+-   [loadCSSFromString][157]
     -   [Parameters][158]
     -   [Examples][159]
--   [loadScriptFromURLAsync][160]
+-   [loadCSSFromURLAsync][160]
     -   [Parameters][161]
     -   [Examples][162]
--   [SettingsButton][163]
+-   [loadScriptFromURLAsync][163]
     -   [Parameters][164]
     -   [Examples][165]
-    -   [isVisible][166]
--   [Watchable][167]
-    -   [watch][168]
-    -   [unwatch][169]
+-   [SettingsButton][166]
+    -   [Parameters][167]
+    -   [Examples][168]
+    -   [isVisible][169]
 
 ## @airtable/blocks
 
@@ -1033,6 +1033,38 @@ Type: [object][189]
     -   `$0.className`
     -   `$0.style`
     -   `$0.pathClassName`
+
+## Watchable
+
+### watch
+
+Start watching the given key or keys. The callback will be called when the value changes. Every call
+to `watch` should have a matching call to `unwatch`.
+
+Will log a warning if the keys given are invalid.
+
+#### Parameters
+
+-   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
+-   `callback` **function (model: this, key: WatchableKey): any**
+-   `context` **[Object][189]??**
+
+Returns **[Array][178]&lt;WatchableKey>**
+
+### unwatch
+
+Stop watching the given key or keys. Should be called with the same arguments that were given to
+`watch`.
+
+Will log a warning if the keys given are invalid.
+
+#### Parameters
+
+-   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
+-   `callback` **function (model: this, key: WatchableKey): any**
+-   `context` **[Object][189]??**
+
+Returns **[Array][178]&lt;WatchableKey>**
 
 ## records
 
@@ -1970,38 +2002,6 @@ Type: [boolean][177]
 
 Returns **[boolean][177]**
 
-## Watchable
-
-### watch
-
-Start watching the given key or keys. The callback will be called when the value changes. Every call
-to `watch` should have a matching call to `unwatch`.
-
-Will log a warning if the keys given are invalid.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
-### unwatch
-
-Stop watching the given key or keys. Should be called with the same arguments that were given to
-`watch`.
-
-Will log a warning if the keys given are invalid.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
 [1]: #airtableblocks
 [2]: #blocksdk
 [3]: #runinfo
@@ -2016,161 +2016,161 @@ Returns **[Array][178]&lt;WatchableKey>**
 [12]: #airtableblocksui
 [13]: #button
 [14]: #icon
-[15]: #records
-[16]: #recordids
-[17]: #isrecordmetadataloaded
-[18]: #visiblerecordids
-[19]: #visiblerecords
-[20]: #getrecordcolor
-[21]: #parameters
-[22]: #abstractmodel
-[23]: #parameters-1
-[24]: #id
-[25]: #isdeleted
-[26]: #fieldtypes
-[27]: #examples
-[28]: #viewtypes
-[29]: #examples-1
-[30]: #generateguid
-[31]: #examples-2
-[32]: #tableorviewqueryresult
-[33]: #parameters-2
-[34]: #parenttable
-[35]: #parentview
-[36]: #recordids-1
-[37]: #fields
-[38]: #linkedrecordsqueryresult
-[39]: #parameters-3
-[40]: #isvalid
-[41]: #parenttable-1
-[42]: #recordids-2
-[43]: #records-1
-[44]: #fields-1
-[45]: #aggregator
-[46]: #properties
-[47]: #examples-3
-[48]: #modes
-[49]: #examples-4
-[50]: #cursor
-[51]: #parameters-4
-[52]: #examples-5
-[53]: #activetableid
-[54]: #activeviewid
-[55]: #abstractmodelwithasyncdata
-[56]: #parameters-5
-[57]: #watch
-[58]: #unwatch
-[59]: #isdataloaded
-[60]: #loaddataasync
-[61]: #unloaddata
-[62]: #viewport
-[63]: #parameters-6
-[64]: #examples-6
-[65]: #enterfullscreenifpossible
-[66]: #exitfullscreen
-[67]: #maxfullscreensize
-[68]: #addmaxfullscreensize
-[69]: #minsize
-[70]: #addminsize
-[71]: #issmallerthanminsize
-[72]: #isfullscreen
-[73]: #size
-[74]: #colorutils
-[75]: #examples-7
-[76]: #gethexforcolor
-[77]: #getrgbforcolor
-[78]: #shoulduselighttextoncolor
-[79]: #createdatacontainer
-[80]: #parameters-7
-[81]: #examples-8
-[82]: #synced
-[83]: #parameters-8
-[84]: #tablepicker
-[85]: #parameters-9
-[86]: #tablepickersynced
-[87]: #parameters-10
-[88]: #fieldpicker
-[89]: #parameters-11
-[90]: #fieldpickersynced
-[91]: #parameters-12
-[92]: #viewpicker
-[93]: #parameters-13
-[94]: #viewpickersynced
-[95]: #parameters-14
-[96]: #input
-[97]: #parameters-15
-[98]: #inputsynced
-[99]: #parameters-16
-[100]: #radiosynced
-[101]: #parameters-17
-[102]: #cellrenderer
-[103]: #parameters-18
-[104]: #expandrecord
-[105]: #parameters-19
-[106]: #examples-9
-[107]: #expandrecordlist
-[108]: #parameters-20
-[109]: #examples-10
-[110]: #expandrecordpickerasync
-[111]: #parameters-21
-[112]: #examples-11
-[113]: #globalalert
-[114]: #examples-12
-[115]: #showreloadprompt
-[116]: #fieldicon
-[117]: #parameters-22
-[118]: #loader
-[119]: #parameters-23
-[120]: #tooltip
-[121]: #parameters-24
-[122]: #collaboratortoken
-[123]: #parameters-25
-[124]: #choicetoken
-[125]: #parameters-26
-[126]: #colorpalette
-[127]: #colorpalettesynced
-[128]: #progressbar
-[129]: #parameters-27
-[130]: #recordcard
-[131]: #parameters-28
-[132]: #recordcardlist
-[133]: #parameters-29
-[134]: #select
-[135]: #parameters-30
-[136]: #selectsynced
-[137]: #parameters-31
-[138]: #selectbuttons
-[139]: #selectbuttonssynced
-[140]: #modal
-[141]: #parameters-32
-[142]: #toggle
-[143]: #parameters-33
-[144]: #togglesynced
-[145]: #parameters-34
-[146]: #popover
-[147]: #parameters-35
-[148]: #autocompletepopover
-[149]: #parameters-36
-[150]: #viewportconstraint
-[151]: #examples-13
-[152]: #link
-[153]: #parameters-37
-[154]: #loadcssfromstring
-[155]: #parameters-38
-[156]: #examples-14
-[157]: #loadcssfromurlasync
-[158]: #parameters-39
-[159]: #examples-15
-[160]: #loadscriptfromurlasync
-[161]: #parameters-40
-[162]: #examples-16
-[163]: #settingsbutton
-[164]: #parameters-41
-[165]: #examples-17
-[166]: #isvisible
-[167]: #watchable
-[168]: #watch-1
-[169]: #unwatch-1
+[15]: #watchable
+[16]: #watch
+[17]: #unwatch
+[18]: #records
+[19]: #recordids
+[20]: #isrecordmetadataloaded
+[21]: #visiblerecordids
+[22]: #visiblerecords
+[23]: #getrecordcolor
+[24]: #parameters
+[25]: #abstractmodel
+[26]: #parameters-1
+[27]: #id
+[28]: #isdeleted
+[29]: #fieldtypes
+[30]: #examples
+[31]: #viewtypes
+[32]: #examples-1
+[33]: #generateguid
+[34]: #examples-2
+[35]: #tableorviewqueryresult
+[36]: #parameters-2
+[37]: #parenttable
+[38]: #parentview
+[39]: #recordids-1
+[40]: #fields
+[41]: #linkedrecordsqueryresult
+[42]: #parameters-3
+[43]: #isvalid
+[44]: #parenttable-1
+[45]: #recordids-2
+[46]: #records-1
+[47]: #fields-1
+[48]: #aggregator
+[49]: #properties
+[50]: #examples-3
+[51]: #modes
+[52]: #examples-4
+[53]: #cursor
+[54]: #parameters-4
+[55]: #examples-5
+[56]: #activetableid
+[57]: #activeviewid
+[58]: #abstractmodelwithasyncdata
+[59]: #parameters-5
+[60]: #watch-1
+[61]: #unwatch-1
+[62]: #isdataloaded
+[63]: #loaddataasync
+[64]: #unloaddata
+[65]: #viewport
+[66]: #parameters-6
+[67]: #examples-6
+[68]: #enterfullscreenifpossible
+[69]: #exitfullscreen
+[70]: #maxfullscreensize
+[71]: #addmaxfullscreensize
+[72]: #minsize
+[73]: #addminsize
+[74]: #issmallerthanminsize
+[75]: #isfullscreen
+[76]: #size
+[77]: #colorutils
+[78]: #examples-7
+[79]: #gethexforcolor
+[80]: #getrgbforcolor
+[81]: #shoulduselighttextoncolor
+[82]: #createdatacontainer
+[83]: #parameters-7
+[84]: #examples-8
+[85]: #synced
+[86]: #parameters-8
+[87]: #tablepicker
+[88]: #parameters-9
+[89]: #tablepickersynced
+[90]: #parameters-10
+[91]: #fieldpicker
+[92]: #parameters-11
+[93]: #fieldpickersynced
+[94]: #parameters-12
+[95]: #viewpicker
+[96]: #parameters-13
+[97]: #viewpickersynced
+[98]: #parameters-14
+[99]: #input
+[100]: #parameters-15
+[101]: #inputsynced
+[102]: #parameters-16
+[103]: #radiosynced
+[104]: #parameters-17
+[105]: #cellrenderer
+[106]: #parameters-18
+[107]: #expandrecord
+[108]: #parameters-19
+[109]: #examples-9
+[110]: #expandrecordlist
+[111]: #parameters-20
+[112]: #examples-10
+[113]: #expandrecordpickerasync
+[114]: #parameters-21
+[115]: #examples-11
+[116]: #globalalert
+[117]: #examples-12
+[118]: #showreloadprompt
+[119]: #fieldicon
+[120]: #parameters-22
+[121]: #loader
+[122]: #parameters-23
+[123]: #tooltip
+[124]: #parameters-24
+[125]: #collaboratortoken
+[126]: #parameters-25
+[127]: #choicetoken
+[128]: #parameters-26
+[129]: #colorpalette
+[130]: #colorpalettesynced
+[131]: #progressbar
+[132]: #parameters-27
+[133]: #recordcard
+[134]: #parameters-28
+[135]: #recordcardlist
+[136]: #parameters-29
+[137]: #select
+[138]: #parameters-30
+[139]: #selectsynced
+[140]: #parameters-31
+[141]: #selectbuttons
+[142]: #selectbuttonssynced
+[143]: #modal
+[144]: #parameters-32
+[145]: #toggle
+[146]: #parameters-33
+[147]: #togglesynced
+[148]: #parameters-34
+[149]: #popover
+[150]: #parameters-35
+[151]: #autocompletepopover
+[152]: #parameters-36
+[153]: #viewportconstraint
+[154]: #examples-13
+[155]: #link
+[156]: #parameters-37
+[157]: #loadcssfromstring
+[158]: #parameters-38
+[159]: #examples-14
+[160]: #loadcssfromurlasync
+[161]: #parameters-39
+[162]: #examples-15
+[163]: #loadscriptfromurlasync
+[164]: #parameters-40
+[165]: #examples-16
+[166]: #settingsbutton
+[167]: #parameters-41
+[168]: #examples-17
+[169]: #isvisible
 [170]: #globalconfig
 [171]: #base
 [172]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String

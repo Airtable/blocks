@@ -15,6 +15,12 @@ var _react = require("react");
 
 var _use_subscription = _interopRequireDefault(require("./use_subscription"));
 
+var noop = () => {};
+
+var noopSubscription = {
+  getCurrentValue: () => null,
+  subscribe: () => () => {}
+};
 var SUSPENSE_CLEAN_UP_MS = 60000;
 
 function useLoadable(model) {
@@ -22,11 +28,13 @@ function useLoadable(model) {
       _ref$shouldSuspend = _ref.shouldSuspend,
       shouldSuspend = _ref$shouldSuspend === void 0 ? true : _ref$shouldSuspend;
 
-  if (!model || typeof model.loadDataAsync !== 'function') {
-    throw new Error("useLoadable called with ".concat(model.toString(), ", which is not a loadable"));
+  var modelConst = model;
+
+  if (modelConst !== null && typeof modelConst.loadDataAsync !== 'function') {
+    throw new Error("useLoadable called with ".concat(typeof modelConst === 'object' ? modelConst.toString() : typeof modelConst, ", which is not a loadable"));
   }
 
-  if (shouldSuspend && !model.isDataLoaded) {
+  if (shouldSuspend && modelConst && !modelConst.isDataLoaded) {
     // if data isn't loaded and we're in suspense mode, we need to start the data loading and
     // throw the load promise. when we throw though, the render tree gets thrown away and none
     // of out hooks will be retained - so we can't attach this QueryResult to a component
@@ -35,35 +43,39 @@ function useLoadable(model) {
     // passed, we unload it, allowing the data to be released as long as it's not used anywhere
     // else in the block.
     setTimeout(() => {
-      model.unloadData();
+      modelConst.unloadData();
     }, SUSPENSE_CLEAN_UP_MS);
-    throw model.loadDataAsync();
+    throw modelConst.loadDataAsync();
   } // re-render when loaded state changes. technically, we could use `useWatchable` here, but as
   // our LoadableModel isn't a Watchable, we can't. There's no way to preserve flow errors when
   // watching something that doesn't have a 'isDataLoaded' watch key and use `Watchable`.
 
 
-  var modelIsLoadedSubscription = (0, _react.useMemo)(() => ({
-    getCurrentValue: () => model.isDataLoaded,
+  var modelIsLoadedSubscription = (0, _react.useMemo)(() => modelConst ? {
+    getCurrentValue: () => modelConst.isDataLoaded,
     subscribe: cb => {
       var onChange = function onChange() {
         cb();
       };
 
-      model.watch('isDataLoaded', onChange);
+      modelConst.watch('isDataLoaded', onChange);
       return () => {
-        model.unwatch('isDataLoaded', onChange);
+        modelConst.unwatch('isDataLoaded', onChange);
       };
     }
-  }), [model]);
+  } : noopSubscription, [modelConst]);
   (0, _use_subscription.default)(modelIsLoadedSubscription); // the main part of this hook comes down to managing the query result data loading in sync with
   // the component lifecycle. That means loading the data when the component mounts, and
   // unloading it when the component unmounts.
 
   (0, _react.useEffect)(() => {
-    model.loadDataAsync();
-    return () => {
-      model.unloadData();
-    };
-  }, [model]);
+    if (modelConst) {
+      modelConst.loadDataAsync();
+      return () => {
+        modelConst.unloadData();
+      };
+    } else {
+      return noop;
+    }
+  }, [modelConst]);
 }

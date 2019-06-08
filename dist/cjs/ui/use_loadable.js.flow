@@ -12,16 +12,27 @@ interface LoadableModel {
     unwatch('isDataLoaded', () => mixed): $ReadOnlyArray<string>;
 }
 
+const noop = () => {};
+const noopSubscription = {
+    getCurrentValue: () => null,
+    subscribe: () => () => {},
+};
+
 const SUSPENSE_CLEAN_UP_MS = 60000;
 export default function useLoadable(
-    model: LoadableModel,
+    model: LoadableModel | null,
     {shouldSuspend = true}: {|shouldSuspend?: boolean|} = {},
 ) {
-    if (!model || typeof model.loadDataAsync !== 'function') {
-        throw new Error(`useLoadable called with ${model.toString()}, which is not a loadable`);
+    const modelConst = model;
+    if (modelConst !== null && typeof modelConst.loadDataAsync !== 'function') {
+        throw new Error(
+            `useLoadable called with ${
+                typeof modelConst === 'object' ? modelConst.toString() : typeof modelConst
+            }, which is not a loadable`,
+        );
     }
 
-    if (shouldSuspend && !model.isDataLoaded) {
+    if (shouldSuspend && modelConst && !modelConst.isDataLoaded) {
         // if data isn't loaded and we're in suspense mode, we need to start the data loading and
         // throw the load promise. when we throw though, the render tree gets thrown away and none
         // of out hooks will be retained - so we can't attach this QueryResult to a component
@@ -30,28 +41,31 @@ export default function useLoadable(
         // passed, we unload it, allowing the data to be released as long as it's not used anywhere
         // else in the block.
         setTimeout(() => {
-            model.unloadData();
+            modelConst.unloadData();
         }, SUSPENSE_CLEAN_UP_MS);
-        throw model.loadDataAsync();
+        throw modelConst.loadDataAsync();
     }
 
     // re-render when loaded state changes. technically, we could use `useWatchable` here, but as
     // our LoadableModel isn't a Watchable, we can't. There's no way to preserve flow errors when
     // watching something that doesn't have a 'isDataLoaded' watch key and use `Watchable`.
     const modelIsLoadedSubscription = useMemo(
-        () => ({
-            getCurrentValue: () => model.isDataLoaded,
-            subscribe: cb => {
-                const onChange = (...args) => {
-                    cb();
-                };
-                model.watch('isDataLoaded', onChange);
-                return () => {
-                    model.unwatch('isDataLoaded', onChange);
-                };
-            },
-        }),
-        [model],
+        () =>
+            modelConst
+                ? {
+                      getCurrentValue: () => modelConst.isDataLoaded,
+                      subscribe: cb => {
+                          const onChange = (...args) => {
+                              cb();
+                          };
+                          modelConst.watch('isDataLoaded', onChange);
+                          return () => {
+                              modelConst.unwatch('isDataLoaded', onChange);
+                          };
+                      },
+                  }
+                : noopSubscription,
+        [modelConst],
     );
     useSubscription(modelIsLoadedSubscription);
 
@@ -59,10 +73,14 @@ export default function useLoadable(
     // the component lifecycle. That means loading the data when the component mounts, and
     // unloading it when the component unmounts.
     useEffect(() => {
-        model.loadDataAsync();
+        if (modelConst) {
+            modelConst.loadDataAsync();
 
-        return () => {
-            model.unloadData();
-        };
-    }, [model]);
+            return () => {
+                modelConst.unloadData();
+            };
+        } else {
+            return noop;
+        }
+    }, [modelConst]);
 }

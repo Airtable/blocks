@@ -8,22 +8,27 @@ import useWatchable from './use_watchable';
 
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 
-export function useRecordIds(queryResult: AnyQueryResult): Array<RecordId> {
+// TODO: should these hooks return [] if queryResult is null?
+
+export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId> | null {
     useLoadable(queryResult);
     useWatchable(queryResult, ['recordIds']);
-    return queryResult.recordIds;
+    return queryResult ? queryResult.recordIds : null;
 }
 
-export function useRecords(queryResult: AnyQueryResult): Array<Record> {
+export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | null {
     useLoadable(queryResult);
     useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
-    return queryResult.records;
+    return queryResult ? queryResult.records : null;
 }
 
-export function useRecordById(queryResult: AnyQueryResult, recordId: RecordId): Record | null {
+export function useRecordById(
+    queryResult: AnyQueryResult | null,
+    recordId: RecordId,
+): Record | null {
     useLoadable(queryResult);
     useWatchable(queryResult, ['records', 'recordColors']);
-    const record = queryResult.getRecordByIdIfExists(recordId);
+    const record = queryResult ? queryResult.getRecordByIdIfExists(recordId) : null;
     useWatchable(record, ['cellValues']);
     return record;
 }
