@@ -32,11 +32,7 @@ function BatchAdder() {
         // Otherwise, we'll use all records in the selected table.
         const viewId = globalConfig.get(GlobalConfigKeys.VIEW_ID);
         const view = table.getViewByIdIfExists(viewId);
-        if (view) {
-            queryResult = view.selectRecords();
-        } else {
-            queryResult = table.selectRecords();
-        }
+        queryResult = view ? view.selectRecords() : table.selectRecords();
     } else {
         queryResult = null;
     }
@@ -68,13 +64,8 @@ function BatchAdder() {
 
     // Adds 1 to the cell values for the specified records and field.
     function onAddClick() {
-        let amountToAdd;
-        if (field.type === models.fieldTypes.PERCENT) {
-            // For percent fields, we only want to add 1%.
-            amountToAdd = 1 / 100;
-        } else {
-            amountToAdd = 1;
-        }
+        // For percent fields, we only want to add 1%.
+        const amountToAdd = models.fieldTypes.PERCENT ? 0.01 : 1;
         for (const record of records) {
             record.setCellValue(field.id, record.getCellValue(field) + amountToAdd);
         }
