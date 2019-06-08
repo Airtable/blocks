@@ -16,72 +16,69 @@ const allowedFieldTypes = [
     models.fieldTypes.PERCENT,
 ];
 
-// Gets the selected table based on the table id in globalConfig.
-function getSelectedTable() {
-    const base = UI.useBase();
-    const tableId = globalConfig.get(GlobalConfigKeys.TABLE_ID);
-    return base.getTableByIdIfExists(tableId);
-}
-
-// Gets the selected field based on the field id in globalConfig.
-function getSelectedField() {
-    const table = getSelectedTable();
-    if (!table) {
-        return null;
-    }
-    const fieldId = globalConfig.get(GlobalConfigKeys.FIELD_ID);
-    return table.getFieldByIdIfExists(fieldId);
-}
-
-// Gets a query result with the records we want to edit.
-function getQueryResult() {
-    const table = getSelectedTable();
-    if (!table) {
-        return null;
-    }
-    const viewId = globalConfig.get(GlobalConfigKeys.VIEW_ID);
-    const view = table.getViewByIdIfExists(viewId);
-    // If there's a view selected, only use the records in that view.
-    // Otherwise, we'll use all records in the selected table.
-    if (view) {
-        return view.selectRecords();
-    } else {
-        return table.selectRecords();
-    }
-}
-
-// Adds 1 to the cell values for the specified records and field.
-function onAddClick(records, field) {
-    let amountToAdd;
-    if (field.type === models.fieldTypes.PERCENT) {
-        // For percent fields, we only want to add 1%.
-        amountToAdd = 1 / 100;
-    } else {
-        amountToAdd = 1;
-    }
-    for (const record of records) {
-        record.setCellValue(field, record.getCellValue(field) + amountToAdd);
-    }
-}
-
 // Index component. Adds 1 to all records in a selected table or view
 // in a selected number/percent/currency field.
 function BatchAdder() {
     const base = UI.useBase();
-    const table = getSelectedTable();
-    const queryResult = getQueryResult();
-    const field = getSelectedField();
-    const isReadOnly = !globalConfig.canSet(GlobalConfigKeys.TABLE_ID);
+
+    // Get the selected table based on the table id in globalConfig.
+    const tableId = globalConfig.get(GlobalConfigKeys.TABLE_ID);
+    const table = base.getTableByIdIfExists(tableId);
+
+    // Get a query result with the records we want to edit.
+    let queryResult;
+    if (table) {
+        // If there's a view selected, only use the records in that view.
+        // Otherwise, we'll use all records in the selected table.
+        const viewId = globalConfig.get(GlobalConfigKeys.VIEW_ID);
+        const view = table.getViewByIdIfExists(viewId);
+        if (view) {
+            queryResult = view.selectRecords();
+        } else {
+            queryResult = table.selectRecords();
+        }
+    } else {
+        queryResult = null;
+    }
+
+    // Get the selected field based on the field id in globalConfig.
+    const fieldId = globalConfig.get(GlobalConfigKeys.FIELD_ID);
+    const field = table ? table.getFieldByIdIfExists(fieldId) : null;
 
     // Re-render this component if:
     // (1) Any global config value changes (i.e. the table, view, or field changes)
-    // (2) Records are added to or removed from the query result
+    // (2) The selected field's type changes
     // (3) The current user's permission level changes
-    // (4) The selected field's type changes
+    // (4) The records in the query result change
     UI.useWatchable(globalConfig, Object.values(GlobalConfigKeys));
-    UI.useRecords(queryResult);
-    UI.useWatchable(base, ['permissionLevel']);
     UI.useWatchable(field, ['type']);
+    UI.useWatchable(base, ['permissionLevel']);
+    const records = UI.useRecords(queryResult);
+
+    // Disable the add button if:
+    // (1) The field (or table) isn't selected
+    // (2) The field is of an unsupported type
+    // (3) The user doesn't have permission to update the cell values in the field
+    // (4) The query result isn't loaded yet
+    const canAdd =
+        field &&
+        allowedFieldTypes.includes(field.type) &&
+        field.canSetCellValues() &&
+        queryResult.isDataLoaded;
+
+    // Adds 1 to the cell values for the specified records and field.
+    function onAddClick() {
+        let amountToAdd;
+        if (field.type === models.fieldTypes.PERCENT) {
+            // For percent fields, we only want to add 1%.
+            amountToAdd = 1 / 100;
+        } else {
+            amountToAdd = 1;
+        }
+        for (const record of records) {
+            record.setCellValue(field.id, record.getCellValue(field) + amountToAdd);
+        }
+    }
 
     return (
         <div
@@ -116,12 +113,8 @@ function BatchAdder() {
             <UI.Button
                 theme={UI.Button.themes.BLUE}
                 style={{justifyContent: 'center'}}
-                // Disable the button if:
-                // (1) There's no table or field selected
-                // (2) The field is of an unsupported type
-                // (3) The user can't edit cell values in the base
-                disabled={!field || !allowedFieldTypes.includes(field.type) || isReadOnly}
-                onClick={() => onAddClick(queryResult.records, field)}
+                disabled={!canAdd}
+                onClick={onAddClick}
             >
                 + Add
             </UI.Button>
