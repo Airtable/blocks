@@ -1,8 +1,10 @@
-import {UI, base} from '@airtable/blocks';
+import {UI} from '@airtable/blocks';
 import React, {useState} from 'react';
 
 // Renders all the records in the selected table and view.
 function TodoBlock() {
+    const base = UI.useBase();
+
     const [tableId, setTableId] = useState(null);
     const [viewId, setViewId] = useState(null);
 
@@ -10,16 +12,14 @@ function TodoBlock() {
     const view = table ? table.getViewByIdIfExists(viewId) : null;
 
     const queryResult = view ? view.select() : null;
-    UI.useWatchable(queryResult, ['records', 'cellValues']);
+    const records = UI.useRecords(queryResult);
 
-    let tasks = null;
-
-    if (queryResult && queryResult.isDataLoaded) {
-        // Create a list of <Task /> components, one for each record.
-        tasks = queryResult.records.map(record => {
-            return <Task key={record.id} record={record} />;
-        });
-    }
+    // Create a list of <Task /> components, one for each record.
+    const tasks = records
+        ? records.map(record => {
+              return <Task key={record.id} record={record} />;
+          })
+        : null;
 
     return (
         <div>

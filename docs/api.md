@@ -16,68 +16,68 @@
 -   [@airtable/blocks/ui][12]
     -   [Button][13]
     -   [Icon][14]
--   [records][15]
--   [recordIds][16]
--   [isRecordMetadataLoaded][17]
--   [AbstractModel][18]
-    -   [Parameters][19]
-    -   [id][20]
-    -   [isDeleted][21]
--   [fieldTypes][22]
-    -   [Examples][23]
--   [viewTypes][24]
-    -   [Examples][25]
--   [generateGuid][26]
-    -   [Examples][27]
--   [visibleRecordIds][28]
--   [visibleRecords][29]
--   [getRecordColor][30]
-    -   [Parameters][31]
--   [TableOrViewQueryResult][32]
-    -   [Parameters][33]
-    -   [parentTable][34]
-    -   [parentView][35]
-    -   [recordIds][36]
-    -   [fields][37]
--   [LinkedRecordsQueryResult][38]
-    -   [Parameters][39]
-    -   [isValid][40]
-    -   [parentTable][41]
-    -   [recordIds][42]
-    -   [records][43]
-    -   [fields][44]
--   [Aggregator][45]
-    -   [Properties][46]
-    -   [Examples][47]
--   [modes][48]
-    -   [Examples][49]
--   [Cursor][50]
-    -   [Parameters][51]
+-   [Watchable][15]
+    -   [watch][16]
+    -   [unwatch][17]
+-   [records][18]
+-   [recordIds][19]
+-   [isRecordMetadataLoaded][20]
+-   [visibleRecordIds][21]
+-   [visibleRecords][22]
+-   [getRecordColor][23]
+    -   [Parameters][24]
+-   [AbstractModel][25]
+    -   [Parameters][26]
+    -   [id][27]
+    -   [isDeleted][28]
+-   [fieldTypes][29]
+    -   [Examples][30]
+-   [viewTypes][31]
+    -   [Examples][32]
+-   [generateGuid][33]
+    -   [Examples][34]
+-   [TableOrViewQueryResult][35]
+    -   [Parameters][36]
+    -   [parentTable][37]
+    -   [parentView][38]
+    -   [recordIds][39]
+    -   [fields][40]
+-   [LinkedRecordsQueryResult][41]
+    -   [Parameters][42]
+    -   [isValid][43]
+    -   [parentTable][44]
+    -   [recordIds][45]
+    -   [records][46]
+    -   [fields][47]
+-   [Aggregator][48]
+    -   [Properties][49]
+    -   [Examples][50]
+-   [modes][51]
     -   [Examples][52]
-    -   [activeTableId][53]
-    -   [activeViewId][54]
--   [AbstractModelWithAsyncData][55]
-    -   [Parameters][56]
-    -   [watch][57]
-    -   [unwatch][58]
-    -   [isDataLoaded][59]
-    -   [loadDataAsync][60]
-    -   [unloadData][61]
--   [Viewport][62]
-    -   [Parameters][63]
-    -   [Examples][64]
-    -   [enterFullscreenIfPossible][65]
-    -   [exitFullscreen][66]
-    -   [maxFullscreenSize][67]
-    -   [addMaxFullscreenSize][68]
-    -   [minSize][69]
-    -   [addMinSize][70]
-    -   [isSmallerThanMinSize][71]
-    -   [isFullscreen][72]
-    -   [size][73]
--   [Watchable][74]
-    -   [watch][75]
-    -   [unwatch][76]
+-   [Cursor][53]
+    -   [Parameters][54]
+    -   [Examples][55]
+    -   [activeTableId][56]
+    -   [activeViewId][57]
+-   [AbstractModelWithAsyncData][58]
+    -   [Parameters][59]
+    -   [watch][60]
+    -   [unwatch][61]
+    -   [isDataLoaded][62]
+    -   [loadDataAsync][63]
+    -   [unloadData][64]
+-   [Viewport][65]
+    -   [Parameters][66]
+    -   [Examples][67]
+    -   [enterFullscreenIfPossible][68]
+    -   [exitFullscreen][69]
+    -   [maxFullscreenSize][70]
+    -   [addMaxFullscreenSize][71]
+    -   [minSize][72]
+    -   [addMinSize][73]
+    -   [isSmallerThanMinSize][74]
+    -   [isFullscreen][75]
+    -   [size][76]
 -   [colorUtils][77]
     -   [Examples][78]
     -   [getHexForColor][79]
@@ -1034,6 +1034,38 @@ Type: [object][189]
     -   `$0.style`
     -   `$0.pathClassName`
 
+## Watchable
+
+### watch
+
+Start watching the given key or keys. The callback will be called when the value changes. Every call
+to `watch` should have a matching call to `unwatch`.
+
+Will log a warning if the keys given are invalid.
+
+#### Parameters
+
+-   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
+-   `callback` **function (model: this, key: WatchableKey): any**
+-   `context` **[Object][189]??**
+
+Returns **[Array][178]&lt;WatchableKey>**
+
+### unwatch
+
+Stop watching the given key or keys. Should be called with the same arguments that were given to
+`watch`.
+
+Will log a warning if the keys given are invalid.
+
+#### Parameters
+
+-   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
+-   `callback` **function (model: this, key: WatchableKey): any**
+-   `context` **[Object][189]??**
+
+Returns **[Array][178]&lt;WatchableKey>**
+
 ## records
 
 The records in this table. The order is arbitrary since records are only ordered in the context of a
@@ -1060,6 +1092,35 @@ loaded before creating, deleting, or updating records.
 Type: [boolean][177]
 
 Returns **[boolean][177]**
+
+## visibleRecordIds
+
+The record IDs that are not filtered out of this view. Can be watched to know when records are
+created, deleted, reordered, or filtered in and out of this view.
+
+Type: [Array][178]&lt;RecordId>
+
+Returns **[Array][178]&lt;RecordId>**
+
+## visibleRecords
+
+The records that are not filtered out of this view. Can be watched to know when records are created,
+deleted, reordered, or filtered in and out of this view.
+
+Type: [Array][178]&lt;[Record][184]>
+
+Returns **[Array][178]&lt;[Record][184]>**
+
+## getRecordColor
+
+Get the color name for the specified record in this view, or null if no color is available. Watch
+with 'recordColors'
+
+### Parameters
+
+-   `recordOrRecordId` **(RecordId | [Record][184])**
+
+Returns **(Color | null)**
 
 ## AbstractModel
 
@@ -1121,35 +1182,6 @@ Helper to generate a GUID
 import {models} from 'airtable-block';
 const id = models.generateGuid();
 ```
-
-## visibleRecordIds
-
-The record IDs that are not filtered out of this view. Can be watched to know when records are
-created, deleted, reordered, or filtered in and out of this view.
-
-Type: [Array][178]&lt;RecordId>
-
-Returns **[Array][178]&lt;RecordId>**
-
-## visibleRecords
-
-The records that are not filtered out of this view. Can be watched to know when records are created,
-deleted, reordered, or filtered in and out of this view.
-
-Type: [Array][178]&lt;[Record][184]>
-
-Returns **[Array][178]&lt;[Record][184]>**
-
-## getRecordColor
-
-Get the color name for the specified record in this view, or null if no color is available. Watch
-with 'recordColors'
-
-### Parameters
-
--   `recordOrRecordId` **(RecordId | [Record][184])**
-
-Returns **(Color | null)**
 
 ## TableOrViewQueryResult
 
@@ -1493,38 +1525,6 @@ Can be watched.
 Type: {width: [number][183], height: [number][183]}
 
 Returns **{width: [number][183], height: [number][183]}**
-
-## Watchable
-
-### watch
-
-Start watching the given key or keys. The callback will be called when the value changes. Every call
-to `watch` should have a matching call to `unwatch`.
-
-Will log a warning if the keys given are invalid.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
-### unwatch
-
-Stop watching the given key or keys. Should be called with the same arguments that were given to
-`watch`.
-
-Will log a warning if the keys given are invalid.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
 
 ## colorUtils
 
@@ -2016,68 +2016,68 @@ Returns **[boolean][177]**
 [12]: #airtableblocksui
 [13]: #button
 [14]: #icon
-[15]: #records
-[16]: #recordids
-[17]: #isrecordmetadataloaded
-[18]: #abstractmodel
-[19]: #parameters
-[20]: #id
-[21]: #isdeleted
-[22]: #fieldtypes
-[23]: #examples
-[24]: #viewtypes
-[25]: #examples-1
-[26]: #generateguid
-[27]: #examples-2
-[28]: #visiblerecordids
-[29]: #visiblerecords
-[30]: #getrecordcolor
-[31]: #parameters-1
-[32]: #tableorviewqueryresult
-[33]: #parameters-2
-[34]: #parenttable
-[35]: #parentview
-[36]: #recordids-1
-[37]: #fields
-[38]: #linkedrecordsqueryresult
-[39]: #parameters-3
-[40]: #isvalid
-[41]: #parenttable-1
-[42]: #recordids-2
-[43]: #records-1
-[44]: #fields-1
-[45]: #aggregator
-[46]: #properties
-[47]: #examples-3
-[48]: #modes
-[49]: #examples-4
-[50]: #cursor
-[51]: #parameters-4
-[52]: #examples-5
-[53]: #activetableid
-[54]: #activeviewid
-[55]: #abstractmodelwithasyncdata
-[56]: #parameters-5
-[57]: #watch
-[58]: #unwatch
-[59]: #isdataloaded
-[60]: #loaddataasync
-[61]: #unloaddata
-[62]: #viewport
-[63]: #parameters-6
-[64]: #examples-6
-[65]: #enterfullscreenifpossible
-[66]: #exitfullscreen
-[67]: #maxfullscreensize
-[68]: #addmaxfullscreensize
-[69]: #minsize
-[70]: #addminsize
-[71]: #issmallerthanminsize
-[72]: #isfullscreen
-[73]: #size
-[74]: #watchable
-[75]: #watch-1
-[76]: #unwatch-1
+[15]: #watchable
+[16]: #watch
+[17]: #unwatch
+[18]: #records
+[19]: #recordids
+[20]: #isrecordmetadataloaded
+[21]: #visiblerecordids
+[22]: #visiblerecords
+[23]: #getrecordcolor
+[24]: #parameters
+[25]: #abstractmodel
+[26]: #parameters-1
+[27]: #id
+[28]: #isdeleted
+[29]: #fieldtypes
+[30]: #examples
+[31]: #viewtypes
+[32]: #examples-1
+[33]: #generateguid
+[34]: #examples-2
+[35]: #tableorviewqueryresult
+[36]: #parameters-2
+[37]: #parenttable
+[38]: #parentview
+[39]: #recordids-1
+[40]: #fields
+[41]: #linkedrecordsqueryresult
+[42]: #parameters-3
+[43]: #isvalid
+[44]: #parenttable-1
+[45]: #recordids-2
+[46]: #records-1
+[47]: #fields-1
+[48]: #aggregator
+[49]: #properties
+[50]: #examples-3
+[51]: #modes
+[52]: #examples-4
+[53]: #cursor
+[54]: #parameters-4
+[55]: #examples-5
+[56]: #activetableid
+[57]: #activeviewid
+[58]: #abstractmodelwithasyncdata
+[59]: #parameters-5
+[60]: #watch-1
+[61]: #unwatch-1
+[62]: #isdataloaded
+[63]: #loaddataasync
+[64]: #unloaddata
+[65]: #viewport
+[66]: #parameters-6
+[67]: #examples-6
+[68]: #enterfullscreenifpossible
+[69]: #exitfullscreen
+[70]: #maxfullscreensize
+[71]: #addmaxfullscreensize
+[72]: #minsize
+[73]: #addminsize
+[74]: #issmallerthanminsize
+[75]: #isfullscreen
+[76]: #size
 [77]: #colorutils
 [78]: #examples-7
 [79]: #gethexforcolor
