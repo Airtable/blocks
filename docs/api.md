@@ -766,6 +766,13 @@ Returns **[Array][178]&lt;[Aggregator][185]>**
 
 Returns **[boolean][177]**
 
+#### canSetCellValues
+
+Use this to check if the current user has permission to update the cell values in this field before
+calling `record.setCellValues` or `table.setCellValues`.
+
+Returns **[boolean][177]**
+
 #### convertStringToCellValue
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current

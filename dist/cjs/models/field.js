@@ -27,7 +27,11 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
+var _permission_levels = require("../types/permission_levels");
+
 var _private_utils = require("../private_utils");
+
+var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
 var _abstract_model = _interopRequireDefault(require("./abstract_model"));
 
@@ -42,7 +46,9 @@ var ColumnTypes = window.__requirePrivateModuleFromAirtable('client_server_share
 var ApiCellFormats = window.__requirePrivateModuleFromAirtable('client_server_shared/api_cell_formats');
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/api_versions'),
-    PublicApiVersions = _window$__requirePriv.PublicApiVersions; // This doesn't follow our enum naming conventions because we want the keys
+    PublicApiVersions = _window$__requirePriv.PublicApiVersions;
+
+var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers'); // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
 
 
@@ -98,6 +104,21 @@ function (_AbstractModel) {
       var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregatorKey];
       var possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(this.__getRawType(), this.__getRawTypeOptions());
       return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
+    }
+    /**
+     * Use this to check if the current user has permission to update the cell values
+     * in this field before calling `record.setCellValues` or `table.setCellValues`.
+     */
+
+  }, {
+    key: "canSetCellValues",
+    value: function canSetCellValues() {
+      // For now, just need at least edit permissions. Once field locking is shipped,
+      // this method should also check if the field is locked.
+      var _getSdk = (0, _get_sdk.default)(),
+          base = _getSdk.base;
+
+      return permissionHelpers.can(base.__rawPermissionLevel, _permission_levels.PermissionLevels.EDIT);
     }
     /**
      * Given a string, will attempt to parse it and return a valid cell value for
