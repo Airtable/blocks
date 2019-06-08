@@ -76,7 +76,7 @@ describe('APIClient', function() {
             testApp.get('/v2/meta/app123/blockInstallations/bli123/accessPolicy', (req: express$Request, res: express$Response) => {
                 res.status(statusCodesIterator.next().value);
                 res.json({
-                    error: {message: 'foo bar'}
+                    error: {message: 'foo bar'},
                 });
             });
 

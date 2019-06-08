@@ -74,7 +74,7 @@ function _failure(message) {
     return {
         statusCode: 500,
         headers: {
-            'Content-Type': ['application/json; charset=utf-8']
+            'Content-Type': ['application/json; charset=utf-8'],
         },
         body: Buffer.from(JSON.stringify({
             error: 'SERVER_ERROR',

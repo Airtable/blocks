@@ -252,7 +252,7 @@ class BlockServer {
             path.join(
                 blockDirPath,
                 blockCliConfigSettings.BUILD_DIR,
-                blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME
+                blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
             ),
             {
                 cache: {},

@@ -14,7 +14,7 @@ describe('init command', function() {
     let yarnInstallAsyncStub;
     beforeEach(function() {
         sinon.stub(cliHelpers, 'promptAsync').resolves({
-            apiKey: 'key123ABC'
+            apiKey: 'key123ABC',
         });
 
         yarnInstallAsyncStub = sinon.stub(nodeModulesCommandHelpers, 'yarnInstallAsync').resolves();
@@ -23,7 +23,7 @@ describe('init command', function() {
     it('writes a directory of files', async function() {
         const blockDirPath = path.join(
             os.tmpdir(),
-            `airtable-blocks-cli-init-test-${Math.random().toString().slice(2)}`
+            `airtable-blocks-cli-init-test-${Math.random().toString().slice(2)}`,
         );
 
         const fakeArgv = {

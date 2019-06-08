@@ -33,8 +33,8 @@ describe('validateBlockJson', () => {
                         'revision': 0,
                         'metadata': {
                             'type': 'frontend',
-                            'name': 'index'
-                        }
+                            'name': 'index',
+                        },
                     },
                 ],
             },

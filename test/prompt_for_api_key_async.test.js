@@ -8,7 +8,7 @@ const assert = require('assert');
 describe('promptForApiKeyAsync', function() {
     beforeEach(function() {
         sinon.stub(cliHelpers, 'promptAsync').resolves({
-            apiKey: 'key123ABC'
+            apiKey: 'key123ABC',
         });
     });
 

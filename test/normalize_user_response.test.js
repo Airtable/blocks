@@ -7,7 +7,7 @@ describe('normalizeUserResponse', () => {
         assert.deepStrictEqual(Object.keys(value), ['statusCode', 'headers', 'body']);
         assert.strictEqual(value.statusCode, 500);
         assert.deepStrictEqual(value.headers, {
-            'Content-Type': ['application/json; charset=utf-8']
+            'Content-Type': ['application/json; charset=utf-8'],
         });
         assert(value.body instanceof Buffer);
         const parsedBody = JSON.parse(value.body);
@@ -85,7 +85,7 @@ describe('normalizeUserResponse', () => {
         assertUnsuccessful(normalizeUserResponse({headers: null}));
         assertUnsuccessful(normalizeUserResponse({headers: 'X-Foo'}));
         assertUnsuccessful(normalizeUserResponse({
-            headers: {'X-Foo': 'boo'}
+            headers: {'X-Foo': 'boo'},
         }));
     });
 

@@ -25,7 +25,7 @@ module.exports = setUpRollbarAsync;
 async function isInDevelopmentRepositoryAsync(): Promise<boolean> {
     const possibleGitPath = path.join(
         getBlocksCliProjectRootPath(),
-        '.git'
+        '.git',
     );
     return await fsExtra.pathExists(possibleGitPath);
 }

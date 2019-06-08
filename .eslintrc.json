@@ -45,6 +45,13 @@
         "block-spacing": "warn",
         "comma-spacing": "warn",
         "comma-style": "warn",
+        "comma-dangle": ["warn", {
+            "arrays": "always-multiline",
+            "objects": "always-multiline",
+            "imports": "always-multiline",
+            "exports": "always-multiline",
+            "functions": "always-multiline"
+        }],
         "computed-property-spacing": "warn",
         "consistent-return": "error",
         "consistent-this": ["warn", "that"],
