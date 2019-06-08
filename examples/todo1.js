@@ -8,10 +8,10 @@ function TodoBlock() {
     const view = table.getViewByName('Grid view');
 
     const queryResult = view.selectRecords();
-    UI.useRecords(queryResult);
+    const records = UI.useRecords(queryResult);
 
     // Create a list of <Task /> components, one for each record.
-    const tasks = queryResult.records.map(record => {
+    const tasks = records.map(record => {
         return <Task key={record.id} record={record} />;
     });
 
