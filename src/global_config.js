@@ -109,7 +109,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     globalConfig.set('favoriteColor', 'purple');
      * }
      */
-    canSet(key: GlobalConfigKey) {
+    canSet(key: GlobalConfigKey): boolean {
         // This takes the key to future-proof against having per-key
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.
@@ -122,7 +122,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return this.setPaths([{path, value}]);
     }
     /** */
-    canSetPaths(updates: Array<GlobalConfigUpdate>) {
+    canSetPaths(updates: Array<GlobalConfigUpdate>): boolean {
         // This takes the updates to future-proof against having per-key
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.

@@ -204,14 +204,16 @@ if (globalConfig.canSet('favoriteColor')) {
 }
 ```
 
-Returns **any** `true` if the current user can set the global config value at `key`, and `false`
-otherwise.
+Returns **[boolean][62]** `true` if the current user can set the global config value at `key`, and
+`false` otherwise.
 
 #### canSetPaths
 
 ##### Parameters
 
 -   `updates` **[Array][61]&lt;GlobalConfigUpdate>**
+
+Returns **[boolean][62]**
 
 #### get
 
