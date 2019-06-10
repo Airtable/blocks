@@ -62,7 +62,7 @@ function Task({record, checkboxField}) {
             {checkboxField && (
                 <input
                     type="checkbox"
-                    checked={record.getCellValue(checkboxField)}
+                    checked={record.getCellValue(checkboxField) ? true : false}
                     disabled={!record.canSetCellValue(checkboxField)}
                     onChange={e => {
                         record.setCellValue(checkboxField, e.target.checked);
