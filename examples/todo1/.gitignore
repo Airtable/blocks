@@ -1,0 +1,4 @@
+node_modules
+.airtableAPIKey
+build
+.developerCredentials.json

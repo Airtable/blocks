@@ -1,0 +1,14 @@
+{
+    "frontendEntryModuleName": "index.js",
+    "applicationId": "appYmmsUD1txaAHua",
+    "blockId": "blkxDYNF4bKWnr577",
+    "modules": [
+        {
+            "revision": 0,
+            "metadata": {
+                "type": "frontend",
+                "name": "index"
+            }
+        }
+    ]
+}

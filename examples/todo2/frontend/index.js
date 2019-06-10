@@ -11,7 +11,7 @@ function TodoBlock() {
     const table = tableId ? base.getTableByIdIfExists(tableId) : null;
     const view = table ? table.getViewByIdIfExists(viewId) : null;
 
-    const queryResult = view ? view.select() : null;
+    const queryResult = view ? view.selectRecords() : null;
     const records = UI.useRecords(queryResult);
 
     // Create a list of <Task /> components, one for each record.

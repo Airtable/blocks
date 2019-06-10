@@ -17,9 +17,11 @@ function TodoBlock() {
     const queryResult = view ? view.selectRecords() : null;
     const records = UI.useRecords(queryResult);
 
-    const tasks = records.map(record => {
-        return <Task key={record.id} record={record} checkboxField={field} />;
-    });
+    const tasks = records
+        ? records.map(record => {
+              return <Task key={record.id} record={record} checkboxField={field} />;
+          })
+        : null;
 
     return (
         <div>
