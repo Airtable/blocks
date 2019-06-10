@@ -57,7 +57,7 @@ var InMemoryStorage = window.__requirePrivateModuleFromAirtable('client/helpers/
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client/helpers/browser_storage/is_storage_available'),
     isLocalStorageAvailable = _window$__requirePriv.isLocalStorageAvailable,
     isSessionStorageAvailable = _window$__requirePriv.isSessionStorageAvailable;
-/**
+/* NOTE: runInfo is not publicly documented yet.
  * @example
  * import {runInfo} from '@airtable/blocks';
  * if (runInfo.isFirstRun) {
@@ -74,7 +74,7 @@ function defaultUpdateBatcher(applyUpdates) {
   applyUpdates();
 }
 /**
- * Top-level container for the Blocks SDK. Can be imported as `'@airtable/blocks'`.
+ * Import the SDK from `'@airtable/blocks'`.
  */
 
 
@@ -93,6 +93,8 @@ function () {
   // We set _runWithUpdateBatching to ReactDOM.unstable_batchedUpdates to facilitate this. We
   // don't know for sure though that React is in use on the page, so we leave actually setting
   // this when the developer sets up their block with React, in UI.initializeBlock.
+
+  /** @hideconstructor */
   function BlockSdk(airtableInterface) {
     (0, _classCallCheck2.default)(this, BlockSdk);
     (0, _defineProperty2.default)(this, "_runWithUpdateBatching", defaultUpdateBatcher);
@@ -195,8 +197,6 @@ function () {
         });
       });
     }
-    /** */
-
   }, {
     key: "reload",
     value: function reload() {

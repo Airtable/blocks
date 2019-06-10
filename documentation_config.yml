@@ -2,7 +2,6 @@ toc:
     - name: '@airtable/blocks'
       children:
           - BlockSdk
-          - RunInfo
           - GlobalConfig
           - Viewport
     - name: '@airtable/blocks/models'

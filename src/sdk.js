@@ -42,7 +42,7 @@ const {
     'client/helpers/browser_storage/is_storage_available',
 );
 
-/**
+/* NOTE: runInfo is not publicly documented yet.
  * @example
  * import {runInfo} from '@airtable/blocks';
  * if (runInfo.isFirstRun) {
@@ -64,7 +64,7 @@ function defaultUpdateBatcher(applyUpdates: () => void) {
 }
 
 /**
- * Top-level container for the Blocks SDK. Can be imported as `'@airtable/blocks'`.
+ * Import the SDK from `'@airtable/blocks'`.
  */
 class BlockSdk {
     static VERSION = global.PACKAGE_VERSION;
@@ -75,37 +75,78 @@ class BlockSdk {
     // so we allow accessing it through getSdk().__airtableInterface for convenience.
     __airtableInterface: AirtableInterface;
 
-    /** */
+    /** Storage for this block installation's configuration. */
     globalConfig: GlobalConfig;
-    /** The current base */
+
+    /** Represents the current Airtable base. */
     base: Base;
-    /** */
-    models: typeof models;
-    /** */
-    installationId: string;
+
     /**
-     * Wrapper for window.localStorage which will automatically fall back
-     * to in-memory storage when window.localStorage is unavailable.
+     * Contains the model classes, field types, view types, and utilities for
+     * working with record coloring and record aggregation.
+     */
+    models: typeof models;
+
+    /**
+     * Returns the ID for the current block installation.
+     * @example
+     * import {installationId} from '@airtable/blocks';
+     * console.log(installationId);
+     * // => 'blifDutUr92OKwnUn'
+     */
+    installationId: string;
+
+    /**
+     * Wrapper for
+     * [`window.localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) which
+     * will automatically fall back to in-memory storage when `window.localStorage` is unavailable.
+     *
+     * @example
+     * import {localStorage} from '@airtable/blocks';
+     * localStorage.setItem('lastScrollTop', 0);
      */
     localStorage: Storage | InMemoryStorage;
+
     /**
-     * Wrapper for window.sessionStorage which will automatically fall back
-     * to in-memory storage when window.sessionStorage is unavailable.
+     * Wrapper for
+     * [`window.sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) which
+     * will automatically fall back to in-memory storage when `window.sessionStorage` is unavailable.
+     *
+     * @example
+     * import {sessionStorage} from '@airtable/blocks';
+     * sessionStorage.setItem('lastScrollTop', 0);
      */
     sessionStorage: Storage | InMemoryStorage;
-    /** */
+
+    /** Controls the block's viewport. You can fullscreen the block and add size
+     * constrains using `viewport`.
+     */
     viewport: Viewport;
-    /** */
+
     runInfo: RunInfo;
-    /** */
+
+    /** Returns information about the active table, active view, and selected records. */
     cursor: Cursor;
-    /** */
+
+    /** React components, hooks, and UI helpers. */
     UI: typeof UI;
-    /** */
+
+    /** Controls the block's settings button. */
     settingsButton: SettingsButton;
-    /** */
+
     undoRedo: UndoRedo;
-    /** */
+
+    /**
+     * Call this function to reload your block.
+     *
+     * @example
+     * import React from 'react';
+     * import {UI, reload} from '@airtable/blocks';
+     * function MyBlock() {
+     *     return <UI.Button onClick={() => reload()}>Reload</UI.Button>;
+     * }
+     * UI.initializeBlock(() => <MyBlock />);
+     */
     reload: () => void;
 
     // When models are updated on the frontend, we want to batch them together and have React do a
@@ -122,6 +163,7 @@ class BlockSdk {
     // this when the developer sets up their block with React, in UI.initializeBlock.
     _runWithUpdateBatching: UpdateBatcher = defaultUpdateBatcher;
 
+    /** @hideconstructor */
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
         // TODO(alex): remove check once hyperbase is deployed
@@ -235,7 +277,6 @@ class BlockSdk {
             });
         });
     }
-    /** */
     reload() {
         this.__airtableInterface.reloadFrame();
     }
