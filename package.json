@@ -23,7 +23,7 @@
         "watch:babel": "npm run build:babel -- --watch",
         "build:flow": "flow-copy-source src dist/cjs",
         "watch:flow": "npm run build:flow -- --watch",
-        "build:docs": "documentation build src/index.js --format md --markdown-toc --markdown-toc-max-depth 3 --config documentation_config.yml --infer-private '^_' --output docs/api.md && prettier --write docs/api.md",
+        "build:docs": "documentation build src/index.js --format md --markdown-toc --markdown-toc-max-depth 3 --config documentation_config.yml --sort-order alpha --infer-private '^_' --output docs/api.md && prettier --write docs/api.md",
         "watch:docs": "npm run build:docs -- --watch",
         "build": "npm run build:clean && npm run build:babel && npm run build:flow && npm run build:docs",
         "watch": "npm run build:clean && concurrently npm:watch:babel npm:watch:flow"
