@@ -10,7 +10,7 @@
         "prepare": "npm run build",
         "pretest": "npm run lint && npm run flow",
         "flow": "flow",
-        "lint": "eslint *.js src",
+        "lint": "eslint *.js src test",
         "lint:quiet": "npm run lint -- --quiet",
         "format": "prettier --write 'src/**/*.js' 'test/**/*.js' '*.{json,js,md}' 'docs/**/*.md'",
         "jest": "jest",
