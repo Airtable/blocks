@@ -1,6 +1,21 @@
 import {UI, models, globalConfig} from '@airtable/blocks';
 import React, {useState} from 'react';
 
+function getCheckboxField(table, fieldId) {
+    const field = table.getFieldByIdIfExists(fieldId);
+    if (!field) {
+        return null;
+    }
+
+    // Only return the field if it's a checkbox field.
+    // Field types can be changed by users.
+    if (field.type !== models.fieldTypes.CHECKBOX) {
+        console.log(field.type);
+        return null;
+    }
+    return field;
+}
+
 // Renders all the records in the selected table and view.
 function TodoBlock() {
     const base = UI.useBase();
@@ -12,7 +27,7 @@ function TodoBlock() {
 
     const table = tableId ? base.getTableByIdIfExists(tableId) : null;
     const view = table ? table.getViewByIdIfExists(viewId) : null;
-    const field = table ? table.getFieldByIdIfExists(fieldId) : null;
+    const field = table ? getCheckboxField(table, fieldId) : null;
 
     const queryResult = view ? view.selectRecords() : null;
     const records = UI.useRecords(queryResult);
