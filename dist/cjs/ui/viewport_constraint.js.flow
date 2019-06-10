@@ -29,12 +29,14 @@ const didSizeChange = (
  *
  * @see sdk.viewport
  * @example
- * <UI.ViewportConstraint minSize={{width: 400}} />
+ * import {ViewportConstraint} from '@airtable/blocks/ui';
+ * <ViewportConstraint minSize={{width: 400}} />
  *
  * @example
- * <UI.ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
+ * import {ViewportConstraint} from '@airtable/blocks/ui';
+ * <ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
  *      <div>I need a max fullscreen size!</div>
- * </UI.ViewportConstraint>
+ * </ViewportConstraint>
  */
 class ViewportConstraint extends React.Component<ViewportConstraintProps> {
     static propTypes = {

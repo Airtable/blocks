@@ -39,12 +39,14 @@ var didSizeChange = (prev, next) => (prev && prev.width) !== (next && next.width
  *
  * @see sdk.viewport
  * @example
- * <UI.ViewportConstraint minSize={{width: 400}} />
+ * import {ViewportConstraint} from '@airtable/blocks/ui';
+ * <ViewportConstraint minSize={{width: 400}} />
  *
  * @example
- * <UI.ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
+ * import {ViewportConstraint} from '@airtable/blocks/ui';
+ * <ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
  *      <div>I need a max fullscreen size!</div>
- * </UI.ViewportConstraint>
+ * </ViewportConstraint>
  */
 
 

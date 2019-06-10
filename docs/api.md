@@ -2557,13 +2557,15 @@ ViewportConstraint - when mounted, applies constraints to the viewport.
 ##### Examples
 
 ```javascript
-<UI.ViewportConstraint minSize={{width: 400}} />
+import {ViewportConstraint} from '@airtable/blocks/ui';
+<ViewportConstraint minSize={{width: 400}} />;
 ```
 
 ```javascript
-<UI.ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
+import {ViewportConstraint} from '@airtable/blocks/ui';
+<ViewportConstraint maxFullScreenSize={{width: 600, height: 400}}>
     <div>I need a max fullscreen size!</div>
-</UI.ViewportConstraint>
+</ViewportConstraint>;
 ```
 
 #### ViewportConstraintProps
