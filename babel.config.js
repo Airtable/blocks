@@ -45,4 +45,7 @@ module.exports = {
         '@babel/transform-runtime',
         ['transform-define', require('./global_constants')],
     ],
+    parserOpts: {
+        allowAwaitOutsideFunction: true,
+    },
 };
