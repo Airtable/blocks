@@ -58,6 +58,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     _cachedMaxFullscreenSize: ViewportSizeConstraint | null = null;
     _cachedMinSize: ViewportSizeConstraint | null = null;
 
+    /** @hideconstructor */
     constructor(isFullscreen: boolean, airtableInterface: AirtableInterface) {
         super();
 
@@ -94,11 +95,15 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * Can be watched. The maximum dimensions of the block when it is in
+     * The maximum dimensions of the block when it is in
      * fullscreen mode. Returns the smallest set of dimensions added with
-     * addMaxFullscreenSize. If `width` or `height` is null, it means there is
-     * no maxSize constraint on that dimension. If maxFullscreenSize would be
-     * smaller than minSize, it is constrained to be at least that.
+     * {@link Viewport#addMaxFullscreenSize}.
+     *
+     * If `width` or `height` is null, it means there is
+     * no max size constraint on that dimension. If `maxFullscreenSize` would be
+     * smaller than {@link Viewport#minSize}, it is constrained to be at least `minSize`.
+     *
+     * @returns {{width: number | null, height: number | null}} maxSize
      */
     get maxFullscreenSize(): ViewportSizeConstraint {
         if (!this._cachedMaxFullscreenSize) {
