@@ -1,6 +1,6 @@
 [ignore]
 <PROJECT_ROOT>/node_modules/documentation/.*
-<PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/dist/.*\.js\$
 
 [include]
 
