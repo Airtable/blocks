@@ -19,13 +19,23 @@ var _private_utils = require("./private_utils");
 
 var _colors = _interopRequireWildcard(require("./colors"));
 
-/**
- * @example
- * import {UI} from 'airtable-block';
- * UI.colorUtils.getHexForColor(UI.colors.RED);
- */
+/** Utilities for working with {@link Color} names from the {@link colors} enum. */
 var colorUtils = {
-  /** */
+  /**
+   * Given a {@link Color}, return the hex color value for that color, or null if the value isn't a {@link Color}
+   *
+   * @function
+   * @param colorString {Color}
+   * @returns {string | null}
+   * @example
+   * import {colorUtils, colors} from '@airtable/blocks/ui';
+   *
+   * colorUtils.getHexForColor(colors.RED);
+   * // => '#ef3061'
+   *
+   * colorUtils.getHexForColor('uncomfortable beige');
+   * // => null
+   */
   getHexForColor: colorString => {
     var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
@@ -39,7 +49,21 @@ var colorUtils = {
     return "#".concat(hexNumber.toString(16).padStart(6, '0'));
   },
 
-  /** */
+  /**
+   * Given a {@link Color}, return an {@link RGB} object representing it, or null if the value isn't a {@link Color}
+   *
+   * @function
+   * @param colorString {Color}
+   * @returns {RGB | null}
+   * @example
+   * import {colorUtils, colors} from '@airtable/blocks/ui';
+   *
+   * colorUtils.getRgbForColor(colors.PURPLE_DARK_1);
+   * // => {r: 107, g: 28, b: 176}
+   *
+   * colorUtils.getRgbForColor('disgruntled pink');
+   * // => null
+   */
   getRgbForColor: colorString => {
     var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
@@ -56,9 +80,23 @@ var colorUtils = {
     };
   },
 
-  /** */
-  shouldUseLightTextOnColor(color) {
-    if (!_colors.rgbTuplesByColor[color]) {
+  /**
+   * Given a {@link Color}, returns true or false to indicate whether that color should have light text on top of it when used as a background color.
+   *
+   * @function
+   * @param colorString {Color}
+   * @returns boolean
+   * @example
+   * import {colorUtils, colors} from '@airtable/blocks/ui';
+   *
+   * colorUtils.shouldUseLightTextOnColor(colors.PINK_LIGHT_1);
+   * // => false
+   *
+   * colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
+   * // => true
+   */
+  shouldUseLightTextOnColor(colorString) {
+    if (!_colors.rgbTuplesByColor[colorString]) {
       // Don't have a color for this. Let's just return false as a default
       // instead of throwing.
       return false;
@@ -68,7 +106,7 @@ var colorUtils = {
     // checking the suffix easier, since no suffix uses light text.
 
 
-    var shouldUseDarkText = color.endsWith('Light1') || color.endsWith('Light2');
+    var shouldUseDarkText = colorString.endsWith('Light1') || colorString.endsWith('Light2');
     return !shouldUseDarkText;
   }
 

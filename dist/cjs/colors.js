@@ -312,9 +312,8 @@ var Colors = {
 };
 var _default = Colors;
 /**
- * A value from the colors enum
- * @type string
- * @see colors
+ * A value from the {@link colors} enum
+ * @typedef string
  */
 
 exports.default = _default;

@@ -9,13 +9,23 @@ type RGB = {|r: number, g: number, b: number|};
 type GetHexForColorType = (Color => string) & (string => string | null);
 type GetRgbForColorType = (Color => RGB) & (string => RGB | null);
 
-/**
- * @example
- * import {UI} from 'airtable-block';
- * UI.colorUtils.getHexForColor(UI.colors.RED);
- */
+/** Utilities for working with {@link Color} names from the {@link colors} enum. */
 const colorUtils = {
-    /** */
+    /**
+     * Given a {@link Color}, return the hex color value for that color, or null if the value isn't a {@link Color}
+     *
+     * @function
+     * @param colorString {Color}
+     * @returns {string | null}
+     * @example
+     * import {colorUtils, colors} from '@airtable/blocks/ui';
+     *
+     * colorUtils.getHexForColor(colors.RED);
+     * // => '#ef3061'
+     *
+     * colorUtils.getHexForColor('uncomfortable beige');
+     * // => null
+     */
     getHexForColor: (colorString => {
         const color = getEnumValueIfExists(Colors, colorString);
         if (!color) {
@@ -27,7 +37,21 @@ const colorUtils = {
         const hexNumber = (rgbTuple[0] << 16) | (rgbTuple[1] << 8) | rgbTuple[2];
         return `#${hexNumber.toString(16).padStart(6, '0')}`;
     }: GetHexForColorType),
-    /** */
+    /**
+     * Given a {@link Color}, return an {@link RGB} object representing it, or null if the value isn't a {@link Color}
+     *
+     * @function
+     * @param colorString {Color}
+     * @returns {RGB | null}
+     * @example
+     * import {colorUtils, colors} from '@airtable/blocks/ui';
+     *
+     * colorUtils.getRgbForColor(colors.PURPLE_DARK_1);
+     * // => {r: 107, g: 28, b: 176}
+     *
+     * colorUtils.getRgbForColor('disgruntled pink');
+     * // => null
+     */
     getRgbForColor: (colorString => {
         const color = getEnumValueIfExists(Colors, colorString);
         if (!color) {
@@ -37,9 +61,23 @@ const colorUtils = {
         const rgbTuple = rgbTuplesByColor[color];
         return {r: rgbTuple[0], g: rgbTuple[1], b: rgbTuple[2]};
     }: GetRgbForColorType),
-    /** */
-    shouldUseLightTextOnColor(color: string): boolean {
-        if (!rgbTuplesByColor[color]) {
+    /**
+     * Given a {@link Color}, returns true or false to indicate whether that color should have light text on top of it when used as a background color.
+     *
+     * @function
+     * @param colorString {Color}
+     * @returns boolean
+     * @example
+     * import {colorUtils, colors} from '@airtable/blocks/ui';
+     *
+     * colorUtils.shouldUseLightTextOnColor(colors.PINK_LIGHT_1);
+     * // => false
+     *
+     * colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
+     * // => true
+     */
+    shouldUseLightTextOnColor(colorString: string): boolean {
+        if (!rgbTuplesByColor[colorString]) {
             // Don't have a color for this. Let's just return false as a default
             // instead of throwing.
             return false;
@@ -49,7 +87,7 @@ const colorUtils = {
         // Bright, Dark1 and no suffix colors use light text.
         // NOTE: use shouldUseDarkText instead of shouldUseLightText just to make
         // checking the suffix easier, since no suffix uses light text.
-        const shouldUseDarkText = color.endsWith('Light1') || color.endsWith('Light2');
+        const shouldUseDarkText = colorString.endsWith('Light1') || colorString.endsWith('Light2');
         return !shouldUseDarkText;
     },
 };

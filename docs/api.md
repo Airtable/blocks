@@ -98,9 +98,9 @@ Type: any
 
 #### reload
 
-Type: function (): void
-
 #### reload
+
+Type: function (): void
 
 #### runInfo
 
@@ -1440,9 +1440,7 @@ inserted into the page.
 
 #### Color
 
--   **See: colors**
-
-A value from the colors enum
+A value from the [colors][79] enum
 
 Type: \$Values&lt;any>
 
@@ -1458,24 +1456,76 @@ Type: {r: [number][63], g: [number][63], b: [number][63]}
 
 #### colorUtils
 
-##### Examples
-
-```javascript
-import {UI} from 'airtable-block';
-UI.colorUtils.getHexForColor(UI.colors.RED);
-```
+Utilities for working with [Color][80] names from the [colors][79] enum.
 
 ##### getHexForColor
 
-##### getRgbForColor
-
-##### shouldUseLightTextOnColor
+Given a [Color][80], return the hex color value for that color, or null if the value isn't a
+[Color][80]
 
 ###### Parameters
 
--   `color` **[string][58]**
+-   `colorString` {Color}
 
-Returns **[boolean][61]**
+###### Examples
+
+```javascript
+import {colorUtils, colors} from '@airtable/blocks/ui';
+
+colorUtils.getHexForColor(colors.RED);
+// => '#ef3061'
+
+colorUtils.getHexForColor('uncomfortable beige');
+// => null
+```
+
+Returns **([string][58] | null)**
+
+##### getRgbForColor
+
+Given a [Color][80], return an [RGB][81] object representing it, or null if the value isn't a
+[Color][80]
+
+###### Parameters
+
+-   `colorString` {Color}
+
+###### Examples
+
+```javascript
+import {colorUtils, colors} from '@airtable/blocks/ui';
+
+colorUtils.getRgbForColor(colors.PURPLE_DARK_1);
+// => {r: 107, g: 28, b: 176}
+
+colorUtils.getRgbForColor('disgruntled pink');
+// => null
+```
+
+Returns **([RGB][82] | null)**
+
+##### shouldUseLightTextOnColor
+
+Given a [Color][80], returns true or false to indicate whether that color should have light text on
+top of it when used as a background color.
+
+###### Parameters
+
+-   `colorString` **[string][58]** {Color}
+
+###### Examples
+
+```javascript
+import {colorUtils, colors} from '@airtable/blocks/ui';
+
+colorUtils.shouldUseLightTextOnColor(colors.PINK_LIGHT_1);
+// => false
+
+colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
+// => true
+```
+
+Returns **[boolean][61]** boolean
 
 #### colors
 
@@ -1590,7 +1640,7 @@ Expands the given record in the Airtable UI.
 ##### Parameters
 
 -   `record` **[Record][68]** the record to expand
--   `opts` **[ExpandRecordOpts][79]?** If `records` is provided, the list will be used to page
+-   `opts` **[ExpandRecordOpts][83]?** If `records` is provided, the list will be used to page
     through records from the expanded record dialog.
 
 ##### Examples
@@ -1693,14 +1743,14 @@ UI.globalAlert.showReloadPrompt();
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][80]**
+-   `props` **[AutocompletePopoverProps][84]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][62]&lt;[AutocompleteItem][81]>, renderItem: function (item: [AutocompleteItem][81], isFocused: [boolean][61]): React$Element&lt;any>?,
-filterItems: function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][81]>):
-[Array][62]&lt;[AutocompleteItem][81]>?, onSelect: function ([AutocompleteItem][81]): void,
+React$Element&lt;any>, items: [Array][62]&lt;[AutocompleteItem][85]>, renderItem: function (item: [AutocompleteItem][85], isFocused: [boolean][61]): React$Element&lt;any>?,
+filterItems: function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][85]>):
+[Array][62]&lt;[AutocompleteItem][85]>?, onSelect: function ([AutocompleteItem][85]): void,
 placeholder: [string][58]?, focusOnOpen: [boolean][61]?, className: [string][58]?, style:
 [Object][67]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][63]?, placementOffsetY: [number][63]?, fitInWindowMode: FitInWindowMode?, isOpen:
@@ -1709,12 +1759,12 @@ placeholder: [string][58]?, focusOnOpen: [boolean][61]?, className: [string][58]
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][62]&lt;[AutocompleteItem][81]>**
--   `renderItem` **function (item: [AutocompleteItem][81], isFocused: [boolean][61]):
+-   `items` **[Array][62]&lt;[AutocompleteItem][85]>**
+-   `renderItem` **function (item: [AutocompleteItem][85], isFocused: [boolean][61]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][81]>):
-    [Array][62]&lt;[AutocompleteItem][81]>?**
--   `onSelect` **function ([AutocompleteItem][81]): void**
+-   `filterItems` **function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][85]>):
+    [Array][62]&lt;[AutocompleteItem][85]>?**
+-   `onSelect` **function ([AutocompleteItem][85]): void**
 -   `placeholder` **[string][58]?**
 -   `focusOnOpen` **[boolean][61]?**
 -   `className` **[string][58]?**
@@ -1747,7 +1797,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][82]**
+-   `props` **[ButtonProps][86]**
 
 ##### Examples
 
@@ -1781,7 +1831,7 @@ Type: [object][67]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][83]**
+-   `props` **[CellRendererProps][87]**
 
 #### CellRendererProps
 
@@ -1803,7 +1853,7 @@ className: [string][58]?, style: [Object][67]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][84]**
+-   `$0` **[ChoiceTokenProps][88]**
     -   `$0.choice`
     -   `$0.className`
 
@@ -1823,7 +1873,7 @@ Type: {choice: {id: [string][58], name: [string][58], color: [string][58]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][85]**
+-   `props` **[CollaboratorTokenProps][89]**
 
 #### CollaboratorTokenProps
 
@@ -1880,7 +1930,7 @@ any?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][86]**
+-   `props` **[FieldIconProps][90]**
 
 #### FieldIconProps
 
@@ -1904,7 +1954,7 @@ style: [Object][67]?, pathClassName: [string][58]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][87]**
+-   `props` **[FieldPickerProps][91]**
 
 #### FieldPickerProps
 
@@ -1931,7 +1981,7 @@ placeholder: [string][58]?, style: [Object][67]?, className: [string][58]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][88]**
+-   `props` **[FieldPickerSyncedProps][92]**
 
 #### FieldPickerSyncedProps
 
@@ -1958,7 +2008,7 @@ className: [string][58]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][89]**
+-   `$0` **[IconProps][93]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -1988,7 +2038,7 @@ style: [Object][67]?, pathClassName: [string][58]?}
 
 ##### Parameters
 
--   `props` **[InputProps][90]**
+-   `props` **[InputProps][94]**
 
 #### InputProps
 
@@ -2014,7 +2064,7 @@ Type: {type: [string][58]?, placeholder: [string][58]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][91]**
+-   `props` **[InputSyncedProps][95]**
 
 #### InputSyncedProps
 
@@ -2039,7 +2089,7 @@ disabled: [boolean][61]?, spellCheck: [boolean][61]?}
 
 ##### Parameters
 
--   `props` **[LinkProps][92]**
+-   `props` **[LinkProps][96]**
 
 #### LinkProps
 
@@ -2061,7 +2111,7 @@ className: [string][58]?, style: [Object][67]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][93]**
+-   `$0` **[LoaderProps][97]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -2082,7 +2132,7 @@ Type: {fillColor: [string][58]?, scale: [number][63]?}
 
 ##### Parameters
 
--   `props` **[ModalProps][94]**
+-   `props` **[ModalProps][98]**
 
 #### ModalProps
 
@@ -2120,7 +2170,7 @@ Type: {className: [string][58]?, style: [Object][67]?, children: React.Node?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][95]**
+-   `props` **[PopoverProps][99]**
 
 #### PopoverProps
 
@@ -2153,7 +2203,7 @@ isOpen: [boolean][61], backgroundClassName: [string][58]?, backgroundStyle: [Obj
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][96]**
+-   `props` **[ProgressBarProps][100]**
 
 #### ProgressBarProps
 
@@ -2177,7 +2227,7 @@ Type: {progress: [number][63], barColor: [string][58]?, backgroundColor: [string
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][97]**
+-   `props` **[RadioSyncedProps][101]**
 
 #### RadioSyncedProps
 
@@ -2200,13 +2250,13 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][58], style: [Object][67
 
 ##### Parameters
 
--   `props` **[RecordCardProps][98]**
+-   `props` **[RecordCardProps][102]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][68] | RecordDef), fields: [Array][62]&lt;[Field][64]>?, view: [View][65]?,
 attachmentCoverField: [Field][64]?, width: [number][63]?, height: [number][63]?, onClick:
-[Function][66]?, getExpandRecordOptions: function ([Record][68]): [ExpandRecordOpts][79]?,
+[Function][66]?, getExpandRecordOptions: function ([Record][68]): [ExpandRecordOpts][83]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][58]?, style: [Object][67]?}
 
 ##### Properties
@@ -2218,7 +2268,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][58]?, style: [Object
 -   `width` **[number][63]?**
 -   `height` **[number][63]?**
 -   `onClick` **[Function][66]?**
--   `getExpandRecordOptions` **function ([Record][68]): [ExpandRecordOpts][79]?**
+-   `getExpandRecordOptions` **function ([Record][68]): [ExpandRecordOpts][83]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][58]?**
@@ -2232,11 +2282,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][58]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][99]**
+-   `props` **[RecordCardListProps][103]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][62]&lt;([Record][68] | RecordDef)>, onScroll: function ([Event][100]):
+Type: {records: [Array][62]&lt;([Record][68] | RecordDef)>, onScroll: function ([Event][104]):
 void?, onRecordClick: (null | function (record: ([Record][68] | RecordDef), index: [number][63]):
 void)?, onRecordMouseEnter: function (record: ([Record][68] | RecordDef), index: [number][63]):
 void?, onRecordMouseLeave: function (record: ([Record][68] | RecordDef), index: [number][63]):
@@ -2246,7 +2296,7 @@ className: [string][58]?, style: [Object][67]?}
 ##### Properties
 
 -   `records` **[Array][62]&lt;([Record][68] | RecordDef)>**
--   `onScroll` **function ([Event][100]): void?**
+-   `onScroll` **function ([Event][104]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][68] | RecordDef), index: [number][63]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][68] | RecordDef), index: [number][63]):
@@ -2267,7 +2317,7 @@ className: [string][58]?, style: [Object][67]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][101]**
+-   `props` **[SelectProps][105]**
 
 #### SelectProps
 
@@ -2279,7 +2329,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][102]**
+-   `props` **[SelectSyncedProps][106]**
 
 #### SelectSyncedProps
 
@@ -2311,7 +2361,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][103]**
+-   `props` **[TablePickerProps][107]**
 
 #### TablePickerProps
 
@@ -2335,7 +2385,7 @@ Type: {table: [Table][69]?, shouldAllowPickingNone: [boolean][61]?, onChange: fu
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][104]**
+-   `props` **[TablePickerSyncedProps][108]**
 
 #### TablePickerSyncedProps
 
@@ -2361,7 +2411,7 @@ style: [Object][67]?, className: [string][58]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][105]**
+-   `props` **[ToggleProps][109]**
 
 #### ToggleProps
 
@@ -2386,7 +2436,7 @@ tabIndex: [number][63]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][106]**
+-   `props` **[ToggleSyncedProps][110]**
 
 #### ToggleSyncedProps
 
@@ -2413,7 +2463,7 @@ function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][5
 
 ##### Parameters
 
--   `props` **[TooltipProps][107]**
+-   `props` **[TooltipProps][111]**
 
 #### TooltipProps
 
@@ -2446,7 +2496,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][61]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][108]**
+-   `props` **[ViewPickerProps][112]**
 
 #### ViewPickerProps
 
@@ -2473,7 +2523,7 @@ placeholder: [string][58]?, style: [Object][67]?, className: [string][58]?, disa
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][109]**
+-   `props` **[ViewPickerSyncedProps][113]**
 
 #### ViewPickerSyncedProps
 
@@ -2518,13 +2568,13 @@ ViewportConstraint - when mounted, applies constraints to the viewport.
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][110]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][110]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][114]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][114]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][110]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][110]?**
+-   `minSize` **[ViewportSizeConstraintProp][114]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][114]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -2614,35 +2664,39 @@ Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
 [76]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [77]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
 [78]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[79]: #expandrecordopts
-[80]: #autocompletepopoverprops
-[81]: #autocompleteitem
-[82]: #buttonprops
-[83]: #cellrendererprops
-[84]: #choicetokenprops
-[85]: #collaboratortokenprops
-[86]: #fieldiconprops
-[87]: #fieldpickerprops
-[88]: #fieldpickersyncedprops
-[89]: #iconprops
-[90]: #inputprops
-[91]: #inputsyncedprops
-[92]: #linkprops
-[93]: #loaderprops
-[94]: #modalprops
-[95]: #popoverprops
-[96]: #progressbarprops
-[97]: #radiosyncedprops
-[98]: #recordcardprops
-[99]: #recordcardlistprops
-[100]: https://developer.mozilla.org/docs/Web/API/Event
-[101]: #selectprops
-[102]: #selectsyncedprops
-[103]: #tablepickerprops
-[104]: #tablepickersyncedprops
-[105]: #toggleprops
-[106]: #togglesyncedprops
-[107]: #tooltipprops
-[108]: #viewpickerprops
-[109]: #viewpickersyncedprops
-[110]: #viewportsizeconstraintprop
+[79]: #colors
+[80]: #color
+[81]: #rgb
+[82]: #rgb
+[83]: #expandrecordopts
+[84]: #autocompletepopoverprops
+[85]: #autocompleteitem
+[86]: #buttonprops
+[87]: #cellrendererprops
+[88]: #choicetokenprops
+[89]: #collaboratortokenprops
+[90]: #fieldiconprops
+[91]: #fieldpickerprops
+[92]: #fieldpickersyncedprops
+[93]: #iconprops
+[94]: #inputprops
+[95]: #inputsyncedprops
+[96]: #linkprops
+[97]: #loaderprops
+[98]: #modalprops
+[99]: #popoverprops
+[100]: #progressbarprops
+[101]: #radiosyncedprops
+[102]: #recordcardprops
+[103]: #recordcardlistprops
+[104]: https://developer.mozilla.org/docs/Web/API/Event
+[105]: #selectprops
+[106]: #selectsyncedprops
+[107]: #tablepickerprops
+[108]: #tablepickersyncedprops
+[109]: #toggleprops
+[110]: #togglesyncedprops
+[111]: #tooltipprops
+[112]: #viewpickerprops
+[113]: #viewpickersyncedprops
+[114]: #viewportsizeconstraintprop
