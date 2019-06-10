@@ -11,7 +11,8 @@ export type ExpandRecordOpts = {
  * Expands the given record in the Airtable UI.
  *
  * @param record the record to expand
- * @param opts If `records` is provided, the list will be used to page through
+ * @param [opts] An optional options object.
+ * @param [opts.records] If `records` is provided, the list will be used to page through
  * records from the expanded record dialog.
  *
  * @example

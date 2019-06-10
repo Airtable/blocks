@@ -1670,8 +1670,9 @@ Expands the given record in the Airtable UI.
 ##### Parameters
 
 -   `record` **[Record][68]** the record to expand
--   `opts` **[ExpandRecordOpts][83]?** If `records` is provided, the list will be used to page
-    through records from the expanded record dialog.
+-   `opts` **[ExpandRecordOpts][83]?** An optional options object.
+    -   `opts.records` If `records` is provided, the list will be used to page through records from
+        the expanded record dialog.
 
 ##### Examples
 
