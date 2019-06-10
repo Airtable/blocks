@@ -10,6 +10,7 @@ const browserify = require('browserify');
 const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
+const ErrorCodes = require('./types/error_codes');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
@@ -34,7 +35,11 @@ type RequestWithRequestId = $Request & {
     requestId: number,
 };
 
+// NOTE(richsinn): These type definitions are for the `resolve` and `reject` functions
+//   from the "executor" parameter of the `Promise` constructor. They are NOT the
+//   type definitions for the "static" Promise.resolve and Promise.reject functions.
 type PromiseResolveFunction = <R>(Promise<R> | R) => void;
+type PromiseRejectFunction = (error: any) => void; // eslint-disable-line flowtype/no-weak-types
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
@@ -53,7 +58,10 @@ const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
 class BlockServer {
-    _pendingLongPollResolveByRequestId: Map<number, PromiseResolveFunction>;
+    _pendingLongPollResolveRejectByRequestId: Map<number, {
+        resolve: PromiseResolveFunction,
+        reject: PromiseRejectFunction,
+    }>;
     _expressApp: $Application;
     _shouldTranspileAll: boolean;
     _nextRequestId: number;
@@ -77,7 +85,7 @@ class BlockServer {
             remoteJson,
         } = args;
 
-        this._pendingLongPollResolveByRequestId = new Map();
+        this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
         this._shouldTranspileAll = transpileAll;
         this._nextRequestId = 0;
@@ -193,10 +201,10 @@ class BlockServer {
             res.sendStatus(200);
         });
 
-        runFrameRoutes.get('/poll', (req: RequestWithRequestId, res: $Response) => {
+        runFrameRoutes.get('/poll', (req: RequestWithRequestId, res: $Response, next: NextFunction) => {
             // This promise will resolve whenever the bundle we're serving changes.
             const bundleChangePromise = new Promise((resolve, reject) => {
-                this._pendingLongPollResolveByRequestId.set(req.requestId, resolve);
+                this._pendingLongPollResolveRejectByRequestId.set(req.requestId, {resolve, reject});
             });
             // After the LONG_POLL_TIMEOUT_MS, send a request timeout to tell the client to retry.
             const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => resolve('timeout'), LONG_POLL_TIMEOUT_MS));
@@ -205,9 +213,20 @@ class BlockServer {
                 bundleChangePromise,
                 timeoutPromise,
             ]).then(result => {
-                this._pendingLongPollResolveByRequestId.delete(req.requestId);
                 const statusCode = result === 'timeout' ? 408 : 200;
                 res.sendStatus(statusCode);
+            }).catch((err) => {
+                if (err.code === ErrorCodes.BUNDLE_ERROR) {
+                    // TODO(richsinn): Consider a sending a different response HTTP status. Also
+                    //   Send a body with the syntax error to display on the block frame.
+                    // NOTE: Sending a 500 will "disconnect" the block, and the user will
+                    //   need to reload the block.
+                    res.status(500).end();
+                } else {
+                    next(err);
+                }
+            }).finally(() => {
+                this._pendingLongPollResolveRejectByRequestId.delete(req.requestId);
             });
         });
 
@@ -419,7 +438,7 @@ class BlockServer {
                 this._bundlePromiseIfExists = null;
             }
             // Resolve any long poll promises that were listening for bundle changes.
-            for (const longPollResolve of this._pendingLongPollResolveByRequestId.values()) {
+            for (const {resolve: longPollResolve} of this._pendingLongPollResolveRejectByRequestId.values()) {
                 longPollResolve();
             }
             // Resolve our primary bundle promise.
@@ -435,11 +454,19 @@ class BlockServer {
                 if (this._bundlePromiseIfExists === bundlePromise) {
                     this._bundlePromiseIfExists = null;
                 }
+                err.code = ErrorCodes.BUNDLE_ERROR;
+
+                // Reject our primary bundle promise.
                 reject(err);
             })
             .pipe(fsStream);
 
-        return bundlePromise;
+        return bundlePromise.catch((err) => {
+            // Reject any long poll promises that were listening for bundle changes.
+            for (const {reject: longPollReject} of this._pendingLongPollResolveRejectByRequestId.values()) {
+                longPollReject(err);
+            }
+        });
     }
 }
 
