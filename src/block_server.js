@@ -10,6 +10,7 @@ const browserify = require('browserify');
 const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
+const AnsiToHtmlConverter = require('ansi-to-html');
 const ErrorCodes = require('./types/error_codes');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
@@ -217,11 +218,17 @@ class BlockServer {
                 res.sendStatus(statusCode);
             }).catch((err) => {
                 if (err.code === ErrorCodes.BUNDLE_ERROR) {
-                    // TODO(richsinn): Consider a sending a different response HTTP status. Also
-                    //   Send a body with the syntax error to display on the block frame.
-                    // NOTE: Sending a 500 will "disconnect" the block, and the user will
-                    //   need to reload the block.
-                    res.status(500).end();
+                    const ansiToHtmlConverter = new AnsiToHtmlConverter();
+                    const errHtml = `<pre>
+${ansiToHtmlConverter.toHtml(err.message)}
+</pre>
+`;
+                    res.set('Content-Type', 'application/json');
+                    // TODO(richsinn): Handle the error overlay and polling logic for syntax
+                    //   errors in the iframe itself, instead of the block_client_wrapper code.
+                    // NOTE: There exists logic in the block_client_wrapper code to keep the
+                    //   polling connection alive for errors with'BUNDLE_ERROR' error code.
+                    res.status(500).send({code: err.code, errStackHtml: errHtml});
                 } else {
                     next(err);
                 }
