@@ -71,7 +71,7 @@ var compareWithNulls = (a, b, compare) => {
  * Information about the current viewport
  *
  * @example
- * import {viewport} from 'airtable-block';
+ * import {viewport} from '@airtable/blocks';
  */
 
 

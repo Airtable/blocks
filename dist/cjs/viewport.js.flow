@@ -41,7 +41,7 @@ const compareWithNulls = (
  * Information about the current viewport
  *
  * @example
- * import {viewport} from 'airtable-block';
+ * import {viewport} from '@airtable/blocks';
  */
 class Viewport extends Watchable<WatchableViewportKey> {
     static _className = 'Viewport';

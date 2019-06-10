@@ -38,8 +38,8 @@ var WatchableGlobalAlertKeys = Object.freeze({
 /**
  * @alias globalAlert
  * @example
- * import {UI} from 'airtable-block';
- * UI.globalAlert.showReloadPrompt();
+ * import {globalAlert} from '@airtable/blocks/ui';
+ * globalAlert.showReloadPrompt();
  */
 var GlobalAlert =
 /*#__PURE__*/

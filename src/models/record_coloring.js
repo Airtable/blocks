@@ -47,14 +47,14 @@ export type RecordColorMode =
  * @alias recordColoring.modes
  * @memberof recordColoring
  * @example
- * import {models} from 'airtable-block';
+ * import {recordColoring} from '@airtable/blocks/models';
  *
  * // no record coloring:
- * const recordColorMode = models.recordColoring.modes.none();
+ * const recordColorMode = recordColoring.modes.none();
  * // color by select field:
- * const recordColorMode = models.recordColoring.modes.bySelectField(someSelectField);
+ * const recordColorMode = recordColoring.modes.bySelectField(someSelectField);
  * // color from view:
- * const recordColorMode = models.recordColoring.modes.fromView(someView);
+ * const recordColorMode = recordColoring.modes.fromView(someView);
  *
  * // with a query result:
  * const queryResult = table.selectRecords({ recordColorMode });

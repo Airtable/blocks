@@ -39,16 +39,16 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  * chosen by the user or null
  *
  * @example
- * import {UI} from 'airtable-block';
+ * import {expandRecordPickerAsync} from '@airtable/blocks/ui';
  *
- * const recordA = await UI.expandRecordPickerAsync([record1, record2, record3]);
+ * const recordA = await expandRecordPickerAsync([record1, record2, record3]);
  * if (recordA !== null) {
  *     alert(recordA.primaryCellValueAsString);
  * } else {
  *     alert('no record picked');
  * }
  *
- * const recordB = await UI.expandRecordPickerAsync([record1, record2], {
+ * const recordB = await expandRecordPickerAsync([record1, record2], {
  *     fields: [field1, field2],
  * });
  */

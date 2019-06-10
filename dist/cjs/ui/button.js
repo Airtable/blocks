@@ -57,14 +57,15 @@ var classNamesByTheme = {
  * Clickable button component.
  *
  * @example
- * import {UI} from 'airtable-block';
+ * import {Button} from '@airtable/blocks/ui';
  * const button = (
- *     <UI.Button
+ *     <Button
  *        disabled={false}
- *        theme={UI.Button.themes.BLUE}
- *        onClick={() => alert('Clicked!')}>
+ *        theme={Button.themes.BLUE}
+ *        onClick={() => alert('Clicked!')}
+ *     >
  *         Done
- *     </UI.Button>
+ *     </Button>
  * );
  */
 

@@ -15,7 +15,7 @@ var _default = msg => {
   if ((0, _get_sdk.default)().runInfo.isDevelopmentMode && usedWarnings[msg] !== true) {
     usedWarnings[msg] = true; // eslint-disable-next-line no-console
 
-    console.warn("[airtable-block] ".concat(msg));
+    console.warn("[@airtable/blocks] ".concat(msg));
   }
 };
 

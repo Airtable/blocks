@@ -59,7 +59,7 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client/he
     isSessionStorageAvailable = _window$__requirePriv.isSessionStorageAvailable;
 /**
  * @example
- * import {runInfo} from 'airtable-block';
+ * import {runInfo} from '@airtable/blocks';
  * if (runInfo.isFirstRun) {
  *     // The current user just installed this block.
  *     // Take the opportunity to show any onboarding and set
@@ -74,7 +74,7 @@ function defaultUpdateBatcher(applyUpdates) {
   applyUpdates();
 }
 /**
- * Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
+ * Top-level container for the Blocks SDK. Can be imported as `'@airtable/blocks'`.
  */
 
 
@@ -109,7 +109,7 @@ function () {
     this.models = _models.default;
     this.installationId = sdkInitData.blockInstallationId; // Bind the public methods on this class so users can import
     // just the method, e.g.
-    // import {reload} from 'airtable-block';
+    // import {reload} from '@airtable/blocks';
 
     this.reload = this.reload.bind(this); // When localStorage/sessionStorage aren't available (e.g. when
     // "Block third-party cookies" is enabled in Chrome), we provide

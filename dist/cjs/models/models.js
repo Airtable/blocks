@@ -39,9 +39,9 @@ var hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_
 /**
  * @alias fieldTypes
  * @example
- * import {models} from 'airtable-block';
+ * import {fieldTypes} from '@airtable/blocks/models';
  * const numberFields = myTable.fields.filter(field => (
- *     field.type === models.fieldTypes.NUMBER
+ *     field.type === fieldTypes.NUMBER
  * ));
  */
 
@@ -50,9 +50,9 @@ var fieldTypes = _field.FieldTypes;
 /**
  * @alias viewTypes
  * @example
- * import {models} from 'airtable-block';
+ * import {viewTypes} from '@airtable/blocks/models';
  * const gridViews = myTable.views.filter(view => (
- *     view.type === models.viewTypes.GRID
+ *     view.type === viewTypes.GRID
  * ));
  */
 
@@ -63,8 +63,8 @@ var viewTypes = _view.ViewTypes;
  * @returns string
  * @alias generateGuid
  * @example
- * import {models} from 'airtable-block';
- * const id = models.generateGuid();
+ * import {generateGuid} from '@airtable/blocks/models';
+ * const id = generateGuid();
  */
 
 var generateGuid = hyperIdGenerator.generateGuid;

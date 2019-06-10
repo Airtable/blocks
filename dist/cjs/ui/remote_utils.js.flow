@@ -4,15 +4,16 @@ import invariant from 'invariant';
 /**
  * Injects CSS from a string into the page.
  *
+ * @param css {string}
  * @returns the style tag inserted into the page.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.loadCSSFromString('body { background: red; }');
+ * import {loadCSSFromString} from '@airtable/blocks/ui';
+ * loadCSSFromString('body { background: red; }');
  */
-export function loadCSSFromString(string: string): HTMLStyleElement {
+export function loadCSSFromString(css: string): HTMLStyleElement {
     const styleTag = document.createElement('style');
-    styleTag.innerHTML = string;
+    styleTag.innerHTML = css;
     invariant(document.head, 'no document head');
     document.head.appendChild(styleTag);
     return styleTag;
@@ -21,11 +22,12 @@ export function loadCSSFromString(string: string): HTMLStyleElement {
 /**
  * Injects CSS from a remote URL.
  *
+ * @param url {string}
  * @returns a Promise that resolves to the style tag inserted into the page.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.loadCSSFromURLAsync('https://example.com/style.css');
+ * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+ * loadCSSFromURLAsync('https://example.com/style.css');
  */
 export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
     // Pre-create the error for a nicer stack trace.
@@ -48,11 +50,12 @@ export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
 /**
  * Injects Javascript from a remote URL.
  *
+ * @param url {string}
  * @returns a Promise that resolves to the script tag inserted into the page.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.loadScriptFromURLAsync('https://example.com/script.js');
+ * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+ * loadScriptFromURLAsync('https://example.com/script.js');
  */
 export function loadScriptFromURLAsync(url: string): Promise<HTMLScriptElement> {
     // Pre-create the error for a nicer stack trace.

@@ -23,10 +23,10 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  * be shown. Duplicate fields will be removed.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.expandRecordList([record1, record2, record3]);
+ * import {expandRecordList} from '@airtable/blocks/ui';
+ * expandRecordList([record1, record2, record3]);
  *
- * UI.expandRecordList([record1, record2], {
+ * expandRecordList([record1, record2], {
  *     fields: [field1, field2],
  * });
  */

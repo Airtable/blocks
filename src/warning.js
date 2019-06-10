@@ -8,6 +8,6 @@ export default (msg: string) => {
         usedWarnings[msg] = true;
 
         // eslint-disable-next-line no-console
-        console.warn(`[airtable-block] ${msg}`);
+        console.warn(`[@airtable/blocks] ${msg}`);
     }
 };

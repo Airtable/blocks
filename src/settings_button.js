@@ -17,7 +17,7 @@ type WatchableSettingsButtonKey = $Values<typeof WatchableSettingsButtonKeys>;
  *
  * @alias settingsButton
  * @example
- * import {settingsButton} from 'airtable-block';
+ * import {settingsButton} from '@airtable/blocks';
  * settingsButton.isVisible = true;
  * settingsButton.watch('click', () => {
  *     alert('Clicked!');
@@ -40,6 +40,7 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
      * Whether the settings button is being shown.
      * Set to `true` to show the settings button.
      * Can be watched.
+     *
      * @memberof settingsButton
      */
     get isVisible(): boolean {

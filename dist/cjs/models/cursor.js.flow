@@ -29,7 +29,7 @@ type CursorData = {|
  * Contains information about the state of the user's current interactions in Airtable
  *
  * @example
- * import {cursor} from 'airtable-block';
+ * import {cursor} from '@airtable/blocks';
  */
 class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
     static _className = 'Cursor';

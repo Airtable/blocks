@@ -60,7 +60,7 @@ var WatchableCursorKeys = Object.freeze({
  * Contains information about the state of the user's current interactions in Airtable
  *
  * @example
- * import {cursor} from 'airtable-block';
+ * import {cursor} from '@airtable/blocks';
  */
 var Cursor =
 /*#__PURE__*/

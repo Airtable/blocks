@@ -18,15 +18,16 @@ var _invariant = _interopRequireDefault(require("invariant"));
 /**
  * Injects CSS from a string into the page.
  *
+ * @param css {string}
  * @returns the style tag inserted into the page.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.loadCSSFromString('body { background: red; }');
+ * import {loadCSSFromString} from '@airtable/blocks/ui';
+ * loadCSSFromString('body { background: red; }');
  */
-function loadCSSFromString(string) {
+function loadCSSFromString(css) {
   var styleTag = document.createElement('style');
-  styleTag.innerHTML = string;
+  styleTag.innerHTML = css;
   (0, _invariant.default)(document.head, 'no document head');
   document.head.appendChild(styleTag);
   return styleTag;
@@ -34,11 +35,12 @@ function loadCSSFromString(string) {
 /**
  * Injects CSS from a remote URL.
  *
+ * @param url {string}
  * @returns a Promise that resolves to the style tag inserted into the page.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.loadCSSFromURLAsync('https://example.com/style.css');
+ * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+ * loadCSSFromURLAsync('https://example.com/style.css');
  */
 
 
@@ -62,11 +64,12 @@ function loadCSSFromURLAsync(url) {
 /**
  * Injects Javascript from a remote URL.
  *
+ * @param url {string}
  * @returns a Promise that resolves to the script tag inserted into the page.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.loadScriptFromURLAsync('https://example.com/script.js');
+ * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+ * loadScriptFromURLAsync('https://example.com/script.js');
  */
 
 

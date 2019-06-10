@@ -64,7 +64,7 @@ var forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtabl
  * Any key can be watched to know when the value of the key changes.
  *
  * @example
- * import {globalConfig} from 'airtable-block';
+ * import {globalConfig} from '@airtable/blocks';
  */
 var GlobalConfig =
 /*#__PURE__*/

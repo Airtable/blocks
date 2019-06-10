@@ -70,8 +70,8 @@ type WrappedWatchConfig = {
  * function is triggered.
  *
  * @example
- * import {UI} from 'airtable-block';
- * const MyComponentWithData = UI.createDataContainer(MyComponent, getDependencies(props) {
+ * import {createDataContainer} from '@airtable/blocks/ui';
+ * const MyComponentWithData = createDataContainer(MyComponent, getDependencies(props) {
  *     // This should return an array of dependency objects:
  *     return [
  *         // Will call forceUpdate when table name changes.

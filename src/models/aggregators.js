@@ -13,11 +13,11 @@ const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable(
  *
  * @example
  * // To get a list of aggregators supported for a specific field:
- * const aggregators = myField.availableAggregators;
+ * const fieldAggregators = myField.availableAggregators;
  *
  * // To compute the total attachment size of an attachment field:
- * import {models} from 'airtable-block';
- * const aggregator = models.aggregators.totalAttachmentSize;
+ * import {aggregators} from '@airtable/blocks/models';
+ * const aggregator = aggregators.totalAttachmentSize;
  * const value = aggregator.aggregate(myRecords, myAttachmentField);
  * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
  */

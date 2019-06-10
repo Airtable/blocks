@@ -17,8 +17,8 @@ type AlertInfo = {
 /**
  * @alias globalAlert
  * @example
- * import {UI} from 'airtable-block';
- * UI.globalAlert.showReloadPrompt();
+ * import {globalAlert} from '@airtable/blocks/ui';
+ * globalAlert.showReloadPrompt();
  */
 class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     static _className = 'GlobalAlert';

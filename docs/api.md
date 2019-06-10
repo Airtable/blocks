@@ -61,7 +61,7 @@
 
 ### BlockSdk
 
-Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
+Top-level container for the Blocks SDK. Can be imported as `'@airtable/blocks'`.
 
 #### Parameters
 
@@ -141,7 +141,7 @@ Type: {isFirstRun: [boolean][61], isDevelopmentMode: [boolean][61]}
 #### Examples
 
 ```javascript
-import {runInfo} from 'airtable-block';
+import {runInfo} from '@airtable/blocks';
 if (runInfo.isFirstRun) {
     // The current user just installed this block.
     // Take the opportunity to show any onboarding and set
@@ -171,7 +171,7 @@ Any key can be watched to know when the value of the key changes.
 #### Examples
 
 ```javascript
-import {globalConfig} from 'airtable-block';
+import {globalConfig} from '@airtable/blocks';
 ```
 
 #### canSet
@@ -225,7 +225,7 @@ Information about the current viewport
 #### Examples
 
 ```javascript
-import {viewport} from 'airtable-block';
+import {viewport} from '@airtable/blocks';
 ```
 
 #### addMaxFullscreenSize
@@ -319,8 +319,8 @@ Returns **{width: [number][63], height: [number][63]}**
 #### Examples
 
 ```javascript
-import {models} from 'airtable-block';
-const numberFields = myTable.fields.filter(field => field.type === models.fieldTypes.NUMBER);
+import {fieldTypes} from '@airtable/blocks/models';
+const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NUMBER);
 ```
 
 ### generateGuid
@@ -330,8 +330,8 @@ Helper to generate a GUID
 #### Examples
 
 ```javascript
-import {models} from 'airtable-block';
-const id = models.generateGuid();
+import {generateGuid} from '@airtable/blocks/models';
+const id = generateGuid();
 ```
 
 Returns **any** string
@@ -341,8 +341,8 @@ Returns **any** string
 #### Examples
 
 ```javascript
-import {models} from 'airtable-block';
-const gridViews = myTable.views.filter(view => view.type === models.viewTypes.GRID);
+import {viewTypes} from '@airtable/blocks/models';
+const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
 ```
 
 ### recordColoring
@@ -354,14 +354,14 @@ create a record coloring mode object
 ##### Examples
 
 ```javascript
-import {models} from 'airtable-block';
+import {recordColoring} from '@airtable/blocks/models';
 
 // no record coloring:
-const recordColorMode = models.recordColoring.modes.none();
+const recordColorMode = recordColoring.modes.none();
 // color by select field:
-const recordColorMode = models.recordColoring.modes.bySelectField(someSelectField);
+const recordColorMode = recordColoring.modes.bySelectField(someSelectField);
 // color from view:
-const recordColorMode = models.recordColoring.modes.fromView(someView);
+const recordColorMode = recordColoring.modes.fromView(someView);
 
 // with a query result:
 const queryResult = table.selectRecords({recordColorMode});
@@ -412,7 +412,7 @@ Watch `click` to handle click events on the button.
 #### Examples
 
 ```javascript
-import {settingsButton} from 'airtable-block';
+import {settingsButton} from '@airtable/blocks';
 settingsButton.isVisible = true;
 settingsButton.watch('click', () => {
     alert('Clicked!');
@@ -533,11 +533,11 @@ function (records: [Array][62]&lt;[Record][68]>, field: [Field][64]): [string][5
 
 ```javascript
 // To get a list of aggregators supported for a specific field:
-const aggregators = myField.availableAggregators;
+const fieldAggregators = myField.availableAggregators;
 
 // To compute the total attachment size of an attachment field:
-import {models} from 'airtable-block';
-const aggregator = models.aggregators.totalAttachmentSize;
+import {aggregators} from '@airtable/blocks/models';
+const aggregator = aggregators.totalAttachmentSize;
 const value = aggregator.aggregate(myRecords, myAttachmentField);
 const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
 ```
@@ -665,7 +665,7 @@ Contains information about the state of the user's current interactions in Airta
 #### Examples
 
 ```javascript
-import {cursor} from 'airtable-block';
+import {cursor} from '@airtable/blocks';
 ```
 
 #### activeTableId
@@ -1389,13 +1389,13 @@ Injects CSS from a string into the page.
 
 ##### Parameters
 
--   `string` **[string][58]**
+-   `css` **[string][58]** {string}
 
 ##### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
-UI.loadCSSFromString('body { background: red; }');
+import {loadCSSFromString} from '@airtable/blocks/ui';
+loadCSSFromString('body { background: red; }');
 ```
 
 Returns **[HTMLStyleElement][75]** the style tag inserted into the page.
@@ -1406,13 +1406,13 @@ Injects CSS from a remote URL.
 
 ##### Parameters
 
--   `url` **[string][58]**
+-   `url` **[string][58]** {string}
 
 ##### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
-UI.loadCSSFromURLAsync('https://example.com/style.css');
+import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
 Returns **[Promise][76]&lt;[HTMLLinkElement][77]>** a Promise that resolves to the style tag
@@ -1424,13 +1424,13 @@ Injects Javascript from a remote URL.
 
 ##### Parameters
 
--   `url` **[string][58]**
+-   `url` **[string][58]** {string}
 
 ##### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
-UI.loadScriptFromURLAsync('https://example.com/script.js');
+import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
 Returns **[Promise][76]&lt;[HTMLScriptElement][78]>** a Promise that resolves to the script tag
@@ -1646,8 +1646,8 @@ Expands the given record in the Airtable UI.
 ##### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
-UI.expandRecord(record1, {
+import {expandRecord} from '@airtable/blocks/ui';
+expandRecord(record1, {
     records: [record1, record2, record3],
 });
 ```
@@ -1675,10 +1675,10 @@ Expands a list of records in the Airtable UI
 #### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
-UI.expandRecordList([record1, record2, record3]);
+import {expandRecordList} from '@airtable/blocks/ui';
+expandRecordList([record1, record2, record3]);
 
-UI.expandRecordList([record1, record2], {
+expandRecordList([record1, record2], {
     fields: [field1, field2],
 });
 ```
@@ -1705,16 +1705,16 @@ return null.
 #### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
+import {expandRecordPickerAsync} from '@airtable/blocks/ui';
 
-const recordA = await UI.expandRecordPickerAsync([record1, record2, record3]);
+const recordA = await expandRecordPickerAsync([record1, record2, record3]);
 if (recordA !== null) {
     alert(recordA.primaryCellValueAsString);
 } else {
     alert('no record picked');
 }
 
-const recordB = await UI.expandRecordPickerAsync([record1, record2], {
+const recordB = await expandRecordPickerAsync([record1, record2], {
     fields: [field1, field2],
 });
 ```
@@ -1729,8 +1729,8 @@ user or null
 #### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
-UI.globalAlert.showReloadPrompt();
+import {globalAlert} from '@airtable/blocks/ui';
+globalAlert.showReloadPrompt();
 ```
 
 #### showReloadPrompt
@@ -1802,11 +1802,11 @@ Clickable button component.
 ##### Examples
 
 ```javascript
-import {UI} from 'airtable-block';
+import {Button} from '@airtable/blocks/ui';
 const button = (
-    <UI.Button disabled={false} theme={UI.Button.themes.BLUE} onClick={() => alert('Clicked!')}>
+    <Button disabled={false} theme={Button.themes.BLUE} onClick={() => alert('Clicked!')}>
         Done
-    </UI.Button>
+    </Button>
 );
 ```
 

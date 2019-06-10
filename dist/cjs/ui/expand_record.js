@@ -19,8 +19,8 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  * records from the expanded record dialog.
  *
  * @example
- * import {UI} from 'airtable-block';
- * UI.expandRecord(record1, {
+ * import {expandRecord} from '@airtable/blocks/ui';
+ * expandRecord(record1, {
  *     records: [record1, record2, record3],
  * });
  */
