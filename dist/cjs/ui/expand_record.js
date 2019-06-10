@@ -15,8 +15,8 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
  * Expands the given record in the Airtable UI.
  *
  * @param record the record to expand
- * @param [opts] An optional options object.
- * @param [opts.records] If `records` is provided, the list will be used to page through
+ * @param {object} [opts] An optional options object.
+ * @param {Array<Record>} [opts.records] If `records` is provided, the list will be used to page through
  * records from the expanded record dialog.
  *
  * @example

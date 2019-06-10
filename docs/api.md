@@ -1665,9 +1665,9 @@ Expands the given record in the Airtable UI.
 ##### Parameters
 
 -   `record` **[Record][68]** the record to expand
--   `opts` **[ExpandRecordOpts][83]?** An optional options object.
-    -   `opts.records` If `records` is provided, the list will be used to page through records from
-        the expanded record dialog.
+-   `opts` **[object][67]?** An optional options object.
+    -   `opts.records` **[Array][62]&lt;[Record][68]>?** If `records` is provided, the list will be
+        used to page through records from the expanded record dialog.
 
 ##### Examples
 
@@ -1769,14 +1769,14 @@ globalAlert.showReloadPrompt();
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][84]**
+-   `props` **[AutocompletePopoverProps][83]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][62]&lt;[AutocompleteItem][85]>, renderItem: function (item: [AutocompleteItem][85], isFocused: [boolean][61]): React$Element&lt;any>?,
-filterItems: function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][85]>):
-[Array][62]&lt;[AutocompleteItem][85]>?, onSelect: function ([AutocompleteItem][85]): void,
+React$Element&lt;any>, items: [Array][62]&lt;[AutocompleteItem][84]>, renderItem: function (item: [AutocompleteItem][84], isFocused: [boolean][61]): React$Element&lt;any>?,
+filterItems: function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][84]>):
+[Array][62]&lt;[AutocompleteItem][84]>?, onSelect: function ([AutocompleteItem][84]): void,
 placeholder: [string][58]?, focusOnOpen: [boolean][61]?, className: [string][58]?, style:
 [Object][67]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][63]?, placementOffsetY: [number][63]?, fitInWindowMode: FitInWindowMode?, isOpen:
@@ -1785,12 +1785,12 @@ placeholder: [string][58]?, focusOnOpen: [boolean][61]?, className: [string][58]
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][62]&lt;[AutocompleteItem][85]>**
--   `renderItem` **function (item: [AutocompleteItem][85], isFocused: [boolean][61]):
+-   `items` **[Array][62]&lt;[AutocompleteItem][84]>**
+-   `renderItem` **function (item: [AutocompleteItem][84], isFocused: [boolean][61]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][85]>):
-    [Array][62]&lt;[AutocompleteItem][85]>?**
--   `onSelect` **function ([AutocompleteItem][85]): void**
+-   `filterItems` **function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][84]>):
+    [Array][62]&lt;[AutocompleteItem][84]>?**
+-   `onSelect` **function ([AutocompleteItem][84]): void**
 -   `placeholder` **[string][58]?**
 -   `focusOnOpen` **[boolean][61]?**
 -   `className` **[string][58]?**
@@ -1823,7 +1823,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][86]**
+-   `props` **[ButtonProps][85]**
 
 ##### Examples
 
@@ -1857,7 +1857,7 @@ Type: [object][67]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][87]**
+-   `props` **[CellRendererProps][86]**
 
 #### CellRendererProps
 
@@ -1879,7 +1879,7 @@ className: [string][58]?, style: [Object][67]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][88]**
+-   `$0` **[ChoiceTokenProps][87]**
     -   `$0.choice`
     -   `$0.className`
 
@@ -1899,7 +1899,7 @@ Type: {choice: {id: [string][58], name: [string][58], color: [string][58]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][89]**
+-   `props` **[CollaboratorTokenProps][88]**
 
 #### CollaboratorTokenProps
 
@@ -1956,7 +1956,7 @@ any?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][90]**
+-   `props` **[FieldIconProps][89]**
 
 #### FieldIconProps
 
@@ -1980,7 +1980,7 @@ style: [Object][67]?, pathClassName: [string][58]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][91]**
+-   `props` **[FieldPickerProps][90]**
 
 #### FieldPickerProps
 
@@ -2007,7 +2007,7 @@ placeholder: [string][58]?, style: [Object][67]?, className: [string][58]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][92]**
+-   `props` **[FieldPickerSyncedProps][91]**
 
 #### FieldPickerSyncedProps
 
@@ -2034,7 +2034,7 @@ className: [string][58]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][93]**
+-   `$0` **[IconProps][92]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -2064,7 +2064,7 @@ style: [Object][67]?, pathClassName: [string][58]?}
 
 ##### Parameters
 
--   `props` **[InputProps][94]**
+-   `props` **[InputProps][93]**
 
 #### InputProps
 
@@ -2090,7 +2090,7 @@ Type: {type: [string][58]?, placeholder: [string][58]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][95]**
+-   `props` **[InputSyncedProps][94]**
 
 #### InputSyncedProps
 
@@ -2115,7 +2115,7 @@ disabled: [boolean][61]?, spellCheck: [boolean][61]?}
 
 ##### Parameters
 
--   `props` **[LinkProps][96]**
+-   `props` **[LinkProps][95]**
 
 #### LinkProps
 
@@ -2137,7 +2137,7 @@ className: [string][58]?, style: [Object][67]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][97]**
+-   `$0` **[LoaderProps][96]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -2158,7 +2158,7 @@ Type: {fillColor: [string][58]?, scale: [number][63]?}
 
 ##### Parameters
 
--   `props` **[ModalProps][98]**
+-   `props` **[ModalProps][97]**
 
 #### ModalProps
 
@@ -2196,7 +2196,7 @@ Type: {className: [string][58]?, style: [Object][67]?, children: React.Node?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][99]**
+-   `props` **[PopoverProps][98]**
 
 #### PopoverProps
 
@@ -2229,7 +2229,7 @@ isOpen: [boolean][61], backgroundClassName: [string][58]?, backgroundStyle: [Obj
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][100]**
+-   `props` **[ProgressBarProps][99]**
 
 #### ProgressBarProps
 
@@ -2253,7 +2253,7 @@ Type: {progress: [number][63], barColor: [string][58]?, backgroundColor: [string
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][101]**
+-   `props` **[RadioSyncedProps][100]**
 
 #### RadioSyncedProps
 
@@ -2276,13 +2276,13 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][58], style: [Object][67
 
 ##### Parameters
 
--   `props` **[RecordCardProps][102]**
+-   `props` **[RecordCardProps][101]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][68] | RecordDef), fields: [Array][62]&lt;[Field][64]>?, view: [View][65]?,
 attachmentCoverField: [Field][64]?, width: [number][63]?, height: [number][63]?, onClick:
-[Function][66]?, getExpandRecordOptions: function ([Record][68]): [ExpandRecordOpts][83]?,
+[Function][66]?, getExpandRecordOptions: function ([Record][68]): [ExpandRecordOpts][102]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][58]?, style: [Object][67]?}
 
 ##### Properties
@@ -2294,7 +2294,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][58]?, style: [Object
 -   `width` **[number][63]?**
 -   `height` **[number][63]?**
 -   `onClick` **[Function][66]?**
--   `getExpandRecordOptions` **function ([Record][68]): [ExpandRecordOpts][83]?**
+-   `getExpandRecordOptions` **function ([Record][68]): [ExpandRecordOpts][102]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][58]?**
@@ -2696,26 +2696,26 @@ Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
 [80]: #color
 [81]: #rgb
 [82]: #rgb
-[83]: #expandrecordopts
-[84]: #autocompletepopoverprops
-[85]: #autocompleteitem
-[86]: #buttonprops
-[87]: #cellrendererprops
-[88]: #choicetokenprops
-[89]: #collaboratortokenprops
-[90]: #fieldiconprops
-[91]: #fieldpickerprops
-[92]: #fieldpickersyncedprops
-[93]: #iconprops
-[94]: #inputprops
-[95]: #inputsyncedprops
-[96]: #linkprops
-[97]: #loaderprops
-[98]: #modalprops
-[99]: #popoverprops
-[100]: #progressbarprops
-[101]: #radiosyncedprops
-[102]: #recordcardprops
+[83]: #autocompletepopoverprops
+[84]: #autocompleteitem
+[85]: #buttonprops
+[86]: #cellrendererprops
+[87]: #choicetokenprops
+[88]: #collaboratortokenprops
+[89]: #fieldiconprops
+[90]: #fieldpickerprops
+[91]: #fieldpickersyncedprops
+[92]: #iconprops
+[93]: #inputprops
+[94]: #inputsyncedprops
+[95]: #linkprops
+[96]: #loaderprops
+[97]: #modalprops
+[98]: #popoverprops
+[99]: #progressbarprops
+[100]: #radiosyncedprops
+[101]: #recordcardprops
+[102]: #expandrecordopts
 [103]: #recordcardlistprops
 [104]: https://developer.mozilla.org/docs/Web/API/Event
 [105]: #selectprops
