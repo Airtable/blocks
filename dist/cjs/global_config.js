@@ -82,7 +82,7 @@ function (_Watchable) {
   }]);
 
   /**
-   * @private
+   * @hideconstructor
    */
   function GlobalConfig(initialKvValuesByKey, airtableInterface) {
     var _this;

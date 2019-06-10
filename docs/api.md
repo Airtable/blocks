@@ -98,9 +98,9 @@ Type: any
 
 #### reload
 
-#### reload
-
 Type: function (): void
+
+#### reload
 
 #### runInfo
 
@@ -164,11 +164,6 @@ development mode.
 Any key can be watched to know when the value of the key changes.
 
 You should not need to construct this object yourself.
-
-#### Parameters
-
--   `initialKvValuesByKey` **GlobalConfigData**
--   `airtableInterface` **AirtableInterface**
 
 #### Examples
 

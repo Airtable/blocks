@@ -55,7 +55,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     _kvStore: GlobalConfigData;
     _airtableInterface: AirtableInterface;
     /**
-     * @private
+     * @hideconstructor
      */
     constructor(initialKvValuesByKey: GlobalConfigData, airtableInterface: AirtableInterface) {
         super();
