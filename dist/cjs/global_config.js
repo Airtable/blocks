@@ -138,7 +138,18 @@ function (_Watchable) {
       var value = u.get(this._kvStore, path);
       return value;
     }
-    /** */
+    /**
+     * Returns `true` if the current user can set the global config value at `key`, `false` otherwise.
+     *
+     * @param {string|Array<string>} key A string for the the top-level key, or an array of strings describing the path to the value.
+     * @returns `true` if the current user can set the global config value at `key`, and `false` otherwise.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * if (globalConfig.canSet('favoriteColor')) {
+     *     globalConfig.set('favoriteColor', 'purple');
+     * }
+     */
 
   }, {
     key: "canSet",

@@ -98,9 +98,9 @@ Type: any
 
 #### reload
 
-Type: function (): void
-
 #### reload
+
+Type: function (): void
 
 #### runInfo
 
@@ -178,9 +178,25 @@ import {globalConfig} from '@airtable/blocks';
 
 #### canSet
 
+Returns `true` if the current user can set the global config value at `key`, `false` otherwise.
+
 ##### Parameters
 
--   `key` **GlobalConfigKey**
+-   `key` **([string][58] \| [Array][62]&lt;[string][58]>)** A string for the the top-level key, or
+    an array of strings describing the path to the value.
+
+##### Examples
+
+```javascript
+import {globalConfig} from 'airtable-block';
+
+if (globalConfig.canSet('favoriteColor')) {
+    globalConfig.set('favoriteColor', 'purple');
+}
+```
+
+Returns **any** `true` if the current user can set the global config value at `key`, and `false`
+otherwise.
 
 #### canSetPaths
 
@@ -194,8 +210,8 @@ Get the value at a path. Throws an error if the path does not exist.
 
 ##### Parameters
 
--   `key` **([string][173] \| [Array][178]&lt;[string][173]>)** A string for the the top-level key,
-    or an array of strings describing the path to the value.
+-   `key` **([string][58] \| [Array][62]&lt;[string][58]>)** A string for the the top-level key, or
+    an array of strings describing the path to the value.
 
 ##### Examples
 
