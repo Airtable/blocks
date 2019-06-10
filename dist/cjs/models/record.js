@@ -195,9 +195,9 @@ function (_AbstractModel) {
         // format, make the public cell value look like an array for
         // backwards compatibility.
         if (!Record.shouldUseNewLookupFormat && field.type === _field.FieldTypes.LOOKUP) {
-          var cellValueForMigration = []; // flow-disable-next-line
+          var cellValueForMigration = []; // $FlowFixMe
 
-          cellValueForMigration.linkedRecordIds = (0, _private_utils.cloneDeep)(cellValue.linkedRecordIds); // flow-disable-next-line
+          cellValueForMigration.linkedRecordIds = (0, _private_utils.cloneDeep)(cellValue.linkedRecordIds); // $FlowFixMe
 
           cellValueForMigration.valuesByLinkedRecordId = (0, _private_utils.cloneDeep)(cellValue.valuesByLinkedRecordId);
           (0, _invariant.default)(Array.isArray(cellValue.linkedRecordIds), 'linkedRecordIds');

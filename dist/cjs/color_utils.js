@@ -40,7 +40,7 @@ var colorUtils = {
     var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
     if (!color) {
-      // flow-disable-next-line returning null doesn't work with the overload
+      // $FlowFixMe returning null doesn't work with the overload
       return null;
     }
 
@@ -68,7 +68,7 @@ var colorUtils = {
     var color = (0, _private_utils.getEnumValueIfExists)(_colors.default, colorString);
 
     if (!color) {
-      // flow-disable-next-line returning null doesn't work with the overload
+      // $FlowFixMe returning null doesn't work with the overload
       return null;
     }
 

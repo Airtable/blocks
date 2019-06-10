@@ -148,9 +148,9 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             // backwards compatibility.
             if (!Record.shouldUseNewLookupFormat && field.type === FieldTypes.LOOKUP) {
                 const cellValueForMigration = [];
-                // flow-disable-next-line
+                // $FlowFixMe
                 cellValueForMigration.linkedRecordIds = cloneDeep(cellValue.linkedRecordIds);
-                // flow-disable-next-line
+                // $FlowFixMe
                 cellValueForMigration.valuesByLinkedRecordId = cloneDeep(
                     cellValue.valuesByLinkedRecordId,
                 );

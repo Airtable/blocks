@@ -29,7 +29,7 @@ const colorUtils = {
     getHexForColor: (colorString => {
         const color = getEnumValueIfExists(Colors, colorString);
         if (!color) {
-            // flow-disable-next-line returning null doesn't work with the overload
+            // $FlowFixMe returning null doesn't work with the overload
             return null;
         }
         const rgbTuple = rgbTuplesByColor[color];
@@ -55,7 +55,7 @@ const colorUtils = {
     getRgbForColor: (colorString => {
         const color = getEnumValueIfExists(Colors, colorString);
         if (!color) {
-            // flow-disable-next-line returning null doesn't work with the overload
+            // $FlowFixMe returning null doesn't work with the overload
             return null;
         }
         const rgbTuple = rgbTuplesByColor[color];

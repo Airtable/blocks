@@ -46,7 +46,7 @@ function getInvertedEnumMemoized<EnumValue: string, EnumObj: {+[string]: EnumVal
 ): {+[EnumValue]: ?$Keys<EnumObj>} {
     const existingInvertedEnum = invertedEnumCache.get(enumObj);
     if (existingInvertedEnum) {
-        // flow-disable-next-line flow can't type WeakMap precisely enough to know that it's being used as this sort of cache
+        // $FlowFixMe flow can't type WeakMap precisely enough to know that it's being used as this sort of cache
         return existingInvertedEnum;
     }
 

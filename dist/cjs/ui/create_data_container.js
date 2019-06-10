@@ -60,7 +60,7 @@ function isReactComponent(component) {
 
 function getReactComponent(Component) {
   if (isReactComponent(Component)) {
-    // flow-disable-next-line
+    // $FlowFixMe
     return Component;
   } else {
     return null;
@@ -616,7 +616,7 @@ function createDataContainer(Component, getDependencies, passthruMethodNames) {
       var _loop = function _loop() {
         var passthruMethodName = _step8.value;
 
-        // flow-disable-next-line
+        // $FlowFixMe
         DataContainer.prototype[passthruMethodName] = function () {
           for (var _len2 = arguments.length, args = new Array(_len2), _key3 = 0; _key3 < _len2; _key3++) {
             args[_key3] = arguments[_key3];
@@ -646,7 +646,7 @@ function createDataContainer(Component, getDependencies, passthruMethodNames) {
   } // for developer ease, we return the exact type of the wrapped component rather
   // than a new component. this is slightly incorrect - any methods not listed in
   // passthruMethodNames wont be available, although flow will think they exist.
-  // flow-disable-next-line
+  // $FlowFixMe
 
 
   return DataContainer;

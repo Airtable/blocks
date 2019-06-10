@@ -21,7 +21,7 @@ function getReactComponent<Props: {}>(
     Component: mixed | React.ComponentType<Props>,
 ): React.ComponentType<Props> | null {
     if (isReactComponent(Component)) {
-        // flow-disable-next-line
+        // $FlowFixMe
         return Component;
     } else {
         return null;
@@ -396,7 +396,7 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
         // Let's augment the data container's prototype to have methods that pass through
         // to the wrapped component.
         for (const passthruMethodName of passthruMethodNames) {
-            // flow-disable-next-line
+            // $FlowFixMe
             DataContainer.prototype[passthruMethodName] = function(...args) {
                 this._wrappedComponent[passthruMethodName](args);
             };
@@ -406,7 +406,7 @@ function createDataContainer<Props: {}, ComponentType: React.ComponentType<Props
     // for developer ease, we return the exact type of the wrapped component rather
     // than a new component. this is slightly incorrect - any methods not listed in
     // passthruMethodNames wont be available, although flow will think they exist.
-    // flow-disable-next-line
+    // $FlowFixMe
     return DataContainer;
 }
 
