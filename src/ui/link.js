@@ -2,7 +2,10 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 
-/** @typedef */
+/**
+ * @typedef
+ * @memberof Link
+ */
 type LinkProps = {
     href: string,
     target?: string,
@@ -19,7 +22,25 @@ type LinkProps = {
 // Ref: https://tools.ietf.org/html/rfc3986#section-3.1
 const reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
 
-/** */
+/**
+ * A wrapper around the `<a>` tag that offers a few security benefits:
+ *
+ * - Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be prepended.
+ * - There is [reverse tabnabbing prevention](https://www.owasp.org/index.php/Reverse_Tabnabbing). If `target` is set, the `rel` attribute will be set to `noopener noreferrer`.
+ *
+ * Developers should use `Link` instead of `a` when possible.
+ *
+ * @example
+ * import {UI} from '@airtable/blocks/ui';
+ *
+ * function MyLinkComponent() {
+ *     return (
+ *         <UI.Link href="https://example.com">
+ *             Check out my homepage!
+ *         </UI.Link>
+ *     );
+ * }
+ */
 const Link = (props: LinkProps) => {
     // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
     // https://www.owasp.org/index.php/Reverse_Tabnabbing

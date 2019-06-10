@@ -93,10 +93,7 @@ toc:
                 - InputProps
                 - InputSynced
                 - InputSyncedProps
-          - name: Link
-            children:
-                - Link
-                - LinkProps
+          - Link
           - name: Loader
             children:
                 - Loader

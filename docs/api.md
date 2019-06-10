@@ -2121,11 +2121,28 @@ disabled: [boolean][62]?, spellCheck: [boolean][62]?}
 
 ### Link
 
-#### Link
+A wrapper around the `<a>` tag that offers a few security benefits:
 
-##### Parameters
+-   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
+    prepended.
+-   There is [reverse tabnabbing prevention][95]. If `target` is set, the `rel` attribute will be
+    set to `noopener noreferrer`.
 
--   `props` **[LinkProps][95]**
+Developers should use `Link` instead of `a` when possible.
+
+#### Parameters
+
+-   `props` **LinkProps**
+
+#### Examples
+
+```javascript
+import {UI} from '@airtable/blocks/ui';
+
+function MyLinkComponent() {
+    return <UI.Link href="https://example.com">Check out my homepage!</UI.Link>;
+}
+```
 
 #### LinkProps
 
@@ -2718,7 +2735,7 @@ Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
 [92]: #iconprops
 [93]: #inputprops
 [94]: #inputsyncedprops
-[95]: #linkprops
+[95]: https://www.owasp.org/index.php/Reverse_Tabnabbing
 [96]: #loaderprops
 [97]: #modalprops
 [98]: #popoverprops
