@@ -16,7 +16,7 @@ type SyncedProps = {
     }) => React.Element<*>,
 };
 
-/** */
+/** @private */
 class Synced extends React.Component<SyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

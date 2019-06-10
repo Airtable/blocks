@@ -186,6 +186,7 @@ class RecordCardListWithItemProvider extends React.Component<RecordCardListWithI
     }
 }
 
+/** @typedef */
 type RecordCardListProps = {
     records: Array<Record | RecordDef>,
 

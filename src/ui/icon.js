@@ -7,6 +7,7 @@ const iconConfig = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/assets/icon_config',
 );
 
+/** @typedef */
 type IconProps = {
     name: string,
     size?: number,

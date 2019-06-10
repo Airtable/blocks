@@ -15,6 +15,8 @@ var React = _interopRequireWildcard(require("react"));
 
 // TODO(kasra): don't depend on liveapp components.
 var _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/react/ui/loader/loader');
+/** @typedef */
+
 
 // Override the default props and then just proxy through to our loader.
 

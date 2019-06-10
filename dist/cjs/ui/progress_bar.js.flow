@@ -6,6 +6,7 @@ import colorUtils from '../color_utils';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
+/** @typedef */
 type ProgressBarProps = {
     progress: number,
     barColor?: string,

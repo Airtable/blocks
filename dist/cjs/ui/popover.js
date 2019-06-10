@@ -54,6 +54,8 @@ var _private_utils = require("../private_utils");
 var _create_detect_element_resize = _interopRequireDefault(require("./create_detect_element_resize"));
 
 var Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
+/** @alias Popover.placements */
+
 
 var PopoverPlacements = Object.freeze({
   TOP: 'top',
@@ -62,6 +64,8 @@ var PopoverPlacements = Object.freeze({
   LEFT: 'left',
   RIGHT: 'right'
 });
+
+/** @alias Popover.fitInWindowModes */
 var FitInWindowModes = Object.freeze({
   NONE: 'none',
   FLIP: 'flip',

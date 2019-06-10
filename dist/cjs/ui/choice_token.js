@@ -19,6 +19,8 @@ var _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shar
 
 
 var colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
+/** @typedef */
+
 
 /** */
 var ChoiceToken = (_ref) => {

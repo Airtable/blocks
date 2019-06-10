@@ -15,6 +15,7 @@ import createDataContainer from './create_data_container';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
+/** @typedef */
 type FieldPickerSyncedProps = {
     table?: Table,
     globalConfigKey: GlobalConfigKey,

@@ -11,6 +11,7 @@ import Popover, {
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
+/** @typedef */
 type TooltipProps = {
     children: React$Element<*>,
     // TODO(jb): remove renderContent in favor of just content.

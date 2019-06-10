@@ -7,7 +7,7 @@ import {
     validateOptions,
     optionValueToString,
     stringToOptionValue,
-    type SelectAndSelectButtonsProps as SelectProps,
+    type SelectAndSelectButtonsProps,
 } from './select_and_select_buttons_helpers';
 
 const styleForChevron = {
@@ -17,6 +17,9 @@ const styleForChevron = {
     backgroundPosition: 'calc(100% - 6px)',
     paddingRight: 22,
 };
+
+/** @typedef */
+type SelectProps = SelectAndSelectButtonsProps;
 
 // This component isn't great right now. It's just a styled <select> with a really hacky
 // way of getting the chevron arrow to show up. It also behaves weirdly when you give it

@@ -52,6 +52,8 @@ var _synced = _interopRequireDefault(require("./synced"));
 var _create_data_container = _interopRequireDefault(require("./create_data_container"));
 
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+/** @typedef */
+
 
 /** */
 var FieldPickerSynced =

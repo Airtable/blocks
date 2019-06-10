@@ -12,12 +12,14 @@ import Popover, {
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
+/** @typedef */
 type AutocompleteItem = {|
     value: string,
     label: string,
     aliases?: Array<string>,
 |};
 
+/** @typedef */
 type AutocompletePopoverProps = {
     children: React$Element<*>,
     items: Array<AutocompleteItem>,

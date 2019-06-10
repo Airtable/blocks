@@ -2,6 +2,7 @@
 import {getEnumValueIfExists} from './private_utils';
 import Colors, {type Color, rgbTuplesByColor} from './colors';
 
+/** @typedef */
 type RGB = {|r: number, g: number, b: number|};
 
 // overload return signatures to avoid null checks if type of input is Color:

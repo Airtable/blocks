@@ -6,12 +6,16 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import Icon from './icon';
 
+/** @typedef */
 type ModalCloseButtonProps = {|
     className?: string,
     style?: Object,
     children?: React.Node,
 |};
 
+/**
+ * @alias Modal.CloseButton
+ */
 class ModalCloseButton extends React.Component<ModalCloseButtonProps> {
     static propTypes = {
         className: PropTypes.string,
@@ -38,6 +42,7 @@ class ModalCloseButton extends React.Component<ModalCloseButtonProps> {
     }
 }
 
+/** @typedef */
 type ModalProps = {
     onClose?: Function,
     className?: string,

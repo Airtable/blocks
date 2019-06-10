@@ -24,6 +24,8 @@ var _icon = _interopRequireDefault(require("./icon"));
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
+/** @typedef */
+
 
 /** */
 var FieldIcon = props => {

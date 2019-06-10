@@ -7,6 +7,7 @@ import Table from '../models/table';
 import createDataContainer from './create_data_container';
 import ModelPickerSelect from './model_picker_select';
 
+/** @typedef */
 type TablePickerProps = {
     table?: Table,
     shouldAllowPickingNone?: boolean,

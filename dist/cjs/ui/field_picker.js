@@ -60,6 +60,8 @@ var _model_picker_select = _interopRequireDefault(require("./model_picker_select
 var _create_data_container = _interopRequireDefault(require("./create_data_container"));
 
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+/** @typedef */
+
 
 /** */
 var FieldPicker =

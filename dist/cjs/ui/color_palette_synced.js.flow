@@ -7,6 +7,7 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
+/** @typedef */
 type ColorPaletteSyncedProps = {
     globalConfigKey: string,
     disabled?: boolean,

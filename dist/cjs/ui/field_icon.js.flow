@@ -9,6 +9,7 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
 
+/** @typedef */
 type FieldIconProps = {
     field: Field,
     size?: number,

@@ -55,14 +55,16 @@ var styleForChevron = {
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'calc(100% - 6px)',
   paddingRight: 22
-}; // This component isn't great right now. It's just a styled <select> with a really hacky
+};
+/** @typedef */
+
+// This component isn't great right now. It's just a styled <select> with a really hacky
 // way of getting the chevron arrow to show up. It also behaves weirdly when you give it
 // a margin (I think this is a limitation of <select>). We should probably replace it with
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
 
 /** */
-
 var Select =
 /*#__PURE__*/
 function (_React$Component) {

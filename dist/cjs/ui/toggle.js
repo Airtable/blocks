@@ -60,6 +60,7 @@ var classNamesByTheme = {
   [themes.YELLOW]: 'yellow',
   [themes.GRAY]: 'gray'
 };
+/** @typedef */
 
 /** */
 var Toggle =

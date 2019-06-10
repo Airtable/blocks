@@ -131,6 +131,8 @@ CellValueAndFieldLabel.propTypes = {
   field: _propTypes.default.instanceOf(_field2.default).isRequired,
   width: _propTypes.default.number.isRequired
 };
+/** @typedef */
+
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
 var FormulaicFieldTypes = {
   [_field.FieldTypes.FORMULA]: true,

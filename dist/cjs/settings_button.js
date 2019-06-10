@@ -33,6 +33,7 @@ var WatchableSettingsButtonKeys = Object.freeze({
  *
  * Watch `click` to handle click events on the button.
  *
+ * @alias settingsButton
  * @example
  * import {settingsButton} from 'airtable-block';
  * settingsButton.isVisible = true;
@@ -64,6 +65,7 @@ function (_Watchable) {
    * Whether the settings button is being shown.
    * Set to `true` to show the settings button.
    * Can be watched.
+   * @memberof settingsButton
    */
 
 

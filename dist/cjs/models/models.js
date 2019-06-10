@@ -36,7 +36,38 @@ var recordColoring = _interopRequireWildcard(require("./record_coloring"));
 var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
 
 var hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
+/**
+ * @alias fieldTypes
+ * @example
+ * import {models} from 'airtable-block';
+ * const numberFields = myTable.fields.filter(field => (
+ *     field.type === models.fieldTypes.NUMBER
+ * ));
+ */
 
+
+var fieldTypes = _field.FieldTypes;
+/**
+ * @alias viewTypes
+ * @example
+ * import {models} from 'airtable-block';
+ * const gridViews = myTable.views.filter(view => (
+ *     view.type === models.viewTypes.GRID
+ * ));
+ */
+
+var viewTypes = _view.ViewTypes;
+/**
+ * Helper to generate a GUID
+ * @function
+ * @returns string
+ * @alias generateGuid
+ * @example
+ * import {models} from 'airtable-block';
+ * const id = models.generateGuid();
+ */
+
+var generateGuid = hyperIdGenerator.generateGuid;
 var models = {
   Base: _base.default,
   Table: _table.default,
@@ -50,33 +81,10 @@ var models = {
   LinkedRecordsQueryResult: _linked_records_query_result.default,
   aggregators: _aggregators.default,
   recordColoring,
-
-  /**
-   * @example
-   * import {models} from 'airtable-block';
-   * const numberFields = myTable.fields.filter(field => (
-   *     field.type === models.fieldTypes.NUMBER
-   * ));
-   */
-  fieldTypes: _field.FieldTypes,
-
-  /**
-   * @example
-   * import {models} from 'airtable-block';
-   * const gridViews = myTable.views.filter(view => (
-   *     view.type === models.viewTypes.GRID
-   * ));
-   */
-  viewTypes: _view.ViewTypes,
+  fieldTypes,
+  viewTypes,
   permissionLevels: permissionHelpers.ApiPermissionLevels,
-
-  /**
-   * Helper to generate a GUID
-   * @example
-   * import {models} from 'airtable-block';
-   * const id = models.generateGuid();
-   */
-  generateGuid: hyperIdGenerator.generateGuid
+  generateGuid
 };
 var _default = models;
 exports.default = _default;

@@ -19,6 +19,37 @@ const hyperIdGenerator = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/hyper_id/hyper_id_generator',
 );
 
+/**
+ * @alias fieldTypes
+ * @example
+ * import {models} from 'airtable-block';
+ * const numberFields = myTable.fields.filter(field => (
+ *     field.type === models.fieldTypes.NUMBER
+ * ));
+ */
+const fieldTypes = FieldTypes;
+
+/**
+ * @alias viewTypes
+ * @example
+ * import {models} from 'airtable-block';
+ * const gridViews = myTable.views.filter(view => (
+ *     view.type === models.viewTypes.GRID
+ * ));
+ */
+const viewTypes = ViewTypes;
+
+/**
+ * Helper to generate a GUID
+ * @function
+ * @returns string
+ * @alias generateGuid
+ * @example
+ * import {models} from 'airtable-block';
+ * const id = models.generateGuid();
+ */
+const generateGuid = hyperIdGenerator.generateGuid;
+
 const models = {
     Base,
     Table,
@@ -31,30 +62,11 @@ const models = {
     LinkedRecordsQueryResult,
     aggregators,
     recordColoring,
-    /**
-     * @example
-     * import {models} from 'airtable-block';
-     * const numberFields = myTable.fields.filter(field => (
-     *     field.type === models.fieldTypes.NUMBER
-     * ));
-     */
-    fieldTypes: FieldTypes,
-    /**
-     * @example
-     * import {models} from 'airtable-block';
-     * const gridViews = myTable.views.filter(view => (
-     *     view.type === models.viewTypes.GRID
-     * ));
-     */
-    viewTypes: ViewTypes,
+    fieldTypes,
+    viewTypes,
     permissionLevels: permissionHelpers.ApiPermissionLevels,
-    /**
-     * Helper to generate a GUID
-     * @example
-     * import {models} from 'airtable-block';
-     * const id = models.generateGuid();
-     */
-    generateGuid: hyperIdGenerator.generateGuid,
+
+    generateGuid,
 };
 
 export default models;

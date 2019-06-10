@@ -8,6 +8,7 @@ import Icon from './icon';
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
 
+/** @typedef */
 type ColorPaletteProps = {
     color?: string,
     allowedColors: Array<string>,

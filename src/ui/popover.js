@@ -9,6 +9,7 @@ import createDetectElementResize from './create_detect_element_resize';
 
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 
+/** @alias Popover.placements */
 const PopoverPlacements = Object.freeze({
     TOP: ('top': 'top'),
     CENTER: ('center': 'center'),
@@ -19,6 +20,7 @@ const PopoverPlacements = Object.freeze({
 export type PopoverPlacementX = 'left' | 'center' | 'right';
 export type PopoverPlacementY = 'top' | 'center' | 'bottom';
 
+/** @alias Popover.fitInWindowModes */
 const FitInWindowModes = Object.freeze({
     NONE: ('none': 'none'),
     FLIP: ('flip': 'flip'),
@@ -26,6 +28,7 @@ const FitInWindowModes = Object.freeze({
 });
 export type FitInWindowMode = $Values<typeof FitInWindowModes>;
 
+/** @typedef */
 type PopoverProps = {
     children: React$Element<*>,
     renderContent: () => React$Element<*>,

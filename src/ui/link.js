@@ -2,7 +2,8 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 
-type Props = {
+/** @typedef */
+type LinkProps = {
     href: string,
     target?: string,
     tabIndex?: number | string,
@@ -19,7 +20,7 @@ type Props = {
 const reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
 
 /** */
-const Link = (props: Props) => {
+const Link = (props: LinkProps) => {
     // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
     // https://www.owasp.org/index.php/Reverse_Tabnabbing
     const rel = props.target ? 'noopener noreferrer' : null;

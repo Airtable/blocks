@@ -17,6 +17,7 @@ const CellContextTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/cell_context/cell_context_types',
 );
 
+/** @typedef */
 type CellRendererProps = {|
     record?: ?Record,
     cellValue?: mixed,

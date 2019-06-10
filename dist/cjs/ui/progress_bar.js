@@ -21,6 +21,8 @@ var _color_utils = _interopRequireDefault(require("../color_utils"));
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
+/** @typedef */
+
 
 /** */
 var ProgressBar = props => {

@@ -3,11 +3,14 @@ import * as React from 'react';
 import SelectButtons from './select_buttons';
 import {
     SelectAndSelectButtonsSyncedPropTypes,
-    type SelectAndSelectButtonsSyncedProps as SelectButtonsSyncedProps,
+    type SelectAndSelectButtonsSyncedProps,
 } from './select_and_select_buttons_helpers';
 import Synced from './synced';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+
+/** @typedef */
+type SelectButtonsSyncedProps = SelectAndSelectButtonsSyncedProps;
 
 /** */
 class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {

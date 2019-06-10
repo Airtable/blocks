@@ -40,6 +40,7 @@ var _private_utils = require("../private_utils");
 var _popover = _interopRequireDefault(require("./popover"));
 
 var FADE_IN_ANIMATION_DURATION = 150;
+/** @typedef */
 
 /** */
 var Tooltip =

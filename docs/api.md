@@ -6,171 +6,56 @@
     -   [BlockSdk][2]
     -   [RunInfo][3]
     -   [GlobalConfig][4]
--   [@airtable/blocks/models][5]
-    -   [Base][6]
-    -   [Table][7]
-    -   [View][8]
-    -   [Field][9]
-    -   [QueryResult][10]
-    -   [Record][11]
--   [@airtable/blocks/ui][12]
-    -   [Button][13]
-    -   [Icon][14]
--   [TableOrViewQueryResult][15]
-    -   [Parameters][16]
-    -   [fields][17]
-    -   [parentTable][18]
-    -   [parentView][19]
-    -   [recordIds][20]
--   [AbstractModel][21]
-    -   [Parameters][22]
-    -   [id][23]
-    -   [isDeleted][24]
--   [AbstractModelWithAsyncData][25]
-    -   [Parameters][26]
-    -   [isDataLoaded][27]
-    -   [loadDataAsync][28]
-    -   [unloadData][29]
-    -   [unwatch][30]
-    -   [watch][31]
--   [Cursor][32]
-    -   [Parameters][33]
-    -   [Examples][34]
-    -   [activeTableId][35]
-    -   [activeViewId][36]
--   [Viewport][37]
-    -   [Parameters][38]
-    -   [Examples][39]
-    -   [addMaxFullscreenSize][40]
-    -   [addMinSize][41]
-    -   [enterFullscreenIfPossible][42]
-    -   [exitFullscreen][43]
-    -   [isFullscreen][44]
-    -   [isSmallerThanMinSize][45]
-    -   [maxFullscreenSize][46]
-    -   [minSize][47]
-    -   [size][48]
--   [Aggregator][49]
-    -   [Properties][50]
-    -   [Examples][51]
--   [AutocompletePopover][52]
-    -   [Parameters][53]
--   [CellRenderer][54]
-    -   [Parameters][55]
--   [ChoiceToken][56]
-    -   [Parameters][57]
--   [CollaboratorToken][58]
-    -   [Parameters][59]
--   [ColorPalette][60]
--   [ColorPaletteSynced][61]
--   [colorUtils][62]
-    -   [Examples][63]
-    -   [getHexForColor][64]
-    -   [getRgbForColor][65]
-    -   [shouldUseLightTextOnColor][66]
--   [createDataContainer][67]
-    -   [Parameters][68]
-    -   [Examples][69]
--   [expandRecord][70]
-    -   [Parameters][71]
-    -   [Examples][72]
--   [expandRecordList][73]
-    -   [Parameters][74]
-    -   [Examples][75]
--   [expandRecordPickerAsync][76]
-    -   [Parameters][77]
-    -   [Examples][78]
--   [FieldIcon][79]
-    -   [Parameters][80]
--   [FieldPicker][81]
-    -   [Parameters][82]
--   [FieldPickerSynced][83]
-    -   [Parameters][84]
--   [LinkedRecordsQueryResult][85]
-    -   [Parameters][86]
-    -   [fields][87]
-    -   [isValid][88]
-    -   [parentTable][89]
-    -   [recordIds][90]
-    -   [records][91]
--   [fieldTypes][92]
-    -   [Examples][93]
--   [generateGuid][94]
-    -   [Examples][95]
--   [viewTypes][96]
-    -   [Examples][97]
--   [getRecordColor][98]
-    -   [Parameters][99]
--   [visibleRecordIds][100]
--   [visibleRecords][101]
--   [GlobalAlert][102]
-    -   [Examples][103]
-    -   [showReloadPrompt][104]
--   [Input][105]
-    -   [Parameters][106]
--   [InputSynced][107]
-    -   [Parameters][108]
--   [isRecordMetadataLoaded][109]
--   [recordIds][110]
--   [records][111]
--   [SettingsButton][112]
-    -   [Parameters][113]
-    -   [Examples][114]
-    -   [isVisible][115]
--   [Link][116]
-    -   [Parameters][117]
--   [loadCSSFromString][118]
-    -   [Parameters][119]
-    -   [Examples][120]
--   [loadCSSFromURLAsync][121]
-    -   [Parameters][122]
-    -   [Examples][123]
--   [Loader][124]
-    -   [Parameters][125]
--   [loadScriptFromURLAsync][126]
-    -   [Parameters][127]
-    -   [Examples][128]
--   [Modal][129]
-    -   [Parameters][130]
--   [modes][131]
-    -   [Examples][132]
--   [Popover][133]
-    -   [Parameters][134]
--   [ProgressBar][135]
-    -   [Parameters][136]
--   [RadioSynced][137]
-    -   [Parameters][138]
--   [RecordCard][139]
-    -   [Parameters][140]
--   [RecordCardList][141]
-    -   [Parameters][142]
--   [Select][143]
-    -   [Parameters][144]
--   [SelectButtons][145]
--   [SelectButtonsSynced][146]
--   [SelectSynced][147]
-    -   [Parameters][148]
--   [Synced][149]
-    -   [Parameters][150]
--   [TablePicker][151]
-    -   [Parameters][152]
--   [TablePickerSynced][153]
-    -   [Parameters][154]
--   [Toggle][155]
-    -   [Parameters][156]
--   [ToggleSynced][157]
-    -   [Parameters][158]
--   [Tooltip][159]
-    -   [Parameters][160]
--   [Watchable][161]
-    -   [unwatch][162]
-    -   [watch][163]
--   [ViewPicker][164]
-    -   [Parameters][165]
--   [ViewPickerSynced][166]
-    -   [Parameters][167]
--   [ViewportConstraint][168]
-    -   [Examples][169]
+    -   [Viewport][5]
+-   [@airtable/blocks/models][6]
+    -   [fieldTypes][7]
+    -   [generateGuid][8]
+    -   [viewTypes][9]
+    -   [recordColoring][10]
+    -   [settingsButton][11]
+    -   [AbstractModel][12]
+    -   [AbstractModelWithAsyncData][13]
+    -   [Aggregator][14]
+    -   [Base][15]
+    -   [Cursor][16]
+    -   [Field][17]
+    -   [QueryResult][18]
+    -   [Record][19]
+    -   [Table][20]
+    -   [View][21]
+    -   [Watchable][22]
+-   [@airtable/blocks/ui][23]
+    -   [CSS & external scripts][24]
+    -   [Color utilities][25]
+    -   [expandRecord][26]
+    -   [expandRecordList][27]
+    -   [expandRecordPickerAsync][28]
+    -   [globalAlert][29]
+    -   [AutocompletePopover][30]
+    -   [Button][31]
+    -   [CellRenderer][32]
+    -   [ChoiceToken][33]
+    -   [CollaboratorToken][34]
+    -   [ColorPalette][35]
+    -   [FieldIcon][36]
+    -   [FieldPicker][37]
+    -   [Icon][38]
+    -   [Input][39]
+    -   [Link][40]
+    -   [Loader][41]
+    -   [Modal][42]
+    -   [Popover][43]
+    -   [ProgressBar][44]
+    -   [RadioSynced][45]
+    -   [RecordCard][46]
+    -   [RecordCardList][47]
+    -   [Select][48]
+    -   [SelectButtons][49]
+    -   [TablePicker][50]
+    -   [Toggle][51]
+    -   [Tooltip][52]
+    -   [ViewPicker][53]
+    -   [ViewportConstraint][54]
 
 ## @airtable/blocks
 
@@ -186,19 +71,19 @@ Top-level container for the Blocks SDK. Can be imported as `'airtable-block'`.
 
 The current base
 
-Type: [Base][170]
+Type: [Base][55]
 
 #### cursor
 
-Type: [Cursor][171]
+Type: [Cursor][56]
 
 #### globalConfig
 
-Type: [GlobalConfig][172]
+Type: [GlobalConfig][57]
 
 #### installationId
 
-Type: [string][173]
+Type: [string][58]
 
 #### localStorage
 
@@ -213,13 +98,13 @@ Type: any
 
 #### reload
 
-#### reload
-
 Type: function (): void
+
+#### reload
 
 #### runInfo
 
-Type: [RunInfo][174]
+Type: [RunInfo][59]
 
 #### sessionStorage
 
@@ -230,7 +115,7 @@ Type: (Storage | InMemoryStorage)
 
 #### settingsButton
 
-Type: [SettingsButton][175]
+Type: SettingsButton
 
 #### UI
 
@@ -242,16 +127,16 @@ Type: UndoRedo
 
 #### viewport
 
-Type: [Viewport][176]
+Type: [Viewport][60]
 
 ### RunInfo
 
-Type: {isFirstRun: [boolean][177], isDevelopmentMode: [boolean][177]}
+Type: {isFirstRun: [boolean][61], isDevelopmentMode: [boolean][61]}
 
 #### Properties
 
--   `isFirstRun` **[boolean][177]**
--   `isDevelopmentMode` **[boolean][177]**
+-   `isFirstRun` **[boolean][61]**
+-   `isDevelopmentMode` **[boolean][61]**
 
 #### Examples
 
@@ -299,7 +184,7 @@ import {globalConfig} from 'airtable-block';
 
 ##### Parameters
 
--   `updates` **[Array][178]&lt;GlobalConfigUpdate>**
+-   `updates` **[Array][62]&lt;GlobalConfigUpdate>**
 
 #### get
 
@@ -322,11 +207,340 @@ Returns **AirtableWriteAction&lt;void, {}>**
 
 ##### Parameters
 
--   `updates` **[Array][178]&lt;GlobalConfigUpdate>**
+-   `updates` **[Array][62]&lt;GlobalConfigUpdate>**
 
 Returns **AirtableWriteAction&lt;void, {}>**
 
+### Viewport
+
+**Extends Watchable**
+
+Information about the current viewport
+
+#### Parameters
+
+-   `isFullscreen` **[boolean][61]**
+-   `airtableInterface` **AirtableInterface**
+
+#### Examples
+
+```javascript
+import {viewport} from 'airtable-block';
+```
+
+#### addMaxFullscreenSize
+
+Add a maximum fullscreen size constraint. Returns a function that can be called to remove the
+fullscreen size that was added. Use .maxFullscreenSize to get the aggregate of all added
+constraints. Both `width` and `height` are optional - if either is set to null, that means there is
+no max size in that dimension.
+
+##### Parameters
+
+-   `$0` **\$Shape&lt;ViewportSizeConstraint>**
+    -   `$0.width`
+    -   `$0.height`
+
+Returns **UnsetFn**
+
+#### addMinSize
+
+Add a minimum frame size constraint. Returns a function that can be called to remove the added
+constraint. Use .minSize to get the aggregate of all added constraints. Both `width` and `height`
+are optional - if either is null, there is no minimum size in that dimension.
+
+##### Parameters
+
+-   `$0` **\$Shape&lt;ViewportSizeConstraint>**
+    -   `$0.width`
+    -   `$0.height`
+
+Returns **UnsetFn**
+
+#### enterFullscreenIfPossible
+
+Request to enter fullscreen mode.
+
+May fail if another block is fullscreen or this block doesn't have permission to fullscreen itself.
+Watch `isFullscreen` to know if the request succeeded.
+
+#### exitFullscreen
+
+Request to exit fullscreen mode
+
+#### isFullscreen
+
+Can be watched.
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
+
+#### isSmallerThanMinSize
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
+
+#### maxFullscreenSize
+
+Can be watched. The maximum dimensions of the block when it is in fullscreen mode. Returns the
+smallest set of dimensions added with addMaxFullscreenSize. If `width` or `height` is null, it means
+there is no maxSize constraint on that dimension. If maxFullscreenSize would be smaller than
+minSize, it is constrained to be at least that.
+
+Type: ViewportSizeConstraint
+
+Returns **ViewportSizeConstraint**
+
+#### minSize
+
+Can be watched. The minimum dimensions of the block - if the viewport gets smaller than this size,
+an overlay will be shown asking the user to resize the block to be bigger. Returns the largest set
+of dimensions added with addMinSize. If `width` or `height` is null, it means there is no minSize
+constraint on that dimension.
+
+Type: ViewportSizeConstraint
+
+Returns **ViewportSizeConstraint**
+
+#### size
+
+Can be watched.
+
+Type: {width: [number][63], height: [number][63]}
+
+Returns **{width: [number][63], height: [number][63]}**
+
 ## @airtable/blocks/models
+
+### fieldTypes
+
+#### Examples
+
+```javascript
+import {models} from 'airtable-block';
+const numberFields = myTable.fields.filter(field => field.type === models.fieldTypes.NUMBER);
+```
+
+### generateGuid
+
+Helper to generate a GUID
+
+#### Examples
+
+```javascript
+import {models} from 'airtable-block';
+const id = models.generateGuid();
+```
+
+Returns **any** string
+
+### viewTypes
+
+#### Examples
+
+```javascript
+import {models} from 'airtable-block';
+const gridViews = myTable.views.filter(view => view.type === models.viewTypes.GRID);
+```
+
+### recordColoring
+
+#### recordColoring.modes
+
+create a record coloring mode object
+
+##### Examples
+
+```javascript
+import {models} from 'airtable-block';
+
+// no record coloring:
+const recordColorMode = models.recordColoring.modes.none();
+// color by select field:
+const recordColorMode = models.recordColoring.modes.bySelectField(someSelectField);
+// color from view:
+const recordColorMode = models.recordColoring.modes.fromView(someView);
+
+// with a query result:
+const queryResult = table.selectRecords({recordColorMode});
+```
+
+#### recordColoring.modes.bySelectField
+
+##### Parameters
+
+-   `selectField` **[Field][64]**
+
+#### recordColoring.modes.byView
+
+##### Parameters
+
+-   `view` **[View][65]**
+
+#### recordColoring.modes.none
+
+#### recordColoring.ModeTypes
+
+#### recordColoring.ModeTypes.BY_SELECT_FIELD
+
+#### recordColoring.ModeTypes.BY_VIEW
+
+#### recordColoring.ModeTypes.NONE
+
+#### recordColoring.RecordColorMode
+
+Type: ({type: any} | {type: any, selectField: [Field][64]} | {type: any, view: [View][65]})
+
+#### recordColoring.RecordColorModeType
+
+Type: \$Values&lt;any>
+
+### settingsButton
+
+**Extends Watchable**
+
+Interface to the settings button that lives outside the block's viewport.
+
+Watch `click` to handle click events on the button.
+
+#### Parameters
+
+-   `airtableInterface` **AirtableInterface**
+
+#### Examples
+
+```javascript
+import {settingsButton} from 'airtable-block';
+settingsButton.isVisible = true;
+settingsButton.watch('click', () => {
+    alert('Clicked!');
+});
+```
+
+#### isVisible
+
+Whether the settings button is being shown. Set to `true` to show the settings button. Can be
+watched.
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
+
+### AbstractModel
+
+**Extends Watchable**
+
+Abstract superclass for all models.
+
+#### Parameters
+
+-   `baseData` **BaseData**
+-   `modelId` **[string][58]**
+
+#### id
+
+The ID for this model.
+
+Type: [string][58]
+
+Returns **[string][58]**
+
+#### isDeleted
+
+True if the model has been deleted.
+
+In general, it's best to avoid keeping a reference to an object past the current event loop, since
+it may be deleted and trying to access any data of a deleted object (other than its ID) will throw.
+But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
+data.
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
+
+### AbstractModelWithAsyncData
+
+**Extends AbstractModel**
+
+Abstract superclass for all block SDK models that need to fetch async data.
+
+#### Parameters
+
+-   `baseData` **BaseData**
+-   `modelId` **[string][58]**
+
+#### isDataLoaded
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
+
+#### loadDataAsync
+
+Will cause all the async data to be fetched and retained. Every call to `loadDataAsync` should have
+a matching call to `unloadData`.
+
+Returns a Promise that will resolve once the data is loaded.
+
+#### unloadData
+
+#### unwatch
+
+Unwatching a key that needs to load data asynchronously will automatically cause the data to be
+released. Once the data is available, the callback will be called.
+
+##### Parameters
+
+-   `keys` **(WatchableKey | [Array][62]&lt;WatchableKey>)**
+-   `callback` **[Function][66]**
+-   `context` **[Object][67]??**
+
+Returns **[Array][62]&lt;WatchableKey>**
+
+#### watch
+
+Watching a key that needs to load data asynchronously will automatically cause the data to be
+fetched. Once the data is available, the callback will be called.
+
+##### Parameters
+
+-   `keys` **(WatchableKey | [Array][62]&lt;WatchableKey>)**
+-   `callback` **[Function][66]**
+-   `context` **[Object][67]??**
+
+Returns **[Array][62]&lt;WatchableKey>**
+
+### Aggregator
+
+Aggregators can be used to compute aggregates for cell values.
+
+Type: {key: [string][58], displayName: [string][58], shortDisplayName: [string][58], aggregate:
+function (records: [Array][62]&lt;[Record][68]>, field: [Field][64]): any, aggregateToString:
+function (records: [Array][62]&lt;[Record][68]>, field: [Field][64]): [string][58]}
+
+#### Properties
+
+-   `key` **[string][58]**
+-   `displayName` **[string][58]**
+-   `shortDisplayName` **[string][58]**
+-   `aggregate` **function (records: [Array][62]&lt;[Record][68]>, field: [Field][64]): any**
+-   `aggregateToString` **function (records: [Array][62]&lt;[Record][68]>, field: [Field][64]):
+    [string][58]**
+
+#### Examples
+
+```javascript
+// To get a list of aggregators supported for a specific field:
+const aggregators = myField.availableAggregators;
+
+// To compute the total attachment size of an attachment field:
+import {models} from 'airtable-block';
+const aggregator = models.aggregators.totalAttachmentSize;
+const value = aggregator.aggregate(myRecords, myAttachmentField);
+const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
+```
 
 ### Base
 
@@ -349,9 +563,9 @@ import {base} from 'airtable-blocks';
 
 The users who have access to this base.
 
-Type: [Array][178]&lt;CollaboratorData>
+Type: [Array][62]&lt;CollaboratorData>
 
-Returns **[Array][178]&lt;CollaboratorData>**
+Returns **[Array][62]&lt;CollaboratorData>**
 
 #### currentUser
 
@@ -378,9 +592,9 @@ Returns the table matching the given ID, or `null` if that table does not exist 
 
 ##### Parameters
 
--   `tableId` **[string][173]**
+-   `tableId` **[string][58]**
 
-Returns **([Table][179] | null)**
+Returns **([Table][69] | null)**
 
 #### getTableByNameIfExists
 
@@ -388,17 +602,17 @@ Returns the table matching the given name, or `null` if no table exists with tha
 
 ##### Parameters
 
--   `tableName` **[string][173]**
+-   `tableName` **[string][58]**
 
-Returns **([Table][179] | null)**
+Returns **([Table][69] | null)**
 
 #### name
 
 The name of the base.
 
-Type: [string][173]
+Type: [string][58]
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 #### permissionLevel
 
@@ -410,7 +624,7 @@ an action, use the more specific `can` method.
 Can be watched to know when the user's permission level changes. Usually, you'll want to watch this
 in your root component and re-render your whole block when the permission level changes.
 
-Type: [string][173]
+Type: [string][58]
 
 ##### Examples
 
@@ -426,281 +640,51 @@ if (record.canSetCellValue('Name', 'Chair')) {
 }
 ```
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 #### tables
 
 The tables in this base. Can be watched to know when tables are created, deleted, or reordered in
 the base.
 
-Type: [Array][178]&lt;[Table][179]>
+Type: [Array][62]&lt;[Table][69]>
 
-Returns **[Array][178]&lt;[Table][179]>**
+Returns **[Array][62]&lt;[Table][69]>**
 
-### Table
+### Cursor
 
-**Extends AbstractModel**
+**Extends AbstractModelWithAsyncData**
 
-Model class representing a table in the base.
+Contains information about the state of the user's current interactions in Airtable
 
 #### Parameters
 
 -   `baseData` **BaseData**
--   `parentBase` **[Base][170]**
--   `recordStore` **RecordStore**
--   `tableId` **[string][173]**
 -   `airtableInterface` **AirtableInterface**
 
-#### canCreateRecord
+#### Examples
 
-##### Parameters
+```javascript
+import {cursor} from 'airtable-block';
+```
 
--   `cellValuesByFieldIdOrFieldName` **RecordDef?**
+#### activeTableId
 
-Returns **[boolean][177]**
+Returns the currently active table ID. Can return null when the active table has changed and is not
+yet loaded.
 
-#### canCreateRecords
+Type: (TableId | null)
 
-##### Parameters
+Returns **(TableId | null)**
 
--   `recordDefsOrNumberOfRecords` **([Array][178]&lt;RecordDef> | [number][180])**
+#### activeViewId
 
-Returns **[boolean][177]**
+Returns the currently active view ID. This will always be a view belonging to `activeTableId`.
+Returns `null` when the active view has changed and is not yet loaded.
 
-#### canDeleteRecord
+Type: (ViewId | null)
 
-##### Parameters
-
--   `record` **[Record][181]**
-
-#### canDeleteRecords
-
-##### Parameters
-
--   `records` **[Array][178]&lt;[Record][181]>**
-
-#### canSetCellValues
-
-##### Parameters
-
--   `cellValuesByRecordIdThenFieldIdOrFieldName` **{}**
-
-Returns **[boolean][177]**
-
-#### createRecord
-
-##### Parameters
-
--   `cellValuesByFieldIdOrFieldName` **RecordDef?**
-
-Returns **AirtableWriteAction&lt;void, {record: [Record][181]}>**
-
-#### createRecords
-
-##### Parameters
-
--   `recordDefsOrNumberOfRecords` **([Array][178]&lt;RecordDef> | [number][180])**
-
-Returns **AirtableWriteAction&lt;void, {records: [Array][178]&lt;[Record][181]>}>**
-
-#### deleteRecord
-
-##### Parameters
-
--   `record` **[Record][181]**
-
-Returns **AirtableWriteAction&lt;void, {}>**
-
-#### deleteRecords
-
-##### Parameters
-
--   `records` **[Array][178]&lt;[Record][181]>**
-
-Returns **AirtableWriteAction&lt;void, {}>**
-
-#### fields
-
-The fields in this table. The order is arbitrary, since fields are only ordered in the context of a
-specific view.
-
-Can be watched to know when fields are created or deleted.
-
-Type: [Array][178]&lt;[Field][182]>
-
-Returns **[Array][178]&lt;[Field][182]>**
-
-#### getFieldByIdIfExists
-
-##### Parameters
-
--   `fieldId` **FieldId**
-
-Returns **([Field][182] | null)**
-
-#### getFieldByNameIfExists
-
-##### Parameters
-
--   `fieldName` **[string][173]**
-
-Returns **([Field][182] | null)**
-
-#### getFirstViewOfType
-
-Returns the first view in the table where the type is one of `allowedViewTypes`. If a
-`preferredViewOrViewId` is supplied and that view exists & has the correct type, that view will be
-returned before checking the other views in the table.
-
-##### Parameters
-
--   `allowedViewTypes` **([Array][178]&lt;ViewType> | ViewType)**
--   `preferredViewOrViewId` **([View][183] | ViewId | null)?**
-
-Returns **([View][183] | null)**
-
-#### getViewByIdIfExists
-
-##### Parameters
-
--   `viewId` **ViewId**
-
-Returns **([View][183] | null)**
-
-#### getViewByNameIfExists
-
-##### Parameters
-
--   `viewName` **[string][173]**
-
-Returns **([View][183] | null)**
-
-#### name
-
-The table's name. Can be watched.
-
-Type: [string][173]
-
-Returns **[string][173]**
-
-#### parentBase
-
-Type: [Base][170]
-
-Returns **[Base][170]**
-
-#### primaryField
-
-Every table has exactly one primary field. The primary field of a table will not change.
-
-Type: [Field][182]
-
-Returns **[Field][182]**
-
-#### recordLimit
-
-Maximum number of records that the table can contain
-
-Type: [number][180]
-
-Returns **[number][180]**
-
-#### selectRecords
-
-##### Parameters
-
--   `opts` **QueryResultOpts?**
-
-Returns **[TableOrViewQueryResult][184]**
-
-#### setCellValues
-
-##### Parameters
-
--   `cellValuesByRecordIdThenFieldIdOrFieldName` **{}**
-
-Returns **AirtableWriteAction&lt;void, {}>**
-
-#### url
-
-Type: [string][173]
-
-Returns **[string][173]**
-
-#### views
-
-The views in the table. Can be watched to know when views are created, deleted, or reordered.
-
-Type: [Array][178]&lt;[View][183]>
-
-Returns **[Array][178]&lt;[View][183]>**
-
-### View
-
-**Extends AbstractModel**
-
-Model class representing a view in a table.
-
-#### Parameters
-
--   `baseData` **BaseData**
--   `parentTable` **[Table][179]**
--   `viewDataStore` **ViewDataStore**
--   `viewId` **[string][173]**
-
-#### allFields
-
-All the fields in the table, including fields that are hidden in this view. Can be watched to know
-when fields are created, deleted, or reordered.
-
-Type: [Array][178]&lt;[Field][182]>
-
-Returns **[Array][178]&lt;[Field][182]>**
-
-#### name
-
-The name of the view. Can be watched.
-
-Type: [string][173]
-
-Returns **[string][173]**
-
-#### parentTable
-
-Type: [Table][179]
-
-Returns **[Table][179]**
-
-#### selectRecords
-
-##### Parameters
-
--   `opts` **QueryResultOpts?**
-
-Returns **[TableOrViewQueryResult][184]**
-
-#### type
-
-The type of the view. Will not change.
-
-Type: ViewType
-
-Returns **ViewType**
-
-#### url
-
-Type: [string][173]
-
-Returns **[string][173]**
-
-#### visibleFields
-
-The fields that are not hidden in this view. view. Can be watched to know when fields are created,
-deleted, or reordered.
-
-Type: [Array][178]&lt;[Field][182]>
-
-Returns **[Array][178]&lt;[Field][182]>**
+Returns **(ViewId | null)**
 
 ### Field
 
@@ -711,21 +695,21 @@ Model class representing a field in a table.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `parentTable` **[Table][179]**
--   `fieldId` **[string][173]**
+-   `parentTable` **[Table][69]**
+-   `fieldId` **[string][58]**
 
 #### availableAggregators
 
-Type: [Array][178]&lt;[Aggregator][185]>
+Type: [Array][62]&lt;[Aggregator][70]>
 
-Returns **[Array][178]&lt;[Aggregator][185]>**
+Returns **[Array][62]&lt;[Aggregator][70]>**
 
 #### canSetCellValues
 
 Use this to check if the current user has permission to update the cell values in this field before
 calling `record.setCellValues` or `table.setCellValues`.
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
 #### convertStringToCellValue
 
@@ -734,7 +718,7 @@ config.
 
 ##### Parameters
 
--   `string` **[string][173]**
+-   `string` **[string][58]**
 
 Returns **any**
 
@@ -742,29 +726,29 @@ Returns **any**
 
 ##### Parameters
 
--   `aggregator` **([Aggregator][185] \| [string][173])**
+-   `aggregator` **([Aggregator][70] \| [string][58])**
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
 #### isComputed
 
-Type: [boolean][177]
+Type: [boolean][61]
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
 #### isPrimaryField
 
 Every table has exactly one primary field. True if this field is its parent table's primary field.
 
-Type: [boolean][177]
+Type: [boolean][61]
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
 #### name
 
-Type: [string][173]
+Type: [string][58]
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 #### options
 
@@ -774,58 +758,165 @@ Returns **({} | null)**
 
 #### parentTable
 
-Type: [Table][179]
+Type: [Table][69]
 
-Returns **[Table][179]**
+Returns **[Table][69]**
 
 #### type
 
-Type: [string][173]
+Type: [string][58]
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 ### QueryResult
 
+#### QueryResult
+
 **Extends AbstractModelWithAsyncData**
 
-#### Parameters
+##### Parameters
 
 -   `recordStore` **RecordStore**
 -   `normalizedOpts` **NormalizedQueryResultOpts**
 -   `baseData` **BaseData**
 
-#### fields
+##### fields
 
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
 the QueryResult will load all fields in the table.
 
-Type: ([Array][178]&lt;[Field][182]> | null)
+Type: ([Array][62]&lt;[Field][64]> | null)
 
-Returns **([Array][178]&lt;[Field][182]> | null)**
+Returns **([Array][62]&lt;[Field][64]> | null)**
 
-#### parentTable
+##### parentTable
 
 The table that records in this QueryResult are part of
 
-Type: [Table][179]
+Type: [Table][69]
 
-Returns **[Table][179]**
+Returns **[Table][69]**
 
-#### recordIds
+##### recordIds
 
 The record IDs in this QueryResult. Throws if data is not loaded yet.
 
-Type: [Array][178]&lt;RecordId>
+Type: [Array][62]&lt;RecordId>
 
-Returns **[Array][178]&lt;RecordId>**
+Returns **[Array][62]&lt;RecordId>**
 
-#### records
+##### records
 
 The records in this QueryResult. Throws if data is not loaded yet.
 
-Type: [Array][178]&lt;[Record][181]>
+Type: [Array][62]&lt;[Record][68]>
 
-Returns **[Array][178]&lt;[Record][181]>**
+Returns **[Array][62]&lt;[Record][68]>**
+
+#### TableOrViewQueryResult
+
+**Extends QueryResult**
+
+Represents a set of records directly from a view or table.
+
+Do not instantiate. You can get instances of this class by calling `table.selectRecords` or
+`view.selectRecords`.
+
+##### Parameters
+
+-   `sourceModel` **([Table][69] \| [View][65])**
+-   `recordStore` **RecordStore**
+-   `opts` **QueryResultOpts?**
+
+##### fields
+
+The fields that were used to create this QueryResult. Null if fields were not specified, which means
+the QueryResult will load all fields in the table.
+
+Type: ([Array][62]&lt;[Field][64]> | null)
+
+Returns **([Array][62]&lt;[Field][64]> | null)**
+
+##### parentTable
+
+Type: [Table][69]
+
+Returns **[Table][69]**
+
+##### parentView
+
+The view that was used to obtain this QueryResult by calling `view.selectRecords`. Null if the
+QueryResult was obtained by calling `table.selectRecords`.
+
+Type: ([View][65] | null)
+
+Returns **([View][65] | null)**
+
+##### recordIds
+
+The record IDs in this QueryResult. Throws if data is not loaded yet.
+
+Type: [Array][62]&lt;[string][58]>
+
+Returns **[Array][62]&lt;[string][58]>**
+
+#### LinkedRecordsQueryResult
+
+**Extends QueryResult**
+
+Represents a set of records from a LinkedRecord cell value.
+
+Do not instantiate. You can get instances of this class by calling
+`record.getLinkedRecordsFromCell`.
+
+##### Parameters
+
+-   `record` **[Record][68]**
+-   `field` **[Field][64]**
+-   `opts` **QueryResultOpts**
+
+##### fields
+
+The fields that were used to create this LinkedRecordsQueryResult.
+
+Type: ([Array][62]&lt;[Field][64]> | null)
+
+Returns **([Array][62]&lt;[Field][64]> | null)**
+
+##### isValid
+
+Is the query result currently valid? This value always starts as 'true', but can become false if the
+field config changes to link to a different table or a type other than MULTIPLE_RECORD_LINKS. Once
+`isValid` has become false, it will never become true again. Many fields will throw on attempting to
+access them, and watches will no longer fire.
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
+
+##### parentTable
+
+The table that the records in the QueryResult are a part of
+
+Type: [Table][69]
+
+Returns **[Table][69]**
+
+##### recordIds
+
+Ordered array of all the linked record ids. Watchable.
+
+Type: [Array][62]&lt;[string][58]>
+
+Returns **[Array][62]&lt;[string][58]>**
+
+##### records
+
+Ordered array of all the linked records. Watchable.
+
+Type: [Array][62]&lt;[Record][68]>
+
+Returns **[Array][62]&lt;[Record][68]>**
 
 ### Record
 
@@ -839,12 +930,12 @@ Do not instantiate. To create a new record, use `table.createRecord`.
 
 -   `baseData` **BaseData**
 -   `parentRecordStore` **RecordStore**
--   `parentTable` **[Table][179]**
--   `recordId` **[string][173]**
+-   `parentTable` **[Table][69]**
+-   `recordId` **[string][58]**
 
 #### canDelete
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
 #### canSetCellValue
 
@@ -853,7 +944,7 @@ Use this to check if the current user has permission to update a specific cell v
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][182] \| [string][173])**
+-   `fieldOrFieldIdOrFieldName` **([Field][64] \| [string][58])**
 -   `publicCellValue` **any**
 
 #### canSetCellValues
@@ -865,19 +956,19 @@ Use this to check if the current user has permission to update a set of cell val
 
 -   `cellValuesByFieldIdOrFieldName` **RecordDef**
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
 #### commentCount
 
-Type: [number][180]
+Type: [number][63]
 
-Returns **[number][180]**
+Returns **[number][63]**
 
 #### createdTime
 
-Type: [Date][186]
+Type: [Date][71]
 
-Returns **[Date][186]**
+Returns **[Date][71]**
 
 #### delete
 
@@ -890,16 +981,16 @@ the current client. The URL that is returned will only work for the current user
 
 ##### Parameters
 
--   `attachmentId` **[string][173]**
--   `attachmentUrl` **[string][173]**
+-   `attachmentId` **[string][58]**
+-   `attachmentUrl` **[string][58]**
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 #### getCellValue
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][182] \| [string][173])**
+-   `fieldOrFieldIdOrFieldName` **([Field][64] \| [string][58])**
 
 Returns **any**
 
@@ -907,9 +998,9 @@ Returns **any**
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][182] \| [string][173])**
+-   `fieldOrFieldIdOrFieldName` **([Field][64] \| [string][58])**
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 #### getColorHexInView
 
@@ -918,9 +1009,9 @@ with the 'colorInView:\${ViewId}' key
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][183] \| [string][173])**
+-   `viewOrViewIdOrViewName` **([View][65] \| [string][58])**
 
-Returns **([string][173] | null)**
+Returns **([string][58] | null)**
 
 #### getColorInView
 
@@ -929,15 +1020,15 @@ with the 'colorInView:\${ViewId}' key.
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][183] \| [string][173])**
+-   `viewOrViewIdOrViewName` **([View][65] \| [string][58])**
 
-Returns **(Color | null)**
+Returns **([Color][72] | null)**
 
 #### parentTable
 
-Type: [Table][179]
+Type: [Table][69]
 
-Returns **[Table][179]**
+Returns **[Table][69]**
 
 #### primaryCellValue
 
@@ -947,18 +1038,18 @@ Returns **any**
 
 #### primaryCellValueAsString
 
-Type: [string][173]
+Type: [string][58]
 
-Returns **[string][173]**
+Returns **[string][58]**
 
 #### selectLinkedRecordsFromCell
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][182] \| [string][173])**
+-   `fieldOrFieldIdOrFieldName` **([Field][64] \| [string][58])**
 -   `opts` **QueryResultOpts** (optional, default `{}`)
 
-Returns **[LinkedRecordsQueryResult][187]**
+Returns **[LinkedRecordsQueryResult][73]**
 
 #### setCellValue
 
@@ -967,7 +1058,7 @@ before calling. Will throw if the user does not have permission.
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][182] \| [string][173])**
+-   `fieldOrFieldIdOrFieldName` **([Field][64] \| [string][58])**
 -   `publicCellValue` **any**
 
 Returns **AirtableWriteAction&lt;void, {}>**
@@ -987,460 +1078,522 @@ Returns **AirtableWriteAction&lt;void, {}>**
 
 Returns the URL for this record.
 
-Type: [string][173]
+Type: [string][58]
 
-Returns **[string][173]**
+Returns **[string][58]**
 
-## @airtable/blocks/ui
+### Table
 
-### Button
+**Extends AbstractModel**
 
-#### Button
+Model class representing a table in the base.
 
-**Extends React.Component**
+#### Parameters
 
-Clickable button component.
+-   `baseData` **BaseData**
+-   `parentBase` **[Base][55]**
+-   `recordStore` **RecordStore**
+-   `tableId` **[string][58]**
+-   `airtableInterface` **AirtableInterface**
+
+#### canCreateRecord
 
 ##### Parameters
 
--   `props` **[ButtonProps][188]**
+-   `cellValuesByFieldIdOrFieldName` **RecordDef?**
+
+Returns **[boolean][61]**
+
+#### canCreateRecords
+
+##### Parameters
+
+-   `recordDefsOrNumberOfRecords` **([Array][62]&lt;RecordDef> | [number][63])**
+
+Returns **[boolean][61]**
+
+#### canDeleteRecord
+
+##### Parameters
+
+-   `record` **[Record][68]**
+
+#### canDeleteRecords
+
+##### Parameters
+
+-   `records` **[Array][62]&lt;[Record][68]>**
+
+#### canSetCellValues
+
+##### Parameters
+
+-   `cellValuesByRecordIdThenFieldIdOrFieldName` **{}**
+
+Returns **[boolean][61]**
+
+#### createRecord
+
+##### Parameters
+
+-   `cellValuesByFieldIdOrFieldName` **RecordDef?**
+
+Returns **AirtableWriteAction&lt;void, {record: [Record][68]}>**
+
+#### createRecords
+
+##### Parameters
+
+-   `recordDefsOrNumberOfRecords` **([Array][62]&lt;RecordDef> | [number][63])**
+
+Returns **AirtableWriteAction&lt;void, {records: [Array][62]&lt;[Record][68]>}>**
+
+#### deleteRecord
+
+##### Parameters
+
+-   `record` **[Record][68]**
+
+Returns **AirtableWriteAction&lt;void, {}>**
+
+#### deleteRecords
+
+##### Parameters
+
+-   `records` **[Array][62]&lt;[Record][68]>**
+
+Returns **AirtableWriteAction&lt;void, {}>**
+
+#### fields
+
+The fields in this table. The order is arbitrary, since fields are only ordered in the context of a
+specific view.
+
+Can be watched to know when fields are created or deleted.
+
+Type: [Array][62]&lt;[Field][64]>
+
+Returns **[Array][62]&lt;[Field][64]>**
+
+#### getFieldByIdIfExists
+
+##### Parameters
+
+-   `fieldId` **FieldId**
+
+Returns **([Field][64] | null)**
+
+#### getFieldByNameIfExists
+
+##### Parameters
+
+-   `fieldName` **[string][58]**
+
+Returns **([Field][64] | null)**
+
+#### getFirstViewOfType
+
+Returns the first view in the table where the type is one of `allowedViewTypes`. If a
+`preferredViewOrViewId` is supplied and that view exists & has the correct type, that view will be
+returned before checking the other views in the table.
+
+##### Parameters
+
+-   `allowedViewTypes` **([Array][62]&lt;ViewType> | ViewType)**
+-   `preferredViewOrViewId` **([View][65] | ViewId | null)?**
+
+Returns **([View][65] | null)**
+
+#### getViewByIdIfExists
+
+##### Parameters
+
+-   `viewId` **ViewId**
+
+Returns **([View][65] | null)**
+
+#### getViewByNameIfExists
+
+##### Parameters
+
+-   `viewName` **[string][58]**
+
+Returns **([View][65] | null)**
+
+#### name
+
+The table's name. Can be watched.
+
+Type: [string][58]
+
+Returns **[string][58]**
+
+#### parentBase
+
+Type: [Base][55]
+
+Returns **[Base][55]**
+
+#### primaryField
+
+Every table has exactly one primary field. The primary field of a table will not change.
+
+Type: [Field][64]
+
+Returns **[Field][64]**
+
+#### recordLimit
+
+Maximum number of records that the table can contain
+
+Type: [number][63]
+
+Returns **[number][63]**
+
+#### selectRecords
+
+##### Parameters
+
+-   `opts` **QueryResultOpts?**
+
+Returns **[TableOrViewQueryResult][74]**
+
+#### setCellValues
+
+##### Parameters
+
+-   `cellValuesByRecordIdThenFieldIdOrFieldName` **{}**
+
+Returns **AirtableWriteAction&lt;void, {}>**
+
+#### url
+
+Type: [string][58]
+
+Returns **[string][58]**
+
+#### views
+
+The views in the table. Can be watched to know when views are created, deleted, or reordered.
+
+Type: [Array][62]&lt;[View][65]>
+
+Returns **[Array][62]&lt;[View][65]>**
+
+### View
+
+**Extends AbstractModel**
+
+Model class representing a view in a table.
+
+#### Parameters
+
+-   `baseData` **BaseData**
+-   `parentTable` **[Table][69]**
+-   `viewDataStore` **ViewDataStore**
+-   `viewId` **[string][58]**
+
+#### allFields
+
+All the fields in the table, including fields that are hidden in this view. Can be watched to know
+when fields are created, deleted, or reordered.
+
+Type: [Array][62]&lt;[Field][64]>
+
+Returns **[Array][62]&lt;[Field][64]>**
+
+#### name
+
+The name of the view. Can be watched.
+
+Type: [string][58]
+
+Returns **[string][58]**
+
+#### parentTable
+
+Type: [Table][69]
+
+Returns **[Table][69]**
+
+#### selectRecords
+
+##### Parameters
+
+-   `opts` **QueryResultOpts?**
+
+Returns **[TableOrViewQueryResult][74]**
+
+#### type
+
+The type of the view. Will not change.
+
+Type: ViewType
+
+Returns **ViewType**
+
+#### url
+
+Type: [string][58]
+
+Returns **[string][58]**
+
+#### visibleFields
+
+The fields that are not hidden in this view. view. Can be watched to know when fields are created,
+deleted, or reordered.
+
+Type: [Array][62]&lt;[Field][64]>
+
+Returns **[Array][62]&lt;[Field][64]>**
+
+### Watchable
+
+#### unwatch
+
+Stop watching the given key or keys. Should be called with the same arguments that were given to
+`watch`.
+
+Will log a warning if the keys given are invalid.
+
+##### Parameters
+
+-   `keys` **(WatchableKey | [Array][62]&lt;WatchableKey>)**
+-   `callback` **function (model: this, key: WatchableKey): any**
+-   `context` **[Object][67]??**
+
+Returns **[Array][62]&lt;WatchableKey>**
+
+#### watch
+
+Start watching the given key or keys. The callback will be called when the value changes. Every call
+to `watch` should have a matching call to `unwatch`.
+
+Will log a warning if the keys given are invalid.
+
+##### Parameters
+
+-   `keys` **(WatchableKey | [Array][62]&lt;WatchableKey>)**
+-   `callback` **function (model: this, key: WatchableKey): any**
+-   `context` **[Object][67]??**
+
+Returns **[Array][62]&lt;WatchableKey>**
+
+## @airtable/blocks/ui
+
+### CSS & external scripts
+
+#### loadCSSFromString
+
+Injects CSS from a string into the page.
+
+##### Parameters
+
+-   `string` **[string][58]**
 
 ##### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
-const button = (
-    <UI.Button disabled={false} theme={UI.Button.themes.BLUE} onClick={() => alert('Clicked!')}>
-        Done
-    </UI.Button>
-);
+UI.loadCSSFromString('body { background: red; }');
 ```
 
-#### ButtonProps
+Returns **[HTMLStyleElement][75]** the style tag inserted into the page.
 
-Type: [object][189]
+#### loadCSSFromURLAsync
+
+Injects CSS from a remote URL.
+
+##### Parameters
+
+-   `url` **[string][58]**
+
+##### Examples
+
+```javascript
+import {UI} from 'airtable-block';
+UI.loadCSSFromURLAsync('https://example.com/style.css');
+```
+
+Returns **[Promise][76]&lt;[HTMLLinkElement][77]>** a Promise that resolves to the style tag
+inserted into the page.
+
+#### loadScriptFromURLAsync
+
+Injects Javascript from a remote URL.
+
+##### Parameters
+
+-   `url` **[string][58]**
+
+##### Examples
+
+```javascript
+import {UI} from 'airtable-block';
+UI.loadScriptFromURLAsync('https://example.com/script.js');
+```
+
+Returns **[Promise][76]&lt;[HTMLScriptElement][78]>** a Promise that resolves to the script tag
+inserted into the page.
+
+### Color utilities
+
+#### Color
+
+-   **See: colors**
+
+A value from the colors enum
+
+Type: \$Values&lt;any>
+
+#### RGB
+
+Type: {r: [number][63], g: [number][63], b: [number][63]}
 
 ##### Properties
 
--   `theme` **(Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW |
-    Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
-    The color theme for the button.
--   `className` **[string][173]?**
--   `disabled` **[boolean][177]?**
--   `children` **React.Node?**
+-   `r` **[number][63]**
+-   `g` **[number][63]**
+-   `b` **[number][63]**
 
-### Icon
+#### colorUtils
 
-#### Parameters
-
--   `$0` **IconProps**
-    -   `$0.name`
-    -   `$0.size` (optional, default `16`)
-    -   `$0.fillColor`
-    -   `$0.className`
-    -   `$0.style`
-    -   `$0.pathClassName`
-
-## TableOrViewQueryResult
-
-**Extends QueryResult**
-
-Represents a set of records directly from a view or table.
-
-Do not instantiate. You can get instances of this class by calling `table.selectRecords` or
-`view.selectRecords`.
-
-### Parameters
-
--   `sourceModel` **([Table][179] \| [View][183])**
--   `recordStore` **RecordStore**
--   `opts` **QueryResultOpts?**
-
-### fields
-
-The fields that were used to create this QueryResult. Null if fields were not specified, which means
-the QueryResult will load all fields in the table.
-
-Type: ([Array][178]&lt;[Field][182]> | null)
-
-Returns **([Array][178]&lt;[Field][182]> | null)**
-
-### parentTable
-
-Type: [Table][179]
-
-Returns **[Table][179]**
-
-### parentView
-
-The view that was used to obtain this QueryResult by calling `view.selectRecords`. Null if the
-QueryResult was obtained by calling `table.selectRecords`.
-
-Type: ([View][183] | null)
-
-Returns **([View][183] | null)**
-
-### recordIds
-
-The record IDs in this QueryResult. Throws if data is not loaded yet.
-
-Type: [Array][178]&lt;[string][173]>
-
-Returns **[Array][178]&lt;[string][173]>**
-
-## AbstractModel
-
-**Extends Watchable**
-
-Abstract superclass for all models.
-
-### Parameters
-
--   `baseData` **BaseData**
--   `modelId` **[string][173]**
-
-### id
-
-The ID for this model.
-
-Type: [string][173]
-
-Returns **[string][173]**
-
-### isDeleted
-
-True if the model has been deleted.
-
-In general, it's best to avoid keeping a reference to an object past the current event loop, since
-it may be deleted and trying to access any data of a deleted object (other than its ID) will throw.
-But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
-data.
-
-Type: [boolean][177]
-
-Returns **[boolean][177]**
-
-## AbstractModelWithAsyncData
-
-**Extends AbstractModel**
-
-Abstract superclass for all block SDK models that need to fetch async data.
-
-### Parameters
-
--   `baseData` **BaseData**
--   `modelId` **[string][173]**
-
-### isDataLoaded
-
-Type: [boolean][177]
-
-Returns **[boolean][177]**
-
-### loadDataAsync
-
-Will cause all the async data to be fetched and retained. Every call to `loadDataAsync` should have
-a matching call to `unloadData`.
-
-Returns a Promise that will resolve once the data is loaded.
-
-### unloadData
-
-### unwatch
-
-Unwatching a key that needs to load data asynchronously will automatically cause the data to be
-released. Once the data is available, the callback will be called.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **[Function][190]**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
-### watch
-
-Watching a key that needs to load data asynchronously will automatically cause the data to be
-fetched. Once the data is available, the callback will be called.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **[Function][190]**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
-## Cursor
-
-**Extends AbstractModelWithAsyncData**
-
-Contains information about the state of the user's current interactions in Airtable
-
-### Parameters
-
--   `baseData` **BaseData**
--   `airtableInterface` **AirtableInterface**
-
-### Examples
-
-```javascript
-import {cursor} from 'airtable-block';
-```
-
-### activeTableId
-
-Returns the currently active table ID. Can return null when the active table has changed and is not
-yet loaded.
-
-Type: (TableId | null)
-
-Returns **(TableId | null)**
-
-### activeViewId
-
-Returns the currently active view ID. This will always be a view belonging to `activeTableId`.
-Returns `null` when the active view has changed and is not yet loaded.
-
-Type: (ViewId | null)
-
-Returns **(ViewId | null)**
-
-## Viewport
-
-**Extends Watchable**
-
-Information about the current viewport
-
-### Parameters
-
--   `isFullscreen` **[boolean][177]**
--   `airtableInterface` **AirtableInterface**
-
-### Examples
-
-```javascript
-import {viewport} from 'airtable-block';
-```
-
-### addMaxFullscreenSize
-
-Add a maximum fullscreen size constraint. Returns a function that can be called to remove the
-fullscreen size that was added. Use .maxFullscreenSize to get the aggregate of all added
-constraints. Both `width` and `height` are optional - if either is set to null, that means there is
-no max size in that dimension.
-
-#### Parameters
-
--   `$0` **\$Shape&lt;ViewportSizeConstraint>**
-    -   `$0.width`
-    -   `$0.height`
-
-Returns **UnsetFn**
-
-### addMinSize
-
-Add a minimum frame size constraint. Returns a function that can be called to remove the added
-constraint. Use .minSize to get the aggregate of all added constraints. Both `width` and `height`
-are optional - if either is null, there is no minimum size in that dimension.
-
-#### Parameters
-
--   `$0` **\$Shape&lt;ViewportSizeConstraint>**
-    -   `$0.width`
-    -   `$0.height`
-
-Returns **UnsetFn**
-
-### enterFullscreenIfPossible
-
-Request to enter fullscreen mode.
-
-May fail if another block is fullscreen or this block doesn't have permission to fullscreen itself.
-Watch `isFullscreen` to know if the request succeeded.
-
-### exitFullscreen
-
-Request to exit fullscreen mode
-
-### isFullscreen
-
-Can be watched.
-
-Type: [boolean][177]
-
-Returns **[boolean][177]**
-
-### isSmallerThanMinSize
-
-Type: [boolean][177]
-
-Returns **[boolean][177]**
-
-### maxFullscreenSize
-
-Can be watched. The maximum dimensions of the block when it is in fullscreen mode. Returns the
-smallest set of dimensions added with addMaxFullscreenSize. If `width` or `height` is null, it means
-there is no maxSize constraint on that dimension. If maxFullscreenSize would be smaller than
-minSize, it is constrained to be at least that.
-
-Type: ViewportSizeConstraint
-
-Returns **ViewportSizeConstraint**
-
-### minSize
-
-Can be watched. The minimum dimensions of the block - if the viewport gets smaller than this size,
-an overlay will be shown asking the user to resize the block to be bigger. Returns the largest set
-of dimensions added with addMinSize. If `width` or `height` is null, it means there is no minSize
-constraint on that dimension.
-
-Type: ViewportSizeConstraint
-
-Returns **ViewportSizeConstraint**
-
-### size
-
-Can be watched.
-
-Type: {width: [number][180], height: [number][180]}
-
-Returns **{width: [number][180], height: [number][180]}**
-
-## Aggregator
-
-Aggregators can be used to compute aggregates for cell values.
-
-Type: {key: [string][173], displayName: [string][173], shortDisplayName: [string][173], aggregate:
-function (records: [Array][178]&lt;[Record][181]>, field: [Field][182]): any, aggregateToString:
-function (records: [Array][178]&lt;[Record][181]>, field: [Field][182]): [string][173]}
-
-### Properties
-
--   `key` **[string][173]**
--   `displayName` **[string][173]**
--   `shortDisplayName` **[string][173]**
--   `aggregate` **function (records: [Array][178]&lt;[Record][181]>, field: [Field][182]): any**
--   `aggregateToString` **function (records: [Array][178]&lt;[Record][181]>, field: [Field][182]):
-    [string][173]**
-
-### Examples
-
-```javascript
-// To get a list of aggregators supported for a specific field:
-const aggregators = myField.availableAggregators;
-
-// To compute the total attachment size of an attachment field:
-import {models} from 'airtable-block';
-const aggregator = models.aggregators.totalAttachmentSize;
-const value = aggregator.aggregate(myRecords, myAttachmentField);
-const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
-```
-
-## AutocompletePopover
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **AutocompletePopoverProps**
-
-## CellRenderer
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **CellRendererProps**
-
-## ChoiceToken
-
-### Parameters
-
--   `$0` **ChoiceTokenProps**
-    -   `$0.choice`
-    -   `$0.className`
-
-## CollaboratorToken
-
-### Parameters
-
--   `props` **CollaboratorTokenProps**
-
-## ColorPalette
-
-**Extends React.Component**
-
-## ColorPaletteSynced
-
-**Extends React.Component**
-
-## colorUtils
-
-### Examples
+##### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
 UI.colorUtils.getHexForColor(UI.colors.RED);
 ```
 
-### getHexForColor
+##### getHexForColor
 
-### getRgbForColor
+##### getRgbForColor
 
-### shouldUseLightTextOnColor
+##### shouldUseLightTextOnColor
 
-#### Parameters
+###### Parameters
 
--   `color` **[string][173]**
+-   `color` **[string][58]**
 
-Returns **[boolean][177]**
+Returns **[boolean][61]**
 
-## createDataContainer
+#### colors
 
-Returns a HOC component that will watch and unwatch the specified watchable objects.
+An enum of color names
 
-Component can either be a stateful React component class, or a stateless functional component.
+##### colors.BLUE
 
-The getDependencies function will be invoked on componentDidMount, whenever props shallowly change,
-and whenever one of the watches returned from the getDependencies function is triggered.
+##### colors.BLUE_BRIGHT
 
-### Parameters
+##### colors.BLUE_DARK_1
 
--   `Component` **ComponentType**
--   `getDependencies` **function (props: Props): [Array][178]&lt;WatchDependency?>**
--   `passthruMethodNames` **[Array][178]&lt;[string][173]>?**
+##### colors.BLUE_LIGHT_1
 
-### Examples
+##### colors.BLUE_LIGHT_2
 
-```javascript
-import {UI} from 'airtable-block';
-const MyComponentWithData = UI.createDataContainer(MyComponent, getDependencies(props) {
-    // This should return an array of dependency objects:
-    return [
-        // Will call forceUpdate when table name changes.
-        {watch: props.table, key: 'name'},
+##### colors.CYAN
 
-        // Will call this._onFieldsChange when table fields change.
-        {watch: props.table, key: 'fields', callback: MyComponent.prototype._onFieldsChange},
-    ];
-});
-```
+##### colors.CYAN_BRIGHT
 
-Returns **ComponentType**
+##### colors.CYAN_DARK_1
 
-## expandRecord
+##### colors.CYAN_LIGHT_1
+
+##### colors.CYAN_LIGHT_2
+
+##### colors.GRAY
+
+##### colors.GRAY_BRIGHT
+
+##### colors.GRAY_DARK_1
+
+##### colors.GRAY_LIGHT_1
+
+##### colors.GRAY_LIGHT_2
+
+##### colors.GREEN
+
+##### colors.GREEN_BRIGHT
+
+##### colors.GREEN_DARK_1
+
+##### colors.GREEN_LIGHT_1
+
+##### colors.GREEN_LIGHT_2
+
+##### colors.ORANGE
+
+##### colors.ORANGE_BRIGHT
+
+##### colors.ORANGE_DARK_1
+
+##### colors.ORANGE_LIGHT_1
+
+##### colors.ORANGE_LIGHT_2
+
+##### colors.PINK
+
+##### colors.PINK_BRIGHT
+
+##### colors.PINK_DARK_1
+
+##### colors.PINK_LIGHT_1
+
+##### colors.PINK_LIGHT_2
+
+##### colors.PURPLE
+
+##### colors.PURPLE_BRIGHT
+
+##### colors.PURPLE_DARK_1
+
+##### colors.PURPLE_LIGHT_1
+
+##### colors.PURPLE_LIGHT_2
+
+##### colors.RED
+
+##### colors.RED_BRIGHT
+
+##### colors.RED_DARK_1
+
+##### colors.RED_LIGHT_1
+
+##### colors.RED_LIGHT_2
+
+##### colors.TEAL
+
+##### colors.TEAL_BRIGHT
+
+##### colors.TEAL_DARK_1
+
+##### colors.TEAL_LIGHT_1
+
+##### colors.TEAL_LIGHT_2
+
+##### colors.YELLOW
+
+##### colors.YELLOW_BRIGHT
+
+##### colors.YELLOW_DARK_1
+
+##### colors.YELLOW_LIGHT_1
+
+##### colors.YELLOW_LIGHT_2
+
+### expandRecord
+
+#### expandRecord
 
 Expands the given record in the Airtable UI.
 
-### Parameters
+##### Parameters
 
--   `record` **[Record][181]** the record to expand
--   `opts` **ExpandRecordOpts?** If `records` is provided, the list will be used to page through
-    records from the expanded record dialog.
+-   `record` **[Record][68]** the record to expand
+-   `opts` **[ExpandRecordOpts][79]?** If `records` is provided, the list will be used to page
+    through records from the expanded record dialog.
 
-### Examples
+##### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
@@ -1449,19 +1602,27 @@ UI.expandRecord(record1, {
 });
 ```
 
-## expandRecordList
+#### ExpandRecordOpts
+
+Type: {records: [Array][62]&lt;[Record][68]>?}
+
+##### Properties
+
+-   `records` **[Array][62]&lt;[Record][68]>?**
+
+### expandRecordList
 
 Expands a list of records in the Airtable UI
 
-### Parameters
+#### Parameters
 
--   `records` **[Array][178]&lt;[Record][181]>** the records to expand. Duplicate records will be
+-   `records` **[Array][62]&lt;[Record][68]>** the records to expand. Duplicate records will be
     removed.
--   `opts` **{fields: [Array][178]&lt;[Field][182]>?}?** An optional options object.
+-   `opts` **{fields: [Array][62]&lt;[Field][64]>?}?** An optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
 
-### Examples
+#### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
@@ -1472,7 +1633,7 @@ UI.expandRecordList([record1, record2], {
 });
 ```
 
-## expandRecordPickerAsync
+### expandRecordPickerAsync
 
 Expands a list of records in the Airtable UI, and prompts the user to pick one. The selected record
 is returned to the block, and the modal is automatically closed.
@@ -1480,18 +1641,18 @@ is returned to the block, and the modal is automatically closed.
 If the user dismisses the modal, or another one is opened before this one has been closed, it will
 return null.
 
-### Parameters
+#### Parameters
 
--   `records` **[Array][178]&lt;[Record][181]>** the records the user can pick from. Duplicate
-    records will be removed.
--   `opts` **{fields: [Array][178]&lt;[Field][182]>?, shouldAllowCreatingRecord: [boolean][177]?}?**
-    An optional options object.
+-   `records` **[Array][62]&lt;[Record][68]>** the records the user can pick from. Duplicate records
+    will be removed.
+-   `opts` **{fields: [Array][62]&lt;[Field][64]>?, shouldAllowCreatingRecord: [boolean][61]?}?** An
+    optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
     -   `opts.shouldAllowCreatingRecord` set to true to allow the user to create an empty new
         record.
 
-### Examples
+#### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
@@ -1508,488 +1669,834 @@ const recordB = await UI.expandRecordPickerAsync([record1, record2], {
 });
 ```
 
-Returns **[Promise][191]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][76]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
-## FieldIcon
-
-### Parameters
-
--   `props` **FieldIconProps**
-
-## FieldPicker
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **FieldPickerProps**
-
-## FieldPickerSynced
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **FieldPickerSyncedProps**
-
-## LinkedRecordsQueryResult
-
-**Extends QueryResult**
-
-Represents a set of records from a LinkedRecord cell value.
-
-Do not instantiate. You can get instances of this class by calling
-`record.getLinkedRecordsFromCell`.
-
-### Parameters
-
--   `record` **[Record][181]**
--   `field` **[Field][182]**
--   `opts` **QueryResultOpts**
-
-### fields
-
-The fields that were used to create this LinkedRecordsQueryResult.
-
-Type: ([Array][178]&lt;[Field][182]> | null)
-
-Returns **([Array][178]&lt;[Field][182]> | null)**
-
-### isValid
-
-Is the query result currently valid? This value always starts as 'true', but can become false if the
-field config changes to link to a different table or a type other than MULTIPLE_RECORD_LINKS. Once
-`isValid` has become false, it will never become true again. Many fields will throw on attempting to
-access them, and watches will no longer fire.
-
-Type: [boolean][177]
-
-Returns **[boolean][177]**
-
-### parentTable
-
-The table that the records in the QueryResult are a part of
-
-Type: [Table][179]
-
-Returns **[Table][179]**
-
-### recordIds
-
-Ordered array of all the linked record ids. Watchable.
-
-Type: [Array][178]&lt;[string][173]>
-
-Returns **[Array][178]&lt;[string][173]>**
-
-### records
-
-Ordered array of all the linked records. Watchable.
-
-Type: [Array][178]&lt;[Record][181]>
-
-Returns **[Array][178]&lt;[Record][181]>**
-
-## fieldTypes
-
-### Examples
-
-```javascript
-import {models} from 'airtable-block';
-const numberFields = myTable.fields.filter(field => field.type === models.fieldTypes.NUMBER);
-```
-
-## generateGuid
-
-Helper to generate a GUID
-
-### Examples
-
-```javascript
-import {models} from 'airtable-block';
-const id = models.generateGuid();
-```
-
-## viewTypes
-
-### Examples
-
-```javascript
-import {models} from 'airtable-block';
-const gridViews = myTable.views.filter(view => view.type === models.viewTypes.GRID);
-```
-
-## getRecordColor
-
-Get the color name for the specified record in this view, or null if no color is available. Watch
-with 'recordColors'
-
-### Parameters
-
--   `recordOrRecordId` **(RecordId | [Record][181])**
-
-Returns **(Color | null)**
-
-## visibleRecordIds
-
-The record IDs that are not filtered out of this view. Can be watched to know when records are
-created, deleted, reordered, or filtered in and out of this view.
-
-Type: [Array][178]&lt;RecordId>
-
-Returns **[Array][178]&lt;RecordId>**
-
-## visibleRecords
-
-The records that are not filtered out of this view. Can be watched to know when records are created,
-deleted, reordered, or filtered in and out of this view.
-
-Type: [Array][178]&lt;[Record][181]>
-
-Returns **[Array][178]&lt;[Record][181]>**
-
-## GlobalAlert
+### globalAlert
 
 **Extends Watchable**
 
-### Examples
+#### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
 UI.globalAlert.showReloadPrompt();
 ```
 
-### showReloadPrompt
+#### showReloadPrompt
 
-## Input
+### AutocompletePopover
 
-**Extends React.Component**
-
-### Parameters
-
--   `props` **InputProps**
-
-## InputSynced
+#### AutocompletePopover
 
 **Extends React.Component**
 
-### Parameters
+##### Parameters
 
--   `props` **InputSyncedProps**
+-   `props` **[AutocompletePopoverProps][80]**
 
-## isRecordMetadataLoaded
+#### AutocompletePopoverProps
 
-Record metadata means record IDs, createdTime, and commentCount are loaded. Record metadata must be
-loaded before creating, deleting, or updating records.
+Type: {children:
+React$Element&lt;any>, items: [Array][62]&lt;[AutocompleteItem][81]>, renderItem: function (item: [AutocompleteItem][81], isFocused: [boolean][61]): React$Element&lt;any>?,
+filterItems: function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][81]>):
+[Array][62]&lt;[AutocompleteItem][81]>?, onSelect: function ([AutocompleteItem][81]): void,
+placeholder: [string][58]?, focusOnOpen: [boolean][61]?, className: [string][58]?, style:
+[Object][67]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
+[number][63]?, placementOffsetY: [number][63]?, fitInWindowMode: FitInWindowMode?, isOpen:
+[boolean][61]?, onClose: function (opts: {wasFromEscape: [boolean][61]}): void?}
 
-Type: [boolean][177]
+##### Properties
 
-Returns **[boolean][177]**
+-   `children` **React\$Element&lt;any>**
+-   `items` **[Array][62]&lt;[AutocompleteItem][81]>**
+-   `renderItem` **function (item: [AutocompleteItem][81], isFocused: [boolean][61]):
+    React\$Element&lt;any>?**
+-   `filterItems` **function (query: [string][58], items: [Array][62]&lt;[AutocompleteItem][81]>):
+    [Array][62]&lt;[AutocompleteItem][81]>?**
+-   `onSelect` **function ([AutocompleteItem][81]): void**
+-   `placeholder` **[string][58]?**
+-   `focusOnOpen` **[boolean][61]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `placementX` **PopoverPlacementX?**
+-   `placementY` **PopoverPlacementY?**
+-   `placementOffsetX` **[number][63]?**
+-   `placementOffsetY` **[number][63]?**
+-   `fitInWindowMode` **FitInWindowMode?**
+-   `isOpen` **[boolean][61]?**
+-   `onClose` **function (opts: {wasFromEscape: [boolean][61]}): void?**
 
-## recordIds
+#### AutocompleteItem
 
-The record IDs in this table. The order is arbitrary since records are only ordered in the context
-of a specific view.
+Type: {value: [string][58], label: [string][58], aliases: [Array][62]&lt;[string][58]>?}
 
-Type: [Array][178]&lt;[string][173]>
+##### Properties
 
-Returns **[Array][178]&lt;[string][173]>**
+-   `value` **[string][58]**
+-   `label` **[string][58]**
+-   `aliases` **[Array][62]&lt;[string][58]>?**
 
-## records
+### Button
 
-The records in this table. The order is arbitrary since records are only ordered in the context of a
-specific view.
+#### Button
 
-Type: [Array][178]&lt;[Record][181]>
+**Extends React.Component**
 
-Returns **[Array][178]&lt;[Record][181]>**
+Clickable button component.
 
-## SettingsButton
+##### Parameters
 
-**Extends Watchable**
+-   `props` **[ButtonProps][82]**
 
-Interface to the settings button that lives outside the block's viewport.
-
-Watch `click` to handle click events on the button.
-
-### Parameters
-
--   `airtableInterface` **AirtableInterface**
-
-### Examples
-
-```javascript
-import {settingsButton} from 'airtable-block';
-settingsButton.isVisible = true;
-settingsButton.watch('click', () => {
-    alert('Clicked!');
-});
-```
-
-### isVisible
-
-Whether the settings button is being shown. Set to `true` to show the settings button. Can be
-watched.
-
-Type: [boolean][177]
-
-Returns **[boolean][177]**
-
-## Link
-
-### Parameters
-
--   `props` **Props**
-
-## loadCSSFromString
-
-Injects CSS from a string into the page.
-
-### Parameters
-
--   `string` **[string][173]**
-
-### Examples
+##### Examples
 
 ```javascript
 import {UI} from 'airtable-block';
-UI.loadCSSFromString('body { background: red; }');
+const button = (
+    <UI.Button disabled={false} theme={UI.Button.themes.BLUE} onClick={() => alert('Clicked!')}>
+        Done
+    </UI.Button>
+);
 ```
 
-Returns **[HTMLStyleElement][192]** the style tag inserted into the page.
+#### ButtonProps
 
-## loadCSSFromURLAsync
+Type: [object][67]
 
-Injects CSS from a remote URL.
+##### Properties
 
-### Parameters
+-   `theme` **(Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW |
+    Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
+    The color theme for the button.
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
+-   `children` **React.Node?**
 
--   `url` **[string][173]**
+### CellRenderer
 
-### Examples
+#### CellRenderer
 
-```javascript
-import {UI} from 'airtable-block';
-UI.loadCSSFromURLAsync('https://example.com/style.css');
-```
+**Extends React.Component**
 
-Returns **[Promise][191]&lt;[HTMLLinkElement][193]>** a Promise that resolves to the style tag
-inserted into the page.
+##### Parameters
 
-## Loader
+-   `props` **[CellRendererProps][83]**
 
-### Parameters
+#### CellRendererProps
 
--   `$0` **LoaderPropTypes**
+Type: {record: [Record][68]??, cellValue: any?, field: [Field][64], shouldWrap: [boolean][61]?,
+className: [string][58]?, style: [Object][67]?}
+
+##### Properties
+
+-   `record` **[Record][68]??**
+-   `cellValue` **any?**
+-   `field` **[Field][64]**
+-   `shouldWrap` **[boolean][61]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+
+### ChoiceToken
+
+#### ChoiceToken
+
+##### Parameters
+
+-   `$0` **[ChoiceTokenProps][84]**
+    -   `$0.choice`
+    -   `$0.className`
+
+#### ChoiceTokenProps
+
+Type: {choice: {id: [string][58], name: [string][58], color: [string][58]?}, className:
+[string][58]?}
+
+##### Properties
+
+-   `choice` **{id: [string][58], name: [string][58], color: [string][58]?}**
+-   `className` **[string][58]?**
+
+### CollaboratorToken
+
+#### CollaboratorToken
+
+##### Parameters
+
+-   `props` **[CollaboratorTokenProps][85]**
+
+#### CollaboratorTokenProps
+
+Type: {collaborator: {id: [string][58]?, email: [string][58]?, name: [string][58]?, profilePicUrl:
+[string][58]?, status: [string][58]?}, className: [string][58]?}
+
+##### Properties
+
+-   `collaborator` **{id: [string][58]?, email: [string][58]?, name: [string][58]?, profilePicUrl:
+    [string][58]?, status: [string][58]?}**
+-   `className` **[string][58]?**
+
+### ColorPalette
+
+#### ColorPalette
+
+**Extends React.Component**
+
+#### ColorPaletteProps
+
+Type: {color: [string][58]?, allowedColors: [Array][62]&lt;[string][58]>, onChange: function
+([string][58]): any?, squareSize: [number][63], squareMargin: [number][63], className: [string][58],
+style: [Object][67], disabled: [boolean][61]?}
+
+##### Properties
+
+-   `color` **[string][58]?**
+-   `allowedColors` **[Array][62]&lt;[string][58]>**
+-   `onChange` **function ([string][58]): any?**
+-   `squareSize` **[number][63]**
+-   `squareMargin` **[number][63]**
+-   `className` **[string][58]**
+-   `style` **[Object][67]**
+-   `disabled` **[boolean][61]?**
+
+#### ColorPaletteSynced
+
+**Extends React.Component**
+
+#### ColorPaletteSyncedProps
+
+Type: {globalConfigKey: [string][58], disabled: [boolean][61]?, onChange: function ([string][58]):
+any?}
+
+##### Properties
+
+-   `globalConfigKey` **[string][58]**
+-   `disabled` **[boolean][61]?**
+-   `onChange` **function ([string][58]): any?**
+
+### FieldIcon
+
+#### FieldIcon
+
+##### Parameters
+
+-   `props` **[FieldIconProps][86]**
+
+#### FieldIconProps
+
+Type: {field: [Field][64], size: [number][63]?, fillColor: [string][58]?, className: [string][58]?,
+style: [Object][67]?, pathClassName: [string][58]?}
+
+##### Properties
+
+-   `field` **[Field][64]**
+-   `size` **[number][63]?**
+-   `fillColor` **[string][58]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `pathClassName` **[string][58]?**
+
+### FieldPicker
+
+#### FieldPicker
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[FieldPickerProps][87]**
+
+#### FieldPickerProps
+
+Type: {table: [Table][69]?, field: [Field][64]?, shouldAllowPickingNone: [boolean][61]?, onChange:
+function (fieldModel: ([Field][64] | null)): void?, allowedTypes: [Array][62]&lt;FieldType>?,
+placeholder: [string][58]?, style: [Object][67]?, className: [string][58]?, disabled:
+[boolean][61]?}
+
+##### Properties
+
+-   `table` **[Table][69]?**
+-   `field` **[Field][64]?**
+-   `shouldAllowPickingNone` **[boolean][61]?**
+-   `onChange` **function (fieldModel: ([Field][64] | null)): void?**
+-   `allowedTypes` **[Array][62]&lt;FieldType>?**
+-   `placeholder` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
+
+#### FieldPickerSynced
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[FieldPickerSyncedProps][88]**
+
+#### FieldPickerSyncedProps
+
+Type: {table: [Table][69]?, globalConfigKey: GlobalConfigKey, onChange: function (fieldModel:
+([Field][64] | null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?,
+allowedTypes: [Array][62]&lt;FieldType>?, placeholder: [string][58]?, style: [Object][67]?,
+className: [string][58]?}
+
+##### Properties
+
+-   `table` **[Table][69]?**
+-   `globalConfigKey` **GlobalConfigKey**
+-   `onChange` **function (fieldModel: ([Field][64] | null)): void?**
+-   `disabled` **[boolean][61]?**
+-   `shouldAllowPickingNone` **[boolean][61]?**
+-   `allowedTypes` **[Array][62]&lt;FieldType>?**
+-   `placeholder` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+
+### Icon
+
+#### Icon
+
+##### Parameters
+
+-   `$0` **[IconProps][89]**
+    -   `$0.name`
+    -   `$0.size` (optional, default `16`)
+    -   `$0.fillColor`
+    -   `$0.className`
+    -   `$0.style`
+    -   `$0.pathClassName`
+
+#### IconProps
+
+Type: {name: [string][58], size: [number][63]?, fillColor: [string][58]?, className: [string][58]?,
+style: [Object][67]?, pathClassName: [string][58]?}
+
+##### Properties
+
+-   `name` **[string][58]**
+-   `size` **[number][63]?**
+-   `fillColor` **[string][58]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `pathClassName` **[string][58]?**
+
+### Input
+
+#### Input
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[InputProps][90]**
+
+#### InputProps
+
+Type: {type: [string][58]?, placeholder: [string][58]?, onChange: function
+(SyntheticInputEvent&lt;>): void?, style: [Object][67]?, className: [string][58]?, disabled:
+[boolean][61]?, required: [boolean][61]?, spellCheck: [boolean][61]?, tabIndex: [number][63]?}
+
+##### Properties
+
+-   `type` **[string][58]?**
+-   `placeholder` **[string][58]?**
+-   `onChange` **function (SyntheticInputEvent&lt;>): void?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
+-   `required` **[boolean][61]?**
+-   `spellCheck` **[boolean][61]?**
+-   `tabIndex` **[number][63]?**
+
+#### InputSynced
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[InputSyncedProps][91]**
+
+#### InputSyncedProps
+
+Type: {type: [string][58]?, globalConfigKey: GlobalConfigKey, placeholder: [string][58]?, onChange:
+function (SyntheticInputEvent&lt;>): void?, style: [Object][67]?, className: [string][58]?,
+disabled: [boolean][61]?, spellCheck: [boolean][61]?}
+
+##### Properties
+
+-   `type` **[string][58]?**
+-   `globalConfigKey` **GlobalConfigKey**
+-   `placeholder` **[string][58]?**
+-   `onChange` **function (SyntheticInputEvent&lt;>): void?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
+-   `spellCheck` **[boolean][61]?**
+
+### Link
+
+#### Link
+
+##### Parameters
+
+-   `props` **[LinkProps][92]**
+
+#### LinkProps
+
+Type: {href: [string][58], target: [string][58]?, tabIndex: ([number][63] \| [string][58])?,
+className: [string][58]?, style: [Object][67]?, children: React.Node}
+
+##### Properties
+
+-   `href` **[string][58]**
+-   `target` **[string][58]?**
+-   `tabIndex` **([number][63] \| [string][58])?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `children` **React.Node**
+
+### Loader
+
+#### Loader
+
+##### Parameters
+
+-   `$0` **[LoaderProps][93]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
-## loadScriptFromURLAsync
+#### LoaderProps
 
-Injects Javascript from a remote URL.
+Type: {fillColor: [string][58]?, scale: [number][63]?}
 
-### Parameters
+##### Properties
 
--   `url` **[string][173]**
+-   `fillColor` **[string][58]?**
+-   `scale` **[number][63]?**
 
-### Examples
+### Modal
 
-```javascript
-import {UI} from 'airtable-block';
-UI.loadScriptFromURLAsync('https://example.com/script.js');
-```
-
-Returns **[Promise][191]&lt;[HTMLScriptElement][194]>** a Promise that resolves to the script tag
-inserted into the page.
-
-## Modal
+#### Modal
 
 **Extends React.Component**
 
-### Parameters
+##### Parameters
 
--   `props` **ModalProps**
+-   `props` **[ModalProps][94]**
 
-## modes
+#### ModalProps
 
-create a record coloring mode object
+Type: {onClose: [Function][66]?, className: [string][58]?, style: [Object][67]?,
+backgroundClassName: [string][58]?, backgroundStyle: [Object][67]?, children: React.Node}
 
-### Examples
+##### Properties
 
-```javascript
-import {models} from 'airtable-block';
+-   `onClose` **[Function][66]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `backgroundClassName` **[string][58]?**
+-   `backgroundStyle` **[Object][67]?**
+-   `children` **React.Node**
 
-// no record coloring:
-const recordColorMode = models.recordColoring.modes.none();
-// color by select field:
-const recordColorMode = models.recordColoring.modes.bySelectField(someSelectField);
-// color from view:
-const recordColorMode = models.recordColoring.modes.fromView(someView);
-
-// with a query result:
-const queryResult = table.selectRecords({recordColorMode});
-```
-
-## Popover
+#### Modal.CloseButton
 
 **Extends React.Component**
 
-### Parameters
+#### ModalCloseButtonProps
 
--   `props` **PopoverProps**
+Type: {className: [string][58]?, style: [Object][67]?, children: React.Node?}
 
-## ProgressBar
+##### Properties
 
-### Parameters
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `children` **React.Node?**
 
--   `props` **ProgressBarProps**
+### Popover
 
-## RadioSynced
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **RadioSyncedProps**
-
-## RecordCard
+#### Popover
 
 **Extends React.Component**
 
-### Parameters
+##### Parameters
 
--   `props` **RecordCardProps**
+-   `props` **[PopoverProps][95]**
 
-## RecordCardList
+#### PopoverProps
 
-**Extends React.Component**
+Type: {children: React$Element&lt;any>, renderContent: function (): React$Element&lt;any>,
+placementX: PopoverPlacementX, placementY: PopoverPlacementY, placementOffsetX: [number][63],
+placementOffsetY: [number][63], fitInWindowMode: FitInWindowMode, onClose: function (): void?,
+isOpen: [boolean][61], backgroundClassName: [string][58]?, backgroundStyle: [Object][67]?}
 
-### Parameters
+##### Properties
 
--   `props` **RecordCardListProps**
+-   `children` **React\$Element&lt;any>**
+-   `renderContent` **function (): React\$Element&lt;any>**
+-   `placementX` **PopoverPlacementX**
+-   `placementY` **PopoverPlacementY**
+-   `placementOffsetX` **[number][63]**
+-   `placementOffsetY` **[number][63]**
+-   `fitInWindowMode` **FitInWindowMode**
+-   `onClose` **function (): void?**
+-   `isOpen` **[boolean][61]**
+-   `backgroundClassName` **[string][58]?**
+-   `backgroundStyle` **[Object][67]?**
 
-## Select
+#### Popover.fitInWindowModes
 
-**Extends React.Component**
+#### Popover.placements
 
-### Parameters
+### ProgressBar
 
--   `props` **SelectProps**
+#### ProgressBar
 
-## SelectButtons
+##### Parameters
 
-**Extends React.Component**
+-   `props` **[ProgressBarProps][96]**
 
-## SelectButtonsSynced
+#### ProgressBarProps
 
-**Extends React.Component**
+Type: {progress: [number][63], barColor: [string][58]?, backgroundColor: [string][58]?, height:
+[number][63]?, className: [string][58]?, style: [Object][67]?}
 
-## SelectSynced
+##### Properties
 
-**Extends React.Component**
+-   `progress` **[number][63]**
+-   `barColor` **[string][58]?**
+-   `backgroundColor` **[string][58]?**
+-   `height` **[number][63]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
 
-### Parameters
+### RadioSynced
 
--   `props` **SelectSyncedProps**
-
-## Synced
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **SyncedProps**
-
-## TablePicker
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **TablePickerProps**
-
-## TablePickerSynced
-
-**Extends React.Component**
-
-### Parameters
-
--   `props` **TablePickerSyncedProps**
-
-## Toggle
+#### RadioSynced
 
 **Extends React.Component**
 
-### Parameters
+##### Parameters
 
--   `props` **ToggleProps**
+-   `props` **[RadioSyncedProps][97]**
 
-## ToggleSynced
+#### RadioSyncedProps
 
-**Extends React.Component**
+Type: {globalConfigKey: GlobalConfigKey, value: [string][58], style: [Object][67]?, className:
+[string][58]?, disabled: [boolean][61]?}
 
-### Parameters
+##### Properties
 
--   `props` **ToggleSyncedProps**
+-   `globalConfigKey` **GlobalConfigKey**
+-   `value` **[string][58]**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
 
-## Tooltip
+### RecordCard
 
-**Extends React.Component**
-
-### Parameters
-
--   `props` **TooltipProps**
-
-## Watchable
-
-### unwatch
-
-Stop watching the given key or keys. Should be called with the same arguments that were given to
-`watch`.
-
-Will log a warning if the keys given are invalid.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
-### watch
-
-Start watching the given key or keys. The callback will be called when the value changes. Every call
-to `watch` should have a matching call to `unwatch`.
-
-Will log a warning if the keys given are invalid.
-
-#### Parameters
-
--   `keys` **(WatchableKey | [Array][178]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][189]??**
-
-Returns **[Array][178]&lt;WatchableKey>**
-
-## ViewPicker
+#### RecordCard
 
 **Extends React.Component**
 
-### Parameters
+##### Parameters
 
--   `props` **ViewPickerProps**
+-   `props` **[RecordCardProps][98]**
 
-## ViewPickerSynced
+#### RecordCardProps
+
+Type: {record: ([Record][68] | RecordDef), fields: [Array][62]&lt;[Field][64]>?, view: [View][65]?,
+attachmentCoverField: [Field][64]?, width: [number][63]?, height: [number][63]?, onClick:
+[Function][66]?, getExpandRecordOptions: function ([Record][68]): [ExpandRecordOpts][79]?,
+onMouseEnter: any?, onMouseLeave: any?, className: [string][58]?, style: [Object][67]?}
+
+##### Properties
+
+-   `record` **([Record][68] | RecordDef)**
+-   `fields` **[Array][62]&lt;[Field][64]>?**
+-   `view` **[View][65]?**
+-   `attachmentCoverField` **[Field][64]?**
+-   `width` **[number][63]?**
+-   `height` **[number][63]?**
+-   `onClick` **[Function][66]?**
+-   `getExpandRecordOptions` **function ([Record][68]): [ExpandRecordOpts][79]?**
+-   `onMouseEnter` **any?**
+-   `onMouseLeave` **any?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+
+### RecordCardList
+
+#### RecordCardList
 
 **Extends React.Component**
 
-### Parameters
+##### Parameters
 
--   `props` **ViewPickerSyncedProps**
+-   `props` **[RecordCardListProps][99]**
 
-## ViewportConstraint
+#### RecordCardListProps
+
+Type: {records: [Array][62]&lt;([Record][68] | RecordDef)>, onScroll: function ([Event][100]):
+void?, onRecordClick: (null | function (record: ([Record][68] | RecordDef), index: [number][63]):
+void)?, onRecordMouseEnter: function (record: ([Record][68] | RecordDef), index: [number][63]):
+void?, onRecordMouseLeave: function (record: ([Record][68] | RecordDef), index: [number][63]):
+void?, fields: [Array][62]&lt;[Field][64]>?, view: [View][65]?, attachmentCoverField: [Field][64]?,
+className: [string][58]?, style: [Object][67]?}
+
+##### Properties
+
+-   `records` **[Array][62]&lt;([Record][68] | RecordDef)>**
+-   `onScroll` **function ([Event][100]): void?**
+-   `onRecordClick` **(null | function (record: ([Record][68] | RecordDef), index: [number][63]):
+    void)?**
+-   `onRecordMouseEnter` **function (record: ([Record][68] | RecordDef), index: [number][63]):
+    void?**
+-   `onRecordMouseLeave` **function (record: ([Record][68] | RecordDef), index: [number][63]):
+    void?**
+-   `fields` **[Array][62]&lt;[Field][64]>?**
+-   `view` **[View][65]?**
+-   `attachmentCoverField` **[Field][64]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+
+### Select
+
+#### Select
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[SelectProps][101]**
+
+#### SelectProps
+
+Type: SelectAndSelectButtonsProps
+
+#### SelectSynced
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[SelectSyncedProps][102]**
+
+#### SelectSyncedProps
+
+Type: SelectAndSelectButtonsSyncedProps
+
+### SelectButtons
+
+#### SelectButtons
+
+**Extends React.Component**
+
+#### SelectButtonsProps
+
+Type: SelectAndSelectButtonsProps
+
+#### SelectButtonsSynced
+
+**Extends React.Component**
+
+#### SelectButtonsSyncedProps
+
+Type: SelectAndSelectButtonsSyncedProps
+
+### TablePicker
+
+#### TablePicker
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[TablePickerProps][103]**
+
+#### TablePickerProps
+
+Type: {table: [Table][69]?, shouldAllowPickingNone: [boolean][61]?, onChange: function (tableModel:
+([Table][69] | null)): void?, placeholder: [string][58]?, style: [Object][67]?, className:
+[string][58]?, disabled: [boolean][61]?}
+
+##### Properties
+
+-   `table` **[Table][69]?**
+-   `shouldAllowPickingNone` **[boolean][61]?**
+-   `onChange` **function (tableModel: ([Table][69] | null)): void?**
+-   `placeholder` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
+
+#### TablePickerSynced
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[TablePickerSyncedProps][104]**
+
+#### TablePickerSyncedProps
+
+Type: {globalConfigKey: GlobalConfigKey, onChange: function (tableModel: ([Table][69] | null)):
+void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?, placeholder: [string][58]?,
+style: [Object][67]?, className: [string][58]?}
+
+##### Properties
+
+-   `globalConfigKey` **GlobalConfigKey**
+-   `onChange` **function (tableModel: ([Table][69] | null)): void?**
+-   `disabled` **[boolean][61]?**
+-   `shouldAllowPickingNone` **[boolean][61]?**
+-   `placeholder` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+
+### Toggle
+
+#### Toggle
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[ToggleProps][105]**
+
+#### ToggleProps
+
+Type: {value: [boolean][61], label: React.Node?, theme: [string][58]?, onChange: function
+([boolean][61]): void?, disabled: [boolean][61]?, className: [string][58]?, style: [Object][67]?,
+tabIndex: [number][63]?}
+
+##### Properties
+
+-   `value` **[boolean][61]**
+-   `label` **React.Node?**
+-   `theme` **[string][58]?**
+-   `onChange` **function ([boolean][61]): void?**
+-   `disabled` **[boolean][61]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `tabIndex` **[number][63]?**
+
+#### ToggleSynced
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[ToggleSyncedProps][106]**
+
+#### ToggleSyncedProps
+
+Type: {globalConfigKey: GlobalConfigKey, label: React.Node?, theme: [string][58]?, onChange:
+function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][58]?, style:
+[Object][67]?, tabIndex: [number][63]?}
+
+##### Properties
+
+-   `globalConfigKey` **GlobalConfigKey**
+-   `label` **React.Node?**
+-   `theme` **[string][58]?**
+-   `onChange` **function ([boolean][61]): void?**
+-   `disabled` **[boolean][61]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `tabIndex` **[number][63]?**
+
+### Tooltip
+
+#### Tooltip
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[TooltipProps][107]**
+
+#### TooltipProps
+
+Type: {children: React$Element&lt;any>, renderContent: function (): React$Element&lt;any>?, content:
+([string][58] | function (): React\$Element&lt;any>)?, placementX: PopoverPlacementX?, placementY:
+PopoverPlacementY?, placementOffsetX: [number][63]?, placementOffsetY: [number][63]?,
+fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][61]?, disabled:
+[boolean][61]?, className: [string][58]?, style: [Object][67]?}
+
+##### Properties
+
+-   `children` **React\$Element&lt;any>**
+-   `renderContent` **function (): React\$Element&lt;any>?**
+-   `content` **([string][58] | function (): React\$Element&lt;any>)?**
+-   `placementX` **PopoverPlacementX?**
+-   `placementY` **PopoverPlacementY?**
+-   `placementOffsetX` **[number][63]?**
+-   `placementOffsetY` **[number][63]?**
+-   `fitInWindowMode` **FitInWindowMode?**
+-   `shouldHideTooltipOnClick` **[boolean][61]?**
+-   `disabled` **[boolean][61]?**
+-   `className` **[string][58]?**
+-   `style` **[Object][67]?**
+
+### ViewPicker
+
+#### ViewPicker
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[ViewPickerProps][108]**
+
+#### ViewPickerProps
+
+Type: {table: [Table][69]?, view: [View][65]?, shouldAllowPickingNone: [boolean][61]?, onChange:
+function (viewModel: ([View][65] | null)): void?, allowedTypes: [Array][62]&lt;ViewType>?,
+placeholder: [string][58]?, style: [Object][67]?, className: [string][58]?, disabled:
+[boolean][61]?}
+
+##### Properties
+
+-   `table` **[Table][69]?**
+-   `view` **[View][65]?**
+-   `shouldAllowPickingNone` **[boolean][61]?**
+-   `onChange` **function (viewModel: ([View][65] | null)): void?**
+-   `allowedTypes` **[Array][62]&lt;ViewType>?**
+-   `placeholder` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+-   `disabled` **[boolean][61]?**
+
+#### ViewPickerSynced
+
+**Extends React.Component**
+
+##### Parameters
+
+-   `props` **[ViewPickerSyncedProps][109]**
+
+#### ViewPickerSyncedProps
+
+Type: {table: [Table][69]?, globalConfigKey: GlobalConfigKey, onChange: function (viewModel:
+([View][65] | null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?,
+allowedTypes: [Array][62]&lt;ViewType>?, placeholder: [string][58]?, style: [Object][67]?,
+className: [string][58]?}
+
+##### Properties
+
+-   `table` **[Table][69]?**
+-   `globalConfigKey` **GlobalConfigKey**
+-   `onChange` **function (viewModel: ([View][65] | null)): void?**
+-   `disabled` **[boolean][61]?**
+-   `shouldAllowPickingNone` **[boolean][61]?**
+-   `allowedTypes` **[Array][62]&lt;ViewType>?**
+-   `placeholder` **[string][58]?**
+-   `style` **[Object][67]?**
+-   `className` **[string][58]?**
+
+### ViewportConstraint
+
+#### ViewportConstraint
 
 **Extends React.Component**
 
@@ -1997,7 +2504,7 @@ Returns **[Array][178]&lt;WatchableKey>**
 
 ViewportConstraint - when mounted, applies constraints to the viewport.
 
-### Examples
+##### Examples
 
 ```javascript
 <UI.ViewportConstraint minSize={{width: 400}} />
@@ -2009,197 +2516,133 @@ ViewportConstraint - when mounted, applies constraints to the viewport.
 </UI.ViewportConstraint>
 ```
 
+#### ViewportConstraintProps
+
+Type: {minSize: [ViewportSizeConstraintProp][110]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][110]?, children: React.Node?}
+
+##### Properties
+
+-   `minSize` **[ViewportSizeConstraintProp][110]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][110]?**
+-   `children` **React.Node?**
+
+#### ViewportSizeConstraintProp
+
+Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
+
+##### Properties
+
+-   `width` **([number][63] | null)?**
+-   `height` **([number][63] | null)?**
+
 [1]: #airtableblocks
 [2]: #blocksdk
 [3]: #runinfo
 [4]: #globalconfig
-[5]: #airtableblocksmodels
-[6]: #base
-[7]: #table
-[8]: #view
-[9]: #field
-[10]: #queryresult
-[11]: #record
-[12]: #airtableblocksui
-[13]: #button
-[14]: #icon
-[15]: #tableorviewqueryresult
-[16]: #parameters
-[17]: #fields
-[18]: #parenttable
-[19]: #parentview
-[20]: #recordids
-[21]: #abstractmodel
-[22]: #parameters-1
-[23]: #id
-[24]: #isdeleted
-[25]: #abstractmodelwithasyncdata
-[26]: #parameters-2
-[27]: #isdataloaded
-[28]: #loaddataasync
-[29]: #unloaddata
-[30]: #unwatch
-[31]: #watch
-[32]: #cursor
-[33]: #parameters-3
-[34]: #examples
-[35]: #activetableid
-[36]: #activeviewid
-[37]: #viewport
-[38]: #parameters-4
-[39]: #examples-1
-[40]: #addmaxfullscreensize
-[41]: #addminsize
-[42]: #enterfullscreenifpossible
-[43]: #exitfullscreen
-[44]: #isfullscreen
-[45]: #issmallerthanminsize
-[46]: #maxfullscreensize
-[47]: #minsize
-[48]: #size
-[49]: #aggregator
-[50]: #properties
-[51]: #examples-2
-[52]: #autocompletepopover
-[53]: #parameters-5
-[54]: #cellrenderer
-[55]: #parameters-6
-[56]: #choicetoken
-[57]: #parameters-7
-[58]: #collaboratortoken
-[59]: #parameters-8
-[60]: #colorpalette
-[61]: #colorpalettesynced
-[62]: #colorutils
-[63]: #examples-3
-[64]: #gethexforcolor
-[65]: #getrgbforcolor
-[66]: #shoulduselighttextoncolor
-[67]: #createdatacontainer
-[68]: #parameters-9
-[69]: #examples-4
-[70]: #expandrecord
-[71]: #parameters-10
-[72]: #examples-5
-[73]: #expandrecordlist
-[74]: #parameters-11
-[75]: #examples-6
-[76]: #expandrecordpickerasync
-[77]: #parameters-12
-[78]: #examples-7
-[79]: #fieldicon
-[80]: #parameters-13
-[81]: #fieldpicker
-[82]: #parameters-14
-[83]: #fieldpickersynced
-[84]: #parameters-15
-[85]: #linkedrecordsqueryresult
-[86]: #parameters-16
-[87]: #fields-1
-[88]: #isvalid
-[89]: #parenttable-1
-[90]: #recordids-1
-[91]: #records
-[92]: #fieldtypes
-[93]: #examples-8
-[94]: #generateguid
-[95]: #examples-9
-[96]: #viewtypes
-[97]: #examples-10
-[98]: #getrecordcolor
-[99]: #parameters-17
-[100]: #visiblerecordids
-[101]: #visiblerecords
-[102]: #globalalert
-[103]: #examples-11
-[104]: #showreloadprompt
-[105]: #input
-[106]: #parameters-18
-[107]: #inputsynced
-[108]: #parameters-19
-[109]: #isrecordmetadataloaded
-[110]: #recordids-2
-[111]: #records-1
-[112]: #settingsbutton
-[113]: #parameters-20
-[114]: #examples-12
-[115]: #isvisible
-[116]: #link
-[117]: #parameters-21
-[118]: #loadcssfromstring
-[119]: #parameters-22
-[120]: #examples-13
-[121]: #loadcssfromurlasync
-[122]: #parameters-23
-[123]: #examples-14
-[124]: #loader
-[125]: #parameters-24
-[126]: #loadscriptfromurlasync
-[127]: #parameters-25
-[128]: #examples-15
-[129]: #modal
-[130]: #parameters-26
-[131]: #modes
-[132]: #examples-16
-[133]: #popover
-[134]: #parameters-27
-[135]: #progressbar
-[136]: #parameters-28
-[137]: #radiosynced
-[138]: #parameters-29
-[139]: #recordcard
-[140]: #parameters-30
-[141]: #recordcardlist
-[142]: #parameters-31
-[143]: #select
-[144]: #parameters-32
-[145]: #selectbuttons
-[146]: #selectbuttonssynced
-[147]: #selectsynced
-[148]: #parameters-33
-[149]: #synced
-[150]: #parameters-34
-[151]: #tablepicker
-[152]: #parameters-35
-[153]: #tablepickersynced
-[154]: #parameters-36
-[155]: #toggle
-[156]: #parameters-37
-[157]: #togglesynced
-[158]: #parameters-38
-[159]: #tooltip
-[160]: #parameters-39
-[161]: #watchable
-[162]: #unwatch-1
-[163]: #watch-1
-[164]: #viewpicker
-[165]: #parameters-40
-[166]: #viewpickersynced
-[167]: #parameters-41
-[168]: #viewportconstraint
-[169]: #examples-17
-[170]: #base
-[171]: #cursor
-[172]: #globalconfig
-[173]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-[174]: #runinfo
-[175]: #settingsbutton
-[176]: #viewport
-[177]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-[178]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-[179]: #table
-[180]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-[181]: #record
-[182]: #field
-[183]: #view
-[184]: #tableorviewqueryresult
-[185]: #aggregator
-[186]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-[187]: #linkedrecordsqueryresult
-[188]: #buttonprops
-[189]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-[190]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-[191]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[192]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[193]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[194]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[5]: #viewport
+[6]: #airtableblocksmodels
+[7]: #fieldtypes
+[8]: #generateguid
+[9]: #viewtypes
+[10]: #recordcoloring
+[11]: #settingsbutton
+[12]: #abstractmodel
+[13]: #abstractmodelwithasyncdata
+[14]: #aggregator
+[15]: #base
+[16]: #cursor
+[17]: #field
+[18]: #queryresult
+[19]: #record
+[20]: #table
+[21]: #view
+[22]: #watchable
+[23]: #airtableblocksui
+[24]: #css--external-scripts
+[25]: #color-utilities
+[26]: #expandrecord
+[27]: #expandrecordlist
+[28]: #expandrecordpickerasync
+[29]: #globalalert
+[30]: #autocompletepopover
+[31]: #button
+[32]: #cellrenderer
+[33]: #choicetoken
+[34]: #collaboratortoken
+[35]: #colorpalette
+[36]: #fieldicon
+[37]: #fieldpicker
+[38]: #icon
+[39]: #input
+[40]: #link
+[41]: #loader
+[42]: #modal
+[43]: #popover
+[44]: #progressbar
+[45]: #radiosynced
+[46]: #recordcard
+[47]: #recordcardlist
+[48]: #select
+[49]: #selectbuttons
+[50]: #tablepicker
+[51]: #toggle
+[52]: #tooltip
+[53]: #viewpicker
+[54]: #viewportconstraint
+[55]: #base
+[56]: #cursor
+[57]: #globalconfig
+[58]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[59]: #runinfo
+[60]: #viewport
+[61]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[62]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[63]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[64]: #field
+[65]: #view
+[66]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[67]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[68]: #record
+[69]: #table
+[70]: #aggregator
+[71]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[72]: #color
+[73]: #linkedrecordsqueryresult
+[74]: #tableorviewqueryresult
+[75]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[76]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[77]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[78]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[79]: #expandrecordopts
+[80]: #autocompletepopoverprops
+[81]: #autocompleteitem
+[82]: #buttonprops
+[83]: #cellrendererprops
+[84]: #choicetokenprops
+[85]: #collaboratortokenprops
+[86]: #fieldiconprops
+[87]: #fieldpickerprops
+[88]: #fieldpickersyncedprops
+[89]: #iconprops
+[90]: #inputprops
+[91]: #inputsyncedprops
+[92]: #linkprops
+[93]: #loaderprops
+[94]: #modalprops
+[95]: #popoverprops
+[96]: #progressbarprops
+[97]: #radiosyncedprops
+[98]: #recordcardprops
+[99]: #recordcardlistprops
+[100]: https://developer.mozilla.org/docs/Web/API/Event
+[101]: #selectprops
+[102]: #selectsyncedprops
+[103]: #tablepickerprops
+[104]: #tablepickersyncedprops
+[105]: #toggleprops
+[106]: #togglesyncedprops
+[107]: #tooltipprops
+[108]: #viewpickerprops
+[109]: #viewpickersyncedprops
+[110]: #viewportsizeconstraintprop

@@ -17,6 +17,8 @@ var Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/
 
 
 var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
+/** @typedef */
+
 
 /** */
 var Icon = (_ref) => {

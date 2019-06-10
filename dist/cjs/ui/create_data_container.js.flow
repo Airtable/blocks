@@ -81,6 +81,8 @@ type WrappedWatchConfig = {
  *         {watch: props.table, key: 'fields', callback: MyComponent.prototype._onFieldsChange},
  *     ];
  * });
+ *
+ * @private
  */
 //
 // IMPORTANT: The passthruMethodNames arg should be reserved for internal blocks SDK use only.

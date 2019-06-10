@@ -45,6 +45,8 @@ var _global_config_synced_component_helpers = _interopRequireDefault(require("./
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
+/** @typedef */
+
 
 /** */
 var ToggleSynced =

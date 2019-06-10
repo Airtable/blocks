@@ -40,6 +40,8 @@ var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_serve
 var CellReadModeContext = window.__requirePrivateModuleFromAirtable('client_server_shared/cell_context/cell_read_mode_context');
 
 var CellContextTypes = window.__requirePrivateModuleFromAirtable('client_server_shared/cell_context/cell_context_types');
+/** @typedef */
+
 
 /** */
 var CellRenderer =

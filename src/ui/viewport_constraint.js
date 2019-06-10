@@ -4,18 +4,23 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 
-type SizeConstraintProp = {
+/** @typedef */
+type ViewportSizeConstraintProp = {
     width?: number | null,
     height?: number | null,
 };
 
+/** @typedef */
 type ViewportConstraintProps = {
-    minSize?: SizeConstraintProp,
-    maxFullscreenSize?: SizeConstraintProp,
+    minSize?: ViewportSizeConstraintProp,
+    maxFullscreenSize?: ViewportSizeConstraintProp,
     children?: React.Node,
 };
 
-const didSizeChange = (prev: ?SizeConstraintProp, next: ?SizeConstraintProp): boolean =>
+const didSizeChange = (
+    prev: ?ViewportSizeConstraintProp,
+    next: ?ViewportSizeConstraintProp,
+): boolean =>
     (prev && prev.width) !== (next && next.width) ||
     (prev && prev.height) !== (next && next.height);
 

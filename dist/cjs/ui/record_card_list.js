@@ -230,6 +230,8 @@ function (_React$Component) {
   }]);
   return RecordCardListWithItemProvider;
 }(React.Component);
+/** @typedef */
+
 
 (0, _defineProperty2.default)(RecordCardListWithItemProvider, "propTypes", {
   itemProvider: _propTypes.default.instanceOf(RecordCardListItemProvider).isRequired,

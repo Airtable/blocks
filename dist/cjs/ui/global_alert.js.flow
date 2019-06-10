@@ -15,6 +15,7 @@ type AlertInfo = {
 };
 
 /**
+ * @alias globalAlert
  * @example
  * import {UI} from 'airtable-block';
  * UI.globalAlert.showReloadPrompt();
@@ -25,6 +26,7 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
         return isEnumValue(WatchableGlobalAlertKeys, key);
     }
     _alertInfo: AlertInfo | null;
+    /** @private */
     constructor() {
         super();
         this._alertInfo = null;
@@ -33,7 +35,7 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     get __alertInfo(): AlertInfo | null {
         return this._alertInfo;
     }
-    /** */
+    /** @memberof globalAlert */
     showReloadPrompt() {
         this._alertInfo = {
             content: (

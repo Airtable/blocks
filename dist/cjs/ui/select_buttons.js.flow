@@ -11,11 +11,14 @@ import {
     validateOptions,
     optionValueToString,
     type SelectOptionValue,
-    type SelectAndSelectButtonsProps as SelectButtonsProps,
+    type SelectAndSelectButtonsProps,
 } from './select_and_select_buttons_helpers';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
+
+/** @typedef */
+type SelectButtonsProps = SelectAndSelectButtonsProps;
 
 /** */
 class SelectButtons extends React.Component<SelectButtonsProps> {

@@ -24,8 +24,12 @@ const WatchableRecordColorsInViewKeyPrefix = 'recordColorsInView:';
 // The string case is to accommodate prefix keys
 export type WatchableRecordStoreKey = $Values<typeof WatchableRecordStoreKeys> | string;
 
-// One RecordStore exists per table, and contains all the record data associated with that table.
-// Table itself is for schema information only, so isn't the appropriate place for this data.
+/**
+ * One RecordStore exists per table, and contains all the record data associated with that table.
+ * Table itself is for schema information only, so isn't the appropriate place for this data.
+ *
+ * @private
+ */
 class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordStoreKey> {
     static _className = 'RecordStore';
     static _isWatchableKey(key: string): boolean {

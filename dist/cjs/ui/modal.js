@@ -37,6 +37,9 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _icon = _interopRequireDefault(require("./icon"));
 
+/**
+ * @alias Modal.CloseButton
+ */
 var ModalCloseButton =
 /*#__PURE__*/
 function (_React$Component) {
@@ -63,6 +66,8 @@ function (_React$Component) {
   }]);
   return ModalCloseButton;
 }(React.Component);
+/** @typedef */
+
 
 (0, _defineProperty2.default)(ModalCloseButton, "propTypes", {
   className: _propTypes.default.string,

@@ -32,6 +32,7 @@ const classNamesByTheme = {
     [themes.GRAY]: 'gray',
 };
 
+/** @typedef */
 type ToggleProps = {
     value: boolean,
     label?: React.Node,

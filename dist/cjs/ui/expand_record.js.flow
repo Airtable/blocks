@@ -2,6 +2,7 @@
 import getSdk from '../get_sdk';
 import type Record from '../models/record';
 
+/** @typedef */
 export type ExpandRecordOpts = {
     records?: Array<Record>,
 };

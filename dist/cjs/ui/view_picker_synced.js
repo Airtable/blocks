@@ -52,6 +52,8 @@ var _global_config_synced_component_helpers = _interopRequireDefault(require("./
 var _synced = _interopRequireDefault(require("./synced"));
 
 var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
+/** @typedef */
+
 
 /** */
 var ViewPickerSynced =

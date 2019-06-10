@@ -24,6 +24,8 @@ var appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable('client
 var profilePicHelper = window.__requirePrivateModuleFromAirtable('client_server_shared/profile_pic_helper');
 
 var _CollaboratorToken = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/components/collaborator_token');
+/** @typdef */
+
 
 /** */
 var CollaboratorToken = props => {

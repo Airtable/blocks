@@ -49,6 +49,8 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
     u = _window$__requirePriv.u;
 
 var KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
+/** @typedef */
+
 
 /** */
 var AutocompletePopover =

@@ -15,6 +15,7 @@ import Synced from './synced';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
+/** @typedef */
 type ViewPickerSyncedProps = {
     table?: Table,
     globalConfigKey: GlobalConfigKey,

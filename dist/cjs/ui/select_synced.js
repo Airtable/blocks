@@ -35,9 +35,10 @@ var _synced = _interopRequireDefault(require("./synced"));
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
+/** @typedef */
+
+
 /** */
-
-
 var SelectSynced =
 /*#__PURE__*/
 function (_React$Component) {

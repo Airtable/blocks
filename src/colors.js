@@ -1,67 +1,278 @@
 // @flow
+
+/**
+ * An enum of color names
+ * @alias colors
+ */
 const Colors = {
+    /**
+     * @alias colors.BLUE_BRIGHT
+     * @memberof colors
+     */
     BLUE_BRIGHT: ('blueBright': 'blueBright'),
+    /**
+     * @alias colors.BLUE_DARK_1
+     * @memberof colors
+     */
     BLUE_DARK_1: ('blueDark1': 'blueDark1'),
+    /**
+     * @alias colors.BLUE_LIGHT_1
+     * @memberof colors
+     */
     BLUE_LIGHT_1: ('blueLight1': 'blueLight1'),
+    /**
+     * @alias colors.BLUE_LIGHT_2
+     * @memberof colors
+     */
     BLUE_LIGHT_2: ('blueLight2': 'blueLight2'),
+    /**
+     * @alias colors.BLUE
+     * @memberof colors
+     */
     BLUE: ('blue': 'blue'),
 
+    /**
+     * @alias colors.CYAN_BRIGHT
+     * @memberof colors
+     */
     CYAN_BRIGHT: ('cyanBright': 'cyanBright'),
+    /**
+     * @alias colors.CYAN_DARK_1
+     * @memberof colors
+     */
     CYAN_DARK_1: ('cyanDark1': 'cyanDark1'),
+    /**
+     * @alias colors.CYAN_LIGHT_1
+     * @memberof colors
+     */
     CYAN_LIGHT_1: ('cyanLight1': 'cyanLight1'),
+    /**
+     * @alias colors.CYAN_LIGHT_2
+     * @memberof colors
+     */
     CYAN_LIGHT_2: ('cyanLight2': 'cyanLight2'),
+    /**
+     * @alias colors.CYAN
+     * @memberof colors
+     */
     CYAN: ('cyan': 'cyan'),
 
+    /**
+     * @alias colors.GRAY_BRIGHT
+     * @memberof colors
+     */
     GRAY_BRIGHT: ('grayBright': 'grayBright'),
+    /**
+     * @alias colors.GRAY_DARK_1
+     * @memberof colors
+     */
     GRAY_DARK_1: ('grayDark1': 'grayDark1'),
+    /**
+     * @alias colors.GRAY_LIGHT_1
+     * @memberof colors
+     */
     GRAY_LIGHT_1: ('grayLight1': 'grayLight1'),
+    /**
+     * @alias colors.GRAY_LIGHT_2
+     * @memberof colors
+     */
     GRAY_LIGHT_2: ('grayLight2': 'grayLight2'),
+    /**
+     * @alias colors.GRAY
+     * @memberof colors
+     */
     GRAY: ('gray': 'gray'),
 
+    /**
+     * @alias colors.GREEN_BRIGHT
+     * @memberof colors
+     */
     GREEN_BRIGHT: ('greenBright': 'greenBright'),
+    /**
+     * @alias colors.GREEN_DARK_1
+     * @memberof colors
+     */
     GREEN_DARK_1: ('greenDark1': 'greenDark1'),
+    /**
+     * @alias colors.GREEN_LIGHT_1
+     * @memberof colors
+     */
     GREEN_LIGHT_1: ('greenLight1': 'greenLight1'),
+    /**
+     * @alias colors.GREEN_LIGHT_2
+     * @memberof colors
+     */
     GREEN_LIGHT_2: ('greenLight2': 'greenLight2'),
+    /**
+     * @alias colors.GREEN
+     * @memberof colors
+     */
     GREEN: ('green': 'green'),
 
+    /**
+     * @alias colors.ORANGE_BRIGHT
+     * @memberof colors
+     */
     ORANGE_BRIGHT: ('orangeBright': 'orangeBright'),
+    /**
+     * @alias colors.ORANGE_DARK_1
+     * @memberof colors
+     */
     ORANGE_DARK_1: ('orangeDark1': 'orangeDark1'),
+    /**
+     * @alias colors.ORANGE_LIGHT_1
+     * @memberof colors
+     */
     ORANGE_LIGHT_1: ('orangeLight1': 'orangeLight1'),
+    /**
+     * @alias colors.ORANGE_LIGHT_2
+     * @memberof colors
+     */
     ORANGE_LIGHT_2: ('orangeLight2': 'orangeLight2'),
+    /**
+     * @alias colors.ORANGE
+     * @memberof colors
+     */
     ORANGE: ('orange': 'orange'),
 
+    /**
+     * @alias colors.PINK_BRIGHT
+     * @memberof colors
+     */
     PINK_BRIGHT: ('pinkBright': 'pinkBright'),
+    /**
+     * @alias colors.PINK_DARK_1
+     * @memberof colors
+     */
     PINK_DARK_1: ('pinkDark1': 'pinkDark1'),
+    /**
+     * @alias colors.PINK_LIGHT_1
+     * @memberof colors
+     */
     PINK_LIGHT_1: ('pinkLight1': 'pinkLight1'),
+    /**
+     * @alias colors.PINK_LIGHT_2
+     * @memberof colors
+     */
     PINK_LIGHT_2: ('pinkLight2': 'pinkLight2'),
+    /**
+     * @alias colors.PINK
+     * @memberof colors
+     */
     PINK: ('pink': 'pink'),
 
+    /**
+     * @alias colors.PURPLE_BRIGHT
+     * @memberof colors
+     */
     PURPLE_BRIGHT: ('purpleBright': 'purpleBright'),
+    /**
+     * @alias colors.PURPLE_DARK_1
+     * @memberof colors
+     */
     PURPLE_DARK_1: ('purpleDark1': 'purpleDark1'),
+    /**
+     * @alias colors.PURPLE_LIGHT_1
+     * @memberof colors
+     */
     PURPLE_LIGHT_1: ('purpleLight1': 'purpleLight1'),
+    /**
+     * @alias colors.PURPLE_LIGHT_2
+     * @memberof colors
+     */
     PURPLE_LIGHT_2: ('purpleLight2': 'purpleLight2'),
+    /**
+     * @alias colors.PURPLE
+     * @memberof colors
+     */
     PURPLE: ('purple': 'purple'),
 
+    /**
+     * @alias colors.RED_BRIGHT
+     * @memberof colors
+     */
     RED_BRIGHT: ('redBright': 'redBright'),
+    /**
+     * @alias colors.RED_DARK_1
+     * @memberof colors
+     */
     RED_DARK_1: ('redDark1': 'redDark1'),
+    /**
+     * @alias colors.RED_LIGHT_1
+     * @memberof colors
+     */
     RED_LIGHT_1: ('redLight1': 'redLight1'),
+    /**
+     * @alias colors.RED_LIGHT_2
+     * @memberof colors
+     */
     RED_LIGHT_2: ('redLight2': 'redLight2'),
+    /**
+     * @alias colors.RED
+     * @memberof colors
+     */
     RED: ('red': 'red'),
 
+    /**
+     * @alias colors.TEAL_BRIGHT
+     * @memberof colors
+     */
     TEAL_BRIGHT: ('tealBright': 'tealBright'),
+    /**
+     * @alias colors.TEAL_DARK_1
+     * @memberof colors
+     */
     TEAL_DARK_1: ('tealDark1': 'tealDark1'),
+    /**
+     * @alias colors.TEAL_LIGHT_1
+     * @memberof colors
+     */
     TEAL_LIGHT_1: ('tealLight1': 'tealLight1'),
+    /**
+     * @alias colors.TEAL_LIGHT_2
+     * @memberof colors
+     */
     TEAL_LIGHT_2: ('tealLight2': 'tealLight2'),
+    /**
+     * @alias colors.TEAL
+     * @memberof colors
+     */
     TEAL: ('teal': 'teal'),
 
+    /**
+     * @alias colors.YELLOW_BRIGHT
+     * @memberof colors
+     */
     YELLOW_BRIGHT: ('yellowBright': 'yellowBright'),
+    /**
+     * @alias colors.YELLOW_DARK_1
+     * @memberof colors
+     */
     YELLOW_DARK_1: ('yellowDark1': 'yellowDark1'),
+    /**
+     * @alias colors.YELLOW_LIGHT_1
+     * @memberof colors
+     */
     YELLOW_LIGHT_1: ('yellowLight1': 'yellowLight1'),
+    /**
+     * @alias colors.YELLOW_LIGHT_2
+     * @memberof colors
+     */
     YELLOW_LIGHT_2: ('yellowLight2': 'yellowLight2'),
+    /**
+     * @alias colors.YELLOW
+     * @memberof colors
+     */
     YELLOW: ('yellow': 'yellow'),
 };
 
 export default Colors;
+
+/**
+ * A value from the colors enum
+ * @type string
+ * @see colors
+ */
 export type Color = $Values<typeof Colors>;
 
 export const rgbTuplesByColor = {

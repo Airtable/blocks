@@ -14,6 +14,7 @@ const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/collaborator_token',
 );
 
+/** @typdef */
 type CollaboratorTokenProps = {
     collaborator: {
         id?: string,

@@ -8,6 +8,7 @@ const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu')
 
 export type InputValue = string | boolean | number;
 
+/** @typedef */
 type InputProps = {
     type?: string,
     placeholder?: string,

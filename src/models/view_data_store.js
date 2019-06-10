@@ -23,6 +23,7 @@ export type WatchableViewDataStoreKey = $Values<typeof WatchableViewDataStoreKey
 // ViewDataStore contains loadable data for a specific view. That means the set of visible records,
 // and field order/visibility information. View itself only contains core schema information. The
 // data here doesn't belong in View as it's record data or conditionally loaded.
+/** @private */
 class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDataStoreKey> {
     static _className = 'ViewDataStore';
     static _isWatchableKey(key: string): boolean {

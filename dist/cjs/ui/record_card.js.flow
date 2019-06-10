@@ -93,6 +93,7 @@ CellValueAndFieldLabel.propTypes = {
     width: PropTypes.number.isRequired,
 };
 
+/** @typedef */
 type RecordCardProps = {
     record: Record | RecordDef,
     fields?: Array<Field>,

@@ -4,18 +4,168 @@ toc:
           - BlockSdk
           - RunInfo
           - GlobalConfig
+          - Viewport
     - name: '@airtable/blocks/models'
       children:
+          - fieldTypes
+          - generateGuid
+          - viewTypes
+          - recordColoring
+          - settingsButton
+          - AbstractModel
+          - AbstractModelWithAsyncData
+          - Aggregator
           - Base
+          - Cursor
+          - Field
+          - name: QueryResult
+            children:
+                - QueryResult
+                - TableOrViewQueryResult
+                - LinkedRecordsQueryResult
+          - Record
           - Table
           - View
-          - Field
-          - QueryResult
-          - Record
+          - Watchable
     - name: '@airtable/blocks/ui'
       children:
+          - name: 'CSS & external scripts'
+            children:
+                - loadCSSFromString
+                - loadCSSFromURLAsync
+                - loadScriptFromURLAsync
+          - name: Color utilities
+            children:
+                - Color
+                - RGB
+                - colorUtils
+                - colors
+          - name: expandRecord
+            children:
+                - expandRecord
+                - ExpandRecordOpts
+          - expandRecordList
+          - expandRecordPickerAsync
+          - globalAlert
+          - name: AutocompletePopover
+            children:
+                - AutocompletePopover
+                - AutocompletePopoverProps
+                - AutocompleteItem
           - name: Button
             children:
                 - Button
                 - ButtonProps
-          - Icon
+          - name: CellRenderer
+            children:
+                - CellRenderer
+                - CellRendererProps
+          - name: ChoiceToken
+            children:
+                - ChoiceToken
+                - ChoiceTokenProps
+          - name: CollaboratorToken
+            children:
+                - CollaboratorToken
+                - CollaboratorTokenProps
+          - name: ColorPalette
+            children:
+                - ColorPalette
+                - ColorPaletteProps
+                - ColorPaletteSynced
+                - ColorPaletteSyncedProps
+          - name: FieldIcon
+            children:
+                - FieldIcon
+                - FieldIconProps
+          - name: FieldPicker
+            children:
+                - FieldPicker
+                - FieldPickerProps
+                - FieldPickerSynced
+                - FieldPickerSyncedProps
+          - name: Icon
+            children:
+                - Icon
+                - IconProps
+          - name: Input
+            children:
+                - Input
+                - InputProps
+                - InputSynced
+                - InputSyncedProps
+          - name: Link
+            children:
+                - Link
+                - LinkProps
+          - name: Loader
+            children:
+                - Loader
+                - LoaderProps
+          - name: Modal
+            children:
+                - Modal
+                - ModalProps
+                - Modal.CloseButton
+                - ModalCloseButtonProps
+          - name: Popover
+            children:
+                - Popover
+                - PopoverProps
+                - Popover.fitInWindowModes
+                - Popover.placements
+          - name: ProgressBar
+            children:
+                - ProgressBar
+                - ProgressBarProps
+          - name: RadioSynced
+            children:
+                - RadioSynced
+                - RadioSyncedProps
+          - name: RecordCard
+            children:
+                - RecordCard
+                - RecordCardProps
+          - name: RecordCardList
+            children:
+                - RecordCardList
+                - RecordCardListProps
+          - name: Select
+            children:
+                - Select
+                - SelectProps
+                - SelectSynced
+                - SelectSyncedProps
+          - name: SelectButtons
+            children:
+                - SelectButtons
+                - SelectButtonsProps
+                - SelectButtonsSynced
+                - SelectButtonsSyncedProps
+          - name: TablePicker
+            children:
+                - TablePicker
+                - TablePickerProps
+                - TablePickerSynced
+                - TablePickerSyncedProps
+          - name: Toggle
+            children:
+                - Toggle
+                - ToggleProps
+                - ToggleSynced
+                - ToggleSyncedProps
+          - name: Tooltip
+            children:
+                - Tooltip
+                - TooltipProps
+          - name: ViewPicker
+            children:
+                - ViewPicker
+                - ViewPickerProps
+                - ViewPickerSynced
+                - ViewPickerSyncedProps
+          - name: ViewportConstraint
+            children:
+                - ViewportConstraint
+                - ViewportConstraintProps
+                - ViewportSizeConstraintProp

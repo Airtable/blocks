@@ -33,7 +33,7 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
 
 var _global_config_synced_component_helpers = _interopRequireDefault(require("./global_config_synced_component_helpers"));
 
-/** */
+/** @private */
 var Synced =
 /*#__PURE__*/
 function (_React$Component) {

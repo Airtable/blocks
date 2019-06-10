@@ -9,6 +9,7 @@ const _ChoiceToken = window.__requirePrivateModuleFromAirtable(
 ); // TODO(kasra): don't depend on liveapp components.
 const colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 
+/** @typedef */
 type ChoiceTokenProps = {
     choice: {
         id: string,

@@ -71,8 +71,12 @@ var WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 var WatchableRecordIdsInViewKeyPrefix = 'recordIdsInView:';
 var WatchableRecordColorsInViewKeyPrefix = 'recordColorsInView:'; // The string case is to accommodate prefix keys
 
-// One RecordStore exists per table, and contains all the record data associated with that table.
-// Table itself is for schema information only, so isn't the appropriate place for this data.
+/**
+ * One RecordStore exists per table, and contains all the record data associated with that table.
+ * Table itself is for schema information only, so isn't the appropriate place for this data.
+ *
+ * @private
+ */
 var RecordStore =
 /*#__PURE__*/
 function (_AbstractModelWithAsy) {

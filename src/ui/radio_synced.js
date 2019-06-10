@@ -7,6 +7,7 @@ import {type GlobalConfigKey} from '../global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
 
+/** @typedef */
 type RadioSyncedProps = {
     globalConfigKey: GlobalConfigKey,
     value: string,
