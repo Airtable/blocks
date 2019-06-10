@@ -63,6 +63,8 @@ var forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtabl
  *
  * Any key can be watched to know when the value of the key changes.
  *
+ * You should not need to construct this object yourself.
+ *
  * @example
  * import {globalConfig} from '@airtable/blocks';
  */
@@ -79,6 +81,9 @@ function (_Watchable) {
     }
   }]);
 
+  /**
+   * @private
+   */
   function GlobalConfig(initialKvValuesByKey, airtableInterface) {
     var _this;
 
@@ -107,7 +112,17 @@ function (_Watchable) {
 
       return key;
     }
-    /** */
+    /**
+     * Get the value at a path. Throws an error if the path does not exist.
+     *
+     * @param {string|Array<string>} key A string for the the top-level key, or an array of strings describing the path to the value.
+     * @returns The value at the provided path.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * const topLevelValue = globalConfig.get('topLevelKey');
+     * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
+     */
 
   }, {
     key: "get",

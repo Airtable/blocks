@@ -98,9 +98,9 @@ Type: any
 
 #### reload
 
-#### reload
-
 Type: function (): void
+
+#### reload
 
 #### runInfo
 
@@ -163,6 +163,8 @@ development mode.
 
 Any key can be watched to know when the value of the key changes.
 
+You should not need to construct this object yourself.
+
 #### Parameters
 
 -   `initialKvValuesByKey` **GlobalConfigData**
@@ -188,11 +190,23 @@ import {globalConfig} from '@airtable/blocks';
 
 #### get
 
+Get the value at a path. Throws an error if the path does not exist.
+
 ##### Parameters
 
--   `key` **GlobalConfigKey**
+-   `key` **([string][173] \| [Array][178]&lt;[string][173]>)** A string for the the top-level key,
+    or an array of strings describing the path to the value.
 
-Returns **GlobalConfigValue**
+##### Examples
+
+```javascript
+import {globalConfig} from 'airtable-block';
+
+const topLevelValue = globalConfig.get('topLevelKey');
+const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
+```
+
+Returns **GlobalConfigValue** The value at the provided path.
 
 #### set
 
