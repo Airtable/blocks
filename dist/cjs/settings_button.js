@@ -52,6 +52,7 @@ function (_Watchable) {
     }
   }]);
 
+  /** @hideconstructor */
   function SettingsButton(airtableInterface) {
     var _this;
 

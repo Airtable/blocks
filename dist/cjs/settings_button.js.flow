@@ -30,6 +30,7 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     }
     _isVisible: boolean;
     _airtableInterface: AirtableInterface;
+    /** @hideconstructor */
     constructor(airtableInterface: AirtableInterface) {
         super();
 

@@ -78,7 +78,7 @@ class BlockSdk {
     /** Storage for this block installation's configuration. */
     globalConfig: GlobalConfig;
 
-    /** Represents the current Airtable base. */
+    /** Represents the current Airtable {@link Base}. */
     base: Base;
 
     /**
@@ -131,7 +131,9 @@ class BlockSdk {
     /** React components, hooks, and UI helpers. */
     UI: typeof UI;
 
-    /** Controls the block's settings button. */
+    /**
+     * Controls the block's {@link settingsButton settings button}.
+     */
     settingsButton: SettingsButton;
 
     undoRedo: UndoRedo;

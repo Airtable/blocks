@@ -64,7 +64,7 @@ Import the SDK from `'@airtable/blocks'`.
 
 #### base
 
-Represents the current Airtable base.
+Represents the current Airtable [Base][14].
 
 Type: [Base][54]
 
@@ -148,7 +148,7 @@ sessionStorage.setItem('lastScrollTop', 0);
 
 #### settingsButton
 
-Controls the block's settings button.
+Controls the block's [settings button][10].
 
 Type: SettingsButton
 
@@ -443,10 +443,6 @@ Type: \$Values&lt;any>
 Interface to the settings button that lives outside the block's viewport.
 
 Watch `click` to handle click events on the button.
-
-#### Parameters
-
--   `airtableInterface` **AirtableInterface**
 
 #### Examples
 
