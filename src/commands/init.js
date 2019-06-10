@@ -24,7 +24,7 @@ function getDefaultFrontendCode(blockDirPath: string): string {
         componentName = `${componentName}Block`;
     }
 
-    return `import {UI} from '@airtable/blocks';
+    return `import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
 
 function ${componentName}() {
@@ -34,7 +34,7 @@ function ${componentName}() {
     );
 }
 
-UI.initializeBlock(() => <${componentName} />);
+initializeBlock(() => <${componentName} />);
 `;
 }
 
