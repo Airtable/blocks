@@ -119,7 +119,7 @@ function (_React$Component) {
  * A styled modal dialog component.
  *
  * @example
- * import {Button, Dialog} from '@airtable/blocks/UI';
+ * import {Button, Dialog} from '@airtable/blocks/ui';
  * import React, {Fragment, useState} from 'react';
  *
  * function Block() {

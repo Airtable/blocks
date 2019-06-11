@@ -15,12 +15,17 @@ var _react = require("react");
 
 // Copied from https://github.com/facebook/react/pull/15022
 // TODO: replace this with the package once it's published
-// Hook used for safely managing subscriptions in concurrent mode.
-//
-// In order to avoid removing and re-adding subscriptions each time this hook is called,
-// the parameters passed to this hook should be memoized in some way–
-// either by wrapping the entire params object with useMemo()
-// or by wrapping the individual callbacks with useCallback().
+
+/**
+ * Hook used for safely managing subscriptions in concurrent mode.
+ *
+ * In order to avoid removing and re-adding subscriptions each time this hook is called,
+ * the parameters passed to this hook should be memoized in some way–
+ * either by wrapping the entire params object with useMemo()
+ * or by wrapping the individual callbacks with useCallback().
+ *
+ * @private
+ */
 function useSubscription(_ref) {
   var getCurrentValue = _ref.getCurrentValue,
       subscribe = _ref.subscribe;

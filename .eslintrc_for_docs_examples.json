@@ -5,6 +5,7 @@
         "react/react-in-jsx-scope": "off",
         "react/jsx-no-undef": "off",
         "flowtype/require-valid-file-annotation": "off",
-        "jsdoc/require-jsdoc": "off"
+        "jsdoc/require-jsdoc": "off",
+        "react/prop-types": "off"
     }
 }

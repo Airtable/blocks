@@ -21,6 +21,45 @@ var noopSubscription = {
   getCurrentValue: () => null,
   subscribe: () => () => {}
 };
+/**
+ * A React hook for watching data in Airtable models like {@link Table} and {@link Record}. Each
+ * model has several watchable keys that can be used with this hook to have your component
+ * automatically re-render when data in the models changes. You can also provide an optional
+ * callback if you need to do anything other than re-render when the data changes.
+ *
+ * This is a low-level tool that you should only use when you specifically need it. There are more
+ * convenient model-specific hooks available:
+ *
+ * - For {@link Base}, {@link Table}, {@link View} & {@link Field}, use {@link useBase}
+ * - For {@link QueryResult} & {@link Record}, use {@link useRecords}, {@link useRecordIds}, or
+ *   {@link useRecordById}
+ * - For {@link Viewport}, use {@link useViewport}.
+ *
+ * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
+ *
+ * @param {Watchable} model the model to watch
+ * @param {Array<string>} keys which keys we want to watch
+ * @param [callback] an optional callback to call when any of the watch keys change
+ *
+ * @example
+ * import {useWatchable} from '@airtable/blocks/ui';
+ *
+ * function TableName({table}) {
+ *     useWatchable(table, ['name']);
+ *     return <span>The table name is {table.name}</span>;
+ * }
+ *
+ * @example
+ * import {useWatchable} from '@airtable/blocks/ui';
+ *
+ * function ActiveView({cursor}) {
+ *     useWatchable(cursor, ['activeViewId'], () => {
+ *          alert('active view changed!!!')
+ *     });
+ *
+ *     return <span>Active view id: {cursor.activeViewId}</span>;
+ * }
+ */
 
 function useWatchable(model, keys, callback) {
   var compactKeys = (0, _private_utils.compact)(keys); // use a ref to the callback so consumers don't have to provide their own memoization to avoid

@@ -39,6 +39,30 @@ toc:
                 - RGB
                 - colorUtils
                 - colors
+          - name: React hooks for working with Airtable data
+            description: |
+                React hooks are a new feature in React 16.8. They allow you to use state and other
+                React features without writing a class, and form the core of how you can connect
+                React components to data from your Airtable base when writing Blocks. If you've
+                never used hooks before, don't worry - the React team [has some great resources](https://reactjs.org/docs/hooks-intro.html)
+                for learning about them. You can use hooks with class components too with the help
+                of the [withHooks](#withhooks) higher-order component.
+
+                > **Important Note:** right now, most of these hooks cause your component to
+                > re-render, but return the same mutable instance of the underlying model. This
+                > means that it's often not safe to use these hooks with React.memo or
+                > React.PureComponent. This will change in a future release of @airtable/blocks.
+                > If you're not sure what this means or if it effects you, don't worry! Just avoid
+                > React.memo & React.PureComponent and you'll be fine.
+            children:
+                - useBase
+                - useRecords
+                - useRecordIds
+                - useRecordById
+                - useViewport
+                - useWatchable
+                - useLoadable
+                - withHooks
           - name: expandRecord
             children:
                 - expandRecord
