@@ -2487,7 +2487,7 @@ Type: [object][68]
 -   `className` **[string][60]?**
 -   `style` **[Object][68]?**
 -   `onClick` **function (e: SyntheticMouseEvent&lt;[HTMLButtonElement][109]>): any?**
--   `type` **(`"button"` \| `"reset"` \| `"submit"`)**
+-   `type` **(`"button"` \| `"reset"` \| `"submit"`)?**
 -   `disabled` **[boolean][65]?**
 -   `tabIndex` **[number][67]?**
 -   `aria-label` **[string][60]?**

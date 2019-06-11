@@ -27,7 +27,7 @@ type ButtonProps = {
     className?: string,
     style?: Object,
     onClick?: (e?: SyntheticMouseEvent<HTMLButtonElement>) => mixed,
-    type: 'button' | 'reset' | 'submit',
+    type?: 'button' | 'reset' | 'submit',
     disabled?: boolean,
     tabIndex?: number,
     'aria-label'?: string,
