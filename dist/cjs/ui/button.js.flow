@@ -23,9 +23,14 @@ type ButtonTheme = $Values<typeof themes>;
  * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme=Button.themes.GRAY] The color theme for the button.
  */
 type ButtonProps = {
-    className?: string,
-    disabled?: boolean,
     theme: ButtonTheme,
+    className?: string,
+    style?: Object,
+    onClick?: (e?: SyntheticMouseEvent<HTMLButtonElement>) => mixed,
+    type: 'button' | 'reset' | 'submit',
+    disabled?: boolean,
+    tabIndex?: number,
+    'aria-label'?: string,
     children?: React.Node,
 };
 
@@ -36,7 +41,7 @@ const classNamesByTheme = {
     [themes.YELLOW]: 'yellow text-dark',
     [themes.WHITE]: 'white text-blue',
     [themes.DARK]: 'dark text-white',
-    [themes.GRAY]: 'grayLight1 text-dark',
+    [themes.GRAY]: 'grayLight2 text-dark',
     [themes.TRANSPARENT]: 'background-transparent text-dark',
 };
 
@@ -58,21 +63,25 @@ const classNamesByTheme = {
  */
 class Button extends React.Component<ButtonProps> {
     static propTypes = {
-        className: PropTypes.string,
-        disabled: PropTypes.bool,
         theme: PropTypes.oneOf(Object.keys(classNamesByTheme)),
+        className: PropTypes.string,
+        style: PropTypes.object,
+        onClick: PropTypes.func,
+        type: PropTypes.oneOf(['button', 'submit', 'reset']),
+        disabled: PropTypes.bool,
+        tabIndex: PropTypes.number,
+        'aria-label': PropTypes.string,
     };
-
     static defaultProps = {
-        theme: themes.GRAY,
+        theme: themes.BLUE,
+        // Default type is "submit", which will submit the parent <form> if it exists.
+        type: 'button',
     };
-
     static themes = themes;
-
     _button: HTMLButtonElement | null;
     constructor(props: ButtonProps) {
         super(props);
-
+        // TODO (stephen): use React.forwardRef
         this._button = null;
     }
     focus() {
@@ -88,17 +97,15 @@ class Button extends React.Component<ButtonProps> {
         this._button.click();
     }
     render() {
-        const {className, theme, disabled, children, ...restOfProps} = this.props;
+        const {theme, className, style, onClick, disabled, children} = this.props;
 
         const themeClassNames = classNamesByTheme[theme] || '';
 
         return (
             <button
                 ref={el => (this._button = el)}
-                type="button" // Default type is "submit", which will submit the parent <form> if it exists.
-                disabled={disabled}
                 className={classNames(
-                    'baymax rounded big strong p1 flex-inline items-center no-outline',
+                    'baymax rounded big strong p1 flex-inline items-center no-outline no-user-select',
                     themeClassNames,
                     className,
                     {
@@ -106,7 +113,11 @@ class Button extends React.Component<ButtonProps> {
                         'noevents quieter': disabled,
                     },
                 )}
-                {...restOfProps}
+                style={style}
+                onClick={onClick}
+                type="button"
+                disabled={disabled}
+                aria-label={this.props['aria-label']}
             >
                 {children}
             </button>

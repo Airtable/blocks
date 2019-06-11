@@ -9,10 +9,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -50,7 +46,7 @@ var classNamesByTheme = {
   [themes.YELLOW]: 'yellow text-dark',
   [themes.WHITE]: 'white text-blue',
   [themes.DARK]: 'dark text-white',
-  [themes.GRAY]: 'grayLight1 text-dark',
+  [themes.GRAY]: 'grayLight2 text-dark',
   [themes.TRANSPARENT]: 'background-transparent text-dark'
 };
 /**
@@ -79,7 +75,8 @@ function (_React$Component) {
     var _this;
 
     (0, _classCallCheck2.default)(this, Button);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Button).call(this, props)); // TODO (stephen): use React.forwardRef
+
     _this._button = null;
     return _this;
   }
@@ -109,34 +106,44 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var _this$props = this.props,
-          className = _this$props.className,
           theme = _this$props.theme,
+          className = _this$props.className,
+          style = _this$props.style,
+          onClick = _this$props.onClick,
           disabled = _this$props.disabled,
-          children = _this$props.children,
-          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["className", "theme", "disabled", "children"]);
+          children = _this$props.children;
       var themeClassNames = classNamesByTheme[theme] || '';
-      return React.createElement("button", (0, _extends2.default)({
+      return React.createElement("button", {
         ref: el => this._button = el,
-        type: "button" // Default type is "submit", which will submit the parent <form> if it exists.
-        ,
-        disabled: disabled,
-        className: (0, _classnames.default)('baymax rounded big strong p1 flex-inline items-center no-outline', themeClassNames, className, {
+        className: (0, _classnames.default)('baymax rounded big strong p1 flex-inline items-center no-outline no-user-select', themeClassNames, className, {
           'pointer link-quiet': !disabled,
           'noevents quieter': disabled
-        })
-      }, restOfProps), children);
+        }),
+        style: style,
+        onClick: onClick,
+        type: "button",
+        disabled: disabled,
+        "aria-label": this.props['aria-label']
+      }, children);
     }
   }]);
   return Button;
 }(React.Component);
 
 (0, _defineProperty2.default)(Button, "propTypes", {
+  theme: _propTypes.default.oneOf(Object.keys(classNamesByTheme)),
   className: _propTypes.default.string,
+  style: _propTypes.default.object,
+  onClick: _propTypes.default.func,
+  type: _propTypes.default.oneOf(['button', 'submit', 'reset']),
   disabled: _propTypes.default.bool,
-  theme: _propTypes.default.oneOf(Object.keys(classNamesByTheme))
+  tabIndex: _propTypes.default.number,
+  'aria-label': _propTypes.default.string
 });
 (0, _defineProperty2.default)(Button, "defaultProps", {
-  theme: themes.GRAY
+  theme: themes.BLUE,
+  // Default type is "submit", which will submit the parent <form> if it exists.
+  type: 'button'
 });
 (0, _defineProperty2.default)(Button, "themes", themes);
 var _default = Button;

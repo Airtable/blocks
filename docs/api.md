@@ -2485,7 +2485,12 @@ Type: [object][68]
     Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
     The color theme for the button.
 -   `className` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `onClick` **function (e: SyntheticMouseEvent&lt;[HTMLButtonElement][109]>): any?**
+-   `type` **(`"button"` \| `"reset"` \| `"submit"`)**
 -   `disabled` **[boolean][65]?**
+-   `tabIndex` **[number][67]?**
+-   `aria-label` **[string][60]?**
 -   `children` **React.Node?**
 
 ### CellRenderer
@@ -2496,7 +2501,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][109]**
+-   `props` **[CellRendererProps][110]**
 
 #### CellRendererProps
 
@@ -2518,7 +2523,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][110]**
+-   `$0` **[ChoiceTokenProps][111]**
     -   `$0.choice`
     -   `$0.className`
 
@@ -2538,7 +2543,7 @@ Type: {choice: {id: [string][60], name: [string][60], color: [string][60]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][111]**
+-   `props` **[CollaboratorTokenProps][112]**
 
 #### CollaboratorTokenProps
 
@@ -2658,7 +2663,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][112]**
+-   `props` **[DialogProps][113]**
 
 ##### Examples
 
@@ -2735,7 +2740,7 @@ React.Node?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][113]**
+-   `props` **[FieldIconProps][114]**
 
 #### FieldIconProps
 
@@ -2759,7 +2764,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][114]**
+-   `props` **[FieldPickerProps][115]**
 
 #### FieldPickerProps
 
@@ -2786,7 +2791,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][115]**
+-   `props` **[FieldPickerSyncedProps][116]**
 
 #### FieldPickerSyncedProps
 
@@ -2813,7 +2818,7 @@ className: [string][60]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][116]**
+-   `$0` **[IconProps][117]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -2843,7 +2848,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[InputProps][117]**
+-   `props` **[InputProps][118]**
 
 #### InputProps
 
@@ -2869,7 +2874,7 @@ Type: {type: [string][60]?, placeholder: [string][60]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][118]**
+-   `props` **[InputSyncedProps][119]**
 
 #### InputSyncedProps
 
@@ -2894,7 +2899,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][119]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][120]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -2933,7 +2938,7 @@ className: [string][60]?, style: [Object][68]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][120]**
+-   `$0` **[LoaderProps][121]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -2954,7 +2959,7 @@ Type: {fillColor: [string][60]?, scale: [number][67]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][121]**
+-   `props` **[PopoverProps][122]**
 
 #### PopoverProps
 
@@ -2989,7 +2994,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][122]**
+-   `props` **[ProgressBarProps][123]**
 
 ##### Examples
 
@@ -3024,7 +3029,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][123]**
+-   `props` **[RadioSyncedProps][124]**
 
 #### RadioSyncedProps
 
@@ -3047,13 +3052,13 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][60], style: [Object][68
 
 ##### Parameters
 
--   `props` **[RecordCardProps][124]**
+-   `props` **[RecordCardProps][125]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][74] | RecordDef), fields: [Array][64]&lt;[Field][71]>?, view: [View][72]?,
 attachmentCoverField: [Field][71]?, width: [number][67]?, height: [number][67]?, onClick:
-[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][125]?,
+[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][126]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
@@ -3065,7 +3070,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 -   `width` **[number][67]?**
 -   `height` **[number][67]?**
 -   `onClick` **[Function][73]?**
--   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][125]?**
+-   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][126]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][60]?**
@@ -3079,11 +3084,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][126]**
+-   `props` **[RecordCardListProps][127]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][127]):
+Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][128]):
 void?, onRecordClick: (null | function (record: ([Record][74] | RecordDef), index: [number][67]):
 void)?, onRecordMouseEnter: function (record: ([Record][74] | RecordDef), index: [number][67]):
 void?, onRecordMouseLeave: function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3093,7 +3098,7 @@ className: [string][60]?, style: [Object][68]?}
 ##### Properties
 
 -   `records` **[Array][64]&lt;([Record][74] | RecordDef)>**
--   `onScroll` **function ([Event][127]): void?**
+-   `onScroll` **function ([Event][128]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][74] | RecordDef), index: [number][67]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3114,7 +3119,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][128]**
+-   `props` **[SelectProps][129]**
 
 #### SelectProps
 
@@ -3126,7 +3131,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][129]**
+-   `props` **[SelectSyncedProps][130]**
 
 #### SelectSyncedProps
 
@@ -3158,7 +3163,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][130]**
+-   `props` **[TablePickerProps][131]**
 
 #### TablePickerProps
 
@@ -3182,7 +3187,7 @@ Type: {table: [Table][76]?, shouldAllowPickingNone: [boolean][65]?, onChange: fu
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][131]**
+-   `props` **[TablePickerSyncedProps][132]**
 
 #### TablePickerSyncedProps
 
@@ -3208,7 +3213,7 @@ style: [Object][68]?, className: [string][60]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][132]**
+-   `props` **[ToggleProps][133]**
 
 #### ToggleProps
 
@@ -3233,7 +3238,7 @@ tabIndex: [number][67]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][133]**
+-   `props` **[ToggleSyncedProps][134]**
 
 #### ToggleSyncedProps
 
@@ -3260,7 +3265,7 @@ function ([boolean][65]): void?, disabled: [boolean][65]?, className: [string][6
 
 ##### Parameters
 
--   `props` **[TooltipProps][134]**
+-   `props` **[TooltipProps][135]**
 
 #### TooltipProps
 
@@ -3293,7 +3298,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][135]**
+-   `props` **[ViewPickerProps][136]**
 
 #### ViewPickerProps
 
@@ -3320,7 +3325,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][136]**
+-   `props` **[ViewPickerSyncedProps][137]**
 
 #### ViewPickerSyncedProps
 
@@ -3367,13 +3372,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][137]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][137]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][138]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][138]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][137]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][137]?**
+-   `minSize` **[ViewportSizeConstraintProp][138]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][138]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -3493,32 +3498,33 @@ Type: {width: ([number][67] | null)?, height: ([number][67] | null)?}
 [106]: #autocompletepopoverprops
 [107]: #autocompleteitem
 [108]: #buttonprops
-[109]: #cellrendererprops
-[110]: #choicetokenprops
-[111]: #collaboratortokenprops
-[112]: #dialogprops
-[113]: #fieldiconprops
-[114]: #fieldpickerprops
-[115]: #fieldpickersyncedprops
-[116]: #iconprops
-[117]: #inputprops
-[118]: #inputsyncedprops
-[119]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[120]: #loaderprops
-[121]: #popoverprops
-[122]: #progressbarprops
-[123]: #radiosyncedprops
-[124]: #recordcardprops
-[125]: #expandrecordopts
-[126]: #recordcardlistprops
-[127]: https://developer.mozilla.org/docs/Web/API/Event
-[128]: #selectprops
-[129]: #selectsyncedprops
-[130]: #tablepickerprops
-[131]: #tablepickersyncedprops
-[132]: #toggleprops
-[133]: #togglesyncedprops
-[134]: #tooltipprops
-[135]: #viewpickerprops
-[136]: #viewpickersyncedprops
-[137]: #viewportsizeconstraintprop
+[109]: https://developer.mozilla.org/docs/Web/API/HTMLButtonElement
+[110]: #cellrendererprops
+[111]: #choicetokenprops
+[112]: #collaboratortokenprops
+[113]: #dialogprops
+[114]: #fieldiconprops
+[115]: #fieldpickerprops
+[116]: #fieldpickersyncedprops
+[117]: #iconprops
+[118]: #inputprops
+[119]: #inputsyncedprops
+[120]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[121]: #loaderprops
+[122]: #popoverprops
+[123]: #progressbarprops
+[124]: #radiosyncedprops
+[125]: #recordcardprops
+[126]: #expandrecordopts
+[127]: #recordcardlistprops
+[128]: https://developer.mozilla.org/docs/Web/API/Event
+[129]: #selectprops
+[130]: #selectsyncedprops
+[131]: #tablepickerprops
+[132]: #tablepickersyncedprops
+[133]: #toggleprops
+[134]: #togglesyncedprops
+[135]: #tooltipprops
+[136]: #viewpickerprops
+[137]: #viewpickersyncedprops
+[138]: #viewportsizeconstraintprop
