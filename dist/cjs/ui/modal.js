@@ -92,15 +92,15 @@ function (_React$Component) {
     }
   }, {
     key: "_onMouseDown",
-    value: function _onMouseDown(event) {
-      if (this._shouldClickingOnElementCloseModal(event.target)) {
+    value: function _onMouseDown(e) {
+      if (this._shouldClickingOnElementCloseModal(e.target)) {
         this._mouseDownOutsideModal = true;
       }
     }
   }, {
     key: "_onMouseUp",
-    value: function _onMouseUp(event) {
-      if (this._mouseDownOutsideModal && this.props.onClose && this._shouldClickingOnElementCloseModal(event.target)) {
+    value: function _onMouseUp(e) {
+      if (this._mouseDownOutsideModal && this.props.onClose && this._shouldClickingOnElementCloseModal(e.target)) {
         this.props.onClose();
       }
 
@@ -108,8 +108,8 @@ function (_React$Component) {
     }
   }, {
     key: "_shouldClickingOnElementCloseModal",
-    value: function _shouldClickingOnElementCloseModal(element) {
-      return element === this._background;
+    value: function _shouldClickingOnElementCloseModal(el) {
+      return el === this._background;
     }
   }, {
     key: "render",
@@ -122,7 +122,7 @@ function (_React$Component) {
         maxHeight: '100vh'
       }, this.props.style);
       return _reactDom.default.createPortal(React.createElement("div", {
-        ref: element => this._background = element,
+        ref: el => this._background = el,
         className: backgroundClassName,
         style: backgroundStyle,
         onMouseDown: this._onMouseDown,

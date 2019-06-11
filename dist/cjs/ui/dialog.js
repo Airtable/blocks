@@ -56,14 +56,14 @@ function (_React$Component) {
 
   (0, _createClass2.default)(DialogCloseButton, [{
     key: "_onKeyDown",
-    value: function _onKeyDown(event) {
-      if (event.ctrlKey || event.altKey || event.metaKey) {
+    value: function _onKeyDown(e) {
+      if (e.ctrlKey || e.altKey || e.metaKey) {
         return;
       }
 
-      if (['Enter', ' '].includes(event.key)) {
-        event.preventDefault();
-        event.stopPropagation();
+      if (['Enter', ' '].includes(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
         this.context.onDialogClose();
       }
     }
@@ -188,8 +188,8 @@ function (_React$Component2) {
     }
   }, {
     key: "_onKeyDown",
-    value: function _onKeyDown(event) {
-      if (event.key === 'Escape') {
+    value: function _onKeyDown(e) {
+      if (e.key === 'Escape') {
         this.props.onClose();
       }
     }

@@ -30,18 +30,18 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
     static contextTypes = {
         onDialogClose: PropTypes.func,
     };
-    _onKeyDown: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void;
+    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLDivElement>) => void;
     constructor(props: DialogCloseButtonProps) {
         super(props);
         this._onKeyDown = this._onKeyDown.bind(this);
     }
-    _onKeyDown(event: SyntheticKeyboardEvent<HTMLDivElement>) {
-        if (event.ctrlKey || event.altKey || event.metaKey) {
+    _onKeyDown(e: SyntheticKeyboardEvent<HTMLDivElement>) {
+        if (e.ctrlKey || e.altKey || e.metaKey) {
             return;
         }
-        if (['Enter', ' '].includes(event.key)) {
-            event.preventDefault();
-            event.stopPropagation();
+        if (['Enter', ' '].includes(e.key)) {
+            e.preventDefault();
+            e.stopPropagation();
             this.context.onDialogClose();
         }
     }
@@ -141,7 +141,7 @@ class Dialog extends React.Component<DialogProps> {
     static childContextTypes = {
         onDialogClose: PropTypes.func,
     };
-    _onKeyDown: (event: SyntheticKeyboardEvent<HTMLElement>) => void;
+    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLElement>) => void;
     constructor(props: DialogProps) {
         super(props);
         this._onKeyDown = this._onKeyDown.bind(this);
@@ -157,8 +157,8 @@ class Dialog extends React.Component<DialogProps> {
     componentWillUnmount() {
         window.removeEventListener('keydown', this._onKeyDown, false);
     }
-    _onKeyDown(event: SyntheticKeyboardEvent<HTMLElement>) {
-        if (event.key === 'Escape') {
+    _onKeyDown(e: SyntheticKeyboardEvent<HTMLElement>) {
+        if (e.key === 'Escape') {
             this.props.onClose();
         }
     }

@@ -125,7 +125,7 @@ function (_React$Component) {
       }, title), body, React.createElement("div", {
         className: "width-full flex flex-reverse items-center justify-start mt2"
       }, React.createElement(_button.default, {
-        ref: element => this._confirmButtonRef = element,
+        ref: el => this._confirmButtonRef = el,
         onClick: this._onConfirm,
         theme: isConfirmActionDangerous ? _button.default.themes.RED : _button.default.themes.BLUE
       }, confirmButtonText), React.createElement(_button.default, {

@@ -77,23 +77,23 @@ class Modal extends React.Component<ModalProps> {
             this._originalActiveElement.focus();
         }
     }
-    _onMouseDown(event: MouseEvent) {
-        if (this._shouldClickingOnElementCloseModal(event.target)) {
+    _onMouseDown(e: MouseEvent) {
+        if (this._shouldClickingOnElementCloseModal(e.target)) {
             this._mouseDownOutsideModal = true;
         }
     }
-    _onMouseUp(event: MouseEvent) {
+    _onMouseUp(e: MouseEvent) {
         if (
             this._mouseDownOutsideModal &&
             this.props.onClose &&
-            this._shouldClickingOnElementCloseModal(event.target)
+            this._shouldClickingOnElementCloseModal(e.target)
         ) {
             this.props.onClose();
         }
         this._mouseDownOutsideModal = false;
     }
-    _shouldClickingOnElementCloseModal(element: EventTarget) {
-        return element === this._background;
+    _shouldClickingOnElementCloseModal(el: EventTarget) {
+        return el === this._background;
     }
     render() {
         const backgroundClassName = classNames(
@@ -114,7 +114,7 @@ class Modal extends React.Component<ModalProps> {
 
         return ReactDOM.createPortal(
             <div
-                ref={element => (this._background = element)}
+                ref={el => (this._background = el)}
                 className={backgroundClassName}
                 style={backgroundStyle}
                 onMouseDown={this._onMouseDown}

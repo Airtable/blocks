@@ -112,7 +112,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                 {body}
                 <div className="width-full flex flex-reverse items-center justify-start mt2">
                     <Button
-                        ref={element => (this._confirmButtonRef = element)}
+                        ref={el => (this._confirmButtonRef = el)}
                         onClick={this._onConfirm}
                         theme={isConfirmActionDangerous ? Button.themes.RED : Button.themes.BLUE}
                     >
