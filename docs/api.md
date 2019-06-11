@@ -643,134 +643,124 @@ Model class representing a base.
 
 ```javascript
 import {base} from 'airtable-blocks';
+
+console.log('The name of your base is', base.name);
 ```
 
 #### activeCollaborators
 
-The users who have access to this base.
-
 Type: [Array][64]&lt;CollaboratorData>
 
-Returns **[Array][64]&lt;CollaboratorData>**
+##### Examples
+
+```javascript
+import {base} from 'airtable-blocks';
+console.log(base.activeCollaborators[0].email);
+```
+
+Returns **[Array][64]&lt;CollaboratorData>** The users who have access to this base.
 
 #### currentUser
 
-The current user, or `null` if the block is running in a publicly shared base.
-
 Type: (CollaboratorData | null)
 
-Returns **(CollaboratorData | null)**
+##### Examples
+
+```javascript
+import {base} from 'airtable-blocks';
+if (base.currentUser) {
+    console.log(base.currentUser.id);
+    console.log(base.currentUser.email);
+    console.log(base.currentUser.name);
+}
+```
+
+Returns **(CollaboratorData | null)** The current user, or `null` if the block is running in a
+publicly shared base.
 
 #### getCollaboratorById
 
-Returns the user matching the given ID. Throws if that user does not exist or does not have access
-to this base. Use [getCollaboratorByIdIfExists][75] instead if you are unsure whether a collaborator
-with the given ID exists and has access to this base.
-
 ##### Parameters
 
--   `collaboratorId` **UserId**
+-   `collaboratorId` **UserId** The ID of the user.
 
-Returns **CollaboratorData**
+Returns **CollaboratorData** The user matching the given ID. Throws if that user does not exist or
+does not have access to this base. Use [getCollaboratorByIdIfExists][75] instead if you are unsure
+whether a collaborator with the given ID exists and has access to this base.
 
 #### getCollaboratorByIdIfExists
 
-Returns the user matching the given ID, or `null` if that user does not exist or does not have
-access to this base.
-
 ##### Parameters
 
--   `collaboratorId` **UserId**
+-   `collaboratorId` **UserId** The ID of the user.
 
-Returns **(CollaboratorData | null)**
+Returns **(CollaboratorData | null)** The user matching the given ID, or `null` if that user does
+not exist or does not have access to this base.
 
 #### getTableById
 
-Returns the table matching the given ID. Throws if that table does not exist in this base. Use
-[getTableByIdIfExists][76] instead if you are unsure whether a table exists with the given ID.
-
 ##### Parameters
 
--   `tableId` **[string][60]**
+-   `tableId` **[string][60]** The ID of the table.
 
-Returns **[Table][77]**
+Returns **[Table][76]** The table matching the given ID. Throws if that table does not exist in this
+base. Use [getTableByIdIfExists][77] instead if you are unsure whether a table exists with the given
+ID.
 
 #### getTableByIdIfExists
 
-Returns the table matching the given ID, or `null` if that table does not exist in this base.
-
 ##### Parameters
 
--   `tableId` **[string][60]**
+-   `tableId` **[string][60]** The ID of the table.
 
-Returns **([Table][77] | null)**
+Returns **([Table][76] | null)** The table matching the given ID, or `null` if that table does not
+exist in this base.
 
 #### getTableByName
 
-Returns the table matching the given name. Throws if no table exists with that name in this base.
-Use [getTableByNameIfExists][78] instead if you are unsure whether a table exists with the given
-name.
-
 ##### Parameters
 
--   `tableName` **[string][60]**
+-   `tableName` **[string][60]** The name of the table you're looking for.
 
-Returns **[Table][77]**
+Returns **[Table][76]** The table matching the given name. Throws if no table exists with that name
+in this base. Use [getTableByNameIfExists][78] instead if you are unsure whether a table exists with
+the given name.
 
 #### getTableByNameIfExists
 
-Returns the table matching the given name, or `null` if no table exists with that name in this base.
-
 ##### Parameters
 
--   `tableName` **[string][60]**
+-   `tableName` **[string][60]** The name of the table you're looking for.
 
-Returns **([Table][77] | null)**
+Returns **([Table][76] | null)** The table matching the given name, or `null` if no table exists
+with that name in this base.
 
 #### name
-
-The name of the base.
-
-Type: [string][60]
-
-Returns **[string][60]**
-
-#### permissionLevel
-
-The current user's permission level.
-
-The value of this should not be consumed and will be deprecated. To know whether a user can perform
-an action, use the more specific `can` method.
-
-Can be watched to know when the user's permission level changes. Usually, you'll want to watch this
-in your root component and re-render your whole block when the permission level changes.
 
 Type: [string][60]
 
 ##### Examples
 
 ```javascript
-if (globalConfig.canSet('foo')) {
-    globalConfig.set('foo', 'bar');
-}
+import {base} from 'airtable-blocks';
+console.log('The name of your base is', base.name);
 ```
 
-```javascript
-if (record.canSetCellValue('Name', 'Chair')) {
-    record.setCellValue('Name', 'Chair');
-}
-```
-
-Returns **[string][60]**
+Returns **[string][60]** The name of the base.
 
 #### tables
 
-The tables in this base. Can be watched to know when tables are created, deleted, or reordered in
-the base.
+Type: [Array][64]&lt;[Table][76]>
 
-Type: [Array][64]&lt;[Table][77]>
+##### Examples
 
-Returns **[Array][64]&lt;[Table][77]>**
+```javascript
+import {base} from 'airtable-blocks';
+console.log(`You have ${base.tables.length} tables`);
+```
+
+Returns **[Array][64]&lt;[Table][76]>** The tables in this base. Can be watched to know when tables
+are created, deleted, or reordered in the base.
 
 ### Cursor
 
@@ -816,7 +806,7 @@ Model class representing a field in a table.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `parentTable` **[Table][77]**
+-   `parentTable` **[Table][76]**
 -   `fieldId` **[string][60]**
 
 #### availableAggregators
@@ -879,9 +869,9 @@ Returns **({} | null)**
 
 #### parentTable
 
-Type: [Table][77]
+Type: [Table][76]
 
-Returns **[Table][77]**
+Returns **[Table][76]**
 
 #### type
 
@@ -914,9 +904,9 @@ Returns **([Array][64]&lt;[Field][71]> | null)**
 
 The table that records in this QueryResult are part of
 
-Type: [Table][77]
+Type: [Table][76]
 
-Returns **[Table][77]**
+Returns **[Table][76]**
 
 ##### recordIds
 
@@ -945,7 +935,7 @@ Do not instantiate. You can get instances of this class by calling `table.select
 
 ##### Parameters
 
--   `sourceModel` **([Table][77] \| [View][72])**
+-   `sourceModel` **([Table][76] \| [View][72])**
 -   `recordStore` **RecordStore**
 -   `opts` **QueryResultOpts?**
 
@@ -960,9 +950,9 @@ Returns **([Array][64]&lt;[Field][71]> | null)**
 
 ##### parentTable
 
-Type: [Table][77]
+Type: [Table][76]
 
-Returns **[Table][77]**
+Returns **[Table][76]**
 
 ##### parentView
 
@@ -1019,9 +1009,9 @@ Returns **[boolean][65]**
 
 The table that the records in the QueryResult are a part of
 
-Type: [Table][77]
+Type: [Table][76]
 
-Returns **[Table][77]**
+Returns **[Table][76]**
 
 ##### recordIds
 
@@ -1051,7 +1041,7 @@ Do not instantiate. To create a new record, use `table.createRecord`.
 
 -   `baseData` **BaseData**
 -   `parentRecordStore` **RecordStore**
--   `parentTable` **[Table][77]**
+-   `parentTable` **[Table][76]**
 -   `recordId` **[string][60]**
 
 #### canDelete
@@ -1147,9 +1137,9 @@ Returns **([Color][81] | null)**
 
 #### parentTable
 
-Type: [Table][77]
+Type: [Table][76]
 
-Returns **[Table][77]**
+Returns **[Table][76]**
 
 #### primaryCellValue
 
@@ -1436,7 +1426,7 @@ Returns **[string][60]** The name of the view. Can be watched.
 
 #### parentTable
 
-Type: [Table][77]
+Type: [Table][76]
 
 ##### Examples
 
@@ -1446,7 +1436,7 @@ console.log(view.parentTable.id === myTable.id);
 // => true
 ```
 
-Returns **[Table][77]** The table that this view belongs to. Should never change because views
+Returns **[Table][76]** The table that this view belongs to. Should never change because views
 aren't moved between tables.
 
 #### selectRecords
@@ -2684,14 +2674,14 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 #### FieldPickerProps
 
-Type: {table: [Table][77]?, field: [Field][71]?, shouldAllowPickingNone: [boolean][65]?, onChange:
+Type: {table: [Table][76]?, field: [Field][71]?, shouldAllowPickingNone: [boolean][65]?, onChange:
 function (fieldModel: ([Field][71] | null)): void?, allowedTypes: [Array][64]&lt;FieldType>?,
 placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disabled:
 [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][77]?**
+-   `table` **[Table][76]?**
 -   `field` **[Field][71]?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
 -   `onChange` **function (fieldModel: ([Field][71] | null)): void?**
@@ -2711,14 +2701,14 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 #### FieldPickerSyncedProps
 
-Type: {table: [Table][77]?, globalConfigKey: GlobalConfigKey, onChange: function (fieldModel:
+Type: {table: [Table][76]?, globalConfigKey: GlobalConfigKey, onChange: function (fieldModel:
 ([Field][71] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?,
 allowedTypes: [Array][64]&lt;FieldType>?, placeholder: [string][60]?, style: [Object][68]?,
 className: [string][60]?}
 
 ##### Properties
 
--   `table` **[Table][77]?**
+-   `table` **[Table][76]?**
 -   `globalConfigKey` **GlobalConfigKey**
 -   `onChange` **function (fieldModel: ([Field][71] | null)): void?**
 -   `disabled` **[boolean][65]?**
@@ -3083,15 +3073,15 @@ Type: SelectAndSelectButtonsSyncedProps
 
 #### TablePickerProps
 
-Type: {table: [Table][77]?, shouldAllowPickingNone: [boolean][65]?, onChange: function (tableModel:
-([Table][77] | null)): void?, placeholder: [string][60]?, style: [Object][68]?, className:
+Type: {table: [Table][76]?, shouldAllowPickingNone: [boolean][65]?, onChange: function (tableModel:
+([Table][76] | null)): void?, placeholder: [string][60]?, style: [Object][68]?, className:
 [string][60]?, disabled: [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][77]?**
+-   `table` **[Table][76]?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
--   `onChange` **function (tableModel: ([Table][77] | null)): void?**
+-   `onChange` **function (tableModel: ([Table][76] | null)): void?**
 -   `placeholder` **[string][60]?**
 -   `style` **[Object][68]?**
 -   `className` **[string][60]?**
@@ -3107,14 +3097,14 @@ Type: {table: [Table][77]?, shouldAllowPickingNone: [boolean][65]?, onChange: fu
 
 #### TablePickerSyncedProps
 
-Type: {globalConfigKey: GlobalConfigKey, onChange: function (tableModel: ([Table][77] | null)):
+Type: {globalConfigKey: GlobalConfigKey, onChange: function (tableModel: ([Table][76] | null)):
 void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?, placeholder: [string][60]?,
 style: [Object][68]?, className: [string][60]?}
 
 ##### Properties
 
 -   `globalConfigKey` **GlobalConfigKey**
--   `onChange` **function (tableModel: ([Table][77] | null)): void?**
+-   `onChange` **function (tableModel: ([Table][76] | null)): void?**
 -   `disabled` **[boolean][65]?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
 -   `placeholder` **[string][60]?**
@@ -3218,14 +3208,14 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, dis
 
 #### ViewPickerProps
 
-Type: {table: [Table][77]?, view: [View][72]?, shouldAllowPickingNone: [boolean][65]?, onChange:
+Type: {table: [Table][76]?, view: [View][72]?, shouldAllowPickingNone: [boolean][65]?, onChange:
 function (viewModel: ([View][72] | null)): void?, allowedTypes: [Array][64]&lt;ViewType>?,
 placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disabled:
 [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][77]?**
+-   `table` **[Table][76]?**
 -   `view` **[View][72]?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
 -   `onChange` **function (viewModel: ([View][72] | null)): void?**
@@ -3245,14 +3235,14 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 #### ViewPickerSyncedProps
 
-Type: {table: [Table][77]?, globalConfigKey: GlobalConfigKey, onChange: function (viewModel:
+Type: {table: [Table][76]?, globalConfigKey: GlobalConfigKey, onChange: function (viewModel:
 ([View][72] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?,
 allowedTypes: [Array][64]&lt;ViewType>?, placeholder: [string][60]?, style: [Object][68]?,
 className: [string][60]?}
 
 ##### Properties
 
--   `table` **[Table][77]?**
+-   `table` **[Table][76]?**
 -   `globalConfigKey` **GlobalConfigKey**
 -   `onChange` **function (viewModel: ([View][72] | null)): void?**
 -   `disabled` **[boolean][65]?**
@@ -3381,8 +3371,8 @@ Type: {width: ([number][67] | null)?, height: ([number][67] | null)?}
 [73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 [74]: #record
 [75]: getCollaboratorByIdIfExists
-[76]: getTableByIdIfExists
-[77]: #table
+[76]: #table
+[77]: getTableByIdIfExists
 [78]: getTableByNameIfExists
 [79]: #aggregator
 [80]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date

@@ -55,6 +55,8 @@ type ChangedPaths = {_isDirty?: true, [string]: ?ChangedPaths};
  *
  * @example
  * import {base} from 'airtable-blocks';
+ *
+ * console.log('The name of your base is', base.name);
  */
 class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     static _className = 'Base';
@@ -73,15 +75,32 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.
         this._airtableInterface = airtableInterface;
     }
+    /**
+     * @private
+     */
     get _dataOrNullIfDeleted(): BaseData | null {
         return this._baseData;
     }
-    /** The name of the base. */
+    /**
+     * @function
+     * @returns The name of the base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * console.log('The name of your base is', base.name);
+     */
     get name(): string {
         return this._data.name;
     }
     /**
-     * The current user, or `null` if the block is running in a publicly shared base.
+     * @function
+     * @returns The current user, or `null` if the block is running in a publicly shared base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * if (base.currentUser) {
+     *     console.log(base.currentUser.id);
+     *     console.log(base.currentUser.email);
+     *     console.log(base.currentUser.name);
+     * }
      */
     get currentUser(): CollaboratorData | null {
         const userId = this._data.currentUserId;
@@ -91,13 +110,20 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             return this.getCollaboratorByIdIfExists(userId);
         }
     }
+    /**
+     * @private
+     */
     _isFeatureEnabled(featureName: string): boolean {
         return this._data.enabledFeatureNames.includes(featureName);
     }
+    /**
+     * @private
+     */
     get __rawPermissionLevel(): PermissionLevel {
         return this._data.permissionLevel;
     }
     /**
+     * @private
      * The current user's permission level.
      *
      * The value of this should not be consumed and will be deprecated.
@@ -122,8 +148,11 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
     }
     /**
-     * The tables in this base. Can be watched to know when tables are created,
-     * deleted, or reordered in the base.
+     * @function
+     * @returns The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * console.log(`You have ${base.tables.length} tables`);
      */
     get tables(): Array<Table> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
@@ -141,7 +170,11 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return tables;
     }
     /**
-     * The users who have access to this base.
+     * @function
+     * @returns The users who have access to this base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * console.log(base.activeCollaborators[0].email);
      */
     get activeCollaborators(): Array<CollaboratorData> {
         const collaborators = [];
@@ -165,8 +198,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return collaborators;
     }
     /**
-     * Returns the user matching the given ID, or `null` if that
-     * user does not exist or does not have access to this base.
+     * @param collaboratorId The ID of the user.
+     * @returns The user matching the given ID, or `null` if that user does not exist or does not have access to this base.
      */
     getCollaboratorByIdIfExists(collaboratorId: UserId): CollaboratorData | null {
         const appBlanket = this.__appBlanket;
@@ -180,7 +213,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
     /**
-     * Returns the user matching the given ID. Throws if that user does not exist
+     * @param collaboratorId The ID of the user.
+     * @returns The user matching the given ID. Throws if that user does not exist
      * or does not have access to this base. Use {@link getCollaboratorByIdIfExists}
      * instead if you are unsure whether a collaborator with the given ID exists
      * and has access to this base.
@@ -194,9 +228,15 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return collaborator;
     }
+    /**
+     * @private
+     */
     get __appBlanket(): AppBlanketData {
         return this._data.appBlanket;
     }
+    /**
+     * @private
+     */
     get __appInterface(): UserScopedAppInterface {
         return new UserScopedAppInterface({
             applicationId: this.id,
@@ -207,6 +247,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             isFeatureEnabled: featureName => this._isFeatureEnabled(featureName),
         });
     }
+    /**
+     * @private
+     */
     __getRecordStore(tableId: TableId): RecordStore {
         if (this._tableRecordStoresByTableId[tableId]) {
             return this._tableRecordStoresByTableId[tableId];
@@ -217,8 +260,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return newRecordStore;
     }
     /**
-     * Returns the table matching the given ID, or `null` if that
-     * table does not exist in this base.
+     * @param tableId The ID of the table.
+     * @returns The table matching the given ID, or `null` if that table does not exist in this base.
      */
     getTableByIdIfExists(tableId: string): Table | null {
         if (!this._data.tablesById[tableId]) {
@@ -237,9 +280,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
     }
     /**
-     * Returns the table matching the given ID. Throws if that table does not
-     * exist in this base. Use {@link getTableByIdIfExists} instead if you are
-     * unsure whether a table exists with the given ID.
+     * @param tableId The ID of the table.
+     * @returns The table matching the given ID. Throws if that table does not exist in this base. Use {@link getTableByIdIfExists} instead if you are unsure whether a table exists with the given ID.
      */
     getTableById(tableId: string): Table {
         const table = this.getTableByIdIfExists(tableId);
@@ -249,8 +291,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return table;
     }
     /**
-     * Returns the table matching the given name, or `null` if no table
-     * exists with that name in this base.
+     * @param tableName The name of the table you're looking for.
+     * @returns The table matching the given name, or `null` if no table exists with that name in this base.
      */
     getTableByNameIfExists(tableName: string): Table | null {
         for (const [tableId, tableData] of entries(this._data.tablesById)) {
@@ -261,9 +303,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return null;
     }
     /**
-     * Returns the table matching the given name. Throws if no table exists
-     * with that name in this base. Use {@link getTableByNameIfExists} instead
-     * if you are unsure whether a table exists with the given name.
+     * @param tableName The name of the table you're looking for.
+     * @returns The table matching the given name. Throws if no table exists with that name in this base. Use {@link getTableByNameIfExists} instead if you are unsure whether a table exists with the given name.
      */
     getTableByName(tableName: string): Table {
         const table = this.getTableByNameIfExists(tableName);
@@ -272,6 +313,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return table;
     }
+    /**
+     * @private
+     */
     __triggerOnChangeForChangedPaths(changedPaths: ChangedPaths) {
         let didSchemaChange = false;
         if (changedPaths.name) {
@@ -318,6 +362,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             this._onChange(WatchableBaseKeys.__schema);
         }
     }
+    /**
+     * @private
+     */
     __applyChangesWithoutTriggeringEvents(changes: Array<ModelChange>): ChangedPaths {
         // Internal method.
         // After applying all changes, changedPaths will have the same shape as
@@ -331,6 +378,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return changedPaths;
     }
+    /**
+     * @private
+     */
     _applyChange(path: Array<string>, value: mixed, changedPathsByRef: ChangedPaths) {
         let dataSubtree = this._data;
         let dirtySubtree = changedPathsByRef;

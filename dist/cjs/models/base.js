@@ -90,6 +90,8 @@ var WatchableBaseKeys = Object.freeze({
  *
  * @example
  * import {base} from 'airtable-blocks';
+ *
+ * console.log('The name of your base is', base.name);
  */
 var Base =
 /*#__PURE__*/
@@ -116,18 +118,30 @@ function (_AbstractModel) {
     _this._airtableInterface = airtableInterface;
     return _this;
   }
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(Base, [{
     key: "_isFeatureEnabled",
+
+    /**
+     * @private
+     */
     value: function _isFeatureEnabled(featureName) {
       return this._data.enabledFeatureNames.includes(featureName);
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "getCollaboratorByIdIfExists",
 
     /**
-     * Returns the user matching the given ID, or `null` if that
-     * user does not exist or does not have access to this base.
+     * @param collaboratorId The ID of the user.
+     * @returns The user matching the given ID, or `null` if that user does not exist or does not have access to this base.
      */
     value: function getCollaboratorByIdIfExists(collaboratorId) {
       var appBlanket = this.__appBlanket;
@@ -145,7 +159,8 @@ function (_AbstractModel) {
       return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
     /**
-     * Returns the user matching the given ID. Throws if that user does not exist
+     * @param collaboratorId The ID of the user.
+     * @returns The user matching the given ID. Throws if that user does not exist
      * or does not have access to this base. Use {@link getCollaboratorByIdIfExists}
      * instead if you are unsure whether a collaborator with the given ID exists
      * and has access to this base.
@@ -162,8 +177,16 @@ function (_AbstractModel) {
 
       return collaborator;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getRecordStore",
+
+    /**
+     * @private
+     */
     value: function __getRecordStore(tableId) {
       if (this._tableRecordStoresByTableId[tableId]) {
         return this._tableRecordStoresByTableId[tableId];
@@ -175,8 +198,8 @@ function (_AbstractModel) {
       return newRecordStore;
     }
     /**
-     * Returns the table matching the given ID, or `null` if that
-     * table does not exist in this base.
+     * @param tableId The ID of the table.
+     * @returns The table matching the given ID, or `null` if that table does not exist in this base.
      */
 
   }, {
@@ -193,9 +216,8 @@ function (_AbstractModel) {
       }
     }
     /**
-     * Returns the table matching the given ID. Throws if that table does not
-     * exist in this base. Use {@link getTableByIdIfExists} instead if you are
-     * unsure whether a table exists with the given ID.
+     * @param tableId The ID of the table.
+     * @returns The table matching the given ID. Throws if that table does not exist in this base. Use {@link getTableByIdIfExists} instead if you are unsure whether a table exists with the given ID.
      */
 
   }, {
@@ -210,8 +232,8 @@ function (_AbstractModel) {
       return table;
     }
     /**
-     * Returns the table matching the given name, or `null` if no table
-     * exists with that name in this base.
+     * @param tableName The name of the table you're looking for.
+     * @returns The table matching the given name, or `null` if no table exists with that name in this base.
      */
 
   }, {
@@ -249,9 +271,8 @@ function (_AbstractModel) {
       return null;
     }
     /**
-     * Returns the table matching the given name. Throws if no table exists
-     * with that name in this base. Use {@link getTableByNameIfExists} instead
-     * if you are unsure whether a table exists with the given name.
+     * @param tableName The name of the table you're looking for.
+     * @returns The table matching the given name. Throws if no table exists with that name in this base. Use {@link getTableByNameIfExists} instead if you are unsure whether a table exists with the given name.
      */
 
   }, {
@@ -265,6 +286,10 @@ function (_AbstractModel) {
 
       return table;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__triggerOnChangeForChangedPaths",
     value: function __triggerOnChangeForChangedPaths(changedPaths) {
@@ -369,6 +394,10 @@ function (_AbstractModel) {
         this._onChange(WatchableBaseKeys.__schema);
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__applyChangesWithoutTriggeringEvents",
     value: function __applyChangesWithoutTriggeringEvents(changes) {
@@ -406,6 +435,10 @@ function (_AbstractModel) {
 
       return changedPaths;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_applyChange",
     value: function _applyChange(path, value, changedPathsByRef) {
@@ -454,7 +487,13 @@ function (_AbstractModel) {
     get: function get() {
       return this._baseData;
     }
-    /** The name of the base. */
+    /**
+     * @function
+     * @returns The name of the base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * console.log('The name of your base is', base.name);
+     */
 
   }, {
     key: "name",
@@ -462,7 +501,15 @@ function (_AbstractModel) {
       return this._data.name;
     }
     /**
-     * The current user, or `null` if the block is running in a publicly shared base.
+     * @function
+     * @returns The current user, or `null` if the block is running in a publicly shared base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * if (base.currentUser) {
+     *     console.log(base.currentUser.id);
+     *     console.log(base.currentUser.email);
+     *     console.log(base.currentUser.name);
+     * }
      */
 
   }, {
@@ -482,6 +529,7 @@ function (_AbstractModel) {
       return this._data.permissionLevel;
     }
     /**
+     * @private
      * The current user's permission level.
      *
      * The value of this should not be consumed and will be deprecated.
@@ -509,8 +557,11 @@ function (_AbstractModel) {
       return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
     }
     /**
-     * The tables in this base. Can be watched to know when tables are created,
-     * deleted, or reordered in the base.
+     * @function
+     * @returns The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * console.log(`You have ${base.tables.length} tables`);
      */
 
   }, {
@@ -533,7 +584,11 @@ function (_AbstractModel) {
       return tables;
     }
     /**
-     * The users who have access to this base.
+     * @function
+     * @returns The users who have access to this base.
+     * @example
+     * import {base} from 'airtable-blocks';
+     * console.log(base.activeCollaborators[0].email);
      */
 
   }, {
@@ -582,6 +637,10 @@ function (_AbstractModel) {
     get: function get() {
       return this._data.appBlanket;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__appInterface",
     get: function get() {
