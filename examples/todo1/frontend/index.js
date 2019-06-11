@@ -25,7 +25,7 @@ function Task({record}) {
             <a
                 style={{cursor: 'pointer'}}
                 onClick={() => {
-                    UI.expandRecord(record);
+                    expandRecord(record);
                 }}
             >
                 {record.primaryCellValueAsString || 'Unnamed record'}
