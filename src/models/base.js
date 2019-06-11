@@ -75,6 +75,18 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.
         this._airtableInterface = airtableInterface;
     }
+
+    /**
+     * @function id
+     * @memberof Base
+     * @instance
+     * @returns {string} This base's ID.
+     * @example
+     * import {base} from '@airtable/blocks';
+     * console.log(base.id);
+     * // => 'app1234567890123'
+     */
+
     /**
      * @private
      */

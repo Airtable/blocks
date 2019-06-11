@@ -735,6 +735,18 @@ the given name.
 Returns **([Table][76] | null)** The table matching the given name, or `null` if no table exists
 with that name in this base.
 
+#### id
+
+##### Examples
+
+```javascript
+import {base} from '@airtable/blocks';
+console.log(base.id);
+// => 'app1234567890123'
+```
+
+Returns **[string][60]** This base's ID.
+
 #### name
 
 Type: [string][60]
@@ -861,6 +873,17 @@ console.log(cellValue === 42);
 ```
 
 Returns **any** The parsed cell value, or `null` if unable to parse the given string.
+
+#### id
+
+##### Examples
+
+```javascript
+console.log(myField.id);
+// => 'fld1234567890123'
+```
+
+Returns **[string][60]** This field's ID.
 
 #### isAggregatorAvailable
 
@@ -1499,6 +1522,17 @@ console.log(myView.allFields);
 
 Returns **[Array][64]&lt;[Field][71]>** All the fields in the table, including fields that are
 hidden in this view. Can be watched to know when fields are created, deleted, or reordered.
+
+#### id
+
+##### Examples
+
+```javascript
+console.log(myView.id);
+// => 'viw1234567890123'
+```
+
+Returns **[string][60]** This view's ID.
 
 #### name
 

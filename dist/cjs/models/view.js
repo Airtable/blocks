@@ -85,6 +85,16 @@ function (_AbstractModel) {
     return _this;
   }
   /**
+   * @function id
+   * @memberof View
+   * @instance
+   * @returns {string} This view's ID.
+   * @example
+   * console.log(myView.id);
+   * // => 'viw1234567890123'
+   */
+
+  /**
    * @private
    */
 

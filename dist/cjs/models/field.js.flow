@@ -60,6 +60,17 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
 
         this._parentTable = parentTable;
     }
+
+    /**
+     * @function id
+     * @memberof Field
+     * @instance
+     * @returns {string} This field's ID.
+     * @example
+     * console.log(myField.id);
+     * // => 'fld1234567890123'
+     */
+
     /**
      * @private
      */

@@ -119,6 +119,17 @@ function (_AbstractModel) {
     return _this;
   }
   /**
+   * @function id
+   * @memberof Base
+   * @instance
+   * @returns {string} This base's ID.
+   * @example
+   * import {base} from '@airtable/blocks';
+   * console.log(base.id);
+   * // => 'app1234567890123'
+   */
+
+  /**
    * @private
    */
 
