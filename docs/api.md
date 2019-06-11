@@ -639,11 +639,6 @@ const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
 
 Model class representing a base.
 
-#### Parameters
-
--   `baseData` **BaseData**
--   `airtableInterface` **AirtableInterface**
-
 #### Examples
 
 ```javascript

@@ -102,6 +102,9 @@ function (_AbstractModel) {
     }
   }]);
 
+  /**
+   * @hideconstructor
+   */
   function Base(baseData, airtableInterface) {
     var _this;
 

@@ -64,6 +64,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     _tableModelsById: {[string]: Table};
     _tableRecordStoresByTableId: {[TableId]: RecordStore | void} = {};
     _airtableInterface: AirtableInterface;
+    /**
+     * @hideconstructor
+     */
     constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
         super(baseData, baseData.id);
 
