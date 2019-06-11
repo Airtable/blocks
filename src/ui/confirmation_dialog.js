@@ -105,6 +105,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
 
         return (
             <Dialog onClose={this._onCancel} className={className} style={{width: 400, ...style}}>
+                <Dialog.CloseButton />
                 <h1 className="mb1 strong" style={{fontSize: 20}}>
                     {title}
                 </h1>

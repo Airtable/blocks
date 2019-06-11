@@ -205,7 +205,7 @@ function (_React$Component2) {
           children = _this$props2.children;
       return React.createElement(_modal.default, {
         onClose: onClose,
-        className: (0, _classnames.default)('relative p2 line-height-4', className),
+        className: (0, _classnames.default)('relative p2 big line-height-4', className),
         style: style,
         backgroundClassName: backgroundClassName,
         backgroundStyle: backgroundStyle

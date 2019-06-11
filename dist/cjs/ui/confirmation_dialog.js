@@ -117,7 +117,7 @@ function (_React$Component) {
         style: (0, _objectSpread2.default)({
           width: 400
         }, style)
-      }, React.createElement("h1", {
+      }, React.createElement(_dialog.default.CloseButton, null), React.createElement("h1", {
         className: "mb1 strong",
         style: {
           fontSize: 20

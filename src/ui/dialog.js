@@ -174,7 +174,7 @@ class Dialog extends React.Component<DialogProps> {
         return (
             <Modal
                 onClose={onClose}
-                className={classNames('relative p2 line-height-4', className)}
+                className={classNames('relative p2 big line-height-4', className)}
                 style={style}
                 backgroundClassName={backgroundClassName}
                 backgroundStyle={backgroundStyle}
