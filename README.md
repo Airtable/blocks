@@ -1,87 +1,11 @@
 # @airtable/blocks
 
-## Commands
-
-Run with `npm run <command>` or `yarn run <command>`.
-
-| Command       | Description                                                                                                          |
-| ------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `format`      | Format all files in the project with prettier                                                                        |
-| `lint`        | Run eslint on all source files in the project                                                                        |
-| `lint:quiet`  | Run eslint on all source files, but only report errors - not warnings.                                               |
-| `flow`        | Check the source with Flow.                                                                                          |
-| `jest`        | Run Jest tests.                                                                                                      |
-| `jest:watch`  | Run Jest tests in watch mode, re-running tests when files change.                                                    |
-| `test`        | Run `lint`, `flow`, and `jest` tasks (in that order).                                                                |
-| `build:clean` | Delete any build files                                                                                               |
-| `build:babel` | Transpile the contents of `src` to `dist` using Babel                                                                |
-| `build:flow`  | Use [`flow-copy-source`](https://github.com/Macil/flow-copy-source) to make `src` flowtypes available in `dist`      |
-| `build:docs`  | Use [`documentation`](https://github.com/documentationjs/documentation) to build docs into the `docs` directory      |
-| `build`       | Build the project. Runs `build:clean`, `build:babel`, and `build:flow`                                               |
-| `watch:babel` | Runs `build:babel` in watch mode to re-transpile files as they change                                                |
-| `watch:flow`  | Runs `build:flow` in watch mode to re-copy files as the change                                                       |
-| `watch:docs`  | Runs `build:docs` in watch mode to re-copy files as the change                                                       |
-| `watch`       | Runs `build:clean`, then concurrently runs `watch:babel` and `watch:flow` to keep `dist` up to date as files change. |
-
-## Publishing
-
-Publish the package with [`np`](https://github.com/sindresorhus/np), which runs some extra checks
-and makes sure tags etc. get pushed to GitHub. Whilst we're in pre-alpha, every version bump can be
-`patch` - we can start following semver later.
-
-Publish using this command:
-
-```sh
-npx np patch --any-branch
-```
-
-## Links
-
--   [Documentation](https://www.kasrak.com/121a0699b674cd3d03e2983b667a4cdd/)
+For guides, check out the tutorials on Quip.
 
 ## Blocks development best practices
 
 There are a few best practices that we've found make block developing easier. That said, nothing is
 set in stone, so let us know if you have any ideas for improvements!
-
-### Fetching data
-
--   Using `UI.createDataContainer` is preferable to using the manual watch / unwatch methods in
-    almost all cases since it takes care of loading data when components are mounted, unloading when
-    components are unmounted, and automatically re-rendering when data changes. You should only use
-    the manual watch / unwatch methods if you need to load / unload data on the fly.
-
--   Instead of using `table.loadDataAsync`, `view.loadDataAsync`, or watching `table.records` /
-    `view.visibleRecords`, it's preferable to use `QueryResult`. This lets you have better control
-    on which fields you're loading. Example:
-
-```js
-// To load the primary field and assignee field values
-// for the records in the "Open bugs" view:
-import {base, UI} from 'airtable-block';
-const table = base.getTableByName('Bugs');
-const view = table.getViewByName('Open bugs');
-const queryResult = view.select({
-    fields: [table.primaryField, table.getFieldByName('Assignee')],
-});
-
-// Can now use queryResult.loadDataAsync, or just watch records/cellValues
-// on queryResult directly:
-const Component = UI.createDataContainer(
-    () => {
-        if (!queryResult.isDataLoaded) {
-            return <UI.Loader />;
-        } else {
-            return <div>There are {queryResult.records.length} records.</div>;
-        }
-    },
-    () => [
-        // The component will re-render when records are added/removed/reordered
-        // in the view, or when the primary field or assignee cell values change.
-        {watch: queryResult, key: ['records', 'cellValues']},
-    ],
-);
-```
 
 ### Global config
 
@@ -239,7 +163,7 @@ models.fieldTypes = {
     MULTILINE_TEXT: 'multilineText',
     NUMBER: 'number',
     CURRENCY: 'currency',
-    LEGACY_PERCENT_TIMES_100: 'legacyPercentTimes100',
+    PERCENT: 'percent',
     SINGLE_SELECT: 'singleSelect',
     MULTIPLE_SELECTS: 'multipleSelects',
     SINGLE_COLLABORATOR: 'singleCollaborator',
