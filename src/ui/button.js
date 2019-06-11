@@ -1,5 +1,4 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import invariant from 'invariant';
@@ -21,7 +20,7 @@ type ButtonTheme = $Values<typeof themes>;
 /**
  * @typedef
  * @type {object}
- * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme] The color theme for the button.
+ * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme=Button.themes.GRAY] The color theme for the button.
  */
 type ButtonProps = {
     className?: string,
@@ -45,15 +44,16 @@ const classNamesByTheme = {
  * Clickable button component.
  *
  * @example
- * import {Button} from '@airtable/blocks/ui';
+ * import UI from '@airtable/blocks/ui';
+ *
  * const button = (
- *     <Button
+ *     <UI.Button
+ *        onClick={() => alert('Clicked!')}
  *        disabled={false}
  *        theme={Button.themes.BLUE}
- *        onClick={() => alert('Clicked!')}
  *     >
- *         Done
- *     </Button>
+ *         Click here!
+ *     </UI.Button>
  * );
  */
 class Button extends React.Component<ButtonProps> {

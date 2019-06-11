@@ -1838,11 +1838,12 @@ Clickable button component.
 ##### Examples
 
 ```javascript
-import {Button} from '@airtable/blocks/ui';
+import UI from '@airtable/blocks/ui';
+
 const button = (
-    <Button disabled={false} theme={Button.themes.BLUE} onClick={() => alert('Clicked!')}>
-        Done
-    </Button>
+    <UI.Button onClick={() => alert('Clicked!')} disabled={false} theme={Button.themes.BLUE}>
+        Click here!
+    </UI.Button>
 );
 ```
 
