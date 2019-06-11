@@ -221,8 +221,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @returns `true` if the current user has permission to update the cell values in this field, `false` otherwise.
      * @example
-     * if (myField.canSetCellValues()) {
-     *     myRecord.setCellValue(field, 'new cell value');
+     * if (mySingleLineTextField.canSetCellValues()) {
+     *     myRecord.setCellValue(mySingleLineTextField, 'new cell value');
      * }
      */
     canSetCellValues(): boolean {

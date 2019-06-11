@@ -834,8 +834,8 @@ be called before calling [Record#setCellValue][80] or [Table#setCellValues][81].
 ##### Examples
 
 ```javascript
-if (myField.canSetCellValues()) {
-    myRecord.setCellValue(field, 'new cell value');
+if (mySingleLineTextField.canSetCellValues()) {
+    myRecord.setCellValue(mySingleLineTextField, 'new cell value');
 }
 ```
 
