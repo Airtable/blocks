@@ -12,6 +12,7 @@
             "version": "16.8"
         },
         "jsdoc": {
+            "ignorePrivate": true,
             "configFile": "./.eslintrc_for_docs_examples.json"
         }
     },
