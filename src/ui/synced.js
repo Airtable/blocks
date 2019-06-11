@@ -1,9 +1,8 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {type GlobalConfigValue} from '../types/global_config';
+import {type GlobalConfigKey, type GlobalConfigValue} from '../global_config';
 import getSdk from '../get_sdk';
-import {type GlobalConfigKey} from '../global_config';
 import createDataContainer from './create_data_container';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 

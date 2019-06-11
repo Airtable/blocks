@@ -3,6 +3,7 @@ toc:
       children:
           - BlockSdk
           - GlobalConfig
+          - GlobalConfigValue
           - Viewport
     - name: '@airtable/blocks/models'
       children:

@@ -2,7 +2,7 @@
 import {type BaseData} from '../types/base';
 import {type BlockInstallationId} from '../types/block';
 import {type HostToBlockMessageType} from '../types/block_frame';
-import {type GlobalConfigUpdate, type GlobalConfigData} from '../types/global_config';
+import {type GlobalConfigUpdate, type GlobalConfigData} from '../global_config';
 import {type RecordData, type RecordDef} from '../types/record';
 import {type UndoRedoMode} from '../types/undo_redo';
 import {type ViewportSizeConstraint} from '../types/viewport';

@@ -5,58 +5,59 @@
 -   [@airtable/blocks][1]
     -   [BlockSdk][2]
     -   [GlobalConfig][3]
-    -   [Viewport][4]
--   [@airtable/blocks/models][5]
-    -   [fieldTypes][6]
-    -   [generateGuid][7]
-    -   [viewTypes][8]
-    -   [recordColoring][9]
-    -   [settingsButton][10]
-    -   [AbstractModel][11]
-    -   [AbstractModelWithAsyncData][12]
-    -   [Aggregator][13]
-    -   [Base][14]
-    -   [Cursor][15]
-    -   [Field][16]
-    -   [QueryResult][17]
-    -   [Record][18]
-    -   [Table][19]
-    -   [View][20]
-    -   [Watchable][21]
--   [@airtable/blocks/ui][22]
-    -   [CSS & external scripts][23]
-    -   [Color utilities][24]
-    -   [React hooks for working with Airtable data][25]
-    -   [expandRecord][26]
-    -   [expandRecordList][27]
-    -   [expandRecordPickerAsync][28]
-    -   [globalAlert][29]
-    -   [AutocompletePopover][30]
-    -   [Button][31]
-    -   [CellRenderer][32]
-    -   [ChoiceToken][33]
-    -   [CollaboratorToken][34]
-    -   [ColorPalette][35]
-    -   [ConfirmationDialog][36]
-    -   [Dialog][37]
-    -   [FieldIcon][38]
-    -   [FieldPicker][39]
-    -   [Icon][40]
-    -   [Input][41]
-    -   [Link][42]
-    -   [Loader][43]
-    -   [Popover][44]
-    -   [ProgressBar][45]
-    -   [RadioSynced][46]
-    -   [RecordCard][47]
-    -   [RecordCardList][48]
-    -   [Select][49]
-    -   [SelectButtons][50]
-    -   [TablePicker][51]
-    -   [Toggle][52]
-    -   [Tooltip][53]
-    -   [ViewPicker][54]
-    -   [ViewportConstraint][55]
+    -   [GlobalConfigValue][4]
+    -   [Viewport][5]
+-   [@airtable/blocks/models][6]
+    -   [fieldTypes][7]
+    -   [generateGuid][8]
+    -   [viewTypes][9]
+    -   [recordColoring][10]
+    -   [settingsButton][11]
+    -   [AbstractModel][12]
+    -   [AbstractModelWithAsyncData][13]
+    -   [Aggregator][14]
+    -   [Base][15]
+    -   [Cursor][16]
+    -   [Field][17]
+    -   [QueryResult][18]
+    -   [Record][19]
+    -   [Table][20]
+    -   [View][21]
+    -   [Watchable][22]
+-   [@airtable/blocks/ui][23]
+    -   [CSS & external scripts][24]
+    -   [Color utilities][25]
+    -   [React hooks for working with Airtable data][26]
+    -   [expandRecord][27]
+    -   [expandRecordList][28]
+    -   [expandRecordPickerAsync][29]
+    -   [globalAlert][30]
+    -   [AutocompletePopover][31]
+    -   [Button][32]
+    -   [CellRenderer][33]
+    -   [ChoiceToken][34]
+    -   [CollaboratorToken][35]
+    -   [ColorPalette][36]
+    -   [ConfirmationDialog][37]
+    -   [Dialog][38]
+    -   [FieldIcon][39]
+    -   [FieldPicker][40]
+    -   [Icon][41]
+    -   [Input][42]
+    -   [Link][43]
+    -   [Loader][44]
+    -   [Popover][45]
+    -   [ProgressBar][46]
+    -   [RadioSynced][47]
+    -   [RecordCard][48]
+    -   [RecordCardList][49]
+    -   [Select][50]
+    -   [SelectButtons][51]
+    -   [TablePicker][52]
+    -   [Toggle][53]
+    -   [Tooltip][54]
+    -   [ViewPicker][55]
+    -   [ViewportConstraint][56]
 
 ## @airtable/blocks
 
@@ -66,27 +67,27 @@ Import the SDK from `'@airtable/blocks'`.
 
 #### base
 
-Represents the current Airtable [Base][14].
+Represents the current Airtable [Base][15].
 
-Type: [Base][56]
+Type: [Base][57]
 
 #### cursor
 
 Returns information about the active table, active view, and selected records.
 
-Type: [Cursor][57]
+Type: [Cursor][58]
 
 #### globalConfig
 
 Storage for this block installation's configuration.
 
-Type: [GlobalConfig][58]
+Type: [GlobalConfig][59]
 
 #### installationId
 
 Returns the ID for the current block installation.
 
-Type: [string][59]
+Type: [string][60]
 
 ##### Examples
 
@@ -98,7 +99,7 @@ console.log(installationId);
 
 #### localStorage
 
-Wrapper for [`window.localStorage`][60] which will automatically fall back to in-memory storage when
+Wrapper for [`window.localStorage`][61] which will automatically fall back to in-memory storage when
 `window.localStorage` is unavailable.
 
 Type: (Storage | InMemoryStorage)
@@ -136,7 +137,7 @@ UI.initializeBlock(() => <MyBlock />);
 
 #### sessionStorage
 
-Wrapper for [`window.sessionStorage`][61] which will automatically fall back to in-memory storage
+Wrapper for [`window.sessionStorage`][62] which will automatically fall back to in-memory storage
 when `window.sessionStorage` is unavailable.
 
 Type: (Storage | InMemoryStorage)
@@ -150,7 +151,7 @@ sessionStorage.setItem('lastScrollTop', 0);
 
 #### settingsButton
 
-Controls the block's [settings button][10].
+Controls the block's [settings button][11].
 
 Type: SettingsButton
 
@@ -165,7 +166,7 @@ Type: any
 Controls the block's viewport. You can fullscreen the block and add size constrains using
 `viewport`.
 
-Type: [Viewport][62]
+Type: [Viewport][63]
 
 ### GlobalConfig
 
@@ -193,8 +194,8 @@ Returns `true` if the current user can set the global config value at `key`, `fa
 
 ##### Parameters
 
--   `key` **([string][59] \| [Array][63]&lt;[string][59]>)** A string for the the top-level key, or
-    an array of strings describing the path to the value.
+-   `key` **([string][60] \| [Array][64]&lt;[string][60]>)** A string for the top-level key, or an
+    array of strings describing the path to the value.
 
 ##### Examples
 
@@ -206,25 +207,44 @@ if (globalConfig.canSet('favoriteColor')) {
 }
 ```
 
-Returns **[boolean][64]** `true` if the current user can set the global config value at `key`, and
+Returns **[boolean][65]** `true` if the current user can set the global config value at `key`, and
 `false` otherwise.
 
 #### canSetPaths
 
+Returns `true` if the current user can perform the specified updates to global config, `false`
+otherwise.
+
 ##### Parameters
 
--   `updates` **[Array][63]&lt;GlobalConfigUpdate>**
+-   `updates` **[Array][64]&lt;{path: ([string][60] \| [Array][64]&lt;[string][60]>), value:
+    [GlobalConfigValue][66]}>** The paths and values to set.
 
-Returns **[boolean][64]**
+##### Examples
+
+```javascript
+import {globalConfig} from 'airtable-block';
+
+const updates = [
+    {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+    {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+];
+if (globalConfig.canSetPaths(updates)) {
+    globalConfig.setPaths(updates);
+}
+```
+
+Returns **[boolean][65]** `true` if the current user can perform the specified updates to global
+config, `false` otherwise.
 
 #### get
 
-Get the value at a path. Throws an error if the path does not exist.
+Get the value at a path. Throws an error if the path is invalid.
 
 ##### Parameters
 
--   `key` **([string][59] \| [Array][63]&lt;[string][59]>)** A string for the the top-level key, or
-    an array of strings describing the path to the value.
+-   `key` **([string][60] \| [Array][64]&lt;[string][60]>)** A string for the top-level key, or an
+    array of strings describing the path to the value.
 
 ##### Examples
 
@@ -235,24 +255,59 @@ const topLevelValue = globalConfig.get('topLevelKey');
 const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
 ```
 
-Returns **GlobalConfigValue** The value at the provided path.
+Returns **[GlobalConfigValue][66]** The value at the provided path.
 
 #### set
 
+Sets a value at a path. Throws an error if the path or value is invalid.
+
 ##### Parameters
 
--   `key` **GlobalConfigKey**
--   `value` **GlobalConfigValue**
+-   `key` **([string][60] \| [Array][64]&lt;[string][60]>)** A string for the top-level key, or an
+    array of strings describing the path to set.
+-   `value` **[GlobalConfigValue][66]** The value to set at the specified path.
+
+##### Examples
+
+```javascript
+import {globalConfig} from 'airtable-block';
+
+if (globalConfig.canSet('favoriteColor')) {
+    globalConfig.set('favoriteColor', 'purple');
+}
+```
 
 Returns **AirtableWriteAction&lt;void, {}>**
 
 #### setPaths
 
+Sets multiple values. Throws if any path or value is invalid.
+
 ##### Parameters
 
--   `updates` **[Array][63]&lt;GlobalConfigUpdate>**
+-   `updates` **[Array][64]&lt;{path: ([string][60] \| [Array][64]&lt;[string][60]>), value:
+    [GlobalConfigValue][66]}>** The paths and values to set.
+
+##### Examples
+
+```javascript
+import {globalConfig} from 'airtable-block';
+
+const updates = [
+    {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+    {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+];
+if (globalConfig.canSetPaths(updates)) {
+    globalConfig.setPaths(updates);
+}
+```
 
 Returns **AirtableWriteAction&lt;void, {}>**
+
+### GlobalConfigValue
+
+Type: (null | [boolean][65] \| [number][67] \| [string][60] \|
+[Array][64]&lt;[GlobalConfigValue][66]> | [Object][68]&lt;[string][60], [GlobalConfigValue][66]>)
 
 ### Viewport
 
@@ -310,23 +365,23 @@ Request to exit fullscreen mode
 
 Can be watched.
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### isSmallerThanMinSize
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### maxFullscreenSize
 
 The maximum dimensions of the block when it is in fullscreen mode. Returns the smallest set of
-dimensions added with [Viewport#addMaxFullscreenSize][65].
+dimensions added with [Viewport#addMaxFullscreenSize][69].
 
 If `width` or `height` is null, it means there is no max size constraint on that dimension. If
-`maxFullscreenSize` would be smaller than [Viewport#minSize][66], it is constrained to be at least
+`maxFullscreenSize` would be smaller than [Viewport#minSize][70], it is constrained to be at least
 `minSize`.
 
 Type: ViewportSizeConstraint
@@ -411,13 +466,13 @@ const queryResult = table.selectRecords({recordColorMode});
 
 ##### Parameters
 
--   `selectField` **[Field][68]**
+-   `selectField` **[Field][71]**
 
 #### recordColoring.modes.byView
 
 ##### Parameters
 
--   `view` **[View][69]**
+-   `view` **[View][72]**
 
 #### recordColoring.modes.none
 
@@ -431,7 +486,7 @@ const queryResult = table.selectRecords({recordColorMode});
 
 #### recordColoring.RecordColorMode
 
-Type: ({type: any} | {type: any, selectField: [Field][68]} | {type: any, view: [View][69]})
+Type: ({type: any} | {type: any, selectField: [Field][71]} | {type: any, view: [View][72]})
 
 #### recordColoring.RecordColorModeType
 
@@ -460,9 +515,9 @@ settingsButton.watch('click', () => {
 Whether the settings button is being shown. Set to `true` to show the settings button. Can be
 watched.
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 ### AbstractModel
 
@@ -473,15 +528,15 @@ Abstract superclass for all models.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `modelId` **[string][59]**
+-   `modelId` **[string][60]**
 
 #### id
 
 The ID for this model.
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### isDeleted
 
@@ -492,9 +547,9 @@ it may be deleted and trying to access any data of a deleted object (other than 
 But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
 data.
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 ### AbstractModelWithAsyncData
 
@@ -505,13 +560,13 @@ Abstract superclass for all block SDK models that need to fetch async data.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `modelId` **[string][59]**
+-   `modelId` **[string][60]**
 
 #### isDataLoaded
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### loadDataAsync
 
@@ -529,11 +584,11 @@ released. Once the data is available, the callback will be called.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][63]&lt;WatchableKey>)**
--   `callback` **[Function][70]**
--   `context` **[Object][71]??**
+-   `keys` **(WatchableKey | [Array][64]&lt;WatchableKey>)**
+-   `callback` **[Function][73]**
+-   `context` **[Object][68]??**
 
-Returns **[Array][63]&lt;WatchableKey>**
+Returns **[Array][64]&lt;WatchableKey>**
 
 #### watch
 
@@ -542,28 +597,28 @@ fetched. Once the data is available, the callback will be called.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][63]&lt;WatchableKey>)**
--   `callback` **[Function][70]**
--   `context` **[Object][71]??**
+-   `keys` **(WatchableKey | [Array][64]&lt;WatchableKey>)**
+-   `callback` **[Function][73]**
+-   `context` **[Object][68]??**
 
-Returns **[Array][63]&lt;WatchableKey>**
+Returns **[Array][64]&lt;WatchableKey>**
 
 ### Aggregator
 
 Aggregators can be used to compute aggregates for cell values.
 
-Type: {key: [string][59], displayName: [string][59], shortDisplayName: [string][59], aggregate:
-function (records: [Array][63]&lt;[Record][72]>, field: [Field][68]): any, aggregateToString:
-function (records: [Array][63]&lt;[Record][72]>, field: [Field][68]): [string][59]}
+Type: {key: [string][60], displayName: [string][60], shortDisplayName: [string][60], aggregate:
+function (records: [Array][64]&lt;[Record][74]>, field: [Field][71]): any, aggregateToString:
+function (records: [Array][64]&lt;[Record][74]>, field: [Field][71]): [string][60]}
 
 #### Properties
 
--   `key` **[string][59]**
--   `displayName` **[string][59]**
--   `shortDisplayName` **[string][59]**
--   `aggregate` **function (records: [Array][63]&lt;[Record][72]>, field: [Field][68]): any**
--   `aggregateToString` **function (records: [Array][63]&lt;[Record][72]>, field: [Field][68]):
-    [string][59]**
+-   `key` **[string][60]**
+-   `displayName` **[string][60]**
+-   `shortDisplayName` **[string][60]**
+-   `aggregate` **function (records: [Array][64]&lt;[Record][74]>, field: [Field][71]): any**
+-   `aggregateToString` **function (records: [Array][64]&lt;[Record][74]>, field: [Field][71]):
+    [string][60]**
 
 #### Examples
 
@@ -599,9 +654,9 @@ import {base} from 'airtable-blocks';
 
 The users who have access to this base.
 
-Type: [Array][63]&lt;CollaboratorData>
+Type: [Array][64]&lt;CollaboratorData>
 
-Returns **[Array][63]&lt;CollaboratorData>**
+Returns **[Array][64]&lt;CollaboratorData>**
 
 #### currentUser
 
@@ -628,9 +683,9 @@ Returns the table matching the given ID, or `null` if that table does not exist 
 
 ##### Parameters
 
--   `tableId` **[string][59]**
+-   `tableId` **[string][60]**
 
-Returns **([Table][73] | null)**
+Returns **([Table][75] | null)**
 
 #### getTableByNameIfExists
 
@@ -638,17 +693,17 @@ Returns the table matching the given name, or `null` if no table exists with tha
 
 ##### Parameters
 
--   `tableName` **[string][59]**
+-   `tableName` **[string][60]**
 
-Returns **([Table][73] | null)**
+Returns **([Table][75] | null)**
 
 #### name
 
 The name of the base.
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### permissionLevel
 
@@ -660,7 +715,7 @@ an action, use the more specific `can` method.
 Can be watched to know when the user's permission level changes. Usually, you'll want to watch this
 in your root component and re-render your whole block when the permission level changes.
 
-Type: [string][59]
+Type: [string][60]
 
 ##### Examples
 
@@ -676,16 +731,16 @@ if (record.canSetCellValue('Name', 'Chair')) {
 }
 ```
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### tables
 
 The tables in this base. Can be watched to know when tables are created, deleted, or reordered in
 the base.
 
-Type: [Array][63]&lt;[Table][73]>
+Type: [Array][64]&lt;[Table][75]>
 
-Returns **[Array][63]&lt;[Table][73]>**
+Returns **[Array][64]&lt;[Table][75]>**
 
 ### Cursor
 
@@ -731,21 +786,21 @@ Model class representing a field in a table.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `parentTable` **[Table][73]**
--   `fieldId` **[string][59]**
+-   `parentTable` **[Table][75]**
+-   `fieldId` **[string][60]**
 
 #### availableAggregators
 
-Type: [Array][63]&lt;[Aggregator][74]>
+Type: [Array][64]&lt;[Aggregator][76]>
 
-Returns **[Array][63]&lt;[Aggregator][74]>**
+Returns **[Array][64]&lt;[Aggregator][76]>**
 
 #### canSetCellValues
 
 Use this to check if the current user has permission to update the cell values in this field before
 calling `record.setCellValues` or `table.setCellValues`.
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### convertStringToCellValue
 
@@ -754,7 +809,7 @@ config.
 
 ##### Parameters
 
--   `string` **[string][59]**
+-   `string` **[string][60]**
 
 Returns **any**
 
@@ -762,29 +817,29 @@ Returns **any**
 
 ##### Parameters
 
--   `aggregator` **([Aggregator][74] \| [string][59])**
+-   `aggregator` **([Aggregator][76] \| [string][60])**
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### isComputed
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### isPrimaryField
 
 Every table has exactly one primary field. True if this field is its parent table's primary field.
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### name
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### options
 
@@ -794,15 +849,15 @@ Returns **({} | null)**
 
 #### parentTable
 
-Type: [Table][73]
+Type: [Table][75]
 
-Returns **[Table][73]**
+Returns **[Table][75]**
 
 #### type
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 ### QueryResult
 
@@ -821,33 +876,33 @@ Returns **[string][59]**
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
 the QueryResult will load all fields in the table.
 
-Type: ([Array][63]&lt;[Field][68]> | null)
+Type: ([Array][64]&lt;[Field][71]> | null)
 
-Returns **([Array][63]&lt;[Field][68]> | null)**
+Returns **([Array][64]&lt;[Field][71]> | null)**
 
 ##### parentTable
 
 The table that records in this QueryResult are part of
 
-Type: [Table][73]
+Type: [Table][75]
 
-Returns **[Table][73]**
+Returns **[Table][75]**
 
 ##### recordIds
 
 The record IDs in this QueryResult. Throws if data is not loaded yet.
 
-Type: [Array][63]&lt;RecordId>
+Type: [Array][64]&lt;RecordId>
 
-Returns **[Array][63]&lt;RecordId>**
+Returns **[Array][64]&lt;RecordId>**
 
 ##### records
 
 The records in this QueryResult. Throws if data is not loaded yet.
 
-Type: [Array][63]&lt;[Record][72]>
+Type: [Array][64]&lt;[Record][74]>
 
-Returns **[Array][63]&lt;[Record][72]>**
+Returns **[Array][64]&lt;[Record][74]>**
 
 #### TableOrViewQueryResult
 
@@ -860,7 +915,7 @@ Do not instantiate. You can get instances of this class by calling `table.select
 
 ##### Parameters
 
--   `sourceModel` **([Table][73] \| [View][69])**
+-   `sourceModel` **([Table][75] \| [View][72])**
 -   `recordStore` **RecordStore**
 -   `opts` **QueryResultOpts?**
 
@@ -869,32 +924,32 @@ Do not instantiate. You can get instances of this class by calling `table.select
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
 the QueryResult will load all fields in the table.
 
-Type: ([Array][63]&lt;[Field][68]> | null)
+Type: ([Array][64]&lt;[Field][71]> | null)
 
-Returns **([Array][63]&lt;[Field][68]> | null)**
+Returns **([Array][64]&lt;[Field][71]> | null)**
 
 ##### parentTable
 
-Type: [Table][73]
+Type: [Table][75]
 
-Returns **[Table][73]**
+Returns **[Table][75]**
 
 ##### parentView
 
 The view that was used to obtain this QueryResult by calling `view.selectRecords`. Null if the
 QueryResult was obtained by calling `table.selectRecords`.
 
-Type: ([View][69] | null)
+Type: ([View][72] | null)
 
-Returns **([View][69] | null)**
+Returns **([View][72] | null)**
 
 ##### recordIds
 
 The record IDs in this QueryResult. Throws if data is not loaded yet.
 
-Type: [Array][63]&lt;[string][59]>
+Type: [Array][64]&lt;[string][60]>
 
-Returns **[Array][63]&lt;[string][59]>**
+Returns **[Array][64]&lt;[string][60]>**
 
 #### LinkedRecordsQueryResult
 
@@ -907,17 +962,17 @@ Do not instantiate. You can get instances of this class by calling
 
 ##### Parameters
 
--   `record` **[Record][72]**
--   `field` **[Field][68]**
+-   `record` **[Record][74]**
+-   `field` **[Field][71]**
 -   `opts` **QueryResultOpts**
 
 ##### fields
 
 The fields that were used to create this LinkedRecordsQueryResult.
 
-Type: ([Array][63]&lt;[Field][68]> | null)
+Type: ([Array][64]&lt;[Field][71]> | null)
 
-Returns **([Array][63]&lt;[Field][68]> | null)**
+Returns **([Array][64]&lt;[Field][71]> | null)**
 
 ##### isValid
 
@@ -926,33 +981,33 @@ field config changes to link to a different table or a type other than MULTIPLE_
 `isValid` has become false, it will never become true again. Many fields will throw on attempting to
 access them, and watches will no longer fire.
 
-Type: [boolean][64]
+Type: [boolean][65]
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 ##### parentTable
 
 The table that the records in the QueryResult are a part of
 
-Type: [Table][73]
+Type: [Table][75]
 
-Returns **[Table][73]**
+Returns **[Table][75]**
 
 ##### recordIds
 
 Ordered array of all the linked record ids. Watchable.
 
-Type: [Array][63]&lt;[string][59]>
+Type: [Array][64]&lt;[string][60]>
 
-Returns **[Array][63]&lt;[string][59]>**
+Returns **[Array][64]&lt;[string][60]>**
 
 ##### records
 
 Ordered array of all the linked records. Watchable.
 
-Type: [Array][63]&lt;[Record][72]>
+Type: [Array][64]&lt;[Record][74]>
 
-Returns **[Array][63]&lt;[Record][72]>**
+Returns **[Array][64]&lt;[Record][74]>**
 
 ### Record
 
@@ -966,12 +1021,12 @@ Do not instantiate. To create a new record, use `table.createRecord`.
 
 -   `baseData` **BaseData**
 -   `parentRecordStore` **RecordStore**
--   `parentTable` **[Table][73]**
--   `recordId` **[string][59]**
+-   `parentTable` **[Table][75]**
+-   `recordId` **[string][60]**
 
 #### canDelete
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### canSetCellValue
 
@@ -980,7 +1035,7 @@ Use this to check if the current user has permission to update a specific cell v
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][68] \| [string][59])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
 -   `publicCellValue` **any**
 
 #### canSetCellValues
@@ -992,7 +1047,7 @@ Use this to check if the current user has permission to update a set of cell val
 
 -   `cellValuesByFieldIdOrFieldName` **RecordDef**
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### commentCount
 
@@ -1002,9 +1057,9 @@ Returns **[number][67]**
 
 #### createdTime
 
-Type: [Date][75]
+Type: [Date][77]
 
-Returns **[Date][75]**
+Returns **[Date][77]**
 
 #### delete
 
@@ -1017,16 +1072,16 @@ the current client. The URL that is returned will only work for the current user
 
 ##### Parameters
 
--   `attachmentId` **[string][59]**
--   `attachmentUrl` **[string][59]**
+-   `attachmentId` **[string][60]**
+-   `attachmentUrl` **[string][60]**
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### getCellValue
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][68] \| [string][59])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
 
 Returns **any**
 
@@ -1034,9 +1089,9 @@ Returns **any**
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][68] \| [string][59])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### getColorHexInView
 
@@ -1045,9 +1100,9 @@ with the 'colorInView:\${ViewId}' key
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][69] \| [string][59])**
+-   `viewOrViewIdOrViewName` **([View][72] \| [string][60])**
 
-Returns **([string][59] | null)**
+Returns **([string][60] | null)**
 
 #### getColorInView
 
@@ -1056,15 +1111,15 @@ with the 'colorInView:\${ViewId}' key.
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][69] \| [string][59])**
+-   `viewOrViewIdOrViewName` **([View][72] \| [string][60])**
 
-Returns **([Color][76] | null)**
+Returns **([Color][78] | null)**
 
 #### parentTable
 
-Type: [Table][73]
+Type: [Table][75]
 
-Returns **[Table][73]**
+Returns **[Table][75]**
 
 #### primaryCellValue
 
@@ -1074,18 +1129,18 @@ Returns **any**
 
 #### primaryCellValueAsString
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### selectLinkedRecordsFromCell
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][68] \| [string][59])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
 -   `opts` **QueryResultOpts** (optional, default `{}`)
 
-Returns **[LinkedRecordsQueryResult][77]**
+Returns **[LinkedRecordsQueryResult][79]**
 
 #### setCellValue
 
@@ -1094,7 +1149,7 @@ before calling. Will throw if the user does not have permission.
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][68] \| [string][59])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
 -   `publicCellValue` **any**
 
 Returns **AirtableWriteAction&lt;void, {}>**
@@ -1114,9 +1169,9 @@ Returns **AirtableWriteAction&lt;void, {}>**
 
 Returns the URL for this record.
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 ### Table
 
@@ -1127,9 +1182,9 @@ Model class representing a table in the base.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `parentBase` **[Base][56]**
+-   `parentBase` **[Base][57]**
 -   `recordStore` **RecordStore**
--   `tableId` **[string][59]**
+-   `tableId` **[string][60]**
 -   `airtableInterface` **AirtableInterface**
 
 #### canCreateRecord
@@ -1138,27 +1193,27 @@ Model class representing a table in the base.
 
 -   `cellValuesByFieldIdOrFieldName` **RecordDef?**
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### canCreateRecords
 
 ##### Parameters
 
--   `recordDefsOrNumberOfRecords` **([Array][63]&lt;RecordDef> | [number][67])**
+-   `recordDefsOrNumberOfRecords` **([Array][64]&lt;RecordDef> | [number][67])**
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### canDeleteRecord
 
 ##### Parameters
 
--   `record` **[Record][72]**
+-   `record` **[Record][74]**
 
 #### canDeleteRecords
 
 ##### Parameters
 
--   `records` **[Array][63]&lt;[Record][72]>**
+-   `records` **[Array][64]&lt;[Record][74]>**
 
 #### canSetCellValues
 
@@ -1166,7 +1221,7 @@ Returns **[boolean][64]**
 
 -   `cellValuesByRecordIdThenFieldIdOrFieldName` **{}**
 
-Returns **[boolean][64]**
+Returns **[boolean][65]**
 
 #### createRecord
 
@@ -1174,21 +1229,21 @@ Returns **[boolean][64]**
 
 -   `cellValuesByFieldIdOrFieldName` **RecordDef?**
 
-Returns **AirtableWriteAction&lt;void, {record: [Record][72]}>**
+Returns **AirtableWriteAction&lt;void, {record: [Record][74]}>**
 
 #### createRecords
 
 ##### Parameters
 
--   `recordDefsOrNumberOfRecords` **([Array][63]&lt;RecordDef> | [number][67])**
+-   `recordDefsOrNumberOfRecords` **([Array][64]&lt;RecordDef> | [number][67])**
 
-Returns **AirtableWriteAction&lt;void, {records: [Array][63]&lt;[Record][72]>}>**
+Returns **AirtableWriteAction&lt;void, {records: [Array][64]&lt;[Record][74]>}>**
 
 #### deleteRecord
 
 ##### Parameters
 
--   `record` **[Record][72]**
+-   `record` **[Record][74]**
 
 Returns **AirtableWriteAction&lt;void, {}>**
 
@@ -1196,7 +1251,7 @@ Returns **AirtableWriteAction&lt;void, {}>**
 
 ##### Parameters
 
--   `records` **[Array][63]&lt;[Record][72]>**
+-   `records` **[Array][64]&lt;[Record][74]>**
 
 Returns **AirtableWriteAction&lt;void, {}>**
 
@@ -1207,9 +1262,9 @@ specific view.
 
 Can be watched to know when fields are created or deleted.
 
-Type: [Array][63]&lt;[Field][68]>
+Type: [Array][64]&lt;[Field][71]>
 
-Returns **[Array][63]&lt;[Field][68]>**
+Returns **[Array][64]&lt;[Field][71]>**
 
 #### getFieldByIdIfExists
 
@@ -1217,15 +1272,15 @@ Returns **[Array][63]&lt;[Field][68]>**
 
 -   `fieldId` **FieldId**
 
-Returns **([Field][68] | null)**
+Returns **([Field][71] | null)**
 
 #### getFieldByNameIfExists
 
 ##### Parameters
 
--   `fieldName` **[string][59]**
+-   `fieldName` **[string][60]**
 
-Returns **([Field][68] | null)**
+Returns **([Field][71] | null)**
 
 #### getFirstViewOfType
 
@@ -1235,10 +1290,10 @@ returned before checking the other views in the table.
 
 ##### Parameters
 
--   `allowedViewTypes` **([Array][63]&lt;ViewType> | ViewType)**
--   `preferredViewOrViewId` **([View][69] | ViewId | null)?**
+-   `allowedViewTypes` **([Array][64]&lt;ViewType> | ViewType)**
+-   `preferredViewOrViewId` **([View][72] | ViewId | null)?**
 
-Returns **([View][69] | null)**
+Returns **([View][72] | null)**
 
 #### getViewByIdIfExists
 
@@ -1246,37 +1301,37 @@ Returns **([View][69] | null)**
 
 -   `viewId` **ViewId**
 
-Returns **([View][69] | null)**
+Returns **([View][72] | null)**
 
 #### getViewByNameIfExists
 
 ##### Parameters
 
--   `viewName` **[string][59]**
+-   `viewName` **[string][60]**
 
-Returns **([View][69] | null)**
+Returns **([View][72] | null)**
 
 #### name
 
 The table's name. Can be watched.
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### parentBase
 
-Type: [Base][56]
+Type: [Base][57]
 
-Returns **[Base][56]**
+Returns **[Base][57]**
 
 #### primaryField
 
 Every table has exactly one primary field. The primary field of a table will not change.
 
-Type: [Field][68]
+Type: [Field][71]
 
-Returns **[Field][68]**
+Returns **[Field][71]**
 
 #### recordLimit
 
@@ -1292,7 +1347,7 @@ Returns **[number][67]**
 
 -   `opts` **QueryResultOpts?**
 
-Returns **[TableOrViewQueryResult][78]**
+Returns **[TableOrViewQueryResult][80]**
 
 #### setCellValues
 
@@ -1304,27 +1359,27 @@ Returns **AirtableWriteAction&lt;void, {}>**
 
 #### url
 
-Type: [string][59]
+Type: [string][60]
 
-Returns **[string][59]**
+Returns **[string][60]**
 
 #### views
 
 The views in the table. Can be watched to know when views are created, deleted, or reordered.
 
-Type: [Array][63]&lt;[View][69]>
+Type: [Array][64]&lt;[View][72]>
 
-Returns **[Array][63]&lt;[View][69]>**
+Returns **[Array][64]&lt;[View][72]>**
 
 ### View
 
 **Extends AbstractModel**
 
-A class that represents an Airtable view. Every [Table][19] has one or more views.
+A class that represents an Airtable view. Every [Table][20] has one or more views.
 
 #### allFields
 
-Type: [Array][63]&lt;[Field][68]>
+Type: [Array][64]&lt;[Field][71]>
 
 ##### Examples
 
@@ -1333,12 +1388,12 @@ console.log(myView.allFields);
 // => [Field {...}, Field {...}, ...]
 ```
 
-Returns **[Array][63]&lt;[Field][68]>** All the fields in the table, including fields that are
+Returns **[Array][64]&lt;[Field][71]>** All the fields in the table, including fields that are
 hidden in this view. Can be watched to know when fields are created, deleted, or reordered.
 
 #### name
 
-Type: [string][59]
+Type: [string][60]
 
 ##### Examples
 
@@ -1347,11 +1402,11 @@ console.log(myView.name);
 // => 'Grid view'
 ```
 
-Returns **[string][59]** The name of the view. Can be watched.
+Returns **[string][60]** The name of the view. Can be watched.
 
 #### parentTable
 
-Type: [Table][73]
+Type: [Table][75]
 
 ##### Examples
 
@@ -1361,7 +1416,7 @@ console.log(view.parentTable.id === myTable.id);
 // => true
 ```
 
-Returns **[Table][73]** The table that this view belongs to. Should never change because views
+Returns **[Table][75]** The table that this view belongs to. Should never change because views
 aren't moved between tables.
 
 #### selectRecords
@@ -1397,7 +1452,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][78]** A query result.
+Returns **[TableOrViewQueryResult][80]** A query result.
 
 #### type
 
@@ -1415,7 +1470,7 @@ because view types cannot be modified.
 
 #### url
 
-Type: [string][59]
+Type: [string][60]
 
 ##### Examples
 
@@ -1424,12 +1479,12 @@ console.log(myView.url);
 // => https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx
 ```
 
-Returns **[string][59]** The URL for the view. You can visit this URL in the browser to be taken to
+Returns **[string][60]** The URL for the view. You can visit this URL in the browser to be taken to
 the view in the Airtable UI.
 
 #### visibleFields
 
-Type: [Array][63]&lt;[Field][68]>
+Type: [Array][64]&lt;[Field][71]>
 
 ##### Examples
 
@@ -1438,7 +1493,7 @@ console.log(myView.visibleFields);
 // => [Field {...}, Field {...}, ...]
 ```
 
-Returns **[Array][63]&lt;[Field][68]>** The fields that are visible in this view. Can be watched to
+Returns **[Array][64]&lt;[Field][71]>** The fields that are visible in this view. Can be watched to
 know when fields are created, deleted, hidden, shown, or reordered.
 
 ### Watchable
@@ -1452,11 +1507,11 @@ Will log a warning if the keys given are invalid.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][63]&lt;WatchableKey>)**
+-   `keys` **(WatchableKey | [Array][64]&lt;WatchableKey>)**
 -   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][71]??**
+-   `context` **[Object][68]??**
 
-Returns **[Array][63]&lt;WatchableKey>**
+Returns **[Array][64]&lt;WatchableKey>**
 
 #### watch
 
@@ -1467,11 +1522,11 @@ Will log a warning if the keys given are invalid.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][63]&lt;WatchableKey>)**
+-   `keys` **(WatchableKey | [Array][64]&lt;WatchableKey>)**
 -   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][71]??**
+-   `context` **[Object][68]??**
 
-Returns **[Array][63]&lt;WatchableKey>**
+Returns **[Array][64]&lt;WatchableKey>**
 
 ## @airtable/blocks/ui
 
@@ -1483,7 +1538,7 @@ Injects CSS from a string into the page.
 
 ##### Parameters
 
--   `css` **[string][59]** {string}
+-   `css` **[string][60]** {string}
 
 ##### Examples
 
@@ -1492,7 +1547,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][79]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][81]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -1500,7 +1555,7 @@ Injects CSS from a remote URL.
 
 ##### Parameters
 
--   `url` **[string][59]** {string}
+-   `url` **[string][60]** {string}
 
 ##### Examples
 
@@ -1509,7 +1564,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][80]&lt;[HTMLLinkElement][81]>** a Promise that resolves to the style tag
+Returns **[Promise][82]&lt;[HTMLLinkElement][83]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -1518,7 +1573,7 @@ Injects Javascript from a remote URL.
 
 ##### Parameters
 
--   `url` **[string][59]** {string}
+-   `url` **[string][60]** {string}
 
 ##### Examples
 
@@ -1527,14 +1582,14 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][80]&lt;[HTMLScriptElement][82]>** a Promise that resolves to the script tag
+Returns **[Promise][82]&lt;[HTMLScriptElement][84]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
 
 #### Color
 
-A value from the [colors][83] enum
+A value from the [colors][85] enum
 
 Type: \$Values&lt;any>
 
@@ -1550,12 +1605,12 @@ Type: {r: [number][67], g: [number][67], b: [number][67]}
 
 #### colorUtils
 
-Utilities for working with [Color][84] names from the [colors][83] enum.
+Utilities for working with [Color][86] names from the [colors][85] enum.
 
 ##### getHexForColor
 
-Given a [Color][84], return the hex color value for that color, or null if the value isn't a
-[Color][84]
+Given a [Color][86], return the hex color value for that color, or null if the value isn't a
+[Color][86]
 
 ###### Parameters
 
@@ -1573,12 +1628,12 @@ colorUtils.getHexForColor('uncomfortable beige');
 // => null
 ```
 
-Returns **([string][59] | null)**
+Returns **([string][60] | null)**
 
 ##### getRgbForColor
 
-Given a [Color][84], return an [RGB][85] object representing it, or null if the value isn't a
-[Color][84]
+Given a [Color][86], return an [RGB][87] object representing it, or null if the value isn't a
+[Color][86]
 
 ###### Parameters
 
@@ -1596,16 +1651,16 @@ colorUtils.getRgbForColor('disgruntled pink');
 // => null
 ```
 
-Returns **([RGB][86] | null)**
+Returns **([RGB][88] | null)**
 
 ##### shouldUseLightTextOnColor
 
-Given a [Color][84], returns true or false to indicate whether that color should have light text on
+Given a [Color][86], returns true or false to indicate whether that color should have light text on
 top of it when used as a background color.
 
 ###### Parameters
 
--   `colorString` **[string][59]** {Color}
+-   `colorString` **[string][60]** {Color}
 
 ###### Examples
 
@@ -1619,7 +1674,7 @@ colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
 // => true
 ```
 
-Returns **[boolean][64]** boolean
+Returns **[boolean][65]** boolean
 
 #### colors
 
@@ -1730,8 +1785,8 @@ An enum of color names
 React hooks are a new feature in React 16.8. They allow you to use state and other React features
 without writing a class, and form the core of how you can connect React components to data from your
 Airtable base when writing Blocks. If you've never used hooks before, don't worry - the React team
-[has some great resources][87] for learning about them. You can use hooks with class components too
-with the help of the [withHooks][88] higher-order component.
+[has some great resources][89] for learning about them. You can use hooks with class components too
+with the help of the [withHooks][90] higher-order component.
 
 > **Important Note:** right now, most of these hooks cause your component to re-render, but return
 > the same mutable instance of the underlying model. This means that it's often not safe to use
@@ -1741,14 +1796,14 @@ with the help of the [withHooks][88] higher-order component.
 
 #### useBase
 
-A hook for connecting a React component to your Base's schema. This returns a [Base][14] instance
+A hook for connecting a React component to your Base's schema. This returns a [Base][15] instance
 and will re-render your component whenever the base's schema changes. That means any change to your
 base like tables being added or removed, fields getting renamed, etc. It excludes any change to the
 actual records in the base.
 
 useBase should meet most of your needs for working with Base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][89] hook might help.
+[useWatchable][91] hook might help.
 
 ##### Examples
 
@@ -1767,7 +1822,7 @@ function TableList() {
 }
 ```
 
-Returns **[Base][56]** Base
+Returns **[Base][57]** Base
 
 #### useRecords
 
@@ -1776,12 +1831,12 @@ query result. Automatically handles loading data in the query result and updatin
 when the underlying data changes.
 
 This hook re-renders when any data concerning the records changing - that's useful, but can cause
-re-renders quite often, meaning [useRecordIds][90] or [useRecordById][91] could be more appropriate
+re-renders quite often, meaning [useRecordIds][92] or [useRecordById][93] could be more appropriate
 depending on your use-case.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][92] | null)** the query result you want the records from
+-   `queryResult` **([QueryResult][94] | null)** the query result you want the records from
 
 ##### Examples
 
@@ -1808,7 +1863,7 @@ function RecordList() {
 }
 ```
 
-Returns **([Array][63]&lt;[Record][72]> | null)** the records in the query result, or null if no
+Returns **([Array][64]&lt;[Record][74]> | null)** the records in the query result, or null if no
 query result was passed in.
 
 #### useRecordIds
@@ -1821,7 +1876,7 @@ added, removed, or re-ordered.
 
 ##### Parameters
 
--   `queryResult` **[QueryResult][92]** the query result you want the record ids from
+-   `queryResult` **[QueryResult][94]** the query result you want the record ids from
 
 ##### Examples
 
@@ -1846,7 +1901,7 @@ function RecordCount() {
 }
 ```
 
-Returns **([Array][63]&lt;RecordId> | null)** the array of record IDs in the query result, or null
+Returns **([Array][64]&lt;RecordId> | null)** the array of record IDs in the query result, or null
 if no query result was passed in.
 
 #### useRecordById
@@ -1854,12 +1909,12 @@ if no query result was passed in.
 A hook for working with a single record from a query result. Automatically handles loading data in
 the query result and updating your component when the records cell values etc. change.
 
-Often used with [useRecordIds][90] to render a list of records where each list item only updates
+Often used with [useRecordIds][92] to render a list of records where each list item only updates
 when the specific record it concerns changes.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][92] | null)** the query result you want a record from
+-   `queryResult` **([QueryResult][94] | null)** the query result you want a record from
 -   `recordId` **RecordId** the ID of the record you want from the query result
 
 ##### Examples
@@ -1897,12 +1952,12 @@ function RecordList() {
 }
 ```
 
-Returns **([Record][72] | null)** the record, or null if no query result was passed in or no record
+Returns **([Record][74] | null)** the record, or null if no query result was passed in or no record
 with that ID exists in the query result
 
 #### useViewport
 
-Returns the current [Viewport][4] object and updates whenever the viewport size, constraints, or
+Returns the current [Viewport][5] object and updates whenever the viewport size, constraints, or
 fullscreen status changes.
 
 ##### Examples
@@ -1930,11 +1985,11 @@ function ViewportSize() {
 }
 ```
 
-Returns **[Viewport][62]** the current [Viewport][4]
+Returns **[Viewport][63]** the current [Viewport][5]
 
 #### useWatchable
 
-A React hook for watching data in Airtable models like [Table][19] and [Record][18]. Each model has
+A React hook for watching data in Airtable models like [Table][20] and [Record][19]. Each model has
 several watchable keys that can be used with this hook to have your component automatically
 re-render when data in the models changes. You can also provide an optional callback if you need to
 do anything other than re-render when the data changes.
@@ -1942,17 +1997,17 @@ do anything other than re-render when the data changes.
 This is a low-level tool that you should only use when you specifically need it. There are more
 convenient model-specific hooks available:
 
--   For [Base][14], [Table][19], [View][20] & [Field][16], use [useBase][93]
--   For [QueryResult][17] & [Record][18], use [useRecords][94], [useRecordIds][90], or
-    [useRecordById][91]
--   For [Viewport][4], use [useViewport][95].
+-   For [Base][15], [Table][20], [View][21] & [Field][17], use [useBase][95]
+-   For [QueryResult][18] & [Record][19], use [useRecords][96], [useRecordIds][92], or
+    [useRecordById][93]
+-   For [Viewport][5], use [useViewport][97].
 
-If you're writing a class component and still want to be able to use hooks, try [withHooks][88].
+If you're writing a class component and still want to be able to use hooks, try [withHooks][90].
 
 ##### Parameters
 
--   `model` **[Watchable][96]** the model to watch
--   `keys` **[Array][63]&lt;[string][59]>** which keys we want to watch
+-   `model` **[Watchable][98]** the model to watch
+-   `keys` **[Array][64]&lt;[string][60]>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
 ##### Examples
@@ -1982,15 +2037,15 @@ function ActiveView({cursor}) {
 
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
-might not need to use it directly though - if you're working with a [QueryResult][17], try
-[useRecords][94], [useRecordIds][90], or [useRecordById][91] first.
+might not need to use it directly though - if you're working with a [QueryResult][18], try
+[useRecords][96], [useRecordIds][92], or [useRecordById][93] first.
 
 When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
 loaded when your component mounts, and unloaded when your component unmounts. By default, you don't
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [&lt;React.Suspense />][97] around the component that uses the hook.
+looks, use [&lt;React.Suspense />][99] around the component that uses the hook.
 
 If you need more control (for example, if you have two models you want to load at the same time
 rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to the
@@ -1999,10 +2054,10 @@ use the data you loaded.
 
 ##### Parameters
 
--   `model` **([QueryResult][92] \| [Cursor][57] | null)** the model to load.
--   `options` **[object][71]?** Optional options to control how the hook works (optional, default
+-   `model` **([QueryResult][94] \| [Cursor][58] | null)** the model to load.
+-   `options` **[object][68]?** Optional options to control how the hook works (optional, default
     `{}`)
-    -   `options.shouldSuspend` **[boolean][64]** pass {shouldSuspend: false} to disable suspense
+    -   `options.shouldSuspend` **[boolean][65]** pass {shouldSuspend: false} to disable suspense
         mode. If suspense is disabled, you need to manually check model.isDataLoaded so you don't
         use your model before it's ready. (optional, default `true`)
 
@@ -2047,13 +2102,13 @@ function LoadTwoQueryResults({queryResultA, queryResultB}) {
 
 A helper method for working with react hooks in class-based components. It takes a React component
 and wraps it, injecting values from hooks as additional props. `withHooks` uses
-[React.forwardRef][98] to make sure that you can use refs with your wrapped component in exactly the
-same way you would if you weren't using withHooks.
+[React.forwardRef][100] to make sure that you can use refs with your wrapped component in exactly
+the same way you would if you weren't using withHooks.
 
 ##### Parameters
 
 -   `Component` **React.Component** The React component you want to inject hooks into
--   `getAdditionalPropsToInject` **[Function][70]** a function that takes props and returns more
+-   `getAdditionalPropsToInject` **[Function][73]** a function that takes props and returns more
     props to be injected into the wrapped component
 
 ##### Examples
@@ -2138,9 +2193,9 @@ Expands the given record in the Airtable UI.
 
 ##### Parameters
 
--   `record` **[Record][72]** the record to expand
--   `opts` **[object][71]?** An optional options object.
-    -   `opts.records` **[Array][63]&lt;[Record][72]>?** If `records` is provided, the list will be
+-   `record` **[Record][74]** the record to expand
+-   `opts` **[object][68]?** An optional options object.
+    -   `opts.records` **[Array][64]&lt;[Record][74]>?** If `records` is provided, the list will be
         used to page through records from the expanded record dialog.
 
 ##### Examples
@@ -2154,11 +2209,11 @@ expandRecord(record1, {
 
 #### ExpandRecordOpts
 
-Type: {records: [Array][63]&lt;[Record][72]>?}
+Type: {records: [Array][64]&lt;[Record][74]>?}
 
 ##### Properties
 
--   `records` **[Array][63]&lt;[Record][72]>?**
+-   `records` **[Array][64]&lt;[Record][74]>?**
 
 ### expandRecordList
 
@@ -2166,9 +2221,9 @@ Expands a list of records in the Airtable UI
 
 #### Parameters
 
--   `records` **[Array][63]&lt;[Record][72]>** the records to expand. Duplicate records will be
+-   `records` **[Array][64]&lt;[Record][74]>** the records to expand. Duplicate records will be
     removed.
--   `opts` **{fields: [Array][63]&lt;[Field][68]>?}?** An optional options object.
+-   `opts` **{fields: [Array][64]&lt;[Field][71]>?}?** An optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
 
@@ -2193,9 +2248,9 @@ return null.
 
 #### Parameters
 
--   `records` **[Array][63]&lt;[Record][72]>** the records the user can pick from. Duplicate records
+-   `records` **[Array][64]&lt;[Record][74]>** the records the user can pick from. Duplicate records
     will be removed.
--   `opts` **{fields: [Array][63]&lt;[Field][68]>?, shouldAllowCreatingRecord: [boolean][64]?}?** An
+-   `opts` **{fields: [Array][64]&lt;[Field][71]>?, shouldAllowCreatingRecord: [boolean][65]?}?** An
     optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
@@ -2219,7 +2274,7 @@ const recordB = await expandRecordPickerAsync([record1, record2], {
 });
 ```
 
-Returns **[Promise][80]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][82]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
 ### globalAlert
@@ -2243,49 +2298,49 @@ globalAlert.showReloadPrompt();
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][99]**
+-   `props` **[AutocompletePopoverProps][101]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][63]&lt;[AutocompleteItem][100]>, renderItem: function (item: [AutocompleteItem][100], isFocused: [boolean][64]): React$Element&lt;any>?,
-filterItems: function (query: [string][59], items: [Array][63]&lt;[AutocompleteItem][100]>):
-[Array][63]&lt;[AutocompleteItem][100]>?, onSelect: function ([AutocompleteItem][100]): void,
-placeholder: [string][59]?, focusOnOpen: [boolean][64]?, className: [string][59]?, style:
-[Object][71]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
+React$Element&lt;any>, items: [Array][64]&lt;[AutocompleteItem][102]>, renderItem: function (item: [AutocompleteItem][102], isFocused: [boolean][65]): React$Element&lt;any>?,
+filterItems: function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][102]>):
+[Array][64]&lt;[AutocompleteItem][102]>?, onSelect: function ([AutocompleteItem][102]): void,
+placeholder: [string][60]?, focusOnOpen: [boolean][65]?, className: [string][60]?, style:
+[Object][68]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][67]?, placementOffsetY: [number][67]?, fitInWindowMode: FitInWindowMode?, isOpen:
-[boolean][64]?, onClose: function (opts: {wasFromEscape: [boolean][64]}): void?}
+[boolean][65]?, onClose: function (opts: {wasFromEscape: [boolean][65]}): void?}
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][63]&lt;[AutocompleteItem][100]>**
--   `renderItem` **function (item: [AutocompleteItem][100], isFocused: [boolean][64]):
+-   `items` **[Array][64]&lt;[AutocompleteItem][102]>**
+-   `renderItem` **function (item: [AutocompleteItem][102], isFocused: [boolean][65]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][59], items: [Array][63]&lt;[AutocompleteItem][100]>):
-    [Array][63]&lt;[AutocompleteItem][100]>?**
--   `onSelect` **function ([AutocompleteItem][100]): void**
--   `placeholder` **[string][59]?**
--   `focusOnOpen` **[boolean][64]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `filterItems` **function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][102]>):
+    [Array][64]&lt;[AutocompleteItem][102]>?**
+-   `onSelect` **function ([AutocompleteItem][102]): void**
+-   `placeholder` **[string][60]?**
+-   `focusOnOpen` **[boolean][65]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 -   `placementX` **PopoverPlacementX?**
 -   `placementY` **PopoverPlacementY?**
 -   `placementOffsetX` **[number][67]?**
 -   `placementOffsetY` **[number][67]?**
 -   `fitInWindowMode` **FitInWindowMode?**
--   `isOpen` **[boolean][64]?**
--   `onClose` **function (opts: {wasFromEscape: [boolean][64]}): void?**
+-   `isOpen` **[boolean][65]?**
+-   `onClose` **function (opts: {wasFromEscape: [boolean][65]}): void?**
 
 #### AutocompleteItem
 
-Type: {value: [string][59], label: [string][59], aliases: [Array][63]&lt;[string][59]>?}
+Type: {value: [string][60], label: [string][60], aliases: [Array][64]&lt;[string][60]>?}
 
 ##### Properties
 
--   `value` **[string][59]**
--   `label` **[string][59]**
--   `aliases` **[Array][63]&lt;[string][59]>?**
+-   `value` **[string][60]**
+-   `label` **[string][60]**
+-   `aliases` **[Array][64]&lt;[string][60]>?**
 
 ### Button
 
@@ -2297,7 +2352,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][101]**
+-   `props` **[ButtonProps][103]**
 
 ##### Examples
 
@@ -2313,15 +2368,15 @@ const button = (
 
 #### ButtonProps
 
-Type: [object][71]
+Type: [object][68]
 
 ##### Properties
 
 -   `theme` **(Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW |
     Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
     The color theme for the button.
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
 -   `children` **React.Node?**
 
 ### CellRenderer
@@ -2332,21 +2387,21 @@ Type: [object][71]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][102]**
+-   `props` **[CellRendererProps][104]**
 
 #### CellRendererProps
 
-Type: {record: [Record][72]??, cellValue: any?, field: [Field][68], shouldWrap: [boolean][64]?,
-className: [string][59]?, style: [Object][71]?}
+Type: {record: [Record][74]??, cellValue: any?, field: [Field][71], shouldWrap: [boolean][65]?,
+className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
 
--   `record` **[Record][72]??**
+-   `record` **[Record][74]??**
 -   `cellValue` **any?**
--   `field` **[Field][68]**
--   `shouldWrap` **[boolean][64]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `field` **[Field][71]**
+-   `shouldWrap` **[boolean][65]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 
 ### ChoiceToken
 
@@ -2354,19 +2409,19 @@ className: [string][59]?, style: [Object][71]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][103]**
+-   `$0` **[ChoiceTokenProps][105]**
     -   `$0.choice`
     -   `$0.className`
 
 #### ChoiceTokenProps
 
-Type: {choice: {id: [string][59], name: [string][59], color: [string][59]?}, className:
-[string][59]?}
+Type: {choice: {id: [string][60], name: [string][60], color: [string][60]?}, className:
+[string][60]?}
 
 ##### Properties
 
--   `choice` **{id: [string][59], name: [string][59], color: [string][59]?}**
--   `className` **[string][59]?**
+-   `choice` **{id: [string][60], name: [string][60], color: [string][60]?}**
+-   `className` **[string][60]?**
 
 ### CollaboratorToken
 
@@ -2374,18 +2429,18 @@ Type: {choice: {id: [string][59], name: [string][59], color: [string][59]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][104]**
+-   `props` **[CollaboratorTokenProps][106]**
 
 #### CollaboratorTokenProps
 
-Type: {collaborator: {id: [string][59]?, email: [string][59]?, name: [string][59]?, profilePicUrl:
-[string][59]?, status: [string][59]?}, className: [string][59]?}
+Type: {collaborator: {id: [string][60]?, email: [string][60]?, name: [string][60]?, profilePicUrl:
+[string][60]?, status: [string][60]?}, className: [string][60]?}
 
 ##### Properties
 
--   `collaborator` **{id: [string][59]?, email: [string][59]?, name: [string][59]?, profilePicUrl:
-    [string][59]?, status: [string][59]?}**
--   `className` **[string][59]?**
+-   `collaborator` **{id: [string][60]?, email: [string][60]?, name: [string][60]?, profilePicUrl:
+    [string][60]?, status: [string][60]?}**
+-   `className` **[string][60]?**
 
 ### ColorPalette
 
@@ -2395,20 +2450,20 @@ Type: {collaborator: {id: [string][59]?, email: [string][59]?, name: [string][59
 
 #### ColorPaletteProps
 
-Type: {color: [string][59]?, allowedColors: [Array][63]&lt;[string][59]>, onChange: function
-([string][59]): any?, squareSize: [number][67], squareMargin: [number][67], className: [string][59],
-style: [Object][71], disabled: [boolean][64]?}
+Type: {color: [string][60]?, allowedColors: [Array][64]&lt;[string][60]>, onChange: function
+([string][60]): any?, squareSize: [number][67], squareMargin: [number][67], className: [string][60],
+style: [Object][68], disabled: [boolean][65]?}
 
 ##### Properties
 
--   `color` **[string][59]?**
--   `allowedColors` **[Array][63]&lt;[string][59]>**
--   `onChange` **function ([string][59]): any?**
+-   `color` **[string][60]?**
+-   `allowedColors` **[Array][64]&lt;[string][60]>**
+-   `onChange` **function ([string][60]): any?**
 -   `squareSize` **[number][67]**
 -   `squareMargin` **[number][67]**
--   `className` **[string][59]**
--   `style` **[Object][71]**
--   `disabled` **[boolean][64]?**
+-   `className` **[string][60]**
+-   `style` **[Object][68]**
+-   `disabled` **[boolean][65]?**
 
 #### ColorPaletteSynced
 
@@ -2416,14 +2471,14 @@ style: [Object][71], disabled: [boolean][64]?}
 
 #### ColorPaletteSyncedProps
 
-Type: {globalConfigKey: [string][59], disabled: [boolean][64]?, onChange: function ([string][59]):
+Type: {globalConfigKey: [string][60], disabled: [boolean][65]?, onChange: function ([string][60]):
 any?}
 
 ##### Properties
 
--   `globalConfigKey` **[string][59]**
--   `disabled` **[boolean][64]?**
--   `onChange` **function ([string][59]): any?**
+-   `globalConfigKey` **[string][60]**
+-   `disabled` **[boolean][65]?**
+-   `onChange` **function ([string][60]): any?**
 
 ### ConfirmationDialog
 
@@ -2468,19 +2523,19 @@ function Block() {
 
 #### ConfirmationDialogProps
 
-Type: {title: [string][59], body: React.Node?, cancelButtonText: [string][59], confirmButtonText:
-[string][59], isConfirmActionDangerous: [boolean][64], className: [string][59]?, style:
-[Object][71]?, onCancel: function (): any, onConfirm: function (): any}
+Type: {title: [string][60], body: React.Node?, cancelButtonText: [string][60], confirmButtonText:
+[string][60], isConfirmActionDangerous: [boolean][65], className: [string][60]?, style:
+[Object][68]?, onCancel: function (): any, onConfirm: function (): any}
 
 ##### Properties
 
--   `title` **[string][59]**
+-   `title` **[string][60]**
 -   `body` **React.Node?**
--   `cancelButtonText` **[string][59]**
--   `confirmButtonText` **[string][59]**
--   `isConfirmActionDangerous` **[boolean][64]**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `cancelButtonText` **[string][60]**
+-   `confirmButtonText` **[string][60]**
+-   `isConfirmActionDangerous` **[boolean][65]**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 -   `onCancel` **function (): any**
 -   `onConfirm` **function (): any**
 
@@ -2494,7 +2549,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][105]**
+-   `props` **[DialogProps][107]**
 
 ##### Examples
 
@@ -2533,16 +2588,16 @@ function Block() {
 
 #### DialogProps
 
-Type: {onClose: function (): any, className: [string][59]?, style: [Object][71]?,
-backgroundClassName: [string][59]?, backgroundStyle: [Object][71]?, children: React.Node}
+Type: {onClose: function (): any, className: [string][60]?, style: [Object][68]?,
+backgroundClassName: [string][60]?, backgroundStyle: [Object][68]?, children: React.Node}
 
 ##### Properties
 
 -   `onClose` **function (): any**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
--   `backgroundClassName` **[string][59]?**
--   `backgroundStyle` **[Object][71]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `backgroundClassName` **[string][60]?**
+-   `backgroundStyle` **[Object][68]?**
 -   `children` **React.Node**
 
 #### Dialog.CloseButton
@@ -2555,13 +2610,13 @@ backgroundClassName: [string][59]?, backgroundStyle: [Object][71]?, children: Re
 
 #### Dialog.CloseButtonProps
 
-Type: {className: [string][59]?, style: [Object][71]?, tabIndex: [number][67]?, children:
+Type: {className: [string][60]?, style: [Object][68]?, tabIndex: [number][67]?, children:
 React.Node?}
 
 ##### Properties
 
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 -   `tabIndex` **[number][67]?**
 -   `children` **React.Node?**
 
@@ -2571,21 +2626,21 @@ React.Node?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][106]**
+-   `props` **[FieldIconProps][108]**
 
 #### FieldIconProps
 
-Type: {field: [Field][68], size: [number][67]?, fillColor: [string][59]?, className: [string][59]?,
-style: [Object][71]?, pathClassName: [string][59]?}
+Type: {field: [Field][71], size: [number][67]?, fillColor: [string][60]?, className: [string][60]?,
+style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Properties
 
--   `field` **[Field][68]**
+-   `field` **[Field][71]**
 -   `size` **[number][67]?**
--   `fillColor` **[string][59]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
--   `pathClassName` **[string][59]?**
+-   `fillColor` **[string][60]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `pathClassName` **[string][60]?**
 
 ### FieldPicker
 
@@ -2595,26 +2650,26 @@ style: [Object][71]?, pathClassName: [string][59]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][107]**
+-   `props` **[FieldPickerProps][109]**
 
 #### FieldPickerProps
 
-Type: {table: [Table][73]?, field: [Field][68]?, shouldAllowPickingNone: [boolean][64]?, onChange:
-function (fieldModel: ([Field][68] | null)): void?, allowedTypes: [Array][63]&lt;FieldType>?,
-placeholder: [string][59]?, style: [Object][71]?, className: [string][59]?, disabled:
-[boolean][64]?}
+Type: {table: [Table][75]?, field: [Field][71]?, shouldAllowPickingNone: [boolean][65]?, onChange:
+function (fieldModel: ([Field][71] | null)): void?, allowedTypes: [Array][64]&lt;FieldType>?,
+placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disabled:
+[boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][73]?**
--   `field` **[Field][68]?**
--   `shouldAllowPickingNone` **[boolean][64]?**
--   `onChange` **function (fieldModel: ([Field][68] | null)): void?**
--   `allowedTypes` **[Array][63]&lt;FieldType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
+-   `table` **[Table][75]?**
+-   `field` **[Field][71]?**
+-   `shouldAllowPickingNone` **[boolean][65]?**
+-   `onChange` **function (fieldModel: ([Field][71] | null)): void?**
+-   `allowedTypes` **[Array][64]&lt;FieldType>?**
+-   `placeholder` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
 
 #### FieldPickerSynced
 
@@ -2622,26 +2677,26 @@ placeholder: [string][59]?, style: [Object][71]?, className: [string][59]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][108]**
+-   `props` **[FieldPickerSyncedProps][110]**
 
 #### FieldPickerSyncedProps
 
-Type: {table: [Table][73]?, globalConfigKey: GlobalConfigKey, onChange: function (fieldModel:
-([Field][68] | null)): void?, disabled: [boolean][64]?, shouldAllowPickingNone: [boolean][64]?,
-allowedTypes: [Array][63]&lt;FieldType>?, placeholder: [string][59]?, style: [Object][71]?,
-className: [string][59]?}
+Type: {table: [Table][75]?, globalConfigKey: GlobalConfigKey, onChange: function (fieldModel:
+([Field][71] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?,
+allowedTypes: [Array][64]&lt;FieldType>?, placeholder: [string][60]?, style: [Object][68]?,
+className: [string][60]?}
 
 ##### Properties
 
--   `table` **[Table][73]?**
+-   `table` **[Table][75]?**
 -   `globalConfigKey` **GlobalConfigKey**
--   `onChange` **function (fieldModel: ([Field][68] | null)): void?**
--   `disabled` **[boolean][64]?**
--   `shouldAllowPickingNone` **[boolean][64]?**
--   `allowedTypes` **[Array][63]&lt;FieldType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
+-   `onChange` **function (fieldModel: ([Field][71] | null)): void?**
+-   `disabled` **[boolean][65]?**
+-   `shouldAllowPickingNone` **[boolean][65]?**
+-   `allowedTypes` **[Array][64]&lt;FieldType>?**
+-   `placeholder` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
 
 ### Icon
 
@@ -2649,7 +2704,7 @@ className: [string][59]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][109]**
+-   `$0` **[IconProps][111]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -2659,17 +2714,17 @@ className: [string][59]?}
 
 #### IconProps
 
-Type: {name: [string][59], size: [number][67]?, fillColor: [string][59]?, className: [string][59]?,
-style: [Object][71]?, pathClassName: [string][59]?}
+Type: {name: [string][60], size: [number][67]?, fillColor: [string][60]?, className: [string][60]?,
+style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Properties
 
--   `name` **[string][59]**
+-   `name` **[string][60]**
 -   `size` **[number][67]?**
--   `fillColor` **[string][59]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
--   `pathClassName` **[string][59]?**
+-   `fillColor` **[string][60]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `pathClassName` **[string][60]?**
 
 ### Input
 
@@ -2679,24 +2734,24 @@ style: [Object][71]?, pathClassName: [string][59]?}
 
 ##### Parameters
 
--   `props` **[InputProps][110]**
+-   `props` **[InputProps][112]**
 
 #### InputProps
 
-Type: {type: [string][59]?, placeholder: [string][59]?, onChange: function
-(SyntheticInputEvent&lt;>): void?, style: [Object][71]?, className: [string][59]?, disabled:
-[boolean][64]?, required: [boolean][64]?, spellCheck: [boolean][64]?, tabIndex: [number][67]?}
+Type: {type: [string][60]?, placeholder: [string][60]?, onChange: function
+(SyntheticInputEvent&lt;>): void?, style: [Object][68]?, className: [string][60]?, disabled:
+[boolean][65]?, required: [boolean][65]?, spellCheck: [boolean][65]?, tabIndex: [number][67]?}
 
 ##### Properties
 
--   `type` **[string][59]?**
--   `placeholder` **[string][59]?**
+-   `type` **[string][60]?**
+-   `placeholder` **[string][60]?**
 -   `onChange` **function (SyntheticInputEvent&lt;>): void?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
--   `required` **[boolean][64]?**
--   `spellCheck` **[boolean][64]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
+-   `required` **[boolean][65]?**
+-   `spellCheck` **[boolean][65]?**
 -   `tabIndex` **[number][67]?**
 
 #### InputSynced
@@ -2705,24 +2760,24 @@ Type: {type: [string][59]?, placeholder: [string][59]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][111]**
+-   `props` **[InputSyncedProps][113]**
 
 #### InputSyncedProps
 
-Type: {type: [string][59]?, globalConfigKey: GlobalConfigKey, placeholder: [string][59]?, onChange:
-function (SyntheticInputEvent&lt;>): void?, style: [Object][71]?, className: [string][59]?,
-disabled: [boolean][64]?, spellCheck: [boolean][64]?}
+Type: {type: [string][60]?, globalConfigKey: GlobalConfigKey, placeholder: [string][60]?, onChange:
+function (SyntheticInputEvent&lt;>): void?, style: [Object][68]?, className: [string][60]?,
+disabled: [boolean][65]?, spellCheck: [boolean][65]?}
 
 ##### Properties
 
--   `type` **[string][59]?**
+-   `type` **[string][60]?**
 -   `globalConfigKey` **GlobalConfigKey**
--   `placeholder` **[string][59]?**
+-   `placeholder` **[string][60]?**
 -   `onChange` **function (SyntheticInputEvent&lt;>): void?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
--   `spellCheck` **[boolean][64]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
+-   `spellCheck` **[boolean][65]?**
 
 ### Link
 
@@ -2730,7 +2785,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][112]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][114]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -2751,16 +2806,16 @@ function MyLinkComponent() {
 
 #### LinkProps
 
-Type: {href: [string][59], target: [string][59]?, tabIndex: ([number][67] \| [string][59])?,
-className: [string][59]?, style: [Object][71]?, children: React.Node}
+Type: {href: [string][60], target: [string][60]?, tabIndex: ([number][67] \| [string][60])?,
+className: [string][60]?, style: [Object][68]?, children: React.Node}
 
 ##### Properties
 
--   `href` **[string][59]**
--   `target` **[string][59]?**
--   `tabIndex` **([number][67] \| [string][59])?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `href` **[string][60]**
+-   `target` **[string][60]?**
+-   `tabIndex` **([number][67] \| [string][60])?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 -   `children` **React.Node**
 
 ### Loader
@@ -2769,17 +2824,17 @@ className: [string][59]?, style: [Object][71]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][113]**
+-   `$0` **[LoaderProps][115]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
 #### LoaderProps
 
-Type: {fillColor: [string][59]?, scale: [number][67]?}
+Type: {fillColor: [string][60]?, scale: [number][67]?}
 
 ##### Properties
 
--   `fillColor` **[string][59]?**
+-   `fillColor` **[string][60]?**
 -   `scale` **[number][67]?**
 
 ### Popover
@@ -2790,14 +2845,14 @@ Type: {fillColor: [string][59]?, scale: [number][67]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][114]**
+-   `props` **[PopoverProps][116]**
 
 #### PopoverProps
 
 Type: {children: React$Element&lt;any>, renderContent: function (): React$Element&lt;any>,
 placementX: PopoverPlacementX, placementY: PopoverPlacementY, placementOffsetX: [number][67],
 placementOffsetY: [number][67], fitInWindowMode: FitInWindowMode, onClose: function (): void?,
-isOpen: [boolean][64], backgroundClassName: [string][59]?, backgroundStyle: [Object][71]?}
+isOpen: [boolean][65], backgroundClassName: [string][60]?, backgroundStyle: [Object][68]?}
 
 ##### Properties
 
@@ -2809,9 +2864,9 @@ isOpen: [boolean][64], backgroundClassName: [string][59]?, backgroundStyle: [Obj
 -   `placementOffsetY` **[number][67]**
 -   `fitInWindowMode` **FitInWindowMode**
 -   `onClose` **function (): void?**
--   `isOpen` **[boolean][64]**
--   `backgroundClassName` **[string][59]?**
--   `backgroundStyle` **[Object][71]?**
+-   `isOpen` **[boolean][65]**
+-   `backgroundClassName` **[string][60]?**
+-   `backgroundStyle` **[Object][68]?**
 
 #### Popover.fitInWindowModes
 
@@ -2825,7 +2880,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][115]**
+-   `props` **[ProgressBarProps][117]**
 
 ##### Examples
 
@@ -2839,18 +2894,18 @@ function MyComponent() {
 
 #### ProgressBarProps
 
-Type: [object][71]
+Type: [object][68]
 
 ##### Properties
 
 -   `progress` **[number][67]** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1
     is 100% complete. If you include a number outside of the range, the value will be clamped to be
     inside of the range.
--   `barColor` **[string][59]?** A CSS color, such as `#ff9900`.
--   `backgroundColor` **[string][59]?** A CSS color, such as `#ff9900`.
+-   `barColor` **[string][60]?** A CSS color, such as `#ff9900`.
+-   `backgroundColor` **[string][60]?** A CSS color, such as `#ff9900`.
 -   `height` **[number][67]?** A height, in pixels.
--   `className` **[string][59]?** Extra `className`s to apply to the element, separated by spaces.
--   `style` **[object][71]?** Extra styles to apply to the progress bar.
+-   `className` **[string][60]?** Extra `className`s to apply to the element, separated by spaces.
+-   `style` **[object][68]?** Extra styles to apply to the progress bar.
 
 ### RadioSynced
 
@@ -2860,20 +2915,20 @@ Type: [object][71]
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][116]**
+-   `props` **[RadioSyncedProps][118]**
 
 #### RadioSyncedProps
 
-Type: {globalConfigKey: GlobalConfigKey, value: [string][59], style: [Object][71]?, className:
-[string][59]?, disabled: [boolean][64]?}
+Type: {globalConfigKey: GlobalConfigKey, value: [string][60], style: [Object][68]?, className:
+[string][60]?, disabled: [boolean][65]?}
 
 ##### Properties
 
 -   `globalConfigKey` **GlobalConfigKey**
--   `value` **[string][59]**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
+-   `value` **[string][60]**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
 
 ### RecordCard
 
@@ -2883,29 +2938,29 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][59], style: [Object][71
 
 ##### Parameters
 
--   `props` **[RecordCardProps][117]**
+-   `props` **[RecordCardProps][119]**
 
 #### RecordCardProps
 
-Type: {record: ([Record][72] | RecordDef), fields: [Array][63]&lt;[Field][68]>?, view: [View][69]?,
-attachmentCoverField: [Field][68]?, width: [number][67]?, height: [number][67]?, onClick:
-[Function][70]?, getExpandRecordOptions: function ([Record][72]): [ExpandRecordOpts][118]?,
-onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object][71]?}
+Type: {record: ([Record][74] | RecordDef), fields: [Array][64]&lt;[Field][71]>?, view: [View][72]?,
+attachmentCoverField: [Field][71]?, width: [number][67]?, height: [number][67]?, onClick:
+[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][120]?,
+onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
 
--   `record` **([Record][72] | RecordDef)**
--   `fields` **[Array][63]&lt;[Field][68]>?**
--   `view` **[View][69]?**
--   `attachmentCoverField` **[Field][68]?**
+-   `record` **([Record][74] | RecordDef)**
+-   `fields` **[Array][64]&lt;[Field][71]>?**
+-   `view` **[View][72]?**
+-   `attachmentCoverField` **[Field][71]?**
 -   `width` **[number][67]?**
 -   `height` **[number][67]?**
--   `onClick` **[Function][70]?**
--   `getExpandRecordOptions` **function ([Record][72]): [ExpandRecordOpts][118]?**
+-   `onClick` **[Function][73]?**
+-   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][120]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 
 ### RecordCardList
 
@@ -2915,32 +2970,32 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][119]**
+-   `props` **[RecordCardListProps][121]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][63]&lt;([Record][72] | RecordDef)>, onScroll: function ([Event][120]):
-void?, onRecordClick: (null | function (record: ([Record][72] | RecordDef), index: [number][67]):
-void)?, onRecordMouseEnter: function (record: ([Record][72] | RecordDef), index: [number][67]):
-void?, onRecordMouseLeave: function (record: ([Record][72] | RecordDef), index: [number][67]):
-void?, fields: [Array][63]&lt;[Field][68]>?, view: [View][69]?, attachmentCoverField: [Field][68]?,
-className: [string][59]?, style: [Object][71]?}
+Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][122]):
+void?, onRecordClick: (null | function (record: ([Record][74] | RecordDef), index: [number][67]):
+void)?, onRecordMouseEnter: function (record: ([Record][74] | RecordDef), index: [number][67]):
+void?, onRecordMouseLeave: function (record: ([Record][74] | RecordDef), index: [number][67]):
+void?, fields: [Array][64]&lt;[Field][71]>?, view: [View][72]?, attachmentCoverField: [Field][71]?,
+className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
 
--   `records` **[Array][63]&lt;([Record][72] | RecordDef)>**
--   `onScroll` **function ([Event][120]): void?**
--   `onRecordClick` **(null | function (record: ([Record][72] | RecordDef), index: [number][67]):
+-   `records` **[Array][64]&lt;([Record][74] | RecordDef)>**
+-   `onScroll` **function ([Event][122]): void?**
+-   `onRecordClick` **(null | function (record: ([Record][74] | RecordDef), index: [number][67]):
     void)?**
--   `onRecordMouseEnter` **function (record: ([Record][72] | RecordDef), index: [number][67]):
+-   `onRecordMouseEnter` **function (record: ([Record][74] | RecordDef), index: [number][67]):
     void?**
--   `onRecordMouseLeave` **function (record: ([Record][72] | RecordDef), index: [number][67]):
+-   `onRecordMouseLeave` **function (record: ([Record][74] | RecordDef), index: [number][67]):
     void?**
--   `fields` **[Array][63]&lt;[Field][68]>?**
--   `view` **[View][69]?**
--   `attachmentCoverField` **[Field][68]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `fields` **[Array][64]&lt;[Field][71]>?**
+-   `view` **[View][72]?**
+-   `attachmentCoverField` **[Field][71]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 
 ### Select
 
@@ -2950,7 +3005,7 @@ className: [string][59]?, style: [Object][71]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][121]**
+-   `props` **[SelectProps][123]**
 
 #### SelectProps
 
@@ -2962,7 +3017,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][122]**
+-   `props` **[SelectSyncedProps][124]**
 
 #### SelectSyncedProps
 
@@ -2994,23 +3049,23 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][123]**
+-   `props` **[TablePickerProps][125]**
 
 #### TablePickerProps
 
-Type: {table: [Table][73]?, shouldAllowPickingNone: [boolean][64]?, onChange: function (tableModel:
-([Table][73] | null)): void?, placeholder: [string][59]?, style: [Object][71]?, className:
-[string][59]?, disabled: [boolean][64]?}
+Type: {table: [Table][75]?, shouldAllowPickingNone: [boolean][65]?, onChange: function (tableModel:
+([Table][75] | null)): void?, placeholder: [string][60]?, style: [Object][68]?, className:
+[string][60]?, disabled: [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][73]?**
--   `shouldAllowPickingNone` **[boolean][64]?**
--   `onChange` **function (tableModel: ([Table][73] | null)): void?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
+-   `table` **[Table][75]?**
+-   `shouldAllowPickingNone` **[boolean][65]?**
+-   `onChange` **function (tableModel: ([Table][75] | null)): void?**
+-   `placeholder` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
 
 #### TablePickerSynced
 
@@ -3018,23 +3073,23 @@ Type: {table: [Table][73]?, shouldAllowPickingNone: [boolean][64]?, onChange: fu
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][124]**
+-   `props` **[TablePickerSyncedProps][126]**
 
 #### TablePickerSyncedProps
 
-Type: {globalConfigKey: GlobalConfigKey, onChange: function (tableModel: ([Table][73] | null)):
-void?, disabled: [boolean][64]?, shouldAllowPickingNone: [boolean][64]?, placeholder: [string][59]?,
-style: [Object][71]?, className: [string][59]?}
+Type: {globalConfigKey: GlobalConfigKey, onChange: function (tableModel: ([Table][75] | null)):
+void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?, placeholder: [string][60]?,
+style: [Object][68]?, className: [string][60]?}
 
 ##### Properties
 
 -   `globalConfigKey` **GlobalConfigKey**
--   `onChange` **function (tableModel: ([Table][73] | null)): void?**
--   `disabled` **[boolean][64]?**
--   `shouldAllowPickingNone` **[boolean][64]?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
+-   `onChange` **function (tableModel: ([Table][75] | null)): void?**
+-   `disabled` **[boolean][65]?**
+-   `shouldAllowPickingNone` **[boolean][65]?**
+-   `placeholder` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
 
 ### Toggle
 
@@ -3044,23 +3099,23 @@ style: [Object][71]?, className: [string][59]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][125]**
+-   `props` **[ToggleProps][127]**
 
 #### ToggleProps
 
-Type: {value: [boolean][64], label: React.Node?, theme: [string][59]?, onChange: function
-([boolean][64]): void?, disabled: [boolean][64]?, className: [string][59]?, style: [Object][71]?,
+Type: {value: [boolean][65], label: React.Node?, theme: [string][60]?, onChange: function
+([boolean][65]): void?, disabled: [boolean][65]?, className: [string][60]?, style: [Object][68]?,
 tabIndex: [number][67]?}
 
 ##### Properties
 
--   `value` **[boolean][64]**
+-   `value` **[boolean][65]**
 -   `label` **React.Node?**
--   `theme` **[string][59]?**
--   `onChange` **function ([boolean][64]): void?**
--   `disabled` **[boolean][64]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `theme` **[string][60]?**
+-   `onChange` **function ([boolean][65]): void?**
+-   `disabled` **[boolean][65]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 -   `tabIndex` **[number][67]?**
 
 #### ToggleSynced
@@ -3069,23 +3124,23 @@ tabIndex: [number][67]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][126]**
+-   `props` **[ToggleSyncedProps][128]**
 
 #### ToggleSyncedProps
 
-Type: {globalConfigKey: GlobalConfigKey, label: React.Node?, theme: [string][59]?, onChange:
-function ([boolean][64]): void?, disabled: [boolean][64]?, className: [string][59]?, style:
-[Object][71]?, tabIndex: [number][67]?}
+Type: {globalConfigKey: GlobalConfigKey, label: React.Node?, theme: [string][60]?, onChange:
+function ([boolean][65]): void?, disabled: [boolean][65]?, className: [string][60]?, style:
+[Object][68]?, tabIndex: [number][67]?}
 
 ##### Properties
 
 -   `globalConfigKey` **GlobalConfigKey**
 -   `label` **React.Node?**
--   `theme` **[string][59]?**
--   `onChange` **function ([boolean][64]): void?**
--   `disabled` **[boolean][64]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `theme` **[string][60]?**
+-   `onChange` **function ([boolean][65]): void?**
+-   `disabled` **[boolean][65]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 -   `tabIndex` **[number][67]?**
 
 ### Tooltip
@@ -3096,30 +3151,30 @@ function ([boolean][64]): void?, disabled: [boolean][64]?, className: [string][5
 
 ##### Parameters
 
--   `props` **[TooltipProps][127]**
+-   `props` **[TooltipProps][129]**
 
 #### TooltipProps
 
 Type: {children: React$Element&lt;any>, renderContent: function (): React$Element&lt;any>?, content:
-([string][59] | function (): React\$Element&lt;any>)?, placementX: PopoverPlacementX?, placementY:
+([string][60] | function (): React\$Element&lt;any>)?, placementX: PopoverPlacementX?, placementY:
 PopoverPlacementY?, placementOffsetX: [number][67]?, placementOffsetY: [number][67]?,
-fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][64]?, disabled:
-[boolean][64]?, className: [string][59]?, style: [Object][71]?}
+fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, disabled:
+[boolean][65]?, className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
 -   `renderContent` **function (): React\$Element&lt;any>?**
--   `content` **([string][59] | function (): React\$Element&lt;any>)?**
+-   `content` **([string][60] | function (): React\$Element&lt;any>)?**
 -   `placementX` **PopoverPlacementX?**
 -   `placementY` **PopoverPlacementY?**
 -   `placementOffsetX` **[number][67]?**
 -   `placementOffsetY` **[number][67]?**
 -   `fitInWindowMode` **FitInWindowMode?**
--   `shouldHideTooltipOnClick` **[boolean][64]?**
--   `disabled` **[boolean][64]?**
--   `className` **[string][59]?**
--   `style` **[Object][71]?**
+-   `shouldHideTooltipOnClick` **[boolean][65]?**
+-   `disabled` **[boolean][65]?**
+-   `className` **[string][60]?**
+-   `style` **[Object][68]?**
 
 ### ViewPicker
 
@@ -3129,26 +3184,26 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][64]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][128]**
+-   `props` **[ViewPickerProps][130]**
 
 #### ViewPickerProps
 
-Type: {table: [Table][73]?, view: [View][69]?, shouldAllowPickingNone: [boolean][64]?, onChange:
-function (viewModel: ([View][69] | null)): void?, allowedTypes: [Array][63]&lt;ViewType>?,
-placeholder: [string][59]?, style: [Object][71]?, className: [string][59]?, disabled:
-[boolean][64]?}
+Type: {table: [Table][75]?, view: [View][72]?, shouldAllowPickingNone: [boolean][65]?, onChange:
+function (viewModel: ([View][72] | null)): void?, allowedTypes: [Array][64]&lt;ViewType>?,
+placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disabled:
+[boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][73]?**
--   `view` **[View][69]?**
--   `shouldAllowPickingNone` **[boolean][64]?**
--   `onChange` **function (viewModel: ([View][69] | null)): void?**
--   `allowedTypes` **[Array][63]&lt;ViewType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][64]?**
+-   `table` **[Table][75]?**
+-   `view` **[View][72]?**
+-   `shouldAllowPickingNone` **[boolean][65]?**
+-   `onChange` **function (viewModel: ([View][72] | null)): void?**
+-   `allowedTypes` **[Array][64]&lt;ViewType>?**
+-   `placeholder` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
+-   `disabled` **[boolean][65]?**
 
 #### ViewPickerSynced
 
@@ -3156,26 +3211,26 @@ placeholder: [string][59]?, style: [Object][71]?, className: [string][59]?, disa
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][129]**
+-   `props` **[ViewPickerSyncedProps][131]**
 
 #### ViewPickerSyncedProps
 
-Type: {table: [Table][73]?, globalConfigKey: GlobalConfigKey, onChange: function (viewModel:
-([View][69] | null)): void?, disabled: [boolean][64]?, shouldAllowPickingNone: [boolean][64]?,
-allowedTypes: [Array][63]&lt;ViewType>?, placeholder: [string][59]?, style: [Object][71]?,
-className: [string][59]?}
+Type: {table: [Table][75]?, globalConfigKey: GlobalConfigKey, onChange: function (viewModel:
+([View][72] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?,
+allowedTypes: [Array][64]&lt;ViewType>?, placeholder: [string][60]?, style: [Object][68]?,
+className: [string][60]?}
 
 ##### Properties
 
--   `table` **[Table][73]?**
+-   `table` **[Table][75]?**
 -   `globalConfigKey` **GlobalConfigKey**
--   `onChange` **function (viewModel: ([View][69] | null)): void?**
--   `disabled` **[boolean][64]?**
--   `shouldAllowPickingNone` **[boolean][64]?**
--   `allowedTypes` **[Array][63]&lt;ViewType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][71]?**
--   `className` **[string][59]?**
+-   `onChange` **function (viewModel: ([View][72] | null)): void?**
+-   `disabled` **[boolean][65]?**
+-   `shouldAllowPickingNone` **[boolean][65]?**
+-   `allowedTypes` **[Array][64]&lt;ViewType>?**
+-   `placeholder` **[string][60]?**
+-   `style` **[Object][68]?**
+-   `className` **[string][60]?**
 
 ### ViewportConstraint
 
@@ -3203,13 +3258,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][130]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][130]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][132]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][132]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][130]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][130]?**
+-   `minSize` **[ViewportSizeConstraintProp][132]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][132]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -3224,130 +3279,132 @@ Type: {width: ([number][67] | null)?, height: ([number][67] | null)?}
 [1]: #airtableblocks
 [2]: #blocksdk
 [3]: #globalconfig
-[4]: #viewport
-[5]: #airtableblocksmodels
-[6]: #fieldtypes
-[7]: #generateguid
-[8]: #viewtypes
-[9]: #recordcoloring
-[10]: #settingsbutton
-[11]: #abstractmodel
-[12]: #abstractmodelwithasyncdata
-[13]: #aggregator
-[14]: #base
-[15]: #cursor
-[16]: #field
-[17]: #queryresult
-[18]: #record
-[19]: #table
-[20]: #view
-[21]: #watchable
-[22]: #airtableblocksui
-[23]: #css--external-scripts
-[24]: #color-utilities
-[25]: #react-hooks-for-working-with-airtable-data
-[26]: #expandrecord
-[27]: #expandrecordlist
-[28]: #expandrecordpickerasync
-[29]: #globalalert
-[30]: #autocompletepopover
-[31]: #button
-[32]: #cellrenderer
-[33]: #choicetoken
-[34]: #collaboratortoken
-[35]: #colorpalette
-[36]: #confirmationdialog
-[37]: #dialog
-[38]: #fieldicon
-[39]: #fieldpicker
-[40]: #icon
-[41]: #input
-[42]: #link
-[43]: #loader
-[44]: #popover
-[45]: #progressbar
-[46]: #radiosynced
-[47]: #recordcard
-[48]: #recordcardlist
-[49]: #select
-[50]: #selectbuttons
-[51]: #tablepicker
-[52]: #toggle
-[53]: #tooltip
-[54]: #viewpicker
-[55]: #viewportconstraint
-[56]: #base
-[57]: #cursor
-[58]: #globalconfig
-[59]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-[60]: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-[61]: https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
-[62]: #viewport
-[63]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-[65]: #viewportaddmaxfullscreensize
-[66]: #viewportminsize
+[4]: #globalconfigvalue
+[5]: #viewport
+[6]: #airtableblocksmodels
+[7]: #fieldtypes
+[8]: #generateguid
+[9]: #viewtypes
+[10]: #recordcoloring
+[11]: #settingsbutton
+[12]: #abstractmodel
+[13]: #abstractmodelwithasyncdata
+[14]: #aggregator
+[15]: #base
+[16]: #cursor
+[17]: #field
+[18]: #queryresult
+[19]: #record
+[20]: #table
+[21]: #view
+[22]: #watchable
+[23]: #airtableblocksui
+[24]: #css--external-scripts
+[25]: #color-utilities
+[26]: #react-hooks-for-working-with-airtable-data
+[27]: #expandrecord
+[28]: #expandrecordlist
+[29]: #expandrecordpickerasync
+[30]: #globalalert
+[31]: #autocompletepopover
+[32]: #button
+[33]: #cellrenderer
+[34]: #choicetoken
+[35]: #collaboratortoken
+[36]: #colorpalette
+[37]: #confirmationdialog
+[38]: #dialog
+[39]: #fieldicon
+[40]: #fieldpicker
+[41]: #icon
+[42]: #input
+[43]: #link
+[44]: #loader
+[45]: #popover
+[46]: #progressbar
+[47]: #radiosynced
+[48]: #recordcard
+[49]: #recordcardlist
+[50]: #select
+[51]: #selectbuttons
+[52]: #tablepicker
+[53]: #toggle
+[54]: #tooltip
+[55]: #viewpicker
+[56]: #viewportconstraint
+[57]: #base
+[58]: #cursor
+[59]: #globalconfig
+[60]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[61]: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+[62]: https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
+[63]: #viewport
+[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[65]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[66]: #globalconfigvalue
 [67]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-[68]: #field
-[69]: #view
-[70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-[71]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-[72]: #record
-[73]: #table
-[74]: #aggregator
-[75]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-[76]: #color
-[77]: #linkedrecordsqueryresult
-[78]: #tableorviewqueryresult
-[79]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[80]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[81]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[82]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[83]: #colors
-[84]: #color
-[85]: #rgb
-[86]: #rgb
-[87]: https://reactjs.org/docs/hooks-intro.html
-[88]: #withhooks
-[89]: #usewatchable
-[90]: #userecordids
-[91]: #userecordbyid
-[92]: #queryresult
-[93]: #usebase
-[94]: #userecords
-[95]: #useviewport
-[96]: #watchable
-[97]: https://reactjs.org/docs/react-api.html#reactsuspense
-[98]: https://reactjs.org/docs/forwarding-refs.html
-[99]: #autocompletepopoverprops
-[100]: #autocompleteitem
-[101]: #buttonprops
-[102]: #cellrendererprops
-[103]: #choicetokenprops
-[104]: #collaboratortokenprops
-[105]: #dialogprops
-[106]: #fieldiconprops
-[107]: #fieldpickerprops
-[108]: #fieldpickersyncedprops
-[109]: #iconprops
-[110]: #inputprops
-[111]: #inputsyncedprops
-[112]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[113]: #loaderprops
-[114]: #popoverprops
-[115]: #progressbarprops
-[116]: #radiosyncedprops
-[117]: #recordcardprops
-[118]: #expandrecordopts
-[119]: #recordcardlistprops
-[120]: https://developer.mozilla.org/docs/Web/API/Event
-[121]: #selectprops
-[122]: #selectsyncedprops
-[123]: #tablepickerprops
-[124]: #tablepickersyncedprops
-[125]: #toggleprops
-[126]: #togglesyncedprops
-[127]: #tooltipprops
-[128]: #viewpickerprops
-[129]: #viewpickersyncedprops
-[130]: #viewportsizeconstraintprop
+[68]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[69]: #viewportaddmaxfullscreensize
+[70]: #viewportminsize
+[71]: #field
+[72]: #view
+[73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[74]: #record
+[75]: #table
+[76]: #aggregator
+[77]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[78]: #color
+[79]: #linkedrecordsqueryresult
+[80]: #tableorviewqueryresult
+[81]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[82]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[83]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[84]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[85]: #colors
+[86]: #color
+[87]: #rgb
+[88]: #rgb
+[89]: https://reactjs.org/docs/hooks-intro.html
+[90]: #withhooks
+[91]: #usewatchable
+[92]: #userecordids
+[93]: #userecordbyid
+[94]: #queryresult
+[95]: #usebase
+[96]: #userecords
+[97]: #useviewport
+[98]: #watchable
+[99]: https://reactjs.org/docs/react-api.html#reactsuspense
+[100]: https://reactjs.org/docs/forwarding-refs.html
+[101]: #autocompletepopoverprops
+[102]: #autocompleteitem
+[103]: #buttonprops
+[104]: #cellrendererprops
+[105]: #choicetokenprops
+[106]: #collaboratortokenprops
+[107]: #dialogprops
+[108]: #fieldiconprops
+[109]: #fieldpickerprops
+[110]: #fieldpickersyncedprops
+[111]: #iconprops
+[112]: #inputprops
+[113]: #inputsyncedprops
+[114]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[115]: #loaderprops
+[116]: #popoverprops
+[117]: #progressbarprops
+[118]: #radiosyncedprops
+[119]: #recordcardprops
+[120]: #expandrecordopts
+[121]: #recordcardlistprops
+[122]: https://developer.mozilla.org/docs/Web/API/Event
+[123]: #selectprops
+[124]: #selectsyncedprops
+[125]: #tablepickerprops
+[126]: #tablepickersyncedprops
+[127]: #toggleprops
+[128]: #togglesyncedprops
+[129]: #tooltipprops
+[130]: #viewpickerprops
+[131]: #viewpickersyncedprops
+[132]: #viewportsizeconstraintprop

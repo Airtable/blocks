@@ -113,9 +113,9 @@ function (_Watchable) {
       return key;
     }
     /**
-     * Get the value at a path. Throws an error if the path does not exist.
+     * Get the value at a path. Throws an error if the path is invalid.
      *
-     * @param {string|Array<string>} key A string for the the top-level key, or an array of strings describing the path to the value.
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns The value at the provided path.
      * @example
      * import {globalConfig} from 'airtable-block';
@@ -141,7 +141,7 @@ function (_Watchable) {
     /**
      * Returns `true` if the current user can set the global config value at `key`, `false` otherwise.
      *
-     * @param {string|Array<string>} key A string for the the top-level key, or an array of strings describing the path to the value.
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns `true` if the current user can set the global config value at `key`, and `false` otherwise.
      * @example
      * import {globalConfig} from 'airtable-block';
@@ -162,7 +162,18 @@ function (_Watchable) {
 
       return permissionHelpers.can(base.__rawPermissionLevel, _permission_levels.PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Sets a value at a path. Throws an error if the path or value is invalid.
+     *
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
+     * @param value The value to set at the specified path.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * if (globalConfig.canSet('favoriteColor')) {
+     *     globalConfig.set('favoriteColor', 'purple');
+     * }
+     */
 
   }, {
     key: "set",
@@ -174,7 +185,22 @@ function (_Watchable) {
         value
       }]);
     }
-    /** */
+    /**
+     * Returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
+     *
+     * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * const updates = [
+     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     * ];
+     * if (globalConfig.canSetPaths(updates)) {
+     *     globalConfig.setPaths(updates);
+     * }
+     */
 
   }, {
     key: "canSetPaths",
@@ -187,7 +213,21 @@ function (_Watchable) {
 
       return permissionHelpers.can(base.__rawPermissionLevel, _permission_levels.PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Sets multiple values. Throws if any path or value is invalid.
+     *
+     * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * const updates = [
+     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     * ];
+     * if (globalConfig.canSetPaths(updates)) {
+     *     globalConfig.setPaths(updates);
+     * }
+     */
 
   }, {
     key: "setPaths",

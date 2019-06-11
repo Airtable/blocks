@@ -1,9 +1,4 @@
 // @flow
-import {
-    type GlobalConfigValue,
-    type GlobalConfigUpdate,
-    type GlobalConfigData,
-} from './types/global_config';
 import {PermissionLevels} from './types/permission_levels';
 import Watchable from './watchable';
 import getSdk from './get_sdk';
@@ -21,6 +16,24 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
 );
 
 export type GlobalConfigKey = string | Array<string>;
+
+/**
+ * @typedef {null|boolean|number|string|Array<GlobalConfigValue>|Object.<string, GlobalConfigValue>}
+ */
+export type GlobalConfigValue =
+    | null
+    | boolean
+    | number
+    | string
+    | Array<GlobalConfigValue>
+    | {[string]: GlobalConfigValue};
+
+export type GlobalConfigData = {[string]: ?GlobalConfigValue};
+
+export type GlobalConfigUpdate = {|
+    path: Array<string>,
+    value: GlobalConfigValue | void,
+|};
 
 type WatchableGlobalConfigKey = string;
 
@@ -76,9 +89,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         return key;
     }
     /**
-     * Get the value at a path. Throws an error if the path does not exist.
+     * Get the value at a path. Throws an error if the path is invalid.
      *
-     * @param {string|Array<string>} key A string for the the top-level key, or an array of strings describing the path to the value.
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns The value at the provided path.
      * @example
      * import {globalConfig} from 'airtable-block';
@@ -100,7 +113,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Returns `true` if the current user can set the global config value at `key`, `false` otherwise.
      *
-     * @param {string|Array<string>} key A string for the the top-level key, or an array of strings describing the path to the value.
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns `true` if the current user can set the global config value at `key`, and `false` otherwise.
      * @example
      * import {globalConfig} from 'airtable-block';
@@ -116,12 +129,38 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         const {base} = getSdk();
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Sets a value at a path. Throws an error if the path or value is invalid.
+     *
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
+     * @param value The value to set at the specified path.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * if (globalConfig.canSet('favoriteColor')) {
+     *     globalConfig.set('favoriteColor', 'purple');
+     * }
+     */
     set(key: GlobalConfigKey, value: GlobalConfigValue): AirtableWriteAction<void, {}> {
         const path = this.__formatKeyAsPath(key);
         return this.setPaths([{path, value}]);
     }
-    /** */
+    /**
+     * Returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
+     *
+     * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * const updates = [
+     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     * ];
+     * if (globalConfig.canSetPaths(updates)) {
+     *     globalConfig.setPaths(updates);
+     * }
+     */
     canSetPaths(updates: Array<GlobalConfigUpdate>): boolean {
         // This takes the updates to future-proof against having per-key
         // permissions.
@@ -129,7 +168,21 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         const {base} = getSdk();
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Sets multiple values. Throws if any path or value is invalid.
+     *
+     * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @example
+     * import {globalConfig} from 'airtable-block';
+     *
+     * const updates = [
+     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     * ];
+     * if (globalConfig.canSetPaths(updates)) {
+     *     globalConfig.setPaths(updates);
+     * }
+     */
     setPaths(updates: Array<GlobalConfigUpdate>): AirtableWriteAction<void, {}> {
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.

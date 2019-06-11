@@ -11,8 +11,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {type ModelChange} from './types/base';
-import {type GlobalConfigUpdate} from './types/global_config';
-import GlobalConfig from './global_config';
+import GlobalConfig, {type GlobalConfigUpdate} from './global_config';
 import Base from './models/base';
 import models from './models/models';
 import Cursor from './models/cursor';
