@@ -144,6 +144,13 @@ function (_AbstractModel) {
 
       return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
+    /**
+     * Returns the user matching the given ID. Throws if that user does not exist
+     * or does not have access to this base. Use {@link getCollaboratorByIdIfExists}
+     * instead if you are unsure whether a collaborator with the given ID exists
+     * and has access to this base.
+     */
+
   }, {
     key: "getCollaboratorById",
     value: function getCollaboratorById(collaboratorId) {
@@ -185,6 +192,12 @@ function (_AbstractModel) {
         return this._tableModelsById[tableId];
       }
     }
+    /**
+     * Returns the table matching the given ID. Throws if that table does not
+     * exist in this base. Use {@link getTableByIdIfExists} instead if you are
+     * unsure whether a table exists with the given ID.
+     */
+
   }, {
     key: "getTableById",
     value: function getTableById(tableId) {
@@ -235,6 +248,12 @@ function (_AbstractModel) {
 
       return null;
     }
+    /**
+     * Returns the table matching the given name. Throws if no table exists
+     * with that name in this base. Use {@link getTableByNameIfExists} instead
+     * if you are unsure whether a table exists with the given name.
+     */
+
   }, {
     key: "getTableByName",
     value: function getTableByName(tableName) {

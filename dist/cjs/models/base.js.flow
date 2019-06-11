@@ -179,6 +179,12 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
     }
+    /**
+     * Returns the user matching the given ID. Throws if that user does not exist
+     * or does not have access to this base. Use {@link getCollaboratorByIdIfExists}
+     * instead if you are unsure whether a collaborator with the given ID exists
+     * and has access to this base.
+     */
     getCollaboratorById(collaboratorId: UserId): CollaboratorData {
         const collaborator = this.getCollaboratorByIdIfExists(collaboratorId);
         if (!collaborator) {
@@ -230,6 +236,11 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             return this._tableModelsById[tableId];
         }
     }
+    /**
+     * Returns the table matching the given ID. Throws if that table does not
+     * exist in this base. Use {@link getTableByIdIfExists} instead if you are
+     * unsure whether a table exists with the given ID.
+     */
     getTableById(tableId: string): Table {
         const table = this.getTableByIdIfExists(tableId);
         if (!table) {
@@ -249,6 +260,11 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return null;
     }
+    /**
+     * Returns the table matching the given name. Throws if no table exists
+     * with that name in this base. Use {@link getTableByNameIfExists} instead
+     * if you are unsure whether a table exists with the given name.
+     */
     getTableByName(tableName: string): Table {
         const table = this.getTableByNameIfExists(tableName);
         if (!table) {
