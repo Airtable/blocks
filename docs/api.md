@@ -803,24 +803,44 @@ Returns **(ViewId | null)**
 
 Model class representing a field in a table.
 
-#### Parameters
+#### Examples
 
--   `baseData` **BaseData**
--   `parentTable` **[Table][76]**
--   `fieldId` **[string][60]**
+```javascript
+import {base} from 'airtable-blocks';
+
+const table = base.getTableByName('Table 1');
+const field = table.getFieldByName('Name');
+console.log('The type of this field is', field.type);
+```
 
 #### availableAggregators
 
 Type: [Array][64]&lt;[Aggregator][79]>
 
-Returns **[Array][64]&lt;[Aggregator][79]>**
+##### Examples
+
+```javascript
+const fieldAggregators = myField.availableAggregators;
+```
+
+Returns **[Array][64]&lt;[Aggregator][79]>** A list of available aggregators given this field's
+configuration.
 
 #### canSetCellValues
 
-Use this to check if the current user has permission to update the cell values in this field before
-calling `record.setCellValues` or `table.setCellValues`.
+Determines whether the current user has permission to update the cell values in this field. Should
+be called before calling [Record#setCellValue][80] or [Table#setCellValues][81].
 
-Returns **[boolean][65]**
+##### Examples
+
+```javascript
+if (myField.canSetCellValues()) {
+    myRecord.setCellValue(field, 'new cell value');
+}
+```
+
+Returns **[boolean][65]** `true` if the current user has permission to update the cell values in
+this field, `false` otherwise.
 
 #### convertStringToCellValue
 
@@ -829,55 +849,124 @@ config.
 
 ##### Parameters
 
--   `string` **[string][60]**
+-   `string` **[string][60]** The string to parse.
 
-Returns **any**
+##### Examples
+
+```javascript
+const inputString = '42';
+const cellValue = myNumberField.convertStringToCellValue(inputString);
+console.log(cellValue === 42);
+// => true
+```
+
+Returns **any** The parsed cell value, or `null` if unable to parse the given string.
 
 #### isAggregatorAvailable
 
 ##### Parameters
 
--   `aggregator` **([Aggregator][79] \| [string][60])**
+-   `aggregator` **([Aggregator][79] \| [string][60])** The aggregator object or aggregator key.
 
-Returns **[boolean][65]**
+##### Examples
+
+```javascript
+import {aggregators} from '@airtable/blocks/models';
+const aggregator = aggregators.totalAttachmentSize;
+
+// Using an aggregator object
+console.log(myAttachmentField.isAggregatorAvailable(aggregator));
+// => true
+
+// Using an aggregator key
+console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
+// => false
+```
+
+Returns **[boolean][65]** `true` if the given aggregator is available for this field, `false`
+otherwise.
 
 #### isComputed
 
 Type: [boolean][65]
 
-Returns **[boolean][65]**
+##### Examples
+
+```javascript
+console.log(mySingleLineTextField.isComputed);
+// => false
+console.log(myAutoNumberField.isComputed);
+// => true
+```
+
+Returns **[boolean][65]** `true` if this field is computed, `false` otherwise. A field is "computed"
+if it's value is not set by user input (e.g. autoNumber, formula, etc.). Can be watched.
 
 #### isPrimaryField
 
-Every table has exactly one primary field. True if this field is its parent table's primary field.
-
 Type: [boolean][65]
 
-Returns **[boolean][65]**
+Returns **[boolean][65]** `true` if this field is its parent table's primary field, `false`
+otherwise. Should never change because the primary field of a table cannot change.
 
 #### name
 
 Type: [string][60]
 
-Returns **[string][60]**
+##### Examples
+
+```javascript
+console.log(myField.name);
+// => 'Name'
+```
+
+Returns **[string][60]** The name of the field. Can be watched.
 
 #### options
 
 Type: ({} | null)
 
-Returns **({} | null)**
+##### Examples
+
+```javascript
+import {fieldTypes} from '@airtable/blocks/models';
+
+if (myField.type === fieldTypes.CURRENCY) {
+    console.log(myField.options.symbol);
+    // => '$'
+}
+```
+
+Returns **({} | null)** The configuration options of the field. The structure of the field's options
+depend on the field's type. Can be watched.
 
 #### parentTable
 
 Type: [Table][76]
 
-Returns **[Table][76]**
+##### Examples
+
+```javascript
+const field = myTable.getFieldByName('Name');
+console.log(field.parentTable.id === myTable.id);
+// => true
+```
+
+Returns **[Table][76]** The table that this field belongs to. Should never change because fields
+aren't moved between tables.
 
 #### type
 
 Type: [string][60]
 
-Returns **[string][60]**
+##### Examples
+
+```javascript
+console.log(myField.type);
+// => 'singleLineText'
+```
+
+Returns **[string][60]** The type of the field. Can be watched.
 
 ### QueryResult
 
@@ -1077,9 +1166,9 @@ Returns **[number][67]**
 
 #### createdTime
 
-Type: [Date][80]
+Type: [Date][82]
 
-Returns **[Date][80]**
+Returns **[Date][82]**
 
 #### delete
 
@@ -1133,7 +1222,7 @@ with the 'colorInView:\${ViewId}' key.
 
 -   `viewOrViewIdOrViewName` **([View][72] \| [string][60])**
 
-Returns **([Color][81] | null)**
+Returns **([Color][83] | null)**
 
 #### parentTable
 
@@ -1160,7 +1249,7 @@ Returns **[string][60]**
 -   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
 -   `opts` **QueryResultOpts** (optional, default `{}`)
 
-Returns **[LinkedRecordsQueryResult][82]**
+Returns **[LinkedRecordsQueryResult][84]**
 
 #### setCellValue
 
@@ -1367,7 +1456,7 @@ Returns **[number][67]**
 
 -   `opts` **QueryResultOpts?**
 
-Returns **[TableOrViewQueryResult][83]**
+Returns **[TableOrViewQueryResult][85]**
 
 #### setCellValues
 
@@ -1472,7 +1561,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][83]** A query result.
+Returns **[TableOrViewQueryResult][85]** A query result.
 
 #### type
 
@@ -1567,7 +1656,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][84]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][86]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -1584,7 +1673,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][85]&lt;[HTMLLinkElement][86]>** a Promise that resolves to the style tag
+Returns **[Promise][87]&lt;[HTMLLinkElement][88]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -1602,14 +1691,14 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][85]&lt;[HTMLScriptElement][87]>** a Promise that resolves to the script tag
+Returns **[Promise][87]&lt;[HTMLScriptElement][89]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
 
 #### Color
 
-A value from the [colors][88] enum
+A value from the [colors][90] enum
 
 Type: \$Values&lt;any>
 
@@ -1625,12 +1714,12 @@ Type: {r: [number][67], g: [number][67], b: [number][67]}
 
 #### colorUtils
 
-Utilities for working with [Color][89] names from the [colors][88] enum.
+Utilities for working with [Color][91] names from the [colors][90] enum.
 
 ##### getHexForColor
 
-Given a [Color][89], return the hex color value for that color, or null if the value isn't a
-[Color][89]
+Given a [Color][91], return the hex color value for that color, or null if the value isn't a
+[Color][91]
 
 ###### Parameters
 
@@ -1652,8 +1741,8 @@ Returns **([string][60] | null)**
 
 ##### getRgbForColor
 
-Given a [Color][89], return an [RGB][90] object representing it, or null if the value isn't a
-[Color][89]
+Given a [Color][91], return an [RGB][92] object representing it, or null if the value isn't a
+[Color][91]
 
 ###### Parameters
 
@@ -1671,11 +1760,11 @@ colorUtils.getRgbForColor('disgruntled pink');
 // => null
 ```
 
-Returns **([RGB][91] | null)**
+Returns **([RGB][93] | null)**
 
 ##### shouldUseLightTextOnColor
 
-Given a [Color][89], returns true or false to indicate whether that color should have light text on
+Given a [Color][91], returns true or false to indicate whether that color should have light text on
 top of it when used as a background color.
 
 ###### Parameters
@@ -1805,8 +1894,8 @@ An enum of color names
 React hooks are a new feature in React 16.8. They allow you to use state and other React features
 without writing a class, and form the core of how you can connect React components to data from your
 Airtable base when writing Blocks. If you've never used hooks before, don't worry - the React team
-[has some great resources][92] for learning about them. You can use hooks with class components too
-with the help of the [withHooks][93] higher-order component.
+[has some great resources][94] for learning about them. You can use hooks with class components too
+with the help of the [withHooks][95] higher-order component.
 
 > **Important Note:** right now, most of these hooks cause your component to re-render, but return
 > the same mutable instance of the underlying model. This means that it's often not safe to use
@@ -1823,7 +1912,7 @@ actual records in the base.
 
 useBase should meet most of your needs for working with Base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][94] hook might help.
+[useWatchable][96] hook might help.
 
 ##### Examples
 
@@ -1851,12 +1940,12 @@ query result. Automatically handles loading data in the query result and updatin
 when the underlying data changes.
 
 This hook re-renders when any data concerning the records changing - that's useful, but can cause
-re-renders quite often, meaning [useRecordIds][95] or [useRecordById][96] could be more appropriate
+re-renders quite often, meaning [useRecordIds][97] or [useRecordById][98] could be more appropriate
 depending on your use-case.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][97] | null)** the query result you want the records from
+-   `queryResult` **([QueryResult][99] | null)** the query result you want the records from
 
 ##### Examples
 
@@ -1896,7 +1985,7 @@ added, removed, or re-ordered.
 
 ##### Parameters
 
--   `queryResult` **[QueryResult][97]** the query result you want the record ids from
+-   `queryResult` **[QueryResult][99]** the query result you want the record ids from
 
 ##### Examples
 
@@ -1929,12 +2018,12 @@ if no query result was passed in.
 A hook for working with a single record from a query result. Automatically handles loading data in
 the query result and updating your component when the records cell values etc. change.
 
-Often used with [useRecordIds][95] to render a list of records where each list item only updates
+Often used with [useRecordIds][97] to render a list of records where each list item only updates
 when the specific record it concerns changes.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][97] | null)** the query result you want a record from
+-   `queryResult` **([QueryResult][99] | null)** the query result you want a record from
 -   `recordId` **RecordId** the ID of the record you want from the query result
 
 ##### Examples
@@ -2017,16 +2106,16 @@ do anything other than re-render when the data changes.
 This is a low-level tool that you should only use when you specifically need it. There are more
 convenient model-specific hooks available:
 
--   For [Base][15], [Table][20], [View][21] & [Field][17], use [useBase][98]
--   For [QueryResult][18] & [Record][19], use [useRecords][99], [useRecordIds][95], or
-    [useRecordById][96]
--   For [Viewport][5], use [useViewport][100].
+-   For [Base][15], [Table][20], [View][21] & [Field][17], use [useBase][100]
+-   For [QueryResult][18] & [Record][19], use [useRecords][101], [useRecordIds][97], or
+    [useRecordById][98]
+-   For [Viewport][5], use [useViewport][102].
 
-If you're writing a class component and still want to be able to use hooks, try [withHooks][93].
+If you're writing a class component and still want to be able to use hooks, try [withHooks][95].
 
 ##### Parameters
 
--   `model` **[Watchable][101]** the model to watch
+-   `model` **[Watchable][103]** the model to watch
 -   `keys` **[Array][64]&lt;[string][60]>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
@@ -2058,14 +2147,14 @@ function ActiveView({cursor}) {
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
 might not need to use it directly though - if you're working with a [QueryResult][18], try
-[useRecords][99], [useRecordIds][95], or [useRecordById][96] first.
+[useRecords][101], [useRecordIds][97], or [useRecordById][98] first.
 
 When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
 loaded when your component mounts, and unloaded when your component unmounts. By default, you don't
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [&lt;React.Suspense />][102] around the component that uses the hook.
+looks, use [&lt;React.Suspense />][104] around the component that uses the hook.
 
 If you need more control (for example, if you have two models you want to load at the same time
 rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to the
@@ -2074,7 +2163,7 @@ use the data you loaded.
 
 ##### Parameters
 
--   `model` **([QueryResult][97] \| [Cursor][58] | null)** the model to load.
+-   `model` **([QueryResult][99] \| [Cursor][58] | null)** the model to load.
 -   `options` **[object][68]?** Optional options to control how the hook works (optional, default
     `{}`)
     -   `options.shouldSuspend` **[boolean][65]** pass {shouldSuspend: false} to disable suspense
@@ -2122,7 +2211,7 @@ function LoadTwoQueryResults({queryResultA, queryResultB}) {
 
 A helper method for working with react hooks in class-based components. It takes a React component
 and wraps it, injecting values from hooks as additional props. `withHooks` uses
-[React.forwardRef][103] to make sure that you can use refs with your wrapped component in exactly
+[React.forwardRef][105] to make sure that you can use refs with your wrapped component in exactly
 the same way you would if you weren't using withHooks.
 
 ##### Parameters
@@ -2294,7 +2383,7 @@ const recordB = await expandRecordPickerAsync([record1, record2], {
 });
 ```
 
-Returns **[Promise][85]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][87]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
 ### globalAlert
@@ -2318,14 +2407,14 @@ globalAlert.showReloadPrompt();
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][104]**
+-   `props` **[AutocompletePopoverProps][106]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][64]&lt;[AutocompleteItem][105]>, renderItem: function (item: [AutocompleteItem][105], isFocused: [boolean][65]): React$Element&lt;any>?,
-filterItems: function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][105]>):
-[Array][64]&lt;[AutocompleteItem][105]>?, onSelect: function ([AutocompleteItem][105]): void,
+React$Element&lt;any>, items: [Array][64]&lt;[AutocompleteItem][107]>, renderItem: function (item: [AutocompleteItem][107], isFocused: [boolean][65]): React$Element&lt;any>?,
+filterItems: function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][107]>):
+[Array][64]&lt;[AutocompleteItem][107]>?, onSelect: function ([AutocompleteItem][107]): void,
 placeholder: [string][60]?, focusOnOpen: [boolean][65]?, className: [string][60]?, style:
 [Object][68]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][67]?, placementOffsetY: [number][67]?, fitInWindowMode: FitInWindowMode?, isOpen:
@@ -2334,12 +2423,12 @@ placeholder: [string][60]?, focusOnOpen: [boolean][65]?, className: [string][60]
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][64]&lt;[AutocompleteItem][105]>**
--   `renderItem` **function (item: [AutocompleteItem][105], isFocused: [boolean][65]):
+-   `items` **[Array][64]&lt;[AutocompleteItem][107]>**
+-   `renderItem` **function (item: [AutocompleteItem][107], isFocused: [boolean][65]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][105]>):
-    [Array][64]&lt;[AutocompleteItem][105]>?**
--   `onSelect` **function ([AutocompleteItem][105]): void**
+-   `filterItems` **function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][107]>):
+    [Array][64]&lt;[AutocompleteItem][107]>?**
+-   `onSelect` **function ([AutocompleteItem][107]): void**
 -   `placeholder` **[string][60]?**
 -   `focusOnOpen` **[boolean][65]?**
 -   `className` **[string][60]?**
@@ -2372,7 +2461,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][106]**
+-   `props` **[ButtonProps][108]**
 
 ##### Examples
 
@@ -2407,7 +2496,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][107]**
+-   `props` **[CellRendererProps][109]**
 
 #### CellRendererProps
 
@@ -2429,7 +2518,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][108]**
+-   `$0` **[ChoiceTokenProps][110]**
     -   `$0.choice`
     -   `$0.className`
 
@@ -2449,7 +2538,7 @@ Type: {choice: {id: [string][60], name: [string][60], color: [string][60]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][109]**
+-   `props` **[CollaboratorTokenProps][111]**
 
 #### CollaboratorTokenProps
 
@@ -2569,7 +2658,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][110]**
+-   `props` **[DialogProps][112]**
 
 ##### Examples
 
@@ -2646,7 +2735,7 @@ React.Node?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][111]**
+-   `props` **[FieldIconProps][113]**
 
 #### FieldIconProps
 
@@ -2670,7 +2759,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][112]**
+-   `props` **[FieldPickerProps][114]**
 
 #### FieldPickerProps
 
@@ -2697,7 +2786,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][113]**
+-   `props` **[FieldPickerSyncedProps][115]**
 
 #### FieldPickerSyncedProps
 
@@ -2724,7 +2813,7 @@ className: [string][60]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][114]**
+-   `$0` **[IconProps][116]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -2754,7 +2843,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[InputProps][115]**
+-   `props` **[InputProps][117]**
 
 #### InputProps
 
@@ -2780,7 +2869,7 @@ Type: {type: [string][60]?, placeholder: [string][60]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][116]**
+-   `props` **[InputSyncedProps][118]**
 
 #### InputSyncedProps
 
@@ -2805,7 +2894,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][117]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][119]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -2844,7 +2933,7 @@ className: [string][60]?, style: [Object][68]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][118]**
+-   `$0` **[LoaderProps][120]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -2865,7 +2954,7 @@ Type: {fillColor: [string][60]?, scale: [number][67]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][119]**
+-   `props` **[PopoverProps][121]**
 
 #### PopoverProps
 
@@ -2900,7 +2989,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][120]**
+-   `props` **[ProgressBarProps][122]**
 
 ##### Examples
 
@@ -2935,7 +3024,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][121]**
+-   `props` **[RadioSyncedProps][123]**
 
 #### RadioSyncedProps
 
@@ -2958,13 +3047,13 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][60], style: [Object][68
 
 ##### Parameters
 
--   `props` **[RecordCardProps][122]**
+-   `props` **[RecordCardProps][124]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][74] | RecordDef), fields: [Array][64]&lt;[Field][71]>?, view: [View][72]?,
 attachmentCoverField: [Field][71]?, width: [number][67]?, height: [number][67]?, onClick:
-[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][123]?,
+[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][125]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
@@ -2976,7 +3065,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 -   `width` **[number][67]?**
 -   `height` **[number][67]?**
 -   `onClick` **[Function][73]?**
--   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][123]?**
+-   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][125]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][60]?**
@@ -2990,11 +3079,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][124]**
+-   `props` **[RecordCardListProps][126]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][125]):
+Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][127]):
 void?, onRecordClick: (null | function (record: ([Record][74] | RecordDef), index: [number][67]):
 void)?, onRecordMouseEnter: function (record: ([Record][74] | RecordDef), index: [number][67]):
 void?, onRecordMouseLeave: function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3004,7 +3093,7 @@ className: [string][60]?, style: [Object][68]?}
 ##### Properties
 
 -   `records` **[Array][64]&lt;([Record][74] | RecordDef)>**
--   `onScroll` **function ([Event][125]): void?**
+-   `onScroll` **function ([Event][127]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][74] | RecordDef), index: [number][67]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3025,7 +3114,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][126]**
+-   `props` **[SelectProps][128]**
 
 #### SelectProps
 
@@ -3037,7 +3126,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][127]**
+-   `props` **[SelectSyncedProps][129]**
 
 #### SelectSyncedProps
 
@@ -3069,7 +3158,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][128]**
+-   `props` **[TablePickerProps][130]**
 
 #### TablePickerProps
 
@@ -3093,7 +3182,7 @@ Type: {table: [Table][76]?, shouldAllowPickingNone: [boolean][65]?, onChange: fu
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][129]**
+-   `props` **[TablePickerSyncedProps][131]**
 
 #### TablePickerSyncedProps
 
@@ -3119,7 +3208,7 @@ style: [Object][68]?, className: [string][60]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][130]**
+-   `props` **[ToggleProps][132]**
 
 #### ToggleProps
 
@@ -3144,7 +3233,7 @@ tabIndex: [number][67]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][131]**
+-   `props` **[ToggleSyncedProps][133]**
 
 #### ToggleSyncedProps
 
@@ -3171,7 +3260,7 @@ function ([boolean][65]): void?, disabled: [boolean][65]?, className: [string][6
 
 ##### Parameters
 
--   `props` **[TooltipProps][132]**
+-   `props` **[TooltipProps][134]**
 
 #### TooltipProps
 
@@ -3204,7 +3293,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][133]**
+-   `props` **[ViewPickerProps][135]**
 
 #### ViewPickerProps
 
@@ -3231,7 +3320,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][134]**
+-   `props` **[ViewPickerSyncedProps][136]**
 
 #### ViewPickerSyncedProps
 
@@ -3278,13 +3367,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][135]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][135]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][137]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][137]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][135]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][135]?**
+-   `minSize` **[ViewportSizeConstraintProp][137]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][137]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -3375,59 +3464,61 @@ Type: {width: ([number][67] | null)?, height: ([number][67] | null)?}
 [77]: getTableByIdIfExists
 [78]: getTableByNameIfExists
 [79]: #aggregator
-[80]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-[81]: #color
-[82]: #linkedrecordsqueryresult
-[83]: #tableorviewqueryresult
-[84]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[85]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[86]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[87]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[88]: #colors
-[89]: #color
-[90]: #rgb
-[91]: #rgb
-[92]: https://reactjs.org/docs/hooks-intro.html
-[93]: #withhooks
-[94]: #usewatchable
-[95]: #userecordids
-[96]: #userecordbyid
-[97]: #queryresult
-[98]: #usebase
-[99]: #userecords
-[100]: #useviewport
-[101]: #watchable
-[102]: https://reactjs.org/docs/react-api.html#reactsuspense
-[103]: https://reactjs.org/docs/forwarding-refs.html
-[104]: #autocompletepopoverprops
-[105]: #autocompleteitem
-[106]: #buttonprops
-[107]: #cellrendererprops
-[108]: #choicetokenprops
-[109]: #collaboratortokenprops
-[110]: #dialogprops
-[111]: #fieldiconprops
-[112]: #fieldpickerprops
-[113]: #fieldpickersyncedprops
-[114]: #iconprops
-[115]: #inputprops
-[116]: #inputsyncedprops
-[117]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[118]: #loaderprops
-[119]: #popoverprops
-[120]: #progressbarprops
-[121]: #radiosyncedprops
-[122]: #recordcardprops
-[123]: #expandrecordopts
-[124]: #recordcardlistprops
-[125]: https://developer.mozilla.org/docs/Web/API/Event
-[126]: #selectprops
-[127]: #selectsyncedprops
-[128]: #tablepickerprops
-[129]: #tablepickersyncedprops
-[130]: #toggleprops
-[131]: #togglesyncedprops
-[132]: #tooltipprops
-[133]: #viewpickerprops
-[134]: #viewpickersyncedprops
-[135]: #viewportsizeconstraintprop
+[80]: #recordsetcellvalue
+[81]: #tablesetcellvalues
+[82]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[83]: #color
+[84]: #linkedrecordsqueryresult
+[85]: #tableorviewqueryresult
+[86]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[87]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[88]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[89]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[90]: #colors
+[91]: #color
+[92]: #rgb
+[93]: #rgb
+[94]: https://reactjs.org/docs/hooks-intro.html
+[95]: #withhooks
+[96]: #usewatchable
+[97]: #userecordids
+[98]: #userecordbyid
+[99]: #queryresult
+[100]: #usebase
+[101]: #userecords
+[102]: #useviewport
+[103]: #watchable
+[104]: https://reactjs.org/docs/react-api.html#reactsuspense
+[105]: https://reactjs.org/docs/forwarding-refs.html
+[106]: #autocompletepopoverprops
+[107]: #autocompleteitem
+[108]: #buttonprops
+[109]: #cellrendererprops
+[110]: #choicetokenprops
+[111]: #collaboratortokenprops
+[112]: #dialogprops
+[113]: #fieldiconprops
+[114]: #fieldpickerprops
+[115]: #fieldpickersyncedprops
+[116]: #iconprops
+[117]: #inputprops
+[118]: #inputsyncedprops
+[119]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[120]: #loaderprops
+[121]: #popoverprops
+[122]: #progressbarprops
+[123]: #radiosyncedprops
+[124]: #recordcardprops
+[125]: #expandrecordopts
+[126]: #recordcardlistprops
+[127]: https://developer.mozilla.org/docs/Web/API/Event
+[128]: #selectprops
+[129]: #selectsyncedprops
+[130]: #tablepickerprops
+[131]: #tablepickersyncedprops
+[132]: #toggleprops
+[133]: #togglesyncedprops
+[134]: #tooltipprops
+[135]: #viewpickerprops
+[136]: #viewpickersyncedprops
+[137]: #viewportsizeconstraintprop

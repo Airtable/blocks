@@ -36,18 +36,33 @@ const WatchableFieldKeys = Object.freeze({
 
 export type WatchableFieldKey = $Values<typeof WatchableFieldKeys>;
 
-/** Model class representing a field in a table. */
+/**
+ * Model class representing a field in a table.
+ *
+ * @example
+ * import {base} from 'airtable-blocks';
+ *
+ * const table = base.getTableByName('Table 1');
+ * const field = table.getFieldByName('Name');
+ * console.log('The type of this field is', field.type);
+ */
 class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     static _className = 'Field';
     static _isWatchableKey(key: string) {
         return isEnumValue(WatchableFieldKeys, key);
     }
     _parentTable: Table;
+    /**
+     * @hideconstructor
+     */
     constructor(baseData: BaseData, parentTable: Table, fieldId: string) {
         super(baseData, fieldId);
 
         this._parentTable = parentTable;
     }
+    /**
+     * @private
+     */
     get _dataOrNullIfDeleted(): FieldData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
         if (!tableData) {
@@ -55,14 +70,31 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         }
         return tableData.fieldsById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The table that this field belongs to. Should never change because fields aren't moved between tables.
+     *
+     * @example
+     * const field = myTable.getFieldByName('Name');
+     * console.log(field.parentTable.id === myTable.id);
+     * // => true
+     */
     get parentTable(): Table {
         return this._parentTable;
     }
-    /** */
+    /**
+     * @function
+     * @returns The name of the field. Can be watched.
+     * @example
+     * console.log(myField.name);
+     * // => 'Name'
+     */
     get name(): string {
         return this._data.name;
     }
+    /**
+     * @private
+     */
     _getConfig(): {type: string, options: Object | null} {
         // TODO: add separate methods for getting type and options and
         const {type, options} = columnTypeProvider.getConfigForPublicApi(
@@ -77,7 +109,13 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             options: options ? cloneDeep(options) : null,
         };
     }
-    /** */
+    /**
+     * @function
+     * @returns The type of the field. Can be watched.
+     * @example
+     * console.log(myField.type);
+     * // => 'singleLineText'
+     */
     get type(): string {
         // TODO: add separate methods for getting type and options and
         const {type} = columnTypeProvider.getConfigForPublicApi(
@@ -88,7 +126,18 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         );
         return type;
     }
-    /** */
+    /**
+     * @function
+     * @returns The configuration options of the field. The structure of the field's
+     * options depend on the field's type. Can be watched.
+     * @example
+     * import {fieldTypes} from '@airtable/blocks/models';
+     *
+     * if (myField.type === fieldTypes.CURRENCY) {
+     *     console.log(myField.options.symbol);
+     *     // => '$'
+     * }
+     */
     get options(): {[string]: mixed} | null {
         const {options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
@@ -99,19 +148,35 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
 
         return options ? cloneDeep(options) : null;
     }
-    /** */
+    /**
+     * @function
+     * @returns `true` if this field is computed, `false` otherwise. A field is
+     * "computed" if it's value is not set by user input (e.g. autoNumber, formula,
+     * etc.). Can be watched.
+     * @example
+     * console.log(mySingleLineTextField.isComputed);
+     * // => false
+     * console.log(myAutoNumberField.isComputed);
+     * // => true
+     */
     get isComputed(): boolean {
         const isComputed = columnTypeProvider.isComputed(this.__getRawType());
         return isComputed;
     }
     /**
-     * Every table has exactly one primary field. True if this field is
-     * its parent table's primary field.
+     * @function
+     * @returns `true` if this field is its parent table's primary field, `false` otherwise.
+     * Should never change because the primary field of a table cannot change.
      */
     get isPrimaryField(): boolean {
         return this.id === this.parentTable.primaryField.id;
     }
-    /** */
+    /**
+     * @function
+     * @returns A list of available aggregators given this field's configuration.
+     * @example
+     * const fieldAggregators = myField.availableAggregators;
+     */
     get availableAggregators(): Array<Aggregator> {
         const possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(
             this.__getRawType(),
@@ -123,7 +188,22 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
         });
     }
-    /** */
+    /**
+     * @function
+     * @param aggregator The aggregator object or aggregator key.
+     * @returns `true` if the given aggregator is available for this field, `false` otherwise.
+     * @example
+     * import {aggregators} from '@airtable/blocks/models';
+     * const aggregator = aggregators.totalAttachmentSize;
+     *
+     * // Using an aggregator object
+     * console.log(myAttachmentField.isAggregatorAvailable(aggregator));
+     * // => true
+     *
+     * // Using an aggregator key
+     * console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
+     * // => false
+     */
     isAggregatorAvailable(aggregator: Aggregator | string): boolean {
         const aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
         const liveappSummaryFunctionKey = liveappSummaryFunctionKeyByAggregatorKey[aggregatorKey];
@@ -135,8 +215,15 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
     }
     /**
-     * Use this to check if the current user has permission to update the cell values
-     * in this field before calling `record.setCellValues` or `table.setCellValues`.
+     * Determines whether the current user has permission to update the cell values
+     * in this field. Should be called before calling {@link Record#setCellValue} or
+     * {@link Table#setCellValues}.
+     *
+     * @returns `true` if the current user has permission to update the cell values in this field, `false` otherwise.
+     * @example
+     * if (myField.canSetCellValues()) {
+     *     myRecord.setCellValue(field, 'new cell value');
+     * }
      */
     canSetCellValues(): boolean {
         // For now, just need at least edit permissions. Once field locking is shipped,
@@ -147,6 +234,14 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     /**
      * Given a string, will attempt to parse it and return a valid cell value for
      * the field's current config.
+     *
+     * @param string The string to parse.
+     * @returns The parsed cell value, or `null` if unable to parse the given string.
+     * @example
+     * const inputString = '42';
+     * const cellValue = myNumberField.convertStringToCellValue(inputString);
+     * console.log(cellValue === 42);
+     * // => true
      */
     convertStringToCellValue(string: string): mixed {
         // TODO(jb): figure out 'cacheForBulkConversion'
@@ -179,12 +274,21 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             return null;
         }
     }
+    /**
+     * @private
+     */
     __getRawType(): PrivateColumnType {
         return this._data.type;
     }
+    /**
+     * @private
+     */
     __getRawTypeOptions(): ?Object {
         return this._data.typeOptions;
     }
+    /**
+     * @private
+     */
     __getRawFormulaicResultType() {
         // Copied from liveapp column model.
         // We don't store resultType for count, for all intents and purposes on the
@@ -200,6 +304,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             }
         }
     }
+    /**
+     * @private
+     */
     __getRawColumn(): {id: string, type: string, typeOptions: ?Object} {
         return {
             id: this.id,
@@ -207,6 +314,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             typeOptions: this.__getRawTypeOptions(),
         };
     }
+    /**
+     * @private
+     */
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         if (dirtyPaths.name) {
             this._onChange(WatchableFieldKeys.name);

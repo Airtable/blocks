@@ -59,7 +59,16 @@ var WatchableFieldKeys = Object.freeze({
   isComputed: 'isComputed'
 });
 
-/** Model class representing a field in a table. */
+/**
+ * Model class representing a field in a table.
+ *
+ * @example
+ * import {base} from 'airtable-blocks';
+ *
+ * const table = base.getTableByName('Table 1');
+ * const field = table.getFieldByName('Name');
+ * console.log('The type of this field is', field.type);
+ */
 var Field =
 /*#__PURE__*/
 function (_AbstractModel) {
@@ -71,6 +80,9 @@ function (_AbstractModel) {
     }
   }]);
 
+  /**
+   * @hideconstructor
+   */
   function Field(baseData, parentTable, fieldId) {
     var _this;
 
@@ -79,9 +91,17 @@ function (_AbstractModel) {
     _this._parentTable = parentTable;
     return _this;
   }
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(Field, [{
     key: "_getConfig",
+
+    /**
+     * @private
+     */
     value: function _getConfig() {
       // TODO: add separate methods for getting type and options and
       var _columnTypeProvider$g = columnTypeProvider.getConfigForPublicApi(this.__getRawType(), this.__getRawTypeOptions(), this.parentTable.parentBase.__appInterface, this.parentTable.__getFieldNamesById()),
@@ -93,12 +113,33 @@ function (_AbstractModel) {
         options: options ? (0, _private_utils.cloneDeep)(options) : null
       };
     }
-    /** */
+    /**
+     * @function
+     * @returns The type of the field. Can be watched.
+     * @example
+     * console.log(myField.type);
+     * // => 'singleLineText'
+     */
 
   }, {
     key: "isAggregatorAvailable",
 
-    /** */
+    /**
+     * @function
+     * @param aggregator The aggregator object or aggregator key.
+     * @returns `true` if the given aggregator is available for this field, `false` otherwise.
+     * @example
+     * import {aggregators} from '@airtable/blocks/models';
+     * const aggregator = aggregators.totalAttachmentSize;
+     *
+     * // Using an aggregator object
+     * console.log(myAttachmentField.isAggregatorAvailable(aggregator));
+     * // => true
+     *
+     * // Using an aggregator key
+     * console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
+     * // => false
+     */
     value: function isAggregatorAvailable(aggregator) {
       var aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
       var liveappSummaryFunctionKey = _liveapp_summary_function_key_by_aggregator_key.default[aggregatorKey];
@@ -106,8 +147,15 @@ function (_AbstractModel) {
       return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
     }
     /**
-     * Use this to check if the current user has permission to update the cell values
-     * in this field before calling `record.setCellValues` or `table.setCellValues`.
+     * Determines whether the current user has permission to update the cell values
+     * in this field. Should be called before calling {@link Record#setCellValue} or
+     * {@link Table#setCellValues}.
+     *
+     * @returns `true` if the current user has permission to update the cell values in this field, `false` otherwise.
+     * @example
+     * if (myField.canSetCellValues()) {
+     *     myRecord.setCellValue(field, 'new cell value');
+     * }
      */
 
   }, {
@@ -123,6 +171,14 @@ function (_AbstractModel) {
     /**
      * Given a string, will attempt to parse it and return a valid cell value for
      * the field's current config.
+     *
+     * @param string The string to parse.
+     * @returns The parsed cell value, or `null` if unable to parse the given string.
+     * @example
+     * const inputString = '42';
+     * const cellValue = myNumberField.convertStringToCellValue(inputString);
+     * console.log(cellValue === 42);
+     * // => true
      */
 
   }, {
@@ -142,16 +198,28 @@ function (_AbstractModel) {
         return null;
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getRawType",
     value: function __getRawType() {
       return this._data.type;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getRawTypeOptions",
     value: function __getRawTypeOptions() {
       return this._data.typeOptions;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getRawFormulaicResultType",
     value: function __getRawFormulaicResultType() {
@@ -170,6 +238,10 @@ function (_AbstractModel) {
         }
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getRawColumn",
     value: function __getRawColumn() {
@@ -179,6 +251,10 @@ function (_AbstractModel) {
         typeOptions: this.__getRawTypeOptions()
       };
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__triggerOnChangeForDirtyPaths",
     value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
@@ -209,14 +285,28 @@ function (_AbstractModel) {
 
       return tableData.fieldsById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The table that this field belongs to. Should never change because fields aren't moved between tables.
+     *
+     * @example
+     * const field = myTable.getFieldByName('Name');
+     * console.log(field.parentTable.id === myTable.id);
+     * // => true
+     */
 
   }, {
     key: "parentTable",
     get: function get() {
       return this._parentTable;
     }
-    /** */
+    /**
+     * @function
+     * @returns The name of the field. Can be watched.
+     * @example
+     * console.log(myField.name);
+     * // => 'Name'
+     */
 
   }, {
     key: "name",
@@ -232,7 +322,18 @@ function (_AbstractModel) {
 
       return type;
     }
-    /** */
+    /**
+     * @function
+     * @returns The configuration options of the field. The structure of the field's
+     * options depend on the field's type. Can be watched.
+     * @example
+     * import {fieldTypes} from '@airtable/blocks/models';
+     *
+     * if (myField.type === fieldTypes.CURRENCY) {
+     *     console.log(myField.options.symbol);
+     *     // => '$'
+     * }
+     */
 
   }, {
     key: "options",
@@ -242,7 +343,17 @@ function (_AbstractModel) {
 
       return options ? (0, _private_utils.cloneDeep)(options) : null;
     }
-    /** */
+    /**
+     * @function
+     * @returns `true` if this field is computed, `false` otherwise. A field is
+     * "computed" if it's value is not set by user input (e.g. autoNumber, formula,
+     * etc.). Can be watched.
+     * @example
+     * console.log(mySingleLineTextField.isComputed);
+     * // => false
+     * console.log(myAutoNumberField.isComputed);
+     * // => true
+     */
 
   }, {
     key: "isComputed",
@@ -251,8 +362,9 @@ function (_AbstractModel) {
       return isComputed;
     }
     /**
-     * Every table has exactly one primary field. True if this field is
-     * its parent table's primary field.
+     * @function
+     * @returns `true` if this field is its parent table's primary field, `false` otherwise.
+     * Should never change because the primary field of a table cannot change.
      */
 
   }, {
@@ -260,7 +372,12 @@ function (_AbstractModel) {
     get: function get() {
       return this.id === this.parentTable.primaryField.id;
     }
-    /** */
+    /**
+     * @function
+     * @returns A list of available aggregators given this field's configuration.
+     * @example
+     * const fieldAggregators = myField.availableAggregators;
+     */
 
   }, {
     key: "availableAggregators",
