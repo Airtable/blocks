@@ -73,6 +73,13 @@ toc:
                 - ColorPaletteProps
                 - ColorPaletteSynced
                 - ColorPaletteSyncedProps
+          - ConfirmationDialog
+          - name: Dialog
+            children:
+                - Dialog
+                - DialogProps
+                - Dialog.CloseButton
+                - Dialog.CloseButtonProps
           - name: FieldIcon
             children:
                 - FieldIcon
@@ -98,12 +105,6 @@ toc:
             children:
                 - Loader
                 - LoaderProps
-          - name: Modal
-            children:
-                - Modal
-                - ModalProps
-                - Modal.CloseButton
-                - ModalCloseButtonProps
           - name: Popover
             children:
                 - Popover

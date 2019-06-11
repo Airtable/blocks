@@ -1,50 +1,17 @@
 // @flow
+
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import invariant from 'invariant';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-import Icon from './icon';
-
-/** @typedef */
-type ModalCloseButtonProps = {|
-    className?: string,
-    style?: Object,
-    children?: React.Node,
-|};
 
 /**
- * @alias Modal.CloseButton
+ * @typedef
+ * @memberof Modal
  */
-class ModalCloseButton extends React.Component<ModalCloseButtonProps> {
-    static propTypes = {
-        className: PropTypes.string,
-        style: PropTypes.object,
-    };
-    static contextTypes = {
-        onModalClose: PropTypes.func,
-    };
-    render() {
-        return (
-            <a
-                onClick={this.context.onModalClose}
-                className={this.props.className || 'pointer link-quiet'}
-                style={this.props.style}
-                tabIndex={-1}
-            >
-                {this.props.children !== null && this.props.children !== undefined ? (
-                    this.props.children
-                ) : (
-                    <Icon name="x" size={12} />
-                )}
-            </a>
-        );
-    }
-}
-
-/** @typedef */
 type ModalProps = {
-    onClose?: Function,
+    onClose?: () => mixed,
     className?: string,
     style?: Object,
     backgroundClassName?: string,
@@ -52,9 +19,12 @@ type ModalProps = {
     children: React.Node,
 };
 
-/** */
+/**
+ * Generic modal component with minimal styling.
+ *
+ * @private
+ */
 class Modal extends React.Component<ModalProps> {
-    static CloseButton = ModalCloseButton;
     static propTypes = {
         onClose: PropTypes.func,
         className: PropTypes.string,
@@ -62,32 +32,24 @@ class Modal extends React.Component<ModalProps> {
         backgroundClassName: PropTypes.string,
         backgroundStyle: PropTypes.object,
     };
-    // automatically pass onClose to any descendants that are Modal.CloseButton
-    static childContextTypes = {
-        onModalClose: PropTypes.func,
-    };
     _background: HTMLDivElement | null;
-    _container: null | HTMLElement;
+    _container: HTMLDivElement;
+    _originalActiveElement: HTMLElement | SVGElement | null;
     _mouseDownOutsideModal: boolean;
-    _onMouseDown: Event => void;
-    _onMouseUp: Event => void;
+    _onMouseDown: MouseEvent => void;
+    _onMouseUp: MouseEvent => void;
     constructor(props: ModalProps) {
         super(props);
 
         this._background = null;
-        this._container = null;
+        this._container = document.createElement('div');
+        this._originalActiveElement = null;
         this._mouseDownOutsideModal = false;
 
         this._onMouseDown = this._onMouseDown.bind(this);
         this._onMouseUp = this._onMouseUp.bind(this);
     }
-    getChildContext() {
-        return {
-            onModalClose: this.props.onClose,
-        };
-    }
     componentDidMount() {
-        this._container = document.createElement('div');
         const container = this._container;
 
         container.setAttribute('tabIndex', '0');
@@ -99,26 +61,41 @@ class Modal extends React.Component<ModalProps> {
         invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
-        this._refreshContainer();
-
         // If the frame is focused, move focus to the modal's container.
         // Next time the user presses tab, it will focus the first focusable element in the modal.
         // We only do this if the document is focused to avoid the frame becoming
         // programmatically focused if a modal is displayed without user interaction.
         if (document.hasFocus()) {
+            this._originalActiveElement = document.activeElement;
             container.focus();
         }
     }
-    componentDidUpdate() {
-        this._refreshContainer();
-    }
     componentWillUnmount() {
-        const container = this._container;
-        invariant(container, 'No modal container');
-        ReactDOM.unmountComponentAtNode(container);
-        container.remove();
+        invariant(document.body, 'no document body');
+        document.body.removeChild(this._container);
+        if (this._originalActiveElement !== null) {
+            this._originalActiveElement.focus();
+        }
     }
-    _refreshContainer() {
+    _onMouseDown(event: MouseEvent) {
+        if (this._shouldClickingOnElementCloseModal(event.target)) {
+            this._mouseDownOutsideModal = true;
+        }
+    }
+    _onMouseUp(event: MouseEvent) {
+        if (
+            this._mouseDownOutsideModal &&
+            this.props.onClose &&
+            this._shouldClickingOnElementCloseModal(event.target)
+        ) {
+            this.props.onClose();
+        }
+        this._mouseDownOutsideModal = false;
+    }
+    _shouldClickingOnElementCloseModal(element: EventTarget) {
+        return element === this._background;
+    }
+    render() {
         const backgroundClassName = classNames(
             'fixed all-0 darken3 flex items-center justify-center',
             this.props.backgroundClassName,
@@ -126,22 +103,18 @@ class Modal extends React.Component<ModalProps> {
         const backgroundStyle = this.props.backgroundStyle;
 
         const contentClassName = classNames(
-            'white rounded-big overflow-auto light-scrollbar width-full stroked1 animate-bounce-in',
+            'width-full m2 overflow-auto light-scrollbar white stroked1 rounded-big animate-bounce-in',
             this.props.className,
         );
         const contentStyle = {
-            maxWidth: '95vw',
-            maxHeight: '95vh',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
             ...this.props.style,
         };
 
-        // TODO(jb): we'll need to change this to support all versions of ReactDOM.
-        // Probably shouldn't be using unstable methods like this when we release the
-        // editor.
-        ReactDOM.unstable_renderSubtreeIntoContainer(
-            this,
+        return ReactDOM.createPortal(
             <div
-                ref={el => (this._background = el)}
+                ref={element => (this._background = element)}
                 className={backgroundClassName}
                 style={backgroundStyle}
                 onMouseDown={this._onMouseDown}
@@ -153,27 +126,6 @@ class Modal extends React.Component<ModalProps> {
             </div>,
             this._container,
         );
-    }
-    _onMouseDown(e: Event) {
-        if (this._shouldClickingOnElementCloseModal(e.target)) {
-            this._mouseDownOutsideModal = true;
-        }
-    }
-    _onMouseUp(e: Event) {
-        if (
-            this._mouseDownOutsideModal &&
-            this.props.onClose &&
-            this._shouldClickingOnElementCloseModal(e.target)
-        ) {
-            this.props.onClose();
-        }
-        this._mouseDownOutsideModal = false;
-    }
-    _shouldClickingOnElementCloseModal(element: EventTarget) {
-        return element === this._background;
-    }
-    render() {
-        return null;
     }
 }
 

@@ -2,7 +2,7 @@
 import invariant from 'invariant';
 import * as React from 'react';
 import getSdk from '../get_sdk';
-import Modal from './modal';
+import Dialog from './dialog';
 import createDataContainer from './create_data_container';
 import Loader from './loader';
 
@@ -61,7 +61,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
         const globalAlertInfo = UI.globalAlert.__alertInfo;
         if (globalAlertInfo) {
             return (
-                <Modal
+                <Dialog
                     className="absolute all-0 flex items-center justify-center p2"
                     style={{
                         animation: 'none',
@@ -72,7 +72,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
                     }}
                 >
                     {globalAlertInfo.content}
-                </Modal>
+                </Dialog>
             );
         }
 

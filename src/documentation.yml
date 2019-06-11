@@ -27,7 +27,7 @@ toc:
     - Input
     - InputSynced
     - Loader
-    - Modal
+    - Dialog
     - Popover
     - ProgressBar
     - RadioSynced

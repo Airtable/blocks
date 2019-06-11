@@ -77,7 +77,9 @@ var _select_buttons_synced = _interopRequireDefault(require("./select_buttons_sy
 
 var _modal = _interopRequireDefault(require("./modal"));
 
-var _confirmation_modal = _interopRequireDefault(require("./confirmation_modal"));
+var _dialog = _interopRequireDefault(require("./dialog"));
+
+var _confirmation_dialog = _interopRequireDefault(require("./confirmation_dialog"));
 
 var _toggle = _interopRequireDefault(require("./toggle"));
 
@@ -149,7 +151,8 @@ var UI = {
   SelectButtons: _select_buttons.default,
   SelectButtonsSynced: _select_buttons_synced.default,
   Modal: _modal.default,
-  ConfirmationModal: _confirmation_modal.default,
+  Dialog: _dialog.default,
+  ConfirmationDialog: _confirmation_dialog.default,
   Toggle: _toggle.default,
   ToggleSynced: _toggle_synced.default,
   ViewportConstraint: _viewport_constraint.default,

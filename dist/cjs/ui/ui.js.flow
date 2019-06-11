@@ -34,7 +34,8 @@ import SelectSynced from './select_synced';
 import SelectButtons from './select_buttons';
 import SelectButtonsSynced from './select_buttons_synced';
 import Modal from './modal';
-import ConfirmationModal from './confirmation_modal';
+import Dialog from './dialog';
+import ConfirmationDialog from './confirmation_dialog';
 import Toggle from './toggle';
 import ToggleSynced from './toggle_synced';
 import Popover from './popover';
@@ -92,7 +93,8 @@ const UI = {
     SelectButtons,
     SelectButtonsSynced,
     Modal,
-    ConfirmationModal,
+    Dialog,
+    ConfirmationDialog,
     Toggle,
     ToggleSynced,
     ViewportConstraint,
