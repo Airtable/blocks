@@ -1,21 +1,22 @@
-import {UI} from '@airtable/blocks';
+import {initializeBlock, useBase, useRecords, expandRecord} from '@airtable/blocks/ui';
 import React from 'react';
 
 // Renders all the records in the "Grid view" in the "Tasks" table.
 function TodoBlock() {
-    const base = UI.useBase();
+    const base = useBase();
     const table = base.getTableByName('Tasks');
     const view = table.getViewByName('Grid view');
-
+    
     const queryResult = view.selectRecords();
-    const records = UI.useRecords(queryResult);
+    const records = useRecords(queryResult);
 
-    // Create a list of <Task /> components, one for each record.
     const tasks = records.map(record => {
         return <Task key={record.id} record={record} />;
     });
 
-    return <div>{tasks}</div>;
+    return (
+        <div>{tasks}</div>
+    );
 }
 
 // Renders a single record.
@@ -34,4 +35,4 @@ function Task({record}) {
     );
 }
 
-UI.initializeBlock(() => <TodoBlock />);
+initializeBlock(() => <TodoBlock />);
