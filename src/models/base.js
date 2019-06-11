@@ -84,7 +84,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @example
      * import {base} from '@airtable/blocks';
      * console.log(base.id);
-     * // => 'app1234567890123'
+     * // => 'appxxxxxxxxxxxxxx'
      */
 
     /**

@@ -98,7 +98,7 @@ function (_AbstractModel) {
    * @returns {string} This field's ID.
    * @example
    * console.log(myField.id);
-   * // => 'fld1234567890123'
+   * // => 'fldxxxxxxxxxxxxxx'
    */
 
   /**

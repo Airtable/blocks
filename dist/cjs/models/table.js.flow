@@ -40,7 +40,9 @@ export const WatchableTableKeys = Object.freeze({
 
 export type WatchableTableKey = $Values<typeof WatchableTableKeys>;
 
-/** Model class representing a table in the base. */
+/**
+ * Model class representing a table. Every {@link Base} has one or more tables.
+ */
 class Table extends AbstractModel<TableData, WatchableTableKey> {
     static _className = 'Table';
     static _isWatchableKey(key: string): boolean {
@@ -53,6 +55,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     _airtableInterface: AirtableInterface;
     _recordStore: RecordStore;
 
+    /**
+     * @hideconstructor
+     */
     constructor(
         baseData: BaseData,
         parentBase: Base,
@@ -72,36 +77,78 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
 
         Object.seal(this);
     }
+
+    /**
+     * @function id
+     * @memberof Table
+     * @instance
+     * @returns {string} This table's ID.
+     * @example
+     * console.log(myTable.id);
+     * // => 'tblxxxxxxxxxxxxxx'
+     */
+
+    /**
+     * @private
+     */
     get _dataOrNullIfDeleted(): TableData | null {
         return this._baseData.tablesById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The base that this table belongs to.
+     *
+     * @example
+     * import {base} from '@airtable/blocks';
+     * const table = base.getTableByName('Table 1');
+     * console.log(table.parentBase.id === base.id);
+     * // => true
+     */
     get parentBase(): Base {
         return this._parentBase;
     }
-    /** The table's name. Can be watched. */
+    /**
+     * @function
+     * @returns The name of the table. Can be watched.
+     * @example
+     * console.log(myTable.name);
+     * // => 'Table 1'
+     */
     get name(): string {
         return this._data.name;
     }
-    /** */
+    /**
+     * @function
+     * @returns The URL for the table. You can visit this URL in the browser to be taken to the table in the Airtable UI.
+     * @example
+     * console.log(myTable.url);
+     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx'
+     */
     get url(): string {
         return airtableUrls.getUrlForTable(this.id, {
             absolute: true,
         });
     }
     /**
-     * Every table has exactly one primary field. The primary field of a table
-     * will not change.
+     * @function
+     * @returns The table's primary field. Every table has exactly one primary
+     * field. The primary field of a table will not change.
+     * @example
+     * console.log(myTable.primaryField.name);
+     * // => 'Name'
      */
     get primaryField(): Field {
         const primaryField = this.getFieldById(this._data.primaryFieldId);
         return primaryField;
     }
     /**
-     * The fields in this table. The order is arbitrary, since fields are
+     * @function
+     * @returns The fields in this table. The order is arbitrary, since fields are
      * only ordered in the context of a specific view.
      *
      * Can be watched to know when fields are created or deleted.
+     * @example
+     * console.log(`This table has ${myTable.fields.length} fields`);
      */
     get fields(): Array<Field> {
         // TODO(kasra): is it confusing that this returns an array, since the order
@@ -114,7 +161,18 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return fields;
     }
-    /** */
+    /**
+     * @param fieldId The ID of the field.
+     * @returns The field matching the given ID, or `null` if that field does not exist in this table.
+     * @example
+     * const fieldId = 'fldxxxxxxxxxxxxxx';
+     * const field = myTable.getFieldByIdIfExists(fieldId);
+     * if (field !== null) {
+     *     console.log(field.name);
+     * } else {
+     *     console.log('No field exists with that ID');
+     * }
+     */
     getFieldByIdIfExists(fieldId: FieldId): Field | null {
         if (!this._data.fieldsById[fieldId]) {
             return null;
@@ -125,6 +183,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             return this._fieldModelsById[fieldId];
         }
     }
+    /**
+     * @param fieldId The ID of the field.
+     * @returns The field matching the given ID. Throws if that field does not exist in this table. Use {@link getFieldByIdIfExists} instead if you are unsure whether a field exists with the given ID.
+     * @example
+     * const fieldId = 'fldxxxxxxxxxxxxxx';
+     * const field = myTable.getFieldById(fieldId);
+     * console.log(field.name);
+     * // => 'Name'
+     */
     getFieldById(fieldId: FieldId): Field {
         const field = this.getFieldByIdIfExists(fieldId);
         if (!field) {
@@ -132,7 +199,17 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return field;
     }
-    /** */
+    /**
+     * @param fieldName The name of the field you're looking for.
+     * @returns The field matching the given name, or `null` if no field exists with that name in this table.
+     * @example
+     * const field = myTable.getFieldByNameIfExists('Name');
+     * if (field !== null) {
+     *     console.log(field.id);
+     * } else {
+     *     console.log('No field exists with that name');
+     * }
+     */
     getFieldByNameIfExists(fieldName: string): Field | null {
         for (const [fieldId, fieldData] of entries(this._data.fieldsById)) {
             if (fieldData.name === fieldName) {
@@ -141,6 +218,14 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return null;
     }
+    /**
+     * @param fieldName The name of the field you're looking for.
+     * @returns The field matching the given name. Throws if no field exists with that name in this table. Use {@link getFieldByNameIfExists} instead if you are unsure whether a field exists with the given name.
+     * @example
+     * const field = myTable.getFieldByName('Name');
+     * console.log(field.id);
+     * // => 'fldxxxxxxxxxxxxxx'
+     */
     getFieldByName(fieldName: string): Field {
         const field = this.getFieldByNameIfExists(fieldName);
         if (!field) {
@@ -149,8 +234,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return field;
     }
     /**
-     * The views in the table. Can be watched to know when views are created,
+     * @function
+     * @returns The views in this table. Can be watched to know when views are created,
      * deleted, or reordered.
+     * @example
+     * console.log(`This table has ${myTable.views.length} views`);
      */
     get views(): Array<View> {
         // TODO(kasra): cache and freeze this so it isn't O(n)
@@ -161,7 +249,18 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         });
         return views;
     }
-    /** */
+    /**
+     * @param viewId The ID of the view.
+     * @returns The view matching the given ID, or `null` if that view does not exist in this table.
+     * @example
+     * const viewId = 'viwxxxxxxxxxxxxxx';
+     * const view = myTable.getViewByIdIfExists(viewId);
+     * if (view !== null) {
+     *     console.log(view.name);
+     * } else {
+     *     console.log('No view exists with that ID');
+     * }
+     */
     getViewByIdIfExists(viewId: ViewId): View | null {
         if (!this._data.viewsById[viewId]) {
             return null;
@@ -177,6 +276,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             return this._viewModelsById[viewId];
         }
     }
+    /**
+     * @param viewId The ID of the view.
+     * @returns The view matching the given ID. Throws if that view does not exist in this table. Use {@link getViewByIdIfExists} instead if you are unsure whether a view exists with the given ID.
+     * @example
+     * const viewId = 'viwxxxxxxxxxxxxxx';
+     * const view = myTable.getViewById(viewId);
+     * console.log(view.name);
+     * // => 'Grid view'
+     */
     getViewById(viewId: ViewId): View {
         const view = this.getViewByIdIfExists(viewId);
         if (!view) {
@@ -184,7 +292,17 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return view;
     }
-    /** */
+    /**
+     * @param viewName The name of the view you're looking for.
+     * @returns The view matching the given name, or `null` if no view exists with that name in this table.
+     * @example
+     * const view = myTable.getViewByNameIfExists('Name');
+     * if (view !== null) {
+     *     console.log(view.id);
+     * } else {
+     *     console.log('No view exists with that name');
+     * }
+     */
     getViewByNameIfExists(viewName: string): View | null {
         for (const [viewId, viewData] of entries(this._data.viewsById)) {
             if (viewData.name === viewName) {
@@ -193,6 +311,14 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return null;
     }
+    /**
+     * @param viewName The name of the view you're looking for.
+     * @returns The view matching the given name. Throws if no view exists with that name in this table. Use {@link getViewByNameIfExists} instead if you are unsure whether a view exists with the given name.
+     * @example
+     * const view = myTable.getViewByName('Name');
+     * console.log(view.id);
+     * // => 'viwxxxxxxxxxxxxxx'
+     */
     getViewByName(viewName: string): View {
         const view = this.getViewByNameIfExists(viewName);
         if (!view) {
@@ -200,7 +326,33 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return view;
     }
-    /** */
+    /**
+     * Select records from the table. Returns a query result.
+     *
+     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @returns A query result.
+     * @example
+     * import {UI} from '@airtable/blocks';
+     * import React from 'react';
+     *
+     * function TodoList() {
+     *     const base = UI.useBase();
+     *     const table = base.getTableByName('Tasks');
+     *
+     *     const queryResult = table.selectRecords();
+     *     const records = UI.useRecords(queryResult);
+     *
+     *     return (
+     *         <ul>
+     *             {records.map(record => (
+     *                 <li key={record.id}>
+     *                     {record.primaryCellValueAsString || 'Unnamed record'}
+     *                 </li>
+     *             ))}
+     *         </ul>
+     *     );
+     * }
+     */
     selectRecords(opts?: QueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(
             this,
@@ -209,18 +361,63 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
     }
 
-    /** Maximum number of records that the table can contain */
+    /**
+     * @function
+     * @private (not documenting, since this should really be part of the canCreateRecords check)
+     * @returns The maximum number of records that the table can contain.
+     */
     get recordLimit(): number {
         return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
     }
-    /** */
+    /**
+     * Use this to check whether the current user can update a set of cell values. Should be
+     * called before calling {@link setCellValues}.
+     *
+     * @param {object.<RecordId, object.<(FieldId|string), CellValue>>} cellValuesByRecordIdThenFieldIdOrFieldName The cell values to set.
+     * @returns `true` if the current user can set the given cell values, `false` otherwise.
+     * @example
+     * const cellValuesByRecordIdThenFieldId = {
+     *     [record1.id]: {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     [record2.id]: {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * };
+     * if (myTable.canSetCellValues(cellValuesByRecordIdThenFieldId)) {
+     *     myTable.setCellValues(cellValuesByRecordIdThenFieldId);
+     * }
+     */
     canSetCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}): boolean {
         // This takes the field and record IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Sets cell values.
+     *
+     * Throws if the current user cannot update all of the given cell values. Call
+     * {@link canSetCellValues} before calling this to check whether the current user
+     * can perform the given updates.
+     *
+     * @param {object.<RecordId, object.<(FieldId|string), CellValue>>} cellValuesByRecordIdThenFieldIdOrFieldName The cell values to set.
+     * @returns {{}}
+     * @example
+     * const cellValuesByRecordIdThenFieldId = {
+     *     [record1.id]: {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     [record2.id]: {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * };
+     * if (myTable.canSetCellValues(cellValuesByRecordIdThenFieldId)) {
+     *     myTable.setCellValues(cellValuesByRecordIdThenFieldId);
+     * }
+     */
     setCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {
         [string]: RecordDef,
     }): AirtableWriteAction<void, {}> {
@@ -291,13 +488,57 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             completion: completionPromise,
         };
     }
-    /** */
+    /**
+     * Use this to check whether the current user can create a record. Should be
+     * called before calling {@link createRecord}.
+     *
+     * @param {(object.<(FieldId|string), CellValue>)?} cellValuesByFieldIdOrFieldName The record to create. If nothing is supplied, this will check whether the current user can create a single, empty record.
+     * @returns `true` if the current user can create the given record, `false` otherwise.
+     * @example
+     * const recordDef = {
+     *     [mySingleLineTextField.id]: 'new cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myTable.canCreateRecord(recordDef)) {
+     *     const {record} = myTable.createRecord(recordDef);
+     *     console.log(record.id);
+     * }
+     *
+     * @example
+     * if (myTable.canCreateRecord()) {
+     *     const {record} = myTable.createRecord();
+     *     console.log(record.id);
+     * }
+     */
     canCreateRecord(cellValuesByFieldIdOrFieldName: ?RecordDef): boolean {
         return this.canCreateRecords(
             cellValuesByFieldIdOrFieldName ? [cellValuesByFieldIdOrFieldName] : 1,
         );
     }
-    /** */
+    /**
+     * Creates a record in the table.
+     *
+     * Throws if the current user cannot create the given record. Call {@link canCreateRecord}
+     * before calling this to check whether the current user can create the given record.
+     *
+     * @param {(object.<(FieldId|string), CellValue>)?} cellValuesByFieldIdOrFieldName The record to create. If nothing is supplied, this will create a single, empty record.
+     * @returns {{record: Record}} An object with the optimistically-created record.
+     * @example
+     * const recordDef = {
+     *     [mySingleLineTextField.id]: 'new cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myTable.canCreateRecord(recordDef)) {
+     *     const {record} = myTable.createRecord(recordDef);
+     *     console.log(record.id);
+     * }
+     *
+     * @example
+     * if (myTable.canCreateRecord()) {
+     *     const {record} = myTable.createRecord();
+     *     console.log(record.id);
+     * }
+     */
     createRecord(
         cellValuesByFieldIdOrFieldName: ?RecordDef,
     ): AirtableWriteAction<
@@ -314,14 +555,70 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             record: records[0],
         };
     }
-    /** */
+    /**
+     * Use this to check whether the current user can create records. Should be
+     * called before calling {@link createRecords}.
+     *
+     * @param {(Array<object.<(FieldId|string), CellValue>>|number)} recordDefsOrNumberOfRecords The records to create, or a number of empty records to create.
+     * @returns `true` if the current user can create the given records, `false` otherwise.
+     * @example
+     * const recordDefs = [
+     *     {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * ];
+     * if (myTable.canCreateRecords(recordDefs)) {
+     *     const {records} = myTable.createRecords(recordDefs);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     *
+     * @example
+     * const numRecordsToCreate = 10;
+     * if (myTable.canCreateRecords(numRecordsToCreate)) {
+     *     const {records} = myTable.createRecords(numRecordsToCreate);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     */
     canCreateRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): boolean {
         // This takes the field IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Creates records in the table.
+     *
+     * Throws if the current user cannot create the given records. Call {@link canCreateRecords}
+     * before calling this to check whether the current user can create the given records.
+     *
+     * @param {(Array<object.<(FieldId|string), CellValue>>|number)} recordDefsOrNumberOfRecords The records to create, or a number of empty records to create.
+     * @returns {{records: Array<Record>}} An object with the optimistically-created records.
+     * @example
+     * const recordDefs = [
+     *     {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * ];
+     * if (myTable.canCreateRecords(recordDefs)) {
+     *     const {records} = myTable.createRecords(recordDefs);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     *
+     * @example
+     * const numRecordsToCreate = 10;
+     * if (myTable.canCreateRecords(numRecordsToCreate)) {
+     *     const {records} = myTable.createRecords(numRecordsToCreate);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     */
     createRecords(
         recordDefsOrNumberOfRecords: Array<RecordDef> | number,
     ): AirtableWriteAction<
@@ -425,22 +722,68 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             records: recordModels,
         };
     }
-    /** */
-    canDeleteRecord(record: Record) {
+    /**
+     * Use this to check whether the current user can delete a record. Should be
+     * called before calling {@link deleteRecord}.
+     *
+     * @param record The record to delete.
+     * @returns `true` if the current user can delete the given record, `false` otherwise.
+     * @example
+     * if (myTable.canDeleteRecord(myRecord)) {
+     *     myTable.deleteRecord(myRecord);
+     * }
+     */
+    canDeleteRecord(record: Record): boolean {
         return this.canDeleteRecords([record]);
     }
-    /** */
+    /**
+     * Deletes a record.
+     *
+     * Throws if the current user cannot delete the given record. Call {@link canDeleteRecord}
+     * before calling this to check whether the current user can delete the given record.
+     *
+     * @param record The record to delete.
+     * @returns {{}}
+     * @example
+     * if (myTable.canDeleteRecord(myRecord)) {
+     *     myTable.deleteRecord(myRecord);
+     * }
+     */
     deleteRecord(record: Record): AirtableWriteAction<void, {}> {
         return this.deleteRecords([record]);
     }
-    /** */
+    /**
+     * Use this to check whether the current user can delete records. Should be
+     * called before calling {@link deleteRecords}.
+     *
+     * @param records The records to delete.
+     * @returns `true` if the current user can delete the given records, `false` otherwise.
+     * @example
+     * const recordsToDelete = [myRecord1, myRecord2];
+     * if (myTable.canDeleteRecords(recordsToDelete)) {
+     *     myTable.deleteRecords(recordsToDelete);
+     * }
+     */
     canDeleteRecords(records: Array<Record>) {
         // This takes the records to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Deletes records.
+     *
+     * Throws if the current user cannot delete the given records. Call {@link canDeleteRecords}
+     * before calling this to check whether the current user can delete the given records.
+     *
+     * @param records The records to delete.
+     * @returns {{}}
+     * @example
+     * const recordsToDelete = [myRecord1, myRecord2];
+     * if (myTable.canDeleteRecords(recordsToDelete)) {
+     *     myTable.deleteRecords(recordsToDelete);
+     * }
+     */
     deleteRecords(records: Array<Record>): AirtableWriteAction<void, {}> {
         if (!this.canDeleteRecords(records)) {
             throw new Error('Your permission level does not allow deleting records');
@@ -477,9 +820,20 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         };
     }
     /**
-     * Returns the first view in the table where the type is one of `allowedViewTypes`. If a
-     * `preferredViewOrViewId` is supplied and that view exists & has the correct type, that view
+     * Returns the first view in the table where the type is one of `allowedViewTypes`.
+     *
+     * @param allowedViewTypes An array of view types or a single view type to match against.
+     * @param preferredViewOrViewId If a view or view ID is supplied and that view exists & has the correct type, that view
      * will be returned before checking the other views in the table.
+     * @returns The first view where the type is one of `allowedViewTypes` or `null` if no such view exists in the table.
+     * @example
+     * import {viewTypes} from '@airtable/blocks/models';
+     * const firstCalendarView = myTable.getFirstViewOfType(viewTypes.CALENDAR);
+     * if (firstCalendarView !== null) {
+     *     console.log(firstCalendarView.name);
+     * } else {
+     *     console.log('No calendar views exist in the table');
+     * }
      */
     getFirstViewOfType(
         allowedViewTypes: Array<ViewType> | ViewType,
@@ -508,6 +862,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     // Experimental, do not document yet. Allows fetching default cell values for
     // a table or view. Before documenting, we should explore making this synchronous.
+    /**
+     * @private
+     */
     async getDefaultCellValuesByFieldIdAsync(opts?: {
         view?: View | null,
     }): Promise<{[string]: mixed}> {
@@ -518,7 +875,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
         return cellValuesByFieldId;
     }
-
+    /**
+     * @private
+     */
     __getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
         let field: Field | null;
         if (fieldOrFieldIdOrFieldName instanceof Field) {
@@ -530,6 +889,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return field;
     }
+    /**
+     * @private
+     */
     __getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
         let view: View | null;
         if (viewOrViewIdOrViewName instanceof View) {
@@ -541,6 +903,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return view;
     }
+    /**
+     * @private
+     */
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object): boolean {
         let didTableSchemaChange = false;
         this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
@@ -620,6 +985,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
         return didTableSchemaChange;
     }
+    /**
+     * @private
+     */
     __getFieldNamesById(): {[string]: string} {
         if (!this._cachedFieldNamesById) {
             const fieldNamesById = {};

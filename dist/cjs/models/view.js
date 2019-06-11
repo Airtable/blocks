@@ -91,7 +91,7 @@ function (_AbstractModel) {
    * @returns {string} This view's ID.
    * @example
    * console.log(myView.id);
-   * // => 'viw1234567890123'
+   * // => 'viwxxxxxxxxxxxxxx'
    */
 
   /**
@@ -291,7 +291,7 @@ function (_AbstractModel) {
      * @returns The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
      * @example
      * console.log(myView.url);
-     * // => https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx
+     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
      */
 
   }, {

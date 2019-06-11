@@ -90,7 +90,9 @@ var WatchableTableKeys = Object.freeze({
 });
 exports.WatchableTableKeys = WatchableTableKeys;
 
-/** Model class representing a table in the base. */
+/**
+ * Model class representing a table. Every {@link Base} has one or more tables.
+ */
 var Table =
 /*#__PURE__*/
 function (_AbstractModel) {
@@ -102,6 +104,9 @@ function (_AbstractModel) {
     }
   }]);
 
+  /**
+   * @hideconstructor
+   */
   function Table(baseData, parentBase, recordStore, tableId, airtableInterface) {
     var _this;
 
@@ -118,11 +123,36 @@ function (_AbstractModel) {
     Object.seal((0, _assertThisInitialized2.default)(_this));
     return _this;
   }
+  /**
+   * @function id
+   * @memberof Table
+   * @instance
+   * @returns {string} This table's ID.
+   * @example
+   * console.log(myTable.id);
+   * // => 'tblxxxxxxxxxxxxxx'
+   */
+
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(Table, [{
     key: "getFieldByIdIfExists",
 
-    /** */
+    /**
+     * @param fieldId The ID of the field.
+     * @returns The field matching the given ID, or `null` if that field does not exist in this table.
+     * @example
+     * const fieldId = 'fldxxxxxxxxxxxxxx';
+     * const field = myTable.getFieldByIdIfExists(fieldId);
+     * if (field !== null) {
+     *     console.log(field.name);
+     * } else {
+     *     console.log('No field exists with that ID');
+     * }
+     */
     value: function getFieldByIdIfExists(fieldId) {
       if (!this._data.fieldsById[fieldId]) {
         return null;
@@ -134,6 +164,16 @@ function (_AbstractModel) {
         return this._fieldModelsById[fieldId];
       }
     }
+    /**
+     * @param fieldId The ID of the field.
+     * @returns The field matching the given ID. Throws if that field does not exist in this table. Use {@link getFieldByIdIfExists} instead if you are unsure whether a field exists with the given ID.
+     * @example
+     * const fieldId = 'fldxxxxxxxxxxxxxx';
+     * const field = myTable.getFieldById(fieldId);
+     * console.log(field.name);
+     * // => 'Name'
+     */
+
   }, {
     key: "getFieldById",
     value: function getFieldById(fieldId) {
@@ -145,7 +185,17 @@ function (_AbstractModel) {
 
       return field;
     }
-    /** */
+    /**
+     * @param fieldName The name of the field you're looking for.
+     * @returns The field matching the given name, or `null` if no field exists with that name in this table.
+     * @example
+     * const field = myTable.getFieldByNameIfExists('Name');
+     * if (field !== null) {
+     *     console.log(field.id);
+     * } else {
+     *     console.log('No field exists with that name');
+     * }
+     */
 
   }, {
     key: "getFieldByNameIfExists",
@@ -181,6 +231,15 @@ function (_AbstractModel) {
 
       return null;
     }
+    /**
+     * @param fieldName The name of the field you're looking for.
+     * @returns The field matching the given name. Throws if no field exists with that name in this table. Use {@link getFieldByNameIfExists} instead if you are unsure whether a field exists with the given name.
+     * @example
+     * const field = myTable.getFieldByName('Name');
+     * console.log(field.id);
+     * // => 'fldxxxxxxxxxxxxxx'
+     */
+
   }, {
     key: "getFieldByName",
     value: function getFieldByName(fieldName) {
@@ -193,14 +252,28 @@ function (_AbstractModel) {
       return field;
     }
     /**
-     * The views in the table. Can be watched to know when views are created,
+     * @function
+     * @returns The views in this table. Can be watched to know when views are created,
      * deleted, or reordered.
+     * @example
+     * console.log(`This table has ${myTable.views.length} views`);
      */
 
   }, {
     key: "getViewByIdIfExists",
 
-    /** */
+    /**
+     * @param viewId The ID of the view.
+     * @returns The view matching the given ID, or `null` if that view does not exist in this table.
+     * @example
+     * const viewId = 'viwxxxxxxxxxxxxxx';
+     * const view = myTable.getViewByIdIfExists(viewId);
+     * if (view !== null) {
+     *     console.log(view.name);
+     * } else {
+     *     console.log('No view exists with that ID');
+     * }
+     */
     value: function getViewByIdIfExists(viewId) {
       if (!this._data.viewsById[viewId]) {
         return null;
@@ -212,6 +285,16 @@ function (_AbstractModel) {
         return this._viewModelsById[viewId];
       }
     }
+    /**
+     * @param viewId The ID of the view.
+     * @returns The view matching the given ID. Throws if that view does not exist in this table. Use {@link getViewByIdIfExists} instead if you are unsure whether a view exists with the given ID.
+     * @example
+     * const viewId = 'viwxxxxxxxxxxxxxx';
+     * const view = myTable.getViewById(viewId);
+     * console.log(view.name);
+     * // => 'Grid view'
+     */
+
   }, {
     key: "getViewById",
     value: function getViewById(viewId) {
@@ -223,7 +306,17 @@ function (_AbstractModel) {
 
       return view;
     }
-    /** */
+    /**
+     * @param viewName The name of the view you're looking for.
+     * @returns The view matching the given name, or `null` if no view exists with that name in this table.
+     * @example
+     * const view = myTable.getViewByNameIfExists('Name');
+     * if (view !== null) {
+     *     console.log(view.id);
+     * } else {
+     *     console.log('No view exists with that name');
+     * }
+     */
 
   }, {
     key: "getViewByNameIfExists",
@@ -259,6 +352,15 @@ function (_AbstractModel) {
 
       return null;
     }
+    /**
+     * @param viewName The name of the view you're looking for.
+     * @returns The view matching the given name. Throws if no view exists with that name in this table. Use {@link getViewByNameIfExists} instead if you are unsure whether a view exists with the given name.
+     * @example
+     * const view = myTable.getViewByName('Name');
+     * console.log(view.id);
+     * // => 'viwxxxxxxxxxxxxxx'
+     */
+
   }, {
     key: "getViewByName",
     value: function getViewByName(viewName) {
@@ -270,19 +372,68 @@ function (_AbstractModel) {
 
       return view;
     }
-    /** */
+    /**
+     * Select records from the table. Returns a query result.
+     *
+     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @returns A query result.
+     * @example
+     * import {UI} from '@airtable/blocks';
+     * import React from 'react';
+     *
+     * function TodoList() {
+     *     const base = UI.useBase();
+     *     const table = base.getTableByName('Tasks');
+     *
+     *     const queryResult = table.selectRecords();
+     *     const records = UI.useRecords(queryResult);
+     *
+     *     return (
+     *         <ul>
+     *             {records.map(record => (
+     *                 <li key={record.id}>
+     *                     {record.primaryCellValueAsString || 'Unnamed record'}
+     *                 </li>
+     *             ))}
+     *         </ul>
+     *     );
+     * }
+     */
 
   }, {
     key: "selectRecords",
     value: function selectRecords(opts) {
       return _table_or_view_query_result.default.__createOrReuseQueryResult(this, this._recordStore, opts || {});
     }
-    /** Maximum number of records that the table can contain */
+    /**
+     * @function
+     * @private (not documenting, since this should really be part of the canCreateRecords check)
+     * @returns The maximum number of records that the table can contain.
+     */
 
   }, {
     key: "canSetCellValues",
 
-    /** */
+    /**
+     * Use this to check whether the current user can update a set of cell values. Should be
+     * called before calling {@link setCellValues}.
+     *
+     * @param {object.<RecordId, object.<(FieldId|string), CellValue>>} cellValuesByRecordIdThenFieldIdOrFieldName The cell values to set.
+     * @returns `true` if the current user can set the given cell values, `false` otherwise.
+     * @example
+     * const cellValuesByRecordIdThenFieldId = {
+     *     [record1.id]: {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     [record2.id]: {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * };
+     * if (myTable.canSetCellValues(cellValuesByRecordIdThenFieldId)) {
+     *     myTable.setCellValues(cellValuesByRecordIdThenFieldId);
+     * }
+     */
     value: function canSetCellValues(cellValuesByRecordIdThenFieldIdOrFieldName) {
       // This takes the field and record IDs to future-proof against granular permissions.
       // For now, just need at least edit permissions.
@@ -291,7 +442,29 @@ function (_AbstractModel) {
 
       return permissionHelpers.can(base.__rawPermissionLevel, _permission_levels.PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Sets cell values.
+     *
+     * Throws if the current user cannot update all of the given cell values. Call
+     * {@link canSetCellValues} before calling this to check whether the current user
+     * can perform the given updates.
+     *
+     * @param {object.<RecordId, object.<(FieldId|string), CellValue>>} cellValuesByRecordIdThenFieldIdOrFieldName The cell values to set.
+     * @returns {{}}
+     * @example
+     * const cellValuesByRecordIdThenFieldId = {
+     *     [record1.id]: {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     [record2.id]: {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * };
+     * if (myTable.canSetCellValues(cellValuesByRecordIdThenFieldId)) {
+     *     myTable.setCellValues(cellValuesByRecordIdThenFieldId);
+     * }
+     */
 
   }, {
     key: "setCellValues",
@@ -392,14 +565,58 @@ function (_AbstractModel) {
         completion: completionPromise
       };
     }
-    /** */
+    /**
+     * Use this to check whether the current user can create a record. Should be
+     * called before calling {@link createRecord}.
+     *
+     * @param {(object.<(FieldId|string), CellValue>)?} cellValuesByFieldIdOrFieldName The record to create. If nothing is supplied, this will check whether the current user can create a single, empty record.
+     * @returns `true` if the current user can create the given record, `false` otherwise.
+     * @example
+     * const recordDef = {
+     *     [mySingleLineTextField.id]: 'new cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myTable.canCreateRecord(recordDef)) {
+     *     const {record} = myTable.createRecord(recordDef);
+     *     console.log(record.id);
+     * }
+     *
+     * @example
+     * if (myTable.canCreateRecord()) {
+     *     const {record} = myTable.createRecord();
+     *     console.log(record.id);
+     * }
+     */
 
   }, {
     key: "canCreateRecord",
     value: function canCreateRecord(cellValuesByFieldIdOrFieldName) {
       return this.canCreateRecords(cellValuesByFieldIdOrFieldName ? [cellValuesByFieldIdOrFieldName] : 1);
     }
-    /** */
+    /**
+     * Creates a record in the table.
+     *
+     * Throws if the current user cannot create the given record. Call {@link canCreateRecord}
+     * before calling this to check whether the current user can create the given record.
+     *
+     * @param {(object.<(FieldId|string), CellValue>)?} cellValuesByFieldIdOrFieldName The record to create. If nothing is supplied, this will create a single, empty record.
+     * @returns {{record: Record}} An object with the optimistically-created record.
+     * @example
+     * const recordDef = {
+     *     [mySingleLineTextField.id]: 'new cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myTable.canCreateRecord(recordDef)) {
+     *     const {record} = myTable.createRecord(recordDef);
+     *     console.log(record.id);
+     * }
+     *
+     * @example
+     * if (myTable.canCreateRecord()) {
+     *     const {record} = myTable.createRecord();
+     *     console.log(record.id);
+     * }
+     */
 
   }, {
     key: "createRecord",
@@ -412,7 +629,34 @@ function (_AbstractModel) {
         record: records[0]
       };
     }
-    /** */
+    /**
+     * Use this to check whether the current user can create records. Should be
+     * called before calling {@link createRecords}.
+     *
+     * @param {(Array<object.<(FieldId|string), CellValue>>|number)} recordDefsOrNumberOfRecords The records to create, or a number of empty records to create.
+     * @returns `true` if the current user can create the given records, `false` otherwise.
+     * @example
+     * const recordDefs = [
+     *     {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * ];
+     * if (myTable.canCreateRecords(recordDefs)) {
+     *     const {records} = myTable.createRecords(recordDefs);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     *
+     * @example
+     * const numRecordsToCreate = 10;
+     * if (myTable.canCreateRecords(numRecordsToCreate)) {
+     *     const {records} = myTable.createRecords(numRecordsToCreate);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     */
 
   }, {
     key: "canCreateRecords",
@@ -424,7 +668,36 @@ function (_AbstractModel) {
 
       return permissionHelpers.can(base.__rawPermissionLevel, _permission_levels.PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Creates records in the table.
+     *
+     * Throws if the current user cannot create the given records. Call {@link canCreateRecords}
+     * before calling this to check whether the current user can create the given records.
+     *
+     * @param {(Array<object.<(FieldId|string), CellValue>>|number)} recordDefsOrNumberOfRecords The records to create, or a number of empty records to create.
+     * @returns {{records: Array<Record>}} An object with the optimistically-created records.
+     * @example
+     * const recordDefs = [
+     *     {
+     *         [mySingleLineTextField.id]: 'new cell value',
+     *     },
+     *     {
+     *         [mySingleLineTextField.id]: 'another cell value',
+     *         [myNumberField.id]: 42,
+     *     },
+     * ];
+     * if (myTable.canCreateRecords(recordDefs)) {
+     *     const {records} = myTable.createRecords(recordDefs);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     *
+     * @example
+     * const numRecordsToCreate = 10;
+     * if (myTable.canCreateRecords(numRecordsToCreate)) {
+     *     const {records} = myTable.createRecords(numRecordsToCreate);
+     *     console.log(`Created ${records.length} records`);
+     * }
+     */
 
   }, {
     key: "createRecords",
@@ -578,21 +851,54 @@ function (_AbstractModel) {
         records: recordModels
       };
     }
-    /** */
+    /**
+     * Use this to check whether the current user can delete a record. Should be
+     * called before calling {@link deleteRecord}.
+     *
+     * @param record The record to delete.
+     * @returns `true` if the current user can delete the given record, `false` otherwise.
+     * @example
+     * if (myTable.canDeleteRecord(myRecord)) {
+     *     myTable.deleteRecord(myRecord);
+     * }
+     */
 
   }, {
     key: "canDeleteRecord",
     value: function canDeleteRecord(record) {
       return this.canDeleteRecords([record]);
     }
-    /** */
+    /**
+     * Deletes a record.
+     *
+     * Throws if the current user cannot delete the given record. Call {@link canDeleteRecord}
+     * before calling this to check whether the current user can delete the given record.
+     *
+     * @param record The record to delete.
+     * @returns {{}}
+     * @example
+     * if (myTable.canDeleteRecord(myRecord)) {
+     *     myTable.deleteRecord(myRecord);
+     * }
+     */
 
   }, {
     key: "deleteRecord",
     value: function deleteRecord(record) {
       return this.deleteRecords([record]);
     }
-    /** */
+    /**
+     * Use this to check whether the current user can delete records. Should be
+     * called before calling {@link deleteRecords}.
+     *
+     * @param records The records to delete.
+     * @returns `true` if the current user can delete the given records, `false` otherwise.
+     * @example
+     * const recordsToDelete = [myRecord1, myRecord2];
+     * if (myTable.canDeleteRecords(recordsToDelete)) {
+     *     myTable.deleteRecords(recordsToDelete);
+     * }
+     */
 
   }, {
     key: "canDeleteRecords",
@@ -604,7 +910,20 @@ function (_AbstractModel) {
 
       return permissionHelpers.can(base.__rawPermissionLevel, _permission_levels.PermissionLevels.EDIT);
     }
-    /** */
+    /**
+     * Deletes records.
+     *
+     * Throws if the current user cannot delete the given records. Call {@link canDeleteRecords}
+     * before calling this to check whether the current user can delete the given records.
+     *
+     * @param records The records to delete.
+     * @returns {{}}
+     * @example
+     * const recordsToDelete = [myRecord1, myRecord2];
+     * if (myTable.canDeleteRecords(recordsToDelete)) {
+     *     myTable.deleteRecords(recordsToDelete);
+     * }
+     */
 
   }, {
     key: "deleteRecords",
@@ -664,9 +983,20 @@ function (_AbstractModel) {
       };
     }
     /**
-     * Returns the first view in the table where the type is one of `allowedViewTypes`. If a
-     * `preferredViewOrViewId` is supplied and that view exists & has the correct type, that view
+     * Returns the first view in the table where the type is one of `allowedViewTypes`.
+     *
+     * @param allowedViewTypes An array of view types or a single view type to match against.
+     * @param preferredViewOrViewId If a view or view ID is supplied and that view exists & has the correct type, that view
      * will be returned before checking the other views in the table.
+     * @returns The first view where the type is one of `allowedViewTypes` or `null` if no such view exists in the table.
+     * @example
+     * import {viewTypes} from '@airtable/blocks/models';
+     * const firstCalendarView = myTable.getFirstViewOfType(viewTypes.CALENDAR);
+     * if (firstCalendarView !== null) {
+     *     console.log(firstCalendarView.name);
+     * } else {
+     *     console.log('No calendar views exist in the table');
+     * }
      */
 
   }, {
@@ -689,6 +1019,10 @@ function (_AbstractModel) {
       }) || null;
     } // Experimental, do not document yet. Allows fetching default cell values for
     // a table or view. Before documenting, we should explore making this synchronous.
+
+    /**
+     * @private
+     */
 
   }, {
     key: "getDefaultCellValuesByFieldIdAsync",
@@ -723,6 +1057,10 @@ function (_AbstractModel) {
 
       return getDefaultCellValuesByFieldIdAsync;
     }()
+    /**
+     * @private
+     */
+
   }, {
     key: "__getFieldMatching",
     value: function __getFieldMatching(fieldOrFieldIdOrFieldName) {
@@ -736,6 +1074,10 @@ function (_AbstractModel) {
 
       return field;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getViewMatching",
     value: function __getViewMatching(viewOrViewIdOrViewName) {
@@ -749,6 +1091,10 @@ function (_AbstractModel) {
 
       return view;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__triggerOnChangeForDirtyPaths",
     value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
@@ -908,6 +1254,10 @@ function (_AbstractModel) {
 
       return didTableSchemaChange;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getFieldNamesById",
     value: function __getFieldNamesById() {
@@ -950,21 +1300,42 @@ function (_AbstractModel) {
     get: function get() {
       return this._baseData.tablesById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The base that this table belongs to.
+     *
+     * @example
+     * import {base} from '@airtable/blocks';
+     * const table = base.getTableByName('Table 1');
+     * console.log(table.parentBase.id === base.id);
+     * // => true
+     */
 
   }, {
     key: "parentBase",
     get: function get() {
       return this._parentBase;
     }
-    /** The table's name. Can be watched. */
+    /**
+     * @function
+     * @returns The name of the table. Can be watched.
+     * @example
+     * console.log(myTable.name);
+     * // => 'Table 1'
+     */
 
   }, {
     key: "name",
     get: function get() {
       return this._data.name;
     }
-    /** */
+    /**
+     * @function
+     * @returns The URL for the table. You can visit this URL in the browser to be taken to the table in the Airtable UI.
+     * @example
+     * console.log(myTable.url);
+     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx'
+     */
 
   }, {
     key: "url",
@@ -974,8 +1345,12 @@ function (_AbstractModel) {
       });
     }
     /**
-     * Every table has exactly one primary field. The primary field of a table
-     * will not change.
+     * @function
+     * @returns The table's primary field. Every table has exactly one primary
+     * field. The primary field of a table will not change.
+     * @example
+     * console.log(myTable.primaryField.name);
+     * // => 'Name'
      */
 
   }, {
@@ -985,10 +1360,13 @@ function (_AbstractModel) {
       return primaryField;
     }
     /**
-     * The fields in this table. The order is arbitrary, since fields are
+     * @function
+     * @returns The fields in this table. The order is arbitrary, since fields are
      * only ordered in the context of a specific view.
      *
      * Can be watched to know when fields are created or deleted.
+     * @example
+     * console.log(`This table has ${myTable.fields.length} fields`);
      */
 
   }, {
