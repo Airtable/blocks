@@ -2357,23 +2357,36 @@ isOpen: [boolean][63], backgroundClassName: [string][58]?, backgroundStyle: [Obj
 
 #### ProgressBar
 
+A progress bar.
+
 ##### Parameters
 
 -   `props` **[ProgressBarProps][102]**
 
+##### Examples
+
+```javascript
+import {UI} from '@airtable/blocks/ui';
+
+function MyComponent() {
+    return <ProgressBar progress={0.6} barColor="#ff9900" />;
+}
+```
+
 #### ProgressBarProps
 
-Type: {progress: [number][66], barColor: [string][58]?, backgroundColor: [string][58]?, height:
-[number][66]?, className: [string][58]?, style: [Object][70]?}
+Type: [object][70]
 
 ##### Properties
 
--   `progress` **[number][66]**
--   `barColor` **[string][58]?**
--   `backgroundColor` **[string][58]?**
--   `height` **[number][66]?**
--   `className` **[string][58]?**
--   `style` **[Object][70]?**
+-   `progress` **[number][66]** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1
+    is 100% complete. If you include a number outside of the range, the value will be clamped to be
+    inside of the range.
+-   `barColor` **[string][58]?** A CSS color, such as `#ff9900`.
+-   `backgroundColor` **[string][58]?** A CSS color, such as `#ff9900`.
+-   `height` **[number][66]?** A height, in pixels.
+-   `className` **[string][58]?** Extra `className`s to apply to the element, separated by spaces.
+-   `style` **[object][70]?** Extra styles to apply to the progress bar.
 
 ### RadioSynced
 
