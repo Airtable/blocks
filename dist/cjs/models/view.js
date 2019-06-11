@@ -57,7 +57,9 @@ var WatchableViewKeys = Object.freeze({
   allFields: 'allFields'
 });
 
-/** Model class representing a view in a table. */
+/**
+ * A class that represents an Airtable view. Every {@link Table} has one or more views.
+ */
 var View =
 /*#__PURE__*/
 function (_AbstractModel) {
@@ -69,6 +71,9 @@ function (_AbstractModel) {
     }
   }]);
 
+  /**
+   * @hideconstructor
+   */
   function View(baseData, parentTable, viewDataStore, viewId) {
     var _this;
 
@@ -79,17 +84,51 @@ function (_AbstractModel) {
     Object.seal((0, _assertThisInitialized2.default)(_this));
     return _this;
   }
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(View, [{
     key: "selectRecords",
 
-    /** */
+    /**
+     * Select records from the view. Returns a query result.
+     *
+     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @returns A query result.
+     * @example
+     * import {UI} from '@airtable/blocks';
+     * import React from 'react';
+     *
+     * function TodoList() {
+     *     const base = UI.useBase();
+     *     const table = base.getTableByName('Tasks');
+     *     const view = table.getViewByName('Grid view');
+     *
+     *     const queryResult = view.selectRecords();
+     *     const records = UI.useRecords(queryResult);
+     *
+     *     return (
+     *         <ul>
+     *             {records.map(record => (
+     *                 <li key={record.id}>
+     *                     {record.primaryCellValueAsString || 'Unnamed record'}
+     *                 </li>
+     *             ))}
+     *         </ul>
+     *     );
+     * }
+     */
     value: function selectRecords(opts) {
       return _table_or_view_query_result.default.__createOrReuseQueryResult(this, this._viewDataStore.parentRecordStore, opts || {});
     }
     /**
-     * All the fields in the table, including fields that are hidden in this
-     * view. Can be watched to know when fields are created, deleted, or reordered.
+     * @function
+     * @returns All the fields in the table, including fields that are hidden in this view. Can be watched to know when fields are created, deleted, or reordered.
+     * @example
+     * console.log(myView.allFields);
+     * // => [Field {...}, Field {...}, ...]
      */
 
   }, {
@@ -166,6 +205,10 @@ function (_AbstractModel) {
 
       return validKeys;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__triggerOnChangeForDirtyPaths",
     value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
@@ -192,28 +235,54 @@ function (_AbstractModel) {
 
       return tableData.viewsById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The table that this view belongs to. Should never change because views aren't moved between tables.
+     *
+     * @example
+     * const view = myTable.getViewByName('Grid View');
+     * console.log(view.parentTable.id === myTable.id);
+     * // => true
+     */
 
   }, {
     key: "parentTable",
     get: function get() {
       return this._parentTable;
     }
-    /** The name of the view. Can be watched. */
+    /**
+     * @function
+     * @returns The name of the view. Can be watched.
+     * @example
+     * console.log(myView.name);
+     * // => 'Grid view'
+     */
 
   }, {
     key: "name",
     get: function get() {
       return this._data.name;
     }
-    /** The type of the view. Will not change. */
+    /**
+     * @function
+     * @returns The type of the view, such as Grid, Calendar, or Kanban. Should never change because view types cannot be modified.
+     * @example
+     * console.log(myView.type);
+     * // => 'kanban'
+     */
 
   }, {
     key: "type",
     get: function get() {
       return viewTypeProvider.getApiViewType(this._data.type);
     }
-    /** */
+    /**
+     * @function
+     * @returns The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
+     * @example
+     * console.log(myView.url);
+     * // => https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx
+     */
 
   }, {
     key: "url",
@@ -228,8 +297,11 @@ function (_AbstractModel) {
       return this._viewDataStore.allFieldIds.map(fieldId => this.parentTable.getFieldById(fieldId));
     }
     /**
-     * The fields that are not hidden in this view.
-     * view. Can be watched to know when fields are created, deleted, or reordered.
+     * @function
+     * @returns The fields that are visible in this view. Can be watched to know when fields are created, deleted, hidden, shown, or reordered.
+     * @example
+     * console.log(myView.visibleFields);
+     * // => [Field {...}, Field {...}, ...]
      */
 
   }, {

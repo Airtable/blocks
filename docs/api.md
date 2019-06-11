@@ -1319,68 +1319,126 @@ Returns **[Array][62]&lt;[View][68]>**
 
 **Extends AbstractModel**
 
-Model class representing a view in a table.
-
-#### Parameters
-
--   `baseData` **BaseData**
--   `parentTable` **[Table][72]**
--   `viewDataStore` **ViewDataStore**
--   `viewId` **[string][58]**
+A class that represents an Airtable view. Every [Table][19] has one or more views.
 
 #### allFields
 
-All the fields in the table, including fields that are hidden in this view. Can be watched to know
-when fields are created, deleted, or reordered.
-
 Type: [Array][62]&lt;[Field][67]>
 
-Returns **[Array][62]&lt;[Field][67]>**
+##### Examples
+
+```javascript
+console.log(myView.allFields);
+// => [Field {...}, Field {...}, ...]
+```
+
+Returns **[Array][62]&lt;[Field][67]>** All the fields in the table, including fields that are
+hidden in this view. Can be watched to know when fields are created, deleted, or reordered.
 
 #### name
 
-The name of the view. Can be watched.
-
 Type: [string][58]
 
-Returns **[string][58]**
+##### Examples
+
+```javascript
+console.log(myView.name);
+// => 'Grid view'
+```
+
+Returns **[string][58]** The name of the view. Can be watched.
 
 #### parentTable
 
 Type: [Table][72]
 
-Returns **[Table][72]**
+##### Examples
+
+```javascript
+const view = myTable.getViewByName('Grid View');
+console.log(view.parentTable.id === myTable.id);
+// => true
+```
+
+Returns **[Table][72]** The table that this view belongs to. Should never change because views
+aren't moved between tables.
 
 #### selectRecords
 
+Select records from the view. Returns a query result.
+
 ##### Parameters
 
--   `opts` **QueryResultOpts?**
+-   `opts` **QueryResultOpts?** Options for the query, such as sorts and fields. (optional, default
+    `{}`)
 
-Returns **[TableOrViewQueryResult][77]**
+##### Examples
+
+```javascript
+import {UI} from '@airtable/blocks';
+import React from 'react';
+
+function TodoList() {
+    const base = UI.useBase();
+    const table = base.getTableByName('Tasks');
+    const view = table.getViewByName('Grid view');
+
+    const queryResult = view.selectRecords();
+    const records = UI.useRecords(queryResult);
+
+    return (
+        <ul>
+            {records.map(record => (
+                <li key={record.id}>{record.primaryCellValueAsString || 'Unnamed record'}</li>
+            ))}
+        </ul>
+    );
+}
+```
+
+Returns **[TableOrViewQueryResult][77]** A query result.
 
 #### type
 
-The type of the view. Will not change.
-
 Type: ViewType
 
-Returns **ViewType**
+##### Examples
+
+```javascript
+console.log(myView.type);
+// => 'kanban'
+```
+
+Returns **ViewType** The type of the view, such as Grid, Calendar, or Kanban. Should never change
+because view types cannot be modified.
 
 #### url
 
 Type: [string][58]
 
-Returns **[string][58]**
+##### Examples
+
+```javascript
+console.log(myView.url);
+// => https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx
+```
+
+Returns **[string][58]** The URL for the view. You can visit this URL in the browser to be taken to
+the view in the Airtable UI.
 
 #### visibleFields
 
-The fields that are not hidden in this view. view. Can be watched to know when fields are created,
-deleted, or reordered.
-
 Type: [Array][62]&lt;[Field][67]>
 
-Returns **[Array][62]&lt;[Field][67]>**
+##### Examples
+
+```javascript
+console.log(myView.visibleFields);
+// => [Field {...}, Field {...}, ...]
+```
+
+Returns **[Array][62]&lt;[Field][67]>** The fields that are visible in this view. Can be watched to
+know when fields are created, deleted, hidden, shown, or reordered.
 
 ### Watchable
 
