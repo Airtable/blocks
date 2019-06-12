@@ -88,7 +88,7 @@ async function initBlockAsync(
 
     // Create a minimal package json so the user can yarn install.
     const defaultDependencies = {
-        '@airtable/blocks': '^0.0.6',
+        '@airtable/blocks': '^0.0.7',
         react: '^16.8.0',
         'react-dom': '^16.8.0',
     };
