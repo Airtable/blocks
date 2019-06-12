@@ -27,8 +27,6 @@ const FADE_IN_ANIMATION_DURATION = 150;
  */
 type TooltipProps = {
     children: React$Element<*>,
-    // TODO(jb): remove renderContent in favor of just content.
-    renderContent?: () => React$Element<*>,
     content?: string | (() => React$Element<*>),
     placementX?: PopoverPlacementX,
     placementY?: PopoverPlacementY,
@@ -70,8 +68,6 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
 
     static propTypes = {
         children: PropTypes.element.isRequired,
-        // TODO(jb): remove renderContent in favor of just content.
-        renderContent: PropTypes.func,
         content: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
         placementX: PropTypes.oneOf([
             Popover.placements.LEFT,
@@ -149,13 +145,10 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         this.setState({isShowingTooltip: false});
     }
     _renderTooltipContent() {
-        const {renderContent, content, className, style} = this.props;
+        const {content, className, style} = this.props;
         let renderedContent;
         let isContentAFunction;
-        if (renderContent) {
-            renderedContent = renderContent();
-            isContentAFunction = true;
-        } else if (typeof content === 'function') {
+        if (typeof content === 'function') {
             renderedContent = content();
             isContentAFunction = true;
         } else {
@@ -179,9 +172,9 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         );
     }
     render() {
-        const {children, renderContent, content, disabled} = this.props;
+        const {children, content, disabled} = this.props;
 
-        if (disabled || (!renderContent && !content)) {
+        if (disabled || !content) {
             // The tooltip will never show, so just return the children.
             return children;
         }

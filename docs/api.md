@@ -5033,7 +5033,6 @@ Type: [object][64]
 -   `className` **[string][59]?** Additional class names to attach to the tooltip, separated by
     spaces.
 -   `style` **[object][64]?** Additional styles names to attach to the tooltip.
--   `renderContent` **function (): React\$Element&lt;any>?**
 
 ### ViewPicker
 

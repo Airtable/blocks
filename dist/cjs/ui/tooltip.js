@@ -150,17 +150,13 @@ function (_React$Component) {
     key: "_renderTooltipContent",
     value: function _renderTooltipContent() {
       var _this$props = this.props,
-          renderContent = _this$props.renderContent,
           content = _this$props.content,
           className = _this$props.className,
           style = _this$props.style;
       var renderedContent;
       var isContentAFunction;
 
-      if (renderContent) {
-        renderedContent = renderContent();
-        isContentAFunction = true;
-      } else if (typeof content === 'function') {
+      if (typeof content === 'function') {
         renderedContent = content();
         isContentAFunction = true;
       } else {
@@ -181,11 +177,10 @@ function (_React$Component) {
     value: function render() {
       var _this$props2 = this.props,
           children = _this$props2.children,
-          renderContent = _this$props2.renderContent,
           content = _this$props2.content,
           disabled = _this$props2.disabled;
 
-      if (disabled || !renderContent && !content) {
+      if (disabled || !content) {
         // The tooltip will never show, so just return the children.
         return children;
       }
@@ -226,8 +221,6 @@ function (_React$Component) {
 (0, _defineProperty2.default)(Tooltip, "fitInWindowModes", _popover.default.fitInWindowModes);
 (0, _defineProperty2.default)(Tooltip, "propTypes", {
   children: _propTypes.default.element.isRequired,
-  // TODO(jb): remove renderContent in favor of just content.
-  renderContent: _propTypes.default.func,
   content: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func]),
   placementX: _propTypes.default.oneOf([_popover.default.placements.LEFT, _popover.default.placements.CENTER, _popover.default.placements.RIGHT]),
   placementY: _propTypes.default.oneOf([_popover.default.placements.TOP, _popover.default.placements.CENTER, _popover.default.placements.BOTTOM]),
