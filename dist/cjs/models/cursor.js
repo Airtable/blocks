@@ -95,12 +95,58 @@ function (_AbstractModelWithAsy) {
     Object.seal((0, _assertThisInitialized2.default)(_this));
     return _this;
   }
+  /**
+   * Get notified of changes to the cursor.
+   *
+   * Watchable keys are:
+   * - `'selectedRecordIds'`
+   * - `'activeTableId'`
+   * - `'activeViewId'`
+   * - `'isDataLoaded'`
+   *
+   * Every call to `.watch` should have a matching call to `.unwatch`.
+   *
+   * @function watch
+   * @memberof Cursor
+   * @instance
+   * @param {(WatchableCursorKey|Array<WatchableCursorKey>)} keys the keys to watch
+   * @param {Function} callback a function to call when those keys change
+   * @param {Object?} [context] an optional context for `this` in `callback`.
+   * @returns {Array<WatchableCursorKey>} the array of keys that were watched
+   */
+
+  /**
+   * Unwatch keys watched with `.watch`.
+   *
+   * Should be called with the same arguments given to `.watch`.
+   *
+   * @function unwatch
+   * @memberof Cursor
+   * @instance
+   * @param {(WatchableCursorKey|Array<WatchableCursorKey>)} keys the keys to unwatch
+   * @param {Function} callback the function passed to `.watch` for these keys
+   * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+   * @returns {Array<WatchableCursorKey>} the array of keys that were unwatched
+   */
+
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(Cursor, [{
     key: "_onChangeIsDataLoaded",
+
+    /**
+     * @private
+     */
     value: function _onChangeIsDataLoaded() {
       this._onChange(WatchableCursorKeys.isDataLoaded);
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_loadDataAsync",
     value: function () {
@@ -134,6 +180,10 @@ function (_AbstractModelWithAsy) {
 
       return _loadDataAsync;
     }()
+    /**
+     * @private
+     */
+
   }, {
     key: "_unloadData",
     value: function _unloadData() {
@@ -141,8 +191,23 @@ function (_AbstractModelWithAsy) {
 
       this._cursorData.selectedRecordIdSet = null;
     }
+    /**
+     * The record IDs of all currently selected records, or an empty array if no records are selected.
+     *
+     * Can be watched.
+     *
+     * @returns The record IDs of all currently selected records, or an empty array if no records are selected.
+     */
+
   }, {
     key: "isRecordSelected",
+
+    /**
+     * Checks whether a given record is selected.
+     *
+     * @param recordOrRecordId The record or record ID to check for.
+     * @returns `true` if the given record is selected, `false` otherwise.
+     */
     value: function isRecordSelected(recordOrRecordId) {
       var selectedRecordIdSet = this._data.selectedRecordIdSet;
       (0, _invariant.default)(selectedRecordIdSet, 'Cursor data is not loaded');
@@ -157,12 +222,20 @@ function (_AbstractModelWithAsy) {
       return !!selectedRecordIdSet[recordId];
     }
     /**
-     * Returns the currently active table ID. Can return null when the active table has changed and
-     * is not yet loaded.
+     * The currently active table ID.
+     *
+     * Can be watched.
+     *
+     * @returns The currently active table ID. Can return null when the active
+     * table has changed and is not yet loaded.
      */
 
   }, {
     key: "__applyChangesWithoutTriggeringEvents",
+
+    /**
+     * @private
+     */
     value: function __applyChangesWithoutTriggeringEvents(changes) {
       var changedKeys = {
         [WatchableCursorKeys.selectedRecordIds]: false,
@@ -219,6 +292,10 @@ function (_AbstractModelWithAsy) {
 
       return changedKeys;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__triggerOnChangeForChangedKeys",
     value: function __triggerOnChangeForChangedKeys(changedKeys) {
@@ -270,8 +347,12 @@ function (_AbstractModelWithAsy) {
       return this._data.activeTableId;
     }
     /**
-     * Returns the currently active view ID. This will always be a view belonging to
-     * `activeTableId`. Returns `null` when the active view has changed and is not yet loaded.
+     * The currently active view ID. This will always be a view belonging to `activeTableId`
+     *
+     * Can be watched.
+     *
+     * @returns The currently active view ID. Can return null when the active
+     * view has changed and is not yet loaded.
      */
 
   }, {

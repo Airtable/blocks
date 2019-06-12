@@ -955,21 +955,81 @@ import {cursor} from '@airtable/blocks';
 
 #### activeTableId
 
-Returns the currently active table ID. Can return null when the active table has changed and is not
-yet loaded.
+The currently active table ID.
+
+Can be watched.
 
 Type: (TableId | null)
 
-Returns **(TableId | null)**
+Returns **(TableId | null)** The currently active table ID. Can return null when the active table
+has changed and is not yet loaded.
 
 #### activeViewId
 
-Returns the currently active view ID. This will always be a view belonging to `activeTableId`.
-Returns `null` when the active view has changed and is not yet loaded.
+The currently active view ID. This will always be a view belonging to `activeTableId`
+
+Can be watched.
 
 Type: (ViewId | null)
 
-Returns **(ViewId | null)**
+Returns **(ViewId | null)** The currently active view ID. Can return null when the active view has
+changed and is not yet loaded.
+
+#### isRecordSelected
+
+Checks whether a given record is selected.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][71] \| [string][59])** The record or record ID to check for.
+
+Returns **[boolean][61]** `true` if the given record is selected, `false` otherwise.
+
+#### selectedRecordIds
+
+The record IDs of all currently selected records, or an empty array if no records are selected.
+
+Can be watched.
+
+Type: [Array][60]&lt;RecordId>
+
+Returns **[Array][60]&lt;RecordId>** The record IDs of all currently selected records, or an empty
+array if no records are selected.
+
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableCursorKey | [Array][60]&lt;WatchableCursorKey>)** the keys to unwatch
+-   `callback` **[Function][63]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableCursorKey>** the array of keys that were unwatched
+
+#### watch
+
+Get notified of changes to the cursor.
+
+Watchable keys are:
+
+-   `'selectedRecordIds'`
+-   `'activeTableId'`
+-   `'activeViewId'`
+-   `'isDataLoaded'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableCursorKey | [Array][60]&lt;WatchableCursorKey>)** the keys to watch
+-   `callback` **[Function][63]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableCursorKey>** the array of keys that were watched
 
 ### Field
 

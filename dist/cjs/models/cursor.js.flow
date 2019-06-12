@@ -59,28 +59,88 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
 
         Object.seal(this);
     }
+
+    /**
+     * Get notified of changes to the cursor.
+     *
+     * Watchable keys are:
+     * - `'selectedRecordIds'`
+     * - `'activeTableId'`
+     * - `'activeViewId'`
+     * - `'isDataLoaded'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @function watch
+     * @memberof Cursor
+     * @instance
+     * @param {(WatchableCursorKey|Array<WatchableCursorKey>)} keys the keys to watch
+     * @param {Function} callback a function to call when those keys change
+     * @param {Object?} [context] an optional context for `this` in `callback`.
+     * @returns {Array<WatchableCursorKey>} the array of keys that were watched
+     */
+
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @function unwatch
+     * @memberof Cursor
+     * @instance
+     * @param {(WatchableCursorKey|Array<WatchableCursorKey>)} keys the keys to unwatch
+     * @param {Function} callback the function passed to `.watch` for these keys
+     * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+     * @returns {Array<WatchableCursorKey>} the array of keys that were unwatched
+     */
+
+    /**
+     * @private
+     */
     get _dataOrNullIfDeleted(): CursorData {
         return this._cursorData;
     }
+    /**
+     * @private
+     */
     _onChangeIsDataLoaded() {
         this._onChange(WatchableCursorKeys.isDataLoaded);
     }
+    /**
+     * @private
+     */
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {
         const cursorData = await this._airtableInterface.fetchAndSubscribeToCursorDataAsync();
         this._cursorData.selectedRecordIdSet = cursorData.selectedRecordIdSet;
 
         return [WatchableCursorKeys.selectedRecordIds];
     }
+    /**
+     * @private
+     */
     _unloadData() {
         this._airtableInterface.unsubscribeFromCursorData();
         this._cursorData.selectedRecordIdSet = null;
     }
+    /**
+     * The record IDs of all currently selected records, or an empty array if no records are selected.
+     *
+     * Can be watched.
+     *
+     * @returns The record IDs of all currently selected records, or an empty array if no records are selected.
+     */
     get selectedRecordIds(): Array<RecordId> {
         const {selectedRecordIdSet} = this._data;
         invariant(selectedRecordIdSet, 'Cursor data is not loaded');
         const selectedRecordIds = Object.keys(selectedRecordIdSet);
         return selectedRecordIds;
     }
+    /**
+     * Checks whether a given record is selected.
+     *
+     * @param recordOrRecordId The record or record ID to check for.
+     * @returns `true` if the given record is selected, `false` otherwise.
+     */
     isRecordSelected(recordOrRecordId: Record | string): boolean {
         const {selectedRecordIdSet} = this._data;
         invariant(selectedRecordIdSet, 'Cursor data is not loaded');
@@ -93,19 +153,30 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return !!selectedRecordIdSet[recordId];
     }
     /**
-     * Returns the currently active table ID. Can return null when the active table has changed and
-     * is not yet loaded.
+     * The currently active table ID.
+     *
+     * Can be watched.
+     *
+     * @returns The currently active table ID. Can return null when the active
+     * table has changed and is not yet loaded.
      */
     get activeTableId(): TableId | null {
         return this._data.activeTableId;
     }
     /**
-     * Returns the currently active view ID. This will always be a view belonging to
-     * `activeTableId`. Returns `null` when the active view has changed and is not yet loaded.
+     * The currently active view ID. This will always be a view belonging to `activeTableId`
+     *
+     * Can be watched.
+     *
+     * @returns The currently active view ID. Can return null when the active
+     * view has changed and is not yet loaded.
      */
     get activeViewId(): ViewId | null {
         return this._data.activeViewId;
     }
+    /**
+     * @private
+     */
     __applyChangesWithoutTriggeringEvents(
         changes: Array<ModelChange>,
     ): {[WatchableCursorKey]: boolean} {
@@ -151,7 +222,9 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
 
         return changedKeys;
     }
-
+    /**
+     * @private
+     */
     __triggerOnChangeForChangedKeys(changedKeys: {[WatchableCursorKey]: boolean}) {
         for (const [key, didChange] of entries(changedKeys)) {
             if (didChange) {
