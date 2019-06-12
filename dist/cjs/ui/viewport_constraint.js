@@ -143,21 +143,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var children = this.props.children;
-
-      if (children === null || children === undefined) {
-        return null;
-      } // In React 16+, Fragment is available, so we can allow this component
-      // to accept one or more child. As we have to support React 15 as well,
-      // we fall back to asserting there is only one child if Fragment is\
-      // unavailable
-
-
-      if (React.Fragment) {
-        return React.createElement(React.Fragment, null, children);
-      }
-
-      return React.Children.only(children);
+      return React.createElement(React.Fragment, null, this.props.children);
     }
   }]);
   return ViewportConstraint;

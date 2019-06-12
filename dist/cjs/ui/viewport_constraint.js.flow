@@ -115,21 +115,7 @@ class ViewportConstraint extends React.Component<ViewportConstraintProps> {
     }
 
     render() {
-        const children = this.props.children;
-
-        if (children === null || children === undefined) {
-            return null;
-        }
-
-        // In React 16+, Fragment is available, so we can allow this component
-        // to accept one or more child. As we have to support React 15 as well,
-        // we fall back to asserting there is only one child if Fragment is\
-        // unavailable
-        if (React.Fragment) {
-            return <React.Fragment>{children}</React.Fragment>;
-        }
-
-        return React.Children.only(children);
+        return <React.Fragment>{this.props.children}</React.Fragment>;
     }
 }
 
