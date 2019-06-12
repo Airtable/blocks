@@ -110,7 +110,7 @@ function useRecords(queryResult) {
  *
  *  // this component concerns a single record - it only updates when that specific record updates
  *  function RecordListItem({queryResult, recordId}) {
- *      const record = useRecord(queryResult, recordId);
+ *      const record = useRecordById(queryResult, recordId);
  *      return <li>{record.primaryCellValueAsString}</li>;
  *  }
  *
