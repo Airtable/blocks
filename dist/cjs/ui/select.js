@@ -82,8 +82,8 @@ var styleForChevron = {
  * function ColorPicker() {
  *     const [value, setValue] = useState(null);
  *     return (
- *         <label style={{display: 'flex', flexDirection: 'column'}}>
- *             <span style={{marginBottom: 8, fontWeight: 500}}>Color</span>
+ *         <label>
+ *             <div style={{marginBottom: 8, fontWeight: 500}}>Color</div>
  *             <Select
  *                 onChange={newValue => setValue(newValue)}
  *                 value={value}

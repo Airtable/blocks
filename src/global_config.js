@@ -15,6 +15,9 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
     'client_server_shared/fork_object_path_for_write_by_reference',
 );
 
+/**
+ * @typedef
+ */
 export type GlobalConfigKey = string | Array<string>;
 
 /**

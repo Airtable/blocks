@@ -9,8 +9,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -33,12 +31,30 @@ var _select_and_select_buttons_helpers = require("./select_and_select_buttons_he
 
 var _synced = _interopRequireDefault(require("./synced"));
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
-/** @typedef */
-
-
-/** */
+/**
+ * Dropdown menu component synced with {@link GlobalConfig}. A wrapper around `<select>` that fits in with Airtable's user interface.
+ *
+ * @example
+ * import {SelectSynced} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function ColorPickerSynced() {
+ *     return (
+ *         <label>
+ *             <div style={{marginBottom: 8, fontWeight: 500}}>Color</div>
+ *             <SelectSynced
+ *                 globalConfigKey='color'
+ *                 options={[
+ *                     {value: null, label: 'Pick a color...', disabled: true},
+ *                     {value: 'red', label: 'red'},
+ *                     {value: 'green', label: 'green'},
+ *                     {value: 'blue', label: 'blue'},
+ *                 ]}
+ *             />
+ *         </label>
+ *     );
+ * }
+ */
 var SelectSynced =
 /*#__PURE__*/
 function (_React$Component) {
@@ -48,7 +64,8 @@ function (_React$Component) {
     var _this;
 
     (0, _classCallCheck2.default)(this, SelectSynced);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SelectSynced).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SelectSynced).call(this, props)); // TODO (stephen): use React.forwardRef
+
     _this._select = null;
     return _this;
   }
@@ -77,25 +94,50 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+      var _this$props = this.props,
+          globalConfigKey = _this$props.globalConfigKey,
+          _onChange = _this$props.onChange,
+          options = _this$props.options,
+          disabled = _this$props.disabled,
+          id = _this$props.id,
+          className = _this$props.className,
+          style = _this$props.style,
+          tabIndex = _this$props.tabIndex;
       return React.createElement(_synced.default, {
-        globalConfigKey: this.props.globalConfigKey,
+        globalConfigKey: globalConfigKey,
         render: (_ref) => {
           var value = _ref.value,
               canSetValue = _ref.canSetValue,
               setValue = _ref.setValue;
-          return React.createElement(_select.default, (0, _extends2.default)({
+
+          if (value === undefined) {
+            value = null;
+          }
+
+          (0, _invariant.default)(typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || value === null, 'value should be a primitive type');
+          return React.createElement(_select.default, {
             ref: el => this._select = el,
-            disabled: this.props.disabled || !canSetValue,
+            disabled: disabled || !canSetValue,
             value: value,
+            options: options,
             onChange: newValue => {
+              if (newValue === undefined) {
+                newValue = null;
+              }
+
               setValue(newValue);
 
-              if (this.props.onChange) {
-                this.props.onChange(newValue);
+              if (_onChange) {
+                _onChange(newValue);
               }
-            }
-          }, restOfProps));
+            },
+            id: id,
+            className: className,
+            style: style,
+            tabIndex: tabIndex,
+            "aria-labelledby": this.props['aria-labelledby'],
+            "aria-describedby": this.props['aria-describedby']
+          });
         }
       });
     }

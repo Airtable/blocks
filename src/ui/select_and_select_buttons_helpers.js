@@ -31,7 +31,6 @@ export type SelectAndSelectButtonsProps = {
     tabIndex?: number | string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
-    children?: void,
 };
 
 export type SelectAndSelectButtonsSyncedProps = {
@@ -39,9 +38,12 @@ export type SelectAndSelectButtonsSyncedProps = {
     options: Array<SelectOption>,
     onChange?: (value: SelectOptionValue) => void,
     disabled?: boolean,
-    style?: Object,
+    id?: string,
     className?: string,
+    style?: Object,
     tabIndex?: number | string,
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
 };
 
 const SelectOptionValueProp = PropTypes.oneOfType([

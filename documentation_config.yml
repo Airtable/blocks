@@ -5,6 +5,7 @@ toc:
           - name: GlobalConfig
             children:
                 - GlobalConfig
+                - GlobalConfigKey
                 - GlobalConfigValue
           - settingsButton
           - Viewport

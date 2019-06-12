@@ -45,6 +45,10 @@ var blockKvHelpers = window.__requirePrivateModuleFromAirtable('client_server_sh
 var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server_shared/permissions/permission_helpers');
 
 var forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtable('client_server_shared/fork_object_path_for_write_by_reference');
+/**
+ * @typedef
+ */
+
 
 // NOTE: GlobalConfig is essentially a wrapper around a generic key-value store.
 // It's called GlobalConfig in order to convey two main points about its intended

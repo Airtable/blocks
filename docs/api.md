@@ -282,6 +282,10 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 Returns **[Array][60]&lt;WatchableGlobalConfigKey>** the array of keys that were watched
 
+#### GlobalConfigKey
+
+Type: ([string][59] \| [Array][60]&lt;[string][59]>)
+
 #### GlobalConfigValue
 
 Type: (null | [boolean][61] \| [number][65] \| [string][59] \|
@@ -4035,7 +4039,7 @@ Type: {table: ([Table][73] | null)?, field: ([Field][68] | null)?, shouldAllowPi
 
 #### FieldPickerSyncedProps
 
-Type: {table: ([Table][73] | null)?, globalConfigKey: GlobalConfigKey, onChange: function
+Type: {table: ([Table][73] | null)?, globalConfigKey: [GlobalConfigKey][137], onChange: function
 (fieldModel: ([Field][68] | null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone:
 [boolean][61]?, allowedTypes: [Array][60]&lt;FieldType>?, placeholder: [string][59]?, style:
 [Object][64]?, className: [string][59]?}
@@ -4043,7 +4047,7 @@ Type: {table: ([Table][73] | null)?, globalConfigKey: GlobalConfigKey, onChange:
 ##### Properties
 
 -   `table` **([Table][73] | null)?**
--   `globalConfigKey` **GlobalConfigKey**
+-   `globalConfigKey` **[GlobalConfigKey][137]**
 -   `onChange` **function (fieldModel: ([Field][68] | null)): void?**
 -   `disabled` **[boolean][61]?**
 -   `shouldAllowPickingNone` **[boolean][61]?**
@@ -4058,7 +4062,7 @@ Type: {table: ([Table][73] | null)?, globalConfigKey: GlobalConfigKey, onChange:
 
 ##### Parameters
 
--   `$0` **[IconProps][137]**
+-   `$0` **[IconProps][138]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -4090,7 +4094,7 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 
 ##### Parameters
 
--   `props` **[InputProps][138]**
+-   `props` **[InputProps][139]**
 
 ##### Examples
 
@@ -4142,7 +4146,7 @@ A wrapper around the `UI.Input` component that syncs with global config.
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][139]**
+-   `props` **[InputSyncedProps][140]**
 
 ##### Examples
 
@@ -4181,7 +4185,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][140]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][141]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -4254,7 +4258,7 @@ A popover component, which is used to "float" some content above some other cont
 
 ##### Parameters
 
--   `props` **[PopoverProps][141]**
+-   `props` **[PopoverProps][142]**
 
 #### PopoverProps
 
@@ -4307,7 +4311,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][142]**
+-   `props` **[ProgressBarProps][143]**
 
 ##### Examples
 
@@ -4342,13 +4346,13 @@ Type: [object][64]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][143]**
+-   `props` **[RecordCardProps][144]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][71] | RecordDef), fields: [Array][60]&lt;[Field][68]>?, view: [View][69]?,
 attachmentCoverField: [Field][68]?, width: [number][65]?, height: [number][65]?, onClick:
-[Function][63]?, getExpandRecordOptions: function ([Record][71]): [ExpandRecordOpts][144]?,
+[Function][63]?, getExpandRecordOptions: function ([Record][71]): [ExpandRecordOpts][145]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object][64]?}
 
 ##### Properties
@@ -4360,7 +4364,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 -   `width` **[number][65]?**
 -   `height` **[number][65]?**
 -   `onClick` **[Function][63]?**
--   `getExpandRecordOptions` **function ([Record][71]): [ExpandRecordOpts][144]?**
+-   `getExpandRecordOptions` **function ([Record][71]): [ExpandRecordOpts][145]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][59]?**
@@ -4374,11 +4378,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][145]**
+-   `props` **[RecordCardListProps][146]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][60]&lt;([Record][71] | RecordDef)>, onScroll: function ([Event][146]):
+Type: {records: [Array][60]&lt;([Record][71] | RecordDef)>, onScroll: function ([Event][147]):
 void?, onRecordClick: (null | function (record: ([Record][71] | RecordDef), index: [number][65]):
 void)?, onRecordMouseEnter: function (record: ([Record][71] | RecordDef), index: [number][65]):
 void?, onRecordMouseLeave: function (record: ([Record][71] | RecordDef), index: [number][65]):
@@ -4388,7 +4392,7 @@ className: [string][59]?, style: [Object][64]?}
 ##### Properties
 
 -   `records` **[Array][60]&lt;([Record][71] | RecordDef)>**
--   `onScroll` **function ([Event][146]): void?**
+-   `onScroll` **function ([Event][147]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][71] | RecordDef), index: [number][65]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][71] | RecordDef), index: [number][65]):
@@ -4411,7 +4415,7 @@ Dropdown menu component. A wrapper around `<select>` that fits in with Airtable'
 
 ##### Parameters
 
--   `props` **[SelectProps][147]**
+-   `props` **[SelectProps][148]**
 
 ##### Examples
 
@@ -4422,8 +4426,8 @@ import React, {useState} from 'react';
 function ColorPicker() {
     const [value, setValue] = useState(null);
     return (
-        <label style={{display: 'flex', flexDirection: 'column'}}>
-            <span style={{marginBottom: 8, fontWeight: 500}}>Color</span>
+        <label>
+            <div style={{marginBottom: 8, fontWeight: 500}}>Color</div>
             <Select
                 onChange={newValue => setValue(newValue)}
                 value={value}
@@ -4448,7 +4452,7 @@ Type: [object][64]
 -   `onChange` **[function][63]?** A function to be called when the selected option changes.
 -   `value` **([string][59] \| [number][65] \| [boolean][61] | null)?** The value of the selected
     option.
--   `options` **[Array][60]&lt;[SelectOption][148]>** The list of select options.
+-   `options` **[Array][60]&lt;[SelectOption][149]>** The list of select options.
 -   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the button.
 -   `id` **[string][59]?** The ID of the select element.
 -   `className` **[string][59]?** Additional class names to apply to the select.
@@ -4473,13 +4477,57 @@ Type: [object][64]
 
 **Extends React.Component**
 
+Dropdown menu component synced with [GlobalConfig][3]. A wrapper around `<select>` that fits in with
+Airtable's user interface.
+
 ##### Parameters
 
--   `props` **[SelectSyncedProps][149]**
+-   `props` **[SelectSyncedProps][150]**
+
+##### Examples
+
+```javascript
+import {SelectSynced} from '@airtable/blocks/ui';
+import React from 'react';
+
+function ColorPickerSynced() {
+    return (
+        <label>
+            <div style={{marginBottom: 8, fontWeight: 500}}>Color</div>
+            <SelectSynced
+                globalConfigKey="color"
+                options={[
+                    {value: null, label: 'Pick a color...', disabled: true},
+                    {value: 'red', label: 'red'},
+                    {value: 'green', label: 'green'},
+                    {value: 'blue', label: 'blue'},
+                ]}
+            />
+        </label>
+    );
+}
+```
 
 #### SelectSyncedProps
 
-Type: SelectAndSelectButtonsSyncedProps
+Type: [object][64]
+
+##### Properties
+
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
+    for this key. Selecting a new option will update `globalConfig`.
+-   `onChange` **[function][63]?** A function to be called when the selected option changes. This
+    should only be used for side effects.
+-   `options` **[Array][60]&lt;[SelectOption][149]>** The list of select options.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the button.
+-   `id` **[string][59]?** The ID of the select element.
+-   `className` **[string][59]?** Additional class names to apply to the select.
+-   `style` **[object][64]?** Additional styles to apply to the select.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the select can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 ### SelectButtons
 
@@ -4507,7 +4555,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][150]**
+-   `props` **[TablePickerProps][151]**
 
 #### TablePickerProps
 
@@ -4531,17 +4579,17 @@ className: [string][59]?, disabled: [boolean][61]?}
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][151]**
+-   `props` **[TablePickerSyncedProps][152]**
 
 #### TablePickerSyncedProps
 
-Type: {globalConfigKey: GlobalConfigKey, onChange: function (tableModel: ([Table][73] | null)):
-void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?, placeholder: [string][59]?,
-style: [Object][64]?, className: [string][59]?}
+Type: {globalConfigKey: [GlobalConfigKey][137], onChange: function (tableModel: ([Table][73] |
+null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?, placeholder:
+[string][59]?, style: [Object][64]?, className: [string][59]?}
 
 ##### Properties
 
--   `globalConfigKey` **GlobalConfigKey**
+-   `globalConfigKey` **[GlobalConfigKey][137]**
 -   `onChange` **function (tableModel: ([Table][73] | null)): void?**
 -   `disabled` **[boolean][61]?**
 -   `shouldAllowPickingNone` **[boolean][61]?**
@@ -4557,7 +4605,7 @@ style: [Object][64]?, className: [string][59]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][152]**
+-   `props` **[ToggleProps][153]**
 
 #### ToggleProps
 
@@ -4582,17 +4630,17 @@ tabIndex: [number][65]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][153]**
+-   `props` **[ToggleSyncedProps][154]**
 
 #### ToggleSyncedProps
 
-Type: {globalConfigKey: GlobalConfigKey, label: React.Node?, theme: [string][59]?, onChange:
+Type: {globalConfigKey: [GlobalConfigKey][137], label: React.Node?, theme: [string][59]?, onChange:
 function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][59]?, style:
 [Object][64]?, tabIndex: [number][65]?}
 
 ##### Properties
 
--   `globalConfigKey` **GlobalConfigKey**
+-   `globalConfigKey` **[GlobalConfigKey][137]**
 -   `label` **React.Node?**
 -   `theme` **[string][59]?**
 -   `onChange` **function ([boolean][61]): void?**
@@ -4611,7 +4659,7 @@ A component that shows a tooltip. Wraps its children.
 
 ##### Parameters
 
--   `props` **[TooltipProps][154]**
+-   `props` **[TooltipProps][155]**
 
 ##### Examples
 
@@ -4677,7 +4725,7 @@ Type: [object][64]
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][155]**
+-   `props` **[ViewPickerProps][156]**
 
 #### ViewPickerProps
 
@@ -4704,11 +4752,11 @@ Type: {table: ([Table][73] | null)?, view: ([View][69] | null)?, shouldAllowPick
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][156]**
+-   `props` **[ViewPickerSyncedProps][157]**
 
 #### ViewPickerSyncedProps
 
-Type: {table: ([Table][73] | null)?, globalConfigKey: GlobalConfigKey, onChange: function
+Type: {table: ([Table][73] | null)?, globalConfigKey: [GlobalConfigKey][137], onChange: function
 (viewModel: ([View][69] | null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone:
 [boolean][61]?, allowedTypes: [Array][60]&lt;ViewType>?, placeholder: [string][59]?, style:
 [Object][64]?, className: [string][59]?}
@@ -4716,7 +4764,7 @@ Type: {table: ([Table][73] | null)?, globalConfigKey: GlobalConfigKey, onChange:
 ##### Properties
 
 -   `table` **([Table][73] | null)?**
--   `globalConfigKey` **GlobalConfigKey**
+-   `globalConfigKey` **[GlobalConfigKey][137]**
 -   `onChange` **function (viewModel: ([View][69] | null)): void?**
 -   `disabled` **[boolean][61]?**
 -   `shouldAllowPickingNone` **[boolean][61]?**
@@ -4751,13 +4799,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][157]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][157]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][158]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][158]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][157]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][157]?**
+-   `minSize` **[ViewportSizeConstraintProp][158]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][158]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -4905,24 +4953,25 @@ Type: {width: ([number][65] | null)?, height: ([number][65] | null)?}
 [134]: #fieldiconprops
 [135]: #fieldpickerprops
 [136]: #fieldpickersyncedprops
-[137]: #iconprops
-[138]: #inputprops
-[139]: #inputsyncedprops
-[140]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[141]: #popoverprops
-[142]: #progressbarprops
-[143]: #recordcardprops
-[144]: #expandrecordopts
-[145]: #recordcardlistprops
-[146]: https://developer.mozilla.org/docs/Web/API/Event
-[147]: #selectprops
-[148]: #selectoption
-[149]: #selectsyncedprops
-[150]: #tablepickerprops
-[151]: #tablepickersyncedprops
-[152]: #toggleprops
-[153]: #togglesyncedprops
-[154]: #tooltipprops
-[155]: #viewpickerprops
-[156]: #viewpickersyncedprops
-[157]: #viewportsizeconstraintprop
+[137]: #globalconfigkey
+[138]: #iconprops
+[139]: #inputprops
+[140]: #inputsyncedprops
+[141]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[142]: #popoverprops
+[143]: #progressbarprops
+[144]: #recordcardprops
+[145]: #expandrecordopts
+[146]: #recordcardlistprops
+[147]: https://developer.mozilla.org/docs/Web/API/Event
+[148]: #selectprops
+[149]: #selectoption
+[150]: #selectsyncedprops
+[151]: #tablepickerprops
+[152]: #tablepickersyncedprops
+[153]: #toggleprops
+[154]: #togglesyncedprops
+[155]: #tooltipprops
+[156]: #viewpickerprops
+[157]: #viewpickersyncedprops
+[158]: #viewportsizeconstraintprop
