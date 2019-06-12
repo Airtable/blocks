@@ -60,7 +60,8 @@ const tableOrViewQueryResultPool: ObjectPool<
 });
 
 /**
- * Represents a set of records directly from a view or table.
+ * Represents a set of records directly from a view or table. See {@link QueryResult} for main
+ * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
  * `table.selectRecords` or `view.selectRecords`.
@@ -201,7 +202,10 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     get __sourceModelId(): string {
         return this._sourceModel.id;
     }
-    /** */
+
+    /**
+     * The table that records in this QueryResult are part of
+     */
     get parentTable(): Table {
         return this._table;
     }
@@ -216,6 +220,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     /**
      * The record IDs in this QueryResult.
      * Throws if data is not loaded yet.
+     * Can be watched.
      */
     get recordIds(): Array<string> {
         invariant(this.isDataLoaded, 'QueryResult data is not loaded');
@@ -225,6 +230,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
+     * @private
      */
     _getOrGenerateRecordIdsSet(): {[string]: true | void} {
         if (!this._recordIdsSet) {

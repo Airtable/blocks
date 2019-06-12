@@ -88,7 +88,8 @@ var tableOrViewQueryResultPool = new _object_pool.default({
   }
 });
 /**
- * Represents a set of records directly from a view or table.
+ * Represents a set of records directly from a view or table. See {@link QueryResult} for main
+ * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
  * `table.selectRecords` or `view.selectRecords`.
@@ -245,6 +246,7 @@ function (_QueryResult) {
     /**
      * The set of record IDs in this QueryResult.
      * Throws if data is not loaded yet.
+     * @private
      */
     value: function _getOrGenerateRecordIdsSet() {
       if (!this._recordIdsSet) {
@@ -1118,7 +1120,9 @@ function (_QueryResult) {
     get: function get() {
       return this._sourceModel.id;
     }
-    /** */
+    /**
+     * The table that records in this QueryResult are part of
+     */
 
   }, {
     key: "parentTable",
@@ -1139,6 +1143,7 @@ function (_QueryResult) {
     /**
      * The record IDs in this QueryResult.
      * Throws if data is not loaded yet.
+     * Can be watched.
      */
 
   }, {

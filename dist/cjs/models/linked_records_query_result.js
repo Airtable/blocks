@@ -86,7 +86,8 @@ var pool = new _object_pool.default({
   }
 });
 /**
- * Represents a set of records from a LinkedRecord cell value.
+ * Represents a set of records from a LinkedRecord cell value. See {@link QueryResult} for main
+ * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
  * `record.getLinkedRecordsFromCell`.
@@ -161,6 +162,8 @@ function (_QueryResult) {
    * table or a type other than MULTIPLE_RECORD_LINKS. Once `isValid` has
    * become false, it will never become true again. Many fields will throw on
    * attempting to access them, and watches will no longer fire.
+   *
+   * @returns whether the query result is valid
    */
 
 
@@ -639,7 +642,7 @@ function (_QueryResult) {
       return this._isValid;
     }
     /**
-     * The table that the records in the QueryResult are a part of
+     * @returns the table that records in this QueryResult are part of
      */
 
   }, {
@@ -649,8 +652,9 @@ function (_QueryResult) {
       return this._linkedTable;
     }
     /**
-     * Ordered array of all the linked record ids.
      * Watchable.
+     *
+     * @returns Ordered array of all the linked record ids.
      */
 
   }, {
@@ -665,8 +669,9 @@ function (_QueryResult) {
       return this._computedFilteredSortedRecordIds;
     }
     /**
-     * Ordered array of all the linked records.
      * Watchable.
+     *
+     * @returns Ordered array of all the linked records.
      */
 
   }, {
@@ -681,7 +686,7 @@ function (_QueryResult) {
       });
     }
     /**
-     * The fields that were used to create this LinkedRecordsQueryResult.
+     * @returns The fields that were used to create this LinkedRecordsQueryResult.
      */
 
   }, {

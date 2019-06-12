@@ -43,7 +43,8 @@ const pool: ObjectPool<
 });
 
 /**
- * Represents a set of records from a LinkedRecord cell value.
+ * Represents a set of records from a LinkedRecord cell value. See {@link QueryResult} for main
+ * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
  * `record.getLinkedRecordsFromCell`.
@@ -145,13 +146,15 @@ class LinkedRecordsQueryResult extends QueryResult {
      * table or a type other than MULTIPLE_RECORD_LINKS. Once `isValid` has
      * become false, it will never become true again. Many fields will throw on
      * attempting to access them, and watches will no longer fire.
+     *
+     * @returns whether the query result is valid
      */
     get isValid(): boolean {
         return this._isValid;
     }
 
     /**
-     * The table that the records in the QueryResult are a part of
+     * @returns the table that records in this QueryResult are part of
      */
     get parentTable(): Table {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
@@ -159,8 +162,9 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     /**
-     * Ordered array of all the linked record ids.
      * Watchable.
+     *
+     * @returns Ordered array of all the linked record ids.
      */
     get recordIds(): Array<string> {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
@@ -174,8 +178,9 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     /**
-     * Ordered array of all the linked records.
      * Watchable.
+     *
+     * @returns Ordered array of all the linked records.
      */
     get records(): Array<Record> {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
@@ -188,7 +193,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     /**
-     * The fields that were used to create this LinkedRecordsQueryResult.
+     * @returns The fields that were used to create this LinkedRecordsQueryResult.
      */
     get fields(): Array<Field> | null {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
