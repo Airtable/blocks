@@ -2148,7 +2148,8 @@ if (myTable.canDeleteRecords(recordsToDelete)) {
 }
 ```
 
-Returns **any** `true` if the current user can delete the given records, `false` otherwise.
+Returns **[boolean][61]** `true` if the current user can delete the given records, `false`
+otherwise.
 
 #### canSetCellValues
 

@@ -816,7 +816,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     myTable.deleteRecords(recordsToDelete);
      * }
      */
-    canDeleteRecords(records: Array<Record>) {
+    canDeleteRecords(records: Array<Record>): boolean {
         // This takes the records to future-proof against granular permissions.
         // For now, just need at least edit permissions.
         const {base} = getSdk();
