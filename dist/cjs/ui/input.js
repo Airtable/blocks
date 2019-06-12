@@ -33,6 +33,20 @@ var React = _interopRequireWildcard(require("react"));
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
+/**
+ * @type {object}
+ * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
+ * @property {string} [placeholder=''] The placeholder for the input.
+ * @property {string} [value] The input's current value. Required if `onChange` is set.
+ * @property {function} [onChange] A function to be called when the input changes. Required if `value` is set.
+ * @property {object} [style={}] Additional styles to apply to the input.
+ * @property {string} [className=''] Additional class names to apply to the input, separated by spaces.
+ * @property {boolean} [disabled=false] If set to `true`, the input will be disabled.
+ * @property {boolean} [required=false] If set to `true`, the input will be required.
+ * @property {boolean} [spellCheck=false] If set to `true`, the `spellcheck` property will be set on the input.
+ * @property {number} [tabIndex=0] The `tabindex` for the input.
+ */
+
 
 var validTypesSet = {
   checkbox: true,

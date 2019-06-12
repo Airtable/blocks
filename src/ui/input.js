@@ -6,8 +6,6 @@ import * as React from 'react';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
-export type InputValue = string | boolean | number;
-
 /**
  * @type {object}
  * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
