@@ -6,6 +6,7 @@ toc:
             children:
                 - GlobalConfig
                 - GlobalConfigValue
+          - settingsButton
           - Viewport
     - name: '@airtable/blocks/models'
       children:
@@ -13,7 +14,6 @@ toc:
           - generateGuid
           - viewTypes
           - recordColoring
-          - settingsButton
           - AbstractModel
           - AbstractModelWithAsyncData
           - Aggregator

@@ -5,13 +5,13 @@
 -   [@airtable/blocks][1]
     -   [SDK][2]
     -   [GlobalConfig][3]
-    -   [Viewport][4]
--   [@airtable/blocks/models][5]
-    -   [fieldTypes][6]
-    -   [generateGuid][7]
-    -   [viewTypes][8]
-    -   [recordColoring][9]
-    -   [settingsButton][10]
+    -   [settingsButton][4]
+    -   [Viewport][5]
+-   [@airtable/blocks/models][6]
+    -   [fieldTypes][7]
+    -   [generateGuid][8]
+    -   [viewTypes][9]
+    -   [recordColoring][10]
     -   [AbstractModel][11]
     -   [AbstractModelWithAsyncData][12]
     -   [Aggregator][13]
@@ -76,12 +76,12 @@ your block. Use it for storing block configuration.
 An instance of [Cursor][15], containing information about the table & view that the user currently
 has open in the main Airtable app, as well as which records they have selected.
 
-#### [import {viewport} from '@airtable/blocks';][4]
+#### [import {viewport} from '@airtable/blocks';][5]
 
 Controls the block's viewport within Airtable. Use this to fullscreen the block and add size
-constraints. See [Viewport][4].
+constraints. See [Viewport][5].
 
-#### [import {settingsButton} from '@airtable/blocks';][10]
+#### [import {settingsButton} from '@airtable/blocks';][4]
 
 Controls the block's settings button. See [SettingsButton][56].
 
@@ -103,7 +103,7 @@ A unique ID for this block installation.
 Wrappers for [window.localStorage][57] and [window.sessionStorage][58] which will automatically fall
 back to an in-memory alternative when the browser version is unavailable.
 
-#### [import \* as models from '@airtable/blocks/models';][5]
+#### [import \* as models from '@airtable/blocks/models';][6]
 
 Model classes, field types, view types, and utilities for working with record coloring and record
 aggregation.
@@ -286,6 +286,68 @@ Returns **[Array][60]&lt;WatchableGlobalConfigKey>** the array of keys that were
 
 Type: (null | [boolean][61] \| [number][65] \| [string][59] \|
 [Array][60]&lt;[GlobalConfigValue][62]> | [Object][64]&lt;[string][59], [GlobalConfigValue][62]>)
+
+### settingsButton
+
+**Extends Watchable**
+
+Interface to the settings button that lives outside the block's viewport.
+
+Watch `click` to handle click events on the button.
+
+#### Examples
+
+```javascript
+import {settingsButton} from '@airtable/blocks';
+settingsButton.isVisible = true;
+settingsButton.watch('click', () => {
+    alert('Clicked!');
+});
+```
+
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableSettingsButtonKey | [Array][60]&lt;WatchableSettingsButtonKey>)** the keys to
+    unwatch
+-   `callback` **[Function][63]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableSettingsButtonKey>** the array of keys that were unwatched
+
+#### watch
+
+Get notified of changes to the settings button.
+
+Watchable keys are:
+
+-   `'isVisible'`
+-   `'click'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableSettingsButtonKey | [Array][60]&lt;WatchableSettingsButtonKey>)** the keys to
+    watch
+-   `callback` **[Function][63]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableSettingsButtonKey>** the array of keys that were watched
+
+#### isVisible
+
+Whether the settings button is being shown. Set to `true` to show the settings button. Can be
+watched.
+
+Type: [boolean][61]
+
+Returns **[boolean][61]**
 
 ### Viewport
 
@@ -541,33 +603,6 @@ An enum of the different types of [recordColoring.modes][70]
 #### recordColoring.ModeTypes.BY_VIEW
 
 #### recordColoring.ModeTypes.NONE
-
-### settingsButton
-
-**Extends Watchable**
-
-Interface to the settings button that lives outside the block's viewport.
-
-Watch `click` to handle click events on the button.
-
-#### Examples
-
-```javascript
-import {settingsButton} from '@airtable/blocks';
-settingsButton.isVisible = true;
-settingsButton.watch('click', () => {
-    alert('Clicked!');
-});
-```
-
-#### isVisible
-
-Whether the settings button is being shown. Set to `true` to show the settings button. Can be
-watched.
-
-Type: [boolean][61]
-
-Returns **[boolean][61]**
 
 ### AbstractModel
 
@@ -3208,7 +3243,7 @@ with that ID exists in the query result
 
 #### useViewport
 
-Returns the current [Viewport][4] object and updates whenever the viewport size, constraints, or
+Returns the current [Viewport][5] object and updates whenever the viewport size, constraints, or
 fullscreen status changes.
 
 ##### Examples
@@ -3236,7 +3271,7 @@ function ViewportSize() {
 }
 ```
 
-Returns **[Viewport][121]** the current [Viewport][4]
+Returns **[Viewport][121]** the current [Viewport][5]
 
 #### useWatchable
 
@@ -3251,7 +3286,7 @@ convenient model-specific hooks available:
 -   For [Base][14], [Table][19], [View][20] & [Field][16], use [useBase][55]
 -   For [QueryResult][17] & [Record][18], use [useRecords][82], [useRecordIds][83], or
     [useRecordById][84]
--   For [Viewport][4], use [useViewport][122].
+-   For [Viewport][5], use [useViewport][122].
 
 If you're writing a class component and still want to be able to use hooks, try [withHooks][118].
 
@@ -4671,13 +4706,13 @@ Type: {width: ([number][65] | null)?, height: ([number][65] | null)?}
 [1]: #airtableblocks
 [2]: #sdk
 [3]: #globalconfig
-[4]: #viewport
-[5]: #airtableblocksmodels
-[6]: #fieldtypes
-[7]: #generateguid
-[8]: #viewtypes
-[9]: #recordcoloring
-[10]: #settingsbutton
+[4]: #settingsbutton
+[5]: #viewport
+[6]: #airtableblocksmodels
+[7]: #fieldtypes
+[8]: #generateguid
+[9]: #viewtypes
+[10]: #recordcoloring
 [11]: #abstractmodel
 [12]: #abstractmodelwithasyncdata
 [13]: #aggregator
