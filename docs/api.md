@@ -2801,35 +2801,40 @@ Returns **[Array][60]&lt;WatchableViewKey>** the array of keys that were watched
 
 ### Watchable
 
+Abstract superclass for watchable models. All watchable models expose `watch` and `unwatch` methods
+that allow consumers to subscribe to changes to that model.
+
+This class should not be used directly.
+
 #### unwatch
 
-Stop watching the given key or keys. Should be called with the same arguments that were given to
-`watch`.
+Unwatch keys watched with `.watch`.
 
-Will log a warning if the keys given are invalid.
+Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][60]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][64]??**
+-   `keys` **(WatchableKey | [Array][60]&lt;WatchableKey>)** the keys to unwatch
+-   `callback` **function (model: this, key: WatchableKey): any** the function passed to `.watch`
+    for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][60]&lt;WatchableKey>**
+Returns **[Array][60]&lt;WatchableKey>** the array of keys that were unwatched
 
 #### watch
 
-Start watching the given key or keys. The callback will be called when the value changes. Every call
-to `watch` should have a matching call to `unwatch`.
+Get notified of changes to the model.
 
-Will log a warning if the keys given are invalid.
+Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][60]&lt;WatchableKey>)**
--   `callback` **function (model: this, key: WatchableKey): any**
--   `context` **[Object][64]??**
+-   `keys` **(WatchableKey | [Array][60]&lt;WatchableKey>)** the keys to watch
+-   `callback` **function (model: this, key: WatchableKey): any** a function to call when those keys
+    change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
 
-Returns **[Array][60]&lt;WatchableKey>**
+Returns **[Array][60]&lt;WatchableKey>** the array of keys that were watched
 
 ## @airtable/blocks/ui
 

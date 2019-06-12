@@ -1,12 +1,20 @@
 // @flow
 
 let idCount = 0;
+/**
+ * @private
+ */
 function getId() {
     idCount++;
     return idCount;
 }
 
-/** */
+/**
+ * Abstract superclass for watchable models. All watchable models expose `watch`
+ * and `unwatch` methods that allow consumers to subscribe to changes to that model.
+ *
+ * This class should not be used directly.
+ */
 class Watchable<WatchableKey: string> {
     static _className = 'Watchable';
     static _isWatchableKey(key: string): boolean {
@@ -21,6 +29,9 @@ class Watchable<WatchableKey: string> {
             context: ?Object,
         }>,
     };
+    /**
+     * @hideconstructor
+     */
     constructor() {
         this._changeWatchersByKey = {};
     }
@@ -29,14 +40,21 @@ class Watchable<WatchableKey: string> {
     // of the model doesn't change, but the data inside it might. Rather than never returning two equal values
     // those integrations can use __getWatchableKey, a string key that is guaranteed to be unique
     // to each watchable and will change whenever the watch keys are fired.
+    /**
+     * @private
+     */
     __getWatchableKey(): string {
         return `${this._watchableId} ${this._changeCount}`;
     }
     /**
-     * Start watching the given key or keys. The callback will be called when the
-     * value changes. Every call to `watch` should have a matching call to `unwatch`.
+     * Get notified of changes to the model.
      *
-     * Will log a warning if the keys given are invalid.
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param [context] an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
     watch(
         keys: WatchableKey | Array<WatchableKey>,
@@ -73,10 +91,14 @@ class Watchable<WatchableKey: string> {
         return validKeys;
     }
     /**
-     * Stop watching the given key or keys. Should be called with the same
-     * arguments that were given to `watch`.
+     * Unwatch keys watched with `.watch`.
      *
-     * Will log a warning if the keys given are invalid.
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
     unwatch(
         keys: WatchableKey | Array<WatchableKey>,
@@ -109,6 +131,9 @@ class Watchable<WatchableKey: string> {
 
         return validKeys;
     }
+    /**
+     * @private
+     */
     _onChange(key: WatchableKey, ...args: Array<mixed>) {
         this._changeCount += 1;
         const watchers = this._changeWatchersByKey[key];
