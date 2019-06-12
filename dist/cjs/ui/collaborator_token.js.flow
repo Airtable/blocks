@@ -44,7 +44,7 @@ type CollaboratorTokenProps = {
  *     );
  * }
  */
-const CollaboratorToken = (props: CollaboratorTokenProps) => {
+const CollaboratorToken = (props: CollaboratorTokenProps): React.Node => {
     const {collaborator, className} = props;
 
     // NOTE: this is a bit strange. We pull the user obj out of app blanket, format it for api v2,

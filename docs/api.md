@@ -3841,7 +3841,7 @@ function ChoicesForSelectField({selectField}) {
 }
 ```
 
-Returns **any** A React node.
+Returns **React.Node** A React node.
 
 ### CollaboratorToken
 
@@ -3871,7 +3871,7 @@ function CurrentUserGreeter() {
 }
 ```
 
-Returns **any** A React node.
+Returns **React.Node** A React node.
 
 ### ColorPalette
 
@@ -4441,7 +4441,7 @@ function MyDataComponent() {
 }
 ```
 
-Returns **any** A React node.
+Returns **React.Node** A React node.
 
 ### Popover
 

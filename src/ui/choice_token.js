@@ -44,7 +44,7 @@ type ChoiceTokenProps = {
  *     );
  * }
  */
-const ChoiceToken = ({choice, className}: ChoiceTokenProps) => {
+const ChoiceToken = ({choice, className}: ChoiceTokenProps): React.Node => {
     // Convert the choice color back to a private api choice color.
     const color = choice.color
         ? colors.getColorForColorClass(choice.color)

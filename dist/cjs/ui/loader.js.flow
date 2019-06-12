@@ -31,7 +31,7 @@ type LoaderProps = {|
  *     }
  * }
  */
-const Loader = ({fillColor = '#888', scale = 0.3}: LoaderProps) => {
+const Loader = ({fillColor = '#888', scale = 0.3}: LoaderProps): React.Node => {
     return <_Loader fillColor={fillColor} scale={scale} />;
 };
 
