@@ -36,7 +36,7 @@ var WatchableGlobalAlertKeys = Object.freeze({
 });
 
 /**
- * @alias globalAlert
+ * @private
  * @example
  * import {globalAlert} from '@airtable/blocks/ui';
  * globalAlert.showReloadPrompt();
@@ -52,7 +52,6 @@ function (_Watchable) {
     }
   }]);
 
-  /** @private */
   function GlobalAlert() {
     var _this;
 
@@ -65,8 +64,6 @@ function (_Watchable) {
 
   (0, _createClass2.default)(GlobalAlert, [{
     key: "showReloadPrompt",
-
-    /** @memberof globalAlert */
     value: function showReloadPrompt() {
       this._alertInfo = {
         content: React.createElement("span", {

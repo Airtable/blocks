@@ -1,5 +1,4 @@
 // @flow
-
 import * as React from 'react';
 import {isEnumValue} from '../private_utils';
 import Watchable from '../watchable';
@@ -15,7 +14,7 @@ type AlertInfo = {
 };
 
 /**
- * @alias globalAlert
+ * @private
  * @example
  * import {globalAlert} from '@airtable/blocks/ui';
  * globalAlert.showReloadPrompt();
@@ -26,7 +25,6 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
         return isEnumValue(WatchableGlobalAlertKeys, key);
     }
     _alertInfo: AlertInfo | null;
-    /** @private */
     constructor() {
         super();
         this._alertInfo = null;
@@ -35,7 +33,6 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     get __alertInfo(): AlertInfo | null {
         return this._alertInfo;
     }
-    /** @memberof globalAlert */
     showReloadPrompt() {
         this._alertInfo = {
             content: (

@@ -72,7 +72,6 @@ toc:
                 - ExpandRecordOpts
           - expandRecordList
           - expandRecordPickerAsync
-          - globalAlert
           - name: AutocompletePopover
             children:
                 - AutocompletePopover
