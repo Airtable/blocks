@@ -44,7 +44,7 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_se
  * @property {boolean} [disabled=false] If set to `true`, the input will be disabled.
  * @property {boolean} [required=false] If set to `true`, the input will be required.
  * @property {boolean} [spellCheck=false] If set to `true`, the `spellcheck` property will be set on the input.
- * @property {number} [tabIndex=0] The `tabindex` for the input.
+ * @property {number | string} [tabIndex=0] The `tabindex` for the input.
  */
 
 
@@ -75,22 +75,22 @@ var typesToExcludeFromDefaultClassesSet = {
  * An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
  *
  * @example
- * import {UI} from '@airtable/blocks/ui';
- * import React from 'react';
+ * import {Input} from '@airtable/blocks/ui';
+ * import React, {Fragment, useState} from 'react';
  *
  * function HelloSomeone() {
- *     const [value, setValue] = React.useState('world');
+ *     const [value, setValue] = useState('world');
  *
  *     return (
- *         <React.Fragment>
+ *         <Fragment>
  *             <div>Hello, {value}!</div>
  *
- *             <UI.Input
+ *             <Input
  *                 value={value}
  *                 onChange={(event) => setValue(event.target.value)}
  *                 placeholder="world"
  *             />
- *         </React.Fragment>
+ *         </Fragment>
  *     );
  * }
  */

@@ -21,11 +21,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
 var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
@@ -56,7 +52,19 @@ var styleForChevron = {
   backgroundPosition: 'calc(100% - 6px)',
   paddingRight: 22
 };
-/** @typedef */
+/**
+ * @typedef {object} SelectProps
+ * @property {function} [onChange] A function to be called when the selected option changes.
+ * @property {string | number | boolean | null} [value] The value of the selected option.
+ * @property {Array.<SelectOption>} options The list of select options.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the button.
+ * @property {string} [id] The ID of the select element.
+ * @property {string} [className] Additional class names to apply to the select.
+ * @property {object} [style] Additional styles to apply to the select.
+ * @property {number | string} [tabIndex] Indicates if the select can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
 
 // This component isn't great right now. It's just a styled <select> with a really hacky
 // way of getting the chevron arrow to show up. It also behaves weirdly when you give it
@@ -64,7 +72,32 @@ var styleForChevron = {
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
 
-/** */
+/**
+ * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
+ *
+ * @example
+ * import {Select} from '@airtable/blocks/ui';
+ * import React, {useState} from 'react';
+ *
+ * function ColorPicker() {
+ *     const [value, setValue] = useState(null);
+ *     return (
+ *         <label style={{display: 'flex', flexDirection: 'column'}}>
+ *             <span style={{marginBottom: 8, fontWeight: 500}}>Color</span>
+ *             <Select
+ *                 onChange={newValue => setValue(newValue)}
+ *                 value={value}
+ *                 options={[
+ *                     {value: null, label: 'Pick a color...', disabled: true},
+ *                     {value: 'red', label: 'red'},
+ *                     {value: 'green', label: 'green'},
+ *                     {value: 'blue', label: 'blue'},
+ *                 ]}
+ *             />
+ *         </label>
+ *     );
+ * }
+ */
 var Select =
 /*#__PURE__*/
 function (_React$Component) {
@@ -116,14 +149,12 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var _this$props = this.props,
+          id = _this$props.id,
           className = _this$props.className,
           style = _this$props.style,
           _this$props$options = _this$props.options,
           originalOptions = _this$props$options === void 0 ? [] : _this$props$options,
-          value = _this$props.value,
-          children = _this$props.children,
-          onChange = _this$props.onChange,
-          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["className", "style", "options", "value", "children", "onChange"]); // Check options here for a cleaner stack trace.
+          value = _this$props.value; // Check options here for a cleaner stack trace.
       // Also, even though options are required, still check if it's set because
       // the error is really ugly and covers up the prop type check.
 
@@ -177,8 +208,9 @@ function (_React$Component) {
       }
 
       options.push(...originalOptions);
-      return React.createElement("select", (0, _extends2.default)({
+      return React.createElement("select", {
         ref: el => this._select = el,
+        id: id,
         className: (0, _classnames.default)('styled-input p1 rounded normal no-outline darken1 text-dark', {
           'link-quiet pointer': !this.props.disabled,
           quieter: this.props.disabled
@@ -186,7 +218,7 @@ function (_React$Component) {
         style: (0, _objectSpread2.default)({}, styleForChevron, style),
         value: (0, _select_and_select_buttons_helpers.optionValueToString)(value),
         onChange: this._onChange
-      }, restOfProps), options && options.map(option => {
+      }, options && options.map(option => {
         var valueJson = (0, _select_and_select_buttons_helpers.optionValueToString)(option.value);
         return React.createElement("option", {
           key: valueJson,

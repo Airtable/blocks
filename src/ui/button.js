@@ -25,7 +25,7 @@ type ButtonTheme = $Values<typeof themes>;
  * @property {function} [onClick] Click event handler. Also handles Space and Enter keypress events.
  * @property {string} [type='button'] The type of the button.
  * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
- * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {number | string} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  * @property {string} [aria-label] The label for the button. Use this if the button lacks a visible text label.
  */
 type ButtonProps = {
@@ -35,7 +35,7 @@ type ButtonProps = {
     onClick?: (e?: SyntheticMouseEvent<HTMLButtonElement>) => mixed,
     type?: string,
     disabled?: boolean,
-    tabIndex?: number,
+    tabIndex?: number | string,
     'aria-label'?: string,
     children?: React.Node,
 };
@@ -55,16 +55,16 @@ const classNamesByTheme = {
  * Clickable button component.
  *
  * @example
- * import UI from '@airtable/blocks/ui';
+ * import {Button} from '@airtable/blocks/ui';
  *
  * const button = (
- *     <UI.Button
- *        onClick={() => alert('Clicked!')}
- *        disabled={false}
- *        theme={Button.themes.BLUE}
+ *     <Button
+ *         onClick={() => alert('Clicked!')}
+ *         disabled={false}
+ *         theme={Button.themes.BLUE}
  *     >
  *         Click here!
- *     </UI.Button>
+ *     </Button>
  * );
  */
 class Button extends React.Component<ButtonProps> {

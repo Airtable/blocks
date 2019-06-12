@@ -3384,12 +3384,12 @@ Clickable button component.
 ##### Examples
 
 ```javascript
-import UI from '@airtable/blocks/ui';
+import {Button} from '@airtable/blocks/ui';
 
 const button = (
-    <UI.Button onClick={() => alert('Clicked!')} disabled={false} theme={Button.themes.BLUE}>
+    <Button onClick={() => alert('Clicked!')} disabled={false} theme={Button.themes.BLUE}>
         Click here!
-    </UI.Button>
+    </Button>
 );
 ```
 
@@ -3407,8 +3407,8 @@ Type: [object][64]
 -   `onClick` **[function][70]?** Click event handler. Also handles Space and Enter keypress events.
 -   `type` **[string][59]?** The type of the button.
 -   `disabled` **[boolean][61]?** Indicates whether or not the user can interact with the button.
--   `tabIndex` **[number][63]?** Indicates if the button can be focused and if/where it participates
-    in sequential keyboard navigation.
+-   `tabIndex` **([number][63] \| [string][59])?** Indicates if the button can be focused and
+    if/where it participates in sequential keyboard navigation.
 -   `aria-label` **[string][59]?** The label for the button. Use this if the button lacks a visible
     text label.
 
@@ -3681,8 +3681,8 @@ Type: [object][64]
 
 -   `className` **[string][59]?** `className`s to apply to the close button, separated by spaces.
 -   `style` **[object][64]?** Styles to apply to the dialog element.
--   `tabIndex` **[number][63]?** Indicates if the button can be focused and if/where it participates
-    in sequential keyboard navigation.
+-   `tabIndex` **([number][63] \| [string][59])?** Indicates if the button can be focused and
+    if/where it participates in sequential keyboard navigation.
 
 ### FieldIcon
 
@@ -3805,22 +3805,22 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 ##### Examples
 
 ```javascript
-import {UI} from '@airtable/blocks/ui';
-import React from 'react';
+import {Input} from '@airtable/blocks/ui';
+import React, {Fragment, useState} from 'react';
 
 function HelloSomeone() {
-    const [value, setValue] = React.useState('world');
+    const [value, setValue] = useState('world');
 
     return (
-        <React.Fragment>
+        <Fragment>
             <div>Hello, {value}!</div>
 
-            <UI.Input
+            <Input
                 value={value}
                 onChange={event => setValue(event.target.value)}
                 placeholder="world"
             />
-        </React.Fragment>
+        </Fragment>
     );
 }
 ```
@@ -3842,7 +3842,7 @@ Type: [object][64]
 -   `required` **[boolean][61]?** If set to `true`, the input will be required.
 -   `spellCheck` **[boolean][61]?** If set to `true`, the `spellcheck` property will be set on the
     input.
--   `tabIndex` **[number][63]?** The `tabindex` for the input.
+-   `tabIndex` **([number][63] \| [string][59])?** The `tabindex` for the input.
 
 #### InputSynced
 
@@ -4095,13 +4095,67 @@ className: [string][59]?, style: [Object][64]?}
 
 **Extends React.Component**
 
+Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
+
 ##### Parameters
 
 -   `props` **[SelectProps][147]**
 
+##### Examples
+
+```javascript
+import {Select} from '@airtable/blocks/ui';
+import React, {useState} from 'react';
+
+function ColorPicker() {
+    const [value, setValue] = useState(null);
+    return (
+        <label style={{display: 'flex', flexDirection: 'column'}}>
+            <span style={{marginBottom: 8, fontWeight: 500}}>Color</span>
+            <Select
+                onChange={newValue => setValue(newValue)}
+                value={value}
+                options={[
+                    {value: null, label: 'Pick a color...', disabled: true},
+                    {value: 'red', label: 'red'},
+                    {value: 'green', label: 'green'},
+                    {value: 'blue', label: 'blue'},
+                ]}
+            />
+        </label>
+    );
+}
+```
+
 #### SelectProps
 
-Type: SelectAndSelectButtonsProps
+Type: [object][64]
+
+##### Properties
+
+-   `onChange` **[function][70]?** A function to be called when the selected option changes.
+-   `value` **([string][59] \| [number][63] \| [boolean][61] | null)?** The value of the selected
+    option.
+-   `options` **[Array][60]&lt;[SelectOption][148]>** The list of select options.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the button.
+-   `id` **[string][59]?** The ID of the select element.
+-   `className` **[string][59]?** Additional class names to apply to the select.
+-   `style` **[object][64]?** Additional styles to apply to the select.
+-   `tabIndex` **([number][63] \| [string][59])?** Indicates if the select can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
+
+#### SelectOption
+
+Type: [object][64]
+
+##### Properties
+
+-   `value` **([string][59] \| [number][63] \| [boolean][61] | null)** The value for the select
+    option.
+-   `label` **React.Node** The label for the select option.
+-   `disabled` **[boolean][61]?** If set to `true`, this option will not be selectable.
 
 #### SelectSynced
 
@@ -4109,7 +4163,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][148]**
+-   `props` **[SelectSyncedProps][149]**
 
 #### SelectSyncedProps
 
@@ -4141,7 +4195,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][149]**
+-   `props` **[TablePickerProps][150]**
 
 #### TablePickerProps
 
@@ -4165,7 +4219,7 @@ className: [string][59]?, disabled: [boolean][61]?}
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][150]**
+-   `props` **[TablePickerSyncedProps][151]**
 
 #### TablePickerSyncedProps
 
@@ -4191,7 +4245,7 @@ style: [Object][64]?, className: [string][59]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][151]**
+-   `props` **[ToggleProps][152]**
 
 #### ToggleProps
 
@@ -4216,7 +4270,7 @@ tabIndex: [number][63]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][152]**
+-   `props` **[ToggleSyncedProps][153]**
 
 #### ToggleSyncedProps
 
@@ -4245,7 +4299,7 @@ A component that shows a tooltip. Wraps its children.
 
 ##### Parameters
 
--   `props` **[TooltipProps][153]**
+-   `props` **[TooltipProps][154]**
 
 ##### Examples
 
@@ -4311,7 +4365,7 @@ Type: [object][64]
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][154]**
+-   `props` **[ViewPickerProps][155]**
 
 #### ViewPickerProps
 
@@ -4338,7 +4392,7 @@ Type: {table: ([Table][73] | null)?, view: ([View][68] | null)?, shouldAllowPick
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][155]**
+-   `props` **[ViewPickerSyncedProps][156]**
 
 #### ViewPickerSyncedProps
 
@@ -4385,13 +4439,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][156]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][156]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][157]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][157]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][156]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][156]?**
+-   `minSize` **[ViewportSizeConstraintProp][157]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][157]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -4550,12 +4604,13 @@ Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
 [145]: #recordcardlistprops
 [146]: https://developer.mozilla.org/docs/Web/API/Event
 [147]: #selectprops
-[148]: #selectsyncedprops
-[149]: #tablepickerprops
-[150]: #tablepickersyncedprops
-[151]: #toggleprops
-[152]: #togglesyncedprops
-[153]: #tooltipprops
-[154]: #viewpickerprops
-[155]: #viewpickersyncedprops
-[156]: #viewportsizeconstraintprop
+[148]: #selectoption
+[149]: #selectsyncedprops
+[150]: #tablepickerprops
+[151]: #tablepickersyncedprops
+[152]: #toggleprops
+[153]: #togglesyncedprops
+[154]: #tooltipprops
+[155]: #viewpickerprops
+[156]: #viewpickersyncedprops
+[157]: #viewportsizeconstraintprop

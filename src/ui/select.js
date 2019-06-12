@@ -18,7 +18,19 @@ const styleForChevron = {
     paddingRight: 22,
 };
 
-/** @typedef */
+/**
+ * @typedef {object} SelectProps
+ * @property {function} [onChange] A function to be called when the selected option changes.
+ * @property {string | number | boolean | null} [value] The value of the selected option.
+ * @property {Array.<SelectOption>} options The list of select options.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the button.
+ * @property {string} [id] The ID of the select element.
+ * @property {string} [className] Additional class names to apply to the select.
+ * @property {object} [style] Additional styles to apply to the select.
+ * @property {number | string} [tabIndex] Indicates if the select can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
 type SelectProps = SelectAndSelectButtonsProps;
 
 // This component isn't great right now. It's just a styled <select> with a really hacky
@@ -26,7 +38,33 @@ type SelectProps = SelectAndSelectButtonsProps;
 // a margin (I think this is a limitation of <select>). We should probably replace it with
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
-/** */
+
+/**
+ * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
+ *
+ * @example
+ * import {Select} from '@airtable/blocks/ui';
+ * import React, {useState} from 'react';
+ *
+ * function ColorPicker() {
+ *     const [value, setValue] = useState(null);
+ *     return (
+ *         <label style={{display: 'flex', flexDirection: 'column'}}>
+ *             <span style={{marginBottom: 8, fontWeight: 500}}>Color</span>
+ *             <Select
+ *                 onChange={newValue => setValue(newValue)}
+ *                 value={value}
+ *                 options={[
+ *                     {value: null, label: 'Pick a color...', disabled: true},
+ *                     {value: 'red', label: 'red'},
+ *                     {value: 'green', label: 'green'},
+ *                     {value: 'blue', label: 'blue'},
+ *                 ]}
+ *             />
+ *         </label>
+ *     );
+ * }
+ */
 class Select extends React.Component<SelectProps> {
     static propTypes = SelectAndSelectButtonsPropTypes;
     props: SelectProps;
@@ -59,17 +97,7 @@ class Select extends React.Component<SelectProps> {
         this._select.click();
     }
     render() {
-        const {
-            className,
-            style,
-            options: originalOptions = [],
-            value,
-            // Filter these out so they're not
-            // included in restOfProps:
-            children, // eslint-disable-line no-unused-vars
-            onChange, // eslint-disable-line no-unused-vars
-            ...restOfProps
-        } = this.props;
+        const {id, className, style, options: originalOptions = [], value} = this.props;
 
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
@@ -105,6 +133,7 @@ class Select extends React.Component<SelectProps> {
         return (
             <select
                 ref={el => (this._select = el)}
+                id={id}
                 className={classNames(
                     'styled-input p1 rounded normal no-outline darken1 text-dark',
                     {
@@ -119,7 +148,6 @@ class Select extends React.Component<SelectProps> {
                 }}
                 value={optionValueToString(value)}
                 onChange={this._onChange}
-                {...restOfProps}
             >
                 {options &&
                     options.map(option => {

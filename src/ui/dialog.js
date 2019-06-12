@@ -10,12 +10,12 @@ import Modal from './modal';
  * @typedef {object} DialogCloseButtonProps
  * @property {string} [className] `className`s to apply to the close button, separated by spaces.
  * @property {object} [style] Styles to apply to the dialog element.
- * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {number | string} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  */
 type DialogCloseButtonProps = {|
     className?: string,
     style?: Object,
-    tabIndex?: number,
+    tabIndex?: number | string,
     children?: React.Node,
 |};
 

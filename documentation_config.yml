@@ -148,6 +148,7 @@ toc:
             children:
                 - Select
                 - SelectProps
+                - SelectOption
                 - SelectSynced
                 - SelectSyncedProps
           - name: SelectButtons

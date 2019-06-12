@@ -8,6 +8,12 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 // Regular <select> coerces all values to string, which is confusing.
 export type SelectOptionValue = string | number | boolean | null | void;
 
+/**
+ * @typedef {object} SelectOption
+ * @property {string | number | boolean | null} value The value for the select option.
+ * @property {React.Node} label The label for the select option.
+ * @property {boolean} [disabled=false] If set to `true`, this option will not be selectable.
+ */
 type SelectOption = {
     value: SelectOptionValue,
     label: React.Node,
@@ -19,9 +25,12 @@ export type SelectAndSelectButtonsProps = {
     value: ?SelectOptionValue,
     options: Array<SelectOption>,
     disabled?: boolean,
-    style?: Object,
+    id?: string,
     className?: string,
+    style?: Object,
     tabIndex?: number | string,
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
     children?: void,
 };
 
