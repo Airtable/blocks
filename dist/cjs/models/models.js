@@ -37,7 +37,8 @@ var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server
 
 var hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
 /**
- * Helper to generate a GUID
+ * Helper to generate a GUID.
+ *
  * @function
  * @returns string
  * @alias generateGuid

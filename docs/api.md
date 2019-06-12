@@ -424,7 +424,7 @@ const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NU
 
 ### generateGuid
 
-Helper to generate a GUID
+Helper to generate a GUID.
 
 #### Examples
 
