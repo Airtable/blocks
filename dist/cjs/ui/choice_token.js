@@ -19,10 +19,33 @@ var _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shar
 
 
 var colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
-/** @typedef */
 
-
-/** */
+/**
+ * A component that shows a single choice.
+ *
+ * @param {object} props The props for the component.
+ * @param {object} props.choice An object representing a select choice. You should not create these objects from scratch, but should instead grab them from base data.
+ * @param {string} [props.className=''] Additional class names for the component, separated by spaces.
+ * @returns A React node.
+ * @example
+ * import {UI} from '@airtable/blocks';
+ *
+ * function ChoicesForSelectField({selectField}) {
+ *     const choiceNodes = selectField.options.choices.map(choice => (
+ *         <UI.ChoiceToken
+ *             key={choice.id}
+ *             choice={choice}
+ *         />
+ *     ));
+ *
+ *     return (
+ *         <React.Fragment>
+ *             Here are all of your choices:
+ *             {choiceNodes}
+ *         </React.Fragment>
+ *     );
+ * }
+ */
 var ChoiceToken = (_ref) => {
   var choice = _ref.choice,
       className = _ref.className;

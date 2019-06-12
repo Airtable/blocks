@@ -86,10 +86,7 @@ toc:
             children:
                 - CellRenderer
                 - CellRendererProps
-          - name: ChoiceToken
-            children:
-                - ChoiceToken
-                - ChoiceTokenProps
+          - ChoiceToken
           - name: CollaboratorToken
             children:
                 - CollaboratorToken
