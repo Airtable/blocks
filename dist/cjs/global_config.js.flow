@@ -76,12 +76,49 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         this._kvStore = initialKvValuesByKey;
         this._airtableInterface = airtableInterface;
     }
+
+    /**
+     * Get notified of changes to global config.
+     *
+     * You can watch any top-level key in global config.
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @function watch
+     * @memberof GlobalConfig
+     * @instance
+     * @param {(WatchableGlobalConfigKey|Array<WatchableGlobalConfigKey>)} keys the keys to watch
+     * @param {Function} callback a function to call when those keys change
+     * @param {Object?} [context] an optional context for `this` in `callback`.
+     * @returns {Array<WatchableGlobalConfigKey>} the array of keys that were watched
+     */
+
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @function unwatch
+     * @memberof GlobalConfig
+     * @instance
+     * @param {(WatchableGlobalConfigKey|Array<WatchableGlobalConfigKey>)} keys the keys to unwatch
+     * @param {Function} callback the function passed to `.watch` for these keys
+     * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+     * @returns {Array<WatchableGlobalConfigKey>} the array of keys that were unwatched
+     */
+
+    /**
+     * @private
+     */
     __getTopLevelKey(key: GlobalConfigKey): string {
         if (Array.isArray(key)) {
             return key[0];
         }
         return key;
     }
+    /**
+     * @private
+     */
     __formatKeyAsPath(key: GlobalConfigKey): Array<string> {
         if (!Array.isArray(key)) {
             return [key];
@@ -134,6 +171,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path.
+     * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -172,6 +210,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Sets multiple values. Throws if any path or value is invalid.
      *
      * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -198,7 +237,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             completion: completionPromise,
         };
     }
-    /** this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates() */
+    /**
+     * @private
+     * this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates()
+     */
     __setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
         if (!Array.isArray(updates)) {
             throw new Error('globalConfig updates must be an array');

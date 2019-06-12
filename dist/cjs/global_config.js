@@ -93,6 +93,40 @@ function (_Watchable) {
     _this._airtableInterface = airtableInterface;
     return _this;
   }
+  /**
+   * Get notified of changes to global config.
+   *
+   * You can watch any top-level key in global config.
+   *
+   * Every call to `.watch` should have a matching call to `.unwatch`.
+   *
+   * @function watch
+   * @memberof GlobalConfig
+   * @instance
+   * @param {(WatchableGlobalConfigKey|Array<WatchableGlobalConfigKey>)} keys the keys to watch
+   * @param {Function} callback a function to call when those keys change
+   * @param {Object?} [context] an optional context for `this` in `callback`.
+   * @returns {Array<WatchableGlobalConfigKey>} the array of keys that were watched
+   */
+
+  /**
+   * Unwatch keys watched with `.watch`.
+   *
+   * Should be called with the same arguments given to `.watch`.
+   *
+   * @function unwatch
+   * @memberof GlobalConfig
+   * @instance
+   * @param {(WatchableGlobalConfigKey|Array<WatchableGlobalConfigKey>)} keys the keys to unwatch
+   * @param {Function} callback the function passed to `.watch` for these keys
+   * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+   * @returns {Array<WatchableGlobalConfigKey>} the array of keys that were unwatched
+   */
+
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(GlobalConfig, [{
     key: "__getTopLevelKey",
@@ -103,6 +137,10 @@ function (_Watchable) {
 
       return key;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__formatKeyAsPath",
     value: function __formatKeyAsPath(key) {
@@ -167,6 +205,7 @@ function (_Watchable) {
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path.
+     * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -217,6 +256,7 @@ function (_Watchable) {
      * Sets multiple values. Throws if any path or value is invalid.
      *
      * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -247,7 +287,10 @@ function (_Watchable) {
         completion: completionPromise
       };
     }
-    /** this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates() */
+    /**
+     * @private
+     * this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates()
+     */
 
   }, {
     key: "__setMultipleKvPaths",
