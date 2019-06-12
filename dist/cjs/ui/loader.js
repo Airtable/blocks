@@ -15,12 +15,27 @@ var React = _interopRequireWildcard(require("react"));
 
 // TODO(kasra): don't depend on liveapp components.
 var _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/react/ui/loader/loader');
-/** @typedef */
-
 
 // Override the default props and then just proxy through to our loader.
 
-/** */
+/**
+ * A loading spinner component.
+ *
+ * @param {object} [props] The props for the component.
+ * @param {string} [props.fillColor='#888'] Fill color for the loading spinner. Gray by default.
+ * @param {number} [props.scale=0.3] A scalar for the loader. Increasing the scale increases the size of the loader.
+ * @returns A React node.
+ * @example
+ * import {UI} from '@airtable/blocks';
+ *
+ * function MyDataComponent() {
+ *     if (myDataHasLoaded) {
+ *         return <div>Here's your data!</div>;
+ *     } else {
+ *         return <UI.Loader />
+ *     }
+ * }
+ */
 var Loader = (_ref) => {
   var _ref$fillColor = _ref.fillColor,
       fillColor = _ref$fillColor === void 0 ? '#888' : _ref$fillColor,

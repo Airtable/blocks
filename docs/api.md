@@ -3928,20 +3928,31 @@ className: [string][59]?, style: [Object][64]?, children: React.Node}
 
 #### Loader
 
+A loading spinner component.
+
 ##### Parameters
 
--   `$0` **[LoaderProps][141]**
-    -   `$0.fillColor` (optional, default `'#888'`)
-    -   `$0.scale` (optional, default `0.3`)
+-   `props` **[object][64]?** The props for the component.
+    -   `props.fillColor` **[string][59]** Fill color for the loading spinner. Gray by default.
+        (optional, default `'#888'`)
+    -   `props.scale` **[number][63]** A scalar for the loader. Increasing the scale increases the
+        size of the loader. (optional, default `0.3`)
 
-#### LoaderProps
+##### Examples
 
-Type: {fillColor: [string][59]?, scale: [number][63]?}
+```javascript
+import {UI} from '@airtable/blocks';
 
-##### Properties
+function MyDataComponent() {
+    if (myDataHasLoaded) {
+        return <div>Here's your data!</div>;
+    } else {
+        return <UI.Loader />;
+    }
+}
+```
 
--   `fillColor` **[string][59]?**
--   `scale` **[number][63]?**
+Returns **any** A React node.
 
 ### Popover
 
@@ -3951,7 +3962,7 @@ Type: {fillColor: [string][59]?, scale: [number][63]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][142]**
+-   `props` **[PopoverProps][141]**
 
 #### PopoverProps
 
@@ -3986,7 +3997,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][143]**
+-   `props` **[ProgressBarProps][142]**
 
 ##### Examples
 
@@ -4021,13 +4032,13 @@ Type: [object][64]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][144]**
+-   `props` **[RecordCardProps][143]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][71] | RecordDef), fields: [Array][60]&lt;[Field][67]>?, view: [View][68]?,
 attachmentCoverField: [Field][67]?, width: [number][63]?, height: [number][63]?, onClick:
-[Function][70]?, getExpandRecordOptions: function ([Record][71]): [ExpandRecordOpts][145]?,
+[Function][70]?, getExpandRecordOptions: function ([Record][71]): [ExpandRecordOpts][144]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object][64]?}
 
 ##### Properties
@@ -4039,7 +4050,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 -   `width` **[number][63]?**
 -   `height` **[number][63]?**
 -   `onClick` **[Function][70]?**
--   `getExpandRecordOptions` **function ([Record][71]): [ExpandRecordOpts][145]?**
+-   `getExpandRecordOptions` **function ([Record][71]): [ExpandRecordOpts][144]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][59]?**
@@ -4053,11 +4064,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][146]**
+-   `props` **[RecordCardListProps][145]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][60]&lt;([Record][71] | RecordDef)>, onScroll: function ([Event][147]):
+Type: {records: [Array][60]&lt;([Record][71] | RecordDef)>, onScroll: function ([Event][146]):
 void?, onRecordClick: (null | function (record: ([Record][71] | RecordDef), index: [number][63]):
 void)?, onRecordMouseEnter: function (record: ([Record][71] | RecordDef), index: [number][63]):
 void?, onRecordMouseLeave: function (record: ([Record][71] | RecordDef), index: [number][63]):
@@ -4067,7 +4078,7 @@ className: [string][59]?, style: [Object][64]?}
 ##### Properties
 
 -   `records` **[Array][60]&lt;([Record][71] | RecordDef)>**
--   `onScroll` **function ([Event][147]): void?**
+-   `onScroll` **function ([Event][146]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][71] | RecordDef), index: [number][63]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][71] | RecordDef), index: [number][63]):
@@ -4088,7 +4099,7 @@ className: [string][59]?, style: [Object][64]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][148]**
+-   `props` **[SelectProps][147]**
 
 #### SelectProps
 
@@ -4100,7 +4111,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][149]**
+-   `props` **[SelectSyncedProps][148]**
 
 #### SelectSyncedProps
 
@@ -4132,7 +4143,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][150]**
+-   `props` **[TablePickerProps][149]**
 
 #### TablePickerProps
 
@@ -4156,7 +4167,7 @@ className: [string][59]?, disabled: [boolean][61]?}
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][151]**
+-   `props` **[TablePickerSyncedProps][150]**
 
 #### TablePickerSyncedProps
 
@@ -4182,7 +4193,7 @@ style: [Object][64]?, className: [string][59]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][152]**
+-   `props` **[ToggleProps][151]**
 
 #### ToggleProps
 
@@ -4207,7 +4218,7 @@ tabIndex: [number][63]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][153]**
+-   `props` **[ToggleSyncedProps][152]**
 
 #### ToggleSyncedProps
 
@@ -4234,7 +4245,7 @@ function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][5
 
 ##### Parameters
 
--   `props` **[TooltipProps][154]**
+-   `props` **[TooltipProps][153]**
 
 #### TooltipProps
 
@@ -4267,7 +4278,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][61]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][155]**
+-   `props` **[ViewPickerProps][154]**
 
 #### ViewPickerProps
 
@@ -4294,7 +4305,7 @@ Type: {table: ([Table][73] | null)?, view: ([View][68] | null)?, shouldAllowPick
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][156]**
+-   `props` **[ViewPickerSyncedProps][155]**
 
 #### ViewPickerSyncedProps
 
@@ -4341,13 +4352,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][157]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][157]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][156]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][156]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][157]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][157]?**
+-   `minSize` **[ViewportSizeConstraintProp][156]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][156]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -4499,20 +4510,19 @@ Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
 [138]: #inputprops
 [139]: #inputsyncedprops
 [140]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[141]: #loaderprops
-[142]: #popoverprops
-[143]: #progressbarprops
-[144]: #recordcardprops
-[145]: #expandrecordopts
-[146]: #recordcardlistprops
-[147]: https://developer.mozilla.org/docs/Web/API/Event
-[148]: #selectprops
-[149]: #selectsyncedprops
-[150]: #tablepickerprops
-[151]: #tablepickersyncedprops
-[152]: #toggleprops
-[153]: #togglesyncedprops
-[154]: #tooltipprops
-[155]: #viewpickerprops
-[156]: #viewpickersyncedprops
-[157]: #viewportsizeconstraintprop
+[141]: #popoverprops
+[142]: #progressbarprops
+[143]: #recordcardprops
+[144]: #expandrecordopts
+[145]: #recordcardlistprops
+[146]: https://developer.mozilla.org/docs/Web/API/Event
+[147]: #selectprops
+[148]: #selectsyncedprops
+[149]: #tablepickerprops
+[150]: #tablepickersyncedprops
+[151]: #toggleprops
+[152]: #togglesyncedprops
+[153]: #tooltipprops
+[154]: #viewpickerprops
+[155]: #viewpickersyncedprops
+[156]: #viewportsizeconstraintprop
