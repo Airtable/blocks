@@ -37,10 +37,36 @@ var _global_config_synced_component_helpers = _interopRequireDefault(require("./
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
-/** @typedef */
+/** @type {object}
+ * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
+ * @property {string|Array<string>} globalConfigKey The key, or path to a key, in global config.
+ * @property {string} [placeholder=''] The placeholder for the input.
+ * @property {function} [onChange] A function to be called when the input changes. Note that this component will sync to global config, so you won't always need to set this.
+ * @property {object} [style={}] Additional styles to apply to the input.
+ * @property {string} [className=''] Additional class names to apply to the input, separated by spaces.
+ * @property {boolean} [disabled=false] If set to `true`, the input will be disabled.
+ * @property {boolean} [spellCheck=false] If set to `true`, the `spellcheck` property will be set on the input.
+ */
 
 
-/** */
+/**
+ * A wrapper around the `UI.Input` component that syncs with global config.
+ *
+ * @example
+ * import {UI} from '@airtable/blocks/ui';
+ * import {globalConfig} from '@airtable/blocks';
+ * import React from 'react';
+ *
+ * function ApiKeyInput() {
+ *     const canEditApiKey = globalConfig.canSet('apiKey');
+ *     return (
+ *         <UI.InputSynced
+ *             globalConfigKey="apiKey"
+ *             disabled={!canEditApiKey}
+ *         />
+ *     );
+ * }
+ */
 var InputSynced =
 /*#__PURE__*/
 function (_React$Component) {

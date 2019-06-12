@@ -3815,26 +3815,42 @@ Type: [object][65]
 
 **Extends React.Component**
 
+A wrapper around the `UI.Input` component that syncs with global config.
+
 ##### Parameters
 
 -   `props` **[InputSyncedProps][141]**
 
+##### Examples
+
+```javascript
+import {UI} from '@airtable/blocks/ui';
+import {globalConfig} from '@airtable/blocks';
+import React from 'react';
+
+function ApiKeyInput() {
+    const canEditApiKey = globalConfig.canSet('apiKey');
+    return <UI.InputSynced globalConfigKey="apiKey" disabled={!canEditApiKey} />;
+}
+```
+
 #### InputSyncedProps
 
-Type: {type: [string][60]?, globalConfigKey: GlobalConfigKey, placeholder: [string][60]?, onChange:
-function (SyntheticInputEvent&lt;>): void?, style: [Object][65]?, className: [string][60]?,
-disabled: [boolean][62]?, spellCheck: [boolean][62]?}
+Type: [object][65]
 
 ##### Properties
 
--   `type` **[string][60]?**
--   `globalConfigKey` **GlobalConfigKey**
--   `placeholder` **[string][60]?**
--   `onChange` **function (SyntheticInputEvent&lt;>): void?**
--   `style` **[Object][65]?**
--   `className` **[string][60]?**
--   `disabled` **[boolean][62]?**
--   `spellCheck` **[boolean][62]?**
+-   `type` **[string][60]?** The `type` for the input. Defaults to `text`.
+-   `globalConfigKey` **([string][60] \| [Array][61]&lt;[string][60]>)** The key, or path to a key,
+    in global config.
+-   `placeholder` **[string][60]?** The placeholder for the input.
+-   `onChange` **[function][70]?** A function to be called when the input changes. Note that this
+    component will sync to global config, so you won't always need to set this.
+-   `style` **[object][65]?** Additional styles to apply to the input.
+-   `className` **[string][60]?** Additional class names to apply to the input, separated by spaces.
+-   `disabled` **[boolean][62]?** If set to `true`, the input will be disabled.
+-   `spellCheck` **[boolean][62]?** If set to `true`, the `spellcheck` property will be set on the
+    input.
 
 ### Link
 
