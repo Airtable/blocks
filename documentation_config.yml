@@ -1,9 +1,11 @@
 toc:
     - name: '@airtable/blocks'
       children:
-          - BlockSdk
-          - GlobalConfig
-          - GlobalConfigValue
+          - SDK
+          - name: GlobalConfig
+            children:
+                - GlobalConfig
+                - GlobalConfigValue
           - Viewport
     - name: '@airtable/blocks/models'
       children:

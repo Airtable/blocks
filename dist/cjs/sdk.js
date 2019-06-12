@@ -70,11 +70,13 @@ var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client/he
  */
 
 
+/** @private */
 function defaultUpdateBatcher(applyUpdates) {
   applyUpdates();
 }
 /**
  * Import the SDK from `'@airtable/blocks'`.
+ * @private because we document this manually in index.js
  */
 
 

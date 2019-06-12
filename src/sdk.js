@@ -58,12 +58,14 @@ export type RunInfo = {
 };
 
 type UpdateBatcher = (applyUpdates: () => void) => void;
+/** @private */
 function defaultUpdateBatcher(applyUpdates: () => void) {
     applyUpdates();
 }
 
 /**
  * Import the SDK from `'@airtable/blocks'`.
+ * @private because we document this manually in index.js
  */
 class BlockSdk {
     static VERSION = global.PACKAGE_VERSION;
