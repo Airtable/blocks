@@ -326,6 +326,32 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         this._recordStore = recordStore;
     }
 
+    /**
+     * Loads all data for the query result.
+     *
+     * Every call to `loadDataAsync` should have a matching call to `unloadData`.
+     *
+     * @async
+     * @function loadDataAsync
+     * @memberof QueryResult
+     * @instance
+     * @returns {Promise<void>} A promise that will resolve once the data is loaded.
+     */
+
+    /**
+     * Unloads data for the query result.
+     *
+     * Every call to `loadDataAsync` should have a matching call to `unloadData`.
+     *
+     * @function unloadData
+     * @memberof QueryResult
+     * @instance
+     * @returns {void}
+     */
+
+    /**
+     * @private
+     */
     __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedQueryResultOpts): boolean {
         return u.isEqual(this._normalizedOpts, normalizedOpts);
     }
@@ -376,6 +402,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         return record;
     }
 
+    /**
+     * @private
+     */
     _getRecord(recordOrRecordId: RecordId | Record): Record {
         return this.getRecordById(
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
@@ -427,6 +456,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         }
     }
 
+    /**
+     * @private
+     */
     _onChangeIsDataLoaded() {
         this._onChange(WatchableQueryResultKeys.isDataLoaded);
     }
@@ -443,6 +475,10 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * - `'cellValuesInField:' + someFieldId`
      *
      * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * Watching a key that needs to load data asynchronously will automatically
+     * cause the data to be fetched. Once the data is available, the `callback`
+     * will be called.
      *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
@@ -468,6 +504,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      *
      * Should be called with the same arguments given to `.watch`.
      *
+     * Unwatching a key that needs to load data asynchronously will automatically
+     * cause the data to be unloaded.
+     *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
      * @param [context] the context that was passed to `.watch` for this `callback`
@@ -487,6 +526,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         return validKeys;
     }
 
+    /**
+     * @private
+     */
     _watchRecordColorsIfNeeded() {
         const watchCount = (this._changeWatchersByKey[WatchableQueryResultKeys.recordColors] || [])
             .length;
@@ -495,6 +537,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         }
     }
 
+    /**
+     * @private
+     */
     _watchRecordColors() {
         const recordColorMode = this._normalizedOpts.recordColorMode;
         const handler = (model, key, recordIds) => {
@@ -528,6 +573,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         this._recordColorChangeHandler = handler;
     }
 
+    /**
+     * @private
+     */
     _unwatchRecordColorsIfPossible() {
         const watchCount = (this._changeWatchersByKey[WatchableQueryResultKeys.recordColors] || [])
             .length;
@@ -536,6 +584,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         }
     }
 
+    /**
+     * @private
+     */
     _unwatchRecordColors() {
         const recordColorMode = this._normalizedOpts.recordColorMode;
         const handler = this._recordColorChangeHandler;
@@ -564,6 +615,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         this._recordColorChangeHandler = null;
     }
 
+    /**
+     * @private
+     */
     async _loadRecordColorsAsync(): Promise<void> {
         const recordColorMode = this._normalizedOpts.recordColorMode;
         switch (recordColorMode.type) {
@@ -584,6 +638,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         }
     }
 
+    /**
+     * @private
+     */
     _unloadRecordColors() {
         const recordColorMode = this._normalizedOpts.recordColorMode;
         switch (recordColorMode.type) {

@@ -354,6 +354,33 @@ function (_AbstractModelWithAsy) {
     _this._recordStore = recordStore;
     return _this;
   }
+  /**
+   * Loads all data for the query result.
+   *
+   * Every call to `loadDataAsync` should have a matching call to `unloadData`.
+   *
+   * @async
+   * @function loadDataAsync
+   * @memberof QueryResult
+   * @instance
+   * @returns {Promise<void>} A promise that will resolve once the data is loaded.
+   */
+
+  /**
+   * Unloads data for the query result.
+   *
+   * Every call to `loadDataAsync` should have a matching call to `unloadData`.
+   *
+   * @function unloadData
+   * @memberof QueryResult
+   * @instance
+   * @returns {void}
+   */
+
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(QueryResult, [{
     key: "__canBeReusedForNormalizedOpts",
@@ -406,6 +433,10 @@ function (_AbstractModelWithAsy) {
 
       return record;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_getRecord",
     value: function _getRecord(recordOrRecordId) {
@@ -461,6 +492,10 @@ function (_AbstractModelWithAsy) {
           throw new Error("Unknown record coloring mode: ".concat(recordColorMode.type));
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_onChangeIsDataLoaded",
     value: function _onChangeIsDataLoaded() {
@@ -478,6 +513,10 @@ function (_AbstractModelWithAsy) {
      * - `'cellValuesInField:' + someFieldId`
      *
      * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * Watching a key that needs to load data asynchronously will automatically
+     * cause the data to be fetched. Once the data is available, the `callback`
+     * will be called.
      *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
@@ -523,6 +562,9 @@ function (_AbstractModelWithAsy) {
      *
      * Should be called with the same arguments given to `.watch`.
      *
+     * Unwatching a key that needs to load data asynchronously will automatically
+     * cause the data to be unloaded.
+     *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
      * @param [context] the context that was passed to `.watch` for this `callback`
@@ -562,6 +604,10 @@ function (_AbstractModelWithAsy) {
 
       return validKeys;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_watchRecordColorsIfNeeded",
     value: function _watchRecordColorsIfNeeded() {
@@ -571,6 +617,10 @@ function (_AbstractModelWithAsy) {
         this._watchRecordColors();
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_watchRecordColors",
     value: function _watchRecordColors() {
@@ -606,6 +656,10 @@ function (_AbstractModelWithAsy) {
 
       this._recordColorChangeHandler = handler;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_unwatchRecordColorsIfPossible",
     value: function _unwatchRecordColorsIfPossible() {
@@ -615,6 +669,10 @@ function (_AbstractModelWithAsy) {
         this._unwatchRecordColors();
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_unwatchRecordColors",
     value: function _unwatchRecordColors() {
@@ -644,6 +702,10 @@ function (_AbstractModelWithAsy) {
 
       this._recordColorChangeHandler = null;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_loadRecordColorsAsync",
     value: function () {
@@ -690,6 +752,10 @@ function (_AbstractModelWithAsy) {
 
       return _loadRecordColorsAsync;
     }()
+    /**
+     * @private
+     */
+
   }, {
     key: "_unloadRecordColors",
     value: function _unloadRecordColors() {

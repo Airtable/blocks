@@ -1377,6 +1377,14 @@ the record has been deleted or is filtered out.
 
 Returns **[boolean][61]** whether the record exists in this query result
 
+##### loadDataAsync
+
+Loads all data for the query result.
+
+Every call to `loadDataAsync` should have a matching call to `unloadData`.
+
+Returns **[Promise][88]&lt;void>** A promise that will resolve once the data is loaded.
+
 ##### parentTable
 
 The table that records in this QueryResult are part of
@@ -1401,11 +1409,22 @@ Type: [Array][60]&lt;[Record][71]>
 
 Returns **[Array][60]&lt;[Record][71]>** all of the records in this query result
 
+##### unloadData
+
+Unloads data for the query result.
+
+Every call to `loadDataAsync` should have a matching call to `unloadData`.
+
+Returns **void**
+
 ##### unwatch
 
 Unwatch keys watched with `.watch`.
 
 Should be called with the same arguments given to `.watch`.
+
+Unwatching a key that needs to load data asynchronously will automatically cause the data to be
+unloaded.
 
 ###### Parameters
 
@@ -1430,6 +1449,9 @@ Watchable keys are:
 -   `'cellValuesInField:' + someFieldId`
 
 Every call to `.watch` should have a matching call to `.unwatch`.
+
+Watching a key that needs to load data asynchronously will automatically cause the data to be
+fetched. Once the data is available, the `callback` will be called.
 
 ###### Parameters
 
@@ -1556,7 +1578,7 @@ Do not instantiate. To create a new record, use `table.createRecord`.
 #### canDelete
 
 Use this to check whether the current user can delete this record. Should be called before calling
-[delete][88].
+[delete][89].
 
 ##### Examples
 
@@ -1571,7 +1593,7 @@ Returns **[boolean][61]** `true` if the current user can delete this record, `fa
 #### canSetCellValue
 
 Use this to check whether the current user can update a specific cell value. Should be called before
-calling [setCellValue][89].
+calling [setCellValue][90].
 
 ##### Parameters
 
@@ -1594,7 +1616,7 @@ otherwise.
 #### canSetCellValues
 
 Use this to check whether the current user can update a set of cell values. Should be called before
-calling [setCellValues][90].
+calling [setCellValues][91].
 
 ##### Parameters
 
@@ -1631,7 +1653,7 @@ Returns **[number][65]** The number of comments on this record.
 
 #### createdTime
 
-Type: [Date][91]
+Type: [Date][92]
 
 ##### Examples
 
@@ -1639,13 +1661,13 @@ Type: [Date][91]
 console.log(`This record was created at ${myRecord.createdTime.toISOString()}`);
 ```
 
-Returns **[Date][91]** The created time of this record.
+Returns **[Date][92]** The created time of this record.
 
 #### delete
 
 Deletes this record.
 
-Throws if the current user cannot delete this record. Call [canDelete][92] before calling this to
+Throws if the current user cannot delete this record. Call [canDelete][93] before calling this to
 check whether the current user can delete this record.
 
 ##### Examples
@@ -1851,14 +1873,14 @@ Select records referenced in a `multipleRecordLinks` cell value. Returns a query
 -   `opts` **QueryResultOpts** Options for the query, such as sorts and fields. (optional, default
     `{}`)
 
-Returns **[LinkedRecordsQueryResult][93]** A query result containing the records in the given
+Returns **[LinkedRecordsQueryResult][94]** A query result containing the records in the given
 `multipleRecordLinks` field.
 
 #### setCellValue
 
 Sets a cell value.
 
-Throws if the current user cannot update this cell value. Call [canSetCellValue][94] before calling
+Throws if the current user cannot update this cell value. Call [canSetCellValue][95] before calling
 this to check if the current user can update this cell value.
 
 ##### Parameters
@@ -1882,7 +1904,7 @@ Returns **{}**
 
 Sets cell values.
 
-Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][95]
+Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][96]
 before calling this to check whether the current user can perform the given updates.
 
 ##### Parameters
@@ -1963,7 +1985,7 @@ Model class representing a table. Every [Base][14] has one or more tables.
 #### canCreateRecord
 
 Use this to check whether the current user can create a record. Should be called before calling
-[createRecord][96].
+[createRecord][97].
 
 ##### Parameters
 
@@ -1996,7 +2018,7 @@ Returns **[boolean][61]** `true` if the current user can create the given record
 #### canCreateRecords
 
 Use this to check whether the current user can create records. Should be called before calling
-[createRecords][97].
+[createRecords][98].
 
 ##### Parameters
 
@@ -2035,7 +2057,7 @@ otherwise.
 #### canDeleteRecord
 
 Use this to check whether the current user can delete a record. Should be called before calling
-[deleteRecord][98].
+[deleteRecord][99].
 
 ##### Parameters
 
@@ -2054,7 +2076,7 @@ Returns **[boolean][61]** `true` if the current user can delete the given record
 #### canDeleteRecords
 
 Use this to check whether the current user can delete records. Should be called before calling
-[deleteRecords][99].
+[deleteRecords][100].
 
 ##### Parameters
 
@@ -2074,7 +2096,7 @@ Returns **any** `true` if the current user can delete the given records, `false`
 #### canSetCellValues
 
 Use this to check whether the current user can update a set of cell values. Should be called before
-calling [setCellValues][90].
+calling [setCellValues][91].
 
 ##### Parameters
 
@@ -2105,7 +2127,7 @@ otherwise.
 
 Creates a record in the table.
 
-Throws if the current user cannot create the given record. Call [canCreateRecord][100] before
+Throws if the current user cannot create the given record. Call [canCreateRecord][101] before
 calling this to check whether the current user can create the given record.
 
 ##### Parameters
@@ -2139,7 +2161,7 @@ Returns **{record: [Record][71]}** An object with the optimistically-created rec
 
 Creates records in the table.
 
-Throws if the current user cannot create the given records. Call [canCreateRecords][101] before
+Throws if the current user cannot create the given records. Call [canCreateRecords][102] before
 calling this to check whether the current user can create the given records.
 
 ##### Parameters
@@ -2180,7 +2202,7 @@ records.
 
 Deletes a record.
 
-Throws if the current user cannot delete the given record. Call [canDeleteRecord][102] before
+Throws if the current user cannot delete the given record. Call [canDeleteRecord][103] before
 calling this to check whether the current user can delete the given record.
 
 ##### Parameters
@@ -2201,7 +2223,7 @@ Returns **{}**
 
 Deletes records.
 
-Throws if the current user cannot delete the given records. Call [canDeleteRecords][103] before
+Throws if the current user cannot delete the given records. Call [canDeleteRecords][104] before
 calling this to check whether the current user can delete the given records.
 
 ##### Parameters
@@ -2249,7 +2271,7 @@ console.log(field.name);
 ```
 
 Returns **[Field][68]** The field matching the given ID. Throws if that field does not exist in this
-table. Use [getFieldByIdIfExists][104] instead if you are unsure whether a field exists with the
+table. Use [getFieldByIdIfExists][105] instead if you are unsure whether a field exists with the
 given ID.
 
 #### getFieldByIdIfExists
@@ -2288,7 +2310,7 @@ console.log(field.id);
 ```
 
 Returns **[Field][68]** The field matching the given name. Throws if no field exists with that name
-in this table. Use [getFieldByNameIfExists][105] instead if you are unsure whether a field exists
+in this table. Use [getFieldByNameIfExists][106] instead if you are unsure whether a field exists
 with the given name.
 
 #### getFieldByNameIfExists
@@ -2354,7 +2376,7 @@ console.log(view.name);
 ```
 
 Returns **[View][69]** The view matching the given ID. Throws if that view does not exist in this
-table. Use [getViewByIdIfExists][106] instead if you are unsure whether a view exists with the given
+table. Use [getViewByIdIfExists][107] instead if you are unsure whether a view exists with the given
 ID.
 
 #### getViewByIdIfExists
@@ -2393,7 +2415,7 @@ console.log(view.id);
 ```
 
 Returns **[View][69]** The view matching the given name. Throws if no view exists with that name in
-this table. Use [getViewByNameIfExists][107] instead if you are unsure whether a view exists with
+this table. Use [getViewByNameIfExists][108] instead if you are unsure whether a view exists with
 the given name.
 
 #### getViewByNameIfExists
@@ -2461,7 +2483,7 @@ Returns **[string][59]** The name of the table. Can be watched.
 
 #### parentBase
 
-Type: [Base][108]
+Type: [Base][109]
 
 ##### Examples
 
@@ -2472,7 +2494,7 @@ console.log(table.parentBase.id === base.id);
 // => true
 ```
 
-Returns **[Base][108]** The base that this table belongs to.
+Returns **[Base][109]** The base that this table belongs to.
 
 #### primaryField
 
@@ -2520,13 +2542,13 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][109]** A query result.
+Returns **[TableOrViewQueryResult][110]** A query result.
 
 #### setCellValues
 
 Sets cell values.
 
-Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][95]
+Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][96]
 before calling this to check whether the current user can perform the given updates.
 
 ##### Parameters
@@ -2725,7 +2747,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][109]** A query result.
+Returns **[TableOrViewQueryResult][110]** A query result.
 
 #### type
 
@@ -2881,7 +2903,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][110]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][111]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -2898,7 +2920,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][111]&lt;[HTMLLinkElement][112]>** a Promise that resolves to the style tag
+Returns **[Promise][88]&lt;[HTMLLinkElement][112]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -2916,7 +2938,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][111]&lt;[HTMLScriptElement][113]>** a Promise that resolves to the script tag
+Returns **[Promise][88]&lt;[HTMLScriptElement][113]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
@@ -3156,7 +3178,7 @@ function TableList() {
 }
 ```
 
-Returns **[Base][108]** Base
+Returns **[Base][109]** Base
 
 #### useRecords
 
@@ -3608,7 +3630,7 @@ const recordB = await expandRecordPickerAsync([record1, record2], {
 });
 ```
 
-Returns **[Promise][111]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][88]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
 ### AutocompletePopover
@@ -4904,30 +4926,30 @@ Type: {width: ([number][65] | null)?, height: ([number][65] | null)?}
 [85]: #useloadable
 [86]: #color
 [87]: #color
-[88]: delete
-[89]: setCellValue
-[90]: setCellValues
-[91]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-[92]: canDelete
-[93]: #linkedrecordsqueryresult
-[94]: canSetCellValue
-[95]: canSetCellValues
-[96]: createRecord
-[97]: createRecords
-[98]: deleteRecord
-[99]: deleteRecords
-[100]: canCreateRecord
-[101]: canCreateRecords
-[102]: canDeleteRecord
-[103]: canDeleteRecords
-[104]: getFieldByIdIfExists
-[105]: getFieldByNameIfExists
-[106]: getViewByIdIfExists
-[107]: getViewByNameIfExists
-[108]: #base
-[109]: #tableorviewqueryresult
-[110]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[111]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[88]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[89]: delete
+[90]: setCellValue
+[91]: setCellValues
+[92]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[93]: canDelete
+[94]: #linkedrecordsqueryresult
+[95]: canSetCellValue
+[96]: canSetCellValues
+[97]: createRecord
+[98]: createRecords
+[99]: deleteRecord
+[100]: deleteRecords
+[101]: canCreateRecord
+[102]: canCreateRecords
+[103]: canDeleteRecord
+[104]: canDeleteRecords
+[105]: getFieldByIdIfExists
+[106]: getFieldByNameIfExists
+[107]: getViewByIdIfExists
+[108]: getViewByNameIfExists
+[109]: #base
+[110]: #tableorviewqueryresult
+[111]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
 [112]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
 [113]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
 [114]: #colors
