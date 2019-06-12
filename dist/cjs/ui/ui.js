@@ -31,8 +31,6 @@ var _input = _interopRequireDefault(require("./input"));
 
 var _input_synced = _interopRequireDefault(require("./input_synced"));
 
-var _radio_synced = _interopRequireDefault(require("./radio_synced"));
-
 var _cell_renderer = _interopRequireDefault(require("./cell_renderer"));
 
 var _expand_record = _interopRequireDefault(require("./expand_record"));
@@ -129,7 +127,6 @@ var UI = {
   ViewPickerSynced: _view_picker_synced.default,
   Input: _input.default,
   InputSynced: _input_synced.default,
-  RadioSynced: _radio_synced.default,
   CellRenderer: _cell_renderer.default,
   FieldIcon: _field_icon.default,
   Icon: _icon.default,

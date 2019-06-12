@@ -11,7 +11,6 @@ import ViewPicker from './view_picker';
 import ViewPickerSynced from './view_picker_synced';
 import Input from './input';
 import InputSynced from './input_synced';
-import RadioSynced from './radio_synced';
 import CellRenderer from './cell_renderer';
 import expandRecord from './expand_record';
 import expandRecordList from './expand_record_list';
@@ -71,7 +70,6 @@ const UI = {
     ViewPickerSynced,
     Input,
     InputSynced,
-    RadioSynced,
     CellRenderer,
     FieldIcon,
     Icon,

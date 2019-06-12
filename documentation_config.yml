@@ -145,10 +145,6 @@ toc:
             children:
                 - ProgressBar
                 - ProgressBarProps
-          - name: RadioSynced
-            children:
-                - RadioSynced
-                - RadioSyncedProps
           - name: RecordCard
             children:
                 - RecordCard
