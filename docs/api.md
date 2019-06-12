@@ -540,24 +540,17 @@ Returns **[boolean][62]**
 
 **Extends Watchable**
 
-Abstract superclass for all models.
-
-#### Parameters
-
--   `baseData` **BaseData**
--   `modelId` **[string][60]**
+Abstract superclass for all models. You won't use this class directly.
 
 #### id
 
-The ID for this model.
-
 Type: [string][60]
 
-Returns **[string][60]**
+Returns **[string][60]** The ID for this model.
 
 #### isDeleted
 
-True if the model has been deleted.
+A boolean denoting whether the model has been deleted.
 
 In general, it's best to avoid keeping a reference to an object past the current event loop, since
 it may be deleted and trying to access any data of a deleted object (other than its ID) will throw.
@@ -566,7 +559,11 @@ data.
 
 Type: [boolean][62]
 
-Returns **[boolean][62]**
+Returns **[boolean][62]** `true` if the model has been deleted, and `false` otherwise.
+
+#### toString
+
+Returns **[string][60]** A string representation of the model for use in debugging.
 
 ### AbstractModelWithAsyncData
 

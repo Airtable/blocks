@@ -26,7 +26,7 @@ var _invariant = _interopRequireDefault(require("invariant"));
 var _watchable = _interopRequireDefault(require("../watchable"));
 
 /**
- * Abstract superclass for all models.
+ * Abstract superclass for all models. You won't use this class directly.
  */
 var AbstractModel =
 /*#__PURE__*/
@@ -40,6 +40,9 @@ function (_Watchable) {
     }
   }]);
 
+  /**
+   * @hideconstructor
+   */
   function AbstractModel(baseData, modelId) {
     var _this;
 
@@ -50,14 +53,25 @@ function (_Watchable) {
     _this._id = modelId;
     return _this;
   }
-  /** The ID for this model. */
+  /**
+   * @function
+   * @returns The ID for this model.
+   */
 
 
   (0, _createClass2.default)(AbstractModel, [{
     key: "_getErrorMessageForDeletion",
+
+    /**
+     * @private
+     */
     value: function _getErrorMessageForDeletion() {
       return this.constructor._className + ' has been deleted';
     }
+    /**
+     * @returns A string representation of the model for use in debugging.
+     */
+
   }, {
     key: "toString",
     value: function toString() {
@@ -68,12 +82,20 @@ function (_Watchable) {
     get: function get() {
       return this._id;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_dataOrNullIfDeleted",
     get: function get() {
       // Abstract, implement this.
       throw new Error('abstract method');
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_data",
     get: function get() {
@@ -86,13 +108,16 @@ function (_Watchable) {
       return data;
     }
     /**
-     * True if the model has been deleted.
+     * A boolean denoting whether the model has been deleted.
      *
      * In general, it's best to avoid keeping a reference to an object past the
      * current event loop, since it may be deleted and trying to access any data
      * of a deleted object (other than its ID) will throw. But if you keep a
      * reference, you can use `isDeleted` to check that it's safe to access the
      * model's data.
+     *
+     * @function
+     * @returns `true` if the model has been deleted, and `false` otherwise.
      */
 
   }, {
@@ -100,6 +125,10 @@ function (_Watchable) {
     get: function get() {
       return this._dataOrNullIfDeleted === null;
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__baseData",
     get: function get() {
