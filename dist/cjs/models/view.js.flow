@@ -63,6 +63,25 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      */
 
     /**
+     * True if this view has been deleted.
+     *
+     * In general, it's best to avoid keeping a reference to a view past the
+     * current event loop, since it may be deleted and trying to access any data
+     * of a deleted view (other than its ID) will throw. But if you do keep a
+     * reference, you can use `isDeleted` to check that it's safe to access the
+     * view's data.
+     *
+     * @function isDeleted
+     * @memberof View
+     * @instance
+     * @returns {boolean} `true` if the view has been deleted, `false` otherwise.
+     * @example
+     * if (!myView.isDeleted) {
+     *     // Do things with myView
+     * }
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): ViewData | null {

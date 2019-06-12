@@ -89,6 +89,25 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      */
 
     /**
+     * True if this table has been deleted.
+     *
+     * In general, it's best to avoid keeping a reference to a table past the
+     * current event loop, since it may be deleted and trying to access any data
+     * of a deleted table (other than its ID) will throw. But if you do keep a
+     * reference, you can use `isDeleted` to check that it's safe to access the
+     * table's data.
+     *
+     * @function isDeleted
+     * @memberof Table
+     * @instance
+     * @returns {boolean} `true` if the table has been deleted, `false` otherwise.
+     * @example
+     * if (!myTable.isDeleted) {
+     *     // Do things with myTable
+     * }
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): TableData | null {

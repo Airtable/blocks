@@ -925,6 +925,25 @@ console.log(myAutoNumberField.isComputed);
 Returns **[boolean][65]** `true` if this field is computed, `false` otherwise. A field is "computed"
 if it's value is not set by user input (e.g. autoNumber, formula, etc.). Can be watched.
 
+#### isDeleted
+
+True if this field has been deleted.
+
+In general, it's best to avoid keeping a reference to a field past the current event loop, since it
+may be deleted and trying to access any data of a deleted field (other than its ID) will throw. But
+if you do keep a reference, you can use `isDeleted` to check that it's safe to access the field's
+data.
+
+##### Examples
+
+```javascript
+if (!myField.isDeleted) {
+    // Do things with myField
+}
+```
+
+Returns **[boolean][65]** `true` if the field has been deleted, `false` otherwise.
+
 #### isPrimaryField
 
 Type: [boolean][65]
@@ -1368,6 +1387,25 @@ console.log(myRecord.id);
 ```
 
 Returns **[string][60]** This record's ID.
+
+#### isDeleted
+
+True if this record has been deleted.
+
+In general, it's best to avoid keeping a reference to a record past the current event loop, since it
+may be deleted and trying to access any data of a deleted record (other than its ID) will throw. But
+if you do keep a reference, you can use `isDeleted` to check that it's safe to access the record's
+data.
+
+##### Examples
+
+```javascript
+if (!myRecord.isDeleted) {
+    // Do things with myRecord
+}
+```
+
+Returns **[boolean][65]** `true` if the record has been deleted, `false` otherwise.
 
 #### parentTable
 
@@ -1967,6 +2005,25 @@ console.log(myTable.id);
 
 Returns **[string][60]** This table's ID.
 
+#### isDeleted
+
+True if this table has been deleted.
+
+In general, it's best to avoid keeping a reference to a table past the current event loop, since it
+may be deleted and trying to access any data of a deleted table (other than its ID) will throw. But
+if you do keep a reference, you can use `isDeleted` to check that it's safe to access the table's
+data.
+
+##### Examples
+
+```javascript
+if (!myTable.isDeleted) {
+    // Do things with myTable
+}
+```
+
+Returns **[boolean][65]** `true` if the table has been deleted, `false` otherwise.
+
 #### name
 
 Type: [string][60]
@@ -2131,6 +2188,25 @@ console.log(myView.id);
 ```
 
 Returns **[string][60]** This view's ID.
+
+#### isDeleted
+
+True if this view has been deleted.
+
+In general, it's best to avoid keeping a reference to a view past the current event loop, since it
+may be deleted and trying to access any data of a deleted view (other than its ID) will throw. But
+if you do keep a reference, you can use `isDeleted` to check that it's safe to access the view's
+data.
+
+##### Examples
+
+```javascript
+if (!myView.isDeleted) {
+    // Do things with myView
+}
+```
+
+Returns **[boolean][65]** `true` if the view has been deleted, `false` otherwise.
 
 #### name
 

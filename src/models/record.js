@@ -90,6 +90,25 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
 
     /**
+     * True if this record has been deleted.
+     *
+     * In general, it's best to avoid keeping a reference to a record past the
+     * current event loop, since it may be deleted and trying to access any data
+     * of a deleted record (other than its ID) will throw. But if you do keep a
+     * reference, you can use `isDeleted` to check that it's safe to access the
+     * record's data.
+     *
+     * @function isDeleted
+     * @memberof Record
+     * @instance
+     * @returns {boolean} `true` if the record has been deleted, `false` otherwise.
+     * @example
+     * if (!myRecord.isDeleted) {
+     *     // Do things with myRecord
+     * }
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): RecordData | null {

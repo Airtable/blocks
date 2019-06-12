@@ -72,6 +72,25 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      */
 
     /**
+     * True if this field has been deleted.
+     *
+     * In general, it's best to avoid keeping a reference to a field past the
+     * current event loop, since it may be deleted and trying to access any data
+     * of a deleted field (other than its ID) will throw. But if you do keep a
+     * reference, you can use `isDeleted` to check that it's safe to access the
+     * field's data.
+     *
+     * @function isDeleted
+     * @memberof Field
+     * @instance
+     * @returns {boolean} `true` if the field has been deleted, `false` otherwise.
+     * @example
+     * if (!myField.isDeleted) {
+     *     // Do things with myField
+     * }
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): FieldData | null {
