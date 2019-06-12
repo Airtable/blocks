@@ -363,32 +363,30 @@ import {viewport} from '@airtable/blocks';
 
 #### addMaxFullscreenSize
 
-Add a maximum fullscreen size constraint. Returns a function that can be called to remove the
-fullscreen size that was added. Use .maxFullscreenSize to get the aggregate of all added
-constraints. Both `width` and `height` are optional - if either is set to null, that means there is
-no max size in that dimension.
+Add a maximum fullscreen size constraint. Use \`.maxFullscreenSize`` to get the aggregate of all
+added constraints.
 
 ##### Parameters
 
--   `$0` **\$Shape&lt;ViewportSizeConstraint>**
-    -   `$0.width`
-    -   `$0.height`
+-   `sizeConstraint` **{width: ([number][65] | null), height: ([number][65] | null)}** The width and
+    height constraints to add. Both `width` and `height` are optional - if either is set to null,
+    that means there is no max size in that dimension.
 
-Returns **UnsetFn**
+Returns **[Function][63]** A function that can be called to remove the fullscreen size constraint
+that was added.
 
 #### addMinSize
 
-Add a minimum frame size constraint. Returns a function that can be called to remove the added
-constraint. Use .minSize to get the aggregate of all added constraints. Both `width` and `height`
-are optional - if either is null, there is no minimum size in that dimension.
+Add a minimum frame size constraint. Use \`.minSize`` to get the aggregate of all added constraints.
 
 ##### Parameters
 
--   `$0` **\$Shape&lt;ViewportSizeConstraint>**
-    -   `$0.width`
-    -   `$0.height`
+-   `sizeConstraint` **{width: ([number][65] | null), height: ([number][65] | null)}** The width and
+    height constraints to add. Both `width` and `height` are optional - if either is set to null,
+    that means there is no min size in that dimension.
 
-Returns **UnsetFn**
+Returns **[Function][63]** A function that can be called to remove the size constraint that was
+added.
 
 #### enterFullscreenIfPossible
 
@@ -403,17 +401,21 @@ Request to exit fullscreen mode
 
 #### isFullscreen
 
+Boolean to denote whether the block is currently fullscreen.
+
 Can be watched.
 
 Type: [boolean][61]
 
-Returns **[boolean][61]**
+Returns **[boolean][61]** `true` if the block is fullscreen, `false` otherwise.
 
 #### isSmallerThanMinSize
 
+Boolean to denote whether the block frame is smaller than the `minSize`.
+
 Type: [boolean][61]
 
-Returns **[boolean][61]**
+Returns **[boolean][61]** `true` if the block frame is smaller than `minSize`, `false` otherwise.
 
 #### maxFullscreenSize
 
@@ -426,26 +428,63 @@ If `width` or `height` is null, it means there is no max size constraint on that
 
 Type: ViewportSizeConstraint
 
-Returns **ViewportSizeConstraint**
+Returns **{width: ([number][65] | null), height: ([number][65] | null)}** maxSize
 
 #### minSize
 
-Can be watched. The minimum dimensions of the block - if the viewport gets smaller than this size,
-an overlay will be shown asking the user to resize the block to be bigger. Returns the largest set
-of dimensions added with addMinSize. If `width` or `height` is null, it means there is no minSize
-constraint on that dimension.
+The minimum dimensions of the block - if the viewport gets smaller than this size, an overlay will
+be shown asking the user to resize the block to be bigger.
 
 Type: ViewportSizeConstraint
 
-Returns **ViewportSizeConstraint**
+Returns **{width: ([number][65] | null), height: ([number][65] | null)}** The largest set of
+dimensions added with addMinSize. If `width` or `height` is null, it means there is no minSize
+constraint on that dimension.
 
 #### size
+
+The current size of the block frame.
 
 Can be watched.
 
 Type: {width: [number][65], height: [number][65]}
 
-Returns **{width: [number][65], height: [number][65]}**
+Returns **{width: [number][65], height: [number][65]}** The current size of the block frame.
+
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableViewportKey | [Array][60]&lt;WatchableViewportKey>)** the keys to unwatch
+-   `callback` **[Function][63]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableViewportKey>** the array of keys that were unwatched
+
+#### watch
+
+Get notified of changes to the viewport.
+
+Watchable keys are:
+
+-   `'isFullscreen'`
+-   `'size'`
+-   `'minSize'`
+-   `'maxFullscreenSize'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableViewportKey | [Array][60]&lt;WatchableViewportKey>)** the keys to watch
+-   `callback` **[Function][63]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableViewportKey>** the array of keys that were watched
 
 ## @airtable/blocks/models
 

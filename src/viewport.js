@@ -103,7 +103,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * no max size constraint on that dimension. If `maxFullscreenSize` would be
      * smaller than {@link Viewport#minSize}, it is constrained to be at least `minSize`.
      *
-     * @returns {{width: number | null, height: number | null}} maxSize
+     * @returns {{width: (number|null), height: (number|null)}} maxSize
      */
     get maxFullscreenSize(): ViewportSizeConstraint {
         if (!this._cachedMaxFullscreenSize) {
@@ -132,13 +132,17 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * Add a maximum fullscreen size constraint. Returns a function that can be
-     * called to remove the fullscreen size that was added. Use
-     * .maxFullscreenSize to get the aggregate of all added constraints. Both
+     * Add a maximum fullscreen size constraint. Use `.maxFullscreenSize`` to get
+     * the aggregate of all added constraints.
+     *
+     * @param {{width: (number|null), height: (number|null)}} sizeConstraint The width and height constraints to add. Both
      * `width` and `height` are optional - if either is set to null, that means
      * there is no max size in that dimension.
+     * @returns {Function} A function that can be called to remove the fullscreen
+     * size constraint that was added.
      */
-    addMaxFullscreenSize({width, height}: $Shape<ViewportSizeConstraint>): UnsetFn {
+    addMaxFullscreenSize(sizeConstraint: $Shape<ViewportSizeConstraint>): UnsetFn {
+        const {width, height} = sizeConstraint;
         const size = Object.freeze({
             width: typeof width === 'number' ? width : null,
             height: typeof height === 'number' ? height : null,
@@ -157,11 +161,12 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * Can be watched. The minimum dimensions of the block - if the viewport
-     * gets smaller than this size, an overlay will be shown asking the user to
-     * resize the block to be bigger. Returns the largest set of dimensions
-     * added with addMinSize. If `width` or `height` is null, it means there is
-     * no minSize constraint on that dimension.
+     * The minimum dimensions of the block - if the viewport gets smaller than this
+     * size, an overlay will be shown asking the user to resize the block to be bigger.
+     *
+     * @returns {{width: (number|null), height: (number|null)}} The largest set of dimensions
+     * added with addMinSize. If `width` or `height` is null, it means there is no minSize
+     * constraint on that dimension.
      */
     get minSize(): ViewportSizeConstraint {
         if (!this._cachedMinSize) {
@@ -178,12 +183,17 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * Add a minimum frame size constraint. Returns a function that can be
-     * called to remove the added constraint. Use .minSize to get the aggregate
-     * of all added constraints. Both `width` and `height` are optional - if
-     * either is null, there is no minimum size in that dimension.
+     * Add a minimum frame size constraint. Use `.minSize`` to get the aggregate
+     * of all added constraints.
+     *
+     * @param {{width: (number|null), height: (number|null)}} sizeConstraint The width and height constraints to add. Both `width`
+     * and `height` are optional - if either is set to null, that means there is
+     * no min size in that dimension.
+     * @returns {Function} A function that can be called to remove the  size constraint
+     * that was added.
      */
-    addMinSize({width, height}: $Shape<ViewportSizeConstraint>): UnsetFn {
+    addMinSize(sizeConstraint: $Shape<ViewportSizeConstraint>): UnsetFn {
+        const {width, height} = sizeConstraint;
         const size = Object.freeze({
             width: typeof width === 'number' ? width : null,
             height: typeof height === 'number' ? height : null,
@@ -207,24 +217,56 @@ class Viewport extends Watchable<WatchableViewportKey> {
         };
     }
 
-    /** */
+    /**
+     * Boolean to denote whether the block frame is smaller than the `minSize`.
+     *
+     * @returns `true` if the block frame is smaller than `minSize`, `false` otherwise.
+     */
     get isSmallerThanMinSize(): boolean {
         const {width, height} = this.size;
         const isWidthTooSmall = this.minSize.width !== null && this.minSize.width > width;
         const isHeightTooSmall = this.minSize.height !== null && this.minSize.height > height;
         return isWidthTooSmall || isHeightTooSmall;
     }
-    /** Can be watched. */
+    /**
+     * Boolean to denote whether the block is currently fullscreen.
+     *
+     * Can be watched.
+     *
+     * @returns `true` if the block is fullscreen, `false` otherwise.
+     */
     get isFullscreen(): boolean {
         return this._isFullscreen;
     }
-    /** Can be watched. */
+    /**
+     * The current size of the block frame.
+     *
+     * Can be watched.
+     *
+     * @returns The current size of the block frame.
+     */
     get size(): {width: number, height: number} {
         return {
             width: window.innerWidth,
             height: window.innerHeight,
         };
     }
+    /**
+     * Get notified of changes to the viewport.
+     *
+     * Watchable keys are:
+     * - `'isFullscreen'`
+     * - `'size'`
+     * - `'minSize'`
+     * - `'maxFullscreenSize'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param [context] an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
+     */
     watch(
         keys: WatchableViewportKey | Array<WatchableViewportKey>,
         callback: Function,
@@ -241,6 +283,16 @@ class Viewport extends Watchable<WatchableViewportKey> {
 
         return validKeys;
     }
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
+     */
     unwatch(
         keys: WatchableViewportKey | Array<WatchableViewportKey>,
         callback: Function,
@@ -257,18 +309,27 @@ class Viewport extends Watchable<WatchableViewportKey> {
 
         return validKeys;
     }
+    /**
+     * @private
+     */
     __onEnterFullscreen() {
         this._isFullscreen = true;
 
         this._onChange(WatchableViewportKeys.isFullscreen);
         this._onChange(WatchableViewportKeys.size);
     }
+    /**
+     * @private
+     */
     __onExitFullscreen() {
         this._isFullscreen = false;
 
         this._onChange(WatchableViewportKeys.isFullscreen);
         this._onChange(WatchableViewportKeys.size);
     }
+    /**
+     * @private
+     */
     __focus() {
         const {body, activeElement} = document;
         // See comment in BlockFrame.focusIframe for why we do this.
@@ -284,6 +345,9 @@ class Viewport extends Watchable<WatchableViewportKey> {
             input.remove();
         }
     }
+    /**
+     * @private
+     */
     _onSizeChange() {
         this._onChange(WatchableViewportKeys.size);
     }
