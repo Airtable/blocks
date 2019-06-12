@@ -8,6 +8,11 @@
 
 [Guide: building a to-do list block (developer preview)](https://airtable.quip.com/49x4AwpraVGS/Guide-building-a-to-do-list-block-developer-preview)
 
+## Example blocks
+
+-   [To-do list](/examples/todo/frontend/index.js)
+-   [Batch adder](/examples/batch_adder/frontend/index.js)
+
 ## API Reference
 
 [API Reference docs](/docs/api.md)
