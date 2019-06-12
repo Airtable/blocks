@@ -15,10 +15,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -54,7 +50,8 @@ function (_React$Component) {
     var _this;
 
     (0, _classCallCheck2.default)(this, ModelPickerSelect);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ModelPickerSelect).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ModelPickerSelect).call(this, props)); // TODO (stephen): Use React.forwardRef
+
     _this._onChange = _this._onChange.bind((0, _assertThisInitialized2.default)(_this));
     _this._select = null;
     return _this;
@@ -93,22 +90,25 @@ function (_React$Component) {
       var _this$props = this.props,
           models = _this$props.models,
           selectedModelId = _this$props.selectedModelId,
-          style = _this$props.style,
-          className = _this$props.className,
-          disabled = _this$props.disabled,
-          placeholder = _this$props.placeholder,
           shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
           shouldAllowPickingModelFn = _this$props.shouldAllowPickingModelFn,
-          modelKeysToWatch = _this$props.modelKeysToWatch,
-          onChange = _this$props.onChange,
-          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["models", "selectedModelId", "style", "className", "disabled", "placeholder", "shouldAllowPickingNone", "shouldAllowPickingModelFn", "modelKeysToWatch", "onChange"]);
-      return React.createElement(_select.default, (0, _extends2.default)({
+          id = _this$props.id,
+          className = _this$props.className,
+          style = _this$props.style,
+          disabled = _this$props.disabled,
+          tabIndex = _this$props.tabIndex,
+          placeholder = _this$props.placeholder;
+      return React.createElement(_select.default, {
         ref: el => this._select = el,
         value: selectedModelId,
         onChange: this._onChange,
-        style: style,
+        id: id,
         className: className,
+        style: style,
         disabled: disabled,
+        tabIndex: tabIndex,
+        "aria-labelledby": this.props['aria-labelledby'],
+        "aria-describedby": this.props['aria-describedby'],
         options: [{
           value: null,
           label: placeholder,
@@ -120,7 +120,7 @@ function (_React$Component) {
             disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model)
           };
         })]
-      }, restOfProps));
+      });
     }
   }]);
   return ModelPickerSelect;

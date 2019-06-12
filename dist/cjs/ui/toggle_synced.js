@@ -121,7 +121,7 @@ function (_React$Component) {
   disabled: _propTypes.default.bool,
   className: _propTypes.default.string,
   style: _propTypes.default.object,
-  tabIndex: _propTypes.default.number
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string])
 });
 var _default = ToggleSynced;
 exports.default = _default;

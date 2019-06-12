@@ -186,7 +186,7 @@ function (_React$Component) {
   disabled: _propTypes.default.bool,
   required: _propTypes.default.bool,
   spellCheck: _propTypes.default.bool,
-  tabIndex: _propTypes.default.number
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string])
 });
 (0, _defineProperty2.default)(Input, "defaultProps", {
   tabIndex: 0

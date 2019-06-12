@@ -14,14 +14,18 @@ type AnyModel = Table | View | Field;
 type ModelPickerSelectProps<Model: AnyModel> = {
     models: Array<Model>,
     selectedModelId: string | null,
-    onChange: (string | null) => void,
-    style?: Object,
-    className?: string,
-    disabled?: boolean,
-    placeholder: string,
-    shouldAllowPickingNone?: boolean,
     modelKeysToWatch: Array<string>,
+    shouldAllowPickingNone?: boolean,
     shouldAllowPickingModelFn?: Model => boolean,
+    onChange: (string | null) => void,
+    id?: string,
+    className?: string,
+    style?: Object,
+    disabled?: boolean,
+    tabIndex?: number | string,
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
+    placeholder: string,
 };
 
 class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
@@ -29,7 +33,7 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
     _onChange: SelectOptionValue => void;
     constructor(props: ModelPickerSelectProps<Model>) {
         super(props);
-
+        // TODO (stephen): Use React.forwardRef
         this._onChange = this._onChange.bind(this);
         this._select = null;
     }
@@ -53,26 +57,27 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
         const {
             models,
             selectedModelId,
-            style,
-            className,
-            disabled,
-            placeholder,
             shouldAllowPickingNone,
             shouldAllowPickingModelFn,
-            // Filter these out so they're not
-            // included in restOfProps:
-            modelKeysToWatch, // eslint-disable-line no-unused-vars
-            onChange, // eslint-disable-line no-unused-vars
-            ...restOfProps
+            id,
+            className,
+            style,
+            disabled,
+            tabIndex,
+            placeholder,
         } = this.props;
         return (
             <Select
                 ref={el => (this._select = el)}
                 value={selectedModelId}
                 onChange={this._onChange}
-                style={style}
+                id={id}
                 className={className}
+                style={style}
                 disabled={disabled}
+                tabIndex={tabIndex}
+                aria-labelledby={this.props['aria-labelledby']}
+                aria-describedby={this.props['aria-describedby']}
                 options={[
                     {value: null, label: placeholder, disabled: !shouldAllowPickingNone},
                     ...models.map(model => {
@@ -84,7 +89,6 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
                         };
                     }),
                 ]}
-                {...restOfProps}
             />
         );
     }

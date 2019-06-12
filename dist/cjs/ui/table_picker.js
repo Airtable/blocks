@@ -9,10 +9,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -41,7 +37,35 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
 
 var _model_picker_select = _interopRequireDefault(require("./model_picker_select"));
 
-/** */
+/**
+ * Dropdown menu component for selecting tables.
+ *
+ * @example
+ * import {TablePickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+ * import React, {Fragment, useState} from 'react';
+ *
+ * function Block() {
+ *     useBase();
+ *     const [table, setTable] = useState(null);
+ *     const queryResult = table ? table.selectRecords() : null;
+ *     const records = useRecords(queryResult);
+ *
+ *     const summaryText = table ? `${table.name} has ${records.length} record(s).` : 'No table selected.';
+ *     return (
+ *         <Fragment>
+ *             <p style={{marginBottom: 16}}>{summaryText}</p>
+ *             <label>
+ *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+ *                 <TablePickerSynced
+ *                     table={table}
+ *                     onChange={newTable => setTable(newTable)}
+ *                     shouldAllowPickingNone={true}
+ *                 />
+ *             </label>
+ *         </Fragment>
+ *     );
+ * }
+ */
 var TablePicker =
 /*#__PURE__*/
 function (_React$Component) {
@@ -51,7 +75,8 @@ function (_React$Component) {
     var _this;
 
     (0, _classCallCheck2.default)(this, TablePicker);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TablePicker).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TablePicker).call(this, props)); // TODO (stephen): use React.forwardRef
+
     _this._select = null;
     _this._onChange = _this._onChange.bind((0, _assertThisInitialized2.default)(_this));
     return _this;
@@ -94,12 +119,12 @@ function (_React$Component) {
       var _this$props = this.props,
           table = _this$props.table,
           shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
-          style = _this$props.style,
-          className = _this$props.className,
           disabled = _this$props.disabled,
           placeholder = _this$props.placeholder,
-          onChange = _this$props.onChange,
-          restOfProps = (0, _objectWithoutProperties2.default)(_this$props, ["table", "shouldAllowPickingNone", "style", "className", "disabled", "placeholder", "onChange"]);
+          id = _this$props.id,
+          className = _this$props.className,
+          style = _this$props.style,
+          tabIndex = _this$props.tabIndex;
       var selectedTable = table && !table.isDeleted ? table : null;
       var placeholderToUse;
 
@@ -111,18 +136,22 @@ function (_React$Component) {
         placeholderToUse = placeholder;
       }
 
-      return React.createElement(_model_picker_select.default, (0, _extends2.default)({
+      return React.createElement(_model_picker_select.default, {
         ref: el => this._select = el,
         models: (0, _get_sdk.default)().base.tables,
         selectedModelId: selectedTable ? selectedTable.id : null,
+        modelKeysToWatch: ['name'],
         onChange: this._onChange,
-        style: style,
-        className: className,
         disabled: disabled,
-        placeholder: placeholderToUse,
         shouldAllowPickingNone: shouldAllowPickingNone,
-        modelKeysToWatch: ['name']
-      }, restOfProps));
+        placeholder: placeholderToUse,
+        id: id,
+        className: className,
+        style: style,
+        tabIndex: tabIndex,
+        "aria-labelledby": this.props['aria-labelledby'],
+        "aria-describedby": this.props['aria-describedby']
+      });
     }
   }]);
   return TablePicker;
@@ -131,11 +160,15 @@ function (_React$Component) {
 (0, _defineProperty2.default)(TablePicker, "propTypes", {
   table: _propTypes.default.instanceOf(_table.default),
   shouldAllowPickingNone: _propTypes.default.bool,
+  disabled: _propTypes.default.bool,
   onChange: _propTypes.default.func,
   placeholder: _propTypes.default.string,
-  style: _propTypes.default.object,
+  id: _propTypes.default.string,
   className: _propTypes.default.string,
-  disabled: _propTypes.default.bool
+  style: _propTypes.default.object,
+  tabIndex: _propTypes.default.oneOf([_propTypes.default.number, _propTypes.default.string]),
+  'aria-labelledby': _propTypes.default.string,
+  'aria-describedby': _propTypes.default.string
 });
 
 var _default = (0, _create_data_container.default)(TablePicker, props => {

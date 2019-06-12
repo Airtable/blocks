@@ -9,8 +9,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -39,12 +37,37 @@ var _global_config_synced_component_helpers = _interopRequireDefault(require("./
 
 var _synced = _interopRequireDefault(require("./synced"));
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
-/** @typedef */
-
-
-/** */
+/**
+ * Dropdown menu component for selecting tables, synced with {@link GlobalConfig}.
+ *
+ * @example
+ * import {TablePickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
+ * import {globalConfig} from '@airtable/blocks';
+ * import React, {Fragment} from 'react';
+ *
+ * function Block() {
+ *     const base = useBase();
+ *     const tableId = globalConfig.get('tableId');
+ *     const table = base.getTableByIdIfExists(tableId);
+ *     const queryResult = table ? table.selectRecords() : null;
+ *     const records = useRecords(queryResult);
+ *     useWatchable(globalConfig, ['tableId']);
+ *
+ *     const summaryText = table ? `${table.name} has ${records.length} record(s).` : 'No table selected.';
+ *     return (
+ *         <Fragment>
+ *             <p style={{marginBottom: 16}}>{summaryText}</p>
+ *             <label>
+ *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+ *                 <TablePickerSynced
+ *                     globalConfigKey="tableId"
+ *                     shouldAllowPickingNone={true}
+ *                 />
+ *             </label>
+ *         </Fragment>
+ *     );
+ * }
+ */
 var TablePickerSynced =
 /*#__PURE__*/
 function (_React$Component) {
@@ -54,7 +77,8 @@ function (_React$Component) {
     var _this;
 
     (0, _classCallCheck2.default)(this, TablePickerSynced);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TablePickerSynced).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TablePickerSynced).call(this, props)); // TODO (stephen): use React.forwardRef
+
     _this._tablePicker = null;
     return _this;
   }
@@ -88,25 +112,42 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+      var _this$props = this.props,
+          globalConfigKey = _this$props.globalConfigKey,
+          _onChange = _this$props.onChange,
+          disabled = _this$props.disabled,
+          shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
+          placeholder = _this$props.placeholder,
+          id = _this$props.id,
+          className = _this$props.className,
+          style = _this$props.style,
+          tabIndex = _this$props.tabIndex;
       return React.createElement(_synced.default, {
-        globalConfigKey: this.props.globalConfigKey,
+        globalConfigKey: globalConfigKey,
         render: (_ref) => {
           var value = _ref.value,
               canSetValue = _ref.canSetValue,
               setValue = _ref.setValue;
-          return React.createElement(_table_picker.default, (0, _extends2.default)({
+          return React.createElement(_table_picker.default, {
             ref: el => this._tablePicker = el,
             table: this._getTableFromGlobalConfigValue(value),
-            disabled: this.props.disabled || !canSetValue,
             onChange: table => {
               setValue(table ? table.id : null);
 
-              if (this.props.onChange) {
-                this.props.onChange(table);
+              if (_onChange) {
+                _onChange(table);
               }
-            }
-          }, restOfProps));
+            },
+            disabled: disabled || !canSetValue,
+            shouldAllowPickingNone: shouldAllowPickingNone,
+            placeholder: placeholder,
+            id: id,
+            className: className,
+            style: style,
+            tabIndex: tabIndex,
+            "aria-labelledby": this.props['aria-labelledby'],
+            "aria-describedby": this.props['aria-describedby']
+          });
         }
       });
     }
@@ -121,8 +162,12 @@ function (_React$Component) {
   // Passed through to TablePicker.
   shouldAllowPickingNone: _propTypes.default.bool,
   placeholder: _propTypes.default.string,
+  id: _propTypes.default.string,
+  className: _propTypes.default.string,
   style: _propTypes.default.object,
-  className: _propTypes.default.string
+  tabIndex: _propTypes.default.oneOf([_propTypes.default.number, _propTypes.default.string]),
+  'aria-labelledby': _propTypes.default.string,
+  'aria-describedby': _propTypes.default.string
 });
 
 var _default = (0, _create_data_container.default)(TablePickerSynced, props => {

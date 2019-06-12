@@ -81,7 +81,7 @@ var Link = props => {
 Link.propTypes = {
   href: _propTypes.default.string.isRequired,
   target: _propTypes.default.string,
-  tabIndex: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
   className: _propTypes.default.string,
   style: _propTypes.default.object,
   children: _propTypes.default.node

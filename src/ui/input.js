@@ -91,7 +91,7 @@ class Input extends React.Component<InputProps> {
         disabled: PropTypes.bool,
         required: PropTypes.bool,
         spellCheck: PropTypes.bool,
-        tabIndex: PropTypes.number,
+        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     };
     static defaultProps = {
         tabIndex: 0,

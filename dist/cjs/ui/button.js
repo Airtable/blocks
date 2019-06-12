@@ -137,7 +137,7 @@ function (_React$Component) {
   onClick: _propTypes.default.func,
   type: _propTypes.default.string,
   disabled: _propTypes.default.bool,
-  tabIndex: _propTypes.default.number,
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
   'aria-label': _propTypes.default.string
 });
 (0, _defineProperty2.default)(Button, "defaultProps", {

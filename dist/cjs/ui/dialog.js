@@ -113,7 +113,7 @@ function (_React$Component) {
 (0, _defineProperty2.default)(DialogCloseButton, "propTypes", {
   className: _propTypes.default.string,
   style: _propTypes.default.object,
-  tabIndex: _propTypes.default.number,
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
   children: _propTypes.default.node
 });
 (0, _defineProperty2.default)(DialogCloseButton, "contextTypes", {

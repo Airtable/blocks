@@ -26,7 +26,7 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
     static propTypes = {
         className: PropTypes.string,
         style: PropTypes.object,
-        tabIndex: PropTypes.number,
+        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         children: PropTypes.node,
     };
     static contextTypes = {

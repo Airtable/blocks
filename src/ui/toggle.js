@@ -41,7 +41,7 @@ type ToggleProps = {
     disabled?: boolean,
     className?: string,
     style?: Object,
-    tabIndex?: number,
+    tabIndex?: number | string,
 };
 
 /** */
@@ -55,7 +55,7 @@ class Toggle extends React.Component<ToggleProps> {
         disabled: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
-        tabIndex: PropTypes.number,
+        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     };
     static defaultProps = {
         tabIndex: 0,

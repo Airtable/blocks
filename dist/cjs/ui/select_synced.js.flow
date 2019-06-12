@@ -13,7 +13,7 @@ import Synced from './synced';
  * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`.
  * @property {function} [onChange] A function to be called when the selected option changes. This should only be used for side effects.
  * @property {Array.<SelectOption>} options The list of select options.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the button.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
  * @property {string} [id] The ID of the select element.
  * @property {string} [className] Additional class names to apply to the select.
  * @property {object} [style] Additional styles to apply to the select.

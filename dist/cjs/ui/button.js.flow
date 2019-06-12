@@ -75,7 +75,7 @@ class Button extends React.Component<ButtonProps> {
         onClick: PropTypes.func,
         type: PropTypes.string,
         disabled: PropTypes.bool,
-        tabIndex: PropTypes.number,
+        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         'aria-label': PropTypes.string,
     };
     static defaultProps = {

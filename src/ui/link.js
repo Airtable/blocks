@@ -87,7 +87,7 @@ const Link = (props: LinkProps) => {
 Link.propTypes = {
     href: PropTypes.string.isRequired,
     target: PropTypes.string,
-    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     className: PropTypes.string,
     style: PropTypes.object,
     children: PropTypes.node,

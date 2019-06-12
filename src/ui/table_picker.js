@@ -7,34 +7,83 @@ import Table from '../models/table';
 import createDataContainer from './create_data_container';
 import ModelPickerSelect from './model_picker_select';
 
-/** @typedef */
+/**
+ * @typedef {object} TablePickerProps
+ * @property {Table} [table] The selected table model.
+ * @property {function} [onChange] A function to be called when the selected table changes.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
+ * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected table.
+ * @property {string} [placeholder='Pick a table...'] The placeholder text when no table is selected.
+ * @property {string} [id] The ID of the picker element.
+ * @property {string} [className] Additional class names to apply to the picker.
+ * @property {object} [style] Additional styles to apply to the picker.
+ * @property {number | string} [tabIndex] Indicates if the picker can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
 type TablePickerProps = {
     table?: Table | null,
     shouldAllowPickingNone?: boolean,
+    disabled?: boolean,
     onChange?: (tableModel: Table | null) => void,
     placeholder?: string,
-    style?: Object,
+    id?: string,
     className?: string,
-    disabled?: boolean,
+    style?: Object,
+    tabIndex?: number | string,
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
 };
 
-/** */
+/**
+ * Dropdown menu component for selecting tables.
+ *
+ * @example
+ * import {TablePickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+ * import React, {Fragment, useState} from 'react';
+ *
+ * function Block() {
+ *     useBase();
+ *     const [table, setTable] = useState(null);
+ *     const queryResult = table ? table.selectRecords() : null;
+ *     const records = useRecords(queryResult);
+ *
+ *     const summaryText = table ? `${table.name} has ${records.length} record(s).` : 'No table selected.';
+ *     return (
+ *         <Fragment>
+ *             <p style={{marginBottom: 16}}>{summaryText}</p>
+ *             <label>
+ *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+ *                 <TablePickerSynced
+ *                     table={table}
+ *                     onChange={newTable => setTable(newTable)}
+ *                     shouldAllowPickingNone={true}
+ *                 />
+ *             </label>
+ *         </Fragment>
+ *     );
+ * }
+ */
 class TablePicker extends React.Component<TablePickerProps> {
     static propTypes = {
         table: PropTypes.instanceOf(Table),
         shouldAllowPickingNone: PropTypes.bool,
+        disabled: PropTypes.bool,
         onChange: PropTypes.func,
         placeholder: PropTypes.string,
-        style: PropTypes.object,
+        id: PropTypes.string,
         className: PropTypes.string,
-        disabled: PropTypes.bool,
+        style: PropTypes.object,
+        tabIndex: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
+        'aria-labelledby': PropTypes.string,
+        'aria-describedby': PropTypes.string,
     };
     props: TablePickerProps;
     _select: ModelPickerSelect<Table> | null;
     _onChange: (string | null) => void;
     constructor(props: TablePickerProps) {
         super(props);
-
+        // TODO (stephen): use React.forwardRef
         this._select = null;
         this._onChange = this._onChange.bind(this);
     }
@@ -61,14 +110,12 @@ class TablePicker extends React.Component<TablePickerProps> {
         const {
             table,
             shouldAllowPickingNone,
-            style,
-            className,
             disabled,
             placeholder,
-            // Filter these out so they're not
-            // included in restOfProps:
-            onChange, // eslint-disable-line no-unused-vars
-            ...restOfProps
+            id,
+            className,
+            style,
+            tabIndex,
         } = this.props;
         const selectedTable = table && !table.isDeleted ? table : null;
 
@@ -86,14 +133,17 @@ class TablePicker extends React.Component<TablePickerProps> {
                 ref={el => (this._select = el)}
                 models={getSdk().base.tables}
                 selectedModelId={selectedTable ? selectedTable.id : null}
-                onChange={this._onChange}
-                style={style}
-                className={className}
-                disabled={disabled}
-                placeholder={placeholderToUse}
-                shouldAllowPickingNone={shouldAllowPickingNone}
                 modelKeysToWatch={['name']}
-                {...restOfProps}
+                onChange={this._onChange}
+                disabled={disabled}
+                shouldAllowPickingNone={shouldAllowPickingNone}
+                placeholder={placeholderToUse}
+                id={id}
+                className={className}
+                style={style}
+                tabIndex={tabIndex}
+                aria-labelledby={this.props['aria-labelledby']}
+                aria-describedby={this.props['aria-describedby']}
             />
         );
     }

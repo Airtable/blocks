@@ -19,7 +19,7 @@ type ToggleSyncedProps = {
     disabled?: boolean,
     className?: string,
     style?: Object,
-    tabIndex?: number,
+    tabIndex?: number | string,
 };
 
 /** */
@@ -32,7 +32,7 @@ class ToggleSynced extends React.Component<ToggleSyncedProps> {
         disabled: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
-        tabIndex: PropTypes.number,
+        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     };
     _toggle: Toggle | null;
     constructor(props: ToggleSyncedProps) {

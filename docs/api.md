@@ -4544,7 +4544,7 @@ Type: [object][64]
 -   `onChange` **[function][63]?** A function to be called when the selected option changes. This
     should only be used for side effects.
 -   `options` **[Array][60]&lt;[SelectOption][149]>** The list of select options.
--   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the button.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the select.
 -   `id` **[string][59]?** The ID of the select element.
 -   `className` **[string][59]?** Additional class names to apply to the select.
 -   `style` **[object][64]?** Additional styles to apply to the select.
@@ -4577,49 +4577,125 @@ Type: SelectAndSelectButtonsSyncedProps
 
 **Extends React.Component**
 
+Dropdown menu component for selecting tables.
+
 ##### Parameters
 
 -   `props` **[TablePickerProps][151]**
 
+##### Examples
+
+```javascript
+import {TablePickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+import React, {Fragment, useState} from 'react';
+
+function Block() {
+    useBase();
+    const [table, setTable] = useState(null);
+    const queryResult = table ? table.selectRecords() : null;
+    const records = useRecords(queryResult);
+
+    const summaryText = table
+        ? `${table.name} has ${records.length} record(s).`
+        : 'No table selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePickerSynced
+                    table={table}
+                    onChange={newTable => setTable(newTable)}
+                    shouldAllowPickingNone={true}
+                />
+            </label>
+        </Fragment>
+    );
+}
+```
+
 #### TablePickerProps
 
-Type: {table: ([Table][73] | null)?, shouldAllowPickingNone: [boolean][61]?, onChange: function
-(tableModel: ([Table][73] | null)): void?, placeholder: [string][59]?, style: [Object][64]?,
-className: [string][59]?, disabled: [boolean][61]?}
+Type: [object][64]
 
 ##### Properties
 
--   `table` **([Table][73] | null)?**
--   `shouldAllowPickingNone` **[boolean][61]?**
--   `onChange` **function (tableModel: ([Table][73] | null)): void?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][64]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][61]?**
+-   `table` **[Table][73]?** The selected table model.
+-   `onChange` **[function][63]?** A function to be called when the selected table changes.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the picker.
+-   `shouldAllowPickingNone` **[boolean][61]?** If set to `true`, the user can unset the selected
+    table.
+-   `placeholder` **[string][59]?** The placeholder text when no table is selected.
+-   `id` **[string][59]?** The ID of the picker element.
+-   `className` **[string][59]?** Additional class names to apply to the picker.
+-   `style` **[object][64]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 #### TablePickerSynced
 
 **Extends React.Component**
 
+Dropdown menu component for selecting tables, synced with [GlobalConfig][3].
+
 ##### Parameters
 
 -   `props` **[TablePickerSyncedProps][152]**
 
+##### Examples
+
+```javascript
+import {TablePickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
+import {globalConfig} from '@airtable/blocks';
+import React, {Fragment} from 'react';
+
+function Block() {
+    const base = useBase();
+    const tableId = globalConfig.get('tableId');
+    const table = base.getTableByIdIfExists(tableId);
+    const queryResult = table ? table.selectRecords() : null;
+    const records = useRecords(queryResult);
+    useWatchable(globalConfig, ['tableId']);
+
+    const summaryText = table
+        ? `${table.name} has ${records.length} record(s).`
+        : 'No table selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
+            </label>
+        </Fragment>
+    );
+}
+```
+
 #### TablePickerSyncedProps
 
-Type: {globalConfigKey: [GlobalConfigKey][137], onChange: function (tableModel: ([Table][73] |
-null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?, placeholder:
-[string][59]?, style: [Object][64]?, className: [string][59]?}
+Type: [object][64]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][137]**
--   `onChange` **function (tableModel: ([Table][73] | null)): void?**
--   `disabled` **[boolean][61]?**
--   `shouldAllowPickingNone` **[boolean][61]?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][64]?**
--   `className` **[string][59]?**
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
+    for this key. Selecting a new table will update `globalConfig`.
+-   `onChange` **[function][63]?** A function to be called when the selected table changes. This
+    should only be used for side effects.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the picker.
+-   `shouldAllowPickingNone` **[boolean][61]?** If set to `true`, the user can unset the selected
+    table.
+-   `placeholder` **[string][59]?** The placeholder text when no table is selected.
+-   `id` **[string][59]?** The ID of the picker element.
+-   `className` **[string][59]?** Additional class names to apply to the picker.
+-   `style` **[object][64]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 ### Toggle
 
@@ -4635,7 +4711,7 @@ null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone: [boolean][61]?,
 
 Type: {value: [boolean][61], label: React.Node?, theme: [string][59]?, onChange: function
 ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][59]?, style: [Object][64]?,
-tabIndex: [number][65]?}
+tabIndex: ([number][65] \| [string][59])?}
 
 ##### Properties
 
@@ -4646,7 +4722,7 @@ tabIndex: [number][65]?}
 -   `disabled` **[boolean][61]?**
 -   `className` **[string][59]?**
 -   `style` **[Object][64]?**
--   `tabIndex` **[number][65]?**
+-   `tabIndex` **([number][65] \| [string][59])?**
 
 #### ToggleSynced
 
@@ -4660,7 +4736,7 @@ tabIndex: [number][65]?}
 
 Type: {globalConfigKey: [GlobalConfigKey][137], label: React.Node?, theme: [string][59]?, onChange:
 function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][59]?, style:
-[Object][64]?, tabIndex: [number][65]?}
+[Object][64]?, tabIndex: ([number][65] \| [string][59])?}
 
 ##### Properties
 
@@ -4671,7 +4747,7 @@ function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][5
 -   `disabled` **[boolean][61]?**
 -   `className` **[string][59]?**
 -   `style` **[Object][64]?**
--   `tabIndex` **[number][65]?**
+-   `tabIndex` **([number][65] \| [string][59])?**
 
 ### Tooltip
 
