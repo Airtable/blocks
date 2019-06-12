@@ -3391,10 +3391,8 @@ Type: [object][65]
 
 ##### Properties
 
--   `className` **[string][60]?** Extra `className`s to apply to the close button, separated by
-    spaces.
--   `style` **[object][65]?** Extra `className`s to apply to the lightbox element, separated by
-    spaces.
+-   `className` **[string][60]?** `className`s to apply to the close button, separated by spaces.
+-   `style` **[object][65]?** Styles to apply to the dialog element.
 -   `tabIndex` **[number][64]?** Indicates if the button can be focused and if/where it participates
     in sequential keyboard navigation.
 
