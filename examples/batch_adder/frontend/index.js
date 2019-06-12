@@ -1,4 +1,15 @@
-import {globalConfig, models, UI} from '@airtable/blocks';
+import {
+    initializeBlock,
+    useBase,
+    useWatchable,
+    useRecords,
+    TablePickerSynced,
+    ViewPickerSynced,
+    FieldPickerSynced,
+    Button,
+} from '@airtable/blocks/ui';
+import {globalConfig} from '@airtable/blocks';
+import {fieldTypes} from '@airtable/blocks/models';
 import React from 'react';
 
 // Keys we're storing in globalConfig. Using an enum instead of
@@ -10,16 +21,12 @@ const GlobalConfigKeys = {
 };
 
 // List of field types that this block supports.
-const allowedFieldTypes = [
-    models.fieldTypes.CURRENCY,
-    models.fieldTypes.NUMBER,
-    models.fieldTypes.PERCENT,
-];
+const allowedFieldTypes = [fieldTypes.CURRENCY, fieldTypes.NUMBER, fieldTypes.PERCENT];
 
 // Index component. Adds 1 to all records in a selected table or view
 // in a selected number/percent/currency field.
 function BatchAdder() {
-    const base = UI.useBase();
+    const base = useBase();
 
     // Get the selected table based on the table id in globalConfig.
     const tableId = globalConfig.get(GlobalConfigKeys.TABLE_ID);
@@ -43,13 +50,9 @@ function BatchAdder() {
 
     // Re-render this component if:
     // (1) Any global config value changes (i.e. the table, view, or field changes)
-    // (2) The selected field's type changes
-    // (3) The current user's permission level changes
-    // (4) The records in the query result change
-    UI.useWatchable(globalConfig, Object.values(GlobalConfigKeys));
-    UI.useWatchable(field, ['type']);
-    UI.useWatchable(base, ['permissionLevel']);
-    const records = UI.useRecords(queryResult);
+    // (2) The records in the query result change
+    useWatchable(globalConfig, Object.values(GlobalConfigKeys));
+    const records = useRecords(queryResult);
 
     // Disable the add button if:
     // (1) The field (or table) isn't selected
@@ -65,7 +68,7 @@ function BatchAdder() {
     // Adds 1 to the cell values for the specified records and field.
     function onAddClick() {
         // For percent fields, we only want to add 1%.
-        const amountToAdd = models.fieldTypes.PERCENT ? 0.01 : 1;
+        const amountToAdd = field.type === fieldTypes.PERCENT ? 0.01 : 1;
         for (const record of records) {
             record.setCellValue(field.id, record.getCellValue(field) + amountToAdd);
         }
@@ -80,10 +83,10 @@ function BatchAdder() {
             }}
         >
             <Label text="Table">
-                <UI.TablePickerSynced globalConfigKey={GlobalConfigKeys.TABLE_ID} />
+                <TablePickerSynced globalConfigKey={GlobalConfigKeys.TABLE_ID} />
             </Label>
             <Label text="View">
-                <UI.ViewPickerSynced
+                <ViewPickerSynced
                     table={table}
                     globalConfigKey={GlobalConfigKeys.VIEW_ID}
                     // This prop allows the user to deselect the view.
@@ -93,7 +96,7 @@ function BatchAdder() {
                 />
             </Label>
             <Label text="Field">
-                <UI.FieldPickerSynced
+                <FieldPickerSynced
                     table={table}
                     globalConfigKey={GlobalConfigKeys.FIELD_ID}
                     // This prop allows the user to specify a set of
@@ -101,14 +104,14 @@ function BatchAdder() {
                     allowedTypes={allowedFieldTypes}
                 />
             </Label>
-            <UI.Button
-                theme={UI.Button.themes.BLUE}
+            <Button
+                theme={Button.themes.BLUE}
                 style={{justifyContent: 'center'}}
                 disabled={!canAdd}
                 onClick={onAddClick}
             >
                 + Add
-            </UI.Button>
+            </Button>
         </div>
     );
 }
@@ -129,4 +132,4 @@ function Label({text, children}) {
     );
 }
 
-UI.initializeBlock(() => <BatchAdder />);
+initializeBlock(() => <BatchAdder />);
