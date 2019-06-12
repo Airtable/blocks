@@ -78,6 +78,7 @@ function (_AbstractModelWithAsy) {
     }
   }]);
 
+  /** @hideconstructor */
   function Cursor(baseData, airtableInterface) {
     var _this;
 

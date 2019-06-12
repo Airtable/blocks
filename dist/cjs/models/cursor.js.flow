@@ -41,6 +41,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
     _airtableInterface: AirtableInterface;
     _cursorData: CursorData;
+
+    /** @hideconstructor */
     constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
         super(baseData, 'cursor');
         this._airtableInterface = airtableInterface;

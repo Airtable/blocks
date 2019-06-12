@@ -942,11 +942,6 @@ Returns **[Array][60]&lt;WatchableBaseKey>** the array of keys that were watched
 
 Contains information about the state of the user's current interactions in Airtable
 
-#### Parameters
-
--   `baseData` **BaseData**
--   `airtableInterface` **AirtableInterface**
-
 #### Examples
 
 ```javascript
