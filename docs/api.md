@@ -1149,161 +1149,350 @@ Model class representing a record in a table.
 
 Do not instantiate. To create a new record, use `table.createRecord`.
 
-#### Parameters
-
--   `baseData` **BaseData**
--   `parentRecordStore` **RecordStore**
--   `parentTable` **[Table][76]**
--   `recordId` **[string][60]**
-
 #### canDelete
 
-Returns **[boolean][65]**
+Use this to check whether the current user can delete this record. Should be called before calling
+[delete][82].
+
+##### Examples
+
+```javascript
+if (myRecord.canDelete()) {
+    myRecord.delete();
+}
+```
+
+Returns **[boolean][65]** `true` if the current user can delete this record, `false` otherwise.
 
 #### canSetCellValue
 
-Use this to check if the current user has permission to update a specific cell value before calling
-`setCellValue`.
+Use this to check whether the current user can update a specific cell value. Should be called before
+calling [setCellValue][83].
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
--   `publicCellValue` **any**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])** The field (or field ID or field
+    name) to use.
+-   `cellValue` **any** The cell value to set.
+
+##### Examples
+
+```javascript
+const newCellValue = 'new cell value';
+if (myRecord.canSetCellValue(mySingleLineTextField, newCellValue)) {
+    myRecord.setCellValue(mySingleLineTextField, newCellValue);
+}
+```
+
+Returns **[boolean][65]** `true` if the current user can set the given cell value, `false`
+otherwise.
 
 #### canSetCellValues
 
-Use this to check if the current user has permission to update a set of cell values before calling
-`setCellValues`.
+Use this to check whether the current user can update a set of cell values. Should be called before
+calling [setCellValues][84].
 
 ##### Parameters
 
--   `cellValuesByFieldIdOrFieldName` **RecordDef**
+-   `cellValuesByFieldIdOrFieldName` **[object][68]&lt;(FieldId | [string][60]), CellValue>** The
+    cell values to set.
 
-Returns **[boolean][65]**
+##### Examples
+
+```javascript
+const cellValuesByFieldId = {
+    [mySingleLineTextField.id]: 'another cell value',
+    [myNumberField.id]: 42,
+};
+if (myRecord.canSetCellValues(cellValuesByFieldId)) {
+    myRecord.setCellValues(cellValuesByFieldId);
+}
+```
+
+Returns **[boolean][65]** `true` if the current user can set the given cell values, `false`
+otherwise.
 
 #### commentCount
 
 Type: [number][67]
 
-Returns **[number][67]**
+##### Examples
+
+```javascript
+const comentCount = myRecord.commentCount;
+console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`);
+```
+
+Returns **[number][67]** The number of comments on this record.
 
 #### createdTime
 
-Type: [Date][82]
+Type: [Date][85]
 
-Returns **[Date][82]**
+##### Examples
+
+```javascript
+console.log(`This record was created at ${myRecord.createdTime.toISOString()}`);
+```
+
+Returns **[Date][85]** The created time of this record.
 
 #### delete
 
-Returns **AirtableWriteAction&lt;void, {}>**
+Deletes this record.
+
+Throws if the current user cannot delete this record. Call [canDelete][86] before calling this to
+check whether the current user can delete this record.
+
+##### Examples
+
+```javascript
+if (myRecord.canDelete()) {
+    myRecord.delete();
+}
+```
+
+Returns **{}**
 
 #### getAttachmentClientUrlFromCellValueUrl
 
-Call this method with an attachment ID and URL to get back a URL that is suitable for rendering on
-the current client. The URL that is returned will only work for the current user.
+Returns a URL that is suitable for rendering an attachment on the current client. The URL that is
+returned will only work for the current user.
 
 ##### Parameters
 
--   `attachmentId` **[string][60]**
--   `attachmentUrl` **[string][60]**
+-   `attachmentId` **[string][60]** The ID of the attachment.
+-   `attachmentUrl` **[string][60]** The attachment's URL (which is not suitable for rendering on
+    the client).
 
-Returns **[string][60]**
+##### Examples
+
+```javascript
+import React from 'react';
+
+function RecordAttachments(props) {
+    const {record, attachmentField} = props;
+    const attachmentCellValue = record.getCellValue(attachmentField);
+    if (attachmentCellValue === null) {
+        return null;
+    }
+    return (
+        <div>
+            {attachmentCellValue.map(attachmentObj => {
+                const clientUrl = record.getAttachmentClientUrlFromCellValueUrl(
+                    attachmentObj.id,
+                    attachmentObj.url,
+                );
+                return <img key={attachmentObj.id} src={clientUrl} width={200} />;
+            })}
+        </div>
+    );
+}
+```
+
+Returns **[string][60]** A URL that is suitable for rendering on the current client.
 
 #### getCellValue
 
+Gets a specific cell value in this record.
+
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] | FieldId | [string][60])** The field (or field ID or
+    field name) whose cell value you'd like to get.
 
-Returns **any**
+##### Examples
+
+```javascript
+const cellValue = myRecord.getCellValue(mySingleLineTextField);
+console.log(cellValue);
+// => 'cell value'
+```
+
+Returns **any** The cell value in the given field.
 
 #### getCellValueAsString
 
+Gets a specific cell value in this record, formatted as a `string`.
+
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])** The field (or field ID or field
+    name) whose cell value you'd like to get.
 
-Returns **[string][60]**
+##### Examples
+
+```javascript
+const cellValueAsString = myRecord.getCellValueAsString(myNumberField);
+console.log(cellValueAsString);
+// => '42'
+```
+
+Returns **[string][60]** The cell value in the given field, formatted as a `string`.
 
 #### getColorHexInView
 
-Get a CSS hex string for this record in the specified view, or null if no color is available. Watch
-with the 'colorInView:\${ViewId}' key
+Gets the CSS hex string for this record in a given view.
+
+Can be watched with the 'colorInView:\${ViewId}' key.
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][72] \| [string][60])**
+-   `viewOrViewIdOrViewName` **([View][72] \| [string][60])** The view (or view ID or view name) to
+    use for record coloring.
 
-Returns **([string][60] | null)**
+Returns **([string][60] | null)** The CSS hex color for this record in the given view, or null if
+the record has no color in that view.
 
 #### getColorInView
 
-Get the color name for this record in the specified view, or null if no color is available. Watch
-with the 'colorInView:\${ViewId}' key.
+Gets the color of this record in a given view.
+
+Can be watched with the 'colorInView:\${ViewId}' key.
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][72] \| [string][60])**
+-   `viewOrViewIdOrViewName` **([View][72] \| [string][60])** The view (or view ID or view name) to
+    use for record coloring.
 
-Returns **([Color][83] | null)**
+Returns **([Color][87] | null)** The color of this record in the given view, or null if the record
+has no color in that view.
+
+#### id
+
+##### Examples
+
+```javascript
+console.log(myRecord.id);
+// => 'recxxxxxxxxxxxxxx'
+```
+
+Returns **[string][60]** This record's ID.
 
 #### parentTable
 
 Type: [Table][76]
 
-Returns **[Table][76]**
+##### Examples
+
+```javascript
+import {useRecords, withHooks} from '@airtable/blocks/ui';
+const queryResult = myTable.selectRecords();
+const records = useRecords(queryResult);
+console.log(records[0].parentTable.id === myTable.id);
+// => true
+```
+
+Returns **[Table][76]** The table that this record belongs to. Should never change because records
+aren't moved between tables.
 
 #### primaryCellValue
 
+Gets the primary cell value in this record.
+
 Type: any
 
-Returns **any**
+##### Examples
+
+```javascript
+console.log(myRecord.primaryCellValue);
+// => 'primary cell value'
+```
+
+Returns **any** The primary cell value in this record.
 
 #### primaryCellValueAsString
 
+Gets the primary cell value in this record, formatted as a `string`.
+
 Type: [string][60]
 
-Returns **[string][60]**
+##### Examples
+
+```javascript
+console.log(myRecord.primaryCellValueAsString);
+// => '42'
+```
+
+Returns **[string][60]** The primary cell value in this record, formatted as a `string`.
 
 #### selectLinkedRecordsFromCell
 
+Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
--   `opts` **QueryResultOpts** (optional, default `{}`)
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])** The `multipleRecordLinks` field
+    (or field ID or field name) to use.
+-   `opts` **QueryResultOpts** Options for the query, such as sorts and fields. (optional, default
+    `{}`)
 
-Returns **[LinkedRecordsQueryResult][84]**
+Returns **[LinkedRecordsQueryResult][88]** A query result containing the records in the given
+`multipleRecordLinks` field.
 
 #### setCellValue
 
-Use `canSetCellValue` to check if the current user has permission to update a specific cell value
-before calling. Will throw if the user does not have permission.
+Sets a cell value.
+
+Throws if the current user cannot update this cell value. Call [canSetCellValue][89] before calling
+this to check if the current user can update this cell value.
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])**
--   `publicCellValue` **any**
+-   `fieldOrFieldIdOrFieldName` **([Field][71] \| [string][60])** The field (or field ID or field
+    name) to use.
+-   `cellValue` **any** The cell value to set.
 
-Returns **AirtableWriteAction&lt;void, {}>**
+##### Examples
+
+```javascript
+const newCellValue = 'new cell value';
+if (myRecord.canSetCellValue(mySingleLineTextField, newCellValue)) {
+    myRecord.setCellValue(mySingleLineTextField, newCellValue);
+}
+```
+
+Returns **{}**
 
 #### setCellValues
 
-Use `canSetCellValues` to check if the current user has permission to update the cell values before
-calling. Will throw if the user does not have permission.
+Sets cell values.
+
+Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][90]
+before calling this to check whether the current user can perform the given updates.
 
 ##### Parameters
 
--   `cellValuesByFieldIdOrFieldName` **RecordDef**
+-   `cellValuesByFieldIdOrFieldName` **[object][68]&lt;(FieldId | [string][60]), CellValue>** The
+    cell values to set.
 
-Returns **AirtableWriteAction&lt;void, {}>**
+##### Examples
+
+```javascript
+const cellValuesByFieldId = {
+    [mySingleLineTextField.id]: 'another cell value',
+    [myNumberField.id]: 42,
+};
+if (myRecord.canSetCellValues(cellValuesByFieldId)) {
+    myRecord.setCellValues(cellValuesByFieldId);
+}
+```
+
+Returns **{}**
 
 #### url
 
-Returns the URL for this record.
-
 Type: [string][60]
 
-Returns **[string][60]**
+##### Examples
+
+```javascript
+console.log(myRecord.url);
+// => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
+```
+
+Returns **[string][60]** The URL for the record. You can visit this URL in the browser to be taken
+to the record in the Airtable UI.
 
 ### Table
 
@@ -1314,7 +1503,7 @@ Model class representing a table. Every [Base][15] has one or more tables.
 #### canCreateRecord
 
 Use this to check whether the current user can create a record. Should be called before calling
-[createRecord][85].
+[createRecord][91].
 
 ##### Parameters
 
@@ -1347,7 +1536,7 @@ Returns **[boolean][65]** `true` if the current user can create the given record
 #### canCreateRecords
 
 Use this to check whether the current user can create records. Should be called before calling
-[createRecords][86].
+[createRecords][92].
 
 ##### Parameters
 
@@ -1386,7 +1575,7 @@ otherwise.
 #### canDeleteRecord
 
 Use this to check whether the current user can delete a record. Should be called before calling
-[deleteRecord][87].
+[deleteRecord][93].
 
 ##### Parameters
 
@@ -1405,7 +1594,7 @@ Returns **[boolean][65]** `true` if the current user can delete the given record
 #### canDeleteRecords
 
 Use this to check whether the current user can delete records. Should be called before calling
-[deleteRecords][88].
+[deleteRecords][94].
 
 ##### Parameters
 
@@ -1425,7 +1614,7 @@ Returns **any** `true` if the current user can delete the given records, `false`
 #### canSetCellValues
 
 Use this to check whether the current user can update a set of cell values. Should be called before
-calling [setCellValues][89].
+calling [setCellValues][84].
 
 ##### Parameters
 
@@ -1456,7 +1645,7 @@ otherwise.
 
 Creates a record in the table.
 
-Throws if the current user cannot create the given record. Call [canCreateRecord][90] before calling
+Throws if the current user cannot create the given record. Call [canCreateRecord][95] before calling
 this to check whether the current user can create the given record.
 
 ##### Parameters
@@ -1490,7 +1679,7 @@ Returns **{record: [Record][74]}** An object with the optimistically-created rec
 
 Creates records in the table.
 
-Throws if the current user cannot create the given records. Call [canCreateRecords][91] before
+Throws if the current user cannot create the given records. Call [canCreateRecords][96] before
 calling this to check whether the current user can create the given records.
 
 ##### Parameters
@@ -1531,7 +1720,7 @@ records.
 
 Deletes a record.
 
-Throws if the current user cannot delete the given record. Call [canDeleteRecord][92] before calling
+Throws if the current user cannot delete the given record. Call [canDeleteRecord][97] before calling
 this to check whether the current user can delete the given record.
 
 ##### Parameters
@@ -1552,7 +1741,7 @@ Returns **{}**
 
 Deletes records.
 
-Throws if the current user cannot delete the given records. Call [canDeleteRecords][93] before
+Throws if the current user cannot delete the given records. Call [canDeleteRecords][98] before
 calling this to check whether the current user can delete the given records.
 
 ##### Parameters
@@ -1600,7 +1789,7 @@ console.log(field.name);
 ```
 
 Returns **[Field][71]** The field matching the given ID. Throws if that field does not exist in this
-table. Use [getFieldByIdIfExists][94] instead if you are unsure whether a field exists with the
+table. Use [getFieldByIdIfExists][99] instead if you are unsure whether a field exists with the
 given ID.
 
 #### getFieldByIdIfExists
@@ -1639,7 +1828,7 @@ console.log(field.id);
 ```
 
 Returns **[Field][71]** The field matching the given name. Throws if no field exists with that name
-in this table. Use [getFieldByNameIfExists][95] instead if you are unsure whether a field exists
+in this table. Use [getFieldByNameIfExists][100] instead if you are unsure whether a field exists
 with the given name.
 
 #### getFieldByNameIfExists
@@ -1705,7 +1894,7 @@ console.log(view.name);
 ```
 
 Returns **[View][72]** The view matching the given ID. Throws if that view does not exist in this
-table. Use [getViewByIdIfExists][96] instead if you are unsure whether a view exists with the given
+table. Use [getViewByIdIfExists][101] instead if you are unsure whether a view exists with the given
 ID.
 
 #### getViewByIdIfExists
@@ -1744,8 +1933,8 @@ console.log(view.id);
 ```
 
 Returns **[View][72]** The view matching the given name. Throws if no view exists with that name in
-this table. Use [getViewByNameIfExists][97] instead if you are unsure whether a view exists with the
-given name.
+this table. Use [getViewByNameIfExists][102] instead if you are unsure whether a view exists with
+the given name.
 
 #### getViewByNameIfExists
 
@@ -1852,13 +2041,13 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][98]** A query result.
+Returns **[TableOrViewQueryResult][103]** A query result.
 
 #### setCellValues
 
 Sets cell values.
 
-Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][99]
+Throws if the current user cannot update all of the given cell values. Call [canSetCellValues][90]
 before calling this to check whether the current user can perform the given updates.
 
 ##### Parameters
@@ -2004,7 +2193,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][98]** A query result.
+Returns **[TableOrViewQueryResult][103]** A query result.
 
 #### type
 
@@ -2099,7 +2288,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][100]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][104]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -2116,7 +2305,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][101]&lt;[HTMLLinkElement][102]>** a Promise that resolves to the style tag
+Returns **[Promise][105]&lt;[HTMLLinkElement][106]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -2134,14 +2323,14 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][101]&lt;[HTMLScriptElement][103]>** a Promise that resolves to the script tag
+Returns **[Promise][105]&lt;[HTMLScriptElement][107]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
 
 #### Color
 
-A value from the [colors][104] enum
+A value from the [colors][108] enum
 
 Type: \$Values&lt;any>
 
@@ -2157,12 +2346,12 @@ Type: {r: [number][67], g: [number][67], b: [number][67]}
 
 #### colorUtils
 
-Utilities for working with [Color][105] names from the [colors][104] enum.
+Utilities for working with [Color][109] names from the [colors][108] enum.
 
 ##### getHexForColor
 
-Given a [Color][105], return the hex color value for that color, or null if the value isn't a
-[Color][105]
+Given a [Color][109], return the hex color value for that color, or null if the value isn't a
+[Color][109]
 
 ###### Parameters
 
@@ -2184,8 +2373,8 @@ Returns **([string][60] | null)**
 
 ##### getRgbForColor
 
-Given a [Color][105], return an [RGB][106] object representing it, or null if the value isn't a
-[Color][105]
+Given a [Color][109], return an [RGB][110] object representing it, or null if the value isn't a
+[Color][109]
 
 ###### Parameters
 
@@ -2203,11 +2392,11 @@ colorUtils.getRgbForColor('disgruntled pink');
 // => null
 ```
 
-Returns **([RGB][107] | null)**
+Returns **([RGB][111] | null)**
 
 ##### shouldUseLightTextOnColor
 
-Given a [Color][105], returns true or false to indicate whether that color should have light text on
+Given a [Color][109], returns true or false to indicate whether that color should have light text on
 top of it when used as a background color.
 
 ###### Parameters
@@ -2337,8 +2526,8 @@ An enum of color names
 React hooks are a new feature in React 16.8. They allow you to use state and other React features
 without writing a class, and form the core of how you can connect React components to data from your
 Airtable base when writing Blocks. If you've never used hooks before, don't worry - the React team
-[has some great resources][108] for learning about them. You can use hooks with class components too
-with the help of the [withHooks][109] higher-order component.
+[has some great resources][112] for learning about them. You can use hooks with class components too
+with the help of the [withHooks][113] higher-order component.
 
 > **Important Note:** right now, most of these hooks cause your component to re-render, but return
 > the same mutable instance of the underlying model. This means that it's often not safe to use
@@ -2355,7 +2544,7 @@ actual records in the base.
 
 useBase should meet most of your needs for working with Base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][110] hook might help.
+[useWatchable][114] hook might help.
 
 ##### Examples
 
@@ -2383,12 +2572,12 @@ query result. Automatically handles loading data in the query result and updatin
 when the underlying data changes.
 
 This hook re-renders when any data concerning the records changing - that's useful, but can cause
-re-renders quite often, meaning [useRecordIds][111] or [useRecordById][112] could be more
+re-renders quite often, meaning [useRecordIds][115] or [useRecordById][116] could be more
 appropriate depending on your use-case.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][113] | null)** the query result you want the records from
+-   `queryResult` **([QueryResult][117] | null)** the query result you want the records from
 
 ##### Examples
 
@@ -2428,7 +2617,7 @@ added, removed, or re-ordered.
 
 ##### Parameters
 
--   `queryResult` **[QueryResult][113]** the query result you want the record ids from
+-   `queryResult` **[QueryResult][117]** the query result you want the record ids from
 
 ##### Examples
 
@@ -2461,12 +2650,12 @@ if no query result was passed in.
 A hook for working with a single record from a query result. Automatically handles loading data in
 the query result and updating your component when the records cell values etc. change.
 
-Often used with [useRecordIds][111] to render a list of records where each list item only updates
+Often used with [useRecordIds][115] to render a list of records where each list item only updates
 when the specific record it concerns changes.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][113] | null)** the query result you want a record from
+-   `queryResult` **([QueryResult][117] | null)** the query result you want a record from
 -   `recordId` **RecordId** the ID of the record you want from the query result
 
 ##### Examples
@@ -2549,16 +2738,16 @@ do anything other than re-render when the data changes.
 This is a low-level tool that you should only use when you specifically need it. There are more
 convenient model-specific hooks available:
 
--   For [Base][15], [Table][20], [View][21] & [Field][17], use [useBase][114]
--   For [QueryResult][18] & [Record][19], use [useRecords][115], [useRecordIds][111], or
-    [useRecordById][112]
--   For [Viewport][5], use [useViewport][116].
+-   For [Base][15], [Table][20], [View][21] & [Field][17], use [useBase][118]
+-   For [QueryResult][18] & [Record][19], use [useRecords][119], [useRecordIds][115], or
+    [useRecordById][116]
+-   For [Viewport][5], use [useViewport][120].
 
-If you're writing a class component and still want to be able to use hooks, try [withHooks][109].
+If you're writing a class component and still want to be able to use hooks, try [withHooks][113].
 
 ##### Parameters
 
--   `model` **[Watchable][117]** the model to watch
+-   `model` **[Watchable][121]** the model to watch
 -   `keys` **[Array][64]&lt;[string][60]>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
@@ -2590,14 +2779,14 @@ function ActiveView({cursor}) {
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
 might not need to use it directly though - if you're working with a [QueryResult][18], try
-[useRecords][115], [useRecordIds][111], or [useRecordById][112] first.
+[useRecords][119], [useRecordIds][115], or [useRecordById][116] first.
 
 When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
 loaded when your component mounts, and unloaded when your component unmounts. By default, you don't
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [&lt;React.Suspense />][118] around the component that uses the hook.
+looks, use [&lt;React.Suspense />][122] around the component that uses the hook.
 
 If you need more control (for example, if you have two models you want to load at the same time
 rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to the
@@ -2606,7 +2795,7 @@ use the data you loaded.
 
 ##### Parameters
 
--   `model` **([QueryResult][113] \| [Cursor][58] | null)** the model to load.
+-   `model` **([QueryResult][117] \| [Cursor][58] | null)** the model to load.
 -   `options` **[object][68]?** Optional options to control how the hook works (optional, default
     `{}`)
     -   `options.shouldSuspend` **[boolean][65]** pass {shouldSuspend: false} to disable suspense
@@ -2654,7 +2843,7 @@ function LoadTwoQueryResults({queryResultA, queryResultB}) {
 
 A helper method for working with react hooks in class-based components. It takes a React component
 and wraps it, injecting values from hooks as additional props. `withHooks` uses
-[React.forwardRef][119] to make sure that you can use refs with your wrapped component in exactly
+[React.forwardRef][123] to make sure that you can use refs with your wrapped component in exactly
 the same way you would if you weren't using withHooks.
 
 ##### Parameters
@@ -2826,7 +3015,7 @@ const recordB = await expandRecordPickerAsync([record1, record2], {
 });
 ```
 
-Returns **[Promise][101]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][105]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
 ### globalAlert
@@ -2850,14 +3039,14 @@ globalAlert.showReloadPrompt();
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][120]**
+-   `props` **[AutocompletePopoverProps][124]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][64]&lt;[AutocompleteItem][121]>, renderItem: function (item: [AutocompleteItem][121], isFocused: [boolean][65]): React$Element&lt;any>?,
-filterItems: function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][121]>):
-[Array][64]&lt;[AutocompleteItem][121]>?, onSelect: function ([AutocompleteItem][121]): void,
+React$Element&lt;any>, items: [Array][64]&lt;[AutocompleteItem][125]>, renderItem: function (item: [AutocompleteItem][125], isFocused: [boolean][65]): React$Element&lt;any>?,
+filterItems: function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][125]>):
+[Array][64]&lt;[AutocompleteItem][125]>?, onSelect: function ([AutocompleteItem][125]): void,
 placeholder: [string][60]?, focusOnOpen: [boolean][65]?, className: [string][60]?, style:
 [Object][68]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][67]?, placementOffsetY: [number][67]?, fitInWindowMode: FitInWindowMode?, isOpen:
@@ -2866,12 +3055,12 @@ placeholder: [string][60]?, focusOnOpen: [boolean][65]?, className: [string][60]
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][64]&lt;[AutocompleteItem][121]>**
--   `renderItem` **function (item: [AutocompleteItem][121], isFocused: [boolean][65]):
+-   `items` **[Array][64]&lt;[AutocompleteItem][125]>**
+-   `renderItem` **function (item: [AutocompleteItem][125], isFocused: [boolean][65]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][121]>):
-    [Array][64]&lt;[AutocompleteItem][121]>?**
--   `onSelect` **function ([AutocompleteItem][121]): void**
+-   `filterItems` **function (query: [string][60], items: [Array][64]&lt;[AutocompleteItem][125]>):
+    [Array][64]&lt;[AutocompleteItem][125]>?**
+-   `onSelect` **function ([AutocompleteItem][125]): void**
 -   `placeholder` **[string][60]?**
 -   `focusOnOpen` **[boolean][65]?**
 -   `className` **[string][60]?**
@@ -2904,7 +3093,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][122]**
+-   `props` **[ButtonProps][126]**
 
 ##### Examples
 
@@ -2929,7 +3118,7 @@ Type: [object][68]
     The color theme for the button.
 -   `className` **[string][60]?**
 -   `style` **[Object][68]?**
--   `onClick` **function (e: SyntheticMouseEvent&lt;[HTMLButtonElement][123]>): any?**
+-   `onClick` **function (e: SyntheticMouseEvent&lt;[HTMLButtonElement][127]>): any?**
 -   `type` **(`"button"` \| `"reset"` \| `"submit"`)?**
 -   `disabled` **[boolean][65]?**
 -   `tabIndex` **[number][67]?**
@@ -2944,7 +3133,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][124]**
+-   `props` **[CellRendererProps][128]**
 
 #### CellRendererProps
 
@@ -2966,7 +3155,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][125]**
+-   `$0` **[ChoiceTokenProps][129]**
     -   `$0.choice`
     -   `$0.className`
 
@@ -2986,7 +3175,7 @@ Type: {choice: {id: [string][60], name: [string][60], color: [string][60]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][126]**
+-   `props` **[CollaboratorTokenProps][130]**
 
 #### CollaboratorTokenProps
 
@@ -3106,7 +3295,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][127]**
+-   `props` **[DialogProps][131]**
 
 ##### Examples
 
@@ -3183,7 +3372,7 @@ React.Node?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][128]**
+-   `props` **[FieldIconProps][132]**
 
 #### FieldIconProps
 
@@ -3207,7 +3396,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][129]**
+-   `props` **[FieldPickerProps][133]**
 
 #### FieldPickerProps
 
@@ -3234,7 +3423,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][130]**
+-   `props` **[FieldPickerSyncedProps][134]**
 
 #### FieldPickerSyncedProps
 
@@ -3261,7 +3450,7 @@ className: [string][60]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][131]**
+-   `$0` **[IconProps][135]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -3291,7 +3480,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[InputProps][132]**
+-   `props` **[InputProps][136]**
 
 #### InputProps
 
@@ -3317,7 +3506,7 @@ Type: {type: [string][60]?, placeholder: [string][60]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][133]**
+-   `props` **[InputSyncedProps][137]**
 
 #### InputSyncedProps
 
@@ -3342,7 +3531,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][134]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][138]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -3381,7 +3570,7 @@ className: [string][60]?, style: [Object][68]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][135]**
+-   `$0` **[LoaderProps][139]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -3402,7 +3591,7 @@ Type: {fillColor: [string][60]?, scale: [number][67]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][136]**
+-   `props` **[PopoverProps][140]**
 
 #### PopoverProps
 
@@ -3437,7 +3626,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][137]**
+-   `props` **[ProgressBarProps][141]**
 
 ##### Examples
 
@@ -3472,7 +3661,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][138]**
+-   `props` **[RadioSyncedProps][142]**
 
 #### RadioSyncedProps
 
@@ -3495,13 +3684,13 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][60], style: [Object][68
 
 ##### Parameters
 
--   `props` **[RecordCardProps][139]**
+-   `props` **[RecordCardProps][143]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][74] | RecordDef), fields: [Array][64]&lt;[Field][71]>?, view: [View][72]?,
 attachmentCoverField: [Field][71]?, width: [number][67]?, height: [number][67]?, onClick:
-[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][140]?,
+[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][144]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
@@ -3513,7 +3702,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 -   `width` **[number][67]?**
 -   `height` **[number][67]?**
 -   `onClick` **[Function][73]?**
--   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][140]?**
+-   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][144]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][60]?**
@@ -3527,11 +3716,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][141]**
+-   `props` **[RecordCardListProps][145]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][142]):
+Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][146]):
 void?, onRecordClick: (null | function (record: ([Record][74] | RecordDef), index: [number][67]):
 void)?, onRecordMouseEnter: function (record: ([Record][74] | RecordDef), index: [number][67]):
 void?, onRecordMouseLeave: function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3541,7 +3730,7 @@ className: [string][60]?, style: [Object][68]?}
 ##### Properties
 
 -   `records` **[Array][64]&lt;([Record][74] | RecordDef)>**
--   `onScroll` **function ([Event][142]): void?**
+-   `onScroll` **function ([Event][146]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][74] | RecordDef), index: [number][67]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3562,7 +3751,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][143]**
+-   `props` **[SelectProps][147]**
 
 #### SelectProps
 
@@ -3574,7 +3763,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][144]**
+-   `props` **[SelectSyncedProps][148]**
 
 #### SelectSyncedProps
 
@@ -3606,7 +3795,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][145]**
+-   `props` **[TablePickerProps][149]**
 
 #### TablePickerProps
 
@@ -3630,7 +3819,7 @@ Type: {table: [Table][76]?, shouldAllowPickingNone: [boolean][65]?, onChange: fu
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][146]**
+-   `props` **[TablePickerSyncedProps][150]**
 
 #### TablePickerSyncedProps
 
@@ -3656,7 +3845,7 @@ style: [Object][68]?, className: [string][60]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][147]**
+-   `props` **[ToggleProps][151]**
 
 #### ToggleProps
 
@@ -3681,7 +3870,7 @@ tabIndex: [number][67]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][148]**
+-   `props` **[ToggleSyncedProps][152]**
 
 #### ToggleSyncedProps
 
@@ -3708,7 +3897,7 @@ function ([boolean][65]): void?, disabled: [boolean][65]?, className: [string][6
 
 ##### Parameters
 
--   `props` **[TooltipProps][149]**
+-   `props` **[TooltipProps][153]**
 
 #### TooltipProps
 
@@ -3741,7 +3930,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][150]**
+-   `props` **[ViewPickerProps][154]**
 
 #### ViewPickerProps
 
@@ -3768,7 +3957,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][151]**
+-   `props` **[ViewPickerSyncedProps][155]**
 
 #### ViewPickerSyncedProps
 
@@ -3815,13 +4004,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][152]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][152]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][156]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][156]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][152]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][152]?**
+-   `minSize` **[ViewportSizeConstraintProp][156]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][156]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -3914,74 +4103,78 @@ Type: {width: ([number][67] | null)?, height: ([number][67] | null)?}
 [79]: #aggregator
 [80]: #recordsetcellvalue
 [81]: #tablesetcellvalues
-[82]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-[83]: #color
-[84]: #linkedrecordsqueryresult
-[85]: createRecord
-[86]: createRecords
-[87]: deleteRecord
-[88]: deleteRecords
-[89]: setCellValues
-[90]: canCreateRecord
-[91]: canCreateRecords
-[92]: canDeleteRecord
-[93]: canDeleteRecords
-[94]: getFieldByIdIfExists
-[95]: getFieldByNameIfExists
-[96]: getViewByIdIfExists
-[97]: getViewByNameIfExists
-[98]: #tableorviewqueryresult
-[99]: canSetCellValues
-[100]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[101]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[102]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[103]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[104]: #colors
-[105]: #color
-[106]: #rgb
-[107]: #rgb
-[108]: https://reactjs.org/docs/hooks-intro.html
-[109]: #withhooks
-[110]: #usewatchable
-[111]: #userecordids
-[112]: #userecordbyid
-[113]: #queryresult
-[114]: #usebase
-[115]: #userecords
-[116]: #useviewport
-[117]: #watchable
-[118]: https://reactjs.org/docs/react-api.html#reactsuspense
-[119]: https://reactjs.org/docs/forwarding-refs.html
-[120]: #autocompletepopoverprops
-[121]: #autocompleteitem
-[122]: #buttonprops
-[123]: https://developer.mozilla.org/docs/Web/API/HTMLButtonElement
-[124]: #cellrendererprops
-[125]: #choicetokenprops
-[126]: #collaboratortokenprops
-[127]: #dialogprops
-[128]: #fieldiconprops
-[129]: #fieldpickerprops
-[130]: #fieldpickersyncedprops
-[131]: #iconprops
-[132]: #inputprops
-[133]: #inputsyncedprops
-[134]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[135]: #loaderprops
-[136]: #popoverprops
-[137]: #progressbarprops
-[138]: #radiosyncedprops
-[139]: #recordcardprops
-[140]: #expandrecordopts
-[141]: #recordcardlistprops
-[142]: https://developer.mozilla.org/docs/Web/API/Event
-[143]: #selectprops
-[144]: #selectsyncedprops
-[145]: #tablepickerprops
-[146]: #tablepickersyncedprops
-[147]: #toggleprops
-[148]: #togglesyncedprops
-[149]: #tooltipprops
-[150]: #viewpickerprops
-[151]: #viewpickersyncedprops
-[152]: #viewportsizeconstraintprop
+[82]: delete
+[83]: setCellValue
+[84]: setCellValues
+[85]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[86]: canDelete
+[87]: #color
+[88]: #linkedrecordsqueryresult
+[89]: canSetCellValue
+[90]: canSetCellValues
+[91]: createRecord
+[92]: createRecords
+[93]: deleteRecord
+[94]: deleteRecords
+[95]: canCreateRecord
+[96]: canCreateRecords
+[97]: canDeleteRecord
+[98]: canDeleteRecords
+[99]: getFieldByIdIfExists
+[100]: getFieldByNameIfExists
+[101]: getViewByIdIfExists
+[102]: getViewByNameIfExists
+[103]: #tableorviewqueryresult
+[104]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[105]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[106]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[107]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[108]: #colors
+[109]: #color
+[110]: #rgb
+[111]: #rgb
+[112]: https://reactjs.org/docs/hooks-intro.html
+[113]: #withhooks
+[114]: #usewatchable
+[115]: #userecordids
+[116]: #userecordbyid
+[117]: #queryresult
+[118]: #usebase
+[119]: #userecords
+[120]: #useviewport
+[121]: #watchable
+[122]: https://reactjs.org/docs/react-api.html#reactsuspense
+[123]: https://reactjs.org/docs/forwarding-refs.html
+[124]: #autocompletepopoverprops
+[125]: #autocompleteitem
+[126]: #buttonprops
+[127]: https://developer.mozilla.org/docs/Web/API/HTMLButtonElement
+[128]: #cellrendererprops
+[129]: #choicetokenprops
+[130]: #collaboratortokenprops
+[131]: #dialogprops
+[132]: #fieldiconprops
+[133]: #fieldpickerprops
+[134]: #fieldpickersyncedprops
+[135]: #iconprops
+[136]: #inputprops
+[137]: #inputsyncedprops
+[138]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[139]: #loaderprops
+[140]: #popoverprops
+[141]: #progressbarprops
+[142]: #radiosyncedprops
+[143]: #recordcardprops
+[144]: #expandrecordopts
+[145]: #recordcardlistprops
+[146]: https://developer.mozilla.org/docs/Web/API/Event
+[147]: #selectprops
+[148]: #selectsyncedprops
+[149]: #tablepickerprops
+[150]: #tablepickersyncedprops
+[151]: #toggleprops
+[152]: #togglesyncedprops
+[153]: #tooltipprops
+[154]: #viewpickerprops
+[155]: #viewpickersyncedprops
+[156]: #viewportsizeconstraintprop

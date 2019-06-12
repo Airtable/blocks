@@ -96,6 +96,9 @@ function (_AbstractModel) {
     }
   }]);
 
+  /**
+   * @hideconstructor
+   */
   function Record(baseData, parentRecordStore, parentTable, recordId) {
     var _this;
 
@@ -105,14 +108,36 @@ function (_AbstractModel) {
     _this._parentTable = parentTable;
     return _this;
   }
+  /**
+   * @function id
+   * @memberof Record
+   * @instance
+   * @returns {string} This record's ID.
+   * @example
+   * console.log(myRecord.id);
+   * // => 'recxxxxxxxxxxxxxx'
+   */
+
+  /**
+   * @private
+   */
+
 
   (0, _createClass2.default)(Record, [{
     key: "__getRawCellValue",
+
+    /**
+     * @private
+     */
     value: function __getRawCellValue(fieldId) {
       var publicCellValue = this.getCellValue(fieldId);
       var field = this.parentTable.getFieldById(fieldId);
       return _cell_value_utils.default.parsePublicApiCellValue(publicCellValue, field);
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__getRawRow",
     value: function __getRawRow() {
@@ -161,17 +186,34 @@ function (_AbstractModel) {
         cellValuesByColumnId
       };
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_getFieldMatching",
     value: function _getFieldMatching(fieldOrFieldIdOrFieldName) {
       return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "_getViewMatching",
     value: function _getViewMatching(viewOrViewIdOrViewName) {
       return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
-    /** */
+    /**
+     * Gets a specific cell value in this record.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
+     * @returns The cell value in the given field.
+     * @example
+     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
+     * console.log(cellValue);
+     * // => 'cell value'
+     */
 
   }, {
     key: "getCellValue",
@@ -266,7 +308,16 @@ function (_AbstractModel) {
         return cellValue;
       }
     }
-    /** */
+    /**
+     * Gets a specific cell value in this record, formatted as a `string`.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
+     * @returns The cell value in the given field, formatted as a `string`.
+     * @example
+     * const cellValueAsString = myRecord.getCellValueAsString(myNumberField);
+     * console.log(cellValueAsString);
+     * // => '42'
+     */
 
   }, {
     key: "getCellValueAsString",
@@ -286,9 +337,32 @@ function (_AbstractModel) {
       }
     }
     /**
-     * Call this method with an attachment ID and URL to get back a URL that is
-     * suitable for rendering on the current client. The URL that is returned
-     * will only work for the current user.
+     * Returns a URL that is suitable for rendering an attachment on the current client.
+     * The URL that is returned will only work for the current user.
+     *
+     * @param attachmentId The ID of the attachment.
+     * @param attachmentUrl The attachment's URL (which is not suitable for rendering on the client).
+     * @returns A URL that is suitable for rendering on the current client.
+     * @example
+     * import React from 'react';
+     *
+     * function RecordAttachments(props) {
+     *     const {record, attachmentField} = props;
+     *     const attachmentCellValue = record.getCellValue(attachmentField);
+     *     if (attachmentCellValue === null) {
+     *         return null;
+     *     }
+     *     return (
+     *         <div>
+     *             {attachmentCellValue.map(attachmentObj => {
+     *                 const clientUrl = record.getAttachmentClientUrlFromCellValueUrl(attachmentObj.id, attachmentObj.url);
+     *                 return (
+     *                     <img key={attachmentObj.id} src={clientUrl} width={200} />
+     *                 );
+     *             })}
+     *         </div>
+     *     );
+     * }
      */
 
   }, {
@@ -308,8 +382,12 @@ function (_AbstractModel) {
       return attachmentUrl;
     }
     /**
-     * Get the color name for this record in the specified view, or null if
-     * no color is available. Watch with the 'colorInView:${ViewId}' key.
+     * Gets the color of this record in a given view.
+     *
+     * Can be watched with the 'colorInView:${ViewId}' key.
+     *
+     * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
+     * @returns The color of this record in the given view, or null if the record has no color in that view.
      */
 
   }, {
@@ -322,8 +400,12 @@ function (_AbstractModel) {
       return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
     /**
-     * Get a CSS hex string for this record in the specified view, or null if
-     * no color is available. Watch with the 'colorInView:${ViewId}' key
+     * Gets the CSS hex string for this record in a given view.
+     *
+     * Can be watched with the 'colorInView:${ViewId}' key.
+     *
+     * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
+     * @returns The CSS hex color for this record in the given view, or null if the record has no color in that view.
      */
 
   }, {
@@ -337,7 +419,13 @@ function (_AbstractModel) {
 
       return _color_utils.default.getHexForColor(color);
     }
-    /** */
+    /**
+     * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+     *
+     * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
+     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @returns A query result containing the records in the given `multipleRecordLinks` field.
+     */
 
   }, {
     key: "selectLinkedRecordsFromCell",
@@ -350,44 +438,80 @@ function (_AbstractModel) {
       (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
       return _linked_records_query_result.default.__createOrReuseQueryResult(this, field, opts);
     }
-    /** Returns the URL for this record. */
+    /**
+     * @function
+     * @returns The URL for the record. You can visit this URL in the browser to be taken to the record in the Airtable UI.
+     * @example
+     * console.log(myRecord.url);
+     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
+     */
 
   }, {
     key: "canSetCellValue",
 
     /**
-     * Use this to check if the current user has permission to update a
-     * specific cell value before calling `setCellValue`.
+     * Use this to check whether the current user can update a specific cell value.
+     * Should be called before calling {@link setCellValue}.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) to use.
+     * @param cellValue The cell value to set.
+     * @returns `true` if the current user can set the given cell value, `false` otherwise.
+     * @example
+     * const newCellValue = 'new cell value';
+     * if (myRecord.canSetCellValue(mySingleLineTextField, newCellValue)) {
+     *     myRecord.setCellValue(mySingleLineTextField, newCellValue);
+     * }
      */
-    value: function canSetCellValue(fieldOrFieldIdOrFieldName, publicCellValue) {
+    value: function canSetCellValue(fieldOrFieldIdOrFieldName, cellValue) {
       var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
 
       (0, _invariant.default)(field, 'Field does not exist');
       (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
       return this.canSetCellValues({
-        [field.id]: publicCellValue
+        [field.id]: cellValue
       });
     }
     /**
-     * Use `canSetCellValue` to check if the current user has permission to update a
-     * specific cell value before calling. Will throw if the user does not have
-     * permission.
+     * Sets a cell value.
+     *
+     * Throws if the current user cannot update this cell value. Call {@link canSetCellValue}
+     * before calling this to check if the current user can update this cell value.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) to use.
+     * @param cellValue The cell value to set.
+     * @returns {{}}
+     * @example
+     * const newCellValue = 'new cell value';
+     * if (myRecord.canSetCellValue(mySingleLineTextField, newCellValue)) {
+     *     myRecord.setCellValue(mySingleLineTextField, newCellValue);
+     * }
      */
 
   }, {
     key: "setCellValue",
-    value: function setCellValue(fieldOrFieldIdOrFieldName, publicCellValue) {
+    value: function setCellValue(fieldOrFieldIdOrFieldName, cellValue) {
       var field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
 
       (0, _invariant.default)(field, 'Field does not exist');
       (0, _invariant.default)(!field.isDeleted, 'Field has been deleted');
       return this.setCellValues({
-        [field.id]: publicCellValue
+        [field.id]: cellValue
       });
     }
     /**
-     * Use this to check if the current user has permission to update a
-     * set of cell values before calling `setCellValues`.
+     * Use this to check whether the current user can update a set of cell values. Should be
+     * called before calling {@link setCellValues}.
+     *
+     * @param {object.<(FieldId|string), CellValue>} cellValuesByFieldIdOrFieldName The cell values to set.
+     * @returns `true` if the current user can set the given cell values, `false` otherwise.
+     * @example
+     * const cellValuesByFieldId = {
+     *     [mySingleLineTextField.id]: 'another cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myRecord.canSetCellValues(cellValuesByFieldId)) {
+     *     myRecord.setCellValues(cellValuesByFieldId);
+     * }
      */
 
   }, {
@@ -398,9 +522,22 @@ function (_AbstractModel) {
       });
     }
     /**
-     * Use `canSetCellValues` to check if the current user has permission to update
-     * the cell values before calling. Will throw if the user does not have
-     * permission.
+     * Sets cell values.
+     *
+     * Throws if the current user cannot update all of the given cell values. Call
+     * {@link canSetCellValues} before calling this to check whether the current user
+     * can perform the given updates.
+     *
+     * @param {object.<(FieldId|string), CellValue>} cellValuesByFieldIdOrFieldName The cell values to set.
+     * @returns {{}}
+     * @example
+     * const cellValuesByFieldId = {
+     *     [mySingleLineTextField.id]: 'another cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myRecord.canSetCellValues(cellValuesByFieldId)) {
+     *     myRecord.setCellValues(cellValuesByFieldId);
+     * }
      */
 
   }, {
@@ -410,24 +547,54 @@ function (_AbstractModel) {
         [this.id]: cellValuesByFieldIdOrFieldName
       });
     }
-    /** */
+    /**
+     * Use this to check whether the current user can delete this record. Should be
+     * called before calling {@link delete}.
+     *
+     * @returns `true` if the current user can delete this record, `false` otherwise.
+     * @example
+     * if (myRecord.canDelete()) {
+     *     myRecord.delete();
+     * }
+     */
 
   }, {
     key: "canDelete",
     value: function canDelete() {
       return this.parentTable.canDeleteRecord(this);
     }
-    /** */
+    /**
+     * Deletes this record.
+     *
+     * Throws if the current user cannot delete this record. Call {@link canDelete}
+     * before calling this to check whether the current user can delete this record.
+     *
+     * @returns {{}}
+     * @example
+     * if (myRecord.canDelete()) {
+     *     myRecord.delete();
+     * }
+     */
 
   }, {
     key: "delete",
     value: function _delete() {
       return this.parentTable.deleteRecord(this);
     }
-    /** */
+    /**
+     * @function
+     * @returns The number of comments on this record.
+     * @example
+     * const comentCount = myRecord.commentCount;
+     * console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`);
+     */
 
   }, {
     key: "__triggerOnChangeForDirtyPaths",
+
+    /**
+     * @private
+     */
     value: function __triggerOnChangeForDirtyPaths(dirtyPaths) {
       var cellValuesByFieldId = dirtyPaths.cellValuesByFieldId,
           commentCount = dirtyPaths.commentCount;
@@ -453,6 +620,10 @@ function (_AbstractModel) {
         this._onChange(WatchableRecordKeys.commentCount);
       }
     }
+    /**
+     * @private
+     */
+
   }, {
     key: "__triggerOnChangeForRecordColorInViewId",
     value: function __triggerOnChangeForRecordColorInViewId(viewId) {
@@ -471,7 +642,17 @@ function (_AbstractModel) {
       (0, _invariant.default)(recordsById, 'Record data is not loaded');
       return recordsById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The table that this record belongs to. Should never change because records aren't moved between tables.
+     *
+     * @example
+     * import {useRecords, withHooks} from '@airtable/blocks/ui';
+     * const queryResult = myTable.selectRecords();
+     * const records = useRecords(queryResult);
+     * console.log(records[0].parentTable.id === myTable.id);
+     * // => true
+     */
 
   }, {
     key: "parentTable",
@@ -485,14 +666,30 @@ function (_AbstractModel) {
         absolute: true
       });
     }
-    /** */
+    /**
+     * Gets the primary cell value in this record.
+     *
+     * @function
+     * @returns The primary cell value in this record.
+     * @example
+     * console.log(myRecord.primaryCellValue);
+     * // => 'primary cell value'
+     */
 
   }, {
     key: "primaryCellValue",
     get: function get() {
       return this.getCellValue(this.parentTable.primaryField);
     }
-    /** */
+    /**
+     * Gets the primary cell value in this record, formatted as a `string`.
+     *
+     * @function
+     * @returns The primary cell value in this record, formatted as a `string`.
+     * @example
+     * console.log(myRecord.primaryCellValueAsString);
+     * // => '42'
+     */
 
   }, {
     key: "primaryCellValueAsString",
@@ -504,7 +701,12 @@ function (_AbstractModel) {
     get: function get() {
       return this._data.commentCount;
     }
-    /** */
+    /**
+     * @function
+     * @returns The created time of this record.
+     * @example
+     * console.log(`This record was created at ${myRecord.createdTime.toISOString()}`)
+     */
 
   }, {
     key: "createdTime",

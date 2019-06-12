@@ -3,7 +3,7 @@ import invariant from 'invariant';
 import {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
-import {FieldTypes} from '../types/field';
+import {FieldTypes, type FieldId} from '../types/field';
 import {isEnumValue, cloneDeep, entries} from '../private_utils';
 import {type AirtableWriteAction} from '../injected/airtable_interface';
 import colorUtils from '../color_utils';
@@ -63,6 +63,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     }
     _parentRecordStore: RecordStore;
     _parentTable: Table;
+
+    /**
+     * @hideconstructor
+     */
     constructor(
         baseData: BaseData,
         parentRecordStore: RecordStore,
@@ -74,6 +78,20 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
     }
+
+    /**
+     * @function id
+     * @memberof Record
+     * @instance
+     * @returns {string} This record's ID.
+     * @example
+     * console.log(myRecord.id);
+     * // => 'recxxxxxxxxxxxxxx'
+     */
+
+    /**
+     * @private
+     */
     get _dataOrNullIfDeleted(): RecordData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
         if (!tableData) {
@@ -83,15 +101,31 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         invariant(recordsById, 'Record data is not loaded');
         return recordsById[this._id] || null;
     }
-    /** */
+    /**
+     * @function
+     * @returns The table that this record belongs to. Should never change because records aren't moved between tables.
+     *
+     * @example
+     * import {useRecords, withHooks} from '@airtable/blocks/ui';
+     * const queryResult = myTable.selectRecords();
+     * const records = useRecords(queryResult);
+     * console.log(records[0].parentTable.id === myTable.id);
+     * // => true
+     */
     get parentTable(): Table {
         return this._parentTable;
     }
+    /**
+     * @private
+     */
     __getRawCellValue(fieldId: string): mixed {
         const publicCellValue = this.getCellValue(fieldId);
         const field = this.parentTable.getFieldById(fieldId);
         return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
     }
+    /**
+     * @private
+     */
     __getRawRow(): {id: string, createdTime: string, cellValuesByColumnId?: RecordDef} {
         let cellValuesByColumnId;
         const cellValuesByFieldId = this._data.cellValuesByFieldId;
@@ -116,14 +150,29 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             cellValuesByColumnId,
         };
     }
+    /**
+     * @private
+     */
     _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
         return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
+    /**
+     * @private
+     */
     _getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
-    /** */
-    getCellValue(fieldOrFieldIdOrFieldName: Field | string): mixed {
+    /**
+     * Gets a specific cell value in this record.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
+     * @returns The cell value in the given field.
+     * @example
+     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
+     * console.log(cellValue);
+     * // => 'cell value'
+     */
+    getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): mixed {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
@@ -181,7 +230,16 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             return cellValue;
         }
     }
-    /** */
+    /**
+     * Gets a specific cell value in this record, formatted as a `string`.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
+     * @returns The cell value in the given field, formatted as a `string`.
+     * @example
+     * const cellValueAsString = myRecord.getCellValueAsString(myNumberField);
+     * console.log(cellValueAsString);
+     * // => '42'
+     */
     getCellValueAsString(fieldOrFieldIdOrFieldName: Field | string): string {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
@@ -204,9 +262,32 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         }
     }
     /**
-     * Call this method with an attachment ID and URL to get back a URL that is
-     * suitable for rendering on the current client. The URL that is returned
-     * will only work for the current user.
+     * Returns a URL that is suitable for rendering an attachment on the current client.
+     * The URL that is returned will only work for the current user.
+     *
+     * @param attachmentId The ID of the attachment.
+     * @param attachmentUrl The attachment's URL (which is not suitable for rendering on the client).
+     * @returns A URL that is suitable for rendering on the current client.
+     * @example
+     * import React from 'react';
+     *
+     * function RecordAttachments(props) {
+     *     const {record, attachmentField} = props;
+     *     const attachmentCellValue = record.getCellValue(attachmentField);
+     *     if (attachmentCellValue === null) {
+     *         return null;
+     *     }
+     *     return (
+     *         <div>
+     *             {attachmentCellValue.map(attachmentObj => {
+     *                 const clientUrl = record.getAttachmentClientUrlFromCellValueUrl(attachmentObj.id, attachmentObj.url);
+     *                 return (
+     *                     <img key={attachmentObj.id} src={clientUrl} width={200} />
+     *                 );
+     *             })}
+     *         </div>
+     *     );
+     * }
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
         const appInterface = this.parentTable.parentBase.__appInterface;
@@ -225,8 +306,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return attachmentUrl;
     }
     /**
-     * Get the color name for this record in the specified view, or null if
-     * no color is available. Watch with the 'colorInView:${ViewId}' key.
+     * Gets the color of this record in a given view.
+     *
+     * Can be watched with the 'colorInView:${ViewId}' key.
+     *
+     * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
+     * @returns The color of this record in the given view, or null if the record has no color in that view.
      */
     getColorInView(viewOrViewIdOrViewName: View | string): Color | null {
         const view = this._getViewMatching(viewOrViewIdOrViewName);
@@ -236,8 +321,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
     /**
-     * Get a CSS hex string for this record in the specified view, or null if
-     * no color is available. Watch with the 'colorInView:${ViewId}' key
+     * Gets the CSS hex string for this record in a given view.
+     *
+     * Can be watched with the 'colorInView:${ViewId}' key.
+     *
+     * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
+     * @returns The CSS hex color for this record in the given view, or null if the record has no color in that view.
      */
     getColorHexInView(viewOrViewIdOrViewName: View | string): string | null {
         const color = this.getColorInView(viewOrViewIdOrViewName);
@@ -246,7 +335,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         }
         return colorUtils.getHexForColor(color);
     }
-    /** */
+    /**
+     * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+     *
+     * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
+     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @returns A query result containing the records in the given `multipleRecordLinks` field.
+     */
     selectLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | string,
         opts: QueryResultOpts = {},
@@ -256,53 +351,105 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         invariant(!field.isDeleted, 'Field has been deleted');
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
-    /** Returns the URL for this record. */
+    /**
+     * @function
+     * @returns The URL for the record. You can visit this URL in the browser to be taken to the record in the Airtable UI.
+     * @example
+     * console.log(myRecord.url);
+     * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
+     */
     get url(): string {
         return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
             absolute: true,
         });
     }
-    /** */
+    /**
+     * Gets the primary cell value in this record.
+     *
+     * @function
+     * @returns The primary cell value in this record.
+     * @example
+     * console.log(myRecord.primaryCellValue);
+     * // => 'primary cell value'
+     */
     get primaryCellValue(): mixed {
         return this.getCellValue(this.parentTable.primaryField);
     }
-    /** */
+    /**
+     * Gets the primary cell value in this record, formatted as a `string`.
+     *
+     * @function
+     * @returns The primary cell value in this record, formatted as a `string`.
+     * @example
+     * console.log(myRecord.primaryCellValueAsString);
+     * // => '42'
+     */
     get primaryCellValueAsString(): string {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
     /**
-     * Use this to check if the current user has permission to update a
-     * specific cell value before calling `setCellValue`.
+     * Use this to check whether the current user can update a specific cell value.
+     * Should be called before calling {@link setCellValue}.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) to use.
+     * @param cellValue The cell value to set.
+     * @returns `true` if the current user can set the given cell value, `false` otherwise.
+     * @example
+     * const newCellValue = 'new cell value';
+     * if (myRecord.canSetCellValue(mySingleLineTextField, newCellValue)) {
+     *     myRecord.setCellValue(mySingleLineTextField, newCellValue);
+     * }
      */
-    canSetCellValue(fieldOrFieldIdOrFieldName: Field | string, publicCellValue: mixed) {
+    canSetCellValue(fieldOrFieldIdOrFieldName: Field | string, cellValue: mixed): boolean {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
 
         return this.canSetCellValues({
-            [field.id]: publicCellValue,
+            [field.id]: cellValue,
         });
     }
     /**
-     * Use `canSetCellValue` to check if the current user has permission to update a
-     * specific cell value before calling. Will throw if the user does not have
-     * permission.
+     * Sets a cell value.
+     *
+     * Throws if the current user cannot update this cell value. Call {@link canSetCellValue}
+     * before calling this to check if the current user can update this cell value.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) to use.
+     * @param cellValue The cell value to set.
+     * @returns {{}}
+     * @example
+     * const newCellValue = 'new cell value';
+     * if (myRecord.canSetCellValue(mySingleLineTextField, newCellValue)) {
+     *     myRecord.setCellValue(mySingleLineTextField, newCellValue);
+     * }
      */
     setCellValue(
         fieldOrFieldIdOrFieldName: Field | string,
-        publicCellValue: mixed,
+        cellValue: mixed,
     ): AirtableWriteAction<void, {}> {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');
         invariant(!field.isDeleted, 'Field has been deleted');
 
         return this.setCellValues({
-            [field.id]: publicCellValue,
+            [field.id]: cellValue,
         });
     }
     /**
-     * Use this to check if the current user has permission to update a
-     * set of cell values before calling `setCellValues`.
+     * Use this to check whether the current user can update a set of cell values. Should be
+     * called before calling {@link setCellValues}.
+     *
+     * @param {object.<(FieldId|string), CellValue>} cellValuesByFieldIdOrFieldName The cell values to set.
+     * @returns `true` if the current user can set the given cell values, `false` otherwise.
+     * @example
+     * const cellValuesByFieldId = {
+     *     [mySingleLineTextField.id]: 'another cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myRecord.canSetCellValues(cellValuesByFieldId)) {
+     *     myRecord.setCellValues(cellValuesByFieldId);
+     * }
      */
     canSetCellValues(cellValuesByFieldIdOrFieldName: RecordDef): boolean {
         return this.parentTable.canSetCellValues({
@@ -310,31 +457,78 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         });
     }
     /**
-     * Use `canSetCellValues` to check if the current user has permission to update
-     * the cell values before calling. Will throw if the user does not have
-     * permission.
+     * Sets cell values.
+     *
+     * Throws if the current user cannot update all of the given cell values. Call
+     * {@link canSetCellValues} before calling this to check whether the current user
+     * can perform the given updates.
+     *
+     * @param {object.<(FieldId|string), CellValue>} cellValuesByFieldIdOrFieldName The cell values to set.
+     * @returns {{}}
+     * @example
+     * const cellValuesByFieldId = {
+     *     [mySingleLineTextField.id]: 'another cell value',
+     *     [myNumberField.id]: 42,
+     * };
+     * if (myRecord.canSetCellValues(cellValuesByFieldId)) {
+     *     myRecord.setCellValues(cellValuesByFieldId);
+     * }
      */
     setCellValues(cellValuesByFieldIdOrFieldName: RecordDef): AirtableWriteAction<void, {}> {
         return this.parentTable.setCellValues({
             [this.id]: cellValuesByFieldIdOrFieldName,
         });
     }
-    /** */
+    /**
+     * Use this to check whether the current user can delete this record. Should be
+     * called before calling {@link delete}.
+     *
+     * @returns `true` if the current user can delete this record, `false` otherwise.
+     * @example
+     * if (myRecord.canDelete()) {
+     *     myRecord.delete();
+     * }
+     */
     canDelete(): boolean {
         return this.parentTable.canDeleteRecord(this);
     }
-    /** */
+    /**
+     * Deletes this record.
+     *
+     * Throws if the current user cannot delete this record. Call {@link canDelete}
+     * before calling this to check whether the current user can delete this record.
+     *
+     * @returns {{}}
+     * @example
+     * if (myRecord.canDelete()) {
+     *     myRecord.delete();
+     * }
+     */
     delete(): AirtableWriteAction<void, {}> {
         return this.parentTable.deleteRecord(this);
     }
-    /** */
+    /**
+     * @function
+     * @returns The number of comments on this record.
+     * @example
+     * const comentCount = myRecord.commentCount;
+     * console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`);
+     */
     get commentCount(): number {
         return this._data.commentCount;
     }
-    /** */
+    /**
+     * @function
+     * @returns The created time of this record.
+     * @example
+     * console.log(`This record was created at ${myRecord.createdTime.toISOString()}`)
+     */
     get createdTime(): Date {
         return new Date(this._data.createdTime);
     }
+    /**
+     * @private
+     */
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         const {cellValuesByFieldId, commentCount} = dirtyPaths;
 
@@ -358,6 +552,9 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             this._onChange(WatchableRecordKeys.commentCount);
         }
     }
+    /**
+     * @private
+     */
     __triggerOnChangeForRecordColorInViewId(viewId: string) {
         this._onChange(WatchableColorInViewKeyPrefix + viewId);
     }
