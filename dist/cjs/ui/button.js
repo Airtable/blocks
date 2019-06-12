@@ -135,7 +135,7 @@ function (_React$Component) {
   className: _propTypes.default.string,
   style: _propTypes.default.object,
   onClick: _propTypes.default.func,
-  type: _propTypes.default.oneOf(['button', 'submit', 'reset']),
+  type: _propTypes.default.string,
   disabled: _propTypes.default.bool,
   tabIndex: _propTypes.default.number,
   'aria-label': _propTypes.default.string

@@ -18,16 +18,22 @@ const themes = Object.freeze({
 type ButtonTheme = $Values<typeof themes>;
 
 /**
- * @typedef
- * @type {object}
- * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme=Button.themes.GRAY] The color theme for the button.
+ * @typedef {object} ButtonProps
+ * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme=Button.themes.BLUE] The color theme for the button.
+ * @property {string} [className] Extra `className`s to apply to the button, separated by spaces.
+ * @property {object} [style] Extra styles to apply to the button.
+ * @property {function} [onClick] Click event handler. Also handles Space and Enter keypress events.
+ * @property {string} [type='button'] The type of the button.
+ * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
+ * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-label] The label for the button. Use this if the button lacks a visible text label.
  */
 type ButtonProps = {
     theme: ButtonTheme,
     className?: string,
     style?: Object,
     onClick?: (e?: SyntheticMouseEvent<HTMLButtonElement>) => mixed,
-    type?: 'button' | 'reset' | 'submit',
+    type?: string,
     disabled?: boolean,
     tabIndex?: number,
     'aria-label'?: string,
@@ -67,7 +73,7 @@ class Button extends React.Component<ButtonProps> {
         className: PropTypes.string,
         style: PropTypes.object,
         onClick: PropTypes.func,
-        type: PropTypes.oneOf(['button', 'submit', 'reset']),
+        type: PropTypes.string,
         disabled: PropTypes.bool,
         tabIndex: PropTypes.number,
         'aria-label': PropTypes.string,

@@ -29,7 +29,7 @@ var React = _interopRequireWildcard(require("react"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-var _dialog = _interopRequireDefault(require("./dialog"));
+var _modal = _interopRequireDefault(require("./modal"));
 
 var _create_data_container = _interopRequireDefault(require("./create_data_container"));
 
@@ -108,7 +108,7 @@ function (_React$Component) {
       var globalAlertInfo = UI.globalAlert.__alertInfo;
 
       if (globalAlertInfo) {
-        return React.createElement(_dialog.default, {
+        return React.createElement(_modal.default, {
           className: "absolute all-0 flex items-center justify-center p2",
           style: {
             animation: 'none',

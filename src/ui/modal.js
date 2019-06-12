@@ -7,8 +7,13 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 
 /**
- * @typedef
  * @memberof Modal
+ * @typedef {Object} ModalProps
+ * @property {function} [onClose] Callback function to fire when the modal is closed.
+ * @property {string} [className] Extra `className`s to apply to the modal element, separated by spaces.
+ * @property {Object} [style] Extra styles to apply to the modal element.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
  */
 type ModalProps = {
     onClose?: () => mixed,

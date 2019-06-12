@@ -98,13 +98,16 @@ toc:
                 - ColorPaletteProps
                 - ColorPaletteSynced
                 - ColorPaletteSyncedProps
-          - ConfirmationDialog
+          - name: ConfirmationDialog
+            children:
+                - ConfirmationDialog
+                - ConfirmationDialogProps
           - name: Dialog
             children:
                 - Dialog
                 - DialogProps
                 - Dialog.CloseButton
-                - Dialog.CloseButtonProps
+                - DialogCloseButtonProps
           - name: FieldIcon
             children:
                 - FieldIcon

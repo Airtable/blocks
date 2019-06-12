@@ -6,8 +6,18 @@ import Dialog from './dialog';
 import Button from './button';
 
 /**
- * @typedef
- * @memberof ConfirmationDialog
+ * @typedef {Object} ConfirmationDialogProps
+ * @property {string} title The title of the dialog.
+ * @property {React.Node} [body] The body of the dialog.
+ * @property {string} [cancelButtonText='Cancel'] The label for the cancel button.
+ * @property {string} [confirmButtonText='Confirm'] The label for the confirm button.
+ * @property {boolean} [isConfirmActionDangerous=false] Whether the action is dangerous (potentially destructive or not easily reversible).
+ * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
+ * @property {Object} [style] Extra styles to apply to the dialog element.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
+ * @property {function} onCancel Cancel button event handler. Handles click events and Space and Enter keypress events.
+ * @property {function} onConfirm Confirm button event handler. Handles click events and Space and Enter keypress events.
  */
 type ConfirmationDialogProps = {|
     title: string,
@@ -17,6 +27,8 @@ type ConfirmationDialogProps = {|
     isConfirmActionDangerous: boolean,
     className?: string,
     style?: Object,
+    backgroundClassName?: string,
+    backgroundStyle?: Object,
     onCancel: () => mixed,
     onConfirm: () => mixed,
 |};
@@ -64,12 +76,14 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         isConfirmActionDangerous: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
+        backgroundClassName: PropTypes.string,
+        backgroundStyle: PropTypes.object,
         onCancel: PropTypes.func.isRequired,
         onConfirm: PropTypes.func.isRequired,
     };
     static defaultProps = {
         cancelButtonText: 'Cancel',
-        confirmButtonText: 'Okay',
+        confirmButtonText: 'Confirm',
         isConfirmActionDangerous: false,
     };
     _onConfirm: () => void;
@@ -101,10 +115,21 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
             isConfirmActionDangerous,
             className,
             style,
+            backgroundClassName,
+            backgroundStyle,
         } = this.props;
 
         return (
-            <Dialog onClose={this._onCancel} className={className} style={{width: 400, ...style}}>
+            <Dialog
+                onClose={this._onCancel}
+                className={className}
+                style={{
+                    width: 400, // TODO (stephen): Consider making this an explicit prop
+                    ...style,
+                }}
+                backgroundClassName={backgroundClassName}
+                backgroundStyle={backgroundStyle}
+            >
                 <Dialog.CloseButton />
                 <h1 className="mb1 strong" style={{fontSize: 20}}>
                     {title}

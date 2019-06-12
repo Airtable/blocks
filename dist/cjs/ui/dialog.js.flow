@@ -7,8 +7,10 @@ import Icon from './icon';
 import Modal from './modal';
 
 /**
- * @typedef
- * @alias Dialog.CloseButtonProps
+ * @typedef {object} DialogCloseButtonProps
+ * @property {string} [className] Extra `className`s to apply to the close button, separated by spaces.
+ * @property {object} [style] Extra `className`s to apply to the lightbox element, separated by spaces.
+ * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  */
 type DialogCloseButtonProps = {|
     className?: string,
@@ -77,7 +79,12 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
 }
 
 /**
- * @typedef
+ * @typedef {Object} DialogProps
+ * @property {function} onClose Callback function to fire when the dialog is closed.
+ * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
+ * @property {Object} [style] Extra styles to apply to the dialog element.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
  */
 type DialogProps = {
     onClose: () => mixed,

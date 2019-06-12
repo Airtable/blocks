@@ -3116,14 +3116,15 @@ Type: [object][68]
 -   `theme` **(Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW |
     Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
     The color theme for the button.
--   `className` **[string][60]?**
--   `style` **[Object][68]?**
--   `onClick` **function (e: SyntheticMouseEvent&lt;[HTMLButtonElement][127]>): any?**
--   `type` **(`"button"` \| `"reset"` \| `"submit"`)?**
--   `disabled` **[boolean][65]?**
--   `tabIndex` **[number][67]?**
--   `aria-label` **[string][60]?**
--   `children` **React.Node?**
+-   `className` **[string][60]?** Extra `className`s to apply to the button, separated by spaces.
+-   `style` **[object][68]?** Extra styles to apply to the button.
+-   `onClick` **[function][73]?** Click event handler. Also handles Space and Enter keypress events.
+-   `type` **[string][60]?** The type of the button.
+-   `disabled` **[boolean][65]?** Indicates whether or not the user can interact with the button.
+-   `tabIndex` **[number][67]?** Indicates if the button can be focused and if/where it participates
+    in sequential keyboard navigation.
+-   `aria-label` **[string][60]?** The label for the button. Use this if the button lacks a visible
+    text label.
 
 ### CellRenderer
 
@@ -3133,7 +3134,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][128]**
+-   `props` **[CellRendererProps][127]**
 
 #### CellRendererProps
 
@@ -3155,7 +3156,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `$0` **[ChoiceTokenProps][129]**
+-   `$0` **[ChoiceTokenProps][128]**
     -   `$0.choice`
     -   `$0.className`
 
@@ -3175,7 +3176,7 @@ Type: {choice: {id: [string][60], name: [string][60], color: [string][60]?}, cla
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][130]**
+-   `props` **[CollaboratorTokenProps][129]**
 
 #### CollaboratorTokenProps
 
@@ -3228,17 +3229,19 @@ any?}
 
 ### ConfirmationDialog
 
+#### ConfirmationDialog
+
 **Extends React.Component**
 
 A styled modal dialog component that prompts the user to confirm or cancel an action. By default,
 this component will focus the "Confirm" button on mount, so that pressing the Enter key will confirm
 the action.
 
-#### Parameters
+##### Parameters
 
--   `props` **ConfirmationDialogProps**
+-   `props` **[ConfirmationDialogProps][130]**
 
-#### Examples
+##### Examples
 
 ```javascript
 import {Button, Dialog, ConfirmationDialog} from '@airtable/blocks/ui';
@@ -3269,21 +3272,26 @@ function Block() {
 
 #### ConfirmationDialogProps
 
-Type: {title: [string][60], body: React.Node?, cancelButtonText: [string][60], confirmButtonText:
-[string][60], isConfirmActionDangerous: [boolean][65], className: [string][60]?, style:
-[Object][68]?, onCancel: function (): any, onConfirm: function (): any}
+Type: [Object][68]
 
 ##### Properties
 
--   `title` **[string][60]**
--   `body` **React.Node?**
--   `cancelButtonText` **[string][60]**
--   `confirmButtonText` **[string][60]**
--   `isConfirmActionDangerous` **[boolean][65]**
--   `className` **[string][60]?**
--   `style` **[Object][68]?**
--   `onCancel` **function (): any**
--   `onConfirm` **function (): any**
+-   `title` **[string][60]** The title of the dialog.
+-   `body` **React.Node?** The body of the dialog.
+-   `cancelButtonText` **[string][60]?** The label for the cancel button.
+-   `confirmButtonText` **[string][60]?** The label for the confirm button.
+-   `isConfirmActionDangerous` **[boolean][65]?** Whether the action is dangerous (potentially
+    destructive or not easily reversible).
+-   `className` **[string][60]?** Extra `className`s to apply to the dialog element, separated by
+    spaces.
+-   `style` **[Object][68]?** Extra styles to apply to the dialog element.
+-   `backgroundClassName` **[string][60]?** Extra `className`s to apply to the lightbox element,
+    separated by spaces.
+-   `backgroundStyle` **[Object][68]?** Extra styles to apply to the lightbox element.
+-   `onCancel` **[function][73]** Cancel button event handler. Handles click events and Space and
+    Enter keypress events.
+-   `onConfirm` **[function][73]** Confirm button event handler. Handles click events and Space and
+    Enter keypress events.
 
 ### Dialog
 
@@ -3334,17 +3342,17 @@ function Block() {
 
 #### DialogProps
 
-Type: {onClose: function (): any, className: [string][60]?, style: [Object][68]?,
-backgroundClassName: [string][60]?, backgroundStyle: [Object][68]?, children: React.Node}
+Type: [Object][68]
 
 ##### Properties
 
--   `onClose` **function (): any**
--   `className` **[string][60]?**
--   `style` **[Object][68]?**
--   `backgroundClassName` **[string][60]?**
--   `backgroundStyle` **[Object][68]?**
--   `children` **React.Node**
+-   `onClose` **[function][73]** Callback function to fire when the dialog is closed.
+-   `className` **[string][60]?** Extra `className`s to apply to the dialog element, separated by
+    spaces.
+-   `style` **[Object][68]?** Extra styles to apply to the dialog element.
+-   `backgroundClassName` **[string][60]?** Extra `className`s to apply to the lightbox element,
+    separated by spaces.
+-   `backgroundStyle` **[Object][68]?** Extra styles to apply to the lightbox element.
 
 #### Dialog.CloseButton
 
@@ -3352,19 +3360,20 @@ backgroundClassName: [string][60]?, backgroundStyle: [Object][68]?, children: Re
 
 ##### Parameters
 
--   `props` **DialogCloseButtonProps**
+-   `props` **[DialogCloseButtonProps][132]**
 
-#### Dialog.CloseButtonProps
+#### DialogCloseButtonProps
 
-Type: {className: [string][60]?, style: [Object][68]?, tabIndex: [number][67]?, children:
-React.Node?}
+Type: [object][68]
 
 ##### Properties
 
--   `className` **[string][60]?**
--   `style` **[Object][68]?**
--   `tabIndex` **[number][67]?**
--   `children` **React.Node?**
+-   `className` **[string][60]?** Extra `className`s to apply to the close button, separated by
+    spaces.
+-   `style` **[object][68]?** Extra `className`s to apply to the lightbox element, separated by
+    spaces.
+-   `tabIndex` **[number][67]?** Indicates if the button can be focused and if/where it participates
+    in sequential keyboard navigation.
 
 ### FieldIcon
 
@@ -3372,7 +3381,7 @@ React.Node?}
 
 ##### Parameters
 
--   `props` **[FieldIconProps][132]**
+-   `props` **[FieldIconProps][133]**
 
 #### FieldIconProps
 
@@ -3396,7 +3405,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][133]**
+-   `props` **[FieldPickerProps][134]**
 
 #### FieldPickerProps
 
@@ -3423,7 +3432,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][134]**
+-   `props` **[FieldPickerSyncedProps][135]**
 
 #### FieldPickerSyncedProps
 
@@ -3450,7 +3459,7 @@ className: [string][60]?}
 
 ##### Parameters
 
--   `$0` **[IconProps][135]**
+-   `$0` **[IconProps][136]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -3480,7 +3489,7 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 ##### Parameters
 
--   `props` **[InputProps][136]**
+-   `props` **[InputProps][137]**
 
 #### InputProps
 
@@ -3506,7 +3515,7 @@ Type: {type: [string][60]?, placeholder: [string][60]?, onChange: function
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][137]**
+-   `props` **[InputSyncedProps][138]**
 
 #### InputSyncedProps
 
@@ -3531,7 +3540,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][138]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][139]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -3570,7 +3579,7 @@ className: [string][60]?, style: [Object][68]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][139]**
+-   `$0` **[LoaderProps][140]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -3591,7 +3600,7 @@ Type: {fillColor: [string][60]?, scale: [number][67]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][140]**
+-   `props` **[PopoverProps][141]**
 
 #### PopoverProps
 
@@ -3626,7 +3635,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][141]**
+-   `props` **[ProgressBarProps][142]**
 
 ##### Examples
 
@@ -3661,7 +3670,7 @@ Type: [object][68]
 
 ##### Parameters
 
--   `props` **[RadioSyncedProps][142]**
+-   `props` **[RadioSyncedProps][143]**
 
 #### RadioSyncedProps
 
@@ -3684,13 +3693,13 @@ Type: {globalConfigKey: GlobalConfigKey, value: [string][60], style: [Object][68
 
 ##### Parameters
 
--   `props` **[RecordCardProps][143]**
+-   `props` **[RecordCardProps][144]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][74] | RecordDef), fields: [Array][64]&lt;[Field][71]>?, view: [View][72]?,
 attachmentCoverField: [Field][71]?, width: [number][67]?, height: [number][67]?, onClick:
-[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][144]?,
+[Function][73]?, getExpandRecordOptions: function ([Record][74]): [ExpandRecordOpts][145]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][68]?}
 
 ##### Properties
@@ -3702,7 +3711,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 -   `width` **[number][67]?**
 -   `height` **[number][67]?**
 -   `onClick` **[Function][73]?**
--   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][144]?**
+-   `getExpandRecordOptions` **function ([Record][74]): [ExpandRecordOpts][145]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][60]?**
@@ -3716,11 +3725,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][145]**
+-   `props` **[RecordCardListProps][146]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][146]):
+Type: {records: [Array][64]&lt;([Record][74] | RecordDef)>, onScroll: function ([Event][147]):
 void?, onRecordClick: (null | function (record: ([Record][74] | RecordDef), index: [number][67]):
 void)?, onRecordMouseEnter: function (record: ([Record][74] | RecordDef), index: [number][67]):
 void?, onRecordMouseLeave: function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3730,7 +3739,7 @@ className: [string][60]?, style: [Object][68]?}
 ##### Properties
 
 -   `records` **[Array][64]&lt;([Record][74] | RecordDef)>**
--   `onScroll` **function ([Event][146]): void?**
+-   `onScroll` **function ([Event][147]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][74] | RecordDef), index: [number][67]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][74] | RecordDef), index: [number][67]):
@@ -3751,7 +3760,7 @@ className: [string][60]?, style: [Object][68]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][147]**
+-   `props` **[SelectProps][148]**
 
 #### SelectProps
 
@@ -3763,7 +3772,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][148]**
+-   `props` **[SelectSyncedProps][149]**
 
 #### SelectSyncedProps
 
@@ -3795,7 +3804,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][149]**
+-   `props` **[TablePickerProps][150]**
 
 #### TablePickerProps
 
@@ -3819,7 +3828,7 @@ Type: {table: [Table][76]?, shouldAllowPickingNone: [boolean][65]?, onChange: fu
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][150]**
+-   `props` **[TablePickerSyncedProps][151]**
 
 #### TablePickerSyncedProps
 
@@ -3845,7 +3854,7 @@ style: [Object][68]?, className: [string][60]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][151]**
+-   `props` **[ToggleProps][152]**
 
 #### ToggleProps
 
@@ -3870,7 +3879,7 @@ tabIndex: [number][67]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][152]**
+-   `props` **[ToggleSyncedProps][153]**
 
 #### ToggleSyncedProps
 
@@ -3897,7 +3906,7 @@ function ([boolean][65]): void?, disabled: [boolean][65]?, className: [string][6
 
 ##### Parameters
 
--   `props` **[TooltipProps][153]**
+-   `props` **[TooltipProps][154]**
 
 #### TooltipProps
 
@@ -3930,7 +3939,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][154]**
+-   `props` **[ViewPickerProps][155]**
 
 #### ViewPickerProps
 
@@ -3957,7 +3966,7 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][155]**
+-   `props` **[ViewPickerSyncedProps][156]**
 
 #### ViewPickerSyncedProps
 
@@ -4004,13 +4013,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][156]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][156]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][157]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][157]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][156]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][156]?**
+-   `minSize` **[ViewportSizeConstraintProp][157]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][157]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -4148,33 +4157,34 @@ Type: {width: ([number][67] | null)?, height: ([number][67] | null)?}
 [124]: #autocompletepopoverprops
 [125]: #autocompleteitem
 [126]: #buttonprops
-[127]: https://developer.mozilla.org/docs/Web/API/HTMLButtonElement
-[128]: #cellrendererprops
-[129]: #choicetokenprops
-[130]: #collaboratortokenprops
+[127]: #cellrendererprops
+[128]: #choicetokenprops
+[129]: #collaboratortokenprops
+[130]: #confirmationdialogprops
 [131]: #dialogprops
-[132]: #fieldiconprops
-[133]: #fieldpickerprops
-[134]: #fieldpickersyncedprops
-[135]: #iconprops
-[136]: #inputprops
-[137]: #inputsyncedprops
-[138]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[139]: #loaderprops
-[140]: #popoverprops
-[141]: #progressbarprops
-[142]: #radiosyncedprops
-[143]: #recordcardprops
-[144]: #expandrecordopts
-[145]: #recordcardlistprops
-[146]: https://developer.mozilla.org/docs/Web/API/Event
-[147]: #selectprops
-[148]: #selectsyncedprops
-[149]: #tablepickerprops
-[150]: #tablepickersyncedprops
-[151]: #toggleprops
-[152]: #togglesyncedprops
-[153]: #tooltipprops
-[154]: #viewpickerprops
-[155]: #viewpickersyncedprops
-[156]: #viewportsizeconstraintprop
+[132]: #dialogclosebuttonprops
+[133]: #fieldiconprops
+[134]: #fieldpickerprops
+[135]: #fieldpickersyncedprops
+[136]: #iconprops
+[137]: #inputprops
+[138]: #inputsyncedprops
+[139]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[140]: #loaderprops
+[141]: #popoverprops
+[142]: #progressbarprops
+[143]: #radiosyncedprops
+[144]: #recordcardprops
+[145]: #expandrecordopts
+[146]: #recordcardlistprops
+[147]: https://developer.mozilla.org/docs/Web/API/Event
+[148]: #selectprops
+[149]: #selectsyncedprops
+[150]: #tablepickerprops
+[151]: #tablepickersyncedprops
+[152]: #toggleprops
+[153]: #togglesyncedprops
+[154]: #tooltipprops
+[155]: #viewpickerprops
+[156]: #viewpickersyncedprops
+[157]: #viewportsizeconstraintprop

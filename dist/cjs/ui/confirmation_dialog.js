@@ -110,13 +110,17 @@ function (_React$Component) {
           confirmButtonText = _this$props.confirmButtonText,
           isConfirmActionDangerous = _this$props.isConfirmActionDangerous,
           className = _this$props.className,
-          style = _this$props.style;
+          style = _this$props.style,
+          backgroundClassName = _this$props.backgroundClassName,
+          backgroundStyle = _this$props.backgroundStyle;
       return React.createElement(_dialog.default, {
         onClose: this._onCancel,
         className: className,
         style: (0, _objectSpread2.default)({
           width: 400
-        }, style)
+        }, style),
+        backgroundClassName: backgroundClassName,
+        backgroundStyle: backgroundStyle
       }, React.createElement(_dialog.default.CloseButton, null), React.createElement("h1", {
         className: "mb1 strong",
         style: {
@@ -146,12 +150,14 @@ function (_React$Component) {
   isConfirmActionDangerous: _propTypes.default.bool,
   className: _propTypes.default.string,
   style: _propTypes.default.object,
+  backgroundClassName: _propTypes.default.string,
+  backgroundStyle: _propTypes.default.object,
   onCancel: _propTypes.default.func.isRequired,
   onConfirm: _propTypes.default.func.isRequired
 });
 (0, _defineProperty2.default)(ConfirmationDialog, "defaultProps", {
   cancelButtonText: 'Cancel',
-  confirmButtonText: 'Okay',
+  confirmButtonText: 'Confirm',
   isConfirmActionDangerous: false
 });
 var _default = ConfirmationDialog;

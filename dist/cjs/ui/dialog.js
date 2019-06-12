@@ -101,7 +101,12 @@ function (_React$Component) {
   return DialogCloseButton;
 }(React.Component);
 /**
- * @typedef
+ * @typedef {Object} DialogProps
+ * @property {function} onClose Callback function to fire when the dialog is closed.
+ * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
+ * @property {Object} [style] Extra styles to apply to the dialog element.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
  */
 
 
