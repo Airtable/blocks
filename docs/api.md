@@ -4241,32 +4241,67 @@ function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][5
 
 **Extends React.Component**
 
+A component that shows a tooltip. Wraps its children.
+
 ##### Parameters
 
 -   `props` **[TooltipProps][153]**
 
+##### Examples
+
+```javascript
+import {UI} from '@airtable/blocks';
+
+function MyComponent() {
+    return (
+        <UI.Tooltip
+            content="Clicking this button will be a lot of fun!"
+            placementX={UI.Tooltip.placements.CENTER}
+            placementY={UI.Tooltip.placements.TOP}
+        >
+            <UI.Button onClick={() => alert('Clicked!')}>Click here!</UI.Button>
+        </UI.Tooltip>
+    );
+}
+```
+
 #### TooltipProps
 
-Type: {children: React$Element&lt;any>, renderContent: function (): React$Element&lt;any>?, content:
-([string][59] | function (): React\$Element&lt;any>)?, placementX: PopoverPlacementX?, placementY:
-PopoverPlacementY?, placementOffsetX: [number][63]?, placementOffsetY: [number][63]?,
-fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][61]?, disabled:
-[boolean][61]?, className: [string][59]?, style: [Object][64]?}
+Type: [object][64]
 
 ##### Properties
 
--   `children` **React\$Element&lt;any>**
+-   `children` **React\$Element&lt;any>** Child components to render.
+-   `content` **([string][59] \| [function][70])** A string representing the contents.
+    Alternatively, you can include a function that returns a React node to place into the tooltip,
+    which is useful for things like italicization in the tooltip.
+-   `placementX` **(UI.Tooltip.placements.LEFT | UI.Tooltip.placements.CENTER |
+    UI.Tooltip.placements.RIGHT)?** The horizontal placement of the tooltip.
+-   `placementY` **(UI.Tooltip.placements.TOP | UI.Tooltip.placements.CENTER |
+    UI.Tooltip.placements.BOTTOM)?** The vertical placement of the tooltip.
+-   `placementOffsetX` **[number][63]?** The horizontal offset, in pixels, of the tooltip. If
+    `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to
+    the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the
+    tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has
+    no effect.
+-   `placementOffsetY` **[number][63]?** The vertical offset, in pixels, of the tooltip. If
+    `placementY` is set to `UI.Tooltip.placements.TOP`, a higher number will move the tooltip
+    upward. If `placementY` is set to `UI.Tooltip.placements.BOTTOM`, a higher number moves the
+    tooltip downard. If `placementY` is set to `UI.Tooltip.placements.CENTER`, this value has no
+    effect.
+-   `fitInWindowMode` **(UI.Tooltip.fitInWindowModes.FLIP | UI.Tooltip.fitInWindowModes.NUDGE |
+    UI.Tooltip.fitInWindowModes.NONE)?** Dictates the behavior when the "normal" placement of the
+    tooltip would be outside of the viewport. If `NONE`, this has no effect, and the tooltip may be
+    placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving
+    the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to
+    fit on screen.
+-   `shouldHideTooltipOnClick` **[boolean][61]?** Should the tooltip be hidden when clicked?
+-   `disabled` **[boolean][61]?** If set to `true`, this tooltip will not be shown. Useful when
+    trying to disable the tooltip dynamically.
+-   `className` **[string][59]?** Additional class names to attach to the tooltip, separated by
+    spaces.
+-   `style` **[object][64]?** Additional styles names to attach to the tooltip.
 -   `renderContent` **function (): React\$Element&lt;any>?**
--   `content` **([string][59] | function (): React\$Element&lt;any>)?**
--   `placementX` **PopoverPlacementX?**
--   `placementY` **PopoverPlacementY?**
--   `placementOffsetX` **[number][63]?**
--   `placementOffsetY` **[number][63]?**
--   `fitInWindowMode` **FitInWindowMode?**
--   `shouldHideTooltipOnClick` **[boolean][61]?**
--   `disabled` **[boolean][61]?**
--   `className` **[string][59]?**
--   `style` **[Object][64]?**
 
 ### ViewPicker
 
