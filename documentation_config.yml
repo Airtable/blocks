@@ -31,6 +31,7 @@ toc:
           - Watchable
     - name: '@airtable/blocks/ui'
       children:
+          - initializeBlock
           - name: 'CSS & external scripts'
             children:
                 - loadCSSFromString

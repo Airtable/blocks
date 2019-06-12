@@ -18,6 +18,22 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 var _block_wrapper = _interopRequireDefault(require("./block_wrapper"));
 
 var hasBeenInitialized = false;
+/**
+ * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Blocks-specific things.
+ *
+ * @param getEntryElement A function that returns your React Node.
+ * @example
+ * import {initializeBlock} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function App() {
+ *     return (
+ *         <div>Hello world 🚀</div>
+ *     );
+ * }
+ *
+ * initializeBlock(() => <App />);
+ */
 
 function initializeBlock(getEntryElement) {
   var body = typeof document !== 'undefined' ? document.body : null;
