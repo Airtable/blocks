@@ -20,26 +20,6 @@ const hyperIdGenerator = window.__requirePrivateModuleFromAirtable(
 );
 
 /**
- * @alias fieldTypes
- * @example
- * import {fieldTypes} from '@airtable/blocks/models';
- * const numberFields = myTable.fields.filter(field => (
- *     field.type === fieldTypes.NUMBER
- * ));
- */
-const fieldTypes = FieldTypes;
-
-/**
- * @alias viewTypes
- * @example
- * import {viewTypes} from '@airtable/blocks/models';
- * const gridViews = myTable.views.filter(view => (
- *     view.type === viewTypes.GRID
- * ));
- */
-const viewTypes = ViewTypes;
-
-/**
  * Helper to generate a GUID
  * @function
  * @returns string
@@ -62,8 +42,8 @@ const models = {
     LinkedRecordsQueryResult,
     aggregators,
     recordColoring,
-    fieldTypes,
-    viewTypes,
+    fieldTypes: FieldTypes,
+    viewTypes: ViewTypes,
     permissionLevels: permissionHelpers.ApiPermissionLevels,
 
     generateGuid,

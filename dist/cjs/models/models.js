@@ -37,27 +37,6 @@ var permissionHelpers = window.__requirePrivateModuleFromAirtable('client_server
 
 var hyperIdGenerator = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id/hyper_id_generator');
 /**
- * @alias fieldTypes
- * @example
- * import {fieldTypes} from '@airtable/blocks/models';
- * const numberFields = myTable.fields.filter(field => (
- *     field.type === fieldTypes.NUMBER
- * ));
- */
-
-
-var fieldTypes = _field.FieldTypes;
-/**
- * @alias viewTypes
- * @example
- * import {viewTypes} from '@airtable/blocks/models';
- * const gridViews = myTable.views.filter(view => (
- *     view.type === viewTypes.GRID
- * ));
- */
-
-var viewTypes = _view.ViewTypes;
-/**
  * Helper to generate a GUID
  * @function
  * @returns string
@@ -66,6 +45,7 @@ var viewTypes = _view.ViewTypes;
  * import {generateGuid} from '@airtable/blocks/models';
  * const id = generateGuid();
  */
+
 
 var generateGuid = hyperIdGenerator.generateGuid;
 var models = {
@@ -81,8 +61,8 @@ var models = {
   LinkedRecordsQueryResult: _linked_records_query_result.default,
   aggregators: _aggregators.default,
   recordColoring,
-  fieldTypes,
-  viewTypes,
+  fieldTypes: _field.FieldTypes,
+  viewTypes: _view.ViewTypes,
   permissionLevels: permissionHelpers.ApiPermissionLevels,
   generateGuid
 };

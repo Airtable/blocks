@@ -358,12 +358,70 @@ Returns **{width: [number][64], height: [number][64]}**
 
 ### fieldTypes
 
+An enum of Airtable's field types
+
 #### Examples
 
 ```javascript
 import {fieldTypes} from '@airtable/blocks/models';
 const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NUMBER);
 ```
+
+#### fieldTypes.AUTO_NUMBER
+
+#### fieldTypes.BARCODE
+
+#### fieldTypes.CHECKBOX
+
+#### fieldTypes.COUNT
+
+#### fieldTypes.CREATED_TIME
+
+#### fieldTypes.CURRENCY
+
+#### fieldTypes.DATE
+
+#### fieldTypes.DATE_TIME
+
+#### fieldTypes.DURATION
+
+#### fieldTypes.EMAIL
+
+#### fieldTypes.FORMULA
+
+#### fieldTypes.LAST_MODIFIED_TIME
+
+#### fieldTypes.LOOKUP
+
+#### fieldTypes.MULTILINE_TEXT
+
+#### fieldTypes.MULTIPLE_ATTACHMENTS
+
+#### fieldTypes.MULTIPLE_COLLABORATORS
+
+#### fieldTypes.MULTIPLE_RECORD_LINKS
+
+#### fieldTypes.MULTIPLE_SELECTS
+
+#### fieldTypes.NUMBER
+
+#### fieldTypes.PERCENT
+
+#### fieldTypes.PHONE_NUMBER
+
+#### fieldTypes.RATING
+
+#### fieldTypes.RICH_TEXT
+
+#### fieldTypes.ROLLUP
+
+#### fieldTypes.SINGLE_COLLABORATOR
+
+#### fieldTypes.SINGLE_LINE_TEXT
+
+#### fieldTypes.SINGLE_SELECT
+
+#### fieldTypes.URL
 
 ### generateGuid
 
@@ -380,12 +438,24 @@ Returns **any** string
 
 ### viewTypes
 
+An enum of Airtable's view types
+
 #### Examples
 
 ```javascript
 import {viewTypes} from '@airtable/blocks/models';
 const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
 ```
+
+#### viewTypes.CALENDAR
+
+#### viewTypes.FORM
+
+#### viewTypes.GALLERY
+
+#### viewTypes.GRID
+
+#### viewTypes.KANBAN
 
 ### recordColoring
 
