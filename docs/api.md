@@ -580,7 +580,7 @@ const queryResult = table.selectRecords({recordColorMode});
 
 -   `selectField` **[Field][68]**
 
-Returns **any** `{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: Field}`
+Returns **{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: [Field][68]}**
 
 #### recordColoring.modes.byView
 
@@ -588,11 +588,11 @@ Returns **any** `{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: F
 
 -   `view` **[View][69]**
 
-Returns **any** `{type: recordColoring.ModeTypes.BY_VIEW, view: View}`
+Returns **{type: recordColoring.ModeTypes.BY_VIEW, view: [View][69]}**
 
 #### recordColoring.modes.none
 
-Returns **any** `{type: recordColoring.ModeTypes.NONE}`
+Returns **{type: recordColoring.ModeTypes.NONE}**
 
 #### recordColoring.ModeTypes
 

@@ -60,7 +60,7 @@ var modes = {
   /**
    * @alias recordColoring.modes.none
    * @memberof recordColoring
-   * @returns `{type: recordColoring.ModeTypes.NONE}`
+   * @returns {{type: recordColoring.ModeTypes.NONE}}
    */
   none: () => ({
     type: ModeTypes.NONE
@@ -70,7 +70,7 @@ var modes = {
    * @alias recordColoring.modes.bySelectField
    * @memberof recordColoring
    * @param selectField
-   * @returns `{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: Field}`
+   * @returns {{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: Field}}
    */
   bySelectField: selectField => ({
     type: ModeTypes.BY_SELECT_FIELD,
@@ -81,7 +81,7 @@ var modes = {
    * @alias recordColoring.modes.byView
    * @memberof recordColoring
    * @param view
-   * @returns `{type: recordColoring.ModeTypes.BY_VIEW, view: View}`
+   * @returns {{type: recordColoring.ModeTypes.BY_VIEW, view: View}}
    */
   byView: view => ({
     type: ModeTypes.BY_VIEW,
