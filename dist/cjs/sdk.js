@@ -211,6 +211,6 @@ function () {
   return BlockSdk;
 }();
 
-(0, _defineProperty2.default)(BlockSdk, "VERSION", "0.0.7");
+(0, _defineProperty2.default)(BlockSdk, "VERSION", "0.0.8");
 var _default = BlockSdk;
 exports.default = _default;
