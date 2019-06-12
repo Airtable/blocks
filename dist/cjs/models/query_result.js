@@ -470,7 +470,12 @@ function (_AbstractModelWithAsy) {
      * Get notified of changes to the query result.
      *
      * Watchable keys are:
-     * -
+     * - `'records'`
+     * - `'recordIds'`
+     * - `'cellValues'`
+     * - `'recordColors'`
+     * - `'isDataLoaded'`
+     * - `'cellValuesInField:' + someFieldId`
      *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
