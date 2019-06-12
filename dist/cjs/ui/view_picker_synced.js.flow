@@ -17,7 +17,7 @@ const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 /** @typedef */
 type ViewPickerSyncedProps = {
-    table?: Table,
+    table?: Table | null,
     globalConfigKey: GlobalConfigKey,
     onChange?: (viewModel: View | null) => void,
     disabled?: boolean,

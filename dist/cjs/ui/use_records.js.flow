@@ -8,8 +8,8 @@ import useWatchable from './use_watchable';
 
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 
-// TODO: should these hooks return [] if queryResult is null?
-
+declare function useRecordIds(queryResult: AnyQueryResult): Array<RecordId>;
+declare function useRecordIds(queryResult: null): null; // eslint-disable-line no-redeclare
 /**
  * A hook for working with the set of record IDs in a particular query result. Automatically
  * handles loading data in the query result and updating your component when the underlying
@@ -38,12 +38,14 @@ type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
  *      return <span>record count in {table.name}: {recordIds.length}</span>;
  *  }
  */
-export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId> | null {
+export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId> | null { // eslint-disable-line no-redeclare
     useLoadable(queryResult);
     useWatchable(queryResult, ['recordIds']);
     return queryResult ? queryResult.recordIds : null;
 }
 
+declare function useRecords(queryResult: AnyQueryResult): Array<Record>;
+declare function useRecords(queryResult: null): null; // eslint-disable-line no-redeclare
 /**
  * A hook for working with all the records (including their colors and cell values) in a
  * particular query result. Automatically handles loading data in the query result and updating
@@ -79,7 +81,7 @@ export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId
  *      );
  *  }
  */
-export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | null {
+export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | null { // eslint-disable-line no-redeclare
     useLoadable(queryResult);
     useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
     return queryResult ? queryResult.records : null;

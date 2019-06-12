@@ -3409,15 +3409,15 @@ style: [Object][68]?, pathClassName: [string][60]?}
 
 #### FieldPickerProps
 
-Type: {table: [Table][76]?, field: [Field][71]?, shouldAllowPickingNone: [boolean][65]?, onChange:
-function (fieldModel: ([Field][71] | null)): void?, allowedTypes: [Array][64]&lt;FieldType>?,
-placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disabled:
-[boolean][65]?}
+Type: {table: ([Table][76] | null)?, field: ([Field][71] | null)?, shouldAllowPickingNone:
+[boolean][65]?, onChange: function (fieldModel: ([Field][71] | null)): void?, allowedTypes:
+[Array][64]&lt;FieldType>?, placeholder: [string][60]?, style: [Object][68]?, className:
+[string][60]?, disabled: [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][76]?**
--   `field` **[Field][71]?**
+-   `table` **([Table][76] | null)?**
+-   `field` **([Field][71] | null)?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
 -   `onChange` **function (fieldModel: ([Field][71] | null)): void?**
 -   `allowedTypes` **[Array][64]&lt;FieldType>?**
@@ -3436,14 +3436,14 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 #### FieldPickerSyncedProps
 
-Type: {table: [Table][76]?, globalConfigKey: GlobalConfigKey, onChange: function (fieldModel:
-([Field][71] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?,
-allowedTypes: [Array][64]&lt;FieldType>?, placeholder: [string][60]?, style: [Object][68]?,
-className: [string][60]?}
+Type: {table: ([Table][76] | null)?, globalConfigKey: GlobalConfigKey, onChange: function
+(fieldModel: ([Field][71] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone:
+[boolean][65]?, allowedTypes: [Array][64]&lt;FieldType>?, placeholder: [string][60]?, style:
+[Object][68]?, className: [string][60]?}
 
 ##### Properties
 
--   `table` **[Table][76]?**
+-   `table` **([Table][76] | null)?**
 -   `globalConfigKey` **GlobalConfigKey**
 -   `onChange` **function (fieldModel: ([Field][71] | null)): void?**
 -   `disabled` **[boolean][65]?**
@@ -3808,13 +3808,13 @@ Type: SelectAndSelectButtonsSyncedProps
 
 #### TablePickerProps
 
-Type: {table: [Table][76]?, shouldAllowPickingNone: [boolean][65]?, onChange: function (tableModel:
-([Table][76] | null)): void?, placeholder: [string][60]?, style: [Object][68]?, className:
-[string][60]?, disabled: [boolean][65]?}
+Type: {table: ([Table][76] | null)?, shouldAllowPickingNone: [boolean][65]?, onChange: function
+(tableModel: ([Table][76] | null)): void?, placeholder: [string][60]?, style: [Object][68]?,
+className: [string][60]?, disabled: [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][76]?**
+-   `table` **([Table][76] | null)?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
 -   `onChange` **function (tableModel: ([Table][76] | null)): void?**
 -   `placeholder` **[string][60]?**
@@ -3943,15 +3943,15 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][65]?, dis
 
 #### ViewPickerProps
 
-Type: {table: [Table][76]?, view: [View][72]?, shouldAllowPickingNone: [boolean][65]?, onChange:
-function (viewModel: ([View][72] | null)): void?, allowedTypes: [Array][64]&lt;ViewType>?,
-placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disabled:
-[boolean][65]?}
+Type: {table: ([Table][76] | null)?, view: ([View][72] | null)?, shouldAllowPickingNone:
+[boolean][65]?, onChange: function (viewModel: ([View][72] | null)): void?, allowedTypes:
+[Array][64]&lt;ViewType>?, placeholder: [string][60]?, style: [Object][68]?, className:
+[string][60]?, disabled: [boolean][65]?}
 
 ##### Properties
 
--   `table` **[Table][76]?**
--   `view` **[View][72]?**
+-   `table` **([Table][76] | null)?**
+-   `view` **([View][72] | null)?**
 -   `shouldAllowPickingNone` **[boolean][65]?**
 -   `onChange` **function (viewModel: ([View][72] | null)): void?**
 -   `allowedTypes` **[Array][64]&lt;ViewType>?**
@@ -3970,14 +3970,14 @@ placeholder: [string][60]?, style: [Object][68]?, className: [string][60]?, disa
 
 #### ViewPickerSyncedProps
 
-Type: {table: [Table][76]?, globalConfigKey: GlobalConfigKey, onChange: function (viewModel:
-([View][72] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone: [boolean][65]?,
-allowedTypes: [Array][64]&lt;ViewType>?, placeholder: [string][60]?, style: [Object][68]?,
-className: [string][60]?}
+Type: {table: ([Table][76] | null)?, globalConfigKey: GlobalConfigKey, onChange: function
+(viewModel: ([View][72] | null)): void?, disabled: [boolean][65]?, shouldAllowPickingNone:
+[boolean][65]?, allowedTypes: [Array][64]&lt;ViewType>?, placeholder: [string][60]?, style:
+[Object][68]?, className: [string][60]?}
 
 ##### Properties
 
--   `table` **[Table][76]?**
+-   `table` **([Table][76] | null)?**
 -   `globalConfigKey` **GlobalConfigKey**
 -   `onChange` **function (viewModel: ([View][72] | null)): void?**
 -   `disabled` **[boolean][65]?**

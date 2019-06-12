@@ -13,7 +13,7 @@ var _use_loadable = _interopRequireDefault(require("./use_loadable"));
 
 var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
-// TODO: should these hooks return [] if queryResult is null?
+// eslint-disable-line no-redeclare
 
 /**
  * A hook for working with the set of record IDs in a particular query result. Automatically
@@ -44,10 +44,14 @@ var _use_watchable = _interopRequireDefault(require("./use_watchable"));
  *  }
  */
 function useRecordIds(queryResult) {
+  // eslint-disable-line no-redeclare
   (0, _use_loadable.default)(queryResult);
   (0, _use_watchable.default)(queryResult, ['recordIds']);
   return queryResult ? queryResult.recordIds : null;
 }
+
+// eslint-disable-line no-redeclare
+
 /**
  * A hook for working with all the records (including their colors and cell values) in a
  * particular query result. Automatically handles loading data in the query result and updating
@@ -83,9 +87,8 @@ function useRecordIds(queryResult) {
  *      );
  *  }
  */
-
-
 function useRecords(queryResult) {
+  // eslint-disable-line no-redeclare
   (0, _use_loadable.default)(queryResult);
   (0, _use_watchable.default)(queryResult, ['records', 'cellValues', 'recordColors']);
   return queryResult ? queryResult.records : null;

@@ -14,8 +14,8 @@ const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 /** @typedef */
 type ViewPickerProps = {
-    table?: Table,
-    view?: View,
+    table?: Table | null,
+    view?: View | null,
     shouldAllowPickingNone?: boolean,
     onChange?: (viewModel: View | null) => void,
     allowedTypes?: Array<ViewType>,

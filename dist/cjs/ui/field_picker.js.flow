@@ -14,8 +14,8 @@ const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 /** @typedef */
 type FieldPickerProps = {
-    table?: Table,
-    field?: Field,
+    table?: Table | null,
+    field?: Field | null,
     shouldAllowPickingNone?: boolean,
     onChange?: (fieldModel: Field | null) => void,
     allowedTypes?: Array<FieldType>,

@@ -17,7 +17,7 @@ const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 /** @typedef */
 type FieldPickerSyncedProps = {
-    table?: Table,
+    table?: Table | null,
     globalConfigKey: GlobalConfigKey,
     onChange?: (fieldModel: Field | null) => void,
     disabled?: boolean,

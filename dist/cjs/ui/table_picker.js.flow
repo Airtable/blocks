@@ -9,7 +9,7 @@ import ModelPickerSelect from './model_picker_select';
 
 /** @typedef */
 type TablePickerProps = {
-    table?: Table,
+    table?: Table | null,
     shouldAllowPickingNone?: boolean,
     onChange?: (tableModel: Table | null) => void,
     placeholder?: string,
