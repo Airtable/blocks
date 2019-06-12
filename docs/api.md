@@ -789,6 +789,41 @@ console.log(`You have ${base.tables.length} tables`);
 Returns **[Array][60]&lt;[Table][73]>** The tables in this base. Can be watched to know when tables
 are created, deleted, or reordered in the base.
 
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableBaseKey | [Array][60]&lt;WatchableBaseKey>)** the keys to unwatch
+-   `callback` **[Function][70]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableBaseKey>** the array of keys that were unwatched
+
+#### watch
+
+Get notified of changes to the base.
+
+Watchable keys are:
+
+-   `'name'`
+-   `'permissionLevel'`
+-   `'tables'`
+-   `'collaborators'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableBaseKey | [Array][60]&lt;WatchableBaseKey>)** the keys to watch
+-   `callback` **[Function][70]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableBaseKey>** the array of keys that were watched
+
 ### Cursor
 
 **Extends AbstractModelWithAsyncData**
@@ -1025,6 +1060,41 @@ console.log(myField.type);
 
 Returns **[string][59]** The type of the field. Can be watched.
 
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableFieldKey | [Array][60]&lt;WatchableFieldKey>)** the keys to unwatch
+-   `callback` **[Function][70]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableFieldKey>** the array of keys that were unwatched
+
+#### watch
+
+Get notified of changes to the field.
+
+Watchable keys are:
+
+-   `'name'`
+-   `'type'`
+-   `'options'`
+-   `'isComputed'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableFieldKey | [Array][60]&lt;WatchableFieldKey>)** the keys to watch
+-   `callback` **[Function][70]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableFieldKey>** the array of keys that were watched
+
 ### QueryResult
 
 #### QueryResult
@@ -1225,13 +1295,16 @@ Returns **[Array][60]&lt;[Record][71]>** all of the records in this query result
 
 Unwatch keys watched with `.watch`.
 
+Should be called with the same arguments given to `.watch`.
+
 ###### Parameters
 
--   `keys` **(WatchableQueryResultKey | [Array][60]&lt;WatchableQueryResultKey>)** the keys to watch
--   `callback` **[Function][70]** a function to call when those keys change
--   `context` **[Object][64]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableQueryResultKey | [Array][60]&lt;WatchableQueryResultKey>)** the keys to
+    unwatch
+-   `callback` **[Function][70]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][60]&lt;WatchableQueryResultKey>** the array of keys that were watched
+Returns **[Array][60]&lt;WatchableQueryResultKey>** the array of keys that were unwatched
 
 ##### watch
 
@@ -1245,6 +1318,8 @@ Watchable keys are:
 -   `'recordColors'`
 -   `'isDataLoaded'`
 -   `'cellValuesInField:' + someFieldId`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
 
 ###### Parameters
 
@@ -1719,6 +1794,20 @@ if (myRecord.canSetCellValues(cellValuesByFieldId)) {
 
 Returns **{}**
 
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableRecordKey | [Array][60]&lt;WatchableRecordKey>)** the keys to unwatch
+-   `callback` **[Function][70]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableRecordKey>** the array of keys that were unwatched
+
 #### url
 
 Type: [string][59]
@@ -1732,6 +1821,28 @@ console.log(myRecord.url);
 
 Returns **[string][59]** The URL for the record. You can visit this URL in the browser to be taken
 to the record in the Airtable UI.
+
+#### watch
+
+Get notified of changes to the record.
+
+Watchable keys are:
+
+-   `'primaryCellValue'`
+-   `'commentCount'`
+-   `'cellValues'`
+-   `'cellValueInField:' + someFieldId`
+-   `'colorInView:' + someViewId`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableRecordKey | [Array][60]&lt;WatchableRecordKey>)** the keys to watch
+-   `callback` **[Function][70]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableRecordKey>** the array of keys that were watched
 
 ### Table
 
@@ -2332,6 +2443,20 @@ if (myTable.canSetCellValues(cellValuesByRecordIdThenFieldId)) {
 
 Returns **{}**
 
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableTableKey | [Array][60]&lt;WatchableTableKey>)** the keys to unwatch
+-   `callback` **[Function][70]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableTableKey>** the array of keys that were unwatched
+
 #### url
 
 Type: [string][59]
@@ -2358,6 +2483,26 @@ console.log(`This table has ${myTable.views.length} views`);
 
 Returns **[Array][60]&lt;[View][68]>** The views in this table. Can be watched to know when views
 are created, deleted, or reordered.
+
+#### watch
+
+Get notified of changes to the table.
+
+Watchable keys are:
+
+-   `'name'`
+-   `'views'`
+-   `'fields'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableTableKey | [Array][60]&lt;WatchableTableKey>)** the keys to watch
+-   `callback` **[Function][70]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableTableKey>** the array of keys that were watched
 
 ### View
 
@@ -2486,6 +2631,20 @@ console.log(myView.type);
 Returns **ViewType** The type of the view, such as Grid, Calendar, or Kanban. Should never change
 because view types cannot be modified.
 
+#### unwatch
+
+Unwatch keys watched with `.watch`.
+
+Should be called with the same arguments given to `.watch`.
+
+##### Parameters
+
+-   `keys` **(WatchableViewKey | [Array][60]&lt;WatchableViewKey>)** the keys to unwatch
+-   `callback` **[Function][70]** the function passed to `.watch` for these keys
+-   `context` **[Object][64]??** the context that was passed to `.watch` for this `callback`
+
+Returns **[Array][60]&lt;WatchableViewKey>** the array of keys that were unwatched
+
 #### url
 
 Type: [string][59]
@@ -2513,6 +2672,26 @@ console.log(myView.visibleFields);
 
 Returns **[Array][60]&lt;[Field][67]>** The fields that are visible in this view. Can be watched to
 know when fields are created, deleted, hidden, shown, or reordered.
+
+#### watch
+
+Get notified of changes to the view.
+
+Watchable keys are:
+
+-   `'name'`
+-   `'visibleFields'`
+-   `'allFields'`
+
+Every call to `.watch` should have a matching call to `.unwatch`.
+
+##### Parameters
+
+-   `keys` **(WatchableViewKey | [Array][60]&lt;WatchableViewKey>)** the keys to watch
+-   `callback` **[Function][70]** a function to call when those keys change
+-   `context` **[Object][64]??** an optional context for `this` in `callback`.
+
+Returns **[Array][60]&lt;WatchableViewKey>** the array of keys that were watched
 
 ### Watchable
 

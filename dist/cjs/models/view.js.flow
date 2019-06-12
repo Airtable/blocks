@@ -195,6 +195,21 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         );
     }
 
+    /**
+     * Get notified of changes to the view.
+     *
+     * Watchable keys are:
+     * - `'name'`
+     * - `'visibleFields'`
+     * - `'allFields'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param [context] an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
+     */
     watch(
         keys: WatchableViewKey | Array<WatchableViewKey>,
         callback: Function,
@@ -222,6 +237,16 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return validKeys;
     }
 
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
+     */
     unwatch(
         keys: WatchableViewKey | Array<WatchableViewKey>,
         callback: Function,

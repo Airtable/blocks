@@ -162,6 +162,22 @@ function (_AbstractModel) {
 
   }, {
     key: "watch",
+
+    /**
+     * Get notified of changes to the view.
+     *
+     * Watchable keys are:
+     * - `'name'`
+     * - `'visibleFields'`
+     * - `'allFields'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param [context] an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
+     */
     value: function watch(keys, callback, context) {
       var validKeys = (0, _get2.default)((0, _getPrototypeOf2.default)(View.prototype), "watch", this).call(this, keys, callback, context);
       var _iteratorNormalCompletion = true;
@@ -197,6 +213,17 @@ function (_AbstractModel) {
 
       return validKeys;
     }
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
+     */
+
   }, {
     key: "unwatch",
     value: function unwatch(keys, callback, context) {

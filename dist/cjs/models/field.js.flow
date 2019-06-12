@@ -91,6 +91,40 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      */
 
     /**
+     * Get notified of changes to the field.
+     *
+     * Watchable keys are:
+     * - `'name'`
+     * - `'type'`
+     * - `'options'`
+     * - `'isComputed'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @function watch
+     * @memberof Field
+     * @instance
+     * @param {(WatchableFieldKey|Array<WatchableFieldKey>)} keys the keys to watch
+     * @param {Function} callback a function to call when those keys change
+     * @param {Object?} [context] an optional context for `this` in `callback`.
+     * @returns {Array<WatchableFieldKey>} the array of keys that were watched
+     */
+
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @function unwatch
+     * @memberof Field
+     * @instance
+     * @param {(WatchableFieldKey|Array<WatchableFieldKey>)} keys the keys to unwatch
+     * @param {Function} callback the function passed to `.watch` for these keys
+     * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+     * @returns {Array<WatchableFieldKey>} the array of keys that were unwatched
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): FieldData | null {

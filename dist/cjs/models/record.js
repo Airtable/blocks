@@ -138,6 +138,41 @@ function (_AbstractModel) {
    */
 
   /**
+   * Get notified of changes to the record.
+   *
+   * Watchable keys are:
+   * - `'primaryCellValue'`
+   * - `'commentCount'`
+   * - `'cellValues'`
+   * - `'cellValueInField:' + someFieldId`
+   * - `'colorInView:' + someViewId`
+   *
+   * Every call to `.watch` should have a matching call to `.unwatch`.
+   *
+   * @function watch
+   * @memberof Record
+   * @instance
+   * @param {(WatchableRecordKey|Array<WatchableRecordKey>)} keys the keys to watch
+   * @param {Function} callback a function to call when those keys change
+   * @param {Object?} [context] an optional context for `this` in `callback`.
+   * @returns {Array<WatchableRecordKey>} the array of keys that were watched
+   */
+
+  /**
+   * Unwatch keys watched with `.watch`.
+   *
+   * Should be called with the same arguments given to `.watch`.
+   *
+   * @function unwatch
+   * @memberof Record
+   * @instance
+   * @param {(WatchableRecordKey|Array<WatchableRecordKey>)} keys the keys to unwatch
+   * @param {Function} callback the function passed to `.watch` for these keys
+   * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+   * @returns {Array<WatchableRecordKey>} the array of keys that were unwatched
+   */
+
+  /**
    * @private
    */
 

@@ -131,11 +131,11 @@ export type NormalizedQueryResultOpts = {|
  *         'Rating',
  *     ],
  * });
- * 
+ *
  * ##### recordColorMode
  * Just like a view in Airtable, you can control the colors of records in a field. There are three
  * supported record color modes:
- * 
+ *
  * By taking the colors the records have according to the rules of a specific view:
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
@@ -144,20 +144,20 @@ export type NormalizedQueryResultOpts = {|
  *     recordColorMode: recordColoring.modes.byView(someView),
  * });
  * ```
- * 
+ *
  * Based on the color of a single select field in the table:
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
- * 
+ *
  * someView.selectRecords({
  *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
  * });
  * ```
- * 
+ *
  * Or with no color at all (the default):
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
- * 
+ *
  * someView.selectRecords({
  *     recordColorMode: recordColoring.modes.none(),
  * });
@@ -442,6 +442,8 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * - `'isDataLoaded'`
      * - `'cellValuesInField:' + someFieldId`
      *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
      * @param [context] an optional context for `this` in `callback`.
@@ -464,10 +466,12 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     /**
      * Unwatch keys watched with `.watch`.
      *
-     * @param keys the keys to watch
-     * @param callback a function to call when those keys change
-     * @param [context] an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
     unwatch(
         keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,

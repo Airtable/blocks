@@ -88,6 +88,40 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      */
 
     /**
+     * Get notified of changes to the base.
+     *
+     * Watchable keys are:
+     * - `'name'`
+     * - `'permissionLevel'`
+     * - `'tables'`
+     * - `'collaborators'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @function watch
+     * @memberof Base
+     * @instance
+     * @param {(WatchableBaseKey|Array<WatchableBaseKey>)} keys the keys to watch
+     * @param {Function} callback a function to call when those keys change
+     * @param {Object?} [context] an optional context for `this` in `callback`.
+     * @returns {Array<WatchableBaseKey>} the array of keys that were watched
+     */
+
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @function unwatch
+     * @memberof Base
+     * @instance
+     * @param {(WatchableBaseKey|Array<WatchableBaseKey>)} keys the keys to unwatch
+     * @param {Function} callback the function passed to `.watch` for these keys
+     * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+     * @returns {Array<WatchableBaseKey>} the array of keys that were unwatched
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): BaseData | null {

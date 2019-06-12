@@ -108,6 +108,39 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      */
 
     /**
+     * Get notified of changes to the table.
+     *
+     * Watchable keys are:
+     * - `'name'`
+     * - `'views'`
+     * - `'fields'`
+     *
+     * Every call to `.watch` should have a matching call to `.unwatch`.
+     *
+     * @function watch
+     * @memberof Table
+     * @instance
+     * @param {(WatchableTableKey|Array<WatchableTableKey>)} keys the keys to watch
+     * @param {Function} callback a function to call when those keys change
+     * @param {Object?} [context] an optional context for `this` in `callback`.
+     * @returns {Array<WatchableTableKey>} the array of keys that were watched
+     */
+
+    /**
+     * Unwatch keys watched with `.watch`.
+     *
+     * Should be called with the same arguments given to `.watch`.
+     *
+     * @function unwatch
+     * @memberof Table
+     * @instance
+     * @param {(WatchableTableKey|Array<WatchableTableKey>)} keys the keys to unwatch
+     * @param {Function} callback the function passed to `.watch` for these keys
+     * @param {Object?} [context] the context that was passed to `.watch` for this `callback`
+     * @returns {Array<WatchableTableKey>} the array of keys that were unwatched
+     */
+
+    /**
      * @private
      */
     get _dataOrNullIfDeleted(): TableData | null {
