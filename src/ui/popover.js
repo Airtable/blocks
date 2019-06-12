@@ -9,7 +9,15 @@ import createDetectElementResize from './create_detect_element_resize';
 
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
 
-/** @alias Popover.placements */
+// NOTE(evanhahn) I wasn't figure out a better way to document these enums
+// with JSDoc. The @memberof directive doesn't seem to work when the token
+// contains a period (as Popover.placements does).
+
+/**
+ * An enum describing popover placements. One of `Popover.placements.TOP`, `Popover.placements.CENTER`, `Popover.placements.BOTTOM`, `Popover.placements.LEFT`, `Popover.placements.RIGHT`.
+ *
+ * @alias Popover.placements
+ */
 const PopoverPlacements = Object.freeze({
     TOP: ('top': 'top'),
     CENTER: ('center': 'center'),
@@ -20,7 +28,11 @@ const PopoverPlacements = Object.freeze({
 export type PopoverPlacementX = 'left' | 'center' | 'right';
 export type PopoverPlacementY = 'top' | 'center' | 'bottom';
 
-/** @alias Popover.fitInWindowModes */
+/**
+ * An enum describing the fit-in-window mode. One of `Popover.fitInWindowModes.NONE`, `Popover.fitInWindowModes.FLIP`, `Popover.fitInWindowModes.NUDGE`.
+ *
+ * @alias Popover.fitInWindowModes
+ */
 const FitInWindowModes = Object.freeze({
     NONE: ('none': 'none'),
     FLIP: ('flip': 'flip'),
@@ -28,7 +40,20 @@ const FitInWindowModes = Object.freeze({
 });
 export type FitInWindowMode = $Values<typeof FitInWindowModes>;
 
-/** @typedef */
+/**
+ * @type {object}
+ * @property {React$Element<*>} children Child components to render.
+ * @property {function} renderContent A function that returns the contents of the popover as React elements.
+ * @property {Popover.placements.LEFT|Popover.placements.CENTER|Popover.placements.RIGHT} [placementX=Popover.placements.RIGHT] The horizontal placement of the popover.
+ * @property {Popover.placements.TOP|Popover.placements.CENTER|Popover.placements.BOTTOM} [placementY=Popover.placements.CENTER] The vertical placement of the popover.
+ * @property {number} [placementOffsetX=0] The horizontal offset, in pixels, of the popover. If `placementX` is set to `Popover.placements.LEFT`, a higher number will move the popover to the left. If `placementX` is set to `Popover.placements.RIGHT`, a higher number moves the popover to the right. If `placementX` is set to `Popover.placements.CENTER`, this value has no effect.
+ * @property {number} [placementOffsetY=0] The vertical offset, in pixels, of the popover. If `placementY` is set to `Popover.placements.TOP`, a higher number will move the popover upward. If `placementY` is set to `Popover.placements.BOTTOM`, a higher number moves the popover downard. If `placementY` is set to `Popover.placements.CENTER`, this value has no effect.
+ * @property {Popover.fitInWindowModes.FLIP|Popover.fitInWindowModes.NUDGE|Popover.fitInWindowModes.NONE} [fitInWindowMode=Popover.fitInWindowModes.FLIP] Dictates the behavior when the "normal" placement of the popover would be outside of the viewport. If `NONE`, this has no effect, and the popover may be placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving the popover from the left to the right). If `NUDGE`, the popover will be "nudged" just enough to fit on screen.
+ * @property {function} [onClose] A function that will be called when the popover closes.
+ * @property {boolean} isOpen A boolean that dictates whether the popover is open.
+ * @property {string} [backgroundClassName=''] Extra class names for the background of the popover, separated by spaces.
+ * @property {object} [backgroundStyle={}] Extra styles for the background of the popover.
+ */
 type PopoverProps = {
     children: React$Element<*>,
     renderContent: () => React$Element<*>,
@@ -43,7 +68,11 @@ type PopoverProps = {
     backgroundStyle?: Object,
 };
 
-/** */
+/**
+ * A popover component, which is used to "float" some content above some other content.
+ *
+ * @see {@link Tooltip}
+ */
 class Popover extends React.Component<PopoverProps> {
     static placements = PopoverPlacements;
     static fitInWindowModes = FitInWindowModes;

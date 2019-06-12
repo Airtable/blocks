@@ -53,8 +53,15 @@ var _private_utils = require("../private_utils");
 
 var _create_detect_element_resize = _interopRequireDefault(require("./create_detect_element_resize"));
 
-var Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
-/** @alias Popover.placements */
+var Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry'); // NOTE(evanhahn) I wasn't figure out a better way to document these enums
+// with JSDoc. The @memberof directive doesn't seem to work when the token
+// contains a period (as Popover.placements does).
+
+/**
+ * An enum describing popover placements. One of `Popover.placements.TOP`, `Popover.placements.CENTER`, `Popover.placements.BOTTOM`, `Popover.placements.LEFT`, `Popover.placements.RIGHT`.
+ *
+ * @alias Popover.placements
+ */
 
 
 var PopoverPlacements = Object.freeze({
@@ -65,14 +72,22 @@ var PopoverPlacements = Object.freeze({
   RIGHT: 'right'
 });
 
-/** @alias Popover.fitInWindowModes */
+/**
+ * An enum describing the fit-in-window mode. One of `Popover.fitInWindowModes.NONE`, `Popover.fitInWindowModes.FLIP`, `Popover.fitInWindowModes.NUDGE`.
+ *
+ * @alias Popover.fitInWindowModes
+ */
 var FitInWindowModes = Object.freeze({
   NONE: 'none',
   FLIP: 'flip',
   NUDGE: 'nudge'
 });
 
-/** */
+/**
+ * A popover component, which is used to "float" some content above some other content.
+ *
+ * @see {@link Tooltip}
+ */
 var Popover =
 /*#__PURE__*/
 function (_React$Component) {

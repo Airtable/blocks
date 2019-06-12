@@ -4204,34 +4204,56 @@ Returns **any** A React node.
 
 **Extends React.Component**
 
+-   **See: [Tooltip][52]**
+
+A popover component, which is used to "float" some content above some other content.
+
 ##### Parameters
 
 -   `props` **[PopoverProps][141]**
 
 #### PopoverProps
 
-Type: {children: React$Element&lt;any>, renderContent: function (): React$Element&lt;any>,
-placementX: PopoverPlacementX, placementY: PopoverPlacementY, placementOffsetX: [number][65],
-placementOffsetY: [number][65], fitInWindowMode: FitInWindowMode, onClose: function (): void?,
-isOpen: [boolean][61], backgroundClassName: [string][59]?, backgroundStyle: [Object][64]?}
+Type: [object][64]
 
 ##### Properties
 
--   `children` **React\$Element&lt;any>**
--   `renderContent` **function (): React\$Element&lt;any>**
--   `placementX` **PopoverPlacementX**
--   `placementY` **PopoverPlacementY**
--   `placementOffsetX` **[number][65]**
--   `placementOffsetY` **[number][65]**
--   `fitInWindowMode` **FitInWindowMode**
--   `onClose` **function (): void?**
--   `isOpen` **[boolean][61]**
--   `backgroundClassName` **[string][59]?**
--   `backgroundStyle` **[Object][64]?**
+-   `children` **React\$Element&lt;any>** Child components to render.
+-   `renderContent` **[function][63]** A function that returns the contents of the popover as React
+    elements.
+-   `placementX` **(Popover.placements.LEFT | Popover.placements.CENTER |
+    Popover.placements.RIGHT)?** The horizontal placement of the popover.
+-   `placementY` **(Popover.placements.TOP | Popover.placements.CENTER |
+    Popover.placements.BOTTOM)?** The vertical placement of the popover.
+-   `placementOffsetX` **[number][65]?** The horizontal offset, in pixels, of the popover. If
+    `placementX` is set to `Popover.placements.LEFT`, a higher number will move the popover to the
+    left. If `placementX` is set to `Popover.placements.RIGHT`, a higher number moves the popover to
+    the right. If `placementX` is set to `Popover.placements.CENTER`, this value has no effect.
+-   `placementOffsetY` **[number][65]?** The vertical offset, in pixels, of the popover. If
+    `placementY` is set to `Popover.placements.TOP`, a higher number will move the popover upward.
+    If `placementY` is set to `Popover.placements.BOTTOM`, a higher number moves the popover
+    downard. If `placementY` is set to `Popover.placements.CENTER`, this value has no effect.
+-   `fitInWindowMode` **(Popover.fitInWindowModes.FLIP | Popover.fitInWindowModes.NUDGE |
+    Popover.fitInWindowModes.NONE)?** Dictates the behavior when the "normal" placement of the
+    popover would be outside of the viewport. If `NONE`, this has no effect, and the popover may be
+    placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving
+    the popover from the left to the right). If `NUDGE`, the popover will be "nudged" just enough to
+    fit on screen.
+-   `onClose` **[function][63]?** A function that will be called when the popover closes.
+-   `isOpen` **[boolean][61]** A boolean that dictates whether the popover is open.
+-   `backgroundClassName` **[string][59]?** Extra class names for the background of the popover,
+    separated by spaces.
+-   `backgroundStyle` **[object][64]?** Extra styles for the background of the popover.
 
 #### Popover.fitInWindowModes
 
+An enum describing the fit-in-window mode. One of `Popover.fitInWindowModes.NONE`,
+`Popover.fitInWindowModes.FLIP`, `Popover.fitInWindowModes.NUDGE`.
+
 #### Popover.placements
+
+An enum describing popover placements. One of `Popover.placements.TOP`, `Popover.placements.CENTER`,
+`Popover.placements.BOTTOM`, `Popover.placements.LEFT`, `Popover.placements.RIGHT`.
 
 ### ProgressBar
 
