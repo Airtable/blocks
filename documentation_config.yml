@@ -125,10 +125,7 @@ toc:
                 - InputSynced
                 - InputSyncedProps
           - Link
-          - name: Loader
-            children:
-                - Loader
-                - LoaderProps
+          - Loader
           - name: Popover
             children:
                 - Popover

@@ -3926,11 +3926,9 @@ className: [string][59]?, style: [Object][64]?, children: React.Node}
 
 ### Loader
 
-#### Loader
-
 A loading spinner component.
 
-##### Parameters
+#### Parameters
 
 -   `props` **[object][64]?** The props for the component.
     -   `props.fillColor` **[string][59]** Fill color for the loading spinner. Gray by default.
@@ -3938,7 +3936,7 @@ A loading spinner component.
     -   `props.scale` **[number][63]** A scalar for the loader. Increasing the scale increases the
         size of the loader. (optional, default `0.3`)
 
-##### Examples
+#### Examples
 
 ```javascript
 import {UI} from '@airtable/blocks';
