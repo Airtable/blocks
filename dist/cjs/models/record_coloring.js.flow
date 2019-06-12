@@ -2,9 +2,15 @@
 import type Field from './field';
 import type View from './view';
 
-/** @namespace recordColoring */
+/**
+ * Record coloring configuration used with {@link QueryResult}s.
+ *
+ * @namespace recordColoring
+ */
 
 /**
+ * An enum of the different types of {@link recordColoring.modes}
+ *
  * @alias recordColoring.ModeTypes
  * @memberof recordColoring
  */
@@ -26,23 +32,15 @@ export const ModeTypes = Object.freeze({
     BY_VIEW: ('byView': 'byView'),
 });
 
-/**
- * @alias recordColoring.RecordColorModeType
- * @memberof recordColoring
- */
 export type RecordColorModeType = $Values<typeof ModeTypes>;
 
-/**
- * @alias recordColoring.RecordColorMode
- * @memberof recordColoring
- */
 export type RecordColorMode =
     | {|type: typeof ModeTypes.NONE|}
     | {|type: typeof ModeTypes.BY_SELECT_FIELD, selectField: Field|}
     | {|type: typeof ModeTypes.BY_VIEW, view: View|};
 
 /**
- * create a record coloring mode object
+ * Record coloring config creators.
  *
  * @alias recordColoring.modes
  * @memberof recordColoring
@@ -63,6 +61,7 @@ export const modes = {
     /**
      * @alias recordColoring.modes.none
      * @memberof recordColoring
+     * @returns `{type: recordColoring.ModeTypes.NONE}`
      */
     none: () => ({
         type: ModeTypes.NONE,
@@ -71,6 +70,7 @@ export const modes = {
      * @alias recordColoring.modes.bySelectField
      * @memberof recordColoring
      * @param selectField
+     * @returns `{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: Field}`
      */
     bySelectField: (selectField: Field) => ({
         type: ModeTypes.BY_SELECT_FIELD,
@@ -80,6 +80,7 @@ export const modes = {
      * @alias recordColoring.modes.byView
      * @memberof recordColoring
      * @param view
+     * @returns `{type: recordColoring.ModeTypes.BY_VIEW, view: View}`
      */
     byView: (view: View) => ({
         type: ModeTypes.BY_VIEW,
