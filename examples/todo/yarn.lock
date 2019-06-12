@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@airtable/blocks@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@airtable/blocks/-/blocks-0.0.6.tgz#c8221bbb99615da3ad7d6aaf074fd4208f8ee993"
-  integrity sha512-LSy+jjilV+3CNgLpKdEp+mt3QXBmNQM/WXS++rttc/zFLm/t7x019B5CzuZCryZRVi5F7yeLhH0vWuJyHJn8eQ==
+"@airtable/blocks@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@airtable/blocks/-/blocks-0.0.9.tgz#b8650ed0f7ed991043c03d463ddb2567b65a2aa8"
+  integrity sha512-hQpcO2KDY13JHy45iSCyoqGe72H7Uupudz3ZVinn1NqGNcNtKMyy3AueLHs3XmkZmq/P4/IF4Ti/mzjU9BtOTw==
   dependencies:
     "@babel/runtime" "^7.4.4"
     classnames "2.2.6"

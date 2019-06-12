@@ -1,7 +1,7 @@
 {
     "private": true,
     "dependencies": {
-        "@airtable/blocks": "^0.0.6",
+        "@airtable/blocks": "^0.0.9",
         "react": "^16.8.0",
         "react-dom": "^16.8.0"
     }
