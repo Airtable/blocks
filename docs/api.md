@@ -201,7 +201,8 @@ const topLevelValue = globalConfig.get('topLevelKey');
 const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
 ```
 
-Returns **[GlobalConfigValue][62]** The value at the provided path.
+Returns **([GlobalConfigValue][62] | void)** The value at the provided path, or `undefined` if no
+value exists at that path.
 
 ##### set
 
@@ -211,7 +212,8 @@ Sets a value at a path. Throws an error if the path or value is invalid.
 
 -   `key` **([string][59] \| [Array][60]&lt;[string][59]>)** A string for the top-level key, or an
     array of strings describing the path to set.
--   `value` **[GlobalConfigValue][62]** The value to set at the specified path.
+-   `value` **([GlobalConfigValue][62] | void)** The value to set at the specified path. Use
+    `undefined` to delete the value at the given path.
 
 ###### Examples
 

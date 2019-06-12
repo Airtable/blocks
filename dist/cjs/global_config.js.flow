@@ -132,14 +132,14 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Get the value at a path. Throws an error if the path is invalid.
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
-     * @returns The value at the provided path.
+     * @returns The value at the provided path, or `undefined` if no value exists at that path.
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
      * const topLevelValue = globalConfig.get('topLevelKey');
      * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
      */
-    get(key: GlobalConfigKey): GlobalConfigValue {
+    get(key: GlobalConfigKey): GlobalConfigValue | void {
         const path = this.__formatKeyAsPath(key);
 
         const pathValidationResult = blockKvHelpers.validateKvKeyPath(path, this._kvStore);
@@ -173,7 +173,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Sets a value at a path. Throws an error if the path or value is invalid.
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
-     * @param value The value to set at the specified path.
+     * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
      * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
@@ -182,7 +182,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     globalConfig.set('favoriteColor', 'purple');
      * }
      */
-    set(key: GlobalConfigKey, value: GlobalConfigValue): AirtableWriteAction<void, {}> {
+    set(key: GlobalConfigKey, value: GlobalConfigValue | void): AirtableWriteAction<void, {}> {
         const path = this.__formatKeyAsPath(key);
         return this.setPaths([{path, value}]);
     }

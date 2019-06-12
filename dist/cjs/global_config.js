@@ -158,7 +158,7 @@ function (_Watchable) {
      * Get the value at a path. Throws an error if the path is invalid.
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
-     * @returns The value at the provided path.
+     * @returns The value at the provided path, or `undefined` if no value exists at that path.
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -208,7 +208,7 @@ function (_Watchable) {
      * Sets a value at a path. Throws an error if the path or value is invalid.
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
-     * @param value The value to set at the specified path.
+     * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
      * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
