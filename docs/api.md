@@ -3438,7 +3438,8 @@ className: [string][59]?, style: [Object][64]?}
 
 ### ChoiceToken
 
-A component that shows a single choice.
+A component that shows a single choice in a small token, to be displayed inline or in a list of
+choices.
 
 #### Parameters
 
@@ -3471,22 +3472,33 @@ Returns **any** A React node.
 
 ### CollaboratorToken
 
-#### CollaboratorToken
+A component that shows a single collaborator in a small token, to be displayed inline or in a list
+of choices.
 
-##### Parameters
+#### Parameters
 
--   `props` **[CollaboratorTokenProps][131]**
+-   `props` **[object][64]** The props for the component.
+    -   `props.collaborator` **[object][64]** An object representing a collaborator. You should not
+        create these objects from scratch, but should instead grab them from base data.
+    -   `props.className` **[string][59]** Additional class names for the component, separated by
+        spaces. (optional, default `''`)
 
-#### CollaboratorTokenProps
+#### Examples
 
-Type: {collaborator: {id: [string][59]?, email: [string][59]?, name: [string][59]?, profilePicUrl:
-[string][59]?, status: [string][59]?}, className: [string][59]?}
+```javascript
+import {UI, base} from '@airtable/blocks';
 
-##### Properties
+function CurrentUserGreeter() {
+    return (
+        <React.Fragment>
+            Hello,
+            <UI.CollaboratorToken collaborator={base.currentUser} />!
+        </React.Fragment>
+    );
+}
+```
 
--   `collaborator` **{id: [string][59]?, email: [string][59]?, name: [string][59]?, profilePicUrl:
-    [string][59]?, status: [string][59]?}**
--   `className` **[string][59]?**
+Returns **any** A React node.
 
 ### ColorPalette
 
@@ -3538,7 +3550,7 @@ the action.
 
 ##### Parameters
 
--   `props` **[ConfirmationDialogProps][132]**
+-   `props` **[ConfirmationDialogProps][131]**
 
 ##### Examples
 
@@ -3602,7 +3614,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][133]**
+-   `props` **[DialogProps][132]**
 
 ##### Examples
 
@@ -3659,7 +3671,7 @@ Type: [Object][64]
 
 ##### Parameters
 
--   `props` **[DialogCloseButtonProps][134]**
+-   `props` **[DialogCloseButtonProps][133]**
 
 #### DialogCloseButtonProps
 
@@ -3678,7 +3690,7 @@ Type: [object][64]
 
 ##### Parameters
 
--   `props` **[FieldIconProps][135]**
+-   `props` **[FieldIconProps][134]**
 
 #### FieldIconProps
 
@@ -3702,7 +3714,7 @@ style: [Object][64]?, pathClassName: [string][59]?}
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][136]**
+-   `props` **[FieldPickerProps][135]**
 
 #### FieldPickerProps
 
@@ -3729,7 +3741,7 @@ Type: {table: ([Table][73] | null)?, field: ([Field][67] | null)?, shouldAllowPi
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][137]**
+-   `props` **[FieldPickerSyncedProps][136]**
 
 #### FieldPickerSyncedProps
 
@@ -3756,7 +3768,7 @@ Type: {table: ([Table][73] | null)?, globalConfigKey: GlobalConfigKey, onChange:
 
 ##### Parameters
 
--   `$0` **[IconProps][138]**
+-   `$0` **[IconProps][137]**
     -   `$0.name`
     -   `$0.size` (optional, default `16`)
     -   `$0.fillColor`
@@ -3788,7 +3800,7 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 
 ##### Parameters
 
--   `props` **[InputProps][139]**
+-   `props` **[InputProps][138]**
 
 ##### Examples
 
@@ -3840,7 +3852,7 @@ A wrapper around the `UI.Input` component that syncs with global config.
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][140]**
+-   `props` **[InputSyncedProps][139]**
 
 ##### Examples
 
@@ -3879,7 +3891,7 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][141]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][140]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
@@ -3918,7 +3930,7 @@ className: [string][59]?, style: [Object][64]?, children: React.Node}
 
 ##### Parameters
 
--   `$0` **[LoaderProps][142]**
+-   `$0` **[LoaderProps][141]**
     -   `$0.fillColor` (optional, default `'#888'`)
     -   `$0.scale` (optional, default `0.3`)
 
@@ -3939,7 +3951,7 @@ Type: {fillColor: [string][59]?, scale: [number][63]?}
 
 ##### Parameters
 
--   `props` **[PopoverProps][143]**
+-   `props` **[PopoverProps][142]**
 
 #### PopoverProps
 
@@ -3974,7 +3986,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][144]**
+-   `props` **[ProgressBarProps][143]**
 
 ##### Examples
 
@@ -4009,13 +4021,13 @@ Type: [object][64]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][145]**
+-   `props` **[RecordCardProps][144]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][71] | RecordDef), fields: [Array][60]&lt;[Field][67]>?, view: [View][68]?,
 attachmentCoverField: [Field][67]?, width: [number][63]?, height: [number][63]?, onClick:
-[Function][70]?, getExpandRecordOptions: function ([Record][71]): [ExpandRecordOpts][146]?,
+[Function][70]?, getExpandRecordOptions: function ([Record][71]): [ExpandRecordOpts][145]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object][64]?}
 
 ##### Properties
@@ -4027,7 +4039,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 -   `width` **[number][63]?**
 -   `height` **[number][63]?**
 -   `onClick` **[Function][70]?**
--   `getExpandRecordOptions` **function ([Record][71]): [ExpandRecordOpts][146]?**
+-   `getExpandRecordOptions` **function ([Record][71]): [ExpandRecordOpts][145]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][59]?**
@@ -4041,11 +4053,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][59]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][147]**
+-   `props` **[RecordCardListProps][146]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][60]&lt;([Record][71] | RecordDef)>, onScroll: function ([Event][148]):
+Type: {records: [Array][60]&lt;([Record][71] | RecordDef)>, onScroll: function ([Event][147]):
 void?, onRecordClick: (null | function (record: ([Record][71] | RecordDef), index: [number][63]):
 void)?, onRecordMouseEnter: function (record: ([Record][71] | RecordDef), index: [number][63]):
 void?, onRecordMouseLeave: function (record: ([Record][71] | RecordDef), index: [number][63]):
@@ -4055,7 +4067,7 @@ className: [string][59]?, style: [Object][64]?}
 ##### Properties
 
 -   `records` **[Array][60]&lt;([Record][71] | RecordDef)>**
--   `onScroll` **function ([Event][148]): void?**
+-   `onScroll` **function ([Event][147]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][71] | RecordDef), index: [number][63]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][71] | RecordDef), index: [number][63]):
@@ -4076,7 +4088,7 @@ className: [string][59]?, style: [Object][64]?}
 
 ##### Parameters
 
--   `props` **[SelectProps][149]**
+-   `props` **[SelectProps][148]**
 
 #### SelectProps
 
@@ -4088,7 +4100,7 @@ Type: SelectAndSelectButtonsProps
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][150]**
+-   `props` **[SelectSyncedProps][149]**
 
 #### SelectSyncedProps
 
@@ -4120,7 +4132,7 @@ Type: SelectAndSelectButtonsSyncedProps
 
 ##### Parameters
 
--   `props` **[TablePickerProps][151]**
+-   `props` **[TablePickerProps][150]**
 
 #### TablePickerProps
 
@@ -4144,7 +4156,7 @@ className: [string][59]?, disabled: [boolean][61]?}
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][152]**
+-   `props` **[TablePickerSyncedProps][151]**
 
 #### TablePickerSyncedProps
 
@@ -4170,7 +4182,7 @@ style: [Object][64]?, className: [string][59]?}
 
 ##### Parameters
 
--   `props` **[ToggleProps][153]**
+-   `props` **[ToggleProps][152]**
 
 #### ToggleProps
 
@@ -4195,7 +4207,7 @@ tabIndex: [number][63]?}
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][154]**
+-   `props` **[ToggleSyncedProps][153]**
 
 #### ToggleSyncedProps
 
@@ -4222,7 +4234,7 @@ function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][5
 
 ##### Parameters
 
--   `props` **[TooltipProps][155]**
+-   `props` **[TooltipProps][154]**
 
 #### TooltipProps
 
@@ -4255,7 +4267,7 @@ fitInWindowMode: FitInWindowMode?, shouldHideTooltipOnClick: [boolean][61]?, dis
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][156]**
+-   `props` **[ViewPickerProps][155]**
 
 #### ViewPickerProps
 
@@ -4282,7 +4294,7 @@ Type: {table: ([Table][73] | null)?, view: ([View][68] | null)?, shouldAllowPick
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][157]**
+-   `props` **[ViewPickerSyncedProps][156]**
 
 #### ViewPickerSyncedProps
 
@@ -4329,13 +4341,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][158]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][158]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][157]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][157]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][158]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][158]?**
+-   `minSize` **[ViewportSizeConstraintProp][157]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][157]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -4477,31 +4489,30 @@ Type: {width: ([number][63] | null)?, height: ([number][63] | null)?}
 [128]: #autocompleteitem
 [129]: #buttonprops
 [130]: #cellrendererprops
-[131]: #collaboratortokenprops
-[132]: #confirmationdialogprops
-[133]: #dialogprops
-[134]: #dialogclosebuttonprops
-[135]: #fieldiconprops
-[136]: #fieldpickerprops
-[137]: #fieldpickersyncedprops
-[138]: #iconprops
-[139]: #inputprops
-[140]: #inputsyncedprops
-[141]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[142]: #loaderprops
-[143]: #popoverprops
-[144]: #progressbarprops
-[145]: #recordcardprops
-[146]: #expandrecordopts
-[147]: #recordcardlistprops
-[148]: https://developer.mozilla.org/docs/Web/API/Event
-[149]: #selectprops
-[150]: #selectsyncedprops
-[151]: #tablepickerprops
-[152]: #tablepickersyncedprops
-[153]: #toggleprops
-[154]: #togglesyncedprops
-[155]: #tooltipprops
-[156]: #viewpickerprops
-[157]: #viewpickersyncedprops
-[158]: #viewportsizeconstraintprop
+[131]: #confirmationdialogprops
+[132]: #dialogprops
+[133]: #dialogclosebuttonprops
+[134]: #fieldiconprops
+[135]: #fieldpickerprops
+[136]: #fieldpickersyncedprops
+[137]: #iconprops
+[138]: #inputprops
+[139]: #inputsyncedprops
+[140]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[141]: #loaderprops
+[142]: #popoverprops
+[143]: #progressbarprops
+[144]: #recordcardprops
+[145]: #expandrecordopts
+[146]: #recordcardlistprops
+[147]: https://developer.mozilla.org/docs/Web/API/Event
+[148]: #selectprops
+[149]: #selectsyncedprops
+[150]: #tablepickerprops
+[151]: #tablepickersyncedprops
+[152]: #toggleprops
+[153]: #togglesyncedprops
+[154]: #tooltipprops
+[155]: #viewpickerprops
+[156]: #viewpickersyncedprops
+[157]: #viewportsizeconstraintprop

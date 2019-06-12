@@ -19,7 +19,7 @@ type ChoiceTokenProps = {
 };
 
 /**
- * A component that shows a single choice.
+ * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
  * @param {object} props The props for the component.
  * @param {object} props.choice An object representing a select choice. You should not create these objects from scratch, but should instead grab them from base data.

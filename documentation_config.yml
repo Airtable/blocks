@@ -87,10 +87,7 @@ toc:
                 - CellRenderer
                 - CellRendererProps
           - ChoiceToken
-          - name: CollaboratorToken
-            children:
-                - CollaboratorToken
-                - CollaboratorTokenProps
+          - CollaboratorToken
           - name: ColorPalette
             children:
                 - ColorPalette

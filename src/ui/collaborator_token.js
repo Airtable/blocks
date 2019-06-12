@@ -14,7 +14,6 @@ const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/collaborator_token',
 );
 
-/** @typdef */
 type CollaboratorTokenProps = {
     collaborator: {
         id?: string,
@@ -26,7 +25,25 @@ type CollaboratorTokenProps = {
     className?: string,
 };
 
-/** */
+/**
+ * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
+ *
+ * @param {object} props The props for the component.
+ * @param {object} props.collaborator An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data.
+ * @param {string} [props.className=''] Additional class names for the component, separated by spaces.
+ * @returns A React node.
+ * @example
+ * import {UI, base} from '@airtable/blocks';
+ *
+ * function CurrentUserGreeter() {
+ *     return (
+ *         <React.Fragment>
+ *             Hello,
+ *             <UI.CollaboratorToken collaborator={base.currentUser} />!
+ *         </React.Fragment>
+ *     );
+ * }
+ */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className} = props;
 
