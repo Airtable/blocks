@@ -54,7 +54,7 @@ type ChangedPaths = {_isDirty?: true, [string]: ?ChangedPaths};
  * Model class representing a base.
  *
  * @example
- * import {base} from 'airtable-blocks';
+ * import {base} from '@airtable/blocks';
  *
  * console.log('The name of your base is', base.name);
  */
@@ -97,7 +97,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function
      * @returns The name of the base.
      * @example
-     * import {base} from 'airtable-blocks';
+     * import {base} from '@airtable/blocks';
      * console.log('The name of your base is', base.name);
      */
     get name(): string {
@@ -107,7 +107,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function
      * @returns The current user, or `null` if the block is running in a publicly shared base.
      * @example
-     * import {base} from 'airtable-blocks';
+     * import {base} from '@airtable/blocks';
      * if (base.currentUser) {
      *     console.log(base.currentUser.id);
      *     console.log(base.currentUser.email);
@@ -163,7 +163,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function
      * @returns The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
      * @example
-     * import {base} from 'airtable-blocks';
+     * import {base} from '@airtable/blocks';
      * console.log(`You have ${base.tables.length} tables`);
      */
     get tables(): Array<Table> {
@@ -185,7 +185,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function
      * @returns The users who have access to this base.
      * @example
-     * import {base} from 'airtable-blocks';
+     * import {base} from '@airtable/blocks';
      * console.log(base.activeCollaborators[0].email);
      */
     get activeCollaborators(): Array<CollaboratorData> {

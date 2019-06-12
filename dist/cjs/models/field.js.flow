@@ -40,7 +40,7 @@ export type WatchableFieldKey = $Values<typeof WatchableFieldKeys>;
  * Model class representing a field in a table.
  *
  * @example
- * import {base} from 'airtable-blocks';
+ * import {base} from '@airtable/blocks';
  *
  * const table = base.getTableByName('Table 1');
  * const field = table.getFieldByName('Name');

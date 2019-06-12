@@ -118,7 +118,7 @@ function (_Watchable) {
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns The value at the provided path.
      * @example
-     * import {globalConfig} from 'airtable-block';
+     * import {globalConfig} from '@airtable/blocks';
      *
      * const topLevelValue = globalConfig.get('topLevelKey');
      * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
@@ -144,7 +144,7 @@ function (_Watchable) {
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns `true` if the current user can set the global config value at `key`, and `false` otherwise.
      * @example
-     * import {globalConfig} from 'airtable-block';
+     * import {globalConfig} from '@airtable/blocks';
      *
      * if (globalConfig.canSet('favoriteColor')) {
      *     globalConfig.set('favoriteColor', 'purple');
@@ -168,7 +168,7 @@ function (_Watchable) {
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path.
      * @example
-     * import {globalConfig} from 'airtable-block';
+     * import {globalConfig} from '@airtable/blocks';
      *
      * if (globalConfig.canSet('favoriteColor')) {
      *     globalConfig.set('favoriteColor', 'purple');
@@ -191,7 +191,7 @@ function (_Watchable) {
      * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
      * @returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
      * @example
-     * import {globalConfig} from 'airtable-block';
+     * import {globalConfig} from '@airtable/blocks';
      *
      * const updates = [
      *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
@@ -218,7 +218,7 @@ function (_Watchable) {
      *
      * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
      * @example
-     * import {globalConfig} from 'airtable-block';
+     * import {globalConfig} from '@airtable/blocks';
      *
      * const updates = [
      *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},

@@ -146,7 +146,7 @@ Returns `true` if the current user can set the global config value at `key`, `fa
 ###### Examples
 
 ```javascript
-import {globalConfig} from 'airtable-block';
+import {globalConfig} from '@airtable/blocks';
 
 if (globalConfig.canSet('favoriteColor')) {
     globalConfig.set('favoriteColor', 'purple');
@@ -169,7 +169,7 @@ otherwise.
 ###### Examples
 
 ```javascript
-import {globalConfig} from 'airtable-block';
+import {globalConfig} from '@airtable/blocks';
 
 const updates = [
     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
@@ -195,7 +195,7 @@ Get the value at a path. Throws an error if the path is invalid.
 ###### Examples
 
 ```javascript
-import {globalConfig} from 'airtable-block';
+import {globalConfig} from '@airtable/blocks';
 
 const topLevelValue = globalConfig.get('topLevelKey');
 const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
@@ -216,7 +216,7 @@ Sets a value at a path. Throws an error if the path or value is invalid.
 ###### Examples
 
 ```javascript
-import {globalConfig} from 'airtable-block';
+import {globalConfig} from '@airtable/blocks';
 
 if (globalConfig.canSet('favoriteColor')) {
     globalConfig.set('favoriteColor', 'purple');
@@ -237,7 +237,7 @@ Sets multiple values. Throws if any path or value is invalid.
 ###### Examples
 
 ```javascript
-import {globalConfig} from 'airtable-block';
+import {globalConfig} from '@airtable/blocks';
 
 const updates = [
     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
@@ -657,7 +657,7 @@ Model class representing a base.
 #### Examples
 
 ```javascript
-import {base} from 'airtable-blocks';
+import {base} from '@airtable/blocks';
 
 console.log('The name of your base is', base.name);
 ```
@@ -669,7 +669,7 @@ Type: [Array][60]&lt;CollaboratorData>
 ##### Examples
 
 ```javascript
-import {base} from 'airtable-blocks';
+import {base} from '@airtable/blocks';
 console.log(base.activeCollaborators[0].email);
 ```
 
@@ -682,7 +682,7 @@ Type: (CollaboratorData | null)
 ##### Examples
 
 ```javascript
-import {base} from 'airtable-blocks';
+import {base} from '@airtable/blocks';
 if (base.currentUser) {
     console.log(base.currentUser.id);
     console.log(base.currentUser.email);
@@ -769,7 +769,7 @@ Type: [string][59]
 ##### Examples
 
 ```javascript
-import {base} from 'airtable-blocks';
+import {base} from '@airtable/blocks';
 console.log('The name of your base is', base.name);
 ```
 
@@ -782,7 +782,7 @@ Type: [Array][60]&lt;[Table][73]>
 ##### Examples
 
 ```javascript
-import {base} from 'airtable-blocks';
+import {base} from '@airtable/blocks';
 console.log(`You have ${base.tables.length} tables`);
 ```
 
@@ -833,7 +833,7 @@ Model class representing a field in a table.
 #### Examples
 
 ```javascript
-import {base} from 'airtable-blocks';
+import {base} from '@airtable/blocks';
 
 const table = base.getTableByName('Table 1');
 const field = table.getFieldByName('Name');
