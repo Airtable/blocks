@@ -23,7 +23,7 @@ const hyperIdGenerator = window.__requirePrivateModuleFromAirtable(
  * Helper to generate a GUID.
  *
  * @function
- * @returns string
+ * @returns {string}
  * @alias generateGuid
  * @example
  * import {generateGuid} from '@airtable/blocks/models';

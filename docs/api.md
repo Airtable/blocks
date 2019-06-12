@@ -527,7 +527,7 @@ import {generateGuid} from '@airtable/blocks/models';
 const id = generateGuid();
 ```
 
-Returns **any** string
+Returns **[string][59]**
 
 ### viewTypes
 
