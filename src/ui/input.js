@@ -8,7 +8,19 @@ const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu')
 
 export type InputValue = string | boolean | number;
 
-/** @typedef */
+/**
+ * @type {object}
+ * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
+ * @property {string} [placeholder=''] The placeholder for the input.
+ * @property {string} [value] The input's current value. Required if `onChange` is set.
+ * @property {function} [onChange] A function to be called when the input changes. Required if `value` is set.
+ * @property {object} [style={}] Additional styles to apply to the input.
+ * @property {string} [className=''] Additional class names to apply to the input, separated by spaces.
+ * @property {boolean} [disabled=false] If set to `true`, the input will be disabled.
+ * @property {boolean} [required=false] If set to `true`, the input will be required.
+ * @property {boolean} [spellCheck=false] If set to `true`, the `spellcheck` property will be set on the input.
+ * @property {number} [tabIndex=0] The `tabindex` for the input.
+ */
 type InputProps = {
     type?: string,
     placeholder?: string,
@@ -46,7 +58,29 @@ const typesToExcludeFromDefaultClassesSet = {
     range: true,
 };
 
-/** */
+/**
+ * An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
+ *
+ * @example
+ * import {UI} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function HelloSomeone() {
+ *     const [value, setValue] = React.useState('world');
+ *
+ *     return (
+ *         <React.Fragment>
+ *             <div>Hello, {value}!</div>
+ *
+ *             <UI.Input
+ *                 value={value}
+ *                 onChange={(event) => setValue(event.target.value)}
+ *                 placeholder="world"
+ *             />
+ *         </React.Fragment>
+ *     );
+ * }
+ */
 class Input extends React.Component<InputProps> {
     static validTypesSet = validTypesSet;
 

@@ -57,7 +57,29 @@ var typesToExcludeFromDefaultClassesSet = {
   color: true,
   range: true
 };
-/** */
+/**
+ * An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
+ *
+ * @example
+ * import {UI} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function HelloSomeone() {
+ *     const [value, setValue] = React.useState('world');
+ *
+ *     return (
+ *         <React.Fragment>
+ *             <div>Hello, {value}!</div>
+ *
+ *             <UI.Input
+ *                 value={value}
+ *                 onChange={(event) => setValue(event.target.value)}
+ *                 placeholder="world"
+ *             />
+ *         </React.Fragment>
+ *     );
+ * }
+ */
 
 var Input =
 /*#__PURE__*/

@@ -3510,27 +3510,53 @@ style: [Object][65]?, pathClassName: [string][60]?}
 
 **Extends React.Component**
 
+An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
+
 ##### Parameters
 
 -   `props` **[InputProps][136]**
 
+##### Examples
+
+```javascript
+import {UI} from '@airtable/blocks/ui';
+import React from 'react';
+
+function HelloSomeone() {
+    const [value, setValue] = React.useState('world');
+
+    return (
+        <React.Fragment>
+            <div>Hello, {value}!</div>
+
+            <UI.Input
+                value={value}
+                onChange={event => setValue(event.target.value)}
+                placeholder="world"
+            />
+        </React.Fragment>
+    );
+}
+```
+
 #### InputProps
 
-Type: {type: [string][60]?, placeholder: [string][60]?, onChange: function
-(SyntheticInputEvent&lt;>): void?, style: [Object][65]?, className: [string][60]?, disabled:
-[boolean][62]?, required: [boolean][62]?, spellCheck: [boolean][62]?, tabIndex: [number][64]?}
+Type: [object][65]
 
 ##### Properties
 
--   `type` **[string][60]?**
--   `placeholder` **[string][60]?**
--   `onChange` **function (SyntheticInputEvent&lt;>): void?**
--   `style` **[Object][65]?**
--   `className` **[string][60]?**
--   `disabled` **[boolean][62]?**
--   `required` **[boolean][62]?**
--   `spellCheck` **[boolean][62]?**
--   `tabIndex` **[number][64]?**
+-   `type` **[string][60]?** The `type` for the input. Defaults to `text`.
+-   `placeholder` **[string][60]?** The placeholder for the input.
+-   `value` **[string][60]?** The input's current value. Required if `onChange` is set.
+-   `onChange` **[function][70]?** A function to be called when the input changes. Required if
+    `value` is set.
+-   `style` **[object][65]?** Additional styles to apply to the input.
+-   `className` **[string][60]?** Additional class names to apply to the input, separated by spaces.
+-   `disabled` **[boolean][62]?** If set to `true`, the input will be disabled.
+-   `required` **[boolean][62]?** If set to `true`, the input will be required.
+-   `spellCheck` **[boolean][62]?** If set to `true`, the `spellcheck` property will be set on the
+    input.
+-   `tabIndex` **[number][64]?** The `tabindex` for the input.
 
 #### InputSynced
 
