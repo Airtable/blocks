@@ -1658,7 +1658,8 @@ Returns **[string][60]** The primary cell value in this record, formatted as a `
 
 #### selectLinkedRecordsFromCell
 
-Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+Select records referenced in a `multipleRecordLinks` cell value. Returns a query result. See
+[QueryResult][17] for more.
 
 ##### Parameters
 
@@ -2270,7 +2271,7 @@ primary field of a table will not change.
 
 #### selectRecords
 
-Select records from the table. Returns a query result.
+Select records from the table. Returns a query result. See [QueryResult][17] for more.
 
 ##### Parameters
 
@@ -2440,7 +2441,7 @@ aren't moved between tables.
 
 #### selectRecords
 
-Select records from the view. Returns a query result.
+Select records from the view. Returns a query result. See {@QueryResult} for more.
 
 ##### Parameters
 

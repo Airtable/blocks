@@ -392,7 +392,7 @@ function (_AbstractModel) {
       return view;
     }
     /**
-     * Select records from the table. Returns a query result.
+     * Select records from the table. Returns a query result. See {@link QueryResult} for more.
      *
      * @param [opts={}] Options for the query, such as sorts and fields.
      * @returns A query result.

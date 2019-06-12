@@ -356,6 +356,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     }
     /**
      * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+     * See {@link QueryResult} for more.
      *
      * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
      * @param [opts={}] Options for the query, such as sorts and fields.

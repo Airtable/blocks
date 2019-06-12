@@ -136,7 +136,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         });
     }
     /**
-     * Select records from the view. Returns a query result.
+     * Select records from the view. Returns a query result. See {@QueryResult} for more.
      *
      * @param [opts={}] Options for the query, such as sorts and fields.
      * @returns A query result.
