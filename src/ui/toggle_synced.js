@@ -106,7 +106,7 @@ class ToggleSynced extends React.Component<ToggleSyncedProps> {
                 render={({value, canSetValue, setValue}) => (
                     <Toggle
                         ref={el => (this._toggle = el)}
-                        value={value || false}
+                        value={!!value}
                         onChange={newValue => {
                             setValue(newValue);
                             if (onChange) {

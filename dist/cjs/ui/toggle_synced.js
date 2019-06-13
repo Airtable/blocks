@@ -108,7 +108,7 @@ function (_React$Component) {
               setValue = _ref.setValue;
           return React.createElement(_toggle.default, {
             ref: el => this._toggle = el,
-            value: value || false,
+            value: !!value,
             onChange: newValue => {
               setValue(newValue);
 
