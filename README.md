@@ -12,6 +12,7 @@
 
 -   [To-do list](/examples/todo/frontend/index.js)
 -   [Batch adder](/examples/batch_adder/frontend/index.js)
+-   [Simple bar chart](/examples/simple_chart/frontend/index.js)
 
 ## API Reference
 
