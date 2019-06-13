@@ -158,7 +158,7 @@ class FieldPicker extends React.Component<FieldPickerProps> {
         if (placeholder === undefined) {
             // Let's set a good default value for the placeholder, depending
             // on the shouldAllowPickingNone flag.
-            placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a view...';
+            placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a field...';
         } else {
             placeholderToUse = placeholder;
         }
