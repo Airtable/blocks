@@ -153,6 +153,7 @@ function (_React$Component) {
           globalConfigKey = _this$props.globalConfigKey,
           _onChange = _this$props.onChange,
           disabled = _this$props.disabled,
+          allowedTypes = _this$props.allowedTypes,
           shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
           placeholder = _this$props.placeholder,
           id = _this$props.id,
@@ -177,6 +178,7 @@ function (_React$Component) {
               }
             },
             disabled: disabled || !canSetValue,
+            allowedTypes: allowedTypes,
             shouldAllowPickingNone: shouldAllowPickingNone,
             placeholder: placeholder,
             id: id,

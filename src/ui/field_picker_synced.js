@@ -146,6 +146,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
             globalConfigKey,
             onChange,
             disabled,
+            allowedTypes,
             shouldAllowPickingNone,
             placeholder,
             id,
@@ -168,6 +169,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
                             }
                         }}
                         disabled={disabled || !canSetValue}
+                        allowedTypes={allowedTypes}
                         shouldAllowPickingNone={shouldAllowPickingNone}
                         placeholder={placeholder}
                         id={id}
