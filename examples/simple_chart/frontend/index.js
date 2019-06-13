@@ -9,6 +9,10 @@ import {
 } from '@airtable/blocks/ui';
 import {globalConfig} from '@airtable/blocks';
 import React, {useState} from 'react';
+
+// This block uses chart.js and the react-chartjs-2 packages.
+// Install them by running this in the terminal:
+// $ yarn add chart.js react-chartjs-2
 import {Bar} from 'react-chartjs-2';
 
 const GlobalConfigKeys = {
