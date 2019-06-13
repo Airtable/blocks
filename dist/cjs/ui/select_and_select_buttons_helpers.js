@@ -99,6 +99,8 @@ var validateOptions = options => {
     isValid: true
   };
 };
+/** @private */
+
 
 exports.validateOptions = validateOptions;
 
@@ -110,6 +112,8 @@ function optionValueToString(value) {
   });
   return valueJson;
 }
+/** @private */
+
 
 function stringToOptionValue(valueJson) {
   var parsed = JSON.parse(valueJson);

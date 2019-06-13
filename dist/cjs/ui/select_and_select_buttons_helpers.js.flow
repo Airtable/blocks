@@ -103,12 +103,14 @@ export const validateOptions = (options: Array<SelectOption>) => {
     return {isValid: true};
 };
 
+/** @private */
 export function optionValueToString(value: SelectOptionValue): string {
     const valueJson = JSON.stringify(
         value === undefined ? {isUndefined: true} : {notUndefinedValue: value},
     );
     return valueJson;
 }
+/** @private */
 export function stringToOptionValue(valueJson: string): SelectOptionValue {
     const parsed = JSON.parse(valueJson);
     const value = parsed.isUndefined ? undefined : parsed.notUndefinedValue;
