@@ -1,4 +1,7 @@
 // @flow
+/**
+ * @private
+ */
 export function cloneDeep<T: mixed>(obj: T): T {
     const jsonString = JSON.stringify(obj);
     if (jsonString === undefined) {
@@ -13,10 +16,16 @@ export function cloneDeep<T: mixed>(obj: T): T {
 // {x: number, y: string}, for example. Returning mixed isn't particularly useful though, so we
 // provide these unsound wrappers instead.
 // TODO: consider renaming these with unsound_ prefixes.
+/**
+ * @private
+ */
 export function values<Obj: {+[string]: mixed}>(obj: Obj): Array<$Values<Obj>> {
     return Object.values(obj);
 }
 
+/**
+ * @private
+ */
 export function entries<Obj: {+[string]: mixed}>(obj: Obj): Array<[$Keys<Obj>, $Values<Obj>]> {
     // flow-disable-next-line
     return Object.entries(obj);
@@ -27,6 +36,9 @@ export function entries<Obj: {+[string]: mixed}>(obj: Obj): Array<[$Keys<Obj>, $
 // in must be fully bound with all of its arguments and will be immediately
 // called (this does not return a function). This makes it work better with
 // Flow: you get argument type checking by using `.bind`.
+/**
+ * @private
+ */
 export function fireAndForgetPromise(fn: () => Promise<mixed>) {
     fn().catch(err => {
         // Defer til later, so the error doesn't cause the promise to be rejected.
@@ -36,10 +48,16 @@ export function fireAndForgetPromise(fn: () => Promise<mixed>) {
     });
 }
 
+/**
+ * @private
+ */
 export function has(obj: {+[string]: mixed}, key: string): boolean {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+/**
+ * @private
+ */
 const invertedEnumCache: WeakMap<{+[string]: string}, {+[string]: ?string}> = new WeakMap();
 function getInvertedEnumMemoized<EnumValue: string, EnumObj: {+[string]: EnumValue}>(
     enumObj: EnumObj,
@@ -59,6 +77,9 @@ function getInvertedEnumMemoized<EnumValue: string, EnumObj: {+[string]: EnumVal
     return invertedEnum;
 }
 
+/**
+ * @private
+ */
 export function getEnumValueIfExists<EnumValue: string, EnumObj: {+[string]: EnumValue}>(
     enumObj: EnumObj,
     valueToCheck: string,
@@ -71,6 +92,9 @@ export function getEnumValueIfExists<EnumValue: string, EnumObj: {+[string]: Enu
     return null;
 }
 
+/**
+ * @private
+ */
 export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValue}>(
     enumObj: EnumObj,
     valueToCheck: string,
@@ -82,10 +106,16 @@ export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValu
     return enumValue;
 }
 
+/**
+ * @private
+ */
 export function isEnumValue(enumObj: {[string]: string}, valueToCheck: string): boolean {
     return getEnumValueIfExists(enumObj, valueToCheck) !== null;
 }
 
+/**
+ * @private
+ */
 export function spawnUnknownSwitchCaseError(valueDescription: string, providedValue: mixed): Error {
     const providedValueString =
         providedValue !== null && providedValue !== undefined ? providedValue : 'null';
@@ -95,12 +125,18 @@ export function spawnUnknownSwitchCaseError(valueDescription: string, providedVa
     );
 }
 
+/**
+ * @private
+ */
 export function spawnAbstractMethodError(): Error {
     return spawnError('Abstract method', spawnAbstractMethodError);
 }
 
 // If errorOriginFn is specified, all frames above and including the call to errorOriginFn
 // will be omitted from the strack trace.
+/**
+ * @private
+ */
 export function spawnError(errName: string, errorOriginFn?: (...args: Array<any>) => mixed): Error {
     const err = new Error(errName);
 
@@ -115,6 +151,9 @@ export function spawnError(errName: string, errorOriginFn?: (...args: Array<any>
     return err;
 }
 
+/**
+ * @private
+ */
 export function isObjectEmpty(obj: {+[string]: mixed}): boolean {
     for (const key in obj) {
         if (has(obj, key)) {
@@ -124,6 +163,9 @@ export function isObjectEmpty(obj: {+[string]: mixed}): boolean {
     return true;
 }
 
+/**
+ * @private
+ */
 export function isNullOrUndefinedOrEmpty(value: mixed): boolean %checks {
     return (
         value === null ||
@@ -133,6 +175,9 @@ export function isNullOrUndefinedOrEmpty(value: mixed): boolean %checks {
     );
 }
 
+/**
+ * @private
+ */
 export function compact<T>(array: $ReadOnlyArray<?T>): Array<T> {
     const result = [];
     for (const item of array) {

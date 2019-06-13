@@ -36,6 +36,9 @@ exports.isObjectEmpty = isObjectEmpty;
 exports.isNullOrUndefinedOrEmpty = isNullOrUndefinedOrEmpty;
 exports.compact = compact;
 
+/**
+ * @private
+ */
 function cloneDeep(obj) {
   var jsonString = JSON.stringify(obj);
 
@@ -51,10 +54,18 @@ function cloneDeep(obj) {
 // provide these unsound wrappers instead.
 // TODO: consider renaming these with unsound_ prefixes.
 
+/**
+ * @private
+ */
+
 
 function values(obj) {
   return Object.values(obj);
 }
+/**
+ * @private
+ */
+
 
 function entries(obj) {
   // flow-disable-next-line
@@ -65,6 +76,10 @@ function entries(obj) {
 // called (this does not return a function). This makes it work better with
 // Flow: you get argument type checking by using `.bind`.
 
+/**
+ * @private
+ */
+
 
 function fireAndForgetPromise(fn) {
   fn().catch(err => {
@@ -74,10 +89,18 @@ function fireAndForgetPromise(fn) {
     }, 0);
   });
 }
+/**
+ * @private
+ */
+
 
 function has(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
+/**
+ * @private
+ */
+
 
 var invertedEnumCache = new WeakMap();
 
@@ -100,6 +123,10 @@ function getInvertedEnumMemoized(enumObj) {
   invertedEnumCache.set(enumObj, invertedEnum);
   return invertedEnum;
 }
+/**
+ * @private
+ */
+
 
 function getEnumValueIfExists(enumObj, valueToCheck) {
   var invertedEnum = getInvertedEnumMemoized(enumObj);
@@ -111,6 +138,10 @@ function getEnumValueIfExists(enumObj, valueToCheck) {
 
   return null;
 }
+/**
+ * @private
+ */
+
 
 function assertEnumValue(enumObj, valueToCheck) {
   var enumValue = getEnumValueIfExists(enumObj, valueToCheck);
@@ -121,20 +152,36 @@ function assertEnumValue(enumObj, valueToCheck) {
 
   return enumValue;
 }
+/**
+ * @private
+ */
+
 
 function isEnumValue(enumObj, valueToCheck) {
   return getEnumValueIfExists(enumObj, valueToCheck) !== null;
 }
+/**
+ * @private
+ */
+
 
 function spawnUnknownSwitchCaseError(valueDescription, providedValue) {
   var providedValueString = providedValue !== null && providedValue !== undefined ? providedValue : 'null';
   return spawnError("Unknown value ".concat(String(providedValueString), " for ").concat(valueDescription), spawnUnknownSwitchCaseError);
 }
+/**
+ * @private
+ */
+
 
 function spawnAbstractMethodError() {
   return spawnError('Abstract method', spawnAbstractMethodError);
 } // If errorOriginFn is specified, all frames above and including the call to errorOriginFn
 // will be omitted from the strack trace.
+
+/**
+ * @private
+ */
 
 
 function spawnError(errName, errorOriginFn) {
@@ -149,6 +196,10 @@ function spawnError(errName, errorOriginFn) {
 
   return err;
 }
+/**
+ * @private
+ */
+
 
 function isObjectEmpty(obj) {
   for (var key in obj) {
@@ -159,10 +210,18 @@ function isObjectEmpty(obj) {
 
   return true;
 }
+/**
+ * @private
+ */
+
 
 function isNullOrUndefinedOrEmpty(value) {
   return value === null || value === undefined || (typeof value === 'string' || Array.isArray(value)) && value.length === 0 || typeof value === 'object' && isObjectEmpty(value);
 }
+/**
+ * @private
+ */
+
 
 function compact(array) {
   var result = [];
