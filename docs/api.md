@@ -4085,55 +4085,171 @@ style: [Object][64]?, pathClassName: [string][59]?}
 
 **Extends React.Component**
 
+Dropdown menu component for selecting fields.
+
 ##### Parameters
 
 -   `props` **[FieldPickerProps][135]**
 
+##### Examples
+
+```javascript
+import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
+import {FieldTypes} from '@airtable/blocks/types/field';
+import React, {Fragment, useState} from 'react';
+
+function Block() {
+    useBase();
+    const [table, setTable] = useState(null);
+    const [field, setField] = useState(null);
+
+    const summaryText = field
+        ? `The field type for ${field.name} is ${field.type}.`
+        : 'No field selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePicker
+                    table={table}
+                    onChange={newTable => {
+                        setTable(newTable);
+                        setField(null);
+                    }}
+                    shouldAllowPickingNone={true}
+                />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
+                    <FieldPicker
+                        table={table}
+                        field={field}
+                        onChange={newField => setField(newField)}
+                        allowedTypes={[
+                            FieldTypes.SINGLE_LINE_TEXT,
+                            FieldTypes.MULTILINE_TEXT,
+                            FieldTypes.EMAIL,
+                            FieldTypes.URL,
+                            FieldTypes.PHONE_NUMBER,
+                        ]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
 #### FieldPickerProps
 
-Type: {table: ([Table][73] | null)?, field: ([Field][68] | null)?, shouldAllowPickingNone:
-[boolean][61]?, onChange: function (fieldModel: ([Field][68] | null)): void?, allowedTypes:
-[Array][60]&lt;FieldType>?, placeholder: [string][59]?, style: [Object][64]?, className:
-[string][59]?, disabled: [boolean][61]?}
+Type: [object][64]
 
 ##### Properties
 
--   `table` **([Table][73] | null)?**
--   `field` **([Field][68] | null)?**
--   `shouldAllowPickingNone` **[boolean][61]?**
--   `onChange` **function (fieldModel: ([Field][68] | null)): void?**
--   `allowedTypes` **[Array][60]&lt;FieldType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][64]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][61]?**
+-   `table` **[Table][73]?** The parent table model to select fields from. If `null` or `undefined`,
+    the picker won't render.
+-   `field` **[Field][68]?** The selected field model.
+-   `onChange` **[function][63]?** A function to be called when the selected field changes.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][60]&lt;FieldType>?** An array indicating which field types can be
+    selected.
+-   `shouldAllowPickingNone` **[boolean][61]?** If set to `true`, the user can unset the selected
+    field.
+-   `placeholder` **[string][59]?** The placeholder text when no field is selected.
+-   `id` **[string][59]?** The ID of the picker element.
+-   `className` **[string][59]?** Additional class names to apply to the picker.
+-   `style` **[object][64]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 #### FieldPickerSynced
 
 **Extends React.Component**
 
+Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
+
 ##### Parameters
 
 -   `props` **[FieldPickerSyncedProps][136]**
 
+##### Examples
+
+```javascript
+import {TablePickerSynced, FieldPickerSynced, useBase} from '@airtable/blocks/ui';
+import {FieldTypes} from '@airtable/blocks/types/field';
+import React, {Fragment} from 'react';
+
+function Block() {
+    const base = useBase();
+    const tableId = globalConfig.get('tableId');
+    const table = base.getTableByIdIfExists(tableId);
+    const fieldId = globalConfig.get('fieldId');
+    const field = table.getFieldByIdIfExists(fieldId);
+    useWatchable(globalConfig, ['tableId', 'fieldId']);
+
+    const summaryText = field
+        ? `The field type for ${field.name} is ${field.type}.`
+        : 'No field selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
+                    <FieldPickerSynced
+                        table={table}
+                        globalConfigKey="fieldId"
+                        allowedTypes={[
+                            FieldTypes.SINGLE_LINE_TEXT,
+                            FieldTypes.MULTILINE_TEXT,
+                            FieldTypes.EMAIL,
+                            FieldTypes.URL,
+                            FieldTypes.PHONE_NUMBER,
+                        ]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
 #### FieldPickerSyncedProps
 
-Type: {table: ([Table][73] | null)?, globalConfigKey: [GlobalConfigKey][137], onChange: function
-(fieldModel: ([Field][68] | null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone:
-[boolean][61]?, allowedTypes: [Array][60]&lt;FieldType>?, placeholder: [string][59]?, style:
-[Object][64]?, className: [string][59]?}
+Type: [object][64]
 
 ##### Properties
 
--   `table` **([Table][73] | null)?**
--   `globalConfigKey` **[GlobalConfigKey][137]**
--   `onChange` **function (fieldModel: ([Field][68] | null)): void?**
--   `disabled` **[boolean][61]?**
--   `shouldAllowPickingNone` **[boolean][61]?**
--   `allowedTypes` **[Array][60]&lt;FieldType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][64]?**
--   `className` **[string][59]?**
+-   `table` **[Table][73]?** The parent table model to select fields from. If `null` or `undefined`,
+    the picker won't render.
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
+    for this key. Selecting a new field will update `globalConfig`.
+-   `onChange` **[function][63]?** A function to be called when the selected field changes. This
+    should only be used for side effects.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][60]&lt;FieldType>?** An array indicating which field types can be
+    selected.
+-   `shouldAllowPickingNone` **[boolean][61]?** If set to `true`, the user can unset the selected
+    field.
+-   `placeholder` **[string][59]?** The placeholder text when no field is selected.
+-   `id` **[string][59]?** The ID of the picker element.
+-   `className` **[string][59]?** Additional class names to apply to the picker.
+-   `style` **[object][64]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 ### Icon
 
@@ -4921,8 +5037,8 @@ function Block() {
                     <ViewPicker
                         table={table}
                         view={view}
-                        allowedTypes={[ViewTypes.GRID]}
                         onChange={newView => setView(newView)}
+                        allowedTypes={[ViewTypes.GRID]}
                         shouldAllowPickingNone={true}
                     />
                 </label>

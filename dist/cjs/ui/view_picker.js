@@ -89,8 +89,8 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
  *                     <ViewPicker
  *                         table={table}
  *                         view={view}
- *                         allowedTypes={[ViewTypes.GRID]}
  *                         onChange={newView => setView(newView)}
+ *                         allowedTypes={[ViewTypes.GRID]}
  *                         shouldAllowPickingNone={true}
  *                     />
  *                 </label>

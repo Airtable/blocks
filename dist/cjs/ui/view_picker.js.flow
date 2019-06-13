@@ -78,8 +78,8 @@ type ViewPickerProps = {
  *                     <ViewPicker
  *                         table={table}
  *                         view={view}
- *                         allowedTypes={[ViewTypes.GRID]}
  *                         onChange={newView => setView(newView)}
+ *                         allowedTypes={[ViewTypes.GRID]}
  *                         shouldAllowPickingNone={true}
  *                     />
  *                 </label>

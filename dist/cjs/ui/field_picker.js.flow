@@ -10,39 +10,110 @@ import {FieldTypes, type FieldType} from '../types/field';
 import ModelPickerSelect from './model_picker_select';
 import createDataContainer from './create_data_container';
 
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-
-/** @typedef */
+/**
+ * @typedef {object} FieldPickerProps
+ * @property {Table} [table] The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
+ * @property {Field} [field] The selected field model.
+ * @property {function} [onChange] A function to be called when the selected field changes.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
+ * @property {Array.<FieldType>} [allowedTypes] An array indicating which field types can be selected.
+ * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected field.
+ * @property {string} [placeholder='Pick a field...'] The placeholder text when no field is selected.
+ * @property {string} [id] The ID of the picker element.
+ * @property {string} [className] Additional class names to apply to the picker.
+ * @property {object} [style] Additional styles to apply to the picker.
+ * @property {number | string} [tabIndex] Indicates if the picker can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
 type FieldPickerProps = {
     table?: Table | null,
     field?: Field | null,
-    shouldAllowPickingNone?: boolean,
     onChange?: (fieldModel: Field | null) => void,
-    allowedTypes?: Array<FieldType>,
-    placeholder?: string,
-    style?: Object,
-    className?: string,
     disabled?: boolean,
+    allowedTypes?: Array<FieldType>,
+    shouldAllowPickingNone?: boolean,
+    placeholder?: string,
+    id?: string,
+    className?: string,
+    style?: Object,
+    tabIndex?: number | string,
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
 };
 
-/** */
+/**
+ * Dropdown menu component for selecting fields.
+ *
+ * @example
+ * import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
+ * import {FieldTypes} from '@airtable/blocks/types/field';
+ * import React, {Fragment, useState} from 'react';
+ *
+ * function Block() {
+ *     useBase();
+ *     const [table, setTable] = useState(null);
+ *     const [field, setField] = useState(null);
+ *
+ *     const summaryText = field ? `The field type for ${field.name} is ${field.type}.` : 'No field selected.';
+ *     return (
+ *         <Fragment>
+ *             <p style={{marginBottom: 16}}>{summaryText}</p>
+ *             <label style={{display: 'block', marginBottom: 16}}>
+ *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+ *                 <TablePicker
+ *                     table={table}
+ *                     onChange={newTable => {
+ *                         setTable(newTable);
+ *                         setField(null);
+ *                     }}
+ *                     shouldAllowPickingNone={true}
+ *                 />
+ *             </label>
+ *             {table && (
+ *                 <label>
+ *                     <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
+ *                     <FieldPicker
+ *                         table={table}
+ *                         field={field}
+ *                         onChange={newField => setField(newField)}
+ *                         allowedTypes={[
+ *                             FieldTypes.SINGLE_LINE_TEXT,
+ *                             FieldTypes.MULTILINE_TEXT,
+ *                             FieldTypes.EMAIL,
+ *                             FieldTypes.URL,
+ *                             FieldTypes.PHONE_NUMBER,
+ *                         ]}
+ *                         shouldAllowPickingNone={true}
+ *                     />
+ *                 </label>
+ *             )}
+ *         </Fragment>
+ *     );
+ * }
+ */
 class FieldPicker extends React.Component<FieldPickerProps> {
     static propTypes = {
         table: PropTypes.instanceOf(Table),
         field: PropTypes.instanceOf(Field),
-        shouldAllowPickingNone: PropTypes.bool,
         onChange: PropTypes.func,
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
-        placeholder: PropTypes.string,
-        style: PropTypes.object,
-        className: PropTypes.string,
         disabled: PropTypes.bool,
+        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
+        shouldAllowPickingNone: PropTypes.bool,
+        placeholder: PropTypes.string,
+        id: PropTypes.string,
+        className: PropTypes.string,
+        style: PropTypes.object,
+        tabIndex: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
+        'aria-labelledby': PropTypes.string,
+        'aria-describedby': PropTypes.string,
     };
     props: FieldPickerProps;
     _onChange: (string | null) => void;
     _select: ModelPickerSelect<Field> | null;
     constructor(props: FieldPickerProps) {
         super(props);
+        // TODO (stephen): Use React.forwardRef
         this._select = null;
         this._onChange = this._onChange.bind(this);
     }
@@ -68,38 +139,39 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     }
     render() {
         const {
-            field: selectedField,
             table,
+            field: selectedField,
             shouldAllowPickingNone,
-            style,
-            className,
             disabled,
+            allowedTypes,
+            placeholder,
+            id,
+            className,
+            style,
+            tabIndex,
         } = this.props;
         if (!table || table.isDeleted) {
             return null;
         }
 
-        let placeholder;
-        if (this.props.placeholder === undefined) {
+        let placeholderToUse;
+        if (placeholder === undefined) {
             // Let's set a good default value for the placeholder, depending
             // on the shouldAllowPickingNone flag.
-            placeholder = shouldAllowPickingNone ? 'None' : 'Pick a field...';
+            placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a view...';
         } else {
-            placeholder = this.props.placeholder;
+            placeholderToUse = placeholder;
         }
 
-        let allowedTypes = null;
-        if (this.props.allowedTypes) {
-            allowedTypes = {};
-            for (const allowedType of this.props.allowedTypes) {
-                allowedTypes[allowedType] = true;
+        const allowedTypesSet = {};
+        if (allowedTypes) {
+            for (const allowedType of allowedTypes) {
+                allowedTypesSet[allowedType] = true;
             }
         }
         const shouldAllowPickingFieldFn = field => {
-            return !allowedTypes || allowedTypes[field.type];
+            return !allowedTypes || allowedTypesSet[field.type];
         };
-
-        const restOfProps = u.omit(this.props, Object.keys(FieldPicker.propTypes));
 
         // Fields are only ordered within a view, and views' column orders aren't
         // loaded by default. So we'll always list the primary field first, followed
@@ -115,18 +187,21 @@ class FieldPicker extends React.Component<FieldPickerProps> {
             <ModelPickerSelect
                 ref={el => (this._select = el)}
                 models={models}
+                shouldAllowPickingModelFn={shouldAllowPickingFieldFn}
                 selectedModelId={
                     selectedField && !selectedField.isDeleted ? selectedField.id : null
                 }
-                shouldAllowPickingModelFn={shouldAllowPickingFieldFn}
-                onChange={this._onChange}
-                style={style}
-                className={className}
-                disabled={disabled}
-                placeholder={placeholder}
-                shouldAllowPickingNone={shouldAllowPickingNone}
                 modelKeysToWatch={['name', 'type', 'options']}
-                {...restOfProps}
+                onChange={this._onChange}
+                disabled={disabled}
+                shouldAllowPickingNone={shouldAllowPickingNone}
+                placeholder={placeholderToUse}
+                id={id}
+                className={className}
+                style={style}
+                tabIndex={tabIndex}
+                aria-labelledby={this.props['aria-labelledby']}
+                aria-describedby={this.props['aria-describedby']}
             />
         );
     }
