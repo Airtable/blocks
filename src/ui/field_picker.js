@@ -47,7 +47,7 @@ type FieldPickerProps = {
  *
  * @example
  * import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
- * import {FieldTypes} from '@airtable/blocks/types/field';
+ * import {fieldTypes} from '@airtable/blocks/models';
  * import React, {Fragment, useState} from 'react';
  *
  * function Block() {
@@ -78,11 +78,11 @@ type FieldPickerProps = {
  *                         field={field}
  *                         onChange={newField => setField(newField)}
  *                         allowedTypes={[
- *                             FieldTypes.SINGLE_LINE_TEXT,
- *                             FieldTypes.MULTILINE_TEXT,
- *                             FieldTypes.EMAIL,
- *                             FieldTypes.URL,
- *                             FieldTypes.PHONE_NUMBER,
+ *                             fieldTypes.SINGLE_LINE_TEXT,
+ *                             fieldTypes.MULTILINE_TEXT,
+ *                             fieldTypes.EMAIL,
+ *                             fieldTypes.URL,
+ *                             fieldTypes.PHONE_NUMBER,
  *                         ]}
  *                         shouldAllowPickingNone={true}
  *                     />

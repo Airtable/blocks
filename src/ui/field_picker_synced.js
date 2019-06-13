@@ -52,7 +52,7 @@ type FieldPickerSyncedProps = {
  *
  * @example
  * import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';
- * import {FieldTypes} from '@airtable/blocks/types/field';
+ * import {fieldTypes} from '@airtable/blocks/models';
  * import {globalConfig} from '@airtable/blocks';
  * import React, {Fragment} from 'react';
  *
@@ -82,11 +82,11 @@ type FieldPickerSyncedProps = {
  *                         table={table}
  *                         globalConfigKey='fieldId'
  *                         allowedTypes={[
- *                             FieldTypes.SINGLE_LINE_TEXT,
- *                             FieldTypes.MULTILINE_TEXT,
- *                             FieldTypes.EMAIL,
- *                             FieldTypes.URL,
- *                             FieldTypes.PHONE_NUMBER,
+ *                             fieldTypes.SINGLE_LINE_TEXT,
+ *                             fieldTypes.MULTILINE_TEXT,
+ *                             fieldTypes.EMAIL,
+ *                             fieldTypes.URL,
+ *                             fieldTypes.PHONE_NUMBER,
  *                         ]}
  *                         shouldAllowPickingNone={true}
  *                     />
