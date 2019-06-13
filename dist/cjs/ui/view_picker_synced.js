@@ -53,8 +53,9 @@ var _synced = _interopRequireDefault(require("./synced"));
  * Dropdown menu component for selecting views, synced with {@link GlobalConfig}.
  *
  * @example
- * import {TablePickerSynced, ViewPickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+ * import {TablePickerSynced, ViewPickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
  * import {ViewTypes} from '@airtable/blocks/types/view';
+ * import {globalConfig} from '@airtable/blocks';
  * import React, {Fragment} from 'react';
  *
  * function Block() {

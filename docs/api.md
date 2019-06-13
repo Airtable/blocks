@@ -4180,8 +4180,9 @@ Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 ##### Examples
 
 ```javascript
-import {TablePickerSynced, FieldPickerSynced, useBase} from '@airtable/blocks/ui';
+import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';
 import {FieldTypes} from '@airtable/blocks/types/field';
+import {globalConfig} from '@airtable/blocks';
 import React, {Fragment} from 'react';
 
 function Block() {
@@ -4874,51 +4875,96 @@ Type: [object][64]
 
 **Extends React.Component**
 
+A toggleable switch for controlling boolean values. Functionally analogous to a checkbox.
+
 ##### Parameters
 
 -   `props` **[ToggleProps][153]**
 
+##### Examples
+
+```javascript
+import {Toggle} from '@airtable/blocks/ui';
+import React, {useState} from 'react';
+
+function Block() {
+    const [isEnabled, setIsEnabled] = useState(false);
+    return <Toggle value={isEnabled} onChange={setIsEnabled} label={isEnabled ? 'On' : 'Off'} />;
+}
+```
+
 #### ToggleProps
 
-Type: {value: [boolean][61], label: React.Node?, theme: [string][59]?, onChange: function
-([boolean][61]): void?, disabled: [boolean][61]?, className: [string][59]?, style: [Object][64]?,
-tabIndex: ([number][65] \| [string][59])?}
+Type: [object][64]
 
 ##### Properties
 
--   `value` **[boolean][61]**
--   `label` **React.Node?**
--   `theme` **[string][59]?**
--   `onChange` **function ([boolean][61]): void?**
--   `disabled` **[boolean][61]?**
--   `className` **[string][59]?**
--   `style` **[Object][64]?**
--   `tabIndex` **([number][65] \| [string][59])?**
+-   `value` **[boolean][61]** If set to `true`, the switch will be toggled on.
+-   `onChange` **[function][63]?** A function to be called when the switch is toggled.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the switch.
+-   `label` **React.Node?** The label node for the switch.
+-   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
+    Toggle.themes.GRAY)?** The color theme for the switch.
+-   `id` **[string][59]?** The ID of the switch element.
+-   `className` **[string][59]?** Additional class names to apply to the switch.
+-   `style` **[object][64]?** Additional styles to apply to the switch.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the switch can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][59]?** The label for the switch. Use this if the switch lacks a visible
+    text label.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 #### ToggleSynced
 
 **Extends React.Component**
 
+A toggleable switch for controlling boolean values, synced with [GlobalConfig][3]. Functionally
+analogous to a checkbox.
+
 ##### Parameters
 
 -   `props` **[ToggleSyncedProps][154]**
 
+##### Examples
+
+```javascript
+import {ToggleSynced, useWatchable} from '@airtable/blocks/ui';
+import {globalConfig} from '@airtable/blocks';
+import React from 'react';
+
+function Block() {
+    useWatchable(globalConfig, ['isEnabled']);
+    return (
+        <Toggle globalConfigKey="isEnabled" label={globalConfig.get('isEnabled') ? 'On' : 'Off'} />
+    );
+}
+```
+
 #### ToggleSyncedProps
 
-Type: {globalConfigKey: [GlobalConfigKey][137], label: React.Node?, theme: [string][59]?, onChange:
-function ([boolean][61]): void?, disabled: [boolean][61]?, className: [string][59]?, style:
-[Object][64]?, tabIndex: ([number][65] \| [string][59])?}
+Type: [object][64]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][137]**
--   `label` **React.Node?**
--   `theme` **[string][59]?**
--   `onChange` **function ([boolean][61]): void?**
--   `disabled` **[boolean][61]?**
--   `className` **[string][59]?**
--   `style` **[Object][64]?**
--   `tabIndex` **([number][65] \| [string][59])?**
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
+    `globalConfig` for this key. Toggling the switch will update `globalConfig`.
+-   `onChange` **[function][63]?** A function to be called when the switch is toggled. This should
+    only be used for side effects.
+-   `label` **React.Node?** The label node for the switch.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the switch.
+-   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
+    Toggle.themes.GRAY)?** The color theme for the switch.
+-   `id` **[string][59]?** The ID of the switch element.
+-   `className` **[string][59]?** Additional class names to apply to the switch.
+-   `style` **[object][64]?** Additional styles to apply to the switch.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the switch can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][59]?** The label for the switch. Use this if the switch lacks a visible
+    text label.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 ### Tooltip
 
@@ -5085,8 +5131,15 @@ Dropdown menu component for selecting views, synced with [GlobalConfig][3].
 ##### Examples
 
 ```javascript
-import {TablePickerSynced, ViewPickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+import {
+    TablePickerSynced,
+    ViewPickerSynced,
+    useBase,
+    useRecords,
+    useWatchable,
+} from '@airtable/blocks/ui';
 import {ViewTypes} from '@airtable/blocks/types/view';
+import {globalConfig} from '@airtable/blocks';
 import React, {Fragment} from 'react';
 
 function Block() {

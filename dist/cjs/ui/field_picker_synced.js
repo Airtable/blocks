@@ -53,8 +53,9 @@ var _create_data_container = _interopRequireDefault(require("./create_data_conta
  * Dropdown menu component for selecting fields, synced with {@link GlobalConfig}.
  *
  * @example
- * import {TablePickerSynced, FieldPickerSynced, useBase} from '@airtable/blocks/ui';
+ * import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';
  * import {FieldTypes} from '@airtable/blocks/types/field';
+ * import {globalConfig} from '@airtable/blocks';
  * import React, {Fragment} from 'react';
  *
  * function Block() {
