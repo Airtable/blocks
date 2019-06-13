@@ -19,19 +19,7 @@ var _colors = _interopRequireDefault(require("../colors"));
 
 var _color_utils = _interopRequireDefault(require("../color_utils"));
 
-var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
-    u = _window$__requirePriv.u;
-/**
- * @typedef
- * @type {object}
- * @property {number} progress A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include a number outside of the range, the value will be clamped to be inside of the range.
- * @property {string} [barColor] A CSS color, such as `#ff9900`.
- * @property {string} [backgroundColor] A CSS color, such as `#ff9900`.
- * @property {number} [height] A height, in pixels.
- * @property {string} [className=''] Extra `className`s to apply to the element, separated by spaces.
- * @property {object} [style={}] Extra styles to apply to the progress bar.
- */
-
+var _private_utils = require("../private_utils");
 
 /**
  * A progress bar.
@@ -59,7 +47,7 @@ var ProgressBar = props => {
       _props$className = props.className,
       className = _props$className === void 0 ? '' : _props$className,
       style = props.style;
-  var clampedProgress = u.clamp(progress, 0, 1);
+  var clampedProgress = (0, _private_utils.clamp)(progress, 0, 1);
   return React.createElement("div", {
     className: "".concat(className, " relative pill overflow-hidden"),
     style: (0, _objectSpread2.default)({}, style, {

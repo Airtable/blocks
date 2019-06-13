@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import colors from '../colors';
 import colorUtils from '../color_utils';
-
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+import {clamp} from '../private_utils';
 
 /**
  * @typedef
@@ -50,7 +49,7 @@ const ProgressBar = (props: ProgressBarProps) => {
         style,
     } = props;
 
-    const clampedProgress = u.clamp(progress, 0, 1);
+    const clampedProgress = clamp(progress, 0, 1);
 
     return (
         <div

@@ -187,3 +187,16 @@ export function compact<T>(array: $ReadOnlyArray<?T>): Array<T> {
     }
     return result;
 }
+
+/**
+ * @private
+ */
+export function clamp(n: number, lowerBound: number, upperBound: number): number {
+    if (n < lowerBound) {
+        return lowerBound;
+    } else if (n > upperBound) {
+        return upperBound;
+    } else {
+        return n;
+    }
+}

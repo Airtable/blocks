@@ -35,6 +35,7 @@ exports.spawnError = spawnError;
 exports.isObjectEmpty = isObjectEmpty;
 exports.isNullOrUndefinedOrEmpty = isNullOrUndefinedOrEmpty;
 exports.compact = compact;
+exports.clamp = clamp;
 
 /**
  * @private
@@ -253,4 +254,18 @@ function compact(array) {
   }
 
   return result;
+}
+/**
+ * @private
+ */
+
+
+function clamp(n, lowerBound, upperBound) {
+  if (n < lowerBound) {
+    return lowerBound;
+  } else if (n > upperBound) {
+    return upperBound;
+  } else {
+    return n;
+  }
 }

@@ -7,6 +7,7 @@ import {
     isObjectEmpty,
     isNullOrUndefinedOrEmpty,
     compact,
+    clamp,
 } from '../src/private_utils';
 import {flowTest} from './test_helpers';
 
@@ -142,5 +143,23 @@ describe('compact', () => {
         (compacted: Array<number>);
         // flow-expect-error
         (compacted: Array<?number>);
+    });
+});
+
+describe('clamp', () => {
+    it('keeps a number between two bounds', () => {
+        expect(clamp(0, -1.2, 3.4)).toBe(0);
+
+        expect(clamp(-1, -1.2, 3.4)).toBe(-1);
+        expect(clamp(-1.2, -1.2, 3.4)).toBe(-1.2);
+        expect(clamp(-1.3, -1.2, 3.4)).toBe(-1.2);
+        expect(clamp(-100, -1.2, 3.4)).toBe(-1.2);
+        expect(clamp(-Infinity, -1.2, 3.4)).toBe(-1.2);
+
+        expect(clamp(3, -1.2, 3.4)).toBe(3);
+        expect(clamp(3.4, -1.2, 3.4)).toBe(3.4);
+        expect(clamp(3.5, -1.2, 3.4)).toBe(3.4);
+        expect(clamp(100, -1.2, 3.4)).toBe(3.4);
+        expect(clamp(Infinity, -1.2, 3.4)).toBe(3.4);
     });
 });
