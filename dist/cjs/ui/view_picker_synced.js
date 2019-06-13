@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
@@ -104,7 +102,8 @@ function (_React$Component) {
     var _this;
 
     (0, _classCallCheck2.default)(this, ViewPickerSynced);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ViewPickerSynced).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ViewPickerSynced).call(this, props)); // TODO (stephen): Use React.forwardRef
+
     _this._viewPicker = null;
     return _this;
   }
@@ -144,25 +143,44 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+      var _this$props = this.props,
+          table = _this$props.table,
+          globalConfigKey = _this$props.globalConfigKey,
+          _onChange = _this$props.onChange,
+          disabled = _this$props.disabled,
+          shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
+          placeholder = _this$props.placeholder,
+          id = _this$props.id,
+          className = _this$props.className,
+          style = _this$props.style,
+          tabIndex = _this$props.tabIndex;
       return React.createElement(_synced.default, {
-        globalConfigKey: this.props.globalConfigKey,
+        globalConfigKey: globalConfigKey,
         render: (_ref) => {
           var value = _ref.value,
               canSetValue = _ref.canSetValue,
               setValue = _ref.setValue;
-          return React.createElement(_view_picker.default, (0, _extends2.default)({
+          return React.createElement(_view_picker.default, {
             ref: el => this._viewPicker = el,
-            disabled: this.props.disabled || !canSetValue,
+            table: table,
             view: this._getViewFromGlobalConfigValue(value),
             onChange: view => {
               setValue(view ? view.id : null);
 
-              if (this.props.onChange) {
-                this.props.onChange(view);
+              if (_onChange) {
+                _onChange(view);
               }
-            }
-          }, restOfProps));
+            },
+            disabled: disabled || !canSetValue,
+            shouldAllowPickingNone: shouldAllowPickingNone,
+            placeholder: placeholder,
+            id: id,
+            className: className,
+            style: style,
+            tabIndex: tabIndex,
+            "aria-labelledby": this.props['aria-labelledby'],
+            "aria-describedby": this.props['aria-describedby']
+          });
         }
       });
     }

@@ -113,7 +113,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
     _viewPicker: ViewPicker | null;
     constructor(props: ViewPickerSyncedProps) {
         super(props);
-
+        // TODO (stephen): Use React.forwardRef
         this._viewPicker = null;
     }
     focus() {
@@ -136,22 +136,41 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
         return typeof viewId === 'string' && table ? table.getViewByIdIfExists(viewId) : null;
     }
     render() {
-        const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+        const {
+            table,
+            globalConfigKey,
+            onChange,
+            disabled,
+            shouldAllowPickingNone,
+            placeholder,
+            id,
+            className,
+            style,
+            tabIndex,
+        } = this.props;
         return (
             <Synced
-                globalConfigKey={this.props.globalConfigKey}
+                globalConfigKey={globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <ViewPicker
                         ref={el => (this._viewPicker = el)}
-                        disabled={this.props.disabled || !canSetValue}
+                        table={table}
                         view={this._getViewFromGlobalConfigValue(value)}
                         onChange={view => {
                             setValue(view ? view.id : null);
-                            if (this.props.onChange) {
-                                this.props.onChange(view);
+                            if (onChange) {
+                                onChange(view);
                             }
                         }}
-                        {...restOfProps}
+                        disabled={disabled || !canSetValue}
+                        shouldAllowPickingNone={shouldAllowPickingNone}
+                        placeholder={placeholder}
+                        id={id}
+                        className={className}
+                        style={style}
+                        tabIndex={tabIndex}
+                        aria-labelledby={this.props['aria-labelledby']}
+                        aria-describedby={this.props['aria-describedby']}
                     />
                 )}
             />
