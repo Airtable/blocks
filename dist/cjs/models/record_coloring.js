@@ -51,7 +51,7 @@ exports.ModeTypes = ModeTypes;
  * // color by select field:
  * const recordColorMode = recordColoring.modes.bySelectField(someSelectField);
  * // color from view:
- * const recordColorMode = recordColoring.modes.fromView(someView);
+ * const recordColorMode = recordColoring.modes.byView(someView);
  *
  * // with a query result:
  * const queryResult = table.selectRecords({ recordColorMode });
