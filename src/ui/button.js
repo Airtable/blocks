@@ -30,6 +30,7 @@ type ButtonTheme = $Values<typeof themes>;
  */
 type ButtonProps = {
     theme: ButtonTheme,
+    id?: string,
     className?: string,
     style?: Object,
     onClick?: (e?: SyntheticMouseEvent<HTMLButtonElement>) => mixed,
@@ -70,6 +71,7 @@ const classNamesByTheme = {
 class Button extends React.Component<ButtonProps> {
     static propTypes = {
         theme: PropTypes.oneOf(Object.keys(classNamesByTheme)),
+        id: PropTypes.string,
         className: PropTypes.string,
         style: PropTypes.object,
         onClick: PropTypes.func,
@@ -103,13 +105,24 @@ class Button extends React.Component<ButtonProps> {
         this._button.click();
     }
     render() {
-        const {theme, className, style, onClick, disabled, children} = this.props;
+        const {
+            theme,
+            id,
+            className,
+            style,
+            onClick,
+            type,
+            disabled,
+            tabIndex,
+            children,
+        } = this.props;
 
         const themeClassNames = classNamesByTheme[theme] || '';
 
         return (
             <button
                 ref={el => (this._button = el)}
+                id={id}
                 className={classNames(
                     'baymax rounded big strong p1 flex-inline items-center no-outline no-user-select',
                     themeClassNames,
@@ -121,8 +134,9 @@ class Button extends React.Component<ButtonProps> {
                 )}
                 style={style}
                 onClick={onClick}
-                type="button"
+                type={type}
                 disabled={disabled}
+                tabIndex={tabIndex}
                 aria-label={this.props['aria-label']}
             >
                 {children}

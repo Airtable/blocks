@@ -107,22 +107,27 @@ function (_React$Component) {
     value: function render() {
       var _this$props = this.props,
           theme = _this$props.theme,
+          id = _this$props.id,
           className = _this$props.className,
           style = _this$props.style,
           onClick = _this$props.onClick,
+          type = _this$props.type,
           disabled = _this$props.disabled,
+          tabIndex = _this$props.tabIndex,
           children = _this$props.children;
       var themeClassNames = classNamesByTheme[theme] || '';
       return React.createElement("button", {
         ref: el => this._button = el,
+        id: id,
         className: (0, _classnames.default)('baymax rounded big strong p1 flex-inline items-center no-outline no-user-select', themeClassNames, className, {
           'pointer link-quiet': !disabled,
           'noevents quieter': disabled
         }),
         style: style,
         onClick: onClick,
-        type: "button",
+        type: type,
         disabled: disabled,
+        tabIndex: tabIndex,
         "aria-label": this.props['aria-label']
       }, children);
     }
@@ -132,6 +137,7 @@ function (_React$Component) {
 
 (0, _defineProperty2.default)(Button, "propTypes", {
   theme: _propTypes.default.oneOf(Object.keys(classNamesByTheme)),
+  id: _propTypes.default.string,
   className: _propTypes.default.string,
   style: _propTypes.default.object,
   onClick: _propTypes.default.func,
