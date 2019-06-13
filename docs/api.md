@@ -4254,31 +4254,32 @@ Type: [object][64]
 
 ### Icon
 
-#### Icon
+A vector icon from the Airtable icon set.
 
-##### Parameters
+#### Parameters
 
--   `$0` **[IconProps][138]**
-    -   `$0.name`
-    -   `$0.size` (optional, default `16`)
-    -   `$0.fillColor`
-    -   `$0.className`
-    -   `$0.style`
-    -   `$0.pathClassName`
+-   `props` **[object][64]** The props for the component.
+    -   `props.name` **[string][59]** The name of the icon. For a comprehensive list, refer to the
+        "Icon" section of the [styleguide][138].
+    -   `props.size` **[number][65]** The width/height of the icon. (optional, default `16`)
+    -   `props.fillColor` **[string][59]?** The color of the icon.
+    -   `props.className` **[string][59]?** Additional class names to apply to the icon.
+    -   `props.style` **[object][64]?** Additional styles to apply to the icon.
+    -   `props.pathClassName` **[string][59]?** Additional class names to apply to the icon path.
+    -   `props.pathStyle` **[object][64]?** Additional styles to apply to the icon path.
 
-#### IconProps
+#### Examples
 
-Type: {name: [string][59], size: [number][65]?, fillColor: [string][59]?, className: [string][59]?,
-style: [Object][64]?, pathClassName: [string][59]?}
+```javascript
+const LikeButton = (
+    <Button theme={Button.themes.RED} onClick={() => alert('Liked!')}>
+        <Icon name="heart" fillColor="#fff" style={{marginRight: 8}} />
+        Like
+    </Button>
+);
+```
 
-##### Properties
-
--   `name` **[string][59]**
--   `size` **[number][65]?**
--   `fillColor` **[string][59]?**
--   `className` **[string][59]?**
--   `style` **[Object][64]?**
--   `pathClassName` **[string][59]?**
+Returns **any** A React node.
 
 ### Input
 
@@ -5386,7 +5387,7 @@ Type: {width: ([number][65] | null)?, height: ([number][65] | null)?}
 [135]: #fieldpickerprops
 [136]: #fieldpickersyncedprops
 [137]: #globalconfigkey
-[138]: #iconprops
+[138]: https://airtable.com/styleguide
 [139]: #inputprops
 [140]: #inputsyncedprops
 [141]: https://www.owasp.org/index.php/Reverse_Tabnabbing

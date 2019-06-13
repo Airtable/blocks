@@ -17,10 +17,35 @@ var Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/
 
 
 var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
-/** @typedef */
 
-
-/** */
+/**
+ * A vector icon from the Airtable icon set.
+ *
+ * @param {object} props The props for the component.
+ * @param {string} props.name The name of the icon. For a comprehensive list, refer to the "Icon" section of the [styleguide](https://airtable.com/styleguide).
+ * @param {number} [props.size=16] The width/height of the icon.
+ * @param {string} [props.fillColor] The color of the icon.
+ * @param {string} [props.className] Additional class names to apply to the icon.
+ * @param {object} [props.style] Additional styles to apply to the icon.
+ * @param {string} [props.pathClassName] Additional class names to apply to the icon path.
+ * @param {object} [props.pathStyle] Additional styles to apply to the icon path.
+ * @returns A React node.
+ *
+ * @example
+ * const LikeButton = (
+ *     <Button
+ *         theme={Button.themes.RED}
+ *         onClick={() => alert('Liked!')}
+ *     >
+ *         <Icon
+ *             name="heart"
+ *             fillColor="#fff"
+ *             style={{marginRight: 8}}
+ *         />
+ *         Like
+ *     </Button>
+ * );
+ */
 var Icon = (_ref) => {
   var name = _ref.name,
       _ref$size = _ref.size,
@@ -28,7 +53,8 @@ var Icon = (_ref) => {
       fillColor = _ref.fillColor,
       className = _ref.className,
       style = _ref.style,
-      pathClassName = _ref.pathClassName;
+      pathClassName = _ref.pathClassName,
+      pathStyle = _ref.pathStyle;
   var isMicro = size <= 12;
   var pathData = iconConfig["".concat(name).concat(isMicro ? 'Micro' : '')];
 
@@ -46,6 +72,7 @@ var Icon = (_ref) => {
   }, React.createElement("path", {
     fillRule: "evenodd",
     className: pathClassName,
+    style: pathStyle,
     fill: fillColor,
     d: pathData
   }));
@@ -57,7 +84,8 @@ Icon.propTypes = {
   fillColor: _propTypes.default.string,
   className: _propTypes.default.string,
   style: _propTypes.default.object,
-  pathClassName: _propTypes.default.string
+  pathClassName: _propTypes.default.string,
+  pathStyle: _propTypes.default.object
 };
 var _default = Icon;
 exports.default = _default;

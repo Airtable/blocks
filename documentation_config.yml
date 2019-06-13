@@ -115,10 +115,7 @@ toc:
                 - FieldPickerProps
                 - FieldPickerSynced
                 - FieldPickerSyncedProps
-          - name: Icon
-            children:
-                - Icon
-                - IconProps
+          - Icon
           - name: Input
             children:
                 - Input
