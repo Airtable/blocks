@@ -4641,7 +4641,7 @@ Dropdown menu component for selecting tables.
 ##### Examples
 
 ```javascript
-import {TablePickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+import {TablePicker, useBase, useRecords} from '@airtable/blocks/ui';
 import React, {Fragment, useState} from 'react';
 
 function Block() {
@@ -4658,7 +4658,7 @@ function Block() {
             <p style={{marginBottom: 16}}>{summaryText}</p>
             <label>
                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
-                <TablePickerSynced
+                <TablePicker
                     table={table}
                     onChange={newTable => setTable(newTable)}
                     shouldAllowPickingNone={true}
@@ -4878,55 +4878,163 @@ Type: [object][64]
 
 **Extends React.Component**
 
+Dropdown menu component for selecting views.
+
 ##### Parameters
 
 -   `props` **[ViewPickerProps][156]**
 
+##### Examples
+
+```javascript
+import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
+import {ViewTypes} from '@airtable/blocks/types/view';
+import React, {Fragment, useState} from 'react';
+
+function Block() {
+    useBase();
+    const [table, setTable] = useState(null);
+    const [view, setView] = useState(null);
+    const queryResult = view ? view.selectRecords() : null;
+    const records = useRecords(queryResult);
+
+    const summaryText = view
+        ? `${view.name} has ${records.length} record(s).`
+        : 'No view selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePicker
+                    table={table}
+                    onChange={newTable => {
+                        setTable(newTable);
+                        setView(null);
+                    }}
+                    shouldAllowPickingNone={true}
+                />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
+                    <ViewPicker
+                        table={table}
+                        view={view}
+                        allowedTypes={[ViewTypes.GRID]}
+                        onChange={newView => setView(newView)}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
 #### ViewPickerProps
 
-Type: {table: ([Table][73] | null)?, view: ([View][69] | null)?, shouldAllowPickingNone:
-[boolean][61]?, onChange: function (viewModel: ([View][69] | null)): void?, allowedTypes:
-[Array][60]&lt;ViewType>?, placeholder: [string][59]?, style: [Object][64]?, className:
-[string][59]?, disabled: [boolean][61]?}
+Type: [object][64]
 
 ##### Properties
 
--   `table` **([Table][73] | null)?**
--   `view` **([View][69] | null)?**
--   `shouldAllowPickingNone` **[boolean][61]?**
--   `onChange` **function (viewModel: ([View][69] | null)): void?**
--   `allowedTypes` **[Array][60]&lt;ViewType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][64]?**
--   `className` **[string][59]?**
--   `disabled` **[boolean][61]?**
+-   `table` **[Table][73]?** The parent table model to select views from. If `null` or `undefined`,
+    the picker won't render.
+-   `view` **[View][69]?** The selected view model.
+-   `onChange` **[function][63]?** A function to be called when the selected view changes.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][60]&lt;ViewType>?** An array indicating which view types can be
+    selected.
+-   `shouldAllowPickingNone` **[boolean][61]?** If set to `true`, the user can unset the selected
+    view.
+-   `placeholder` **[string][59]?** The placeholder text when no view is selected.
+-   `id` **[string][59]?** The ID of the picker element.
+-   `className` **[string][59]?** Additional class names to apply to the picker.
+-   `style` **[object][64]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 #### ViewPickerSynced
 
 **Extends React.Component**
 
+Dropdown menu component for selecting views, synced with [GlobalConfig][3].
+
 ##### Parameters
 
 -   `props` **[ViewPickerSyncedProps][157]**
 
+##### Examples
+
+```javascript
+import {TablePickerSynced, ViewPickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+import {ViewTypes} from '@airtable/blocks/types/view';
+import React, {Fragment} from 'react';
+
+function Block() {
+    const base = useBase();
+    const tableId = globalConfig.get('tableId');
+    const table = base.getTableByIdIfExists(tableId);
+    const viewId = globalConfig.get('viewId');
+    const view = view.getViewByIdIfExists(viewId);
+    const queryResult = view ? view.selectRecords() : null;
+    const records = useRecords(queryResult);
+    useWatchable(globalConfig, ['tableId', 'viewId']);
+
+    const summaryText = view
+        ? `${view.name} has ${records.length} record(s).`
+        : 'No view selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
+                    <ViewPickerSynced
+                        table={table}
+                        globalConfigKey="viewId"
+                        allowedTypes={[ViewTypes.GRID]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
 #### ViewPickerSyncedProps
 
-Type: {table: ([Table][73] | null)?, globalConfigKey: [GlobalConfigKey][137], onChange: function
-(viewModel: ([View][69] | null)): void?, disabled: [boolean][61]?, shouldAllowPickingNone:
-[boolean][61]?, allowedTypes: [Array][60]&lt;ViewType>?, placeholder: [string][59]?, style:
-[Object][64]?, className: [string][59]?}
+Type: [object][64]
 
 ##### Properties
 
--   `table` **([Table][73] | null)?**
--   `globalConfigKey` **[GlobalConfigKey][137]**
--   `onChange` **function (viewModel: ([View][69] | null)): void?**
--   `disabled` **[boolean][61]?**
--   `shouldAllowPickingNone` **[boolean][61]?**
--   `allowedTypes` **[Array][60]&lt;ViewType>?**
--   `placeholder` **[string][59]?**
--   `style` **[Object][64]?**
--   `className` **[string][59]?**
+-   `table` **[Table][73]?** The parent table model to select views from. If `null` or `undefined`,
+    the picker won't render.
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
+    for this key. Selecting a new view will update `globalConfig`.
+-   `onChange` **[function][63]?** A function to be called when the selected view changes. This
+    should only be used for side effects.
+-   `disabled` **[boolean][61]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][60]&lt;ViewType>?** An array indicating which view types can be
+    selected.
+-   `shouldAllowPickingNone` **[boolean][61]?** If set to `true`, the user can unset the selected
+    view.
+-   `placeholder` **[string][59]?** The placeholder text when no view is selected.
+-   `id` **[string][59]?** The ID of the picker element.
+-   `className` **[string][59]?** Additional class names to apply to the picker.
+-   `style` **[object][64]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][65] \| [string][59])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][59]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][59]?** A space separated list of description element IDs.
 
 ### ViewportConstraint
 

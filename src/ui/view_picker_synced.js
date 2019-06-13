@@ -13,9 +13,22 @@ import ViewPicker from './view_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
 
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-
-/** @typedef */
+/**
+ * @typedef {object} ViewPickerSyncedProps
+ * @property {Table} [table] The parent table model to select views from. If `null` or `undefined`, the picker won't render.
+ * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a new view will update `globalConfig`.
+ * @property {function} [onChange] A function to be called when the selected view changes. This should only be used for side effects.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
+ * @property {Array.<ViewType>} [allowedTypes] An array indicating which view types can be selected.
+ * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected view.
+ * @property {string} [placeholder='Pick a view...'] The placeholder text when no view is selected.
+ * @property {string} [id] The ID of the picker element.
+ * @property {string} [className] Additional class names to apply to the picker.
+ * @property {object} [style] Additional styles to apply to the picker.
+ * @property {number | string} [tabIndex] Indicates if the picker can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
 type ViewPickerSyncedProps = {
     table?: Table | null,
     globalConfigKey: GlobalConfigKey,
@@ -23,14 +36,61 @@ type ViewPickerSyncedProps = {
     disabled?: boolean,
 
     // Passed through to ViewPicker:
-    shouldAllowPickingNone?: boolean,
     allowedTypes?: Array<ViewType>,
+    shouldAllowPickingNone?: boolean,
     placeholder?: string,
-    style?: Object,
+    id?: string,
     className?: string,
+    style?: Object,
+    tabIndex?: number | string,
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
 };
 
-/** */
+/**
+ * Dropdown menu component for selecting views, synced with {@link GlobalConfig}.
+ *
+ * @example
+ * import {TablePickerSynced, ViewPickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+ * import {ViewTypes} from '@airtable/blocks/types/view';
+ * import React, {Fragment} from 'react';
+ *
+ * function Block() {
+ *     const base = useBase();
+ *     const tableId = globalConfig.get('tableId');
+ *     const table = base.getTableByIdIfExists(tableId);
+ *     const viewId = globalConfig.get('viewId');
+ *     const view = view.getViewByIdIfExists(viewId);
+ *     const queryResult = view ? view.selectRecords() : null;
+ *     const records = useRecords(queryResult);
+ *     useWatchable(globalConfig, ['tableId', 'viewId']);
+ *
+ *     const summaryText = view ? `${view.name} has ${records.length} record(s).` : 'No view selected.';
+ *     return (
+ *         <Fragment>
+ *             <p style={{marginBottom: 16}}>{summaryText}</p>
+ *             <label style={{display: 'block', marginBottom: 16}}>
+ *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+ *                 <TablePickerSynced
+ *                     globalConfigKey='tableId'
+ *                     shouldAllowPickingNone={true}
+ *                 />
+ *             </label>
+ *             {table && (
+ *                 <label>
+ *                     <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
+ *                     <ViewPickerSynced
+ *                         table={table}
+ *                         globalConfigKey='viewId'
+ *                         allowedTypes={[ViewTypes.GRID]}
+ *                         shouldAllowPickingNone={true}
+ *                     />
+ *                 </label>
+ *             )}
+ *         </Fragment>
+ *     );
+ * }
+ */
 class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
     static propTypes = {
         table: PropTypes.instanceOf(Table),
@@ -39,11 +99,15 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
         disabled: PropTypes.bool,
 
         // Passed through to ViewPicker:
-        shouldAllowPickingNone: PropTypes.bool,
         allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewTypes))),
+        shouldAllowPickingNone: PropTypes.bool,
         placeholder: PropTypes.string,
-        style: PropTypes.object,
+        id: PropTypes.string,
         className: PropTypes.string,
+        style: PropTypes.object,
+        tabIndex: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
+        'aria-labelledby': PropTypes.string,
+        'aria-describedby': PropTypes.string,
     };
     props: ViewPickerSyncedProps;
     _viewPicker: ViewPicker | null;

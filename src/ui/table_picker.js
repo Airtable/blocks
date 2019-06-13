@@ -39,7 +39,7 @@ type TablePickerProps = {
  * Dropdown menu component for selecting tables.
  *
  * @example
- * import {TablePickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+ * import {TablePicker, useBase, useRecords} from '@airtable/blocks/ui';
  * import React, {Fragment, useState} from 'react';
  *
  * function Block() {
@@ -54,7 +54,7 @@ type TablePickerProps = {
  *             <p style={{marginBottom: 16}}>{summaryText}</p>
  *             <label>
  *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePickerSynced
+ *                 <TablePicker
  *                     table={table}
  *                     onChange={newTable => setTable(newTable)}
  *                     shouldAllowPickingNone={true}

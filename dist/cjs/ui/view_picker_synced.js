@@ -51,11 +51,50 @@ var _global_config_synced_component_helpers = _interopRequireDefault(require("./
 
 var _synced = _interopRequireDefault(require("./synced"));
 
-var u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
-/** @typedef */
-
-
-/** */
+/**
+ * Dropdown menu component for selecting views, synced with {@link GlobalConfig}.
+ *
+ * @example
+ * import {TablePickerSynced, ViewPickerSynced, useBase, useRecords} from '@airtable/blocks/ui';
+ * import {ViewTypes} from '@airtable/blocks/types/view';
+ * import React, {Fragment} from 'react';
+ *
+ * function Block() {
+ *     const base = useBase();
+ *     const tableId = globalConfig.get('tableId');
+ *     const table = base.getTableByIdIfExists(tableId);
+ *     const viewId = globalConfig.get('viewId');
+ *     const view = view.getViewByIdIfExists(viewId);
+ *     const queryResult = view ? view.selectRecords() : null;
+ *     const records = useRecords(queryResult);
+ *     useWatchable(globalConfig, ['tableId', 'viewId']);
+ *
+ *     const summaryText = view ? `${view.name} has ${records.length} record(s).` : 'No view selected.';
+ *     return (
+ *         <Fragment>
+ *             <p style={{marginBottom: 16}}>{summaryText}</p>
+ *             <label style={{display: 'block', marginBottom: 16}}>
+ *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+ *                 <TablePickerSynced
+ *                     globalConfigKey='tableId'
+ *                     shouldAllowPickingNone={true}
+ *                 />
+ *             </label>
+ *             {table && (
+ *                 <label>
+ *                     <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
+ *                     <ViewPickerSynced
+ *                         table={table}
+ *                         globalConfigKey='viewId'
+ *                         allowedTypes={[ViewTypes.GRID]}
+ *                         shouldAllowPickingNone={true}
+ *                     />
+ *                 </label>
+ *             )}
+ *         </Fragment>
+ *     );
+ * }
+ */
 var ViewPickerSynced =
 /*#__PURE__*/
 function (_React$Component) {
@@ -137,11 +176,15 @@ function (_React$Component) {
   onChange: _propTypes.default.func,
   disabled: _propTypes.default.bool,
   // Passed through to ViewPicker:
-  shouldAllowPickingNone: _propTypes.default.bool,
   allowedTypes: _propTypes.default.arrayOf(_propTypes.default.oneOf((0, _private_utils.values)(_view.ViewTypes))),
+  shouldAllowPickingNone: _propTypes.default.bool,
   placeholder: _propTypes.default.string,
+  id: _propTypes.default.string,
+  className: _propTypes.default.string,
   style: _propTypes.default.object,
-  className: _propTypes.default.string
+  tabIndex: _propTypes.default.oneOf([_propTypes.default.number, _propTypes.default.string]),
+  'aria-labelledby': _propTypes.default.string,
+  'aria-describedby': _propTypes.default.string
 });
 
 var _default = (0, _create_data_container.default)(ViewPickerSynced, props => {
