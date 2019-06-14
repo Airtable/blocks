@@ -55,6 +55,7 @@
         "eslint-plugin-react-hooks": "^1.6.0",
         "flow-bin": "0.98.1",
         "flow-copy-source": "^2.0.6",
+        "flow-typed": "^2.5.2",
         "fs-extra": "^8.0.1",
         "glob": "^7.1.4",
         "husky": "^2.3.0",
