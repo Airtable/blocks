@@ -52,7 +52,7 @@ type ViewPickerSyncedProps = {
  *
  * @example
  * import {TablePickerSynced, ViewPickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
- * import {ViewTypes} from '@airtable/blocks/types/view';
+ * import {viewTypes} from '@airtable/blocks/models';
  * import {globalConfig} from '@airtable/blocks';
  * import React, {Fragment} from 'react';
  *
@@ -83,7 +83,7 @@ type ViewPickerSyncedProps = {
  *                     <ViewPickerSynced
  *                         table={table}
  *                         globalConfigKey='viewId'
- *                         allowedTypes={[ViewTypes.GRID]}
+ *                         allowedTypes={[viewTypes.GRID]}
  *                         shouldAllowPickingNone={true}
  *                     />
  *                 </label>

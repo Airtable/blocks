@@ -5050,7 +5050,7 @@ Dropdown menu component for selecting views.
 
 ```javascript
 import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
-import {ViewTypes} from '@airtable/blocks/types/view';
+import {viewTypes} from '@airtable/blocks/models';
 import React, {Fragment, useState} from 'react';
 
 function Block() {
@@ -5084,7 +5084,7 @@ function Block() {
                         table={table}
                         view={view}
                         onChange={newView => setView(newView)}
-                        allowedTypes={[ViewTypes.GRID]}
+                        allowedTypes={[viewTypes.GRID]}
                         shouldAllowPickingNone={true}
                     />
                 </label>
@@ -5138,7 +5138,7 @@ import {
     useRecords,
     useWatchable,
 } from '@airtable/blocks/ui';
-import {ViewTypes} from '@airtable/blocks/types/view';
+import {viewTypes} from '@airtable/blocks/models';
 import {globalConfig} from '@airtable/blocks';
 import React, {Fragment} from 'react';
 
@@ -5168,7 +5168,7 @@ function Block() {
                     <ViewPickerSynced
                         table={table}
                         globalConfigKey="viewId"
-                        allowedTypes={[ViewTypes.GRID]}
+                        allowedTypes={[viewTypes.GRID]}
                         shouldAllowPickingNone={true}
                     />
                 </label>

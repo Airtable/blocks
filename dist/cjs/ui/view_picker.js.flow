@@ -47,7 +47,7 @@ type ViewPickerProps = {
  *
  * @example
  * import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
- * import {ViewTypes} from '@airtable/blocks/types/view';
+ * import {viewTypes} from '@airtable/blocks/models';
  * import React, {Fragment, useState} from 'react';
  *
  * function Block() {
@@ -79,7 +79,7 @@ type ViewPickerProps = {
  *                         table={table}
  *                         view={view}
  *                         onChange={newView => setView(newView)}
- *                         allowedTypes={[ViewTypes.GRID]}
+ *                         allowedTypes={[viewTypes.GRID]}
  *                         shouldAllowPickingNone={true}
  *                     />
  *                 </label>
