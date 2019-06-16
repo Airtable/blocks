@@ -21,6 +21,7 @@ const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const getBlockDirPath = require('./get_block_dir_path');
 const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
+const clipboardy = require('clipboardy');
 
 import type {
     $Application,
@@ -352,6 +353,12 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         this.setPublicBaseUrl(url);
         await this.bundleAsync(null);
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
+        try {
+            await clipboardy.write(url);
+            console.log('Block URL has been copied to your clipboard');
+        } catch (err) {
+            // This can fail, especially on Linux. If it does, we don't really care.
+        }
     }
     async startNgrokAsync(port: number): Promise<string> {
         // Start our express server.
