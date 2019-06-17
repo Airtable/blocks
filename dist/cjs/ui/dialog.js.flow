@@ -43,7 +43,6 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
         }
         if (['Enter', ' '].includes(e.key)) {
             e.preventDefault();
-            e.stopPropagation();
             this.context.onDialogClose();
         }
     }

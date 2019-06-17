@@ -119,7 +119,6 @@ class Toggle extends React.Component<ToggleProps> {
         }
         if (['Enter', ' '].includes(e.key)) {
             e.preventDefault();
-            e.stopPropagation();
             this._toggleValue();
         }
     }
