@@ -20,6 +20,8 @@ type DialogCloseButtonProps = {|
 |};
 
 /**
+ * A button that closes {@link Dialog}.
+ *
  * @alias Dialog.CloseButton
  */
 class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
@@ -78,7 +80,7 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
 }
 
 /**
- * @typedef {Object} DialogProps
+ * @typedef {object} DialogProps
  * @property {function} onClose Callback function to fire when the dialog is closed.
  * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
  * @property {Object} [style] Extra styles to apply to the dialog element.

@@ -4027,7 +4027,7 @@ function Block() {
 
 #### DialogProps
 
-Type: [Object][64]
+Type: [object][64]
 
 ##### Properties
 
@@ -4042,6 +4042,8 @@ Type: [Object][64]
 #### Dialog.CloseButton
 
 **Extends React.Component**
+
+A button that closes [Dialog][37].
 
 ##### Parameters
 

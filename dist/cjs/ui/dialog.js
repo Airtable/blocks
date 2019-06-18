@@ -38,6 +38,8 @@ var _icon = _interopRequireDefault(require("./icon"));
 var _modal = _interopRequireDefault(require("./modal"));
 
 /**
+ * A button that closes {@link Dialog}.
+ *
  * @alias Dialog.CloseButton
  */
 var DialogCloseButton =
@@ -100,7 +102,7 @@ function (_React$Component) {
   return DialogCloseButton;
 }(React.Component);
 /**
- * @typedef {Object} DialogProps
+ * @typedef {object} DialogProps
  * @property {function} onClose Callback function to fire when the dialog is closed.
  * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
  * @property {Object} [style] Extra styles to apply to the dialog element.
