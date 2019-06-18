@@ -117,6 +117,13 @@ class BlockServer {
             this._nextRequestId++;
             next();
         });
+
+        // TODO(richsinn): Add URL to instructions or docs?
+        // TODO(richsinn): We'll need to figure out how to avoid conflicts when
+        //   implementing backend blocks routes
+        this._expressApp.get('/', (req: $Request, res: $Response) => {
+           res.send("Congratulations! You've set up the Airtable Blocks server. Now go to your Airtable base to build your block.");
+        });
     }
     async _ensureBundleIsReadyAsync(): Promise<void> {
         if (this._bundlePromiseIfExists === null) {
