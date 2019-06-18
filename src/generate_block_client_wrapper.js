@@ -96,7 +96,7 @@ module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath
                     // dev iframes are running, only one of them will live reload.
                     fetch(blockUrl + '/__runFrame/poll?random=' + Math.random()).then(function(response) {
                         if (response.status === 200) {
-                            window._airtableBlockSdk.reload();
+                            window['${blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME}'].reload();
                         } else if (response.status === 408) {
                             pollForLiveReload();
                         } else if (response.status === 500) {

@@ -457,10 +457,19 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             }
             // Resolve our primary bundle promise.
             resolve();
+        }).on('error', (err) => {
+            // Reject our primary bundle promise.
+            reject(err);
         });
-        this._bundler
-            .bundle()
+
+        const bundleStream = this._bundler.bundle();
+        bundleStream
             .on('error', (err) => {
+                // Append a custom error code here. The error code will be used
+                // to signal that the HTTP connection to block_server should be
+                // kept alive via long polling.
+                err.code = ErrorCodes.BUNDLE_ERROR;
+
                 console.error(err.message);
                 if (err.codeFrame) {
                     console.error(err.codeFrame);
@@ -468,10 +477,8 @@ ${ansiToHtmlConverter.toHtml(err.message)}
                 if (this._bundlePromiseIfExists === bundlePromise) {
                     this._bundlePromiseIfExists = null;
                 }
-                err.code = ErrorCodes.BUNDLE_ERROR;
-
-                // Reject our primary bundle promise.
-                reject(err);
+                bundleStream.unpipe(fsStream);
+                fsStream.destroy(err);
             })
             .pipe(fsStream);
 
