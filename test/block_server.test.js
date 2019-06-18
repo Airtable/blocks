@@ -3,7 +3,7 @@ const BlockServer = require('../src/block_server');
 const sinon = require('sinon');
 const clipboardy = require('clipboardy');
 const path = require('path');
-const os = require('os');
+const {getTemporaryDirectoryPath} = require('./helpers');
 const {outputFile, ensureDir} = require('fs-extra');
 
 describe('BlockServer', function() {
@@ -12,12 +12,7 @@ describe('BlockServer', function() {
     beforeEach(async function() {
         oldCwd = process.cwd();
 
-        const tmpDirName =
-            'airtable-blocks-cli-test_' +
-            Math.random()
-                .toString()
-                .slice(2);
-        const tmpDir = path.join(os.tmpdir(), tmpDirName);
+        const tmpDir = getTemporaryDirectoryPath();
 
         await Promise.all([
             outputFile(

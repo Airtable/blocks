@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use strict';
 
 const _ = require('lodash');
@@ -6,25 +5,19 @@ const fs = require('fs');
 const path = require('path');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
 
-let blockDirPath = null;
+const fileSystemRoot = path.parse(process.cwd()).root;
 
 function getBlockDirPath() {
-    if (blockDirPath === null) {
-        let currentDirPath = process.cwd();
-        while (currentDirPath !== '/') {
-            const currentDirFiles = fs.readdirSync(currentDirPath);
-            if (_.includes(currentDirFiles, blockCliConfigSettings.BLOCK_FILE_NAME)) {
-                // Cache and return the blockDirPath.
-                blockDirPath = currentDirPath;
-                return blockDirPath;
-            }
-            // Traverse up one level.
-            currentDirPath = path.dirname(currentDirPath);
+    let currentDirPath = process.cwd();
+    while (currentDirPath !== fileSystemRoot) {
+        const currentDirFiles = fs.readdirSync(currentDirPath);
+        if (_.includes(currentDirFiles, blockCliConfigSettings.BLOCK_FILE_NAME)) {
+            return currentDirPath;
         }
-        console.error('Could not find a block directory');
-        process.exit(1);
+        // Traverse up one level.
+        currentDirPath = path.dirname(currentDirPath);
     }
-    return blockDirPath;
+    throw new Error('Could not find a block directory');
 }
 
 module.exports = getBlockDirPath;

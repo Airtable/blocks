@@ -1,10 +1,10 @@
 // @flow
 const init = require('../../src/commands/init');
 const Environments = require('../../src/types/environments');
-const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
+const {getTemporaryDirectoryPath} = require('../helpers');
 const cliHelpers = require('../../src/helpers/cli_helpers');
 const nodeModulesCommandHelpers = require('../../src/helpers/node_modules_command_helpers');
 const sinon = require('sinon');
@@ -21,10 +21,7 @@ describe('init command', function() {
     });
 
     it('writes a directory of files', async function() {
-        const blockDirPath = path.join(
-            os.tmpdir(),
-            `airtable-blocks-cli-init-test-${Math.random().toString().slice(2)}`,
-        );
+        const blockDirPath = getTemporaryDirectoryPath();
 
         const fakeArgv = {
             _: [],
