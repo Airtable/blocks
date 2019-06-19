@@ -30,7 +30,7 @@ import type {
     Middleware,
     NextFunction,
 } from 'express';
-import type {BlockJsonNew} from './types/block_json_new_type';
+import type {BlockJson} from './types/block_json_type';
 import type {RemoteJson} from './types/remote_json_type';
 
 type RequestWithRequestId = $Request & {
@@ -69,7 +69,7 @@ class BlockServer {
     _nextRequestId: number;
     _apiKey: string;
     _bundlePromiseIfExists: Promise<void> | null;
-    _blockJson: BlockJsonNew;
+    _blockJson: BlockJson;
     _remoteJson: RemoteJson;
     _apiClient: APIClient;
     _bundler: browserify;
@@ -77,7 +77,7 @@ class BlockServer {
     constructor(args: {
         transpileAll: boolean,
         apiKey: string,
-        blockJson: BlockJsonNew,
+        blockJson: BlockJson,
         remoteJson: RemoteJson,
     }) {
         const {

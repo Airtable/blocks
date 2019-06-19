@@ -13,7 +13,7 @@ const {camelCase, upperFirst} = require('lodash');
 
 import type {Argv} from 'yargs';
 import type {Environment} from '../types/environments';
-import type {BlockJsonNew} from '../types/block_json_new_type';
+import type {BlockJson} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 
 const DEFAULT_FRONTEND_ENTRY_NAME = 'index';
@@ -58,7 +58,7 @@ async function initBlockAsync(
 
     // Create the block.json file.
     // TODO(richsinn): Add workflow to scaffold 'backend' routes with default files here.
-    const blockJson: BlockJsonNew = {
+    const blockJson: BlockJson = {
         frontendEntry: `./${SupportedTopLevelDirectoryNames.FRONTEND}/${DEFAULT_FRONTEND_ENTRY_NAME}.js`,
     };
     const writeBlockJsonPromise = fsUtils.writeFileAsync(

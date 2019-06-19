@@ -6,9 +6,9 @@ const fsUtils = require('../fs_utils');
 const path = require('path');
 
 import type {Result} from '../types/result';
-import type {BlockJsonNew} from '../types/block_json_new_type';
+import type {BlockJson} from '../types/block_json_type';
 
-async function parseAndValidateBlockJsonAsync(): Promise<Result<BlockJsonNew>> {
+async function parseAndValidateBlockJsonAsync(): Promise<Result<BlockJson>> {
     const blockDirPath = getBlockDirPath();
     const blockJsonPath = path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME);
     const blockJsonStr = await fsUtils.readFileAsync(blockJsonPath);
@@ -23,7 +23,7 @@ async function parseAndValidateBlockJsonAsync(): Promise<Result<BlockJsonNew>> {
         return {err: new Error(validationResult.reason)};
     }
     return {
-        value: ((blockJson: any): BlockJsonNew), // eslint-disable-line flowtype/no-weak-types
+        value: ((blockJson: any): BlockJson), // eslint-disable-line flowtype/no-weak-types
     };
 }
 

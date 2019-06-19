@@ -14,7 +14,7 @@ const browserify = require('browserify');
 const {promisify} = require('util');
 const Terser = require('terser');
 
-import type {BlockJsonNew} from '../types/block_json_new_type';
+import type {BlockJson} from '../types/block_json_type';
 
 type BuildStepSuccess<+R> = {|success: true, +value: R|};
 type BuildStepFailure = {|success: false, error: Error|};
@@ -166,7 +166,11 @@ class BlockBuilder {
             value: Buffer.from(result.code),
         };
     }
-    async _generateFrontendBundleAsync(blockJson: BlockJsonNew, userSrcDirPath: DirectoryPath, buildArtifactsDirPath: DirectoryPath): Promise<BuildStepResult<FilePath>> {
+    async _generateFrontendBundleAsync(
+        blockJson: BlockJson,
+        userSrcDirPath: DirectoryPath,
+        buildArtifactsDirPath: DirectoryPath,
+    ): Promise<BuildStepResult<FilePath>> {
         // We need to write our client wrapper file.
         // NOTE: it's a bit weird that we write the client wrapper file in the user
         // source code directory. This is necessary since we can't have multiple copies
