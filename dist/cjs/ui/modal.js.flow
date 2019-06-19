@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import invariant from 'invariant';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
+import {type SVGElement} from '../types/svg_element';
 
 /**
  * @memberof Modal

@@ -1,5 +1,5 @@
 // @flow
 
-declare class SVGElement extends Element {
+export interface SVGElement extends Element {
     focus(): void;
 }
