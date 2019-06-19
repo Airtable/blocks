@@ -39,9 +39,9 @@
     -   [ColorPalette][35]
     -   [ConfirmationDialog][36]
     -   [Dialog][37]
-    -   [FieldIcon][38]
-    -   [FieldPicker][39]
-    -   [Icon][40]
+    -   [FieldPicker][38]
+    -   [Icon][39]
+    -   [FieldIcon][40]
     -   [Input][41]
     -   [Link][42]
     -   [Loader][43]
@@ -4060,28 +4060,6 @@ Type: [object][64]
 -   `tabIndex` **([number][65] \| [string][59])?** Indicates if the button can be focused and
     if/where it participates in sequential keyboard navigation.
 
-### FieldIcon
-
-#### FieldIcon
-
-##### Parameters
-
--   `props` **[FieldIconProps][134]**
-
-#### FieldIconProps
-
-Type: {field: [Field][68], size: [number][65]?, fillColor: [string][59]?, className: [string][59]?,
-style: [Object][64]?, pathClassName: [string][59]?}
-
-##### Properties
-
--   `field` **[Field][68]**
--   `size` **[number][65]?**
--   `fillColor` **[string][59]?**
--   `className` **[string][59]?**
--   `style` **[Object][64]?**
--   `pathClassName` **[string][59]?**
-
 ### FieldPicker
 
 #### FieldPicker
@@ -4092,7 +4070,7 @@ Dropdown menu component for selecting fields.
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][135]**
+-   `props` **[FieldPickerProps][134]**
 
 ##### Examples
 
@@ -4178,7 +4156,7 @@ Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][136]**
+-   `props` **[FieldPickerSyncedProps][135]**
 
 ##### Examples
 
@@ -4236,7 +4214,7 @@ Type: [object][64]
 
 -   `table` **[Table][73]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
 -   `onChange` **[function][63]?** A function to be called when the selected field changes. This
@@ -4263,7 +4241,7 @@ A vector icon from the Airtable icon set.
 
 -   `props` **[object][64]** The props for the component.
     -   `props.name` **[string][59]** The name of the icon. For a comprehensive list, refer to the
-        "Icon" section of the [styleguide][138].
+        "Icon" section of the [styleguide][137].
     -   `props.size` **[number][65]** The width/height of the icon. (optional, default `16`)
     -   `props.fillColor` **[string][59]?** The color of the icon.
     -   `props.className` **[string][59]?** Additional class names to apply to the icon.
@@ -4283,6 +4261,57 @@ const LikeButton = (
 ```
 
 Returns **any** A React node.
+
+### FieldIcon
+
+#### FieldIcon
+
+**Extends React.StatelessFunctionalComponent**
+
+A vector icon for a field's type.
+
+##### Parameters
+
+-   `props` **[FieldIconProps][138]**
+
+##### Examples
+
+```javascript
+import {FieldIcon, useBase} from '@airtable/blocks/ui';
+
+const base = useBase();
+const table = base.tables[0];
+const {primaryField} = table;
+const FieldToken = (
+    <div
+        style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: 8,
+            fontWeight: 500,
+            backgroundColor: '#eee',
+            borderRadius: 3,
+        }}
+    >
+        <FieldIcon field={primaryField} style={{marginRight: 8}} />
+        {primaryField.name}
+    </div>
+);
+```
+
+#### FieldIconProps
+
+Type: [object][64]
+
+##### Properties
+
+-   `field` **[Field][68]** The field model to display an icon for.
+-   `size` **[number][65]?** The width/height of the icon.
+-   `fillColor` **[string][59]?** The color of the icon.
+-   `className` **[string][59]?** Additional class names to apply to the icon.
+-   `style` **[object][64]?** Additional styles to apply to the icon.
+-   `pathClassName` **[string][59]?** Additional class names to apply to the icon path.
+-   `pathStyle` **[object][64]?** Additional styles to apply to the icon path.
 
 ### Input
 
@@ -4714,7 +4743,7 @@ Type: [object][64]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
 -   `onChange` **[function][63]?** A function to be called when the selected option changes. This
@@ -4856,7 +4885,7 @@ Type: [object][64]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
 -   `onChange` **[function][63]?** A function to be called when the selected table changes. This
@@ -4951,7 +4980,7 @@ Type: [object][64]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
 -   `onChange` **[function][63]?** A function to be called when the switch is toggled. This should
@@ -5189,7 +5218,7 @@ Type: [object][64]
 
 -   `table` **[Table][73]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
 -   `onChange` **[function][63]?** A function to be called when the selected view changes. This
@@ -5289,9 +5318,9 @@ Type: {width: ([number][65] | null)?, height: ([number][65] | null)?}
 [35]: #colorpalette
 [36]: #confirmationdialog
 [37]: #dialog
-[38]: #fieldicon
-[39]: #fieldpicker
-[40]: #icon
+[38]: #fieldpicker
+[39]: #icon
+[40]: #fieldicon
 [41]: #input
 [42]: #link
 [43]: #loader
@@ -5385,11 +5414,11 @@ Type: {width: ([number][65] | null)?, height: ([number][65] | null)?}
 [131]: #confirmationdialogprops
 [132]: #dialogprops
 [133]: #dialogclosebuttonprops
-[134]: #fieldiconprops
-[135]: #fieldpickerprops
-[136]: #fieldpickersyncedprops
-[137]: #globalconfigkey
-[138]: https://airtable.com/styleguide
+[134]: #fieldpickerprops
+[135]: #fieldpickersyncedprops
+[136]: #globalconfigkey
+[137]: https://airtable.com/styleguide
+[138]: #fieldiconprops
 [139]: #inputprops
 [140]: #inputsyncedprops
 [141]: https://www.owasp.org/index.php/Reverse_Tabnabbing

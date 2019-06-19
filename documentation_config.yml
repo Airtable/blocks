@@ -105,10 +105,6 @@ toc:
                 - DialogProps
                 - Dialog.CloseButton
                 - DialogCloseButtonProps
-          - name: FieldIcon
-            children:
-                - FieldIcon
-                - FieldIconProps
           - name: FieldPicker
             children:
                 - FieldPicker
@@ -116,6 +112,10 @@ toc:
                 - FieldPickerSynced
                 - FieldPickerSyncedProps
           - Icon
+          - name: FieldIcon
+            children:
+                - FieldIcon
+                - FieldIconProps
           - name: Input
             children:
                 - Input
