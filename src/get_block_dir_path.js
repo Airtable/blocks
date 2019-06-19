@@ -1,3 +1,4 @@
+// @flow
 'use strict';
 
 const fs = require('fs');
@@ -6,7 +7,7 @@ const blockCliConfigSettings = require('./config/block_cli_config_settings');
 
 const fileSystemRoot = path.parse(process.cwd()).root;
 
-function getBlockDirPath() {
+function getBlockDirPath(): string {
     let currentDirPath = process.cwd();
     while (currentDirPath !== fileSystemRoot) {
         const currentDirFiles = fs.readdirSync(currentDirPath);
