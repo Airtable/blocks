@@ -253,8 +253,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         // Check if react and react-dom are listed in package.json.
         const packageJson = fs.readFileSync(path.join(blockDirPath, 'package.json'), 'utf8');
         const dependencies = JSON.parse(packageJson).dependencies;
-        const dependenciesList = Object.keys(dependencies);
-        if (!_.includes(dependenciesList, 'react') || !_.includes(dependenciesList, 'react-dom')) {
+        if (!dependencies.hasOwnProperty('react') || !dependencies.hasOwnProperty('react-dom')) {
             console.log(
                 'Please ensure that react and react-dom packages are installed and listed in package.json',
             );
