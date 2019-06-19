@@ -8,8 +8,9 @@ import useWatchable from './use_watchable';
 
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 
+/* eslint-disable no-redeclare */
 declare function useRecordIds(queryResult: AnyQueryResult): Array<RecordId>;
-declare function useRecordIds(queryResult: null): null; // eslint-disable-line no-redeclare
+declare function useRecordIds(queryResult: null): null;
 /**
  * A hook for working with the set of record IDs in a particular query result. Automatically
  * handles loading data in the query result and updating your component when the underlying
@@ -38,7 +39,7 @@ declare function useRecordIds(queryResult: null): null; // eslint-disable-line n
  *      return <span>record count in {table.name}: {recordIds.length}</span>;
  *  }
  */
-export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId> | null { // eslint-disable-line no-redeclare
+export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId> | null {
     useLoadable(queryResult);
     useWatchable(queryResult, ['recordIds']);
     return queryResult ? queryResult.recordIds : null;
@@ -81,11 +82,12 @@ declare function useRecords(queryResult: null): null; // eslint-disable-line no-
  *      );
  *  }
  */
-export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | null { // eslint-disable-line no-redeclare
+export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | null {
     useLoadable(queryResult);
     useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
     return queryResult ? queryResult.records : null;
 }
+/* eslint-enable no-redeclare */
 
 /**
  * A hook for working with a single record from a query result. Automatically handles loading data

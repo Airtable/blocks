@@ -13,8 +13,6 @@ var _use_loadable = _interopRequireDefault(require("./use_loadable"));
 
 var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
-// eslint-disable-line no-redeclare
-
 /**
  * A hook for working with the set of record IDs in a particular query result. Automatically
  * handles loading data in the query result and updating your component when the underlying
@@ -44,7 +42,6 @@ var _use_watchable = _interopRequireDefault(require("./use_watchable"));
  *  }
  */
 function useRecordIds(queryResult) {
-  // eslint-disable-line no-redeclare
   (0, _use_loadable.default)(queryResult);
   (0, _use_watchable.default)(queryResult, ['recordIds']);
   return queryResult ? queryResult.recordIds : null;
@@ -88,11 +85,12 @@ function useRecordIds(queryResult) {
  *  }
  */
 function useRecords(queryResult) {
-  // eslint-disable-line no-redeclare
   (0, _use_loadable.default)(queryResult);
   (0, _use_watchable.default)(queryResult, ['records', 'cellValues', 'recordColors']);
   return queryResult ? queryResult.records : null;
 }
+/* eslint-enable no-redeclare */
+
 /**
  * A hook for working with a single record from a query result. Automatically handles loading data
  * in the query result and updating your component when the records cell values etc. change.
