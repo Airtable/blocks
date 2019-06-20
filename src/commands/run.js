@@ -14,10 +14,11 @@ const DEFAULT_PORT = 8000;
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const apiKey = getApiKeySync(getBlockDirPath());
-    const {ngrok, transpileAll, sdkRepo, remote} = argv;
+    const {ngrok, transpileAll, sdkRepo} = argv;
+    const remoteName = argv.remote || null;
     invariant(typeof ngrok === 'boolean', 'expects ngrok to be a boolean');
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
-    invariant(typeof remote === 'string', 'expects remote to be a string');
+    invariant(remoteName === null || typeof remoteName === 'string', 'expects remoteName to be null or a string');
 
     const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
     if (blockJsonValidationResult.err) {
@@ -25,7 +26,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     const blockJson = blockJsonValidationResult.value;
 
-    const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remote);
+    const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remoteName);
     if (parseRemoteResult.err) {
         throw parseRemoteResult.err;
     }

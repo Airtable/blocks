@@ -24,7 +24,7 @@ module.exports = {
     // Directory for block-scoped config.
     BLOCK_CONFIG_DIR_NAME: '.block',
 
-    DEFAULT_REMOTE_NAME: 'remote',
+    REMOTE_JSON_BASE_FILE_PATH: 'remote.json',
 
     // Copied over from blockRouterConfigSettings.REQUEST_BODY_LIMIT
     // in the hyperbase codebase

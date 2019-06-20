@@ -1,7 +1,6 @@
 // @flow
 const CommandNames = require('./command_names');
 const Environments = require('../types/environments');
-const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const path = require('path');
 const _ = require('lodash');
 
@@ -89,7 +88,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 description: 'Configure which remote to use',
                 type: 'string',
                 hidden: true, // hide from --help output
-                default: blockCliConfigSettings.DEFAULT_REMOTE_NAME,
             },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),
@@ -104,7 +102,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 description: 'Configure which remote to use',
                 type: 'string',
                 hidden: true, // hide from --help output
-                default: blockCliConfigSettings.DEFAULT_REMOTE_NAME,
             },
         },
         runCommandAsync: commandRunner(CommandNames.RELEASE),

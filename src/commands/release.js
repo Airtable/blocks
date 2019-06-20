@@ -125,8 +125,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         throw blockJsonValidationResult.err;
     }
 
-    invariant(typeof argv.remote === 'string', 'expects remote to be a string');
-    const apiClientResult = await APIClient.constructAPIClientForRemoteAsync(argv.remote);
+    const remoteName = argv.remote || null;
+    invariant(remoteName === null || typeof remoteName === 'string', 'expects remoteName to be null or a string');
+    const apiClientResult = await APIClient.constructAPIClientForRemoteAsync(remoteName);
     if (apiClientResult.err) {
         throw apiClientResult.err;
     }

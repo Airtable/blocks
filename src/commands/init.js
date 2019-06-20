@@ -76,7 +76,7 @@ async function initBlockAsync(
     const blockConfigDirPath = path.join(blockDirPath, blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME);
     await fsUtils.mkdirPathAsync(blockConfigDirPath);
     const writeRemoteJsonPromise = fsUtils.writeFileAsync(
-        path.join(blockConfigDirPath, `${blockCliConfigSettings.DEFAULT_REMOTE_NAME}.json`),
+        path.join(blockConfigDirPath, blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH),
         JSON.stringify(remoteJson, null, 4),
     );
 

@@ -45,7 +45,7 @@ class APIClient {
 
     static apiBaseUrlsByEnvironment = apiBaseUrlsByEnvironment;
 
-    static async constructAPIClientForRemoteAsync(remoteName: string): Promise<Result<APIClient>> {
+    static async constructAPIClientForRemoteAsync(remoteName: string | null): Promise<Result<APIClient>> {
         const parseResult = await parseAndValidateRemoteJsonAsync(remoteName);
         if (parseResult.err) {
             return parseResult;
