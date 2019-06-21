@@ -8,7 +8,8 @@ import Field from '../models/field';
 import Table from '../models/table';
 import {FieldTypes, type FieldType} from '../types/field';
 import ModelPickerSelect from './model_picker_select';
-import createDataContainer from './create_data_container';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} FieldPickerProps
@@ -207,10 +208,8 @@ class FieldPicker extends React.Component<FieldPickerProps> {
     }
 }
 
-export default createDataContainer(
-    FieldPicker,
-    (props: FieldPickerProps) => {
-        return [{watch: props.table, key: 'fields'}, {watch: getSdk().base, key: 'tables'}];
-    },
-    ['focus', 'blur', 'click'],
-);
+export default withHooks<FieldPickerProps, {}, FieldPicker>(FieldPicker, props => {
+    useWatchable(getSdk().base, ['tables']);
+    useWatchable(props.table, ['fields']);
+    return {};
+});

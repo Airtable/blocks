@@ -5,10 +5,11 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import type Table from '../models/table';
 import {type GlobalConfigKey} from '../global_config';
-import createDataContainer from './create_data_container';
 import TablePicker from './table_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} TablePickerSyncedProps
@@ -88,7 +89,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
         'aria-describedby': PropTypes.string,
     };
     props: TablePickerSyncedProps;
-    _tablePicker: TablePicker | null;
+    _tablePicker: React.ElementRef<typeof TablePicker> | null;
     constructor(props: TablePickerSyncedProps) {
         super(props);
         // TODO (stephen): use React.forwardRef
@@ -150,10 +151,7 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
     }
 }
 
-export default createDataContainer(
-    TablePickerSynced,
-    (props: TablePickerSyncedProps) => {
-        return [{watch: getSdk().base, key: 'tables'}];
-    },
-    ['focus', 'blur', 'click'],
-);
+export default withHooks<TablePickerSyncedProps, {}, TablePickerSynced>(TablePickerSynced, () => {
+    useWatchable(getSdk().base, ['tables']);
+    return {};
+});

@@ -51,7 +51,9 @@ var _view2 = require("../types/view");
 
 var _model_picker_select = _interopRequireDefault(require("./model_picker_select"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
 /**
  * Dropdown menu component for selecting views.
@@ -249,14 +251,10 @@ function (_React$Component) {
   allowedTypes: [_view2.ViewTypes.GRID, _view2.ViewTypes.CALENDAR, _view2.ViewTypes.GALLERY, _view2.ViewTypes.KANBAN]
 });
 
-var _default = (0, _create_data_container.default)(ViewPicker, props => {
-  return [{
-    watch: props.table,
-    key: 'views'
-  }, {
-    watch: (0, _get_sdk.default)().base,
-    key: 'tables'
-  }];
-}, ['focus', 'blur', 'click']);
+var _default = (0, _with_hooks.default)(ViewPicker, props => {
+  (0, _use_watchable.default)((0, _get_sdk.default)().base, ['tables']);
+  (0, _use_watchable.default)(props.table, ['views']);
+  return {};
+});
 
 exports.default = _default;

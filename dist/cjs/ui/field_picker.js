@@ -55,7 +55,9 @@ var _field2 = require("../types/field");
 
 var _model_picker_select = _interopRequireDefault(require("./model_picker_select"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
 /**
  * Dropdown menu component for selecting fields.
@@ -262,14 +264,10 @@ function (_React$Component) {
   'aria-describedby': _propTypes.default.string
 });
 
-var _default = (0, _create_data_container.default)(FieldPicker, props => {
-  return [{
-    watch: props.table,
-    key: 'fields'
-  }, {
-    watch: (0, _get_sdk.default)().base,
-    key: 'tables'
-  }];
-}, ['focus', 'blur', 'click']);
+var _default = (0, _with_hooks.default)(FieldPicker, props => {
+  (0, _use_watchable.default)((0, _get_sdk.default)().base, ['tables']);
+  (0, _use_watchable.default)(props.table, ['fields']);
+  return {};
+});
 
 exports.default = _default;

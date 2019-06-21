@@ -25,8 +25,8 @@ const noopSubscription = {
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
- * @param {Watchable} model the model to watch
- * @param {Array<string>} keys which keys we want to watch
+ * @param {?Watchable} model the model to watch
+ * @param {Array<?string>} keys which keys we want to watch
  * @param [callback] an optional callback to call when any of the watch keys change
  *
  * @example
@@ -49,7 +49,7 @@ const noopSubscription = {
  * }
  */
 export default function useWatchable<Keys: string>(
-    model: Watchable<Keys> | null,
+    model: ?Watchable<Keys>,
     keys: $ReadOnlyArray<?Keys>,
     callback?: () => mixed,
 ) {

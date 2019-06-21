@@ -11,8 +11,6 @@ var _colors = _interopRequireDefault(require("../colors"));
 
 var _color_utils = _interopRequireDefault(require("../color_utils"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
-
 var _synced = _interopRequireDefault(require("./synced"));
 
 var _table_picker = _interopRequireDefault(require("./table_picker"));
@@ -111,7 +109,6 @@ var _use_viewport = _interopRequireDefault(require("./use_viewport"));
 var UI = {
   Popover: _popover.default,
   AutocompletePopover: _autocomplete_popover.default,
-  createDataContainer: _create_data_container.default,
   loadCSSFromString: _remote_utils.loadCSSFromString,
   loadScriptFromURLAsync: _remote_utils.loadScriptFromURLAsync,
   loadCSSFromURLAsync: _remote_utils.loadCSSFromURLAsync,

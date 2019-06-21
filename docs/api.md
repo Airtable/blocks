@@ -3420,8 +3420,8 @@ If you're writing a class component and still want to be able to use hooks, try 
 
 ##### Parameters
 
--   `model` **[Watchable][123]** the model to watch
--   `keys` **[Array][60]&lt;[string][59]>** which keys we want to watch
+-   `model` **[Watchable][123]?** the model to watch
+-   `keys` **[Array][60]&lt;[string][59]?>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
 ##### Examples

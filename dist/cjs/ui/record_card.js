@@ -63,11 +63,13 @@ var _view = _interopRequireDefault(require("../models/view"));
 
 var _cell_value_utils = _interopRequireDefault(require("../models/cell_value_utils"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
-
 var _expand_record = _interopRequireDefault(require("./expand_record"));
 
 var _cell_renderer = _interopRequireDefault(require("./cell_renderer"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
+
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
 
 var _window$__requirePriv = window.__requirePrivateModuleFromAirtable('client_server_shared/hu'),
     u = _window$__requirePriv.u;
@@ -96,11 +98,13 @@ var styles = {
     fontSize: 12
   }
 };
-var CellValueAndFieldLabel = (0, _create_data_container.default)((_ref) => {
+
+var CellValueAndFieldLabel = (_ref) => {
   var record = _ref.record,
       cellValue = _ref.cellValue,
       field = _ref.field,
       width = _ref.width;
+  (0, _use_watchable.default)(field, ['name', 'type', 'options']);
   return React.createElement("div", {
     className: "borderBoxSizing relative inline-block m0 pr1",
     style: (0, _objectSpread2.default)({
@@ -117,10 +121,8 @@ var CellValueAndFieldLabel = (0, _create_data_container.default)((_ref) => {
     className: "recordCardCellValue block textOverflowEllipsis",
     style: styles.cellValue
   }));
-}, props => [{
-  watch: props.field,
-  key: ['name', 'type', 'options']
-}]);
+};
+
 CellValueAndFieldLabel.propTypes = {
   record: _propTypes.default.instanceOf(_record.default),
   // NOTE: this currently will not work for linked record fields, since CellRenderer
@@ -624,9 +626,9 @@ function (_React$Component) {
   style: {}
 });
 
-var _default = (0, _create_data_container.default)(RecordCard, props => {
+var _default = (0, _with_hooks.default)(RecordCard, props => {
   var recordModel = props.record && props.record instanceof _record.default ? props.record : null;
-  var parentTable;
+  var parentTable = null;
 
   if (recordModel) {
     parentTable = recordModel.parentTable;
@@ -636,21 +638,11 @@ var _default = (0, _create_data_container.default)(RecordCard, props => {
     parentTable = props.view.parentTable;
   }
 
-  return [{
-    watch: recordModel,
-    key: 'primaryCellValue'
-  }, props.view && {
-    watch: recordModel,
-    key: "colorInView:".concat(props.view.id)
-  }, // It's safe to watch the record's parentTable since a record's
-  // parent table never changes.
-  {
-    watch: parentTable,
-    key: 'fields'
-  }, {
-    watch: props.view,
-    key: 'visibleFields'
-  }];
+  (0, _use_watchable.default)(recordModel, ['primaryCellValue', props.view ? "colorInView:".concat(props.view.id) : null]); // It's safe to watch the record's parentTable since a record's parent table never changes.
+
+  (0, _use_watchable.default)(parentTable, ['fields']);
+  (0, _use_watchable.default)(props.view, ['visibleFields']);
+  return {};
 });
 
 exports.default = _default;

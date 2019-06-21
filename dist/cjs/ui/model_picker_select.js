@@ -37,9 +37,20 @@ var _view = _interopRequireDefault(require("../models/view"));
 
 var _field = _interopRequireDefault(require("../models/field"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
-
 var _select = _interopRequireDefault(require("./select"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
+
+var ModelWatcher = (_ref) => {
+  var model = _ref.model,
+      modelKeysToWatch = _ref.modelKeysToWatch,
+      onChange = _ref.onChange;
+  // useWatchable has stricter typing than createDataContainer which it replaced, so we can't
+  // know that model and modelKeysToWatch are exactly compatible here:
+  // $FlowFixMe
+  (0, _use_watchable.default)(model, modelKeysToWatch, onChange);
+  return null;
+};
 
 var ModelPickerSelect =
 /*#__PURE__*/
@@ -89,6 +100,7 @@ function (_React$Component) {
     value: function render() {
       var _this$props = this.props,
           models = _this$props.models,
+          modelKeysToWatch = _this$props.modelKeysToWatch,
           selectedModelId = _this$props.selectedModelId,
           shouldAllowPickingNone = _this$props.shouldAllowPickingNone,
           shouldAllowPickingModelFn = _this$props.shouldAllowPickingModelFn,
@@ -98,7 +110,7 @@ function (_React$Component) {
           disabled = _this$props.disabled,
           tabIndex = _this$props.tabIndex,
           placeholder = _this$props.placeholder;
-      return React.createElement(_select.default, {
+      return React.createElement(React.Fragment, null, React.createElement(_select.default, {
         ref: el => this._select = el,
         value: selectedModelId,
         onChange: this._onChange,
@@ -120,19 +132,18 @@ function (_React$Component) {
             disabled: shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model)
           };
         })]
-      });
+      }), models.map(model => // TODO: remove this once we have immutable schema models OR allow Select to
+      // take options elements
+      React.createElement(ModelWatcher, {
+        key: model.id,
+        model: model,
+        modelKeysToWatch: modelKeysToWatch,
+        onChange: () => this.forceUpdate()
+      })));
     }
   }]);
   return ModelPickerSelect;
 }(React.Component);
 
-var _default = (0, _create_data_container.default)(ModelPickerSelect, props => {
-  return props.models.map(model => {
-    return {
-      watch: model,
-      key: props.modelKeysToWatch
-    };
-  });
-}, ['focus', 'blur', 'click']);
-
+var _default = ModelPickerSelect;
 exports.default = _default;

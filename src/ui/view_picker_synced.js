@@ -8,10 +8,11 @@ import Table from '../models/table';
 import {ViewTypes, type ViewType} from '../types/view';
 import type View from '../models/view';
 import {type GlobalConfigKey} from '../global_config';
-import createDataContainer from './create_data_container';
 import ViewPicker from './view_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} ViewPickerSyncedProps
@@ -111,7 +112,7 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
         'aria-describedby': PropTypes.string,
     };
     props: ViewPickerSyncedProps;
-    _viewPicker: ViewPicker | null;
+    _viewPicker: React.ElementRef<typeof ViewPicker> | null;
     constructor(props: ViewPickerSyncedProps) {
         super(props);
         // TODO (stephen): Use React.forwardRef
@@ -179,10 +180,8 @@ class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
     }
 }
 
-export default createDataContainer(
-    ViewPickerSynced,
-    (props: ViewPickerSyncedProps) => {
-        return [{watch: props.table, key: 'views'}, {watch: getSdk().base, key: 'tables'}];
-    },
-    ['focus', 'blur', 'click'],
-);
+export default withHooks<ViewPickerSyncedProps, {}, ViewPickerSynced>(ViewPickerSynced, props => {
+    useWatchable(getSdk().base, ['tables']);
+    useWatchable(props.table, ['views']);
+    return {};
+});

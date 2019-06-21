@@ -11,7 +11,8 @@ import {values} from '../private_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import FieldPicker from './field_picker';
 import Synced from './synced';
-import createDataContainer from './create_data_container';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} FieldPickerSyncedProps
@@ -115,7 +116,7 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
         'aria-describedby': PropTypes.string,
     };
     props: FieldPickerSyncedProps;
-    _fieldPicker: FieldPicker | null;
+    _fieldPicker: React.ElementRef<typeof FieldPicker> | null;
     constructor(props: FieldPickerSyncedProps) {
         super(props);
         // TODO (stephen): Use React.forwardRef
@@ -185,10 +186,11 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
     }
 }
 
-export default createDataContainer(
+export default withHooks<FieldPickerSyncedProps, {}, FieldPickerSynced>(
     FieldPickerSynced,
-    (props: FieldPickerSyncedProps) => {
-        return [{watch: props.table, key: 'fields'}, {watch: getSdk().base, key: 'tables'}];
+    props => {
+        useWatchable(getSdk().base, ['tables']);
+        useWatchable(props.table, ['fields']);
+        return {};
     },
-    ['focus', 'blur', 'click'],
 );

@@ -4,9 +4,9 @@ import * as React from 'react';
 import Table from '../models/table';
 import View from '../models/view';
 import Field from '../models/field';
-import createDataContainer from './create_data_container';
 import Select from './select';
 import {type SelectOptionValue} from './select_and_select_buttons_helpers';
+import useWatchable from './use_watchable';
 
 type AnyModel = Table | View | Field;
 
@@ -26,6 +26,22 @@ type ModelPickerSelectProps<Model: AnyModel> = {
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
     placeholder: string,
+};
+
+const ModelWatcher = ({
+    model,
+    modelKeysToWatch,
+    onChange,
+}: {|
+    model: AnyModel,
+    modelKeysToWatch: Array<string>,
+    onChange: () => mixed,
+|}) => {
+    // useWatchable has stricter typing than createDataContainer which it replaced, so we can't
+    // know that model and modelKeysToWatch are exactly compatible here:
+    // $FlowFixMe
+    useWatchable(model, modelKeysToWatch, onChange);
+    return null;
 };
 
 class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
@@ -56,6 +72,7 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
     render() {
         const {
             models,
+            modelKeysToWatch,
             selectedModelId,
             shouldAllowPickingNone,
             shouldAllowPickingModelFn,
@@ -66,40 +83,46 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
             tabIndex,
             placeholder,
         } = this.props;
+
         return (
-            <Select
-                ref={el => (this._select = el)}
-                value={selectedModelId}
-                onChange={this._onChange}
-                id={id}
-                className={className}
-                style={style}
-                disabled={disabled}
-                tabIndex={tabIndex}
-                aria-labelledby={this.props['aria-labelledby']}
-                aria-describedby={this.props['aria-describedby']}
-                options={[
-                    {value: null, label: placeholder, disabled: !shouldAllowPickingNone},
-                    ...models.map(model => {
-                        return {
-                            value: model.id,
-                            label: model.name,
-                            disabled:
-                                shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model),
-                        };
-                    }),
-                ]}
-            />
+            <React.Fragment>
+                <Select
+                    ref={el => (this._select = el)}
+                    value={selectedModelId}
+                    onChange={this._onChange}
+                    id={id}
+                    className={className}
+                    style={style}
+                    disabled={disabled}
+                    tabIndex={tabIndex}
+                    aria-labelledby={this.props['aria-labelledby']}
+                    aria-describedby={this.props['aria-describedby']}
+                    options={[
+                        {value: null, label: placeholder, disabled: !shouldAllowPickingNone},
+                        ...models.map(model => {
+                            return {
+                                value: model.id,
+                                label: model.name,
+                                disabled:
+                                    shouldAllowPickingModelFn && !shouldAllowPickingModelFn(model),
+                            };
+                        }),
+                    ]}
+                />
+
+                {models.map(model => (
+                    // TODO: remove this once we have immutable schema models OR allow Select to
+                    // take options elements
+                    <ModelWatcher
+                        key={model.id}
+                        model={model}
+                        modelKeysToWatch={modelKeysToWatch}
+                        onChange={() => this.forceUpdate()}
+                    />
+                ))}
+            </React.Fragment>
         );
     }
 }
 
-export default createDataContainer(
-    ModelPickerSelect,
-    props => {
-        return props.models.map(model => {
-            return {watch: model, key: props.modelKeysToWatch};
-        });
-    },
-    ['focus', 'blur', 'click'],
-);
+export default ModelPickerSelect;

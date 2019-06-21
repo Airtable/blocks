@@ -33,7 +33,9 @@ var _field = _interopRequireDefault(require("../models/field"));
 
 var _cell_value_utils = _interopRequireDefault(require("../models/cell_value_utils"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
 var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_server_shared/column_types/column_type_provider');
 
@@ -152,14 +154,10 @@ function (_React$Component) {
   shouldWrap: true
 });
 
-var _default = (0, _create_data_container.default)(CellRenderer, props => {
-  return [{
-    watch: props.record,
-    key: "cellValueInField:".concat(props.field.id)
-  }, {
-    watch: props.field,
-    key: ['type', 'options']
-  }];
+var _default = (0, _with_hooks.default)(CellRenderer, props => {
+  (0, _use_watchable.default)(props.record, ["cellValueInField:".concat(props.field.id)]);
+  (0, _use_watchable.default)(props.field, ['type', 'options']);
+  return {};
 });
 
 exports.default = _default;

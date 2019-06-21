@@ -3,8 +3,9 @@ import invariant from 'invariant';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Modal from './modal';
-import createDataContainer from './create_data_container';
 import Loader from './loader';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 type BlockWrapperProps = {|
     children: React.Node,
@@ -117,6 +118,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
     }
 }
 
-export default createDataContainer(BlockWrapper, () => [
-    {watch: getSdk().viewport, key: ['size', 'minSize']},
-]);
+export default withHooks<BlockWrapperProps, {}, BlockWrapper>(BlockWrapper, () => {
+    useWatchable(getSdk().viewport, ['size', 'minSize']);
+    return {};
+});

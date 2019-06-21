@@ -11,9 +11,10 @@ import Field from '../models/field';
 import Record from '../models/record';
 import View from '../models/view';
 import cellValueUtils from '../models/cell_value_utils';
-import createDataContainer from './create_data_container';
 import expandRecord, {type ExpandRecordOpts} from './expand_record';
 import CellRenderer from './cell_renderer';
+import useWatchable from './use_watchable';
+import withHooks from './with_hooks';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
@@ -51,35 +52,34 @@ type CellValueAndFieldLabelProps = {|
     width: number,
 |};
 
-const CellValueAndFieldLabel = createDataContainer(
-    ({record, cellValue, field, width}: CellValueAndFieldLabelProps) => {
-        return (
+const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndFieldLabelProps) => {
+    useWatchable(field, ['name', 'type', 'options']);
+
+    return (
+        <div
+            className="borderBoxSizing relative inline-block m0 pr1"
+            style={{
+                width,
+                ...styles.cellValueAndFieldLabel,
+            }}
+        >
             <div
-                className="borderBoxSizing relative inline-block m0 pr1"
-                style={{
-                    width,
-                    ...styles.cellValueAndFieldLabel,
-                }}
+                className="block textOverflowEllipsis uppercase small appFontWeightRegular"
+                style={styles.fieldLabel}
             >
-                <div
-                    className="block textOverflowEllipsis uppercase small appFontWeightRegular"
-                    style={styles.fieldLabel}
-                >
-                    {field.name}
-                </div>
-                <CellRenderer
-                    record={record}
-                    cellValue={cellValue}
-                    field={field}
-                    shouldWrap={false}
-                    className="recordCardCellValue block textOverflowEllipsis"
-                    style={styles.cellValue}
-                />
+                {field.name}
             </div>
-        );
-    },
-    props => [{watch: props.field, key: ['name', 'type', 'options']}],
-);
+            <CellRenderer
+                record={record}
+                cellValue={cellValue}
+                field={field}
+                shouldWrap={false}
+                className="recordCardCellValue block textOverflowEllipsis"
+                style={styles.cellValue}
+            />
+        </div>
+    );
+};
 
 CellValueAndFieldLabel.propTypes = {
     record: PropTypes.instanceOf(Record),
@@ -531,9 +531,9 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
 }
 
-export default createDataContainer(RecordCard, (props: RecordCardProps) => {
+export default withHooks<RecordCardProps, {}, RecordCard>(RecordCard, props => {
     const recordModel = props.record && props.record instanceof Record ? props.record : null;
-    let parentTable;
+    let parentTable = null;
     if (recordModel) {
         parentTable = recordModel.parentTable;
     } else if (props.fields && props.fields.length > 0) {
@@ -541,13 +541,14 @@ export default createDataContainer(RecordCard, (props: RecordCardProps) => {
     } else if (props.view) {
         parentTable = props.view.parentTable;
     }
-    return [
-        {watch: recordModel, key: 'primaryCellValue'},
-        props.view && {watch: recordModel, key: `colorInView:${props.view.id}`},
 
-        // It's safe to watch the record's parentTable since a record's
-        // parent table never changes.
-        {watch: parentTable, key: 'fields'},
-        {watch: props.view, key: 'visibleFields'},
-    ];
+    useWatchable(recordModel, [
+        'primaryCellValue',
+        props.view ? `colorInView:${props.view.id}` : null,
+    ]);
+    // It's safe to watch the record's parentTable since a record's parent table never changes.
+    useWatchable(parentTable, ['fields']);
+    useWatchable(props.view, ['visibleFields']);
+
+    return {};
 });

@@ -29,9 +29,9 @@ var React = _interopRequireWildcard(require("react"));
 
 var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
-
 var _global_config_synced_component_helpers = _interopRequireDefault(require("./global_config_synced_component_helpers"));
+
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
 
 /** @private */
 var Synced =
@@ -76,8 +76,10 @@ function (_React$Component) {
   render: _propTypes.default.func.isRequired
 });
 
-var _default = (0, _create_data_container.default)(Synced, props => {
-  return _global_config_synced_component_helpers.default.getDefaultWatchesForSyncedComponent(props.globalConfigKey);
+var _default = (0, _with_hooks.default)(Synced, props => {
+  _global_config_synced_component_helpers.default.useDefaultWatchesForSyncedComponent(props.globalConfigKey);
+
+  return {};
 });
 
 exports.default = _default;

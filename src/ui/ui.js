@@ -1,7 +1,6 @@
 // @flow
 import colors from '../colors';
 import colorUtils from '../color_utils';
-import createDataContainer from './create_data_container';
 import Synced from './synced';
 import TablePicker from './table_picker';
 import TablePickerSynced from './table_picker_synced';
@@ -54,7 +53,6 @@ import useViewport from './use_viewport';
 const UI = {
     Popover,
     AutocompletePopover,
-    createDataContainer,
     loadCSSFromString,
     loadScriptFromURLAsync,
     loadCSSFromURLAsync,

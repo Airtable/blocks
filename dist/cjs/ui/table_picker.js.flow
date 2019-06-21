@@ -4,8 +4,9 @@ import invariant from 'invariant';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Table from '../models/table';
-import createDataContainer from './create_data_container';
 import ModelPickerSelect from './model_picker_select';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} TablePickerProps
@@ -149,10 +150,7 @@ class TablePicker extends React.Component<TablePickerProps> {
     }
 }
 
-export default createDataContainer(
-    TablePicker,
-    (props: TablePickerProps) => {
-        return [{watch: getSdk().base, key: 'tables'}];
-    },
-    ['focus', 'blur', 'click'],
-);
+export default withHooks<TablePickerProps, {}, TablePicker>(TablePicker, () => {
+    useWatchable(getSdk().base, ['tables']);
+    return {};
+});

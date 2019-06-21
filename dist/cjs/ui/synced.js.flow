@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import {type GlobalConfigKey, type GlobalConfigValue} from '../global_config';
 import getSdk from '../get_sdk';
-import createDataContainer from './create_data_container';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import withHooks from './with_hooks';
 
 type SyncedProps = {
     globalConfigKey: GlobalConfigKey,
@@ -43,8 +43,7 @@ class Synced extends React.Component<SyncedProps> {
     }
 }
 
-export default createDataContainer(Synced, (props: SyncedProps) => {
-    return globalConfigSyncedComponentHelpers.getDefaultWatchesForSyncedComponent(
-        props.globalConfigKey,
-    );
+export default withHooks<SyncedProps, {}, Synced>(Synced, props => {
+    globalConfigSyncedComponentHelpers.useDefaultWatchesForSyncedComponent(props.globalConfigKey);
+    return {};
 });

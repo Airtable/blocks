@@ -8,7 +8,8 @@ import View from '../models/view';
 import Table from '../models/table';
 import {ViewTypes, type ViewType} from '../types/view';
 import ModelPickerSelect from './model_picker_select';
-import createDataContainer from './create_data_container';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} ViewPickerProps
@@ -193,10 +194,8 @@ class ViewPicker extends React.Component<ViewPickerProps> {
     }
 }
 
-export default createDataContainer(
-    ViewPicker,
-    (props: ViewPickerProps) => {
-        return [{watch: props.table, key: 'views'}, {watch: getSdk().base, key: 'tables'}];
-    },
-    ['focus', 'blur', 'click'],
-);
+export default withHooks<ViewPickerProps, {}, ViewPicker>(ViewPicker, props => {
+    useWatchable(getSdk().base, ['tables']);
+    useWatchable(props.table, ['views']);
+    return {};
+});

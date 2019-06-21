@@ -31,9 +31,11 @@ var _get_sdk = _interopRequireDefault(require("../get_sdk"));
 
 var _modal = _interopRequireDefault(require("./modal"));
 
-var _create_data_container = _interopRequireDefault(require("./create_data_container"));
-
 var _loader = _interopRequireDefault(require("./loader"));
+
+var _with_hooks = _interopRequireDefault(require("./with_hooks"));
+
+var _use_watchable = _interopRequireDefault(require("./use_watchable"));
 
 var BlockWrapper =
 /*#__PURE__*/
@@ -141,9 +143,9 @@ function (_React$Component) {
   return BlockWrapper;
 }(React.Component);
 
-var _default = (0, _create_data_container.default)(BlockWrapper, () => [{
-  watch: (0, _get_sdk.default)().viewport,
-  key: ['size', 'minSize']
-}]);
+var _default = (0, _with_hooks.default)(BlockWrapper, () => {
+  (0, _use_watchable.default)((0, _get_sdk.default)().viewport, ['size', 'minSize']);
+  return {};
+});
 
 exports.default = _default;

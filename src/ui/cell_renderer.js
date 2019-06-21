@@ -5,7 +5,8 @@ import * as React from 'react';
 import Record from '../models/record';
 import Field from '../models/field';
 import cellValueUtils from '../models/cell_value_utils';
-import createDataContainer from './create_data_container';
+import withHooks from './with_hooks';
+import useWatchable from './use_watchable';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -126,9 +127,8 @@ class CellRenderer extends React.Component<CellRendererProps> {
     }
 }
 
-export default createDataContainer(CellRenderer, (props: CellRendererProps) => {
-    return [
-        {watch: props.record, key: `cellValueInField:${props.field.id}`},
-        {watch: props.field, key: ['type', 'options']},
-    ];
+export default withHooks<CellRendererProps, {}, CellRenderer>(CellRenderer, props => {
+    useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
+    useWatchable(props.field, ['type', 'options']);
+    return {};
 });
