@@ -11,6 +11,7 @@
     "scripts": {
         "prepare": "npm run build",
         "pretest": "npm run lint && npm run flow",
+        "release": "np",
         "flow": "flow",
         "lint": "eslint *.js src test",
         "lint:quiet": "npm run lint -- --quiet",
@@ -61,6 +62,7 @@
         "husky": "^2.3.0",
         "jest": "^24.8.0",
         "lint-staged": "^8.1.7",
+        "np": "^5.0.3",
         "prettier": "^1.17.1",
         "pretty-quick": "^1.10.0",
         "react": "16.9.0-alpha.0",
