@@ -30,6 +30,6 @@ import useWatchable from './use_watchable';
  */
 export default function useBase(): Base {
     const base = getSdk().base;
-    useWatchable(base, ['__schema']);
+    useWatchable(base, ['schema']);
     return base;
 }

@@ -40,6 +40,6 @@ var _use_watchable = _interopRequireDefault(require("./use_watchable"));
  */
 function useBase() {
   var base = (0, _get_sdk.default)().base;
-  (0, _use_watchable.default)(base, ['__schema']);
+  (0, _use_watchable.default)(base, ['schema']);
   return base;
 }

@@ -82,7 +82,7 @@ var WatchableBaseKeys = Object.freeze({
   permissionLevel: 'permissionLevel',
   tables: 'tables',
   collaborators: 'collaborators',
-  __schema: '__schema'
+  schema: 'schema'
 });
 
 /**
@@ -436,7 +436,7 @@ function (_AbstractModel) {
       }
 
       if (didSchemaChange) {
-        this._onChange(WatchableBaseKeys.__schema);
+        this._onChange(WatchableBaseKeys.schema);
       }
     }
     /**

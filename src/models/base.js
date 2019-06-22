@@ -43,7 +43,7 @@ const WatchableBaseKeys = Object.freeze({
     permissionLevel: ('permissionLevel': 'permissionLevel'),
     tables: ('tables': 'tables'),
     collaborators: ('collaborators': 'collaborators'),
-    __schema: ('__schema': '__schema'),
+    schema: ('schema': 'schema'),
 });
 
 type WatchableBaseKey = $Values<typeof WatchableBaseKeys>;
@@ -405,7 +405,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             didSchemaChange = true;
         }
         if (didSchemaChange) {
-            this._onChange(WatchableBaseKeys.__schema);
+            this._onChange(WatchableBaseKeys.schema);
         }
     }
     /**
