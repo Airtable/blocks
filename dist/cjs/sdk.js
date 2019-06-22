@@ -100,14 +100,9 @@ function () {
   function BlockSdk(airtableInterface) {
     (0, _classCallCheck2.default)(this, BlockSdk);
     (0, _defineProperty2.default)(this, "_runWithUpdateBatching", defaultUpdateBatcher);
-    this.__airtableInterface = airtableInterface; // TODO(alex): remove check once hyperbase is deployed
-
-    if (airtableInterface.assertAllowedSdkPackageVersion) {
-      airtableInterface.assertAllowedSdkPackageVersion("@airtable/blocks", BlockSdk.VERSION);
-    } // TODO(alex): remove initial data fallback once hyperbase is deployed
-
-
-    var sdkInitData = (0, _private_utils.cloneDeep)(airtableInterface.sdkInitData || airtableInterface.initialData);
+    this.__airtableInterface = airtableInterface;
+    airtableInterface.assertAllowedSdkPackageVersion("@airtable/blocks", BlockSdk.VERSION);
+    var sdkInitData = (0, _private_utils.cloneDeep)(airtableInterface.sdkInitData);
     this.globalConfig = new _global_config.default(sdkInitData.initialKvValuesByKey, airtableInterface);
     this.base = new _base.default(sdkInitData.baseData, airtableInterface);
     this.models = _models.default;

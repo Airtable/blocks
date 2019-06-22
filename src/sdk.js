@@ -169,15 +169,9 @@ class BlockSdk {
     /** @hideconstructor */
     constructor(airtableInterface: AirtableInterface) {
         this.__airtableInterface = airtableInterface;
-        // TODO(alex): remove check once hyperbase is deployed
-        if (airtableInterface.assertAllowedSdkPackageVersion) {
-            airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);
-        }
+        airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);
 
-        // TODO(alex): remove initial data fallback once hyperbase is deployed
-        const sdkInitData = cloneDeep(
-            airtableInterface.sdkInitData || airtableInterface.initialData,
-        );
+        const sdkInitData = cloneDeep(airtableInterface.sdkInitData);
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
         this.base = new Base(sdkInitData.baseData, airtableInterface);
         this.models = models;
