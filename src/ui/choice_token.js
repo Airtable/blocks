@@ -9,6 +9,14 @@ const _ChoiceToken = window.__requirePrivateModuleFromAirtable(
 ); // TODO(kasra): don't depend on liveapp components.
 const colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 
+/**
+ * @typedef {object} ChoiceTokenProps
+ * @property {object} choice An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data.
+ * @property {string} choice.id The ID of the select option.
+ * @property {string} choice.name The name of the select option.
+ * @property {string} [choice.color] The color of the select option.
+ * @property {string} [className] Additional class names to apply to the collaborator token.
+ */
 type ChoiceTokenProps = {
     choice: {
         id: string,
@@ -21,10 +29,9 @@ type ChoiceTokenProps = {
 /**
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
- * @param {object} props The props for the component.
- * @param {object} props.choice An object representing a select choice. You should not create these objects from scratch, but should instead grab them from base data.
- * @param {string} [props.className=''] Additional class names for the component, separated by spaces.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {ChoiceTokenProps} props
+ *
  * @example
  * import {UI} from '@airtable/blocks';
  *
@@ -44,7 +51,8 @@ type ChoiceTokenProps = {
  *     );
  * }
  */
-const ChoiceToken = ({choice, className}: ChoiceTokenProps): React.Node => {
+const ChoiceToken = (props: ChoiceTokenProps) => {
+    const {choice, className} = props;
     // Convert the choice color back to a private api choice color.
     const color = choice.color
         ? colors.getColorForColorClass(choice.color)

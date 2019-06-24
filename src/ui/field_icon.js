@@ -28,7 +28,6 @@ type FieldIconProps = {
     pathStyle?: Object,
 };
 
-/* eslint-disable jsdoc/require-returns */
 /**
  * A vector icon for a field's type.
  *
@@ -41,6 +40,7 @@ type FieldIconProps = {
  * const base = useBase();
  * const table = base.tables[0];
  * const {primaryField} = table;
+ *
  * const FieldToken = (
  *     <div style={{
  *         display: 'inline-flex',
@@ -58,7 +58,6 @@ type FieldIconProps = {
  *     </div>
  * );
  */
-/* eslint-enable jsdoc/require-returns */
 const FieldIcon = (props: FieldIconProps) => {
     const {field, size, fillColor, className, style, pathClassName, pathStyle} = props;
 

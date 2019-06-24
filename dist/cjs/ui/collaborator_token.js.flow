@@ -14,6 +14,15 @@ const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/collaborator_token',
 );
 
+/**
+ * @typedef {object} CollaboratorTokenProps
+ * @property {object} collaborator An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data.
+ * @property {string} [collaborator.id] The user ID of the collaborator.
+ * @property {string} [collaborator.email] The email address of the collaborator.
+ * @property {string} [collaborator.name] The name of the collaborator.
+ * @property {string} [collaborator.profilePicUrl] The URL of the collaborator's profile picture.
+ * @property {string} [className] Additional class names to apply to the collaborator token.
+ */
 type CollaboratorTokenProps = {
     collaborator: {
         id?: string,
@@ -28,10 +37,9 @@ type CollaboratorTokenProps = {
 /**
  * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
  *
- * @param {object} props The props for the component.
- * @param {object} props.collaborator An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data.
- * @param {string} [props.className=''] Additional class names for the component, separated by spaces.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {CollaboratorTokenProps} props
+ *
  * @example
  * import {UI, base} from '@airtable/blocks';
  *
@@ -44,7 +52,7 @@ type CollaboratorTokenProps = {
  *     );
  * }
  */
-const CollaboratorToken = (props: CollaboratorTokenProps): React.Node => {
+const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className} = props;
 
     // NOTE: this is a bit strange. We pull the user obj out of app blanket, format it for api v2,

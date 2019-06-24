@@ -7,9 +7,20 @@ const iconConfig = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/assets/icon_config',
 );
 
+// TODO (stephen): remove link to styleguide
+/**
+ * @typedef {object} IconProps
+ * @property {string} name The name of the icon. For a comprehensive list, refer to the "Icon" section of the [styleguide](https://airtable.com/styleguide).
+ * @property {number} [size=16] The width/height of the icon.
+ * @property {string} [fillColor] The color of the icon.
+ * @property {string} [className] Additional class names to apply to the icon.
+ * @property {object} [style] Additional styles to apply to the icon.
+ * @property {string} [pathClassName] Additional class names to apply to the icon path.
+ * @property {object} [pathStyle] Additional styles to apply to the icon path.
+ */
 type IconProps = {
     name: string,
-    size?: number,
+    size: number,
     fillColor?: string,
     className?: string,
     style?: Object,
@@ -20,17 +31,12 @@ type IconProps = {
 /**
  * A vector icon from the Airtable icon set.
  *
- * @param {object} props The props for the component.
- * @param {string} props.name The name of the icon. For a comprehensive list, refer to the "Icon" section of the [styleguide](https://airtable.com/styleguide).
- * @param {number} [props.size=16] The width/height of the icon.
- * @param {string} [props.fillColor] The color of the icon.
- * @param {string} [props.className] Additional class names to apply to the icon.
- * @param {object} [props.style] Additional styles to apply to the icon.
- * @param {string} [props.pathClassName] Additional class names to apply to the icon path.
- * @param {object} [props.pathStyle] Additional styles to apply to the icon path.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {IconProps} props
  *
  * @example
+ * import {Button, Icon} from '@airtable/blocks/ui';
+ *
  * const LikeButton = (
  *     <Button
  *         theme={Button.themes.RED}
@@ -45,15 +51,9 @@ type IconProps = {
  *     </Button>
  * );
  */
-const Icon = ({
-    name,
-    size = 16,
-    fillColor,
-    className,
-    style,
-    pathClassName,
-    pathStyle,
-}: IconProps) => {
+const Icon = (props: IconProps) => {
+    const {name, size, fillColor, className, style, pathClassName, pathStyle} = props;
+
     const isMicro = size <= 12;
     const pathData = iconConfig[`${name}${isMicro ? 'Micro' : ''}`];
     if (!pathData) {
@@ -82,12 +82,16 @@ const Icon = ({
 
 Icon.propTypes = {
     name: PropTypes.string.isRequired,
-    size: PropTypes.number,
+    size: PropTypes.number.isRequired,
     fillColor: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
     pathClassName: PropTypes.string,
     pathStyle: PropTypes.object,
+};
+
+Icon.defaultProps = {
+    size: 16,
 };
 
 export default Icon;

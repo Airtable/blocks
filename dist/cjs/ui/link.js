@@ -29,6 +29,9 @@ var reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
  *
  * Developers should use `Link` instead of `a` when possible.
  *
+ * @augments React.StatelessFunctionalComponent
+ * @param {LinkProps} props
+ *
  * @example
  * import {UI} from '@airtable/blocks/ui';
  *

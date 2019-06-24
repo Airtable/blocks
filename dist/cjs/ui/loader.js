@@ -15,32 +15,35 @@ var React = _interopRequireWildcard(require("react"));
 
 // TODO(kasra): don't depend on liveapp components.
 var _Loader = window.__requirePrivateModuleFromAirtable('client_server_shared/react/ui/loader/loader');
+/**
+ * @typedef {object} LoaderProps
+ * @property {string} [fillColor='#888'] The color of the loading spinner.
+ * @property {number} [scale=0.3] A scalar for the loader. Increasing the scale increases the size of the loader.
+ */
+
 
 // Override the default props and then just proxy through to our loader.
 
 /**
  * A loading spinner component.
  *
- * @param {object} [props] The props for the component.
- * @param {string} [props.fillColor='#888'] Fill color for the loading spinner. Gray by default.
- * @param {number} [props.scale=0.3] A scalar for the loader. Increasing the scale increases the size of the loader.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {LoaderProps} props
+ *
  * @example
- * import {UI} from '@airtable/blocks';
+ * import {Loader} from '@airtable/blocks/ui';
  *
  * function MyDataComponent() {
  *     if (myDataHasLoaded) {
  *         return <div>Here's your data!</div>;
  *     } else {
- *         return <UI.Loader />
+ *         return <Loader />
  *     }
  * }
  */
-var Loader = (_ref) => {
-  var _ref$fillColor = _ref.fillColor,
-      fillColor = _ref$fillColor === void 0 ? '#888' : _ref$fillColor,
-      _ref$scale = _ref.scale,
-      scale = _ref$scale === void 0 ? 0.3 : _ref$scale;
+var Loader = props => {
+  var fillColor = props.fillColor,
+      scale = props.scale;
   return React.createElement(_Loader, {
     fillColor: fillColor,
     scale: scale
@@ -48,8 +51,12 @@ var Loader = (_ref) => {
 };
 
 Loader.propTypes = {
-  fillColor: _propTypes.default.string,
-  scale: _propTypes.default.number
+  fillColor: _propTypes.default.string.isRequired,
+  scale: _propTypes.default.number.isRequired
+};
+Loader.defaultProps = {
+  fillColor: '#888',
+  scale: 0.3
 };
 var _default = Loader;
 exports.default = _default;

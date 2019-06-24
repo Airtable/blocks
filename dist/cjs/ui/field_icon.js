@@ -30,8 +30,6 @@ var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_serve
  */
 
 
-/* eslint-disable jsdoc/require-returns */
-
 /**
  * A vector icon for a field's type.
  *
@@ -44,6 +42,7 @@ var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_serve
  * const base = useBase();
  * const table = base.tables[0];
  * const {primaryField} = table;
+ *
  * const FieldToken = (
  *     <div style={{
  *         display: 'inline-flex',
@@ -61,8 +60,6 @@ var columnTypeProvider = window.__requirePrivateModuleFromAirtable('client_serve
  *     </div>
  * );
  */
-
-/* eslint-enable jsdoc/require-returns */
 var FieldIcon = props => {
   var field = props.field,
       size = props.size,

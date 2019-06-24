@@ -7,37 +7,47 @@ const _Loader = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/ui/loader/loader',
 );
 
+/**
+ * @typedef {object} LoaderProps
+ * @property {string} [fillColor='#888'] The color of the loading spinner.
+ * @property {number} [scale=0.3] A scalar for the loader. Increasing the scale increases the size of the loader.
+ */
 type LoaderProps = {|
-    fillColor?: string,
-    scale?: number,
+    fillColor: string,
+    scale: number,
 |};
 
 // Override the default props and then just proxy through to our loader.
 /**
  * A loading spinner component.
  *
- * @param {object} [props] The props for the component.
- * @param {string} [props.fillColor='#888'] Fill color for the loading spinner. Gray by default.
- * @param {number} [props.scale=0.3] A scalar for the loader. Increasing the scale increases the size of the loader.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {LoaderProps} props
+ *
  * @example
- * import {UI} from '@airtable/blocks';
+ * import {Loader} from '@airtable/blocks/ui';
  *
  * function MyDataComponent() {
  *     if (myDataHasLoaded) {
  *         return <div>Here's your data!</div>;
  *     } else {
- *         return <UI.Loader />
+ *         return <Loader />
  *     }
  * }
  */
-const Loader = ({fillColor = '#888', scale = 0.3}: LoaderProps): React.Node => {
+const Loader = (props: LoaderProps) => {
+    const {fillColor, scale} = props;
     return <_Loader fillColor={fillColor} scale={scale} />;
 };
 
 Loader.propTypes = {
-    fillColor: PropTypes.string,
-    scale: PropTypes.number,
+    fillColor: PropTypes.string.isRequired,
+    scale: PropTypes.number.isRequired,
+};
+
+Loader.defaultProps = {
+    fillColor: '#888',
+    scale: 0.3,
 };
 
 export default Loader;

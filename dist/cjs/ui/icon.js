@@ -16,22 +16,29 @@ var React = window.__requirePrivateModuleFromAirtable('client_server_shared/reac
 var Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); // TODO(kasra): don't depend on liveapp components.
 
 
-var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config');
+var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/icon_config'); // TODO (stephen): remove link to styleguide
+
+/**
+ * @typedef {object} IconProps
+ * @property {string} name The name of the icon. For a comprehensive list, refer to the "Icon" section of the [styleguide](https://airtable.com/styleguide).
+ * @property {number} [size=16] The width/height of the icon.
+ * @property {string} [fillColor] The color of the icon.
+ * @property {string} [className] Additional class names to apply to the icon.
+ * @property {object} [style] Additional styles to apply to the icon.
+ * @property {string} [pathClassName] Additional class names to apply to the icon path.
+ * @property {object} [pathStyle] Additional styles to apply to the icon path.
+ */
+
 
 /**
  * A vector icon from the Airtable icon set.
  *
- * @param {object} props The props for the component.
- * @param {string} props.name The name of the icon. For a comprehensive list, refer to the "Icon" section of the [styleguide](https://airtable.com/styleguide).
- * @param {number} [props.size=16] The width/height of the icon.
- * @param {string} [props.fillColor] The color of the icon.
- * @param {string} [props.className] Additional class names to apply to the icon.
- * @param {object} [props.style] Additional styles to apply to the icon.
- * @param {string} [props.pathClassName] Additional class names to apply to the icon path.
- * @param {object} [props.pathStyle] Additional styles to apply to the icon path.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {IconProps} props
  *
  * @example
+ * import {Button, Icon} from '@airtable/blocks/ui';
+ *
  * const LikeButton = (
  *     <Button
  *         theme={Button.themes.RED}
@@ -46,15 +53,14 @@ var iconConfig = window.__requirePrivateModuleFromAirtable('client_server_shared
  *     </Button>
  * );
  */
-var Icon = (_ref) => {
-  var name = _ref.name,
-      _ref$size = _ref.size,
-      size = _ref$size === void 0 ? 16 : _ref$size,
-      fillColor = _ref.fillColor,
-      className = _ref.className,
-      style = _ref.style,
-      pathClassName = _ref.pathClassName,
-      pathStyle = _ref.pathStyle;
+var Icon = props => {
+  var name = props.name,
+      size = props.size,
+      fillColor = props.fillColor,
+      className = props.className,
+      style = props.style,
+      pathClassName = props.pathClassName,
+      pathStyle = props.pathStyle;
   var isMicro = size <= 12;
   var pathData = iconConfig["".concat(name).concat(isMicro ? 'Micro' : '')];
 
@@ -80,12 +86,15 @@ var Icon = (_ref) => {
 
 Icon.propTypes = {
   name: _propTypes.default.string.isRequired,
-  size: _propTypes.default.number,
+  size: _propTypes.default.number.isRequired,
   fillColor: _propTypes.default.string,
   className: _propTypes.default.string,
   style: _propTypes.default.object,
   pathClassName: _propTypes.default.string,
   pathStyle: _propTypes.default.object
+};
+Icon.defaultProps = {
+  size: 16
 };
 var _default = Icon;
 exports.default = _default;

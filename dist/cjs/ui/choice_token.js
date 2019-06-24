@@ -19,14 +19,22 @@ var _ChoiceToken = window.__requirePrivateModuleFromAirtable('client_server_shar
 
 
 var colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
+/**
+ * @typedef {object} ChoiceTokenProps
+ * @property {object} choice An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data.
+ * @property {string} choice.id The ID of the select option.
+ * @property {string} choice.name The name of the select option.
+ * @property {string} [choice.color] The color of the select option.
+ * @property {string} [className] Additional class names to apply to the collaborator token.
+ */
+
 
 /**
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
- * @param {object} props The props for the component.
- * @param {object} props.choice An object representing a select choice. You should not create these objects from scratch, but should instead grab them from base data.
- * @param {string} [props.className=''] Additional class names for the component, separated by spaces.
- * @returns A React node.
+ * @augments React.StatelessFunctionalComponent
+ * @param {ChoiceTokenProps} props
+ *
  * @example
  * import {UI} from '@airtable/blocks';
  *
@@ -46,10 +54,10 @@ var colors = window.__requirePrivateModuleFromAirtable('client_server_shared/col
  *     );
  * }
  */
-var ChoiceToken = (_ref) => {
-  var choice = _ref.choice,
-      className = _ref.className;
-  // Convert the choice color back to a private api choice color.
+var ChoiceToken = props => {
+  var choice = props.choice,
+      className = props.className; // Convert the choice color back to a private api choice color.
+
   var color = choice.color ? colors.getColorForColorClass(choice.color) : colors.DEFAULT_CHOICE_COLOR;
   return React.createElement(_ChoiceToken, {
     color: color,

@@ -87,8 +87,14 @@ toc:
             children:
                 - CellRenderer
                 - CellRendererProps
-          - ChoiceToken
-          - CollaboratorToken
+          - name: ChoiceToken
+            children:
+                - ChoiceToken
+                - ChoiceTokenProps
+          - name: CollaboratorToken
+            children:
+                - CollaboratorToken
+                - CollaboratorTokenProps
           - name: ColorPalette
             children:
                 - ColorPalette
@@ -111,9 +117,10 @@ toc:
                 - FieldPickerProps
                 - FieldPickerSynced
                 - FieldPickerSyncedProps
-          - Icon
-          - name: FieldIcon
+          - name: Icon
             children:
+                - Icon
+                - IconProps
                 - FieldIcon
                 - FieldIconProps
           - name: Input
@@ -122,8 +129,14 @@ toc:
                 - InputProps
                 - InputSynced
                 - InputSyncedProps
-          - Link
-          - Loader
+          - name: Link
+            children:
+                - Link
+                - LinkProps
+          - name: Loader
+            children:
+                - Loader
+                - LoaderProps
           - name: Popover
             children:
                 - Popover

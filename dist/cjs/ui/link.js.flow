@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 
 /**
- * @typedef
- * @memberof Link
+ * @typedef {object} LinkProps
+ * @property {string} href The target URL or URL fragment for the link.
+ * @property {string} [target] Specifies where to display the linked URL.
+ * @property {number | string} [tabIndex] Indicates if the link can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [className] Additional class names to apply to the link.
+ * @property {object} [style] Additional styles to apply to the link.
  */
 type LinkProps = {
     href: string,
@@ -29,6 +33,9 @@ const reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
  * - There is [reverse tabnabbing prevention](https://www.owasp.org/index.php/Reverse_Tabnabbing). If `target` is set, the `rel` attribute will be set to `noopener noreferrer`.
  *
  * Developers should use `Link` instead of `a` when possible.
+ *
+ * @augments React.StatelessFunctionalComponent
+ * @param {LinkProps} props
  *
  * @example
  * import {UI} from '@airtable/blocks/ui';
