@@ -1,9 +1,0 @@
-{
-    "name": "block_frontend_sdk",
-    "version": "0.0.1",
-    "private": true,
-    "dependencies": {},
-    "browser": {
-        "client_server_shared/get_base_url": "client_server_shared/get_base_url_from_global_data"
-    }
-}
