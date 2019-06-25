@@ -1,19 +1,19 @@
+import React from 'react';
 import {
     initializeBlock,
     useBase,
     useRecords,
-    useWatchable,
+    useGlobalConfig,
     expandRecord,
     TablePickerSynced,
     ViewPickerSynced,
 } from '@airtable/blocks/ui';
-import {globalConfig} from '@airtable/blocks';
-import React, {useState} from 'react';
 
 function TodoBlock() {
     const base = useBase();
 
-    useWatchable(globalConfig, ['selectedTableId', 'selectedViewId']);
+    // Read the user's choice for which table and view to use from globalConfig.
+    const globalConfig = useGlobalConfig();
     const tableId = globalConfig.get('selectedTableId');
     const viewId = globalConfig.get('selectedViewId');
 

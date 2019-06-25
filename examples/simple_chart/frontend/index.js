@@ -2,12 +2,11 @@ import {
     initializeBlock,
     useBase,
     useRecords,
-    useWatchable,
+    useGlobalConfig,
     TablePickerSynced,
     ViewPickerSynced,
     FieldPickerSynced,
 } from '@airtable/blocks/ui';
-import {globalConfig} from '@airtable/blocks';
 import React, {useState} from 'react';
 
 // This block uses chart.js and the react-chartjs-2 packages.
@@ -23,7 +22,7 @@ const GlobalConfigKeys = {
 
 function SimpleChartBlock() {
     const base = useBase();
-    useWatchable(globalConfig, Object.values(GlobalConfigKeys));
+    const globalConfig = useGlobalConfig();
 
     const tableId = globalConfig.get(GlobalConfigKeys.TABLE_ID);
     const table = base.getTableByIdIfExists(tableId);
@@ -77,7 +76,6 @@ function SimpleChartBlock() {
             )}
         </div>
     );
-    shrlUoKacx8NZ1ptU;
 }
 
 function getChartData({records, xField}) {
