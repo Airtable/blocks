@@ -84,7 +84,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "pretty-quick --staged && lint-staged && npm run prepare && git add docs/api.md dist"
+            "pre-commit": "pretty-quick --staged && lint-staged && npm run build:docs && git add docs/api.md"
         }
     },
     "lint-staged": {
