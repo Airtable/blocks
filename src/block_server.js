@@ -11,6 +11,7 @@ const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
 const AnsiToHtmlConverter = require('ansi-to-html');
+const stripAnsi = require('strip-ansi');
 const ErrorCodes = require('./types/error_codes');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
@@ -32,6 +33,7 @@ import type {
 } from 'express';
 import type {BlockJson} from './types/block_json_type';
 import type {RemoteJson} from './types/remote_json_type';
+import type {ErrorCode} from './types/error_codes';
 
 type RequestWithRequestId = $Request & {
     requestId: number,
@@ -42,6 +44,29 @@ type RequestWithRequestId = $Request & {
 //   type definitions for the "static" Promise.resolve and Promise.reject functions.
 type PromiseResolveFunction = <R>(Promise<R> | R) => void;
 type PromiseRejectFunction = (error: any) => void; // eslint-disable-line flowtype/no-weak-types
+
+type ErrorWithCode = Error & {
+    code?: ErrorCode,
+};
+
+const BundleStatuses = {
+    READY: ('ready': 'ready'),
+    BUNDLING: ('bundling': 'bundling'),
+    ERROR: ('error': 'error'),
+};
+
+type BundleStateReady = {|status: typeof BundleStatuses.READY|};
+type BundleStateBundling = {|
+    status: typeof BundleStatuses.BUNDLING,
+    promise: Promise<void>,
+|};
+type BundleStateError = {|
+    status: typeof BundleStatuses.ERROR,
+    error: ErrorWithCode,
+|};
+
+type BundleStateData = BundleStateReady | BundleStateBundling | BundleStateError;
+
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
@@ -68,7 +93,7 @@ class BlockServer {
     _shouldTranspileAll: boolean;
     _nextRequestId: number;
     _apiKey: string;
-    _bundlePromiseIfExists: Promise<void> | null;
+    _bundleStateDataIfExists: BundleStateData | null;
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
     _apiClient: APIClient;
@@ -92,7 +117,7 @@ class BlockServer {
         this._shouldTranspileAll = transpileAll;
         this._nextRequestId = 0;
         this._apiKey = apiKey;
-        this._bundlePromiseIfExists = null;
+        this._bundleStateDataIfExists = null;
         this._blockJson = blockJson;
         this._remoteJson = remoteJson;
 
@@ -126,12 +151,21 @@ class BlockServer {
         });
     }
     async _ensureBundleIsReadyAsync(): Promise<void> {
-        if (this._bundlePromiseIfExists === null) {
-            // Bundle already ready.
-            return;
-        }
+        invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
+        const bundleStateData = this._bundleStateDataIfExists;
+        switch (bundleStateData.status) {
+            case BundleStatuses.READY:
+            case BundleStatuses.ERROR:
+                return;
 
-        await this._bundlePromiseIfExists;
+            case BundleStatuses.BUNDLING:
+                await bundleStateData.promise;
+                break;
+
+            default:
+                throw new Error(`Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`);
+
+        }
 
         // During the async gap, another bundling process may have kicked off, so
         // we recurse here to check. If the bundle is ready, the recursive call
@@ -144,16 +178,34 @@ class BlockServer {
                 this._ensureBundleIsReadyAsync(),
                 new Promise((resolve, reject) => {
                     setTimeout(
-                        () => resolve('timeout _ensureBundleIsReadyAsync'),
+                        () => resolve(),
                         BUNDLE_TIMEOUT_MS,
                     );
                 }),
-            ]).then((value) => {
-                if (value === 'timeout _ensureBundleIsReadyAsync') {
-                    res.sendStatus(408);
-                    return;
+            ]).then(() => {
+                invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
+                const bundleStateData = this._bundleStateDataIfExists;
+                switch (bundleStateData.status) {
+                    case BundleStatuses.READY:
+                        next();
+                        break;
+
+                    case BundleStatuses.ERROR: {
+                        const err = bundleStateData.error;
+                        const errStack = stripAnsi(err.message);
+                        res.status(422).send({message: errStack});
+                        break;
+                    }
+
+                    case BundleStatuses.BUNDLING:
+                        // If we're still bundling, this is a timeout due to our Promise.race setup.
+                        res.sendStatus(408);
+                        break;
+
+                    default:
+                        throw new Error(`Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`);
+
                 }
-                next();
             });
         };
     }
@@ -225,8 +277,11 @@ class BlockServer {
                 const statusCode = result === 'timeout' ? 408 : 200;
                 res.sendStatus(statusCode);
             }).catch((err) => {
+                // TODO(richsinn): Deprecate and remove ansiToHtmlConverter. We'll eventually
+                //   be stripping this error handling logic from the poll request; bundle errors
+                //   will always be handled by the /bundle.js endpoint.
+                const ansiToHtmlConverter = new AnsiToHtmlConverter({fg: '#000', bg: '#FFF'});
                 if (err.code === ErrorCodes.BUNDLE_ERROR) {
-                    const ansiToHtmlConverter = new AnsiToHtmlConverter();
                     const errHtml = `<pre>
 ${ansiToHtmlConverter.toHtml(err.message)}
 </pre>
@@ -341,7 +396,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             },
         );
 
-        this._bundler.on('update', this.bundleAsync.bind(this));
+        this._bundler.on('update', this.bundleFiles.bind(this));
         this._bundler.on('bundle', () => console.log('Updating bundle...'));
     }
     setPublicBaseUrl(publicBaseUrl: string): void {
@@ -357,7 +412,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             await this.startNgrokAsync(port) :
             await this.startLocalAsync(port);
         this.setPublicBaseUrl(url);
-        await this.bundleAsync(null);
+        this.bundleFiles(null);
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
         try {
             await clipboardy.write(url);
@@ -415,7 +470,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         console.log('');
         return url;
     }
-    bundleAsync(files: Array<string> | null): Promise<void> {
+    bundleFiles(files: Array<string> | null): void {
         if (files && files.findIndex(file => file.includes('package.json')) !== -1) {
             // When yarn adds or removes packages, it deletes the symlinks
             // and SDK stub we add to node_modules. As a temporary fix, we
@@ -426,17 +481,18 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             process.exit(0);
         }
 
-        let resolve;
-        let reject;
-        const bundlePromise = new Promise((resolveInner, rejectInner) => {
-            resolve = resolveInner;
-            reject = rejectInner;
-        });
-        // NOTE: In the case where `bundleAsync` is triggered multiple times,
-        // this assignment to the `this._bundlePromiseIfExists` instance variable
-        // will be the latest Promise. This mechanism allows us to serve the
-        // most recently updated bundle.js file.
-        this._bundlePromiseIfExists = bundlePromise;
+        let bundleResolve;
+        const localBundleStateData: BundleStateBundling = {
+            status: BundleStatuses.BUNDLING,
+            promise: new Promise((resolveInner, reject) => {
+                bundleResolve = resolveInner;
+            }),
+        };
+
+        // Always reassign the instance variable with the localBundleStateData.
+        // If this method is triggered multiple times in quick succession,
+        // the instance var will always be pointing to the the latest BundleStateData.
+        this._bundleStateDataIfExists = localBundleStateData;
 
         const blockDirPath = getBlockDirPath();
         const fsStream = fs.createWriteStream(path.join(
@@ -446,26 +502,37 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         ));
         fsStream.on('finish', () => {
             console.log('Bundle updated');
-            // NOTE: A null value for the `this._bundlePromiseIfExists`
-            // instance variable means the bundle is ready to serve.
-            // If `bundleAsync` is quickly triggered multiple times:
+            // TODO(richsinn): Refactor this to have a better separation
+            //   between bundling logic and the state (maybe 2 separate methods).
+            // NOTE: If `bundleFiles` is quickly triggered multiple times:
             //   1) It's possible the earlier Promises have not resolved yet.
-            //   2) We only want to serve the bundle for the latest Promise.
-            // Because the instance variable always stores the latest Promise, we
-            // check the local Promise against the instance variable to determine
-            // if this is the latest Promise and the bundle is ready.
-            if (this._bundlePromiseIfExists === bundlePromise) {
-                this._bundlePromiseIfExists = null;
+            //   2) We only want to serve the bundle from the latest trigger.
+            // Because the instance variable always stores the latest BundleStateData,
+            // we check the localBundleStateData against the instance variable
+            // to determine if this is the latest trigger and the bundle is ready.
+            if (this._bundleStateDataIfExists === localBundleStateData) {
+                this._bundleStateDataIfExists = {status: BundleStatuses.READY};
             }
+
             // Resolve any long poll promises that were listening for bundle changes.
             for (const {resolve: longPollResolve} of this._pendingLongPollResolveRejectByRequestId.values()) {
                 longPollResolve();
             }
-            // Resolve our primary bundle promise.
-            resolve();
         }).on('error', (err) => {
-            // Reject our primary bundle promise.
-            reject(err);
+            if (this._bundleStateDataIfExists === localBundleStateData) {
+                this._bundleStateDataIfExists = {
+                    status: BundleStatuses.ERROR,
+                    error: err,
+                };
+            }
+
+            // Reject any long poll promises that were listening for bundle changes.
+            for (const {reject: longPollReject} of this._pendingLongPollResolveRejectByRequestId.values()) {
+                longPollReject(err);
+            }
+        }).on('close', () => {
+            // Resolve our local bundle promise.
+            bundleResolve();
         });
 
         const bundleStream = this._bundler.bundle();
@@ -480,20 +547,10 @@ ${ansiToHtmlConverter.toHtml(err.message)}
                 if (err.codeFrame) {
                     console.error(err.codeFrame);
                 }
-                if (this._bundlePromiseIfExists === bundlePromise) {
-                    this._bundlePromiseIfExists = null;
-                }
                 bundleStream.unpipe(fsStream);
                 fsStream.destroy(err);
             })
             .pipe(fsStream);
-
-        return bundlePromise.catch((err) => {
-            // Reject any long poll promises that were listening for bundle changes.
-            for (const {reject: longPollReject} of this._pendingLongPollResolveRejectByRequestId.values()) {
-                longPollReject(err);
-            }
-        });
     }
 }
 
