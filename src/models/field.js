@@ -279,6 +279,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
     }
     /**
+     * @private (since we're not documenting write operations)
      * Determines whether the current user has permission to update the cell values
      * in this field. Should be called before calling {@link Record#setCellValue} or
      * {@link Table#setCellValues}.

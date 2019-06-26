@@ -422,6 +422,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can update a set of cell values. Should be
      * called before calling {@link setCellValues}.
      *
@@ -448,6 +449,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Sets cell values.
      *
      * Throws if the current user cannot update all of the given cell values. Call
@@ -541,6 +543,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         };
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can create a record. Should be
      * called before calling {@link createRecord}.
      *
@@ -568,6 +571,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
     }
     /**
+     * @private (since we're not documenting write operations)
      * Creates a record in the table.
      *
      * Throws if the current user cannot create the given record. Call {@link canCreateRecord}
@@ -608,6 +612,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         };
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can create records. Should be
      * called before calling {@link createRecords}.
      *
@@ -642,6 +647,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Creates records in the table.
      *
      * Throws if the current user cannot create the given records. Call {@link canCreateRecords}
@@ -775,6 +781,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         };
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can delete a record. Should be
      * called before calling {@link deleteRecord}.
      *
@@ -789,6 +796,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return this.canDeleteRecords([record]);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Deletes a record.
      *
      * Throws if the current user cannot delete the given record. Call {@link canDeleteRecord}
@@ -805,6 +813,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return this.deleteRecords([record]);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can delete records. Should be
      * called before calling {@link deleteRecords}.
      *
@@ -823,6 +832,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Deletes records.
      *
      * Throws if the current user cannot delete the given records. Call {@link canDeleteRecords}

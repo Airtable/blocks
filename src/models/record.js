@@ -47,7 +47,8 @@ type WatchableRecordKey = $Values<typeof WatchableRecordKeys> | string;
 /**
  * Model class representing a record in a table.
  *
- * Do not instantiate. To create a new record, use `table.createRecord`.
+ * Do not instantiate. You can get instances of this class by calling `table.selectRecords`
+ * or `view.selectRecords` and using the resulting {@QueryResult}.
  */
 class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     // Once all blocks set this flag to true, remove this flag.
@@ -443,6 +444,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can update a specific cell value.
      * Should be called before calling {@link setCellValue}.
      *
@@ -465,6 +467,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         });
     }
     /**
+     * @private (since we're not documenting write operations)
      * Sets a cell value.
      *
      * Throws if the current user cannot update this cell value. Call {@link canSetCellValue}
@@ -492,6 +495,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         });
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can update a set of cell values. Should be
      * called before calling {@link setCellValues}.
      *
@@ -512,6 +516,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         });
     }
     /**
+     * @private (since we're not documenting write operations)
      * Sets cell values.
      *
      * Throws if the current user cannot update all of the given cell values. Call
@@ -535,6 +540,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         });
     }
     /**
+     * @private (since we're not documenting write operations)
      * Use this to check whether the current user can delete this record. Should be
      * called before calling {@link delete}.
      *
@@ -548,6 +554,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this.parentTable.canDeleteRecord(this);
     }
     /**
+     * @private (since we're not documenting write operations)
      * Deletes this record.
      *
      * Throws if the current user cannot delete this record. Call {@link canDelete}
