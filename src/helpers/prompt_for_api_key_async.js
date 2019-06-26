@@ -17,6 +17,9 @@ async function promptForApiKeyAsync(environment: Environment): Promise<string> {
     const result = await cliHelpers.promptAsync({
         name: 'apiKey',
         description: `Please enter your API key. You can generate one at https://${domain}/account`,
+        message: 'API key is required for development',
+        hidden: true,
+        required: true,
     });
     return result.apiKey;
 }
