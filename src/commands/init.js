@@ -86,18 +86,14 @@ async function initBlockAsync(
         apiKey,
     );
 
-    // Create a minimal package json so the user can yarn install.
-    const defaultDependencies = {
-        '@airtable/blocks': '^0.0.12',
-        react: '^16.8.0',
-        'react-dom': '^16.8.0',
-    };
+    // Create an empty package json so the user can `yarn add`.
+    // Dependencies are specified as part of the `yarn add` to install the latest versions: this
+    // empty file is needed so that the dependencies are saved in the correct folder.
     const writePackageJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, 'package.json'),
         JSON.stringify(
             {
                 private: true,
-                dependencies: defaultDependencies,
             },
             null,
             4,
@@ -124,7 +120,7 @@ async function initBlockAsync(
         writeAirtableApiKeyFilePromise,
     ]);
 
-    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['--non-interactive']);
+    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['add', '@airtable/blocks', 'react', 'react-dom', '--non-interactive']);
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
