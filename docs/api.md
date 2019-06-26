@@ -1182,21 +1182,6 @@ if (myField.type === fieldTypes.CURRENCY) {
 Returns **({} | null)** The configuration options of the field. The structure of the field's options
 depend on the field's type. Can be watched.
 
-#### parentTable
-
-Type: [Table][72]
-
-##### Examples
-
-```javascript
-const field = myTable.getFieldByName('Name');
-console.log(field.parentTable.id === myTable.id);
-// => true
-```
-
-Returns **[Table][72]** The table that this field belongs to. Should never change because fields
-aren't moved between tables.
-
 #### type
 
 Type: [string][58]
@@ -1425,14 +1410,6 @@ Every call to `loadDataAsync` should have a matching call to `unloadData`.
 
 Returns **[Promise][85]&lt;void>** A promise that will resolve once the data is loaded.
 
-##### parentTable
-
-The table that records in this QueryResult are part of
-
-Type: [Table][72]
-
-Returns **[Table][72]**
-
 ##### recordIds
 
 The record IDs in this QueryResult. Throws if data is not loaded yet. Can be watched.
@@ -1526,23 +1503,6 @@ Type: ([Array][59]&lt;[Field][67]> | null)
 
 Returns **([Array][59]&lt;[Field][67]> | null)**
 
-##### parentTable
-
-The table that records in this QueryResult are part of
-
-Type: [Table][72]
-
-Returns **[Table][72]**
-
-##### parentView
-
-The view that was used to obtain this QueryResult by calling `view.selectRecords`. Null if the
-QueryResult was obtained by calling `table.selectRecords`.
-
-Type: ([View][68] | null)
-
-Returns **([View][68] | null)**
-
 ##### recordIds
 
 The record IDs in this QueryResult. Throws if data is not loaded yet. Can be watched.
@@ -1584,12 +1544,6 @@ access them, and watches will no longer fire.
 Type: [boolean][60]
 
 Returns **[boolean][60]** whether the query result is valid
-
-##### parentTable
-
-Type: [Table][72]
-
-Returns **[Table][72]** the table that records in this QueryResult are part of
 
 ##### recordIds
 
@@ -1774,23 +1728,6 @@ if (!myRecord.isDeleted) {
 ```
 
 Returns **[boolean][60]** `true` if the record has been deleted, `false` otherwise.
-
-#### parentTable
-
-Type: [Table][72]
-
-##### Examples
-
-```javascript
-import {useRecords, withHooks} from '@airtable/blocks/ui';
-const queryResult = myTable.selectRecords();
-const records = useRecords(queryResult);
-console.log(records[0].parentTable.id === myTable.id);
-// => true
-```
-
-Returns **[Table][72]** The table that this record belongs to. Should never change because records
-aren't moved between tables.
 
 #### primaryCellValue
 
@@ -2133,21 +2070,6 @@ console.log(myTable.name);
 
 Returns **[string][58]** The name of the table. Can be watched.
 
-#### parentBase
-
-Type: [Base][92]
-
-##### Examples
-
-```javascript
-import {base} from '@airtable/blocks';
-const table = base.getTableByName('Table 1');
-console.log(table.parentBase.id === base.id);
-// => true
-```
-
-Returns **[Base][92]** The base that this table belongs to.
-
 #### primaryField
 
 Type: [Field][67]
@@ -2194,7 +2116,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][93]** A query result.
+Returns **[TableOrViewQueryResult][92]** A query result.
 
 #### unwatch
 
@@ -2320,21 +2242,6 @@ console.log(myView.name);
 
 Returns **[string][58]** The name of the view. Can be watched.
 
-#### parentTable
-
-Type: [Table][72]
-
-##### Examples
-
-```javascript
-const view = myTable.getViewByName('Grid View');
-console.log(view.parentTable.id === myTable.id);
-// => true
-```
-
-Returns **[Table][72]** The table that this view belongs to. Should never change because views
-aren't moved between tables.
-
 #### selectRecords
 
 Select records from the view. Returns a query result. See {@QueryResult} for more.
@@ -2368,7 +2275,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][93]** A query result.
+Returns **[TableOrViewQueryResult][92]** A query result.
 
 #### type
 
@@ -2524,7 +2431,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][94]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][93]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -2541,7 +2448,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][85]&lt;[HTMLLinkElement][95]>** a Promise that resolves to the style tag
+Returns **[Promise][85]&lt;[HTMLLinkElement][94]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -2559,14 +2466,14 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][85]&lt;[HTMLScriptElement][96]>** a Promise that resolves to the script tag
+Returns **[Promise][85]&lt;[HTMLScriptElement][95]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
 
 #### Color
 
-A value from the [colors][97] enum
+A value from the [colors][96] enum
 
 Type: \$Values&lt;any>
 
@@ -2582,7 +2489,7 @@ Type: {r: [number][64], g: [number][64], b: [number][64]}
 
 #### colorUtils
 
-Utilities for working with [Color][84] names from the [colors][97] enum.
+Utilities for working with [Color][84] names from the [colors][96] enum.
 
 ##### getHexForColor
 
@@ -2609,7 +2516,7 @@ Returns **([string][58] | null)**
 
 ##### getRgbForColor
 
-Given a [Color][84], return an [RGB][98] object representing it, or null if the value isn't a
+Given a [Color][84], return an [RGB][97] object representing it, or null if the value isn't a
 [Color][84]
 
 ###### Parameters
@@ -2628,7 +2535,7 @@ colorUtils.getRgbForColor('disgruntled pink');
 // => null
 ```
 
-Returns **([RGB][99] | null)**
+Returns **([RGB][98] | null)**
 
 ##### shouldUseLightTextOnColor
 
@@ -2762,8 +2669,8 @@ An enum of color names
 React hooks are a new feature in React 16.8. They allow you to use state and other React features
 without writing a class, and form the core of how you can connect React components to data from your
 Airtable base when writing Blocks. If you've never used hooks before, don't worry - the React team
-[has some great resources][100] for learning about them. You can use hooks with class components too
-with the help of the [withHooks][101] higher-order component.
+[has some great resources][99] for learning about them. You can use hooks with class components too
+with the help of the [withHooks][100] higher-order component.
 
 > **Important Note:** right now, most of these hooks cause your component to re-render, but return
 > the same mutable instance of the underlying model. This means that it's often not safe to use
@@ -2780,7 +2687,7 @@ actual records in the base.
 
 useBase should meet most of your needs for working with Base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][102] hook might help.
+[useWatchable][101] hook might help.
 
 ##### Examples
 
@@ -2799,7 +2706,7 @@ function TableList() {
 }
 ```
 
-Returns **[Base][92]** Base
+Returns **[Base][102]** Base
 
 #### useRecords
 
@@ -2979,7 +2886,7 @@ convenient model-specific hooks available:
     [useRecordById][81]
 -   For [Viewport][5], use [useViewport][105].
 
-If you're writing a class component and still want to be able to use hooks, try [withHooks][101].
+If you're writing a class component and still want to be able to use hooks, try [withHooks][100].
 
 ##### Parameters
 
@@ -4980,17 +4887,17 @@ Type: {width: ([number][64] | null)?, height: ([number][64] | null)?}
 [89]: getFieldByNameIfExists
 [90]: getViewByIdIfExists
 [91]: getViewByNameIfExists
-[92]: #base
-[93]: #tableorviewqueryresult
-[94]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[95]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[96]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[97]: #colors
+[92]: #tableorviewqueryresult
+[93]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[94]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[95]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[96]: #colors
+[97]: #rgb
 [98]: #rgb
-[99]: #rgb
-[100]: https://reactjs.org/docs/hooks-intro.html
-[101]: #withhooks
-[102]: #usewatchable
+[99]: https://reactjs.org/docs/hooks-intro.html
+[100]: #withhooks
+[101]: #usewatchable
+[102]: #base
 [103]: #queryresult
 [104]: #viewport
 [105]: #useviewport

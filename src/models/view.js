@@ -92,6 +92,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return tableData.viewsById[this._id] || null;
     }
     /**
+     * @private (since we may not be able to return parent model instances in the immutable models world)
      * @function
      * @returns The table that this view belongs to. Should never change because views aren't moved between tables.
      *

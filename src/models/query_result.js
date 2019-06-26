@@ -196,6 +196,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     /**
+     * @private (since we may not be able to return parent model instances in the immutable models world)
      * The table that records in this QueryResult are part of
      */
     get parentTable(): Table {

@@ -154,6 +154,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     /**
+     * @private (since we may not be able to return parent model instances in the immutable models world)
      * @returns the table that records in this QueryResult are part of
      */
     get parentTable(): Table {

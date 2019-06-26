@@ -157,6 +157,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return recordsById[this._id] || null;
     }
     /**
+     * @private (since we may not be able to return parent model instances in the immutable models world)
      * @function
      * @returns The table that this record belongs to. Should never change because records aren't moved between tables.
      *

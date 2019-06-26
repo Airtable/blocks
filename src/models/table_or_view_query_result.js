@@ -204,12 +204,14 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     }
 
     /**
+     * @private (since we may not be able to return parent model instances in the immutable models world)
      * The table that records in this QueryResult are part of
      */
     get parentTable(): Table {
         return this._table;
     }
     /**
+     * @private (since we may not be able to return parent model instances in the immutable models world)
      * The view that was used to obtain this QueryResult by calling
      * `view.selectRecords`. Null if the QueryResult was obtained by calling
      * `table.selectRecords`.
