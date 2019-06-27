@@ -147,8 +147,8 @@ async function initBlockAsync(
     // Create a .gitignore file.
     const gitignoreContents = [
         'node_modules',
-        blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
-        blockCliConfigSettings.BUILD_DIR,
+        '/' + blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
+        '/' + blockCliConfigSettings.BUILD_DIR,
     ];
     const writeGitignoreFilePromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, '.gitignore'),
