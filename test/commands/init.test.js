@@ -43,7 +43,9 @@ describe('init command', function() {
 
         assert(fs.existsSync(path.join(blockDirPath, 'frontend', 'index.js')));
 
-        assert(yarnInstallAsyncStub.calledOnce);
+        assert(fs.existsSync(path.join(blockDirPath, '.eslintrc.js')));
+
+        assert(yarnInstallAsyncStub.calledTwice);
 
         const blockJson = await fsExtra.readJson(path.join(blockDirPath, 'block.json'));
         assert.strictEqual(blockJson.frontendEntry, './frontend/index.js');
