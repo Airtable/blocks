@@ -167,8 +167,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // This takes the key to future-proof against having per-key
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.
-        const {base} = getSdk();
-        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
+        const {session} = getSdk();
+        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * Sets a value at a path. Throws an error if the path or value is invalid.
@@ -207,8 +207,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // This takes the updates to future-proof against having per-key
         // permissions.
         // For now, just need at least edit permissions to update globalConfig.
-        const {base} = getSdk();
-        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
+        const {session} = getSdk();
+        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * Sets multiple values. Throws if any path or value is invalid.

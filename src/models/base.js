@@ -2,7 +2,6 @@
 import {type BaseData, type AppBlanketData, type ModelChange} from '../types/base';
 import {type CollaboratorData, type UserId} from '../types/collaborator';
 import {type TableId} from '../types/table';
-import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, values, entries} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
@@ -11,9 +10,6 @@ import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
 
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const permissionHelpers = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_helpers',
-);
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
@@ -136,60 +132,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return this._data.name;
     }
     /**
-     * @function
-     * @returns The current user, or `null` if the block is running in a publicly shared base.
-     * @example
-     * import {base} from '@airtable/blocks';
-     * if (base.currentUser) {
-     *     console.log(base.currentUser.id);
-     *     console.log(base.currentUser.email);
-     *     console.log(base.currentUser.name);
-     * }
-     */
-    get currentUser(): CollaboratorData | null {
-        const userId = this._data.currentUserId;
-        if (!userId) {
-            return null;
-        } else {
-            return this.getCollaboratorByIdIfExists(userId);
-        }
-    }
-    /**
      * @private
      */
     _isFeatureEnabled(featureName: string): boolean {
         return this._data.enabledFeatureNames.includes(featureName);
-    }
-    /**
-     * @private
-     */
-    get __rawPermissionLevel(): PermissionLevel {
-        return this._data.permissionLevel;
-    }
-    /**
-     * @private
-     * The current user's permission level.
-     *
-     * The value of this should not be consumed and will be deprecated.
-     * To know whether a user can perform an action, use the more specific
-     * `can` method.
-     *
-     * Can be watched to know when the user's permission level changes. Usually,
-     * you'll want to watch this in your root component and re-render your whole
-     * block when the permission level changes.
-     *
-     * @example
-     * if (globalConfig.canSet('foo')) {
-     *     globalConfig.set('foo', 'bar');
-     * }
-     *
-     * @example
-     * if (record.canSetCellValue('Name', 'Chair')) {
-     *     record.setCellValue('Name', 'Chair');
-     * }
-     */
-    get permissionLevel(): string {
-        return permissionHelpers.getPublicApiNameForPermissionLevel(this._data.permissionLevel);
     }
     /**
      * @function

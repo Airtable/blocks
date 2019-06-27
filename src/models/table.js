@@ -446,8 +446,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     canSetCellValues(cellValuesByRecordIdThenFieldIdOrFieldName: {[string]: RecordDef}): boolean {
         // This takes the field and record IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
-        const {base} = getSdk();
-        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
+        const {session} = getSdk();
+        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * @private (since we're not documenting write operations)
@@ -644,8 +644,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     canCreateRecords(recordDefsOrNumberOfRecords: Array<RecordDef> | number): boolean {
         // This takes the field IDs to future-proof against granular permissions.
         // For now, just need at least edit permissions.
-        const {base} = getSdk();
-        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
+        const {session} = getSdk();
+        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * @private (since we're not documenting write operations)
@@ -829,8 +829,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     canDeleteRecords(records: Array<Record>): boolean {
         // This takes the records to future-proof against granular permissions.
         // For now, just need at least edit permissions.
-        const {base} = getSdk();
-        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
+        const {session} = getSdk();
+        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * @private (since we're not documenting write operations)

@@ -294,8 +294,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     canSetCellValues(): boolean {
         // For now, just need at least edit permissions. Once field locking is shipped,
         // this method should also check if the field is locked.
-        const {base} = getSdk();
-        return permissionHelpers.can(base.__rawPermissionLevel, PermissionLevels.EDIT);
+        const {session} = getSdk();
+        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * Given a string, will attempt to parse it and return a valid cell value for

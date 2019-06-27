@@ -13,6 +13,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Added base.watch('schema') to get notified when base schema changes.
 -   Added Session to expose data about the current user's session.
+-   **BREAKING:** Removed `currentUser` from `Base` since it is now accessible through `Session`.
 
 ## [0.0.13](https://github.com/airtable/blocks-sdk/releases/tag/v0.0.13) - 2019-06-21
 

@@ -791,24 +791,6 @@ console.log(base.activeCollaborators[0].email);
 
 Returns **[Array][60]&lt;CollaboratorData>** The users who have access to this base.
 
-#### currentUser
-
-Type: (CollaboratorData | null)
-
-##### Examples
-
-```javascript
-import {base} from '@airtable/blocks';
-if (base.currentUser) {
-    console.log(base.currentUser.id);
-    console.log(base.currentUser.email);
-    console.log(base.currentUser.name);
-}
-```
-
-Returns **(CollaboratorData | null)** The current user, or `null` if the block is running in a
-publicly shared base.
-
 #### getCollaboratorById
 
 ##### Parameters
@@ -3413,13 +3395,13 @@ of choices.
 ##### Examples
 
 ```javascript
-import {UI, base} from '@airtable/blocks';
+import {UI, session} from '@airtable/blocks';
 
 function CurrentUserGreeter() {
     return (
         <React.Fragment>
             Hello,
-            <UI.CollaboratorToken collaborator={base.currentUser} />!
+            <UI.CollaboratorToken collaborator={session.currentUser} />!
         </React.Fragment>
     );
 }
