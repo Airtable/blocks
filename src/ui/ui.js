@@ -46,6 +46,7 @@ import withHooks from './with_hooks';
 import useLoadable from './use_loadable';
 import {useRecordIds, useRecords, useRecordById} from './use_records';
 import useBase from './use_base';
+import useSession from './use_session';
 import useWatchable from './use_watchable';
 import useViewport from './use_viewport';
 
@@ -98,6 +99,7 @@ const UI = {
     initializeBlock,
     withHooks,
     useBase,
+    useSession,
     useViewport,
     useWatchable,
     useLoadable,

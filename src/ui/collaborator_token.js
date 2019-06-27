@@ -41,13 +41,14 @@ type CollaboratorTokenProps = {
  * @param {CollaboratorTokenProps} props
  *
  * @example
- * import {UI, session} from '@airtable/blocks';
+ * import {CollaboratorToken, useSession} from '@airtable/blocks/ui';
  *
  * function CurrentUserGreeter() {
+ *     const session = useSession();
  *     return (
  *         <React.Fragment>
  *             Hello,
- *             <UI.CollaboratorToken collaborator={session.currentUser} />!
+ *             <CollaboratorToken collaborator={session.currentUser} />!
  *         </React.Fragment>
  *     );
  * }

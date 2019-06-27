@@ -65,6 +65,7 @@ toc:
                 - useRecords
                 - useRecordIds
                 - useRecordById
+                - useSession
                 - useViewport
                 - useWatchable
                 - useLoadable

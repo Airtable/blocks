@@ -11,7 +11,9 @@ import getSdk from './get_sdk';
  * of your block. Use it for storing block configuration.
  *
  * #### [import {session} from '@airtable/blocks';](#session)
- * An instance of {@link Session}, containing information about the current user's session.
+ * An instance of {@link Session}, containing information about the current user's session. If you're
+ * writing a React Component, you might want to use the {@link useSession} hook rather than importing
+ * `session` directly.
  *
  * #### [import {cursor} from '@airtable/blocks';](#cursor)
  * An instance of {@link Cursor}, containing information about the table & view that the user

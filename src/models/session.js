@@ -16,6 +16,9 @@ type SessionData = {
 
 const WatchableSessionKeys = Object.freeze({
     permissionLevel: ('permissionLevel': 'permissionLevel'),
+
+    // NOTE: the current user's identity will never change, but their name/email/profpic/etc. can.
+    currentUser: ('currentUser': 'currentUser'),
 });
 type WatchableSessionKey = $Values<typeof WatchableSessionKeys>;
 
@@ -128,6 +131,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     ): {[WatchableSessionKey]: boolean} {
         const changedKeys = {
             [WatchableSessionKeys.permissionLevel]: false,
+            [WatchableSessionKeys.currentUser]: false,
         };
         for (const {path, value} of changes) {
             if (path[0] === 'permissionLevel') {
@@ -141,6 +145,12 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
                 invariant(typeof value === 'string', 'permissionLevel must be a string');
                 this._sessionData.permissionLevel = (value: any); // eslint-disable-line flowtype/no-weak-types
                 changedKeys[WatchableSessionKeys.permissionLevel] = true;
+            }
+
+            // TODO(jb): figure out a better way to trigger this that fires only when the
+            // current user changes (rather than firing whenever appBlanket changes).
+            if (path[0] === 'appBlanket') {
+                changedKeys[WatchableSessionKeys.currentUser] = true;
             }
         }
 
