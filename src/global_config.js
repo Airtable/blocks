@@ -41,6 +41,21 @@ export type GlobalConfigUpdate = {|
 
 type WatchableGlobalConfigKey = string;
 
+/** @private */
+function validatePath(
+    path: GlobalConfigKey,
+    store: GlobalConfigData,
+): {|isValid: true|} | {|isValid: false, reason: string|} {
+    const validation = blockKvHelpers.validateKvKeyPath(path, store);
+    if (!validation.isValid) {
+        return validation;
+    }
+    if (path === '*' || (Array.isArray(path) && path[0] === '*')) {
+        return {isValid: false, reason: "cannot use '*' as a top-level key"};
+    }
+    return {isValid: true};
+}
+
 // NOTE: GlobalConfig is essentially a wrapper around a generic key-value store.
 // It's called GlobalConfig in order to convey two main points about its intended
 // usage:
@@ -84,7 +99,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Get notified of changes to global config.
      *
-     * You can watch any top-level key in global config.
+     * You can watch any top-level key in global config. Use '*' to watch every change.
      *
      * Every call to `.watch` should have a matching call to `.unwatch`.
      *
@@ -143,7 +158,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     get(key: GlobalConfigKey): GlobalConfigValue | void {
         const path = this.__formatKeyAsPath(key);
 
-        const pathValidationResult = blockKvHelpers.validateKvKeyPath(path, this._kvStore);
+        const pathValidationResult = validatePath(path, this._kvStore);
         if (!pathValidationResult.isValid) {
             throw spawnError('Invalid globalConfig path: %s', pathValidationResult.reason);
         }
@@ -233,6 +248,12 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             throw spawnError('Your permission level does not allow setting globalConfig values');
         }
 
+        for (const update of updates) {
+            const pathValidation = validatePath(update.path, this._kvStore);
+            if (!pathValidation.isValid) {
+                throw spawnError('Invalid globalConfig path: %s', pathValidation.reason);
+            }
+        }
         getSdk().__applyGlobalConfigUpdates(updates);
 
         // Now send the update to Airtable.
@@ -281,9 +302,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             topLevelKeySet[topLevelKey] = true;
         }
 
+        const changedTopLevelKeys = Object.keys(topLevelKeySet);
         const limitCheckResult = blockKvHelpers.limitCheckKvStore(
             workingKvStore,
-            Object.keys(topLevelKeySet),
+            changedTopLevelKeys,
         );
         if (!limitCheckResult.isValid) {
             throw spawnError('globalConfig over limits: %s', limitCheckResult.reason);
@@ -295,8 +317,11 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // Now loop over the top level keys to fire change events.
         // NOTE: it's important that we do this after the loop above (instead of inline),
         // so that all of the changes are reflected by the time we trigger change events.
-        for (const key of Object.keys(topLevelKeySet)) {
+        for (const key of changedTopLevelKeys) {
             this._onChange(key);
+        }
+        if (changedTopLevelKeys.length) {
+            this._onChange('*');
         }
     }
 }

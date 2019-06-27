@@ -62,6 +62,7 @@ toc:
                 > React.memo & React.PureComponent and you'll be fine.
             children:
                 - useBase
+                - useGlobalConfig
                 - useRecords
                 - useRecordIds
                 - useRecordById

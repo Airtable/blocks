@@ -49,6 +49,7 @@ import useBase from './use_base';
 import useSession from './use_session';
 import useWatchable from './use_watchable';
 import useViewport from './use_viewport';
+import useGlobalConfig from './use_global_config';
 
 // TODO: freeze this object before we ship the code editor.
 const UI = {
@@ -106,6 +107,7 @@ const UI = {
     useRecordIds,
     useRecords,
     useRecordById,
+    useGlobalConfig,
 };
 
 export default UI;
