@@ -926,7 +926,6 @@ Get notified of changes to the base.
 Watchable keys are:
 
 -   `'name'`
--   `'permissionLevel'`
 -   `'tables'`
 -   `'collaborators'`
 

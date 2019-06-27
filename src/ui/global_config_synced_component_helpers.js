@@ -10,9 +10,9 @@ const globalConfigSyncedComponentHelpers = {
         PropTypes.arrayOf(PropTypes.string),
     ]).isRequired,
     useDefaultWatchesForSyncedComponent(globalConfigKey: GlobalConfigKey): void {
-        const {globalConfig, base} = getSdk();
+        const {globalConfig, session} = getSdk();
         useWatchable(globalConfig, [globalConfig.__getTopLevelKey(globalConfigKey)]);
-        useWatchable(base, ['permissionLevel']);
+        useWatchable(session, ['permissionLevel']);
     },
 };
 

@@ -40,7 +40,6 @@ const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleF
 
 const WatchableBaseKeys = Object.freeze({
     name: ('name': 'name'),
-    permissionLevel: ('permissionLevel': 'permissionLevel'),
     tables: ('tables': 'tables'),
     collaborators: ('collaborators': 'collaborators'),
     schema: ('schema': 'schema'),
@@ -92,7 +91,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *
      * Watchable keys are:
      * - `'name'`
-     * - `'permissionLevel'`
      * - `'tables'`
      * - `'collaborators'`
      *
@@ -368,10 +366,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         let didSchemaChange = false;
         if (changedPaths.name) {
             this._onChange(WatchableBaseKeys.name);
-            didSchemaChange = true;
-        }
-        if (changedPaths.permissionLevel) {
-            this._onChange(WatchableBaseKeys.permissionLevel);
             didSchemaChange = true;
         }
         if (changedPaths.tableOrder) {
