@@ -1,4 +1,5 @@
 // @flow
+import getSdk from '../get_sdk';
 import {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
@@ -313,7 +314,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
                 rawCellValue,
                 field.__getRawType(),
                 field.__getRawTypeOptions(),
-                this.parentTable.parentBase.__appInterface,
+                getSdk().__appInterface,
             );
         }
     }
@@ -346,7 +347,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * }
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
-        const appInterface = this.parentTable.parentBase.__appInterface;
+        const appInterface = getSdk().__appInterface;
         const isAttachmentsCdnV3Enabled = appInterface.isFeatureEnabled('attachmentsCdnV3');
 
         if (isAttachmentsCdnV3Enabled) {

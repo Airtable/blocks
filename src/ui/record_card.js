@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
+import getSdk from '../get_sdk';
 import {values, isNullOrUndefinedOrEmpty} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import {type AttachmentData} from '../types/attachment';
@@ -432,7 +433,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             );
 
             const attachmentObj: AttachmentData = (attachmentObjIfAvailable: any); // eslint-disable-line flowtype/no-weak-types
-            const userScopedAppInterface = attachmentField.parentTable.parentBase.__appInterface;
+            const userScopedAppInterface = getSdk().__appInterface;
             imageHtml = attachmentPreviewRenderer.renderSquarePreview(
                 attachmentObj,
                 userScopedAppInterface,

@@ -119,6 +119,12 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /**
      * @private
      */
+    get __currentUserId(): UserId | null {
+        return this._sessionData.currentUserId;
+    }
+    /**
+     * @private
+     */
     get __rawPermissionLevel(): PermissionLevel {
         return this._sessionData.permissionLevel;
     }

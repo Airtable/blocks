@@ -61,7 +61,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     // do some nice things like use our helper methods and get token-sized prof pic urls. If the two
     // objects are not equal, then we can't use these, so we'll just render what we were given without
     // formatting it nicely.
-    const userInfoById = getSdk().base.__appInterface.getCollaboratorInfoById();
+    const userInfoById = getSdk().__appInterface.getCollaboratorInfoById();
     const userObj = userInfoById && collaborator.id ? userInfoById[collaborator.id] : null;
     const userObjFormattedForPublicApiV2 = userObj
         ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj)

@@ -165,7 +165,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         const {type, options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             this.parentTable.__getFieldNamesById(),
         );
 
@@ -186,7 +186,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         const {type} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             this.parentTable.__getFieldNamesById(),
         );
         return type;
@@ -207,7 +207,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         const {options} = columnTypeProvider.getConfigForPublicApi(
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             this.parentTable.__getFieldNamesById(),
         );
 
@@ -315,14 +315,14 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             string,
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
         );
 
         const publicCellValue = columnTypeProvider.formatCellValueForPublicApi(
             privateCellValue,
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             {cellFormat: ApiCellFormats.JSON, apiVersion: PublicApiVersions.API2},
         );
         const validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(
@@ -330,7 +330,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             null,
             this.__getRawType(),
             this.__getRawTypeOptions(),
-            this.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             PublicApiVersions.API2,
         );
 

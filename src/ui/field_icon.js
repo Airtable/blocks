@@ -1,6 +1,7 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Icon from './icon';
 
@@ -63,7 +64,7 @@ const FieldIcon = (props: FieldIconProps) => {
 
     const type = field.__getRawType();
     const typeOptions = field.__getRawTypeOptions();
-    const appInterface = field.parentTable.parentBase.__appInterface;
+    const appInterface = getSdk().__appInterface;
 
     const displayType = columnTypeProvider.getDisplayType(type, typeOptions, appInterface);
     const displayTypeConfigs = columnTypeProvider.getDisplayTypeConfigs(type);

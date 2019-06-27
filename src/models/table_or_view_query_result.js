@@ -1,4 +1,5 @@
 // @flow
+import getSdk from '../get_sdk';
 import {type FieldId} from '../types/field';
 import {has} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
@@ -571,7 +572,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             invariant(record, 'Record missing in table');
             const rowJson = record.__getRawRow();
             const groupPath = GroupAssigner.getGroupPathForRow(
-                this._table.parentBase.__appInterface,
+                getSdk().__appInterface,
                 this._getGroupLevelsWithDeletedFieldsFiltered(),
                 columnsById,
                 rowJson,
@@ -779,7 +780,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         const groupLevels = this._getGroupLevelsWithDeletedFieldsFiltered();
 
         const groupAssigner = new GroupAssigner({
-            appInterface: this._table.parentBase.__appInterface,
+            appInterface: getSdk().__appInterface,
             groupLevels,
             rowsById,
             columnsById,

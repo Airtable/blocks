@@ -19,7 +19,7 @@ const publicCellValueUtils = {
             publicCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             PublicApiVersions.API2,
         );
     },
@@ -38,7 +38,7 @@ const publicCellValueUtils = {
             currentPrivateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             PublicApiVersions.API2,
         );
         if (!validationResult.isValid) {

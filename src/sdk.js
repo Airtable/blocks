@@ -42,6 +42,12 @@ const {
 } = window.__requirePrivateModuleFromAirtable(
     'client/helpers/browser_storage/is_storage_available',
 );
+const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/user_scoped_app_interface',
+);
+const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleFromAirtable(
+    'client_server_shared/client_server_shared_config_settings',
+);
 
 /* NOTE: runInfo is not publicly documented yet.
  * @example
@@ -292,6 +298,20 @@ class BlockSdk {
     }
     __setBatchedUpdatesFn(newUpdateBatcher: UpdateBatcher) {
         this._runWithUpdateBatching = newUpdateBatcher;
+    }
+
+    /**
+     * @private
+     */
+    get __appInterface(): UserScopedAppInterface {
+        return new UserScopedAppInterface({
+            applicationId: this.base.id,
+            appBlanket: this.base.__appBlanket,
+            sortTiebreakerKey: this.base.__sortTiebreakerKey,
+            currentSessionUserId:
+                this.session.__currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
+            isFeatureEnabled: featureName => this.base.__isFeatureEnabled(featureName),
+        });
     }
 }
 

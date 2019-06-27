@@ -1,5 +1,5 @@
 // @flow
-import {type BaseData, type AppBlanketData, type ModelChange} from '../types/base';
+import {type BaseData, type AppBlanketData, type ModelChange, type ObjectId} from '../types/base';
 import {type CollaboratorData, type UserId} from '../types/collaborator';
 import {type TableId} from '../types/table';
 import {type AirtableInterface} from '../injected/airtable_interface';
@@ -12,12 +12,6 @@ import AbstractModel from './abstract_model';
 const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
-);
-const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/user_scoped_app_interface',
-);
-const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/client_server_shared_config_settings',
 );
 
 // How these model classes work:
@@ -134,7 +128,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /**
      * @private
      */
-    _isFeatureEnabled(featureName: string): boolean {
+    __isFeatureEnabled(featureName: string): boolean {
         return this._data.enabledFeatureNames.includes(featureName);
     }
     /**
@@ -229,15 +223,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /**
      * @private
      */
-    get __appInterface(): UserScopedAppInterface {
-        return new UserScopedAppInterface({
-            applicationId: this.id,
-            appBlanket: this._data.appBlanket,
-            sortTiebreakerKey: this._data.sortTiebreakerKey,
-            currentSessionUserId:
-                this._data.currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
-            isFeatureEnabled: featureName => this._isFeatureEnabled(featureName),
-        });
+    get __sortTiebreakerKey(): ObjectId | null {
+        return this._data.sortTiebreakerKey;
     }
     /**
      * @private

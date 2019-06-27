@@ -1,7 +1,7 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import getSdk from '../get_sdk';
 import {spawnError} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
@@ -105,7 +105,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
             privateCellValue,
             field.__getRawType(),
             field.__getRawTypeOptions(),
-            field.parentTable.parentBase.__appInterface,
+            getSdk().__appInterface,
             CellReadModeContext.forContextType(cellContextType),
         );
         const attributes: Object = {
