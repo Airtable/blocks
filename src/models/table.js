@@ -1,5 +1,4 @@
 // @flow
-import invariant from 'invariant';
 import {type RecordDef} from '../types/record';
 import {type BaseData} from '../types/base';
 import {type TableData} from '../types/table';
@@ -7,6 +6,7 @@ import {type ViewType, type ViewId} from '../types/view';
 import {type FieldId} from '../types/field';
 import {PermissionLevels} from '../types/permission_levels';
 import {isEnumValue, entries, has} from '../private_utils';
+import {invariant, spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from '../injected/airtable_interface';
 import AbstractModel from './abstract_model';
@@ -248,7 +248,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getFieldById(fieldId: FieldId): Field {
         const field = this.getFieldByIdIfExists(fieldId);
         if (!field) {
-            throw new Error(`No field with ID ${fieldId} in table ${this.id}`);
+            throw spawnError('No field with ID %s in table %s', fieldId, this.id);
         }
         return field;
     }
@@ -282,7 +282,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getFieldByName(fieldName: string): Field {
         const field = this.getFieldByNameIfExists(fieldName);
         if (!field) {
-            throw new Error(`No field named ${fieldName} in table ${this.id}`);
+            throw spawnError('No field named %s in table %s', fieldName, this.id);
         }
         return field;
     }
@@ -341,7 +341,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getViewById(viewId: ViewId): View {
         const view = this.getViewByIdIfExists(viewId);
         if (!view) {
-            throw new Error(`No view with ID ${viewId} in table ${this.id}`);
+            throw spawnError('No view with ID %s in table %s', viewId, this.id);
         }
         return view;
     }
@@ -375,7 +375,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getViewByName(viewName: string): View {
         const view = this.getViewByNameIfExists(viewName);
         if (!view) {
-            throw new Error(`No view named ${viewName} in table ${this.id}`);
+            throw spawnError('No view named %s in table %', viewName, this.id);
         }
         return view;
     }
@@ -477,10 +477,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         [string]: RecordDef,
     }): AirtableWriteAction<void, {}> {
         if (this.isDeleted) {
-            throw new Error('Table does not exist');
+            throw spawnError('Table does not exist');
         }
         if (!this.canSetCellValues(cellValuesByRecordIdThenFieldIdOrFieldName)) {
-            throw new Error('Your permission level does not allow editing cell values');
+            throw spawnError('Your permission level does not allow editing cell values');
         }
 
         const changes = [];
@@ -490,7 +490,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         )) {
             const record = this._recordStore.getRecordByIdIfExists(recordId);
             if (!record) {
-                throw new Error('Record does not exist');
+                throw spawnError('Record does not exist');
             }
 
             cellValuesByRecordIdThenFieldId[recordId] = {};
@@ -509,7 +509,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                     field,
                 );
                 if (!validationResult.isValid) {
-                    throw new Error(validationResult.reason);
+                    throw spawnError(validationResult.reason);
                 }
 
                 const normalizedCellValue = cellValueUtils.normalizePublicCellValueForUpdate(
@@ -687,13 +687,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         },
     > {
         if (!this.canCreateRecords(recordDefsOrNumberOfRecords)) {
-            throw new Error('Your permission level does not allow creating records');
+            throw spawnError('Your permission level does not allow creating records');
         }
 
         // TODO: support creating records when only a record metadata or a
         // subset of fields are loaded.
         if (!this._recordStore.isDataLoaded) {
-            throw new Error('Table data is not loaded');
+            throw spawnError('Table data is not loaded');
         }
 
         let recordDefs;
@@ -708,7 +708,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
 
         if (this.recordLimit - this._recordStore.recordIds.length < recordDefs.length) {
-            throw new Error(
+            throw spawnError(
                 'Table over record limit. Check remainingRecordLimit before creating records.',
             );
         }
@@ -720,8 +720,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             const cellValuesByFieldId = {};
             for (const [fieldIdOrFieldName, cellValue] of entries(recordDef)) {
                 const field = this.__getFieldMatching(fieldIdOrFieldName);
-                invariant(field, `Field does not exist: ${fieldIdOrFieldName}`);
-                invariant(!field.isDeleted, `Field has been deleted: ${fieldIdOrFieldName}`);
+                invariant(field, 'Field does not exist: %s', fieldIdOrFieldName);
+                invariant(!field.isDeleted, 'Field has been deleted: %s', fieldIdOrFieldName);
 
                 // Current cell value is null since the record doesn't exist.
                 const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
@@ -730,7 +730,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                     field,
                 );
                 if (!validationResult.isValid) {
-                    throw new Error(validationResult.reason);
+                    throw spawnError(validationResult.reason);
                 }
 
                 cellValuesByFieldId[field.id] = cellValueUtils.normalizePublicCellValueForUpdate(
@@ -849,13 +849,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      */
     deleteRecords(records: Array<Record>): AirtableWriteAction<void, {}> {
         if (!this.canDeleteRecords(records)) {
-            throw new Error('Your permission level does not allow deleting records');
+            throw spawnError('Your permission level does not allow deleting records');
         }
 
         // TODO: support deleting records when only a record metadata or a
         // subset of fields are loaded.
         if (!this._recordStore.isDataLoaded) {
-            throw new Error('Table data is not loaded');
+            throw spawnError('Table data is not loaded');
         }
 
         const recordIds = records.map(record => record.id);

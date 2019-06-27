@@ -1,8 +1,8 @@
 // @flow
 import PropTypes from 'prop-types';
-import invariant from 'invariant';
 import * as React from 'react';
 import {values} from '../private_utils';
+import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Table from '../models/table';

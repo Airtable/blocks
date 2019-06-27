@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import invariant from 'invariant';
 import {values} from '../private_utils';
+import {invariant} from '../error_utils';
 import createDetectElementResize from './create_detect_element_resize';
 
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');

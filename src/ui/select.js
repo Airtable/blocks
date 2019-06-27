@@ -1,7 +1,7 @@
 // @flow
-import invariant from 'invariant';
 import classNames from 'classnames';
 import * as React from 'react';
+import {invariant, spawnError} from '../error_utils';
 import {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
@@ -104,7 +104,7 @@ class Select extends React.Component<SelectProps> {
         // the error is really ugly and covers up the prop type check.
         const validationResult = validateOptions(originalOptions);
         if (!validationResult.isValid) {
-            throw new Error(`<Select> ${validationResult.reason}`);
+            throw spawnError('<Select> %s', validationResult.reason);
         }
 
         let didFindOptionMatchingValue = false;

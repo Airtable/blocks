@@ -1,7 +1,7 @@
 // @flow
-import invariant from 'invariant';
 import {type BaseData} from '../types/base';
 import {fireAndForgetPromise} from '../private_utils';
+import {invariant, spawnAbstractMethodError} from '../error_utils';
 import AbstractModel from './abstract_model';
 
 /** Abstract superclass for all block SDK models that need to fetch async data. */
@@ -74,17 +74,17 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
     }
     _onChangeIsDataLoaded() {
         // Override this to get notified of changes to .isDataLoaded e.g to fire watch keys
-        throw new Error('abstract method');
+        throw spawnAbstractMethodError();
     }
     async _loadDataAsync(): Promise<Array<WatchableKey>> {
         // Override this to fetch the data.
         // It should return an array of watchable keys that changed
         // as a result of loading data.
-        throw new Error('abstract method');
+        throw spawnAbstractMethodError();
     }
     _unloadData() {
         // Override this to unload the data.
-        throw new Error('abstract method');
+        throw spawnAbstractMethodError();
     }
     // Override this method if your model is dependent on other models.
     // Do NOT load other models' data from _loadDataAsync, since it can lead to

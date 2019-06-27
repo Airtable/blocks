@@ -1,7 +1,7 @@
 // @flow
-import invariant from 'invariant';
 import {type FieldId} from '../types/field';
 import {has} from '../private_utils';
+import {invariant, spawnError} from '../error_utils';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
 import QueryResult, {
@@ -334,8 +334,9 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                     this._fieldIdsSetToLoadOrNullIfAllFields &&
                     !has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)
                 ) {
-                    throw new Error(
-                        `Can't watch field because it wasn't included in QueryResult fields: ${fieldId}`,
+                    throw spawnError(
+                        "Can't watch field because it wasn't included in QueryResult fields: %s",
+                        fieldId,
                     );
                 }
                 this._incrementCellValueKeyWatchCountAndWatchIfNecessary(
@@ -807,9 +808,9 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             return !!field;
         });
     }
-    _getErrorMessageForDeletion(): string {
+    _spawnErrorForDeletion(): Error {
         const sourceModelName = this._sourceModel instanceof Table ? 'table' : 'view';
-        return `QueryResult's underlying ${sourceModelName} has been deleted`;
+        return spawnError("QueryResult's underlying %s has been deleted", sourceModelName);
     }
 }
 

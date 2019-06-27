@@ -1,10 +1,10 @@
 // @flow
-import invariant from 'invariant';
 import {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
 import {FieldTypes, type FieldId} from '../types/field';
 import {isEnumValue, cloneDeep, entries} from '../private_utils';
+import {invariant} from '../error_utils';
 import {type AirtableWriteAction} from '../injected/airtable_interface';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';

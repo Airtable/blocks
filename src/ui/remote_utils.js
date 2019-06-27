@@ -1,5 +1,5 @@
 // @flow
-import invariant from 'invariant';
+import {invariant} from '../error_utils';
 
 /**
  * Injects CSS from a string into the page.

@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import {spawnError} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
 import cellValueUtils from '../models/cell_value_utils';
@@ -59,7 +60,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
             !props.field.isDeleted &&
             props.record.parentTable.id !== props.field.parentTable.id
         ) {
-            throw new Error('CellRenderer: record and field must have the same parent table');
+            throw spawnError('CellRenderer: record and field must have the same parent table');
         }
     }
     render() {

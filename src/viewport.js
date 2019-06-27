@@ -1,7 +1,7 @@
 // @flow
-import invariant from 'invariant';
 import Watchable from './watchable';
 import {isEnumValue} from './private_utils';
+import {invariant} from './error_utils';
 import {type AirtableInterface} from './injected/airtable_interface';
 
 const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');

@@ -1,8 +1,8 @@
 // @flow
-import invariant from 'invariant';
 import {FieldTypes} from '../types/field';
 import getSdk from '../get_sdk';
 import {fireAndForgetPromise} from '../private_utils';
+import {invariant} from '../error_utils';
 import ObjectPool from './object_pool';
 import QueryResult, {
     type WatchableQueryResultKey,
@@ -188,7 +188,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
         return this.recordIds.map(recordId => {
             const record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
-            invariant(record, `No record for id: ${recordId}`);
+            invariant(record, 'No record for id: %s', recordId);
             return record;
         });
     }
@@ -339,7 +339,8 @@ class LinkedRecordsQueryResult extends QueryResult {
         invariant(
             this._cellValueWatchCountByFieldId[fieldId] &&
                 this._cellValueWatchCountByFieldId[fieldId] > 0,
-            `cellValuesInField:${fieldId} over-free'd`,
+            "cellValuesInField:%s over-free'd",
+            fieldId,
         );
 
         if (this._cellValueWatchCountByFieldId[fieldId] === 0 && this.isValid) {

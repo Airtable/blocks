@@ -1,6 +1,7 @@
 // @flow
 import classNames from 'classnames';
 import * as React from 'react';
+import {spawnError} from '../error_utils';
 
 // Disable the "react/prop-types" rule in this file, since it doesn't support this
 // "shared/reusable prop types" pattern:
@@ -45,7 +46,7 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
         // the error is really ugly and covers up the prop type check.
         const validationResult = validateOptions(options);
         if (!validationResult.isValid) {
-            throw new Error(`<SelectButtons> ${validationResult.reason}`);
+            throw spawnError('<SelectButtons> %s', validationResult.reason);
         }
 
         const restOfProps = u.omit(this.props, Object.keys(SelectButtons.propTypes));

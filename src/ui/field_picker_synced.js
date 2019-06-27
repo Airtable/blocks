@@ -1,6 +1,5 @@
 // @flow
 import PropTypes from 'prop-types';
-import invariant from 'invariant';
 import * as React from 'react';
 import Table from '../models/table';
 import getSdk from '../get_sdk';
@@ -8,6 +7,7 @@ import {FieldTypes, type FieldType} from '../types/field';
 import type Field from '../models/field';
 import {type GlobalConfigKey} from '../global_config';
 import {values} from '../private_utils';
+import {invariant} from '../error_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import FieldPicker from './field_picker';
 import Synced from './synced';

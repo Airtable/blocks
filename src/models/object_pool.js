@@ -1,5 +1,5 @@
 // @flow
-import invariant from 'invariant';
+import {invariant, spawnError} from '../error_utils';
 
 type ObjectPoolOptions<T, Opts> = {|
     getKeyFromObject: T => string,
@@ -72,7 +72,7 @@ class ObjectPool<T, Opts> {
     unregisterObjectForReuseWeak(object: T) {
         const didExist = this._unregisterObjectForReuseWeakIfExists(object);
         if (!didExist) {
-            throw new Error('Object was not registered for reuse');
+            throw spawnError('Object was not registered for reuse');
         }
     }
     _unregisterObjectForReuseWeakIfExists(object: T): boolean {

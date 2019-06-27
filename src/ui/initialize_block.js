@@ -2,6 +2,7 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import getSdk from '../get_sdk';
+import {spawnError} from '../error_utils';
 import BlockWrapper from './block_wrapper';
 
 let hasBeenInitialized = false;
@@ -21,36 +22,31 @@ let hasBeenInitialized = false;
  * }
  *
  * initializeBlock(() => <App />);
- */
-function initializeBlock(getEntryElement: () => React.Node) {
+ */ function initializeBlock(getEntryElement: () => React.Node) {
     const body = typeof document !== 'undefined' ? document.body : null;
     if (!body) {
-        throw new Error('initializeBlock should only be called from browser environments');
+        throw spawnError('initializeBlock should only be called from browser environments');
     }
-
     if (hasBeenInitialized) {
-        throw new Error('initializeBlock should only be called once');
+        throw spawnError('initializeBlock should only be called once');
     }
     hasBeenInitialized = true;
 
     if (typeof getEntryElement !== 'function') {
-        throw new Error(
+        throw spawnError(
             'The first argument to initializeBlock should be a function returning a React element',
         );
     }
-
     const entryElement = getEntryElement();
     if (!React.isValidElement(entryElement)) {
-        throw new Error(
+        throw spawnError(
             "The first argument to initializeBlock didn't return a valid React element",
         );
     }
-
     getSdk().__setBatchedUpdatesFn(ReactDOM.unstable_batchedUpdates);
 
     const container = document.createElement('div');
     body.appendChild(container);
     ReactDOM.render(<BlockWrapper>{entryElement}</BlockWrapper>, container);
 }
-
 export default initializeBlock;

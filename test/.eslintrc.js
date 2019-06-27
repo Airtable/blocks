@@ -24,5 +24,9 @@ module.exports = {
         'jsdoc/require-returns-check': 'off',
         'jsdoc/require-returns-description': 'off',
         'jsdoc/require-returns': 'off',
+
+        'airtable/no-throw-new': 'off',
+        'airtable/no-node-modules-invariant': 'off',
+        'airtable/no-error-interpolation': 'off',
     },
 };

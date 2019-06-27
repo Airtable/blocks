@@ -1,4 +1,5 @@
 // @flow
+import {spawnError} from './error_utils';
 
 let idCount = 0;
 /**
@@ -84,7 +85,11 @@ class Watchable<WatchableKey: string> {
                     {callback, context},
                 ];
             } else {
-                throw new Error(`Invalid key to watch for ${this.constructor._className}: ${key}`); // eslint-disable-line no-console
+                throw spawnError(
+                    'Invalid key to watch for %s: %s',
+                    this.constructor._className,
+                    key,
+                );
             }
         }
 

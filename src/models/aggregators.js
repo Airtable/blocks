@@ -1,5 +1,6 @@
 // @flow
 import getSdk from '../get_sdk';
+import {spawnError} from '../error_utils';
 import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
 import type Record from './record';
 import type Field from './field';
@@ -39,8 +40,10 @@ const aggregators: {[string]: Aggregator} = {};
 
 const aggregate = (aggregatorKey: string, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
-        throw new Error(
-            `The ${aggregatorKey} aggregator is not available for ${field.type} fields`,
+        throw spawnError(
+            'The %s aggregator is not available for %s fields',
+            aggregatorKey,
+            field.type,
         );
     }
 

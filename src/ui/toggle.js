@@ -2,8 +2,8 @@
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import invariant from 'invariant';
 import * as React from 'react';
+import {invariant} from '../error_utils';
 
 const themes = Object.freeze({
     GREEN: 'green',

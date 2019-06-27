@@ -1,6 +1,5 @@
 // @flow
-
-import invariant from 'invariant';
+import {invariant, spawnAbstractMethodError, spawnError} from '../error_utils';
 import {type BaseData} from '../types/base';
 import Watchable from '../watchable';
 
@@ -23,7 +22,8 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
 
         invariant(
             typeof modelId === 'string',
-            `${this.constructor._className} id should be a string`,
+            '%s id should be a string',
+            this.constructor._className,
         );
 
         this._baseData = baseData;
@@ -41,7 +41,7 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
      */
     get _dataOrNullIfDeleted(): DataType | null {
         // Abstract, implement this.
-        throw new Error('abstract method');
+        throw spawnAbstractMethodError();
     }
     /**
      * @private
@@ -49,7 +49,7 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     get _data(): DataType {
         const data = this._dataOrNullIfDeleted;
         if (data === null) {
-            throw new Error(this._getErrorMessageForDeletion());
+            throw this._spawnErrorForDeletion();
         }
         return data;
     }
@@ -77,8 +77,8 @@ class AbstractModel<DataType, WatchableKey: string> extends Watchable<WatchableK
     /**
      * @private
      */
-    _getErrorMessageForDeletion(): string {
-        return this.constructor._className + ' has been deleted';
+    _spawnErrorForDeletion(): Error {
+        return spawnError('%s has been deleted', this.constructor._className);
     }
     /**
      * @returns A string representation of the model for use in debugging.

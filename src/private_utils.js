@@ -1,4 +1,6 @@
 // @flow
+import {spawnError} from './error_utils';
+
 /**
  * @private
  */
@@ -55,10 +57,10 @@ export function has(obj: {+[string]: mixed}, key: string): boolean {
     return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+const invertedEnumCache: WeakMap<{+[string]: string}, {+[string]: ?string}> = new WeakMap();
 /**
  * @private
  */
-const invertedEnumCache: WeakMap<{+[string]: string}, {+[string]: ?string}> = new WeakMap();
 function getInvertedEnumMemoized<EnumValue: string, EnumObj: {+[string]: EnumValue}>(
     enumObj: EnumObj,
 ): {+[EnumValue]: ?$Keys<EnumObj>} {
@@ -101,7 +103,7 @@ export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValu
 ): EnumValue {
     const enumValue = getEnumValueIfExists(enumObj, valueToCheck);
     if (!enumValue) {
-        throw new Error(`Unknown enum value ${valueToCheck}`);
+        throw spawnError('Unknown enum value %s', valueToCheck);
     }
     return enumValue;
 }
@@ -111,44 +113,6 @@ export function assertEnumValue<EnumValue: string, EnumObj: {+[string]: EnumValu
  */
 export function isEnumValue(enumObj: {[string]: string}, valueToCheck: string): boolean {
     return getEnumValueIfExists(enumObj, valueToCheck) !== null;
-}
-
-/**
- * @private
- */
-export function spawnUnknownSwitchCaseError(valueDescription: string, providedValue: mixed): Error {
-    const providedValueString =
-        providedValue !== null && providedValue !== undefined ? providedValue : 'null';
-    return spawnError(
-        `Unknown value ${String(providedValueString)} for ${valueDescription}`,
-        spawnUnknownSwitchCaseError,
-    );
-}
-
-/**
- * @private
- */
-export function spawnAbstractMethodError(): Error {
-    return spawnError('Abstract method', spawnAbstractMethodError);
-}
-
-// If errorOriginFn is specified, all frames above and including the call to errorOriginFn
-// will be omitted from the strack trace.
-/**
- * @private
- */
-export function spawnError(errName: string, errorOriginFn?: (...args: Array<any>) => mixed): Error {
-    const err = new Error(errName);
-
-    // captureStackTrace is only available on v8. It captures the current stack trace
-    // and sets the .stack property of the first argument. It will omit all frames above
-    // and including "errorOriginFn", which is useful for hiding implementation details of our
-    // error throwing helpers (e.g. assert and spawn variants).
-    if (Error.captureStackTrace && errorOriginFn) {
-        Error.captureStackTrace(err, errorOriginFn);
-    }
-
-    return err;
 }
 
 /**

@@ -6,6 +6,7 @@ import {type GlobalConfigUpdate, type GlobalConfigData} from '../global_config';
 import {type RecordData, type RecordDef} from '../types/record';
 import {type UndoRedoMode} from '../types/undo_redo';
 import {type ViewportSizeConstraint} from '../types/viewport';
+import {spawnError} from '../error_utils';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 
@@ -96,7 +97,7 @@ const getAirtableInterfaceAtVersion: (number => AirtableInterface) | void =
     window.__getAirtableInterfaceAtVersion;
 
 if (!getAirtableInterfaceAtVersion) {
-    throw new Error('@airtable/blocks can only run inside the block frame');
+    throw spawnError('@airtable/blocks can only run inside the block frame');
 }
 
 export default getAirtableInterfaceAtVersion(AIRTABLE_INTERFACE_VERSION);

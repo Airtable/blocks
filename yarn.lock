@@ -3141,9 +3141,9 @@ eslint-module-utils@^2.4.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
-"eslint-plugin-airtable@github:hyperbase/eslint-plugin-airtable":
+"eslint-plugin-airtable@github:hyperbase/eslint-plugin-airtable#3f7f22e":
   version "0.0.1"
-  resolved "git+ssh://git@github.com/hyperbase/eslint-plugin-airtable.git#da42308fa5d9c164794b2d32c96934e54b1195f9"
+  resolved "git+ssh://git@github.com/hyperbase/eslint-plugin-airtable.git#3f7f22e36af6ba7801a7f1e9bb2f199a49dfc535"
 
 eslint-plugin-flowtype@3.9.0:
   version "3.9.0"
@@ -4352,7 +4352,7 @@ into-stream@^3.1.0:
     from2 "^2.1.1"
     p-is-promise "^1.1.0"
 
-invariant@2.2.4, invariant@^2.2.2, invariant@^2.2.4:
+invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==

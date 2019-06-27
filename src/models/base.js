@@ -1,11 +1,11 @@
 // @flow
-import invariant from 'invariant';
 import {type BaseData, type AppBlanketData, type ModelChange} from '../types/base';
 import {type CollaboratorData, type UserId} from '../types/collaborator';
 import {type TableId} from '../types/table';
 import {type PermissionLevel} from '../types/permission_levels';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, values, entries} from '../private_utils';
+import {spawnError, invariant} from '../error_utils';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
@@ -268,8 +268,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     getCollaboratorById(collaboratorId: UserId): CollaboratorData {
         const collaborator = this.getCollaboratorByIdIfExists(collaboratorId);
         if (!collaborator) {
-            throw new Error(
-                `No collaborator with ID ${collaboratorId} has access to base ${this.id}`,
+            throw spawnError(
+                'No collaborator with ID %s has access to base %s',
+                collaboratorId,
+                this.id,
             );
         }
         return collaborator;
@@ -332,7 +334,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     getTableById(tableId: string): Table {
         const table = this.getTableByIdIfExists(tableId);
         if (!table) {
-            throw new Error(`No table with ID ${tableId} in base ${this.id}`);
+            throw spawnError('No table with ID %s in base %s', tableId, this.id);
         }
         return table;
     }
@@ -355,7 +357,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     getTableByName(tableName: string): Table {
         const table = this.getTableByNameIfExists(tableName);
         if (!table) {
-            throw new Error(`No table named ${tableName} in base ${this.id}`);
+            throw spawnError('No table named %s in base %s', tableName, this.id);
         }
         return table;
     }

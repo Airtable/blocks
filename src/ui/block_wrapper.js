@@ -1,6 +1,6 @@
 // @flow
-import invariant from 'invariant';
 import * as React from 'react';
+import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
 import Modal from './modal';
 import Loader from './loader';

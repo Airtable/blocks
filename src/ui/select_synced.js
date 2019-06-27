@@ -1,6 +1,6 @@
 // @flow
-import invariant from 'invariant';
 import * as React from 'react';
+import {invariant} from '../error_utils';
 import Select from './select';
 import {
     SelectAndSelectButtonsSyncedPropTypes,

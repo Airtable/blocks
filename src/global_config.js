@@ -3,6 +3,7 @@ import {PermissionLevels} from './types/permission_levels';
 import Watchable from './watchable';
 import getSdk from './get_sdk';
 import {type AirtableInterface, type AirtableWriteAction} from './injected/airtable_interface';
+import {spawnError} from './error_utils';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
@@ -144,7 +145,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
 
         const pathValidationResult = blockKvHelpers.validateKvKeyPath(path, this._kvStore);
         if (!pathValidationResult.isValid) {
-            throw new Error(`Invalid globalConfig path: ${pathValidationResult.reason}`);
+            throw spawnError('Invalid globalConfig path: %s', pathValidationResult.reason);
         }
 
         const value = u.get(this._kvStore, path);
@@ -229,7 +230,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
         if (!this.canSetPaths(updates)) {
-            throw new Error('Your permission level does not allow setting globalConfig values');
+            throw spawnError('Your permission level does not allow setting globalConfig values');
         }
 
         getSdk().__applyGlobalConfigUpdates(updates);
@@ -246,7 +247,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      */
     __setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
         if (!Array.isArray(updates)) {
-            throw new Error('globalConfig updates must be an array');
+            throw spawnError('globalConfig updates must be an array');
         }
 
         const topLevelKeySet = {};
@@ -265,7 +266,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
                 this._kvStore,
             );
             if (!updateValidationResult.isValid) {
-                throw new Error(`Invalid globalConfig update: ${updateValidationResult.reason}`);
+                throw spawnError('Invalid globalConfig update: %s', updateValidationResult.reason);
             }
 
             forkObjectPathForWriteByReference(
@@ -285,7 +286,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             Object.keys(topLevelKeySet),
         );
         if (!limitCheckResult.isValid) {
-            throw new Error(`globalConfig over limits: ${limitCheckResult.reason}`);
+            throw spawnError('globalConfig over limits: %s', limitCheckResult.reason);
         }
 
         // We passed validation and limit checks, so it's safe to persist the updates.

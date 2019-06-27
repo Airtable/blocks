@@ -1,11 +1,10 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import invariant from 'invariant';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {type SVGElement} from '../types/svg_element';
+import {invariant} from '../error_utils';
 
 /**
  * @memberof Modal

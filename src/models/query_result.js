@@ -1,15 +1,15 @@
 // @flow
-import invariant from 'invariant';
 import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordId} from '../types/record';
 import {FieldTypes} from '../types/field';
+import {isEnumValue, assertEnumValue} from '../private_utils';
 import {
-    isEnumValue,
-    assertEnumValue,
     spawnAbstractMethodError,
     spawnUnknownSwitchCaseError,
-} from '../private_utils';
+    spawnError,
+    invariant,
+} from '../error_utils';
 import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type Table from './table';
@@ -228,10 +228,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             : opts.sorts.map(sort => {
                   const field = table.__getFieldMatching(sort.field);
                   if (!field) {
-                      throw new Error(
-                          `No field found for sort: ${
-                              sort.field ? sort.field.toString() : typeof sort.field
-                          }`,
+                      throw spawnError(
+                          'No field found for sort: %s',
+                          sort.field ? sort.field.toString() : typeof sort.field,
                       );
                   }
                   if (
@@ -239,7 +238,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                       sort.direction !== 'asc' &&
                       sort.direction !== 'desc'
                   ) {
-                      throw new Error(`Invalid sort direction: ${sort.direction}`);
+                      throw spawnError('Invalid sort direction: %s', sort.direction);
                   }
                   return {
                       fieldId: field.id,
@@ -261,13 +260,14 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     typeof fieldOrFieldIdOrFieldName !== 'string' &&
                     !(fieldOrFieldIdOrFieldName instanceof Field)
                 ) {
-                    throw new Error(
-                        `Invalid value for field, expected a field, id, or name but got: ${fieldOrFieldIdOrFieldName.toString()}`,
+                    throw spawnError(
+                        'Invalid value for field, expected a field, id, or name but got: %s',
+                        fieldOrFieldIdOrFieldName,
                     );
                 }
                 const field = table.__getFieldMatching(fieldOrFieldIdOrFieldName);
                 if (!field) {
-                    throw new Error(`No field found: ${fieldOrFieldIdOrFieldName.toString()}`);
+                    throw spawnError('No field found: %s', fieldOrFieldIdOrFieldName);
                 }
                 fieldIdsOrNullIfAllFields.push(field.id);
             }
@@ -280,9 +280,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.BY_SELECT_FIELD:
                 invariant(
                     recordColorMode.selectField.type === FieldTypes.SINGLE_SELECT,
-                    `Invalid field for coloring records by select field: expected a ${
-                        FieldTypes.SINGLE_SELECT
-                    }, but got a ${recordColorMode.selectField.type}`,
+                    'Invalid field for coloring records by select field: expected a %s, but got a %s',
+                    FieldTypes.SINGLE_SELECT,
+                    recordColorMode.selectField.type,
                 );
                 invariant(
                     recordColorMode.selectField.parentTable === table,
@@ -299,7 +299,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 );
                 break;
             default:
-                throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
+                throw spawnError('Unknown record coloring mode: %s', (recordColorMode.type: empty));
         }
 
         return {
@@ -398,7 +398,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     getRecordById(recordId: RecordId): Record {
         const record = this.getRecordByIdIfExists(recordId);
         if (!record) {
-            throw new Error(`No record with ID ${recordId} in this query result`);
+            throw spawnError('No record with ID %s in this query result', recordId);
         }
         return record;
     }
@@ -453,7 +453,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     .getViewDataStore(recordColorMode.view.id)
                     .getRecordColor(record);
             default:
-                throw new Error(`Unknown record coloring mode: ${(recordColorMode.type: empty)}`);
+                throw spawnError('Unknown record coloring mode: %s', (recordColorMode.type: empty));
         }
     }
 
@@ -568,7 +568,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             }
             default:
-                throw new Error(`unknown record coloring type ${(recordColorMode.type: empty)}`);
+                throw spawnError('Unknown record coloring type %s', (recordColorMode.type: empty));
         }
 
         this._recordColorChangeHandler = handler;
@@ -610,7 +610,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 break;
             }
             default:
-                throw new Error(`unknown record coloring type ${(recordColorMode.type: empty)}`);
+                throw spawnError('unknown record coloring type %s', (recordColorMode.type: empty));
         }
 
         this._recordColorChangeHandler = null;

@@ -1,5 +1,6 @@
 // @flow
 import {useMemo, useEffect} from 'react';
+import {spawnError} from '../error_utils';
 import useSubscription from './use_subscription';
 
 // rather than asking for an AbstractModelWithAsyncData, we define a much more specific interface
@@ -84,10 +85,9 @@ export default function useLoadable(
 ) {
     const modelConst = model;
     if (modelConst !== null && typeof modelConst.loadDataAsync !== 'function') {
-        throw new Error(
-            `useLoadable called with ${
-                typeof modelConst === 'object' ? modelConst.toString() : typeof modelConst
-            }, which is not a loadable`,
+        throw spawnError(
+            'useLoadable called with %s, which is not a loadable',
+            typeof modelConst === 'object' ? modelConst.toString() : typeof modelConst,
         );
     }
 

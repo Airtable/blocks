@@ -1,6 +1,6 @@
 // @flow
-import invariant from 'invariant';
 import {isEnumValue} from '../private_utils';
+import {invariant} from '../error_utils';
 import {type BaseData, type ModelChange} from '../types/base';
 import {type FieldId} from '../types/field';
 import {type ViewData, type ViewId} from '../types/view';

@@ -1,14 +1,5 @@
 // @flow
-import {
-    has,
-    spawnError,
-    spawnAbstractMethodError,
-    spawnUnknownSwitchCaseError,
-    isObjectEmpty,
-    isNullOrUndefinedOrEmpty,
-    compact,
-    clamp,
-} from '../src/private_utils';
+import {has, isObjectEmpty, isNullOrUndefinedOrEmpty, compact, clamp} from '../src/private_utils';
 import {flowTest} from './test_helpers';
 
 describe('has', () => {
@@ -30,52 +21,6 @@ describe('has', () => {
         }
         const obj = new Klass();
         expect(has(obj, 'onPrototype')).toBe(false);
-    });
-});
-
-describe('spawnError', () => {
-    it('returns an error with message set to the first argument', () => {
-        const error = spawnError('hello, world');
-        expect(error).toBeInstanceOf(Error);
-        expect(error).toHaveProperty('message', 'hello, world');
-    });
-
-    it('strips the caller from the stack trace when a second argument is provided', () => {
-        function spawnTestError() {
-            return spawnError('test', spawnTestError);
-        }
-
-        const testErrorStack = spawnTestError().stack;
-        expect(testErrorStack).not.toContain('at spawnError');
-        expect(testErrorStack).not.toContain('at spawnTestError');
-    });
-});
-
-describe('spawnAbstractMethodError', () => {
-    it('returns an error with the message "Abstract method"', () => {
-        const error = spawnAbstractMethodError();
-        expect(error).toBeInstanceOf(Error);
-        expect(error.message).toBe('Abstract method');
-    });
-
-    it("doesn't include itself in its stacktrace", () => {
-        const error = spawnAbstractMethodError();
-        expect(error.stack).not.toContain('at spawnAbstractMethodError');
-        expect(error.stack).not.toContain('at spawnError');
-    });
-});
-
-describe('spawnUnknownSwitchCaseError', () => {
-    it('returns an error with a helpful message', () => {
-        const error = spawnUnknownSwitchCaseError('some enum', 'foo');
-        expect(error).toBeInstanceOf(Error);
-        expect(error.message).toBe('Unknown value foo for some enum');
-    });
-
-    it("doesn't include itself in its stacktrace", () => {
-        const error = spawnUnknownSwitchCaseError('some enum', 'foo');
-        expect(error.stack).not.toContain('at spawnUnknownSwitchCaseError');
-        expect(error.stack).not.toContain('at spawnError');
     });
 });
 

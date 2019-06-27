@@ -1,9 +1,9 @@
 // @flow
-import invariant from 'invariant';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
 import {values, isNullOrUndefinedOrEmpty} from '../private_utils';
+import {invariant, spawnError} from '../error_utils';
 import {type AttachmentData} from '../types/attachment';
 import {FieldTypes} from '../types/field';
 import {type RecordDef} from '../types/record';
@@ -184,30 +184,32 @@ class RecordCard extends React.Component<RecordCardProps> {
         const {record, view, fields, attachmentCoverField} = props;
 
         if (record && record instanceof Record && record.isDeleted) {
-            throw new Error('Record is deleted');
+            throw spawnError('Record is deleted');
         }
 
         if (!record) {
-            throw new Error('Must provide record');
+            throw spawnError('Must provide record');
         }
 
         if (record && record instanceof Record && attachmentCoverField) {
             if (attachmentCoverField.parentTable.id !== record.parentTable.id) {
-                throw new Error('Attachment cover field must have the same parent table as record');
+                throw spawnError(
+                    'Attachment cover field must have the same parent table as record',
+                );
             }
         }
 
         if (record && record instanceof Record && fields) {
             for (const field of fields) {
                 if (!field.isDeleted && field.parentTable.id !== record.parentTable.id) {
-                    throw new Error('All fields must have the same parent table as record');
+                    throw spawnError('All fields must have the same parent table as record');
                 }
             }
         }
 
         if (record && record instanceof Record && view && !view.isDeleted) {
             if (view.parentTable.id !== record.parentTable.id) {
-                throw new Error('View must have the same parent table as record');
+                throw spawnError('View must have the same parent table as record');
             }
         }
     }

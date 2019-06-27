@@ -1,6 +1,6 @@
 // @flow
-import invariant from 'invariant';
 import {isEnumValue, fireAndForgetPromise, entries, has, values} from '../private_utils';
+import {invariant} from '../error_utils';
 import {type BaseData} from '../types/base';
 import {type TableId, type TableData} from '../types/table';
 import {type FieldId} from '../types/field';

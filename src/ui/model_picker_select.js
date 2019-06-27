@@ -1,6 +1,6 @@
 // @flow
-import invariant from 'invariant';
 import * as React from 'react';
+import {invariant} from '../error_utils';
 import Table from '../models/table';
 import View from '../models/view';
 import Field from '../models/field';

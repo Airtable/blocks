@@ -101,6 +101,9 @@
         "airtable/no-missing-await": "warn",
         "airtable/no-process-domain": "warn",
         "airtable/noopener-noreferrer": "warn",
+        "airtable/no-throw-new": "error",
+        "airtable/no-node-modules-invariant": "error",
+        "airtable/no-error-interpolation": ["error", {"spawnError": 0, "invariant": 1}],
 
         "flowtype/array-style-complex-type": "error",
         "flowtype/array-style-simple-type": "error",

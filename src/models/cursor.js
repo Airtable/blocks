@@ -1,11 +1,11 @@
 // @flow
-import invariant from 'invariant';
 import {type BaseData, type ModelChange} from '../types/base';
 import {type RecordId} from '../types/record';
 import {type TableId} from '../types/table';
 import {type ViewId} from '../types/view';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries} from '../private_utils';
+import {invariant} from '../error_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';
 
