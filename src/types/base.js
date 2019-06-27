@@ -39,15 +39,17 @@ export type BaseData = {|
     // it's only used for collaborator fields which were introduced alongside AppBlanket
     appBlanket: AppBlanketData,
     sortTiebreakerKey: ObjectId | null,
-    enabledFeatureNames: Array<string>,
 
     // These will be exposed through separate models, but stored
     // on base data for convenience.
 
+    // Exposed through Session model
     // currentUserId will be null for backend block requests and publicly shared bases.
     currentUserId: UserId | null,
     permissionLevel: PermissionLevel,
+    enabledFeatureNames: Array<string>,
 
+    // Exposed through Cursor model
     // cursorData will be null if it has not been subscribed to.
     cursorData: CursorData | null,
 |};

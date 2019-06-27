@@ -310,7 +310,7 @@ class BlockSdk {
             sortTiebreakerKey: this.base.__sortTiebreakerKey,
             currentSessionUserId:
                 this.session.__currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
-            isFeatureEnabled: featureName => this.base.__isFeatureEnabled(featureName),
+            isFeatureEnabled: featureName => this.session.__isFeatureEnabled(featureName),
         });
     }
 }

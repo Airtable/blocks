@@ -126,12 +126,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return this._data.name;
     }
     /**
-     * @private
-     */
-    __isFeatureEnabled(featureName: string): boolean {
-        return this._data.enabledFeatureNames.includes(featureName);
-    }
-    /**
      * @function
      * @returns The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
      * @example

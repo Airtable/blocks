@@ -12,6 +12,7 @@ type SessionData = {
     // currentUserId will be null for backend block requests and publicly shared bases.
     currentUserId: UserId | null,
     permissionLevel: PermissionLevel,
+    enabledFeatureNames: Array<string>,
 };
 
 const WatchableSessionKeys = Object.freeze({
@@ -49,10 +50,11 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
         super(baseData, 'session');
         this._airtableInterface = airtableInterface;
 
-        const {permissionLevel, currentUserId} = baseData;
+        const {permissionLevel, currentUserId, enabledFeatureNames} = baseData;
         this._sessionData = {
             permissionLevel,
             currentUserId,
+            enabledFeatureNames,
         };
 
         Object.seal(this);
@@ -127,6 +129,12 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      */
     get __rawPermissionLevel(): PermissionLevel {
         return this._sessionData.permissionLevel;
+    }
+    /**
+     * @private
+     */
+    __isFeatureEnabled(featureName: string): boolean {
+        return this._sessionData.enabledFeatureNames.includes(featureName);
     }
 
     /**
