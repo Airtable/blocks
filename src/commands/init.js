@@ -5,6 +5,7 @@ const nodeModulesCommandHelpers = require('../helpers/node_modules_command_helpe
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
 const SupportedTopLevelDirectoryNames = require('../types/supported_top_level_directory_names');
+const chalk = require('chalk');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const path = require('path');
@@ -36,6 +37,46 @@ function ${componentName}() {
 
 initializeBlock(() => <${componentName} />);
 `;
+}
+
+function getDefaultEslintConfig(): string {
+    // `eslint --init` is interactive and requires several selections + manual editing of the eslint
+    // file to configure plugins, so we use a hardcoded default config here instead.
+    // These are the default settings for a React project, plus the default settings for react-hooks
+    return `module.exports = {
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks"
+    ],
+    "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    }
+};`;
 }
 
 async function _writeDefaultFrontendFilesAsync(blockDirPath: string): Promise<void> {
@@ -86,14 +127,17 @@ async function initBlockAsync(
         apiKey,
     );
 
-    // Create an empty package json so the user can `yarn add`.
+    // Create a package json so the user can `yarn add`.
     // Dependencies are specified as part of the `yarn add` to install the latest versions: this
-    // empty file is needed so that the dependencies are saved in the correct folder.
+    // file is created first so that the dependencies are saved in the correct folder.
     const writePackageJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, 'package.json'),
         JSON.stringify(
             {
                 private: true,
+                scripts: {
+                    lint: 'eslint frontend',
+                },
             },
             null,
             4,
@@ -111,6 +155,12 @@ async function initBlockAsync(
         gitignoreContents.join('\n'),
     );
 
+    // Create a .eslintrc.js file.
+    const writeEslintFilePromise = fsUtils.writeFileAsync(
+        path.join(blockDirPath, '.eslintrc.js'),
+        getDefaultEslintConfig(),
+    );
+
     await Promise.all([
         writeBlockJsonPromise,
         writeRemoteJsonPromise,
@@ -118,9 +168,12 @@ async function initBlockAsync(
         writePackageJsonPromise,
         writeGitignoreFilePromise,
         writeAirtableApiKeyFilePromise,
+        writeEslintFilePromise,
     ]);
 
+    // TODO: consider not piping `yarn add` output so that `block init` is less verbose.
     await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['add', '@airtable/blocks', 'react', 'react-dom', '--non-interactive']);
+    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['add', 'eslint', 'eslint-plugin-react', 'eslint-plugin-react-hooks', '--dev', '--non-interactive']);
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
@@ -152,7 +205,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockDirPath,
         apiKey,
     );
-    console.log('Your block is ready!');
+    console.log(`✅ Your block is ready! ${chalk.bold('cd ' + blockDirPath + ' && block run')} to start developing, and ${chalk.bold('yarn lint')} to lint.`);
 }
 
 module.exports = {runCommandAsync};
