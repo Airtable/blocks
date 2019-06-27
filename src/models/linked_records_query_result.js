@@ -4,11 +4,11 @@ import getSdk from '../get_sdk';
 import {fireAndForgetPromise} from '../private_utils';
 import {invariant} from '../error_utils';
 import ObjectPool from './object_pool';
-import QueryResult, {
-    type WatchableQueryResultKey,
-    type QueryResultOpts,
-    type NormalizedQueryResultOpts,
-} from './query_result';
+import RecordQueryResult, {
+    type WatchableRecordQueryResultKey,
+    type RecordQueryResultOpts,
+    type NormalizedRecordQueryResultOpts,
+} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 
 import type Table from './table';
@@ -30,7 +30,7 @@ const pool: ObjectPool<
     {
         field: Field,
         record: Record,
-        normalizedOpts: NormalizedQueryResultOpts,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
     },
 > = new ObjectPool({
     getKeyFromObject: queryResult => queryResult._poolKey,
@@ -43,19 +43,19 @@ const pool: ObjectPool<
 });
 
 /**
- * Represents a set of records from a LinkedRecord cell value. See {@link QueryResult} for main
+ * Represents a set of records from a LinkedRecord cell value. See {@link RecordQueryResult} for main
  * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
  * `record.getLinkedRecordsFromCell`.
  */
-class LinkedRecordsQueryResult extends QueryResult {
+class LinkedRecordsQueryResult extends RecordQueryResult {
     static _className = 'LinkedRecordsQueryResult';
 
     static __createOrReuseQueryResult(
         record: Record,
         field: Field,
-        opts: QueryResultOpts,
+        opts: RecordQueryResultOpts,
     ): LinkedRecordsQueryResult {
         invariant(
             record.parentTable === field.parentTable,
@@ -89,7 +89,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     _linkedTable: Table;
     // the records store for the linked table
     _linkedRecordStore: RecordStore;
-    // a QueryResult containing all the rows in the linked table
+    // a RecordQueryResult containing all the rows in the linked table
     _linkedQueryResult: TableOrViewQueryResult;
     // is the query result currently valid. if the field config changes to link
     // to another table or not be a linked record field at all, isValid will
@@ -105,12 +105,12 @@ class LinkedRecordsQueryResult extends QueryResult {
         [string]: (TableOrViewQueryResult, string, mixed) => void,
     } = {};
 
-    constructor(record: Record, field: Field, opts: QueryResultOpts) {
+    constructor(record: Record, field: Field, opts: RecordQueryResultOpts) {
         const linkedTableId = getLinkedTableId(field);
         const linkedTable = getSdk().base.getTableById(linkedTableId);
         const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
 
-        const normalizedOpts = QueryResult._normalizeOpts(linkedTable, opts);
+        const normalizedOpts = RecordQueryResult._normalizeOpts(linkedTable, opts);
 
         super(linkedRecordStore, normalizedOpts, record.parentTable.__baseData);
 
@@ -124,9 +124,9 @@ class LinkedRecordsQueryResult extends QueryResult {
         this._linkedRecordStore = linkedRecordStore;
         this._poolKey = `${record.id}::${field.id}::${linkedTableId}`;
 
-        // we could rely on QueryResult's reuse pool to make sure we get back
-        // the same QueryResult every time, but that would make it much harder
-        // to make sure we unwatch everything from the old QueryResult if e.g.
+        // we could rely on RecordQueryResult's reuse pool to make sure we get back
+        // the same RecordQueryResult every time, but that would make it much harder
+        // to make sure we unwatch everything from the old RecordQueryResult if e.g.
         // the field config changes to point at a different table
         this._linkedQueryResult = TableOrViewQueryResult.__createOrReuseQueryResult(
             linkedTable,
@@ -155,7 +155,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
     /**
      * @private (since we may not be able to return parent model instances in the immutable models world)
-     * @returns the table that records in this QueryResult are part of
+     * @returns the table that records in this RecordQueryResult are part of
      */
     get parentTable(): Table {
         invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
@@ -203,23 +203,23 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     watch(
-        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
-    ): Array<WatchableQueryResultKey> {
+    ): Array<WatchableRecordQueryResultKey> {
         invariant(this.isValid, 'cannot watch an invalid LinkedRecordQueryResult');
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
             fireAndForgetPromise(this.loadDataAsync.bind(this));
 
-            if (key === QueryResult.WatchableKeys.cellValues) {
+            if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 this._watchLinkedQueryCellValuesIfNeededAfterWatch();
             }
 
-            if (key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(
-                    QueryResult.WatchableCellValuesInFieldKeyPrefix.length,
+                    RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
                 );
                 this._watchLinkedQueryCellValuesInFieldIfNeededAfterWatch(fieldId);
             }
@@ -228,22 +228,22 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     unwatch(
-        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
-    ): Array<WatchableQueryResultKey> {
+    ): Array<WatchableRecordQueryResultKey> {
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
             this.unloadData();
 
-            if (key === QueryResult.WatchableKeys.cellValues) {
+            if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 this._unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch();
             }
 
-            if (key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(
-                    QueryResult.WatchableCellValuesInFieldKeyPrefix.length,
+                    RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
                 );
                 this._unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch(fieldId);
             }
@@ -265,7 +265,7 @@ class LinkedRecordsQueryResult extends QueryResult {
         }
     }
 
-    async _loadDataAsync(): Promise<Array<WatchableQueryResultKey>> {
+    async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
         pool.registerObjectForReuseStrong(this);
         this._watchOrigin();
         this._watchLinkedQueryResult();
@@ -300,7 +300,7 @@ class LinkedRecordsQueryResult extends QueryResult {
     }
 
     get _cellValuesWatchCount(): number {
-        return (this._changeWatchersByKey[QueryResult.WatchableKeys.cellValues] || []).length;
+        return (this._changeWatchersByKey[RecordQueryResult.WatchableKeys.cellValues] || []).length;
     }
 
     _watchLinkedQueryCellValuesIfNeededAfterWatch() {
@@ -319,10 +319,12 @@ class LinkedRecordsQueryResult extends QueryResult {
     get _cellValueWatchCountByFieldId(): $ReadOnly<{[string]: number}> {
         const countByFieldId = {};
         const watchKeys = Object.keys(this._changeWatchersByKey).filter(key => {
-            return key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix);
+            return key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix);
         });
         for (const watchKey of watchKeys) {
-            const fieldId = watchKey.slice(QueryResult.WatchableCellValuesInFieldKeyPrefix.length);
+            const fieldId = watchKey.slice(
+                RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
+            );
             countByFieldId[fieldId] = (this._changeWatchersByKey[watchKey] || []).length;
         }
 
@@ -394,7 +396,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
     _watchLinkedQueryCellValuesInField(fieldId: string) {
         this._linkedQueryResult.watch(
-            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+            RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
             this._getOnLinkedCellValuesInFieldChange(fieldId),
             this,
         );
@@ -402,7 +404,7 @@ class LinkedRecordsQueryResult extends QueryResult {
 
     _unwatchLinkedQueryCellValuesInField(fieldId: string) {
         this._linkedQueryResult.unwatch(
-            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+            RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
             this._getOnLinkedCellValuesInFieldChange(fieldId),
             this,
         );
@@ -455,12 +457,12 @@ class LinkedRecordsQueryResult extends QueryResult {
                     );
                     if (filteredRecordIds.length) {
                         this._onChange(
-                            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+                            RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
                             filteredRecordIds,
                         );
                     }
                 } else {
-                    this._onChange(QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
+                    this._onChange(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
                 }
             };
         }

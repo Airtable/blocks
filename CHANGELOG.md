@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks-sdk/compare/v0.0.13...HEAD)
 
 -   **BREAKING:** Removed `currentUser` from `Base` since it is now accessible through `Session`.
+-   **BREAKING:** Renamed QueryResult to RecordQueryResult
 -   Added base.watch('schema') to get notified when base schema changes.
 -   Added Session to expose data about the current user's session.
 -   Added globalConfig.watch('\*') to get notified of any global config key change.

@@ -22,9 +22,9 @@ toc:
           - Session
           - Cursor
           - Field
-          - name: QueryResult
+          - name: RecordQueryResult
             children:
-                - QueryResult
+                - RecordQueryResult
                 - TableOrViewQueryResult
                 - LinkedRecordsQueryResult
           - Record

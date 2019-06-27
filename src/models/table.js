@@ -15,7 +15,7 @@ import Field from './field';
 import Record from './record';
 import cellValueUtils from './cell_value_utils';
 import type Base from './base';
-import {type QueryResultOpts} from './query_result';
+import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import type RecordStore from './record_store';
 
@@ -380,7 +380,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return view;
     }
     /**
-     * Select records from the table. Returns a query result. See {@link QueryResult} for more.
+     * Select records from the table. Returns a query result. See {@link RecordQueryResult} for more.
      *
      * @param [opts={}] Options for the query, such as sorts and fields.
      * @returns A query result.
@@ -406,7 +406,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     );
      * }
      */
-    selectRecords(opts?: QueryResultOpts): TableOrViewQueryResult {
+    selectRecords(opts?: RecordQueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(
             this,
             this._recordStore,

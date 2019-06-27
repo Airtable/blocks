@@ -6,7 +6,7 @@ import Table from './table';
 import Field from './field';
 import View from './view';
 import Record from './record';
-import QueryResult from './query_result';
+import RecordQueryResult from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import aggregators from './aggregators';
@@ -37,8 +37,7 @@ const models = {
     Field,
     View,
     Record,
-    RecordList: QueryResult, // RecordList has been renamed to QueryResult.
-    QueryResult,
+    RecordQueryResult,
     TableOrViewQueryResult,
     LinkedRecordsQueryResult,
     aggregators,

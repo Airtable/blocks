@@ -19,7 +19,7 @@
     -   [Session][15]
     -   [Cursor][16]
     -   [Field][17]
-    -   [QueryResult][18]
+    -   [RecordQueryResult][18]
     -   [Record][19]
     -   [Table][20]
     -   [View][21]
@@ -1170,7 +1170,7 @@ const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
 
 ### recordColoring
 
-Record coloring configuration used with [QueryResult][18]s.
+Record coloring configuration used with [RecordQueryResult][18]s.
 
 #### recordColoring.modes
 
@@ -1853,17 +1853,18 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 Returns **[Array][61]&lt;WatchableFieldKey>** the array of keys that were watched
 
-### QueryResult
+### RecordQueryResult
 
-#### QueryResult
+#### RecordQueryResult
 
 **Extends AbstractModelWithAsyncData**
 
-A QueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
-contains a bunch of records, filtered to a useful subset of the records in the table. Those records
-can be sorted according to your specification, and they can be colored by a select field or using
-the color from a view. Just like a view, you can either have all the fields in a table available, or
-you can just ask for the fields that are relevant to you. There are two types of QueryResult:
+A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable:
+it contains a bunch of records, filtered to a useful subset of the records in the table. Those
+records can be sorted according to your specification, and they can be colored by a select field or
+using the color from a view. Just like a view, you can either have all the fields in a table
+available, or you can just ask for the fields that are relevant to you. There are two types of
+QueryResult:
 
 -   [TableOrViewQueryResult][82] is the most common, and is a query result filtered to all the
     records in a specific [Table][20] or [View][21]. You can get one of these with
@@ -2004,7 +2005,7 @@ Returns **([Record][76] | null)** the record
 ##### getRecordColor
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
-QueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
+RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 
 ###### Parameters
 
@@ -2043,7 +2044,7 @@ Returns **[Array][61]&lt;RecordId>**
 
 ##### records
 
-The records in this QueryResult. Throws if data is not loaded yet. Can be watched.
+The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
 Type: [Array][61]&lt;[Record][76]>
 
@@ -2068,12 +2069,12 @@ unloaded.
 
 ###### Parameters
 
--   `keys` **(WatchableQueryResultKey | [Array][61]&lt;WatchableQueryResultKey>)** the keys to
-    unwatch
+-   `keys` **(WatchableRecordQueryResultKey | [Array][61]&lt;WatchableRecordQueryResultKey>)** the
+    keys to unwatch
 -   `callback` **[Function][64]** the function passed to `.watch` for these keys
 -   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableQueryResultKey>** the array of keys that were unwatched
+Returns **[Array][61]&lt;WatchableRecordQueryResultKey>** the array of keys that were unwatched
 
 ##### watch
 
@@ -2095,17 +2096,18 @@ fetched. Once the data is available, the `callback` will be called.
 
 ###### Parameters
 
--   `keys` **(WatchableQueryResultKey | [Array][61]&lt;WatchableQueryResultKey>)** the keys to watch
+-   `keys` **(WatchableRecordQueryResultKey | [Array][61]&lt;WatchableRecordQueryResultKey>)** the
+    keys to watch
 -   `callback` **[Function][64]** a function to call when those keys change
 -   `context` **[Object][65]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableQueryResultKey>** the array of keys that were watched
+Returns **[Array][61]&lt;WatchableRecordQueryResultKey>** the array of keys that were watched
 
 #### TableOrViewQueryResult
 
-**Extends QueryResult**
+**Extends RecordQueryResult**
 
-Represents a set of records directly from a view or table. See [QueryResult][18] for main
+Represents a set of records directly from a view or table. See [RecordQueryResult][18] for main
 documentation.
 
 Do not instantiate. You can get instances of this class by calling `table.selectRecords` or
@@ -2115,12 +2117,12 @@ Do not instantiate. You can get instances of this class by calling `table.select
 
 -   `sourceModel` **([Table][78] \| [View][74])**
 -   `recordStore` **RecordStore**
--   `opts` **QueryResultOpts?**
+-   `opts` **RecordQueryResultOpts?**
 
 ##### fields
 
-The fields that were used to create this QueryResult. Null if fields were not specified, which means
-the QueryResult will load all fields in the table.
+The fields that were used to create this RecordQueryResult. Null if fields were not specified, which
+means the RecordQueryResult will load all fields in the table.
 
 Type: ([Array][61]&lt;[Field][73]> | null)
 
@@ -2128,7 +2130,7 @@ Returns **([Array][61]&lt;[Field][73]> | null)**
 
 ##### recordIds
 
-The record IDs in this QueryResult. Throws if data is not loaded yet. Can be watched.
+The record IDs in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
 Type: [Array][61]&lt;[string][60]>
 
@@ -2136,9 +2138,9 @@ Returns **[Array][61]&lt;[string][60]>**
 
 #### LinkedRecordsQueryResult
 
-**Extends QueryResult**
+**Extends RecordQueryResult**
 
-Represents a set of records from a LinkedRecord cell value. See [QueryResult][18] for main
+Represents a set of records from a LinkedRecord cell value. See [RecordQueryResult][18] for main
 documentation.
 
 Do not instantiate. You can get instances of this class by calling
@@ -2148,7 +2150,7 @@ Do not instantiate. You can get instances of this class by calling
 
 -   `record` **[Record][76]**
 -   `field` **[Field][73]**
--   `opts` **QueryResultOpts**
+-   `opts` **RecordQueryResultOpts**
 
 ##### fields
 
@@ -2191,7 +2193,7 @@ Returns **[Array][61]&lt;[Record][76]>** Ordered array of all the linked records
 Model class representing a record in a table.
 
 Do not instantiate. You can get instances of this class by calling `table.selectRecords` or
-`view.selectRecords` and using the resulting {@QueryResult}.
+`view.selectRecords` and using the resulting {@RecordQueryResult}.
 
 #### commentCount
 
@@ -2385,14 +2387,14 @@ Returns **[string][60]** The primary cell value in this record, formatted as a `
 #### selectLinkedRecordsFromCell
 
 Select records referenced in a `multipleRecordLinks` cell value. Returns a query result. See
-[QueryResult][18] for more.
+[RecordQueryResult][18] for more.
 
 ##### Parameters
 
 -   `fieldOrFieldIdOrFieldName` **([Field][73] \| [string][60])** The `multipleRecordLinks` field
     (or field ID or field name) to use.
--   `opts` **QueryResultOpts** Options for the query, such as sorts and fields. (optional, default
-    `{}`)
+-   `opts` **RecordQueryResultOpts** Options for the query, such as sorts and fields. (optional,
+    default `{}`)
 
 Returns **[LinkedRecordsQueryResult][93]** A query result containing the records in the given
 `multipleRecordLinks` field.
@@ -2709,12 +2711,12 @@ primary field of a table will not change.
 
 #### selectRecords
 
-Select records from the table. Returns a query result. See [QueryResult][18] for more.
+Select records from the table. Returns a query result. See [RecordQueryResult][18] for more.
 
 ##### Parameters
 
--   `opts` **QueryResultOpts?** Options for the query, such as sorts and fields. (optional, default
-    `{}`)
+-   `opts` **RecordQueryResultOpts?** Options for the query, such as sorts and fields. (optional,
+    default `{}`)
 
 ##### Examples
 
@@ -2867,12 +2869,12 @@ Returns **[string][60]** The name of the view. Can be watched.
 
 #### selectRecords
 
-Select records from the view. Returns a query result. See {@QueryResult} for more.
+Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
 
 ##### Parameters
 
--   `opts` **QueryResultOpts?** Options for the query, such as sorts and fields. (optional, default
-    `{}`)
+-   `opts` **RecordQueryResultOpts?** Options for the query, such as sorts and fields. (optional,
+    default `{}`)
 
 ##### Examples
 
@@ -3376,7 +3378,7 @@ depending on your use-case.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][110] | null)** the query result you want the records from
+-   `queryResult` **(QueryResult | null)** the query result you want the records from
 
 ##### Examples
 
@@ -3416,7 +3418,7 @@ added, removed, or re-ordered.
 
 ##### Parameters
 
--   `queryResult` **[QueryResult][110]** the query result you want the record ids from
+-   `queryResult` **QueryResult** the query result you want the record ids from
 
 ##### Examples
 
@@ -3454,7 +3456,7 @@ when the specific record it concerns changes.
 
 ##### Parameters
 
--   `queryResult` **([QueryResult][110] | null)** the query result you want a record from
+-   `queryResult` **(QueryResult | null)** the query result you want a record from
 -   `recordId` **RecordId** the ID of the record you want from the query result
 
 ##### Examples
@@ -3523,7 +3525,7 @@ function CurrentUserGreeter() {
 }
 ```
 
-Returns **[Session][111]** Session
+Returns **[Session][110]** Session
 
 #### useViewport
 
@@ -3555,7 +3557,7 @@ function ViewportSize() {
 }
 ```
 
-Returns **[Viewport][112]** the current [Viewport][5]
+Returns **[Viewport][111]** the current [Viewport][5]
 
 #### useWatchable
 
@@ -3568,15 +3570,15 @@ This is a low-level tool that you should only use when you specifically need it.
 convenient model-specific hooks available:
 
 -   For [Base][14], [Table][20], [View][21] & [Field][17], use [useBase][55]
--   For [QueryResult][18] & [Record][19], use [useRecords][85], [useRecordIds][86], or
+-   For [RecordQueryResult][18] & [Record][19], use [useRecords][85], [useRecordIds][86], or
     [useRecordById][87]
--   For [Viewport][5], use [useViewport][113].
+-   For [Viewport][5], use [useViewport][112].
 
 If you're writing a class component and still want to be able to use hooks, try [withHooks][106].
 
 ##### Parameters
 
--   `model` **[Watchable][114]?** the model to watch
+-   `model` **[Watchable][113]?** the model to watch
 -   `keys` **[Array][61]&lt;[string][60]?>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
@@ -3607,7 +3609,7 @@ function ActiveView({cursor}) {
 
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
-might not need to use it directly though - if you're working with a [QueryResult][18], try
+might not need to use it directly though - if you're working with a [RecordQueryResult][18], try
 [useRecords][85], [useRecordIds][86], or [useRecordById][87] first.
 
 When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
@@ -3615,7 +3617,7 @@ loaded when your component mounts, and unloaded when your component unmounts. By
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [&lt;React.Suspense />][115] around the component that uses the hook.
+looks, use [&lt;React.Suspense />][114] around the component that uses the hook.
 
 If you need more control (for example, if you have two models you want to load at the same time
 rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to the
@@ -3624,7 +3626,7 @@ use the data you loaded.
 
 ##### Parameters
 
--   `model` **([QueryResult][110] \| [Cursor][116] | null)** the model to load.
+-   `model` **(QueryResult | [Cursor][115] | null)** the model to load.
 -   `options` **[object][65]?** Optional options to control how the hook works (optional, default
     `{}`)
     -   `options.shouldSuspend` **[boolean][62]** pass {shouldSuspend: false} to disable suspense
@@ -3672,7 +3674,7 @@ function LoadTwoQueryResults({queryResultA, queryResultB}) {
 
 A helper method for working with react hooks in class-based components. It takes a React component
 and wraps it, injecting values from hooks as additional props. `withHooks` uses
-[React.forwardRef][117] to make sure that you can use refs with your wrapped component in exactly
+[React.forwardRef][116] to make sure that you can use refs with your wrapped component in exactly
 the same way you would if you weren't using withHooks.
 
 ##### Parameters
@@ -3855,14 +3857,14 @@ user or null
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][118]**
+-   `props` **[AutocompletePopoverProps][117]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][61]&lt;[AutocompleteItem][119]>, renderItem: function (item: [AutocompleteItem][119], isFocused: [boolean][62]): React$Element&lt;any>?,
-filterItems: function (query: [string][60], items: [Array][61]&lt;[AutocompleteItem][119]>):
-[Array][61]&lt;[AutocompleteItem][119]>?, onSelect: function ([AutocompleteItem][119]): void,
+React$Element&lt;any>, items: [Array][61]&lt;[AutocompleteItem][118]>, renderItem: function (item: [AutocompleteItem][118], isFocused: [boolean][62]): React$Element&lt;any>?,
+filterItems: function (query: [string][60], items: [Array][61]&lt;[AutocompleteItem][118]>):
+[Array][61]&lt;[AutocompleteItem][118]>?, onSelect: function ([AutocompleteItem][118]): void,
 placeholder: [string][60]?, focusOnOpen: [boolean][62]?, className: [string][60]?, style:
 [Object][65]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][66]?, placementOffsetY: [number][66]?, fitInWindowMode: FitInWindowMode?, isOpen:
@@ -3871,12 +3873,12 @@ placeholder: [string][60]?, focusOnOpen: [boolean][62]?, className: [string][60]
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][61]&lt;[AutocompleteItem][119]>**
--   `renderItem` **function (item: [AutocompleteItem][119], isFocused: [boolean][62]):
+-   `items` **[Array][61]&lt;[AutocompleteItem][118]>**
+-   `renderItem` **function (item: [AutocompleteItem][118], isFocused: [boolean][62]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][60], items: [Array][61]&lt;[AutocompleteItem][119]>):
-    [Array][61]&lt;[AutocompleteItem][119]>?**
--   `onSelect` **function ([AutocompleteItem][119]): void**
+-   `filterItems` **function (query: [string][60], items: [Array][61]&lt;[AutocompleteItem][118]>):
+    [Array][61]&lt;[AutocompleteItem][118]>?**
+-   `onSelect` **function ([AutocompleteItem][118]): void**
 -   `placeholder` **[string][60]?**
 -   `focusOnOpen` **[boolean][62]?**
 -   `className` **[string][60]?**
@@ -3909,7 +3911,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][120]**
+-   `props` **[ButtonProps][119]**
 
 ##### Examples
 
@@ -3950,7 +3952,7 @@ Type: [object][65]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][121]**
+-   `props` **[CellRendererProps][120]**
 
 #### CellRendererProps
 
@@ -3977,7 +3979,7 @@ choices.
 
 ##### Parameters
 
--   `props` **[ChoiceTokenProps][122]**
+-   `props` **[ChoiceTokenProps][121]**
 
 ##### Examples
 
@@ -4022,7 +4024,7 @@ of choices.
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][123]**
+-   `props` **[CollaboratorTokenProps][122]**
 
 ##### Examples
 
@@ -4105,7 +4107,7 @@ the action.
 
 ##### Parameters
 
--   `props` **[ConfirmationDialogProps][124]**
+-   `props` **[ConfirmationDialogProps][123]**
 
 ##### Examples
 
@@ -4169,7 +4171,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][125]**
+-   `props` **[DialogProps][124]**
 
 ##### Examples
 
@@ -4228,7 +4230,7 @@ A button that closes [Dialog][38].
 
 ##### Parameters
 
--   `props` **[DialogCloseButtonProps][126]**
+-   `props` **[DialogCloseButtonProps][125]**
 
 #### DialogCloseButtonProps
 
@@ -4251,7 +4253,7 @@ Dropdown menu component for selecting fields.
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][127]**
+-   `props` **[FieldPickerProps][126]**
 
 ##### Examples
 
@@ -4337,7 +4339,7 @@ Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][128]**
+-   `props` **[FieldPickerSyncedProps][127]**
 
 ##### Examples
 
@@ -4395,7 +4397,7 @@ Type: [object][65]
 
 -   `table` **[Table][78]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][129]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][128]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
 -   `onChange` **[function][64]?** A function to be called when the selected field changes. This
@@ -4424,7 +4426,7 @@ A vector icon from the Airtable icon set.
 
 ##### Parameters
 
--   `props` **[IconProps][130]**
+-   `props` **[IconProps][129]**
 
 ##### Examples
 
@@ -4446,7 +4448,7 @@ Type: [object][65]
 ##### Properties
 
 -   `name` **[string][60]** The name of the icon. For a comprehensive list, refer to the "Icon"
-    section of the [styleguide][131].
+    section of the [styleguide][130].
 -   `size` **[number][66]?** The width/height of the icon.
 -   `fillColor` **[string][60]?** The color of the icon.
 -   `className` **[string][60]?** Additional class names to apply to the icon.
@@ -4462,7 +4464,7 @@ A vector icon for a field's type.
 
 ##### Parameters
 
--   `props` **[FieldIconProps][132]**
+-   `props` **[FieldIconProps][131]**
 
 ##### Examples
 
@@ -4514,7 +4516,7 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 
 ##### Parameters
 
--   `props` **[InputProps][133]**
+-   `props` **[InputProps][132]**
 
 ##### Examples
 
@@ -4566,7 +4568,7 @@ A wrapper around the `UI.Input` component that syncs with global config.
 
 ##### Parameters
 
--   `props` **[InputSyncedProps][134]**
+-   `props` **[InputSyncedProps][133]**
 
 ##### Examples
 
@@ -4609,14 +4611,14 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][135]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][134]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
 
 ##### Parameters
 
--   `props` **[LinkProps][136]**
+-   `props` **[LinkProps][135]**
 
 ##### Examples
 
@@ -4651,7 +4653,7 @@ A loading spinner component.
 
 ##### Parameters
 
--   `props` **[LoaderProps][137]**
+-   `props` **[LoaderProps][136]**
 
 ##### Examples
 
@@ -4689,7 +4691,7 @@ A popover component, which is used to "float" some content above some other cont
 
 ##### Parameters
 
--   `props` **[PopoverProps][138]**
+-   `props` **[PopoverProps][137]**
 
 #### PopoverProps
 
@@ -4742,7 +4744,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][139]**
+-   `props` **[ProgressBarProps][138]**
 
 ##### Examples
 
@@ -4777,13 +4779,13 @@ Type: [object][65]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][140]**
+-   `props` **[RecordCardProps][139]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][76] | RecordDef), fields: [Array][61]&lt;[Field][73]>?, view: [View][74]?,
 attachmentCoverField: [Field][73]?, width: [number][66]?, height: [number][66]?, onClick:
-[Function][64]?, getExpandRecordOptions: function ([Record][76]): [ExpandRecordOpts][141]?,
+[Function][64]?, getExpandRecordOptions: function ([Record][76]): [ExpandRecordOpts][140]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][65]?}
 
 ##### Properties
@@ -4795,7 +4797,7 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 -   `width` **[number][66]?**
 -   `height` **[number][66]?**
 -   `onClick` **[Function][64]?**
--   `getExpandRecordOptions` **function ([Record][76]): [ExpandRecordOpts][141]?**
+-   `getExpandRecordOptions` **function ([Record][76]): [ExpandRecordOpts][140]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][60]?**
@@ -4809,11 +4811,11 @@ onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][142]**
+-   `props` **[RecordCardListProps][141]**
 
 #### RecordCardListProps
 
-Type: {records: [Array][61]&lt;([Record][76] | RecordDef)>, onScroll: function ([Event][143]):
+Type: {records: [Array][61]&lt;([Record][76] | RecordDef)>, onScroll: function ([Event][142]):
 void?, onRecordClick: (null | function (record: ([Record][76] | RecordDef), index: [number][66]):
 void)?, onRecordMouseEnter: function (record: ([Record][76] | RecordDef), index: [number][66]):
 void?, onRecordMouseLeave: function (record: ([Record][76] | RecordDef), index: [number][66]):
@@ -4823,7 +4825,7 @@ className: [string][60]?, style: [Object][65]?}
 ##### Properties
 
 -   `records` **[Array][61]&lt;([Record][76] | RecordDef)>**
--   `onScroll` **function ([Event][143]): void?**
+-   `onScroll` **function ([Event][142]): void?**
 -   `onRecordClick` **(null | function (record: ([Record][76] | RecordDef), index: [number][66]):
     void)?**
 -   `onRecordMouseEnter` **function (record: ([Record][76] | RecordDef), index: [number][66]):
@@ -4846,7 +4848,7 @@ Dropdown menu component. A wrapper around `<select>` that fits in with Airtable'
 
 ##### Parameters
 
--   `props` **[SelectProps][144]**
+-   `props` **[SelectProps][143]**
 
 ##### Examples
 
@@ -4883,7 +4885,7 @@ Type: [object][65]
 -   `onChange` **[function][64]?** A function to be called when the selected option changes.
 -   `value` **([string][60] \| [number][66] \| [boolean][62] | null)?** The value of the selected
     option.
--   `options` **[Array][61]&lt;[SelectOption][145]>** The list of select options.
+-   `options` **[Array][61]&lt;[SelectOption][144]>** The list of select options.
 -   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the button.
 -   `id` **[string][60]?** The ID of the select element.
 -   `className` **[string][60]?** Additional class names to apply to the select.
@@ -4913,7 +4915,7 @@ Airtable's user interface.
 
 ##### Parameters
 
--   `props` **[SelectSyncedProps][146]**
+-   `props` **[SelectSyncedProps][145]**
 
 ##### Examples
 
@@ -4945,12 +4947,12 @@ Type: [object][65]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][129]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][128]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
 -   `onChange` **[function][64]?** A function to be called when the selected option changes. This
     should only be used for side effects.
--   `options` **[Array][61]&lt;[SelectOption][145]>** The list of select options.
+-   `options` **[Array][61]&lt;[SelectOption][144]>** The list of select options.
 -   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the select.
 -   `id` **[string][60]?** The ID of the select element.
 -   `className` **[string][60]?** Additional class names to apply to the select.
@@ -4988,7 +4990,7 @@ Dropdown menu component for selecting tables.
 
 ##### Parameters
 
--   `props` **[TablePickerProps][147]**
+-   `props` **[TablePickerProps][146]**
 
 ##### Examples
 
@@ -5049,7 +5051,7 @@ Dropdown menu component for selecting tables, synced with [GlobalConfig][3].
 
 ##### Parameters
 
--   `props` **[TablePickerSyncedProps][148]**
+-   `props` **[TablePickerSyncedProps][147]**
 
 ##### Examples
 
@@ -5087,7 +5089,7 @@ Type: [object][65]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][129]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][128]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
 -   `onChange` **[function][64]?** A function to be called when the selected table changes. This
@@ -5114,7 +5116,7 @@ A toggleable switch for controlling boolean values. Functionally analogous to a 
 
 ##### Parameters
 
--   `props` **[ToggleProps][149]**
+-   `props` **[ToggleProps][148]**
 
 ##### Examples
 
@@ -5159,7 +5161,7 @@ analogous to a checkbox.
 
 ##### Parameters
 
--   `props` **[ToggleSyncedProps][150]**
+-   `props` **[ToggleSyncedProps][149]**
 
 ##### Examples
 
@@ -5182,7 +5184,7 @@ Type: [object][65]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][129]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][128]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
 -   `onChange` **[function][64]?** A function to be called when the switch is toggled. This should
@@ -5211,7 +5213,7 @@ A component that shows a tooltip. Wraps its children.
 
 ##### Parameters
 
--   `props` **[TooltipProps][151]**
+-   `props` **[TooltipProps][150]**
 
 ##### Examples
 
@@ -5278,7 +5280,7 @@ Dropdown menu component for selecting views.
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][152]**
+-   `props` **[ViewPickerProps][151]**
 
 ##### Examples
 
@@ -5360,7 +5362,7 @@ Dropdown menu component for selecting views, synced with [GlobalConfig][3].
 
 ##### Parameters
 
--   `props` **[ViewPickerSyncedProps][153]**
+-   `props` **[ViewPickerSyncedProps][152]**
 
 ##### Examples
 
@@ -5420,7 +5422,7 @@ Type: [object][65]
 
 -   `table` **[Table][78]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][129]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][128]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
 -   `onChange` **[function][64]?** A function to be called when the selected view changes. This
@@ -5465,13 +5467,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][154]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][154]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][153]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][153]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][154]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][154]?**
+-   `minSize` **[ViewportSizeConstraintProp][153]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][153]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -5500,7 +5502,7 @@ Type: {width: ([number][66] | null)?, height: ([number][66] | null)?}
 [15]: #session
 [16]: #cursor
 [17]: #field
-[18]: #queryresult
+[18]: #recordqueryresult
 [19]: #record
 [20]: #table
 [21]: #view
@@ -5592,48 +5594,47 @@ Type: {width: ([number][66] | null)?, height: ([number][66] | null)?}
 [107]: #usewatchable
 [108]: #base
 [109]: #globalconfig
-[110]: #queryresult
-[111]: #session
-[112]: #viewport
-[113]: #useviewport
-[114]: #watchable
-[115]: https://reactjs.org/docs/react-api.html#reactsuspense
-[116]: #cursor
-[117]: https://reactjs.org/docs/forwarding-refs.html
-[118]: #autocompletepopoverprops
-[119]: #autocompleteitem
-[120]: #buttonprops
-[121]: #cellrendererprops
-[122]: #choicetokenprops
-[123]: #collaboratortokenprops
-[124]: #confirmationdialogprops
-[125]: #dialogprops
-[126]: #dialogclosebuttonprops
-[127]: #fieldpickerprops
-[128]: #fieldpickersyncedprops
-[129]: #globalconfigkey
-[130]: #iconprops
-[131]: https://airtable.com/styleguide
-[132]: #fieldiconprops
-[133]: #inputprops
-[134]: #inputsyncedprops
-[135]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[136]: #linkprops
-[137]: #loaderprops
-[138]: #popoverprops
-[139]: #progressbarprops
-[140]: #recordcardprops
-[141]: #expandrecordopts
-[142]: #recordcardlistprops
-[143]: https://developer.mozilla.org/docs/Web/API/Event
-[144]: #selectprops
-[145]: #selectoption
-[146]: #selectsyncedprops
-[147]: #tablepickerprops
-[148]: #tablepickersyncedprops
-[149]: #toggleprops
-[150]: #togglesyncedprops
-[151]: #tooltipprops
-[152]: #viewpickerprops
-[153]: #viewpickersyncedprops
-[154]: #viewportsizeconstraintprop
+[110]: #session
+[111]: #viewport
+[112]: #useviewport
+[113]: #watchable
+[114]: https://reactjs.org/docs/react-api.html#reactsuspense
+[115]: #cursor
+[116]: https://reactjs.org/docs/forwarding-refs.html
+[117]: #autocompletepopoverprops
+[118]: #autocompleteitem
+[119]: #buttonprops
+[120]: #cellrendererprops
+[121]: #choicetokenprops
+[122]: #collaboratortokenprops
+[123]: #confirmationdialogprops
+[124]: #dialogprops
+[125]: #dialogclosebuttonprops
+[126]: #fieldpickerprops
+[127]: #fieldpickersyncedprops
+[128]: #globalconfigkey
+[129]: #iconprops
+[130]: https://airtable.com/styleguide
+[131]: #fieldiconprops
+[132]: #inputprops
+[133]: #inputsyncedprops
+[134]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[135]: #linkprops
+[136]: #loaderprops
+[137]: #popoverprops
+[138]: #progressbarprops
+[139]: #recordcardprops
+[140]: #expandrecordopts
+[141]: #recordcardlistprops
+[142]: https://developer.mozilla.org/docs/Web/API/Event
+[143]: #selectprops
+[144]: #selectoption
+[145]: #selectsyncedprops
+[146]: #tablepickerprops
+[147]: #tablepickersyncedprops
+[148]: #toggleprops
+[149]: #togglesyncedprops
+[150]: #tooltipprops
+[151]: #viewpickerprops
+[152]: #viewpickersyncedprops
+[153]: #viewportsizeconstraintprop

@@ -5,7 +5,7 @@ import {isEnumValue} from '../private_utils';
 import AbstractModel from './abstract_model';
 import type Table from './table';
 import type Field from './field';
-import {type QueryResultOpts} from './query_result';
+import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 
@@ -137,7 +137,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         });
     }
     /**
-     * Select records from the view. Returns a query result. See {@QueryResult} for more.
+     * Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
      *
      * @param [opts={}] Options for the query, such as sorts and fields.
      * @returns A query result.
@@ -164,7 +164,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *     );
      * }
      */
-    selectRecords(opts?: QueryResultOpts): TableOrViewQueryResult {
+    selectRecords(opts?: RecordQueryResultOpts): TableOrViewQueryResult {
         return TableOrViewQueryResult.__createOrReuseQueryResult(
             this,
             this._viewDataStore.parentRecordStore,

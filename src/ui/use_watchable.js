@@ -19,7 +19,7 @@ const noopSubscription = {
  * convenient model-specific hooks available:
  *
  * - For {@link Base}, {@link Table}, {@link View} & {@link Field}, use {@link useBase}
- * - For {@link QueryResult} & {@link Record}, use {@link useRecords}, {@link useRecordIds}, or
+ * - For {@link RecordQueryResult} & {@link Record}, use {@link useRecords}, {@link useRecordIds}, or
  *   {@link useRecordById}
  * - For {@link Viewport}, use {@link useViewport}.
  *

@@ -13,7 +13,7 @@ import Field from './field';
 import cellValueUtils from './cell_value_utils';
 import type Table from './table';
 import type View from './view';
-import {type QueryResultOpts} from './query_result';
+import {type RecordQueryResultOpts} from './record_query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
 
@@ -49,7 +49,7 @@ type WatchableRecordKey = $Values<typeof WatchableRecordKeys> | string;
  * Model class representing a record in a table.
  *
  * Do not instantiate. You can get instances of this class by calling `table.selectRecords`
- * or `view.selectRecords` and using the resulting {@QueryResult}.
+ * or `view.selectRecords` and using the resulting {@RecordQueryResult}.
  */
 class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     // Once all blocks set this flag to true, remove this flag.
@@ -394,7 +394,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     }
     /**
      * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
-     * See {@link QueryResult} for more.
+     * See {@link RecordQueryResult} for more.
      *
      * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
      * @param [opts={}] Options for the query, such as sorts and fields.
@@ -402,7 +402,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     selectLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | string,
-        opts: QueryResultOpts = {},
+        opts: RecordQueryResultOpts = {},
     ): LinkedRecordsQueryResult {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
         invariant(field, 'Field does not exist');

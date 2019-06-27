@@ -3,7 +3,7 @@ import type Field from './field';
 import type View from './view';
 
 /**
- * Record coloring configuration used with {@link QueryResult}s.
+ * Record coloring configuration used with {@link RecordQueryResult}s.
  *
  * @namespace recordColoring
  */

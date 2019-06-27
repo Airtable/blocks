@@ -24,7 +24,7 @@ import {
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
-const WatchableQueryResultKeys = Object.freeze({
+const WatchableRecordQueryResultKeys = Object.freeze({
     records: ('records': 'records'),
     recordIds: ('recordIds': 'recordIds'),
     cellValues: ('cellValues': 'cellValues'),
@@ -34,14 +34,14 @@ const WatchableQueryResultKeys = Object.freeze({
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 
 // The string case is to accommodate cellValuesInField:$FieldId.
-export type WatchableQueryResultKey = $Values<typeof WatchableQueryResultKeys> | string;
+export type WatchableRecordQueryResultKey = $Values<typeof WatchableRecordQueryResultKeys> | string;
 
 type SortConfig = {
     field: Field | string,
     direction?: 'asc' | 'desc',
 };
 
-export type QueryResultOpts = {
+export type RecordQueryResultOpts = {
     sorts?: Array<SortConfig>,
     // Allow falsey values for convenience of including
     // fields conditionally. They'll be filtered out.
@@ -49,14 +49,14 @@ export type QueryResultOpts = {
     recordColorMode?: null | RecordColorMode,
 };
 
-export type NormalizedQueryResultOpts = {|
+export type NormalizedRecordQueryResultOpts = {|
     sorts: Array<{fieldId: string, direction: 'asc' | 'desc'}> | null,
     fieldIdsOrNullIfAllFields: Array<string> | null,
     recordColorMode: RecordColorMode,
 |};
 
 /**
- * A QueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
+ * A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it
  * contains a bunch of records, filtered to a useful subset of the records in the table. Those
  * records can be sorted according to your specification, and they can be colored by a select field
  * or using the color from a view. Just like a view, you can either have all the fields in a table
@@ -163,12 +163,12 @@ export type NormalizedQueryResultOpts = {|
  * });
  * ```
  */
-class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
+class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,
-    WatchableQueryResultKey,
+    WatchableRecordQueryResultKey,
 > {
     // Abstract properties - classes extending QueryResult must override these:
-    static _className = 'QueryResult';
+    static _className = 'RecordQueryResult';
 
     /**
      * The record IDs in this QueryResult.
@@ -204,25 +204,28 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     // provided properties + methods:
-    static WatchableKeys = WatchableQueryResultKeys;
+    static WatchableKeys = WatchableRecordQueryResultKeys;
     static WatchableCellValuesInFieldKeyPrefix = WatchableCellValuesInFieldKeyPrefix;
     static _isWatchableKey(key: string): boolean {
         return (
-            isEnumValue(WatchableQueryResultKeys, key) ||
+            isEnumValue(WatchableRecordQueryResultKeys, key) ||
             key.startsWith(WatchableCellValuesInFieldKeyPrefix)
         );
     }
-    static _shouldLoadDataForKey(key: WatchableQueryResultKey): boolean {
+    static _shouldLoadDataForKey(key: WatchableRecordQueryResultKey): boolean {
         return (
-            key === QueryResult.WatchableKeys.records ||
-            key === QueryResult.WatchableKeys.recordIds ||
-            key === QueryResult.WatchableKeys.cellValues ||
-            key === QueryResult.WatchableKeys.recordColors ||
-            key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)
+            key === RecordQueryResult.WatchableKeys.records ||
+            key === RecordQueryResult.WatchableKeys.recordIds ||
+            key === RecordQueryResult.WatchableKeys.cellValues ||
+            key === RecordQueryResult.WatchableKeys.recordColors ||
+            key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)
         );
     }
 
-    static _normalizeOpts(table: Table, opts: QueryResultOpts = {}): NormalizedQueryResultOpts {
+    static _normalizeOpts(
+        table: Table,
+        opts: RecordQueryResultOpts = {},
+    ): NormalizedRecordQueryResultOpts {
         const sorts = !opts.sorts
             ? null
             : opts.sorts.map(sort => {
@@ -309,7 +312,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         };
     }
 
-    _normalizedOpts: NormalizedQueryResultOpts;
+    _normalizedOpts: NormalizedRecordQueryResultOpts;
     _recordStore: RecordStore;
     _recordColorChangeHandler: Function | null = null;
 
@@ -319,7 +322,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      */
     constructor(
         recordStore: RecordStore,
-        normalizedOpts: NormalizedQueryResultOpts,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
         baseData: BaseData,
     ) {
         super(baseData, getSdk().models.generateGuid());
@@ -334,7 +337,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      *
      * @async
      * @function loadDataAsync
-     * @memberof QueryResult
+     * @memberof RecordQueryResult
      * @instance
      * @returns {Promise<void>} A promise that will resolve once the data is loaded.
      */
@@ -345,7 +348,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Every call to `loadDataAsync` should have a matching call to `unloadData`.
      *
      * @function unloadData
-     * @memberof QueryResult
+     * @memberof RecordQueryResult
      * @instance
      * @returns {void}
      */
@@ -353,12 +356,12 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     /**
      * @private
      */
-    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedQueryResultOpts): boolean {
+    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordQueryResultOpts): boolean {
         return u.isEqual(this._normalizedOpts, normalizedOpts);
     }
 
     /**
-     * The records in this QueryResult.
+     * The records in this RecordQueryResult.
      * Throws if data is not loaded yet.
      * Can be watched.
      *
@@ -427,7 +430,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
     /**
      * Get the color of a specific record in the query result. Throws if the record isn't in the
-     * QueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
+     * RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
      *
      * @param recordOrRecordId the record or record ID you want the color of.
      * @returns a {@link Color}, or null if the record has no color in this query result.
@@ -461,7 +464,7 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @private
      */
     _onChangeIsDataLoaded() {
-        this._onChange(WatchableQueryResultKeys.isDataLoaded);
+        this._onChange(WatchableRecordQueryResultKeys.isDataLoaded);
     }
 
     /**
@@ -487,13 +490,13 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @returns the array of keys that were watched
      */
     watch(
-        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
-    ): Array<WatchableQueryResultKey> {
+    ): Array<WatchableRecordQueryResultKey> {
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
-            if (key === WatchableQueryResultKeys.recordColors) {
+            if (key === WatchableRecordQueryResultKeys.recordColors) {
                 this._watchRecordColorsIfNeeded();
             }
         }
@@ -514,13 +517,13 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @returns the array of keys that were unwatched
      */
     unwatch(
-        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
-    ): Array<WatchableQueryResultKey> {
+    ): Array<WatchableRecordQueryResultKey> {
         const validKeys = super.unwatch(keys, callback, context);
         for (const key of validKeys) {
-            if (key === WatchableQueryResultKeys.recordColors) {
+            if (key === WatchableRecordQueryResultKeys.recordColors) {
                 this._unwatchRecordColorsIfPossible();
             }
         }
@@ -531,8 +534,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @private
      */
     _watchRecordColorsIfNeeded() {
-        const watchCount = (this._changeWatchersByKey[WatchableQueryResultKeys.recordColors] || [])
-            .length;
+        const watchCount = (
+            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors] || []
+        ).length;
         if (!this._recordColorChangeHandler && watchCount >= 1) {
             this._watchRecordColors();
         }
@@ -545,9 +549,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
         const recordColorMode = this._normalizedOpts.recordColorMode;
         const handler = (model, key, recordIds) => {
             if (model === this) {
-                this._onChange(WatchableQueryResultKeys.recordColors, recordIds);
+                this._onChange(WatchableRecordQueryResultKeys.recordColors, recordIds);
             } else {
-                this._onChange(WatchableQueryResultKeys.recordColors);
+                this._onChange(WatchableRecordQueryResultKeys.recordColors);
             }
         };
 
@@ -578,8 +582,9 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @private
      */
     _unwatchRecordColorsIfPossible() {
-        const watchCount = (this._changeWatchersByKey[WatchableQueryResultKeys.recordColors] || [])
-            .length;
+        const watchCount = (
+            this._changeWatchersByKey[WatchableRecordQueryResultKeys.recordColors] || []
+        ).length;
         if (this._recordColorChangeHandler && watchCount === 0) {
             this._unwatchRecordColors();
         }
@@ -662,4 +667,4 @@ class QueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 }
 
-export default QueryResult;
+export default RecordQueryResult;

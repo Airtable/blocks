@@ -24,7 +24,7 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
 /**
  * When you're writing a block, not all of the data in your base is available to work with straight
  * away. We need to load it from Airtable first. This hook is a low-level tool for managing that.
- * You might not need to use it directly though - if you're working with a {@link QueryResult}, try
+ * You might not need to use it directly though - if you're working with a {@link RecordQueryResult}, try
  * {@link useRecords}, {@link useRecordIds}, or {@link useRecordById} first.
  *
  * When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is

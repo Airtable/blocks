@@ -5,11 +5,11 @@ import {has} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
-import QueryResult, {
-    type WatchableQueryResultKey,
-    type QueryResultOpts,
-    type NormalizedQueryResultOpts,
-} from './query_result';
+import RecordQueryResult, {
+    type WatchableRecordQueryResultKey,
+    type RecordQueryResultOpts,
+    type NormalizedRecordQueryResultOpts,
+} from './record_query_result';
 import ObjectPool from './object_pool';
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
 import type Field from './field';
@@ -50,7 +50,7 @@ const tableOrViewQueryResultPool: ObjectPool<
     TableOrViewQueryResult,
     {|
         sourceModel: Table | View,
-        normalizedOpts: NormalizedQueryResultOpts,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
     |},
 > = new ObjectPool({
     getKeyFromObject: queryResult => queryResult.__sourceModelId,
@@ -61,22 +61,22 @@ const tableOrViewQueryResultPool: ObjectPool<
 });
 
 /**
- * Represents a set of records directly from a view or table. See {@link QueryResult} for main
+ * Represents a set of records directly from a view or table. See {@link RecordQueryResult} for main
  * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
  * `table.selectRecords` or `view.selectRecords`.
  */
-class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
+class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultData> {
     static _className = 'TableOrViewQueryResult';
 
     static __createOrReuseQueryResult(
         sourceModel: Table | View,
         recordStore: RecordStore,
-        opts: QueryResultOpts,
+        opts: RecordQueryResultOpts,
     ) {
         const tableModel = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
-        const normalizedOpts = QueryResult._normalizeOpts(tableModel, opts);
+        const normalizedOpts = RecordQueryResult._normalizeOpts(tableModel, opts);
         const queryResult = tableOrViewQueryResultPool.getObjectForReuse({
             sourceModel,
             normalizedOpts,
@@ -114,13 +114,13 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     // is undesirable. Instead, we'll store watch counts for each key to make sure we only
     // watch the table once.
     _cellValueKeyWatchCounts: {[string]: number};
-    constructor(sourceModel: Table | View, recordStore: RecordStore, opts?: QueryResultOpts) {
+    constructor(sourceModel: Table | View, recordStore: RecordStore, opts?: RecordQueryResultOpts) {
         const table = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
         invariant(
             table.id === recordStore.tableId,
-            'record store must belong to QueryResult table',
+            'record store must belong to RecordQueryResult table',
         );
-        const normalizedOpts = QueryResult._normalizeOpts(table, opts);
+        const normalizedOpts = RecordQueryResult._normalizeOpts(table, opts);
         super(recordStore, normalizedOpts, sourceModel.__baseData);
 
         this._sourceModel = sourceModel;
@@ -206,32 +206,32 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
 
     /**
      * @private (since we may not be able to return parent model instances in the immutable models world)
-     * The table that records in this QueryResult are part of
+     * The table that records in this RecordQueryResult are part of
      */
     get parentTable(): Table {
         return this._table;
     }
     /**
      * @private (since we may not be able to return parent model instances in the immutable models world)
-     * The view that was used to obtain this QueryResult by calling
-     * `view.selectRecords`. Null if the QueryResult was obtained by calling
+     * The view that was used to obtain this RecordQueryResult by calling
+     * `view.selectRecords`. Null if the RecordQueryResult was obtained by calling
      * `table.selectRecords`.
      */
     get parentView(): View | null {
         return this._sourceModel instanceof Table ? null : this._sourceModel;
     }
     /**
-     * The record IDs in this QueryResult.
+     * The record IDs in this RecordQueryResult.
      * Throws if data is not loaded yet.
      * Can be watched.
      */
     get recordIds(): Array<string> {
-        invariant(this.isDataLoaded, 'QueryResult data is not loaded');
+        invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
         invariant(this._data.recordIds, 'No recordIds');
         return this._data.recordIds;
     }
     /**
-     * The set of record IDs in this QueryResult.
+     * The set of record IDs in this RecordQueryResult.
      * Throws if data is not loaded yet.
      * @private
      */
@@ -247,18 +247,18 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         return this._recordIdsSet;
     }
     /**
-     * The fields that were used to create this QueryResult.
-     * Null if fields were not specified, which means the QueryResult
+     * The fields that were used to create this RecordQueryResult.
+     * Null if fields were not specified, which means the RecordQueryResult
      * will load all fields in the table.
      */
     get fields(): Array<Field> | null {
         const {fieldIdsOrNullIfAllFields} = this._normalizedOpts;
         if (fieldIdsOrNullIfAllFields) {
             const fields = [];
-            // Filter out any deleted fields, since QueryResult is "live".
+            // Filter out any deleted fields, since RecordQueryResult is "live".
             // It would be too cumbersome (and defeat part of the purpose of
-            // using QueryResult) if the user had to manually watch for deletion
-            // on all the fields and recreate the QueryResult.
+            // using RecordQueryResult) if the user had to manually watch for deletion
+            // on all the fields and recreate the RecordQueryResult.
             for (const fieldId of fieldIdsOrNullIfAllFields) {
                 const field = this._table.getFieldByIdIfExists(fieldId);
                 if (field !== null) {
@@ -317,26 +317,26 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
     }
     watch(
-        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
-    ): Array<WatchableQueryResultKey> {
+    ): Array<WatchableRecordQueryResultKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
         const validKeys = super.watch(keys, callback, context);
 
         for (const key of validKeys) {
-            if (key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(
-                    QueryResult.WatchableCellValuesInFieldKeyPrefix.length,
+                    RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
                 );
                 if (
                     this._fieldIdsSetToLoadOrNullIfAllFields &&
                     !has(this._fieldIdsSetToLoadOrNullIfAllFields, fieldId)
                 ) {
                     throw spawnError(
-                        "Can't watch field because it wasn't included in QueryResult fields: %s",
+                        "Can't watch field because it wasn't included in RecordQueryResult fields: %s",
                         fieldId,
                     );
                 }
@@ -346,11 +346,11 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
                 );
             }
 
-            if (key === QueryResult.WatchableKeys.cellValues) {
+            if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 if (this._fieldIdsSetToLoadOrNullIfAllFields) {
                     for (const fieldId of Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields)) {
                         this._incrementCellValueKeyWatchCountAndWatchIfNecessary(
-                            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+                            RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
                             this._onCellValuesChanged,
                         );
                     }
@@ -366,28 +366,28 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         return validKeys;
     }
     unwatch(
-        keys: WatchableQueryResultKey | Array<WatchableQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
-    ): Array<WatchableQueryResultKey> {
+    ): Array<WatchableRecordQueryResultKey> {
         if (!Array.isArray(keys)) {
             keys = [keys];
         }
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
-            if (key.startsWith(QueryResult.WatchableCellValuesInFieldKeyPrefix)) {
+            if (key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(
                     key,
                     this._onCellValuesInFieldChanged,
                 );
             }
 
-            if (key === QueryResult.WatchableKeys.cellValues) {
+            if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 if (this._fieldIdsSetToLoadOrNullIfAllFields) {
                     for (const fieldId of Object.keys(this._fieldIdsSetToLoadOrNullIfAllFields)) {
                         this._decrementCellValueKeyWatchCountAndUnwatchIfPossible(
-                            QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
+                            RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId,
                             this._onCellValuesChanged,
                         );
                     }
@@ -437,7 +437,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
 
         await super.loadDataAsync();
     }
-    async _loadDataAsync(): Promise<Array<WatchableQueryResultKey>> {
+    async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
         tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
 
         invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
@@ -478,9 +478,9 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         }
 
         const changedKeys = [
-            QueryResult.WatchableKeys.records,
-            QueryResult.WatchableKeys.recordIds,
-            QueryResult.WatchableKeys.cellValues,
+            RecordQueryResult.WatchableKeys.records,
+            RecordQueryResult.WatchableKeys.recordIds,
+            RecordQueryResult.WatchableKeys.cellValues,
         ];
 
         const fieldIds =
@@ -488,7 +488,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             this._table.fields.map(field => field.id);
 
         for (const fieldId of fieldIds) {
-            changedKeys.push(QueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
+            changedKeys.push(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix + fieldId);
         }
 
         return changedKeys;
@@ -634,8 +634,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         // Now that we've applied our changes (if applicable), let's regenerate our recordIds.
         this._orderedRecordIds = this._generateOrderedRecordIds();
 
-        this._onChange(QueryResult.WatchableKeys.records, updates);
-        this._onChange(QueryResult.WatchableKeys.recordIds, updates);
+        this._onChange(RecordQueryResult.WatchableKeys.records, updates);
+        this._onChange(RecordQueryResult.WatchableKeys.recordIds, updates);
     }
     _onCellValuesForSortChanged(
         recordStore: RecordStore,
@@ -670,8 +670,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
         this._orderedRecordIds = this._generateOrderedRecordIds();
 
         const changeData = {addedRecordIds: [], removedRecordIds: []};
-        this._onChange(QueryResult.WatchableKeys.records, changeData);
-        this._onChange(QueryResult.WatchableKeys.recordIds, changeData);
+        this._onChange(RecordQueryResult.WatchableKeys.records, changeData);
+        this._onChange(RecordQueryResult.WatchableKeys.recordIds, changeData);
     }
     _onFieldConfigChanged(field: Field, key: string) {
         // Field config changed for a field we rely on, so we need to replace our vis list.
@@ -729,8 +729,8 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             // Make sure we fire onChange events since the order may have changed
             // as a result.
             const changeData = {addedRecordIds: [], removedRecordIds: []};
-            this._onChange(QueryResult.WatchableKeys.records, changeData);
-            this._onChange(QueryResult.WatchableKeys.recordIds, changeData);
+            this._onChange(RecordQueryResult.WatchableKeys.records, changeData);
+            this._onChange(RecordQueryResult.WatchableKeys.recordIds, changeData);
         }
     }
     _onCellValuesChanged(table: Table, key: string, updates: ?Object) {
@@ -740,7 +740,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
             // a cellValues change twice with no data).
             return;
         }
-        this._onChange(QueryResult.WatchableKeys.cellValues, updates);
+        this._onChange(RecordQueryResult.WatchableKeys.cellValues, updates);
     }
     _onCellValuesInFieldChanged(
         table: Table,
@@ -811,7 +811,7 @@ class TableOrViewQueryResult extends QueryResult<TableOrViewQueryResultData> {
     }
     _spawnErrorForDeletion(): Error {
         const sourceModelName = this._sourceModel instanceof Table ? 'table' : 'view';
-        return spawnError("QueryResult's underlying %s has been deleted", sourceModelName);
+        return spawnError("RecordQueryResult's underlying %s has been deleted", sourceModelName);
     }
 }
 
