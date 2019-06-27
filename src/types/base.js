@@ -33,19 +33,21 @@ export type BaseData = {|
     name: string,
     tableOrder: Array<TableId>,
     activeTableId: TableId | null,
-    permissionLevel: PermissionLevel,
     tablesById: {[TableId]: TableData},
     // NOTE: in rare cases where a base hasn't been loaded since 2016, AppBlanket may be null
     // However, it should never be read from in that scenario since (as of Sep 2017)
     // it's only used for collaborator fields which were introduced alongside AppBlanket
     appBlanket: AppBlanketData,
     sortTiebreakerKey: ObjectId | null,
-    // currentUserId will be null for backend block requests and publicly shared bases.
-    currentUserId: UserId | null,
     enabledFeatureNames: Array<string>,
 
-    // this will be exposed through a separate model, but stored
+    // These will be exposed through separate models, but stored
     // on base data for convenience.
+
+    // currentUserId will be null for backend block requests and publicly shared bases.
+    currentUserId: UserId | null,
+    permissionLevel: PermissionLevel,
+
     // cursorData will be null if it has not been subscribed to.
     cursorData: CursorData | null,
 |};

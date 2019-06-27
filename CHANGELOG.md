@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks-sdk/compare/v0.0.13...HEAD)
 
 -   Added base.watch('schema') to get notified when base schema changes.
+-   Added Session to expose data about the current user's session.
 
 ## [0.0.13](https://github.com/airtable/blocks-sdk/releases/tag/v0.0.13) - 2019-06-21
 

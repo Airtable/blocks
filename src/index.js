@@ -10,6 +10,9 @@ import getSdk from './get_sdk';
  * {@link GlobalConfig} is a key-value store shared between every user of a particular installation
  * of your block. Use it for storing block configuration.
  *
+ * #### [import {session} from '@airtable/blocks';](#session)
+ * An instance of {@link Session}, containing information about the current user's session.
+ *
  * #### [import {cursor} from '@airtable/blocks';](#cursor)
  * An instance of {@link Cursor}, containing information about the table & view that the user
  * currently has open in the main Airtable app, as well as which records they have selected.

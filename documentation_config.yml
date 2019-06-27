@@ -19,6 +19,7 @@ toc:
           - AbstractModelWithAsyncData
           - Aggregator
           - Base
+          - Session
           - Cursor
           - Field
           - name: QueryResult

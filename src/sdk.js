@@ -14,6 +14,7 @@ import {type ModelChange} from './types/base';
 import GlobalConfig, {type GlobalConfigUpdate} from './global_config';
 import Base from './models/base';
 import models from './models/models';
+import Session from './models/session';
 import Cursor from './models/cursor';
 import Viewport from './viewport';
 import UI from './ui/ui';
@@ -82,6 +83,9 @@ class BlockSdk {
 
     /** Represents the current Airtable {@link Base}. */
     base: Base;
+
+    /** Contains information about the current session. */
+    session: Session;
 
     /**
      * Contains the model classes, field types, view types, and utilities for
@@ -199,6 +203,7 @@ class BlockSdk {
 
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
+        this.session = new Session(sdkInitData.baseData, airtableInterface);
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
         this.undoRedo = new UndoRedo(airtableInterface);
@@ -217,8 +222,10 @@ class BlockSdk {
         this._runWithUpdateBatching(() => {
             const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
             const changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
+            const changedSessionKeys = this.session.__applyChangesWithoutTriggeringEvents(changes);
             this.base.__triggerOnChangeForChangedPaths(changedBasePaths);
             this.cursor.__triggerOnChangeForChangedKeys(changedCursorKeys);
+            this.session.__triggerOnChangeForChangedKeys(changedSessionKeys);
         });
     }
     __applyGlobalConfigUpdates(updates: Array<GlobalConfigUpdate>) {
