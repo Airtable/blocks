@@ -189,12 +189,9 @@ class BlockServer {
                         next();
                         break;
 
-                    case BundleStatuses.ERROR: {
-                        const err = bundleStateData.error;
-                        const errStack = stripAnsi(err.message);
-                        res.status(422).send({message: errStack});
+                    case BundleStatuses.ERROR:
+                        res.sendStatus(422);
                         break;
-                    }
 
                     case BundleStatuses.BUNDLING:
                         // If we're still bundling, this is a timeout due to our Promise.race setup.
@@ -219,6 +216,28 @@ class BlockServer {
         runFrameRoutes.get('/bundle.js', this._ensureBundleIsReadyMiddleware(), (req: $Request, res: $Response) => {
             res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
                 root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
+            });
+        });
+
+        /**
+         * This endpoint is used by the block frame for two reasons:
+         * 1. For connection error checks to make sure the local block server is running
+         * 2. To fetch and display any relevant bundle errors. This information is served
+         *    by a separate endpoint instead of putting it in the `GET /bundle.js` response
+         *    because the block frame loads the `GET /bundle.js` info via a <script> tag,
+         *    which doesn't allow us to peek into the HTTP response of the script load request.
+         */
+        runFrameRoutes.get('/bundleStatus', (req: $Request, res: $Response) => {
+            invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
+            const {status} = this._bundleStateDataIfExists;
+            let stack;
+            if (this._bundleStateDataIfExists.status === BundleStatuses.ERROR) {
+                stack = stripAnsi(this._bundleStateDataIfExists.error.message);
+            }
+
+            res.status(200).send({
+                status,
+                ...(stack ? {error: {stack}} : {}),
             });
         });
 
