@@ -186,7 +186,10 @@ class RecordCardListWithItemProvider extends React.Component<RecordCardListWithI
     }
 }
 
-/** @typedef */
+/**
+ * @private
+ * @typedef
+ */
 type RecordCardListProps = {
     records: Array<Record | RecordDef>,
 
@@ -207,7 +210,7 @@ type RecordCardListState = {|
     cardListHeight: number,
 |};
 
-/** */
+/** @private */
 class RecordCardList extends React.Component<RecordCardListProps, RecordCardListState> {
     static propTypes = {
         records: PropTypes.arrayOf(
