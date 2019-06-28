@@ -164,7 +164,6 @@ class BlockServer {
 
             default:
                 throw new Error(`Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`);
-
         }
 
         // During the async gap, another bundling process may have kicked off, so
@@ -396,7 +395,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             },
         );
 
-        this._bundler.on('update', this.bundleFiles.bind(this));
+        this._bundler.on('update', this.triggerBundleAsync.bind(this));
         this._bundler.on('bundle', () => console.log('Updating bundle...'));
     }
     setPublicBaseUrl(publicBaseUrl: string): void {
@@ -412,7 +411,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             await this.startNgrokAsync(port) :
             await this.startLocalAsync(port);
         this.setPublicBaseUrl(url);
-        this.bundleFiles(null);
+        await this.triggerBundleAsync(null);
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
         try {
             await clipboardy.write(url);
@@ -470,7 +469,40 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         console.log('');
         return url;
     }
-    bundleFiles(files: Array<string> | null): void {
+    _bundleAsync(): Promise<BundleStateData> {
+        return new Promise((resolve, reject) => {
+            const blockDirPath = getBlockDirPath();
+            const fsStream = fs.createWriteStream(path.join(
+                blockDirPath,
+                blockCliConfigSettings.BUILD_DIR,
+                blockCliConfigSettings.BUNDLE_FILE_NAME,
+            ));
+            fsStream.on('finish', () => {
+                console.log('Bundle updated');
+                resolve({status: BundleStatuses.READY});
+            }).on('error', (err) => {
+                resolve({status: BundleStatuses.ERROR, error: err});
+            });
+
+            const bundleStream = this._bundler.bundle();
+            bundleStream
+                .on('error', (err) => {
+                    // Append a custom error code here. The error code will be used
+                    // to signal that the HTTP connection to block_server should be
+                    // kept alive via long polling.
+                    err.code = ErrorCodes.BUNDLE_ERROR;
+
+                    console.error(err.message);
+                    if (err.codeFrame) {
+                        console.error(err.codeFrame);
+                    }
+                    bundleStream.unpipe(fsStream);
+                    fsStream.destroy(err);
+                })
+                .pipe(fsStream);
+        });
+    }
+    async triggerBundleAsync(files: Array<string> | null): Promise<void> {
         if (files && files.findIndex(file => file.includes('package.json')) !== -1) {
             // When yarn adds or removes packages, it deletes the symlinks
             // and SDK stub we add to node_modules. As a temporary fix, we
@@ -481,76 +513,61 @@ ${ansiToHtmlConverter.toHtml(err.message)}
             process.exit(0);
         }
 
-        let bundleResolve;
-        const localBundleStateData: BundleStateBundling = {
-            status: BundleStatuses.BUNDLING,
-            promise: new Promise((resolveInner, reject) => {
-                bundleResolve = resolveInner;
-            }),
-        };
-
-        // Always reassign the instance variable with the localBundleStateData.
-        // If this method is triggered multiple times in quick succession,
-        // the instance var will always be pointing to the the latest BundleStateData.
-        this._bundleStateDataIfExists = localBundleStateData;
-
-        const blockDirPath = getBlockDirPath();
-        const fsStream = fs.createWriteStream(path.join(
-            blockDirPath,
-            blockCliConfigSettings.BUILD_DIR,
-            blockCliConfigSettings.BUNDLE_FILE_NAME,
-        ));
-        fsStream.on('finish', () => {
-            console.log('Bundle updated');
-            // TODO(richsinn): Refactor this to have a better separation
-            //   between bundling logic and the state (maybe 2 separate methods).
-            // NOTE: If `bundleFiles` is quickly triggered multiple times:
-            //   1) It's possible the earlier Promises have not resolved yet.
-            //   2) We only want to serve the bundle from the latest trigger.
-            // Because the instance variable always stores the latest BundleStateData,
-            // we check the localBundleStateData against the instance variable
-            // to determine if this is the latest trigger and the bundle is ready.
-            if (this._bundleStateDataIfExists === localBundleStateData) {
-                this._bundleStateDataIfExists = {status: BundleStatuses.READY};
-            }
-
-            // Resolve any long poll promises that were listening for bundle changes.
-            for (const {resolve: longPollResolve} of this._pendingLongPollResolveRejectByRequestId.values()) {
-                longPollResolve();
-            }
-        }).on('error', (err) => {
-            if (this._bundleStateDataIfExists === localBundleStateData) {
-                this._bundleStateDataIfExists = {
-                    status: BundleStatuses.ERROR,
-                    error: err,
-                };
-            }
-
-            // Reject any long poll promises that were listening for bundle changes.
-            for (const {reject: longPollReject} of this._pendingLongPollResolveRejectByRequestId.values()) {
-                longPollReject(err);
-            }
-        }).on('close', () => {
-            // Resolve our local bundle promise.
-            bundleResolve();
+        // 1. Create a new Promise which will be used to determine if the
+        //    bundle is ready to be served via the `GET /bundle.js` endpoint.
+        let bundleAndUpdateStateResolve;
+        const bundleAndUpdateStatePromise = new Promise((resolveInner, rejectInner) => {
+            bundleAndUpdateStateResolve = resolveInner;
         });
 
-        const bundleStream = this._bundler.bundle();
-        bundleStream
-            .on('error', (err) => {
-                // Append a custom error code here. The error code will be used
-                // to signal that the HTTP connection to block_server should be
-                // kept alive via long polling.
-                err.code = ErrorCodes.BUNDLE_ERROR;
+        // 2. Update the `this._bundleStateDataIfExists` instance variable
+        //    to point to the newly created Promise in [1]. If this method is
+        //    triggered multiple times in quick succession, the instance variable
+        //    will always point to the latest created Promise.
+        const localBundleStateData = {
+            status: BundleStatuses.BUNDLING,
+            promise: bundleAndUpdateStatePromise,
+        };
+        this._bundleStateDataIfExists = localBundleStateData;
 
-                console.error(err.message);
-                if (err.codeFrame) {
-                    console.error(err.codeFrame);
+        // 3. Generate the bundle.
+        const bundleResult = await this._bundleAsync();
+
+        // 4. To handle the async gap, we only update `this._bundleStateDataIfExists`
+        //    if it equals the localBundleStateData. This means that the localBundleStateData
+        //    instance is the latest bundle trigger.
+        if (this._bundleStateDataIfExists === localBundleStateData) {
+            this._bundleStateDataIfExists = bundleResult;
+        }
+
+        // 5. Resolve/reject any long poll Promises listening for bundle changes.
+        switch (bundleResult.status) {
+            case BundleStatuses.READY:
+                // Resolve any long poll promises that were listening for bundle changes.
+                for (const {resolve: longPollResolve} of this._pendingLongPollResolveRejectByRequestId.values()) {
+                    longPollResolve();
                 }
-                bundleStream.unpipe(fsStream);
-                fsStream.destroy(err);
-            })
-            .pipe(fsStream);
+                break;
+
+            case BundleStatuses.ERROR:
+                // Reject any long poll promises that were listening for bundle changes.
+                for (const {reject: longPollReject} of this._pendingLongPollResolveRejectByRequestId.values()) {
+                    longPollReject(bundleResult.error);
+                }
+                break;
+
+            case BundleStatuses.BUNDLING:
+                // This is an exceptional case, and should not happen. By
+                // awaiting the local bundleResult above, we should be in a
+                // non-bundling state.
+                throw new Error('Bundling should be finished');
+
+            default:
+                throw new Error(`Unknown ${bundleResult.status} value for BundleStatuses`);
+        }
+
+        invariant(bundleAndUpdateStateResolve, 'bundleAndUpdateStateResolve');
+        bundleAndUpdateStateResolve();
     }
 }
 

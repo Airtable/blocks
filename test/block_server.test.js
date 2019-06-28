@@ -61,7 +61,7 @@ describe('BlockServer', function() {
                 .stub(blockServer, 'startLocalAsync')
                 .callsFake(port => 'https://localhost:' + port);
             sinon.stub(blockServer, 'startNgrokAsync').resolves('https://abc123.ngrok.io');
-            sinon.stub(blockServer, 'bundleFiles').returns();
+            sinon.stub(blockServer, 'triggerBundleAsync').resolves();
             sinon.stub(clipboardy, 'write').resolves();
         });
 
