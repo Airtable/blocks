@@ -10,12 +10,12 @@ const browserify = require('browserify');
 const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
+const AnsiToHtmlConverter = require('ansi-to-html');
 const stripAnsi = require('strip-ansi');
 const ErrorCodes = require('./types/error_codes');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
-const generateBlockClientWrapperCode = require('./block_client_artifacts/generate_block_client_wrapper');
-const generatePollForLiveReloadCode = require('./block_client_artifacts/generate_poll_for_live_reload');
+const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
 const APIClient = require('./api_client');
 const fsUtils = require('./fs_utils');
 const bodyParser = require('body-parser');
@@ -94,11 +94,8 @@ class BlockServer {
     _nextRequestId: number;
     _apiKey: string;
     _bundleStateDataIfExists: BundleStateData | null;
-    _bundlePromiseIfExists: Promise<BundleStateData> | null;
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
-    _blockDirPath: string;
-    _blockServerUrlIfExists: string | null;
     _apiClient: APIClient;
     _bundler: browserify;
 
@@ -121,11 +118,8 @@ class BlockServer {
         this._nextRequestId = 0;
         this._apiKey = apiKey;
         this._bundleStateDataIfExists = null;
-        this._bundlePromiseIfExists = null;
         this._blockJson = blockJson;
         this._remoteJson = remoteJson;
-        this._blockDirPath = getBlockDirPath();
-        this._blockServerUrlIfExists = null;
 
         this._setUpExpressRoutes();
         this._setUpRunFrameRoutes();
@@ -165,8 +159,7 @@ class BlockServer {
                 return;
 
             case BundleStatuses.BUNDLING:
-                invariant(this._bundlePromiseIfExists, 'this._bundlePromiseIfExists');
-                await this._bundlePromiseIfExists;
+                await bundleStateData.promise;
                 break;
 
             default:
@@ -213,7 +206,7 @@ class BlockServer {
         };
     }
     _setUpRunFrameRoutes(): void {
-        const blockDirPath = this._blockDirPath;
+        const blockDirPath = getBlockDirPath();
         const runFrameRoutes = express.Router();
 
         // Use body parser for JSON payloads.
@@ -248,13 +241,6 @@ class BlockServer {
             });
         });
 
-        // Serve the polling script for live reload
-        runFrameRoutes.get('/poll_script.js', (req: $Request, res: $Response) => {
-            res.set('Content-Type', 'text/javascript');
-            invariant(this._blockServerUrlIfExists, 'this._blockServerUrlIfExists');
-            res.send(generatePollForLiveReloadCode(this._blockServerUrlIfExists));
-        });
-
         runFrameRoutes.options('/registerBlockInstallationMetadata', (req: $Request, res: $Response) => {
             res.set({
                 'Access-Control-Allow-Origin': '*',
@@ -287,7 +273,8 @@ class BlockServer {
         });
 
         /**
-         * Simple endpoint that can be used for health checks to this local block server
+         * This endpoint is used by the block frame to check if the
+         * local block server is responding or not.
          */
         runFrameRoutes.head('/ping', (req: $Request, res: $Response) => {
             res.sendStatus(200);
@@ -308,12 +295,21 @@ class BlockServer {
                 const statusCode = result === 'timeout' ? 408 : 200;
                 res.sendStatus(statusCode);
             }).catch((err) => {
+                // TODO(richsinn): Deprecate and remove ansiToHtmlConverter. We'll eventually
+                //   be stripping this error handling logic from the poll request; bundle errors
+                //   will always be handled by the /bundle.js endpoint.
+                const ansiToHtmlConverter = new AnsiToHtmlConverter({fg: '#000', bg: '#FFF'});
                 if (err.code === ErrorCodes.BUNDLE_ERROR) {
-                    // Send 200 to reload the window on bundle errors.
-                    // The reloading mechanism will allow the block frame to
-                    // retrieve the error information when it tries to re-fetch
-                    // the bundle.js file.
-                    res.sendStatus(200);
+                    const errHtml = `<pre>
+${ansiToHtmlConverter.toHtml(err.message)}
+</pre>
+`;
+                    res.set('Content-Type', 'application/json');
+                    // TODO(richsinn): Handle the error overlay and polling logic for syntax
+                    //   errors in the iframe itself, instead of the block_client_wrapper code.
+                    // NOTE: There exists logic in the block_client_wrapper code to keep the
+                    //   polling connection alive for errors with'BUNDLE_ERROR' error code.
+                    res.status(500).send({code: err.code, errStackHtml: errHtml});
                 } else {
                     next(err);
                 }
@@ -325,7 +321,7 @@ class BlockServer {
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
     _setUpBlockSdkAndWrapper() {
-        const blockDirPath = this._blockDirPath;
+        const blockDirPath = getBlockDirPath();
 
         // Check if react and react-dom are listed in package.json.
         const packageJson = fs.readFileSync(path.join(blockDirPath, 'package.json'), 'utf8');
@@ -382,7 +378,7 @@ class BlockServer {
         fs.writeFileSync(clientWrapperFilepath, clientWrapperCode);
     }
     _setUpBundler() {
-        const blockDirPath = this._blockDirPath;
+        const blockDirPath = getBlockDirPath();
 
         const browsers = this._shouldTranspileAll ? allSupportedBrowsers : developmentBrowsers;
         console.log('Transpiling code for the following browsers');
@@ -433,7 +429,6 @@ class BlockServer {
         const url = ngrok ?
             await this.startNgrokAsync(port) :
             await this.startLocalAsync(port);
-        this._blockServerUrlIfExists = url;
         this.setPublicBaseUrl(url);
         await this.triggerBundleAsync(null);
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
@@ -495,7 +490,7 @@ class BlockServer {
     }
     _bundleAsync(): Promise<BundleStateData> {
         return new Promise((resolve, reject) => {
-            const blockDirPath = this._blockDirPath;
+            const blockDirPath = getBlockDirPath();
             const fsStream = fs.createWriteStream(path.join(
                 blockDirPath,
                 blockCliConfigSettings.BUILD_DIR,
