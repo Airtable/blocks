@@ -10,12 +10,12 @@ const browserify = require('browserify');
 const envify = require('envify/custom');
 const babelify = require('babelify');
 const watchify = require('watchify');
-const AnsiToHtmlConverter = require('ansi-to-html');
 const stripAnsi = require('strip-ansi');
 const ErrorCodes = require('./types/error_codes');
 const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
-const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
+const generateBlockClientWrapperCode = require('./block_client_artifacts/generate_block_client_wrapper');
+const generatePollForLiveReloadCode = require('./block_client_artifacts/generate_poll_for_live_reload');
 const APIClient = require('./api_client');
 const fsUtils = require('./fs_utils');
 const bodyParser = require('body-parser');
@@ -96,6 +96,8 @@ class BlockServer {
     _bundleStateDataIfExists: BundleStateData | null;
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
+    _blockDirPath: string;
+    _blockServerUrlIfExists: string | null;
     _apiClient: APIClient;
     _bundler: browserify;
 
@@ -120,6 +122,8 @@ class BlockServer {
         this._bundleStateDataIfExists = null;
         this._blockJson = blockJson;
         this._remoteJson = remoteJson;
+        this._blockDirPath = getBlockDirPath();
+        this._blockServerUrlIfExists = null;
 
         this._setUpExpressRoutes();
         this._setUpRunFrameRoutes();
@@ -206,7 +210,7 @@ class BlockServer {
         };
     }
     _setUpRunFrameRoutes(): void {
-        const blockDirPath = getBlockDirPath();
+        const blockDirPath = this._blockDirPath;
         const runFrameRoutes = express.Router();
 
         // Use body parser for JSON payloads.
@@ -239,6 +243,13 @@ class BlockServer {
                 status,
                 ...(stack ? {error: {stack}} : {}),
             });
+        });
+
+        // Serve the polling script for live reload
+        runFrameRoutes.get('/poll_script.js', (req: $Request, res: $Response) => {
+            res.set('Content-Type', 'text/javascript');
+            invariant(this._blockServerUrlIfExists, 'this._blockServerUrlIfExists');
+            res.send(generatePollForLiveReloadCode(this._blockServerUrlIfExists));
         });
 
         runFrameRoutes.options('/registerBlockInstallationMetadata', (req: $Request, res: $Response) => {
@@ -295,21 +306,12 @@ class BlockServer {
                 const statusCode = result === 'timeout' ? 408 : 200;
                 res.sendStatus(statusCode);
             }).catch((err) => {
-                // TODO(richsinn): Deprecate and remove ansiToHtmlConverter. We'll eventually
-                //   be stripping this error handling logic from the poll request; bundle errors
-                //   will always be handled by the /bundle.js endpoint.
-                const ansiToHtmlConverter = new AnsiToHtmlConverter({fg: '#000', bg: '#FFF'});
                 if (err.code === ErrorCodes.BUNDLE_ERROR) {
-                    const errHtml = `<pre>
-${ansiToHtmlConverter.toHtml(err.message)}
-</pre>
-`;
-                    res.set('Content-Type', 'application/json');
-                    // TODO(richsinn): Handle the error overlay and polling logic for syntax
-                    //   errors in the iframe itself, instead of the block_client_wrapper code.
-                    // NOTE: There exists logic in the block_client_wrapper code to keep the
-                    //   polling connection alive for errors with'BUNDLE_ERROR' error code.
-                    res.status(500).send({code: err.code, errStackHtml: errHtml});
+                    // Send 200 to reload the window on bundle errors.
+                    // The reloading mechanism will allow the block frame to
+                    // retrieve the error information when it tries to re-fetch
+                    // the bundle.js file.
+                    res.sendStatus(200);
                 } else {
                     next(err);
                 }
@@ -321,7 +323,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
     _setUpBlockSdkAndWrapper() {
-        const blockDirPath = getBlockDirPath();
+        const blockDirPath = this._blockDirPath;
 
         // Check if react and react-dom are listed in package.json.
         const packageJson = fs.readFileSync(path.join(blockDirPath, 'package.json'), 'utf8');
@@ -378,7 +380,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         fs.writeFileSync(clientWrapperFilepath, clientWrapperCode);
     }
     _setUpBundler() {
-        const blockDirPath = getBlockDirPath();
+        const blockDirPath = this._blockDirPath;
 
         const browsers = this._shouldTranspileAll ? allSupportedBrowsers : developmentBrowsers;
         console.log('Transpiling code for the following browsers');
@@ -429,6 +431,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
         const url = ngrok ?
             await this.startNgrokAsync(port) :
             await this.startLocalAsync(port);
+        this._blockServerUrlIfExists = url;
         this.setPublicBaseUrl(url);
         await this.triggerBundleAsync(null);
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
@@ -490,7 +493,7 @@ ${ansiToHtmlConverter.toHtml(err.message)}
     }
     _bundleAsync(): Promise<BundleStateData> {
         return new Promise((resolve, reject) => {
-            const blockDirPath = getBlockDirPath();
+            const blockDirPath = this._blockDirPath;
             const fsStream = fs.createWriteStream(path.join(
                 blockDirPath,
                 blockCliConfigSettings.BUILD_DIR,

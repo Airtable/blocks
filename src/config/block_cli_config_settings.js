@@ -40,7 +40,7 @@ module.exports = {
     // File to store the airtable api key.
     AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',
 
-    // Build directory for frontend bundle and transpiled backend code of the user's block code.
+    // Build directory for the user's block code (including frontend bundle and transpiled backend code).
     BUILD_DIR: 'build',
 
     // Wrapper file for blocks frontend code.
