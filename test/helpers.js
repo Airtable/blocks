@@ -1,6 +1,9 @@
 // @flow
 const path = require('path');
 const os = require('os');
+const {TEST_SERVER_PORT} = require('../src/config/block_cli_config_settings');
+
+const TEST_API_URL = 'http://localhost:' + TEST_SERVER_PORT;
 
 function getTemporaryDirectoryPath(): string {
     const id = Math.random()
@@ -11,5 +14,6 @@ function getTemporaryDirectoryPath(): string {
 }
 
 module.exports = {
+    TEST_API_URL,
     getTemporaryDirectoryPath,
 };

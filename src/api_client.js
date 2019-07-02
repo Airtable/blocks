@@ -2,9 +2,8 @@
 const invariant = require('invariant');
 const request = require('request');
 const {promisify} = require('util');
-const Environments = require('./types/environments');
 const {URL} = require('url');
-const {USER_AGENT, TEST_SERVER_PORT} = require('./config/block_cli_config_settings');
+const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');
 const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_remote_json_async');
 const getBlockDirPath = require('./get_block_dir_path');
 const getApiKeySync = require('./get_api_key_sync');
@@ -21,13 +20,6 @@ type BuildId = string;
 type DeployId = string;
 type ReleaseId = string;
 
-const apiBaseUrlsByEnvironment = Object.freeze({
-    [Environments.PRODUCTION]: 'https://api.airtable.com',
-    [Environments.STAGING]: 'https://api-staging.airtable.com',
-    [Environments.LOCAL]: 'https://api.hyperbasedev.com:3000',
-    [Environments.TEST]: 'http://localhost:' + TEST_SERVER_PORT,
-});
-
 // TODO(jb): realistically, all of these endpoints should be using `bases` and not `meta`.
 // If/when we update the endpoints, we should get rid of support for `meta` here.
 const ApiTypes = Object.freeze({
@@ -42,8 +34,6 @@ class APIClient {
     _blockInstallationId: BlockInstallationId | null;
     _blockId: BlockId | null;
     _apiKey: string;
-
-    static apiBaseUrlsByEnvironment = apiBaseUrlsByEnvironment;
 
     static async constructAPIClientForRemoteAsync(remoteName: string | null): Promise<Result<APIClient>> {
         const parseResult = await parseAndValidateRemoteJsonAsync(remoteName);
@@ -68,7 +58,7 @@ class APIClient {
         blockId?: BlockId,
         apiKey: string,
     |}) {
-        this._apiBaseUrl = opts.apiBaseUrl || apiBaseUrlsByEnvironment[Environments.PRODUCTION];
+        this._apiBaseUrl = opts.apiBaseUrl || AIRTABLE_API_URL;
         this._applicationId = opts.applicationId;
         this._blockInstallationId = opts.blockInstallationId || null;
         this._blockId = opts.blockId || null;

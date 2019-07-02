@@ -51,6 +51,8 @@ module.exports = {
 
     AIRTABLE_ACCOUNT_URL: 'https://airtable.com/account',
 
+    AIRTABLE_API_URL: 'https://api.airtable.com',
+
     TEST_SERVER_PORT: 7132,
 
     // This access token is not considered sensitive.

@@ -1,7 +1,7 @@
 // @flow
 const APIClient = require('../src/api_client');
-const Environments = require('../src/types/environments');
 const {TEST_SERVER_PORT} = require('../src/config/block_cli_config_settings');
+const {TEST_API_URL} = require('./helpers');
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -38,7 +38,7 @@ describe('APIClient', function() {
         testApp.use(bodyParser.json());
 
         apiClient = new APIClient({
-            apiBaseUrl: APIClient.apiBaseUrlsByEnvironment[Environments.TEST],
+            apiBaseUrl: TEST_API_URL,
             applicationId: 'app123',
             blockInstallationId: 'bli123',
             blockId: 'blk123',
