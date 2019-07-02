@@ -20,7 +20,7 @@ const APIClient = require('./api_client');
 const fsUtils = require('./fs_utils');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
-const getBlockDirPath = require('./get_block_dir_path');
+const {getBlockDirPath} = require('./get_block_dir_path');
 const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
 const clipboardy = require('clipboardy');
 

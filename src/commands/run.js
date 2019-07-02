@@ -1,6 +1,6 @@
 // @flow
 const invariant = require('invariant');
-const getBlockDirPath = require('../get_block_dir_path');
+const {getBlockDirPath} = require('../get_block_dir_path');
 const getApiKeySync = require('../get_api_key_sync');
 const BlockServer = require('../block_server');
 const LocalSdkBuilder = require('../local_sdk_builder');

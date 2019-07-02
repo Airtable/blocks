@@ -5,7 +5,7 @@ const npmPackageArg = require('npm-package-arg');
 const chalk = require('chalk');
 const cpx = require('cpx');
 const fsUtils = require('./fs_utils');
-const getBlockDirPath = require('./get_block_dir_path');
+const {getBlockDirPath} = require('./get_block_dir_path');
 const {exitWithError} = require('./helpers/cli_helpers');
 const {spawn, execFileAsync} = require('./helpers/child_process_helpers');
 

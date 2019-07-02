@@ -93,4 +93,18 @@ module.exports = {
         });
     },
     unlinkAsync: promisify(fs.unlink),
+    readJsonIfExistsAsync: async function(filePath) {
+        try {
+            return await fsExtra.readJson(filePath);
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                return null;
+            }
+            // Throw if we get any error other than that the file doesn't exist.
+            throw err;
+        }
+    },
+    outputJsonAsync: async function(filePath, content) {
+       await fsExtra.outputJson(filePath, content, {spaces: 4});
+    },
 };

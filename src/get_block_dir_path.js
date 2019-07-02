@@ -20,4 +20,4 @@ function getBlockDirPath(): string {
     throw new Error('Could not find a block directory');
 }
 
-module.exports = getBlockDirPath;
+module.exports = {getBlockDirPath};
