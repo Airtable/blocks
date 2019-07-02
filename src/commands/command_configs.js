@@ -1,6 +1,5 @@
 // @flow
 const CommandNames = require('./command_names');
-const Environments = require('../types/environments');
 const path = require('path');
 const _ = require('lodash');
 
@@ -46,15 +45,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             blockDirPath: {
                 description: 'directory path for the block',
                 type: 'string',
-            },
-        },
-        optionMap: {
-            environment: {
-                type: 'string',
-                description: 'Which environment the block lives on',
-                choices: _.values(Environments),
-                default: Environments.PRODUCTION,
-                hidden: true, // hide from --help output
             },
         },
         runCommandAsync: commandRunner(CommandNames.INIT),

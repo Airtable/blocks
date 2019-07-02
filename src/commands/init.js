@@ -13,7 +13,6 @@ const invariant = require('invariant');
 const {camelCase, upperFirst} = require('lodash');
 
 import type {Argv} from 'yargs';
-import type {Environment} from '../types/environments';
 import type {BlockJson} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 
@@ -177,10 +176,9 @@ async function initBlockAsync(
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
-    const {blockIdentifier, blockDirPath, environment} = argv;
+    const {blockIdentifier, blockDirPath} = argv;
     invariant(typeof blockIdentifier === 'string', 'expects blockIdentifier to be a string');
     invariant(typeof blockDirPath === 'string', 'expects blockDirPath to be a string');
-    invariant(typeof environment === 'string', 'expects environment to be a string');
     const blockIdentifierParseResult = parseBlockIdentifier(blockIdentifier);
     if (!blockIdentifierParseResult.success) {
         throw blockIdentifierParseResult.error;
@@ -194,9 +192,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     // Prompt for apiKey.
-    const apiKey = await promptForApiKeyAsync(
-        ((environment: any): Environment), // eslint-disable-line flowtype/no-weak-types
-    );
+    const apiKey = await promptForApiKeyAsync();
 
     console.log('Initializing block');
     await initBlockAsync(

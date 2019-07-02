@@ -1,6 +1,5 @@
 // @flow
 const init = require('../../src/commands/init');
-const Environments = require('../../src/types/environments');
 const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
@@ -28,7 +27,6 @@ describe('init command', function() {
             $0: 'block',
             blockIdentifier: 'app123/blkABC',
             blockDirPath,
-            environment: Environments.PRODUCTION,
         };
 
         // We stub console.log to tidy up test output, but need to restore it

@@ -17,7 +17,7 @@ module.exports = function getApiKeySync(blockDirPath) {
         if (!/key[0-ZA-Za-z]{14}/.test(apiKey)) {
             console.log(
                 'The Airtable API key looks invalid.\n' +
-                    'Please go to https://airtable.com/account, copy your API key,\n' +
+                    `Please go to ${blockCliConfigSettings.AIRTABLE_ACCOUNT_URL}, copy your API key,\n` +
                     'and put it in a file called ' +
                     blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
             );
@@ -29,7 +29,7 @@ module.exports = function getApiKeySync(blockDirPath) {
         if (err.code === 'ENOENT') {
             console.log(
                 "There doesn't seem to be an API key configured.\n" +
-                    'Please go to https://airtable.com/account, copy your API key,\n' +
+                    `Please go to ${blockCliConfigSettings.AIRTABLE_ACCOUNT_URL}, copy your API key,\n` +
                     'and put it in a file called ' +
                     blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
             );

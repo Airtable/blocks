@@ -49,6 +49,8 @@ module.exports = {
     // Bundle file.
     BUNDLE_FILE_NAME: 'bundle.js',
 
+    AIRTABLE_ACCOUNT_URL: 'https://airtable.com/account',
+
     TEST_SERVER_PORT: 7132,
 
     // This access token is not considered sensitive.
