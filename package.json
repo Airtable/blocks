@@ -2,5 +2,12 @@
   "private": "true",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1"
+  },
+  "scripts": {
+    "format": "pretty-quick"
+  }
 }

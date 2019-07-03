@@ -66,8 +66,6 @@
         "jest": "^24.8.0",
         "lint-staged": "^8.1.7",
         "np": "^5.0.3",
-        "prettier": "^1.17.1",
-        "pretty-quick": "^1.10.0",
         "react": "16.9.0-alpha.0",
         "react-dom": "16.9.0-alpha.0"
     },
@@ -83,7 +81,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "pretty-quick --staged && lint-staged && npm run build:docs && git add docs/api.md"
+            "pre-commit": "lint-staged && npm run build:docs && git add docs/api.md"
         }
     },
     "lint-staged": {
