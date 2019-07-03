@@ -1,0 +1,16 @@
+[ignore]
+.*/(build)/*
+.*/(transpiled)/*
+# Watchify has a Flow error we don't care about.
+<PROJECT_ROOT>/node_modules/watchify/
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+suppress_comment= \\(.\\|\n\\)*flow-disable-next-line
+
+[strict]

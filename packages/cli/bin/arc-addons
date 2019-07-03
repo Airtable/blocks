@@ -1,0 +1,288 @@
+#! /usr/bin/env bash
+set -euo pipefail
+
+# TODO: Maybe get these from a config file in the containing Git repo?
+land_remote="origin"
+push_remote="origin"
+default_land_branch="master"
+derive_push_branch_name() {
+    local_branch_name="$1"
+    # TODO: Maybe get username from a config file?
+    [[ "$USER" != "" ]] || die "\$USER environment variable not set.  We use that to derive the remote branch name."
+    if [[ "$local_branch_name" == "$USER-"* ]]; then
+        echo "$local_branch_name"
+    else
+        echo "$USER-$local_branch_name"
+    fi
+}
+
+die() {
+    for line in "$@"; do
+        printf "%s\n" "$line" 1>&2
+    done
+    exit 1
+}
+
+echo_and_run() {
+    printf ">"
+    printf " %q" "$@"
+    printf "\n"
+    "$@"
+    return $?
+}
+
+if [[ $# -eq 0 ]]; then
+    echo "Try: $(basename "$0") help"
+    exit 1
+fi
+
+sub="$1" ; shift
+
+atnew() {
+    local no_fetch=false
+    local pargs=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --no-fetch) no_fetch=true ;;
+            -*) die "Sub-command \"$sub\": unknown option \"$1\"" ;;
+            *) pargs+=("$1")
+        esac
+        shift
+    done
+    local branch
+    local land_branch
+    if [[ ${#pargs[@]} -eq 1 ]]; then
+        branch="${pargs[0]}"
+        land_branch="$default_land_branch"
+    elif [[ ${#pargs[@]} -eq 2 ]]; then
+        branch="${pargs[0]}"
+        land_branch="${pargs[1]}"
+    else
+        die "Sub-command \"$sub\": expecting 1 or 2 arguments, got ${#pargs[@]}."
+    fi
+
+    if ! "$no_fetch"; then
+        echo_and_run git fetch "$land_remote" "$land_branch"
+    fi
+    echo_and_run git checkout -b "$branch" "$land_remote/$land_branch" --no-track
+    echo_and_run git config "branch.$branch.abr-land-branch" "$land_branch"
+}
+
+atpush() {
+    [[ $# -eq 0 ]] || die "Sub-command \"$sub\": expecting 0 arguments, got $#."
+
+    # TODO: perf: single "git for-each-ref" to get the branch name, hash, and remote?
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    [[ "$branch" != "HEAD" ]] || die "Could not determine current branch name.  Is the repo in a 'detached HEAD' state?"
+    local upstream="$(git for-each-ref --format='%(upstream:short)' "refs/heads/$branch")"
+    local land_branch="$(git config --get "branch.$branch.abr-land-branch" || true)"
+    [[ "$land_branch" != "" ]] || die "Branch \"$branch\"'s \"land branch\" is not set.  Did you create the branch with \"arc atnew\"?"
+    local push_branch
+    if [[ "$upstream" == "" ]]; then
+        push_branch="$(derive_push_branch_name "$branch")"
+        [[ "$push_branch" != "$land_branch" ]] || die "Attempted to push to \"$push_branch\".  This is the \"land branch\" name."
+        echo_and_run git push --set-upstream "$push_remote" HEAD:"$push_branch"
+    else
+        push_branch="${upstream#$push_remote/}"
+        [[ "$upstream" == "$push_remote"/* ]] || die "Branch \"$branch\"'s upstream \"$upstream\" is not on the expected remote \"$push_remote\"."
+        [[ "$push_branch" != "$land_branch" ]] || die "Attempted to push to \"$push_branch\".  This is the \"land branch\" name."
+        # The behavior of plain "git push" depends on the config settings "push.default".
+        # To make sure we only push the current branch, be explicit.
+        echo_and_run git push "$push_remote" "$branch"
+    fi
+}
+
+atreview() {
+    atpush
+    echo_and_run arc diff --no-amend "$@"
+}
+
+merge_or_rebase() {
+    local operation="$1" ; shift
+    local no_fetch=false
+    local pargs=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --no-fetch) no_fetch=true ;;
+            -*) die "Sub-command \"$sub\": unknown option \"$1\"" ;;
+            *) pargs+=("$1")
+        esac
+        shift
+    done
+    [[ ${#pargs[@]} -eq 0 ]] || die "Sub-command \"$sub\": expecting 0 positional arguments, got ${#pargs[@]}."
+
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    [[ "$branch" != "HEAD" ]] || die "Could not determine current branch name.  Is the repo in a 'detached HEAD' state?"
+    local land_branch="$(git config --get "branch.$branch.abr-land-branch" || true)"
+    [[ "$land_branch" != "" ]] || die "Branch \"$branch\"'s \"land branch\" is not set.  Did you create the branch with \"arc atnew\"?"
+
+    if ! "$no_fetch"; then
+        echo_and_run git fetch "$land_remote" "$land_branch"
+    fi
+    echo_and_run git "$operation" "$land_remote/$land_branch"
+}
+
+atmerge() {
+    merge_or_rebase merge "$@"
+}
+
+atrebase() {
+    merge_or_rebase rebase "$@"
+}
+
+atland() {
+    local amend=false
+    local pargs=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --amend) amend=true ;;
+            -*) die "Sub-command \"$atland\": unknown option \"$1\"" ;;
+            *) pargs+=("$1")
+        esac
+        shift
+    done
+
+    local branch
+    if [[ ${#pargs[@]} -eq 0 ]]; then
+        branch="$(git rev-parse --abbrev-ref HEAD)"
+        [[ "$branch" != "HEAD" ]] || die "Could not determine current branch name.  Is the repo in a 'detached HEAD' state?"
+    elif [[ ${#pargs[@]} -eq 1 ]]; then
+        branch="${pargs[0]}"
+    else
+        die "Sub-command \"$sub\": expecting 0 or 1 positional arguments, got ${#pargs[@]}."
+    fi
+    local land_branch="$(git config --get "branch.$branch.abr-land-branch" || true)"
+    [[ "$land_branch" != "" ]] || die "Branch \"$branch\"'s \"land branch\" is not set.  Did you create the branch with \"arc atnew\"?"
+
+    local upstream="$(git for-each-ref --format='%(upstream:short)' "refs/heads/$branch")"
+    [[ "$upstream" != "" ]] || die "Branch \"$branch\" has no upstream set.  Have you done \"arc atpush\"?"
+    [[ "$upstream" == "$push_remote"/* ]] || die "Branch \"$branch\"'s upstream \"$upstream\" is not on the expected remote \"$push_remote\"."
+    local push_branch="${upstream#$push_remote/}"
+    [[ "$push_branch" != "$default_land_branch" ]] || die "Branch \"$branch\"'s upstream \"$upstream\" is the default branch.  Refusing to delete."
+
+    if $amend; then
+        echo_and_run arc land --onto "$land_branch" "$branch" --hold  # puts us in a "detached HEAD" state
+        echo_and_run git commit --amend
+        echo_and_run git push "$land_remote" HEAD:"$land_branch"
+        echo_and_run git push "$push_remote" --delete "$push_branch"
+        echo_and_run git branch -D "$branch"
+    else
+        echo_and_run arc land --onto "$land_branch" "$branch"  # deletes local branch
+        echo_and_run git push "$push_remote" --delete "$push_branch"
+    fi
+}
+
+atset-land-branch() {
+    [[ $# -eq 1 ]] || die "Sub-command \"$sub\": expecting 1 argument, got $#."
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    [[ "$branch" != "HEAD" ]] || die "Could not determine current branch name.  Is the repo in a 'detached HEAD' state?"
+    [[ "$branch" != "$default_land_branch" ]] || die "Can't set-land-branch for default branch \"$default_land_branch\"."
+    local land_branch="$1"
+    echo_and_run git config "branch.$branch.abr-land-branch" "$land_branch"
+}
+
+atdelete() {
+    local current_branch=$(git rev-parse --abbrev-ref HEAD)
+    local branch
+    if [[ $# -eq 0 ]]; then
+        [[ "$current_branch" != "HEAD" ]] || die "Could not determine current branch name.  Is the repo in a 'detached HEAD' state?"
+        branch="$current_branch"
+    elif [[ $# -eq 1 ]]; then
+        branch="$1"
+    else
+        die "Sub-command \"$sub\": expecting 0 or 1 arguments, got $#."
+    fi
+
+    local land_branch="$(git config --get "branch.$branch.abr-land-branch" || true)"
+    [[ "$land_branch" != "" ]] || die "Branch \"$branch\"'s \"land branch\" is not set.  Did you create the branch with \"arc atnew\"?"
+
+    # Delete the upstream, if there is one.
+    local upstream="$(git for-each-ref --format='%(upstream:short)' "refs/heads/$branch")"
+    if [[ "$upstream" != "" ]]; then
+        [[ "$upstream" == "$push_remote"/* ]] || die "Branch \"$branch\"'s upstream \"$upstream\" is not on the expected remote \"$push_remote\"."
+        local push_branch="${upstream#$push_remote/}"
+        [[ "$push_branch" != "$default_land_branch" ]] || die "Branch \"$branch\"'s upstream \"$upstream\" is the default branch.  Refusing to delete."
+        echo_and_run git push "$push_remote" --delete "$push_branch"
+    fi
+
+    # If we're deleting the current branch, we need to switch off it first.
+    if [[ "$branch" == "$current_branch" ]]; then
+        echo_and_run git checkout "refs/heads/$current_branch"
+    fi
+    echo_and_run git branch -D "$branch"
+}
+
+atstate() {
+    if [[ $# -eq 0 ]]; then
+        branch=$(git rev-parse --abbrev-ref HEAD)
+        [[ "$branch" != "HEAD" ]] || die "Could not determine current branch name.  Is the repo in a 'detached HEAD' state?"
+    elif [[ $# -eq 1 ]]; then
+        branch="$1"
+    else
+        die "Sub-command \"$sub\": expecting 0 or 1 arguments, got $#."
+    fi
+    print_setting() {
+        local k="$1"
+        local v="$2"
+        if [[ "$v" != "" ]]; then
+            printf '%-11s  "%s"\n' "$k" "$v"
+        else
+            printf '%-11s  (not set)\n' "$k"
+        fi
+    }
+    print_setting "upstream" "$(git for-each-ref --format='%(upstream:short)' "refs/heads/$branch")"
+    print_setting "land branch" "$(git config --get "branch.$branch.abr-land-branch")"
+}
+
+athelp() {
+    [[ $# -eq 0 ]] || die "Sub-command \"$sub\": expecting 0 arguments, got $#."
+    cat <<EOF
+
+arc atnew <branch> [remote-branch]
+    # Create a new local branch off of the given "$land_remote" branch (default:
+    # "$default_land_branch").
+    # Ex: arc atnew logTypeMismatch
+    #     arc atnew logTypeMismatch development
+    #     arc atnew logTypeMismatch master-v01.10
+    # The remote branch is saved as the local branch's "land branch" for later
+    # merge/rebase/land operations.
+    # Pass --no-fetch to skip the initial fetch of the remote branch.
+
+arc atpush
+    # Push to the branch's upstream (for CI).  If this is the first "atpush",
+    # create a new remote branch "\$USER-\$branch" on "$push_remote" and set that
+    # as the upstream.
+
+arc atreview [arc-args...]
+    # Do "atpush" and then "arc diff".  Any arguments are relayed to "arc diff".
+
+arc atland [branch]
+    # Land given branch (default: current) onto to the "land branch".
+    # Pass --amend to amend the commit message before landing.
+
+arc atmerge|atrebase
+    # Fetch current branch's "land branch" and merge/rebase.
+    # (Warning: rebase doesn't work well with our workflow yet.)
+    # Pass --no-fetch to skip the fetch.
+
+arc atset-land-branch <remote-branch>
+    # Set the current branch's "land branch" (on "$land_remote").
+
+arc atstate [branch]
+    # Show the given branch's upstream and "land branch".
+
+arc atdelete [branch]
+    # Delete the given branch and the corresponding upstream (if one is set).
+
+EOF
+}
+
+case "$sub" in
+    atnew|atpush|atreview|atland|atmerge|atrebase|atset-land-branch|atstate|atdelete|athelp)
+        "$sub" "$@"
+        ;;
+    *)
+        die "Unknown sub-command: \"$sub\""
+        ;;
+esac
+

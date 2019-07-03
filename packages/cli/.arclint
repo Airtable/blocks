@@ -1,0 +1,12 @@
+{
+  "linters": {
+    "eslint-regex-based": {
+      "type": "script-and-regex",
+      "include": "(\\.jsx?$)",
+      "exclude": [],
+      "script-and-regex.script": "sh -c '([ -e ./node_modules/.bin/eslint ]) && (./node_modules/.bin/eslint --report-unused-disable-directives -f compact \"$0\" || true)'",
+      "script-and-regex.regex": "/^(?P<file>.*): line (?P<line>[0-9]*), col (?P<char>[0-9]*), (?P<severity>Warning|Error) - (?P<message>(?!File ignored).*?)(?: \\((?P<code>[a-z-]+)\\))?$/m"
+    }
+  }
+}
+
