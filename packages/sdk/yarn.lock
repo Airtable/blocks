@@ -2987,9 +2987,9 @@ eslint-module-utils@^2.4.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
-"eslint-plugin-airtable@github:hyperbase/eslint-plugin-airtable#3f7f22e":
+"eslint-plugin-airtable@github:hyperbase/eslint-plugin-airtable#01fef1f":
   version "0.0.1"
-  resolved "git+ssh://git@github.com/hyperbase/eslint-plugin-airtable.git#3f7f22e36af6ba7801a7f1e9bb2f199a49dfc535"
+  resolved "git+ssh://git@github.com/hyperbase/eslint-plugin-airtable.git#01fef1fef60df77246c8eae107fbec824d7b5815"
 
 eslint-plugin-flowtype@3.9.0:
   version "3.9.0"
