@@ -3,6 +3,12 @@
 This is a [Lerna](https://github.com/lerna/lerna) monorepo containing projects related to Airtable
 Blocks.
 
+## Branch naming
+
+Use camel-case naming for branching, prefixed with the name of the package and a hyphen. For
+example, if you were adding a friendship component to the SDK, you might name your branch
+`sdk-addFriendship`.
+
 ## Useful commands
 
 | Command                   | Description                                                         |
