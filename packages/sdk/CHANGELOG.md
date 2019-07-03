@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks@0.0.15...HEAD)
 
-No changes.
+-   **BREAKING:** Removed view.visibleFields and view.allFields - use view.selectMetadata instead
+-   Added view.selectMetadata() for querying a view's field order and list of visible fields
 
 ## [0.0.15](https://github.com/airtable/blocks-sdk/compare/v0.0.14...@airtable/blocks@0.0.15) - 2019-07-03
 
