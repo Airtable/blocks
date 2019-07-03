@@ -2,18 +2,12 @@
 /* eslint-disable no-console */
 'use strict';
 
-const blockCliConfigSettings = require('./config/block_cli_config_settings');
+const CommandNames = require('./commands/command_names');
 const configHelpers = require('./helpers/config_helpers');
 const invariant = require('invariant');
 
 async function getApiKeyWithWarningsAsync(): Promise<string> {
-    // TODO(emma): When `block setApiKey` exists, update messages here to include it instead of
-    // these instructions
-    const instructions =
-        `Please go to ${blockCliConfigSettings.AIRTABLE_ACCOUNT_URL}, copy your API key,\n` +
-        'and put it in a file called ' +
-        blockCliConfigSettings.CONFIG_FILE_NAME +
-        ' with the following format:\n {airtableApiKey: YOUR_KEY_HERE}';
+    const instructions = `Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
 
     const apiKey = await configHelpers.getApiKeyIfExistsAsync();
 

@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable no-console */
 const BlockBuilder = require('../builder/block_builder');
+const CommandNames = require('./command_names');
 const APIClient = require('../api_client');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const fsUtils = require('../fs_utils');
@@ -154,13 +155,24 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     const apiClient = apiClientResult.value;
 
-    console.log('building');
-    const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
+    try {
+        console.log('building');
+        const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
 
-    console.log('releasing');
-    await apiClient.createReleaseAsync(buildId, deployId);
+        console.log('releasing');
+        await apiClient.createReleaseAsync(buildId, deployId);
+    } catch (err) {
+        // TODO: Bubble up HTTP status code and check that instead of checking err.message
+        if (err.message === 'Authorization is invalid.') {
+            console.log(
+                `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`,
+            );
+            process.exit(1);
+        }
+        throw err;
+    }
 
-    console.log('successfully released block!');
+    console.log('✅ successfully released block!');
 }
 
 module.exports = {runCommandAsync};

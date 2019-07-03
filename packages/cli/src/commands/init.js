@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-console */
+const CommandNames = require('./command_names');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const configHelpers = require('../helpers/config_helpers');
 const nodeModulesCommandHelpers = require('../helpers/node_modules_command_helpers');
@@ -201,7 +202,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     // Prompt for apiKey if the user does not already have one configured at the user-config level
-    // TODO(emma): When `block setApiKey` exists, update messages here to include it
     const userConfigPath = configHelpers.getConfigPath(configHelpers.ConfigLocations.USER);
     const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(
         configHelpers.ConfigLocations.USER,
@@ -211,7 +211,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     } else {
         const apiKey = await promptForApiKeyAsync();
         await configHelpers.setApiKeyAsync(configHelpers.ConfigLocations.USER, apiKey);
-        console.log(`API key saved to ${userConfigPath}`);
+        console.log(
+            `API key saved to ${userConfigPath}. To update it, use 'block ${CommandNames.SET_API_KEY}'`,
+        );
     }
 
     console.log('Initializing block');

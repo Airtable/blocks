@@ -54,6 +54,14 @@ To pull other users' changes, use `block pull`.
 To release a block, push your code, then go into the web IDE (“Edit block”), click “Run”, then open
 the Builds popover, then click “Release” on the latest build.
 
+#### Updating your API key
+
+To `block release`, you must have a valid Airtable API key configured. Use `block set-api-key` to
+update it.
+
+We support user (`~/.config/.airtableblocksrc.json`) and block (`.airtableblocksrc.json` within
+block directory) scoped configs, and prefer the block scoped config if both exist.
+
 ## Limitations
 
 -   Directories are not supported. Don't create new folders or delete the existing folders.

@@ -3,6 +3,7 @@ const CommandNames = {
     INIT: ('init': 'init'),
     RUN: ('run': 'run'),
     RELEASE: ('release': 'release'),
+    SET_API_KEY: ('set-api-key': 'set-api-key'),
 
     // These commands are no longer supported.
     // TODO(jb): remove them once all blocks are migrated to the standalone CLI world.

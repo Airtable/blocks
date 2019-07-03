@@ -1,5 +1,6 @@
 // @flow
 const CommandNames = require('./command_names');
+const {ConfigLocations} = require('../helpers/config_helpers');
 const path = require('path');
 const _ = require('lodash');
 
@@ -21,8 +22,9 @@ type CommandConfig = {|
 
 function commandRunner(name: string): RunCommandFn {
     return async function(argv: Argv) {
+        // By convention, the command names have hyphens whilst file names have underscores
         // flow-disable-next-line since flow wants us to pass a string literal.
-        const command = require(path.join(__dirname, name));
+        const command = require(path.join(__dirname, name.replace(/-/g, '_')));
         await command.runCommandAsync(argv);
     };
 }
@@ -98,6 +100,21 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             },
         },
         runCommandAsync: commandRunner(CommandNames.RELEASE),
+    },
+    [CommandNames.SET_API_KEY]: {
+        name: CommandNames.SET_API_KEY,
+        command: `${CommandNames.SET_API_KEY}`,
+        description: 'Update your Airtable API key',
+        example: `block ${CommandNames.SET_API_KEY}`,
+        optionMap: {
+            location: {
+                type: 'string',
+                description: 'Which config file to update: user or block scoped',
+                choices: _.values(ConfigLocations),
+                default: ConfigLocations.USER,
+            },
+        },
+        runCommandAsync: commandRunner(CommandNames.SET_API_KEY),
     },
 
     // THE FOLLOWING COMMANDS ARE NO LONGER SUPPORTED.
