@@ -9,13 +9,15 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## Unreleased
+## [Unreleased](https://github.com/airtable/blocks-cli/compare/v0.0.10...HEAD)
+
+## [0.0.10](https://github.com/airtable/blocks-cli/releases/tag/v0.0.10) - 2019-07-02
 
 ### Added
 
-- This changelog!
-- `block run` copies bundle URL to clipboard
+-   This changelog!
+-   `block run` copies bundle URL to clipboard
 
 ### Fixed
 
-- block directory path resolution on windows
+-   block directory path resolution on windows
