@@ -1,0 +1,96 @@
+{
+    "name": "@airtable/blocks",
+    "version": "0.0.15",
+    "description": "Airtable Blocks SDK",
+    "main": "dist/cjs/index.js",
+    "files": [
+        "dist",
+        "ui.js",
+        "models.js"
+    ],
+    "scripts": {
+        "prepare": "npm run build",
+        "pretest": "npm run lint && npm run flow",
+        "release": "np",
+        "version": "changelog-publish 'https://github.com/airtable/blocks-sdk' && git add CHANGELOG.md",
+        "postversion": "git push --tags git@github.com:Airtable/blocks-sdk.git master",
+        "flow": "flow",
+        "lint": "eslint *.js src test",
+        "lint:quiet": "npm run lint -- --quiet",
+        "format": "prettier --write 'src/**/*.js' 'test/**/*.js' '*.{json,js,md}' 'docs/**/*.md'",
+        "jest": "jest",
+        "jest:watch": "jest --watch",
+        "test": "npm run jest",
+        "build:clean": "rm -rf dist",
+        "build:babel": "babel src --out-dir dist/cjs",
+        "watch:babel": "npm run build:babel -- --watch",
+        "build:flow": "flow-copy-source src dist/cjs",
+        "watch:flow": "npm run build:flow -- --watch",
+        "build:docs:noformat": "documentation build src/index.js --format md --markdown-toc --markdown-toc-max-depth 3 --config documentation_config.yml --sort-order alpha --infer-private '^_' --output docs/api.md",
+        "build:docs": "npm run build:docs:noformat && prettier --write docs/api.md",
+        "watch:docs": "npm run build:docs:noformat -- --watch",
+        "build": "npm run build:clean && npm run build:babel && npm run build:flow && npm run build:docs",
+        "watch": "npm run build:clean && concurrently npm:watch:babel npm:watch:flow"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/cli": "^7.4.4",
+        "@babel/core": "^7.4.4",
+        "@babel/plugin-proposal-class-properties": "^7.4.4",
+        "@babel/plugin-syntax-flow": "^7.2.0",
+        "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+        "@babel/plugin-transform-runtime": "^7.4.4",
+        "@babel/preset-env": "^7.4.4",
+        "@babel/preset-react": "^7.0.0",
+        "babel-eslint": "^11.0.0-beta.0",
+        "babel-plugin-transform-define": "^1.3.1",
+        "changelog-publish": "^1.1.0",
+        "concurrently": "^4.1.0",
+        "documentation": "^11.0.1",
+        "enzyme": "^3.10.0",
+        "enzyme-adapter-react-16": "^1.14.0",
+        "eslint": "5.16.0",
+        "eslint-plugin-airtable": "github:hyperbase/eslint-plugin-airtable#3f7f22e",
+        "eslint-plugin-flowtype": "3.9.0",
+        "eslint-plugin-import": "^2.17.2",
+        "eslint-plugin-jsdoc": "^7.2.3",
+        "eslint-plugin-react": "^7.13.0",
+        "eslint-plugin-react-hooks": "^1.6.0",
+        "flow-bin": "0.98.1",
+        "flow-copy-source": "^2.0.6",
+        "flow-typed": "^2.5.2",
+        "fs-extra": "^8.0.1",
+        "glob": "^7.1.4",
+        "jest": "^24.8.0",
+        "lint-staged": "^8.1.7",
+        "np": "^5.0.3",
+        "react": "16.9.0-alpha.0",
+        "react-dom": "16.9.0-alpha.0"
+    },
+    "dependencies": {
+        "@babel/runtime": "^7.4.4",
+        "classnames": "2.2.6",
+        "core-js": "^3.0.1",
+        "prop-types": "15.7.2"
+    },
+    "peerDependencies": {
+        "react": "^16.8.0",
+        "react-dom": "^16.8.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged && npm run build:docs && git add docs/api.md"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "eslint --quiet"
+        ]
+    },
+    "jest": {
+        "setupFiles": [
+            "<rootDir>/test/setup_enzyme.js"
+        ]
+    }
+}

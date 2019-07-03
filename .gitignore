@@ -1,0 +1,9 @@
+/node_modules/
+/packages/*/node_modules
+/packages/*/dist
+/packages/*/transpiled
+
+yarn-error.log
+npm-debug.log
+.DS_Store
+.idea

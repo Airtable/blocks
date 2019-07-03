@@ -1,0 +1,12 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/documentation/.*
+<PROJECT_ROOT>/dist/.*\.js\$
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+suppress_comment= \\(.\\|\n\\)*\\(\\$FlowFixMe\\|flow-expect-error\\)

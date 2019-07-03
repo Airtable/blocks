@@ -1,0 +1,196 @@
+toc:
+    - name: '@airtable/blocks'
+      children:
+          - SDK
+          - name: GlobalConfig
+            children:
+                - GlobalConfig
+                - GlobalConfigKey
+                - GlobalConfigValue
+          - settingsButton
+          - Viewport
+    - name: '@airtable/blocks/models'
+      children:
+          - fieldTypes
+          - generateGuid
+          - viewTypes
+          - recordColoring
+          - AbstractModel
+          - AbstractModelWithAsyncData
+          - Aggregator
+          - Base
+          - Session
+          - Cursor
+          - Field
+          - name: RecordQueryResult
+            children:
+                - RecordQueryResult
+                - TableOrViewQueryResult
+                - LinkedRecordsQueryResult
+          - Record
+          - Table
+          - View
+          - Watchable
+    - name: '@airtable/blocks/ui'
+      children:
+          - initializeBlock
+          - name: 'CSS & external scripts'
+            children:
+                - loadCSSFromString
+                - loadCSSFromURLAsync
+                - loadScriptFromURLAsync
+          - name: Color utilities
+            children:
+                - Color
+                - RGB
+                - colorUtils
+                - colors
+          - name: React hooks for working with Airtable data
+            description: |
+                React hooks are a new feature in React 16.8. They allow you to use state and other
+                React features without writing a class, and form the core of how you can connect
+                React components to data from your Airtable base when writing Blocks. If you've
+                never used hooks before, don't worry - the React team [has some great resources](https://reactjs.org/docs/hooks-intro.html)
+                for learning about them. You can use hooks with class components too with the help
+                of the [withHooks](#withhooks) higher-order component.
+
+                > **Important Note:** right now, most of these hooks cause your component to
+                > re-render, but return the same mutable instance of the underlying model. This
+                > means that it's often not safe to use these hooks with React.memo or
+                > React.PureComponent. This will change in a future release of @airtable/blocks.
+                > If you're not sure what this means or if it effects you, don't worry! Just avoid
+                > React.memo & React.PureComponent and you'll be fine.
+            children:
+                - useBase
+                - useGlobalConfig
+                - useRecords
+                - useRecordIds
+                - useRecordById
+                - useSession
+                - useViewport
+                - useWatchable
+                - useLoadable
+                - withHooks
+          - name: expandRecord
+            children:
+                - expandRecord
+                - ExpandRecordOpts
+          - expandRecordList
+          - expandRecordPickerAsync
+          - name: AutocompletePopover
+            children:
+                - AutocompletePopover
+                - AutocompletePopoverProps
+                - AutocompleteItem
+          - name: Button
+            children:
+                - Button
+                - ButtonProps
+          - name: CellRenderer
+            children:
+                - CellRenderer
+                - CellRendererProps
+          - name: ChoiceToken
+            children:
+                - ChoiceToken
+                - ChoiceTokenProps
+          - name: CollaboratorToken
+            children:
+                - CollaboratorToken
+                - CollaboratorTokenProps
+          - name: ColorPalette
+            children:
+                - ColorPalette
+                - ColorPaletteProps
+                - ColorPaletteSynced
+                - ColorPaletteSyncedProps
+          - name: ConfirmationDialog
+            children:
+                - ConfirmationDialog
+                - ConfirmationDialogProps
+          - name: Dialog
+            children:
+                - Dialog
+                - DialogProps
+                - Dialog.CloseButton
+                - DialogCloseButtonProps
+          - name: FieldPicker
+            children:
+                - FieldPicker
+                - FieldPickerProps
+                - FieldPickerSynced
+                - FieldPickerSyncedProps
+          - name: Icon
+            children:
+                - Icon
+                - IconProps
+                - FieldIcon
+                - FieldIconProps
+          - name: Input
+            children:
+                - Input
+                - InputProps
+                - InputSynced
+                - InputSyncedProps
+          - name: Link
+            children:
+                - Link
+                - LinkProps
+          - name: Loader
+            children:
+                - Loader
+                - LoaderProps
+          - name: Popover
+            children:
+                - Popover
+                - PopoverProps
+                - Popover.fitInWindowModes
+                - Popover.placements
+          - name: ProgressBar
+            children:
+                - ProgressBar
+                - ProgressBarProps
+          - name: RecordCard
+            children:
+                - RecordCard
+                - RecordCardProps
+          - name: Select
+            children:
+                - Select
+                - SelectProps
+                - SelectOption
+                - SelectSynced
+                - SelectSyncedProps
+          - name: SelectButtons
+            children:
+                - SelectButtons
+                - SelectButtonsProps
+                - SelectButtonsSynced
+                - SelectButtonsSyncedProps
+          - name: TablePicker
+            children:
+                - TablePicker
+                - TablePickerProps
+                - TablePickerSynced
+                - TablePickerSyncedProps
+          - name: Toggle
+            children:
+                - Toggle
+                - ToggleProps
+                - ToggleSynced
+                - ToggleSyncedProps
+          - name: Tooltip
+            children:
+                - Tooltip
+                - TooltipProps
+          - name: ViewPicker
+            children:
+                - ViewPicker
+                - ViewPickerProps
+                - ViewPickerSynced
+                - ViewPickerSyncedProps
+          - name: ViewportConstraint
+            children:
+                - ViewportConstraint
+                - ViewportConstraintProps
+                - ViewportSizeConstraintProp
