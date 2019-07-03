@@ -1,7 +1,6 @@
 // @flow
 const invariant = require('invariant');
-const {getBlockDirPath} = require('../get_block_dir_path');
-const getApiKeySync = require('../get_api_key_sync');
+const getApiKeyWithWarningsAsync = require('../get_api_key_with_warnings');
 const BlockServer = require('../block_server');
 const LocalSdkBuilder = require('../local_sdk_builder');
 const cliHelpers = require('../helpers/cli_helpers');
@@ -13,12 +12,13 @@ import type {Argv} from 'yargs';
 const DEFAULT_PORT = 8000;
 
 async function runCommandAsync(argv: Argv): Promise<void> {
-    const apiKey = getApiKeySync(getBlockDirPath());
     const {ngrok, transpileAll, sdkRepo} = argv;
     const remoteName = argv.remote || null;
     invariant(typeof ngrok === 'boolean', 'expects ngrok to be a boolean');
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
     invariant(remoteName === null || typeof remoteName === 'string', 'expects remoteName to be null or a string');
+
+    const apiKey = await getApiKeyWithWarningsAsync();
 
     const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
     if (blockJsonValidationResult.err) {

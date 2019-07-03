@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable no-console */
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
+const configHelpers = require('../helpers/config_helpers');
 const nodeModulesCommandHelpers = require('../helpers/node_modules_command_helpers');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
@@ -91,7 +92,6 @@ async function initBlockAsync(
     baseId: string,
     blockId: string,
     blockDirPath: string,
-    apiKey: string,
 ): Promise<void> {
     // Make a new directory for the block.
     await fsUtils.mkdirAsync(blockDirPath);
@@ -120,12 +120,6 @@ async function initBlockAsync(
         JSON.stringify(remoteJson, null, 4),
     );
 
-    // Write the API key to the file system.
-    const writeAirtableApiKeyFilePromise = fsUtils.writeFileAsync(
-        path.join(blockDirPath, blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME),
-        apiKey,
-    );
-
     // Create a package json so the user can `yarn add`.
     // Dependencies are specified as part of the `yarn add` to install the latest versions: this
     // file is created first so that the dependencies are saved in the correct folder.
@@ -145,8 +139,8 @@ async function initBlockAsync(
 
     // Create a .gitignore file.
     const gitignoreContents = [
-        'node_modules',
-        '/' + blockCliConfigSettings.AIRTABLE_API_KEY_FILE_NAME,
+        '/node_modules',
+        '/' + blockCliConfigSettings.CONFIG_FILE_NAME,
         '/' + blockCliConfigSettings.BUILD_DIR,
     ];
     const writeGitignoreFilePromise = fsUtils.writeFileAsync(
@@ -166,7 +160,6 @@ async function initBlockAsync(
         writeDefaultFrontendFilesPromise,
         writePackageJsonPromise,
         writeGitignoreFilePromise,
-        writeAirtableApiKeyFilePromise,
         writeEslintFilePromise,
     ]);
 
@@ -191,15 +184,23 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         throw new Error(`A directory already exists at ${blockDirPath}`);
     }
 
-    // Prompt for apiKey.
-    const apiKey = await promptForApiKeyAsync();
+    // Prompt for apiKey if the user does not already have one configured at the user-config level
+    // TODO(emma): When `block setApiKey` exists, update messages here to include it
+    const userConfigPath = configHelpers.getConfigPath(configHelpers.ConfigLocations.USER);
+    const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(configHelpers.ConfigLocations.USER);
+    if (doesUserConfigApiKeyExist) {
+        console.log(`Using your existing API key from ${userConfigPath}`);
+    } else {
+        const apiKey = await promptForApiKeyAsync();
+        await configHelpers.setApiKeyAsync(configHelpers.ConfigLocations.USER, apiKey);
+        console.log(`API key saved to ${userConfigPath}`);
+    }
 
     console.log('Initializing block');
     await initBlockAsync(
         baseId,
         blockId,
         blockDirPath,
-        apiKey,
     );
     console.log(`✅ Your block is ready! ${chalk.bold('cd ' + blockDirPath + ' && block run')} to start developing, and ${chalk.bold('yarn lint')} to lint.`);
 }

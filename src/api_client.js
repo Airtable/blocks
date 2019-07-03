@@ -5,8 +5,7 @@ const {promisify} = require('util');
 const {URL} = require('url');
 const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');
 const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_remote_json_async');
-const {getBlockDirPath} = require('./get_block_dir_path');
-const getApiKeySync = require('./get_api_key_sync');
+const getApiKeyWithWarningsAsync = require('./get_api_key_with_warnings');
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
@@ -41,7 +40,7 @@ class APIClient {
             return parseResult;
         }
         const remoteJson = parseResult.value;
-        const apiKey = getApiKeySync(getBlockDirPath());
+        const apiKey = await getApiKeyWithWarningsAsync();
         const apiClient = new APIClient({
             applicationId: remoteJson.baseId,
             blockId: remoteJson.blockId,

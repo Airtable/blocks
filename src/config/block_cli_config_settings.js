@@ -37,9 +37,6 @@ module.exports = {
         ['OS', process.platform],
     ]).toString(),
 
-    // File to store the airtable api key.
-    AIRTABLE_API_KEY_FILE_NAME: '.airtableAPIKey',
-
     // Build directory for the user's block code (including frontend bundle and transpiled backend code).
     BUILD_DIR: 'build',
 
@@ -57,4 +54,7 @@ module.exports = {
 
     // This access token is not considered sensitive.
     ROLLBAR_ACCESS_TOKEN: '2de7b9533b7243f7989e3a7584c7dad7',
+
+    // Name of the file used to store user/blocks scoped configs for blocks-cli
+    CONFIG_FILE_NAME: '.airtableblocksrc.json',
 };

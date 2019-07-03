@@ -5,23 +5,19 @@ const fs = require('fs');
 const fsExtra = require('fs-extra');
 const {getTemporaryDirectoryPath} = require('../helpers');
 const cliHelpers = require('../../src/helpers/cli_helpers');
+const configHelpers = require('../../src/helpers/config_helpers');
 const nodeModulesCommandHelpers = require('../../src/helpers/node_modules_command_helpers');
 const sinon = require('sinon');
 const assert = require('assert');
 
 describe('init command', function() {
     let yarnInstallAsyncStub;
-    beforeEach(function() {
-        sinon.stub(cliHelpers, 'promptAsync').resolves({
-            apiKey: 'key123ABC',
-        });
+    let promptAsyncStub;
+    let hasApiKeyAsyncStub;
+    let setApiKeyAsyncStub;
+    let blockDirPath;
 
-        yarnInstallAsyncStub = sinon.stub(nodeModulesCommandHelpers, 'yarnInstallAsync').resolves();
-    });
-
-    it('writes a directory of files', async function() {
-        const blockDirPath = getTemporaryDirectoryPath();
-
+    async function runInitAsync() {
         const fakeArgv = {
             _: [],
             $0: 'block',
@@ -34,8 +30,23 @@ describe('init command', function() {
         sinon.stub(console, 'log');
         await init.runCommandAsync(fakeArgv);
         console.log.restore(); // eslint-disable-line no-console
+    }
 
-        assert(fs.existsSync(path.join(blockDirPath, '.airtableAPIKey')));
+    beforeEach(function() {
+        promptAsyncStub = sinon.stub(cliHelpers, 'promptAsync').resolves({
+            apiKey: 'key123ABC',
+        });
+
+        yarnInstallAsyncStub = sinon.stub(nodeModulesCommandHelpers, 'yarnInstallAsync').resolves();
+
+        hasApiKeyAsyncStub = sinon.stub(configHelpers, 'hasApiKeyAsync').resolves(true);
+        setApiKeyAsyncStub = sinon.stub(configHelpers, 'setApiKeyAsync').resolves();
+
+        blockDirPath = getTemporaryDirectoryPath();
+    });
+
+    it('writes a directory of files', async function() {
+        await runInitAsync();
 
         assert(fs.existsSync(path.join(blockDirPath, '.gitignore')));
 
@@ -54,5 +65,21 @@ describe('init command', function() {
 
         const packageJson = await fsExtra.readJson(path.join(blockDirPath, 'package.json'));
         assert.strictEqual(packageJson.private, true);
+    });
+
+    it('prompts for API key if the user does not have it set already', async function() {
+        hasApiKeyAsyncStub.resolves(false);
+
+        await runInitAsync();
+
+        assert.strictEqual(promptAsyncStub.called, true);
+        assert.strictEqual(setApiKeyAsyncStub.called, true);
+    });
+
+    it('does not prompt for API key if the user does have it set already', async function() {
+        await runInitAsync();
+
+        assert.strictEqual(promptAsyncStub.called, false);
+        assert.strictEqual(setApiKeyAsyncStub.called, false);
     });
 });

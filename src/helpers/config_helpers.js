@@ -3,10 +3,10 @@ const invariant = require('invariant');
 const os = require('os');
 const path = require('path');
 
+const {CONFIG_FILE_NAME} = require('../config/block_cli_config_settings');
 const getBlockDirPathModule = require('../get_block_dir_path');
 const fsUtils = require('../fs_utils');
 
-const CONFIG_FILE_NAME = '.airtableblocksrc.json';
 const CONFIG_KEY_API_KEY = 'airtableApiKey';
 
 const ConfigLocations = Object.freeze({
@@ -83,11 +83,16 @@ async function getApiKeyIfExistsAsync(): Promise<string | null> {
     return await _getApiKeyFromConfigIfExistsAsync(ConfigLocations.USER);
 }
 
+async function hasApiKeyAsync(location: ConfigLocation): Promise<boolean> {
+    return (await _getApiKeyFromConfigIfExistsAsync(location)) !== null;
+}
+
 module.exports = {
     ConfigLocations,
     getConfigPath,
     setApiKeyAsync,
     getApiKeyIfExistsAsync,
+    hasApiKeyAsync,
     _test: {
         CONFIG_KEY_API_KEY,
     },
