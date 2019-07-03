@@ -1,6 +1,6 @@
 **/node_modules/*
 
-/transpiled/
+/packages/*/transpiled/
 
 npm-debug.log
 .DS_Store
@@ -8,4 +8,4 @@ npm-debug.log
 
 # The 'build' directory was renamed to 'transpiled', but
 # we still ignore it for anyone who hasn't upgraded.
-/build/
+packages/*/build/

@@ -1,0 +1,30 @@
+/* eslint-disable no-console */
+'use strict';
+
+var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
+var blocksConfigSettings = require('./config/block_cli_config_settings');
+
+var blockDirPath = null;
+
+function getBlockDirPath() {
+  if (blockDirPath === null) {
+    var currentDirPath = process.cwd();
+    while (currentDirPath !== '/') {
+      var currentDirFiles = fs.readdirSync(currentDirPath);
+      if (_.includes(currentDirFiles, blocksConfigSettings.BLOCK_FILE_NAME)) {
+        // Cache and return the blockDirPath.
+        blockDirPath = currentDirPath;
+        return blockDirPath;
+      }
+      // Traverse up one level.
+      currentDirPath = path.dirname(currentDirPath);
+    }
+    console.error('Could not find a block directory');
+    process.exit(1);
+  }
+  return blockDirPath;
+}
+
+module.exports = getBlockDirPath;
