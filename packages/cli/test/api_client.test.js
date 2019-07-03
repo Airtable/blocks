@@ -52,17 +52,23 @@ describe('APIClient', function() {
 
     describe('fetchAccessPolicyAsync', function() {
         it('makes a GET request to Airtable and returns its body if successful', async function() {
-            testApp.get('/v2/meta/app123/blockInstallations/bli123/accessPolicy', (req: express$Request, res: express$Response) => {
-                res.json({accessPolicy: 'fakeAccessPolicy'});
-            });
+            testApp.get(
+                '/v2/meta/app123/blockInstallations/bli123/accessPolicy',
+                (req: express$Request, res: express$Response) => {
+                    res.json({accessPolicy: 'fakeAccessPolicy'});
+                },
+            );
             const result = await apiClient.fetchAccessPolicyAsync();
             assert.strictEqual(result, 'fakeAccessPolicy');
         });
 
         it('throws an error if Airtable returns a 404', async function() {
-            testApp.get('/v2/meta/app123/blockInstallations/bli123/accessPolicy', (req: express$Request, res: express$Response) => {
-                res.status(404).json({});
-            });
+            testApp.get(
+                '/v2/meta/app123/blockInstallations/bli123/accessPolicy',
+                (req: express$Request, res: express$Response) => {
+                    res.status(404).json({});
+                },
+            );
             await assert.rejects(async () => {
                 await apiClient.fetchAccessPolicyAsync();
             }, /Incorrect application or block installation id/);
@@ -73,12 +79,15 @@ describe('APIClient', function() {
             // flow-disable-next-line because Flow doesn't support symbols
             const statusCodesIterator = badStatusCodes[Symbol.iterator]();
 
-            testApp.get('/v2/meta/app123/blockInstallations/bli123/accessPolicy', (req: express$Request, res: express$Response) => {
-                res.status(statusCodesIterator.next().value);
-                res.json({
-                    error: {message: 'foo bar'},
-                });
-            });
+            testApp.get(
+                '/v2/meta/app123/blockInstallations/bli123/accessPolicy',
+                (req: express$Request, res: express$Response) => {
+                    res.status(statusCodesIterator.next().value);
+                    res.json({
+                        error: {message: 'foo bar'},
+                    });
+                },
+            );
 
             for (let i = 0; i < badStatusCodes.length; i++) {
                 await assert.rejects(async () => {

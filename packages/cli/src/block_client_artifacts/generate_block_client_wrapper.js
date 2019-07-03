@@ -1,7 +1,10 @@
 // @flow
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 
-module.exports = function generateBlockClientWrapperCode(frontendEntryModulePath: string, isDevelopment: boolean): string {
+module.exports = function generateBlockClientWrapperCode(
+    frontendEntryModulePath: string,
+    isDevelopment: boolean,
+): string {
     // NOTE: this must return ES5 (so no JSX!) since it won't get transpiled on the client.
     // This puts React on window so the block SDK can access it.
     return `
@@ -20,10 +23,11 @@ window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function ru
         return;
     }
     didRun = true;
-    ${isDevelopment ?
-        // In development mode, make sure requests to relative paths get
-        // routed to the local backend (instead of the block router).
-        `
+    ${
+        isDevelopment
+            ? // In development mode, make sure requests to relative paths get
+              // routed to the local backend (instead of the block router).
+              `
         var blockUrl = process.env.BLOCK_BASE_URL;
 
         // Make requests to local backend.
@@ -31,12 +35,13 @@ window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function ru
         baseTag.setAttribute('href', blockUrl);
         document.head.appendChild(baseTag);
         `
-        : ''}
+            : ''
+    }
     // Requiring the entry point file runs user code. Be sure to do any setup
     // above this line.
     var BlockWrapperComponent = window['${
         blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME
-        }'].__BlockWrapperComponent;
+    }'].__BlockWrapperComponent;
     var EntryComponent = require('${frontendEntryModulePath}').default;
 
     var isEntryReactComponent = EntryComponent && (

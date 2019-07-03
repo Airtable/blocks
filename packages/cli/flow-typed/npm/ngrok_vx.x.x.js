@@ -14,7 +14,7 @@
  */
 
 declare module 'ngrok' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,16 +23,16 @@ declare module 'ngrok' {
  * needed.
  */
 declare module 'ngrok/postinstall' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'ngrok/index' {
-  declare module.exports: $Exports<'ngrok'>;
+    declare module.exports: $Exports<'ngrok'>;
 }
 declare module 'ngrok/index.js' {
-  declare module.exports: $Exports<'ngrok'>;
+    declare module.exports: $Exports<'ngrok'>;
 }
 declare module 'ngrok/postinstall.js' {
-  declare module.exports: $Exports<'ngrok/postinstall'>;
+    declare module.exports: $Exports<'ngrok/postinstall'>;
 }

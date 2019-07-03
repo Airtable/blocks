@@ -20,14 +20,14 @@ type BuildStepSuccess<+R> = {|success: true, +value: R|};
 type BuildStepFailure = {|success: false, error: Error|};
 
 // TODO(richsinn): consider using the Result algebraic type from hyperbase
-type BuildStepResult<+R> = (
-    BuildStepSuccess<R> |
-    BuildStepFailure
-);
+type BuildStepResult<+R> = BuildStepSuccess<R> | BuildStepFailure;
 
 type FilePath = string;
 type DirectoryPath = string;
-type BuildResult = BuildStepResult<{|frontendBundlePath: FilePath, backendDeploymentPackagePath: FilePath | null|}>;
+type BuildResult = BuildStepResult<{|
+    frontendBundlePath: FilePath,
+    backendDeploymentPackagePath: FilePath | null,
+|}>;
 
 function buildStepSuccess<R>(value: R): BuildStepSuccess<R> {
     return {
@@ -43,7 +43,10 @@ function buildStepFailure(message: string): BuildStepFailure {
 }
 
 class BlockBuilder {
-    async _transpileSourceCodeAsync(srcDirPath: DirectoryPath, outputDirPath: DirectoryPath): Promise<BuildStepResult<void>> {
+    async _transpileSourceCodeAsync(
+        srcDirPath: DirectoryPath,
+        outputDirPath: DirectoryPath,
+    ): Promise<BuildStepResult<void>> {
         const transpiledTopLevelOutputDirectoryNamesSet = new Set();
         for (const topLevelDirName of Object.values(SupportedTopLevelDirectoryNames)) {
             invariant(typeof topLevelDirName === 'string', 'topLevelDirName should be string');
@@ -54,7 +57,10 @@ class BlockBuilder {
                 continue;
             }
             const topLevelOutputDirPath = path.join(outputDirPath, topLevelDirName);
-            const transpileResult = await this._transpileDirectoryAsync(topLevelSrcDirPath, topLevelOutputDirPath);
+            const transpileResult = await this._transpileDirectoryAsync(
+                topLevelSrcDirPath,
+                topLevelOutputDirPath,
+            );
             if (!transpileResult.success) {
                 return transpileResult;
             }
@@ -66,21 +72,21 @@ class BlockBuilder {
         const buildNodeModulesPath = path.join(outputDirPath, 'node_modules');
         for (const topLevelOutputDirName of transpiledTopLevelOutputDirectoryNamesSet) {
             const symlinkPath = path.join(buildNodeModulesPath, topLevelOutputDirName);
-            await fsUtils.symlinkAsync(path.join(outputDirPath, topLevelOutputDirName), symlinkPath);
+            await fsUtils.symlinkAsync(
+                path.join(outputDirPath, topLevelOutputDirName),
+                symlinkPath,
+            );
         }
 
         return buildStepSuccess();
     }
-    async _transpileDirectoryAsync(srcDirPath: DirectoryPath, outputDirPath: DirectoryPath): Promise<BuildStepResult<void>> {
+    async _transpileDirectoryAsync(
+        srcDirPath: DirectoryPath,
+        outputDirPath: DirectoryPath,
+    ): Promise<BuildStepResult<void>> {
         try {
-            const presets = [
-                '@babel/preset-env',
-                '@babel/preset-flow',
-                '@babel/preset-react',
-            ];
-            const plugins = [
-                '@babel/proposal-class-properties',
-            ];
+            const presets = ['@babel/preset-env', '@babel/preset-flow', '@babel/preset-react'];
+            const plugins = ['@babel/proposal-class-properties'];
 
             // Use the blocks-cli dir as the cwd so babel can properly find
             // presets/plugins.
@@ -100,7 +106,8 @@ class BlockBuilder {
         return buildStepSuccess();
     }
     _getErrorFromYarnInstallStderr(stderr: string): Error | null {
-        const errorMessageLines = stderr.split('\n')
+        const errorMessageLines = stderr
+            .split('\n')
             .filter(message => message.trim().length > 0 && !message.startsWith('warning '));
         if (errorMessageLines.length > 0) {
             return new Error(errorMessageLines.join('\n'));
@@ -125,7 +132,9 @@ class BlockBuilder {
         process.env.NODE_ENV = 'production';
 
         const browserifyInstance = browserify(entryFilePath);
-        browserifyInstance.bundleAsync = promisify(browserifyInstance.bundle.bind(browserifyInstance));
+        browserifyInstance.bundleAsync = promisify(
+            browserifyInstance.bundle.bind(browserifyInstance),
+        );
 
         let bundle: Buffer | null = null;
         let error: Error | null = null;
@@ -181,7 +190,10 @@ class BlockBuilder {
         const frontendEntryModulePath = path.join(userSrcDirPath, blockJson.frontendEntry);
 
         const isDevelopment = false;
-        const clientWrapperCode = generateBlockClientWrapperCode(frontendEntryModulePath, isDevelopment);
+        const clientWrapperCode = generateBlockClientWrapperCode(
+            frontendEntryModulePath,
+            isDevelopment,
+        );
         await fsUtils.writeFileAsync(clientWrapperFilePath, clientWrapperCode);
 
         const browserifyResult = await this._browserifyAsync(clientWrapperFilePath);
@@ -253,7 +265,11 @@ class BlockBuilder {
 
         // Generate frontend bundle.
         console.log('generating frontend bundle');
-        const bundleResult = await this._generateFrontendBundleAsync(blockJson, userSrcDirPath, buildArtifactsDirPath);
+        const bundleResult = await this._generateFrontendBundleAsync(
+            blockJson,
+            userSrcDirPath,
+            buildArtifactsDirPath,
+        );
         if (!bundleResult.success) {
             return bundleResult;
         }

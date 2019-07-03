@@ -8,7 +8,9 @@ const path = require('path');
 import type {Result} from '../types/result';
 import type {RemoteJson} from '../types/remote_json_type';
 
-async function parseAndValidateRemoteJsonAsync(remoteName: string | null): Promise<Result<RemoteJson>> {
+async function parseAndValidateRemoteJsonAsync(
+    remoteName: string | null,
+): Promise<Result<RemoteJson>> {
     const blockDirPath = getBlockDirPath();
 
     let remoteJsonFileName = blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH;
@@ -16,7 +18,10 @@ async function parseAndValidateRemoteJsonAsync(remoteName: string | null): Promi
         remoteJsonFileName = `${remoteName}.${remoteJsonFileName}`;
     }
 
-    const remoteJsonRelativePath = path.join(blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME, remoteJsonFileName);
+    const remoteJsonRelativePath = path.join(
+        blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME,
+        remoteJsonFileName,
+    );
     const remoteJsonAbsolutePath = path.join(blockDirPath, remoteJsonRelativePath);
     const remoteJsonStr = await fsUtils.readFileIfExistsAsync(remoteJsonAbsolutePath);
     if (remoteJsonStr === null) {

@@ -14,11 +14,8 @@ const BANNED_HEADERS_SET = new Set([
 
 function normalizeUserResponse(userResponse) {
     const statusCode = userResponse.hasOwnProperty('statusCode') ? userResponse.statusCode : 200;
-    const isStatusCodeValid = (
-        (statusCode === Math.floor(statusCode)) &&
-        (statusCode >= 100) &&
-        (statusCode < 600)
-    );
+    const isStatusCodeValid =
+        statusCode === Math.floor(statusCode) && statusCode >= 100 && statusCode < 600;
     if (!isStatusCodeValid) {
         return _failure('statusCode is not one of the allowed status codes');
     }
@@ -31,7 +28,7 @@ function normalizeUserResponse(userResponse) {
             const headerName = userHeaders[i];
             const headerValue = userHeaders[i + 1];
 
-            if ((typeof headerName !== 'string') || (typeof headerValue !== 'string')) {
+            if (typeof headerName !== 'string' || typeof headerValue !== 'string') {
                 return _failure('headers must be an array of strings');
             } else if (BANNED_HEADERS_SET.has(headerName.toLowerCase())) {
                 return _failure(`header name "${headerName}" is not allowed`);
@@ -76,10 +73,12 @@ function _failure(message) {
         headers: {
             'Content-Type': ['application/json; charset=utf-8'],
         },
-        body: Buffer.from(JSON.stringify({
-            error: 'SERVER_ERROR',
-            message,
-        })),
+        body: Buffer.from(
+            JSON.stringify({
+                error: 'SERVER_ERROR',
+                message,
+            }),
+        ),
     };
 }
 

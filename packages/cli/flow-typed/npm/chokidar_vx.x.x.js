@@ -14,7 +14,7 @@
  */
 
 declare module 'chokidar' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,23 +23,23 @@ declare module 'chokidar' {
  * needed.
  */
 declare module 'chokidar/lib/fsevents-handler' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'chokidar/lib/nodefs-handler' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'chokidar/index' {
-  declare module.exports: $Exports<'chokidar'>;
+    declare module.exports: $Exports<'chokidar'>;
 }
 declare module 'chokidar/index.js' {
-  declare module.exports: $Exports<'chokidar'>;
+    declare module.exports: $Exports<'chokidar'>;
 }
 declare module 'chokidar/lib/fsevents-handler.js' {
-  declare module.exports: $Exports<'chokidar/lib/fsevents-handler'>;
+    declare module.exports: $Exports<'chokidar/lib/fsevents-handler'>;
 }
 declare module 'chokidar/lib/nodefs-handler.js' {
-  declare module.exports: $Exports<'chokidar/lib/nodefs-handler'>;
+    declare module.exports: $Exports<'chokidar/lib/nodefs-handler'>;
 }

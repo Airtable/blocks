@@ -24,16 +24,16 @@ describe('validateBlockJson', () => {
             {},
             {
                 // Old block.json format.
-                'frontendEntryModuleName': 'index.js',
-                'applicationId': 'app00000000000000',
-                'blockId': 'blk00000000000000',
-                'modules': [
+                frontendEntryModuleName: 'index.js',
+                applicationId: 'app00000000000000',
+                blockId: 'blk00000000000000',
+                modules: [
                     {
-                        'id': 'blm00000000000000',
-                        'revision': 0,
-                        'metadata': {
-                            'type': 'frontend',
-                            'name': 'index',
+                        id: 'blm00000000000000',
+                        revision: 0,
+                        metadata: {
+                            type: 'frontend',
+                            name: 'index',
                         },
                     },
                 ],

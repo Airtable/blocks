@@ -16,7 +16,10 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     const remoteName = argv.remote || null;
     invariant(typeof ngrok === 'boolean', 'expects ngrok to be a boolean');
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
-    invariant(remoteName === null || typeof remoteName === 'string', 'expects remoteName to be null or a string');
+    invariant(
+        remoteName === null || typeof remoteName === 'string',
+        'expects remoteName to be null or a string',
+    );
 
     const apiKey = await getApiKeyWithWarningsAsync();
 
@@ -49,7 +52,8 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     });
 
     let port = DEFAULT_PORT;
-    while (true) { // eslint-disable-line no-constant-condition
+    while (true) {
+        // eslint-disable-line no-constant-condition
         try {
             // Try starting the server on this port.
             await blockServer.startAsync(port, ngrok);

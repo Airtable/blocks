@@ -27,7 +27,8 @@ export type BlockBackendRouteModuleMetadata = {
     urlPath: string,
 };
 
-export type BlockModuleMetadata = BlockFrontendModuleMetadata
+export type BlockModuleMetadata =
+    | BlockFrontendModuleMetadata
     | BlockSharedModuleMetadata
     | BlockBackendRouteModuleMetadata;
 

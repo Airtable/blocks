@@ -1,15 +1,17 @@
 // @flow
 
-type ParseResult = {|
-        success: true,
-        value: {|
-            baseId: string,
-            blockId: string,
-        |},
-    |} | {|
-        success: false,
-        error: Error,
-    |};
+type ParseResult =
+    | {|
+          success: true,
+          value: {|
+              baseId: string,
+              blockId: string,
+          |},
+      |}
+    | {|
+          success: false,
+          error: Error,
+      |};
 
 function parseBlockIdentifier(blockIdentifier: string): ParseResult {
     const blockIdentifierSplit = blockIdentifier.split('/');

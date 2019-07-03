@@ -14,7 +14,7 @@
  */
 
 declare module 'terser' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,45 +23,45 @@ declare module 'terser' {
  * needed.
  */
 declare module 'terser/dist/bundle' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'terser/dist/bundle.min' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'terser/tools/colorless-console' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'terser/tools/domprops' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'terser/tools/exit' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'terser/tools/node' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'terser/dist/bundle.js' {
-  declare module.exports: $Exports<'terser/dist/bundle'>;
+    declare module.exports: $Exports<'terser/dist/bundle'>;
 }
 declare module 'terser/dist/bundle.min.js' {
-  declare module.exports: $Exports<'terser/dist/bundle.min'>;
+    declare module.exports: $Exports<'terser/dist/bundle.min'>;
 }
 declare module 'terser/tools/colorless-console.js' {
-  declare module.exports: $Exports<'terser/tools/colorless-console'>;
+    declare module.exports: $Exports<'terser/tools/colorless-console'>;
 }
 declare module 'terser/tools/domprops.js' {
-  declare module.exports: $Exports<'terser/tools/domprops'>;
+    declare module.exports: $Exports<'terser/tools/domprops'>;
 }
 declare module 'terser/tools/exit.js' {
-  declare module.exports: $Exports<'terser/tools/exit'>;
+    declare module.exports: $Exports<'terser/tools/exit'>;
 }
 declare module 'terser/tools/node.js' {
-  declare module.exports: $Exports<'terser/tools/node'>;
+    declare module.exports: $Exports<'terser/tools/node'>;
 }

@@ -24,13 +24,7 @@ const {getBlockDirPath} = require('./get_block_dir_path');
 const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
 const clipboardy = require('clipboardy');
 
-import type {
-    $Application,
-    $Request,
-    $Response,
-    Middleware,
-    NextFunction,
-} from 'express';
+import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
 import type {BlockJson} from './types/block_json_type';
 import type {RemoteJson} from './types/remote_json_type';
 import type {ErrorCode} from './types/error_codes';
@@ -67,7 +61,6 @@ type BundleStateError = {|
 
 type BundleStateData = BundleStateReady | BundleStateBundling | BundleStateError;
 
-
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
 const developmentBrowsers = [
@@ -85,10 +78,13 @@ const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
 class BlockServer {
-    _pendingLongPollResolveRejectByRequestId: Map<number, {
-        resolve: PromiseResolveFunction,
-        reject: PromiseRejectFunction,
-    }>;
+    _pendingLongPollResolveRejectByRequestId: Map<
+        number,
+        {
+            resolve: PromiseResolveFunction,
+            reject: PromiseRejectFunction,
+        },
+    >;
     _expressApp: $Application;
     _shouldTranspileAll: boolean;
     _nextRequestId: number;
@@ -107,12 +103,7 @@ class BlockServer {
         blockJson: BlockJson,
         remoteJson: RemoteJson,
     }) {
-        const {
-            transpileAll = false,
-            apiKey,
-            blockJson,
-            remoteJson,
-        } = args;
+        const {transpileAll = false, apiKey, blockJson, remoteJson} = args;
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
@@ -151,7 +142,9 @@ class BlockServer {
         // TODO(richsinn): We'll need to figure out how to avoid conflicts when
         //   implementing backend blocks routes
         this._expressApp.get('/', (req: $Request, res: $Response) => {
-           res.send("Congratulations! You've set up the Airtable Blocks server. Now go to your Airtable base to build your block.");
+            res.send(
+                "Congratulations! You've set up the Airtable Blocks server. Now go to your Airtable base to build your block.",
+            );
         });
     }
     async _ensureBundleIsReadyAsync(): Promise<void> {
@@ -167,7 +160,9 @@ class BlockServer {
                 break;
 
             default:
-                throw new Error(`Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`);
+                throw new Error(
+                    `Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`,
+                );
         }
 
         // During the async gap, another bundling process may have kicked off, so
@@ -180,10 +175,7 @@ class BlockServer {
             Promise.race([
                 this._ensureBundleIsReadyAsync(),
                 new Promise((resolve, reject) => {
-                    setTimeout(
-                        () => resolve(),
-                        BUNDLE_TIMEOUT_MS,
-                    );
+                    setTimeout(() => resolve(), BUNDLE_TIMEOUT_MS);
                 }),
             ]).then(() => {
                 invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
@@ -203,8 +195,9 @@ class BlockServer {
                         break;
 
                     default:
-                        throw new Error(`Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`);
-
+                        throw new Error(
+                            `Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`,
+                        );
                 }
             });
         };
@@ -214,14 +207,20 @@ class BlockServer {
         const runFrameRoutes = express.Router();
 
         // Use body parser for JSON payloads.
-        runFrameRoutes.use(bodyParser.json({limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT}));
+        runFrameRoutes.use(
+            bodyParser.json({limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT}),
+        );
 
         // Serve the bundle file if ready.
-        runFrameRoutes.get('/bundle.js', this._ensureBundleIsReadyMiddleware(), (req: $Request, res: $Response) => {
-            res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
-                root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
-            });
-        });
+        runFrameRoutes.get(
+            '/bundle.js',
+            this._ensureBundleIsReadyMiddleware(),
+            (req: $Request, res: $Response) => {
+                res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
+                    root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
+                });
+            },
+        );
 
         /**
          * This endpoint is used by the block frame for two reasons:
@@ -252,36 +251,54 @@ class BlockServer {
             res.send(generatePollForLiveReloadCode(this._blockServerUrlIfExists));
         });
 
-        runFrameRoutes.options('/registerBlockInstallationMetadata', (req: $Request, res: $Response) => {
-            res.set({
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': '*',
-                'Access-Control-Max-Age': '86400',
-                'Access-Control-Allow-Headers': 'Content-Type',
-            }).status(200).end();
-        });
+        runFrameRoutes.options(
+            '/registerBlockInstallationMetadata',
+            (req: $Request, res: $Response) => {
+                res.set({
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': '*',
+                    'Access-Control-Max-Age': '86400',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                })
+                    .status(200)
+                    .end();
+            },
+        );
 
-        runFrameRoutes.post('/registerBlockInstallationMetadata', (req: $Request, res: $Response) => {
-            if (!req.body || !req.body.applicationId || !req.body.blockInstallationId) {
-                res.status(400).send({
-                    error: 'BAD_REQUEST',
-                    message: 'Must include applicationId and blockInstallationId in request body',
-                });
-            } else {
-                if (!this._apiClient || this._apiClient.blockInstallationId !== req.body.blockInstallationId) {
-                    console.log('Switched to a new block installation.');
+        runFrameRoutes.post(
+            '/registerBlockInstallationMetadata',
+            (req: $Request, res: $Response) => {
+                if (!req.body || !req.body.applicationId || !req.body.blockInstallationId) {
+                    res.status(400).send({
+                        error: 'BAD_REQUEST',
+                        message:
+                            'Must include applicationId and blockInstallationId in request body',
+                    });
+                } else {
+                    if (
+                        !this._apiClient ||
+                        this._apiClient.blockInstallationId !== req.body.blockInstallationId
+                    ) {
+                        console.log('Switched to a new block installation.');
+                    }
+                    invariant(
+                        typeof req.body.applicationId === 'string',
+                        'expects req.body.applicationId to be a string',
+                    );
+                    invariant(
+                        typeof req.body.blockInstallationId === 'string',
+                        'req.body.blockInstallationId to be a string',
+                    );
+                    this._apiClient = new APIClient({
+                        apiBaseUrl: this._remoteJson.server,
+                        applicationId: req.body.applicationId,
+                        blockInstallationId: req.body.blockInstallationId,
+                        apiKey: this._apiKey,
+                    });
+                    res.sendStatus(200);
                 }
-                invariant(typeof req.body.applicationId === 'string', 'expects req.body.applicationId to be a string');
-                invariant(typeof req.body.blockInstallationId === 'string', 'req.body.blockInstallationId to be a string');
-                this._apiClient = new APIClient({
-                    apiBaseUrl: this._remoteJson.server,
-                    applicationId: req.body.applicationId,
-                    blockInstallationId: req.body.blockInstallationId,
-                    apiKey: this._apiKey,
-                });
-                res.sendStatus(200);
-            }
-        });
+            },
+        );
 
         /**
          * This endpoint is used by the block frame to check if the
@@ -291,34 +308,42 @@ class BlockServer {
             res.sendStatus(200);
         });
 
-        runFrameRoutes.get('/poll', (req: RequestWithRequestId, res: $Response, next: NextFunction) => {
-            // This promise will resolve whenever the bundle we're serving changes.
-            const bundleChangePromise = new Promise((resolve, reject) => {
-                this._pendingLongPollResolveRejectByRequestId.set(req.requestId, {resolve, reject});
-            });
-            // After the LONG_POLL_TIMEOUT_MS, send a request timeout to tell the client to retry.
-            const timeoutPromise = new Promise((resolve, reject) => setTimeout(() => resolve('timeout'), LONG_POLL_TIMEOUT_MS));
+        runFrameRoutes.get(
+            '/poll',
+            (req: RequestWithRequestId, res: $Response, next: NextFunction) => {
+                // This promise will resolve whenever the bundle we're serving changes.
+                const bundleChangePromise = new Promise((resolve, reject) => {
+                    this._pendingLongPollResolveRejectByRequestId.set(req.requestId, {
+                        resolve,
+                        reject,
+                    });
+                });
+                // After the LONG_POLL_TIMEOUT_MS, send a request timeout to tell the client to retry.
+                const timeoutPromise = new Promise((resolve, reject) =>
+                    setTimeout(() => resolve('timeout'), LONG_POLL_TIMEOUT_MS),
+                );
 
-            Promise.race([
-                bundleChangePromise,
-                timeoutPromise,
-            ]).then(result => {
-                const statusCode = result === 'timeout' ? 408 : 200;
-                res.sendStatus(statusCode);
-            }).catch((err) => {
-                if (err.code === ErrorCodes.BUNDLE_ERROR) {
-                    // Send 200 to reload the window on bundle errors.
-                    // The reloading mechanism will allow the block frame to
-                    // retrieve the error information when it tries to re-fetch
-                    // the bundle.js file.
-                    res.sendStatus(200);
-                } else {
-                    next(err);
-                }
-            }).finally(() => {
-                this._pendingLongPollResolveRejectByRequestId.delete(req.requestId);
-            });
-        });
+                Promise.race([bundleChangePromise, timeoutPromise])
+                    .then(result => {
+                        const statusCode = result === 'timeout' ? 408 : 200;
+                        res.sendStatus(statusCode);
+                    })
+                    .catch(err => {
+                        if (err.code === ErrorCodes.BUNDLE_ERROR) {
+                            // Send 200 to reload the window on bundle errors.
+                            // The reloading mechanism will allow the block frame to
+                            // retrieve the error information when it tries to re-fetch
+                            // the bundle.js file.
+                            res.sendStatus(200);
+                        } else {
+                            next(err);
+                        }
+                    })
+                    .finally(() => {
+                        this._pendingLongPollResolveRejectByRequestId.delete(req.requestId);
+                    });
+            },
+        );
 
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
@@ -374,9 +399,15 @@ class BlockServer {
         if (!fs.existsSync(buildDirPath)) {
             fs.mkdirSync(buildDirPath);
         }
-        const clientWrapperFilepath = path.join(buildDirPath, blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME);
+        const clientWrapperFilepath = path.join(
+            buildDirPath,
+            blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
+        );
         const isDevelopment = true;
-        const clientWrapperCode = generateBlockClientWrapperCode(frontendEntryFilePath, isDevelopment);
+        const clientWrapperCode = generateBlockClientWrapperCode(
+            frontendEntryFilePath,
+            isDevelopment,
+        );
         fs.writeFileSync(clientWrapperFilepath, clientWrapperCode);
     }
     _setUpBundler() {
@@ -388,8 +419,12 @@ class BlockServer {
         if (this._shouldTranspileAll) {
             console.log('These are all the browsers that Airtable supports.');
         } else {
-            console.log('These are recent browsers that support many modern JS features, which makes');
-            console.log('debugging easier even with source maps. To transpile code for all the browsers');
+            console.log(
+                'These are recent browsers that support many modern JS features, which makes',
+            );
+            console.log(
+                'debugging easier even with source maps. To transpile code for all the browsers',
+            );
             console.log('that Airtable supports, use --transpile-all');
         }
         console.log('');
@@ -407,11 +442,13 @@ class BlockServer {
                 plugin: [watchify],
                 paths: [blockDirPath],
                 transform: [
-                    babelify.configure(generateBlockBabelConfig({
-                        browsers: this._shouldTranspileAll
-                            ? allSupportedBrowsers
-                            : developmentBrowsers,
-                    })),
+                    babelify.configure(
+                        generateBlockBabelConfig({
+                            browsers: this._shouldTranspileAll
+                                ? allSupportedBrowsers
+                                : developmentBrowsers,
+                        }),
+                    ),
                 ],
             },
         );
@@ -428,9 +465,7 @@ class BlockServer {
         );
     }
     async startAsync(port: number, ngrok: boolean): Promise<void> {
-        const url = ngrok ?
-            await this.startNgrokAsync(port) :
-            await this.startLocalAsync(port);
+        const url = ngrok ? await this.startNgrokAsync(port) : await this.startLocalAsync(port);
         this._blockServerUrlIfExists = url;
         this.setPublicBaseUrl(url);
         await this.triggerBundleAsync(null);
@@ -447,9 +482,7 @@ class BlockServer {
         await new Promise((resolve, reject) => {
             const expressServer = this._expressApp.listen(port);
             invariant(expressServer, 'expressServer');
-            expressServer
-                .on('error', reject)
-                .on('listening', resolve);
+            expressServer.on('error', reject).on('listening', resolve);
         });
         // Connect ngrok.
         return await new Promise((resolve, reject) => {
@@ -464,8 +497,14 @@ class BlockServer {
     async startLocalAsync(port: number): Promise<string> {
         // Read certs
         const [key, cert] = await Promise.all([
-            fsUtils.readFileAsync(path.join(getBlocksCliProjectRootPath(), 'keys', 'server.key'), 'utf8'),
-            fsUtils.readFileAsync(path.join(getBlocksCliProjectRootPath(), 'keys', 'server.crt'), 'utf8'),
+            fsUtils.readFileAsync(
+                path.join(getBlocksCliProjectRootPath(), 'keys', 'server.key'),
+                'utf8',
+            ),
+            fsUtils.readFileAsync(
+                path.join(getBlocksCliProjectRootPath(), 'keys', 'server.crt'),
+                'utf8',
+            ),
         ]);
         // Start the local server using those certs
         await new Promise((resolve, reject) => {
@@ -494,21 +533,25 @@ class BlockServer {
     _bundleAsync(): Promise<BundleStateData> {
         return new Promise((resolve, reject) => {
             const blockDirPath = this._blockDirPath;
-            const fsStream = fs.createWriteStream(path.join(
-                blockDirPath,
-                blockCliConfigSettings.BUILD_DIR,
-                blockCliConfigSettings.BUNDLE_FILE_NAME,
-            ));
-            fsStream.on('finish', () => {
-                console.log('Bundle updated');
-                resolve({status: BundleStatuses.READY});
-            }).on('error', (err) => {
-                resolve({status: BundleStatuses.ERROR, error: err});
-            });
+            const fsStream = fs.createWriteStream(
+                path.join(
+                    blockDirPath,
+                    blockCliConfigSettings.BUILD_DIR,
+                    blockCliConfigSettings.BUNDLE_FILE_NAME,
+                ),
+            );
+            fsStream
+                .on('finish', () => {
+                    console.log('Bundle updated');
+                    resolve({status: BundleStatuses.READY});
+                })
+                .on('error', err => {
+                    resolve({status: BundleStatuses.ERROR, error: err});
+                });
 
             const bundleStream = this._bundler.bundle();
             bundleStream
-                .on('error', (err) => {
+                .on('error', err => {
                     // Append a custom error code here. The error code will be used
                     // to signal that the HTTP connection to block_server should be
                     // kept alive via long polling.
@@ -566,14 +609,18 @@ class BlockServer {
         switch (bundleResult.status) {
             case BundleStatuses.READY:
                 // Resolve any long poll promises that were listening for bundle changes.
-                for (const {resolve: longPollResolve} of this._pendingLongPollResolveRejectByRequestId.values()) {
+                for (const {
+                    resolve: longPollResolve,
+                } of this._pendingLongPollResolveRejectByRequestId.values()) {
                     longPollResolve();
                 }
                 break;
 
             case BundleStatuses.ERROR:
                 // Reject any long poll promises that were listening for bundle changes.
-                for (const {reject: longPollReject} of this._pendingLongPollResolveRejectByRequestId.values()) {
+                for (const {
+                    reject: longPollReject,
+                } of this._pendingLongPollResolveRejectByRequestId.values()) {
                     longPollReject(bundleResult.error);
                 }
                 break;

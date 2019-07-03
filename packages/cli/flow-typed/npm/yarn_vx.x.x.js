@@ -14,7 +14,7 @@
  */
 
 declare module 'yarn' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,24 +23,24 @@ declare module 'yarn' {
  * needed.
  */
 declare module 'yarn/bin/yarn' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'yarn/lib/cli' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'yarn/lib/v8-compile-cache' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'yarn/bin/yarn.js' {
-  declare module.exports: $Exports<'yarn/bin/yarn'>;
+    declare module.exports: $Exports<'yarn/bin/yarn'>;
 }
 declare module 'yarn/lib/cli.js' {
-  declare module.exports: $Exports<'yarn/lib/cli'>;
+    declare module.exports: $Exports<'yarn/lib/cli'>;
 }
 declare module 'yarn/lib/v8-compile-cache.js' {
-  declare module.exports: $Exports<'yarn/lib/v8-compile-cache'>;
+    declare module.exports: $Exports<'yarn/lib/v8-compile-cache'>;
 }

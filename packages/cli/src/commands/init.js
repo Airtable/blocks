@@ -113,7 +113,10 @@ async function initBlockAsync(
         blockId,
         baseId,
     };
-    const blockConfigDirPath = path.join(blockDirPath, blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME);
+    const blockConfigDirPath = path.join(
+        blockDirPath,
+        blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME,
+    );
     await fsUtils.mkdirPathAsync(blockConfigDirPath);
     const writeRemoteJsonPromise = fsUtils.writeFileAsync(
         path.join(blockConfigDirPath, blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH),
@@ -164,8 +167,21 @@ async function initBlockAsync(
     ]);
 
     // TODO: consider not piping `yarn add` output so that `block init` is less verbose.
-    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['add', '@airtable/blocks', 'react', 'react-dom', '--non-interactive']);
-    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, ['add', 'eslint', 'eslint-plugin-react', 'eslint-plugin-react-hooks', '--dev', '--non-interactive']);
+    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, [
+        'add',
+        '@airtable/blocks',
+        'react',
+        'react-dom',
+        '--non-interactive',
+    ]);
+    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, [
+        'add',
+        'eslint',
+        'eslint-plugin-react',
+        'eslint-plugin-react-hooks',
+        '--dev',
+        '--non-interactive',
+    ]);
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
@@ -187,7 +203,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     // Prompt for apiKey if the user does not already have one configured at the user-config level
     // TODO(emma): When `block setApiKey` exists, update messages here to include it
     const userConfigPath = configHelpers.getConfigPath(configHelpers.ConfigLocations.USER);
-    const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(configHelpers.ConfigLocations.USER);
+    const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(
+        configHelpers.ConfigLocations.USER,
+    );
     if (doesUserConfigApiKeyExist) {
         console.log(`Using your existing API key from ${userConfigPath}`);
     } else {
@@ -197,12 +215,12 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     console.log('Initializing block');
-    await initBlockAsync(
-        baseId,
-        blockId,
-        blockDirPath,
+    await initBlockAsync(baseId, blockId, blockDirPath);
+    console.log(
+        `✅ Your block is ready! ${chalk.bold(
+            'cd ' + blockDirPath + ' && block run',
+        )} to start developing, and ${chalk.bold('yarn lint')} to lint.`,
     );
-    console.log(`✅ Your block is ready! ${chalk.bold('cd ' + blockDirPath + ' && block run')} to start developing, and ${chalk.bold('yarn lint')} to lint.`);
 }
 
 module.exports = {runCommandAsync};

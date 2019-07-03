@@ -105,6 +105,6 @@ module.exports = {
         }
     },
     outputJsonAsync: async function(filePath, content) {
-       await fsExtra.outputJson(filePath, content, {spaces: 4});
+        await fsExtra.outputJson(filePath, content, {spaces: 4});
     },
 };

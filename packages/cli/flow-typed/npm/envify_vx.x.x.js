@@ -14,7 +14,7 @@
  */
 
 declare module 'envify' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,16 +23,16 @@ declare module 'envify' {
  * needed.
  */
 declare module 'envify/custom' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'envify/custom.js' {
-  declare module.exports: $Exports<'envify/custom'>;
+    declare module.exports: $Exports<'envify/custom'>;
 }
 declare module 'envify/index' {
-  declare module.exports: $Exports<'envify'>;
+    declare module.exports: $Exports<'envify'>;
 }
 declare module 'envify/index.js' {
-  declare module.exports: $Exports<'envify'>;
+    declare module.exports: $Exports<'envify'>;
 }

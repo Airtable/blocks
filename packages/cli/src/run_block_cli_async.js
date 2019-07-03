@@ -3,30 +3,23 @@ const commandConfigs = require('./commands/command_configs');
 const setUpRollbarAsync = require('./helpers/set_up_rollbar_async');
 
 function registerCommandForConfig(yargs, commandConfig) {
-    yargs.command(
-        commandConfig.command,
-        commandConfig.description,
-        yargsInner => {
-            if (commandConfig.positionalMap) {
-                for (const positionalName of Object.keys(commandConfig.positionalMap)) {
-                    const positionalConfig = commandConfig.positionalMap[positionalName];
-                    yargsInner.positional(positionalName, positionalConfig);
-                }
+    yargs.command(commandConfig.command, commandConfig.description, yargsInner => {
+        if (commandConfig.positionalMap) {
+            for (const positionalName of Object.keys(commandConfig.positionalMap)) {
+                const positionalConfig = commandConfig.positionalMap[positionalName];
+                yargsInner.positional(positionalName, positionalConfig);
             }
-            if (commandConfig.optionMap) {
-                for (const optionName of Object.keys(commandConfig.optionMap)) {
-                    const optionConfig = commandConfig.optionMap[optionName];
-                    yargs.option(
-                        optionName,
-                        {
-                            group: commandConfig.name,
-                            ...optionConfig,
-                        },
-                    );
-                }
+        }
+        if (commandConfig.optionMap) {
+            for (const optionName of Object.keys(commandConfig.optionMap)) {
+                const optionConfig = commandConfig.optionMap[optionName];
+                yargs.option(optionName, {
+                    group: commandConfig.name,
+                    ...optionConfig,
+                });
             }
-        },
-    );
+        }
+    });
 
     const isCommandShown = commandConfig.description !== false;
     if (isCommandShown) {
@@ -71,10 +64,9 @@ async function runBlockCliAsync() {
     const config = yargs.argv;
     const commandConfig = getCommandConfig(config);
     if (commandConfig) {
-        commandConfig.runCommandAsync(config)
-            .catch(err => {
-                cliHelpers.exitWithError(err.message);
-            });
+        commandConfig.runCommandAsync(config).catch(err => {
+            cliHelpers.exitWithError(err.message);
+        });
     } else {
         yargs.showHelp();
         cliHelpers.exitWithError('Please use a valid command');

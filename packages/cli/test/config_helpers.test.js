@@ -245,7 +245,9 @@ describe('configHelpers', function() {
                     await configHelpers.getApiKeyIfExistsAsync();
                 }, expectedErrorMessage);
 
-                await fsUtils.outputJsonAsync(configPath, {[configHelpers._test.CONFIG_KEY_API_KEY]: 123});
+                await fsUtils.outputJsonAsync(configPath, {
+                    [configHelpers._test.CONFIG_KEY_API_KEY]: 123,
+                });
                 await assert.rejects(async () => {
                     await configHelpers.getApiKeyIfExistsAsync();
                 }, 'expect apiKey to be a string');

@@ -5,11 +5,7 @@ const babelPluginProposalClassProperties = require('@babel/plugin-proposal-class
 
 function generateBlockBabelConfig(targets) {
     return {
-        presets: [
-            [babelPresetEnv, {targets}],
-            babelPresetReact,
-            babelPresetFlow,
-        ],
+        presets: [[babelPresetEnv, {targets}], babelPresetReact, babelPresetFlow],
         plugins: [babelPluginProposalClassProperties],
         retainLines: true,
         minified: true,

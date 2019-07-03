@@ -2,5 +2,5 @@
 // flow-typed version: da30fe6876/invariant_v2.x.x/flow_>=v0.33.x
 
 declare module invariant {
-  declare module.exports: (condition: boolean, message: string) => void;
+    declare module.exports: (condition: boolean, message: string) => void;
 }

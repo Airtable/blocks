@@ -34,7 +34,9 @@ class APIClient {
     _blockId: BlockId | null;
     _apiKey: string;
 
-    static async constructAPIClientForRemoteAsync(remoteName: string | null): Promise<Result<APIClient>> {
+    static async constructAPIClientForRemoteAsync(
+        remoteName: string | null,
+    ): Promise<Result<APIClient>> {
         const parseResult = await parseAndValidateRemoteJsonAsync(remoteName);
         if (parseResult.err) {
             return parseResult;
@@ -71,14 +73,22 @@ class APIClient {
 
     _getAccessPolicyUrl(): string {
         invariant(this._blockInstallationId, '_blockInstallationId');
-        return this._getUrl(`/v2/${ApiTypes.META}/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`);
+        return this._getUrl(
+            `/v2/${ApiTypes.META}/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`,
+        );
     }
 
     _getUrl(path: string): string {
         return new URL(path, this._apiBaseUrl).href;
     }
 
-    async startBuildAsync(hasBackend: boolean): Promise<{buildId: BuildId, frontendBundleUploadUrl: string, backendDeploymentPackageUploadUrl: string | null}> {
+    async startBuildAsync(
+        hasBackend: boolean,
+    ): Promise<{
+        buildId: BuildId,
+        frontendBundleUploadUrl: string,
+        backendDeploymentPackageUploadUrl: string | null,
+    }> {
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/start`,
             headers: {
@@ -163,7 +173,10 @@ class APIClient {
         return body;
     }
 
-    async createReleaseAsync(buildId: BuildId, deployId: DeployId | null): Promise<{releaseId: ReleaseId}> {
+    async createReleaseAsync(
+        buildId: BuildId,
+        deployId: DeployId | null,
+    ): Promise<{releaseId: ReleaseId}> {
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/releases/create`,
             headers: {

@@ -21,7 +21,10 @@ function _getOutputDirPath(): string {
     return path.join(os.tmpdir(), 'build', timestampString);
 }
 
-async function _generateBuildArtifactsAsync(): Promise<{|frontendBundlePath: string, backendDeploymentPackagePath: string | null|}> {
+async function _generateBuildArtifactsAsync(): Promise<{|
+    frontendBundlePath: string,
+    backendDeploymentPackagePath: string | null,
+|}> {
     const blockBuilder = new BlockBuilder();
     const outputDirPath = _getOutputDirPath();
     const buildResult = await blockBuilder.buildAsync(outputDirPath);
@@ -31,7 +34,10 @@ async function _generateBuildArtifactsAsync(): Promise<{|frontendBundlePath: str
     return buildResult.value;
 }
 
-async function _uploadFrontendBundleAsync(frontendBundlePath: string, frontendBundleUploadUrl: string): Promise<void> {
+async function _uploadFrontendBundleAsync(
+    frontendBundlePath: string,
+    frontendBundleUploadUrl: string,
+): Promise<void> {
     const bundle = await fsUtils.readFileAsync(frontendBundlePath);
     const response = await request.putAsync({
         url: frontendBundleUploadUrl,
@@ -51,11 +57,15 @@ async function setTimeoutAsync(timeoutMs: number): Promise<void> {
     return new Promise((resolve, reject) => setTimeout(resolve, timeoutMs));
 }
 
-async function _createDeployAndWaitUntilCompletionAsync(apiClient: APIClient, buildId: BuildId): Promise<DeployId> {
+async function _createDeployAndWaitUntilCompletionAsync(
+    apiClient: APIClient,
+    buildId: BuildId,
+): Promise<DeployId> {
     console.log('deploying backend');
     const {deployId} = await apiClient.createDeployAsync(buildId);
 
-    while (true) { // eslint-disable-line no-constant-condition
+    while (true) {
+        // eslint-disable-line no-constant-condition
         const {status} = await apiClient.getDeployStatusAsync(deployId);
         if (status === 'success') {
             console.log('successfully deployed backend');
@@ -71,7 +81,10 @@ async function _createDeployAndWaitUntilCompletionAsync(apiClient: APIClient, bu
     return deployId;
 }
 
-async function _uploadBackendDeploymentPackageAsync(backendDeploymentPackagePath: string, backendDeploymentPackageUploadUrl: string): Promise<void> {
+async function _uploadBackendDeploymentPackageAsync(
+    backendDeploymentPackagePath: string,
+    backendDeploymentPackageUploadUrl: string,
+): Promise<void> {
     const backendDeploymentPackage = await fsUtils.readFileAsync(backendDeploymentPackagePath);
     const response = await request.putAsync({
         url: backendDeploymentPackageUploadUrl,
@@ -83,7 +96,9 @@ async function _uploadBackendDeploymentPackageAsync(backendDeploymentPackagePath
     }
 }
 
-async function _buildAndDeployAsync(apiClient: APIClient): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
+async function _buildAndDeployAsync(
+    apiClient: APIClient,
+): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
     const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync();
 
     const hasBackend = !!backendDeploymentPackagePath;
@@ -100,7 +115,10 @@ async function _buildAndDeployAsync(apiClient: APIClient): Promise<{|buildId: Bu
         if (hasBackend) {
             invariant(backendDeploymentPackagePath, 'backendDeploymentPackagePath');
             invariant(backendDeploymentPackageUploadUrl, 'backendDeploymentPackageUploadUrl');
-            await _uploadBackendDeploymentPackageAsync(backendDeploymentPackagePath, backendDeploymentPackageUploadUrl);
+            await _uploadBackendDeploymentPackageAsync(
+                backendDeploymentPackagePath,
+                backendDeploymentPackageUploadUrl,
+            );
         }
     } catch (err) {
         console.log('failed to upload build artifacts', err);
@@ -126,7 +144,10 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     const remoteName = argv.remote || null;
-    invariant(remoteName === null || typeof remoteName === 'string', 'expects remoteName to be null or a string');
+    invariant(
+        remoteName === null || typeof remoteName === 'string',
+        'expects remoteName to be null or a string',
+    );
     const apiClientResult = await APIClient.constructAPIClientForRemoteAsync(remoteName);
     if (apiClientResult.err) {
         throw apiClientResult.err;

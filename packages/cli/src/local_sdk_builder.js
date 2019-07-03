@@ -115,7 +115,7 @@ class LocalSdkBuilder {
 
         // now that we've packed everything, rewrite package.json back to the original
         await fsUtils.writeFileAsync(sdkPackageJsonPath, initialPackageJsonString, 'utf-8');
-        
+
         // npm pack prints the location of the package to stdout before exiting
         const lines = stdout.trim().split('\n');
         const packedPackagePath = lines[lines.length - 1];

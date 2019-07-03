@@ -14,7 +14,7 @@
  */
 
 declare module 'babelify' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,11 +23,10 @@ declare module 'babelify' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'babelify/index' {
-  declare module.exports: $Exports<'babelify'>;
+    declare module.exports: $Exports<'babelify'>;
 }
 declare module 'babelify/index.js' {
-  declare module.exports: $Exports<'babelify'>;
+    declare module.exports: $Exports<'babelify'>;
 }

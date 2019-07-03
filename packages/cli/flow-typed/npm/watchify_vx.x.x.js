@@ -14,7 +14,7 @@
  */
 
 declare module 'watchify' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,184 +23,184 @@ declare module 'watchify' {
  * needed.
  */
 declare module 'watchify/bin/args' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/bin/cmd' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/example/files/main' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/example/files/one' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/example/files/two' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/api_brfs' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/api_ignore_watch_default' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/api_ignore_watch_multiple' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/api_ignore_watch' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/api_implicit_cache' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/api' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_brfs' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_ignore_watch_default' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_ignore_watch_multiple' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_ignore_watch' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_pipe' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_plugins_pipelining_multiple_errors' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin_standalone' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/bin' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/errors_transform' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/errors' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/expose' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/many_immediate' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/many' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 declare module 'watchify/test/zzz' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'watchify/bin/args.js' {
-  declare module.exports: $Exports<'watchify/bin/args'>;
+    declare module.exports: $Exports<'watchify/bin/args'>;
 }
 declare module 'watchify/bin/cmd.js' {
-  declare module.exports: $Exports<'watchify/bin/cmd'>;
+    declare module.exports: $Exports<'watchify/bin/cmd'>;
 }
 declare module 'watchify/example/files/main.js' {
-  declare module.exports: $Exports<'watchify/example/files/main'>;
+    declare module.exports: $Exports<'watchify/example/files/main'>;
 }
 declare module 'watchify/example/files/one.js' {
-  declare module.exports: $Exports<'watchify/example/files/one'>;
+    declare module.exports: $Exports<'watchify/example/files/one'>;
 }
 declare module 'watchify/example/files/two.js' {
-  declare module.exports: $Exports<'watchify/example/files/two'>;
+    declare module.exports: $Exports<'watchify/example/files/two'>;
 }
 declare module 'watchify/index' {
-  declare module.exports: $Exports<'watchify'>;
+    declare module.exports: $Exports<'watchify'>;
 }
 declare module 'watchify/index.js' {
-  declare module.exports: $Exports<'watchify'>;
+    declare module.exports: $Exports<'watchify'>;
 }
 declare module 'watchify/test/api_brfs.js' {
-  declare module.exports: $Exports<'watchify/test/api_brfs'>;
+    declare module.exports: $Exports<'watchify/test/api_brfs'>;
 }
 declare module 'watchify/test/api_ignore_watch_default.js' {
-  declare module.exports: $Exports<'watchify/test/api_ignore_watch_default'>;
+    declare module.exports: $Exports<'watchify/test/api_ignore_watch_default'>;
 }
 declare module 'watchify/test/api_ignore_watch_multiple.js' {
-  declare module.exports: $Exports<'watchify/test/api_ignore_watch_multiple'>;
+    declare module.exports: $Exports<'watchify/test/api_ignore_watch_multiple'>;
 }
 declare module 'watchify/test/api_ignore_watch.js' {
-  declare module.exports: $Exports<'watchify/test/api_ignore_watch'>;
+    declare module.exports: $Exports<'watchify/test/api_ignore_watch'>;
 }
 declare module 'watchify/test/api_implicit_cache.js' {
-  declare module.exports: $Exports<'watchify/test/api_implicit_cache'>;
+    declare module.exports: $Exports<'watchify/test/api_implicit_cache'>;
 }
 declare module 'watchify/test/api.js' {
-  declare module.exports: $Exports<'watchify/test/api'>;
+    declare module.exports: $Exports<'watchify/test/api'>;
 }
 declare module 'watchify/test/bin_brfs.js' {
-  declare module.exports: $Exports<'watchify/test/bin_brfs'>;
+    declare module.exports: $Exports<'watchify/test/bin_brfs'>;
 }
 declare module 'watchify/test/bin_ignore_watch_default.js' {
-  declare module.exports: $Exports<'watchify/test/bin_ignore_watch_default'>;
+    declare module.exports: $Exports<'watchify/test/bin_ignore_watch_default'>;
 }
 declare module 'watchify/test/bin_ignore_watch_multiple.js' {
-  declare module.exports: $Exports<'watchify/test/bin_ignore_watch_multiple'>;
+    declare module.exports: $Exports<'watchify/test/bin_ignore_watch_multiple'>;
 }
 declare module 'watchify/test/bin_ignore_watch.js' {
-  declare module.exports: $Exports<'watchify/test/bin_ignore_watch'>;
+    declare module.exports: $Exports<'watchify/test/bin_ignore_watch'>;
 }
 declare module 'watchify/test/bin_pipe.js' {
-  declare module.exports: $Exports<'watchify/test/bin_pipe'>;
+    declare module.exports: $Exports<'watchify/test/bin_pipe'>;
 }
 declare module 'watchify/test/bin_plugins_pipelining_multiple_errors.js' {
-  declare module.exports: $Exports<'watchify/test/bin_plugins_pipelining_multiple_errors'>;
+    declare module.exports: $Exports<'watchify/test/bin_plugins_pipelining_multiple_errors'>;
 }
 declare module 'watchify/test/bin_standalone.js' {
-  declare module.exports: $Exports<'watchify/test/bin_standalone'>;
+    declare module.exports: $Exports<'watchify/test/bin_standalone'>;
 }
 declare module 'watchify/test/bin.js' {
-  declare module.exports: $Exports<'watchify/test/bin'>;
+    declare module.exports: $Exports<'watchify/test/bin'>;
 }
 declare module 'watchify/test/errors_transform.js' {
-  declare module.exports: $Exports<'watchify/test/errors_transform'>;
+    declare module.exports: $Exports<'watchify/test/errors_transform'>;
 }
 declare module 'watchify/test/errors.js' {
-  declare module.exports: $Exports<'watchify/test/errors'>;
+    declare module.exports: $Exports<'watchify/test/errors'>;
 }
 declare module 'watchify/test/expose.js' {
-  declare module.exports: $Exports<'watchify/test/expose'>;
+    declare module.exports: $Exports<'watchify/test/expose'>;
 }
 declare module 'watchify/test/many_immediate.js' {
-  declare module.exports: $Exports<'watchify/test/many_immediate'>;
+    declare module.exports: $Exports<'watchify/test/many_immediate'>;
 }
 declare module 'watchify/test/many.js' {
-  declare module.exports: $Exports<'watchify/test/many'>;
+    declare module.exports: $Exports<'watchify/test/many'>;
 }
 declare module 'watchify/test/zzz.js' {
-  declare module.exports: $Exports<'watchify/test/zzz'>;
+    declare module.exports: $Exports<'watchify/test/zzz'>;
 }

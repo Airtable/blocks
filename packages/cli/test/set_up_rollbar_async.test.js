@@ -11,7 +11,13 @@ class FakeRollbar {
     }
 }
 
-const setUpRollbarAsyncPath = path.join(__dirname, '..', 'src', 'helpers', 'set_up_rollbar_async.js');
+const setUpRollbarAsyncPath = path.join(
+    __dirname,
+    '..',
+    'src',
+    'helpers',
+    'set_up_rollbar_async.js',
+);
 const setUpRollbarAsync = proxyquire(setUpRollbarAsyncPath, {
     rollbar: FakeRollbar,
 });
@@ -33,12 +39,15 @@ describe('setUpRollbarAsync', function() {
         await setUpRollbarAsync();
 
         sinon.assert.calledOnce(rollbarConstructorSpy);
-        sinon.assert.calledWith(rollbarConstructorSpy, sinon.match({
-            accessToken: sinon.match.string,
-            captureUncaught: true,
-            captureUnhandledRejections: true,
-            captureIp: false,
-        }));
+        sinon.assert.calledWith(
+            rollbarConstructorSpy,
+            sinon.match({
+                accessToken: sinon.match.string,
+                captureUncaught: true,
+                captureUnhandledRejections: true,
+                captureIp: false,
+            }),
+        );
 
         sinon.assert.calledOnce(fsExtra.pathExists);
         sinon.assert.calledWithExactly(fsExtra.pathExists, path.join(__dirname, '..', '.git'));

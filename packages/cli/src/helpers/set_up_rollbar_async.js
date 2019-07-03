@@ -23,9 +23,6 @@ module.exports = setUpRollbarAsync;
 // This is a bit brittle because it assumes this file lives at this path.
 // In the future, we may wish to set a flag at publish time to accomplish this.
 async function isInDevelopmentRepositoryAsync(): Promise<boolean> {
-    const possibleGitPath = path.join(
-        getBlocksCliProjectRootPath(),
-        '.git',
-    );
+    const possibleGitPath = path.join(getBlocksCliProjectRootPath(), '.git');
     return await fsExtra.pathExists(possibleGitPath);
 }

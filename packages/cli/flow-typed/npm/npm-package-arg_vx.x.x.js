@@ -14,7 +14,7 @@
  */
 
 declare module 'npm-package-arg' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 /**
@@ -23,10 +23,10 @@ declare module 'npm-package-arg' {
  * needed.
  */
 declare module 'npm-package-arg/npa' {
-  declare module.exports: any;
+    declare module.exports: any;
 }
 
 // Filename aliases
 declare module 'npm-package-arg/npa.js' {
-  declare module.exports: $Exports<'npm-package-arg/npa'>;
+    declare module.exports: $Exports<'npm-package-arg/npa'>;
 }
