@@ -268,11 +268,25 @@ class BlockServer {
         runFrameRoutes.post(
             '/registerBlockInstallationMetadata',
             (req: $Request, res: $Response) => {
-                if (!req.body || !req.body.applicationId || !req.body.blockInstallationId) {
+                if (
+                    !req.body ||
+                    !req.body.applicationId ||
+                    !req.body.blockId ||
+                    !req.body.blockInstallationId
+                ) {
                     res.status(400).send({
                         error: 'BAD_REQUEST',
-                        message:
-                            'Must include applicationId and blockInstallationId in request body',
+                        message: 'Invalid request body',
+                    });
+                } else if (req.body.applicationId !== this._remoteJson.baseId) {
+                    res.status(403).send({
+                        error: 'FORBIDDEN',
+                        message: 'Please check if this is the correct base!',
+                    });
+                } else if (req.body.blockId !== this._remoteJson.blockId) {
+                    res.status(403).send({
+                        error: 'FORBIDDEN',
+                        message: 'Please check if this is the correct block!',
                     });
                 } else {
                     if (
