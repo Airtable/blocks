@@ -50,6 +50,9 @@ describe('setUpRollbarAsync', function() {
         );
 
         sinon.assert.calledOnce(fsExtra.pathExists);
-        sinon.assert.calledWithExactly(fsExtra.pathExists, path.join(__dirname, '..', '.git'));
+        sinon.assert.calledWithExactly(
+            fsExtra.pathExists,
+            path.join(__dirname, '..', '..', '..', '.git'),
+        );
     });
 });
