@@ -9,9 +9,9 @@
     "scripts": {
         "lint": "eslint .",
         "flow": "flow",
-        "buildOnce": "babel src --out-dir transpiled",
-        "build": "yarn buildOnce --watch",
-        "prepublishOnly": "yarn buildOnce",
+        "build": "babel src --out-dir transpiled",
+        "watch": "yarn build --watch",
+        "prepublishOnly": "yarn build",
         "pretest": "yarn run lint",
         "test": "mocha",
         "version": "changelog-publish 'https://github.com/airtable/blocks-cli' && git add CHANGELOG.md"
