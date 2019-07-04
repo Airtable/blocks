@@ -11,8 +11,8 @@
         "flow": "flow",
         "buildOnce": "babel src --out-dir transpiled",
         "build": "yarn buildOnce --watch",
+        "prepublishOnly": "yarn buildOnce",
         "pretest": "yarn run lint",
-        "postinstall": "yarn buildOnce",
         "test": "mocha",
         "version": "changelog-publish 'https://github.com/airtable/blocks-cli' && git add CHANGELOG.md"
     },
@@ -20,8 +20,7 @@
         "/README.md",
         "/bin/block",
         "/keys/",
-        "/src/",
-        ".babelrc"
+        "/transpiled/"
     ],
     "dependencies": {
         "@babel/cli": "^7.2.3",
