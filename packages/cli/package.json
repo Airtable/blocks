@@ -64,7 +64,6 @@
         "changelog-publish": "^1.1.0",
         "eslint": "^5.15.1",
         "eslint-plugin-airtable": "git+ssh://git@github.com/Hyperbase/eslint-plugin-airtable#da42308fa5d9c164794b2d32c96934e54b1195f9",
-        "eslint-plugin-class-property": "^1.1.0",
         "eslint-plugin-flowtype": "^3.4.2",
         "eslint-plugin-react": "^7.6.0",
         "flow-bin": "^0.95.1",
