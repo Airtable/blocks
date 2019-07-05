@@ -1,7 +1,7 @@
 {
     "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "bin": {
         "block": "bin/block"
     },
@@ -23,7 +23,7 @@
         "/transpiled/"
     ],
     "dependencies": {
-        "@airtable/eslint-plugin-blocks": "^1.0.0",
+        "@airtable/eslint-plugin-blocks": "^1.0.1",
         "@babel/cli": "^7.2.3",
         "@babel/core": "^7.4.0",
         "@babel/plugin-proposal-class-properties": "^7.4.0",
@@ -60,7 +60,7 @@
         "yarn": "^1.13.0"
     },
     "devDependencies": {
-        "@airtable-blocks-internal/changelog-publish": "^1.0.0",
+        "@airtable-blocks-internal/changelog-publish": "^1.0.1",
         "@babel/register": "^7.4.4",
         "babel-eslint": "^10.0.1",
         "eslint": "^5.15.1",

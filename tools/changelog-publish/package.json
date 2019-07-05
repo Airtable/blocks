@@ -1,6 +1,6 @@
 {
     "name": "@airtable-blocks-internal/changelog-publish",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Automatically bump versions in changelogs",
     "main": "index.js",
     "private": true,
