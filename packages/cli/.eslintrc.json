@@ -170,7 +170,7 @@
         "flowtype/boolean-style": ["warn", "boolean"],
         "flowtype/define-flow-type": "warn",
         "flowtype/delimiter-dangle": ["warn", "always-multiline"],
-        "flowtype/generic-spacing": "warn",
+        "flowtype/generic-spacing": "off",
         "flowtype/no-dupe-keys": "error",
         "flowtype/no-primitive-constructor-types": "error",
         "flowtype/no-weak-types": [

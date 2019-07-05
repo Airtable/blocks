@@ -65,8 +65,8 @@ async function _createDeployAndWaitUntilCompletionAsync(
     console.log('deploying backend');
     const {deployId} = await apiClient.createDeployAsync(buildId);
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
-        // eslint-disable-line no-constant-condition
         const {status} = await apiClient.getDeployStatusAsync(deployId);
         if (status === 'success') {
             console.log('successfully deployed backend');

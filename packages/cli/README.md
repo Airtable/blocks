@@ -14,12 +14,11 @@ Go to the block's directory and run:
 
 `block run`
 
-This will start a local server and serve the bundle over https locally, with a
-self-signed certificate. You'll need to follow the instructions in the command to get the
-self-signed cert working in your browser. 
+This will start a local server and serve the bundle over https locally, with a self-signed
+certificate. You'll need to follow the instructions in the command to get the self-signed cert
+working in your browser.
 
-Once the server is started paste the bundle URL into the "Edit block
-locally" dialog in Airtable.
+Once the server is started paste the bundle URL into the "Edit block locally" dialog in Airtable.
 
 The block's frame will switch to the local development bundle. It will automatically reload when you
 update the code locally.

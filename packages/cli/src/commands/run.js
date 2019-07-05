@@ -52,8 +52,8 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     });
 
     let port = DEFAULT_PORT;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
-        // eslint-disable-line no-constant-condition
         try {
             // Try starting the server on this port.
             await blockServer.startAsync(port, ngrok);
