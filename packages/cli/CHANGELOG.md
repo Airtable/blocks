@@ -11,7 +11,19 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks-cli/compare/@airtable/blocks-cli0.0.11...HEAD)
 
-No changes.
+### Added
+
+-   `block set-api-key` command to update your Airtable API key
+-   `block init` generates a default ESLint config
+
+### Changed
+
+-   API key storage
+    -   `.airtableApiKey` deprecated and replaced by `.airtableblocksrc.json`
+    -   `.airtableblocksrc.json` supported in both user config (eg.
+        `~/.config/.airtableblocksrc.json`) and at the block level (within your block directory).
+    -   `block init` will check for the presence of user config and not prompt for Airtable API key
+        if it already exists there
 
 ## [0.0.11](https://github.com/airtable/blocks-cli/compare/v0.0.10...@airtable/blocks-cli0.0.11) - 2019-07-03
 
