@@ -11,11 +11,13 @@ import {type RecordDef} from '../types/record';
 import Field from '../models/field';
 import Record from '../models/record';
 import View from '../models/view';
+import type ViewMetadataQueryResult from '../models/view_metadata_query_result';
 import cellValueUtils from '../models/cell_value_utils';
 import expandRecord, {type ExpandRecordOpts} from './expand_record';
 import CellRenderer from './cell_renderer';
 import useWatchable from './use_watchable';
 import withHooks from './with_hooks';
+import useViewMetadata from './use_view_metadata';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
@@ -104,6 +106,9 @@ type RecordCardProps = {
     onMouseLeave?: mixed,
     className?: string,
     style?: Object,
+
+    /** @private injected by withHooks */
+    viewMetadata: ViewMetadataQueryResult | null,
 };
 
 const FormulaicFieldTypes = {
@@ -275,13 +280,13 @@ class RecordCard extends React.Component<RecordCardProps> {
         return attachmentsInField && attachmentsInField.length > 0 ? attachmentsInField[0] : null;
     }
     _getFields(): Array<Field> {
-        const {view, fields, record} = this.props;
+        const {viewMetadata, fields, record} = this.props;
 
         let fieldsToUse;
         if (fields) {
             fieldsToUse = fields.filter(field => !field.isDeleted);
-        } else if (view && !view.isDeleted) {
-            fieldsToUse = view.visibleFields;
+        } else if (viewMetadata && !viewMetadata.isDeleted) {
+            fieldsToUse = viewMetadata.visibleFields;
         } else if (record && record instanceof Record && !record.isDeleted) {
             const parentTable = record.parentTable;
             fieldsToUse = parentTable.fields;
@@ -512,7 +517,11 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
 }
 
-export default withHooks<RecordCardProps, {}, RecordCard>(RecordCard, props => {
+export default withHooks<
+    RecordCardProps,
+    {|viewMetadata: ViewMetadataQueryResult | null|},
+    RecordCard,
+>(RecordCard, props => {
     const recordModel = props.record && props.record instanceof Record ? props.record : null;
     let parentTable = null;
     if (recordModel) {
@@ -528,7 +537,8 @@ export default withHooks<RecordCardProps, {}, RecordCard>(RecordCard, props => {
         props.view ? `colorInView:${props.view.id}` : null,
     ]);
     useWatchable(parentTable, ['fields']);
-    useWatchable(props.view, ['visibleFields']);
 
-    return {};
+    const viewMetadata = useViewMetadata(props.view);
+
+    return {viewMetadata};
 });

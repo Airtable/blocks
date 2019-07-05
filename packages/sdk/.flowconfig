@@ -1,6 +1,6 @@
 [ignore]
 <PROJECT_ROOT>/node_modules/documentation/.*
-<PROJECT_ROOT>/dist/.*\.js\$
+<PROJECT_ROOT>/dist/.*\.js\.flow
 
 [include]
 

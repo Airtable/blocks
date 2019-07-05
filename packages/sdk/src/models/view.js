@@ -4,10 +4,10 @@ import {type ViewData, type ViewType} from '../types/view';
 import {isEnumValue} from '../private_utils';
 import AbstractModel from './abstract_model';
 import type Table from './table';
-import type Field from './field';
 import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
-import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
+import type ViewDataStore from './view_data_store';
+import ViewMetadataQueryResult from './view_metadata_query_result';
 
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
@@ -18,8 +18,6 @@ const airtableUrls = window.__requirePrivateModuleFromAirtable(
 
 const WatchableViewKeys = Object.freeze({
     name: ('name': 'name'),
-    visibleFields: ('visibleFields': 'visibleFields'),
-    allFields: ('allFields': 'allFields'),
 });
 export type WatchableViewKey = $Values<typeof WatchableViewKeys>;
 
@@ -138,7 +136,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
      *
      * @param [opts={}] Options for the query, such as sorts and fields.
-     * @returns A query result.
+     * @returns A record query result.
      * @example
      * import {UI} from '@airtable/blocks';
      * import React from 'react';
@@ -170,28 +168,25 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         );
     }
     /**
-     * @function
-     * @returns All the fields in the table, including fields that are hidden in this view. Can be watched to know when fields are created, deleted, or reordered.
+     * Select the field order and visible fields from the view. See {@ViewMetadataQueryResult} for more.
+     *
+     * @returns a {@ViewMetadataQueryResult}
      * @example
-     * console.log(myView.allFields);
-     * // => [Field {...}, Field {...}, ...]
+     * const viewMetadata = view.selectMetadata();
+     * await viewMetadata.loadDataAsync();
+     *
+     * console.log('Visible fields:');
+     * console.log(viewMetadata.visibleFields.map(field => field.name));
+     * // => ['Field 1', 'Field 2', 'Field 3']
+     *
+     * console.log('All fields:');
+     * console.log(viewMetadata.allFields.map(field => field.name));
+     * // => ['Field 1', 'Field 2', 'Field 3', 'Hidden field 4']
+     *
+     * viewMetadata.unloadData();
      */
-    get allFields(): Array<Field> {
-        return this._viewDataStore.allFieldIds.map(fieldId =>
-            this.parentTable.getFieldById(fieldId),
-        );
-    }
-    /**
-     * @function
-     * @returns The fields that are visible in this view. Can be watched to know when fields are created, deleted, hidden, shown, or reordered.
-     * @example
-     * console.log(myView.visibleFields);
-     * // => [Field {...}, Field {...}, ...]
-     */
-    get visibleFields(): Array<Field> {
-        return this._viewDataStore.visibleFieldIds.map(fieldId =>
-            this.parentTable.getFieldById(fieldId),
-        );
+    selectMetadata(): ViewMetadataQueryResult {
+        return ViewMetadataQueryResult.__createOrReuseQueryResult(this, this._viewDataStore);
     }
 
     /**
@@ -199,79 +194,31 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *
      * Watchable keys are:
      * - `'name'`
-     * - `'visibleFields'`
-     * - `'allFields'`
      *
      * Every call to `.watch` should have a matching call to `.unwatch`.
      *
+     * @function watch
+     * @memberof View
+     * @instance
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
      * @param [context] an optional context for `this` in `callback`.
      * @returns the array of keys that were watched
      */
-    watch(
-        keys: WatchableViewKey | Array<WatchableViewKey>,
-        callback: Function,
-        context?: ?Object,
-    ): Array<WatchableViewKey> {
-        const validKeys = super.watch(keys, callback, context);
-
-        for (const validKey of validKeys) {
-            if (validKey === WatchableViewKeys.visibleFields) {
-                this._viewDataStore.watch(
-                    WatchableViewDataStoreKeys.visibleFieldIds,
-                    callback,
-                    context,
-                );
-            }
-            if (validKey === WatchableViewKeys.allFields) {
-                this._viewDataStore.watch(
-                    WatchableViewDataStoreKeys.allFieldIds,
-                    callback,
-                    context,
-                );
-            }
-        }
-
-        return validKeys;
-    }
 
     /**
      * Unwatch keys watched with `.watch`.
      *
      * Should be called with the same arguments given to `.watch`.
      *
+     * @function unwatch
+     * @memberof View
+     * @instance
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
      * @param [context] the context that was passed to `.watch` for this `callback`
      * @returns the array of keys that were unwatched
      */
-    unwatch(
-        keys: WatchableViewKey | Array<WatchableViewKey>,
-        callback: Function,
-        context?: ?Object,
-    ): Array<WatchableViewKey> {
-        const validKeys = super.unwatch(keys, callback, context);
-
-        for (const validKey of validKeys) {
-            if (validKey === WatchableViewKeys.visibleFields) {
-                this._viewDataStore.unwatch(
-                    WatchableViewDataStoreKeys.visibleFieldIds,
-                    callback,
-                    context,
-                );
-            }
-            if (validKey === WatchableViewKeys.allFields) {
-                this._viewDataStore.unwatch(
-                    WatchableViewDataStoreKeys.allFieldIds,
-                    callback,
-                    context,
-                );
-            }
-        }
-
-        return validKeys;
-    }
 
     /**
      * @private

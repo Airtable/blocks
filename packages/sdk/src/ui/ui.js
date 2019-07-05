@@ -50,6 +50,7 @@ import useSession from './use_session';
 import useWatchable from './use_watchable';
 import useViewport from './use_viewport';
 import useGlobalConfig from './use_global_config';
+import useViewMetadata from './use_view_metadata';
 
 const UI = {
     Popover,
@@ -107,6 +108,7 @@ const UI = {
     useRecords,
     useRecordById,
     useGlobalConfig,
+    useViewMetadata,
 };
 
 export default UI;

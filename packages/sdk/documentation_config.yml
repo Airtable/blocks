@@ -30,6 +30,7 @@ toc:
           - Record
           - Table
           - View
+          - ViewMetadataQueryResult
           - Watchable
     - name: '@airtable/blocks/ui'
       children:
@@ -68,6 +69,7 @@ toc:
                 - useRecordById
                 - useSession
                 - useViewport
+                - useViewMetadata
                 - useWatchable
                 - useLoadable
                 - withHooks

@@ -24,8 +24,8 @@ module.exports = {
         'jsdoc/require-returns-description': 'off',
         'jsdoc/require-returns': 'off',
 
-        'airtable/no-throw-new': 'off',
-        'airtable/no-node-modules-invariant': 'off',
-        'airtable/no-error-interpolation': 'off',
+        '@airtable/blocks/no-throw-new': 'off',
+        '@airtable/blocks/no-node-modules-invariant': 'off',
+        '@airtable/blocks/no-error-interpolation': 'off',
     },
 };

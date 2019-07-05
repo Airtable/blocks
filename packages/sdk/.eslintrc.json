@@ -6,7 +6,15 @@
     },
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "parser": "babel-eslint",
-    "plugins": ["airtable", "react", "flowtype", "react-hooks", "import", "jsdoc"],
+    "plugins": [
+        "airtable",
+        "@airtable/blocks",
+        "react",
+        "flowtype",
+        "react-hooks",
+        "import",
+        "jsdoc"
+    ],
     "settings": {
         "react": {
             "version": "16.8"
@@ -101,9 +109,9 @@
         "airtable/no-missing-await": "warn",
         "airtable/no-process-domain": "warn",
         "airtable/noopener-noreferrer": "warn",
-        "airtable/no-throw-new": "error",
-        "airtable/no-node-modules-invariant": "error",
-        "airtable/no-error-interpolation": ["error", {"spawnError": 0, "invariant": 1}],
+        "@airtable/blocks/no-throw-new": "error",
+        "@airtable/blocks/no-node-modules-invariant": "error",
+        "@airtable/blocks/no-error-interpolation": ["error", {"spawnError": 0, "invariant": 1}],
 
         "flowtype/array-style-complex-type": "error",
         "flowtype/array-style-simple-type": "error",

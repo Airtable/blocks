@@ -1,7 +1,8 @@
 /node_modules/
-/packages/*/node_modules
-/packages/*/dist
-/packages/*/transpiled
+/packages/*/node_modules/
+/packages/*/dist/
+/packages/*/transpiled/
+/tools/*/node_modules/
 
 yarn-error.log
 npm-debug.log
