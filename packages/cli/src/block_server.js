@@ -482,7 +482,7 @@ class BlockServer {
         const url = ngrok ? await this.startNgrokAsync(port) : await this.startLocalAsync(port);
         this._blockServerUrlIfExists = url;
         this.setPublicBaseUrl(url);
-        await this.triggerBundleAsync(null);
+        await this.triggerBundleAsync();
         console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
         try {
             await clipboardy.write(url);
@@ -581,17 +581,7 @@ class BlockServer {
                 .pipe(fsStream);
         });
     }
-    async triggerBundleAsync(files: Array<string> | null): Promise<void> {
-        if (files && files.findIndex(file => file.includes('package.json')) !== -1) {
-            // When yarn adds or removes packages, it deletes the symlinks
-            // and SDK stub we add to node_modules. As a temporary fix, we
-            // quit and ask the user to restart the CLI. Note that we can't
-            // easily regenerate the symlinks and stub at this point because
-            // package.json updates before yarn deletes our files.
-            console.log('package.json changed, please run again.');
-            process.exit(0);
-        }
-
+    async triggerBundleAsync(): Promise<void> {
         // 1. Create a new Promise which will be used to determine if the
         //    bundle is ready to be served via the `GET /bundle.js` endpoint.
         let bundleAndUpdateStateResolve;
