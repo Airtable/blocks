@@ -14,7 +14,7 @@
         "prepublishOnly": "yarn build",
         "pretest": "yarn run lint",
         "test": "mocha",
-        "version": "changelog-publish 'https://github.com/airtable/blocks-cli' && git add CHANGELOG.md"
+        "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks-sdk' --git-tag-prefix='@airtable/blocks-cli' && git add CHANGELOG.md"
     },
     "files": [
         "/README.md",
@@ -60,9 +60,9 @@
         "yarn": "^1.13.0"
     },
     "devDependencies": {
+        "@airtable-blocks-internal/changelog-publish": "^1.0.0",
         "@babel/register": "^7.4.4",
         "babel-eslint": "^10.0.1",
-        "changelog-publish": "^1.1.0",
         "eslint": "^5.15.1",
         "eslint-plugin-airtable": "git+ssh://git@github.com/Hyperbase/eslint-plugin-airtable#da42308fa5d9c164794b2d32c96934e54b1195f9",
         "eslint-plugin-flowtype": "^3.4.2",

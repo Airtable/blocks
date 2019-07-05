@@ -1,0 +1,24 @@
+{
+    "name": "@airtable-blocks-internal/changelog-publish",
+    "version": "1.0.0",
+    "description": "Automatically bump versions in changelogs",
+    "main": "index.js",
+    "private": true,
+    "bin": {
+        "changelog-publish": "./bin/changelog-publish"
+    },
+    "scripts": {
+        "pretest": "flow",
+        "test": "jest",
+        "test:watch": "jest --watch"
+    },
+    "devDependencies": {
+        "flow-bin": "^0.102.0",
+        "jest": "^24.8.0"
+    },
+    "dependencies": {
+        "mdast-util-to-string": "^1.0.6",
+        "remark": "^10.0.1",
+        "yargs": "^13.2.4"
+    }
+}
