@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable no-console */
 const invariant = require('invariant');
 const request = require('request');
 const {promisify} = require('util');
@@ -6,6 +7,7 @@ const {URL} = require('url');
 const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');
 const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_remote_json_async');
 const getApiKeyWithWarningsAsync = require('./get_api_key_with_warnings');
+const CommandNames = require('./commands/command_names');
 request.getAsync = promisify(request.get);
 request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
@@ -82,6 +84,24 @@ class APIClient {
         return new URL(path, this._apiBaseUrl).href;
     }
 
+    _parseErrorMessages(statusCode: number, body: {[string]: mixed}): string {
+        invariant(Array.isArray(body.errors), 'expect body.errors to be Array');
+
+        return body.errors
+            .map(errObj => {
+                // eslint-disable-next-line flowtype/no-weak-types
+                const o = ((errObj: any): {code: string, message: string});
+                let errorMessages;
+                if (statusCode === 401) {
+                    errorMessages = `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
+                } else {
+                    errorMessages = o.message;
+                }
+                return errorMessages;
+            })
+            .join('\n');
+    }
+
     async startBuildAsync(
         hasBackend: boolean,
     ): Promise<{
@@ -100,7 +120,7 @@ class APIClient {
         const response = await request.postAsync(options);
         const {body, statusCode} = response;
         if (statusCode !== 200) {
-            const errorMessage = body.errors.map(o => o.message).join('\n');
+            const errorMessage = this._parseErrorMessages(statusCode, body);
             throw new Error(errorMessage);
         }
         return body;
@@ -117,7 +137,7 @@ class APIClient {
         const response = await request.postAsync(options);
         const {body, statusCode} = response;
         if (statusCode !== 200) {
-            const errorMessage = body.errors.map(o => o.message).join('\n');
+            const errorMessage = this._parseErrorMessages(statusCode, body);
             throw new Error(errorMessage);
         }
     }
@@ -133,7 +153,7 @@ class APIClient {
         const response = await request.postAsync(options);
         const {body, statusCode} = response;
         if (statusCode !== 200) {
-            const errorMessage = body.errors.map(o => o.message).join('\n');
+            const errorMessage = this._parseErrorMessages(statusCode, body);
             throw new Error(errorMessage);
         }
     }
@@ -150,7 +170,7 @@ class APIClient {
         const response = await request.postAsync(options);
         const {body, statusCode} = response;
         if (statusCode !== 200) {
-            const errorMessage = body.errors.map(o => o.message).join('\n');
+            const errorMessage = this._parseErrorMessages(statusCode, body);
             throw new Error(errorMessage);
         }
         return body;
@@ -167,7 +187,7 @@ class APIClient {
         const response = await request.getAsync(options);
         const {body, statusCode} = response;
         if (statusCode !== 200) {
-            const errorMessage = body.errors.map(o => o.message).join('\n');
+            const errorMessage = this._parseErrorMessages(statusCode, body);
             throw new Error(errorMessage);
         }
         return body;
@@ -191,7 +211,7 @@ class APIClient {
         const response = await request.postAsync(options);
         const {body, statusCode} = response;
         if (statusCode !== 200) {
-            const errorMessage = body.errors.map(o => o.message).join('\n');
+            const errorMessage = this._parseErrorMessages(statusCode, body);
             throw new Error(errorMessage);
         }
         return body;

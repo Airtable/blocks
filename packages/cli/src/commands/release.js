@@ -155,22 +155,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     const apiClient = apiClientResult.value;
 
-    try {
-        console.log('building');
-        const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
+    console.log('building');
+    const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
 
-        console.log('releasing');
-        await apiClient.createReleaseAsync(buildId, deployId);
-    } catch (err) {
-        // TODO: Bubble up HTTP status code and check that instead of checking err.message
-        if (err.message === 'Authorization is invalid.') {
-            console.log(
-                `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`,
-            );
-            process.exit(1);
-        }
-        throw err;
-    }
+    console.log('releasing');
+    await apiClient.createReleaseAsync(buildId, deployId);
 
     console.log('✅ successfully released block!');
 }
