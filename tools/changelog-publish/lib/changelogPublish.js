@@ -94,23 +94,31 @@ function changelogPublish(
         },
     ];
 
-    ast.children.splice(unreleasedHeadingIndex, 0, {
-        type: 'heading',
-        depth: 2,
-        children: [
-            {
-                type: 'link',
-                title: null,
-                url: unreleasedLinkUrl,
-                children: [
-                    {
-                        type: 'text',
-                        value: 'Unreleased',
-                    },
-                ],
-            },
-        ],
-    });
+    ast.children.splice(
+        unreleasedHeadingIndex,
+        0,
+        {
+            type: 'heading',
+            depth: 2,
+            children: [
+                {
+                    type: 'link',
+                    title: null,
+                    url: unreleasedLinkUrl,
+                    children: [
+                        {
+                            type: 'text',
+                            value: 'Unreleased',
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            type: 'text',
+            value: 'No changes.',
+        },
+    );
 
     return {isValid: true, changelog: remark.stringify(ast)};
 }

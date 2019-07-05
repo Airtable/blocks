@@ -11,7 +11,11 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks@0.0.15...HEAD)
 
+No changes.
+
 ## [0.0.15](https://github.com/airtable/blocks-sdk/compare/v0.0.14...@airtable/blocks@0.0.15) - 2019-07-03
+
+No changes.
 
 ## [0.0.14](https://github.com/airtable/blocks-sdk/compare/v0.0.13...v0.0.14) - 2019-07-02
 
