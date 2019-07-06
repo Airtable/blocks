@@ -1,5 +1,5 @@
 // @flow
-const APIClient = require('../src/api_client');
+const ApiClient = require('../src/api_client');
 const {TEST_SERVER_PORT} = require('../src/config/block_cli_config_settings');
 const {TEST_API_URL} = require('./helpers');
 const express = require('express');
@@ -9,7 +9,7 @@ const UserAgentBag = require('user-agent-bag');
 const packageJson = require('../package.json');
 const assert = (require('assert'): any); // eslint-disable-line flowtype/no-weak-types
 
-describe('APIClient', function() {
+describe('ApiClient', function() {
     let testApp: express$Application;
     let testServer;
     let apiClient;
@@ -37,7 +37,7 @@ describe('APIClient', function() {
 
         testApp.use(bodyParser.json());
 
-        apiClient = new APIClient({
+        apiClient = new ApiClient({
             apiBaseUrl: TEST_API_URL,
             applicationId: 'app123',
             blockInstallationId: 'bli123',

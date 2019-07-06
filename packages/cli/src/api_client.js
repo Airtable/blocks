@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-console */
 const invariant = require('invariant');
 const request = require('request');
 const {promisify} = require('util');
@@ -29,23 +28,23 @@ const ApiTypes = Object.freeze({
 });
 type ApiType = $Values<typeof ApiTypes>;
 
-class APIClient {
+class ApiClient {
     _apiBaseUrl: string;
     _applicationId: ApplicationId;
     _blockInstallationId: BlockInstallationId | null;
     _blockId: BlockId | null;
     _apiKey: string;
 
-    static async constructAPIClientForRemoteAsync(
+    static async constructApiClientForRemoteAsync(
         remoteName: string | null,
-    ): Promise<Result<APIClient>> {
+    ): Promise<Result<ApiClient>> {
         const parseResult = await parseAndValidateRemoteJsonAsync(remoteName);
         if (parseResult.err) {
             return parseResult;
         }
         const remoteJson = parseResult.value;
         const apiKey = await getApiKeyWithWarningsAsync();
-        const apiClient = new APIClient({
+        const apiClient = new ApiClient({
             applicationId: remoteJson.baseId,
             blockId: remoteJson.blockId,
             apiBaseUrl: remoteJson.server,
@@ -253,4 +252,4 @@ class APIClient {
     }
 }
 
-module.exports = APIClient;
+module.exports = ApiClient;

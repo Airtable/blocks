@@ -16,7 +16,7 @@ const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./block_client_artifacts/generate_block_client_wrapper');
 const generatePollForLiveReloadCode = require('./block_client_artifacts/generate_poll_for_live_reload');
-const APIClient = require('./api_client');
+const ApiClient = require('./api_client');
 const fsUtils = require('./fs_utils');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
@@ -94,7 +94,7 @@ class BlockServer {
     _remoteJson: RemoteJson;
     _blockDirPath: string;
     _blockServerUrlIfExists: string | null;
-    _apiClient: APIClient;
+    _apiClient: ApiClient;
     _bundler: browserify;
 
     constructor(args: {
@@ -303,7 +303,7 @@ class BlockServer {
                         typeof req.body.blockInstallationId === 'string',
                         'req.body.blockInstallationId to be a string',
                     );
-                    this._apiClient = new APIClient({
+                    this._apiClient = new ApiClient({
                         apiBaseUrl: this._remoteJson.server,
                         applicationId: req.body.applicationId,
                         blockInstallationId: req.body.blockInstallationId,

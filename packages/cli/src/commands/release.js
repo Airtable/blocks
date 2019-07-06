@@ -1,8 +1,7 @@
 // @flow
 /* eslint-disable no-console */
 const BlockBuilder = require('../builder/block_builder');
-const CommandNames = require('./command_names');
-const APIClient = require('../api_client');
+const ApiClient = require('../api_client');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const fsUtils = require('../fs_utils');
 const path = require('path');
@@ -59,7 +58,7 @@ async function setTimeoutAsync(timeoutMs: number): Promise<void> {
 }
 
 async function _createDeployAndWaitUntilCompletionAsync(
-    apiClient: APIClient,
+    apiClient: ApiClient,
     buildId: BuildId,
 ): Promise<DeployId> {
     console.log('deploying backend');
@@ -98,7 +97,7 @@ async function _uploadBackendDeploymentPackageAsync(
 }
 
 async function _buildAndDeployAsync(
-    apiClient: APIClient,
+    apiClient: ApiClient,
 ): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
     const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync();
 
@@ -149,7 +148,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         remoteName === null || typeof remoteName === 'string',
         'expects remoteName to be null or a string',
     );
-    const apiClientResult = await APIClient.constructAPIClientForRemoteAsync(remoteName);
+    const apiClientResult = await ApiClient.constructApiClientForRemoteAsync(remoteName);
     if (apiClientResult.err) {
         throw apiClientResult.err;
     }
