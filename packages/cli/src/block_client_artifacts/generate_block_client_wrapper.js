@@ -39,22 +39,7 @@ window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function ru
     }
     // Requiring the entry point file runs user code. Be sure to do any setup
     // above this line.
-    var BlockWrapperComponent = window['${
-        blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME
-    }'].__BlockWrapperComponent;
-    var EntryComponent = require('${frontendEntryModulePath}').default;
-
-    var isEntryReactComponent = EntryComponent && (
-        EntryComponent.prototype instanceof React.Component ||
-        EntryComponent instanceof Function
-    );
-    if (isEntryReactComponent) {
-        var container = document.createElement('div');
-        document.body.appendChild(container);
-        ReactDOM.render(React.createElement(BlockWrapperComponent, {
-            EntryComponent: EntryComponent,
-        }), container);
-    }
+    require('${frontendEntryModulePath}');
 };
 `;
 };

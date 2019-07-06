@@ -11,6 +11,9 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](--github-repo-url/compare/v0.0.12...HEAD)
 
+-   **BREAKING** removes support for exporting a React component from the frontend entry file. Use
+    `initializeBlock` instead.
+
 ## [0.0.12](--github-repo-url/compare/v0.0.11...v0.0.12) - 2019-07-05
 
 ### Added
