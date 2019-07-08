@@ -10,10 +10,10 @@
 
 ## Example blocks
 
--   [To-do list](/examples/todo/frontend/index.js)
--   [Batch adder](/examples/batch_adder/frontend/index.js)
--   [Simple bar chart](/examples/simple_chart/frontend/index.js)
+-   [To-do list](/packages/sdk/examples/todo/frontend/index.js)
+-   [Batch adder](/packages/sdk/examples/batch_adder/frontend/index.js)
+-   [Simple bar chart](/packages/sdk/examples/simple_chart/frontend/index.js)
 
 ## API Reference
 
-[API Reference docs](/docs/api.md)
+[API Reference docs](/packages/sdk/docs/api.md)
