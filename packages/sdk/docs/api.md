@@ -2988,7 +2988,7 @@ In a React component, you might want to use [useViewMetadata][100].
 #### Examples
 
 ```javascript
-const viewMetadata = view.selectMetadata();
+const viewMetadata = view.selectMetaData();
 await viewMetadata.loadDataAsync();
 
 console.log(viewMetadata.visibleField);
