@@ -7,7 +7,9 @@
         "pretty-quick": "^1.11.1"
     },
     "scripts": {
-        "format": "prettier --write '**/*.{js,md,json,yml}'"
+        "format": "prettier --write '**/*.{js,md,json,yml}'",
+        "prepublishOnly": "lerna bootstrap",
+        "postpublish": "git push --tags git@github.com:Airtable/blocks-sdk.git master"
     },
     "husky": {
         "hooks": {

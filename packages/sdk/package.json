@@ -13,7 +13,6 @@
         "pretest": "npm run lint && npm run flow",
         "release": "np",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-sdk' --git-tag-prefix='@airtable/blocks@' && git add CHANGELOG.md",
-        "postversion": "git push --tags git@github.com:Airtable/blocks-sdk.git master",
         "flow": "flow",
         "lint": "eslint *.js src test",
         "lint:quiet": "npm run lint -- --quiet",
