@@ -20,11 +20,22 @@ import type {RemoteJson} from '../types/remote_json_type';
 
 const DEFAULT_FRONTEND_ENTRY_NAME = 'index';
 
-function getDefaultFrontendCode(blockDirPath: string): string {
+function _getComponentName(blockDirPath: string): string {
+    // Convert the input block directory path into a valid function name for the React component
+    // camelCase removes invalid symbols/spaces
     let componentName = upperFirst(camelCase(path.basename(blockDirPath)));
     if (!componentName.includes('Block')) {
         componentName = `${componentName}Block`;
     }
+    if (isFinite(componentName[0])) {
+        // Functions can't start with a number
+        componentName = `My${componentName}`;
+    }
+    return componentName;
+}
+
+function _getDefaultFrontendCode(blockDirPath: string): string {
+    const componentName = _getComponentName(blockDirPath);
 
     return `import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
@@ -85,7 +96,7 @@ async function _writeDefaultFrontendFilesAsync(blockDirPath: string): Promise<vo
     await fsUtils.mkdirAsync(frontendDirPath);
     await fsUtils.writeFileAsync(
         path.join(frontendDirPath, `${DEFAULT_FRONTEND_ENTRY_NAME}.js`),
-        getDefaultFrontendCode(blockDirPath),
+        _getDefaultFrontendCode(blockDirPath),
     );
 }
 
@@ -225,4 +236,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     );
 }
 
-module.exports = {runCommandAsync};
+module.exports = {
+    runCommandAsync,
+    _test: {
+        _getComponentName,
+    },
+};
