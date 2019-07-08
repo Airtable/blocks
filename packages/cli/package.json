@@ -14,7 +14,7 @@
         "prepublishOnly": "yarn build",
         "pretest": "yarn run lint",
         "test": "mocha",
-        "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks-sdk' --git-tag-prefix='@airtable/blocks-cli' && git add CHANGELOG.md"
+        "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks-sdk' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md"
     },
     "files": [
         "/README.md",

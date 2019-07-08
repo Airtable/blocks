@@ -19,8 +19,8 @@ const packageVersion = packageJson.version;
 const publishResult = changelogPublish(changelogContents, {
     version: packageVersion,
     date: new Date(),
-    githubRepoUrl: args['git-tag-prefix'],
-    gitTagPrefix: args['github-repo-url'],
+    githubRepoUrl: args['github-repo-url'],
+    gitTagPrefix: args['git-tag-prefix'],
 });
 
 if (publishResult.isValid) {
