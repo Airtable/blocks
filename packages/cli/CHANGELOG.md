@@ -11,13 +11,18 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.14...HEAD)
 
-No changes.
+### Changed
+
+-   Switch HTTP status code for unchanged live-reload long-polling request to a non-error code to
+    prevent developer console noise.
 
 ## [0.0.14](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.13...@airtable/blocks-cli@0.0.14) - 2019-07-10
 
 -   Update documentation links & eslint-plugin-blocks
 
 ## [0.0.13](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.12...@airtable/blocks-cli@0.0.13) - 2019-07-09
+
+### Removed
 
 -   **BREAKING** removes support for exporting a React component from the frontend entry file. Use
     `initializeBlock` instead.

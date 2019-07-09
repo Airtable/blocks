@@ -11,7 +11,7 @@ function pollForLiveReload() {
     fetch(blockUrl + '/__runFrame/poll?random=' + Math.random()).then(function(response) {
         if (response.status === 200) {
             window.location.reload();
-        } else if (response.status === 408) {
+        } else if (response.status === 304) {
             pollForLiveReload();
         } else {
             throw new Error('Unknown error from development server');

@@ -339,7 +339,7 @@ class BlockServer {
 
                 Promise.race([bundleChangePromise, timeoutPromise])
                     .then(result => {
-                        const statusCode = result === 'timeout' ? 408 : 200;
+                        const statusCode = result === 'timeout' ? 304 : 200;
                         res.sendStatus(statusCode);
                     })
                     .catch(err => {
