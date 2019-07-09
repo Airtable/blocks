@@ -5,6 +5,10 @@ const CommandNames = {
     RELEASE: ('release': 'release'),
     SET_API_KEY: ('set-api-key': 'set-api-key'),
 
+    // This command is a helper to migrate old blocks to the standalone CLI world.
+    // TODO(jb): remove this once all blocks are migrated to the standalone CLI world.
+    MIGRATE_OLD_BLOCK: ('migrate-old-block': 'migrate-old-block'),
+
     // These commands are no longer supported.
     // TODO(jb): remove them once all blocks are migrated to the standalone CLI world.
     CLONE: ('clone': 'clone'),

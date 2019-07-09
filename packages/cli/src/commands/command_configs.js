@@ -116,6 +116,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         },
         runCommandAsync: commandRunner(CommandNames.SET_API_KEY),
     },
+    [CommandNames.MIGRATE_OLD_BLOCK]: {
+        name: CommandNames.MIGRATE_OLD_BLOCK,
+        command: `${CommandNames.MIGRATE_OLD_BLOCK}`,
+        description: false, // Not documented, since this is for internal use.
+        example: `block ${CommandNames.MIGRATE_OLD_BLOCK}`,
+        runCommandAsync: commandRunner(CommandNames.MIGRATE_OLD_BLOCK),
+    },
 
     // THE FOLLOWING COMMANDS ARE NO LONGER SUPPORTED.
     // TODO(jb): remove them once all blocks are migrated to the standalone CLI world.

@@ -1,4 +1,6 @@
 // @flow
+const doesBlockJsonResembleOldFormat = require('./does_block_json_resemble_old_format');
+
 import type {ValidationResult} from '../types/validation_result';
 
 const INVALID_BLOCK_JSON_ERROR_MESSAGE = `block.json must be an object with the following properties:
@@ -7,15 +9,6 @@ const INVALID_BLOCK_JSON_ERROR_MESSAGE = `block.json must be an object with the 
 
 const OLD_BLOCK_JSON_FORMAT_ERROR_MESSAGE =
     'It looks like you are working on a block that is not yet migrated to the new block.json format. You may need to use an old version of blocks-cli';
-
-function doesBlockJsonResembleOldFormat(blockJson: {[string]: mixed}): boolean {
-    return (
-        typeof blockJson.frontendEntryModuleName === 'string' &&
-        typeof blockJson.applicationId === 'string' &&
-        typeof blockJson.blockId === 'string' &&
-        Array.isArray(blockJson.modules)
-    );
-}
 
 function validateBlockJson(blockJson: mixed): ValidationResult {
     if (!(blockJson instanceof Object)) {
