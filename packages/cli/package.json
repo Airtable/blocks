@@ -9,7 +9,9 @@
     "scripts": {
         "lint": "eslint .",
         "flow": "flow",
-        "build": "babel src --out-dir transpiled",
+        "clean": "rm -rf transpiled node_modules",
+        "build:clean": "rm -rf transpiled",
+        "build": "yarn run build:clean && babel src --out-dir transpiled",
         "watch": "yarn build --watch",
         "prepublishOnly": "yarn build",
         "pretest": "yarn run lint",
