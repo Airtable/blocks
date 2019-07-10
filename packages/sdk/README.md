@@ -2,11 +2,11 @@
 
 ## Get Started
 
-[Guide: Hello, Blocks! (developer preview)](https://airtable.quip.com/ELzHAVaNJxQR/Guide-Hello-Blocks-developer-preview)
+[Guide: Hello, Blocks!](/packages/sdk/docs/setup.md)
 
 ## Building your first block
 
-[Guide: building a to-do list block (developer preview)](https://airtable.quip.com/49x4AwpraVGS/Guide-building-a-to-do-list-block-developer-preview)
+[Guide: building a to-do list block](/packages/sdk/docs/tutorial_todo.md)
 
 ## Example blocks
 
