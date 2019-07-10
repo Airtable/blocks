@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks-cli@0.0.12...HEAD)
+## [Unreleased](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks-cli@0.0.13...HEAD)
+
+No changes.
+
+## [0.0.13](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks-cli@0.0.12...@airtable/blocks-cli@0.0.13) - 2019-07-09
 
 -   **BREAKING** removes support for exporting a React component from the frontend entry file. Use
     `initializeBlock` instead.
