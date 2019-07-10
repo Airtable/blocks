@@ -9,24 +9,28 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks@0.0.17...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.18...HEAD)
 
 No changes.
 
-## [0.0.17](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks@0.0.16...@airtable/blocks@0.0.17) - 2019-07-09
+## [0.0.18](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.17...@airtable/blocks@0.0.18) - 2019-07-10
+
+-   Update documentation links & eslint-plugin-blocks
+
+## [0.0.17](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.16...@airtable/blocks@0.0.17) - 2019-07-09
 
 No changes.
 
-## [0.0.16](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks@0.0.15...@airtable/blocks@0.0.16) - 2019-07-05
+## [0.0.16](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.15...@airtable/blocks@0.0.16) - 2019-07-05
 
 -   **BREAKING:** Removed view.visibleFields and view.allFields - use view.selectMetadata instead
 -   Added view.selectMetadata() for querying a view's field order and list of visible fields
 
-## [0.0.15](https://github.com/airtable/blocks-sdk/compare/v0.0.14...@airtable/blocks@0.0.15) - 2019-07-03
+## [0.0.15](https://github.com/airtable/blocks/compare/v0.0.14...@airtable/blocks@0.0.15) - 2019-07-03
 
 No changes.
 
-## [0.0.14](https://github.com/airtable/blocks-sdk/compare/v0.0.13...v0.0.14) - 2019-07-02
+## [0.0.14](https://github.com/airtable/blocks/compare/v0.0.13...v0.0.14) - 2019-07-02
 
 -   **BREAKING:** Removed `currentUser` from `Base` since it is now accessible through `Session`.
 -   **BREAKING:** Renamed QueryResult to RecordQueryResult
@@ -35,7 +39,7 @@ No changes.
 -   Added globalConfig.watch('\*') to get notified of any global config key change.
 -   Added useGlobalConfig() to subscribe to global config changes from a react component.
 
-## [0.0.13](https://github.com/airtable/blocks-sdk/releases/tag/v0.0.13) - 2019-06-21
+## [0.0.13](https://github.com/airtable/blocks/releases/tag/v0.0.13) - 2019-06-21
 
 ### Removed
 
