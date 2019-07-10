@@ -9,7 +9,7 @@
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml}'",
         "prepublishOnly": "lerna bootstrap",
-        "postpublish": "git push --tags git@github.com:Airtable/blocks-sdk.git master"
+        "postpublish": "git push --tags git@github.com:Airtable/blocks.git master"
     },
     "husky": {
         "hooks": {

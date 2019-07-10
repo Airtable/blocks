@@ -9,16 +9,16 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks-cli@0.0.13...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.13...HEAD)
 
 No changes.
 
-## [0.0.13](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks-cli@0.0.12...@airtable/blocks-cli@0.0.13) - 2019-07-09
+## [0.0.13](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.12...@airtable/blocks-cli@0.0.13) - 2019-07-09
 
 -   **BREAKING** removes support for exporting a React component from the frontend entry file. Use
     `initializeBlock` instead.
 
-## [0.0.12](https://github.com/airtable/blocks-sdk/compare/@airtable/blocks-cli@0.0.11...@airtable/blocks-cli@0.0.12) - 2019-07-05
+## [0.0.12](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.11...@airtable/blocks-cli@0.0.12) - 2019-07-05
 
 ### Added
 
@@ -34,11 +34,11 @@ No changes.
     -   `block init` will check for the presence of user config and not prompt for Airtable API key
         if it already exists there
 
-## [0.0.11](https://github.com/airtable/blocks-sdk/compare/v0.0.10...@airtable/blocks-cli@0.0.11) - 2019-07-03
+## [0.0.11](https://github.com/airtable/blocks/compare/v0.0.10...@airtable/blocks-cli@0.0.11) - 2019-07-03
 
 No changes.
 
-## [0.0.10](https://github.com/airtable/blocks-sdk/releases/tag/v0.0.10) - 2019-07-02
+## [0.0.10](https://github.com/airtable/blocks/releases/tag/v0.0.10) - 2019-07-02
 
 ### Added
 

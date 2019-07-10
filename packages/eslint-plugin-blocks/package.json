@@ -2,9 +2,6 @@
     "name": "@airtable/eslint-plugin-blocks",
     "version": "1.0.1",
     "description": "An eslint plugin used by Airtable to develop the blocks SDK and our own blocks",
-    "author": "✨ Alex ✨ <alex@dytry.ch>",
-    "homepage": "https://github.com/Hyperbase/blocks-sdk#readme",
-    "license": "MIT",
     "main": "lib/index.js",
     "directories": {
         "lib": "lib",
@@ -13,18 +10,8 @@
     "files": [
         "lib"
     ],
-    "publishConfig": {
-        "access": "public"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Hyperbase/blocks-sdk.git"
-    },
     "scripts": {
         "test": "mocha 'test/**/*.js'"
-    },
-    "bugs": {
-        "url": "https://github.com/Hyperbase/blocks-sdk/issues"
     },
     "devDependencies": {
         "babel-eslint": "^10.0.2",
