@@ -1,6 +1,6 @@
 {
     "name": "@airtable/eslint-plugin-blocks",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "An eslint plugin used by Airtable to develop the blocks SDK and our own blocks",
     "main": "lib/index.js",
     "directories": {

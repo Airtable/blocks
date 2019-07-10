@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.17",
+    "version": "0.0.18",
     "description": "Airtable Blocks SDK",
     "main": "dist/cjs/index.js",
     "files": [
@@ -69,7 +69,7 @@
         "react-dom": "16.9.0-alpha.0"
     },
     "dependencies": {
-        "@airtable/eslint-plugin-blocks": "^1.0.1",
+        "@airtable/eslint-plugin-blocks": "^1.0.2",
         "@babel/runtime": "^7.4.4",
         "classnames": "2.2.6",
         "core-js": "^3.0.1",

@@ -1,7 +1,7 @@
 {
     "name": "@airtable/blocks-cli",
     "description": "Official command line tool for Airtable blocks development",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "bin": {
         "block": "bin/block"
     },
@@ -25,7 +25,7 @@
         "/transpiled/"
     ],
     "dependencies": {
-        "@airtable/eslint-plugin-blocks": "^1.0.1",
+        "@airtable/eslint-plugin-blocks": "^1.0.2",
         "@babel/cli": "^7.2.3",
         "@babel/core": "^7.4.0",
         "@babel/plugin-proposal-class-properties": "^7.4.0",
