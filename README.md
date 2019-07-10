@@ -21,3 +21,9 @@
 
 -   [@airtable/blocks](./packages/sdk): Blocks SDK
 -   [@airtable/blocks-cli](./packages/cli): Blocks development CLI tool
+
+## Support
+
+We'd love to hear all your feedback! If you run into any bugs, find anything confusing, or have
+questions or feature requests you can email the platform engineering team directly at
+blocks@airtable.com
