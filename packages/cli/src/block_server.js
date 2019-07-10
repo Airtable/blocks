@@ -281,12 +281,14 @@ class BlockServer {
                 } else if (req.body.applicationId !== this._remoteJson.baseId) {
                     res.status(403).send({
                         error: 'FORBIDDEN',
-                        message: 'Please check if this is the correct base!',
+                        message:
+                            'You can only run your development block in the original base where it was created.',
                     });
                 } else if (req.body.blockId !== this._remoteJson.blockId) {
                     res.status(403).send({
                         error: 'FORBIDDEN',
-                        message: 'Please check if this is the correct block!',
+                        message:
+                            'You can only run your development block in the original block where it was created.',
                     });
                 } else {
                     if (
