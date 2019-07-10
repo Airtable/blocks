@@ -93,7 +93,7 @@ class ObjectPool<T, Opts> {
         if (pooledObjects.length === 0) {
             // `delete` causes de-opts, which slows down subsequent reads,
             // so set to undefined instead (unverified that this is actually faster).
-            this._objectsByKey[objectKey] = undefined;
+            this._weakObjectsByKey[objectKey] = undefined;
         }
 
         return true;
