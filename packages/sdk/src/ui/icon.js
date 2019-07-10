@@ -9,7 +9,7 @@ const iconConfig = window.__requirePrivateModuleFromAirtable(
 
 /**
  * @typedef {object} IconProps
- * @property {string} name The name of the icon. For a comprehensive list, refer to the "Icon" section of the [styleguide](https://airtable.com/styleguide).
+ * @property {string} name The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
  * @property {number} [size=16] The width/height of the icon.
  * @property {string} [fillColor] The color of the icon.
  * @property {string} [className] Additional class names to apply to the icon.

@@ -2,18 +2,17 @@
 
 ## Get Started
 
-[Guide: Hello, Blocks! (developer preview)](https://airtable.quip.com/ELzHAVaNJxQR/Guide-Hello-Blocks-developer-preview)
+[Guide: Hello, Blocks!](/packages/sdk/docs/setup.md)
 
 ## Building your first block
 
-[Guide: building a to-do list block (developer preview)](https://airtable.quip.com/49x4AwpraVGS/Guide-building-a-to-do-list-block-developer-preview)
+[Guide: building a to-do list block](/packages/sdk/docs/tutorial_todo.md)
 
 ## Example blocks
 
--   [To-do list](/examples/todo/frontend/index.js)
--   [Batch adder](/examples/batch_adder/frontend/index.js)
--   [Simple bar chart](/examples/simple_chart/frontend/index.js)
+-   [To-do list](https://github.com/Airtable/blocks-sdk/tree/master/packages/sdk/examples/todo/frontend/index.js)
+-   [Simple bar chart](https://github.com/Airtable/blocks-sdk/tree/master/packages/sdk/examples/simple_chart/frontend/index.js)
 
 ## API Reference
 
-[API Reference docs](/docs/api.md)
+[API Reference docs](https://github.com/Airtable/blocks-sdk/tree/master/packages/sdk/docs/api.md)

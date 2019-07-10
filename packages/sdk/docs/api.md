@@ -2988,7 +2988,7 @@ In a React component, you might want to use [useViewMetadata][100].
 #### Examples
 
 ```javascript
-const viewMetadata = view.selectMetadata();
+const viewMetadata = view.selectMetaData();
 await viewMetadata.loadDataAsync();
 
 console.log(viewMetadata.visibleField);
@@ -4546,8 +4546,8 @@ Type: [object][65]
 
 ##### Properties
 
--   `name` **[string][60]** The name of the icon. For a comprehensive list, refer to the "Icon"
-    section of the [styleguide][132].
+-   `name` **[string][60]** The name of the icon. For more details, see the [list of supported
+    icons][132].
 -   `size` **[number][66]?** The width/height of the icon.
 -   `fillColor` **[string][60]?** The color of the icon.
 -   `className` **[string][60]?** Additional class names to apply to the icon.
@@ -5682,7 +5682,7 @@ Type: {width: ([number][66] | null)?, height: ([number][66] | null)?}
 [129]: #fieldpickersyncedprops
 [130]: #globalconfigkey
 [131]: #iconprops
-[132]: https://airtable.com/styleguide
+[132]: /packages/sdk/docs/icons.md
 [133]: #fieldiconprops
 [134]: #inputprops
 [135]: #inputsyncedprops

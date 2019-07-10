@@ -1,9 +1,23 @@
 # Blocks platform
 
-## [@airtable/blocks](./packages/sdk)
+## Get Started
 
-Blocks SDK library
+[Guide: Hello, Blocks!](/packages/sdk/docs/setup.md)
 
-## [@airtable/blocks-cli](./packages/cli)
+## Building your first block
 
-Blocks development CLI tool
+[Guide: building a to-do list block](/packages/sdk/docs/tutorial_todo.md)
+
+## Example blocks
+
+-   [To-do list](https://github.com/Airtable/blocks-sdk/tree/master/packages/sdk/examples/todo/frontend/index.js)
+-   [Simple bar chart](https://github.com/Airtable/blocks-sdk/tree/master/packages/sdk/examples/simple_chart/frontend/index.js)
+
+## API Reference
+
+[API Reference docs](https://github.com/Airtable/blocks-sdk/tree/master/packages/sdk/docs/api.md)
+
+## Packages
+
+-   [@airtable/blocks](./packages/sdk): Blocks SDK
+-   [@airtable/blocks-cli](./packages/cli): Blocks development CLI tool

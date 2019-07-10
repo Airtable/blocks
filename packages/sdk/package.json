@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.16",
+    "version": "0.0.17",
     "description": "Airtable Blocks SDK",
     "main": "dist/cjs/index.js",
     "files": [
@@ -13,7 +13,6 @@
         "pretest": "npm run lint && npm run flow",
         "release": "np",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks-sdk' --git-tag-prefix='@airtable/blocks@' && git add CHANGELOG.md",
-        "postversion": "git push --tags git@github.com:Airtable/blocks-sdk.git master",
         "flow": "flow",
         "lint": "eslint *.js src test",
         "lint:quiet": "npm run lint -- --quiet",
@@ -35,7 +34,7 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@airtable-blocks-internal/changelog-publish": "^1.0.1",
+        "@airtable-blocks-internal/changelog-publish": "^1.0.2",
         "@babel/cli": "^7.4.4",
         "@babel/core": "^7.4.4",
         "@babel/plugin-proposal-class-properties": "^7.4.4",
