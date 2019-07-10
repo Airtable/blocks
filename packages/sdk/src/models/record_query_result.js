@@ -53,6 +53,8 @@ export type NormalizedRecordQueryResultOpts = {|
     sorts: Array<{fieldId: string, direction: 'asc' | 'desc'}> | null,
     fieldIdsOrNullIfAllFields: Array<string> | null,
     recordColorMode: RecordColorMode,
+    table: Table,
+    recordStore: RecordStore,
 |};
 
 /**
@@ -224,6 +226,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
     static _normalizeOpts(
         table: Table,
+        recordStore: RecordStore,
         opts: RecordQueryResultOpts = {},
     ): NormalizedRecordQueryResultOpts {
         const sorts = !opts.sorts
@@ -305,10 +308,14 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                 throw spawnError('Unknown record coloring mode: %s', (recordColorMode.type: empty));
         }
 
+        invariant(table.id === recordStore.tableId, 'record store and table must match');
+
         return {
             sorts,
             fieldIdsOrNullIfAllFields,
             recordColorMode,
+            table,
+            recordStore,
         };
     }
 
@@ -320,14 +327,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @hideconstructor
      * @private
      */
-    constructor(
-        recordStore: RecordStore,
-        normalizedOpts: NormalizedRecordQueryResultOpts,
-        baseData: BaseData,
-    ) {
+    constructor(normalizedOpts: NormalizedRecordQueryResultOpts, baseData: BaseData) {
         super(baseData, getSdk().models.generateGuid());
         this._normalizedOpts = normalizedOpts;
-        this._recordStore = recordStore;
+        this._recordStore = normalizedOpts.recordStore;
     }
 
     /**

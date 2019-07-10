@@ -69,13 +69,18 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
 
         const linkedTable = getSdk().base.getTableById(linkedTableId);
+        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
 
-        const normalizedOpts = TableOrViewQueryResult._normalizeOpts(linkedTable, opts);
+        const normalizedOpts = TableOrViewQueryResult._normalizeOpts(
+            linkedTable,
+            linkedRecordStore,
+            opts,
+        );
         const queryResult = pool.getObjectForReuse({record, field, normalizedOpts});
         if (queryResult) {
             return queryResult;
         } else {
-            return new LinkedRecordsQueryResult(record, field, opts);
+            return new LinkedRecordsQueryResult(record, field, normalizedOpts);
         }
     }
 
@@ -105,14 +110,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         [string]: (TableOrViewQueryResult, string, mixed) => void,
     } = {};
 
-    constructor(record: Record, field: Field, opts: RecordQueryResultOpts) {
-        const linkedTableId = getLinkedTableId(field);
-        const linkedTable = getSdk().base.getTableById(linkedTableId);
-        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
-
-        const normalizedOpts = RecordQueryResult._normalizeOpts(linkedTable, opts);
-
-        super(linkedRecordStore, normalizedOpts, record.parentTable.__baseData);
+    constructor(record: Record, field: Field, normalizedOpts: NormalizedRecordQueryResultOpts) {
+        super(normalizedOpts, record.parentTable.__baseData);
 
         invariant(
             record.parentTable === field.parentTable,
@@ -120,18 +119,17 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         );
         this._record = record;
         this._field = field;
-        this._linkedTable = linkedTable;
-        this._linkedRecordStore = linkedRecordStore;
-        this._poolKey = `${record.id}::${field.id}::${linkedTableId}`;
+        this._linkedTable = normalizedOpts.table;
+        this._linkedRecordStore = normalizedOpts.recordStore;
+        this._poolKey = `${record.id}::${field.id}::${this._linkedTable.id}`;
 
         // we could rely on RecordQueryResult's reuse pool to make sure we get back
         // the same RecordQueryResult every time, but that would make it much harder
         // to make sure we unwatch everything from the old RecordQueryResult if e.g.
         // the field config changes to point at a different table
-        this._linkedQueryResult = TableOrViewQueryResult.__createOrReuseQueryResult(
-            linkedTable,
-            linkedRecordStore,
-            opts,
+        this._linkedQueryResult = TableOrViewQueryResult.__createOrReuseQueryResultWithNormalizedOpts(
+            this._linkedTable,
+            normalizedOpts,
         );
 
         // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
