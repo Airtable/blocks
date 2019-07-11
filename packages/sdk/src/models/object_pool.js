@@ -84,7 +84,7 @@ class ObjectPool<T, Opts> {
 
         pooledObjects.splice(index, 1);
         if (pooledObjects.length === 0) {
-            this._objectsByKey[objectKey] = undefined;
+            this._weakObjectsByKey[objectKey] = undefined;
         }
 
         return true;

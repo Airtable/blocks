@@ -57,23 +57,26 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className} = props;
 
     const userInfoById = getSdk().__appInterface.getCollaboratorInfoById();
-    const userObj = userInfoById && collaborator.id ? userInfoById[collaborator.id] : null;
+    const userObj =
+        userInfoById && collaborator.id && userInfoById.hasOwnProperty(collaborator.id)
+            ? userInfoById[collaborator.id]
+            : null;
     const userObjFormattedForPublicApiV2 = userObj
         ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj)
         : null;
 
     let userName;
     let profilePicUrl;
-    if (userObj === null) {
-        profilePicUrl = profilePicHelper.getSizedUnknownProfilePicUrl(18);
-        userName = 'Unknown';
-    } else if (u.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    let isActive;
+    if (userObj !== null && u.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
         profilePicUrl = appBlanketUserObjMethods.getTokenSizedProfilePicUrl(userObj);
         userName = appBlanketUserObjMethods.getName(userObj) || 'Unknown';
+        isActive = appBlanketUserObjMethods.isActive(userObj);
     } else {
         profilePicUrl =
             collaborator.profilePicUrl || profilePicHelper.getSizedUnknownProfilePicUrl(18);
         userName = collaborator.name || collaborator.email || 'Unknown';
+        isActive = true;
     }
 
     return (
@@ -81,6 +84,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
             profilePicUrl={profilePicUrl}
             userName={userName}
             className={className}
+            shouldDim={!isActive}
         />
     );
 };
