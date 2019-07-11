@@ -143,7 +143,21 @@ class BlockServer {
         //   implementing backend blocks routes
         this._expressApp.get('/', (req: $Request, res: $Response) => {
             res.send(
-                "Congratulations! You've set up the Airtable Blocks server. Now go to your Airtable base to build your block.",
+                `
+                    <!doctype html>
+                    <body>
+                        <style>
+                        body {
+                            font-family: system-ui;
+                            padding: 24px;
+                            font-size: 18px;
+                        }
+                        </style>
+                        <div style="font-size: 36px; margin: 0">🎉</div>
+                        <p>Your block is running!</p>
+                        <p>Go to your <a href="https://airtable.com/${this._remoteJson.baseId}">Airtable base</a> to build your block.</p>
+                    </body>
+                `,
             );
         });
     }
@@ -429,22 +443,6 @@ class BlockServer {
     _setUpBundler() {
         const blockDirPath = this._blockDirPath;
 
-        const browsers = this._shouldTranspileAll ? allSupportedBrowsers : developmentBrowsers;
-        console.log('Transpiling code for the following browsers');
-        browsers.forEach(browser => console.log(`  - ${browser}`));
-        if (this._shouldTranspileAll) {
-            console.log('These are all the browsers that Airtable supports.');
-        } else {
-            console.log(
-                'These are recent browsers that support many modern JS features, which makes',
-            );
-            console.log(
-                'debugging easier even with source maps. To transpile code for all the browsers',
-            );
-            console.log('that Airtable supports, use --transpile-all');
-        }
-        console.log('');
-
         this._bundler = browserify(
             path.join(
                 blockDirPath,
@@ -485,10 +483,10 @@ class BlockServer {
         this._blockServerUrlIfExists = url;
         this.setPublicBaseUrl(url);
         await this.triggerBundleAsync();
-        console.log(chalk.white.bgBlue.bold(` Serving block at ${url} `));
+        console.log(chalk.bold(`\n✅ Your block is running locally at ${url} `));
         try {
             await clipboardy.write(url);
-            console.log('Block URL has been copied to your clipboard');
+            console.log(`${url} has been copied to your clipboard`);
         } catch (err) {
             // This can fail, especially on Linux. If it does, we don't really care.
         }
@@ -533,9 +531,9 @@ class BlockServer {
         });
         const url = `https://localhost:${port}`;
         console.log('Local mode: serving self-signed https on localhost');
-        console.log(
-            "If this is the first time you're running this command in local mode, you need to do some extra setup in your browser:",
-        );
+        console.log("If this is the first time you're running this command,");
+        console.log('you need to do some extra setup in your browser:');
+        console.log('');
         console.log(`  - Firefox: go to https://localhost:${port} and add an ssl exception`);
         console.log(
             `  - Safari: go to https://localhost:${port}, click show details > visit this website, and log in`,
