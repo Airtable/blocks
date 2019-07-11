@@ -46,7 +46,7 @@
         "fs-extra": "^8.0.1",
         "glob": "^7.1.2",
         "invariant": "^2.2.4",
-        "lodash": "^4.17.11",
+        "lodash": "^4.17.14",
         "ngrok": "^2.2.24",
         "npm-package-arg": "^6.1.0",
         "path-to-regexp": "^2.2.1",
