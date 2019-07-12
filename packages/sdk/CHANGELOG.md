@@ -11,7 +11,9 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.19...HEAD)
 
-No changes.
+### Fixed
+
+-   A bug with UI.Toggle that made it difficult to style
 
 ## [0.0.19](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.18...@airtable/blocks@0.0.19) - 2019-07-11
 
