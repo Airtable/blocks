@@ -16,7 +16,8 @@
         "prepublishOnly": "yarn build",
         "pretest": "yarn run lint",
         "test": "mocha",
-        "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md"
+        "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md",
+        "release": "release-it"
     },
     "files": [
         "/README.md",
@@ -72,11 +73,19 @@
         "flow-bin": "^0.95.1",
         "flow-typed": "^2.5.2",
         "mocha": "^5.2.0",
-        "np": "^5.0.2",
         "proxyquire": "^2.1.0",
         "sinon": "^7.3.2"
     },
     "engines": {
         "node": ">=8.10.0"
+    },
+    "release-it": {
+        "git": {
+            "tagName": "@airtable/blocks-cli@${version}"
+        },
+        "hooks": {
+            "before:init": "yarn test",
+            "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+        }
     }
 }

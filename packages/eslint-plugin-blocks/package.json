@@ -11,11 +11,21 @@
         "lib"
     ],
     "scripts": {
-        "test": "mocha 'test/**/*.js'"
+        "test": "mocha 'test/**/*.js'",
+        "release": "release-it"
     },
     "devDependencies": {
         "babel-eslint": "^10.0.2",
         "eslint": "^6.0.1",
         "mocha": "^6.1.4"
+    },
+    "release-it": {
+        "git": {
+            "tagName": "@airtable/eslint-plugin-blocks@${version}"
+        },
+        "hooks": {
+            "before:init": "yarn test",
+            "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+        }
     }
 }
