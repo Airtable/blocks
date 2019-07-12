@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const invariant = require('invariant');
 const express = require('express');
+const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
@@ -375,6 +376,21 @@ class BlockServer {
             },
         );
 
+        runFrameRoutes.get('/ping.gif', (req: $Request, res: $Response) => {
+            // This is used by the web client to detect if blocks-cli is running,
+            // and if HTTPS is being blocked. An image can get around CORS, since
+            // we can't make an XHR request to HTTP.
+            const img = new Buffer(
+                'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+                'base64',
+            );
+            res.writeHead(200, {
+                'Content-Type': 'image/gif',
+                'Content-Length': `${img.length}`,
+            });
+            res.end(img);
+        });
+
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
     _setUpBlockSdkAndWrapper() {
@@ -520,15 +536,30 @@ class BlockServer {
                 'utf8',
             ),
         ]);
+
         // Start the local server using those certs
         await new Promise((resolve, reject) => {
             // flow-disable-next-line because flow confuses Socket types for createServer
-            const server = https.createServer({cert, key}, this._expressApp);
-            server
+            const httpsServer = https.createServer({cert, key}, this._expressApp);
+            httpsServer
                 .listen(port)
                 .on('error', reject)
                 .on('listening', resolve);
         });
+
+        // Also start an http server. The web client will try
+        // loading /__runFrame/ping.gif on both http and https.
+        // This lets it detect if localhost certs are blocked so
+        // we can show a helpful error message.
+        // TODO: maybe don't expose other routes on http?
+        await new Promise((resolve, reject) => {
+            const httpServer = http.createServer(this._expressApp);
+            httpServer
+                .listen(port + 1)
+                .on('error', reject)
+                .on('listening', resolve);
+        });
+
         const url = `https://localhost:${port}`;
         console.log('Local mode: serving self-signed https on localhost');
         console.log("If this is the first time you're running this command,");

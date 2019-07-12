@@ -9,7 +9,7 @@ const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_r
 
 import type {Argv} from 'yargs';
 
-const DEFAULT_PORT = 8000;
+const DEFAULT_PORT = 9000;
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const {ngrok, transpileAll, sdkRepo} = argv;
