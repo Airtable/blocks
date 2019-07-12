@@ -1,6 +1,7 @@
 // @flow
 import PropTypes from 'prop-types'; // TODO(kasra): don't depend on liveapp components.
 import * as React from 'react';
+import {has} from '../private_utils';
 import getSdk from '../get_sdk';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
@@ -63,7 +64,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     // formatting it nicely.
     const userInfoById = getSdk().__appInterface.getCollaboratorInfoById();
     const userObj =
-        userInfoById && collaborator.id && userInfoById.hasOwnProperty(collaborator.id)
+        userInfoById && collaborator.id && has(userInfoById, collaborator.id)
             ? userInfoById[collaborator.id]
             : null;
     const userObjFormattedForPublicApiV2 = userObj
