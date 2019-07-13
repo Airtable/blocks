@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.15...HEAD)
 
-No changes.
+-   `block run`: Changed the default port from 8000 to 9000.
+-   `block run`: Removed browser versions message.
 
 ## [0.0.15](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.14...@airtable/blocks-cli@0.0.15) - 2019-07-11
 
