@@ -1,16 +1,16 @@
 // @flow
+const inquirer = require('inquirer');
 const cliHelpers = require('./cli_helpers');
 const {AIRTABLE_ACCOUNT_URL} = require('../config/block_cli_config_settings');
 
 async function promptForApiKeyAsync(): Promise<string> {
-    const result = await cliHelpers.promptAsync({
+    const {apiKey} = await inquirer.prompt({
+        type: 'password',
         name: 'apiKey',
-        description: `Please enter your API key. You can generate one at ${AIRTABLE_ACCOUNT_URL}`,
-        message: 'API key is required for development',
-        hidden: true,
-        required: true,
+        message: `Please enter your API key. You can generate one at ${AIRTABLE_ACCOUNT_URL}`,
     });
-    return result.apiKey;
+
+    return apiKey;
 }
 
 module.exports = promptForApiKeyAsync;

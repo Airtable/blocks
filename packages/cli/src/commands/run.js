@@ -1,9 +1,9 @@
 // @flow
 const invariant = require('invariant');
+const inquirer = require('inquirer');
 const getApiKeyWithWarningsAsync = require('../get_api_key_with_warnings');
 const BlockServer = require('../block_server');
 const LocalSdkBuilder = require('../local_sdk_builder');
-const cliHelpers = require('../helpers/cli_helpers');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 
@@ -64,9 +64,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             // If there was an error due to the port being taken, prompt for an
             // alternative port and try again.
             if (err.code === 'EADDRINUSE') {
-                const result = await cliHelpers.promptAsync({
+                const result = await inquirer.prompt({
+                    type: 'number',
                     name: 'port',
-                    description: `Port ${port} is taken, please provide an alternative port to run on`,
+                    message: `Port ${port} is taken, please provide an alternative port to run on:`,
+                    default: port + 2,
                 });
                 if (Number.isNaN(result.port)) {
                     throw new Error('Invalid port number');
