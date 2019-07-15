@@ -12,7 +12,7 @@
         "prepare": "npm run build",
         "pretest": "npm run lint && npm run flow",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && git add CHANGELOG.md",
-        "release": "release-it",
+        "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "flow": "flow",
         "lint": "eslint *.js src test",
         "lint:quiet": "npm run lint -- --quiet",
@@ -101,6 +101,9 @@
         "hooks": {
             "before:init": "yarn test",
             "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+        },
+        "npm": {
+            "access": "restricted"
         }
     }
 }
