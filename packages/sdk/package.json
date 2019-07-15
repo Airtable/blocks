@@ -95,7 +95,8 @@
     },
     "release-it": {
         "git": {
-            "tagName": "@airtable/blocks@${version}"
+            "tagName": "@airtable/blocks@${version}",
+            "commitMessage": "Release @airtable/blocks@${version}"
         },
         "hooks": {
             "before:init": "yarn test",

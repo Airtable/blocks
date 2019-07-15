@@ -21,7 +21,8 @@
     },
     "release-it": {
         "git": {
-            "tagName": "@airtable/eslint-plugin-blocks@${version}"
+            "tagName": "@airtable/eslint-plugin-blocks@${version}",
+            "commitMessage": "Release @airtable/eslint-plugin-blocks@${version}"
         },
         "hooks": {
             "before:init": "yarn test",

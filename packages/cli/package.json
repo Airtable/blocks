@@ -81,7 +81,8 @@
     },
     "release-it": {
         "git": {
-            "tagName": "@airtable/blocks-cli@${version}"
+            "tagName": "@airtable/blocks-cli@${version}",
+            "commitMessage": "Release @airtable/blocks-cli@${version}"
         },
         "hooks": {
             "before:init": "yarn test",
