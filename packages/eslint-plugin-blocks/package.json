@@ -12,7 +12,7 @@
     ],
     "scripts": {
         "test": "mocha 'test/**/*.js'",
-        "release": "release-it"
+        "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },
     "devDependencies": {
         "babel-eslint": "^10.0.2",
@@ -27,6 +27,9 @@
         "hooks": {
             "before:init": "yarn test",
             "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+        },
+        "npm": {
+            "access": "restricted"
         }
     }
 }
