@@ -135,45 +135,43 @@ class Toggle extends React.Component<ToggleProps> {
         const toggleClassNameForTheme = theme && classNamesByTheme[theme];
 
         return (
-            <label className="flex-inline">
+            <label
+                ref={el => (this._container = el)}
+                onClick={this._toggleValue}
+                onKeyDown={this._onKeyDown}
+                id={id}
+                className={classNames(
+                    'focusable flex-inline items-center p-half rounded',
+                    {
+                        'pointer link-quiet': !disabled,
+                        'noevents quieter': disabled,
+                    },
+                    className,
+                )}
+                style={style}
+                tabIndex={disabled ? -1 : tabIndex}
+                aria-label={this.props['aria-label']}
+                aria-labelledby={this.props['aria-labelledby']}
+                aria-describedby={this.props['aria-describedby']}
+            >
                 <div
-                    ref={el => (this._container = el)}
-                    onClick={this._toggleValue}
-                    onKeyDown={this._onKeyDown}
-                    id={id}
-                    className={classNames(
-                        'focusable flex-inline items-center p-half rounded',
-                        {
-                            'pointer link-quiet': !disabled,
-                            'noevents quieter': disabled,
-                        },
-                        className,
-                    )}
-                    style={style}
-                    tabIndex={disabled ? -1 : tabIndex}
-                    aria-label={this.props['aria-label']}
-                    aria-labelledby={this.props['aria-labelledby']}
-                    aria-describedby={this.props['aria-describedby']}
+                    className={classNames('pill flex animate flex-none', {
+                        'justify-start darken2': !value,
+                        'justify-end': value,
+                        [toggleClassNameForTheme || '']: value,
+                    })}
+                    style={{
+                        height: toggleHeight,
+                        width: toggleHeight * 1.6,
+                        padding: togglePadding,
+                    }}
                 >
                     <div
-                        className={classNames('pill flex animate flex-none', {
-                            'justify-start darken2': !value,
-                            'justify-end': value,
-                            [toggleClassNameForTheme || '']: value,
-                        })}
-                        style={{
-                            height: toggleHeight,
-                            width: toggleHeight * 1.6,
-                            padding: togglePadding,
-                        }}
-                    >
-                        <div
-                            className="white circle flex-none"
-                            style={{width: toggleHeight - 2 * togglePadding}}
-                        />
-                    </div>
-                    {label && <div className="flex-auto ml1 normal text-dark">{label}</div>}
+                        className="white circle flex-none"
+                        style={{width: toggleHeight - 2 * togglePadding}}
+                    />
                 </div>
+                {label && <div className="flex-auto ml1 normal text-dark">{label}</div>}
             </label>
         );
     }
