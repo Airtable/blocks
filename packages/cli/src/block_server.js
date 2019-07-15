@@ -537,26 +537,40 @@ class BlockServer {
             ),
         ]);
 
-        // Start the local server using those certs
-        await new Promise((resolve, reject) => {
-            // flow-disable-next-line because flow confuses Socket types for createServer
-            const httpsServer = https.createServer({cert, key}, this._expressApp);
-            httpsServer
-                .listen(port)
-                .on('error', reject)
-                .on('listening', resolve);
-        });
-
-        // Also start an http server. The web client will try
+        // We create both an HTTP and an HTTPS server. The web client will try
         // loading /__runFrame/ping.gif on both http and https.
         // This lets it detect if localhost certs are blocked so
         // we can show a helpful error message.
         // TODO: maybe don't expose other routes on http?
+        // flow-disable-next-line because flow confuses Socket types for createServer
+        const httpsServer = https.createServer({cert, key}, this._expressApp);
+        const httpServer = http.createServer(this._expressApp);
+        const stopServers = () => {
+            if (httpsServer.listening) {
+                httpsServer.close();
+            }
+            if (httpServer.listening) {
+                httpServer.close();
+            }
+        };
+
         await new Promise((resolve, reject) => {
-            const httpServer = http.createServer(this._expressApp);
             httpServer
                 .listen(port + 1)
-                .on('error', reject)
+                .on('error', err => {
+                    stopServers();
+                    reject(err);
+                })
+                .on('listening', resolve);
+        });
+
+        await new Promise((resolve, reject) => {
+            httpsServer
+                .listen(port)
+                .on('error', err => {
+                    stopServers();
+                    reject(err);
+                })
                 .on('listening', resolve);
         });
 
