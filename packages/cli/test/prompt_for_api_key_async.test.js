@@ -1,12 +1,12 @@
 // @flow
 const promptForApiKeyAsync = require('../src/helpers/prompt_for_api_key_async');
-const cliHelpers = require('../src/helpers/cli_helpers');
+const inquirer = require('inquirer');
 const sinon = require('sinon');
 const assert = require('assert');
 
 describe('promptForApiKeyAsync', function() {
     beforeEach(function() {
-        sinon.stub(cliHelpers, 'promptAsync').resolves({
+        sinon.stub(inquirer, 'prompt').resolves({
             apiKey: 'key123ABC',
         });
     });

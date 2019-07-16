@@ -3,8 +3,8 @@ const init = require('../../src/commands/init');
 const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
+const inquirer = require('inquirer');
 const {getTemporaryDirectoryPath} = require('../helpers');
-const cliHelpers = require('../../src/helpers/cli_helpers');
 const configHelpers = require('../../src/helpers/config_helpers');
 const nodeModulesCommandHelpers = require('../../src/helpers/node_modules_command_helpers');
 const sinon = require('sinon');
@@ -63,7 +63,7 @@ describe('init', function() {
         }
 
         beforeEach(function() {
-            promptAsyncStub = sinon.stub(cliHelpers, 'promptAsync').resolves({
+            promptAsyncStub = sinon.stub(inquirer, 'prompt').resolves({
                 apiKey: 'key123ABC',
             });
 
