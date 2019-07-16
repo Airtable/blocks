@@ -228,7 +228,18 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     console.log('Initializing block');
-    await initBlockAsync(baseId, blockId, blockDirPath);
+    try {
+        await initBlockAsync(baseId, blockId, blockDirPath);
+    } catch (err) {
+        const doesDirExist = await fsUtils.statIfExistsAsync(blockDirPath);
+        if (doesDirExist) {
+            console.log('❌ Something failed! Cleaning up...');
+            await fsUtils.removeAsync(blockDirPath);
+        }
+
+        throw err;
+    }
+
     console.log(
         `✅ Your block is ready! ${chalk.bold(
             'cd ' + blockDirPath + ' && block run',

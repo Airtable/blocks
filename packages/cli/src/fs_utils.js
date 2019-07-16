@@ -93,6 +93,9 @@ module.exports = {
         });
     },
     unlinkAsync: promisify(fs.unlink),
+    removeAsync: async function(filePath) {
+        return await fsExtra.remove(filePath);
+    },
     readJsonIfExistsAsync: async function(filePath) {
         try {
             return await fsExtra.readJson(filePath);

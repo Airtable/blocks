@@ -3,8 +3,9 @@ const init = require('../../src/commands/init');
 const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
+const fsUtils = require('../../src/fs_utils');
 const inquirer = require('inquirer');
-const {getTemporaryDirectoryPath} = require('../helpers');
+const {getTemporaryDirectoryPath, assertThrowsAsync} = require('../helpers');
 const configHelpers = require('../../src/helpers/config_helpers');
 const nodeModulesCommandHelpers = require('../../src/helpers/node_modules_command_helpers');
 const sinon = require('sinon');
@@ -115,6 +116,15 @@ describe('init', function() {
 
             assert.strictEqual(promptAsyncStub.called, false);
             assert.strictEqual(setApiKeyAsyncStub.called, false);
+        });
+
+        it('removes the block directory if there was an error', async function() {
+            const fsUtilsRemoveSpy = sinon.spy(fsUtils, 'removeAsync');
+            yarnInstallAsyncStub.throws();
+            await assertThrowsAsync(async () => await runInitAsync());
+
+            assert(fsUtilsRemoveSpy.calledOnceWithExactly(blockDirPath));
+            assert(!fs.existsSync(path.join(blockDirPath)));
         });
     });
 });
