@@ -73,7 +73,7 @@ const developmentBrowsers = [
 ];
 
 // From https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable.
-const allSupportedBrowsers = ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'];
+const allSupportedBrowsers = ['firefox >= 45', 'chrome >= 49', 'safari >= 10', 'edge >= 13'];
 
 const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds

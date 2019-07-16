@@ -13,12 +13,14 @@ function registerCommandForConfig(yargs, commandConfig) {
         if (commandConfig.optionMap) {
             for (const optionName of Object.keys(commandConfig.optionMap)) {
                 const optionConfig = commandConfig.optionMap[optionName];
-                yargs.option(optionName, {
+                yargsInner.option(optionName, {
                     group: commandConfig.name,
                     ...optionConfig,
                 });
             }
         }
+
+        return yargsInner;
     });
 
     const isCommandShown = commandConfig.description !== false;
