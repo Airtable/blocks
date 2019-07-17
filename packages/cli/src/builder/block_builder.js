@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const invariant = require('invariant');
-const {babelAsync, yarnInstallAsync} = require('../helpers/node_modules_command_helpers');
+const {babelAsync, npmAsync} = require('../helpers/node_modules_command_helpers');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('../block_client_artifacts/generate_block_client_wrapper');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
@@ -105,7 +105,7 @@ class BlockBuilder {
         }
         return buildStepSuccess();
     }
-    _getErrorFromYarnInstallStderr(stderr: string): Error | null {
+    _getErrorFromNpmInstallStderr(stderr: string): Error | null {
         const errorMessageLines = stderr
             .split('\n')
             .filter(message => message.trim().length > 0 && !message.startsWith('warning '));
@@ -114,12 +114,13 @@ class BlockBuilder {
         }
         return null;
     }
-    async _yarnInstallAsync(dirPath: DirectoryPath): Promise<BuildStepResult<void>> {
+    async _npmInstallAsync(dirPath: DirectoryPath): Promise<BuildStepResult<void>> {
         try {
-            const {stderr} = await yarnInstallAsync(dirPath, ['--prod', '--non-interactive']);
-            const yarnInstallError = this._getErrorFromYarnInstallStderr(stderr.toString());
-            if (yarnInstallError) {
-                return {success: false, error: yarnInstallError};
+            const {stderr} = await npmAsync(dirPath, ['install', '--production', '--quiet']);
+
+            const npmInstallError = this._getErrorFromNpmInstallStderr(stderr.toString());
+            if (npmInstallError) {
+                return {success: false, error: npmInstallError};
             }
         } catch (error) {
             return {success: false, error};
@@ -246,9 +247,9 @@ class BlockBuilder {
 
         // Install user packages.
         console.log('installing node modules');
-        const yarnInstallResult = await this._yarnInstallAsync(userSrcDirPath);
-        if (!yarnInstallResult.success) {
-            return yarnInstallResult;
+        const npmInstallResult = await this._npmInstallAsync(userSrcDirPath);
+        if (!npmInstallResult.success) {
+            return npmInstallResult;
         }
 
         const userSrcNodeModulesPath = path.join(userSrcDirPath, 'node_modules');

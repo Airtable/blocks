@@ -135,8 +135,8 @@ async function initBlockAsync(
         JSON.stringify(remoteJson, null, 4),
     );
 
-    // Create a package json so the user can `yarn add`.
-    // Dependencies are specified as part of the `yarn add` to install the latest versions: this
+    // Create a package json so the user can `npm install`.
+    // Dependencies are specified as part of the `npm install` step below to install the latest versions: this
     // file is created first so that the dependencies are saved in the correct folder.
     const writePackageJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, 'package.json'),
@@ -178,21 +178,19 @@ async function initBlockAsync(
         writeEslintFilePromise,
     ]);
 
-    // TODO: consider not piping `yarn add` output so that `block init` is less verbose.
-    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, [
-        'add',
-        '@airtable/blocks',
-        'react',
-        'react-dom',
-        '--non-interactive',
+    const packageDependencies = ['@airtable/blocks', 'react', 'react-dom'];
+    const packageDevDependencies = ['eslint', 'eslint-plugin-react', 'eslint-plugin-react-hooks'];
+
+    await nodeModulesCommandHelpers.npmAsync(blockDirPath, [
+        'install',
+        ...packageDependencies,
+        '--quiet',
     ]);
-    await nodeModulesCommandHelpers.yarnInstallAsync(blockDirPath, [
-        'add',
-        'eslint',
-        'eslint-plugin-react',
-        'eslint-plugin-react-hooks',
-        '--dev',
-        '--non-interactive',
+    await nodeModulesCommandHelpers.npmAsync(blockDirPath, [
+        'install',
+        ...packageDevDependencies,
+        '--save-dev',
+        '--quiet',
     ]);
 }
 
@@ -243,7 +241,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     console.log(
         `✅ Your block is ready! ${chalk.bold(
             'cd ' + blockDirPath + ' && block run',
-        )} to start developing, and ${chalk.bold('yarn lint')} to lint.`,
+        )} to start developing, and ${chalk.bold('npm run lint')} to lint.`,
     );
 }
 

@@ -42,7 +42,7 @@ describe('init', function() {
     });
 
     describe('init command', function() {
-        let yarnInstallAsyncStub;
+        let npmAsyncStub;
         let promptAsyncStub;
         let hasApiKeyAsyncStub;
         let setApiKeyAsyncStub;
@@ -68,9 +68,7 @@ describe('init', function() {
                 apiKey: 'key123ABC',
             });
 
-            yarnInstallAsyncStub = sinon
-                .stub(nodeModulesCommandHelpers, 'yarnInstallAsync')
-                .resolves();
+            npmAsyncStub = sinon.stub(nodeModulesCommandHelpers, 'npmAsync').resolves();
 
             hasApiKeyAsyncStub = sinon.stub(configHelpers, 'hasApiKeyAsync').resolves(true);
             setApiKeyAsyncStub = sinon.stub(configHelpers, 'setApiKeyAsync').resolves();
@@ -87,7 +85,7 @@ describe('init', function() {
 
             assert(fs.existsSync(path.join(blockDirPath, '.eslintrc.js')));
 
-            assert(yarnInstallAsyncStub.calledTwice);
+            assert(npmAsyncStub.calledTwice);
 
             const blockJson = await fsExtra.readJson(path.join(blockDirPath, 'block.json'));
             assert.strictEqual(blockJson.frontendEntry, './frontend/index.js');
