@@ -1,6 +1,5 @@
 // @flow
 const inquirer = require('inquirer');
-const cliHelpers = require('./cli_helpers');
 const {AIRTABLE_ACCOUNT_URL} = require('../config/block_cli_config_settings');
 
 async function promptForApiKeyAsync(): Promise<string> {

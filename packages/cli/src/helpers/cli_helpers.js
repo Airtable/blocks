@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-const {promisify} = require('util');
 
 const helpers = {
     exitWithError(message, err) {
