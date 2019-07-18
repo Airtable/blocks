@@ -2,6 +2,10 @@
 <PROJECT_ROOT>/node_modules/documentation/.*
 <PROJECT_ROOT>/dist/.*\.js\.flow
 
+# These files are our entrypoints, they reference things that only exist after build:
+<PROJECT_ROOT>/models.js
+<PROJECT_ROOT>/ui.js
+
 [include]
 
 [libs]

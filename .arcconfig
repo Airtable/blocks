@@ -2,7 +2,23 @@
     "phabricator.uri": "https://airtable.phacility.com/",
     "base": "git:merge-base(origin/master)",
     "arc.land.onto.default": "master",
+    "load": ["arc/arc-airtable-test-engine"],
+    "unit.airtable": {
+        "build": {}
+    },
     "aliases": {
+        "atnew": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atnew \"$@\""],
+        "atpush": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atpush \"$@\""],
+        "atreview": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atreview \"$@\""],
+        "atland": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atland \"$@\""],
+        "atmerge": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atmerge \"$@\""],
+        "atrebase": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atrebase \"$@\""],
+        "atset-land-branch": [
+            "!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atset-land-branch \"$@\""
+        ],
+        "atstate": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atstate \"$@\""],
+        "atdelete": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" atdelete \"$@\""],
+        "athelp": ["!\"`git rev-parse --show-toplevel`/bin/arc-addons\" athelp \"$@\""],
         "airdiff": [
             "!branchname=`git branch  | grep '\\*' | cut -d' ' -f2`",
             " && if [ \"$branchname\" == 'master' ]; then echo 'Refusing to \"arc airdiff\" on branch \"'$branchname'\".' > /dev/stderr; false; fi",

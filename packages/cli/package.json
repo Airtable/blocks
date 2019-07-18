@@ -14,7 +14,7 @@
         "build": "yarn run build:clean && babel src --out-dir transpiled",
         "watch": "yarn build --watch",
         "prepublishOnly": "yarn build",
-        "pretest": "yarn run lint",
+        "pretest": "yarn run lint && yarn run flow",
         "test": "mocha",
         "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it"

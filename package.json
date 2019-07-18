@@ -16,7 +16,8 @@
         "release-it": "^12.3.3"
     },
     "scripts": {
-        "format": "prettier --write '**/*.{js,md,json,yml}'"
+        "format": "prettier --write '**/*.{js,md,json,yml}'",
+        "test": "yarn workspaces run test"
     },
     "husky": {
         "hooks": {
