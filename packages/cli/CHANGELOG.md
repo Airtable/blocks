@@ -9,9 +9,14 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.17...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.18...HEAD)
 
--   Replace `yarn` with `npm` for package management of blocks code. This affects both `block init` and `block release`. 
+No changes.
+
+## [0.0.18](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.17...@airtable/blocks-cli@0.0.18) - 2019-07-17
+
+-   Replace `yarn` with `npm` for package management of blocks code. This affects both `block init`
+    and `block release`.
 
 ## [0.0.17](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.16...@airtable/blocks-cli@0.0.17) - 2019-07-16
 
