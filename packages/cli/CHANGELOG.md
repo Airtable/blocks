@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.17...HEAD)
 
-No changes.
+-   Replace `yarn` with `npm` for package management of blocks code. This affects both `block init` and `block release`. 
 
 ## [0.0.17](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.16...@airtable/blocks-cli@0.0.17) - 2019-07-16
 
