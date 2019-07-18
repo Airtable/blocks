@@ -118,7 +118,7 @@ describe('init', function() {
 
         it('removes the block directory if there was an error', async function() {
             const fsUtilsRemoveSpy = sinon.spy(fsUtils, 'removeAsync');
-            yarnInstallAsyncStub.throws();
+            npmAsyncStub.throws();
             await assertThrowsAsync(async () => await runInitAsync());
 
             assert(fsUtilsRemoveSpy.calledOnceWithExactly(blockDirPath));
