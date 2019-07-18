@@ -32,7 +32,7 @@
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:flow"
     },
     "author": "",
-    "license": "ISC",
+    "license": "UNLICENSED",
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
         "@babel/cli": "^7.4.4",

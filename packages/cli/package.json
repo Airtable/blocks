@@ -5,7 +5,7 @@
     "bin": {
         "block": "bin/block"
     },
-    "license": "MIT",
+    "license": "UNLICENSED",
     "scripts": {
         "lint": "eslint .",
         "flow": "flow",
