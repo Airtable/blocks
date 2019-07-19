@@ -129,7 +129,7 @@ const queryResult = table.selectRecords();
 `table.selectRecords` returns a `QueryResult` object that represents a collection of records.
 
 Then we use a new hook, called `useRecords`, to connect our `TodoBlock` component to the records
-inside the `QueryResult`.` Anytime records are created, deleted, or updated in the table, our
+inside the `QueryResult`. Any time records are created, deleted, or updated in the table, our
 component will automatically re-render:
 
 ```
