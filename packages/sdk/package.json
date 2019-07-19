@@ -11,7 +11,7 @@
     "scripts": {
         "prepare": "yarn run build",
         "pretest": "yarn run lint && yarn run flow",
-        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && git add CHANGELOG.md",
+        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run build:docs && git add CHANGELOG.md docs/api.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "flow": "flow",
         "lint": "eslint *.js src test",
