@@ -3141,7 +3141,7 @@ Injects CSS from a remote URL.
 ##### Examples
 
 ```javascript
-import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
