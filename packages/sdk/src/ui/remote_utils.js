@@ -26,7 +26,7 @@ export function loadCSSFromString(css: string): HTMLStyleElement {
  * @returns a Promise that resolves to the style tag inserted into the page.
  *
  * @example
- * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+ * import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
  * loadCSSFromURLAsync('https://example.com/style.css');
  */
 export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
