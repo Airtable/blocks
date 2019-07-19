@@ -16,7 +16,6 @@
         "flow": "flow",
         "lint": "eslint *.js src test",
         "lint:quiet": "yarn run lint --quiet",
-        "format": "prettier --write 'src/**/*.js' 'test/**/*.js' '*.{json,js,md}' 'docs/**/*.md'",
         "jest": "jest",
         "jest:watch": "jest --watch",
         "test": "yarn run jest",
@@ -62,7 +61,6 @@
         "fs-extra": "^8.0.1",
         "glob": "^7.1.4",
         "jest": "^24.8.0",
-        "lint-staged": "^8.1.7",
         "prettier": "^1.18.2",
         "react": "16.9.0-alpha.0",
         "react-dom": "16.9.0-alpha.0"
@@ -77,16 +75,6 @@
     "peerDependencies": {
         "react": "^16.8.0",
         "react-dom": "^16.8.0"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged && npm run build:docs && git add docs/api.md"
-        }
-    },
-    "lint-staged": {
-        "*.js": [
-            "eslint --quiet"
-        ]
     },
     "jest": {
         "setupFiles": [
