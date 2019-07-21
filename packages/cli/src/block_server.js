@@ -380,7 +380,7 @@ class BlockServer {
             // This is used by the web client to detect if blocks-cli is running,
             // and if HTTPS is being blocked. An image can get around CORS, since
             // we can't make an XHR request to HTTP.
-            const img = new Buffer(
+            const img = Buffer.from(
                 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
                 'base64',
             );
