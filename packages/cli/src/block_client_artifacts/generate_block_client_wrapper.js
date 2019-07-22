@@ -39,7 +39,7 @@ window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function ru
     }
     // Requiring the entry point file runs user code. Be sure to do any setup
     // above this line.
-    require('${frontendEntryModulePath}');
+    require(${JSON.stringify(frontendEntryModulePath)});
 };
 `;
 };
