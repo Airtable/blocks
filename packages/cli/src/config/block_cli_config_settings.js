@@ -3,8 +3,8 @@ const UserAgentBag = require('user-agent-bag');
 const packageJson = require('../../package.json');
 
 module.exports = {
-    // The name to `import` when referencing the blocks sdk.
-    SDK_PACKAGE_NAME: 'airtable-block',
+    // The name of the blocks sdk.
+    SDK_PACKAGE_NAME: '@airtable/blocks',
 
     // These global variables will be set on `window` in the block frame.
     // Careful: if you change any of these, you will break blocks that are

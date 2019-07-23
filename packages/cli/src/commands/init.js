@@ -37,7 +37,7 @@ function _getComponentName(blockDirPath: string): string {
 function _getDefaultFrontendCode(blockDirPath: string): string {
     const componentName = _getComponentName(blockDirPath);
 
-    return `import {initializeBlock} from '@airtable/blocks/ui';
+    return `import {initializeBlock} from '${blockCliConfigSettings.SDK_PACKAGE_NAME}/ui';
 import React from 'react';
 
 function ${componentName}() {
@@ -178,7 +178,7 @@ async function initBlockAsync(
         writeEslintFilePromise,
     ]);
 
-    const packageDependencies = ['@airtable/blocks', 'react', 'react-dom'];
+    const packageDependencies = [blockCliConfigSettings.SDK_PACKAGE_NAME, 'react', 'react-dom'];
     const packageDevDependencies = ['eslint', 'eslint-plugin-react', 'eslint-plugin-react-hooks'];
 
     await nodeModulesCommandHelpers.npmAsync(blockDirPath, [

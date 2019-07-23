@@ -119,7 +119,7 @@ class BlockServer {
 
         this._setUpExpressRoutes();
         this._setUpRunFrameRoutes();
-        this._setUpBlockSdkAndWrapper();
+        this._setUpWrapperCode();
         this._setUpBundler();
     }
     _setUpExpressRoutes(): void {
@@ -393,7 +393,7 @@ class BlockServer {
 
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
-    _setUpBlockSdkAndWrapper() {
+    _setUpWrapperCode() {
         const blockDirPath = this._blockDirPath;
 
         // Check if react and react-dom are listed in package.json.
@@ -423,21 +423,6 @@ class BlockServer {
                 `The 'frontendEntry' file at ${frontendEntryFilePath} does not exist. Please check your 'frontendEntry' attribute in ${blockCliConfigSettings.BLOCK_FILE_NAME}`,
             );
             process.exit(1);
-        }
-
-        // Drop in the block SDK stub if it isn't already there.
-        const blockSdkDirPath = path.join(
-            blockDirPath,
-            'node_modules',
-            blockCliConfigSettings.SDK_PACKAGE_NAME,
-        );
-        const blockSdkExists = fs.existsSync(blockSdkDirPath);
-        if (!blockSdkExists) {
-            fs.mkdirSync(blockSdkDirPath);
-            fs.writeFileSync(
-                path.join(blockSdkDirPath, 'index.js'),
-                `module.exports = (typeof window !== 'undefined' ? window : global)['${blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME}'];`,
-            );
         }
 
         // Write the client wrapper file.

@@ -5,11 +5,10 @@ const npmPackageArg = require('npm-package-arg');
 const chalk = require('chalk');
 const cpx = require('cpx');
 const fsUtils = require('./fs_utils');
+const {SDK_PACKAGE_NAME} = require('./config/block_cli_config_settings');
 const {getBlockDirPath} = require('./get_block_dir_path');
 const {exitWithError} = require('./helpers/cli_helpers');
 const {spawn, execFileAsync} = require('./helpers/child_process_helpers');
-
-const SDK_PACKAGE_NAME = '@airtable/blocks';
 
 function warnNonLiveDirectorySdk(installedPath) {
     const message = [
