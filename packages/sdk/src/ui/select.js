@@ -97,7 +97,7 @@ class Select extends React.Component<SelectProps> {
         this._select.click();
     }
     render() {
-        const {id, className, style, options: originalOptions = [], value} = this.props;
+        const {id, className, style, options: originalOptions = [], value, disabled} = this.props;
 
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
@@ -137,8 +137,8 @@ class Select extends React.Component<SelectProps> {
                 className={classNames(
                     'styled-input p1 rounded normal no-outline darken1 text-dark',
                     {
-                        'link-quiet pointer': !this.props.disabled,
-                        quieter: this.props.disabled,
+                        'link-quiet pointer': !disabled,
+                        quieter: disabled,
                     },
                     className,
                 )}
@@ -148,6 +148,7 @@ class Select extends React.Component<SelectProps> {
                 }}
                 value={optionValueToString(value)}
                 onChange={this._onChange}
+                disabled={disabled}
             >
                 {options &&
                     options.map(option => {

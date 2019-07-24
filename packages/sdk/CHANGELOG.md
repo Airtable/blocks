@@ -11,7 +11,10 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.22...HEAD)
 
-No changes.
+### Fixed
+
+-   The `disabled` attribute on `<Select>` components (including model pickers and synced model
+    pickers) now correctly disables the element
 
 ## [0.0.22](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.21...@airtable/blocks@0.0.22) - 2019-07-18
 
