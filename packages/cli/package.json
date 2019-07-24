@@ -42,6 +42,7 @@
         "chokidar": "^2.0.4",
         "clipboardy": "^2.1.0",
         "cpx": "^1.5.0",
+        "cross-spawn": "^6.0.5",
         "envify": "^4.1.0",
         "express": "^4.17.0",
         "fs-extra": "^8.0.1",

@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-console */
+const os = require('os');
 const path = require('path');
 const npmPackageArg = require('npm-package-arg');
 const chalk = require('chalk');
@@ -8,7 +9,7 @@ const fsUtils = require('./fs_utils');
 const {SDK_PACKAGE_NAME} = require('./config/block_cli_config_settings');
 const {getBlockDirPath} = require('./get_block_dir_path');
 const {exitWithError} = require('./helpers/cli_helpers');
-const {spawn, execFileAsync} = require('./helpers/child_process_helpers');
+const {_internal} = require('./helpers/child_process_helpers');
 
 function warnNonLiveDirectorySdk(installedPath) {
     const message = [
@@ -38,6 +39,16 @@ function warnNonLiveDirectorySdk(installedPath) {
  */
 class LocalSdkBuilder {
     static async startIfNeededAsync(sdkPath: string | null): Promise<LocalSdkBuilder | null> {
+        if (os.platform() === 'win32') {
+            if (sdkPath === null) {
+                return null;
+            }
+
+            // This module's functionality is intended for internal workflows, and most
+            // internal workflows work with non-Windows machines.
+            exitWithError('Local SDK is not supported in this environment!');
+        }
+
         const sdkPackageVersionSpecifier = await LocalSdkBuilder._getInstalledSdkPackageVersionSpecifierAsync();
 
         if (sdkPackageVersionSpecifier) {
@@ -107,7 +118,7 @@ class LocalSdkBuilder {
         };
         await fsUtils.writeFileAsync(sdkPackageJsonPath, JSON.stringify(tempPackageJson), 'utf-8');
 
-        const {stdout} = await execFileAsync('npm', ['pack', '--quiet'], {
+        const {stdout} = await _internal._execFileAsync('npm', ['pack', '--quiet'], {
             cwd: this.sdkPath,
             prefix: 'npm pack',
         });
@@ -126,7 +137,7 @@ class LocalSdkBuilder {
         const blockDir = getBlockDirPath();
         const shouldUseYarn = await fsUtils.existsAsync(path.join(blockDir, 'yarn.lock'));
 
-        await execFileAsync(
+        await _internal._execFileAsync(
             shouldUseYarn ? 'yarn' : 'npm',
             shouldUseYarn
                 ? ['add', `${SDK_PACKAGE_NAME}@${packagePath}`, '--non-interactive']
@@ -140,7 +151,7 @@ class LocalSdkBuilder {
 
     _buildAndWatchSourceAsync(): Promise<void> {
         return new Promise(resolve => {
-            const sdkBuildProcess = spawn('npm', ['run', 'watch'], {
+            const sdkBuildProcess = _internal._spawn('npm', ['run', 'watch'], {
                 prefix: SDK_PACKAGE_NAME,
                 cwd: this.sdkPath,
             });
