@@ -104,13 +104,13 @@ project will be ready! Run `cd hello_blocks && block run` (as it says).
 
 In the terminal output, you’ll see something like “Local mode: serving self-signed https on
 localhost”. Blocks must run on HTTPS servers. In production, we'll serve your block code via HTTPS,
-but in development, you'll need to tell your browser that https://localhost:8000 is safe to visit.
+but in development, you'll need to tell your browser that https://localhost:9000 is safe to visit.
 Follow the instructions in the output above to get your browser ready to go.
 
 You may need to restart your browser the first time you do this. After restarting the browser, go
 back to the base, click the `<> DEV` button next to the block, then click "Edit block".
 
-Once you've done this, enter https://localhost:8000 as the block URL. If you've done this correctly,
+Once you've done this, enter https://localhost:9000 as the block URL. If you've done this correctly,
 you'll see your block appear!
 
 ![](/packages/sdk/docs/img/setup_4.png)
