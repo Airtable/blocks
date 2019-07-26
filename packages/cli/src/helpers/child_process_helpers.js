@@ -12,20 +12,18 @@ type ChildProcessOptions = {|
 |};
 
 const _formatAndConsoleLogWithPrefix = (chunk: mixed, prefix: string): void => {
+    if (chunk === null || chunk === undefined || chunk === '') {
+        return undefined;
+    }
+
     let chunkAsString;
     if (Buffer.isBuffer(chunk)) {
         invariant(chunk instanceof Buffer, 'expected chunk to be Buffer');
         chunkAsString = chunk.toString('utf8');
     } else if (typeof chunk === 'string') {
         chunkAsString = chunk;
-    } else if (chunk === null || chunk === undefined) {
-        chunkAsString = '';
     } else {
         chunkAsString = JSON.stringify(chunk);
-    }
-
-    if (chunkAsString === '') {
-        return undefined;
     }
 
     invariant(typeof chunkAsString === 'string', 'expect chunkAsString to be string');
