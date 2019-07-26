@@ -106,9 +106,13 @@ class BlockBuilder {
         return buildStepSuccess();
     }
     _getErrorFromNpmInstallStderr(stderr: string): Error | null {
-        const errorMessageLines = stderr
-            .split('\n')
-            .filter(message => message.trim().length > 0 && !message.startsWith('warning '));
+        const errorMessageLines = stderr.split('\n').filter(message => {
+            return (
+                message.trim().length > 0 &&
+                !message.startsWith('warning ') &&
+                !message.startsWith('npm WARN')
+            );
+        });
         if (errorMessageLines.length > 0) {
             return new Error(errorMessageLines.join('\n'));
         }

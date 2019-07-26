@@ -410,7 +410,7 @@ class BlockServer {
         const nodeModulesDirPath = path.join(blockDirPath, 'node_modules');
         const nodeModulesDirExists = fs.existsSync(nodeModulesDirPath);
         if (!nodeModulesDirExists) {
-            console.log(`Must run yarn in ${blockDirPath} first to install modules`);
+            console.log(`Must run npm in ${blockDirPath} first to install modules`);
             process.exit(1);
         }
         // Get the block entry point filepath.
