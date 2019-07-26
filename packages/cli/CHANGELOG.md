@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.19...HEAD)
 
-No changes.
+-   Some Windows compatibility fixes.
+-   Some fixes regarding error checking during `block release`.
 
 ## [0.0.19](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.18...@airtable/blocks-cli@0.0.19) - 2019-07-18
 
