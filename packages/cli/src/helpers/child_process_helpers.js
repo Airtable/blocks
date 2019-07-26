@@ -82,7 +82,7 @@ function fork(
  * For cross-OS compatibility, this method wraps the 3rd-party 'cross-spawn.sync()' method instead
  * of node's native child_process.spawnSync(). Essentially, all the workable options for using the
  * node's 'child_process' lib with Windows requires us to sanitize the inputs, which is tricky
- * because there are many edge cases. The cross-spawn' lib handles some args escaping and
+ * because there are many edge cases. The 'cross-spawn' lib handles some args escaping and
  * processing for us.
  *
  * NOTE: This wraps the 'cross-spawn.sync()' method instead of the asynchronous
