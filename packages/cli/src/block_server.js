@@ -559,20 +559,7 @@ class BlockServer {
                 .on('listening', resolve);
         });
 
-        const url = `https://localhost:${port}`;
-        console.log('Local mode: serving self-signed https on localhost');
-        console.log("If this is the first time you're running this command,");
-        console.log('you need to do some extra setup in your browser:');
-        console.log('');
-        console.log(`  - Firefox: go to https://localhost:${port} and add an ssl exception`);
-        console.log(
-            `  - Safari: go to https://localhost:${port}, click show details > visit this website, and log in`,
-        );
-        console.log(
-            '  - Chrome: go to chrome://flags/#allow-insecure-localhost and click enable. Restart your browser',
-        );
-        console.log('');
-        return url;
+        return `https://localhost:${port}`;
     }
     _bundleAsync(): Promise<BundleStateData> {
         return new Promise((resolve, reject) => {
