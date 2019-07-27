@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.23...HEAD)
 
-No changes.
+-   Removed some unnecessary copy text on `block run`.
 
 ## [0.0.23](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.22...@airtable/blocks-cli@0.0.23) - 2019-07-26
 
