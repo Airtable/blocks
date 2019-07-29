@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$current_branch" != "master" ]; then
+    echo "You can only run 'yarn release' on branch 'master'. You're currently on '$current_branch'.";
+    exit 1
+fi
+
+git fetch origin
+local_commit="$(git rev-parse HEAD)"
+remote_commit="$(git rev-parse origin/master)"
+
+if [ "$local_commit" != "$remote_commit" ]; then
+    echo "Your local branch must be up to date with origin/master."
+    echo "     Local: $local_commit"
+    echo "    Remote: $remote_commit"
+    exit 1
+fi
+
+git_dir="$(git rev-parse --show-toplevel)/.git"
+
+if [ ! -d "$git_dir" ]; then
+    echo "It looks as if you might be trying to run 'yarn release' from a git worktree."
+    echo "This isn't supported - try switching over to your main repo and running 'yarn release' again."
+    exit 1
+fi

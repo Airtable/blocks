@@ -25,7 +25,7 @@
             "commitMessage": "Release @airtable/eslint-plugin-blocks@${version}"
         },
         "hooks": {
-            "before:init": "yarn test",
+            "before:init": "../../bin/check-repo-for-release && yarn test",
             "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
         },
         "npm": {
