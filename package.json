@@ -3,7 +3,8 @@
     "workspaces": {
         "packages": [
             "packages/*",
-            "tools/*"
+            "tools/*",
+            "docs"
         ],
         "nohoist": [
             "{@airtable,@airtable-blocks-internal}/*/*"

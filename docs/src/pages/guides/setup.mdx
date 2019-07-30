@@ -1,6 +1,11 @@
-# Hello, Blocks!
+import Image from '../../components/Image';
+import createNewBaseGif from './setup_1.gif';
+import buildABlockGif from './setup_2.gif';
+import nameBlockPng from './setup_3.png';
+import helloWorldBlockPng from './setup_4.png';
+import helloWorldEditedPng from './setup_5.png';
 
-<!-- NOTE(evanhahn): This file will soon be moved to the docs/ subproject. -->
+# Guide: Hello, Blocks!
 
 Thanks for participating in the developer preview of the Airtable Blocks platform! Before today, all
 blocks were developed by Airtable. No longer! You'll be able to supercharge your own workflows.
@@ -8,7 +13,7 @@ blocks were developed by Airtable. No longer! You'll be able to supercharge your
 We're genuinely excited to see what you build.
 
 We appreciate any and all feedback! We want to make this platform the best it can be for developers
-and users. Please send all feedback to blocks@airtable.com, it'll go directly to the platform
+and users. Please send all feedback to <blocks@airtable.com>, it'll go directly to the platform
 engineering team. We're also more than happy to help if you get stuck building a block!
 
 This is a developer preview, which means things are subject to change. We ask that you don't make
@@ -66,7 +71,7 @@ We're all set up! Let's build our first block.
 To start, make a new Airtable base from scratch. Its name doesn't matter, but we'll call it
 “Blocks!” in this guide.
 
-![](/docs/src/pages/guides/setup_1.gif)
+<Image src={createNewBaseGif} />
 
 Note that we're just creating a new base for the purposes of this guide—you can build blocks in any
 base you already have, as long as it's in a Pro or Enterprise workspace.
@@ -81,11 +86,11 @@ Now that we have a base, it's time to create our block.
 Start by opening the Blocks dashboard by clicking the “Blocks” button at the top-right of the
 screen. From there, click “Add a block”, and then “Build a block”.
 
-![](/docs/src/pages/guides/setup_2.gif)
+<Image src={buildABlockGif} />
 
 Now it's time to give our new block a name. We'll call it “Hello Blocks”.
 
-![](/docs/src/pages/guides/setup_3.png)
+<Image src={nameBlockPng} />
 
 Click “Create block” to continue.
 
@@ -115,13 +120,13 @@ back to the base, click the `<> DEV` button next to the block, then click "Edit 
 Once you've done this, enter https://localhost:9000 as the block URL. If you've done this correctly,
 you'll see your block appear!
 
-![](/docs/src/pages/guides/setup_4.png)
+<Image src={helloWorldBlockPng} />
 
 Open `frontend/index.js` in your text editor and try changing the text from “Hello world 🚀” to
 something else, like “Goodbye, Earth! 🌍”. When you save the file, the block server will update and
 your block should refresh in the browser automatically.
 
-![](/docs/src/pages/guides/setup_5.png)
+<Image src={helloWorldEditedPng} />
 
 Great! We have our blocks development environment set up.
 
@@ -152,7 +157,7 @@ block.
 We’ve built “Hello, blocks”. You’ve gotten your computer set up, seen how to create a new block, how
 to make changes to it, and how to release it.
 
-**Next, we’ll learn to [how to make a to-do list block!](/packages/sdk/docs/tutorial_todo.md)**
+**Next, we’ll learn to [how to make a to-do list block!](/guides/todo)**
 
 ## Appendix: files and directory structure
 

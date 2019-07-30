@@ -1,12 +1,20 @@
-# Guide: building a to-do list block
+import Image from '../../components/Image';
+import introGif from './tutorial_todo_1.gif';
+import setupGif from './tutorial_todo_2.gif';
+import part1Complete from './tutorial_todo_3.png';
+import storingTableNameGif from './tutorial_todo_4.gif';
+import permissionsGif from './tutorial_todo_5.gif';
 
-<!-- NOTE(evanhahn): This file will soon be moved to the docs/ subproject. -->
+# Guide: building a to-do list block
 
 In this 3-part tutorial, you’ll learn how to build a block that shows a list of tasks from a table
 and lets you click a checkbox to toggle whether the task is done or not. It’ll look something like
 this:
 
-![](/docs/src/pages/guides/tutorial_todo_1.gif)
+<!-- TODO(evanhahn): can we do this without having to do imports and <Image>s? -->
+<!--                 in other words, can we do it with ![](./image.png)?       -->
+
+<Image src={introGif} />
 
 Here’s a breakdown of what we’ll cover in each part:
 
@@ -14,7 +22,7 @@ Here’s a breakdown of what we’ll cover in each part:
 -   Part 2: allow the user to pick which table they want to show tasks from.
 -   Part 3: remember the user’s choices for which table they want to show tasks from.
 
-**We’ll assume you’ve already read [the setup guide](/packages/sdk/docs/setup.md).**
+**We’ll assume you’ve already read [the setup guide](/guides/setup).**
 
 Let’s get started!
 
@@ -27,7 +35,7 @@ of the existing tables.
 Open the blocks panel, click “Add a block”, then click “Build a block”. Follow the onscreen
 instructions to set up the block.
 
-![](/docs/src/pages/guides/tutorial_todo_2.gif)
+<Image src={setupGif} />
 
 Open `frontend/index.js` in your code editor and let’s start writing some code! It should look like
 this:
@@ -315,7 +323,7 @@ function Task({record}) {
 
 Congratulations on finishing Part 1! You should have a block that looks like this:
 
-![](/docs/src/pages/guides/tutorial_todo_3.png)
+<Image src={part1Complete} />
 
 ## Part 2
 
@@ -476,7 +484,7 @@ initializeBlock(() => <TodoBlock />);
 Now there should be a dropdown that lets you pick between different tables in the base (create a new
 table if you only have 1)!
 
-![](/docs/src/pages/guides/tutorial_todo_4.gif)
+<Image src={storingTableNameGif} />
 
 ### Using table ID instead of table name
 
@@ -622,7 +630,7 @@ There’s a bug in the changes we just made. Read-only and comment-only collabor
 to update globalConfig, so if they try changing the selected table our block will crash. You can try
 this out by clicking “Simulate,” then choosing “Read” or “Comment” from the dropdown:
 
-![](/docs/src/pages/guides/tutorial_todo_5.gif)
+<Image src={permissionsGif} />
 
 We could fix this by disabling the `TablePicker` if the user doesn’t have permission to change
 `globalConfig` by using `globalConfig.canSet()`.
