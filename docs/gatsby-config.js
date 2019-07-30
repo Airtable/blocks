@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     siteMetadata: {
         title: `Airtable Blocks developer docs`,
-        description: `TODO`,
+        description: `Guides, examples and API reference materials to help you develop Airtable blocks`,
         author: `Airtable`,
     },
     pathPrefix: '/blocks',
