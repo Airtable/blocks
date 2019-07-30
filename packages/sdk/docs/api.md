@@ -2116,8 +2116,7 @@ Do not instantiate. You can get instances of this class by calling `table.select
 ##### Parameters
 
 -   `sourceModel` **([Table][78] \| [View][74])**
--   `recordStore` **RecordStore**
--   `opts` **RecordQueryResultOpts?**
+-   `normalizedOpts` **NormalizedRecordQueryResultOpts**
 
 ##### fields
 
@@ -2150,7 +2149,7 @@ Do not instantiate. You can get instances of this class by calling
 
 -   `record` **[Record][76]**
 -   `field` **[Field][73]**
--   `opts` **RecordQueryResultOpts**
+-   `normalizedOpts` **NormalizedRecordQueryResultOpts**
 
 ##### fields
 
@@ -5449,7 +5448,7 @@ function Block() {
     const tableId = globalConfig.get('tableId');
     const table = base.getTableByIdIfExists(tableId);
     const viewId = globalConfig.get('viewId');
-    const view = view.getViewByIdIfExists(viewId);
+    const view = table.getViewByIdIfExists(viewId);
     const queryResult = view ? view.selectRecords() : null;
     const records = useRecords(queryResult);
     useWatchable(globalConfig, ['tableId', 'viewId']);
