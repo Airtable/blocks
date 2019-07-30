@@ -32,7 +32,6 @@ module.exports = {
                 path: path.join(__dirname, '..', 'packages', 'sdk', 'src'),
             },
         },
-        `gatsby-transformer-documentationjs`,
         `gatsby-transformer-sharp`,
         `gatsby-plugin-sharp`,
         {
