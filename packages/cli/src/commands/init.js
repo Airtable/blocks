@@ -126,6 +126,7 @@ async function initBlockAsync(
     // Create the block.json file.
     // TODO(richsinn): Add workflow to scaffold 'backend' routes with default files here.
     const blockJson: BlockJson = {
+        version: '1.0',
         frontendEntry: `./${SupportedTopLevelDirectoryNames.FRONTEND}/${DEFAULT_FRONTEND_ENTRY_NAME}.js`,
     };
     const writeBlockJsonPromise = fsUtils.writeFileAsync(

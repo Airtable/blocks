@@ -49,6 +49,7 @@ describe('BlockServer', function() {
                 apiKey: 'key123',
                 transpileAll: false,
                 blockJson: {
+                    version: '1.0',
                     frontendEntry: './frontend/index.js',
                 },
                 remoteJson: {
