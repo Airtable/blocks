@@ -4,6 +4,7 @@
         "packages": [
             "packages/*",
             "tools/*",
+            "examples/*",
             "docs"
         ],
         "nohoist": [
@@ -14,6 +15,8 @@
         "husky": "^3.0.0",
         "prettier": "^1.18.2",
         "pretty-quick": "^1.11.1",
+        "react": "16.9.0-alpha.0",
+        "react-dom": "16.9.0-alpha.0",
         "release-it": "^12.3.3"
     },
     "scripts": {

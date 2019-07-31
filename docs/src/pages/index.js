@@ -47,7 +47,7 @@ const IndexPage = () => (
 
         <ul>
             <li>
-                <a href="https://github.com/Airtable/blocks/tree/master/packages/sdk/examples/simple_chart">
+                <a href="https://github.com/Airtable/blocks/tree/master/examples/simple_chart">
                     Simple Chart
                 </a>{' '}
                 - Shows a bar <strong>chart</strong> of base data using the Chart.js{' '}
@@ -55,7 +55,7 @@ const IndexPage = () => (
             </li>
 
             <li>
-                <a href="https://github.com/Airtable/blocks/tree/master/packages/sdk/examples/todo">
+                <a href="https://github.com/Airtable/blocks/tree/master/examples/todo">
                     To Do List
                 </a>{' '}
                 - The code for the Todo List example from the guide above.

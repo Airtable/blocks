@@ -1,0 +1,13 @@
+{
+    "name": "@airtable-blocks-internal/example-todo-block",
+    "version": "0.0.0",
+    "private": true,
+    "dependencies": {
+        "@airtable/blocks": "*",
+        "react": "^16.8.0",
+        "react-dom": "^16.8.0"
+    },
+    "scripts": {
+        "test": "echo 'no tests'"
+    }
+}

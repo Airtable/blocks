@@ -10,8 +10,8 @@
 
 ## Example blocks
 
--   [To-do list](https://github.com/Airtable/blocks/tree/master/packages/sdk/examples/todo/frontend/index.js)
--   [Simple bar chart](https://github.com/Airtable/blocks/tree/master/packages/sdk/examples/simple_chart/frontend/index.js)
+-   [To-do list](https://github.com/Airtable/blocks/tree/master/examples/todo/frontend/index.js)
+-   [Simple bar chart](https://github.com/Airtable/blocks/tree/master/examples/simple_chart/frontend/index.js)
 
 ## API Reference
 
