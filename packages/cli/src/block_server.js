@@ -64,7 +64,7 @@ type BundleStateData = BundleStateReady | BundleStateBundling | BundleStateError
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
-const developmentBrowsers = [
+const developmentBrowsers: Array<string> = [
     'chrome 61', // Desktop (electron) app.
     'last 2 chrome versions',
     'last 2 firefox versions',
@@ -73,7 +73,12 @@ const developmentBrowsers = [
 ];
 
 // From https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable.
-const allSupportedBrowsers = ['firefox >= 29', 'chrome >= 32', 'safari >= 9', 'edge >= 13'];
+const allSupportedBrowsers: Array<string> = [
+    'firefox >= 29',
+    'chrome >= 32',
+    'safari >= 9',
+    'edge >= 13',
+];
 
 const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
