@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.26...HEAD)
 
-No changes.
+-   Change outputted `block init` copy text for cross system compatibility
+-   Remove some unused dependencies.
 
 ## [0.0.26](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.24...@airtable/blocks-cli@0.0.26) - 2019-07-29
 
