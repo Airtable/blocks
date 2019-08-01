@@ -1,4 +1,6 @@
 {
+    "name": "@airtable-blocks-internal/summary-example-block",
+    "version": "0.0.0",
     "private": true,
     "scripts": {
         "lint": "eslint frontend"

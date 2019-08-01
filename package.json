@@ -4,11 +4,10 @@
         "packages": [
             "packages/*",
             "tools/*",
-            "examples/*",
             "docs"
         ],
         "nohoist": [
-            "{@airtable,@airtable-blocks-internal}/*/*"
+            "{@airtable,@airtable-blocks-internal}/*/!(react|react-dom)"
         ]
     },
     "devDependencies": {
