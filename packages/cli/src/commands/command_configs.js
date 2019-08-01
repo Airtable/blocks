@@ -61,12 +61,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         description: 'Build and run a block',
         example: `block ${CommandNames.RUN}`,
         optionMap: {
-            ngrok: {
-                description: 'Run blocks through ngrok.io',
-                type: 'boolean',
-                hidden: true, // hide from --help output
-                default: false,
-            },
             'transpile-all': {
                 description:
                     'Transpile JS for all browsers airtable supports, rather than a minimal set for development',

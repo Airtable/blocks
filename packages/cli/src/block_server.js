@@ -484,8 +484,8 @@ class BlockServer {
             }),
         );
     }
-    async startAsync(port: number, ngrok: boolean): Promise<void> {
-        const url = ngrok ? await this.startNgrokAsync(port) : await this.startLocalAsync(port);
+    async startAsync(port: number): Promise<void> {
+        const url = await this.startLocalAsync(port);
         this._blockServerUrlIfExists = url;
         this.setPublicBaseUrl(url);
         await this.triggerBundleAsync();
@@ -496,23 +496,6 @@ class BlockServer {
         } catch (err) {
             // This can fail, especially on Linux. If it does, we don't really care.
         }
-    }
-    async startNgrokAsync(port: number): Promise<string> {
-        // Start our express server.
-        await new Promise((resolve, reject) => {
-            const expressServer = this._expressApp.listen(port);
-            invariant(expressServer, 'expressServer');
-            expressServer.on('error', reject).on('listening', resolve);
-        });
-        // Connect ngrok.
-        return await new Promise((resolve, reject) => {
-            require('ngrok').connect(port, (err, url) => {
-                if (err) {
-                    reject(err);
-                }
-                resolve(url);
-            });
-        });
     }
     async startLocalAsync(port: number): Promise<string> {
         // Read certs

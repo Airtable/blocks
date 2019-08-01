@@ -60,23 +60,15 @@ describe('BlockServer', function() {
             sinon
                 .stub(blockServer, 'startLocalAsync')
                 .callsFake(port => 'https://localhost:' + port);
-            sinon.stub(blockServer, 'startNgrokAsync').resolves('https://abc123.ngrok.io');
             sinon.stub(blockServer, 'triggerBundleAsync').resolves();
             sinon.stub(clipboardy, 'write').resolves();
         });
 
         it('copies the server URL to the clipboard in local mode', async function() {
-            await blockServer.startAsync(1234, false);
+            await blockServer.startAsync(1234);
 
             sinon.assert.calledOnce(clipboardy.write);
             sinon.assert.calledWithExactly(clipboardy.write, 'https://localhost:1234');
-        });
-
-        it('copies the server URL to the clipboard in Ngrok mode', async function() {
-            await blockServer.startAsync(1234, true);
-
-            sinon.assert.calledOnce(clipboardy.write);
-            sinon.assert.calledWithExactly(clipboardy.write, 'https://abc123.ngrok.io');
         });
     });
 });

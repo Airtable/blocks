@@ -50,7 +50,6 @@
         "inquirer": "^6.5.0",
         "invariant": "^2.2.4",
         "lodash": "^4.17.14",
-        "ngrok": "^2.2.24",
         "npm-package-arg": "^6.1.0",
         "path-to-regexp": "^2.2.1",
         "request": "^2.83.0",

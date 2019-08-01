@@ -12,9 +12,8 @@ import type {Argv} from 'yargs';
 const DEFAULT_PORT = 9000;
 
 async function runCommandAsync(argv: Argv): Promise<void> {
-    const {ngrok, transpileAll, sdkRepo} = argv;
+    const {transpileAll, sdkRepo} = argv;
     const remoteName = argv.remote || null;
-    invariant(typeof ngrok === 'boolean', 'expects ngrok to be a boolean');
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
     invariant(
         remoteName === null || typeof remoteName === 'string',
@@ -56,7 +55,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     while (true) {
         try {
             // Try starting the server on this port.
-            await blockServer.startAsync(port, ngrok);
+            await blockServer.startAsync(port);
 
             // Ran successfully, so break out of our loop.
             break;
