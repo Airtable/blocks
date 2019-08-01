@@ -61,7 +61,7 @@
         "user-agent-bag": "0.2.0",
         "watchify": "^3.9.0",
         "yargs": "^13.2.0",
-        "yarn": "^1.13.0"
+        "yarn": "^1.17.3"
     },
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
