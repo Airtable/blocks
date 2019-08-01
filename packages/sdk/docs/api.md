@@ -4164,15 +4164,14 @@ Type: [object][65]
 #### ColorPaletteProps
 
 Type: {color: [string][60]?, allowedColors: [Array][61]&lt;[string][60]>, onChange: function
-([string][60]): any?, squareSize: [number][66], squareMargin: [number][66], className: [string][60],
-style: [Object][65], disabled: [boolean][62]?}
+([string][60]): any?, squareMargin: [number][66], className: [string][60], style: [Object][65],
+disabled: [boolean][62]?}
 
 ##### Properties
 
 -   `color` **[string][60]?**
 -   `allowedColors` **[Array][61]&lt;[string][60]>**
 -   `onChange` **function ([string][60]): any?**
--   `squareSize` **[number][66]**
 -   `squareMargin` **[number][66]**
 -   `className` **[string][60]**
 -   `style` **[Object][65]**

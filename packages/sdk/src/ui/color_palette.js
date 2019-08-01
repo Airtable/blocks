@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
 import colorUtils from '../color_utils';
+import {invariant} from '../error_utils';
 import Icon from './icon';
+
+const MIN_COLOR_SQUARE_SIZE = 16;
+const DEFAULT_COLOR_SQUARE_SIZE = 24;
+const MAX_COLOR_SQUARE_SIZE = 32;
 
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
@@ -13,50 +18,80 @@ type ColorPaletteProps = {
     color?: string,
     allowedColors: Array<string>,
     onChange?: string => mixed,
-    squareSize: number,
     squareMargin: number,
     className: string,
     style: Object,
     disabled?: boolean,
 };
 
+type ColorPaletteState = {
+    squareSize: number,
+};
+
 /** */
-class ColorPalette extends React.Component<ColorPaletteProps> {
+class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState> {
     static propTypes = {
         color: PropTypes.string,
         allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
         onChange: PropTypes.func,
-        squareSize: PropTypes.number,
         squareMargin: PropTypes.number,
         className: PropTypes.string,
         style: PropTypes.object,
         disabled: PropTypes.bool,
     };
     static defaultProps = {
-        squareSize: 32,
         squareMargin: 4,
         className: '',
         style: {},
     };
+    _colorPaletteContainerRef: {current: HTMLDivElement | null} = React.createRef();
+    state = {
+        squareSize: DEFAULT_COLOR_SQUARE_SIZE,
+    };
+    componentDidMount() {
+        this._setColorSquareSize();
+    }
+    componentDidUpdate(prevProps: ColorPaletteProps) {
+        if (this.props.allowedColors.length !== prevProps.allowedColors.length) {
+            this._setColorSquareSize();
+        }
+    }
+    // Attempts to fit all `allowedColors` onto one line by adjusting color square size.
+    _setColorSquareSize() {
+        invariant(this._colorPaletteContainerRef.current, 'No container to set color square size');
+        // Calculates the size of each square required to fit `numSquares` squares on one line.
+        const calculateSquareSize = numSquares => {
+            return (containerWidth - this.props.squareMargin * 2 * numSquares) / numSquares;
+        };
+        const containerWidth = this._colorPaletteContainerRef.current.getBoundingClientRect().width;
+        const numColors = this.props.allowedColors.length;
+        const calculatedSquareSize = calculateSquareSize(numColors);
+        let squareSize;
+        // If we can't fit them all in one line, find the closest square size to the default that
+        // fills the row and let flexbox wrap the remainder
+        if (calculatedSquareSize < MIN_COLOR_SQUARE_SIZE) {
+            const numColorsThatWillFitAsDefaultSize = Math.round(
+                containerWidth / (DEFAULT_COLOR_SQUARE_SIZE + 2 * this.props.squareMargin),
+            );
+            squareSize = calculateSquareSize(numColorsThatWillFitAsDefaultSize);
+        } else {
+            squareSize = Math.min(MAX_COLOR_SQUARE_SIZE, calculatedSquareSize);
+        }
+        this.setState({squareSize});
+    }
     _onChange(color: string) {
         if (this.props.onChange) {
             this.props.onChange(color);
         }
     }
     render() {
-        const {
-            color,
-            allowedColors,
-            squareSize,
-            squareMargin,
-            className,
-            style,
-            disabled,
-        } = this.props;
+        const {color, allowedColors, squareMargin, className, style, disabled} = this.props;
+        const {squareSize} = this.state;
         return (
-            <div className={`${className} overflow-hidden`} style={{style}}>
+            <div className={`${className} overflow-hidden`} style={style}>
                 <div
                     className="flex flex-wrap"
+                    ref={this._colorPaletteContainerRef}
                     style={{
                         // Add a negative margin to offset the margin of each swatch,
                         // so the color swatches are flush with the outer container.
@@ -81,7 +116,7 @@ class ColorPalette extends React.Component<ColorPaletteProps> {
                             {allowedColor === color && (
                                 <Icon
                                     name="check"
-                                    size={25}
+                                    size={squareSize}
                                     className={
                                         colorUtils.shouldUseLightTextOnColor(allowedColor)
                                             ? 'text-white'
