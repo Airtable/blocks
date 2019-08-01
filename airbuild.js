@@ -2,7 +2,7 @@
 
 const airbuild = {
     nodejsVersion: '8.15.0',
-    yarnVersion: '1.13.0',
+    yarnVersion: '1.17.3',
     mysqlVersion: 'n/a',
     testCommand: 'yarn test && echo "RUN_ALL_TESTS PASSED"',
     environmentVariables: {
