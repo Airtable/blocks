@@ -12,7 +12,7 @@ type ChildProcessOptions = {|
 |};
 
 const _formatAndConsoleLogWithPrefix = (chunk: mixed, prefix: string): void => {
-    if (chunk === null || chunk === undefined || chunk === '') {
+    if (chunk === null || chunk === undefined || chunk.length === 0) {
         return undefined;
     }
 

@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-console */
+const os = require('os');
 const CommandNames = require('./command_names');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const configHelpers = require('../helpers/config_helpers');
@@ -98,6 +99,20 @@ async function _writeDefaultFrontendFilesAsync(blockDirPath: string): Promise<vo
         path.join(frontendDirPath, `${DEFAULT_FRONTEND_ENTRY_NAME}.js`),
         _getDefaultFrontendCode(blockDirPath),
     );
+}
+
+function _formatBlockRunMessage(blockDirPath: string): string {
+    let blockRunMessage;
+    if (os.platform() === 'win32') {
+        // In Windows, chaining commands differ between PowerShell and CMD.exe.
+        // There is neither a canonical nor simple way to detect if this process is being run in
+        // PowerShell or CMD.exe so we present a generic message for Windows.
+        blockRunMessage = chalk.bold(`cd ${blockDirPath}`) + ' then ' + chalk.bold('block run');
+    } else {
+        blockRunMessage = chalk.bold(`cd ${blockDirPath} && block run`);
+    }
+
+    return blockRunMessage;
 }
 
 async function initBlockAsync(
@@ -239,8 +254,8 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     console.log(
-        `✅ Your block is ready! ${chalk.bold(
-            'cd ' + blockDirPath + ' && block run',
+        `✅ Your block is ready! ${_formatBlockRunMessage(
+            blockDirPath,
         )} to start developing, and ${chalk.bold('npm run lint')} to lint.`,
     );
 }
