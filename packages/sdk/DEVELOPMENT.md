@@ -23,6 +23,7 @@ Run with `yarn <command>`.
 | `watch:docs`  | Runs `build:docs` in watch mode to re-copy files as the change                                                       |
 | `watch`       | Runs `build:clean`, then concurrently runs `watch:babel` and `watch:flow` to keep `dist` up to date as files change. |
 | `release`     | Creates a new version and publishes it to npm & the Airtable org on GitHub.                                          |
+| `storybook`   | Runs Storybook, which is a development environment for presentational UI components                                  |
 
 ## Versioning
 
