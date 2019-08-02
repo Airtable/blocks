@@ -159,6 +159,10 @@ toc:
             children:
                 - RecordCard
                 - RecordCardProps
+          - name: RecordCardList
+            children:
+                - RecordCardList
+                - RecordCardListProps
           - name: Select
             children:
                 - Select

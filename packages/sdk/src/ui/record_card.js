@@ -95,24 +95,39 @@ CellValueAndFieldLabel.propTypes = {
     width: PropTypes.number.isRequired,
 };
 
-/** @typedef */
-type RecordCardProps = {
+/**
+ * @typedef {object} RecordCardProps
+ * @property {Record} record Record to display in the card.
+ * @property {Array.<Field>} [fields] Fields to display in the card. The primary field is always displayed.
+ * @property {View} [view] The view model to use for field order and record coloring.
+ * @property {Field} [attachmentCoverField] Attachment field to display as an image in the square preview for the card. If omitted or not an attachment field, it uses for the first attachment field in `fields`. If `fields` is not defined, it uses the first attachment field in the view.
+ * @property {number} [width] Width of the record card.
+ * @property {number} [height] Height of the record card.
+ * @property {object} [expandRecordOptions] Options object for expanding a record.
+ * @property {Array.<Record>} [expandRecordOptions.records] List of all records, used for cycling through records in the same expanded record window.
+ * @property {function} [onClick] Click event handler for the record card. If undefined, uses default behavior to expand record. If null, no operation is performed.
+ * @property {function} [onMouseEnter] Mouse enter event handler for the record card.
+ * @property {function} [onMouseLeave] Mouse leave event handler for the record card.
+ * @property {string} [className] Additional class names to apply to the record card.
+ * @property {object} [style] Additional styles to apply to the record card.
+ */
+type RecordCardProps = {|
     record: Record | RecordDef,
     fields?: Array<Field>,
     view?: View,
     attachmentCoverField?: Field,
     width?: number,
     height?: number,
-    onClick?: Function,
-    getExpandRecordOptions?: Record => ExpandRecordOpts,
-    onMouseEnter?: mixed,
-    onMouseLeave?: mixed,
+    expandRecordOptions?: ExpandRecordOpts | null,
+    onClick?: ((SyntheticMouseEvent<>) => void) | null,
+    onMouseEnter?: ((SyntheticMouseEvent<>) => void) | null,
+    onMouseLeave?: ((SyntheticMouseEvent<>) => void) | null,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
 
     /** @private injected by withHooks */
     viewMetadata: ViewMetadataQueryResult | null,
-};
+|};
 
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
 const FormulaicFieldTypes = {
@@ -166,7 +181,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         // TODO: add all other mouse events: https://facebook.github.io/react/docs/events.html#mouse-events
         className: PropTypes.string,
         style: PropTypes.object,
-        getExpandRecordOptions: PropTypes.func,
+        expandRecordOptions: PropTypes.object,
     };
     static defaultProps = {
         width: 568,
@@ -231,9 +246,7 @@ class RecordCard extends React.Component<RecordCardProps> {
                     // No-op, let the <a> tag handle opening in new tab or window.
                 } else {
                     e.preventDefault();
-                    const opts = this.props.getExpandRecordOptions
-                        ? this.props.getExpandRecordOptions(recordModel)
-                        : {};
+                    const opts = this.props.expandRecordOptions || {};
                     expandRecord(recordModel, opts);
                 }
             }
@@ -244,7 +257,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         return attachmentField ? this._getFirstAttachmentInField(attachmentField) : null;
     }
     _getAttachmentField(fieldsToUse: Array<Field>): Field | null {
-        const {attachmentCoverField, fields} = this.props;
+        const {attachmentCoverField} = this.props;
 
         if (
             attachmentCoverField &&
@@ -252,7 +265,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             this._isAttachment(attachmentCoverField)
         ) {
             return attachmentCoverField;
-        } else if (attachmentCoverField === undefined && !fields) {
+        } else if (attachmentCoverField === undefined) {
             // The attachment field in this case is either coming from the view
             // if there is a view, or from the table's arbitrary field ordering
             // if there is no view.
