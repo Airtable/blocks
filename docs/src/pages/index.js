@@ -60,6 +60,13 @@ const IndexPage = () => (
                 </a>{' '}
                 - The code for the Todo List example from the guide above.
             </li>
+            <li>
+                <a href="https://github.com/Airtable/blocks/tree/master/examples/summary">
+                    Summary
+                </a>{' '}
+                - Uses the <strong>built-in summary functions</strong> (average, max etc.) on a
+                table field.
+            </li>
         </ul>
     </Layout>
 );
