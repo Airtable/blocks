@@ -1,5 +1,5 @@
 {
-    "extends": "./.eslintrc.json",
+    "extends": "./.eslintrc.js",
     "rules": {
         "no-unused-expressions": "off",
         "react/react-in-jsx-scope": "off",
