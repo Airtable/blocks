@@ -164,3 +164,47 @@ export function clamp(n: number, lowerBound: number, upperBound: number): number
         return n;
     }
 }
+
+type ReadOnlyDeepArray<T> = $ReadOnlyArray<T | ReadOnlyDeepArray<T>>;
+
+/**
+ * @private
+ */
+export function flattenDeep<T>(array: ReadOnlyDeepArray<T>): Array<T> {
+    // $FlowFixMe our version of flow doesn't include a definition for Array.flat yet
+    return array.flat(Infinity);
+}
+
+// For cases where the object keys aren't strings, it's the consumer's reponsibility
+// to convert them to strings in getKey, e.g. keyBy(collection, o => String(o.id))
+/**
+ * @private
+ */
+export function keyBy<Item, Key: string>(
+    array: $ReadOnlyArray<Item>,
+    getKey: Item => Key,
+): {[Key]: Item} {
+    const result = {};
+    for (const item of array) {
+        result[getKey(item)] = item;
+    }
+    return result;
+}
+
+/**
+ * @private
+ */
+export function uniqBy<Item, Key>(array: $ReadOnlyArray<Item>, getKey: Item => Key): Array<Item> {
+    const usedKeys = new Set();
+    const result = [];
+
+    for (const item of array) {
+        const key = getKey(item);
+        if (!usedKeys.has(key)) {
+            result.push(item);
+            usedKeys.add(key);
+        }
+    }
+
+    return result;
+}

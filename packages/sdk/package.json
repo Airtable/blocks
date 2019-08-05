@@ -75,6 +75,8 @@
         "@babel/runtime": "^7.4.4",
         "classnames": "2.2.6",
         "core-js": "^3.0.1",
+        "fast-deep-equal": "^2.0.1",
+        "lodash.omit": "^4.5.0",
         "prop-types": "15.7.2"
     },
     "peerDependencies": {

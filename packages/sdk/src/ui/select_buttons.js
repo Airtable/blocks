@@ -1,6 +1,7 @@
 // @flow
 import classNames from 'classnames';
 import * as React from 'react';
+import omit from 'lodash.omit';
 import {spawnError} from '../error_utils';
 
 // Disable the "react/prop-types" rule in this file, since it doesn't support this
@@ -15,7 +16,6 @@ import {
     type SelectAndSelectButtonsProps,
 } from './select_and_select_buttons_helpers';
 
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 /** @typedef */
@@ -49,7 +49,8 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
             throw spawnError('<SelectButtons> %s', validationResult.reason);
         }
 
-        const restOfProps = u.omit(this.props, Object.keys(SelectButtons.propTypes));
+        // TODO (stephen): remove restOfProps
+        const restOfProps = omit(this.props, Object.keys(SelectButtons.propTypes));
 
         return (
             <div

@@ -1,10 +1,10 @@
 // @flow
 import PropTypes from 'prop-types'; // TODO(kasra): don't depend on liveapp components.
 import * as React from 'react';
+import isEqual from 'fast-deep-equal';
 import {has} from '../private_utils';
 import getSdk from '../get_sdk';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
@@ -74,7 +74,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     let userName;
     let profilePicUrl;
     let isActive;
-    if (userObj !== null && u.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    if (userObj !== null && isEqual(collaborator, userObjFormattedForPublicApiV2)) {
         // Since the object we got passed and the formatted v2 obj are the same, we can just use
         // the private obj and our helpers. We do this so that we can use sized prof pic urls
         // and name helper functions that we couldn't otherwise use.

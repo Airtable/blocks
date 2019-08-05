@@ -2,9 +2,8 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
+import omit from 'lodash.omit';
 import {invariant} from '../error_utils';
-
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 /**
  * @type {object}
@@ -133,7 +132,8 @@ class Input extends React.Component<InputProps> {
             ? 'styled-input rounded p1 darken1 text-dark normal'
             : '';
 
-        const restOfProps = u.omit(this.props, Object.keys(Input.propTypes));
+        // TODO (stephen): remove restOfProps
+        const restOfProps = omit(this.props, Object.keys(Input.propTypes));
 
         return (
             <input
