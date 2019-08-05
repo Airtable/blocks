@@ -36,7 +36,7 @@
         "develop": "gatsby develop",
         "start": "npm run develop",
         "serve": "gatsby serve",
-        "release": "../bin/check-repo-for-release && gatsby build --prefix-paths && gh-pages --dist public --message 'Update docs' --remote public",
+        "release": "./bin/release.sh",
         "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
     }
 }
