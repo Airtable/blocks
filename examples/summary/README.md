@@ -1,16 +1,7 @@
 # Summary block
 
-This example block lets the user pick a table (e.g. Opportunities), a field (e.g. Estimated Value)
-and a function to use to summarize that field (e.g. max).
-
-The code shows how to use the built-in summary functions like average, max etc. to summarize a table
-field.
-
-It also includes examples of:
-
--   Using the built-in components to let users choose a table or field.
-
--   Using the built-in `Select` component to let the user choose from a custom set of options.
+This example block displays many different summaries of a table field. For example: max, min,
+average, etc. It does this by using Airtable's built-in summary functions.
 
 ## How to run this block
 

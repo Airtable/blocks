@@ -1,11 +1,4 @@
-import {
-    initializeBlock,
-    useBase,
-    useRecords,
-    TablePicker,
-    FieldPicker,
-    Select,
-} from '@airtable/blocks/ui';
+import {initializeBlock, useBase, useRecords} from '@airtable/blocks/ui';
 import React, {useState} from 'react';
 
 const TABLE_NAME = 'Opportunities';
