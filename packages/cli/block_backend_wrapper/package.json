@@ -3,9 +3,16 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "@babel/polyfill": "^7.4.4",
         "invariant": "2.2.2",
         "path-to-regexp": "2.0.0",
-        "regenerator-runtime": "0.11.0",
         "request": "2.87.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.2.3",
+        "@babel/core": "^7.4.0",
+        "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+        "@babel/plugin-transform-flow-strip-types": "^7.4.4",
+        "@babel/preset-env": "^7.4.2"
     }
 }

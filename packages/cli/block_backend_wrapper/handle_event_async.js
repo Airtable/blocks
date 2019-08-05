@@ -7,7 +7,6 @@ const BackendBlockSdkWrapper = require('./block_backend_sdk');
 
 // flow-disable-next-line since the routes file will be written as part of the build process.
 const routes = require('./routes.json');
-const getDeveloperCredentialByName = require('./get_developer_credential_by_name');
 const request = require('request');
 
 import type {LambdaEvent} from './backend';
@@ -127,7 +126,6 @@ function getRouteAndParamsForEvent(
     };
 }
 
-const developerCredentialByName = getDeveloperCredentialByName();
 const sdkWrapperInstance = new BackendBlockSdkWrapper();
 
 async function callUserCodeForEventAsync(event: LambdaEvent): Promise<HandlerResponseObj> {
@@ -155,7 +153,7 @@ async function callUserCodeForEventAsync(event: LambdaEvent): Promise<HandlerRes
             global[GLOBAL_SDK_VARIABLE_NAME] = sdkWrapperInstance;
         }
 
-        await sdkWrapperInstance.__initializeSdkForEventAsync(event, developerCredentialByName);
+        await sdkWrapperInstance.__initializeSdkForEventAsync(event);
 
         // flow-disable-next-line since this will be written as part of the build process.
         const routeHandlerModule = require('../user/routes/' + route.metadata.name);

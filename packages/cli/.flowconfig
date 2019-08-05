@@ -3,8 +3,6 @@
 .*/(transpiled)/*
 # Watchify has a Flow error we don't care about.
 <PROJECT_ROOT>/node_modules/watchify/
-# TODO(Chuan): Remove this in the next diff.
-<PROJECT_ROOT>/block_backend_wrapper/
 
 [include]
 

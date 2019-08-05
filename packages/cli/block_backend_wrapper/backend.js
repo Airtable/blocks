@@ -1,6 +1,6 @@
 // @flow
 
-/*
+/**
  * IMPORTANT **********
  * This file (and all of the contents of this folder) is *very* different from other
  * parts of the codebase. This is the wrapper code used in deployed backend blocks.
@@ -14,8 +14,7 @@
  * since regenerator runtime will not be defined.
  */
 
-// The way the SDK gets bundled requires `regeneratorRuntime` to be on the global object.
-global.regeneratorRuntime = require('regenerator-runtime/runtime');
+require('@babel/polyfill');
 
 // This is sketchy: some runtime checks for "am I running in Node" check that
 // typeof self === 'undefined', so this breaks that...

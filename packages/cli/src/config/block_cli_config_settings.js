@@ -1,6 +1,9 @@
 // @flow
+const path = require('path');
 const UserAgentBag = require('user-agent-bag');
-const packageJson = require('../../package.json');
+const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
+// flow-disable-next-line
+const packageJson = require(path.join(getBlocksCliProjectRootPath(), 'package.json'));
 
 module.exports = {
     // The name of the blocks sdk.

@@ -1,9 +1,8 @@
 {
-    "presets": ["es2015", "react", "stage-3"],
+    "presets": ["@babel/preset-env"],
     "plugins": [
-        "transform-flow-strip-types",
-        "transform-object-rest-spread",
-        "transform-class-properties"
+        "@babel/plugin-transform-flow-strip-types",
+        "@babel/plugin-proposal-object-rest-spread",
     ],
     "retainLines": true
 }
