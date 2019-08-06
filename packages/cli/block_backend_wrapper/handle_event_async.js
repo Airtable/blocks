@@ -5,11 +5,13 @@ const pathToRegexp = require('path-to-regexp');
 // flow-disable-next-line since the sdk file will be written as part of the build process.
 const BackendBlockSdkWrapper = require('./block_backend_sdk');
 
-// flow-disable-next-line since the routes file will be written as part of the build process.
-const routes = require('./routes.json');
-const request = require('request');
-
 import type {LambdaEvent} from './backend';
+import type {BackendRoute, BlockJson} from './types/block_json_type';
+
+// TODO(Chuan): Make this an argument / option to allow easier unit testing.
+// flow-disable-next-line since the block.json file will be written as part of the build process.
+const blockJson: BlockJson = require('./block.json');
+const request = require('request');
 
 type HandlerResponseObj = {
     statusCode?: number,
@@ -92,15 +94,13 @@ function wrapConsole(originalConsole, logStream) {
 function getRouteAndParamsForEvent(
     event: LambdaEvent,
 ): {
-    route: Object,
+    route: BackendRoute,
     params: {[string]: string},
 } | null {
-    let matchedRouteIdAndParams = null;
-    for (const routeId of Object.keys(routes)) {
-        const route = routes[routeId];
-        if (route.metadata.method.toLowerCase() === event.method.toLowerCase()) {
+    for (const route of blockJson.routes || []) {
+        if (route.methods.find(method => method.toLowerCase() === event.method.toLowerCase())) {
             const keys = [];
-            const re = pathToRegexp(route.metadata.urlPath, keys);
+            const re = pathToRegexp(route.urlPath, keys);
             const match = re.exec(event.path);
             if (match) {
                 const params = keys.reduce((result, key, index) => {
@@ -108,22 +108,14 @@ function getRouteAndParamsForEvent(
                     result[key.name] = param;
                     return result;
                 }, {});
-                matchedRouteIdAndParams = {
-                    routeId,
+                return {
+                    route,
                     params,
                 };
-                break;
             }
         }
     }
-    if (!matchedRouteIdAndParams) {
-        return null;
-    }
-    const route = routes[matchedRouteIdAndParams.routeId];
-    return {
-        route,
-        params: matchedRouteIdAndParams.params,
-    };
+    return null;
 }
 
 const sdkWrapperInstance = new BackendBlockSdkWrapper();
@@ -156,17 +148,15 @@ async function callUserCodeForEventAsync(event: LambdaEvent): Promise<HandlerRes
         await sdkWrapperInstance.__initializeSdkForEventAsync(event);
 
         // flow-disable-next-line since this will be written as part of the build process.
-        const routeHandlerModule = require('../user/routes/' + route.metadata.name);
+        const routeHandlerModule = require('../user/routes/' + route.handler);
         if (!routeHandlerModule) {
-            throw new Error(`Route module not found: ${route.metadata.name}`);
+            throw new Error(`Route module not found: ${route.handler}`);
         }
         if (
             typeof routeHandlerModule !== 'object' ||
             typeof routeHandlerModule.default !== 'function'
         ) {
-            throw new Error(
-                `Route module's default export must be a function: ${route.metadata.name}`,
-            );
+            throw new Error(`Route module's default export must be a function: ${route.handler}`);
         }
 
         const handler = routeHandlerModule.default;

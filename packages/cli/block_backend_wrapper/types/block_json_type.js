@@ -2,7 +2,7 @@
 
 type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-type BackendRoute = {|
+export type BackendRoute = {|
     // The URL path pattern to handle.
     urlPath: string,
 

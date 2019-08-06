@@ -26,7 +26,7 @@ const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_ro
 const clipboardy = require('clipboardy');
 
 import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
-import type {BlockJson} from './types/block_json_type';
+import type {BlockJson} from '../block_backend_wrapper/types/block_json_type';
 import type {RemoteJson} from './types/remote_json_type';
 import type {ErrorCode} from './types/error_codes';
 
