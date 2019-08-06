@@ -16,7 +16,8 @@ function SEO({description, lang, meta, title}) {
             query {
                 site {
                     siteMetadata {
-                        title
+                        titleFirst
+                        titleSecond
                         description
                         author
                     }
@@ -27,13 +28,21 @@ function SEO({description, lang, meta, title}) {
 
     const metaDescription = description || site.siteMetadata.description;
 
+    const combinedTitle = `${site.siteMetadata.titleFirst} ${site.siteMetadata.titleSecond}`;
+
     return (
         <Helmet
             htmlAttributes={{
                 lang,
             }}
-            title={title}
-            titleTemplate={`%s | ${site.siteMetadata.title}`}
+            titleTemplate={`%s | ${combinedTitle}`}
+            defaultTitle={combinedTitle}
+            htmlAttributes={{
+                class: 'baymax dev-site-html',
+            }}
+            bodyAttributes={{
+                class: 'baymax dev-site-body',
+            }}
             meta={[
                 {
                     name: `description`,

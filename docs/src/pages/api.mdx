@@ -1,62 +1,137 @@
 <!-- NOTE(evanhahn) This file is a manually edited version of the Markdown-generated -->
 <!--                docs we use elsewhere. Soon, we'll use GraphQL instead of this.  -->
 
-### Table of Contents
+import slug from 'slug';
+import classNames from 'classnames';
+import plusSvg from '../images/plus.svg';
 
--   [@airtable/blocks][1]
-    -   [SDK][2]
-    -   [GlobalConfig][3]
-    -   [settingsButton][4]
-    -   [Viewport][5]
--   [@airtable/blocks/models][6]
-    -   [fieldTypes][7]
-    -   [generateGuid][8]
-    -   [viewTypes][9]
-    -   [recordColoring][10]
-    -   [AbstractModel][11]
-    -   [AbstractModelWithAsyncData][12]
-    -   [Aggregator][13]
-    -   [Base][14]
-    -   [Session][15]
-    -   [Cursor][16]
-    -   [Field][17]
-    -   [RecordQueryResult][18]
-    -   [Record][19]
-    -   [Table][20]
-    -   [View][21]
-    -   [ViewMetadataQueryResult][22]
-    -   [Watchable][23]
--   [@airtable/blocks/ui][24]
-    -   [initializeBlock][25]
-    -   [CSS & external scripts][26]
-    -   [Color utilities][27]
-    -   [React hooks for working with Airtable data][28]
-    -   [expandRecord][29]
-    -   [expandRecordList][30]
-    -   [expandRecordPickerAsync][31]
-    -   [AutocompletePopover][32]
-    -   [Button][33]
-    -   [CellRenderer][34]
-    -   [ChoiceToken][35]
-    -   [CollaboratorToken][36]
-    -   [ColorPalette][37]
-    -   [ConfirmationDialog][38]
-    -   [Dialog][39]
-    -   [FieldPicker][40]
-    -   [Icon][41]
-    -   [Input][42]
-    -   [Link][43]
-    -   [Loader][44]
-    -   [Popover][45]
-    -   [ProgressBar][46]
-    -   [RecordCard][47]
-    -   [Select][48]
-    -   [SelectButtons][49]
-    -   [TablePicker][50]
-    -   [Toggle][51]
-    -   [Tooltip][52]
-    -   [ViewPicker][53]
-    -   [ViewportConstraint][54]
+export const links = [
+    {
+        title: '@airtable/blocks',
+        children: ['SDK', 'GlobalConfig', 'settingsButton', 'Viewport'],
+    },
+    {
+        title: '@airtable/blocks/models',
+        children: [
+            'fieldTypes',
+            'generateGuid',
+            'viewTypes',
+            'recordColoring',
+            'AbstractModel',
+            'AbstractModelWithAsyncData',
+            'Aggregator',
+            'Base',
+            'Session',
+            'Cursor',
+            'Field',
+            'RecordQueryResult',
+            'Record',
+            'Table',
+            'View',
+            'ViewMetadataQueryResult',
+            'Watchable',
+        ],
+    },
+    {
+        title: '@airtable/blocks/ui',
+        children: [
+            'initializeBlock',
+            'CSS & external scripts',
+            'Color utilities',
+            'React hooks for working with Airtable data',
+            'expandRecord',
+            'expandRecordList',
+            'expandRecordPickerAsync',
+            'AutocompletePopover',
+            'Button',
+            'CellRenderer',
+            'ChoiceToken',
+            'CollaboratorToken',
+            'ColorPalette',
+            'ConfirmationDialog',
+            'Dialog',
+            'FieldPicker',
+            'Icon',
+            'Input',
+            'Link',
+            'Loader',
+            'Popover',
+            'ProgressBar',
+            'RecordCard',
+            'Select',
+            'SelectButtons',
+            'TablePicker',
+            'Toggle',
+            'Tooltip',
+            'ViewPicker',
+            'ViewportConstraint',
+        ],
+    },
+];
+
+export class TableOfContents extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isExpanded: false,
+        };
+    }
+    handleHeadlineClick() {
+        this.setState({isExpanded: !this.state.isExpanded});
+    }
+    render() {
+        {
+            /* todo(kyleribant): perhaps turn this into a detail element */
+        }
+        const {isExpanded} = this.state;
+        const expanderListClassNames = classNames('list-style-none m0 table-of-contents__list', {
+            'table-of-contents__list--expanded': isExpanded,
+        });
+        const expanderIconClassNames = classNames('icon icon-plus', {
+            'icon-plus--rotated': isExpanded,
+        });
+        return (
+            <div className="table-of-contents col-10 sm-col-8 lg-col-6 white stroked rounded-big p2">
+                <div
+                    onClick={this.handleHeadlineClick.bind(this)}
+                    className="display pointer big h3 m0 flex justify-between items-center width-full no-outline table-of-contents__headline"
+                >
+                    Table of Contents
+                    <img src={plusSvg} className={expanderIconClassNames} />
+                </div>
+                <ul className={expanderListClassNames}>
+                    {links.map((linkGroup, i) => {
+                        return (
+                            <li key={i}>
+                                <a href={`#${slug(linkGroup.title, {lower: true})}`}>
+                                    {linkGroup.title}
+                                </a>
+                                <ul className="list-style-none p0">
+                                    {linkGroup.children.map((childLink, j) => {
+                                        return (
+                                            <li key={j}>
+                                                <a
+                                                    href={`#${slug(childLink, {lower: true})}`}
+                                                    className="text-gray"
+                                                >
+                                                    {childLink}
+                                                </a>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+        );
+    }
+}
+
+<TableOfContents />
+
+<div className="spacer" />
 
 ## @airtable/blocks
 

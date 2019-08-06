@@ -13,9 +13,13 @@ import omit from 'lodash/omit';
 import * as slug from 'slug';
 import isString from 'lodash/isString';
 
+import SEO from './seo';
 import Header from './header';
 import LinkFromMarkdown from './link_from_markdown';
-import './layout.css';
+
+import './type.css';
+import './helpers.css';
+import './custom.css';
 
 function makeAnchoredHeader(type) {
     return function AnchoredHeader(props) {
@@ -36,45 +40,48 @@ const Layout = ({children}) => {
         query SiteTitleQuery {
             site {
                 siteMetadata {
-                    title
+                    titleFirst
+                    titleSecond
                 }
             }
         }
     `);
 
+    const {titleFirst, titleSecond} = data.site.siteMetadata;
+
     return (
         <>
-            <Header siteTitle={data.site.siteMetadata.title} />
-            <div
-                style={{
-                    margin: `0 auto`,
-                    maxWidth: 960,
-                    padding: `0px 1.0875rem 1.45rem`,
-                    paddingTop: 0,
-                }}
-            >
-                <main>
-                    <MDXProvider
-                        components={{
-                            h1: makeAnchoredHeader('h1'),
-                            h2: makeAnchoredHeader('h2'),
-                            h3: makeAnchoredHeader('h3'),
-                            h4: makeAnchoredHeader('h4'),
-                            a: LinkFromMarkdown,
-                        }}
-                    >
-                        {children}
-                    </MDXProvider>
-                </main>
-            </div>
-            <footer
-                style={{
-                    padding: `1.45rem 0`,
-                    borderTop: `1px solid #eee`,
-                    textAlign: 'center',
-                }}
-            >
-                © Airtable {new Date().getFullYear()}
+            {/* todo(kyleribant): pipe in specific page titles */}
+            <SEO title={`${titleFirst} ${titleSecond}`} />
+
+            <Header titleFirst={titleFirst} titleSecond={titleSecond} />
+
+            <main className="col-12 sm-col-10 lg-col-6 mx-auto xs-px3 display main">
+                <MDXProvider
+                    components={{
+                        h1: makeAnchoredHeader('h1'),
+                        h2: makeAnchoredHeader('h2'),
+                        h3: makeAnchoredHeader('h3'),
+                        h4: makeAnchoredHeader('h4'),
+                        a: LinkFromMarkdown,
+                    }}
+                >
+                    {children}
+                </MDXProvider>
+            </main>
+
+            <footer className="footer white stroked col-12">
+                <div className="mx-auto max-width-4 pb2 pt2 col-12 flex px3 big display h5 flex justify-between items-center">
+                    <div>
+                        <p className="mb-half">Need help or have feedback?</p>
+
+                        <a href="mailto:blocks@airtable.com" className="text-blue">
+                            blocks@airtable.com
+                        </a>
+                    </div>
+
+                    <p className="mb0">© Airtable {new Date().getFullYear()}</p>
+                </div>
             </footer>
         </>
     );

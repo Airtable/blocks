@@ -2,12 +2,9 @@ import React from 'react';
 import {Link} from 'gatsby';
 
 import Layout from '../components/layout';
-import SEO from '../components/seo';
 
 const IndexPage = () => (
     <Layout>
-        <SEO title="Home" />
-
         <h1>Hello, Blocks developer!</h1>
         <p>
             Thanks for participating in the developer preview of the Airtable Blocks platform!

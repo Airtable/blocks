@@ -11,54 +11,49 @@ const HeaderLink = ({to, children}) => (
             padding: 0,
         }}
     >
-        {to.startsWith('https://') ? <a href={to}>{children}</a> : <Link to={to}>{children}</Link>}
+        {to.startsWith('https://') ? (
+            <a href={to} className="quiet link-unquiet">
+                {children}
+            </a>
+        ) : (
+            <Link to={to} className="quiet link-unquiet">
+                {children}
+            </Link>
+        )}
     </li>
 );
 
-const Header = ({siteTitle}) => (
-    <header
-        style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
-            marginBottom: `1.45rem`,
-            borderBottom: `1px solid #eee`,
-        }}
-    >
-        <h1
+const HeaderLogo = ({titleFirst, titleSecond}) => (
+    <div className="logo">
+        <Link
+            to="/"
             style={{
-                display: 'flex',
-                flex: '1',
-                height: '100%',
-                alignItems: 'center',
-                margin: 0,
+                color: 'black',
+                textDecoration: `none`,
             }}
+            className="flex items-center"
         >
-            {/* TODO(evanhahn): this img should be clickable as part of the link */}
             <img
                 src={blocksSvg}
                 style={{
                     margin: 0,
-                    padding: '1rem',
-                    width: '2em',
+                    width: '2.5rem',
                 }}
-                alt=""
             />
-            <Link
-                to="/"
-                style={{
-                    color: 'black',
-                    textDecoration: `none`,
-                }}
-            >
-                {siteTitle}
-            </Link>
-        </h1>
-        <div
-            style={{
-                paddingRight: '1rem',
-            }}
-        >
+
+            <span className="flex flex-column ml2">
+                <span className="display huge h3 strong">{titleFirst}</span>
+                <span className="monospace big h5">{titleSecond}</span>
+            </span>
+        </Link>
+    </div>
+);
+
+const Header = ({titleFirst, titleSecond}) => (
+    <header className="white stroked display px3 col-12">
+        <div className="flex items-center mx-auto justify-between max-width-4 pt2 pb2">
+            <HeaderLogo titleFirst={titleFirst} titleSecond={titleSecond} />
+
             <ul
                 style={{
                     display: 'flex',
@@ -68,22 +63,29 @@ const Header = ({siteTitle}) => (
                     padding: 0,
                     listStyleType: 'none',
                 }}
+                className="big h5"
             >
                 <HeaderLink to="/guides">Guides</HeaderLink>
-                <HeaderLink to="/#examples">Examples</HeaderLink>
-                <HeaderLink to="/api">API reference</HeaderLink>
-                <HeaderLink to="https://airtable.com">Back to Airtable</HeaderLink>
+                <HeaderLink to="/api">API</HeaderLink>
+                <a
+                    href="https://airtable.com"
+                    className="rounded-big py1 px2 flex items-center strong link-quiet blue text-white ml2 xs-hide sm-hide"
+                >
+                    Back to Airtable
+                </a>
             </ul>
         </div>
     </header>
 );
 
 Header.propTypes = {
-    siteTitle: PropTypes.string,
+    titleFirst: PropTypes.string,
+    titleSecond: PropTypes.string,
 };
 
 Header.defaultProps = {
-    siteTitle: ``,
+    titleFirst: ``,
+    titleSecond: ``,
 };
 
 export default Header;
