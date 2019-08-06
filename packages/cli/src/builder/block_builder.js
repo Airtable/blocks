@@ -14,7 +14,7 @@ const browserify = require('browserify');
 const {promisify} = require('util');
 const Terser = require('terser');
 
-import type {BlockJson} from '../../block_backend_wrapper/types/block_json_type';
+import type {BlockJson} from '../types/block_json_type';
 
 type BuildStepSuccess<+R> = {|success: true, +value: R|};
 type BuildStepFailure = {|success: false, error: Error|};

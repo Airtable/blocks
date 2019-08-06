@@ -16,7 +16,7 @@ const invariant = require('invariant');
 const {camelCase, upperFirst} = require('lodash');
 
 import type {Argv} from 'yargs';
-import type {BlockJson} from '../../block_backend_wrapper/types/block_json_type';
+import type {BlockJson} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 
 const DEFAULT_FRONTEND_ENTRY_NAME = 'index';

@@ -1,5 +1,5 @@
 {
-    "name": "block_backend_wrapper",
+    "name": "@airtable/blocks-backend-wrapper",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
