@@ -23,7 +23,8 @@
         "/README.md",
         "/bin/block",
         "/keys/",
-        "/transpiled/"
+        "/transpiled/",
+        "/block_backend_wrapper/package.json"
     ],
     "dependencies": {
         "@airtable/eslint-plugin-blocks": "^1.0.2",
@@ -36,6 +37,7 @@
         "@babel/preset-react": "^7.0.0",
         "archiver": "2.0.0",
         "babelify": "^10.0.0",
+        "block_backend_wrapper": "file:block_backend_wrapper",
         "body-parser": "^1.18.3",
         "browserify": "^14.5.0",
         "chalk": "^2.4.1",
