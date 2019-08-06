@@ -28,8 +28,15 @@
         "slug": "^1.1.0"
     },
     "devDependencies": {
+        "babel-jest": "^24.8.0",
+        "babel-preset-gatsby": "^0.2.8",
+        "enzyme": "^3.10.0",
+        "enzyme-adapter-react-16": "^1.14.0",
         "gh-pages": "^2.0.1",
-        "prettier": "^1.18.2"
+        "identity-obj-proxy": "^3.0.0",
+        "jest": "^24.8.0",
+        "prettier": "^1.18.2",
+        "react-test-renderer": "^16.8.6"
     },
     "scripts": {
         "build": "gatsby build",
@@ -37,6 +44,6 @@
         "start": "npm run develop",
         "serve": "gatsby serve",
         "release": "./bin/release.sh",
-        "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+        "test": "jest"
     }
 }

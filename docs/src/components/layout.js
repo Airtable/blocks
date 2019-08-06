@@ -14,7 +14,7 @@ import * as slug from 'slug';
 import isString from 'lodash/isString';
 
 import Header from './header';
-import TagForMarkdownLink from './tag_for_markdown_link';
+import LinkFromMarkdown from './link_from_markdown';
 import './layout.css';
 
 function makeAnchoredHeader(type) {
@@ -60,7 +60,7 @@ const Layout = ({children}) => {
                             h2: makeAnchoredHeader('h2'),
                             h3: makeAnchoredHeader('h3'),
                             h4: makeAnchoredHeader('h4'),
-                            a: TagForMarkdownLink,
+                            a: LinkFromMarkdown,
                         }}
                     >
                         {children}
