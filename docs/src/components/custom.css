@@ -150,7 +150,7 @@ these styles should be scoped to the TOC component in api.mdx.
     right: 0;
     margin: auto;
     top: 8rem;
-    overflow: scroll;
+    overflow-y: scroll;
     max-height: 80vh;
 }
 
