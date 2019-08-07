@@ -34,8 +34,15 @@ the Gatsby site.
 
 -   Follow the instructions for building the api.md docs (see above).
 
--   Copy the file at `packages/sdk/docs/api.md` to `docs/src/pages/api.mdx`. (Note the `x` at the
-    end of the path to copy to.)
+-   You'll be porting a few changes from `packages/sdk/docs/api.md` to `docs/src/pages/api.mdx`.
+
+    -   Update `api.mdx` so the entries in the React table of contents at the top are the same as
+        the entries in the table of contents in `api.md`.
+
+    -   Copy the section of the `api.md` document between the first `##` after the TOC and the end
+        of the whole document. Delete the section of the `api.mdx` document between the first `##`
+        and the end of the whole document. Paste your copied text in to replace what you just
+        deleted.
 
 -   Because of a probable bug in the way `api.md` is built, a few of the intra-page anchor links
     will be broken. Find them by running the Gatsby site locally, navigating to `/api` and running
