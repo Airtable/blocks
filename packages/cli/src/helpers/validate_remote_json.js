@@ -11,7 +11,8 @@ function validateRemoteJson(remoteJson: mixed): ValidationResult {
         remoteJson instanceof Object &&
         typeof remoteJson.blockId === 'string' &&
         typeof remoteJson.baseId === 'string' &&
-        (remoteJson.server === undefined || typeof remoteJson.server === 'string')
+        (remoteJson.server === undefined || typeof remoteJson.server === 'string') &&
+        (remoteJson.apiKeyName === undefined || typeof remoteJson.apiKeyName === 'string')
     ) {
         return {pass: true};
     }

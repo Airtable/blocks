@@ -3,4 +3,5 @@ export type RemoteJson = {|
     blockId: string,
     baseId: string,
     server?: string,
+    apiKeyName?: string,
 |};

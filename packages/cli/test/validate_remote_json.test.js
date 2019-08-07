@@ -20,6 +20,15 @@ describe('validateRemoteJson', () => {
         assert.strictEqual(validationResult.pass, true);
     });
 
+    it('passes for a valid remote with a apiKeyName specified', function() {
+        const validationResult = validateRemoteJson({
+            blockId: 'blk00000000000000',
+            baseId: 'app00000000000000',
+            apiKeyName: 'some-api-key',
+        });
+        assert.strictEqual(validationResult.pass, true);
+    });
+
     it('fails for invalid remotes', function() {
         const testCases = [
             null,
@@ -38,6 +47,11 @@ describe('validateRemoteJson', () => {
                 blockId: 'blk00000000000000',
                 baseId: 'app00000000000000',
                 server: 12, // invalid server
+            },
+            {
+                blockId: 'blk00000000000000',
+                baseId: 'app00000000000000',
+                apiKeyName: 12, // invalid apiKeyName
             },
         ];
         for (const testCase of testCases) {
