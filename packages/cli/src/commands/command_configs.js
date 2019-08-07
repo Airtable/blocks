@@ -1,6 +1,6 @@
 // @flow
 const CommandNames = require('./command_names');
-const {ConfigLocations} = require('../helpers/config_helpers');
+const {ConfigLocations} = require('../types/config_helpers_type');
 const path = require('path');
 const _ = require('lodash');
 
@@ -106,6 +106,11 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 description: 'Which config file to update: user or block scoped',
                 choices: _.values(ConfigLocations),
                 default: ConfigLocations.USER,
+            },
+            'api-key-name': {
+                description: 'The name of the API Key to set',
+                type: 'string',
+                hidden: true, // hide from --help output
             },
         },
         runCommandAsync: commandRunner(CommandNames.SET_API_KEY),

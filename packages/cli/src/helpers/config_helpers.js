@@ -1,20 +1,17 @@
 // @flow
-const invariant = require('invariant');
 const os = require('os');
 const path = require('path');
 
 const {CONFIG_FILE_NAME} = require('../config/block_cli_config_settings');
+const {ConfigKeys, ConfigLocations, DEFAULT_API_KEY_NAME} = require('../types/config_helpers_type');
 const getBlockDirPathModule = require('../get_block_dir_path');
 const fsUtils = require('../fs_utils');
 
-const CONFIG_KEY_API_KEY = 'airtableApiKey';
-
-const ConfigLocations = Object.freeze({
-    BLOCK: ('block': 'block'),
-    USER: ('user': 'user'),
-});
-
-export type ConfigLocation = $Values<typeof ConfigLocations>;
+import type {
+    ConfigLocation,
+    UserOrBlockConfig,
+    AirtableApiKeyOrApiKeyByName,
+} from '../types/config_helpers_type';
 
 function getConfigPath(location: ConfigLocation): string {
     let folderPath: string;
@@ -34,7 +31,7 @@ function getConfigPath(location: ConfigLocation): string {
 
 async function _getConfigIfExistsAsync(
     location: ConfigLocation,
-): Promise<{[string]: mixed} | null> {
+): Promise<UserOrBlockConfig | null> {
     const configPath = getConfigPath(location);
     const fileContents = await fsUtils.readJsonIfExistsAsync(configPath);
 
@@ -46,54 +43,98 @@ async function _getConfigIfExistsAsync(
     }
 }
 
-async function _getApiKeyFromConfigIfExistsAsync(location: ConfigLocation): Promise<string | null> {
+async function _getApiKeyFromConfigIfExistsAsync(
+    location: ConfigLocation,
+    apiKeyName: string | null,
+): Promise<AirtableApiKeyOrApiKeyByName | null> {
     const configData = await _getConfigIfExistsAsync(location);
 
-    if (configData !== null && configData.hasOwnProperty(CONFIG_KEY_API_KEY)) {
-        const apiKey = configData[CONFIG_KEY_API_KEY];
-        invariant(typeof apiKey === 'string', 'expect apiKey to be a string');
-        return apiKey;
+    if (configData === null || !configData.hasOwnProperty(ConfigKeys.API_KEY)) {
+        return null;
+    }
+    const apiKeyOrApiKeyByRemote = configData[ConfigKeys.API_KEY];
+
+    let apiKey;
+    if (typeof apiKeyOrApiKeyByRemote === 'string') {
+        if (apiKeyName === DEFAULT_API_KEY_NAME || apiKeyName === null) {
+            apiKey = apiKeyOrApiKeyByRemote;
+        } else {
+            // Return null in this case because the config value is just a string but a lookup by
+            // apiKeyName was requested; a string type should only represent the default case.
+            apiKey = null;
+        }
+    } else if (apiKeyOrApiKeyByRemote instanceof Object) {
+        if (apiKeyName !== null) {
+            apiKey = apiKeyOrApiKeyByRemote[apiKeyName];
+        } else {
+            apiKey = apiKeyOrApiKeyByRemote[DEFAULT_API_KEY_NAME];
+        }
+    } else {
+        throw new Error('API Key from config is an incorrect format');
     }
 
-    return null;
+    return apiKey || null;
 }
 
-async function setApiKeyAsync(location: ConfigLocation, apiKey: string): Promise<void> {
+async function setApiKeyAsync(
+    location: ConfigLocation,
+    apiKey: string,
+    apiKeyName: string | null,
+): Promise<void> {
     // So this is forwards compatible, we don't clobber any existing config settings (except for
     // apiKey, of course!)
     const currentConfig = await _getConfigIfExistsAsync(location);
 
     const newConfig = currentConfig !== null ? {...currentConfig} : {};
-    newConfig[CONFIG_KEY_API_KEY] = apiKey;
+
+    const existingApiKeyOrApiKeyObject = newConfig[ConfigKeys.API_KEY];
+    if (existingApiKeyOrApiKeyObject instanceof Object) {
+        const remoteNameToUpdate = apiKeyName || DEFAULT_API_KEY_NAME;
+        existingApiKeyOrApiKeyObject[remoteNameToUpdate] = apiKey;
+    } else {
+        if (apiKeyName === null) {
+            newConfig[ConfigKeys.API_KEY] = apiKey;
+        } else {
+            const apiKeyObject = {};
+            if (existingApiKeyOrApiKeyObject) {
+                apiKeyObject[DEFAULT_API_KEY_NAME] = existingApiKeyOrApiKeyObject;
+            }
+            apiKeyObject[apiKeyName] = apiKey;
+            newConfig[ConfigKeys.API_KEY] = apiKeyObject;
+        }
+    }
 
     await fsUtils.outputJsonAsync(getConfigPath(location), newConfig);
 }
 
-async function getApiKeyIfExistsAsync(): Promise<string | null> {
+async function getApiKeyIfExistsAsync(
+    apiKeyName: string | null,
+): Promise<AirtableApiKeyOrApiKeyByName | null> {
     // Prioritise reading the key from blockConfig if it exists, and userConfig if it doesn't.
     // TODO: Similarly to setApiKeyAsync, if we support multiple config values in the future, we'll
     // have to update our getters to read from all config locations and merge results, as each
     // config file could contain any subset of config keys.
-    const blockConfigApiKey = await _getApiKeyFromConfigIfExistsAsync(ConfigLocations.BLOCK);
-
+    const blockConfigApiKey = await _getApiKeyFromConfigIfExistsAsync(
+        ConfigLocations.BLOCK,
+        apiKeyName,
+    );
     if (blockConfigApiKey !== null) {
         return blockConfigApiKey;
     }
 
-    return await _getApiKeyFromConfigIfExistsAsync(ConfigLocations.USER);
+    return await _getApiKeyFromConfigIfExistsAsync(ConfigLocations.USER, apiKeyName);
 }
 
-async function hasApiKeyAsync(location: ConfigLocation): Promise<boolean> {
-    return (await _getApiKeyFromConfigIfExistsAsync(location)) !== null;
+async function hasApiKeyAsync(
+    location: ConfigLocation,
+    apiKeyName: string | null,
+): Promise<boolean> {
+    return (await _getApiKeyFromConfigIfExistsAsync(location, apiKeyName)) !== null;
 }
 
 module.exports = {
-    ConfigLocations,
     getConfigPath,
     setApiKeyAsync,
     getApiKeyIfExistsAsync,
     hasApiKeyAsync,
-    _test: {
-        CONFIG_KEY_API_KEY,
-    },
 };

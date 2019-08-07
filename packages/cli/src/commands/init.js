@@ -4,6 +4,7 @@ const os = require('os');
 const CommandNames = require('./command_names');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const configHelpers = require('../helpers/config_helpers');
+const {ConfigLocations} = require('../types/config_helpers_type');
 const nodeModulesCommandHelpers = require('../helpers/node_modules_command_helpers');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
@@ -227,15 +228,16 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     // Prompt for apiKey if the user does not already have one configured at the user-config level
-    const userConfigPath = configHelpers.getConfigPath(configHelpers.ConfigLocations.USER);
+    const userConfigPath = configHelpers.getConfigPath(ConfigLocations.USER);
     const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(
-        configHelpers.ConfigLocations.USER,
+        ConfigLocations.USER,
+        null, // For'init', use the "default" apiKeyName for API Key lookup.
     );
     if (doesUserConfigApiKeyExist) {
         console.log(`Using your existing API key from ${userConfigPath}`);
     } else {
         const apiKey = await promptForApiKeyAsync();
-        await configHelpers.setApiKeyAsync(configHelpers.ConfigLocations.USER, apiKey);
+        await configHelpers.setApiKeyAsync(ConfigLocations.USER, apiKey, null);
         console.log(
             `API key saved to ${userConfigPath}. To update it, use 'block ${CommandNames.SET_API_KEY}'`,
         );

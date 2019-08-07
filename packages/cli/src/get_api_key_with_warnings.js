@@ -6,10 +6,10 @@ const CommandNames = require('./commands/command_names');
 const configHelpers = require('./helpers/config_helpers');
 const invariant = require('invariant');
 
-async function getApiKeyWithWarningsAsync(): Promise<string> {
+async function getApiKeyWithWarningsAsync(apiKeyName: string | null): Promise<string> {
     const instructions = `Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
 
-    const apiKey = await configHelpers.getApiKeyIfExistsAsync();
+    const apiKey = await configHelpers.getApiKeyIfExistsAsync(apiKeyName);
 
     if (apiKey === null) {
         console.log("There doesn't seem to be an API key configured.\n" + instructions);

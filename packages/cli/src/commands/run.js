@@ -20,8 +20,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects remoteName to be null or a string',
     );
 
-    const apiKey = await getApiKeyWithWarningsAsync();
-
     const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
     if (blockJsonValidationResult.err) {
         throw blockJsonValidationResult.err;
@@ -33,6 +31,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         throw parseRemoteResult.err;
     }
     const remoteJson = parseRemoteResult.value;
+
+    const apiKeyName = remoteJson.apiKeyName || null;
+    const apiKey = await getApiKeyWithWarningsAsync(apiKeyName);
 
     let sdkPath;
     if (sdkRepo) {

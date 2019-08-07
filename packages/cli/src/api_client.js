@@ -43,7 +43,8 @@ class ApiClient {
             return parseResult;
         }
         const remoteJson = parseResult.value;
-        const apiKey = await getApiKeyWithWarningsAsync();
+        const apiKeyName = remoteJson.apiKeyName || null;
+        const apiKey = await getApiKeyWithWarningsAsync(apiKeyName);
         const apiClient = new ApiClient({
             applicationId: remoteJson.baseId,
             blockId: remoteJson.blockId,
