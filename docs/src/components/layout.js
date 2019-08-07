@@ -12,6 +12,7 @@ import {MDXProvider} from '@mdx-js/react';
 import omit from 'lodash/omit';
 import * as slug from 'slug';
 import isString from 'lodash/isString';
+import {Link} from 'gatsby';
 
 import SEO from './seo';
 import Header from './header';
@@ -80,7 +81,12 @@ const Layout = ({children}) => {
                         </a>
                     </div>
 
-                    <p className="mb0">© Airtable {new Date().getFullYear()}</p>
+                    <p className="mb0">
+                        © Airtable {new Date().getFullYear()}
+                        <Link to="/tos" className="ml1 quiet text-blue">
+                            Terms
+                        </Link>
+                    </p>
                 </div>
             </footer>
         </>

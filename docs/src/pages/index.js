@@ -11,6 +11,10 @@ const IndexPage = () => (
             Before today, all blocks were developed by Airtable. No longer! You're now able to
             supercharge your own workflows.
         </p>
+        <p>
+            By participating in the developer preview and using the software, you accept and agree
+            to abide by terms of the <Link to="/tos">developer preview agreement</Link>.
+        </p>
         <h2>If you're new to writing blocks</h2>
         <ol>
             <li>
@@ -20,7 +24,7 @@ const IndexPage = () => (
             </li>
 
             <li>
-                Follow our guide to writing a <Link to="/guides/todo">To Do list block</Link>.
+                Follow our guide to writing a <Link to="/guides/todo">to-do list block</Link>.
                 You'll learn how to <strong>query</strong> and <strong>display data</strong> from
                 your base, how to use core Airtable functions like "expand record", how to use the{' '}
                 <strong>built in component library</strong> to let the user choose a table, and how
@@ -45,7 +49,7 @@ const IndexPage = () => (
         <ul>
             <li>
                 <a href="https://github.com/Airtable/blocks/tree/master/examples/simple_chart">
-                    Simple Chart
+                    Simple chart
                 </a>{' '}
                 - Shows a bar <strong>chart</strong> of base data using the Chart.js{' '}
                 <strong>external library</strong>.
@@ -53,15 +57,15 @@ const IndexPage = () => (
 
             <li>
                 <a href="https://github.com/Airtable/blocks/tree/master/examples/todo">
-                    To Do List
+                    To-do list
                 </a>{' '}
-                - The code for the Todo List example from the guide above.
+                - The code for the to-do list example from the guide above.
             </li>
             <li>
                 <a href="https://github.com/Airtable/blocks/tree/master/examples/summary">
                     Summary
                 </a>{' '}
-                - Uses the <strong>built-in summary functions</strong> (average, max etc.) on a
+                - Uses the <strong>built-in summary functions</strong> (average, max, etc.) on a
                 table field.
             </li>
         </ul>
