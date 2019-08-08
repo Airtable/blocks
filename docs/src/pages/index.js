@@ -68,6 +68,14 @@ const IndexPage = () => (
                 - Uses the <strong>built-in summary functions</strong> (average, max, etc.) on a
                 table field.
             </li>
+            <li>
+                <a href="https://github.com/Airtable/blocks/tree/master/examples/youtube_preview">
+                    YouTube preview
+                </a>{' '}
+                - Uses the <strong>cursor API</strong> to{' '}
+                <strong>detect when the user selects a record</strong> in grid view. If that record
+                has a YouTube URL, the block shows the corresponding <strong>video</strong>.
+            </li>
         </ul>
     </Layout>
 );

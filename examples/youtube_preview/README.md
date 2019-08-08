@@ -1,0 +1,27 @@
+# YouTube preview block
+
+When a user selects a record in grid view that has a YouTube URL, this block plays the corresponding
+video.
+
+The code shows:
+
+-   How to use the Cursor API to detect when a user has selected a record in grid view, and how to
+    get the selected record.
+
+-   How to embed a YouTube video in a block.
+
+## How to run this block
+
+1. Copy [this base](https://airtable.com/shrg3CySSks0nRw5w).
+
+2. Create a new block in your new copied base (see the
+   [setup guide](https://airtable.github.io/blocks/guides/setup/)).
+
+3. Copy the code from the `frontend` directory of this block to the `frontend` directory of your new
+   block.
+
+4. From the root of your new block, run `block run`.
+
+## Screenshot
+
+![Block screenshot](images/block_screenshot.png?raw=true)
