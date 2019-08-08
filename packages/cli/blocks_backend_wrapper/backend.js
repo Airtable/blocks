@@ -22,31 +22,42 @@ require('@babel/polyfill');
 // load. TODO(kasra): look into removing the dependency on whatwg-fetch.
 global.self = global;
 
-const handleEventAsync = require('./handle_event_async');
+const BlocksBackendEventHandler = require('./blocks_backend_event_handler.js');
+// flow-disable-next-line since the sdk file will be written as part of the build process.
+const BackendBlockSdkWrapper = require('./block_backend_sdk');
+// flow-disable-next-line since the block.json file will be written as part of the build process.
+const blockJson: BlockJson = require('./block.json');
 
-export type LambdaEvent = {
-    method: string,
-    query: {[string]: string | $ReadOnlyArray<string>},
-    params: {[string]: mixed},
-    path: string,
-    body: mixed,
-    headers: {[string]: string},
-    presignedS3UploadUrl: string,
-    logKey: string,
-    blockInvocationId: string,
-    // kvValuesByKey will be void if the kv data couldn't fit into the request
-    // due to payload limits.
-    kvValuesByKey: Object | void,
-    apiAccessPolicyString: string,
-    applicationId: string,
-    blockInstallationId: string,
-    apiBaseUrl: string,
-};
+import type {LambdaEvent} from './types/lambda_event_type';
+import type {BackendRouteHandler} from './types/backend_route_types';
+
 type LambdaContext = Object;
 type LambdaCallback = (error: Error | null, response: mixed) => void;
 
+const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();
+const blocksBackendEventHandler = new BlocksBackendEventHandler({
+    blockJson,
+    backendBlockSdkWrapperInstance,
+    enableUploadLogsToS3: true,
+    resolveBackendRouteHandler(handlerName: string): BackendRouteHandler {
+        // flow-disable-next-line since this will be written as part of the build process.
+        const routeHandlerModule = require('../user/routes/' + handlerName);
+        if (!routeHandlerModule) {
+            throw new Error(`Route module not found: ${handlerName}`);
+        }
+        if (
+            typeof routeHandlerModule !== 'object' ||
+            typeof routeHandlerModule.default !== 'function'
+        ) {
+            throw new Error(`Route module's default export must be a function: ${handlerName}`);
+        }
+        return routeHandlerModule.default;
+    },
+});
+
 exports.handler = function(event: LambdaEvent, context: LambdaContext, callback: LambdaCallback) {
-    handleEventAsync(event)
+    blocksBackendEventHandler
+        .handleEventAsync(event)
         .then(response => {
             callback(null, response);
         })
