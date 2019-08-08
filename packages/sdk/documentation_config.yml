@@ -2,7 +2,7 @@ toc:
     - name: '@airtable/blocks'
       children:
           - SDK
-          - name: GlobalConfig
+          - name: globalConfig
             children:
                 - GlobalConfig
                 - GlobalConfigKey

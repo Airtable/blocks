@@ -7,7 +7,7 @@ import getSdk from './get_sdk';
  * Component, you might want to use the {@link useBase} hook rather than importing `base` directly.
  *
  * #### [import {globalConfig} from '@airtable/blocks';](#globalconfig)
- * {@link GlobalConfig} is a key-value store shared between every user of a particular installation
+ * {@link globalConfig} is a key-value store shared between every user of a particular installation
  * of your block. Use it for storing block configuration.
  *
  * #### [import {session} from '@airtable/blocks';](#session)
@@ -24,7 +24,7 @@ import getSdk from './get_sdk';
  * constraints. See {@link Viewport}.
  *
  * #### [import {settingsButton} from '@airtable/blocks';](#settingsbutton)
- * Controls the block's settings button. See {@link SettingsButton}.
+ * Controls the block's settings button. See {@link settingsButton}.
  *
  * #### import {reload} from '@airtable/blocks';
  * Call this function to reload the block frame:

@@ -24,6 +24,9 @@ npm run build:docs
 
 The file will be updated with the latest docs.
 
+-   Find and fix all the compound links. The link descriptions will have the form
+    `Base#getCollaboratorByIdIfExists`.
+
 -   Now follow the instructions for updating the Gatsby docs.
 
 ## Step 2: Build the api.mdx docs (for Gatsby)
