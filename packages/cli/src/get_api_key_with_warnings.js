@@ -4,10 +4,15 @@
 
 const CommandNames = require('./commands/command_names');
 const configHelpers = require('./helpers/config_helpers');
+const chalk = require('chalk');
 const invariant = require('invariant');
 
 async function getApiKeyWithWarningsAsync(apiKeyName: string | null): Promise<string> {
-    const instructions = `Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
+    const blockCommandForInstructions =
+        apiKeyName === null
+            ? `block ${CommandNames.SET_API_KEY}`
+            : `block ${CommandNames.SET_API_KEY} --api-key-name ${apiKeyName}`;
+    const instructions = `Please use '${chalk.bold(blockCommandForInstructions)}' to set it.`;
 
     const apiKey = await configHelpers.getApiKeyIfExistsAsync(apiKeyName);
 
