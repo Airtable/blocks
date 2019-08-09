@@ -6,6 +6,7 @@
         "gh-pages": "^2.0.1"
     },
     "scripts": {
+        "test": "echo 'Docs currently have no tests'",
         "release": "./bin/release.sh"
     }
 }
