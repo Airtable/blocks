@@ -35,6 +35,9 @@ practices for blocks development. And you can use it as a jumping off point for 
     to-do list example from the guide above.
 -   [Summary](https://github.com/Airtable/blocks/tree/master/examples/summary) - Uses the built-in
     summary functions (average, max, etc.) on a table field.
+-   [YouTube preview](https://github.com/Airtable/blocks/tree/master/examples/youtube_preview) -
+    Uses the Cursor API to detect when the user selects a record in grid view. Gets a YouTube URL
+    from the record and plays the corresponding video.
 
 ## Support
 

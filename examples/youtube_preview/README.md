@@ -1,7 +1,7 @@
 # YouTube preview block
 
-When a user selects a record in grid view that has a YouTube URL, this block plays the corresponding
-video.
+When the user selects a record in grid view, this block gets a YouTube URL from the record and plays
+the corresponding video.
 
 The code shows:
 
