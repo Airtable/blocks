@@ -4168,6 +4168,10 @@ Type: [object][72]
 
 **Extends React.Component**
 
+##### Parameters
+
+-   `props` **[ColorPaletteProps][132]**
+
 #### ColorPaletteProps
 
 Type: {color: [string][67]?, allowedColors: [Array][68]&lt;[string][67]>, onChange: function
@@ -4211,7 +4215,7 @@ the action.
 
 ##### Parameters
 
--   `props` **[ConfirmationDialogProps][132]**
+-   `props` **[ConfirmationDialogProps][133]**
 
 ##### Examples
 
@@ -4275,7 +4279,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][133]**
+-   `props` **[DialogProps][134]**
 
 ##### Examples
 
@@ -4334,7 +4338,7 @@ A button that closes [Dialog][40].
 
 ##### Parameters
 
--   `props` **[DialogCloseButtonProps][134]**
+-   `props` **[DialogCloseButtonProps][135]**
 
 #### DialogCloseButtonProps
 
@@ -4357,7 +4361,7 @@ Dropdown menu component for selecting fields.
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][135]**
+-   `props` **[FieldPickerProps][136]**
 
 ##### Examples
 
@@ -4443,7 +4447,7 @@ Type: [object][72]
 
 -   `table` **[Table][85]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
 -   `onChange` **[function][71]?** A function to be called when the selected field changes. This
@@ -4470,7 +4474,7 @@ Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 
 #### Parameters
 
--   `props` **[FieldPickerSyncedProps][137]**
+-   `props` **[FieldPickerSyncedProps][138]**
 
 #### Examples
 
@@ -4530,7 +4534,7 @@ A vector icon from the Airtable icon set.
 
 ##### Parameters
 
--   `props` **[IconProps][138]**
+-   `props` **[IconProps][139]**
 
 ##### Examples
 
@@ -4552,7 +4556,7 @@ Type: [object][72]
 ##### Properties
 
 -   `name` **[string][67]** The name of the icon. For more details, see the [list of supported
-    icons][139].
+    icons][140].
 -   `size` **[number][73]?** The width/height of the icon.
 -   `fillColor` **[string][67]?** The color of the icon.
 -   `className` **[string][67]?** Additional class names to apply to the icon.
@@ -4568,7 +4572,7 @@ A vector icon for a field's type.
 
 ##### Parameters
 
--   `props` **[FieldIconProps][140]**
+-   `props` **[FieldIconProps][141]**
 
 ##### Examples
 
@@ -4620,7 +4624,7 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 
 ##### Parameters
 
--   `props` **[InputProps][141]**
+-   `props` **[InputProps][142]**
 
 ##### Examples
 
@@ -4690,7 +4694,7 @@ A wrapper around the `UI.Input` component that syncs with global config.
 
 #### Parameters
 
--   `props` **[InputSyncedProps][142]**
+-   `props` **[InputSyncedProps][143]**
 
 #### Examples
 
@@ -4715,14 +4719,14 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][143]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][144]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
 
 ##### Parameters
 
--   `props` **[LinkProps][144]**
+-   `props` **[LinkProps][145]**
 
 ##### Examples
 
@@ -4757,7 +4761,7 @@ A loading spinner component.
 
 ##### Parameters
 
--   `props` **[LoaderProps][145]**
+-   `props` **[LoaderProps][146]**
 
 ##### Examples
 
@@ -4795,7 +4799,7 @@ A popover component, which is used to "float" some content above some other cont
 
 ##### Parameters
 
--   `props` **[PopoverProps][146]**
+-   `props` **[PopoverProps][147]**
 
 #### PopoverProps
 
@@ -4848,7 +4852,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][147]**
+-   `props` **[ProgressBarProps][148]**
 
 ##### Examples
 
@@ -4883,13 +4887,13 @@ Type: [object][72]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][148]**
+-   `props` **[RecordCardProps][149]**
 
 #### RecordCardProps
 
 Type: {record: ([Record][83] | RecordDef), fields: [Array][68]&lt;[Field][80]>?, view: [View][81]?,
 attachmentCoverField: [Field][80]?, width: [number][73]?, height: [number][73]?, onClick:
-[Function][71]?, getExpandRecordOptions: function ([Record][83]): [ExpandRecordOpts][149]?,
+[Function][71]?, getExpandRecordOptions: function ([Record][83]): [ExpandRecordOpts][150]?,
 onMouseEnter: any?, onMouseLeave: any?, className: [string][67]?, style: [Object][72]?,
 viewMetadata: ([ViewMetadataQueryResult][106] | null)}
 
@@ -4902,7 +4906,7 @@ viewMetadata: ([ViewMetadataQueryResult][106] | null)}
 -   `width` **[number][73]?**
 -   `height` **[number][73]?**
 -   `onClick` **[Function][71]?**
--   `getExpandRecordOptions` **function ([Record][83]): [ExpandRecordOpts][149]?**
+-   `getExpandRecordOptions` **function ([Record][83]): [ExpandRecordOpts][150]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
 -   `className` **[string][67]?**
@@ -4919,7 +4923,7 @@ Dropdown menu component. A wrapper around `<select>` that fits in with Airtable'
 
 ##### Parameters
 
--   `props` **[SelectProps][150]**
+-   `props` **[SelectProps][151]**
 
 ##### Examples
 
@@ -4956,7 +4960,7 @@ Type: [object][72]
 -   `onChange` **[function][71]?** A function to be called when the selected option changes.
 -   `value` **([string][67] \| [number][73] \| [boolean][69] | null)?** The value of the selected
     option.
--   `options` **[Array][68]&lt;[SelectOption][151]>** The list of select options.
+-   `options` **[Array][68]&lt;[SelectOption][152]>** The list of select options.
 -   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the button.
 -   `id` **[string][67]?** The ID of the select element.
 -   `className` **[string][67]?** Additional class names to apply to the select.
@@ -4983,12 +4987,12 @@ Type: [object][72]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
 -   `onChange` **[function][71]?** A function to be called when the selected option changes. This
     should only be used for side effects.
--   `options` **[Array][68]&lt;[SelectOption][151]>** The list of select options.
+-   `options` **[Array][68]&lt;[SelectOption][152]>** The list of select options.
 -   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
 -   `id` **[string][67]?** The ID of the select element.
 -   `className` **[string][67]?** Additional class names to apply to the select.
@@ -5007,7 +5011,7 @@ Airtable's user interface.
 
 #### Parameters
 
--   `props` **[SelectSyncedProps][152]**
+-   `props` **[SelectSyncedProps][153]**
 
 #### Examples
 
@@ -5061,7 +5065,7 @@ Dropdown menu component for selecting tables.
 
 ##### Parameters
 
--   `props` **[TablePickerProps][153]**
+-   `props` **[TablePickerProps][154]**
 
 ##### Examples
 
@@ -5120,7 +5124,7 @@ Type: [object][72]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
 -   `onChange` **[function][71]?** A function to be called when the selected table changes. This
@@ -5145,7 +5149,7 @@ Dropdown menu component for selecting tables, synced with [GlobalConfig][3].
 
 #### Parameters
 
--   `props` **[TablePickerSyncedProps][154]**
+-   `props` **[TablePickerSyncedProps][155]**
 
 #### Examples
 
@@ -5187,7 +5191,7 @@ A toggleable switch for controlling boolean values. Functionally analogous to a 
 
 ##### Parameters
 
--   `props` **[ToggleProps][155]**
+-   `props` **[ToggleProps][156]**
 
 ##### Examples
 
@@ -5229,7 +5233,7 @@ Type: [object][72]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
 -   `onChange` **[function][71]?** A function to be called when the switch is toggled. This should
@@ -5257,7 +5261,7 @@ analogous to a checkbox.
 
 #### Parameters
 
--   `props` **[ToggleSyncedProps][156]**
+-   `props` **[ToggleSyncedProps][157]**
 
 #### Examples
 
@@ -5284,7 +5288,7 @@ A component that shows a tooltip. Wraps its children.
 
 ##### Parameters
 
--   `props` **[TooltipProps][157]**
+-   `props` **[TooltipProps][158]**
 
 ##### Examples
 
@@ -5351,7 +5355,7 @@ Dropdown menu component for selecting views.
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][158]**
+-   `props` **[ViewPickerProps][159]**
 
 ##### Examples
 
@@ -5433,7 +5437,7 @@ Type: [object][72]
 
 -   `table` **[Table][85]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][136]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
 -   `onChange` **[function][71]?** A function to be called when the selected view changes. This
@@ -5460,7 +5464,7 @@ Dropdown menu component for selecting views, synced with [GlobalConfig][3].
 
 #### Parameters
 
--   `props` **[ViewPickerSyncedProps][159]**
+-   `props` **[ViewPickerSyncedProps][160]**
 
 #### Examples
 
@@ -5538,13 +5542,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][160]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][160]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][161]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][161]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][160]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][160]?**
+-   `minSize` **[ViewportSizeConstraintProp][161]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][161]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -5639,10 +5643,10 @@ Type: {width: ([number][73] | null)?, height: ([number][73] | null)?}
 [81]: #view
 [82]: recordColoring.modes
 [83]: #record
-[84]: #getcollaboratorbyidifexists
+[84]: #basegetcollaboratorbyidifexists
 [85]: #table
-[86]: #gettablebyidifexists
-[87]: #gettablebynameifexists
+[86]: #basegettablebyidifexists
+[87]: #basegettablebynameifexists
 [88]: #aggregator
 [89]: #tableorviewqueryresult
 [90]: #linkedrecordsqueryresult
@@ -5656,10 +5660,10 @@ Type: {width: ([number][73] | null)?, height: ([number][73] | null)?}
 [98]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [99]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
 [100]: #linkedrecordsqueryresult
-[101]: #getfieldbyidifexists
-[102]: #getfieldbynameifexists
-[103]: #getviewbyidifexists
-[104]: #getviewbynameifexists
+[101]: #tablegetfieldbyidifexists
+[102]: #tablegetfieldbynameifexists
+[103]: #tablegetviewbyidifexists
+[104]: #tablegetviewbynameifexists
 [105]: #tableorviewqueryresult
 [106]: #viewmetadataqueryresult
 [107]: #useviewmetadata
@@ -5687,32 +5691,33 @@ Type: {width: ([number][73] | null)?, height: ([number][73] | null)?}
 [129]: #cellrendererprops
 [130]: #choicetokenprops
 [131]: #collaboratortokenprops
-[132]: #confirmationdialogprops
-[133]: #dialogprops
-[134]: #dialogclosebuttonprops
-[135]: #fieldpickerprops
-[136]: #globalconfigkey
-[137]: #fieldpickersyncedprops
-[138]: #iconprops
-[139]: /packages/sdk/docs/icons.md
-[140]: #fieldiconprops
-[141]: #inputprops
-[142]: #inputsyncedprops
-[143]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[144]: #linkprops
-[145]: #loaderprops
-[146]: #popoverprops
-[147]: #progressbarprops
-[148]: #recordcardprops
-[149]: #expandrecordopts
-[150]: #selectprops
-[151]: #selectoption
-[152]: #selectsyncedprops
-[153]: #tablepickerprops
-[154]: #tablepickersyncedprops
-[155]: #toggleprops
-[156]: #togglesyncedprops
-[157]: #tooltipprops
-[158]: #viewpickerprops
-[159]: #viewpickersyncedprops
-[160]: #viewportsizeconstraintprop
+[132]: #colorpaletteprops
+[133]: #confirmationdialogprops
+[134]: #dialogprops
+[135]: #dialogclosebuttonprops
+[136]: #fieldpickerprops
+[137]: #globalconfigkey
+[138]: #fieldpickersyncedprops
+[139]: #iconprops
+[140]: /packages/sdk/docs/icons.md
+[141]: #fieldiconprops
+[142]: #inputprops
+[143]: #inputsyncedprops
+[144]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[145]: #linkprops
+[146]: #loaderprops
+[147]: #popoverprops
+[148]: #progressbarprops
+[149]: #recordcardprops
+[150]: #expandrecordopts
+[151]: #selectprops
+[152]: #selectoption
+[153]: #selectsyncedprops
+[154]: #tablepickerprops
+[155]: #tablepickersyncedprops
+[156]: #toggleprops
+[157]: #togglesyncedprops
+[158]: #tooltipprops
+[159]: #viewpickerprops
+[160]: #viewpickersyncedprops
+[161]: #viewportsizeconstraintprop

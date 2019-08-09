@@ -5,6 +5,7 @@ import * as React from 'react';
 import colorUtils from '../color_utils';
 import {invariant} from '../error_utils';
 import Icon from './icon';
+import createDetectElementResize from './create_detect_element_resize';
 
 const MIN_COLOR_SQUARE_SIZE = 16;
 const DEFAULT_COLOR_SQUARE_SIZE = 24;
@@ -44,12 +45,38 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         className: '',
         style: {},
     };
-    _colorPaletteContainerRef: {current: HTMLDivElement | null} = React.createRef();
-    state = {
-        squareSize: DEFAULT_COLOR_SQUARE_SIZE,
-    };
+    _detectElementResize: {|
+        addResizeListener: (element: HTMLElement, fn: () => void) => void,
+        removeResizeListener: (element: HTMLElement, fn: () => void) => void,
+    |};
+    _setColorSquareSize: () => void;
+    _colorPaletteContainerRef: {current: HTMLDivElement | null};
+    constructor(props: ColorPaletteProps) {
+        super(props);
+
+        this._detectElementResize = createDetectElementResize();
+        this._colorPaletteContainerRef = React.createRef();
+        this._setColorSquareSize = this._setColorSquareSize.bind(this);
+        this.state = {
+            squareSize: DEFAULT_COLOR_SQUARE_SIZE,
+        };
+    }
     componentDidMount() {
+        if (this._colorPaletteContainerRef.current) {
+            this._detectElementResize.addResizeListener(
+                this._colorPaletteContainerRef.current,
+                this._setColorSquareSize,
+            );
+        }
         this._setColorSquareSize();
+    }
+    componentWillUnmount() {
+        if (this._colorPaletteContainerRef.current) {
+            this._detectElementResize.removeResizeListener(
+                this._colorPaletteContainerRef.current,
+                this._setColorSquareSize,
+            );
+        }
     }
     componentDidUpdate(prevProps: ColorPaletteProps) {
         if (this.props.allowedColors.length !== prevProps.allowedColors.length) {
@@ -71,7 +98,8 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         // fills the row and let flexbox wrap the remainder
         if (calculatedSquareSize < MIN_COLOR_SQUARE_SIZE) {
             const numColorsThatWillFitAsDefaultSize = Math.round(
-                containerWidth / (DEFAULT_COLOR_SQUARE_SIZE + 2 * this.props.squareMargin),
+                (containerWidth + 2 * this.props.squareMargin) /
+                    (DEFAULT_COLOR_SQUARE_SIZE + 2 * this.props.squareMargin),
             );
             squareSize = calculateSquareSize(numColorsThatWillFitAsDefaultSize);
         } else {
