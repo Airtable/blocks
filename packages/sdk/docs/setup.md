@@ -66,7 +66,7 @@ We're all set up! Let's build our first block.
 To start, make a new Airtable base from scratch. Its name doesn't matter, but we'll call it
 “Blocks!” in this guide.
 
-![](/docs/src/pages/guides/setup_1.gif)
+![](/packages/sdk/docs/images/setup_1.gif)
 
 Note that we're just creating a new base for the purposes of this guide—you can build blocks in any
 base you already have, as long as it's in a Pro or Enterprise workspace.
@@ -81,11 +81,11 @@ Now that we have a base, it's time to create our block.
 Start by opening the Blocks dashboard by clicking the “Blocks” button at the top-right of the
 screen. From there, click “Add a block”, and then “Build a block”.
 
-![](/docs/src/pages/guides/setup_2.gif)
+![](/packages/sdk/docs/images/setup_2.gif)
 
 Now it's time to give our new block a name. We'll call it “Hello Blocks”.
 
-![](/docs/src/pages/guides/setup_3.png)
+![](/packages/sdk/docs/images/setup_3.png)
 
 Click “Create block” to continue.
 
@@ -115,13 +115,13 @@ back to the base, click the `<> DEV` button next to the block, then click "Edit 
 Once you've done this, enter https://localhost:9000 as the block URL. If you've done this correctly,
 you'll see your block appear!
 
-![](/docs/src/pages/guides/setup_4.png)
+![](/packages/sdk/docs/images/setup_4.png)
 
 Open `frontend/index.js` in your text editor and try changing the text from “Hello world 🚀” to
 something else, like “Goodbye, Earth! 🌍”. When you save the file, the block server will update and
 your block should refresh in the browser automatically.
 
-![](/docs/src/pages/guides/setup_5.png)
+![](/packages/sdk/docs/images/setup_5.png)
 
 Great! We have our blocks development environment set up.
 

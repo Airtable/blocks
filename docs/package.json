@@ -2,49 +2,10 @@
     "name": "@airtable-blocks-internal/blocks-docs",
     "version": "0.0.0",
     "private": true,
-    "dependencies": {
-        "@mdx-js/mdx": "^1.1.0",
-        "@mdx-js/react": "^1.0.27",
-        "classnames": "^2.2.6",
-        "gatsby": "^2.13.34",
-        "gatsby-image": "^2.2.6",
-        "gatsby-plugin-manifest": "^2.2.4",
-        "gatsby-plugin-mdx": "^1.0.15",
-        "gatsby-plugin-offline": "^2.2.4",
-        "gatsby-plugin-react-helmet": "^3.1.2",
-        "gatsby-plugin-sharp": "^2.2.9",
-        "gatsby-remark-images": "^3.1.7",
-        "gatsby-remark-prismjs": "^3.3.3",
-        "gatsby-remark-relative-images": "^0.2.2",
-        "gatsby-source-filesystem": "^2.1.6",
-        "gatsby-transformer-documentationjs": "^4.1.3",
-        "gatsby-transformer-remark": "^2.6.9",
-        "gatsby-transformer-sharp": "^2.2.4",
-        "lodash": "^4.17.15",
-        "prismjs": "^1.17.1",
-        "prop-types": "^15.7.2",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
-        "react-helmet": "^5.2.1",
-        "slug": "^1.1.0"
-    },
     "devDependencies": {
-        "babel-jest": "^24.8.0",
-        "babel-preset-gatsby": "^0.2.8",
-        "enzyme": "^3.10.0",
-        "enzyme-adapter-react-16": "^1.14.0",
-        "gh-pages": "^2.0.1",
-        "identity-obj-proxy": "^3.0.0",
-        "jest": "^24.8.0",
-        "prettier": "^1.18.2",
-        "react-test-renderer": "^16.8.6"
+        "gh-pages": "^2.0.1"
     },
     "scripts": {
-        "build": "gatsby build",
-        "develop": "gatsby develop",
-        "start": "npm run develop",
-        "serve": "gatsby serve",
-        "release": "./bin/release.sh",
-        "test": "jest"
+        "release": "./bin/release.sh"
     }
 }

@@ -11,8 +11,6 @@ cd "$docs_dir"
 
 "$project_root_dir/bin/check-repo-for-release"
 
-yarn run gatsby build --prefix-paths
-
 # NOTE(evanhahn) gh-pages's .cache directy can cause problems, so we remove it.
 rm -rf "$docs_dir/node_modules/gh-pages/.cache"
 
