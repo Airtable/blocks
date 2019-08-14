@@ -67,7 +67,22 @@ module.exports = {
     copyAsync: async function(fromPath, toPath) {
         await fsExtra.copy(fromPath, toPath);
     },
-    symlinkAsync: promisify(fs.symlink),
+    /**
+     * The node docs state that the `type` parameter is only used for Windows; it's ignored on other
+     * platforms (see: https://nodejs.org/api/fs.html#fs_fs_symlink_target_path_type_callback).
+     * Therefore, we always pass it in.
+     *
+     * In Windows 10, it seems you have to run the process as an Administrator for fs.symlink to
+     * work properly. However, it might not be desirable to require the end-user to always run
+     * as an Administrator. As a workaround, passing in type='junction' seems to bypass requiring
+     * the Administrator role.
+     * src: https://github.com/nodejs/node/issues/18518#issuecomment-513866491
+     */
+    symlinkAsync: async function(target, fileOrDirPath, type = 'junction') {
+        const promisifiedFsSymlink = promisify(fs.symlink);
+
+        return await promisifiedFsSymlink(target, fileOrDirPath, type);
+    },
     symlinkIfNeededAsync: function(target, filePath) {
         this.symlinkAsync(target, filePath).catch(err => {
             // Throw if we get any error other than that the symlink already exists.
