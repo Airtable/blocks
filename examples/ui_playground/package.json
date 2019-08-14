@@ -2,6 +2,9 @@
     "name": "@airtable-blocks-internal/ui-playground",
     "version": "0.0.0",
     "private": true,
+    "scripts": {
+        "dev": "block run --sdk-repo ../../packages/sdk"
+    },
     "dependencies": {
         "@airtable/blocks": "0.0.22",
         "react": "^16.8.0",

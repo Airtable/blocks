@@ -14,6 +14,7 @@ const examples: Array<Example> = [
     {
         name: 'ColorPaletteSynced',
         component: ColorPaletteSyncedExample,
+        hasSettings: true,
     },
 ];
 

@@ -4,7 +4,7 @@ import {type Example} from './Example';
 
 type Props = {
     examples: Array<Example>,
-    onSelect: (example: Example) => void | Promise<void>,
+    onSelect: (exampleName: string) => void | Promise<void>,
 };
 
 export default function ExampleOverview(props: Props) {
@@ -23,7 +23,7 @@ export default function ExampleOverview(props: Props) {
                         key={example.name}
                         onClick={e => {
                             e.preventDefault();
-                            onSelect(example);
+                            onSelect(example.name);
                         }}
                     >
                         {example.name}
