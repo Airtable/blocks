@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.27...HEAD)
 
-No changes.
+-   Support for multiple API Keys.
 
 ## [0.0.27](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.26...@airtable/blocks-cli@0.0.27) - 2019-08-01
 
