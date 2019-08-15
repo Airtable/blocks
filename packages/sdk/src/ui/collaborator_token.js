@@ -1,10 +1,10 @@
 // @flow
 import PropTypes from 'prop-types'; 
 import * as React from 'react';
+import isEqual from 'fast-deep-equal';
 import {has} from '../private_utils';
 import getSdk from '../get_sdk';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
@@ -69,7 +69,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     let userName;
     let profilePicUrl;
     let isActive;
-    if (userObj !== null && u.isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    if (userObj !== null && isEqual(collaborator, userObjFormattedForPublicApiV2)) {
         profilePicUrl = appBlanketUserObjMethods.getTokenSizedProfilePicUrl(userObj);
         userName = appBlanketUserObjMethods.getName(userObj) || 'Unknown';
         isActive = appBlanketUserObjMethods.isActive(userObj);

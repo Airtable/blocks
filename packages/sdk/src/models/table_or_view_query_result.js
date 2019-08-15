@@ -76,7 +76,13 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         opts: RecordQueryResultOpts,
     ) {
         const tableModel = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
-        const normalizedOpts = RecordQueryResult._normalizeOpts(tableModel, opts);
+        const normalizedOpts = RecordQueryResult._normalizeOpts(tableModel, recordStore, opts);
+        return this.__createOrReuseQueryResultWithNormalizedOpts(sourceModel, normalizedOpts);
+    }
+    static __createOrReuseQueryResultWithNormalizedOpts(
+        sourceModel: Table | View,
+        normalizedOpts: NormalizedRecordQueryResultOpts,
+    ) {
         const queryResult = tableOrViewQueryResultPool.getObjectForReuse({
             sourceModel,
             normalizedOpts,
@@ -84,7 +90,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         if (queryResult) {
             return queryResult;
         } else {
-            return new TableOrViewQueryResult(sourceModel, recordStore, opts);
+            return new TableOrViewQueryResult(sourceModel, normalizedOpts);
         }
     }
     _sourceModel: Table | View;
@@ -101,18 +107,12 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     _recordIdsSet: {[string]: true | void} | null = null;
 
     _cellValueKeyWatchCounts: {[string]: number};
-    constructor(sourceModel: Table | View, recordStore: RecordStore, opts?: RecordQueryResultOpts) {
-        const table = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
-        invariant(
-            table.id === recordStore.tableId,
-            'record store must belong to RecordQueryResult table',
-        );
-        const normalizedOpts = RecordQueryResult._normalizeOpts(table, opts);
-        super(recordStore, normalizedOpts, sourceModel.__baseData);
+    constructor(sourceModel: Table | View, normalizedOpts: NormalizedRecordQueryResultOpts) {
+        super(normalizedOpts, sourceModel.__baseData);
 
         this._sourceModel = sourceModel;
         this._mostRecentSourceModelLoadPromise = null;
-        this._table = table;
+        this._table = normalizedOpts.table;
 
         const {sorts} = this._normalizedOpts;
         if (sorts) {

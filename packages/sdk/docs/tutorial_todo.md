@@ -1,10 +1,12 @@
 # Guide: building a to-do list block
 
+<!-- NOTE(evanhahn): This file will soon be moved to the docs/ subproject. -->
+
 In this 3-part tutorial, you’ll learn how to build a block that shows a list of tasks from a table
 and lets you click a checkbox to toggle whether the task is done or not. It’ll look something like
 this:
 
-![](/packages/sdk/docs/img/tutorial_todo_1.gif)
+![](/packages/sdk/docs/images/tutorial_todo_1.gif)
 
 Here’s a breakdown of what we’ll cover in each part:
 
@@ -25,7 +27,7 @@ of the existing tables.
 Open the blocks panel, click “Add a block”, then click “Build a block”. Follow the onscreen
 instructions to set up the block.
 
-![](/packages/sdk/docs/img/tutorial_todo_2.gif)
+![](/packages/sdk/docs/images/tutorial_todo_2.gif)
 
 Open `frontend/index.js` in your code editor and let’s start writing some code! It should look like
 this:
@@ -313,7 +315,7 @@ function Task({record}) {
 
 Congratulations on finishing Part 1! You should have a block that looks like this:
 
-![](/packages/sdk/docs/img/tutorial_todo_3.png)
+![](/packages/sdk/docs/images/tutorial_todo_3.png)
 
 ## Part 2
 
@@ -474,7 +476,7 @@ initializeBlock(() => <TodoBlock />);
 Now there should be a dropdown that lets you pick between different tables in the base (create a new
 table if you only have 1)!
 
-![](/packages/sdk/docs/img/tutorial_todo_4.gif)
+![](/packages/sdk/docs/images/tutorial_todo_4.gif)
 
 ### Using table ID instead of table name
 
@@ -620,7 +622,7 @@ There’s a bug in the changes we just made. Read-only and comment-only collabor
 to update globalConfig, so if they try changing the selected table our block will crash. You can try
 this out by clicking “Simulate,” then choosing “Read” or “Comment” from the dropdown:
 
-![](/packages/sdk/docs/img/tutorial_todo_5.gif)
+![](/packages/sdk/docs/images/tutorial_todo_5.gif)
 
 We could fix this by disabling the `TablePicker` if the user doesn’t have permission to change
 `globalConfig` by using `globalConfig.canSet()`.

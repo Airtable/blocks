@@ -3,3 +3,5 @@
 /packages/*/node_modules
 /packages/*/dist
 /packages/*/transpiled
+/docs/.cache/
+/docs/public/

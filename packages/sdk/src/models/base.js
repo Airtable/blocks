@@ -174,7 +174,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /**
      * @param collaboratorId The ID of the user.
      * @returns The user matching the given ID. Throws if that user does not exist
-     * or does not have access to this base. Use {@link getCollaboratorByIdIfExists}
+     * or does not have access to this base. Use {@link Base#getCollaboratorByIdIfExists}
      * instead if you are unsure whether a collaborator with the given ID exists
      * and has access to this base.
      */
@@ -235,7 +235,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
     /**
      * @param tableId The ID of the table.
-     * @returns The table matching the given ID. Throws if that table does not exist in this base. Use {@link getTableByIdIfExists} instead if you are unsure whether a table exists with the given ID.
+     * @returns The table matching the given ID. Throws if that table does not exist in this base. Use {@link Base#getTableByIdIfExists} instead if you are unsure whether a table exists with the given ID.
      */
     getTableById(tableId: string): Table {
         const table = this.getTableByIdIfExists(tableId);
@@ -258,7 +258,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
     /**
      * @param tableName The name of the table you're looking for.
-     * @returns The table matching the given name. Throws if no table exists with that name in this base. Use {@link getTableByNameIfExists} instead if you are unsure whether a table exists with the given name.
+     * @returns The table matching the given name. Throws if no table exists with that name in this base. Use {@link Base#getTableByNameIfExists} instead if you are unsure whether a table exists with the given name.
      */
     getTableByName(tableName: string): Table {
         const table = this.getTableByNameIfExists(tableName);

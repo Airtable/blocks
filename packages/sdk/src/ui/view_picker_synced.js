@@ -61,7 +61,7 @@ type ViewPickerSyncedProps = {
  *     const tableId = globalConfig.get('tableId');
  *     const table = base.getTableByIdIfExists(tableId);
  *     const viewId = globalConfig.get('viewId');
- *     const view = view.getViewByIdIfExists(viewId);
+ *     const view = table.getViewByIdIfExists(viewId);
  *     const queryResult = view ? view.selectRecords() : null;
  *     const records = useRecords(queryResult);
  *     useWatchable(globalConfig, ['tableId', 'viewId']);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import * as React from 'react';
 import getSdk from '../get_sdk';
-import {values, isNullOrUndefinedOrEmpty} from '../private_utils';
+import {values, isNullOrUndefinedOrEmpty, flattenDeep, keyBy, uniqBy} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import {type AttachmentData} from '../types/attachment';
 import {FieldTypes} from '../types/field';
@@ -19,7 +19,6 @@ import useWatchable from './use_watchable';
 import withHooks from './with_hooks';
 import useViewMetadata from './use_view_metadata';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
@@ -239,7 +238,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         ) {
             return attachmentCoverField;
         } else if (attachmentCoverField === undefined && !fields) {
-            const firstAttachmentFieldInView = u.find(fieldsToUse, field => {
+            const firstAttachmentFieldInView = fieldsToUse.find(field => {
                 return this._isAttachment(field);
             });
             if (firstAttachmentFieldInView === undefined) {
@@ -271,7 +270,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         let attachmentsInField;
         if (attachmentField.type === FieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
-            attachmentsInField = u.flattenDeep(
+            attachmentsInField = flattenDeep(
                 values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),
             );
         } else {
@@ -294,7 +293,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             console.warn('RecordCard: no fields, view, or record, so rendering an empty card'); // eslint-disable-line no-console
             fieldsToUse = [];
         }
-        return u.uniqBy(fieldsToUse, field => field.id);
+        return uniqBy(fieldsToUse, field => field.id);
     }
     _getPossibleFieldsForCard(): Array<Field> {
         const fields = this._getFields();
@@ -354,7 +353,7 @@ class RecordCard extends React.Component<RecordCardProps> {
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
         const widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
-        const fieldsById = u.keyBy(fieldsToUse, o => o.id);
+        const fieldsById = keyBy(fieldsToUse, o => o.id);
 
         return widthAndFieldIdArray.map(widthAndFieldId => {
             const field = fieldsById[widthAndFieldId.fieldId];

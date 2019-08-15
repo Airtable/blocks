@@ -150,3 +150,44 @@ export function clamp(n: number, lowerBound: number, upperBound: number): number
         return n;
     }
 }
+
+type ReadOnlyDeepArray<T> = $ReadOnlyArray<T | ReadOnlyDeepArray<T>>;
+
+/**
+ * @private
+ */
+export function flattenDeep<T>(array: ReadOnlyDeepArray<T>): Array<T> {
+    return array.flat(Infinity);
+}
+
+/**
+ * @private
+ */
+export function keyBy<Item, Key: string>(
+    array: $ReadOnlyArray<Item>,
+    getKey: Item => Key,
+): {[Key]: Item} {
+    const result = {};
+    for (const item of array) {
+        result[getKey(item)] = item;
+    }
+    return result;
+}
+
+/**
+ * @private
+ */
+export function uniqBy<Item, Key>(array: $ReadOnlyArray<Item>, getKey: Item => Key): Array<Item> {
+    const usedKeys = new Set();
+    const result = [];
+
+    for (const item of array) {
+        const key = getKey(item);
+        if (!usedKeys.has(key)) {
+            result.push(item);
+            usedKeys.add(key);
+        }
+    }
+
+    return result;
+}

@@ -1,5 +1,7 @@
 # Hello, Blocks!
 
+<!-- NOTE(evanhahn): This file will soon be moved to the docs/ subproject. -->
+
 Thanks for participating in the developer preview of the Airtable Blocks platform! Before today, all
 blocks were developed by Airtable. No longer! You'll be able to supercharge your own workflows.
 
@@ -64,7 +66,7 @@ We're all set up! Let's build our first block.
 To start, make a new Airtable base from scratch. Its name doesn't matter, but we'll call it
 “Blocks!” in this guide.
 
-![](/packages/sdk/docs/img/setup_1.gif)
+![](/packages/sdk/docs/images/setup_1.gif)
 
 Note that we're just creating a new base for the purposes of this guide—you can build blocks in any
 base you already have, as long as it's in a Pro or Enterprise workspace.
@@ -79,11 +81,11 @@ Now that we have a base, it's time to create our block.
 Start by opening the Blocks dashboard by clicking the “Blocks” button at the top-right of the
 screen. From there, click “Add a block”, and then “Build a block”.
 
-![](/packages/sdk/docs/img/setup_2.gif)
+![](/packages/sdk/docs/images/setup_2.gif)
 
 Now it's time to give our new block a name. We'll call it “Hello Blocks”.
 
-![](/packages/sdk/docs/img/setup_3.png)
+![](/packages/sdk/docs/images/setup_3.png)
 
 Click “Create block” to continue.
 
@@ -104,22 +106,22 @@ project will be ready! Run `cd hello_blocks && block run` (as it says).
 
 In the terminal output, you’ll see something like “Local mode: serving self-signed https on
 localhost”. Blocks must run on HTTPS servers. In production, we'll serve your block code via HTTPS,
-but in development, you'll need to tell your browser that https://localhost:8000 is safe to visit.
+but in development, you'll need to tell your browser that https://localhost:9000 is safe to visit.
 Follow the instructions in the output above to get your browser ready to go.
 
 You may need to restart your browser the first time you do this. After restarting the browser, go
 back to the base, click the `<> DEV` button next to the block, then click "Edit block".
 
-Once you've done this, enter https://localhost:8000 as the block URL. If you've done this correctly,
+Once you've done this, enter https://localhost:9000 as the block URL. If you've done this correctly,
 you'll see your block appear!
 
-![](/packages/sdk/docs/img/setup_4.png)
+![](/packages/sdk/docs/images/setup_4.png)
 
 Open `frontend/index.js` in your text editor and try changing the text from “Hello world 🚀” to
 something else, like “Goodbye, Earth! 🌍”. When you save the file, the block server will update and
 your block should refresh in the browser automatically.
 
-![](/packages/sdk/docs/img/setup_5.png)
+![](/packages/sdk/docs/images/setup_5.png)
 
 Great! We have our blocks development environment set up.
 

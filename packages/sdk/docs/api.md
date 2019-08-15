@@ -4,7 +4,7 @@
 
 -   [@airtable/blocks][1]
     -   [SDK][2]
-    -   [GlobalConfig][3]
+    -   [globalConfig][3]
     -   [settingsButton][4]
     -   [Viewport][5]
 -   [@airtable/blocks/models][6]
@@ -39,23 +39,31 @@
     -   [ChoiceToken][35]
     -   [CollaboratorToken][36]
     -   [ColorPalette][37]
-    -   [ConfirmationDialog][38]
-    -   [Dialog][39]
-    -   [FieldPicker][40]
-    -   [Icon][41]
-    -   [Input][42]
-    -   [Link][43]
-    -   [Loader][44]
-    -   [Popover][45]
-    -   [ProgressBar][46]
-    -   [RecordCard][47]
-    -   [Select][48]
-    -   [SelectButtons][49]
-    -   [TablePicker][50]
-    -   [Toggle][51]
-    -   [Tooltip][52]
-    -   [ViewPicker][53]
-    -   [ViewportConstraint][54]
+    -   [ColorPaletteSynced][38]
+    -   [ConfirmationDialog][39]
+    -   [Dialog][40]
+    -   [FieldPicker][41]
+    -   [FieldPickerSynced][42]
+    -   [Icon][43]
+    -   [Input][44]
+    -   [InputSynced][45]
+    -   [Link][46]
+    -   [Loader][47]
+    -   [Popover][48]
+    -   [ProgressBar][49]
+    -   [RecordCard][50]
+    -   [Select][51]
+    -   [SelectSynced][52]
+    -   [SelectButtons][53]
+    -   [SelectButtonsSynced][54]
+    -   [TablePicker][55]
+    -   [TablePickerSynced][56]
+    -   [Toggle][57]
+    -   [ToggleSynced][58]
+    -   [Tooltip][59]
+    -   [ViewPicker][60]
+    -   [ViewPickerSynced][61]
+    -   [ViewportConstraint][62]
 
 ## @airtable/blocks
 
@@ -64,17 +72,17 @@
 #### [import {base} from '@airtable/blocks';][14]
 
 An instance of [Base][14] representing the current Airtable base. If you're writing a React
-Component, you might want to use the [useBase][55] hook rather than importing `base` directly.
+Component, you might want to use the [useBase][63] hook rather than importing `base` directly.
 
 #### [import {globalConfig} from '@airtable/blocks';][3]
 
-[GlobalConfig][3] is a key-value store shared between every user of a particular installation of
+[globalConfig][3] is a key-value store shared between every user of a particular installation of
 your block. Use it for storing block configuration.
 
 #### [import {session} from '@airtable/blocks';][15]
 
 An instance of [Session][15], containing information about the current user's session. If you're
-writing a React Component, you might want to use the [useSession][56] hook rather than importing
+writing a React Component, you might want to use the [useSession][64] hook rather than importing
 `session` directly.
 
 #### [import {cursor} from '@airtable/blocks';][16]
@@ -89,7 +97,7 @@ constraints. See [Viewport][5].
 
 #### [import {settingsButton} from '@airtable/blocks';][4]
 
-Controls the block's settings button. See [SettingsButton][57].
+Controls the block's settings button. See [settingsButton][4].
 
 #### import {reload} from '@airtable/blocks';
 
@@ -106,7 +114,7 @@ A unique ID for this block installation.
 
 #### import {localStorage, sessionStorage} from '@airtable/blocks';
 
-Wrappers for [window.localStorage][58] and [window.sessionStorage][59] which will automatically fall
+Wrappers for [window.localStorage][65] and [window.sessionStorage][66] which will automatically fall
 back to an in-memory alternative when the browser version is unavailable.
 
 #### [import \* as models from '@airtable/blocks/models';][6]
@@ -118,7 +126,7 @@ aggregation.
 
 React component library, hooks for integrating Airtable data with React components, and UI helpers.
 
-### GlobalConfig
+### globalConfig
 
 #### GlobalConfig
 
@@ -127,8 +135,7 @@ React component library, hooks for integrating Airtable data with React componen
 A key-value store for persisting configuration options for a block installation.
 
 The contents will be synced in real-time to all logged-in users of the installation. Contents will
-not be updated in real-time when the installation is running in a publicly shared base, or in
-development mode.
+not be updated in real-time when the installation is running in a publicly shared base.
 
 Any key can be watched to know when the value of the key changes.
 
@@ -146,7 +153,7 @@ Returns `true` if the current user can set the global config value at `key`, `fa
 
 ###### Parameters
 
--   `key` **([string][60] \| [Array][61]&lt;[string][60]>)** A string for the top-level key, or an
+-   `key` **([string][67] \| [Array][68]&lt;[string][67]>)** A string for the top-level key, or an
     array of strings describing the path to the value.
 
 ###### Examples
@@ -159,7 +166,7 @@ if (globalConfig.canSet('favoriteColor')) {
 }
 ```
 
-Returns **[boolean][62]** `true` if the current user can set the global config value at `key`, and
+Returns **[boolean][69]** `true` if the current user can set the global config value at `key`, and
 `false` otherwise.
 
 ##### canSetPaths
@@ -169,8 +176,8 @@ otherwise.
 
 ###### Parameters
 
--   `updates` **[Array][61]&lt;{path: ([string][60] \| [Array][61]&lt;[string][60]>), value:
-    [GlobalConfigValue][63]}>** The paths and values to set.
+-   `updates` **[Array][68]&lt;{path: ([string][67] \| [Array][68]&lt;[string][67]>), value:
+    [GlobalConfigValue][70]}>** The paths and values to set.
 
 ###### Examples
 
@@ -186,7 +193,7 @@ if (globalConfig.canSetPaths(updates)) {
 }
 ```
 
-Returns **[boolean][62]** `true` if the current user can perform the specified updates to global
+Returns **[boolean][69]** `true` if the current user can perform the specified updates to global
 config, `false` otherwise.
 
 ##### get
@@ -195,7 +202,7 @@ Get the value at a path. Throws an error if the path is invalid.
 
 ###### Parameters
 
--   `key` **([string][60] \| [Array][61]&lt;[string][60]>)** A string for the top-level key, or an
+-   `key` **([string][67] \| [Array][68]&lt;[string][67]>)** A string for the top-level key, or an
     array of strings describing the path to the value.
 
 ###### Examples
@@ -207,7 +214,7 @@ const topLevelValue = globalConfig.get('topLevelKey');
 const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
 ```
 
-Returns **([GlobalConfigValue][63] | void)** The value at the provided path, or `undefined` if no
+Returns **([GlobalConfigValue][70] | void)** The value at the provided path, or `undefined` if no
 value exists at that path.
 
 ##### set
@@ -216,9 +223,9 @@ Sets a value at a path. Throws an error if the path or value is invalid.
 
 ###### Parameters
 
--   `key` **([string][60] \| [Array][61]&lt;[string][60]>)** A string for the top-level key, or an
+-   `key` **([string][67] \| [Array][68]&lt;[string][67]>)** A string for the top-level key, or an
     array of strings describing the path to set.
--   `value` **([GlobalConfigValue][63] | void)** The value to set at the specified path. Use
+-   `value` **([GlobalConfigValue][70] | void)** The value to set at the specified path. Use
     `undefined` to delete the value at the given path.
 
 ###### Examples
@@ -239,8 +246,8 @@ Sets multiple values. Throws if any path or value is invalid.
 
 ###### Parameters
 
--   `updates` **[Array][61]&lt;{path: ([string][60] \| [Array][61]&lt;[string][60]>), value:
-    [GlobalConfigValue][63]}>** The paths and values to set.
+-   `updates` **[Array][68]&lt;{path: ([string][67] \| [Array][68]&lt;[string][67]>), value:
+    [GlobalConfigValue][70]}>** The paths and values to set.
 
 ###### Examples
 
@@ -266,12 +273,12 @@ Should be called with the same arguments given to `.watch`.
 
 ###### Parameters
 
--   `keys` **(WatchableGlobalConfigKey | [Array][61]&lt;WatchableGlobalConfigKey>)** the keys to
+-   `keys` **(WatchableGlobalConfigKey | [Array][68]&lt;WatchableGlobalConfigKey>)** the keys to
     unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableGlobalConfigKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableGlobalConfigKey>** the array of keys that were unwatched
 
 ##### watch
 
@@ -283,21 +290,21 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ###### Parameters
 
--   `keys` **(WatchableGlobalConfigKey | [Array][61]&lt;WatchableGlobalConfigKey>)** the keys to
+-   `keys` **(WatchableGlobalConfigKey | [Array][68]&lt;WatchableGlobalConfigKey>)** the keys to
     watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableGlobalConfigKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableGlobalConfigKey>** the array of keys that were watched
 
 #### GlobalConfigKey
 
-Type: ([string][60] \| [Array][61]&lt;[string][60]>)
+Type: ([string][67] \| [Array][68]&lt;[string][67]>)
 
 #### GlobalConfigValue
 
-Type: (null | [boolean][62] \| [number][66] \| [string][60] \|
-[Array][61]&lt;[GlobalConfigValue][63]> | [Object][65]&lt;[string][60], [GlobalConfigValue][63]>)
+Type: (null | [boolean][69] \| [number][73] \| [string][67] \|
+[Array][68]&lt;[GlobalConfigValue][70]> | [Object][72]&lt;[string][67], [GlobalConfigValue][70]>)
 
 ### settingsButton
 
@@ -325,12 +332,12 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableSettingsButtonKey | [Array][61]&lt;WatchableSettingsButtonKey>)** the keys to
+-   `keys` **(WatchableSettingsButtonKey | [Array][68]&lt;WatchableSettingsButtonKey>)** the keys to
     unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableSettingsButtonKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableSettingsButtonKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -345,21 +352,21 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableSettingsButtonKey | [Array][61]&lt;WatchableSettingsButtonKey>)** the keys to
+-   `keys` **(WatchableSettingsButtonKey | [Array][68]&lt;WatchableSettingsButtonKey>)** the keys to
     watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableSettingsButtonKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableSettingsButtonKey>** the array of keys that were watched
 
 #### isVisible
 
 Whether the settings button is being shown. Set to `true` to show the settings button. Can be
 watched.
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]**
+Returns **[boolean][69]**
 
 ### Viewport
 
@@ -380,11 +387,11 @@ added constraints.
 
 ##### Parameters
 
--   `sizeConstraint` **{width: ([number][66] | null), height: ([number][66] | null)}** The width and
+-   `sizeConstraint` **{width: ([number][73] | null), height: ([number][73] | null)}** The width and
     height constraints to add. Both `width` and `height` are optional - if either is set to null,
     that means there is no max size in that dimension.
 
-Returns **[Function][64]** A function that can be called to remove the fullscreen size constraint
+Returns **[Function][71]** A function that can be called to remove the fullscreen size constraint
 that was added.
 
 #### addMinSize
@@ -393,11 +400,11 @@ Add a minimum frame size constraint. Use \`.minSize`` to get the aggregate of al
 
 ##### Parameters
 
--   `sizeConstraint` **{width: ([number][66] | null), height: ([number][66] | null)}** The width and
+-   `sizeConstraint` **{width: ([number][73] | null), height: ([number][73] | null)}** The width and
     height constraints to add. Both `width` and `height` are optional - if either is set to null,
     that means there is no min size in that dimension.
 
-Returns **[Function][64]** A function that can be called to remove the size constraint that was
+Returns **[Function][71]** A function that can be called to remove the size constraint that was
 added.
 
 #### enterFullscreenIfPossible
@@ -417,30 +424,30 @@ Boolean to denote whether the block is currently fullscreen.
 
 Can be watched.
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]** `true` if the block is fullscreen, `false` otherwise.
+Returns **[boolean][69]** `true` if the block is fullscreen, `false` otherwise.
 
 #### isSmallerThanMinSize
 
 Boolean to denote whether the block frame is smaller than the `minSize`.
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]** `true` if the block frame is smaller than `minSize`, `false` otherwise.
+Returns **[boolean][69]** `true` if the block frame is smaller than `minSize`, `false` otherwise.
 
 #### maxFullscreenSize
 
 The maximum dimensions of the block when it is in fullscreen mode. Returns the smallest set of
-dimensions added with [Viewport#addMaxFullscreenSize][67].
+dimensions added with [Viewport#addMaxFullscreenSize][74].
 
 If `width` or `height` is null, it means there is no max size constraint on that dimension. If
-`maxFullscreenSize` would be smaller than [Viewport#minSize][68], it is constrained to be at least
+`maxFullscreenSize` would be smaller than [Viewport#minSize][75], it is constrained to be at least
 `minSize`.
 
 Type: ViewportSizeConstraint
 
-Returns **{width: ([number][66] | null), height: ([number][66] | null)}** maxSize
+Returns **{width: ([number][73] | null), height: ([number][73] | null)}** maxSize
 
 #### minSize
 
@@ -449,7 +456,7 @@ be shown asking the user to resize the block to be bigger.
 
 Type: ViewportSizeConstraint
 
-Returns **{width: ([number][66] | null), height: ([number][66] | null)}** The largest set of
+Returns **{width: ([number][73] | null), height: ([number][73] | null)}** The largest set of
 dimensions added with addMinSize. If `width` or `height` is null, it means there is no minSize
 constraint on that dimension.
 
@@ -459,9 +466,9 @@ The current size of the block frame.
 
 Can be watched.
 
-Type: {width: [number][66], height: [number][66]}
+Type: {width: [number][73], height: [number][73]}
 
-Returns **{width: [number][66], height: [number][66]}** The current size of the block frame.
+Returns **{width: [number][73], height: [number][73]}** The current size of the block frame.
 
 #### unwatch
 
@@ -471,11 +478,11 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableViewportKey | [Array][61]&lt;WatchableViewportKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableViewportKey | [Array][68]&lt;WatchableViewportKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableViewportKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableViewportKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -492,11 +499,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableViewportKey | [Array][61]&lt;WatchableViewportKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableViewportKey | [Array][68]&lt;WatchableViewportKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableViewportKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableViewportKey>** the array of keys that were watched
 
 ## @airtable/blocks/models
 
@@ -598,7 +605,7 @@ The time the record was created in UTC.
 string;
 ```
 
-An [ISO 8601][69] formatted date time.
+An [ISO 8601][76] formatted date time.
 
 ##### Options
 
@@ -611,7 +618,7 @@ An [ISO 8601][69] formatted date time.
 }
 ```
 
-See [fieldTypes.DATE][70] and [fieldTypes.DATE_TIME][71] for `result` options.
+See [fieldTypes.DATE][77] and [fieldTypes.DATE_TIME][78] for `result` options.
 
 #### fieldTypes.CURRENCY
 
@@ -642,7 +649,7 @@ A date.
 string;
 ```
 
-An [ISO 8601][69] formatted date.
+An [ISO 8601][76] formatted date.
 
 ##### Options
 
@@ -666,7 +673,7 @@ A date & time.
 string;
 ```
 
-An [ISO 8601][69] formatted date time.
+An [ISO 8601][76] formatted date time.
 
 ##### Options
 
@@ -760,7 +767,7 @@ specific editable fields.
 string;
 ```
 
-An [ISO 8601][69] formatted date time.
+An [ISO 8601][76] formatted date time.
 
 ##### Options
 
@@ -778,7 +785,7 @@ An [ISO 8601][69] formatted date time.
 }
 ```
 
-See [fieldTypes.DATE][70] and [fieldTypes.DATE_TIME][71] for `result` options.
+See [fieldTypes.DATE][77] and [fieldTypes.DATE_TIME][78] for `result` options.
 
 #### fieldTypes.LOOKUP
 
@@ -1122,7 +1129,7 @@ The currently selected choice.
 
 #### fieldTypes.URL
 
-A valid URL (e.g. airtable.com or [https://airtable.com/universe][72]).
+A valid URL (e.g. airtable.com or [https://airtable.com/universe][79]).
 
 ###### Cell value format
 
@@ -1145,7 +1152,7 @@ import {generateGuid} from '@airtable/blocks/models';
 const id = generateGuid();
 ```
 
-Returns **[string][60]**
+Returns **[string][67]**
 
 ### viewTypes
 
@@ -1196,17 +1203,17 @@ const queryResult = table.selectRecords({recordColorMode});
 
 ##### Parameters
 
--   `selectField` **[Field][73]**
+-   `selectField` **[Field][80]**
 
-Returns **{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: [Field][73]}**
+Returns **{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: [Field][80]}**
 
 #### recordColoring.modes.byView
 
 ##### Parameters
 
--   `view` **[View][74]**
+-   `view` **[View][81]**
 
-Returns **{type: recordColoring.ModeTypes.BY_VIEW, view: [View][74]}**
+Returns **{type: recordColoring.ModeTypes.BY_VIEW, view: [View][81]}**
 
 #### recordColoring.modes.none
 
@@ -1214,7 +1221,7 @@ Returns **{type: recordColoring.ModeTypes.NONE}**
 
 #### recordColoring.ModeTypes
 
-An enum of the different types of [recordColoring.modes][75]
+An enum of the different types of [recordColoring.modes][82]
 
 #### recordColoring.ModeTypes.BY_SELECT_FIELD
 
@@ -1230,9 +1237,9 @@ Abstract superclass for all models. You won't use this class directly.
 
 #### id
 
-Type: [string][60]
+Type: [string][67]
 
-Returns **[string][60]** The ID for this model.
+Returns **[string][67]** The ID for this model.
 
 #### isDeleted
 
@@ -1243,13 +1250,13 @@ it may be deleted and trying to access any data of a deleted object (other than 
 But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
 data.
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]** `true` if the model has been deleted, and `false` otherwise.
+Returns **[boolean][69]** `true` if the model has been deleted, and `false` otherwise.
 
 #### toString
 
-Returns **[string][60]** A string representation of the model for use in debugging.
+Returns **[string][67]** A string representation of the model for use in debugging.
 
 ### AbstractModelWithAsyncData
 
@@ -1260,13 +1267,13 @@ Abstract superclass for all block SDK models that need to fetch async data.
 #### Parameters
 
 -   `baseData` **BaseData**
--   `modelId` **[string][60]**
+-   `modelId` **[string][67]**
 
 #### isDataLoaded
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]**
+Returns **[boolean][69]**
 
 #### loadDataAsync
 
@@ -1284,11 +1291,11 @@ released. Once the data is available, the callback will be called.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][61]&lt;WatchableKey>)**
--   `callback` **[Function][64]**
--   `context` **[Object][65]??**
+-   `keys` **(WatchableKey | [Array][68]&lt;WatchableKey>)**
+-   `callback` **[Function][71]**
+-   `context` **[Object][72]??**
 
-Returns **[Array][61]&lt;WatchableKey>**
+Returns **[Array][68]&lt;WatchableKey>**
 
 #### watch
 
@@ -1297,28 +1304,28 @@ fetched. Once the data is available, the callback will be called.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][61]&lt;WatchableKey>)**
--   `callback` **[Function][64]**
--   `context` **[Object][65]??**
+-   `keys` **(WatchableKey | [Array][68]&lt;WatchableKey>)**
+-   `callback` **[Function][71]**
+-   `context` **[Object][72]??**
 
-Returns **[Array][61]&lt;WatchableKey>**
+Returns **[Array][68]&lt;WatchableKey>**
 
 ### Aggregator
 
 Aggregators can be used to compute aggregates for cell values.
 
-Type: {key: [string][60], displayName: [string][60], shortDisplayName: [string][60], aggregate:
-function (records: [Array][61]&lt;[Record][76]>, field: [Field][73]): any, aggregateToString:
-function (records: [Array][61]&lt;[Record][76]>, field: [Field][73]): [string][60]}
+Type: {key: [string][67], displayName: [string][67], shortDisplayName: [string][67], aggregate:
+function (records: [Array][68]&lt;[Record][83]>, field: [Field][80]): any, aggregateToString:
+function (records: [Array][68]&lt;[Record][83]>, field: [Field][80]): [string][67]}
 
 #### Properties
 
--   `key` **[string][60]**
--   `displayName` **[string][60]**
--   `shortDisplayName` **[string][60]**
--   `aggregate` **function (records: [Array][61]&lt;[Record][76]>, field: [Field][73]): any**
--   `aggregateToString` **function (records: [Array][61]&lt;[Record][76]>, field: [Field][73]):
-    [string][60]**
+-   `key` **[string][67]**
+-   `displayName` **[string][67]**
+-   `shortDisplayName` **[string][67]**
+-   `aggregate` **function (records: [Array][68]&lt;[Record][83]>, field: [Field][80]): any**
+-   `aggregateToString` **function (records: [Array][68]&lt;[Record][83]>, field: [Field][80]):
+    [string][67]**
 
 #### Examples
 
@@ -1349,7 +1356,7 @@ console.log('The name of your base is', base.name);
 
 #### activeCollaborators
 
-Type: [Array][61]&lt;CollaboratorData>
+Type: [Array][68]&lt;CollaboratorData>
 
 ##### Examples
 
@@ -1358,7 +1365,7 @@ import {base} from '@airtable/blocks';
 console.log(base.activeCollaborators[0].email);
 ```
 
-Returns **[Array][61]&lt;CollaboratorData>** The users who have access to this base.
+Returns **[Array][68]&lt;CollaboratorData>** The users who have access to this base.
 
 #### getCollaboratorById
 
@@ -1367,8 +1374,8 @@ Returns **[Array][61]&lt;CollaboratorData>** The users who have access to this b
 -   `collaboratorId` **UserId** The ID of the user.
 
 Returns **CollaboratorData** The user matching the given ID. Throws if that user does not exist or
-does not have access to this base. Use [getCollaboratorByIdIfExists][77] instead if you are unsure
-whether a collaborator with the given ID exists and has access to this base.
+does not have access to this base. Use [Base#getCollaboratorByIdIfExists][84] instead if you are
+unsure whether a collaborator with the given ID exists and has access to this base.
 
 #### getCollaboratorByIdIfExists
 
@@ -1383,38 +1390,38 @@ not exist or does not have access to this base.
 
 ##### Parameters
 
--   `tableId` **[string][60]** The ID of the table.
+-   `tableId` **[string][67]** The ID of the table.
 
-Returns **[Table][78]** The table matching the given ID. Throws if that table does not exist in this
-base. Use [getTableByIdIfExists][79] instead if you are unsure whether a table exists with the given
-ID.
+Returns **[Table][85]** The table matching the given ID. Throws if that table does not exist in this
+base. Use [Base#getTableByIdIfExists][86] instead if you are unsure whether a table exists with the
+given ID.
 
 #### getTableByIdIfExists
 
 ##### Parameters
 
--   `tableId` **[string][60]** The ID of the table.
+-   `tableId` **[string][67]** The ID of the table.
 
-Returns **([Table][78] | null)** The table matching the given ID, or `null` if that table does not
+Returns **([Table][85] | null)** The table matching the given ID, or `null` if that table does not
 exist in this base.
 
 #### getTableByName
 
 ##### Parameters
 
--   `tableName` **[string][60]** The name of the table you're looking for.
+-   `tableName` **[string][67]** The name of the table you're looking for.
 
-Returns **[Table][78]** The table matching the given name. Throws if no table exists with that name
-in this base. Use [getTableByNameIfExists][80] instead if you are unsure whether a table exists with
-the given name.
+Returns **[Table][85]** The table matching the given name. Throws if no table exists with that name
+in this base. Use [Base#getTableByNameIfExists][87] instead if you are unsure whether a table exists
+with the given name.
 
 #### getTableByNameIfExists
 
 ##### Parameters
 
--   `tableName` **[string][60]** The name of the table you're looking for.
+-   `tableName` **[string][67]** The name of the table you're looking for.
 
-Returns **([Table][78] | null)** The table matching the given name, or `null` if no table exists
+Returns **([Table][85] | null)** The table matching the given name, or `null` if no table exists
 with that name in this base.
 
 #### id
@@ -1427,11 +1434,11 @@ console.log(base.id);
 // => 'appxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** This base's ID.
+Returns **[string][67]** This base's ID.
 
 #### name
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -1440,11 +1447,11 @@ import {base} from '@airtable/blocks';
 console.log('The name of your base is', base.name);
 ```
 
-Returns **[string][60]** The name of the base.
+Returns **[string][67]** The name of the base.
 
 #### tables
 
-Type: [Array][61]&lt;[Table][78]>
+Type: [Array][68]&lt;[Table][85]>
 
 ##### Examples
 
@@ -1453,7 +1460,7 @@ import {base} from '@airtable/blocks';
 console.log(`You have ${base.tables.length} tables`);
 ```
 
-Returns **[Array][61]&lt;[Table][78]>** The tables in this base. Can be watched to know when tables
+Returns **[Array][68]&lt;[Table][85]>** The tables in this base. Can be watched to know when tables
 are created, deleted, or reordered in the base.
 
 #### unwatch
@@ -1464,11 +1471,11 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableBaseKey | [Array][61]&lt;WatchableBaseKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableBaseKey | [Array][68]&lt;WatchableBaseKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableBaseKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableBaseKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -1484,11 +1491,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableBaseKey | [Array][61]&lt;WatchableBaseKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableBaseKey | [Array][68]&lt;WatchableBaseKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableBaseKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableBaseKey>** the array of keys that were watched
 
 ### Session
 
@@ -1534,11 +1541,11 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableSessionKey | [Array][61]&lt;WatchableSessionKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableSessionKey | [Array][68]&lt;WatchableSessionKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableSessionKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableSessionKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -1552,11 +1559,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableSessionKey | [Array][61]&lt;WatchableSessionKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableSessionKey | [Array][68]&lt;WatchableSessionKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableSessionKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableSessionKey>** the array of keys that were watched
 
 ### Cursor
 
@@ -1598,9 +1605,9 @@ Checks whether a given record is selected.
 
 ##### Parameters
 
--   `recordOrRecordId` **([Record][76] \| [string][60])** The record or record ID to check for.
+-   `recordOrRecordId` **([Record][83] \| [string][67])** The record or record ID to check for.
 
-Returns **[boolean][62]** `true` if the given record is selected, `false` otherwise.
+Returns **[boolean][69]** `true` if the given record is selected, `false` otherwise.
 
 #### selectedRecordIds
 
@@ -1608,9 +1615,9 @@ The record IDs of all currently selected records, or an empty array if no record
 
 Can be watched.
 
-Type: [Array][61]&lt;RecordId>
+Type: [Array][68]&lt;RecordId>
 
-Returns **[Array][61]&lt;RecordId>** The record IDs of all currently selected records, or an empty
+Returns **[Array][68]&lt;RecordId>** The record IDs of all currently selected records, or an empty
 array if no records are selected.
 
 #### unwatch
@@ -1621,11 +1628,11 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableCursorKey | [Array][61]&lt;WatchableCursorKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableCursorKey | [Array][68]&lt;WatchableCursorKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableCursorKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableCursorKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -1642,11 +1649,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableCursorKey | [Array][61]&lt;WatchableCursorKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableCursorKey | [Array][68]&lt;WatchableCursorKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableCursorKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableCursorKey>** the array of keys that were watched
 
 ### Field
 
@@ -1666,7 +1673,7 @@ console.log('The type of this field is', field.type);
 
 #### availableAggregators
 
-Type: [Array][61]&lt;[Aggregator][81]>
+Type: [Array][68]&lt;[Aggregator][88]>
 
 ##### Examples
 
@@ -1674,7 +1681,7 @@ Type: [Array][61]&lt;[Aggregator][81]>
 const fieldAggregators = myField.availableAggregators;
 ```
 
-Returns **[Array][61]&lt;[Aggregator][81]>** A list of available aggregators given this field's
+Returns **[Array][68]&lt;[Aggregator][88]>** A list of available aggregators given this field's
 configuration.
 
 #### convertStringToCellValue
@@ -1684,7 +1691,7 @@ config.
 
 ##### Parameters
 
--   `string` **[string][60]** The string to parse.
+-   `string` **[string][67]** The string to parse.
 
 ##### Examples
 
@@ -1706,13 +1713,13 @@ console.log(myField.id);
 // => 'fldxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** This field's ID.
+Returns **[string][67]** This field's ID.
 
 #### isAggregatorAvailable
 
 ##### Parameters
 
--   `aggregator` **([Aggregator][81] \| [string][60])** The aggregator object or aggregator key.
+-   `aggregator` **([Aggregator][88] \| [string][67])** The aggregator object or aggregator key.
 
 ##### Examples
 
@@ -1729,12 +1736,12 @@ console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
 // => false
 ```
 
-Returns **[boolean][62]** `true` if the given aggregator is available for this field, `false`
+Returns **[boolean][69]** `true` if the given aggregator is available for this field, `false`
 otherwise.
 
 #### isComputed
 
-Type: [boolean][62]
+Type: [boolean][69]
 
 ##### Examples
 
@@ -1745,7 +1752,7 @@ console.log(myAutoNumberField.isComputed);
 // => true
 ```
 
-Returns **[boolean][62]** `true` if this field is computed, `false` otherwise. A field is "computed"
+Returns **[boolean][69]** `true` if this field is computed, `false` otherwise. A field is "computed"
 if it's value is not set by user input (e.g. autoNumber, formula, etc.). Can be watched.
 
 #### isDeleted
@@ -1765,18 +1772,18 @@ if (!myField.isDeleted) {
 }
 ```
 
-Returns **[boolean][62]** `true` if the field has been deleted, `false` otherwise.
+Returns **[boolean][69]** `true` if the field has been deleted, `false` otherwise.
 
 #### isPrimaryField
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]** `true` if this field is its parent table's primary field, `false`
+Returns **[boolean][69]** `true` if this field is its parent table's primary field, `false`
 otherwise. Should never change because the primary field of a table cannot change.
 
 #### name
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -1785,7 +1792,7 @@ console.log(myField.name);
 // => 'Name'
 ```
 
-Returns **[string][60]** The name of the field. Can be watched.
+Returns **[string][67]** The name of the field. Can be watched.
 
 #### options
 
@@ -1807,7 +1814,7 @@ depend on the field's type. Can be watched.
 
 #### type
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -1816,7 +1823,7 @@ console.log(myField.type);
 // => 'singleLineText'
 ```
 
-Returns **[string][60]** The type of the field. Can be watched.
+Returns **[string][67]** The type of the field. Can be watched.
 
 #### unwatch
 
@@ -1826,11 +1833,11 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableFieldKey | [Array][61]&lt;WatchableFieldKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableFieldKey | [Array][68]&lt;WatchableFieldKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableFieldKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableFieldKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -1847,11 +1854,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableFieldKey | [Array][61]&lt;WatchableFieldKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableFieldKey | [Array][68]&lt;WatchableFieldKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableFieldKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableFieldKey>** the array of keys that were watched
 
 ### RecordQueryResult
 
@@ -1866,11 +1873,11 @@ using the color from a view. Just like a view, you can either have all the field
 available, or you can just ask for the fields that are relevant to you. There are two types of
 QueryResult:
 
--   [TableOrViewQueryResult][82] is the most common, and is a query result filtered to all the
+-   [TableOrViewQueryResult][89] is the most common, and is a query result filtered to all the
     records in a specific [Table][20] or [View][21]. You can get one of these with
     `table.selectRecords()` or `view.selectRecords()`.
--   [LinkedRecordsQueryResult][83] is a query result of all the records in a particular [linked
-    record cell][84]. You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
+-   [LinkedRecordsQueryResult][90] is a query result of all the records in a particular [linked
+    record cell][91]. You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
 
 Once you've got a query result, you need to load it before you can start working with it. When
 you're finished, unload it:
@@ -1890,7 +1897,7 @@ queryResult.unloadData();
 ```
 
 If you're using a query result in a React component, you don't need to worry about this. Just use
-[useRecords][85], [useRecordIds][86], [useRecordById][87] or [useLoadable][88], which will handle
+[useRecords][92], [useRecordIds][93], [useRecordById][94] or [useLoadable][95], which will handle
 all that for you.
 
 Whilst loaded, a query result will automatically keep up to date with what's in Airtable: records
@@ -1976,9 +1983,9 @@ someView.selectRecords({
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
 the QueryResult will load all fields in the table.
 
-Type: ([Array][61]&lt;[Field][73]> | null)
+Type: ([Array][68]&lt;[Field][80]> | null)
 
-Returns **([Array][61]&lt;[Field][73]> | null)**
+Returns **([Array][68]&lt;[Field][80]> | null)**
 
 ##### getRecordById
 
@@ -1989,7 +1996,7 @@ out. Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 -   `recordId` **RecordId** the ID of the [Record][19] you want
 
-Returns **[Record][76]** the record
+Returns **[Record][83]** the record
 
 ##### getRecordByIdIfExists
 
@@ -2000,7 +2007,7 @@ Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 -   `recordId` **RecordId** the ID of the [Record][19] you want
 
-Returns **([Record][76] | null)** the record
+Returns **([Record][83] | null)** the record
 
 ##### getRecordColor
 
@@ -2009,9 +2016,9 @@ RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 
 ###### Parameters
 
--   `recordOrRecordId` **(RecordId | [Record][76])** the record or record ID you want the color of.
+-   `recordOrRecordId` **(RecordId | [Record][83])** the record or record ID you want the color of.
 
-Returns **([Color][89] | null)** a [Color][90], or null if the record has no color in this query
+Returns **([Color][96] | null)** a [Color][97], or null if the record has no color in this query
 result.
 
 ##### hasRecord
@@ -2021,10 +2028,10 @@ the record has been deleted or is filtered out.
 
 ###### Parameters
 
--   `recordOrRecordId` **(RecordId | [Record][76])** the record or record id to check the presence
+-   `recordOrRecordId` **(RecordId | [Record][83])** the record or record id to check the presence
     of
 
-Returns **[boolean][62]** whether the record exists in this query result
+Returns **[boolean][69]** whether the record exists in this query result
 
 ##### loadDataAsync
 
@@ -2032,23 +2039,23 @@ Loads all data for the query result.
 
 Every call to `loadDataAsync` should have a matching call to `unloadData`.
 
-Returns **[Promise][91]&lt;void>** A promise that will resolve once the data is loaded.
+Returns **[Promise][98]&lt;void>** A promise that will resolve once the data is loaded.
 
 ##### recordIds
 
 The record IDs in this QueryResult. Throws if data is not loaded yet. Can be watched.
 
-Type: [Array][61]&lt;RecordId>
+Type: [Array][68]&lt;RecordId>
 
-Returns **[Array][61]&lt;RecordId>**
+Returns **[Array][68]&lt;RecordId>**
 
 ##### records
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
-Type: [Array][61]&lt;[Record][76]>
+Type: [Array][68]&lt;[Record][83]>
 
-Returns **[Array][61]&lt;[Record][76]>** all of the records in this query result
+Returns **[Array][68]&lt;[Record][83]>** all of the records in this query result
 
 ##### unloadData
 
@@ -2069,12 +2076,12 @@ unloaded.
 
 ###### Parameters
 
--   `keys` **(WatchableRecordQueryResultKey | [Array][61]&lt;WatchableRecordQueryResultKey>)** the
+-   `keys` **(WatchableRecordQueryResultKey | [Array][68]&lt;WatchableRecordQueryResultKey>)** the
     keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableRecordQueryResultKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableRecordQueryResultKey>** the array of keys that were unwatched
 
 ##### watch
 
@@ -2096,12 +2103,12 @@ fetched. Once the data is available, the `callback` will be called.
 
 ###### Parameters
 
--   `keys` **(WatchableRecordQueryResultKey | [Array][61]&lt;WatchableRecordQueryResultKey>)** the
+-   `keys` **(WatchableRecordQueryResultKey | [Array][68]&lt;WatchableRecordQueryResultKey>)** the
     keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableRecordQueryResultKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableRecordQueryResultKey>** the array of keys that were watched
 
 #### TableOrViewQueryResult
 
@@ -2115,26 +2122,25 @@ Do not instantiate. You can get instances of this class by calling `table.select
 
 ##### Parameters
 
--   `sourceModel` **([Table][78] \| [View][74])**
--   `recordStore` **RecordStore**
--   `opts` **RecordQueryResultOpts?**
+-   `sourceModel` **([Table][85] \| [View][81])**
+-   `normalizedOpts` **NormalizedRecordQueryResultOpts**
 
 ##### fields
 
 The fields that were used to create this RecordQueryResult. Null if fields were not specified, which
 means the RecordQueryResult will load all fields in the table.
 
-Type: ([Array][61]&lt;[Field][73]> | null)
+Type: ([Array][68]&lt;[Field][80]> | null)
 
-Returns **([Array][61]&lt;[Field][73]> | null)**
+Returns **([Array][68]&lt;[Field][80]> | null)**
 
 ##### recordIds
 
 The record IDs in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
-Type: [Array][61]&lt;[string][60]>
+Type: [Array][68]&lt;[string][67]>
 
-Returns **[Array][61]&lt;[string][60]>**
+Returns **[Array][68]&lt;[string][67]>**
 
 #### LinkedRecordsQueryResult
 
@@ -2148,15 +2154,15 @@ Do not instantiate. You can get instances of this class by calling
 
 ##### Parameters
 
--   `record` **[Record][76]**
--   `field` **[Field][73]**
--   `opts` **RecordQueryResultOpts**
+-   `record` **[Record][83]**
+-   `field` **[Field][80]**
+-   `normalizedOpts` **NormalizedRecordQueryResultOpts**
 
 ##### fields
 
-Type: ([Array][61]&lt;[Field][73]> | null)
+Type: ([Array][68]&lt;[Field][80]> | null)
 
-Returns **([Array][61]&lt;[Field][73]> | null)** The fields that were used to create this
+Returns **([Array][68]&lt;[Field][80]> | null)** The fields that were used to create this
 LinkedRecordsQueryResult.
 
 ##### isValid
@@ -2166,25 +2172,25 @@ field config changes to link to a different table or a type other than MULTIPLE_
 `isValid` has become false, it will never become true again. Many fields will throw on attempting to
 access them, and watches will no longer fire.
 
-Type: [boolean][62]
+Type: [boolean][69]
 
-Returns **[boolean][62]** whether the query result is valid
+Returns **[boolean][69]** whether the query result is valid
 
 ##### recordIds
 
 Watchable.
 
-Type: [Array][61]&lt;[string][60]>
+Type: [Array][68]&lt;[string][67]>
 
-Returns **[Array][61]&lt;[string][60]>** Ordered array of all the linked record ids.
+Returns **[Array][68]&lt;[string][67]>** Ordered array of all the linked record ids.
 
 ##### records
 
 Watchable.
 
-Type: [Array][61]&lt;[Record][76]>
+Type: [Array][68]&lt;[Record][83]>
 
-Returns **[Array][61]&lt;[Record][76]>** Ordered array of all the linked records.
+Returns **[Array][68]&lt;[Record][83]>** Ordered array of all the linked records.
 
 ### Record
 
@@ -2197,7 +2203,7 @@ Do not instantiate. You can get instances of this class by calling `table.select
 
 #### commentCount
 
-Type: [number][66]
+Type: [number][73]
 
 ##### Examples
 
@@ -2206,11 +2212,11 @@ const comentCount = myRecord.commentCount;
 console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`);
 ```
 
-Returns **[number][66]** The number of comments on this record.
+Returns **[number][73]** The number of comments on this record.
 
 #### createdTime
 
-Type: [Date][92]
+Type: [Date][99]
 
 ##### Examples
 
@@ -2218,7 +2224,7 @@ Type: [Date][92]
 console.log(`This record was created at ${myRecord.createdTime.toISOString()}`);
 ```
 
-Returns **[Date][92]** The created time of this record.
+Returns **[Date][99]** The created time of this record.
 
 #### getAttachmentClientUrlFromCellValueUrl
 
@@ -2227,8 +2233,8 @@ returned will only work for the current user.
 
 ##### Parameters
 
--   `attachmentId` **[string][60]** The ID of the attachment.
--   `attachmentUrl` **[string][60]** The attachment's URL (which is not suitable for rendering on
+-   `attachmentId` **[string][67]** The ID of the attachment.
+-   `attachmentUrl` **[string][67]** The attachment's URL (which is not suitable for rendering on
     the client).
 
 ##### Examples
@@ -2256,7 +2262,7 @@ function RecordAttachments(props) {
 }
 ```
 
-Returns **[string][60]** A URL that is suitable for rendering on the current client.
+Returns **[string][67]** A URL that is suitable for rendering on the current client.
 
 #### getCellValue
 
@@ -2264,7 +2270,7 @@ Gets a specific cell value in this record.
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][73] | FieldId | [string][60])** The field (or field ID or
+-   `fieldOrFieldIdOrFieldName` **([Field][80] | FieldId | [string][67])** The field (or field ID or
     field name) whose cell value you'd like to get.
 
 ##### Examples
@@ -2283,7 +2289,7 @@ Gets a specific cell value in this record, formatted as a `string`.
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][73] \| [string][60])** The field (or field ID or field
+-   `fieldOrFieldIdOrFieldName` **([Field][80] \| [string][67])** The field (or field ID or field
     name) whose cell value you'd like to get.
 
 ##### Examples
@@ -2294,7 +2300,7 @@ console.log(cellValueAsString);
 // => '42'
 ```
 
-Returns **[string][60]** The cell value in the given field, formatted as a `string`.
+Returns **[string][67]** The cell value in the given field, formatted as a `string`.
 
 #### getColorHexInView
 
@@ -2304,10 +2310,10 @@ Can be watched with the 'colorInView:\${ViewId}' key.
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][74] \| [string][60])** The view (or view ID or view name) to
+-   `viewOrViewIdOrViewName` **([View][81] \| [string][67])** The view (or view ID or view name) to
     use for record coloring.
 
-Returns **([string][60] | null)** The CSS hex color for this record in the given view, or null if
+Returns **([string][67] | null)** The CSS hex color for this record in the given view, or null if
 the record has no color in that view.
 
 #### getColorInView
@@ -2318,10 +2324,10 @@ Can be watched with the 'colorInView:\${ViewId}' key.
 
 ##### Parameters
 
--   `viewOrViewIdOrViewName` **([View][74] \| [string][60])** The view (or view ID or view name) to
+-   `viewOrViewIdOrViewName` **([View][81] \| [string][67])** The view (or view ID or view name) to
     use for record coloring.
 
-Returns **([Color][89] | null)** The color of this record in the given view, or null if the record
+Returns **([Color][96] | null)** The color of this record in the given view, or null if the record
 has no color in that view.
 
 #### id
@@ -2333,7 +2339,7 @@ console.log(myRecord.id);
 // => 'recxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** This record's ID.
+Returns **[string][67]** This record's ID.
 
 #### isDeleted
 
@@ -2352,7 +2358,7 @@ if (!myRecord.isDeleted) {
 }
 ```
 
-Returns **[boolean][62]** `true` if the record has been deleted, `false` otherwise.
+Returns **[boolean][69]** `true` if the record has been deleted, `false` otherwise.
 
 #### primaryCellValue
 
@@ -2373,7 +2379,7 @@ Returns **any** The primary cell value in this record.
 
 Gets the primary cell value in this record, formatted as a `string`.
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -2382,7 +2388,7 @@ console.log(myRecord.primaryCellValueAsString);
 // => '42'
 ```
 
-Returns **[string][60]** The primary cell value in this record, formatted as a `string`.
+Returns **[string][67]** The primary cell value in this record, formatted as a `string`.
 
 #### selectLinkedRecordsFromCell
 
@@ -2391,12 +2397,12 @@ Select records referenced in a `multipleRecordLinks` cell value. Returns a query
 
 ##### Parameters
 
--   `fieldOrFieldIdOrFieldName` **([Field][73] \| [string][60])** The `multipleRecordLinks` field
+-   `fieldOrFieldIdOrFieldName` **([Field][80] \| [string][67])** The `multipleRecordLinks` field
     (or field ID or field name) to use.
 -   `opts` **RecordQueryResultOpts** Options for the query, such as sorts and fields. (optional,
     default `{}`)
 
-Returns **[LinkedRecordsQueryResult][93]** A query result containing the records in the given
+Returns **[LinkedRecordsQueryResult][100]** A query result containing the records in the given
 `multipleRecordLinks` field.
 
 #### unwatch
@@ -2407,15 +2413,15 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableRecordKey | [Array][61]&lt;WatchableRecordKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableRecordKey | [Array][68]&lt;WatchableRecordKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableRecordKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableRecordKey>** the array of keys that were unwatched
 
 #### url
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -2424,7 +2430,7 @@ console.log(myRecord.url);
 // => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** The URL for the record. You can visit this URL in the browser to be taken
+Returns **[string][67]** The URL for the record. You can visit this URL in the browser to be taken
 to the record in the Airtable UI.
 
 #### watch
@@ -2443,11 +2449,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableRecordKey | [Array][61]&lt;WatchableRecordKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableRecordKey | [Array][68]&lt;WatchableRecordKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableRecordKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableRecordKey>** the array of keys that were watched
 
 ### Table
 
@@ -2457,7 +2463,7 @@ Model class representing a table. Every [Base][14] has one or more tables.
 
 #### fields
 
-Type: [Array][61]&lt;[Field][73]>
+Type: [Array][68]&lt;[Field][80]>
 
 ##### Examples
 
@@ -2465,7 +2471,7 @@ Type: [Array][61]&lt;[Field][73]>
 console.log(`This table has ${myTable.fields.length} fields`);
 ```
 
-Returns **[Array][61]&lt;[Field][73]>** The fields in this table. The order is arbitrary, since
+Returns **[Array][68]&lt;[Field][80]>** The fields in this table. The order is arbitrary, since
 fields are only ordered in the context of a specific view.Can be watched to know when fields are
 created or deleted.
 
@@ -2484,9 +2490,9 @@ console.log(field.name);
 // => 'Name'
 ```
 
-Returns **[Field][73]** The field matching the given ID. Throws if that field does not exist in this
-table. Use [getFieldByIdIfExists][94] instead if you are unsure whether a field exists with the
-given ID.
+Returns **[Field][80]** The field matching the given ID. Throws if that field does not exist in this
+table. Use [Table#getFieldByIdIfExists][101] instead if you are unsure whether a field exists with
+the given ID.
 
 #### getFieldByIdIfExists
 
@@ -2506,14 +2512,14 @@ if (field !== null) {
 }
 ```
 
-Returns **([Field][73] | null)** The field matching the given ID, or `null` if that field does not
+Returns **([Field][80] | null)** The field matching the given ID, or `null` if that field does not
 exist in this table.
 
 #### getFieldByName
 
 ##### Parameters
 
--   `fieldName` **[string][60]** The name of the field you're looking for.
+-   `fieldName` **[string][67]** The name of the field you're looking for.
 
 ##### Examples
 
@@ -2523,15 +2529,15 @@ console.log(field.id);
 // => 'fldxxxxxxxxxxxxxx'
 ```
 
-Returns **[Field][73]** The field matching the given name. Throws if no field exists with that name
-in this table. Use [getFieldByNameIfExists][95] instead if you are unsure whether a field exists
-with the given name.
+Returns **[Field][80]** The field matching the given name. Throws if no field exists with that name
+in this table. Use [Table#getFieldByNameIfExists][102] instead if you are unsure whether a field
+exists with the given name.
 
 #### getFieldByNameIfExists
 
 ##### Parameters
 
--   `fieldName` **[string][60]** The name of the field you're looking for.
+-   `fieldName` **[string][67]** The name of the field you're looking for.
 
 ##### Examples
 
@@ -2544,7 +2550,7 @@ if (field !== null) {
 }
 ```
 
-Returns **([Field][73] | null)** The field matching the given name, or `null` if no field exists
+Returns **([Field][80] | null)** The field matching the given name, or `null` if no field exists
 with that name in this table.
 
 #### getFirstViewOfType
@@ -2553,9 +2559,9 @@ Returns the first view in the table where the type is one of `allowedViewTypes`.
 
 ##### Parameters
 
--   `allowedViewTypes` **([Array][61]&lt;ViewType> | ViewType)** An array of view types or a single
+-   `allowedViewTypes` **([Array][68]&lt;ViewType> | ViewType)** An array of view types or a single
     view type to match against.
--   `preferredViewOrViewId` **([View][74] | ViewId | null)?** If a view or view ID is supplied and
+-   `preferredViewOrViewId` **([View][81] | ViewId | null)?** If a view or view ID is supplied and
     that view exists & has the correct type, that view will be returned before checking the other
     views in the table.
 
@@ -2571,7 +2577,7 @@ if (firstCalendarView !== null) {
 }
 ```
 
-Returns **([View][74] | null)** The first view where the type is one of `allowedViewTypes` or `null`
+Returns **([View][81] | null)** The first view where the type is one of `allowedViewTypes` or `null`
 if no such view exists in the table.
 
 #### getViewById
@@ -2589,9 +2595,9 @@ console.log(view.name);
 // => 'Grid view'
 ```
 
-Returns **[View][74]** The view matching the given ID. Throws if that view does not exist in this
-table. Use [getViewByIdIfExists][96] instead if you are unsure whether a view exists with the given
-ID.
+Returns **[View][81]** The view matching the given ID. Throws if that view does not exist in this
+table. Use [Table#getViewByIdIfExists][103] instead if you are unsure whether a view exists with the
+given ID.
 
 #### getViewByIdIfExists
 
@@ -2611,14 +2617,14 @@ if (view !== null) {
 }
 ```
 
-Returns **([View][74] | null)** The view matching the given ID, or `null` if that view does not
+Returns **([View][81] | null)** The view matching the given ID, or `null` if that view does not
 exist in this table.
 
 #### getViewByName
 
 ##### Parameters
 
--   `viewName` **[string][60]** The name of the view you're looking for.
+-   `viewName` **[string][67]** The name of the view you're looking for.
 
 ##### Examples
 
@@ -2628,15 +2634,15 @@ console.log(view.id);
 // => 'viwxxxxxxxxxxxxxx'
 ```
 
-Returns **[View][74]** The view matching the given name. Throws if no view exists with that name in
-this table. Use [getViewByNameIfExists][97] instead if you are unsure whether a view exists with the
-given name.
+Returns **[View][81]** The view matching the given name. Throws if no view exists with that name in
+this table. Use [Table#getViewByNameIfExists][104] instead if you are unsure whether a view exists
+with the given name.
 
 #### getViewByNameIfExists
 
 ##### Parameters
 
--   `viewName` **[string][60]** The name of the view you're looking for.
+-   `viewName` **[string][67]** The name of the view you're looking for.
 
 ##### Examples
 
@@ -2649,7 +2655,7 @@ if (view !== null) {
 }
 ```
 
-Returns **([View][74] | null)** The view matching the given name, or `null` if no view exists with
+Returns **([View][81] | null)** The view matching the given name, or `null` if no view exists with
 that name in this table.
 
 #### id
@@ -2661,7 +2667,7 @@ console.log(myTable.id);
 // => 'tblxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** This table's ID.
+Returns **[string][67]** This table's ID.
 
 #### isDeleted
 
@@ -2680,11 +2686,11 @@ if (!myTable.isDeleted) {
 }
 ```
 
-Returns **[boolean][62]** `true` if the table has been deleted, `false` otherwise.
+Returns **[boolean][69]** `true` if the table has been deleted, `false` otherwise.
 
 #### name
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -2693,11 +2699,11 @@ console.log(myTable.name);
 // => 'Table 1'
 ```
 
-Returns **[string][60]** The name of the table. Can be watched.
+Returns **[string][67]** The name of the table. Can be watched.
 
 #### primaryField
 
-Type: [Field][73]
+Type: [Field][80]
 
 ##### Examples
 
@@ -2706,7 +2712,7 @@ console.log(myTable.primaryField.name);
 // => 'Name'
 ```
 
-Returns **[Field][73]** The table's primary field. Every table has exactly one primary field. The
+Returns **[Field][80]** The table's primary field. Every table has exactly one primary field. The
 primary field of a table will not change.
 
 #### selectRecords
@@ -2741,7 +2747,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][98]** A query result.
+Returns **[TableOrViewQueryResult][105]** A query result.
 
 #### unwatch
 
@@ -2751,15 +2757,15 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableTableKey | [Array][61]&lt;WatchableTableKey>)** the keys to unwatch
--   `callback` **[Function][64]** the function passed to `.watch` for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `keys` **(WatchableTableKey | [Array][68]&lt;WatchableTableKey>)** the keys to unwatch
+-   `callback` **[Function][71]** the function passed to `.watch` for these keys
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableTableKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableTableKey>** the array of keys that were unwatched
 
 #### url
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -2768,12 +2774,12 @@ console.log(myTable.url);
 // => 'https://airtable.com/tblxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** The URL for the table. You can visit this URL in the browser to be taken to
+Returns **[string][67]** The URL for the table. You can visit this URL in the browser to be taken to
 the table in the Airtable UI.
 
 #### views
 
-Type: [Array][61]&lt;[View][74]>
+Type: [Array][68]&lt;[View][81]>
 
 ##### Examples
 
@@ -2781,7 +2787,7 @@ Type: [Array][61]&lt;[View][74]>
 console.log(`This table has ${myTable.views.length} views`);
 ```
 
-Returns **[Array][61]&lt;[View][74]>** The views in this table. Can be watched to know when views
+Returns **[Array][68]&lt;[View][81]>** The views in this table. Can be watched to know when views
 are created, deleted, or reordered.
 
 #### watch
@@ -2798,11 +2804,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableTableKey | [Array][61]&lt;WatchableTableKey>)** the keys to watch
--   `callback` **[Function][64]** a function to call when those keys change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `keys` **(WatchableTableKey | [Array][68]&lt;WatchableTableKey>)** the keys to watch
+-   `callback` **[Function][71]** a function to call when those keys change
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableTableKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableTableKey>** the array of keys that were watched
 
 ### View
 
@@ -2819,7 +2825,7 @@ console.log(myView.id);
 // => 'viwxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** This view's ID.
+Returns **[string][67]** This view's ID.
 
 #### isDeleted
 
@@ -2838,11 +2844,11 @@ if (!myView.isDeleted) {
 }
 ```
 
-Returns **[boolean][62]** `true` if the view has been deleted, `false` otherwise.
+Returns **[boolean][69]** `true` if the view has been deleted, `false` otherwise.
 
 #### name
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -2851,7 +2857,7 @@ console.log(myView.name);
 // => 'Grid view'
 ```
 
-Returns **[string][60]** The name of the view. Can be watched.
+Returns **[string][67]** The name of the view. Can be watched.
 
 #### selectMetadata
 
@@ -2874,7 +2880,7 @@ console.log(viewMetadata.allFields.map(field => field.name));
 viewMetadata.unloadData();
 ```
 
-Returns **[ViewMetadataQueryResult][99]** a {@ViewMetadataQueryResult}
+Returns **[ViewMetadataQueryResult][106]** a {@ViewMetadataQueryResult}
 
 #### selectRecords
 
@@ -2909,7 +2915,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][98]** A record query result.
+Returns **[TableOrViewQueryResult][105]** A record query result.
 
 #### type
 
@@ -2941,7 +2947,7 @@ Returns **any** the array of keys that were unwatched
 
 #### url
 
-Type: [string][60]
+Type: [string][67]
 
 ##### Examples
 
@@ -2950,7 +2956,7 @@ console.log(myView.url);
 // => 'https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
 ```
 
-Returns **[string][60]** The URL for the view. You can visit this URL in the browser to be taken to
+Returns **[string][67]** The URL for the view. You can visit this URL in the browser to be taken to
 the view in the Airtable UI.
 
 #### watch
@@ -2977,12 +2983,12 @@ Returns **any** the array of keys that were watched
 
 Contains information about a view that isn't loaded by default e.g. field order and visible fields.
 
-In a React component, you might want to use [useViewMetadata][100].
+In a React component, you might want to use [useViewMetadata][107].
 
 #### Parameters
 
 -   `baseData` **BaseData**
--   `parentView` **[View][74]**
+-   `parentView` **[View][81]**
 -   `viewDataStore` **ViewDataStore**
 
 #### Examples
@@ -3004,9 +3010,9 @@ viewMetadata.unloadData();
 
 Returns every field in the table in the order they appear in this view. Watchable.
 
-Type: [Array][61]&lt;[Field][73]>
+Type: [Array][68]&lt;[Field][80]>
 
-Returns **[Array][61]&lt;[Field][73]>**
+Returns **[Array][68]&lt;[Field][80]>**
 
 #### unwatch
 
@@ -3026,9 +3032,9 @@ Returns **any** the array of keys that were unwatched
 
 Returns every field visible in this view. Watchable.
 
-Type: [Array][61]&lt;[Field][73]>
+Type: [Array][68]&lt;[Field][80]>
 
-Returns **[Array][61]&lt;[Field][73]>**
+Returns **[Array][68]&lt;[Field][80]>**
 
 #### watch
 
@@ -3065,12 +3071,12 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][61]&lt;WatchableKey>)** the keys to unwatch
+-   `keys` **(WatchableKey | [Array][68]&lt;WatchableKey>)** the keys to unwatch
 -   `callback` **function (model: this, key: WatchableKey): any** the function passed to `.watch`
     for these keys
--   `context` **[Object][65]??** the context that was passed to `.watch` for this `callback`
+-   `context` **[Object][72]??** the context that was passed to `.watch` for this `callback`
 
-Returns **[Array][61]&lt;WatchableKey>** the array of keys that were unwatched
+Returns **[Array][68]&lt;WatchableKey>** the array of keys that were unwatched
 
 #### watch
 
@@ -3080,12 +3086,12 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][61]&lt;WatchableKey>)** the keys to watch
+-   `keys` **(WatchableKey | [Array][68]&lt;WatchableKey>)** the keys to watch
 -   `callback` **function (model: this, key: WatchableKey): any** a function to call when those keys
     change
--   `context` **[Object][65]??** an optional context for `this` in `callback`.
+-   `context` **[Object][72]??** an optional context for `this` in `callback`.
 
-Returns **[Array][61]&lt;WatchableKey>** the array of keys that were watched
+Returns **[Array][68]&lt;WatchableKey>** the array of keys that were watched
 
 ## @airtable/blocks/ui
 
@@ -3119,7 +3125,7 @@ Injects CSS from a string into the page.
 
 ##### Parameters
 
--   `css` **[string][60]** {string}
+-   `css` **[string][67]** {string}
 
 ##### Examples
 
@@ -3128,7 +3134,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][101]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][108]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -3136,16 +3142,16 @@ Injects CSS from a remote URL.
 
 ##### Parameters
 
--   `url` **[string][60]** {string}
+-   `url` **[string][67]** {string}
 
 ##### Examples
 
 ```javascript
-import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][91]&lt;[HTMLLinkElement][102]>** a Promise that resolves to the style tag
+Returns **[Promise][98]&lt;[HTMLLinkElement][109]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -3154,7 +3160,7 @@ Injects Javascript from a remote URL.
 
 ##### Parameters
 
--   `url` **[string][60]** {string}
+-   `url` **[string][67]** {string}
 
 ##### Examples
 
@@ -3163,35 +3169,35 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][91]&lt;[HTMLScriptElement][103]>** a Promise that resolves to the script tag
+Returns **[Promise][98]&lt;[HTMLScriptElement][110]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
 
 #### Color
 
-A value from the [colors][104] enum
+A value from the [colors][111] enum
 
 Type: \$Values&lt;any>
 
 #### RGB
 
-Type: {r: [number][66], g: [number][66], b: [number][66]}
+Type: {r: [number][73], g: [number][73], b: [number][73]}
 
 ##### Properties
 
--   `r` **[number][66]**
--   `g` **[number][66]**
--   `b` **[number][66]**
+-   `r` **[number][73]**
+-   `g` **[number][73]**
+-   `b` **[number][73]**
 
 #### colorUtils
 
-Utilities for working with [Color][90] names from the [colors][104] enum.
+Utilities for working with [Color][97] names from the [colors][111] enum.
 
 ##### getHexForColor
 
-Given a [Color][90], return the hex color value for that color, or null if the value isn't a
-[Color][90]
+Given a [Color][97], return the hex color value for that color, or null if the value isn't a
+[Color][97]
 
 ###### Parameters
 
@@ -3209,12 +3215,12 @@ colorUtils.getHexForColor('uncomfortable beige');
 // => null
 ```
 
-Returns **([string][60] | null)**
+Returns **([string][67] | null)**
 
 ##### getRgbForColor
 
-Given a [Color][90], return an [RGB][105] object representing it, or null if the value isn't a
-[Color][90]
+Given a [Color][97], return an [RGB][112] object representing it, or null if the value isn't a
+[Color][97]
 
 ###### Parameters
 
@@ -3232,16 +3238,16 @@ colorUtils.getRgbForColor('disgruntled pink');
 // => null
 ```
 
-Returns **([RGB][106] | null)**
+Returns **([RGB][113] | null)**
 
 ##### shouldUseLightTextOnColor
 
-Given a [Color][90], returns true or false to indicate whether that color should have light text on
+Given a [Color][97], returns true or false to indicate whether that color should have light text on
 top of it when used as a background color.
 
 ###### Parameters
 
--   `colorString` **[string][60]** {Color}
+-   `colorString` **[string][67]** {Color}
 
 ###### Examples
 
@@ -3255,7 +3261,7 @@ colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
 // => true
 ```
 
-Returns **[boolean][62]** boolean
+Returns **[boolean][69]** boolean
 
 #### colors
 
@@ -3366,8 +3372,8 @@ An enum of color names
 React hooks are a new feature in React 16.8. They allow you to use state and other React features
 without writing a class, and form the core of how you can connect React components to data from your
 Airtable base when writing Blocks. If you've never used hooks before, don't worry - the React team
-[has some great resources][107] for learning about them. You can use hooks with class components too
-with the help of the [withHooks][108] higher-order component.
+[has some great resources][114] for learning about them. You can use hooks with class components too
+with the help of the [withHooks][115] higher-order component.
 
 > **Important Note:** right now, most of these hooks cause your component to re-render, but return
 > the same mutable instance of the underlying model. This means that it's often not safe to use
@@ -3384,7 +3390,7 @@ actual records in the base.
 
 useBase should meet most of your needs for working with Base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][109] hook might help.
+[useWatchable][116] hook might help.
 
 ##### Examples
 
@@ -3403,7 +3409,7 @@ function TableList() {
 }
 ```
 
-Returns **[Base][110]** Base
+Returns **[Base][117]** Base
 
 #### useGlobalConfig
 
@@ -3436,7 +3442,7 @@ function SyncedCounter() {
 }
 ```
 
-Returns **[GlobalConfig][111]** the [GlobalConfig][3]
+Returns **[GlobalConfig][118]** the [GlobalConfig][3]
 
 #### useRecords
 
@@ -3445,7 +3451,7 @@ query result. Automatically handles loading data in the query result and updatin
 when the underlying data changes.
 
 This hook re-renders when any data concerning the records changing - that's useful, but can cause
-re-renders quite often, meaning [useRecordIds][86] or [useRecordById][87] could be more appropriate
+re-renders quite often, meaning [useRecordIds][93] or [useRecordById][94] could be more appropriate
 depending on your use-case.
 
 ##### Parameters
@@ -3477,7 +3483,7 @@ function RecordList() {
 }
 ```
 
-Returns **([Array][61]&lt;[Record][76]> | null)** the records in the query result, or null if no
+Returns **([Array][68]&lt;[Record][83]> | null)** the records in the query result, or null if no
 query result was passed in.
 
 #### useRecordIds
@@ -3515,7 +3521,7 @@ function RecordCount() {
 }
 ```
 
-Returns **([Array][61]&lt;RecordId> | null)** the array of record IDs in the query result, or null
+Returns **([Array][68]&lt;RecordId> | null)** the array of record IDs in the query result, or null
 if no query result was passed in.
 
 #### useRecordById
@@ -3523,7 +3529,7 @@ if no query result was passed in.
 A hook for working with a single record from a query result. Automatically handles loading data in
 the query result and updating your component when the records cell values etc. change.
 
-Often used with [useRecordIds][86] to render a list of records where each list item only updates
+Often used with [useRecordIds][93] to render a list of records where each list item only updates
 when the specific record it concerns changes.
 
 ##### Parameters
@@ -3566,7 +3572,7 @@ function RecordList() {
 }
 ```
 
-Returns **([Record][76] | null)** the record, or null if no query result was passed in or no record
+Returns **([Record][83] | null)** the record, or null if no query result was passed in or no record
 with that ID exists in the query result
 
 #### useSession
@@ -3577,7 +3583,7 @@ user's permissions change or when the current user's name changes).
 
 useSession should meet most of your needs for working with Session. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][109] hook might help.
+[useWatchable][116] hook might help.
 
 ##### Examples
 
@@ -3597,7 +3603,7 @@ function CurrentUserGreeter() {
 }
 ```
 
-Returns **[Session][112]** Session
+Returns **[Session][119]** Session
 
 #### useViewport
 
@@ -3629,7 +3635,7 @@ function ViewportSize() {
 }
 ```
 
-Returns **[Viewport][113]** the current [Viewport][5]
+Returns **[Viewport][120]** the current [Viewport][5]
 
 #### useViewMetadata
 
@@ -3668,17 +3674,17 @@ do anything other than re-render when the data changes.
 This is a low-level tool that you should only use when you specifically need it. There are more
 convenient model-specific hooks available:
 
--   For [Base][14], [Table][20], [View][21] & [Field][17], use [useBase][55]
--   For [RecordQueryResult][18] & [Record][19], use [useRecords][85], [useRecordIds][86], or
-    [useRecordById][87]
--   For [Viewport][5], use [useViewport][114].
+-   For [Base][14], [Table][20], [View][21] & [Field][17], use [useBase][63]
+-   For [RecordQueryResult][18] & [Record][19], use [useRecords][92], [useRecordIds][93], or
+    [useRecordById][94]
+-   For [Viewport][5], use [useViewport][121].
 
-If you're writing a class component and still want to be able to use hooks, try [withHooks][108].
+If you're writing a class component and still want to be able to use hooks, try [withHooks][115].
 
 ##### Parameters
 
--   `model` **[Watchable][115]?** the model to watch
--   `keys` **[Array][61]&lt;[string][60]?>** which keys we want to watch
+-   `model` **[Watchable][122]?** the model to watch
+-   `keys` **[Array][68]&lt;[string][67]?>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
 ##### Examples
@@ -3709,14 +3715,14 @@ function ActiveView({cursor}) {
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
 might not need to use it directly though - if you're working with a [RecordQueryResult][18], try
-[useRecords][85], [useRecordIds][86], or [useRecordById][87] first.
+[useRecords][92], [useRecordIds][93], or [useRecordById][94] first.
 
 When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
 loaded when your component mounts, and unloaded when your component unmounts. By default, you don't
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [&lt;React.Suspense />][116] around the component that uses the hook.
+looks, use [&lt;React.Suspense />][123] around the component that uses the hook.
 
 If you need more control (for example, if you have two models you want to load at the same time
 rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to the
@@ -3725,10 +3731,10 @@ use the data you loaded.
 
 ##### Parameters
 
--   `model` **(QueryResult | [Cursor][117] | null)** the model to load.
--   `options` **[object][65]?** Optional options to control how the hook works (optional, default
+-   `model` **(QueryResult | [Cursor][124] | null)** the model to load.
+-   `options` **[object][72]?** Optional options to control how the hook works (optional, default
     `{}`)
-    -   `options.shouldSuspend` **[boolean][62]** pass {shouldSuspend: false} to disable suspense
+    -   `options.shouldSuspend` **[boolean][69]** pass {shouldSuspend: false} to disable suspense
         mode. If suspense is disabled, you need to manually check model.isDataLoaded so you don't
         use your model before it's ready. (optional, default `true`)
 
@@ -3773,13 +3779,13 @@ function LoadTwoQueryResults({queryResultA, queryResultB}) {
 
 A helper method for working with react hooks in class-based components. It takes a React component
 and wraps it, injecting values from hooks as additional props. `withHooks` uses
-[React.forwardRef][118] to make sure that you can use refs with your wrapped component in exactly
+[React.forwardRef][125] to make sure that you can use refs with your wrapped component in exactly
 the same way you would if you weren't using withHooks.
 
 ##### Parameters
 
 -   `Component` **React.Component** The React component you want to inject hooks into
--   `getAdditionalPropsToInject` **[Function][64]** a function that takes props and returns more
+-   `getAdditionalPropsToInject` **[Function][71]** a function that takes props and returns more
     props to be injected into the wrapped component
 
 ##### Examples
@@ -3864,9 +3870,9 @@ Expands the given record in the Airtable UI.
 
 ##### Parameters
 
--   `record` **[Record][76]** the record to expand
--   `opts` **[object][65]?** An optional options object.
-    -   `opts.records` **[Array][61]&lt;[Record][76]>?** If `records` is provided, the list will be
+-   `record` **[Record][83]** the record to expand
+-   `opts` **[object][72]?** An optional options object.
+    -   `opts.records` **[Array][68]&lt;[Record][83]>?** If `records` is provided, the list will be
         used to page through records from the expanded record dialog.
 
 ##### Examples
@@ -3880,11 +3886,11 @@ expandRecord(record1, {
 
 #### ExpandRecordOpts
 
-Type: {records: [Array][61]&lt;[Record][76]>?}
+Type: {records: [Array][68]&lt;[Record][83]>?}
 
 ##### Properties
 
--   `records` **[Array][61]&lt;[Record][76]>?**
+-   `records` **[Array][68]&lt;[Record][83]>?**
 
 ### expandRecordList
 
@@ -3892,9 +3898,9 @@ Expands a list of records in the Airtable UI
 
 #### Parameters
 
--   `records` **[Array][61]&lt;[Record][76]>** the records to expand. Duplicate records will be
+-   `records` **[Array][68]&lt;[Record][83]>** the records to expand. Duplicate records will be
     removed.
--   `opts` **{fields: [Array][61]&lt;[Field][73]>?}?** An optional options object.
+-   `opts` **{fields: [Array][68]&lt;[Field][80]>?}?** An optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
 
@@ -3919,9 +3925,9 @@ return null.
 
 #### Parameters
 
--   `records` **[Array][61]&lt;[Record][76]>** the records the user can pick from. Duplicate records
+-   `records` **[Array][68]&lt;[Record][83]>** the records the user can pick from. Duplicate records
     will be removed.
--   `opts` **{fields: [Array][61]&lt;[Field][73]>?, shouldAllowCreatingRecord: [boolean][62]?}?** An
+-   `opts` **{fields: [Array][68]&lt;[Field][80]>?, shouldAllowCreatingRecord: [boolean][69]?}?** An
     optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
@@ -3945,7 +3951,7 @@ const recordB = await expandRecordPickerAsync([record1, record2], {
 });
 ```
 
-Returns **[Promise][91]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][98]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
 ### AutocompletePopover
@@ -3956,49 +3962,49 @@ user or null
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][119]**
+-   `props` **[AutocompletePopoverProps][126]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][61]&lt;[AutocompleteItem][120]>, renderItem: function (item: [AutocompleteItem][120], isFocused: [boolean][62]): React$Element&lt;any>?,
-filterItems: function (query: [string][60], items: [Array][61]&lt;[AutocompleteItem][120]>):
-[Array][61]&lt;[AutocompleteItem][120]>?, onSelect: function ([AutocompleteItem][120]): void,
-placeholder: [string][60]?, focusOnOpen: [boolean][62]?, className: [string][60]?, style:
-[Object][65]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
-[number][66]?, placementOffsetY: [number][66]?, fitInWindowMode: FitInWindowMode?, isOpen:
-[boolean][62]?, onClose: function (opts: {wasFromEscape: [boolean][62]}): void?}
+React$Element&lt;any>, items: [Array][68]&lt;[AutocompleteItem][127]>, renderItem: function (item: [AutocompleteItem][127], isFocused: [boolean][69]): React$Element&lt;any>?,
+filterItems: function (query: [string][67], items: [Array][68]&lt;[AutocompleteItem][127]>):
+[Array][68]&lt;[AutocompleteItem][127]>?, onSelect: function ([AutocompleteItem][127]): void,
+placeholder: [string][67]?, focusOnOpen: [boolean][69]?, className: [string][67]?, style:
+[Object][72]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
+[number][73]?, placementOffsetY: [number][73]?, fitInWindowMode: FitInWindowMode?, isOpen:
+[boolean][69]?, onClose: function (opts: {wasFromEscape: [boolean][69]}): void?}
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][61]&lt;[AutocompleteItem][120]>**
--   `renderItem` **function (item: [AutocompleteItem][120], isFocused: [boolean][62]):
+-   `items` **[Array][68]&lt;[AutocompleteItem][127]>**
+-   `renderItem` **function (item: [AutocompleteItem][127], isFocused: [boolean][69]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][60], items: [Array][61]&lt;[AutocompleteItem][120]>):
-    [Array][61]&lt;[AutocompleteItem][120]>?**
--   `onSelect` **function ([AutocompleteItem][120]): void**
--   `placeholder` **[string][60]?**
--   `focusOnOpen` **[boolean][62]?**
--   `className` **[string][60]?**
--   `style` **[Object][65]?**
+-   `filterItems` **function (query: [string][67], items: [Array][68]&lt;[AutocompleteItem][127]>):
+    [Array][68]&lt;[AutocompleteItem][127]>?**
+-   `onSelect` **function ([AutocompleteItem][127]): void**
+-   `placeholder` **[string][67]?**
+-   `focusOnOpen` **[boolean][69]?**
+-   `className` **[string][67]?**
+-   `style` **[Object][72]?**
 -   `placementX` **PopoverPlacementX?**
 -   `placementY` **PopoverPlacementY?**
--   `placementOffsetX` **[number][66]?**
--   `placementOffsetY` **[number][66]?**
+-   `placementOffsetX` **[number][73]?**
+-   `placementOffsetY` **[number][73]?**
 -   `fitInWindowMode` **FitInWindowMode?**
--   `isOpen` **[boolean][62]?**
--   `onClose` **function (opts: {wasFromEscape: [boolean][62]}): void?**
+-   `isOpen` **[boolean][69]?**
+-   `onClose` **function (opts: {wasFromEscape: [boolean][69]}): void?**
 
 #### AutocompleteItem
 
-Type: {value: [string][60], label: [string][60], aliases: [Array][61]&lt;[string][60]>?}
+Type: {value: [string][67], label: [string][67], aliases: [Array][68]&lt;[string][67]>?}
 
 ##### Properties
 
--   `value` **[string][60]**
--   `label` **[string][60]**
--   `aliases` **[Array][61]&lt;[string][60]>?**
+-   `value` **[string][67]**
+-   `label` **[string][67]**
+-   `aliases` **[Array][68]&lt;[string][67]>?**
 
 ### Button
 
@@ -4010,7 +4016,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][121]**
+-   `props` **[ButtonProps][128]**
 
 ##### Examples
 
@@ -4026,21 +4032,21 @@ const button = (
 
 #### ButtonProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
 -   `theme` **(Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW |
     Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
     The color theme for the button.
--   `className` **[string][60]?** Extra `className`s to apply to the button, separated by spaces.
--   `style` **[object][65]?** Extra styles to apply to the button.
--   `onClick` **[function][64]?** Click event handler. Also handles Space and Enter keypress events.
--   `type` **[string][60]?** The type of the button.
--   `disabled` **[boolean][62]?** Indicates whether or not the user can interact with the button.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the button can be focused and
+-   `className` **[string][67]?** Extra `className`s to apply to the button, separated by spaces.
+-   `style` **[object][72]?** Extra styles to apply to the button.
+-   `onClick` **[function][71]?** Click event handler. Also handles Space and Enter keypress events.
+-   `type` **[string][67]?** The type of the button.
+-   `disabled` **[boolean][69]?** Indicates whether or not the user can interact with the button.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the button can be focused and
     if/where it participates in sequential keyboard navigation.
--   `aria-label` **[string][60]?** The label for the button. Use this if the button lacks a visible
+-   `aria-label` **[string][67]?** The label for the button. Use this if the button lacks a visible
     text label.
 
 ### CellRenderer
@@ -4051,21 +4057,21 @@ Type: [object][65]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][122]**
+-   `props` **[CellRendererProps][129]**
 
 #### CellRendererProps
 
-Type: {record: [Record][76]??, cellValue: any?, field: [Field][73], shouldWrap: [boolean][62]?,
-className: [string][60]?, style: [Object][65]?}
+Type: {record: [Record][83]??, cellValue: any?, field: [Field][80], shouldWrap: [boolean][69]?,
+className: [string][67]?, style: [Object][72]?}
 
 ##### Properties
 
--   `record` **[Record][76]??**
+-   `record` **[Record][83]??**
 -   `cellValue` **any?**
--   `field` **[Field][73]**
--   `shouldWrap` **[boolean][62]?**
--   `className` **[string][60]?**
--   `style` **[Object][65]?**
+-   `field` **[Field][80]**
+-   `shouldWrap` **[boolean][69]?**
+-   `className` **[string][67]?**
+-   `style` **[Object][72]?**
 
 ### ChoiceToken
 
@@ -4078,7 +4084,7 @@ choices.
 
 ##### Parameters
 
--   `props` **[ChoiceTokenProps][123]**
+-   `props` **[ChoiceTokenProps][130]**
 
 ##### Examples
 
@@ -4101,16 +4107,16 @@ function ChoicesForSelectField({selectField}) {
 
 #### ChoiceTokenProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `choice` **[object][65]** An object representing a select option. You should not create these
+-   `choice` **[object][72]** An object representing a select option. You should not create these
     objects from scratch, but should instead grab them from base data.
-    -   `choice.id` **[string][60]** The ID of the select option.
-    -   `choice.name` **[string][60]** The name of the select option.
-    -   `choice.color` **[string][60]?** The color of the select option.
--   `className` **[string][60]?** Additional class names to apply to the collaborator token.
+    -   `choice.id` **[string][67]** The ID of the select option.
+    -   `choice.name` **[string][67]** The name of the select option.
+    -   `choice.color` **[string][67]?** The color of the select option.
+-   `className` **[string][67]?** Additional class names to apply to the collaborator token.
 
 ### CollaboratorToken
 
@@ -4123,7 +4129,7 @@ of choices.
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][124]**
+-   `props` **[CollaboratorTokenProps][131]**
 
 ##### Examples
 
@@ -4143,18 +4149,18 @@ function CurrentUserGreeter() {
 
 #### CollaboratorTokenProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `collaborator` **[object][65]** An object representing a collaborator. You should not create
+-   `collaborator` **[object][72]** An object representing a collaborator. You should not create
     these objects from scratch, but should instead grab them from base data.
-    -   `collaborator.id` **[string][60]?** The user ID of the collaborator.
-    -   `collaborator.email` **[string][60]?** The email address of the collaborator.
-    -   `collaborator.name` **[string][60]?** The name of the collaborator.
-    -   `collaborator.profilePicUrl` **[string][60]?** The URL of the collaborator's profile
+    -   `collaborator.id` **[string][67]?** The user ID of the collaborator.
+    -   `collaborator.email` **[string][67]?** The email address of the collaborator.
+    -   `collaborator.name` **[string][67]?** The name of the collaborator.
+    -   `collaborator.profilePicUrl` **[string][67]?** The URL of the collaborator's profile
         picture.
--   `className` **[string][60]?** Additional class names to apply to the collaborator token.
+-   `className` **[string][67]?** Additional class names to apply to the collaborator token.
 
 ### ColorPalette
 
@@ -4162,37 +4168,40 @@ Type: [object][65]
 
 **Extends React.Component**
 
+##### Parameters
+
+-   `props` **[ColorPaletteProps][132]**
+
 #### ColorPaletteProps
 
-Type: {color: [string][60]?, allowedColors: [Array][61]&lt;[string][60]>, onChange: function
-([string][60]): any?, squareSize: [number][66], squareMargin: [number][66], className: [string][60],
-style: [Object][65], disabled: [boolean][62]?}
+Type: {color: [string][67]?, allowedColors: [Array][68]&lt;[string][67]>, onChange: function
+([string][67]): any?, squareMargin: [number][73], className: [string][67], style: [Object][72],
+disabled: [boolean][69]?}
 
 ##### Properties
 
--   `color` **[string][60]?**
--   `allowedColors` **[Array][61]&lt;[string][60]>**
--   `onChange` **function ([string][60]): any?**
--   `squareSize` **[number][66]**
--   `squareMargin` **[number][66]**
--   `className` **[string][60]**
--   `style` **[Object][65]**
--   `disabled` **[boolean][62]?**
-
-#### ColorPaletteSynced
-
-**Extends React.Component**
+-   `color` **[string][67]?**
+-   `allowedColors` **[Array][68]&lt;[string][67]>**
+-   `onChange` **function ([string][67]): any?**
+-   `squareMargin` **[number][73]**
+-   `className` **[string][67]**
+-   `style` **[Object][72]**
+-   `disabled` **[boolean][69]?**
 
 #### ColorPaletteSyncedProps
 
-Type: {globalConfigKey: [string][60], disabled: [boolean][62]?, onChange: function ([string][60]):
+Type: {globalConfigKey: [string][67], disabled: [boolean][69]?, onChange: function ([string][67]):
 any?}
 
 ##### Properties
 
--   `globalConfigKey` **[string][60]**
--   `disabled` **[boolean][62]?**
--   `onChange` **function ([string][60]): any?**
+-   `globalConfigKey` **[string][67]**
+-   `disabled` **[boolean][69]?**
+-   `onChange` **function ([string][67]): any?**
+
+### ColorPaletteSynced
+
+**Extends React.Component**
 
 ### ConfirmationDialog
 
@@ -4206,7 +4215,7 @@ the action.
 
 ##### Parameters
 
--   `props` **[ConfirmationDialogProps][125]**
+-   `props` **[ConfirmationDialogProps][133]**
 
 ##### Examples
 
@@ -4239,25 +4248,25 @@ function Block() {
 
 #### ConfirmationDialogProps
 
-Type: [Object][65]
+Type: [Object][72]
 
 ##### Properties
 
--   `title` **[string][60]** The title of the dialog.
+-   `title` **[string][67]** The title of the dialog.
 -   `body` **React.Node?** The body of the dialog.
--   `cancelButtonText` **[string][60]?** The label for the cancel button.
--   `confirmButtonText` **[string][60]?** The label for the confirm button.
--   `isConfirmActionDangerous` **[boolean][62]?** Whether the action is dangerous (potentially
+-   `cancelButtonText` **[string][67]?** The label for the cancel button.
+-   `confirmButtonText` **[string][67]?** The label for the confirm button.
+-   `isConfirmActionDangerous` **[boolean][69]?** Whether the action is dangerous (potentially
     destructive or not easily reversible).
--   `className` **[string][60]?** Extra `className`s to apply to the dialog element, separated by
+-   `className` **[string][67]?** Extra `className`s to apply to the dialog element, separated by
     spaces.
--   `style` **[Object][65]?** Extra styles to apply to the dialog element.
--   `backgroundClassName` **[string][60]?** Extra `className`s to apply to the lightbox element,
+-   `style` **[Object][72]?** Extra styles to apply to the dialog element.
+-   `backgroundClassName` **[string][67]?** Extra `className`s to apply to the lightbox element,
     separated by spaces.
--   `backgroundStyle` **[Object][65]?** Extra styles to apply to the lightbox element.
--   `onCancel` **[function][64]** Cancel button event handler. Handles click events and Space and
+-   `backgroundStyle` **[Object][72]?** Extra styles to apply to the lightbox element.
+-   `onCancel` **[function][71]** Cancel button event handler. Handles click events and Space and
     Enter keypress events.
--   `onConfirm` **[function][64]** Confirm button event handler. Handles click events and Space and
+-   `onConfirm` **[function][71]** Confirm button event handler. Handles click events and Space and
     Enter keypress events.
 
 ### Dialog
@@ -4270,7 +4279,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][126]**
+-   `props` **[DialogProps][134]**
 
 ##### Examples
 
@@ -4309,37 +4318,37 @@ function Block() {
 
 #### DialogProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `onClose` **[function][64]** Callback function to fire when the dialog is closed.
--   `className` **[string][60]?** Extra `className`s to apply to the dialog element, separated by
+-   `onClose` **[function][71]** Callback function to fire when the dialog is closed.
+-   `className` **[string][67]?** Extra `className`s to apply to the dialog element, separated by
     spaces.
--   `style` **[Object][65]?** Extra styles to apply to the dialog element.
--   `backgroundClassName` **[string][60]?** Extra `className`s to apply to the lightbox element,
+-   `style` **[Object][72]?** Extra styles to apply to the dialog element.
+-   `backgroundClassName` **[string][67]?** Extra `className`s to apply to the lightbox element,
     separated by spaces.
--   `backgroundStyle` **[Object][65]?** Extra styles to apply to the lightbox element.
+-   `backgroundStyle` **[Object][72]?** Extra styles to apply to the lightbox element.
 
 #### Dialog.CloseButton
 
 **Extends React.Component**
 
-A button that closes [Dialog][39].
+A button that closes [Dialog][40].
 
 ##### Parameters
 
--   `props` **[DialogCloseButtonProps][127]**
+-   `props` **[DialogCloseButtonProps][135]**
 
 #### DialogCloseButtonProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `className` **[string][60]?** `className`s to apply to the close button, separated by spaces.
--   `style` **[object][65]?** Styles to apply to the dialog element.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the button can be focused and
+-   `className` **[string][67]?** `className`s to apply to the close button, separated by spaces.
+-   `style` **[object][72]?** Styles to apply to the dialog element.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the button can be focused and
     if/where it participates in sequential keyboard navigation.
 
 ### FieldPicker
@@ -4352,7 +4361,7 @@ Dropdown menu component for selecting fields.
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][128]**
+-   `props` **[FieldPickerProps][136]**
 
 ##### Examples
 
@@ -4408,39 +4417,66 @@ function Block() {
 
 #### FieldPickerProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `table` **[Table][78]?** The parent table model to select fields from. If `null` or `undefined`,
+-   `table` **[Table][85]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `field` **[Field][73]?** The selected field model.
--   `onChange` **[function][64]?** A function to be called when the selected field changes.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the picker.
--   `allowedTypes` **[Array][61]&lt;FieldType>?** An array indicating which field types can be
+-   `field` **[Field][80]?** The selected field model.
+-   `onChange` **[function][71]?** A function to be called when the selected field changes.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][68]&lt;FieldType>?** An array indicating which field types can be
     selected.
--   `shouldAllowPickingNone` **[boolean][62]?** If set to `true`, the user can unset the selected
+-   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     field.
--   `placeholder` **[string][60]?** The placeholder text when no field is selected.
--   `id` **[string][60]?** The ID of the picker element.
--   `className` **[string][60]?** Additional class names to apply to the picker.
--   `style` **[object][65]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the picker can be focused and
+-   `placeholder` **[string][67]?** The placeholder text when no field is selected.
+-   `id` **[string][67]?** The ID of the picker element.
+-   `className` **[string][67]?** Additional class names to apply to the picker.
+-   `style` **[object][72]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
 
-#### FieldPickerSynced
+#### FieldPickerSyncedProps
+
+Type: [object][72]
+
+##### Properties
+
+-   `table` **[Table][85]?** The parent table model to select fields from. If `null` or `undefined`,
+    the picker won't render.
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
+    for this key. Selecting a new field will update `globalConfig`.
+-   `onChange` **[function][71]?** A function to be called when the selected field changes. This
+    should only be used for side effects.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][68]&lt;FieldType>?** An array indicating which field types can be
+    selected.
+-   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
+    field.
+-   `placeholder` **[string][67]?** The placeholder text when no field is selected.
+-   `id` **[string][67]?** The ID of the picker element.
+-   `className` **[string][67]?** Additional class names to apply to the picker.
+-   `style` **[object][72]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
+
+### FieldPickerSynced
 
 **Extends React.Component**
 
 Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 
-##### Parameters
+#### Parameters
 
--   `props` **[FieldPickerSyncedProps][129]**
+-   `props` **[FieldPickerSyncedProps][138]**
 
-##### Examples
+#### Examples
 
 ```javascript
 import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';
@@ -4488,33 +4524,6 @@ function Block() {
 }
 ```
 
-#### FieldPickerSyncedProps
-
-Type: [object][65]
-
-##### Properties
-
--   `table` **[Table][78]?** The parent table model to select fields from. If `null` or `undefined`,
-    the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][130]** A string key or array key path in
-    [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
-    for this key. Selecting a new field will update `globalConfig`.
--   `onChange` **[function][64]?** A function to be called when the selected field changes. This
-    should only be used for side effects.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the picker.
--   `allowedTypes` **[Array][61]&lt;FieldType>?** An array indicating which field types can be
-    selected.
--   `shouldAllowPickingNone` **[boolean][62]?** If set to `true`, the user can unset the selected
-    field.
--   `placeholder` **[string][60]?** The placeholder text when no field is selected.
--   `id` **[string][60]?** The ID of the picker element.
--   `className` **[string][60]?** Additional class names to apply to the picker.
--   `style` **[object][65]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
-
 ### Icon
 
 #### Icon
@@ -4525,7 +4534,7 @@ A vector icon from the Airtable icon set.
 
 ##### Parameters
 
--   `props` **[IconProps][131]**
+-   `props` **[IconProps][139]**
 
 ##### Examples
 
@@ -4542,18 +4551,18 @@ const LikeButton = (
 
 #### IconProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `name` **[string][60]** The name of the icon. For more details, see the [list of supported
-    icons][132].
--   `size` **[number][66]?** The width/height of the icon.
--   `fillColor` **[string][60]?** The color of the icon.
--   `className` **[string][60]?** Additional class names to apply to the icon.
--   `style` **[object][65]?** Additional styles to apply to the icon.
--   `pathClassName` **[string][60]?** Additional class names to apply to the icon path.
--   `pathStyle` **[object][65]?** Additional styles to apply to the icon path.
+-   `name` **[string][67]** The name of the icon. For more details, see the [list of supported
+    icons][140].
+-   `size` **[number][73]?** The width/height of the icon.
+-   `fillColor` **[string][67]?** The color of the icon.
+-   `className` **[string][67]?** Additional class names to apply to the icon.
+-   `style` **[object][72]?** Additional styles to apply to the icon.
+-   `pathClassName` **[string][67]?** Additional class names to apply to the icon path.
+-   `pathStyle` **[object][72]?** Additional styles to apply to the icon path.
 
 #### FieldIcon
 
@@ -4563,7 +4572,7 @@ A vector icon for a field's type.
 
 ##### Parameters
 
--   `props` **[FieldIconProps][133]**
+-   `props` **[FieldIconProps][141]**
 
 ##### Examples
 
@@ -4593,17 +4602,17 @@ const FieldToken = (
 
 #### FieldIconProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `field` **[Field][73]** The field model to display an icon for.
--   `size` **[number][66]?** The width/height of the icon.
--   `fillColor` **[string][60]?** The color of the icon.
--   `className` **[string][60]?** Additional class names to apply to the icon.
--   `style` **[object][65]?** Additional styles to apply to the icon.
--   `pathClassName` **[string][60]?** Additional class names to apply to the icon path.
--   `pathStyle` **[object][65]?** Additional styles to apply to the icon path.
+-   `field` **[Field][80]** The field model to display an icon for.
+-   `size` **[number][73]?** The width/height of the icon.
+-   `fillColor` **[string][67]?** The color of the icon.
+-   `className` **[string][67]?** Additional class names to apply to the icon.
+-   `style` **[object][72]?** Additional styles to apply to the icon.
+-   `pathClassName` **[string][67]?** Additional class names to apply to the icon path.
+-   `pathStyle` **[object][72]?** Additional styles to apply to the icon path.
 
 ### Input
 
@@ -4615,7 +4624,7 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 
 ##### Parameters
 
--   `props` **[InputProps][134]**
+-   `props` **[InputProps][142]**
 
 ##### Examples
 
@@ -4642,34 +4651,52 @@ function HelloSomeone() {
 
 #### InputProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `type` **[string][60]?** The `type` for the input. Defaults to `text`.
--   `placeholder` **[string][60]?** The placeholder for the input.
--   `value` **[string][60]?** The input's current value. Required if `onChange` is set.
--   `onChange` **[function][64]?** A function to be called when the input changes. Required if
+-   `type` **[string][67]?** The `type` for the input. Defaults to `text`.
+-   `placeholder` **[string][67]?** The placeholder for the input.
+-   `value` **[string][67]?** The input's current value. Required if `onChange` is set.
+-   `onChange` **[function][71]?** A function to be called when the input changes. Required if
     `value` is set.
--   `style` **[object][65]?** Additional styles to apply to the input.
--   `className` **[string][60]?** Additional class names to apply to the input, separated by spaces.
--   `disabled` **[boolean][62]?** If set to `true`, the input will be disabled.
--   `required` **[boolean][62]?** If set to `true`, the input will be required.
--   `spellCheck` **[boolean][62]?** If set to `true`, the `spellcheck` property will be set on the
+-   `style` **[object][72]?** Additional styles to apply to the input.
+-   `className` **[string][67]?** Additional class names to apply to the input, separated by spaces.
+-   `disabled` **[boolean][69]?** If set to `true`, the input will be disabled.
+-   `required` **[boolean][69]?** If set to `true`, the input will be required.
+-   `spellCheck` **[boolean][69]?** If set to `true`, the `spellcheck` property will be set on the
     input.
--   `tabIndex` **([number][66] \| [string][60])?** The `tabindex` for the input.
+-   `tabIndex` **([number][73] \| [string][67])?** The `tabindex` for the input.
 
-#### InputSynced
+#### InputSyncedProps
+
+Type: [object][72]
+
+##### Properties
+
+-   `type` **[string][67]?** The `type` for the input. Defaults to `text`.
+-   `globalConfigKey` **([string][67] \| [Array][68]&lt;[string][67]>)** The key, or path to a key,
+    in global config.
+-   `placeholder` **[string][67]?** The placeholder for the input.
+-   `onChange` **[function][71]?** A function to be called when the input changes. Note that this
+    component will sync to global config, so you won't always need to set this.
+-   `style` **[object][72]?** Additional styles to apply to the input.
+-   `className` **[string][67]?** Additional class names to apply to the input, separated by spaces.
+-   `disabled` **[boolean][69]?** If set to `true`, the input will be disabled.
+-   `spellCheck` **[boolean][69]?** If set to `true`, the `spellcheck` property will be set on the
+    input.
+
+### InputSynced
 
 **Extends React.Component**
 
 A wrapper around the `UI.Input` component that syncs with global config.
 
-##### Parameters
+#### Parameters
 
--   `props` **[InputSyncedProps][135]**
+-   `props` **[InputSyncedProps][143]**
 
-##### Examples
+#### Examples
 
 ```javascript
 import {UI} from '@airtable/blocks/ui';
@@ -4682,24 +4709,6 @@ function ApiKeyInput() {
 }
 ```
 
-#### InputSyncedProps
-
-Type: [object][65]
-
-##### Properties
-
--   `type` **[string][60]?** The `type` for the input. Defaults to `text`.
--   `globalConfigKey` **([string][60] \| [Array][61]&lt;[string][60]>)** The key, or path to a key,
-    in global config.
--   `placeholder` **[string][60]?** The placeholder for the input.
--   `onChange` **[function][64]?** A function to be called when the input changes. Note that this
-    component will sync to global config, so you won't always need to set this.
--   `style` **[object][65]?** Additional styles to apply to the input.
--   `className` **[string][60]?** Additional class names to apply to the input, separated by spaces.
--   `disabled` **[boolean][62]?** If set to `true`, the input will be disabled.
--   `spellCheck` **[boolean][62]?** If set to `true`, the `spellcheck` property will be set on the
-    input.
-
 ### Link
 
 #### Link
@@ -4710,14 +4719,14 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][136]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][144]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
 
 ##### Parameters
 
--   `props` **[LinkProps][137]**
+-   `props` **[LinkProps][145]**
 
 ##### Examples
 
@@ -4731,16 +4740,16 @@ function MyLinkComponent() {
 
 #### LinkProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `href` **[string][60]** The target URL or URL fragment for the link.
--   `target` **[string][60]?** Specifies where to display the linked URL.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the link can be focused and if/where
+-   `href` **[string][67]** The target URL or URL fragment for the link.
+-   `target` **[string][67]?** Specifies where to display the linked URL.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the link can be focused and if/where
     it participates in sequential keyboard navigation.
--   `className` **[string][60]?** Additional class names to apply to the link.
--   `style` **[object][65]?** Additional styles to apply to the link.
+-   `className` **[string][67]?** Additional class names to apply to the link.
+-   `style` **[object][72]?** Additional styles to apply to the link.
 
 ### Loader
 
@@ -4752,7 +4761,7 @@ A loading spinner component.
 
 ##### Parameters
 
--   `props` **[LoaderProps][138]**
+-   `props` **[LoaderProps][146]**
 
 ##### Examples
 
@@ -4770,12 +4779,12 @@ function MyDataComponent() {
 
 #### LoaderProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `fillColor` **[string][60]?** The color of the loading spinner.
--   `scale` **[number][66]?** A scalar for the loader. Increasing the scale increases the size of
+-   `fillColor` **[string][67]?** The color of the loading spinner.
+-   `scale` **[number][73]?** A scalar for the loader. Increasing the scale increases the size of
     the loader.
 
 ### Popover
@@ -4784,32 +4793,32 @@ Type: [object][65]
 
 **Extends React.Component**
 
--   **See: [Tooltip][52]**
+-   **See: [Tooltip][59]**
 
 A popover component, which is used to "float" some content above some other content.
 
 ##### Parameters
 
--   `props` **[PopoverProps][139]**
+-   `props` **[PopoverProps][147]**
 
 #### PopoverProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>** Child components to render.
--   `renderContent` **[function][64]** A function that returns the contents of the popover as React
+-   `renderContent` **[function][71]** A function that returns the contents of the popover as React
     elements.
 -   `placementX` **(Popover.placements.LEFT | Popover.placements.CENTER |
     Popover.placements.RIGHT)?** The horizontal placement of the popover.
 -   `placementY` **(Popover.placements.TOP | Popover.placements.CENTER |
     Popover.placements.BOTTOM)?** The vertical placement of the popover.
--   `placementOffsetX` **[number][66]?** The horizontal offset, in pixels, of the popover. If
+-   `placementOffsetX` **[number][73]?** The horizontal offset, in pixels, of the popover. If
     `placementX` is set to `Popover.placements.LEFT`, a higher number will move the popover to the
     left. If `placementX` is set to `Popover.placements.RIGHT`, a higher number moves the popover to
     the right. If `placementX` is set to `Popover.placements.CENTER`, this value has no effect.
--   `placementOffsetY` **[number][66]?** The vertical offset, in pixels, of the popover. If
+-   `placementOffsetY` **[number][73]?** The vertical offset, in pixels, of the popover. If
     `placementY` is set to `Popover.placements.TOP`, a higher number will move the popover upward.
     If `placementY` is set to `Popover.placements.BOTTOM`, a higher number moves the popover
     downard. If `placementY` is set to `Popover.placements.CENTER`, this value has no effect.
@@ -4819,11 +4828,11 @@ Type: [object][65]
     placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving
     the popover from the left to the right). If `NUDGE`, the popover will be "nudged" just enough to
     fit on screen.
--   `onClose` **[function][64]?** A function that will be called when the popover closes.
--   `isOpen` **[boolean][62]** A boolean that dictates whether the popover is open.
--   `backgroundClassName` **[string][60]?** Extra class names for the background of the popover,
+-   `onClose` **[function][71]?** A function that will be called when the popover closes.
+-   `isOpen` **[boolean][69]** A boolean that dictates whether the popover is open.
+-   `backgroundClassName` **[string][67]?** Extra class names for the background of the popover,
     separated by spaces.
--   `backgroundStyle` **[object][65]?** Extra styles for the background of the popover.
+-   `backgroundStyle` **[object][72]?** Extra styles for the background of the popover.
 
 #### Popover.fitInWindowModes
 
@@ -4843,7 +4852,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][140]**
+-   `props` **[ProgressBarProps][148]**
 
 ##### Examples
 
@@ -4857,18 +4866,18 @@ function MyComponent() {
 
 #### ProgressBarProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `progress` **[number][66]** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1
+-   `progress` **[number][73]** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1
     is 100% complete. If you include a number outside of the range, the value will be clamped to be
     inside of the range.
--   `barColor` **[string][60]?** A CSS color, such as `#ff9900`.
--   `backgroundColor` **[string][60]?** A CSS color, such as `#ff9900`.
--   `height` **[number][66]?** A height, in pixels.
--   `className` **[string][60]?** Extra `className`s to apply to the element, separated by spaces.
--   `style` **[object][65]?** Extra styles to apply to the progress bar.
+-   `barColor` **[string][67]?** A CSS color, such as `#ff9900`.
+-   `backgroundColor` **[string][67]?** A CSS color, such as `#ff9900`.
+-   `height` **[number][73]?** A height, in pixels.
+-   `className` **[string][67]?** Extra `className`s to apply to the element, separated by spaces.
+-   `style` **[object][72]?** Extra styles to apply to the progress bar.
 
 ### RecordCard
 
@@ -4878,31 +4887,31 @@ Type: [object][65]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][141]**
+-   `props` **[RecordCardProps][149]**
 
 #### RecordCardProps
 
-Type: {record: ([Record][76] | RecordDef), fields: [Array][61]&lt;[Field][73]>?, view: [View][74]?,
-attachmentCoverField: [Field][73]?, width: [number][66]?, height: [number][66]?, onClick:
-[Function][64]?, getExpandRecordOptions: function ([Record][76]): [ExpandRecordOpts][142]?,
-onMouseEnter: any?, onMouseLeave: any?, className: [string][60]?, style: [Object][65]?,
-viewMetadata: ([ViewMetadataQueryResult][99] | null)}
+Type: {record: ([Record][83] | RecordDef), fields: [Array][68]&lt;[Field][80]>?, view: [View][81]?,
+attachmentCoverField: [Field][80]?, width: [number][73]?, height: [number][73]?, onClick:
+[Function][71]?, getExpandRecordOptions: function ([Record][83]): [ExpandRecordOpts][150]?,
+onMouseEnter: any?, onMouseLeave: any?, className: [string][67]?, style: [Object][72]?,
+viewMetadata: ([ViewMetadataQueryResult][106] | null)}
 
 ##### Properties
 
--   `record` **([Record][76] | RecordDef)**
--   `fields` **[Array][61]&lt;[Field][73]>?**
--   `view` **[View][74]?**
--   `attachmentCoverField` **[Field][73]?**
--   `width` **[number][66]?**
--   `height` **[number][66]?**
--   `onClick` **[Function][64]?**
--   `getExpandRecordOptions` **function ([Record][76]): [ExpandRecordOpts][142]?**
+-   `record` **([Record][83] | RecordDef)**
+-   `fields` **[Array][68]&lt;[Field][80]>?**
+-   `view` **[View][81]?**
+-   `attachmentCoverField` **[Field][80]?**
+-   `width` **[number][73]?**
+-   `height` **[number][73]?**
+-   `onClick` **[Function][71]?**
+-   `getExpandRecordOptions` **function ([Record][83]): [ExpandRecordOpts][150]?**
 -   `onMouseEnter` **any?**
 -   `onMouseLeave` **any?**
--   `className` **[string][60]?**
--   `style` **[Object][65]?**
--   `viewMetadata` **([ViewMetadataQueryResult][99] | null)**
+-   `className` **[string][67]?**
+-   `style` **[Object][72]?**
+-   `viewMetadata` **([ViewMetadataQueryResult][106] | null)**
 
 ### Select
 
@@ -4914,7 +4923,7 @@ Dropdown menu component. A wrapper around `<select>` that fits in with Airtable'
 
 ##### Parameters
 
--   `props` **[SelectProps][143]**
+-   `props` **[SelectProps][151]**
 
 ##### Examples
 
@@ -4944,46 +4953,67 @@ function ColorPicker() {
 
 #### SelectProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `onChange` **[function][64]?** A function to be called when the selected option changes.
--   `value` **([string][60] \| [number][66] \| [boolean][62] | null)?** The value of the selected
+-   `onChange` **[function][71]?** A function to be called when the selected option changes.
+-   `value` **([string][67] \| [number][73] \| [boolean][69] | null)?** The value of the selected
     option.
--   `options` **[Array][61]&lt;[SelectOption][144]>** The list of select options.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the button.
--   `id` **[string][60]?** The ID of the select element.
--   `className` **[string][60]?** Additional class names to apply to the select.
--   `style` **[object][65]?** Additional styles to apply to the select.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the select can be focused and
+-   `options` **[Array][68]&lt;[SelectOption][152]>** The list of select options.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the button.
+-   `id` **[string][67]?** The ID of the select element.
+-   `className` **[string][67]?** Additional class names to apply to the select.
+-   `style` **[object][72]?** Additional styles to apply to the select.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the select can be focused and
     if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
 
 #### SelectOption
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `value` **([string][60] \| [number][66] \| [boolean][62] | null)** The value for the select
+-   `value` **([string][67] \| [number][73] \| [boolean][69] | null)** The value for the select
     option.
 -   `label` **React.Node** The label for the select option.
--   `disabled` **[boolean][62]?** If set to `true`, this option will not be selectable.
+-   `disabled` **[boolean][69]?** If set to `true`, this option will not be selectable.
 
-#### SelectSynced
+#### SelectSyncedProps
+
+Type: [object][72]
+
+##### Properties
+
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
+    for this key. Selecting a new option will update `globalConfig`.
+-   `onChange` **[function][71]?** A function to be called when the selected option changes. This
+    should only be used for side effects.
+-   `options` **[Array][68]&lt;[SelectOption][152]>** The list of select options.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
+-   `id` **[string][67]?** The ID of the select element.
+-   `className` **[string][67]?** Additional class names to apply to the select.
+-   `style` **[object][72]?** Additional styles to apply to the select.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the select can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
+
+### SelectSynced
 
 **Extends React.Component**
 
 Dropdown menu component synced with [GlobalConfig][3]. A wrapper around `<select>` that fits in with
 Airtable's user interface.
 
-##### Parameters
+#### Parameters
 
--   `props` **[SelectSyncedProps][145]**
+-   `props` **[SelectSyncedProps][153]**
 
-##### Examples
+#### Examples
 
 ```javascript
 import {SelectSynced} from '@airtable/blocks/ui';
@@ -5007,27 +5037,6 @@ function ColorPickerSynced() {
 }
 ```
 
-#### SelectSyncedProps
-
-Type: [object][65]
-
-##### Properties
-
--   `globalConfigKey` **[GlobalConfigKey][130]** A string key or array key path in
-    [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
-    for this key. Selecting a new option will update `globalConfig`.
--   `onChange` **[function][64]?** A function to be called when the selected option changes. This
-    should only be used for side effects.
--   `options` **[Array][61]&lt;[SelectOption][144]>** The list of select options.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the select.
--   `id` **[string][60]?** The ID of the select element.
--   `className` **[string][60]?** Additional class names to apply to the select.
--   `style` **[object][65]?** Additional styles to apply to the select.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the select can be focused and
-    if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
-
 ### SelectButtons
 
 #### SelectButtons
@@ -5038,13 +5047,13 @@ Type: [object][65]
 
 Type: SelectAndSelectButtonsProps
 
-#### SelectButtonsSynced
-
-**Extends React.Component**
-
 #### SelectButtonsSyncedProps
 
 Type: SelectAndSelectButtonsSyncedProps
+
+### SelectButtonsSynced
+
+**Extends React.Component**
 
 ### TablePicker
 
@@ -5056,7 +5065,7 @@ Dropdown menu component for selecting tables.
 
 ##### Parameters
 
--   `props` **[TablePickerProps][146]**
+-   `props` **[TablePickerProps][154]**
 
 ##### Examples
 
@@ -5091,35 +5100,58 @@ function Block() {
 
 #### TablePickerProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `table` **[Table][78]?** The selected table model.
--   `onChange` **[function][64]?** A function to be called when the selected table changes.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the picker.
--   `shouldAllowPickingNone` **[boolean][62]?** If set to `true`, the user can unset the selected
+-   `table` **[Table][85]?** The selected table model.
+-   `onChange` **[function][71]?** A function to be called when the selected table changes.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     table.
--   `placeholder` **[string][60]?** The placeholder text when no table is selected.
--   `id` **[string][60]?** The ID of the picker element.
--   `className` **[string][60]?** Additional class names to apply to the picker.
--   `style` **[object][65]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the picker can be focused and
+-   `placeholder` **[string][67]?** The placeholder text when no table is selected.
+-   `id` **[string][67]?** The ID of the picker element.
+-   `className` **[string][67]?** Additional class names to apply to the picker.
+-   `style` **[object][72]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
 
-#### TablePickerSynced
+#### TablePickerSyncedProps
+
+Type: [object][72]
+
+##### Properties
+
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
+    for this key. Selecting a new table will update `globalConfig`.
+-   `onChange` **[function][71]?** A function to be called when the selected table changes. This
+    should only be used for side effects.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
+    table.
+-   `placeholder` **[string][67]?** The placeholder text when no table is selected.
+-   `id` **[string][67]?** The ID of the picker element.
+-   `className` **[string][67]?** Additional class names to apply to the picker.
+-   `style` **[object][72]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
+
+### TablePickerSynced
 
 **Extends React.Component**
 
 Dropdown menu component for selecting tables, synced with [GlobalConfig][3].
 
-##### Parameters
+#### Parameters
 
--   `props` **[TablePickerSyncedProps][147]**
+-   `props` **[TablePickerSyncedProps][155]**
 
-##### Examples
+#### Examples
 
 ```javascript
 import {TablePickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
@@ -5149,29 +5181,6 @@ function Block() {
 }
 ```
 
-#### TablePickerSyncedProps
-
-Type: [object][65]
-
-##### Properties
-
--   `globalConfigKey` **[GlobalConfigKey][130]** A string key or array key path in
-    [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
-    for this key. Selecting a new table will update `globalConfig`.
--   `onChange` **[function][64]?** A function to be called when the selected table changes. This
-    should only be used for side effects.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the picker.
--   `shouldAllowPickingNone` **[boolean][62]?** If set to `true`, the user can unset the selected
-    table.
--   `placeholder` **[string][60]?** The placeholder text when no table is selected.
--   `id` **[string][60]?** The ID of the picker element.
--   `className` **[string][60]?** Additional class names to apply to the picker.
--   `style` **[object][65]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
-
 ### Toggle
 
 #### Toggle
@@ -5182,7 +5191,7 @@ A toggleable switch for controlling boolean values. Functionally analogous to a 
 
 ##### Parameters
 
--   `props` **[ToggleProps][148]**
+-   `props` **[ToggleProps][156]**
 
 ##### Examples
 
@@ -5198,38 +5207,63 @@ function Block() {
 
 #### ToggleProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `value` **[boolean][62]** If set to `true`, the switch will be toggled on.
--   `onChange` **[function][64]?** A function to be called when the switch is toggled.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the switch.
+-   `value` **[boolean][69]** If set to `true`, the switch will be toggled on.
+-   `onChange` **[function][71]?** A function to be called when the switch is toggled.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the switch.
 -   `label` **React.Node?** The label node for the switch.
 -   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
     Toggle.themes.GRAY)?** The color theme for the switch.
--   `id` **[string][60]?** The ID of the switch element.
--   `className` **[string][60]?** Additional class names to apply to the switch.
--   `style` **[object][65]?** Additional styles to apply to the switch.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the switch can be focused and
+-   `id` **[string][67]?** The ID of the switch element.
+-   `className` **[string][67]?** Additional class names to apply to the switch.
+-   `style` **[object][72]?** Additional styles to apply to the switch.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the switch can be focused and
     if/where it participates in sequential keyboard navigation.
--   `aria-label` **[string][60]?** The label for the switch. Use this if the switch lacks a visible
+-   `aria-label` **[string][67]?** The label for the switch. Use this if the switch lacks a visible
     text label.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
 
-#### ToggleSynced
+#### ToggleSyncedProps
+
+Type: [object][72]
+
+##### Properties
+
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
+    `globalConfig` for this key. Toggling the switch will update `globalConfig`.
+-   `onChange` **[function][71]?** A function to be called when the switch is toggled. This should
+    only be used for side effects.
+-   `label` **React.Node?** The label node for the switch.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the switch.
+-   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
+    Toggle.themes.GRAY)?** The color theme for the switch.
+-   `id` **[string][67]?** The ID of the switch element.
+-   `className` **[string][67]?** Additional class names to apply to the switch.
+-   `style` **[object][72]?** Additional styles to apply to the switch.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the switch can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][67]?** The label for the switch. Use this if the switch lacks a visible
+    text label.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
+
+### ToggleSynced
 
 **Extends React.Component**
 
 A toggleable switch for controlling boolean values, synced with [GlobalConfig][3]. Functionally
 analogous to a checkbox.
 
-##### Parameters
+#### Parameters
 
--   `props` **[ToggleSyncedProps][149]**
+-   `props` **[ToggleSyncedProps][157]**
 
-##### Examples
+#### Examples
 
 ```javascript
 import {ToggleSynced, useWatchable} from '@airtable/blocks/ui';
@@ -5244,31 +5278,6 @@ function Block() {
 }
 ```
 
-#### ToggleSyncedProps
-
-Type: [object][65]
-
-##### Properties
-
--   `globalConfigKey` **[GlobalConfigKey][130]** A string key or array key path in
-    [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
-    `globalConfig` for this key. Toggling the switch will update `globalConfig`.
--   `onChange` **[function][64]?** A function to be called when the switch is toggled. This should
-    only be used for side effects.
--   `label` **React.Node?** The label node for the switch.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the switch.
--   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
-    Toggle.themes.GRAY)?** The color theme for the switch.
--   `id` **[string][60]?** The ID of the switch element.
--   `className` **[string][60]?** Additional class names to apply to the switch.
--   `style` **[object][65]?** Additional styles to apply to the switch.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the switch can be focused and
-    if/where it participates in sequential keyboard navigation.
--   `aria-label` **[string][60]?** The label for the switch. Use this if the switch lacks a visible
-    text label.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
-
 ### Tooltip
 
 #### Tooltip
@@ -5279,7 +5288,7 @@ A component that shows a tooltip. Wraps its children.
 
 ##### Parameters
 
--   `props` **[TooltipProps][150]**
+-   `props` **[TooltipProps][158]**
 
 ##### Examples
 
@@ -5301,24 +5310,24 @@ function MyComponent() {
 
 #### TooltipProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>** Child components to render.
--   `content` **([string][60] \| [function][64])** A string representing the contents.
+-   `content` **([string][67] \| [function][71])** A string representing the contents.
     Alternatively, you can include a function that returns a React node to place into the tooltip,
     which is useful for things like italicization in the tooltip.
 -   `placementX` **(UI.Tooltip.placements.LEFT | UI.Tooltip.placements.CENTER |
     UI.Tooltip.placements.RIGHT)?** The horizontal placement of the tooltip.
 -   `placementY` **(UI.Tooltip.placements.TOP | UI.Tooltip.placements.CENTER |
     UI.Tooltip.placements.BOTTOM)?** The vertical placement of the tooltip.
--   `placementOffsetX` **[number][66]?** The horizontal offset, in pixels, of the tooltip. If
+-   `placementOffsetX` **[number][73]?** The horizontal offset, in pixels, of the tooltip. If
     `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to
     the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the
     tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has
     no effect.
--   `placementOffsetY` **[number][66]?** The vertical offset, in pixels, of the tooltip. If
+-   `placementOffsetY` **[number][73]?** The vertical offset, in pixels, of the tooltip. If
     `placementY` is set to `UI.Tooltip.placements.TOP`, a higher number will move the tooltip
     upward. If `placementY` is set to `UI.Tooltip.placements.BOTTOM`, a higher number moves the
     tooltip downard. If `placementY` is set to `UI.Tooltip.placements.CENTER`, this value has no
@@ -5329,12 +5338,12 @@ Type: [object][65]
     placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving
     the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to
     fit on screen.
--   `shouldHideTooltipOnClick` **[boolean][62]?** Should the tooltip be hidden when clicked?
--   `disabled` **[boolean][62]?** If set to `true`, this tooltip will not be shown. Useful when
+-   `shouldHideTooltipOnClick` **[boolean][69]?** Should the tooltip be hidden when clicked?
+-   `disabled` **[boolean][69]?** If set to `true`, this tooltip will not be shown. Useful when
     trying to disable the tooltip dynamically.
--   `className` **[string][60]?** Additional class names to attach to the tooltip, separated by
+-   `className` **[string][67]?** Additional class names to attach to the tooltip, separated by
     spaces.
--   `style` **[object][65]?** Additional styles names to attach to the tooltip.
+-   `style` **[object][72]?** Additional styles names to attach to the tooltip.
 
 ### ViewPicker
 
@@ -5346,7 +5355,7 @@ Dropdown menu component for selecting views.
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][151]**
+-   `props` **[ViewPickerProps][159]**
 
 ##### Examples
 
@@ -5398,39 +5407,66 @@ function Block() {
 
 #### ViewPickerProps
 
-Type: [object][65]
+Type: [object][72]
 
 ##### Properties
 
--   `table` **[Table][78]?** The parent table model to select views from. If `null` or `undefined`,
+-   `table` **[Table][85]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `view` **[View][74]?** The selected view model.
--   `onChange` **[function][64]?** A function to be called when the selected view changes.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the picker.
--   `allowedTypes` **[Array][61]&lt;ViewType>?** An array indicating which view types can be
+-   `view` **[View][81]?** The selected view model.
+-   `onChange` **[function][71]?** A function to be called when the selected view changes.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][68]&lt;ViewType>?** An array indicating which view types can be
     selected.
--   `shouldAllowPickingNone` **[boolean][62]?** If set to `true`, the user can unset the selected
+-   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     view.
--   `placeholder` **[string][60]?** The placeholder text when no view is selected.
--   `id` **[string][60]?** The ID of the picker element.
--   `className` **[string][60]?** Additional class names to apply to the picker.
--   `style` **[object][65]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the picker can be focused and
+-   `placeholder` **[string][67]?** The placeholder text when no view is selected.
+-   `id` **[string][67]?** The ID of the picker element.
+-   `className` **[string][67]?** Additional class names to apply to the picker.
+-   `style` **[object][72]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
 
-#### ViewPickerSynced
+#### ViewPickerSyncedProps
+
+Type: [object][72]
+
+##### Properties
+
+-   `table` **[Table][85]?** The parent table model to select views from. If `null` or `undefined`,
+    the picker won't render.
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
+    for this key. Selecting a new view will update `globalConfig`.
+-   `onChange` **[function][71]?** A function to be called when the selected view changes. This
+    should only be used for side effects.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `allowedTypes` **[Array][68]&lt;ViewType>?** An array indicating which view types can be
+    selected.
+-   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
+    view.
+-   `placeholder` **[string][67]?** The placeholder text when no view is selected.
+-   `id` **[string][67]?** The ID of the picker element.
+-   `className` **[string][67]?** Additional class names to apply to the picker.
+-   `style` **[object][72]?** Additional styles to apply to the picker.
+-   `tabIndex` **([number][73] \| [string][67])?** Indicates if the picker can be focused and
+    if/where it participates in sequential keyboard navigation.
+-   `aria-labelledby` **[string][67]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][67]?** A space separated list of description element IDs.
+
+### ViewPickerSynced
 
 **Extends React.Component**
 
 Dropdown menu component for selecting views, synced with [GlobalConfig][3].
 
-##### Parameters
+#### Parameters
 
--   `props` **[ViewPickerSyncedProps][152]**
+-   `props` **[ViewPickerSyncedProps][160]**
 
-##### Examples
+#### Examples
 
 ```javascript
 import {
@@ -5449,7 +5485,7 @@ function Block() {
     const tableId = globalConfig.get('tableId');
     const table = base.getTableByIdIfExists(tableId);
     const viewId = globalConfig.get('viewId');
-    const view = view.getViewByIdIfExists(viewId);
+    const view = table.getViewByIdIfExists(viewId);
     const queryResult = view ? view.selectRecords() : null;
     const records = useRecords(queryResult);
     useWatchable(globalConfig, ['tableId', 'viewId']);
@@ -5480,33 +5516,6 @@ function Block() {
 }
 ```
 
-#### ViewPickerSyncedProps
-
-Type: [object][65]
-
-##### Properties
-
--   `table` **[Table][78]?** The parent table model to select views from. If `null` or `undefined`,
-    the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][130]** A string key or array key path in
-    [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
-    for this key. Selecting a new view will update `globalConfig`.
--   `onChange` **[function][64]?** A function to be called when the selected view changes. This
-    should only be used for side effects.
--   `disabled` **[boolean][62]?** If set to `true`, the user cannot interact with the picker.
--   `allowedTypes` **[Array][61]&lt;ViewType>?** An array indicating which view types can be
-    selected.
--   `shouldAllowPickingNone` **[boolean][62]?** If set to `true`, the user can unset the selected
-    view.
--   `placeholder` **[string][60]?** The placeholder text when no view is selected.
--   `id` **[string][60]?** The ID of the picker element.
--   `className` **[string][60]?** Additional class names to apply to the picker.
--   `style` **[object][65]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][66] \| [string][60])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
--   `aria-labelledby` **[string][60]?** A space separated list of label element IDs.
--   `aria-describedby` **[string][60]?** A space separated list of description element IDs.
-
 ### ViewportConstraint
 
 #### ViewportConstraint
@@ -5533,23 +5542,23 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][153]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][153]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][161]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][161]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][153]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][153]?**
+-   `minSize` **[ViewportSizeConstraintProp][161]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][161]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
 
-Type: {width: ([number][66] | null)?, height: ([number][66] | null)?}
+Type: {width: ([number][73] | null)?, height: ([number][73] | null)?}
 
 ##### Properties
 
--   `width` **([number][66] | null)?**
--   `height` **([number][66] | null)?**
+-   `width` **([number][73] | null)?**
+-   `height` **([number][73] | null)?**
 
 [1]: #airtableblocks
 [2]: #sdk
@@ -5588,119 +5597,127 @@ Type: {width: ([number][66] | null)?, height: ([number][66] | null)?}
 [35]: #choicetoken
 [36]: #collaboratortoken
 [37]: #colorpalette
-[38]: #confirmationdialog
-[39]: #dialog
-[40]: #fieldpicker
-[41]: #icon
-[42]: #input
-[43]: #link
-[44]: #loader
-[45]: #popover
-[46]: #progressbar
-[47]: #recordcard
-[48]: #select
-[49]: #selectbuttons
-[50]: #tablepicker
-[51]: #toggle
-[52]: #tooltip
-[53]: #viewpicker
-[54]: #viewportconstraint
-[55]: #usebase
-[56]: #usesession
-[57]: SettingsButton
-[58]: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-[59]: https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
-[60]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-[61]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-[62]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-[63]: #globalconfigvalue
-[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-[65]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-[66]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-[67]: #viewportaddmaxfullscreensize
-[68]: #viewportminsize
-[69]: https://www.iso.org/iso-8601-date-and-time-format.html
-[70]: #fieldtypesdate
-[71]: #fieldtypesdate_time
-[72]: https://airtable.com/universe
-[73]: #field
-[74]: #view
-[75]: recordColoring.modes
-[76]: #record
-[77]: getCollaboratorByIdIfExists
-[78]: #table
-[79]: getTableByIdIfExists
-[80]: getTableByNameIfExists
-[81]: #aggregator
-[82]: #tableorviewqueryresult
-[83]: #linkedrecordsqueryresult
-[84]: https://support.airtable.com/hc/en-us/articles/206452848-Linked-record-fields
-[85]: #userecords
-[86]: #userecordids
-[87]: #userecordbyid
-[88]: #useloadable
-[89]: #color
-[90]: #color
-[91]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[92]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
-[93]: #linkedrecordsqueryresult
-[94]: getFieldByIdIfExists
-[95]: getFieldByNameIfExists
-[96]: getViewByIdIfExists
-[97]: getViewByNameIfExists
-[98]: #tableorviewqueryresult
-[99]: #viewmetadataqueryresult
-[100]: #useviewmetadata
-[101]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[102]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[103]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[104]: #colors
-[105]: #rgb
-[106]: #rgb
-[107]: https://reactjs.org/docs/hooks-intro.html
-[108]: #withhooks
-[109]: #usewatchable
-[110]: #base
-[111]: #globalconfig
-[112]: #session
-[113]: #viewport
-[114]: #useviewport
-[115]: #watchable
-[116]: https://reactjs.org/docs/react-api.html#reactsuspense
-[117]: #cursor
-[118]: https://reactjs.org/docs/forwarding-refs.html
-[119]: #autocompletepopoverprops
-[120]: #autocompleteitem
-[121]: #buttonprops
-[122]: #cellrendererprops
-[123]: #choicetokenprops
-[124]: #collaboratortokenprops
-[125]: #confirmationdialogprops
-[126]: #dialogprops
-[127]: #dialogclosebuttonprops
-[128]: #fieldpickerprops
-[129]: #fieldpickersyncedprops
-[130]: #globalconfigkey
-[131]: #iconprops
-[132]: /packages/sdk/docs/icons.md
-[133]: #fieldiconprops
-[134]: #inputprops
-[135]: #inputsyncedprops
-[136]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[137]: #linkprops
-[138]: #loaderprops
-[139]: #popoverprops
-[140]: #progressbarprops
-[141]: #recordcardprops
-[142]: #expandrecordopts
-[143]: #selectprops
-[144]: #selectoption
-[145]: #selectsyncedprops
-[146]: #tablepickerprops
-[147]: #tablepickersyncedprops
-[148]: #toggleprops
-[149]: #togglesyncedprops
-[150]: #tooltipprops
-[151]: #viewpickerprops
-[152]: #viewpickersyncedprops
-[153]: #viewportsizeconstraintprop
+[38]: #colorpalettesynced
+[39]: #confirmationdialog
+[40]: #dialog
+[41]: #fieldpicker
+[42]: #fieldpickersynced
+[43]: #icon
+[44]: #input
+[45]: #inputsynced
+[46]: #link
+[47]: #loader
+[48]: #popover
+[49]: #progressbar
+[50]: #recordcard
+[51]: #select
+[52]: #selectsynced
+[53]: #selectbuttons
+[54]: #selectbuttonssynced
+[55]: #tablepicker
+[56]: #tablepickersynced
+[57]: #toggle
+[58]: #togglesynced
+[59]: #tooltip
+[60]: #viewpicker
+[61]: #viewpickersynced
+[62]: #viewportconstraint
+[63]: #usebase
+[64]: #usesession
+[65]: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+[66]: https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
+[67]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[68]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[69]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[70]: #globalconfigvalue
+[71]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[72]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[74]: #viewportaddmaxfullscreensize
+[75]: #viewportminsize
+[76]: https://www.iso.org/iso-8601-date-and-time-format.html
+[77]: #fieldtypesdate
+[78]: #fieldtypesdate_time
+[79]: https://airtable.com/universe
+[80]: #field
+[81]: #view
+[82]: recordColoring.modes
+[83]: #record
+[84]: #basegetcollaboratorbyidifexists
+[85]: #table
+[86]: #basegettablebyidifexists
+[87]: #basegettablebynameifexists
+[88]: #aggregator
+[89]: #tableorviewqueryresult
+[90]: #linkedrecordsqueryresult
+[91]: https://support.airtable.com/hc/en-us/articles/206452848-Linked-record-fields
+[92]: #userecords
+[93]: #userecordids
+[94]: #userecordbyid
+[95]: #useloadable
+[96]: #color
+[97]: #color
+[98]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[99]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
+[100]: #linkedrecordsqueryresult
+[101]: #tablegetfieldbyidifexists
+[102]: #tablegetfieldbynameifexists
+[103]: #tablegetviewbyidifexists
+[104]: #tablegetviewbynameifexists
+[105]: #tableorviewqueryresult
+[106]: #viewmetadataqueryresult
+[107]: #useviewmetadata
+[108]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[109]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[110]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[111]: #colors
+[112]: #rgb
+[113]: #rgb
+[114]: https://reactjs.org/docs/hooks-intro.html
+[115]: #withhooks
+[116]: #usewatchable
+[117]: #base
+[118]: #globalconfig
+[119]: #session
+[120]: #viewport
+[121]: #useviewport
+[122]: #watchable
+[123]: https://reactjs.org/docs/react-api.html#reactsuspense
+[124]: #cursor
+[125]: https://reactjs.org/docs/forwarding-refs.html
+[126]: #autocompletepopoverprops
+[127]: #autocompleteitem
+[128]: #buttonprops
+[129]: #cellrendererprops
+[130]: #choicetokenprops
+[131]: #collaboratortokenprops
+[132]: #colorpaletteprops
+[133]: #confirmationdialogprops
+[134]: #dialogprops
+[135]: #dialogclosebuttonprops
+[136]: #fieldpickerprops
+[137]: #globalconfigkey
+[138]: #fieldpickersyncedprops
+[139]: #iconprops
+[140]: /packages/sdk/docs/icons.md
+[141]: #fieldiconprops
+[142]: #inputprops
+[143]: #inputsyncedprops
+[144]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[145]: #linkprops
+[146]: #loaderprops
+[147]: #popoverprops
+[148]: #progressbarprops
+[149]: #recordcardprops
+[150]: #expandrecordopts
+[151]: #selectprops
+[152]: #selectoption
+[153]: #selectsyncedprops
+[154]: #tablepickerprops
+[155]: #tablepickersyncedprops
+[156]: #toggleprops
+[157]: #togglesyncedprops
+[158]: #tooltipprops
+[159]: #viewpickerprops
+[160]: #viewpickersyncedprops
+[161]: #viewportsizeconstraintprop

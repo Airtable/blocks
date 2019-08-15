@@ -2,7 +2,7 @@ toc:
     - name: '@airtable/blocks'
       children:
           - SDK
-          - name: GlobalConfig
+          - name: globalConfig
             children:
                 - GlobalConfig
                 - GlobalConfigKey
@@ -106,6 +106,7 @@ toc:
                 - ColorPaletteProps
                 - ColorPaletteSynced
                 - ColorPaletteSyncedProps
+          - ColorPaletteSynced
           - name: ConfirmationDialog
             children:
                 - ConfirmationDialog
@@ -122,6 +123,7 @@ toc:
                 - FieldPickerProps
                 - FieldPickerSynced
                 - FieldPickerSyncedProps
+          - FieldPickerSynced
           - name: Icon
             children:
                 - Icon
@@ -134,6 +136,7 @@ toc:
                 - InputProps
                 - InputSynced
                 - InputSyncedProps
+          - InputSynced
           - name: Link
             children:
                 - Link
@@ -163,24 +166,28 @@ toc:
                 - SelectOption
                 - SelectSynced
                 - SelectSyncedProps
+          - SelectSynced
           - name: SelectButtons
             children:
                 - SelectButtons
                 - SelectButtonsProps
                 - SelectButtonsSynced
                 - SelectButtonsSyncedProps
+          - SelectButtonsSynced
           - name: TablePicker
             children:
                 - TablePicker
                 - TablePickerProps
                 - TablePickerSynced
                 - TablePickerSyncedProps
+          - TablePickerSynced
           - name: Toggle
             children:
                 - Toggle
                 - ToggleProps
                 - ToggleSynced
                 - ToggleSyncedProps
+          - ToggleSynced
           - name: Tooltip
             children:
                 - Tooltip
@@ -191,6 +198,7 @@ toc:
                 - ViewPickerProps
                 - ViewPickerSynced
                 - ViewPickerSyncedProps
+          - ViewPickerSynced
           - name: ViewportConstraint
             children:
                 - ViewportConstraint

@@ -1,11 +1,10 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import omit from 'lodash.omit';
 import ColorPalette from './color_palette';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 /** @typedef */
 type ColorPaletteSyncedProps = {
@@ -23,7 +22,7 @@ class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
     };
     render() {
         const {globalConfigKey, disabled} = this.props;
-        const restOfProps = u.omit(this.props, ['globalConfigKey', 'disabled', 'onChange']);
+        const restOfProps = omit(this.props, ['globalConfigKey', 'disabled', 'onChange']);
         return (
             <Synced
                 globalConfigKey={globalConfigKey}

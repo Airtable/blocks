@@ -9,7 +9,6 @@ import Popover, {
     type FitInWindowMode,
 } from './popover';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 /** @typedef */
@@ -113,7 +112,7 @@ class AutocompletePopover extends React.Component<
     }
     componentDidMount() {
         if (this.props.isOpen && this.props.focusOnOpen) {
-            u.defer(() => this.focus());
+            setTimeout(() => this.focus(), 0);
         }
 
         document.addEventListener('mousemove', this._resetResultsPointerEvents, false);

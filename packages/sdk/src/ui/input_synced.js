@@ -1,13 +1,12 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import omit from 'lodash.omit';
 import {invariant} from '../error_utils';
 import {type GlobalConfigKey} from '../global_config';
 import Input from './input';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 /** @type {object}
  * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
@@ -87,7 +86,7 @@ class InputSynced extends React.Component<InputSyncedProps> {
         this._input.select();
     }
     render() {
-        const restOfProps = u.omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+        const restOfProps = omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
         return (
             <Synced
                 globalConfigKey={this.props.globalConfigKey}

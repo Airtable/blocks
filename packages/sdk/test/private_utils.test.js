@@ -1,5 +1,14 @@
 // @flow
-import {has, isObjectEmpty, isNullOrUndefinedOrEmpty, compact, clamp} from '../src/private_utils';
+import {
+    has,
+    isObjectEmpty,
+    isNullOrUndefinedOrEmpty,
+    compact,
+    clamp,
+    flattenDeep,
+    keyBy,
+    uniqBy,
+} from '../src/private_utils';
 import {flowTest} from './test_helpers';
 
 describe('has', () => {
@@ -106,5 +115,71 @@ describe('clamp', () => {
         expect(clamp(3.5, -1.2, 3.4)).toBe(3.4);
         expect(clamp(100, -1.2, 3.4)).toBe(3.4);
         expect(clamp(Infinity, -1.2, 3.4)).toBe(3.4);
+    });
+});
+
+describe('flattenDeep', () => {
+    it('flattens a nested array', () => {
+        expect(flattenDeep([1, 2, [3, 4]])).toEqual([1, 2, 3, 4]);
+        expect(flattenDeep([[1, 2, 3, 4]])).toEqual([1, 2, 3, 4]);
+        expect(flattenDeep([1, [2, 3], [[4]]])).toEqual([1, 2, 3, 4]);
+        expect(flattenDeep([[], []])).toEqual([]);
+    });
+
+    it('no-ops for a flat array', () => {
+        expect(flattenDeep([1, 2, 3, 4])).toEqual([1, 2, 3, 4]);
+    });
+});
+
+describe('keyBy', () => {
+    it('converts arrays into objects keyed by the result of a given function', () => {
+        expect(keyBy([1, 2, 3, 4], o => String(o))).toEqual({
+            '1': 1,
+            '2': 2,
+            '3': 3,
+            '4': 4,
+        });
+        expect(keyBy([{id: 1}, {id: 2}, {id: 3}, {id: 4}], o => String(o.id))).toEqual({
+            '1': {id: 1},
+            '2': {id: 2},
+            '3': {id: 3},
+            '4': {id: 4},
+        });
+    });
+
+    it('uses the value of the last element for repeated keys', () => {
+        expect(
+            keyBy(
+                [
+                    {id: 1, group: 'a'},
+                    {id: 2, group: 'b'},
+                    {id: 3, group: 'a'},
+                    {id: 4, group: 'b'},
+                ],
+                o => o.group,
+            ),
+        ).toEqual({
+            a: {id: 3, group: 'a'},
+            b: {id: 4, group: 'b'},
+        });
+    });
+});
+
+describe('uniqBy', () => {
+    it('removes non-unique array elements based on a given function', () => {
+        expect(uniqBy([1, 2, 3, 4], o => o)).toEqual([1, 2, 3, 4]);
+        expect(uniqBy([1, 1, 1, 1], o => o)).toEqual([1]);
+        expect(
+            uniqBy(
+                [
+                    {id: 1, group: 'a'},
+                    {id: 2, group: 'b'},
+                    {id: 3, group: 'a'},
+                    {id: 4, group: 'b'},
+                ],
+                o => o.group,
+            ),
+        ).toEqual([{id: 1, group: 'a'}, {id: 2, group: 'b'}]);
+        expect(uniqBy([2.1, 1.2, 2.3], Math.floor)).toEqual([2.1, 1.2]);
     });
 });
