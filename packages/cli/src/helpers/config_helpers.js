@@ -12,6 +12,31 @@ import type {
     UserOrBlockConfig,
     AirtableApiKeyOrApiKeyByName,
 } from '../types/config_helpers_type';
+import type {Result} from '../types/result';
+
+function _parseAndValidateUserOrBlockConfig(
+    fileContents: mixed,
+    configPath: string,
+): Result<UserOrBlockConfig> {
+    if (Array.isArray(fileContents)) {
+        return {err: new Error('config file should not be an Array')};
+    }
+
+    if (fileContents instanceof Object) {
+        if (fileContents.airtableApiKey !== undefined) {
+            if (
+                fileContents.airtableApiKey instanceof Object ||
+                typeof fileContents.airtableApiKey === 'string'
+            ) {
+                return {value: fileContents};
+            }
+        } else {
+            return {value: fileContents};
+        }
+    }
+
+    return {err: new Error('invalid config file format at ' + configPath)};
+}
 
 function getConfigPath(location: ConfigLocation): string {
     let folderPath: string;
@@ -35,12 +60,15 @@ async function _getConfigIfExistsAsync(
     const configPath = getConfigPath(location);
     const fileContents = await fsUtils.readJsonIfExistsAsync(configPath);
 
-    if ((fileContents instanceof Object && !Array.isArray(fileContents)) || fileContents === null) {
-        return fileContents;
-    } else {
-        // TODO: Handle invalid config files more gracefully
-        throw new Error('Invalid config file at ' + configPath);
+    if (fileContents === null) {
+        return null;
     }
+
+    const userOrBlockConfig = _parseAndValidateUserOrBlockConfig(fileContents, configPath);
+    if (userOrBlockConfig.err) {
+        throw userOrBlockConfig.err;
+    }
+    return userOrBlockConfig.value;
 }
 
 async function _getApiKeyFromConfigIfExistsAsync(

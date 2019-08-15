@@ -13,6 +13,8 @@ export type AirtableApiKeyOrApiKeyByName = ApiKey | {[string]: ApiKey};
 /**
  * These are all the user-level/block-level configs that are currently supported via
  * the config management system (i.e. the `.airtableblocksrc.json` file).
+ *
+ * TODO(richsinn): Consider using a schema validator like joi (https://github.com/hapijs/joi)
  */
 export type UserOrBlockConfig = {
     airtableApiKey?: AirtableApiKeyOrApiKeyByName,

@@ -10,6 +10,8 @@ const configHelpers = require('../src/helpers/config_helpers');
 const {ConfigKeys, ConfigLocations} = require('../src/types/config_helpers_type');
 const getBlockDirPathModule = require('../src/get_block_dir_path');
 
+import type {UserOrBlockConfig} from '../src/types/config_helpers_type';
+
 describe('configHelpers', function() {
     describe('getConfigPath', function() {
         it('for BLOCK location, returns the block directory', function() {
@@ -218,12 +220,14 @@ describe('configHelpers', function() {
                         const blockConfig = await fsUtils.readJsonIfExistsAsync(
                             configHelpers.getConfigPath(ConfigLocations.BLOCK),
                         );
-                        assert(typeof blockConfig.airtableApiKey === 'string');
+                        const blockConfigTypeCoerced = ((blockConfig: any): UserOrBlockConfig); // eslint-disable-line flowtype/no-weak-types
+                        assert(typeof blockConfigTypeCoerced.airtableApiKey === 'string');
 
                         const userConfig = await fsUtils.readJsonIfExistsAsync(
                             configHelpers.getConfigPath(ConfigLocations.USER),
                         );
-                        assert(typeof userConfig.airtableApiKey === 'string');
+                        const userConfigTypeCoerced = ((userConfig: any): UserOrBlockConfig); // eslint-disable-line flowtype/no-weak-types
+                        assert(typeof userConfigTypeCoerced.airtableApiKey === 'string');
 
                         // Update both the user-level and block-level configs with an apiKeyName
                         await configHelpers.setApiKeyAsync(

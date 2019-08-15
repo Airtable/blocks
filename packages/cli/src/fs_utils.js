@@ -1,3 +1,4 @@
+// @flow
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const {promisify} = require('util');
@@ -5,9 +6,12 @@ const path = require('path');
 
 module.exports = {
     readFileAsync: promisify(fs.readFile),
-    readFileIfExistsAsync: async function(filepath) {
+    readFileIfExistsAsync: async function(
+        filepath: string | Buffer | URL | number,
+        optionsOrEncoding?: {encoding?: string | null, flag?: string} | string,
+    ): Promise<string | Buffer | null> {
         try {
-            return await this.readFileAsync(filepath);
+            return await this.readFileAsync(filepath, optionsOrEncoding);
         } catch (err) {
             if (err.code === 'ENOENT') {
                 return null;
@@ -18,7 +22,7 @@ module.exports = {
     },
     writeFileAsync: promisify(fs.writeFile),
     mkdirAsync: promisify(fs.mkdir),
-    mkdirIfDoesntAlreadyExistAsync: async function(dirPath) {
+    mkdirIfDoesntAlreadyExistAsync: async function(dirPath: string | Buffer | URL): Promise<void> {
         try {
             await this.mkdirAsync(dirPath);
         } catch (err) {
@@ -28,7 +32,7 @@ module.exports = {
             }
         }
     },
-    mkdirPathAsync: async function(dirPath) {
+    mkdirPathAsync: async function(dirPath: string): Promise<void> {
         try {
             // Try to make a directory for the given path.
             await this.mkdirIfDoesntAlreadyExistAsync(dirPath);
@@ -48,23 +52,30 @@ module.exports = {
         }
     },
     readDirAsync: promisify(fs.readdir),
-    readDirIfExistsAsync: function(dirPath) {
-        return this.readDirAsync(dirPath).catch(err => {
+    readDirIfExistsAsync: async function(
+        dirPath: string | Buffer | URL,
+    ): Promise<Array<string> | Array<Buffer> | null> {
+        try {
+            return await this.readDirAsync(dirPath);
+        } catch (err) {
             if (err.code === 'ENOENT') {
                 return null;
             }
             // Unknown error, so throw it.
             throw err;
-        });
+        }
     },
-    copyFileAsync: async function(sourceFile, targetFile) {
+    copyFileAsync: async function(
+        sourceFile: string | Buffer | URL | number,
+        targetFile: string | Buffer | URL | number,
+    ): Promise<void> {
         const contents = await this.readFileAsync(sourceFile);
         await this.writeFileAsync(targetFile, contents);
     },
     /**
      * Like cp -r
      */
-    copyAsync: async function(fromPath, toPath) {
+    copyAsync: async function(fromPath: string, toPath: string): Promise<void> {
         await fsExtra.copy(fromPath, toPath);
     },
     /**
@@ -78,40 +89,51 @@ module.exports = {
      * the Administrator role.
      * src: https://github.com/nodejs/node/issues/18518#issuecomment-513866491
      */
-    symlinkAsync: async function(target, fileOrDirPath, type = 'junction') {
+    symlinkAsync: async function(
+        target: string | Buffer | URL,
+        fileOrDirPath: string | Buffer | URL,
+        type?: string = 'junction',
+    ): Promise<void> {
         const promisifiedFsSymlink = promisify(fs.symlink);
 
         return await promisifiedFsSymlink(target, fileOrDirPath, type);
     },
-    symlinkIfNeededAsync: function(target, filePath) {
-        this.symlinkAsync(target, filePath).catch(err => {
+    symlinkIfNeededAsync: async function(
+        target: string | Buffer | URL,
+        filePath: string | Buffer | URL,
+    ): Promise<void> {
+        try {
+            await this.symlinkAsync(target, filePath);
+        } catch (err) {
             // Throw if we get any error other than that the symlink already exists.
             if (err.code !== 'EEXIST') {
                 throw err;
             }
-        });
+        }
     },
     statAsync: promisify(fs.stat),
-    statIfExistsAsync: function(filePath) {
-        return this.statAsync(filePath).catch(err => {
+    statIfExistsAsync: async function(filePath: string | Buffer | URL): Promise<fs.Stats | null> {
+        try {
+            return await this.statAsync(filePath);
+        } catch (err) {
             if (err.code === 'ENOENT') {
                 return null;
             }
             // Throw if we get any error other than that the file doesn't exist.
             throw err;
-        });
+        }
+    },
+    existsAsync: async function(filePath: string | Buffer | URL): Promise<boolean> {
+        const statIfExists = await this.statIfExistsAsync(filePath);
+
+        return statIfExists !== null;
     },
     renameAsync: promisify(fs.rename),
-    existsAsync: function(filePath) {
-        return this.statIfExistsAsync(filePath).then(result => {
-            return result !== null;
-        });
-    },
     unlinkAsync: promisify(fs.unlink),
-    removeAsync: async function(filePath) {
+    removeAsync: async function(filePath: string): Promise<void> {
         return await fsExtra.remove(filePath);
     },
-    readJsonIfExistsAsync: async function(filePath) {
+    readJsonIfExistsAsync: async function(filePath: string): Promise<mixed | null> {
         try {
             return await fsExtra.readJson(filePath);
         } catch (err) {
@@ -122,7 +144,7 @@ module.exports = {
             throw err;
         }
     },
-    outputJsonAsync: async function(filePath, content) {
+    outputJsonAsync: async function(filePath: string, content: mixed): Promise<void> {
         await fsExtra.outputJson(filePath, content, {spaces: 4});
     },
 };

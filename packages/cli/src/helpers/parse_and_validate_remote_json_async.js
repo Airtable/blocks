@@ -4,6 +4,7 @@ const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const validateRemoteJson = require('./validate_remote_json');
 const fsUtils = require('../fs_utils');
 const path = require('path');
+const invariant = require('invariant');
 
 import type {Result} from '../types/result';
 import type {RemoteJson} from '../types/remote_json_type';
@@ -23,10 +24,11 @@ async function parseAndValidateRemoteJsonAsync(
         remoteJsonFileName,
     );
     const remoteJsonAbsolutePath = path.join(blockDirPath, remoteJsonRelativePath);
-    const remoteJsonStr = await fsUtils.readFileIfExistsAsync(remoteJsonAbsolutePath);
+    const remoteJsonStr = await fsUtils.readFileIfExistsAsync(remoteJsonAbsolutePath, 'utf8');
     if (remoteJsonStr === null) {
         return {err: new Error(`Could not find file at ${remoteJsonRelativePath}`)};
     }
+    invariant(typeof remoteJsonStr === 'string', 'expect remoteJsonStr to be string');
     let remoteJson;
     try {
         remoteJson = JSON.parse(remoteJsonStr);
