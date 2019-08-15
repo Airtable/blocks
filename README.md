@@ -24,6 +24,12 @@ terms of the [developer preview agreement](/DEVELOPER_AGREEMENT.md).
 The [API reference](https://github.com/Airtable/blocks/tree/master/packages/sdk/docs/api.md)
 documents public methods and code examples.
 
+## Support
+
+We'd love to hear all your feedback! If you run into any bugs, find anything confusing, or have
+questions or feature requests you can email the platform engineering team directly at
+<blocks@airtable.com>.
+
 ### Example block source code
 
 Here is the code for several example blocks. You can read it to learn techniques and see best
@@ -39,8 +45,18 @@ practices for blocks development. And you can use it as a jumping off point for 
     Uses the Cursor API to detect when the user selects a record in grid view. Gets a YouTube URL
     from the record and plays the corresponding video.
 
-## Support
+##### Simple chart
 
-We'd love to hear all your feedback! If you run into any bugs, find anything confusing, or have
-questions or feature requests you can email the platform engineering team directly at
-<blocks@airtable.com>.
+[![Block updating chart as the user changes data](examples/simple_chart/media/block.gif?raw=true)](examples/simple_chart)
+
+##### To-do list
+
+[![Block updating to-do list as the user changes data](examples/todo/media/block.gif?raw=true)](examples/todo)
+
+##### Summary
+
+[![Block updating summaries as the user changes data](examples/summary/media/block.gif?raw=true)](examples/summary)
+
+##### YouTube preview
+
+[![Block showing YouTube video when user selects record in grid view](examples/youtube_preview/media/block.gif?raw=true)](examples/youtube_preview)

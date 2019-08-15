@@ -22,6 +22,6 @@ The code shows:
 
 4. From the root of your new block, run `block run`.
 
-## Screenshot
+## See the block running
 
-![Block screenshot](images/block_screenshot.png?raw=true)
+![Block showing YouTube video when user selects record in grid view](media/block.gif?raw=true)

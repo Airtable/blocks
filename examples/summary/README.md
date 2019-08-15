@@ -16,6 +16,6 @@ average, etc. It does this by using Airtable's built-in summary functions.
 
 4. From the root of your new block, run `block run`.
 
-## Screenshot
+## See the block running
 
-![Block screenshot](images/block_screenshot.png?raw=true)
+![Block updating summaries as the user changes data](media/block.gif?raw=true)
