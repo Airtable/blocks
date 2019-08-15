@@ -308,7 +308,6 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     _unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch() {
-        invariant(this._cellValuesWatchCount > 0, 'overfree cellValues watch');
         if (this._cellValuesWatchCount === 0 && this.isValid) {
             this._unwatchLinkedQueryCellValues();
         }
