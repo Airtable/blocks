@@ -9,7 +9,7 @@ import type {ConfigLocation} from '../types/config_helpers_type';
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const location = ((argv.location: any): ConfigLocation); // eslint-disable-line flowtype/no-weak-types
-    const apiKeyName = argv.remote || null;
+    const apiKeyName = argv.apiKeyName || null;
     invariant(
         apiKeyName === null || typeof apiKeyName === 'string',
         'expects apiKeyName to be null or a string',
