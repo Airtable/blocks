@@ -26,8 +26,10 @@
         "/transpiled/",
         "/blocks_backend_wrapper/package.json"
     ],
+    "bundledDependencies": [
+        "airtable-blocks-backend-wrapper"
+    ],
     "dependencies": {
-        "@airtable/blocks-backend-wrapper": "file:./blocks_backend_wrapper",
         "@airtable/eslint-plugin-blocks": "^1.0.2",
         "@babel/cli": "^7.2.3",
         "@babel/core": "^7.4.0",
@@ -67,6 +69,7 @@
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
         "@babel/register": "^7.4.4",
+        "airtable-blocks-backend-wrapper": "file:./blocks_backend_wrapper",
         "babel-eslint": "^10.0.1",
         "eslint": "^5.15.1",
         "eslint-plugin-airtable": "git+ssh://git@github.com/Hyperbase/eslint-plugin-airtable#da42308fa5d9c164794b2d32c96934e54b1195f9",

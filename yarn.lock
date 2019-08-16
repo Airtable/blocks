@@ -2,14 +2,6 @@
 # yarn lockfile v1
 
 
-"@airtable/blocks-backend-wrapper@file:./packages/cli/blocks_backend_wrapper":
-  version "0.0.1"
-  dependencies:
-    "@babel/polyfill" "^7.4.4"
-    invariant "2.2.2"
-    path-to-regexp "2.0.0"
-    request "2.87.0"
-
 "@babel/cli@^7.2.3", "@babel/cli@^7.4.4":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.5.5.tgz#bdb6d9169e93e241a08f5f7b0265195bf38ef5ec"
@@ -2439,6 +2431,14 @@ airbnb-prop-types@^2.13.2:
     prop-types "^15.7.2"
     prop-types-exact "^1.2.0"
     react-is "^16.8.6"
+
+"airtable-blocks-backend-wrapper@file:./packages/cli/blocks_backend_wrapper":
+  version "0.0.1"
+  dependencies:
+    "@babel/polyfill" "^7.4.4"
+    invariant "2.2.2"
+    path-to-regexp "2.0.0"
+    request "2.87.0"
 
 ajv-errors@^1.0.0:
   version "1.0.1"
