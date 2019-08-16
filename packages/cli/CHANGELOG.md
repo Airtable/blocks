@@ -9,9 +9,17 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.30...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.31...HEAD)
 
--   Some more miscellaneous fixes and address internal process issues. Versions [0.0.28](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.27...@airtable/blocks-cli@0.0.28) through [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.29...@airtable/blocks-cli@0.0.30) are unavailable and should not be used.
+No changes.
+
+## [0.0.31](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.30...@airtable/blocks-cli@0.0.31) - 2019-08-16
+
+-   Some more miscellaneous fixes and address internal process issues. Versions
+    [0.0.28](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.27...@airtable/blocks-cli@0.0.28)
+    through
+    [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.29...@airtable/blocks-cli@0.0.30)
+    are unavailable and should not be used.
 
 ## [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.29...@airtable/blocks-cli@0.0.30) - 2019-08-16
 
