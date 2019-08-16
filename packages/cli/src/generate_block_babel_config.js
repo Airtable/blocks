@@ -1,8 +1,8 @@
 // @flow
 const babelPresetEnv = require('@babel/preset-env');
 const babelPresetReact = require('@babel/preset-react');
-const babelPresetFlow = require('@babel/preset-flow');
 const babelPluginProposalClassProperties = require('@babel/plugin-proposal-class-properties');
+const babelPluginTransformFlowStripTypes = require('@babel/plugin-transform-flow-strip-types');
 
 /**
  * See documented formats for presets:
@@ -48,9 +48,12 @@ type BabelPresetEnvTargetsOption =
       };
 
 function generateBlockBabelConfig(targets: BabelPresetEnvTargetsOption): BabelConfig {
+    // We use the '@babel/transform-flow-strip-types' plugin instead of the
+    // '@babel/preset-flow' preset due to a Babel bug:
+    // https://github.com/babel/babel/issues/8593#issuecomment-419862386
     return {
-        presets: [[babelPresetEnv, {targets}], babelPresetReact, babelPresetFlow],
-        plugins: [babelPluginProposalClassProperties],
+        presets: [[babelPresetEnv, {targets}], babelPresetReact],
+        plugins: [babelPluginTransformFlowStripTypes, babelPluginProposalClassProperties],
         retainLines: true,
         minified: true,
     };
