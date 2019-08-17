@@ -44,6 +44,8 @@ practices for blocks development. And you can use it as a jumping off point for 
 -   [YouTube preview](https://github.com/Airtable/blocks/tree/master/examples/youtube_preview) -
     Uses the Cursor API to detect when the user selects a record in grid view. Gets a YouTube URL
     from the record and plays the corresponding video.
+-   [Print records](https://github.com/Airtable/blocks/tree/master/examples/print_records) - Creates
+    a printable, custom layout with many records on one page.
 
 ##### Simple chart
 
@@ -60,3 +62,7 @@ practices for blocks development. And you can use it as a jumping off point for 
 ##### YouTube preview
 
 [![Block showing YouTube video when user selects record in grid view](examples/youtube_preview/media/block.gif?raw=true)](examples/youtube_preview)
+
+##### Print records
+
+[![Seeing a layout of artists and their artworks grouped by collection, printing the layout](examples/print_records/media/block.gif?raw=true)](examples/print_records)
