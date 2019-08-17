@@ -24,9 +24,10 @@
         "watch:babel": "yarn run build:babel --watch",
         "build:flow": "flow-copy-source src dist/cjs",
         "watch:flow": "yarn run build:flow --watch",
-        "build:docs:noformat": "documentation build src/index.js --format md --markdown-toc --markdown-toc-max-depth 3 --config documentation_config.yml --sort-order alpha --infer-private '^_' --output docs/api.md",
+        "build:docs:noformat": "documentation build src/index.js --format md --markdown-toc --markdown-toc-max-depth 3 --config documentation_config.yml --sort-order alpha --infer-private '^_' --output docs/api.md && yarn run validate-markdown-links docs/api.md",
         "build:docs": "yarn run build:docs:noformat && prettier --write docs/api.md",
         "watch:docs": "yarn run build:docs:noformat --watch",
+        "validate-markdown-links": "remark --no-stdout",
         "build": "yarn run build:clean && yarn run build:babel && yarn run build:flow && yarn run build:docs",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:flow",
         "storybook": "start-storybook -p 6006",
@@ -68,7 +69,10 @@
         "fs-extra": "^8.0.1",
         "glob": "^7.1.4",
         "jest": "^24.8.0",
-        "prettier": "^1.18.2"
+        "prettier": "^1.18.2",
+        "remark-cli": "^7.0.0",
+        "remark-lint-no-dead-urls": "^0.5.0",
+        "remark-validate-links": "^9.0.1"
     },
     "dependencies": {
         "@airtable/eslint-plugin-blocks": "^1.0.2",
