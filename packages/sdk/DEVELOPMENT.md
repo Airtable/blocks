@@ -29,3 +29,94 @@ Run with `yarn <command>`.
 
 Whilst we're still in pre-alpha, every version should be `patch`. We can start following semver
 later.
+
+## Writing JSDoc links
+
+### Top-level links
+
+Occasionally, you will want to create a link in a comment that points to a top-level entity in the
+[api docs](packages/sdk/docs/api.md). To do this, use a JSDoc `{@link}`.
+
+For example, the `@link` below points at the `RecordQueryResult` section of the API docs:
+
+```js
+/**
+ * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+ * See {@link RecordQueryResult} for more.
+ * etc...
+ */
+```
+
+Note: this will only work for entities that are accessible at the top level.
+
+### Links to a member of a module
+
+If you want to link to the documentation about a module sub-member (e.g. a method like `bar`,
+below), you can't use a `{@link}`. See
+https://airtable.quip.com/Zh56A9fEsvZR/Reasoning-behind-using-Markdown-links-to-link-to-module-sub-members-in-the-blocks-SDK-API-docs
+for details on why. Instead, you need to use a Markdown link that points at `#thenameofthemember`.
+As an example, see the link to `bar` below:
+
+```js
+/**
+ * Example docs for Foo class.
+ * Includes the [bar](#bar) method.
+ */
+class Foo
+    /**
+     * Example docs for bar method.
+     */
+    bar() {
+
+    }
+}
+```
+
+### Disambiguating links
+
+GitHub anchor header names can and often do conflict. Usually, this is fine. For example, a link to
+`#globalconfig` resolves to the first header in the Markdown below, which is what you want:
+
+```md
+### globalConfig
+
+#### GlobalConfig
+
+**Extends Watchable**
+
+A key-value store for...
+```
+
+If you want to link to a header that is not the first instance of its name in the document, you can
+disambiguate. First, put an `@alias` on the member you want to link to. Second,
+[turn that alias into a slug](https://stackoverflow.com/a/45508928) and use it in a Markdown link.
+In the example below, the first link points at the docs for the `foo.bar()` method, whereas the
+second link points at the docs for the `baz.bar()` method:
+
+```js
+/**
+ * Example docs for Foo class.
+ * Contains the [bar](#bar) method.
+ */
+class Foo {
+    /**
+     * Example docs for bar method.
+     */
+    bar() {}
+}
+
+/**
+ * Example docs for Baz class.
+ * Contains the [bar](#bazbar) method.
+ */
+class Baz {
+    /**
+     * Example docs for bar method.
+     * @alias Baz#bar
+     */
+    bar() {}
+}
+```
+
+Note that you can link to the docs for one of these methods from any source file, not just the
+source file in which these methods appear.

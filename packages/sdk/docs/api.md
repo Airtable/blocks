@@ -439,11 +439,10 @@ Returns **[boolean][69]** `true` if the block frame is smaller than `minSize`, `
 #### maxFullscreenSize
 
 The maximum dimensions of the block when it is in fullscreen mode. Returns the smallest set of
-dimensions added with [Viewport#addMaxFullscreenSize][74].
+dimensions added with [addMaxFullscreenSize][74].
 
 If `width` or `height` is null, it means there is no max size constraint on that dimension. If
-`maxFullscreenSize` would be smaller than [Viewport#minSize][75], it is constrained to be at least
-`minSize`.
+`maxFullscreenSize` would be smaller than [minSize][75], it is constrained to be at least `minSize`.
 
 Type: ViewportSizeConstraint
 
@@ -1374,8 +1373,8 @@ Returns **[Array][68]&lt;CollaboratorData>** The users who have access to this b
 -   `collaboratorId` **UserId** The ID of the user.
 
 Returns **CollaboratorData** The user matching the given ID. Throws if that user does not exist or
-does not have access to this base. Use [Base#getCollaboratorByIdIfExists][84] instead if you are
-unsure whether a collaborator with the given ID exists and has access to this base.
+does not have access to this base. Use [getCollaboratorByIdIfExists][84] instead if you are unsure
+whether a collaborator with the given ID exists and has access to this base.
 
 #### getCollaboratorByIdIfExists
 
@@ -1393,8 +1392,8 @@ not exist or does not have access to this base.
 -   `tableId` **[string][67]** The ID of the table.
 
 Returns **[Table][85]** The table matching the given ID. Throws if that table does not exist in this
-base. Use [Base#getTableByIdIfExists][86] instead if you are unsure whether a table exists with the
-given ID.
+base. Use [getTableByIdIfExists][86] instead if you are unsure whether a table exists with the given
+ID.
 
 #### getTableByIdIfExists
 
@@ -1412,8 +1411,8 @@ exist in this base.
 -   `tableName` **[string][67]** The name of the table you're looking for.
 
 Returns **[Table][85]** The table matching the given name. Throws if no table exists with that name
-in this base. Use [Base#getTableByNameIfExists][87] instead if you are unsure whether a table exists
-with the given name.
+in this base. Use [getTableByNameIfExists][87] instead if you are unsure whether a table exists with
+the given name.
 
 #### getTableByNameIfExists
 
@@ -2491,8 +2490,8 @@ console.log(field.name);
 ```
 
 Returns **[Field][80]** The field matching the given ID. Throws if that field does not exist in this
-table. Use [Table#getFieldByIdIfExists][101] instead if you are unsure whether a field exists with
-the given ID.
+table. Use [getFieldByIdIfExists][101] instead if you are unsure whether a field exists with the
+given ID.
 
 #### getFieldByIdIfExists
 
@@ -2530,8 +2529,8 @@ console.log(field.id);
 ```
 
 Returns **[Field][80]** The field matching the given name. Throws if no field exists with that name
-in this table. Use [Table#getFieldByNameIfExists][102] instead if you are unsure whether a field
-exists with the given name.
+in this table. Use [getFieldByNameIfExists][102] instead if you are unsure whether a field exists
+with the given name.
 
 #### getFieldByNameIfExists
 
@@ -2596,8 +2595,8 @@ console.log(view.name);
 ```
 
 Returns **[View][81]** The view matching the given ID. Throws if that view does not exist in this
-table. Use [Table#getViewByIdIfExists][103] instead if you are unsure whether a view exists with the
-given ID.
+table. Use [getViewByIdIfExists][103] instead if you are unsure whether a view exists with the given
+ID.
 
 #### getViewByIdIfExists
 
@@ -2635,8 +2634,8 @@ console.log(view.id);
 ```
 
 Returns **[View][81]** The view matching the given name. Throws if no view exists with that name in
-this table. Use [Table#getViewByNameIfExists][104] instead if you are unsure whether a view exists
-with the given name.
+this table. Use [getViewByNameIfExists][104] instead if you are unsure whether a view exists with
+the given name.
 
 #### getViewByNameIfExists
 
@@ -5633,20 +5632,20 @@ Type: {width: ([number][73] | null)?, height: ([number][73] | null)?}
 [71]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 [72]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 [73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
-[74]: #viewportaddmaxfullscreensize
-[75]: #viewportminsize
+[74]: #addmaxfullscreensize
+[75]: #minsize
 [76]: https://www.iso.org/iso-8601-date-and-time-format.html
 [77]: #fieldtypesdate
 [78]: #fieldtypesdate_time
 [79]: https://airtable.com/universe
 [80]: #field
 [81]: #view
-[82]: recordColoring.modes
+[82]: #recordcoloringmodes
 [83]: #record
-[84]: #basegetcollaboratorbyidifexists
+[84]: #getcollaboratorbyidifexists
 [85]: #table
-[86]: #basegettablebyidifexists
-[87]: #basegettablebynameifexists
+[86]: #gettablebyidifexists
+[87]: #gettablebynameifexists
 [88]: #aggregator
 [89]: #tableorviewqueryresult
 [90]: #linkedrecordsqueryresult
@@ -5660,10 +5659,10 @@ Type: {width: ([number][73] | null)?, height: ([number][73] | null)?}
 [98]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [99]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
 [100]: #linkedrecordsqueryresult
-[101]: #tablegetfieldbyidifexists
-[102]: #tablegetfieldbynameifexists
-[103]: #tablegetviewbyidifexists
-[104]: #tablegetviewbynameifexists
+[101]: #getfieldbyidifexists
+[102]: #getfieldbynameifexists
+[103]: #getviewbyidifexists
+[104]: #getviewbynameifexists
 [105]: #tableorviewqueryresult
 [106]: #viewmetadataqueryresult
 [107]: #useviewmetadata
