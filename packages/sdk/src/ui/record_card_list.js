@@ -32,7 +32,9 @@ type RecordCardListItemProviderOpts = {|
     // Extra space to leave at the bottom, e.g. for add record button
     // in calendar view sidebar.
     bottomInset: number,
-    onRecordClick: null | ((Record | RecordDef, number) => void),
+    // For onRecordClick, null makes clicks no-op, undefined makes it
+    // expand the record (default behavior).
+    onRecordClick: ((Record | RecordDef, number) => void) | null | void,
     onRecordMouseEnter: null | ((Record | RecordDef, number) => void),
     onRecordMouseLeave: null | ((Record | RecordDef, number) => void),
     style: {[string]: mixed},
@@ -314,7 +316,7 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
             rowHeight: 80,
             rowSpacing: 10,
             bottomInset: 0,
-            onRecordClick: this.props.onRecordClick || null,
+            onRecordClick: this.props.onRecordClick,
             onRecordMouseEnter: this.props.onRecordMouseEnter || null,
             onRecordMouseLeave: this.props.onRecordMouseLeave || null,
             style: {},
