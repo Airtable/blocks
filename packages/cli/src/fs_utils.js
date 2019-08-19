@@ -51,6 +51,9 @@ module.exports = {
             await this.mkdirIfDoesntAlreadyExistAsync(dirPath);
         }
     },
+    mkdirPathSync: function(dirPath: string): void {
+        fsExtra.ensureDirSync(dirPath);
+    },
     readDirAsync: promisify(fs.readdir),
     readDirIfExistsAsync: async function(
         dirPath: string | Buffer | URL,

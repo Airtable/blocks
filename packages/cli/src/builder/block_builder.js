@@ -231,7 +231,8 @@ class BlockBuilder {
     }
     async buildAsync(outputDirPath: DirectoryPath): Promise<BuildResult> {
         if (fs.existsSync(outputDirPath)) {
-            return buildStepFailure(`directory already exists at ${outputDirPath}`);
+            console.log('cleaning up build directory');
+            await fsUtils.removeAsync(outputDirPath);
         }
 
         console.log('reading block json');
@@ -240,7 +241,7 @@ class BlockBuilder {
         if (blockJsonResult.err) {
             return {success: false, error: blockJsonResult.err};
         }
-        invariant(blockJsonResult.value, 'blockJson.value');
+        invariant(blockJsonResult.value, 'blockJsonResult.value');
         const blockJson = blockJsonResult.value;
 
         await fsUtils.mkdirPathAsync(outputDirPath);

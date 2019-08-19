@@ -2,10 +2,11 @@
 /* eslint-disable no-console */
 const BlockBuilder = require('../builder/block_builder');
 const ApiClient = require('../api_client');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
+const {getBlockDirPath} = require('../get_block_dir_path');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const fsUtils = require('../fs_utils');
 const path = require('path');
-const os = require('os');
 const invariant = require('invariant');
 const request = require('request');
 const {promisify} = require('util');
@@ -17,8 +18,7 @@ type BuildId = string;
 type DeployId = string;
 
 function _getOutputDirPath(): string {
-    const timestampString = new Date().getTime().toString();
-    return path.join(os.tmpdir(), 'build', timestampString);
+    return path.join(getBlockDirPath(), blockCliConfigSettings.BUILD_DIR, 'release');
 }
 
 async function _generateBuildArtifactsAsync(): Promise<{|

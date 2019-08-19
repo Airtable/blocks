@@ -99,6 +99,7 @@ class BlockServer {
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
     _blockDirPath: string;
+    _blockDirBuildForRunDirPath: string;
     _blockServerUrlIfExists: string | null;
     _apiClient: ApiClient;
     _bundler: browserify;
@@ -120,6 +121,11 @@ class BlockServer {
         this._blockJson = blockJson;
         this._remoteJson = remoteJson;
         this._blockDirPath = getBlockDirPath();
+        this._blockDirBuildForRunDirPath = path.join(
+            this._blockDirPath,
+            blockCliConfigSettings.BUILD_DIR,
+            'run',
+        );
         this._blockServerUrlIfExists = null;
 
         this._setUpExpressRoutes();
@@ -223,7 +229,6 @@ class BlockServer {
         };
     }
     _setUpRunFrameRoutes(): void {
-        const blockDirPath = this._blockDirPath;
         const runFrameRoutes = express.Router();
 
         // Use body parser for JSON payloads.
@@ -237,7 +242,7 @@ class BlockServer {
             this._ensureBundleIsReadyMiddleware(),
             (req: $Request, res: $Response) => {
                 res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
-                    root: path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR),
+                    root: this._blockDirBuildForRunDirPath,
                 });
             },
         );
@@ -431,12 +436,11 @@ class BlockServer {
         }
 
         // Write the client wrapper file.
-        const buildDirPath = path.join(blockDirPath, blockCliConfigSettings.BUILD_DIR);
-        if (!fs.existsSync(buildDirPath)) {
-            fs.mkdirSync(buildDirPath);
+        if (!fs.existsSync(this._blockDirBuildForRunDirPath)) {
+            fsUtils.mkdirPathSync(this._blockDirBuildForRunDirPath);
         }
         const clientWrapperFilepath = path.join(
-            buildDirPath,
+            this._blockDirBuildForRunDirPath,
             blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
         );
         const isDevelopment = true;
@@ -451,8 +455,7 @@ class BlockServer {
 
         this._bundler = browserify(
             path.join(
-                blockDirPath,
-                blockCliConfigSettings.BUILD_DIR,
+                this._blockDirBuildForRunDirPath,
                 blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
             ),
             {
@@ -554,11 +557,9 @@ class BlockServer {
     }
     _bundleAsync(): Promise<BundleStateData> {
         return new Promise((resolve, reject) => {
-            const blockDirPath = this._blockDirPath;
             const fsStream = fs.createWriteStream(
                 path.join(
-                    blockDirPath,
-                    blockCliConfigSettings.BUILD_DIR,
+                    this._blockDirBuildForRunDirPath,
                     blockCliConfigSettings.BUNDLE_FILE_NAME,
                 ),
             );
