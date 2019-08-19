@@ -21,7 +21,7 @@ The code shows how to create a printable record layout. It features:
 1. Create a new base using the
    [Art Gallery Management template](https://airtable.com/templates/creative/expAZgezgpfCF8wVH/art-gallery-management).
 
-2. Create a new block in your new base (see the [setup guide](../../packages/sdk/docs/setup.md)).
+2. Create a new block in your new base (see the [setup guide](/packages/sdk/docs/setup.md)).
 
 3. Copy the code from the `frontend` directory of this block to the `frontend` directory of your new
    block.

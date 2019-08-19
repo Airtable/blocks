@@ -14,8 +14,7 @@ The code shows:
 
 1. Copy [this base](https://airtable.com/shrg3CySSks0nRw5w).
 
-2. Create a new block in your new copied base (see the
-   [setup guide](https://airtable.github.io/blocks/guides/setup/)).
+2. Create a new block in your new copied base (see the [setup guide](/packages/sdk/docs/setup.md)).
 
 3. Copy the code from the `frontend` directory of this block to the `frontend` directory of your new
    block.
