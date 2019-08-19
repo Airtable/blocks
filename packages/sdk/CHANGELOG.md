@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.24...HEAD)
 
-No changes.
+-   Add Print Records block docs example block
 
 ## [0.0.24](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.23...@airtable/blocks@0.0.24) - 2019-08-14
 
