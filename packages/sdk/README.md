@@ -1,3 +1,3 @@
 # @airtable/blocks
 
-[Documentation](/readme.md)
+[Readme for users of the SDK](/README.md)

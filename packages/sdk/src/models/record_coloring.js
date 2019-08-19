@@ -9,7 +9,7 @@ import type View from './view';
  */
 
 /**
- * An enum of the different types of {@link recordColoring.modes}
+ * An enum of the different types of [recordColoring.modes](#recordcoloringmodes)
  *
  * @alias recordColoring.ModeTypes
  * @memberof recordColoring

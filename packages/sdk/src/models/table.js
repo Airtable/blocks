@@ -233,7 +233,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     /**
      * @param fieldId The ID of the field.
-     * @returns The field matching the given ID. Throws if that field does not exist in this table. Use {@link Table#getFieldByIdIfExists} instead if you are unsure whether a field exists with the given ID.
+     * @returns The field matching the given ID. Throws if that field does not exist in this table. Use [getFieldByIdIfExists](#getfieldbyidifexists) instead if you are unsure whether a field exists with the given ID.
      * @example
      * const fieldId = 'fldxxxxxxxxxxxxxx';
      * const field = myTable.getFieldById(fieldId);
@@ -268,7 +268,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     /**
      * @param fieldName The name of the field you're looking for.
-     * @returns The field matching the given name. Throws if no field exists with that name in this table. Use {@link Table#getFieldByNameIfExists} instead if you are unsure whether a field exists with the given name.
+     * @returns The field matching the given name. Throws if no field exists with that name in this table. Use [getFieldByNameIfExists](#getfieldbynameifexists) instead if you are unsure whether a field exists with the given name.
      * @example
      * const field = myTable.getFieldByName('Name');
      * console.log(field.id);
@@ -325,7 +325,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     /**
      * @param viewId The ID of the view.
-     * @returns The view matching the given ID. Throws if that view does not exist in this table. Use {@link Table#getViewByIdIfExists} instead if you are unsure whether a view exists with the given ID.
+     * @returns The view matching the given ID. Throws if that view does not exist in this table. Use [getViewByIdIfExists](#getviewbyidifexists) instead if you are unsure whether a view exists with the given ID.
      * @example
      * const viewId = 'viwxxxxxxxxxxxxxx';
      * const view = myTable.getViewById(viewId);
@@ -360,7 +360,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     /**
      * @param viewName The name of the view you're looking for.
-     * @returns The view matching the given name. Throws if no view exists with that name in this table. Use {@link Table#getViewByNameIfExists} instead if you are unsure whether a view exists with the given name.
+     * @returns The view matching the given name. Throws if no view exists with that name in this table. Use [getViewByNameIfExists](#getviewbynameifexists) instead if you are unsure whether a view exists with the given name.
      * @example
      * const view = myTable.getViewByName('Name');
      * console.log(view.id);

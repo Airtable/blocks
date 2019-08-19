@@ -91,11 +91,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
     /**
      * The maximum dimensions of the block when it is in
      * fullscreen mode. Returns the smallest set of dimensions added with
-     * {@link Viewport#addMaxFullscreenSize}.
+     * [addMaxFullscreenSize](#addmaxfullscreensize).
      *
      * If `width` or `height` is null, it means there is
      * no max size constraint on that dimension. If `maxFullscreenSize` would be
-     * smaller than {@link Viewport#minSize}, it is constrained to be at least `minSize`.
+     * smaller than [minSize](#minsize), it is constrained to be at least `minSize`.
      *
      * @returns {{width: (number|null), height: (number|null)}} maxSize
      */
