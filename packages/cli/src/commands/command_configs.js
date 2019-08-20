@@ -1,6 +1,7 @@
 // @flow
 const CommandNames = require('./command_names');
 const {ConfigLocations} = require('../types/config_helpers_type');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const path = require('path');
 const _ = require('lodash');
 
@@ -42,7 +43,14 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         name: CommandNames.INIT,
         command: `${CommandNames.INIT} <blockIdentifier> <blockDirPath>`,
         description: 'Initialize a block repo',
-        example: `block ${CommandNames.INIT} app123/blk456 my-block`,
+        example: `block ${CommandNames.INIT} app123/blk456 --template=templateNpmPackage my-block`,
+        optionMap: {
+            template: {
+                description: 'Block template to use as a starting point for your code',
+                type: 'string',
+                default: blockCliConfigSettings.HELLO_WORLD_TEMPLATE,
+            },
+        },
         positionalMap: {
             blockIdentifier: {
                 description: 'identifier for the block (of the form <baseId>/<blockId>)',

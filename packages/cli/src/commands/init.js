@@ -15,12 +15,14 @@ const fsUtils = require('../fs_utils');
 const path = require('path');
 const invariant = require('invariant');
 const {camelCase, upperFirst} = require('lodash');
+const initCommandHelpers = require('../helpers/init_command_helpers');
 
 import type {Argv} from 'yargs';
 import type {BlockJson} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 
 const DEFAULT_FRONTEND_ENTRY_NAME = 'index';
+const VALID_TEMPLATE_NAME_REGEX = /^@airtable\/.+/;
 
 function _getComponentName(blockDirPath: string): string {
     // Convert the input block directory path into a valid function name for the React component
@@ -116,16 +118,174 @@ function _formatBlockRunMessage(blockDirPath: string): string {
     return blockRunMessage;
 }
 
-async function initBlockAsync(
-    baseId: string,
-    blockId: string,
-    blockDirPath: string,
-): Promise<void> {
+function isHelloWorldTemplate(template: string): boolean {
+    return template === blockCliConfigSettings.HELLO_WORLD_TEMPLATE;
+}
+
+function getTemplateDescription(template: string): string {
+    if (isHelloWorldTemplate(template)) {
+        return 'Hello world';
+    }
+
+    return template;
+}
+
+// TODO(richsinn): Add workflow to scaffold 'backend' routes with default files here.
+async function runCommandAsync(argv: Argv): Promise<void> {
+    const {blockIdentifier, template, blockDirPath} = argv;
+    invariant(typeof blockIdentifier === 'string', 'expects blockIdentifier to be a string');
+    invariant(typeof template === 'string', 'expects template to be a string');
+    invariant(typeof blockDirPath === 'string', 'expects blockDirPath to be a string');
+    const blockIdentifierParseResult = parseBlockIdentifier(blockIdentifier);
+    if (!blockIdentifierParseResult.success) {
+        throw blockIdentifierParseResult.error;
+    }
+    const {baseId, blockId} = blockIdentifierParseResult.value;
+
+    // Lets validate that the given blockDir doesn't already have something in it.
+    const doesBlockDirExist = fs.existsSync(blockDirPath);
+    if (doesBlockDirExist) {
+        throw new Error(`A directory already exists at ${blockDirPath}`);
+    }
+
+    // Prompt for apiKey if the user does not already have one configured at the user-config level
+    const userConfigPath = configHelpers.getConfigPath(ConfigLocations.USER);
+    const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(
+        ConfigLocations.USER,
+        null, // For'init', use the "default" apiKeyName for API Key lookup.
+    );
+    if (doesUserConfigApiKeyExist) {
+        console.log(`Using your existing API key from ${userConfigPath}`);
+    } else {
+        const apiKey = await promptForApiKeyAsync();
+        await configHelpers.setApiKeyAsync(ConfigLocations.USER, apiKey, null);
+        console.log(
+            `API key saved to ${userConfigPath}. To update it, use 'block ${CommandNames.SET_API_KEY}'`,
+        );
+    }
+
+    // Require that block template is hosted in the `@airtable` org on NPM
+    if (!VALID_TEMPLATE_NAME_REGEX.test(template)) {
+        throw new Error(
+            'Block templates must be official Airtable example blocks. The template location should be in this form: @airtable/name_of_template',
+        );
+    }
+
+    console.log(`Initializing block using ${getTemplateDescription(template)} template`);
+
     // Make a new directory for the block.
     await fsUtils.mkdirAsync(blockDirPath);
 
+    try {
+        if (isHelloWorldTemplate(template)) {
+            // Using default hello world block directory structure.
+            // Derived praogramatically. This is so that any unanticipated
+            // problems with the templating approach won't stop users
+            // building blocks. Once we feel confident in the
+            // template download mechanism, we can replace the custom
+            // hello world installation with a template. Then, we can
+            // delete the programmatic hello world code path.
+            await setupHelloWorldBlockAsync(blockDirPath, blockId, baseId);
+        } else {
+            await setupNpmTemplateBlockAsync(blockDirPath, blockId, baseId, template);
+        }
+    } catch (err) {
+        const doesDirExist = await fsUtils.statIfExistsAsync(blockDirPath);
+        if (doesDirExist) {
+            console.log('❌ Something failed! Cleaning up...');
+            await fsUtils.removeAsync(blockDirPath);
+        }
+
+        throw err;
+    }
+
+    console.log(
+        `✅ Your block is ready! ${_formatBlockRunMessage(
+            blockDirPath,
+        )} to start developing, and ${chalk.bold('npm run lint')} to lint.`,
+    );
+}
+
+function assertNpmPackageSeemsToBeATemplate(blockDirPath: string, template: string): void {
+    // Main indicator is that template contains a `block.json`.  Not
+    // checking for other indicators (e.g. `package.json`) because
+    // they are not totally necessary.
+    if (fs.existsSync(path.join(blockDirPath, 'block.json'))) {
+        return;
+    }
+
+    throw new Error(`${template} does not seem to be a block template`);
+}
+
+function assertTemplateSuccessfullyDownloaded(templatePath: string, template: string): void {
+    // The most likely problem is that the template doesn't exist on
+    // NPM. This is hard to determine robustly, so we just check for the
+    // template dir existing.
+    if (fs.existsSync(templatePath)) {
+        return;
+    }
+
+    throw new Error(
+        `Could not get template ${template} - please check you entered the name correctly`,
+    );
+}
+
+async function populateBlockDirectoryWithTemplateContentAsync(
+    blockDirPath: string,
+    template: string,
+): Promise<void> {
+    // Download the template to a tmp directory using npm install
+    const templatePath = await initCommandHelpers.downloadTemplateAsync(blockDirPath, template);
+
+    assertTemplateSuccessfullyDownloaded(templatePath, template);
+
+    assertNpmPackageSeemsToBeATemplate(templatePath, template);
+
+    // The template is downloaded with `npm install`.  When this
+    // happens, `npm` doesn't include `.gitignore` in the downloaded
+    // package.  To get around this, the template repo symlinks its
+    // `.gitignore` file to `__gitignore`.  The code below then copies
+    // `__gitignore` to `.gitignore` in the downloaded template.  It
+    // will be copied over with the rest of the template to the new
+    // block directory.
+    await fs.copyFileSync(
+        path.join(templatePath, '__gitignore'),
+        path.join(templatePath, '.gitignore'),
+    );
+
+    // Put the contents of the template into the new block directory
+    await fsUtils.copyAsync(templatePath, blockDirPath);
+
+    // Delete the downloaded template
+    await initCommandHelpers.cleanUpDownloadedTemplateAsync(blockDirPath);
+}
+
+async function createRemoteJsonFileAsync(
+    blockDirPath: string,
+    blockId: string,
+    baseId: string,
+): Promise<void> {
+    const remoteJson: RemoteJson = {
+        blockId,
+        baseId,
+    };
+    const blockConfigDirPath = path.join(
+        blockDirPath,
+        blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME,
+    );
+    await fsUtils.mkdirPathAsync(blockConfigDirPath);
+    await fsUtils.writeFileAsync(
+        path.join(blockConfigDirPath, blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH),
+        JSON.stringify(remoteJson, null, 4),
+    );
+}
+
+async function setupHelloWorldBlockAsync(
+    blockDirPath: string,
+    blockId: string,
+    baseId: string,
+): Promise<void> {
     // Create the block.json file.
-    // TODO(richsinn): Add workflow to scaffold 'backend' routes with default files here.
     const blockJson: BlockJson = {
         version: '1.0',
         frontendEntry: `./${SupportedTopLevelDirectoryNames.FRONTEND}/${DEFAULT_FRONTEND_ENTRY_NAME}.js`,
@@ -211,56 +371,20 @@ async function initBlockAsync(
     ]);
 }
 
-async function runCommandAsync(argv: Argv): Promise<void> {
-    const {blockIdentifier, blockDirPath} = argv;
-    invariant(typeof blockIdentifier === 'string', 'expects blockIdentifier to be a string');
-    invariant(typeof blockDirPath === 'string', 'expects blockDirPath to be a string');
-    const blockIdentifierParseResult = parseBlockIdentifier(blockIdentifier);
-    if (!blockIdentifierParseResult.success) {
-        throw blockIdentifierParseResult.error;
-    }
-    const {baseId, blockId} = blockIdentifierParseResult.value;
+async function setupNpmTemplateBlockAsync(
+    blockDirPath: string,
+    blockId: string,
+    baseId: string,
+    template: string,
+): Promise<void> {
+    // Download the template and copy its contents to the new block directory
+    await populateBlockDirectoryWithTemplateContentAsync(blockDirPath, template);
 
-    // Lets validate that the given blockDir doesn't already have something in it.
-    const doesBlockDirExist = fs.existsSync(blockDirPath);
-    if (doesBlockDirExist) {
-        throw new Error(`A directory already exists at ${blockDirPath}`);
-    }
+    // Install the dependencies in the new block's package.json
+    await initCommandHelpers.installBlockDependenciesAsync(blockDirPath);
 
-    // Prompt for apiKey if the user does not already have one configured at the user-config level
-    const userConfigPath = configHelpers.getConfigPath(ConfigLocations.USER);
-    const doesUserConfigApiKeyExist = await configHelpers.hasApiKeyAsync(
-        ConfigLocations.USER,
-        null, // For'init', use the "default" apiKeyName for API Key lookup.
-    );
-    if (doesUserConfigApiKeyExist) {
-        console.log(`Using your existing API key from ${userConfigPath}`);
-    } else {
-        const apiKey = await promptForApiKeyAsync();
-        await configHelpers.setApiKeyAsync(ConfigLocations.USER, apiKey, null);
-        console.log(
-            `API key saved to ${userConfigPath}. To update it, use 'block ${CommandNames.SET_API_KEY}'`,
-        );
-    }
-
-    console.log('Initializing block');
-    try {
-        await initBlockAsync(baseId, blockId, blockDirPath);
-    } catch (err) {
-        const doesDirExist = await fsUtils.statIfExistsAsync(blockDirPath);
-        if (doesDirExist) {
-            console.log('❌ Something failed! Cleaning up...');
-            await fsUtils.removeAsync(blockDirPath);
-        }
-
-        throw err;
-    }
-
-    console.log(
-        `✅ Your block is ready! ${_formatBlockRunMessage(
-            blockDirPath,
-        )} to start developing, and ${chalk.bold('npm run lint')} to lint.`,
-    );
+    // Create the .block/remote.json file
+    await createRemoteJsonFileAsync(blockDirPath, blockId, baseId);
 }
 
 module.exports = {

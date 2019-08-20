@@ -60,4 +60,6 @@ module.exports = {
 
     // Name of the file used to store user/blocks scoped configs for blocks-cli
     CONFIG_FILE_NAME: '.airtableblocksrc.json',
+
+    HELLO_WORLD_TEMPLATE: '@airtable/hello-world',
 };
