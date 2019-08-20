@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.31...HEAD)
 
-No changes.
+-   Can now use an example block as a template to provide starting code for a new block. You can
+    specify an example block as part of the normal "Build a block" feature on airtable.com.
 
 ## [0.0.31](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.30...@airtable/blocks-cli@0.0.31) - 2019-08-16
 
