@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.32...HEAD)
 
-No changes.
+-   In `block init` - disable `react/prop-types` eslint rule in the default scaffolded `.eslintrc.js` file for the user's block directory.
 
 ## [0.0.32](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.31...@airtable/blocks-cli@0.0.32) - 2019-08-20
 
@@ -24,7 +24,7 @@ No changes.
     [0.0.28](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.27...@airtable/blocks-cli@0.0.28)
     through
     [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.29...@airtable/blocks-cli@0.0.30)
-    are unavailable and should not be used.
+    are unavailable/unpublished and should not be used.
 
 ## [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.29...@airtable/blocks-cli@0.0.30) - 2019-08-16
 
