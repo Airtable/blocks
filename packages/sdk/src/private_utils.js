@@ -175,7 +175,19 @@ export function flattenDeep<T>(array: ReadOnlyDeepArray<T>): Array<T> {
     return array.flat(Infinity);
 }
 
-// For cases where the object keys aren't strings, it's the consumer's reponsibility
+// TODO(alex): remove this utility once we upgrade our type-checker to one that knows about Array.flatMap
+/**
+ * @private
+ */
+export function flatMap<In, Out>(
+    array: Array<In>,
+    mapFn: (In, number, Array<In>) => Array<Out>,
+): Array<Out> {
+    // $FlowFixMe our version of flow doesn't include a definition for Array.flatMap yet
+    return array.flatMap(mapFn);
+}
+
+// For cases where the object keys aren't strings, it's the consumer's responsibility
 // to convert them to strings in getKey, e.g. keyBy(collection, o => String(o.id))
 /**
  * @private
