@@ -1,21 +1,26 @@
 // @flow
 import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
-import TablePickerSyncedExample from './TablePickerSyncedExample';
+import ExampleManager, {type Example} from './ExampleManager';
+import BoxExample from './BoxExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
+import TablePickerSyncedExample from './TablePickerSyncedExample';
 import RecordCardListExample from './RecordCardListExample';
-import ExampleManager from './ExampleManager';
-import {type Example} from './Example';
 
+// Alphabetically ordered by name.
 const examples: Array<Example> = [
     {
-        name: 'TablePickerSynced',
-        component: TablePickerSyncedExample,
+        name: 'Box',
+        component: BoxExample,
     },
     {
         name: 'ColorPaletteSynced',
         component: ColorPaletteSyncedExample,
         hasSettings: true,
+    },
+    {
+        name: 'TablePickerSynced',
+        component: TablePickerSyncedExample,
     },
     {
         name: 'RecordCardList',

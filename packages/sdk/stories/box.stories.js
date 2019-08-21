@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import Box from '../src/ui_next/box';
-import theme from '../src/ui_next/theme/default_theme';
+import Box from '../src/ui/box';
+import theme from '../src/ui/theme/default_theme';
 
 const stories = storiesOf('Box', module);
 
@@ -86,9 +86,14 @@ stories.add('ref', () => (
 
 stories.add('breakpoints / responsive properties', () => (
     <>
-        Breakpoints: {theme.breakpoints.join(', ')}
+        Breakpoints: <pre>{JSON.stringify(theme.breakpoints, null, 4)}</pre>
         <Box
-            backgroundColor={['redLight2', 'blueLight2', 'greenLight2', 'pinkLight2']}
+            backgroundColor={{
+                xsmallViewport: 'redLight2',
+                smallViewport: 'blueLight2',
+                mediumViewport: 'greenLight2',
+                largeViewport: 'pinkLight2',
+            }}
             marginTop={2}
             padding={2}
         >

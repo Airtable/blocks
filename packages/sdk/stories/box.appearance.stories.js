@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import Box from '../src/ui_next/box';
-import theme from '../src/ui_next/theme/default_theme';
+import Box from '../src/ui/box';
+import theme from '../src/ui/theme/default_theme';
 
 const stories = storiesOf('Box/appearance', module);
 

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import Box from '../src/ui_next/box';
+import Box from '../src/ui/box';
 
 const stories = storiesOf('Box/flexItem', module);
 
