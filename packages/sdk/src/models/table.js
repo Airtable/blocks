@@ -505,28 +505,24 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         });
     }
     /** @private */
-    createRecordAsync(
+    async createRecordAsync(
         cellValuesByFieldIdOrName: {
             [fieldIdOrName: FieldId | string]: mixed,
         } = {},
     ) {
         const recordId = hyperId.generateRowId();
-        const promise = (async () => {
-            const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
-                cellValuesByFieldIdOrName,
-            );
+        const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
+            cellValuesByFieldIdOrName,
+        );
 
-            await getSdk().unstable_mutations.applyMutationAsync({
-                type: MutationTypes.CREATE_SINGLE_RECORD,
-                tableId: this.id,
-                recordId,
-                cellValuesByFieldId,
-            });
+        await getSdk().unstable_mutations.applyMutationAsync({
+            type: MutationTypes.CREATE_SINGLE_RECORD,
+            tableId: this.id,
+            recordId,
+            cellValuesByFieldId,
+        });
 
-            return recordId;
-        })();
-
-        return promise;
+        return recordId;
     }
     _cellValuesByFieldIdOrNameToCellValuesByFieldId(cellValuesByFieldIdOrName: {
         [fieldIdOrName: FieldId | string]: mixed,
