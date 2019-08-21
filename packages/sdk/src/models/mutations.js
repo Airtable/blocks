@@ -4,7 +4,7 @@ import {PermissionLevels} from '../types/permission_levels';
 import {type ModelChange} from '../types/base';
 import {type Mutation, MutationTypes} from '../types/mutations';
 import {FieldTypes} from '../types/field';
-import {flatMap} from '../private_utils';
+import {entries, flatMap} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
 import cellValueUtils from './cell_value_utils';
 import type Session from './session';
@@ -167,6 +167,45 @@ class Mutations {
                 return;
             }
 
+            case MutationTypes.CREATE_SINGLE_RECORD: {
+                const {tableId, cellValuesByFieldId} = mutation;
+
+                for (const fieldId of Object.keys(cellValuesByFieldId)) {
+                    const field = this._base.getTableById(tableId).getFieldById(fieldId);
+
+                    if (!field) {
+                        throw spawnError(
+                            'No field with id %s exists in table %s',
+                            fieldId,
+                            tableId,
+                        );
+                    }
+
+                    if (field.isComputed) {
+                        throw spawnError('Field %s is computed and cannot be set', field.id);
+                    }
+
+                    // Check that we're not trying to set fields that we don't support mutations for yet
+                    if (FIELD_TYPE_MUTATION_BAN_SET.has(field.type)) {
+                        throw spawnError(
+                            'Fields of type %s cannot currently be set via mutations',
+                            field.type,
+                        );
+                    }
+
+                    // Current cell value is null since the record doesn't exist.
+                    const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                        cellValuesByFieldId[fieldId],
+                        null,
+                        field,
+                    );
+                    if (!validationResult.isValid) {
+                        throw spawnError(validationResult.reason);
+                    }
+                }
+                return;
+            }
+
             default:
                 throw spawnUnknownSwitchCaseError('mutation type', (mutation.type: empty));
         }
@@ -222,6 +261,44 @@ class Mutations {
                             return [];
                         }
                         return viewDataStore.__generateChangesForParentTableDeleteMultipleRecords([
+                            recordId,
+                        ]);
+                    }),
+                ];
+            }
+
+            case MutationTypes.CREATE_SINGLE_RECORD: {
+                const {tableId, recordId, cellValuesByFieldId} = mutation;
+                const recordStore = this._base.__getRecordStore(tableId);
+
+                if (!recordStore.isRecordMetadataLoaded) {
+                    return [];
+                }
+
+                // Only apply optimistic changes for fields that are loaded
+                const filteredCellValuesByFieldId = {};
+                for (const [fieldId, cellValue] of entries(cellValuesByFieldId)) {
+                    if (recordStore.areCellValuesLoadedForFieldId(fieldId)) {
+                        filteredCellValuesByFieldId[fieldId] = cellValue;
+                    }
+                }
+
+                return [
+                    {
+                        path: ['tablesById', tableId, 'recordsById', recordId],
+                        value: {
+                            id: recordId,
+                            filteredCellValuesByFieldId,
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
+                        },
+                    },
+                    ...flatMap(this._base.getTableById(tableId).views, view => {
+                        const viewDataStore = recordStore.getViewDataStore(view.id);
+                        if (!viewDataStore.isDataLoaded) {
+                            return [];
+                        }
+                        return viewDataStore.__generateChangesForParentTableAddMultipleRecords([
                             recordId,
                         ]);
                     }),
