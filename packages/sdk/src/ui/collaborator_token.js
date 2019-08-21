@@ -1,10 +1,13 @@
 // @flow
-import PropTypes from 'prop-types'; // TODO(kasra): don't depend on liveapp components.
+import PropTypes from 'prop-types';
+import {cx} from 'emotion';
 import * as React from 'react';
 import isEqual from 'fast-deep-equal';
 import {has} from '../private_utils';
 import getSdk from '../get_sdk';
+import {baymax} from './baymax_utils';
 
+// TODO(kasra): don't depend on liveapp components.
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
@@ -92,12 +95,14 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     }
 
     return (
-        <_CollaboratorToken
-            profilePicUrl={profilePicUrl}
-            userName={userName}
-            className={className}
-            shouldDim={!isActive}
-        />
+        <div className={cx('baymax', baymax('flex-inline'))}>
+            <_CollaboratorToken
+                profilePicUrl={profilePicUrl}
+                userName={userName}
+                className={className}
+                shouldDim={!isActive}
+            />
+        </div>
     );
 };
 

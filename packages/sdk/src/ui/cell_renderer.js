@@ -1,5 +1,6 @@
 // @flow
 import PropTypes from 'prop-types';
+import {cx} from 'emotion';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import {spawnError} from '../error_utils';
@@ -27,6 +28,10 @@ type CellRendererProps = {|
     shouldWrap?: boolean,
     className?: string,
     style?: Object,
+    // These props exist to separate styling on the baymax wrapper div
+    // (e.g. layout/sizing) from styling on the cell div (needed by RecordCard).
+    cellClassName?: string,
+    cellStyle?: Object,
 |};
 
 /** */
@@ -40,6 +45,8 @@ class CellRenderer extends React.Component<CellRendererProps> {
         shouldWrap: PropTypes.bool,
         className: PropTypes.string,
         style: PropTypes.object,
+        cellClassName: PropTypes.string,
+        cellStyle: PropTypes.object,
     };
     static defaultProps = {
         shouldWrap: true,
@@ -64,7 +71,16 @@ class CellRenderer extends React.Component<CellRendererProps> {
         }
     }
     render() {
-        const {record, cellValue, field, shouldWrap} = this.props;
+        const {
+            record,
+            cellValue,
+            field,
+            shouldWrap,
+            className,
+            style,
+            cellClassName,
+            cellStyle,
+        } = this.props;
 
         if (field.isDeleted) {
             return null;
@@ -116,14 +132,16 @@ class CellRenderer extends React.Component<CellRendererProps> {
             attributes['data-formatting'] = typeOptions.resultType;
         }
         return (
-            <div
-                style={this.props.style}
-                {...attributes}
-                className={`cell read ${this.props.className || ''}`}
-                dangerouslySetInnerHTML={{
-                    __html: rawHtml,
-                }}
-            />
+            <div className={cx('baymax', className)} style={style}>
+                <div
+                    {...attributes}
+                    className={cx('cell read', cellClassName)}
+                    style={cellStyle}
+                    dangerouslySetInnerHTML={{
+                        __html: rawHtml,
+                    }}
+                />
+            </div>
         );
     }
 }

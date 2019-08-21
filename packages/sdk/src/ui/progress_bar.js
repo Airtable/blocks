@@ -1,9 +1,11 @@
 // @flow
 import PropTypes from 'prop-types';
+import {cx} from 'emotion';
 import * as React from 'react';
 import colors from '../colors';
 import colorUtils from '../color_utils';
 import {clamp} from '../private_utils';
+import {baymax} from './baymax_utils';
 
 /**
  * @typedef
@@ -53,7 +55,7 @@ const ProgressBar = (props: ProgressBarProps) => {
 
     return (
         <div
-            className={`${className} relative pill overflow-hidden`}
+            className={cx(baymax('relative pill overflow-hidden'), className)}
             style={{
                 ...style,
                 height,
@@ -61,7 +63,7 @@ const ProgressBar = (props: ProgressBarProps) => {
             }}
         >
             <div
-                className="absolute animate top-0 left-0 height-full"
+                className={baymax('absolute animate top-0 left-0 height-full')}
                 style={{
                     width: `${clampedProgress * 100}%`,
                     backgroundColor: barColor,

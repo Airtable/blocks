@@ -1,6 +1,7 @@
 // @flow
+// TODO (stephen): add cx + baymax once https://airtable.phacility.com/D11014 is landed
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import {values, isNullOrUndefinedOrEmpty, flattenDeep, keyBy, uniqBy} from '../private_utils';
@@ -13,6 +14,8 @@ import Record from '../models/record';
 import View from '../models/view';
 import type ViewMetadataQueryResult from '../models/view_metadata_query_result';
 import cellValueUtils from '../models/cell_value_utils';
+import colorUtils from '../color_utils';
+import {baymax} from './baymax_utils';
 import expandRecord, {type ExpandRecordOpts} from './expand_record';
 import CellRenderer from './cell_renderer';
 import useWatchable from './use_watchable';
@@ -59,16 +62,13 @@ const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndF
 
     return (
         <div
-            className="borderBoxSizing relative inline-block m0 pr1"
+            className={baymax('relative inline-block m0 pr1')}
             style={{
                 width,
                 ...styles.cellValueAndFieldLabel,
             }}
         >
-            <div
-                className="block textOverflowEllipsis uppercase small appFontWeightRegular"
-                style={styles.fieldLabel}
-            >
+            <div className={baymax('small caps truncate')} style={styles.fieldLabel}>
                 {field.name}
             </div>
             <CellRenderer
@@ -76,8 +76,8 @@ const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndF
                 cellValue={cellValue}
                 field={field}
                 shouldWrap={false}
-                className="recordCardCellValue block textOverflowEllipsis"
-                style={styles.cellValue}
+                cellClassName="recordCardCellValue truncate"
+                cellStyle={styles.cellValue}
             />
         </div>
     );
@@ -425,11 +425,11 @@ class RecordCard extends React.Component<RecordCardProps> {
 
         const hasOnClick = !!onClick || !!this._getRecord();
 
-        const containerClasses = classNames(
-            'white rounded relative block overflow-hidden',
+        const containerClasses = cx(
+            baymax('white rounded relative block overflow-hidden'),
             {
-                'pointer cardBoxShadow': hasOnClick,
-                stroked1: !hasOnClick,
+                [baymax('pointer cardBoxShadow')]: hasOnClick,
+                [baymax('stroked1')]: !hasOnClick,
             },
             className,
         );
@@ -455,7 +455,9 @@ class RecordCard extends React.Component<RecordCardProps> {
                 attachmentObj,
                 userScopedAppInterface,
                 {
-                    extraClassString: 'absolute right-0 height-full overflow-hidden noevents',
+                    extraClassString: baymax(
+                        'absolute right-0 height-full overflow-hidden noevents',
+                    ),
                     extraStyles: {
                         'border-top-right-radius': 2,
                         'border-bottom-right-radius': 2,
@@ -476,12 +478,12 @@ class RecordCard extends React.Component<RecordCardProps> {
 
         let primaryCellValueAsString;
         let recordUrl;
-        let recordColorClass;
+        let recordColor;
         if (record instanceof Record) {
             recordUrl = record.url;
             primaryCellValueAsString = record.primaryCellValueAsString;
             if (view) {
-                recordColorClass = record.getColorInView(view);
+                recordColor = record.getColorInView(view);
             }
         } else {
             const primaryField =
@@ -499,12 +501,9 @@ class RecordCard extends React.Component<RecordCardProps> {
             primaryValue = primaryCellValueAsString;
             isUnnamed = false;
         }
-        const primaryClasses = classNames(
-            'strong relative cellValue mt0 flex items-center line-height-4',
-            {
-                unnamed: isUnnamed,
-            },
-        );
+        const primaryClasses = cx(baymax('strong relative mt0 flex items-center line-height-4'), {
+            unnamed: isUnnamed,
+        });
         const primaryStyles = {
             height: 18,
             fontSize: 14,
@@ -520,7 +519,7 @@ class RecordCard extends React.Component<RecordCardProps> {
                 onMouseLeave={onMouseLeave}
             >
                 <div
-                    className="absolute top-0 bottom-0 left-0 appFontColor"
+                    className={baymax('absolute top-0 bottom-0 left-0 text-dark')}
                     style={{
                         right: attachmentSize,
                         background: 'transparent',
@@ -528,16 +527,20 @@ class RecordCard extends React.Component<RecordCardProps> {
                     }}
                 >
                     <div className={primaryClasses} style={primaryStyles}>
-                        {recordColorClass && (
+                        {recordColor && (
                             <div
-                                className={`flex-none pill mr-half ${recordColorClass}`}
-                                style={{width: 6, height: 20}}
+                                className={baymax('flex-none pill mr-half')}
+                                style={{
+                                    width: 6,
+                                    height: 20,
+                                    backgroundColor: colorUtils.getHexForColor(recordColor),
+                                }}
                             />
                         )}
-                        <div className="flex-auto truncate">{primaryValue}</div>
+                        <div className={baymax('flex-auto truncate')}>{primaryValue}</div>
                     </div>
                     <div
-                        className="absolute appFontColorLight"
+                        className={baymax('absolute appFontColorLight')}
                         style={{
                             marginTop: 3,
                         }}

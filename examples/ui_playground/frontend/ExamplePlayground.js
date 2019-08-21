@@ -18,27 +18,29 @@ export default function ExamplePlayground(props: Props) {
 
     return (
         <div className="absolute all-0 flex flex-column">
-            <div className="border-bottom border-darken2 p1 flex items-center">
-                <div style={{width: 80}}>
-                    <Button
-                        theme={Button.themes.GRAY}
-                        style={{height: 32, paddingTop: 0, paddingBottom: 0}}
-                        onClick={onBack}
-                    >
-                        Back
-                    </Button>
-                </div>
-                <div className="strong big center flex-auto truncate px1">{example.name}</div>
-                <div style={{width: 80, textAlign: 'right'}}>
-                    {example.hasSettings ? (
+            <div className="baymax">
+                <div className="border-bottom border-darken2 p1 flex items-center">
+                    <div style={{width: 80}}>
                         <Button
                             theme={Button.themes.GRAY}
                             style={{height: 32, paddingTop: 0, paddingBottom: 0}}
-                            onClick={_onClickSettings}
+                            onClick={onBack}
                         >
-                            Settings
+                            Back
                         </Button>
-                    ) : null}
+                    </div>
+                    <div className="strong big center flex-auto truncate px1">{example.name}</div>
+                    <div style={{width: 80, textAlign: 'right'}}>
+                        {example.hasSettings ? (
+                            <Button
+                                theme={Button.themes.GRAY}
+                                style={{height: 32, paddingTop: 0, paddingBottom: 0}}
+                                onClick={_onClickSettings}
+                            >
+                                Settings
+                            </Button>
+                        ) : null}
+                    </div>
                 </div>
             </div>
             <div className="flex flex-auto items-center justify-center">

@@ -78,7 +78,6 @@
         "@airtable/eslint-plugin-blocks": "^1.0.2",
         "@babel/runtime": "^7.4.4",
         "@styled-system/core": "^5.0.18",
-        "classnames": "2.2.6",
         "core-js": "^3.0.1",
         "emotion": "^10.0.14",
         "fast-deep-equal": "^2.0.1",

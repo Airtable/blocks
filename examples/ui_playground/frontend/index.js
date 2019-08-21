@@ -2,6 +2,7 @@
 import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
 import ExampleManager, {type Example} from './ExampleManager';
+import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
@@ -9,6 +10,10 @@ import RecordCardListExample from './RecordCardListExample';
 
 // Alphabetically ordered by name.
 const examples: Array<Example> = [
+    {
+        name: 'Baymax namespacing',
+        component: BaymaxExample,
+    },
     {
         name: 'Box',
         component: BoxExample,

@@ -4062,7 +4062,8 @@ Type: [object][73]
 #### CellRendererProps
 
 Type: {record: [Record][84]??, cellValue: any?, field: [Field][81], shouldWrap: [boolean][70]?,
-className: [string][68]?, style: [Object][73]?}
+className: [string][68]?, style: [Object][73]?, cellClassName: [string][68]?, cellStyle:
+[Object][73]?}
 
 ##### Properties
 
@@ -4072,6 +4073,8 @@ className: [string][68]?, style: [Object][73]?}
 -   `shouldWrap` **[boolean][70]?**
 -   `className` **[string][68]?**
 -   `style` **[Object][73]?**
+-   `cellClassName` **[string][68]?**
+-   `cellStyle` **[Object][73]?**
 
 ### ChoiceToken
 

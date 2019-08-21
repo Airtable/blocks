@@ -2,6 +2,7 @@
 
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import {baymax} from './baymax_utils';
 import Dialog from './dialog';
 import Button from './button';
 
@@ -131,11 +132,15 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                 backgroundStyle={backgroundStyle}
             >
                 <Dialog.CloseButton />
-                <h1 className="mb1 strong" style={{fontSize: 20}}>
+                <h1 className={baymax('mt0 mb1 strong')} style={{fontSize: 20}}>
                     {title}
                 </h1>
                 {body}
-                <div className="width-full flex flex-reverse items-center justify-start mt2">
+                <div
+                    className={baymax(
+                        'width-full flex flex-reverse items-center justify-start mt2',
+                    )}
+                >
                     <Button
                         ref={el => (this._confirmButtonRef = el)}
                         onClick={this._onConfirm}
@@ -146,7 +151,9 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                     <Button
                         onClick={this._onCancel}
                         theme={Button.themes.TRANSPARENT}
-                        className="self-end mr1 border-transparent quiet link-unquiet-focusable text-blue-focus"
+                        className={baymax(
+                            'self-end mr1 quiet link-unquiet-focusable text-blue-focus',
+                        )}
                     >
                         {cancelButtonText}
                     </Button>

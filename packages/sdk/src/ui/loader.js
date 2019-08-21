@@ -1,6 +1,8 @@
 // @flow
 import PropTypes from 'prop-types';
+import {cx} from 'emotion';
 import * as React from 'react';
+import {baymax} from './baymax_utils';
 
 // TODO(kasra): don't depend on liveapp components.
 const _Loader = window.__requirePrivateModuleFromAirtable(
@@ -37,7 +39,11 @@ type LoaderProps = {|
  */
 const Loader = (props: LoaderProps) => {
     const {fillColor, scale} = props;
-    return <_Loader fillColor={fillColor} scale={scale} />;
+    return (
+        <div className={cx('baymax', baymax('inline'))}>
+            <_Loader fillColor={fillColor} scale={scale} />
+        </div>
+    );
 };
 
 Loader.propTypes = {
