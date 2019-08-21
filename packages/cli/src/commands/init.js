@@ -84,6 +84,7 @@ function getDefaultEslintConfig(): string {
         "react-hooks"
     ],
     "rules": {
+        "react/prop-types": 0,
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn"
     },
