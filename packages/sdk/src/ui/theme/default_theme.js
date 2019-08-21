@@ -74,7 +74,12 @@ const colors = {
     yellowLight2: 'rgb(255, 234, 182)',
 };
 
-const breakpoints = ['480px', '640px', '832px', '1152px'];
+const breakpoints = {
+    xsmallViewport: '480px',
+    smallViewport: '640px',
+    mediumViewport: '832px',
+    largeViewport: '1152px',
+};
 
 const borderWidths = {
     default: '1px',
@@ -108,7 +113,7 @@ const opacities = {
 
 const radii = {
     default: 3,
-    big: 6,
+    large: 6,
     circle: 9999,
 };
 

@@ -1,9 +1,10 @@
 // @flow
 
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import {invariant} from '../error_utils';
+import {baymax} from './baymax_utils';
 
 const themes = Object.freeze({
     GREEN: 'green',
@@ -140,11 +141,11 @@ class Toggle extends React.Component<ToggleProps> {
                 onClick={this._toggleValue}
                 onKeyDown={this._onKeyDown}
                 id={id}
-                className={classNames(
-                    'focusable flex-inline items-center p-half rounded',
+                className={cx(
+                    baymax('focusable flex-inline items-center p-half rounded'),
                     {
-                        'pointer link-quiet': !disabled,
-                        'noevents quieter': disabled,
+                        [baymax('pointer link-quiet')]: !disabled,
+                        [baymax('noevents quieter')]: disabled,
                     },
                     className,
                 )}
@@ -155,10 +156,10 @@ class Toggle extends React.Component<ToggleProps> {
                 aria-describedby={this.props['aria-describedby']}
             >
                 <div
-                    className={classNames('pill flex animate flex-none', {
-                        'justify-start darken2': !value,
-                        'justify-end': value,
-                        [toggleClassNameForTheme || '']: value,
+                    className={cx(baymax('pill flex animate flex-none'), {
+                        [baymax('justify-start darken2')]: !value,
+                        [baymax('justify-end')]: value,
+                        [baymax(toggleClassNameForTheme || '')]: value,
                     })}
                     style={{
                         height: toggleHeight,
@@ -167,11 +168,11 @@ class Toggle extends React.Component<ToggleProps> {
                     }}
                 >
                     <div
-                        className="white circle flex-none"
+                        className={baymax('white circle flex-none')}
                         style={{width: toggleHeight - 2 * togglePadding}}
                     />
                 </div>
-                {label && <div className="flex-auto ml1 normal text-dark">{label}</div>}
+                {label && <div className={baymax('flex-auto ml1 normal text-dark')}>{label}</div>}
             </label>
         );
     }

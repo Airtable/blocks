@@ -1,9 +1,10 @@
 // @flow
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import colorUtils from '../color_utils';
 import {invariant} from '../error_utils';
+import {baymax} from './baymax_utils';
 import Icon from './icon';
 import createDetectElementResize from './create_detect_element_resize';
 
@@ -110,9 +111,9 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         const {color, allowedColors, squareMargin, className, style, disabled} = this.props;
         const {squareSize} = this.state;
         return (
-            <div className={`${className} overflow-hidden`} style={style}>
+            <div className={cx(baymax('overflow-hidden'), className)} style={style}>
                 <div
-                    className="flex flex-wrap"
+                    className={baymax('flex flex-wrap')}
                     ref={this._colorPaletteContainerRef}
                     style={{
                         margin: -squareMargin,
@@ -128,20 +129,20 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
                                 width: squareSize,
                                 margin: squareMargin,
                             }}
-                            className={classNames('rounded flex items-center justify-center', {
-                                'pointer link-quiet': !disabled,
-                                quieter: disabled,
+                            className={cx(baymax('rounded flex items-center justify-center'), {
+                                [baymax('pointer link-quiet')]: !disabled,
+                                [baymax('quieter')]: disabled,
                             })}
                         >
                             {allowedColor === color && (
                                 <Icon
                                     name="check"
                                     size={squareSize}
-                                    className={
+                                    className={baymax(
                                         colorUtils.shouldUseLightTextOnColor(allowedColor)
                                             ? 'text-white'
-                                            : 'text-dark'
-                                    }
+                                            : 'text-dark',
+                                    )}
                                 />
                             )}
                         </label>

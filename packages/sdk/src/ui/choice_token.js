@@ -1,8 +1,9 @@
 // @flow
 
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
+import {baymax} from './baymax_utils';
 
 const _ChoiceToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/choice_token',
@@ -57,15 +58,17 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
         ? colors.getColorForColorClass(choice.color)
         : colors.DEFAULT_CHOICE_COLOR;
     return (
-        <_ChoiceToken
-            color={color}
-            className={classNames(
-                'border-box truncate pill px1 cellToken choiceToken line-height-4 inline-block',
-                className,
-            )}
-        >
-            <div className="flex-auto truncate">{choice.name}</div>
-        </_ChoiceToken>
+        <div className={cx('baymax', baymax('flex-inline'))}>
+            <_ChoiceToken
+                color={color}
+                className={cx(
+                    'block border-box truncate pill px1 choiceToken line-height-4',
+                    className,
+                )}
+            >
+                <div className="flex-auto truncate">{choice.name}</div>
+            </_ChoiceToken>
+        </div>
     );
 };
 

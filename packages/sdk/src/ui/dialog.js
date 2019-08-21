@@ -1,8 +1,9 @@
 // @flow
 
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
+import {baymax} from './baymax_utils';
 import Icon from './icon';
 import Modal from './modal';
 
@@ -59,9 +60,9 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
             <div
                 onClick={this.context.onDialogClose}
                 onKeyDown={this._onKeyDown}
-                className={classNames(
+                className={cx(
                     {
-                        [defaultClassName]: shouldUseDefaultStyling,
+                        [baymax(defaultClassName)]: shouldUseDefaultStyling,
                     },
                     className,
                 )}
@@ -73,7 +74,7 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
                 role="button"
                 aria-label="Close dialog"
             >
-                {children ? children : <Icon name="x" size={12} className="quieter" />}
+                {children ? children : <Icon name="x" size={12} className={baymax('quieter')} />}
             </div>
         );
     }
@@ -181,7 +182,7 @@ class Dialog extends React.Component<DialogProps> {
         return (
             <Modal
                 onClose={onClose}
-                className={classNames('relative p2 big line-height-4', className)}
+                className={cx(baymax('relative p2 big line-height-4'), className)}
                 style={style}
                 backgroundClassName={backgroundClassName}
                 backgroundStyle={backgroundStyle}

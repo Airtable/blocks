@@ -1,8 +1,9 @@
 // @flow
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import {values} from '../private_utils';
+import {baymax} from './baymax_utils';
 import Popover, {
     type PopoverPlacementX,
     type PopoverPlacementY,
@@ -157,10 +158,10 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         }
         return (
             <div
-                className={classNames(
-                    'relative white rounded stroked1 overflow-hidden',
+                className={cx(
+                    baymax('relative dark text-white rounded stroked1 overflow-hidden nowrap'),
                     {
-                        p1: !isContentAFunction,
+                        [baymax('p1')]: !isContentAFunction,
                     },
                     className,
                 )}

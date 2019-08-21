@@ -6,6 +6,7 @@ import {type GlobalConfigUpdate, type GlobalConfigData} from '../global_config';
 import {type RecordData, type RecordDef} from '../types/record';
 import {type UndoRedoMode} from '../types/undo_redo';
 import {type ViewportSizeConstraint} from '../types/viewport';
+import {type Mutation} from '../types/mutations';
 import {spawnError} from '../error_utils';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
@@ -66,6 +67,8 @@ export interface AirtableInterface {
         tableId: string,
         viewId: string | null,
     ): Promise<{[string]: mixed}>;
+
+    applyMutationAsync(mutation: Mutation, opts?: {holdForMs?: number}): Promise<void>;
 
     registerHandler(type: HostToBlockMessageType, handlerFn: (data: Object) => void): void;
     fetchAndSubscribeToCursorDataAsync(): Promise<any>;

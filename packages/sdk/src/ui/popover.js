@@ -1,10 +1,11 @@
 // @flow
+import PropTypes from 'prop-types';
+import {cx} from 'emotion';
 import ReactDOM from 'react-dom';
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import {values} from '../private_utils';
 import {invariant} from '../error_utils';
+import {baymax} from './baymax_utils';
 import createDetectElementResize from './create_detect_element_resize';
 
 const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
@@ -334,7 +335,7 @@ class Popover extends React.Component<PopoverProps> {
             },
         });
 
-        const backgroundClassName = classNames('fixed all-0', this.props.backgroundClassName);
+        const backgroundClassName = cx(baymax('fixed all-0'), this.props.backgroundClassName);
         const backgroundStyle = this.props.backgroundStyle;
 
         return new Promise((resolve, reject) => {

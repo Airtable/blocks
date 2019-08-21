@@ -8,6 +8,7 @@ import GlobalConfig, {type GlobalConfigUpdate} from './global_config';
 import Base from './models/base';
 import models from './models/models';
 import Session from './models/session';
+import Mutations from './models/mutations';
 import Cursor from './models/cursor';
 import Viewport from './viewport';
 import UI from './ui/ui';
@@ -81,6 +82,9 @@ class BlockSdk {
 
     /** Contains information about the current session. */
     session: Session;
+
+    /** @private */
+    unstable_mutations: Mutations;
 
     /**
      * Contains the model classes, field types, view types, and utilities for
@@ -180,6 +184,12 @@ class BlockSdk {
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
         this.session = new Session(sdkInitData.baseData, airtableInterface);
+        this.unstable_mutations = new Mutations(
+            airtableInterface,
+            this.session,
+            this.base,
+            changes => this.__applyModelChanges(changes),
+        );
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
         this.undoRedo = new UndoRedo(airtableInterface);

@@ -1,10 +1,11 @@
 // @flow
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {type SVGElement} from '../types/svg_element';
 import {invariant} from '../error_utils';
+import {baymax} from './baymax_utils';
 
 /**
  * @memberof Modal
@@ -94,14 +95,16 @@ class Modal extends React.Component<ModalProps> {
         return el === this._background;
     }
     render() {
-        const backgroundClassName = classNames(
-            'fixed all-0 darken3 flex items-center justify-center',
+        const backgroundClassName = cx(
+            baymax('fixed all-0 darken3 flex items-center justify-center'),
             this.props.backgroundClassName,
         );
         const backgroundStyle = this.props.backgroundStyle;
 
-        const contentClassName = classNames(
-            'width-full m2 overflow-auto light-scrollbar white stroked1 rounded-big animate-bounce-in',
+        const contentClassName = cx(
+            baymax(
+                'width-full m2 overflow-auto light-scrollbar white stroked1 rounded-big animate-bounce-in',
+            ),
             this.props.className,
         );
         const contentStyle = {

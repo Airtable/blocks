@@ -1,6 +1,8 @@
 // @flow
 import PropTypes from 'prop-types';
+import {cx} from 'emotion';
 import * as React from 'react';
+import {baymax} from './baymax_utils';
 
 const _Loader = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/ui/loader/loader',
@@ -35,7 +37,11 @@ type LoaderProps = {|
  */
 const Loader = (props: LoaderProps) => {
     const {fillColor, scale} = props;
-    return <_Loader fillColor={fillColor} scale={scale} />;
+    return (
+        <div className={cx('baymax', baymax('inline'))}>
+            <_Loader fillColor={fillColor} scale={scale} />
+        </div>
+    );
 };
 
 Loader.propTypes = {

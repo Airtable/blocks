@@ -1,7 +1,8 @@
 // @flow
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import {invariant, spawnError} from '../error_utils';
+import {baymax} from './baymax_utils';
 import {
     SelectAndSelectButtonsPropTypes,
     validateOptions,
@@ -124,11 +125,11 @@ class Select extends React.Component<SelectProps> {
             <select
                 ref={el => (this._select = el)}
                 id={id}
-                className={classNames(
-                    'styled-input p1 rounded normal no-outline darken1 text-dark',
+                className={cx(
+                    baymax('styled-input p1 rounded normal no-outline darken1 text-dark'),
                     {
-                        'link-quiet pointer': !disabled,
-                        quieter: disabled,
+                        [baymax('link-quiet pointer')]: !disabled,
+                        [baymax('quieter')]: disabled,
                     },
                     className,
                 )}

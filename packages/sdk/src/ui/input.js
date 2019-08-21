@@ -1,9 +1,10 @@
 // @flow
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import omit from 'lodash.omit';
 import {invariant} from '../error_utils';
+import {baymax} from './baymax_utils';
 
 /**
  * @type {object}
@@ -140,11 +141,11 @@ class Input extends React.Component<InputProps> {
                 type={type}
                 placeholder={this.props.placeholder}
                 style={this.props.style}
-                className={classNames(
-                    defaultClassName,
+                className={cx(
+                    baymax(defaultClassName),
                     {
-                        quieter: disabled,
-                        'link-quiet': !disabled,
+                        [baymax('quieter')]: disabled,
+                        [baymax('link-quiet')]: !disabled,
                     },
                     this.props.className,
                 )}

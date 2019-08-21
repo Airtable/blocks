@@ -3,6 +3,7 @@ import * as React from 'react';
 import {isEnumValue} from '../private_utils';
 import Watchable from '../watchable';
 import getSdk from '../get_sdk';
+import {baymax} from './baymax_utils';
 
 const WatchableGlobalAlertKeys = Object.freeze({
     __alertInfo: ('__alertInfo': '__alertInfo'),
@@ -36,9 +37,9 @@ class GlobalAlert extends Watchable<WatchableGlobalAlertKey> {
     showReloadPrompt() {
         this._alertInfo = {
             content: (
-                <span className="center line-height-4 quiet strong">
+                <span className={baymax('center line-height-4 quiet strong')}>
                     <span
-                        className="pointer understroke link-unquiet"
+                        className={baymax('pointer understroke link-unquiet')}
                         onClick={() => {
                             getSdk().reload();
                         }}

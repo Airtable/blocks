@@ -1,8 +1,9 @@
 // @flow
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import {invariant} from '../error_utils';
+import {baymax} from './baymax_utils';
 
 const themes = Object.freeze({
     RED: 'red',
@@ -121,14 +122,16 @@ class Button extends React.Component<ButtonProps> {
             <button
                 ref={el => (this._button = el)}
                 id={id}
-                className={classNames(
-                    'baymax rounded big strong p1 flex-inline items-center no-outline no-user-select',
-                    themeClassNames,
-                    className,
+                className={cx(
+                    baymax(
+                        'styled-input rounded big strong p1 flex-inline items-center no-outline no-user-select',
+                    ),
+                    baymax(themeClassNames),
                     {
-                        'pointer link-quiet': !disabled,
-                        'noevents quieter': disabled,
+                        [baymax('pointer link-quiet')]: !disabled,
+                        [baymax('noevents quieter')]: disabled,
                     },
+                    className,
                 )}
                 style={style}
                 onClick={onClick}

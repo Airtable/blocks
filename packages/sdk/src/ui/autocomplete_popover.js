@@ -1,8 +1,9 @@
 // @flow
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import {values} from '../private_utils';
+import {baymax} from './baymax_utils';
 import Popover, {
     type PopoverPlacementX,
     type PopoverPlacementY,
@@ -274,16 +275,16 @@ class AutocompletePopover extends React.Component<
         if (this.props.renderItem) {
             return this.props.renderItem(item, isFocused);
         } else {
-            return <div className="p1 flex items-center">{item.label}</div>;
+            return <div className={baymax('p1 flex items-center')}>{item.label}</div>;
         }
     }
     _renderInput() {
         return (
-            <div className="flex flex-auto">
+            <div className={baymax('flex flex-auto')}>
                 <input
                     ref={el => (this._input = el)}
                     autoComplete="false"
-                    className="p1 flex-auto"
+                    className={baymax('p1 flex-auto')}
                     style={{
                         border: 0,
                         borderBottom: '1px solid rgba(0,0,0,0.1)',
@@ -310,8 +311,8 @@ class AutocompletePopover extends React.Component<
                 <div
                     ref={isFocused ? el => (this._selectedResult = el) : null}
                     key={item.value}
-                    className={classNames('pointer', {
-                        darken1: isFocused,
+                    className={cx(baymax('pointer'), {
+                        [baymax('darken1')]: isFocused,
                     })}
                     onClick={() => this._onItemSelect(item)}
                     onMouseEnter={() => this._onMouseEnterItemAtIndex(index)}
@@ -331,8 +332,8 @@ class AutocompletePopover extends React.Component<
                 isOpen={this.props.isOpen}
                 renderContent={() => (
                     <div
-                        className={classNames(
-                            'rounded stroked1 white overflow-hidden',
+                        className={cx(
+                            baymax('rounded stroked1 white overflow-hidden'),
                             this.props.className,
                         )}
                         style={this.props.style}
@@ -342,12 +343,12 @@ class AutocompletePopover extends React.Component<
                             <div
                                 ref={el => (this._resultsContainer = el)}
                                 style={{maxHeight: 220}}
-                                className="relative overflow-auto"
+                                className={baymax('relative overflow-auto')}
                             >
                                 {items}
                             </div>
                         ) : (
-                            <div className="p1 quieter">No results</div>
+                            <div className={baymax('p1 quieter')}>No results</div>
                         )}
                     </div>
                 )}

@@ -40,6 +40,7 @@ import Popover from './popover';
 import AutocompletePopover from './autocomplete_popover';
 import ViewportConstraint from './viewport_constraint';
 import Link from './link';
+import Box from './box';
 import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 import initializeBlock from './initialize_block';
 import withHooks from './with_hooks';
@@ -82,6 +83,7 @@ const UI = {
     ColorPalette,
     ColorPaletteSynced,
     Link,
+    Box,
     ProgressBar,
     Button,
     RecordCard,

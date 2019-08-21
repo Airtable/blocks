@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
+import {baymax} from './baymax_utils';
 import Modal from './modal';
 import Loader from './loader';
 import withHooks from './with_hooks';
@@ -51,7 +52,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
         if (globalAlertInfo) {
             return (
                 <Modal
-                    className="absolute all-0 flex items-center justify-center p2"
+                    className={baymax('absolute all-0 flex items-center justify-center p2')}
                     style={{
                         animation: 'none',
                         maxWidth: null,
@@ -69,7 +70,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
             <>
                 <React.Suspense
                     fallback={
-                        <div className="absolute all-0 flex items-center justify-center">
+                        <div className={baymax('absolute all-0 flex items-center justify-center')}>
                             <Loader />
                         </div>
                     }
@@ -85,15 +86,17 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
                 */}
                 {viewport.isSmallerThanMinSize && (
                     <div
-                        className="absolute all-0 flex items-center justify-center p2 white"
+                        className={baymax(
+                            'absolute all-0 flex items-center justify-center p2 white',
+                        )}
                         style={{
                             zIndex: 2147483647, 
                         }}
                     >
-                        <span className="center line-height-4 quiet strong">
+                        <span className={baymax('center line-height-4 quiet strong')}>
                             <span>Please make this block bigger or </span>
                             <span
-                                className="pointer understroke link-unquiet"
+                                className={baymax('pointer understroke link-unquiet')}
                                 onClick={() => viewport.enterFullscreenIfPossible()}
                             >
                                 fullscreen

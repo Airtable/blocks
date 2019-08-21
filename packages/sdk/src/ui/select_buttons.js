@@ -1,8 +1,9 @@
 // @flow
-import classNames from 'classnames';
+import {cx} from 'emotion';
 import * as React from 'react';
 import omit from 'lodash.omit';
 import {spawnError} from '../error_utils';
+import {baymax} from './baymax_utils';
 
 /* eslint-disable react/prop-types */
 import {
@@ -47,10 +48,10 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
 
         return (
             <div
-                className={classNames(
-                    'flex rounded overflow-hidden p-half darken2',
+                className={cx(
+                    baymax('flex rounded overflow-hidden p-half darken2'),
                     {
-                        quieter: disabled,
+                        [baymax('quieter')]: disabled,
                     },
                     className,
                 )}
@@ -69,13 +70,15 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
                                     !isOptionDisabled && (e => this._onKeyDown(e, option.value))
                                 }
                                 tabIndex={isOptionDisabled ? -1 : tabIndex}
-                                className={classNames(
-                                    'flex-auto rounded p-half normal center no-outline',
+                                className={cx(
+                                    baymax('flex-auto rounded p-half normal center no-outline'),
                                     {
-                                        'link-unquiet pointer focusable': !isOptionDisabled,
-                                        'darken4 text-white': isSelected,
-                                        'text-dark': !isSelected,
-                                        quiet: !isSelected && !disabled,
+                                        [baymax(
+                                            'link-unquiet pointer focusable',
+                                        )]: !isOptionDisabled,
+                                        [baymax('darken4 text-white')]: isSelected,
+                                        [baymax('text-dark')]: !isSelected,
+                                        [baymax('quiet')]: !isSelected && !disabled,
                                     },
                                 )}
                                 style={{
