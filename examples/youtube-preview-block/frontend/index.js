@@ -90,7 +90,7 @@ function RecordPreview({selectedRecordId}) {
     }
 
     if (cursor.activeTableId !== table.id) {
-        return <Container>Switch to the "{table.name}" table to see previews.</Container>;
+        return <Container>Switch to the &quot;{table.name}&quot; table to see previews.</Container>;
     }
 
     if (

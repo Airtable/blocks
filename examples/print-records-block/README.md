@@ -21,13 +21,20 @@ The code shows how to create a printable record layout. It features:
 1. Create a new base using the
    [Art Gallery Management template](https://airtable.com/templates/creative/expAZgezgpfCF8wVH/art-gallery-management).
 
-2. Create a new block in your new base (see the [setup guide](/packages/sdk/docs/setup.md)).
+2. Create a new block in your new base (see the [setup guide](/packages/sdk/docs/setup.md)), pasting
+   the template block token `@airtable/print-records-block` into the `template` field.
 
-3. Copy the code from the `frontend` directory of this block to the `frontend` directory of your new
-   block.
+3. From the root of your new block, run `block run`.
 
-4. From the root of your new block, run `block run`.
+## Template block token
+
+The token for using this code as a starting point for a new block. (See above for further
+instructions on how to do this.)
+
+```
+@airtable/print-records-block
+```
 
 ## See the block running
 
-![Seeing a layout of artists and their artworks grouped by collection, printing the layout](media/block.gif)
+![Seeing a layout of artists and their artworks grouped by collection, printing the layout](https://raw.githubusercontent.com/Airtable/blocks/master/examples/print-records-block/media/block.gif?token=AAAAVHASL5CUHN4FSG5GDXC5M3EZA)

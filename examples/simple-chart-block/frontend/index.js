@@ -7,7 +7,7 @@ import {
     ViewPickerSynced,
     FieldPickerSynced,
 } from '@airtable/blocks/ui';
-import React, {useState} from 'react';
+import React from 'react';
 
 // This block uses chart.js and the react-chartjs-2 packages.
 // Install them by running this in the terminal:

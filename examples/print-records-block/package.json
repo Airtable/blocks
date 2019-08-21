@@ -1,0 +1,20 @@
+{
+    "name": "@airtable/print-records-block",
+    "version": "1.0.0",
+    "description": "A printable layout of artists and their artworks, grouped by collection",
+    "author": "",
+    "license": "UNLICENSED",
+    "scripts": {
+        "lint": "eslint frontend"
+    },
+    "dependencies": {
+        "@airtable/blocks": "0.0.22",
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6"
+    },
+    "devDependencies": {
+        "eslint": "^6.1.0",
+        "eslint-plugin-react": "^7.14.3",
+        "eslint-plugin-react-hooks": "^1.6.1"
+    }
+}

@@ -1,12 +1,16 @@
 {
-    "private": true,
+    "name": "@airtable/todo-block",
+    "version": "1.0.0",
+    "description": "A to-do list based on records in a table",
+    "author": "",
+    "license": "UNLICENSED",
     "scripts": {
         "lint": "eslint frontend"
     },
     "dependencies": {
         "@airtable/blocks": "0.0.22",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6"
+        "react": "^16.8.0",
+        "react-dom": "^16.8.0"
     },
     "devDependencies": {
         "eslint": "^6.1.0",

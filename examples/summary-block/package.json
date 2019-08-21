@@ -1,5 +1,9 @@
 {
-    "private": true,
+    "name": "@airtable/summary-block",
+    "version": "1.0.0",
+    "description": "Shows many different summaries of a table field",
+    "author": "",
+    "license": "UNLICENSED",
     "scripts": {
         "lint": "eslint frontend"
     },
