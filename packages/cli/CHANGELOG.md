@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.32...HEAD)
 
 -   In `block init` - disable `react/prop-types` eslint rule in the default scaffolded `.eslintrc.js` file for the user's block directory.
+-   Fix frontend code bundling by configuring `browserify` + `envify` correctly.
 
 ## [0.0.32](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.31...@airtable/blocks-cli@0.0.32) - 2019-08-20
 
