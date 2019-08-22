@@ -35,34 +35,34 @@ questions or feature requests you can email the platform engineering team direct
 Here is the code for several example blocks. You can read it to learn techniques and see best
 practices for blocks development. And you can use it as a jumping off point for your own blocks.
 
--   [Simple chart](https://github.com/Airtable/blocks/tree/master/examples/simple_chart) - Shows a
-    bar chart of base data using the Chart.js external library.
--   [To-do list](https://github.com/Airtable/blocks/tree/master/examples/todo) - The code for the
-    to-do list example from the guide above.
--   [Summary](https://github.com/Airtable/blocks/tree/master/examples/summary) - Uses the built-in
-    summary functions (average, max, etc.) on a table field.
--   [YouTube preview](https://github.com/Airtable/blocks/tree/master/examples/youtube_preview) -
+-   [Simple chart](https://github.com/Airtable/blocks/tree/master/examples/simple-chart-block) -
+    Shows a bar chart of base data using the Chart.js external library.
+-   [To-do list](https://github.com/Airtable/blocks/tree/master/examples/todo-block) - The code for
+    the to-do list example from the guide above.
+-   [Summary](https://github.com/Airtable/blocks/tree/master/examples/summary-block) - Uses the
+    built-in summary functions (average, max, etc.) on a table field.
+-   [YouTube preview](https://github.com/Airtable/blocks/tree/master/examples/youtube-preview-block) -
     Uses the Cursor API to detect when the user selects a record in grid view. Gets a YouTube URL
     from the record and plays the corresponding video.
--   [Print records](https://github.com/Airtable/blocks/tree/master/examples/print_records) - Creates
-    a printable, custom layout with many records on one page.
+-   [Print records](https://github.com/Airtable/blocks/tree/master/examples/print-records-block) -
+    Creates a printable, custom layout with many records on one page.
 
 ##### Simple chart
 
-[![Block updating chart as the user changes data](examples/simple_chart/media/block.gif?raw=true)](examples/simple_chart)
+[![Block updating chart as the user changes data](examples/simple-chart-block/media/block.gif?raw=true)](examples/simple-chart-block)
 
 ##### To-do list
 
-[![Block updating to-do list as the user changes data](examples/todo/media/block.gif?raw=true)](examples/todo)
+[![Block updating to-do list as the user changes data](examples/todo-block/media/block.gif?raw=true)](examples/todo-block)
 
 ##### Summary
 
-[![Block updating summaries as the user changes data](examples/summary/media/block.gif?raw=true)](examples/summary)
+[![Block updating summaries as the user changes data](examples/summary-block/media/block.gif?raw=true)](examples/summary-block)
 
 ##### YouTube preview
 
-[![Block showing YouTube video when user selects record in grid view](examples/youtube_preview/media/block.gif?raw=true)](examples/youtube_preview)
+[![Block showing YouTube video when user selects record in grid view](examples/youtube-preview-block/media/block.gif?raw=true)](examples/youtube-preview-block)
 
 ##### Print records
 
-[![Seeing a layout of artists and their artworks grouped by collection, printing the layout](examples/print_records/media/block.gif?raw=true)](examples/print_records)
+[![Seeing a layout of artists and their artworks grouped by collection, printing the layout](examples/print-records-block/media/block.gif?raw=true)](examples/print-records-block)

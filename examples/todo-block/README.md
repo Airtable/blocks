@@ -33,4 +33,4 @@ instructions on how to do this.)
 
 ## See the block running
 
-![Block updating to-do list as the user changes data](https://raw.githubusercontent.com/Airtable/blocks/master/examples/todo-block/media/block.gif?token=AAAAVHCAHHNGOD5IZ7XVYY25M3FRI)
+![Block updating to-do list as the user changes data](https://raw.githubusercontent.com/Airtable/blocks/master/examples/todo-block/media/block.gif?token=AAAAVHANIVEWAD4XLNGUP5C5M4LM4)
