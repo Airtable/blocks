@@ -9,9 +9,14 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.32...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.33...HEAD)
 
--   In `block init` - disable `react/prop-types` eslint rule in the default scaffolded `.eslintrc.js` file for the user's block directory.
+No changes.
+
+## [0.0.33](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.32...@airtable/blocks-cli@0.0.33) - 2019-08-22
+
+-   In `block init` - disable `react/prop-types` eslint rule in the default scaffolded
+    `.eslintrc.js` file for the user's block directory.
 -   Fix frontend code bundling by configuring `browserify` + `envify` correctly.
 
 ## [0.0.32](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.31...@airtable/blocks-cli@0.0.32) - 2019-08-20
