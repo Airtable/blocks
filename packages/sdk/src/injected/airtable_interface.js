@@ -23,6 +23,10 @@ export type SdkInitData = {|
     isFirstRun: boolean,
 |};
 
+type IdGenerator = {|
+    generateRecordId: () => string,
+|};
+
 /*
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable. The mechanism through which we communicate with Airtable
@@ -31,6 +35,7 @@ export type SdkInitData = {|
  */
 export interface AirtableInterface {
     sdkInitData: SdkInitData;
+    idGenerator: IdGenerator;
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 

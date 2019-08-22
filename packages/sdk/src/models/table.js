@@ -18,7 +18,6 @@ import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import type RecordStore from './record_store';
 
-const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
@@ -510,7 +509,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             [fieldIdOrName: FieldId | string]: mixed,
         } = {},
     ) {
-        const recordId = hyperId.generateRowId();
+        const recordId = this._airtableInterface.idGenerator.generateRecordId();
         const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
             cellValuesByFieldIdOrName,
         );
