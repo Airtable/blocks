@@ -7,6 +7,8 @@
 # Requires access to:
 #     https://airtable.com/tbleA2gWqSbqgtXFD?blocks=bipHcxcRpB0ObTAGo
 
+[ -n "$1" ] && block="$1" || block='block'
+
 set -uo pipefail
 
 BLOCK_ID="appQOxbW7k6mK0Eqd/blkDOYCZmdADueASi"
@@ -18,8 +20,6 @@ function echoStep() {
   echo
   echo "$(tput bold)> $1$(tput sgr0)"
 }
-
-[ -n "$1" ] && block="$1" || block='block'
 
 # Check block command exists.
 block_path=$(command -v "$block")
