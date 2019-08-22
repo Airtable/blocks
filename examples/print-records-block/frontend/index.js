@@ -84,15 +84,13 @@ function Report({view}) {
 // of its linked Artists records.
 function Record({record}) {
     const base = useBase();
-    const table = record.parentTable;
 
     // Each record in the "Collections" table is linked to records
-    // in the "Artists" table. We want to show the Artists that are
-    // on display for each collection.
+    // in the "Artists" table. We want to show the Artists for
+    // each collection.
     const linkedTable = base.getTableByName('Artists');
-    const linkedRecordField = table.getFieldByName('Artists');
     const linkedRecords = useRecords(
-        record.selectLinkedRecordsFromCell(linkedRecordField, {
+        record.selectLinkedRecordsFromCell('Artists', {
             // Keep the linked records sorted by their primary field.
             sorts: [{field: linkedTable.primaryField, direction: 'asc'}],
         }),
