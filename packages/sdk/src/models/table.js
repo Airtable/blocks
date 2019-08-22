@@ -3,17 +3,22 @@ import {type BaseData} from '../types/base';
 import {type TableData} from '../types/table';
 import {type ViewType, type ViewId} from '../types/view';
 import {type FieldId} from '../types/field';
+import {type RecordId} from '../types/record';
+import {MutationTypes} from '../types/mutations';
 import {isEnumValue, entries, has} from '../private_utils';
 import {spawnError} from '../error_utils';
+import getSdk from '../get_sdk';
 import {type AirtableInterface} from '../injected/airtable_interface';
 import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
 import type Base from './base';
+import type Record from './record';
 import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import type RecordStore from './record_store';
 
+const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
@@ -460,6 +465,77 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             viewId,
         );
         return cellValuesByFieldId;
+    }
+    /** @private */
+    async updateRecordAsync(
+        recordOrRecordId: Record | RecordId,
+        cellValuesByFieldIdOrName: {[fieldIdOrName: FieldId | string]: mixed},
+    ): Promise<void> {
+        const recordId =
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
+
+        const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
+            cellValuesByFieldIdOrName,
+        );
+
+        await getSdk().unstable_mutations.applyMutationAsync({
+            type: MutationTypes.SET_SINGLE_RECORD_CELL_VALUES,
+            tableId: this.id,
+            recordId,
+            cellValuesByFieldId,
+        });
+    }
+    /** @private */
+    async deleteRecordAsync(recordOrRecordId: Record | RecordId): Promise<void> {
+        const recordId =
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
+
+        await getSdk().unstable_mutations.applyMutationAsync({
+            type: MutationTypes.DELETE_SINGLE_RECORD,
+            tableId: this.id,
+            recordId,
+        });
+    }
+    /** @private */
+    createRecordAsync(
+        cellValuesByFieldIdOrName: {
+            [fieldIdOrName: FieldId | string]: mixed,
+        } = {},
+    ) {
+        const recordId = hyperId.generateRowId();
+        const promise = (async () => {
+            const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
+                cellValuesByFieldIdOrName,
+            );
+
+            await getSdk().unstable_mutations.applyMutationAsync({
+                type: MutationTypes.CREATE_SINGLE_RECORD,
+                tableId: this.id,
+                recordId,
+                cellValuesByFieldId,
+            });
+
+            return recordId;
+        })();
+
+        return promise;
+    }
+    _cellValuesByFieldIdOrNameToCellValuesByFieldId(cellValuesByFieldIdOrName: {
+        [fieldIdOrName: FieldId | string]: mixed,
+    }): {[FieldId]: mixed} {
+        return Object.fromEntries(
+            entries(cellValuesByFieldIdOrName).map(([fieldIdOrName, cellValue]) => {
+                const field = this.__getFieldMatching(fieldIdOrName);
+                if (!field) {
+                    throw spawnError(
+                        "Field '%s' doesn't exist in table %s",
+                        fieldIdOrName,
+                        this.id,
+                    );
+                }
+                return [field.id, cellValue];
+            }),
+        );
     }
     /**
      * @private
