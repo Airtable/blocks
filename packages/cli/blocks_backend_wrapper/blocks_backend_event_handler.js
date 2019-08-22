@@ -74,6 +74,30 @@ class BlocksBackendEventHandler {
         this._resolveBackendRouteHandler = options.resolveBackendRouteHandler;
     }
 
+    /** Utility function to resolve backend route handler using require() and a prefix. */
+    static resolveBackendRouteHandlerWithRequirePrefix(
+        prefix: string,
+        handlerName: string,
+    ): BackendRouteHandler {
+        const routeHandlerModulePath = prefix + handlerName;
+        // flow-disable-next-line since this will be written as part of the build process.
+        const routeHandlerModule = require(routeHandlerModulePath);
+        if (!routeHandlerModule) {
+            throw new Error(
+                `Backend route module not found: ${handlerName} (${routeHandlerModulePath})`,
+            );
+        }
+        if (
+            typeof routeHandlerModule !== 'object' ||
+            typeof routeHandlerModule.default !== 'function'
+        ) {
+            throw new Error(
+                `Backend route module's default export must be a function: ${handlerName}`,
+            );
+        }
+        return routeHandlerModule.default;
+    }
+
     async _uploadLogsToS3Async(
         logFilePath: string,
         logStream: fs.WriteStream,

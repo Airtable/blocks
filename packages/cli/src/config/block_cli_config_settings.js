@@ -61,5 +61,10 @@ module.exports = {
     // Name of the file used to store user/blocks scoped configs for blocks-cli
     CONFIG_FILE_NAME: '.airtableblocksrc.json',
 
+    // Default server providing backend SDK.
+    BACKEND_SDK_BASE_URL: 'https://airtable.com',
+    // URL path to backend SDK.
+    BACKEND_SDK_URL_PATH: '/js/compiled/block_backend_sdk.js',
+
     HELLO_WORLD_TEMPLATE: '@airtable/hello-world',
 };

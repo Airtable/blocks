@@ -29,7 +29,6 @@ const BackendBlockSdkWrapper = require('./block_backend_sdk');
 const blockJson: BlockJson = require('./block.json');
 
 import type {LambdaEvent} from './types/lambda_event_type';
-import type {BackendRouteHandler} from './types/backend_route_types';
 
 type LambdaContext = Object;
 type LambdaCallback = (error: Error | null, response: mixed) => void;
@@ -39,20 +38,10 @@ const blocksBackendEventHandler = new BlocksBackendEventHandler({
     blockJson,
     backendBlockSdkWrapperInstance,
     enableUploadLogsToS3: true,
-    resolveBackendRouteHandler(handlerName: string): BackendRouteHandler {
-        // flow-disable-next-line since this will be written as part of the build process.
-        const routeHandlerModule = require('../user/routes/' + handlerName);
-        if (!routeHandlerModule) {
-            throw new Error(`Route module not found: ${handlerName}`);
-        }
-        if (
-            typeof routeHandlerModule !== 'object' ||
-            typeof routeHandlerModule.default !== 'function'
-        ) {
-            throw new Error(`Route module's default export must be a function: ${handlerName}`);
-        }
-        return routeHandlerModule.default;
-    },
+    resolveBackendRouteHandler: BlocksBackendEventHandler.resolveBackendRouteHandlerWithRequirePrefix.bind(
+        null,
+        '../user/routes/',
+    ),
 });
 
 exports.handler = function(event: LambdaEvent, context: LambdaContext, callback: LambdaCallback) {

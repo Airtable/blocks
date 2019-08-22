@@ -59,6 +59,7 @@ function ensureCleanExit(child: childProcess.ChildProcess, name: string): void {
 
 function fork(
     modulePath: string,
+    args: Array<string> = [],
     {
         env = process.env,
         cwd = process.cwd(),
@@ -66,7 +67,7 @@ function fork(
         execArgv = [],
     }: {|...ChildProcessOptions, execArgv?: Array<string>|} = {},
 ): childProcess.ChildProcess {
-    const child = childProcess.fork(modulePath, {
+    const child = childProcess.fork(modulePath, args, {
         stdio: 'pipe',
         cwd,
         env,
