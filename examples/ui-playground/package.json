@@ -6,7 +6,7 @@
         "dev": "block run --sdk-repo ../../packages/sdk"
     },
     "dependencies": {
-        "@airtable/blocks": "0.0.22",
+        "@airtable/blocks": "0.0.28",
         "react": "^16.8.0",
         "react-dom": "^16.8.0"
     },
