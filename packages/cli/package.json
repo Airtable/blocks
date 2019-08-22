@@ -13,7 +13,7 @@
         "build:clean": "rm -rf transpiled",
         "build": "yarn run build:clean && babel . --only src,blocks_backend_wrapper --out-dir transpiled",
         "watch": "yarn build --watch",
-        "prepublishOnly": "yarn build",
+        "prepublishOnly": "yarn build && ./test/smoke_test.sh \"$PWD/bin/block\"",
         "pretest": "yarn run lint && yarn run flow",
         "test": "mocha test blocks_backend_wrapper/test",
         "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md",
