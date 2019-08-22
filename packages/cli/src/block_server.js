@@ -457,8 +457,8 @@ class BlockServer {
             ),
             {
                 cache: {},
-                debug: true,
                 packageCache: {},
+                debug: true,
                 plugin: [watchify],
                 paths: [blockDirPath],
                 transform: [
@@ -476,18 +476,21 @@ class BlockServer {
         this._bundler.on('update', this.triggerBundleAsync.bind(this));
         this._bundler.on('bundle', () => console.log('Updating bundle...'));
     }
-    setPublicBaseUrl(publicBaseUrl: string): void {
-        // Use process.env to provide the base URL.
+    setEnvironmentVariablesForBundle(publicBaseUrl: string): void {
         this._bundler.transform(
+            // 'global' is required in order to process node_modules files
+            {global: true},
             envify({
+                // Use process.env to provide the base URL in client wrapper code.
                 BLOCK_BASE_URL: publicBaseUrl,
+                NODE_ENV: 'development',
             }),
         );
     }
     async startAsync(port: number): Promise<void> {
         const url = await this.startLocalAsync(port);
         this._blockServerUrlIfExists = url;
-        this.setPublicBaseUrl(url);
+        this.setEnvironmentVariablesForBundle(url);
         await this.triggerBundleAsync();
         console.log(chalk.bold(`\n✅ Your block is running locally at ${url} `));
         try {

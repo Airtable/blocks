@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable no-console */
 const path = require('path');
+const envify = require('envify/custom');
 const fs = require('fs');
 const fsUtils = require('../fs_utils');
 const invariant = require('invariant');
@@ -143,6 +144,13 @@ class BlockBuilder {
         process.env.NODE_ENV = 'production';
 
         const browserifyInstance = browserify(entryFilePath);
+        browserifyInstance.transform(
+            // 'global' is required in order to process node_modules files
+            {global: true},
+            envify({
+                NODE_ENV: process.env.NODE_ENV,
+            }),
+        );
         browserifyInstance.bundleAsync = promisify(
             browserifyInstance.bundle.bind(browserifyInstance),
         );
