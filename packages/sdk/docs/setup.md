@@ -102,18 +102,19 @@ see instructions for using blocks-cli, which begins with `Usage: block <command>
 
 The next screen will have you running `block init` with some additional arguments. Once you’ve
 entered your Airtable API key, the `block init` command will install dependencies and then your
-project will be ready! Run `cd hello_blocks && block run` (as it says).
+project will be ready! Run `cd hello_blocks`, then `block run` (as it says).
 
-In the terminal output, you’ll see something like “Local mode: serving self-signed https on
-localhost”. Blocks must run on HTTPS servers. In production, we'll serve your block code via HTTPS,
-but in development, you'll need to tell your browser that https://localhost:9000 is safe to visit.
-Follow the instructions in the output above to get your browser ready to go.
+In the terminal output, you’ll see something like “Your block is running locally at https://localhost:9000”.
 
-You may need to restart your browser the first time you do this. After restarting the browser, go
-back to the base, click the `<> DEV` button next to the block, then click "Edit block".
+Enter https://localhost:9000 as the block URL in Airtable.
 
-Once you've done this, enter https://localhost:9000 as the block URL. If you've done this correctly,
-you'll see your block appear!
+![](/packages/sdk/docs/images/setup_6.png)
+
+The first time you do this, you may need to tell your browser that https://localhost:9000 is
+safe to visit.  Follow the on-screen instructions to do this. You may need to restart your browser.
+After restarting the browser, go back to the base, click your block's name, then click "Edit block".
+
+If you've done this correctly, you'll see your block appear!
 
 ![](/packages/sdk/docs/images/setup_4.png)
 
