@@ -1,116 +1,440 @@
 // @flow
 /* eslint-disable no-console */
 const path = require('path');
-const envify = require('envify/custom');
 const fs = require('fs');
-const fsUtils = require('../fs_utils');
-const invariant = require('invariant');
-const {babelAsync, npmAsync} = require('../helpers/node_modules_command_helpers');
-const blockCliConfigSettings = require('../config/block_cli_config_settings');
-const generateBlockClientWrapperCode = require('../block_client_artifacts/generate_block_client_wrapper');
-const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
-const SupportedTopLevelDirectoryNames = require('../types/supported_top_level_directory_names');
-const {getBlockDirPath} = require('../get_block_dir_path');
-const browserify = require('browserify');
 const {promisify} = require('util');
+const fsUtils = require('../fs_utils');
+const envify = require('envify/custom');
+const invariant = require('invariant');
+const babel = require('@babel/core');
+const chokidar = require('chokidar');
+const chalk = require('chalk');
+const {npmAsync} = require('../helpers/node_modules_command_helpers');
+const browserify = require('browserify');
+const watchify = require('watchify');
 const Terser = require('terser');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
+const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
+const BlockBuildTypes = require('../types/block_build_types');
+const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types');
+const BlockBuilderJobQueue = require('./block_builder_job_queue');
+const ErrorCodes = require('../types/error_codes');
+const {RESULT_OK} = require('../types/result');
+const {getBlockDirPath} = require('../get_block_dir_path');
 
+import type {BlockBuildType} from '../types/block_build_types';
+import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {BlockJson} from '../types/block_json_type';
-
-type BuildStepSuccess<+R> = {|success: true, +value: R|};
-type BuildStepFailure = {|success: false, error: Error|};
-
-// TODO(richsinn): consider using the Result algebraic type from hyperbase
-type BuildStepResult<+R> = BuildStepSuccess<R> | BuildStepFailure;
+import type {Result} from '../types/result';
+import type {PromiseResolveFunction} from '../types/promise_types';
+import type {ErrorWithCode, TranspileError} from '../types/error_codes';
 
 type FilePath = string;
 type DirectoryPath = string;
-type BuildResult = BuildStepResult<{|
+
+type BuildPackagePaths = {|
     frontendBundlePath: FilePath,
     backendDeploymentPackagePath: FilePath | null,
-|}>;
+|};
 
-function buildStepSuccess<R>(value: R): BuildStepSuccess<R> {
-    return {
-        success: true,
-        value,
-    };
-}
-function buildStepFailure(message: string): BuildStepFailure {
-    return {
-        success: false,
-        error: new Error(message),
-    };
-}
+const FILES_TO_TRANSPILE_REGEX = /\.(es6|js|es|jsx)$/;
 
+// Minimal transpilation - the closer the result is to the source, the easier
+// debugging is, even with source maps.
+const developmentBrowsers: Array<string> = [
+    'chrome 61', // Desktop (electron) app.
+    'last 2 chrome versions',
+    'last 2 firefox versions',
+    'last 1 safari version',
+    'last 1 edge version',
+];
+
+// From https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable.
+const allSupportedBrowsers: Array<string> = [
+    'firefox >= 29',
+    'chrome >= 32',
+    'safari >= 9',
+    'edge >= 13',
+];
+
+/**
+ * BlockBuilder can be used in two ways (defined by buildTypeMode):
+ * - DEVELOPMENT mode - an interactive mode, which watches for and responds to changes in the
+ *   the user's block code. This is the mode used by `block run`.
+ * - RELEASE mode - a non-interactive mode, which will transpile, bundle, and package the user's
+ *   block code. This is the mode used by `block release`.
+ */
 class BlockBuilder {
-    async _transpileSourceCodeAsync(
-        srcDirPath: DirectoryPath,
-        outputDirPath: DirectoryPath,
-    ): Promise<BuildStepResult<void>> {
-        const transpiledTopLevelOutputDirectoryNamesSet = new Set();
-        for (const topLevelDirName of Object.values(SupportedTopLevelDirectoryNames)) {
-            invariant(typeof topLevelDirName === 'string', 'topLevelDirName should be string');
-            const topLevelSrcDirPath = path.join(srcDirPath, topLevelDirName);
-            const stats = await fsUtils.statIfExistsAsync(topLevelSrcDirPath);
-            if (stats === null || !stats.isDirectory()) {
-                // Skip, since this path doesn't exist or isn't a directory.
-                continue;
-            }
-            const topLevelOutputDirPath = path.join(outputDirPath, topLevelDirName);
-            const transpileResult = await this._transpileDirectoryAsync(
-                topLevelSrcDirPath,
-                topLevelOutputDirPath,
-            );
-            if (!transpileResult.success) {
-                return transpileResult;
-            }
-            transpiledTopLevelOutputDirectoryNamesSet.add(topLevelDirName);
-        }
+    _buildTypeMode: BlockBuildType;
+    _blockJson: BlockJson;
+    _shouldTranspileForAllBrowsers: boolean;
+    _blockDirPath: DirectoryPath;
+    _outputTranspiledDirPath: string;
+    _outputUserTranspiledDirPath: string;
+    _outputBuildArtifactsDirPath: string;
+    _browserify: browserify;
+    _initialBuildResolveIfExists: PromiseResolveFunction | null;
+    _blockBuilderJobQueue: BlockBuilderJobQueue;
 
-        // Create symlinks in node_modules for our top-level directories. We do this so that you can
-        // require files using absolute paths like `frontend/foo`.
-        const buildNodeModulesPath = path.join(outputDirPath, 'node_modules');
-        for (const topLevelOutputDirName of transpiledTopLevelOutputDirectoryNamesSet) {
-            const symlinkPath = path.join(buildNodeModulesPath, topLevelOutputDirName);
-            await fsUtils.symlinkAsync(
-                path.join(outputDirPath, topLevelOutputDirName),
-                symlinkPath,
-            );
-        }
+    constructor(args: {
+        buildTypeMode: BlockBuildType,
+        blockJson: BlockJson,
+        transpileForAllBrowsers?: boolean,
+    }) {
+        this._buildTypeMode = args.buildTypeMode;
+        this._blockJson = args.blockJson;
+        this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
+        this._blockDirPath = getBlockDirPath();
 
-        return buildStepSuccess();
+        const outputBuildDirPath = path.join(
+            this._blockDirPath,
+            blockCliConfigSettings.BUILD_DIR,
+            this._buildTypeMode.toLowerCase(),
+        );
+        this._outputTranspiledDirPath = path.join(outputBuildDirPath, 'transpiled');
+        this._outputUserTranspiledDirPath = path.join(this._outputTranspiledDirPath, 'user');
+        this._outputBuildArtifactsDirPath = path.join(outputBuildDirPath, 'build_artifacts');
+
+        this._initialBuildResolveIfExists = null;
+
+        this._setupBlockBuilderJobQueue();
+        this._setupBrowserify();
     }
-    async _transpileDirectoryAsync(
-        srcDirPath: DirectoryPath,
-        outputDirPath: DirectoryPath,
-    ): Promise<BuildStepResult<void>> {
-        try {
-            // We use the '@babel/transform-flow-strip-types' plugin instead of the
-            // '@babel/preset-flow' preset due to a Babel bug:
-            // https://github.com/babel/babel/issues/8593#issuecomment-419862386
-            const presets = ['@babel/preset-env', '@babel/preset-react'];
-            const plugins = [
-                '@babel/plugin-transform-flow-strip-types',
-                '@babel/plugin-proposal-class-properties',
-            ];
 
-            // Use the blocks-cli dir as the cwd so babel can properly find
-            // presets/plugins.
-            await babelAsync(__dirname, [
-                srcDirPath,
-                `--out-dir=${outputDirPath}`,
-                '--copy-files',
-                '--no-babelrc',
-                `--presets=${presets.join(',')}`,
-                `--plugins=${plugins.join(',')}`,
-                '--retain-lines',
-                '--minified',
-            ]);
-        } catch (error) {
-            return {success: false, error};
+    static async createDevelopmentBlockBuilderAsync(args: {
+        blockJson: BlockJson,
+        transpileForAllBrowsers?: boolean,
+    }): Promise<BlockBuilder> {
+        const {blockJson, transpileForAllBrowsers} = args;
+        return new BlockBuilder({
+            buildTypeMode: BlockBuildTypes.DEVELOPMENT,
+            blockJson,
+            transpileForAllBrowsers,
+        });
+    }
+    static async createReleaseBlockBuilderAsync(args: {
+        blockJson: BlockJson,
+    }): Promise<BlockBuilder> {
+        const {blockJson} = args;
+
+        return new BlockBuilder({
+            buildTypeMode: BlockBuildTypes.RELEASE,
+            blockJson,
+            transpileForAllBrowsers: true,
+        });
+    }
+    static getBlockBuilderError(
+        blockBuilderStateData: BlockBuilderStateData,
+    ): ErrorWithCode | TranspileError {
+        // TODO(richsinn): Handle multiple errors on block frame.
+        invariant(
+            blockBuilderStateData.status === BlockBuilderStatuses.ERROR,
+            'expect blockBuilderStateData.status to be ERROR',
+        );
+        let err;
+        if (blockBuilderStateData.transpileErrs && blockBuilderStateData.transpileErrs.length > 0) {
+            err = blockBuilderStateData.transpileErrs[0];
+        } else if (blockBuilderStateData.bundleErr) {
+            err = blockBuilderStateData.bundleErr;
+        } else {
+            // This should never happen.
+            throw new Error('error information missing!');
         }
-        return buildStepSuccess();
+
+        return err;
+    }
+
+    get blockJson(): BlockJson {
+        return this._blockJson;
+    }
+    get blockDirPath(): DirectoryPath {
+        return this._blockDirPath;
+    }
+    get browserify(): browserify {
+        return this._browserify;
+    }
+    get outputBuildArtifactsDirPath(): string {
+        return this._outputBuildArtifactsDirPath;
+    }
+    get blockBuilderStateData(): BlockBuilderStateData {
+        return this._blockBuilderJobQueue.blockBuilderStateData;
+    }
+    get blockBuilderJobQueue(): BlockBuilderJobQueue {
+        return this._blockBuilderJobQueue;
+    }
+    _setupBlockBuilderJobQueue(): void {
+        this._blockBuilderJobQueue = new BlockBuilderJobQueue(this._buildTypeMode);
+        this._blockBuilderJobQueue
+            .on('initialBundleSuccessfullyCompleted', () => {
+                // NOTE: The `update` event handler will enqueue `bundle` jobs, but we only attach
+                // the `update` event handler after the first successful bundle for two reasons:
+                //   1. The watchify plugin will emit the `update` event on the first call
+                //      to `bundle()` before `bundle()` even completes. But we only want to start
+                //      listening for `update` events after the initial `bundle()` completes,
+                //      otherwise we'll trigger two `bundle()` requests on initial building.
+                //   2. If the initial `bundle()` fails, the `update` event will never emit again,
+                //      until a successful `bundle()` completes. Therefore, we have to manually
+                //      trigger the `bundle()` call from the BlockBuildJobQueue before we can start
+                //      enqueuing bundle jobs from here.
+                this._browserify.on('update', () => {
+                    this._blockBuilderJobQueue.enqueue({
+                        action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
+                    });
+                });
+            })
+            .on('buildComplete', () => {
+                if (this._initialBuildResolveIfExists !== null) {
+                    this._initialBuildResolveIfExists();
+                }
+            });
+    }
+    /**
+     * Use chokidar to do the initial walk of the user's block directory.
+     *
+     * In DEVELOPMENT mode:
+     *   - chokidar watches for changes in the blocks code by setting `persistent` option to true.
+     *
+     * In RELEASE mode:
+     *   - chokidar is only needed for the initial walk of the user's block directory. We don't
+     *     need to watch for code changes, so we set the `persistent` option to false.
+     *
+     * As chokidar detects files/changes, it will enqueue 'transpile' jobs to the BlockBuilderJobQueue.
+     * It is also responsible for starting the BlockBuilderJobQueue consumer after it finishes the
+     * initial walk through of the block directory.
+     *
+     * see: https://github.com/paulmillr/chokidar#persistence
+     */
+    _startChokidarWatchAndStartBuildJobQueueConsumer(
+        chokidarOpts: {
+            persistent?: boolean,
+        } = {},
+    ): void {
+        const {persistent = true} = chokidarOpts;
+
+        // TODO(richsinn): Should we respect the user's .gitignore contents here?
+        const ignored = [
+            // HACK: For some reason, we need to use a function here to ignore the 'build' and
+            // the 'node_modules' directories. Using glob patterns is not properly ignored and
+            // it copies things over in an endless recursion.
+            p => p.startsWith(path.join(this._blockDirPath, blockCliConfigSettings.BUILD_DIR)),
+            p => p.startsWith(path.join(this._blockDirPath, 'node_modules')),
+            path.join(this._blockDirPath, blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME),
+            path.join(this._blockDirPath, blockCliConfigSettings.CONFIG_FILE_NAME),
+            '.git',
+            '**/.git/**',
+
+            // This is here for legacy purposes. API Keys are now in blockCliConfigSettings.CONFIG_FILE_NAME)
+            '**/.airtableAPIKey',
+        ];
+
+        const chokidarInstance = chokidar.watch(this._blockDirPath, {
+            ignored,
+            persistent,
+            cwd: this._blockDirPath,
+            alwaysStat: true,
+            awaitWriteFinish: true,
+        });
+
+        const chokidarEvents = ['add', 'addDir', 'change'];
+        for (const chokidarEvent of chokidarEvents) {
+            chokidarInstance.on(chokidarEvent, (fileOrDirPath: string, stats?: fs.Stats) => {
+                if (fileOrDirPath === blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME) {
+                    throw new Error(
+                        `${blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME} is a reserved file name!`,
+                    );
+                }
+
+                // Exiting the CLI process if changes detected to the 'block.json' file because
+                // it requires re-bootstrapping the block code.
+                // TODO(richsinn): re-bootstrap/restart the process automatically (i.e. rewrite the
+                //   'block_client_wrapper.js' file, etc.)
+                if (
+                    fileOrDirPath === blockCliConfigSettings.BLOCK_FILE_NAME &&
+                    this._buildTypeMode === BlockBuildTypes.DEVELOPMENT &&
+                    this._blockBuilderJobQueue.blockBuilderStateData.status !==
+                        BlockBuilderStatuses.START
+                ) {
+                    console.log(
+                        `Detected changes to '${chalk.bold(
+                            blockCliConfigSettings.BLOCK_FILE_NAME,
+                        )}' file. Please restart ${chalk.bold('block run')}.`,
+                    );
+                    process.exit(1);
+                }
+
+                invariant(stats, 'stats');
+                this._blockBuilderJobQueue.enqueue({
+                    action: BlockBuilderJobQueue.JOB_ACTIONS.TRANSPILE_OR_UNLINK,
+                    eventType: chokidarEvent,
+                    fileOrDirPath,
+                    fsStatsIfExists: stats,
+                });
+            });
+        }
+
+        chokidarInstance
+            .on('unlink', (filePath: string) => {
+                if (filePath === blockCliConfigSettings.BLOCK_FILE_NAME) {
+                    console.log(
+                        `Should not delete the '${chalk.bold(
+                            blockCliConfigSettings.BLOCK_FILE_NAME,
+                        )}' file!`,
+                    );
+                    process.exit(1);
+                }
+
+                this._blockBuilderJobQueue.enqueue({
+                    action: BlockBuilderJobQueue.JOB_ACTIONS.TRANSPILE_OR_UNLINK,
+                    eventType: 'unlink',
+                    fileOrDirPath: filePath,
+                    fsStatsIfExists: null,
+                });
+            })
+            .on('ready', () =>
+                this._blockBuilderJobQueue.startQueueConsumerLoop({
+                    outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
+                    transpileOrCopyAsyncFn: this._transpileOrCopyAsync.bind(this),
+                    generateFrontendBundleAsyncFn: this._generateFrontendBundleAsync.bind(this),
+                }),
+            )
+            .on('error', err => {
+                throw err;
+            });
+    }
+    /**
+     * Use browserify to bundle the user's frontend code. NOTE: browserify references the user's
+     * 'transpiled' directory (i.e. _outputUserTranspiledDirPath), NOT the user code directory, to
+     * bundle the code.
+     *
+     * In DEVELOPMENT mode:
+     *   - Use the watchify plugin to watch the transpiled directory for any changes.
+     *     NOTE: The browserify.bundle() method must be triggered at least once for watchify to
+     *     start. Logic to trigger the first bundle() method actually occurs in
+     *     BlockBuilderJobQueue, and is not actually placed on the queue.
+     *   - When watchify detects changes to the transpiled code, it is responsible for enqueuing
+     *     the 'bundle' jobs to the BlockBuilderJobQueue.
+     *   - Set NODE_ENV to 'development' via envify for proper bundling of node_modules
+     *     dependencies
+     *
+     * In RELEASE mode:
+     *   - Set NODE_ENV to 'production' via envify for proper bundling of node_modules dependencies.
+     */
+    _setupBrowserify(): void {
+        const clientWrapperFilePath = path.join(
+            this._outputUserTranspiledDirPath,
+            blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
+        );
+
+        let browserifyWatchOptions;
+        let nodeEnv;
+        switch (this._buildTypeMode) {
+            case BlockBuildTypes.DEVELOPMENT: {
+                nodeEnv = 'development';
+
+                browserifyWatchOptions = {
+                    cache: {},
+                    packageCache: {},
+                    debug: true,
+                    plugin: [watchify],
+                    paths: [this._blockDirPath],
+                };
+                break;
+            }
+            case BlockBuildTypes.RELEASE:
+                nodeEnv = 'production';
+                browserifyWatchOptions = {};
+                break;
+
+            default:
+                throw new Error(`unrecognized buildTypeMode: ${this._buildTypeMode}`);
+        }
+        this._browserify = browserify(clientWrapperFilePath, browserifyWatchOptions);
+        this._browserify.transform(
+            // 'global' is required in order to process node_modules files
+            {global: true},
+            envify({
+                NODE_ENV: nodeEnv,
+            }),
+        );
+
+        this._browserify.bundleAsync = promisify(this._browserify.bundle.bind(this._browserify));
+        if (this._buildTypeMode === BlockBuildTypes.DEVELOPMENT) {
+            this._browserify.on('bundle', () => console.log('Updating bundle...'));
+        }
+    }
+    async _transpileFileAsync(filePath: FilePath): Promise<Object> {
+        const targets = {
+            browsers: this._shouldTranspileForAllBrowsers
+                ? allSupportedBrowsers
+                : developmentBrowsers,
+        };
+        // We use the '@babel/transform-flow-strip-types' plugin instead of the
+        // '@babel/preset-flow' preset due to a Babel bug:
+        // https://github.com/babel/babel/issues/8593#issuecomment-419862386
+        const presets = [['@babel/preset-env', {targets}], '@babel/preset-react'];
+        const plugins = [
+            '@babel/plugin-transform-flow-strip-types',
+            '@babel/plugin-proposal-class-properties',
+        ];
+
+        // Use the blocks-cli dir as the cwd so babel can properly find presets/plugins.
+        return await babel.transformFileAsync(filePath, {presets, plugins, cwd: __dirname});
+    }
+    async _transpileOrCopyAsync(
+        fileOrDirectoryPath: string,
+        stats?: fs.Stats | null,
+    ): Promise<Result<string, TranspileError>> {
+        const dirPath = path.dirname(fileOrDirectoryPath);
+        const targetDirPath = path.join(this._outputUserTranspiledDirPath, dirPath);
+
+        await fsUtils.mkdirPathAsync(targetDirPath);
+
+        // Create symlinks in node_modules for the user's block code's top-level directories to
+        // allow require with absolute paths:
+        // - For DEVELOPMENT the node_modules is in blocksDir.
+        // - For RELEASE, it should be the newly installed node_modules
+        // TODO(richsinn): revisit this symlinking strategy because it's possible to conflict
+        //   with existing node_modules packages.
+        if (stats && stats.isDirectory()) {
+            const isTopLevelDir = !fileOrDirectoryPath.includes(path.sep);
+            if (isTopLevelDir) {
+                const symLinkToNodeModulesDir =
+                    this._buildTypeMode === BlockBuildTypes.DEVELOPMENT
+                        ? path.join(this._blockDirPath, 'node_modules', fileOrDirectoryPath)
+                        : path.join(
+                              this._outputUserTranspiledDirPath,
+                              'node_modules',
+                              fileOrDirectoryPath,
+                          );
+                await fsUtils.symlinkIfNeededAsync(
+                    path.join(targetDirPath, fileOrDirectoryPath),
+                    symLinkToNodeModulesDir,
+                );
+            }
+        }
+
+        if (stats && stats.isFile()) {
+            const filePathToTranspileOrCopy = path.join(
+                targetDirPath,
+                path.basename(fileOrDirectoryPath),
+            );
+            if (FILES_TO_TRANSPILE_REGEX.test(fileOrDirectoryPath)) {
+                let transpiledResult;
+                try {
+                    transpiledResult = await this._transpileFileAsync(fileOrDirectoryPath);
+                } catch (err) {
+                    err.filePath = fileOrDirectoryPath;
+                    console.log(err.message);
+                    return {err};
+                }
+
+                await fsUtils.writeFileAsync(filePathToTranspileOrCopy, transpiledResult.code);
+            } else {
+                await fsUtils.copyFileAsync(fileOrDirectoryPath, filePathToTranspileOrCopy);
+            }
+        }
+
+        return {value: fileOrDirectoryPath};
     }
     _getErrorFromNpmInstallStderr(stderr: string): Error | null {
         const errorMessageLines = stderr.split('\n').filter(message => {
@@ -125,55 +449,20 @@ class BlockBuilder {
         }
         return null;
     }
-    async _npmInstallAsync(dirPath: DirectoryPath): Promise<BuildStepResult<void>> {
+    async _npmInstallAsync(dirPath: DirectoryPath): Promise<Result<void, Error>> {
         try {
             const {stderr} = await npmAsync(dirPath, ['install', '--production', '--quiet']);
 
             const npmInstallError = this._getErrorFromNpmInstallStderr(stderr.toString());
             if (npmInstallError) {
-                return {success: false, error: npmInstallError};
+                return {err: npmInstallError};
             }
-        } catch (error) {
-            return {success: false, error};
-        }
-        return buildStepSuccess();
-    }
-    async _browserifyAsync(entryFilePath: FilePath): Promise<BuildStepResult<Buffer | null>> {
-        // Temporarily set the NODE_ENV to production, regardless of the actual NODE_ENV.
-        const originalNodeEnv = process.env.NODE_ENV;
-        process.env.NODE_ENV = 'production';
-
-        const browserifyInstance = browserify(entryFilePath);
-        browserifyInstance.transform(
-            // 'global' is required in order to process node_modules files
-            {global: true},
-            envify({
-                NODE_ENV: process.env.NODE_ENV,
-            }),
-        );
-        browserifyInstance.bundleAsync = promisify(
-            browserifyInstance.bundle.bind(browserifyInstance),
-        );
-
-        let bundle: Buffer | null = null;
-        let error: Error | null = null;
-        try {
-            bundle = await browserifyInstance.bundleAsync();
         } catch (err) {
-            error = err;
+            return {err};
         }
-
-        // Restore NODE_ENV.
-        process.env.NODE_ENV = originalNodeEnv;
-
-        if (error !== null) {
-            return {success: false, error};
-        } else {
-            invariant(bundle, 'expects a bundle if there is no error');
-            return {success: true, value: bundle};
-        }
+        return RESULT_OK;
     }
-    _minify(bundle: Buffer): BuildStepResult<Buffer> {
+    _minify(bundle: Buffer): Result<Buffer, Error> {
         const options = {
             mangle: false,
             keep_fnames: true,
@@ -184,121 +473,183 @@ class BlockBuilder {
         const bundleString = bundle.toString();
         const result = Terser.minify(bundleString, options);
         if (result.error) {
-            return {
-                success: false,
-                error: result.error,
-            };
+            return {err: result.error};
         }
         return {
-            success: true,
             value: Buffer.from(result.code),
         };
     }
-    async _generateFrontendBundleAsync(
-        blockJson: BlockJson,
-        userSrcDirPath: DirectoryPath,
-        buildArtifactsDirPath: DirectoryPath,
-    ): Promise<BuildStepResult<FilePath>> {
-        // We need to write our client wrapper file.
-        // NOTE: it's a bit weird that we write the client wrapper file in the user
-        // source code directory. This is necessary since we can't have multiple copies
-        // of react and react-dom, which the wrapper code depends on. This way, the client
-        // wrapper code and the user source code share the same versions of react and
-        // react-dom.
-        const clientWrapperFilePath = path.join(userSrcDirPath, 'block_client_wrapper');
-        const frontendEntryModulePath = path.join(userSrcDirPath, blockJson.frontendEntry);
+    async _generateFrontendBundleAsync(): Promise<Result<void, ErrorWithCode>> {
+        await fsUtils.mkdirPathAsync(this._outputBuildArtifactsDirPath);
 
-        const isDevelopment = false;
+        let bundle: Buffer | null = null;
+        try {
+            bundle = await this._browserify.bundleAsync();
+        } catch (err) {
+            console.log(err.message);
+            err.code = ErrorCodes.BUNDLE_ERROR;
+            return {err};
+        }
+
+        await fsUtils.writeFileAsync(
+            path.join(this._outputBuildArtifactsDirPath, blockCliConfigSettings.BUNDLE_FILE_NAME),
+            bundle,
+        );
+
+        if (this._buildTypeMode === BlockBuildTypes.DEVELOPMENT) {
+            console.log('Bundle updated');
+        }
+
+        return RESULT_OK;
+    }
+    async _writeFrontendClientWrapperFileAsync(): Promise<void> {
+        await fsUtils.mkdirPathAsync(this._outputUserTranspiledDirPath);
+        const frontendEntryModulePath = path.join(
+            this._outputUserTranspiledDirPath,
+            this._blockJson.frontendEntry,
+        );
+        const clientWrapperFilePath = path.join(
+            this._outputUserTranspiledDirPath,
+            blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
+        );
+
+        const isDevelopment = this._buildTypeMode === BlockBuildTypes.DEVELOPMENT;
         const clientWrapperCode = generateBlockClientWrapperCode(
             frontendEntryModulePath,
             isDevelopment,
         );
         await fsUtils.writeFileAsync(clientWrapperFilePath, clientWrapperCode);
-
-        const browserifyResult = await this._browserifyAsync(clientWrapperFilePath);
-        if (!browserifyResult.success) {
-            return browserifyResult;
-        }
-        invariant(browserifyResult.value, 'expects browserifyResult.value if there is no error');
-
-        const minifyResult = this._minify(browserifyResult.value);
-        if (!minifyResult.success) {
-            return minifyResult;
-        }
-        const frontendBundlePath = path.join(buildArtifactsDirPath, 'bundle.js');
-        await fsUtils.writeFileAsync(frontendBundlePath, minifyResult.value);
-        return buildStepSuccess(frontendBundlePath);
     }
-    async buildAsync(outputDirPath: DirectoryPath): Promise<BuildResult> {
-        if (fs.existsSync(outputDirPath)) {
-            console.log('cleaning up build directory');
-            await fsUtils.removeAsync(outputDirPath);
+    async _wipeOutputDirectoriesAsync(): Promise<void> {
+        await Promise.all([
+            fsUtils.emptyDirAsync(this._outputUserTranspiledDirPath),
+            fsUtils.emptyDirAsync(this._outputBuildArtifactsDirPath),
+        ]);
+    }
+    /**
+     * For @airtable/blocks-cli up to version 0.0.34, the 'build' directory saved the bundle.js
+     * and block_client_wrapper.js file at root of the 'build' directory.
+     *
+     * However, we now support a more complex 'build' directory structure, and the top-level files
+     * should be cleaned out.
+     *
+     * TODO(richsinn): Remove this method after a "sufficient" amount of time, or after we
+     *   implement some sort of minimum version enforcement, and are confident all users have
+     *   updated their CLI tool.
+     */
+    async _cleanupLegacyBuildDirectoryAsync(): Promise<void> {
+        const outputBuildDirPath = path.join(this._blockDirPath, blockCliConfigSettings.BUILD_DIR);
+
+        const oldBundleFilePath = path.join(
+            outputBuildDirPath,
+            blockCliConfigSettings.BUNDLE_FILE_NAME,
+        );
+        const doesOldBundleExist = await fsUtils.existsAsync(oldBundleFilePath);
+
+        const oldClientWrapperPath = path.join(
+            outputBuildDirPath,
+            blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
+        );
+        const doesOldClientWrapperExist = await fsUtils.existsAsync(oldClientWrapperPath);
+
+        if (doesOldBundleExist || doesOldClientWrapperExist) {
+            await fsUtils.emptyDirAsync(outputBuildDirPath);
         }
-
-        console.log('reading block json');
-        const blockDirPath = getBlockDirPath();
-        const blockJsonResult = await parseAndValidateBlockJsonAsync();
-        if (blockJsonResult.err) {
-            return {success: false, error: blockJsonResult.err};
+    }
+    async _cleanAndPrepareBuildAsync(): Promise<void> {
+        await this._cleanupLegacyBuildDirectoryAsync();
+        await this._wipeOutputDirectoriesAsync();
+        await this._writeFrontendClientWrapperFileAsync();
+    }
+    async _waitForInitialBuildAsync(): Promise<void> {
+        // This promise will be resolved outside of this function when the initial bundle triggered
+        // by the BlockBuilderJobQueue completes.
+        return new Promise((resolve, reject) => {
+            // flow-disable-next-line flow says this is incompatible with null
+            this._initialBuildResolveIfExists = resolve;
+        });
+    }
+    async buildAndWatchAsync(): Promise<void> {
+        if (this._buildTypeMode !== BlockBuildTypes.DEVELOPMENT) {
+            throw new Error('Watch mode is only available for DEVELOPMENT mode');
         }
-        invariant(blockJsonResult.value, 'blockJsonResult.value');
-        const blockJson = blockJsonResult.value;
+        await this._cleanAndPrepareBuildAsync();
 
-        await fsUtils.mkdirPathAsync(outputDirPath);
-        const srcDirPath = path.join(outputDirPath, 'src');
-        await fsUtils.mkdirAsync(srcDirPath);
-
-        const userSrcDirPath = path.join(srcDirPath, 'user');
-        await fsUtils.mkdirAsync(userSrcDirPath);
-
-        const buildArtifactsDirPath = path.join(outputDirPath, 'build_artifacts');
-        await fsUtils.mkdirAsync(buildArtifactsDirPath);
-
-        console.log('copying package.json and block.json files');
-        const packageJsonPath = path.join(blockDirPath, 'package.json');
-        if (fs.existsSync(packageJsonPath)) {
-            await fsUtils.copyFileAsync(packageJsonPath, path.join(userSrcDirPath, 'package.json'));
+        this._startChokidarWatchAndStartBuildJobQueueConsumer({persistent: true});
+        await this._waitForInitialBuildAsync();
+    }
+    async buildForReleaseAsync(): Promise<Result<BuildPackagePaths, ErrorWithCode>> {
+        if (this._buildTypeMode !== BlockBuildTypes.RELEASE) {
+            throw new Error('Build for release is only available for RELEASE mode');
         }
-        await fsUtils.writeFileAsync(
-            path.join(userSrcDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
-            JSON.stringify(blockJson, null, 4),
+        await this._cleanAndPrepareBuildAsync();
+
+        // 1. Manually copy the package.json file even though BlockBuilderJobQueue will also copy it
+        //    over during the initial scanning and bundling of the directory. This is because we
+        //    need to install the node_modules folder before transpiling, and the BlockBuilderJobQueue
+        //    does not handle installing node_modules.
+        console.log('copying package.json files');
+        const packageJsonPath = path.join(this._blockDirPath, 'package.json');
+        const doesPackageJsonExist = await fsUtils.existsAsync(packageJsonPath);
+        if (!doesPackageJsonExist) {
+            return {err: new Error('package.json does not exist!')};
+        }
+        await fsUtils.copyFileAsync(
+            packageJsonPath,
+            path.join(this._outputUserTranspiledDirPath, 'package.json'),
         );
 
-        // Install user packages.
+        // 2. Install node modules in the output transpiled directory
         console.log('installing node modules');
-        const npmInstallResult = await this._npmInstallAsync(userSrcDirPath);
-        if (!npmInstallResult.success) {
+        const npmInstallResult = await this._npmInstallAsync(this._outputUserTranspiledDirPath);
+        if (npmInstallResult.err) {
             return npmInstallResult;
         }
 
-        const userSrcNodeModulesPath = path.join(userSrcDirPath, 'node_modules');
-        if (!fs.existsSync(userSrcNodeModulesPath)) {
-            return buildStepFailure('No modules installed. react and react-dom are required.');
+        // 3. Starting chokidar will recursively scan the entire user's block directory and queue
+        //    the files for transpilation and bundling.
+        console.log('transpiling and building frontend bundle');
+        this._startChokidarWatchAndStartBuildJobQueueConsumer({persistent: false});
+        await this._waitForInitialBuildAsync();
+        this._blockBuilderJobQueue.stopQueueConsumerLoop();
+
+        if (
+            this._blockBuilderJobQueue.blockBuilderStateData.status === BlockBuilderStatuses.ERROR
+        ) {
+            return {
+                err: BlockBuilder.getBlockBuilderError(
+                    this._blockBuilderJobQueue.blockBuilderStateData,
+                ),
+            };
         }
 
-        // Transpile the user's source code.
-        console.log('transpiling source code');
-        const transpileResult = await this._transpileSourceCodeAsync(blockDirPath, userSrcDirPath);
-        if (!transpileResult.success) {
-            return transpileResult;
-        }
-
-        // Generate frontend bundle.
-        console.log('generating frontend bundle');
-        const bundleResult = await this._generateFrontendBundleAsync(
-            blockJson,
-            userSrcDirPath,
-            buildArtifactsDirPath,
+        const frontendBundlePath = path.join(
+            this._outputBuildArtifactsDirPath,
+            blockCliConfigSettings.BUNDLE_FILE_NAME,
         );
-        if (!bundleResult.success) {
-            return bundleResult;
+        const frontendBundleFileBuffer = await fsUtils.readFileIfExistsAsync(frontendBundlePath);
+        if (frontendBundleFileBuffer === null) {
+            return {err: new Error('bundle file does not exist!')};
         }
 
-        return buildStepSuccess({
-            frontendBundlePath: bundleResult.value,
-            // Backend blocks not currently supported.
-            backendDeploymentPackagePath: null,
-        });
+        // 5. Minify the frontend bundle.js file and overwrite the original bundle.js with the
+        //    minified version.
+        invariant(
+            typeof frontendBundleFileBuffer !== 'string',
+            'expect frontendBundleFileBuffer as Buffer',
+        );
+        const minifiedFrontendBundleFileResult = this._minify(frontendBundleFileBuffer);
+        if (minifiedFrontendBundleFileResult.err) {
+            return minifiedFrontendBundleFileResult;
+        }
+        await fsUtils.writeFileAsync(frontendBundlePath, minifiedFrontendBundleFileResult.value);
+
+        return {
+            value: {
+                frontendBundlePath,
+                backendDeploymentPackagePath: null, // TODO(richsinn): Fill here when backend blocks are implemented
+            },
+        };
     }
 }
 

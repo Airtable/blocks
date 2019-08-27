@@ -2,34 +2,29 @@
 /* eslint-disable no-console */
 const BlockBuilder = require('../builder/block_builder');
 const ApiClient = require('../api_client');
-const blockCliConfigSettings = require('../config/block_cli_config_settings');
-const {getBlockDirPath} = require('../get_block_dir_path');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const fsUtils = require('../fs_utils');
-const path = require('path');
 const invariant = require('invariant');
 const request = require('request');
 const {promisify} = require('util');
 request.putAsync = promisify(request.put);
 
 import type {Argv} from 'yargs';
+import type {BlockJson} from '../types/block_json_type';
 
 type BuildId = string;
 type DeployId = string;
 
-function _getOutputDirPath(): string {
-    return path.join(getBlockDirPath(), blockCliConfigSettings.BUILD_DIR, 'release');
-}
-
-async function _generateBuildArtifactsAsync(): Promise<{|
+async function _generateBuildArtifactsAsync(
+    blockJson: BlockJson,
+): Promise<{|
     frontendBundlePath: string,
     backendDeploymentPackagePath: string | null,
 |}> {
-    const blockBuilder = new BlockBuilder();
-    const outputDirPath = _getOutputDirPath();
-    const buildResult = await blockBuilder.buildAsync(outputDirPath);
-    if (!buildResult.success) {
-        throw buildResult.error;
+    const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({blockJson});
+    const buildResult = await blockBuilder.buildForReleaseAsync();
+    if (buildResult.err) {
+        throw new Error('Failed to build the block code!');
     }
     return buildResult.value;
 }
@@ -98,8 +93,11 @@ async function _uploadBackendDeploymentPackageAsync(
 
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
+    blockJson: BlockJson,
 ): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
-    const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync();
+    const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync(
+        blockJson,
+    );
 
     const hasBackend = !!backendDeploymentPackagePath;
     const {
@@ -142,6 +140,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     if (blockJsonValidationResult.err) {
         throw blockJsonValidationResult.err;
     }
+    const blockJson = blockJsonValidationResult.value;
 
     const remoteName = argv.remote || null;
     invariant(
@@ -155,7 +154,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     const apiClient = apiClientResult.value;
 
     console.log('building');
-    const {buildId, deployId} = await _buildAndDeployAsync(apiClient);
+    const {buildId, deployId} = await _buildAndDeployAsync(apiClient, blockJson);
 
     console.log('releasing');
     await apiClient.createReleaseAsync(buildId, deployId);

@@ -1,5 +1,7 @@
 // @flow
 const BlockServer = require('../src/block_server');
+const BlockBuilder = require('../src/builder/block_builder');
+const BlockBuildTypes = require('../src/types/block_build_types');
 const sinon = require('sinon');
 const clipboardy = require('clipboardy');
 const path = require('path');
@@ -43,15 +45,25 @@ describe('BlockServer', function() {
 
     describe('startAsync', function() {
         let blockServer: BlockServer;
+        let blockBuilder: BlockBuilder;
 
         beforeEach(function() {
+            const blockJson = {
+                version: '1.0',
+                frontendEntry: './frontend/index.js',
+            };
+            sinon.stub(BlockBuilder.prototype, 'blockJson').returns(blockJson);
+            sinon.stub(BlockBuilder.prototype, 'buildAndWatchAsync').resolves();
+            blockBuilder = new BlockBuilder({
+                buildTypeMode: BlockBuildTypes.DEVELOPMENT,
+                blockJson,
+                transpileForAllBrowsers: true,
+            });
+            // blockBuilder.blockBuilderStateData = {status: BlockBuilderStatuses.READY};
+
             blockServer = new BlockServer({
+                blockBuilder: blockBuilder,
                 apiKey: 'key123',
-                transpileAll: false,
-                blockJson: {
-                    version: '1.0',
-                    frontendEntry: './frontend/index.js',
-                },
                 remoteJson: {
                     blockId: 'blk123',
                     baseId: 'app123',
@@ -61,7 +73,6 @@ describe('BlockServer', function() {
             sinon
                 .stub(blockServer, 'startLocalAsync')
                 .callsFake(port => 'https://localhost:' + port);
-            sinon.stub(blockServer, 'triggerBundleAsync').resolves();
             sinon.stub(clipboardy, 'write').resolves();
         });
 
@@ -70,6 +81,11 @@ describe('BlockServer', function() {
 
             sinon.assert.calledOnce(clipboardy.write);
             sinon.assert.calledWithExactly(clipboardy.write, 'https://localhost:1234');
+        });
+
+        it('calls BlockBuilder#buildAndWatchAsync once', async function() {
+            await blockServer.startAsync(3333);
+            sinon.assert.calledOnce(blockBuilder.buildAndWatchAsync);
         });
     });
 });

@@ -7,78 +7,29 @@ const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
-const browserify = require('browserify');
 const envify = require('envify/custom');
-const babelify = require('babelify');
-const watchify = require('watchify');
 const stripAnsi = require('strip-ansi');
 const ErrorCodes = require('./types/error_codes');
-const generateBlockBabelConfig = require('./generate_block_babel_config');
 const blockCliConfigSettings = require('./config/block_cli_config_settings');
-const generateBlockClientWrapperCode = require('./block_client_artifacts/generate_block_client_wrapper');
-const generatePollForLiveReloadCode = require('./block_client_artifacts/generate_poll_for_live_reload');
+const generatePollForLiveReloadCode = require('./generate_poll_for_live_reload');
 const ApiClient = require('./api_client');
 const fsUtils = require('./fs_utils');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
-const {getBlockDirPath} = require('./get_block_dir_path');
+const BlockBuilder = require('./builder/block_builder');
+const {BlockBuilderStatuses} = require('./types/block_builder_state_data_types');
 const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
 const clipboardy = require('clipboardy');
 
 import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
 import type {BlockJson} from './types/block_json_type';
 import type {RemoteJson} from './types/remote_json_type';
-import type {ErrorCode} from './types/error_codes';
+import type {BlockBuilderStateData} from './types/block_builder_state_data_types';
+import type {PromiseResolveFunction, PromiseRejectFunction} from './types/promise_types';
 
 type RequestWithRequestId = $Request & {
     requestId: number,
 };
-
-// NOTE(richsinn): These type definitions are for the `resolve` and `reject` functions
-//   from the "executor" parameter of the `Promise` constructor. They are NOT the
-//   type definitions for the "static" Promise.resolve and Promise.reject functions.
-type PromiseResolveFunction = <R>(Promise<R> | R) => void;
-type PromiseRejectFunction = (error: any) => void; // eslint-disable-line flowtype/no-weak-types
-
-type ErrorWithCode = Error & {
-    code?: ErrorCode,
-};
-
-const BundleStatuses = {
-    READY: ('ready': 'ready'),
-    BUNDLING: ('bundling': 'bundling'),
-    ERROR: ('error': 'error'),
-};
-
-type BundleStateReady = {|status: typeof BundleStatuses.READY|};
-type BundleStateBundling = {|
-    status: typeof BundleStatuses.BUNDLING,
-    promise: Promise<void>,
-|};
-type BundleStateError = {|
-    status: typeof BundleStatuses.ERROR,
-    error: ErrorWithCode,
-|};
-
-type BundleStateData = BundleStateReady | BundleStateBundling | BundleStateError;
-
-// Minimal transpilation - the closer the result is to the source, the easier
-// debugging is, even with source maps.
-const developmentBrowsers: Array<string> = [
-    'chrome 61', // Desktop (electron) app.
-    'last 2 chrome versions',
-    'last 2 firefox versions',
-    'last 1 safari version',
-    'last 1 edge version',
-];
-
-// From https://support.airtable.com/hc/en-us/articles/217990018-What-are-the-technical-requirements-for-using-Airtable.
-const allSupportedBrowsers: Array<string> = [
-    'firefox >= 29',
-    'chrome >= 32',
-    'safari >= 9',
-    'edge >= 13',
-];
 
 const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
@@ -92,46 +43,31 @@ class BlockServer {
         },
     >;
     _expressApp: $Application;
-    _shouldTranspileAll: boolean;
     _nextRequestId: number;
     _apiKey: string;
-    _bundleStateDataIfExists: BundleStateData | null;
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
     _blockDirPath: string;
-    _blockDirBuildForRunDirPath: string;
     _blockServerUrlIfExists: string | null;
     _apiClient: ApiClient;
-    _bundler: browserify;
+    _blockBuilder: BlockBuilder;
 
-    constructor(args: {
-        transpileAll: boolean,
-        apiKey: string,
-        blockJson: BlockJson,
-        remoteJson: RemoteJson,
-    }) {
-        const {transpileAll = false, apiKey, blockJson, remoteJson} = args;
+    constructor(args: {blockBuilder: BlockBuilder, apiKey: string, remoteJson: RemoteJson}) {
+        const {blockBuilder, apiKey, remoteJson} = args;
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
-        this._shouldTranspileAll = transpileAll;
         this._nextRequestId = 0;
+        this._blockBuilder = blockBuilder;
         this._apiKey = apiKey;
-        this._bundleStateDataIfExists = null;
-        this._blockJson = blockJson;
         this._remoteJson = remoteJson;
-        this._blockDirPath = getBlockDirPath();
-        this._blockDirBuildForRunDirPath = path.join(
-            this._blockDirPath,
-            blockCliConfigSettings.BUILD_DIR,
-            'run',
-        );
+        this._blockJson = this._blockBuilder.blockJson;
+        this._blockDirPath = this._blockBuilder.blockDirPath;
         this._blockServerUrlIfExists = null;
 
         this._setUpExpressRoutes();
         this._setUpRunFrameRoutes();
-        this._setUpWrapperCode();
-        this._setUpBundler();
+        this._validateBlockDirectory();
     }
     _setUpExpressRoutes(): void {
         // Set Access-Control-Allow-Origin on all requests.
@@ -174,20 +110,24 @@ class BlockServer {
         });
     }
     async _ensureBundleIsReadyAsync(): Promise<void> {
-        invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
-        const bundleStateData = this._bundleStateDataIfExists;
-        switch (bundleStateData.status) {
-            case BundleStatuses.READY:
-            case BundleStatuses.ERROR:
+        const {blockBuilderStateData} = this._blockBuilder;
+        switch (blockBuilderStateData.status) {
+            case BlockBuilderStatuses.READY:
+            case BlockBuilderStatuses.ERROR:
                 return;
 
-            case BundleStatuses.BUNDLING:
-                await bundleStateData.promise;
+            case BlockBuilderStatuses.BUILDING:
+                await blockBuilderStateData.promise;
+                break;
+
+            case BlockBuilderStatuses.START:
+                // This means the initial bundle has not even kicked off yet. In this
+                // case we just recurse.
                 break;
 
             default:
                 throw new Error(
-                    `Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`,
+                    `Unknown ${(blockBuilderStateData.status: empty)} value for BuilderStatuses`,
                 );
         }
 
@@ -204,25 +144,25 @@ class BlockServer {
                     setTimeout(() => resolve(), BUNDLE_TIMEOUT_MS);
                 }),
             ]).then(() => {
-                invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
-                const bundleStateData = this._bundleStateDataIfExists;
-                switch (bundleStateData.status) {
-                    case BundleStatuses.READY:
+                const {blockBuilderStateData} = this._blockBuilder;
+                switch (blockBuilderStateData.status) {
+                    case BlockBuilderStatuses.READY:
                         next();
                         break;
 
-                    case BundleStatuses.ERROR:
+                    case BlockBuilderStatuses.ERROR:
                         res.sendStatus(422);
                         break;
 
-                    case BundleStatuses.BUNDLING:
+                    case BlockBuilderStatuses.START:
+                    case BlockBuilderStatuses.BUILDING:
                         // If we're still bundling, this is a timeout due to our Promise.race setup.
                         res.sendStatus(408);
                         break;
 
                     default:
                         throw new Error(
-                            `Unknown ${(bundleStateData.status: empty)} value for BundleStatuses`,
+                            `Unknown ${(blockBuilderStateData.status: empty)} value for BuilderStatuses`,
                         );
                 }
             });
@@ -242,7 +182,7 @@ class BlockServer {
             this._ensureBundleIsReadyMiddleware(),
             (req: $Request, res: $Response) => {
                 res.sendFile(blockCliConfigSettings.BUNDLE_FILE_NAME, {
-                    root: this._blockDirBuildForRunDirPath,
+                    root: this._blockBuilder.outputBuildArtifactsDirPath,
                 });
             },
         );
@@ -256,15 +196,15 @@ class BlockServer {
          *    which doesn't allow us to peek into the HTTP response of the script load request.
          */
         runFrameRoutes.get('/bundleStatus', (req: $Request, res: $Response) => {
-            invariant(this._bundleStateDataIfExists, 'this._bundleStateDataIfExists');
-            const {status} = this._bundleStateDataIfExists;
+            const {blockBuilderStateData} = this._blockBuilder;
             let stack;
-            if (this._bundleStateDataIfExists.status === BundleStatuses.ERROR) {
-                stack = stripAnsi(this._bundleStateDataIfExists.error.message);
+            if (blockBuilderStateData.status === BlockBuilderStatuses.ERROR) {
+                const blockBuilderError = BlockBuilder.getBlockBuilderError(blockBuilderStateData);
+                stack = stripAnsi(blockBuilderError.message);
             }
 
             res.status(200).send({
-                status,
+                status: blockBuilderStateData.status,
                 ...(stack ? {error: {stack}} : {}),
             });
         });
@@ -370,7 +310,10 @@ class BlockServer {
                         res.sendStatus(statusCode);
                     })
                     .catch(err => {
-                        if (err.code === ErrorCodes.BUNDLE_ERROR) {
+                        if (
+                            err.code === ErrorCodes.BUNDLE_ERROR ||
+                            err.code === ErrorCodes.BABEL_PARSE_ERROR
+                        ) {
                             // Send 200 to reload the window on bundle errors.
                             // The reloading mechanism will allow the block frame to
                             // retrieve the error information when it tries to re-fetch
@@ -403,7 +346,7 @@ class BlockServer {
 
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
-    _setUpWrapperCode() {
+    _validateBlockDirectory() {
         const blockDirPath = this._blockDirPath;
 
         // Check if react and react-dom are listed in package.json.
@@ -434,59 +377,14 @@ class BlockServer {
             );
             process.exit(1);
         }
-
-        // Write the client wrapper file.
-        if (!fs.existsSync(this._blockDirBuildForRunDirPath)) {
-            fsUtils.mkdirPathSync(this._blockDirBuildForRunDirPath);
-        }
-        const clientWrapperFilepath = path.join(
-            this._blockDirBuildForRunDirPath,
-            blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
-        );
-        const isDevelopment = true;
-        const clientWrapperCode = generateBlockClientWrapperCode(
-            frontendEntryFilePath,
-            isDevelopment,
-        );
-        fs.writeFileSync(clientWrapperFilepath, clientWrapperCode);
-    }
-    _setUpBundler() {
-        const blockDirPath = this._blockDirPath;
-
-        this._bundler = browserify(
-            path.join(
-                this._blockDirBuildForRunDirPath,
-                blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
-            ),
-            {
-                cache: {},
-                packageCache: {},
-                debug: true,
-                plugin: [watchify],
-                paths: [blockDirPath],
-                transform: [
-                    babelify.configure(
-                        generateBlockBabelConfig({
-                            browsers: this._shouldTranspileAll
-                                ? allSupportedBrowsers
-                                : developmentBrowsers,
-                        }),
-                    ),
-                ],
-            },
-        );
-
-        this._bundler.on('update', this.triggerBundleAsync.bind(this));
-        this._bundler.on('bundle', () => console.log('Updating bundle...'));
     }
     setEnvironmentVariablesForBundle(publicBaseUrl: string): void {
-        this._bundler.transform(
+        this._blockBuilder.browserify.transform(
             // 'global' is required in order to process node_modules files
             {global: true},
             envify({
                 // Use process.env to provide the base URL in client wrapper code.
                 BLOCK_BASE_URL: publicBaseUrl,
-                NODE_ENV: 'development',
             }),
         );
     }
@@ -494,7 +392,16 @@ class BlockServer {
         const url = await this.startLocalAsync(port);
         this._blockServerUrlIfExists = url;
         this.setEnvironmentVariablesForBundle(url);
-        await this.triggerBundleAsync();
+
+        // Listen for events from the BlockBuilder to resolve the polling Promises.
+        this._blockBuilder.blockBuilderJobQueue.on('buildComplete', () => {
+            this._resolveLongPollPromises(this._blockBuilder.blockBuilderStateData);
+        });
+        this._blockBuilder.blockBuilderJobQueue.on('error', err => {
+            throw err;
+        });
+        await this._blockBuilder.buildAndWatchAsync();
+
         console.log(chalk.bold(`\n✅ Your block is running locally at ${url} `));
         try {
             await clipboardy.write(url);
@@ -555,72 +462,9 @@ class BlockServer {
 
         return `https://localhost:${port}`;
     }
-    _bundleAsync(): Promise<BundleStateData> {
-        return new Promise((resolve, reject) => {
-            const fsStream = fs.createWriteStream(
-                path.join(
-                    this._blockDirBuildForRunDirPath,
-                    blockCliConfigSettings.BUNDLE_FILE_NAME,
-                ),
-            );
-            fsStream
-                .on('finish', () => {
-                    console.log('Bundle updated');
-                    resolve({status: BundleStatuses.READY});
-                })
-                .on('error', err => {
-                    resolve({status: BundleStatuses.ERROR, error: err});
-                });
-
-            const bundleStream = this._bundler.bundle();
-            bundleStream
-                .on('error', err => {
-                    // Append a custom error code here. The error code will be used
-                    // to signal that the HTTP connection to block_server should be
-                    // kept alive via long polling.
-                    err.code = ErrorCodes.BUNDLE_ERROR;
-
-                    console.error(err.message);
-                    if (err.codeFrame) {
-                        console.error(err.codeFrame);
-                    }
-                    bundleStream.unpipe(fsStream);
-                    fsStream.destroy(err);
-                })
-                .pipe(fsStream);
-        });
-    }
-    async triggerBundleAsync(): Promise<void> {
-        // 1. Create a new Promise which will be used to determine if the
-        //    bundle is ready to be served via the `GET /bundle.js` endpoint.
-        let bundleAndUpdateStateResolve;
-        const bundleAndUpdateStatePromise = new Promise((resolveInner, rejectInner) => {
-            bundleAndUpdateStateResolve = resolveInner;
-        });
-
-        // 2. Update the `this._bundleStateDataIfExists` instance variable
-        //    to point to the newly created Promise in [1]. If this method is
-        //    triggered multiple times in quick succession, the instance variable
-        //    will always point to the latest created Promise.
-        const localBundleStateData = {
-            status: BundleStatuses.BUNDLING,
-            promise: bundleAndUpdateStatePromise,
-        };
-        this._bundleStateDataIfExists = localBundleStateData;
-
-        // 3. Generate the bundle.
-        const bundleResult = await this._bundleAsync();
-
-        // 4. To handle the async gap, we only update `this._bundleStateDataIfExists`
-        //    if it equals the localBundleStateData. This means that the localBundleStateData
-        //    instance is the latest bundle trigger.
-        if (this._bundleStateDataIfExists === localBundleStateData) {
-            this._bundleStateDataIfExists = bundleResult;
-        }
-
-        // 5. Resolve/reject any long poll Promises listening for bundle changes.
-        switch (bundleResult.status) {
-            case BundleStatuses.READY:
+    _resolveLongPollPromises(blockBuilderStateData: BlockBuilderStateData): void {
+        switch (blockBuilderStateData.status) {
+            case BlockBuilderStatuses.READY:
                 // Resolve any long poll promises that were listening for bundle changes.
                 for (const {
                     resolve: longPollResolve,
@@ -629,27 +473,29 @@ class BlockServer {
                 }
                 break;
 
-            case BundleStatuses.ERROR:
+            case BlockBuilderStatuses.ERROR:
                 // Reject any long poll promises that were listening for bundle changes.
                 for (const {
                     reject: longPollReject,
                 } of this._pendingLongPollResolveRejectByRequestId.values()) {
-                    longPollReject(bundleResult.error);
+                    const blockBuilderError = BlockBuilder.getBlockBuilderError(
+                        blockBuilderStateData,
+                    );
+                    longPollReject(blockBuilderError);
                 }
                 break;
 
-            case BundleStatuses.BUNDLING:
-                // This is an exceptional case, and should not happen. By
-                // awaiting the local bundleResult above, we should be in a
-                // non-bundling state.
+            case BlockBuilderStatuses.START:
+            case BlockBuilderStatuses.BUILDING:
+                // This is an exceptional case. We should only be resolving the long poll promise
+                // on READY or ERROR states.
                 throw new Error('Bundling should be finished');
 
             default:
-                throw new Error(`Unknown ${bundleResult.status} value for BundleStatuses`);
+                throw new Error(
+                    `Unknown ${(blockBuilderStateData.status: empty)} value for BuilderStatuses`,
+                );
         }
-
-        invariant(bundleAndUpdateStateResolve, 'bundleAndUpdateStateResolve');
-        bundleAndUpdateStateResolve();
     }
 }
 

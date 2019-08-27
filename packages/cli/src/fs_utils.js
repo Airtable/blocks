@@ -136,6 +136,9 @@ module.exports = {
     removeAsync: async function(filePath: string): Promise<void> {
         return await fsExtra.remove(filePath);
     },
+    emptyDirAsync: async function(dirPath: string): Promise<void> {
+        await fsExtra.emptyDir(dirPath);
+    },
     readJsonIfExistsAsync: async function(filePath: string): Promise<mixed | null> {
         try {
             return await fsExtra.readJson(filePath);

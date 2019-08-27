@@ -3,6 +3,7 @@ const invariant = require('invariant');
 const inquirer = require('inquirer');
 const getApiKeyWithWarningsAsync = require('../get_api_key_with_warnings');
 const BlockServer = require('../block_server');
+const BlockBuilder = require('../builder/block_builder');
 const LocalSdkBuilder = require('../local_sdk_builder');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
@@ -44,11 +45,16 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     await LocalSdkBuilder.startIfNeededAsync(sdkPath);
 
+    const blockBuilder = await BlockBuilder.createDevelopmentBlockBuilderAsync({
+        blockJson,
+        transpileForAllBrowsers: transpileAll,
+    });
     const blockServer = new BlockServer({
         apiKey,
         transpileAll,
         blockJson,
         remoteJson,
+        blockBuilder,
     });
 
     let port = DEFAULT_PORT;
