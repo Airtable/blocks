@@ -89,8 +89,8 @@ Now it's time to give our new block a name. We'll call it “Hello Blocks”.
 
 Click “Create block” to continue.
 
-Next, you’ll need to follow the on-screen instructions. First, open your terminal. Next, install
-Yarn by following the instructions on-screen. Finally, install the Airtable Blocks command line
+Next, you’ll need to follow the on-screen instructions. First, open your terminal. Next, follow
+on-screen instructions to install the Airtable Blocks command line
 tool.
 
 > _NOTE:_ If this fails with an error like “@airtable/blocks-cli: Not found”, you likely lack
@@ -171,7 +171,7 @@ hello_blocks
 │   └── index.js
 ├── node_modules/
 ├── package.json
-└── yarn.lock
+└── package-lock.json
 ```
 
 _Not seeing the files that start with .? Try `$ ls -a` to show them._
@@ -181,7 +181,7 @@ Let's talk about what each of these files are.
 -   `.block/remote.json` describes some metadata for your block. The block command uses this to know
     which block you're developing. You shouldn't need to edit this file directly.
 -   `.eslintrc.js` describes some default rules for ESLint, which is an optional command
-    (`yarn lint`) you can run that has recommendations for code style and best practices. You
+    (`npm run lint`) you can run that has recommendations for code style and best practices. You
     shouldn't need to edit this file for this guide.
 -   `.gitignore` describes the files that Git should ignore. You shouldn't need to edit this file
     for this guide.
@@ -196,5 +196,5 @@ Let's talk about what each of these files are.
 -   `package.json` is a file that's standard in most JavaScript projects. You'll use it to describe
     your block's dependencies. For example, React is a dependency, which you can see in
     package.json.
--   `yarn.lock` is a file that Yarn uses to install your dependencies. You shouldn’t make any
+-   `package-lock.json` is a file that npm uses to install your dependencies. You shouldn’t make any
     changes to this file.
