@@ -177,7 +177,7 @@ otherwise.
 
 ###### Parameters
 
--   `updates` **[Array][69]&lt;{path: ([string][68] \| [Array][69]&lt;[string][68]>), value:
+-   `updates` **[Array][69]&lt;{path: [Array][69]&lt;[string][68]>, value:
     [GlobalConfigValue][71]}>** The paths and values to set.
 
 ###### Examples
@@ -247,7 +247,7 @@ Sets multiple values. Throws if any path or value is invalid.
 
 ###### Parameters
 
--   `updates` **[Array][69]&lt;{path: ([string][68] \| [Array][69]&lt;[string][68]>), value:
+-   `updates` **[Array][69]&lt;{path: [Array][69]&lt;[string][68]>, value:
     [GlobalConfigValue][71]}>** The paths and values to set.
 
 ###### Examples

@@ -16,10 +16,12 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
     'client_server_shared/fork_object_path_for_write_by_reference',
 );
 
+type GlobalConfigPath = Array<string>;
+
 /**
- * @typedef
+ * @typedef {string | Array<string>}
  */
-export type GlobalConfigKey = string | Array<string>;
+export type GlobalConfigKey = string | GlobalConfigPath;
 
 /**
  * @typedef {null|boolean|number|string|Array<GlobalConfigValue>|Object.<string, GlobalConfigValue>}
@@ -35,7 +37,7 @@ export type GlobalConfigValue =
 export type GlobalConfigData = {[string]: ?GlobalConfigValue};
 
 export type GlobalConfigUpdate = {|
-    path: Array<string>,
+    path: GlobalConfigPath,
     value: GlobalConfigValue | void,
 |};
 
@@ -43,14 +45,14 @@ type WatchableGlobalConfigKey = string;
 
 /** @private */
 function validatePath(
-    path: GlobalConfigKey,
+    path: GlobalConfigPath,
     store: GlobalConfigData,
 ): {|isValid: true|} | {|isValid: false, reason: string|} {
     const validation = blockKvHelpers.validateKvKeyPath(path, store);
     if (!validation.isValid) {
         return validation;
     }
-    if (path === '*' || (Array.isArray(path) && path[0] === '*')) {
+    if (path[0] === '*') {
         return {isValid: false, reason: "cannot use '*' as a top-level key"};
     }
     return {isValid: true};
@@ -205,7 +207,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
      *
-     * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
      * @returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
      * @example
      * import {globalConfig} from '@airtable/blocks';
@@ -228,7 +230,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Sets multiple values. Throws if any path or value is invalid.
      *
-     * @param {Array<{path: (string|Array<string>), value: GlobalConfigValue}>} updates The paths and values to set.
+     * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
      * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
