@@ -494,7 +494,7 @@ export const FieldTypes = Object.freeze({
      *     // the linked record field in this table that this field is summarizing.
      *     recordLinkFieldId: FieldId,
      *     // the field id in the linked table that this field is summarizing.
-     *     fieldIfInLinkedTable: FieldId,
+     *     fieldIdInLinkedTable: FieldId,
      *     // the other fields in the record that are used in the formula
      *     fieldIdsReferencedByFormulaText: Array<FieldId>,
      *     // the resulting field type and options returned by the formula
