@@ -20,40 +20,12 @@ type BackendBlockSdkWrapper = any;
 /** Resolve backend route handler name to the corresponding function. */
 type BackendRouteHandlerResolver = (handlerName: string) => BackendRouteHandler;
 
-// TODO(Chuan): Replace with promisify
-async function requestAsync(opts: Object): Promise<Object> {
-    return new Promise(function(resolve, reject) {
-        request(opts, function(err, response, body) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(response);
-            }
-        });
-    });
-}
-
-// TODO(Chuan): Replace with promisify
-async function readFileAsync(filePath: string, encoding: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        fs.readFile(filePath, encoding, (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data);
-            }
-        });
-    });
-}
-
-function convertPromiseOrConstantToPromise(value: mixed): Promise<mixed> {
-    return Promise.resolve(value);
-}
+const requestAsync = util.promisify(request);
+const readFileAsync = util.promisify(fs.readFile);
+const unlinkAsync = util.promisify(fs.unlink);
 
 async function endStreamAsync(stream: fs.WriteStream) {
-    return new Promise((resolve, reject) => {
-        stream.end(resolve);
-    });
+    return new Promise<void>(resolve => stream.end(resolve));
 }
 
 class BlocksBackendEventHandler {
@@ -103,7 +75,6 @@ class BlocksBackendEventHandler {
         logStream: fs.WriteStream,
         presignedS3UploadUrl: string,
     ) {
-        await endStreamAsync(logStream);
         const logs = await readFileAsync(logFilePath, 'utf8');
         return await requestAsync({
             method: 'PUT',
@@ -199,7 +170,7 @@ class BlocksBackendEventHandler {
             // A backend route handler function may return a promise or a non-promise
             // value. For consistency, let's always convert it to a promise so that we
             // can handle both formats the same.
-            const responsePromise = convertPromiseOrConstantToPromise(handler(requestObj));
+            const responsePromise = Promise.resolve(handler(requestObj));
 
             const response = await responsePromise;
             // TODO(Chuan): Validate response from user code.
@@ -234,15 +205,20 @@ class BlocksBackendEventHandler {
             // errors, since we don't want a log upload failure to affect the
             // response.
             // TODO(jb): figure out a better way to handle log upload errors.
+            // Suppress "possibly uninitialized variable" error in Flow.
+            invariant(logFilePath, 'logFilePath');
+            invariant(logStream, 'logStream');
             try {
-                // Suppress "possibly uninitialized variable" error in Flow.
-                invariant(logFilePath, 'logFilePath');
-                invariant(logStream, 'logStream');
+                await endStreamAsync(logStream);
                 await this._uploadLogsToS3Async(logFilePath, logStream, event.presignedS3UploadUrl);
             } catch (err) {
                 // No-op
             }
-            // TODO(Chuan): Clean up the log file
+            try {
+                await unlinkAsync(logFilePath);
+            } catch (err) {
+                // No-op
+            }
         }
 
         return response;
