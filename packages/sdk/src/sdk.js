@@ -95,7 +95,7 @@ class BlockSdk {
     session: Session;
 
     /** @private */
-    unstable_mutations: Mutations;
+    __mutations: Mutations;
 
     /**
      * Contains the model classes, field types, view types, and utilities for
@@ -214,11 +214,8 @@ class BlockSdk {
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
         this.session = new Session(sdkInitData.baseData, airtableInterface);
-        this.unstable_mutations = new Mutations(
-            airtableInterface,
-            this.session,
-            this.base,
-            changes => this.__applyModelChanges(changes),
+        this.__mutations = new Mutations(airtableInterface, this.session, this.base, changes =>
+            this.__applyModelChanges(changes),
         );
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);

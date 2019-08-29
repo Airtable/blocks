@@ -486,7 +486,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             cellValuesByFieldIdOrName,
         );
 
-        await getSdk().unstable_mutations.applyMutationAsync({
+        await getSdk().__mutations.applyMutationAsync({
             type: MutationTypes.SET_SINGLE_RECORD_CELL_VALUES,
             tableId: this.id,
             recordId,
@@ -498,7 +498,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
 
-        await getSdk().unstable_mutations.applyMutationAsync({
+        await getSdk().__mutations.applyMutationAsync({
             type: MutationTypes.DELETE_SINGLE_RECORD,
             tableId: this.id,
             recordId,
@@ -515,7 +515,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             cellValuesByFieldIdOrName,
         );
 
-        await getSdk().unstable_mutations.applyMutationAsync({
+        await getSdk().__mutations.applyMutationAsync({
             type: MutationTypes.CREATE_SINGLE_RECORD,
             tableId: this.id,
             recordId,
