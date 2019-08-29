@@ -109,44 +109,76 @@ class LocalSdkBuilder {
         // temporarily rewrite package.json to get a unique version. without this, we might corrupt
         // yarn's cache by having two distinct tarballs at the same version
         const sdkPackageJsonPath = path.join(this.sdkPath, 'package.json');
+        const backupSdkPackageJsonPath = `${sdkPackageJsonPath}.backup`;
         const initialPackageJsonString = await fsUtils.readFileAsync(sdkPackageJsonPath, 'utf-8');
-        const initialPackageJson = JSON.parse(initialPackageJsonString);
 
-        const tempPackageJson = {
-            ...initialPackageJson,
-            version: `${initialPackageJson.version}-local.${Date.now()}`,
-        };
-        await fsUtils.writeFileAsync(sdkPackageJsonPath, JSON.stringify(tempPackageJson), 'utf-8');
+        // write a backup of package.json the user can restore if anything goes wrong:
+        await fsUtils.writeFileAsync(backupSdkPackageJsonPath, initialPackageJsonString, 'utf-8');
 
-        const {stdout} = await _internal._execFileAsync('npm', ['pack', '--quiet'], {
-            cwd: this.sdkPath,
-            prefix: 'npm pack',
-        });
+        let packedPackagePath;
+        try {
+            const initialPackageJson = JSON.parse(initialPackageJsonString);
 
-        // now that we've packed everything, rewrite package.json back to the original
-        await fsUtils.writeFileAsync(sdkPackageJsonPath, initialPackageJsonString, 'utf-8');
+            const tempPackageJson = {
+                ...initialPackageJson,
+                version: `${initialPackageJson.version}-local.${Date.now()}`,
+            };
+            await fsUtils.writeFileAsync(
+                sdkPackageJsonPath,
+                JSON.stringify(tempPackageJson),
+                'utf-8',
+            );
 
-        // npm pack prints the location of the package to stdout before exiting
-        const lines = stdout.trim().split('\n');
-        const packedPackagePath = lines[lines.length - 1];
+            const {stdout} = await _internal._execFileAsync('npm', ['pack', '--quiet'], {
+                cwd: this.sdkPath,
+                prefix: 'npm pack',
+            });
 
-        return path.join(this.sdkPath, packedPackagePath);
+            // npm pack prints the location of the package to stdout before exiting
+            const lines = stdout.trim().split('\n');
+            const originalPackedPackagePath = path.join(this.sdkPath, lines[lines.length - 1]);
+
+            // move the packed path out of the sdk repo and into a temp dir to leave the sdk repo clean:
+            packedPackagePath = path.join(
+                os.tmpdir(),
+                `${Date.now()}-${path.basename(originalPackedPackagePath)}`,
+            );
+            await fsUtils.renameAsync(originalPackedPackagePath, packedPackagePath);
+        } finally {
+            // restore the original package.json and remove the backup so the repo is back to normal
+            await fsUtils.writeFileAsync(sdkPackageJsonPath, initialPackageJsonString, 'utf-8');
+            await fsUtils.unlinkAsync(backupSdkPackageJsonPath);
+        }
+
+        return packedPackagePath;
     }
 
     async _installLocalSdkAsync(packagePath: string): Promise<void> {
         const blockDir = getBlockDirPath();
+        const packageJsonPath = path.join(blockDir, 'package.json');
+        const backupPackageJsonPath = `${packageJsonPath}.backup`;
         const shouldUseYarn = await fsUtils.existsAsync(path.join(blockDir, 'yarn.lock'));
 
-        await _internal._execFileAsync(
-            shouldUseYarn ? 'yarn' : 'npm',
-            shouldUseYarn
-                ? ['add', `${SDK_PACKAGE_NAME}@${packagePath}`, '--non-interactive']
-                : ['install', `${SDK_PACKAGE_NAME}@${packagePath}`],
-            {
-                prefix: shouldUseYarn ? 'yarn add' : 'npm install',
-                cwd: getBlockDirPath(),
-            },
-        );
+        // yarn and npm install will mess with package.json, so we create a backup that can be
+        // restored when we're done:
+        await fsUtils.copyFileAsync(packageJsonPath, backupPackageJsonPath);
+
+        try {
+            await _internal._execFileAsync(
+                shouldUseYarn ? 'yarn' : 'npm',
+                shouldUseYarn
+                    ? ['add', `${SDK_PACKAGE_NAME}@${packagePath}`, '--non-interactive']
+                    : ['install', `${SDK_PACKAGE_NAME}@${packagePath}`],
+                {
+                    prefix: shouldUseYarn ? 'yarn add' : 'npm install',
+                    cwd: getBlockDirPath(),
+                },
+            );
+        } finally {
+            // restore our backup:
+            await fsUtils.unlinkAsync(packageJsonPath);
+            await fsUtils.renameAsync(backupPackageJsonPath, packageJsonPath);
+        }
     }
 
     _buildAndWatchSourceAsync(): Promise<void> {
