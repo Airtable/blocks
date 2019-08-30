@@ -63,7 +63,7 @@
         "eslint-plugin-jsdoc": "^7.2.3",
         "eslint-plugin-react": "^7.13.0",
         "eslint-plugin-react-hooks": "^1.6.0",
-        "flow-bin": "0.98.1",
+        "flow-bin": "0.106.3",
         "flow-copy-source": "^2.0.6",
         "flow-typed": "^2.5.2",
         "fs-extra": "^8.0.1",
