@@ -83,7 +83,8 @@
         "fast-deep-equal": "^2.0.1",
         "lodash.omit": "^4.5.0",
         "prop-types": "15.7.2",
-        "react-window": "1.8.5"
+        "react-window": "1.8.5",
+        "use-subscription": "^1.0.0"
     },
     "peerDependencies": {
         "react": "^16.8.0",

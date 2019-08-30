@@ -1,7 +1,7 @@
 // @flow
 import {useMemo, useEffect} from 'react';
+import {useSubscription} from 'use-subscription';
 import {spawnError} from '../error_utils';
-import useSubscription from './use_subscription';
 
 // rather than asking for an AbstractModelWithAsyncData, we define a much more specific interface
 // that enforces 'isDataLoaded' as a watchable key.
