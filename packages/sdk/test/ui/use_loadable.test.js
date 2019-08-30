@@ -5,9 +5,13 @@ import {mount} from 'enzyme';
 import {act} from 'react-dom/test-utils';
 import AbstractModelWithAsyncData from '../../src/models/abstract_model_with_async_data';
 import useLoadable from '../../src/ui/use_loadable';
-import {actAsync} from '../test_helpers';
 
 jest.useFakeTimers();
+
+async function tickAsync() {
+    await new Promise(resolve => process.nextTick(resolve));
+    jest.advanceTimersByTime(0);
+}
 
 class Thing extends AbstractModelWithAsyncData<{name: string}, 'name' | 'isDataLoaded'> {
     _resolve: (Array<'name' | 'isDataLoaded'>) => void;
@@ -63,9 +67,9 @@ describe('useLoadable', () => {
         const wrapper = mount(<Component thing={thing} />);
         expect(wrapper.find('span').text()).toBe('not loaded, no name');
 
-        await actAsync(async () => {
+        await act(async () => {
             thing.resolveLoading('foo');
-            await Promise.resolve();
+            await tickAsync();
         });
         expect(wrapper.find('span').text()).toBe('loaded, foo');
 
@@ -134,9 +138,9 @@ describe('useLoadable', () => {
 
         expect(el.textContent).toBe('suspended');
 
-        await actAsync(async () => {
+        await act(async () => {
             thing.resolveLoading('foo');
-            await Promise.resolve();
+            await tickAsync();
         });
         expect(el.textContent).toBe('loaded, foo');
 
