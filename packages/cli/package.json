@@ -11,11 +11,16 @@
         "flow": "flow",
         "clean": "rm -rf transpiled node_modules",
         "build:clean": "rm -rf transpiled",
-        "build": "yarn run build:clean && babel . --only src,blocks_backend_wrapper,test --out-dir transpiled",
+        "build:transpile": "babel . --only src,blocks_backend_wrapper,test --out-dir transpiled",
+        "build": "yarn run build:clean && yarn run build:transpile",
+        "build:clean-win": "if exist transpiled rmdir /s /q transpiled",
+        "build:win": "yarn run build:clean-win & yarn run build:transpile",
         "watch": "yarn build --watch",
-        "prepublishOnly": "yarn build && rm -rf ./transpiled/test ./transpiled/blocks_backend_wrapper/test && ./test/smoke_test.sh \"$PWD/bin/block\"",
+        "prepublishOnly": "yarn run build && rm -rf ./transpiled/test ./transpiled/blocks_backend_wrapper/test",
         "pretest": "yarn run lint && yarn run flow",
         "test": "yarn run build && mocha test blocks_backend_wrapper/test",
+        "test:smokeTest": "yarn run build && npm_config_registry=https://registry.npmjs.org/ ./transpiled/test/smoke_test.js --blocks_cli_command=\"$PWD/bin/block\"",
+        "test:releaseSmokeTest": "yarn run build && npm_config_registry=https://registry.npmjs.org/ ./transpiled/test/smoke_test.js --reinstall_from_npm --blocks_cli_command=$(npm config get prefix)/bin/block",
         "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },
@@ -71,15 +76,19 @@
         "@babel/register": "^7.4.4",
         "airtable-blocks-backend-wrapper": "file:./blocks_backend_wrapper",
         "babel-eslint": "^10.0.1",
+        "delay": "^4.3.0",
+        "detect-port": "^1.3.0",
         "eslint": "^5.15.1",
         "eslint-plugin-airtable": "git+ssh://git@github.com/Hyperbase/eslint-plugin-airtable#da42308fa5d9c164794b2d32c96934e54b1195f9",
         "eslint-plugin-flowtype": "^3.4.2",
         "eslint-plugin-react": "^7.6.0",
         "flow-bin": "^0.95.1",
         "flow-typed": "^2.5.2",
+        "is-windows": "^1.0.2",
         "mocha": "^5.2.0",
         "proxyquire": "^2.1.0",
-        "sinon": "^7.3.2"
+        "sinon": "^7.3.2",
+        "which": "^1.3.1"
     },
     "engines": {
         "node": ">=8.10.0"
@@ -90,8 +99,8 @@
             "commitMessage": "Release @airtable/blocks-cli@${version}"
         },
         "hooks": {
-            "before:init": "../../bin/check-repo-for-release && yarn test",
-            "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+            "before:init": "../../bin/check-repo-for-release && yarn run test && yarn run test:smokeTest",
+            "after:release": "git push --tags git@github.com:Airtable/blocks.git master && yarn run test:releaseSmokeTest"
         },
         "npm": {
             "access": "restricted"
