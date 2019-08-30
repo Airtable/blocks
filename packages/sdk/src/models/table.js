@@ -476,52 +476,81 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @private */
     async updateRecordAsync(
         recordOrRecordId: Record | RecordId,
-        cellValuesByFieldIdOrName: {[fieldIdOrName: FieldId | string]: mixed},
+        fields: {[fieldIdOrName: FieldId | string]: mixed},
     ): Promise<void> {
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
 
-        const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
-            cellValuesByFieldIdOrName,
-        );
+        await this.updateRecordsAsync([
+            {
+                id: recordId,
+                fields,
+            },
+        ]);
+    }
+    /** @private */
+    async updateRecordsAsync(
+        records: Array<{
+            id: RecordId,
+            fields: {[fieldIdOrName: FieldId | string]: mixed},
+        }>,
+    ): Promise<void> {
+        const recordsWithCellValuesByFieldId = records.map(record => ({
+            id: record.id,
+            cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
+                record.fields,
+            ),
+        }));
 
         await getSdk().__mutations.applyMutationAsync({
-            type: MutationTypes.SET_SINGLE_RECORD_CELL_VALUES,
+            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
             tableId: this.id,
-            recordId,
-            cellValuesByFieldId,
+            records: recordsWithCellValuesByFieldId,
         });
     }
     /** @private */
     async deleteRecordAsync(recordOrRecordId: Record | RecordId): Promise<void> {
-        const recordId =
-            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
+        await this.deleteRecordsAsync([recordOrRecordId]);
+    }
+    /** @private */
+    async deleteRecordsAsync(recordsOrRecordIds: Array<Record | RecordId>): Promise<void> {
+        const recordIds = recordsOrRecordIds.map(recordOrRecordId =>
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
+        );
 
         await getSdk().__mutations.applyMutationAsync({
-            type: MutationTypes.DELETE_SINGLE_RECORD,
+            type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
-            recordId,
+            recordIds,
         });
     }
     /** @private */
     async createRecordAsync(
-        cellValuesByFieldIdOrName: {
+        fields: {
             [fieldIdOrName: FieldId | string]: mixed,
         } = {},
-    ) {
-        const recordId = this._airtableInterface.idGenerator.generateRecordId();
-        const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
-            cellValuesByFieldIdOrName,
-        );
+    ): Promise<RecordId> {
+        const recordIds = await this.createRecordsAsync([fields]);
+        return recordIds[0];
+    }
+    /** @private */
+    async createRecordsAsync(
+        records: Array<{
+            [fieldIdOrName: FieldId | string]: mixed,
+        }>,
+    ): Promise<Array<RecordId>> {
+        const recordsToCreate = records.map(recordDef => ({
+            id: this._airtableInterface.idGenerator.generateRecordId(),
+            cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(recordDef),
+        }));
 
         await getSdk().__mutations.applyMutationAsync({
-            type: MutationTypes.CREATE_SINGLE_RECORD,
+            type: MutationTypes.CREATE_MULTIPLE_RECORDS,
             tableId: this.id,
-            recordId,
-            cellValuesByFieldId,
+            records: recordsToCreate,
         });
 
-        return recordId;
+        return recordsToCreate.map(record => record.id);
     }
     _cellValuesByFieldIdOrNameToCellValuesByFieldId(cellValuesByFieldIdOrName: {
         [fieldIdOrName: FieldId | string]: mixed,

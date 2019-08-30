@@ -5,36 +5,40 @@ import {type FieldId} from './field';
 import {type RecordId} from './record';
 
 export const MutationTypes = Object.freeze({
-    SET_SINGLE_RECORD_CELL_VALUES: ('setSingleRecordCellValues': 'setSingleRecordCellValues'),
-    DELETE_SINGLE_RECORD: ('deleteSingleRecord': 'deleteSingleRecord'),
-    CREATE_SINGLE_RECORD: ('createSingleRecord': 'createSingleRecord'),
+    SET_MULTIPLE_RECORDS_CELL_VALUES: ('setMultipleRecordsCellValues': 'setMultipleRecordsCellValues'),
+    DELETE_MULTIPLE_RECORDS: ('deleteMultipleRecords': 'deleteMultipleRecords'),
+    CREATE_MULTIPLE_RECORDS: ('createMultipleRecords': 'createMultipleRecords'),
     SET_MULTIPLE_GLOBAL_CONFIG_PATHS: ('setMultipleGlobalConfigPaths': 'setMultipleGlobalConfigPaths'),
 });
 
 export type MutationType = $Values<typeof MutationTypes>;
 
-export type SetSingleRecordCellValuesMutation = {|
-    type: typeof MutationTypes.SET_SINGLE_RECORD_CELL_VALUES,
+export type SetMultipleRecordsCellValuesMutation = {|
+    type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
     tableId: TableId,
-    recordId: RecordId,
-    cellValuesByFieldId: {
-        [FieldId]: mixed,
-    },
+    records: Array<{
+        id: RecordId,
+        cellValuesByFieldId: {
+            [FieldId]: mixed,
+        },
+    }>,
 |};
 
-export type DeleteSingleRecordMutation = {|
-    type: typeof MutationTypes.DELETE_SINGLE_RECORD,
+export type DeleteMultipleRecordsMutation = {|
+    type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS,
     tableId: TableId,
-    recordId: RecordId,
+    recordIds: Array<RecordId>,
 |};
 
-export type CreateSingleRecordMutation = {|
-    type: typeof MutationTypes.CREATE_SINGLE_RECORD,
+export type CreateMultipleRecordsMutation = {|
+    type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS,
     tableId: TableId,
-    recordId: RecordId,
-    cellValuesByFieldId: {
-        [FieldId]: mixed,
-    },
+    records: Array<{
+        id: RecordId,
+        cellValuesByFieldId: {
+            [FieldId]: mixed,
+        },
+    }>,
 |};
 
 export type SetMultipleGlobalConfigPathsMutation = {|
@@ -43,7 +47,7 @@ export type SetMultipleGlobalConfigPathsMutation = {|
 |};
 
 export type Mutation =
-    | SetSingleRecordCellValuesMutation
-    | DeleteSingleRecordMutation
-    | CreateSingleRecordMutation
+    | SetMultipleRecordsCellValuesMutation
+    | DeleteMultipleRecordsMutation
+    | CreateMultipleRecordsMutation
     | SetMultipleGlobalConfigPathsMutation;

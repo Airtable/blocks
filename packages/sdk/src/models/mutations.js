@@ -10,6 +10,7 @@ import {type GlobalConfigUpdate} from '../global_config';
 import cellValueUtils from './cell_value_utils';
 import type Session from './session';
 import type Base from './base';
+import type Field from './field';
 
 const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
@@ -83,6 +84,16 @@ class Mutations {
         return permissionHelpers.can(this._session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
 
+    _assertFieldIsValidForMutation(field: Field, tableId: string) {
+        if (field.isComputed) {
+            throw spawnError('Field %s is computed and cannot be set', field.id);
+        }
+
+        if (FIELD_TYPE_MUTATION_BAN_SET.has(field.type)) {
+            throw spawnError('Fields of type %s cannot currently be mutated', field.type);
+        }
+    }
+
     _assertMutationIsValid(mutation: Mutation) {
         // We call validate the data (including any cell values) because if the data required for
         // us to do that is already loaded in the block, we can error out before applying
@@ -94,8 +105,8 @@ class Mutations {
         // the block in the event of an invalid mutation.
 
         switch (mutation.type) {
-            case MutationTypes.SET_SINGLE_RECORD_CELL_VALUES: {
-                const {tableId, recordId, cellValuesByFieldId} = mutation;
+            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
+                const {tableId, records} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError('No table with id %s exists', tableId);
@@ -106,52 +117,50 @@ class Mutations {
                 // updating actually exists and that the cell values are valid.
                 const recordStore = this._base.__getRecordStore(tableId);
 
-                let record = null;
-                if (recordStore.isRecordMetadataLoaded) {
-                    record = recordStore.getRecordByIdIfExists(recordId);
-                    if (!record) {
-                        throw spawnError('No record with id %s exists', recordId);
-                    }
-                }
+                const checkedFieldIds = new Set();
 
-                for (const fieldId of Object.keys(cellValuesByFieldId)) {
-                    const field = table.getFieldByIdIfExists(fieldId);
-                    if (!field) {
-                        throw spawnError(
-                            'No field with id %s exists in table %s',
-                            fieldId,
-                            tableId,
-                        );
+                for (const record of records) {
+                    let existingRecord = null;
+                    if (recordStore.isRecordMetadataLoaded) {
+                        existingRecord = recordStore.getRecordByIdIfExists(record.id);
+                        if (!existingRecord) {
+                            throw spawnError('No record with id %s exists', record.id);
+                        }
                     }
 
-                    if (field.isComputed) {
-                        throw spawnError('Field %s is computed and cannot be set', field.id);
-                    }
+                    for (const fieldId of Object.keys(record.cellValuesByFieldId)) {
+                        const field = table.getFieldByIdIfExists(fieldId);
+                        if (!field) {
+                            throw spawnError(
+                                'No field with id %s exists in table %s',
+                                fieldId,
+                                tableId,
+                            );
+                        }
 
-                    if (FIELD_TYPE_MUTATION_BAN_SET.has(field.type)) {
-                        throw spawnError(
-                            'Fields of type %s cannot currently be mutated',
-                            field.type,
-                        );
-                    }
+                        if (!checkedFieldIds.has(fieldId)) {
+                            this._assertFieldIsValidForMutation(field, tableId);
+                            checkedFieldIds.add(fieldId);
+                        }
 
-                    if (record && recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                        const oldCellValue = record.getCellValue(fieldId);
-                        const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
-                            cellValuesByFieldId[fieldId],
-                            oldCellValue,
-                            field,
-                        );
-                        if (!validationResult.isValid) {
-                            throw spawnError(validationResult.reason);
+                        if (existingRecord && recordStore.areCellValuesLoadedForFieldId(fieldId)) {
+                            const oldCellValue = existingRecord.getCellValue(fieldId);
+                            const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                                record.cellValuesByFieldId[fieldId],
+                                oldCellValue,
+                                field,
+                            );
+                            if (!validationResult.isValid) {
+                                throw spawnError(validationResult.reason);
+                            }
                         }
                     }
                 }
                 return;
             }
 
-            case MutationTypes.DELETE_SINGLE_RECORD: {
-                const {recordId, tableId} = mutation;
+            case MutationTypes.DELETE_MULTIPLE_RECORDS: {
+                const {tableId, recordIds} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
                     throw spawnError('No table with id %s exists', tableId);
@@ -159,52 +168,54 @@ class Mutations {
 
                 const recordStore = this._base.__getRecordStore(tableId);
                 if (recordStore.isRecordMetadataLoaded) {
-                    const record = recordStore.getRecordByIdIfExists(recordId);
-                    if (!record) {
-                        throw spawnError(
-                            'No record with id %s exists in table %s',
-                            recordId,
-                            tableId,
-                        );
+                    for (const recordId of recordIds) {
+                        const record = recordStore.getRecordByIdIfExists(recordId);
+                        if (!record) {
+                            throw spawnError(
+                                'No record with id %s exists in table %s',
+                                recordId,
+                                tableId,
+                            );
+                        }
                     }
                 }
                 return;
             }
 
-            case MutationTypes.CREATE_SINGLE_RECORD: {
-                const {tableId, cellValuesByFieldId} = mutation;
+            case MutationTypes.CREATE_MULTIPLE_RECORDS: {
+                const {tableId, records} = mutation;
+                const checkedFieldIds = new Set();
 
-                for (const fieldId of Object.keys(cellValuesByFieldId)) {
-                    const field = this._base.getTableById(tableId).getFieldById(fieldId);
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError('No table with id %s exists', tableId);
+                }
 
-                    if (!field) {
-                        throw spawnError(
-                            'No field with id %s exists in table %s',
-                            fieldId,
-                            tableId,
+                for (const record of records) {
+                    for (const fieldId of Object.keys(record.cellValuesByFieldId)) {
+                        const field = table.getFieldByIdIfExists(fieldId);
+                        if (!field) {
+                            throw spawnError(
+                                'No field with id %s exists in table %s',
+                                fieldId,
+                                tableId,
+                            );
+                        }
+
+                        if (!checkedFieldIds.has(fieldId)) {
+                            this._assertFieldIsValidForMutation(field, tableId);
+                            checkedFieldIds.add(fieldId);
+                        }
+
+                        // Current cell value is null since the record doesn't exist.
+                        const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                            record.cellValuesByFieldId[fieldId],
+                            null,
+                            field,
                         );
-                    }
-
-                    if (field.isComputed) {
-                        throw spawnError('Field %s is computed and cannot be set', field.id);
-                    }
-
-                    // Check that we're not trying to set fields that we don't support mutations for yet
-                    if (FIELD_TYPE_MUTATION_BAN_SET.has(field.type)) {
-                        throw spawnError(
-                            'Fields of type %s cannot currently be set via mutations',
-                            field.type,
-                        );
-                    }
-
-                    // Current cell value is null since the record doesn't exist.
-                    const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
-                        cellValuesByFieldId[fieldId],
-                        null,
-                        field,
-                    );
-                    if (!validationResult.isValid) {
-                        throw spawnError(validationResult.reason);
+                        if (!validationResult.isValid) {
+                            throw spawnError(validationResult.reason);
+                        }
                     }
                 }
                 return;
@@ -243,26 +254,29 @@ class Mutations {
 
     _getOptimisticModelChangesForMutation(mutation: Mutation): Array<ModelChange> {
         switch (mutation.type) {
-            case MutationTypes.SET_SINGLE_RECORD_CELL_VALUES: {
-                const {tableId, recordId, cellValuesByFieldId} = mutation;
+            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
+                const {tableId, records} = mutation;
                 const recordStore = this._base.__getRecordStore(tableId);
-                return Object.keys(cellValuesByFieldId)
-                    .filter(fieldId => recordStore.areCellValuesLoadedForFieldId(fieldId))
-                    .map(fieldId => ({
-                        path: [
-                            'tablesById',
-                            tableId,
-                            'recordsById',
-                            recordId,
-                            'cellValuesByFieldId',
-                            fieldId,
-                        ],
-                        value: cellValuesByFieldId[fieldId],
-                    }));
+
+                return records.flatMap(record =>
+                    Object.keys(record.cellValuesByFieldId)
+                        .filter(fieldId => recordStore.areCellValuesLoadedForFieldId(fieldId))
+                        .map(fieldId => ({
+                            path: [
+                                'tablesById',
+                                tableId,
+                                'recordsById',
+                                record.id,
+                                'cellValuesByFieldId',
+                                fieldId,
+                            ],
+                            value: record.cellValuesByFieldId[fieldId],
+                        })),
+                );
             }
 
-            case MutationTypes.DELETE_SINGLE_RECORD: {
-                const {tableId, recordId} = mutation;
+            case MutationTypes.DELETE_MULTIPLE_RECORDS: {
+                const {tableId, recordIds} = mutation;
                 const recordStore = this._base.__getRecordStore(tableId);
 
                 if (!recordStore.isRecordMetadataLoaded) {
@@ -270,56 +284,57 @@ class Mutations {
                 }
 
                 return [
-                    {
+                    ...recordIds.map(recordId => ({
                         path: ['tablesById', tableId, 'recordsById', recordId],
                         value: undefined,
-                    },
+                    })),
                     ...this._base.getTableById(tableId).views.flatMap(view => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
                             return [];
                         }
-                        return viewDataStore.__generateChangesForParentTableDeleteMultipleRecords([
-                            recordId,
-                        ]);
+                        return viewDataStore.__generateChangesForParentTableDeleteMultipleRecords(
+                            recordIds,
+                        );
                     }),
                 ];
             }
 
-            case MutationTypes.CREATE_SINGLE_RECORD: {
-                const {tableId, recordId, cellValuesByFieldId} = mutation;
+            case MutationTypes.CREATE_MULTIPLE_RECORDS: {
+                const {tableId, records} = mutation;
                 const recordStore = this._base.__getRecordStore(tableId);
 
                 if (!recordStore.isRecordMetadataLoaded) {
                     return [];
                 }
 
-                // Only apply optimistic changes for fields that are loaded
-                const filteredCellValuesByFieldId = {};
-                for (const [fieldId, cellValue] of entries(cellValuesByFieldId)) {
-                    if (recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                        filteredCellValuesByFieldId[fieldId] = cellValue;
-                    }
-                }
-
                 return [
-                    {
-                        path: ['tablesById', tableId, 'recordsById', recordId],
-                        value: {
-                            id: recordId,
-                            cellValuesByFieldId: filteredCellValuesByFieldId,
-                            commentCount: 0,
-                            createdTime: new Date().toJSON(),
-                        },
-                    },
+                    ...records.map(record => {
+                        // Only apply optimistic changes for fields that are loaded
+                        const filteredCellValuesByFieldId = {};
+                        for (const [fieldId, cellValue] of entries(record.cellValuesByFieldId)) {
+                            if (recordStore.areCellValuesLoadedForFieldId(fieldId)) {
+                                filteredCellValuesByFieldId[fieldId] = cellValue;
+                            }
+                        }
+                        return {
+                            path: ['tablesById', tableId, 'recordsById', record.id],
+                            value: {
+                                id: record.id,
+                                cellValuesByFieldId: filteredCellValuesByFieldId,
+                                commentCount: 0,
+                                createdTime: new Date().toJSON(),
+                            },
+                        };
+                    }),
                     ...this._base.getTableById(tableId).views.flatMap(view => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
                             return [];
                         }
-                        return viewDataStore.__generateChangesForParentTableAddMultipleRecords([
-                            recordId,
-                        ]);
+                        return viewDataStore.__generateChangesForParentTableAddMultipleRecords(
+                            records.map(record => record.id),
+                        );
                     }),
                 ];
             }
