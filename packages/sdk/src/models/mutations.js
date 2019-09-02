@@ -288,7 +288,7 @@ class Mutations {
                         path: ['tablesById', tableId, 'recordsById', recordId],
                         value: {
                             id: recordId,
-                            filteredCellValuesByFieldId,
+                            cellValuesByFieldId: filteredCellValuesByFieldId,
                             commentCount: 0,
                             createdTime: new Date().toJSON(),
                         },
