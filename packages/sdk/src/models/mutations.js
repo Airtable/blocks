@@ -4,7 +4,7 @@ import {PermissionLevels} from '../types/permission_levels';
 import {type ModelChange} from '../types/base';
 import {type Mutation, MutationTypes} from '../types/mutations';
 import {FieldTypes} from '../types/field';
-import {entries, flatMap} from '../private_utils';
+import {entries} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
 import cellValueUtils from './cell_value_utils';
 import type Session from './session';
@@ -255,7 +255,7 @@ class Mutations {
                         path: ['tablesById', tableId, 'recordsById', recordId],
                         value: undefined,
                     },
-                    ...flatMap(this._base.getTableById(tableId).views, view => {
+                    ...this._base.getTableById(tableId).views.flatMap(view => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
                             return [];
@@ -293,7 +293,7 @@ class Mutations {
                             createdTime: new Date().toJSON(),
                         },
                     },
-                    ...flatMap(this._base.getTableById(tableId).views, view => {
+                    ...this._base.getTableById(tableId).views.flatMap(view => {
                         const viewDataStore = recordStore.getViewDataStore(view.id);
                         if (!viewDataStore.isDataLoaded) {
                             return [];
