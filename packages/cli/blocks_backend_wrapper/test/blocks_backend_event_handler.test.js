@@ -3,6 +3,10 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const BlocksBackendEventHandler = require('../blocks_backend_event_handler');
+const {
+    BlocksBackendExecutionStatuses,
+    getBlocksBackendExecutionStatus,
+} = require('../blocks_backend_execution_status');
 
 import type {BackendRoute, BlockJson} from '../types/block_json_type';
 import type {BackendRouteHandler, BackendRouteResponse} from '../types/backend_route_types';
@@ -82,6 +86,10 @@ describe('BlocksBackendEventHandler', function() {
                 assert.equal(resp.statusCode, 404);
                 assert(resp.body);
                 assert(backendRouteHandler.notCalled);
+                assert.equal(
+                    getBlocksBackendExecutionStatus(resp.headers),
+                    BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES,
+                );
             });
         }
     });
@@ -111,6 +119,10 @@ describe('BlocksBackendEventHandler', function() {
             // flow-disable-next-line because we expect errorData to be populated.
             assert.equal(resp.errorData.message, ERROR_MESSAGE);
             assert(backendRouteHandler.calledOnce);
+            assert.equal(
+                getBlocksBackendExecutionStatus(resp.headers),
+                BlocksBackendExecutionStatuses.HANDLER_EXECUTION_ERROR,
+            );
         });
     });
 
@@ -170,6 +182,10 @@ describe('BlocksBackendEventHandler', function() {
                         _blockInvocationId: event.blockInvocationId,
                         _kvValuesByKey: event.kvValuesByKey,
                     }),
+                );
+                assert.equal(
+                    getBlocksBackendExecutionStatus(resp.headers),
+                    BlocksBackendExecutionStatuses.SUCCESS,
                 );
                 backendRouteHandler.resetHistory();
             });

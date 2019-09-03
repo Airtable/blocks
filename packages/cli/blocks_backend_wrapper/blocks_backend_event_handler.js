@@ -4,6 +4,10 @@ const util = require('util');
 const invariant = require('invariant');
 const pathToRegexp = require('path-to-regexp');
 const request = require('request');
+const {
+    BlocksBackendExecutionStatuses,
+    createBlocksBackendExecutionStatusHeaders,
+} = require('./blocks_backend_execution_status');
 
 import type {BackendRoute, BlockJson} from './types/block_json_type';
 import type {
@@ -12,6 +16,7 @@ import type {
     BackendRouteResponse,
 } from './types/backend_route_types';
 import type {LambdaEvent} from './types/lambda_event_type';
+import type {BlocksBackendExecutionStatus} from './blocks_backend_execution_status';
 
 // TODO(Chuan): Add flow typing for BackendBlockSdkWrapper.
 // eslint-disable-next-line flowtype/no-weak-types
@@ -124,11 +129,27 @@ class BlocksBackendEventHandler {
         return null;
     }
 
+    _createResponseForExecutionError(err: Error, status: BlocksBackendExecutionStatus) {
+        console.error(err); // eslint-disable-line no-console
+        return {
+            statusCode: 500,
+            body: {error: 'SERVER_ERROR'},
+            errorData: {stack: err.stack, message: err.message, name: err.name},
+            headers: createBlocksBackendExecutionStatusHeaders(status),
+        };
+    }
+
     async _callUserCodeForEventAsync(event: LambdaEvent): Promise<BackendRouteResponse> {
         const routeAndParams = this._getRouteAndParamsForEvent(event);
         if (routeAndParams === null) {
             // No matching route, so treat this as a 404.
-            return {statusCode: 404, body: 'NOT_FOUND'};
+            return {
+                statusCode: 404,
+                body: 'NOT_FOUND',
+                headers: createBlocksBackendExecutionStatusHeaders(
+                    BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES,
+                ),
+            };
         }
         const {route, params} = routeAndParams;
 
@@ -147,9 +168,24 @@ class BlocksBackendEventHandler {
             }
 
             await this._backendBlockSdkWrapperInstance.__initializeSdkForEventAsync(event);
+        } catch (err) {
+            return this._createResponseForExecutionError(
+                err,
+                BlocksBackendExecutionStatuses.BACKEND_SDK_INIT_ERROR,
+            );
+        }
 
-            const handler = this._resolveBackendRouteHandler(route.handler);
+        let handler: BackendRouteHandler;
+        try {
+            handler = this._resolveBackendRouteHandler(route.handler);
+        } catch (err) {
+            return this._createResponseForExecutionError(
+                err,
+                BlocksBackendExecutionStatuses.HANDLER_LOAD_ERROR,
+            );
+        }
 
+        try {
             const requestObj: BackendRouteRequest = {
                 method: event.method,
                 query: event.query,
@@ -172,17 +208,20 @@ class BlocksBackendEventHandler {
             // can handle both formats the same.
             const responsePromise = Promise.resolve(handler(requestObj));
 
-            const response = await responsePromise;
             // TODO(Chuan): Validate response from user code.
-            return ((response: any): BackendRouteResponse); // eslint-disable-line flowtype/no-weak-types
-        } catch (err) {
-            console.error(err); // eslint-disable-line no-console
-            // Their handler threw an error, so treat this as a 500.
-            return {
-                statusCode: 500,
-                body: {error: 'SERVER_ERROR'},
-                errorData: {stack: err.stack, message: err.message, name: err.name},
+            const response: BackendRouteResponse = await responsePromise;
+            response.headers = {
+                ...(response.headers || {}),
+                ...createBlocksBackendExecutionStatusHeaders(
+                    BlocksBackendExecutionStatuses.SUCCESS,
+                ),
             };
+            return response;
+        } catch (err) {
+            return this._createResponseForExecutionError(
+                err,
+                BlocksBackendExecutionStatuses.HANDLER_EXECUTION_ERROR,
+            );
         }
     }
 
