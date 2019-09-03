@@ -39,14 +39,14 @@ class Mutations {
     _session: Session;
     _base: Base;
     _applyModelChanges: (Array<ModelChange>) => void;
-    _applyGlobalConfigUpdates: (Array<GlobalConfigUpdate>) => void;
+    _applyGlobalConfigUpdates: ($ReadOnlyArray<GlobalConfigUpdate>) => void;
 
     constructor(
         airtableInterface: AirtableInterface,
         session: Session,
         base: Base,
-        applyModelChanges: (Array<ModelChange>) => void,
-        applyGlobalConfigUpdates: (Array<GlobalConfigUpdate>) => void,
+        applyModelChanges: ($ReadOnlyArray<ModelChange>) => void,
+        applyGlobalConfigUpdates: ($ReadOnlyArray<GlobalConfigUpdate>) => void,
     ) {
         this._airtableInterface = airtableInterface;
         this._session = session;

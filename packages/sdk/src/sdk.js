@@ -235,7 +235,7 @@ class BlockSdk {
 
         // TODO: freeze this object before we ship the code editor.
     }
-    __applyModelChanges(changes: Array<ModelChange>) {
+    __applyModelChanges(changes: $ReadOnlyArray<ModelChange>) {
         this._runWithUpdateBatching(() => {
             const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
             const changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
@@ -245,7 +245,7 @@ class BlockSdk {
             this.session.__triggerOnChangeForChangedKeys(changedSessionKeys);
         });
     }
-    __applyGlobalConfigUpdates(updates: Array<GlobalConfigUpdate>) {
+    __applyGlobalConfigUpdates(updates: $ReadOnlyArray<GlobalConfigUpdate>) {
         this._runWithUpdateBatching(() => {
             this.globalConfig.__setMultipleKvPaths(updates);
         });

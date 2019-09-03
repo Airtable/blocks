@@ -476,7 +476,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @private */
     async updateRecordAsync(
         recordOrRecordId: Record | RecordId,
-        fields: {[fieldIdOrName: FieldId | string]: mixed},
+        fields: {+[fieldIdOrName: FieldId | string]: mixed},
     ): Promise<void> {
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
@@ -490,9 +490,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     /** @private */
     async updateRecordsAsync(
-        records: Array<{
-            id: RecordId,
-            fields: {[fieldIdOrName: FieldId | string]: mixed},
+        records: $ReadOnlyArray<{
+            +id: RecordId,
+            +fields: {+[fieldIdOrName: FieldId | string]: mixed},
         }>,
     ): Promise<void> {
         const recordsWithCellValuesByFieldId = records.map(record => ({
@@ -513,7 +513,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         await this.deleteRecordsAsync([recordOrRecordId]);
     }
     /** @private */
-    async deleteRecordsAsync(recordsOrRecordIds: Array<Record | RecordId>): Promise<void> {
+    async deleteRecordsAsync(recordsOrRecordIds: $ReadOnlyArray<Record | RecordId>): Promise<void> {
         const recordIds = recordsOrRecordIds.map(recordOrRecordId =>
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
@@ -527,7 +527,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @private */
     async createRecordAsync(
         fields: {
-            [fieldIdOrName: FieldId | string]: mixed,
+            +[fieldIdOrName: FieldId | string]: mixed,
         } = {},
     ): Promise<RecordId> {
         const recordIds = await this.createRecordsAsync([fields]);
@@ -535,8 +535,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
     /** @private */
     async createRecordsAsync(
-        records: Array<{
-            [fieldIdOrName: FieldId | string]: mixed,
+        records: $ReadOnlyArray<{
+            +[fieldIdOrName: FieldId | string]: mixed,
         }>,
     ): Promise<Array<RecordId>> {
         const recordsToCreate = records.map(recordDef => ({
@@ -553,7 +553,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return recordsToCreate.map(record => record.id);
     }
     _cellValuesByFieldIdOrNameToCellValuesByFieldId(cellValuesByFieldIdOrName: {
-        [fieldIdOrName: FieldId | string]: mixed,
+        +[fieldIdOrName: FieldId | string]: mixed,
     }): {[FieldId]: mixed} {
         return Object.fromEntries(
             entries(cellValuesByFieldIdOrName).map(([fieldIdOrName, cellValue]) => {

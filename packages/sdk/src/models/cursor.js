@@ -180,7 +180,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @private
      */
     __applyChangesWithoutTriggeringEvents(
-        changes: Array<ModelChange>,
+        changes: $ReadOnlyArray<ModelChange>,
     ): {[WatchableCursorKey]: boolean} {
         let changedKeys = {
             [WatchableCursorKeys.selectedRecordIds]: false,

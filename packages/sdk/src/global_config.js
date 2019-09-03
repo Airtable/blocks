@@ -17,7 +17,7 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
     'client_server_shared/fork_object_path_for_write_by_reference',
 );
 
-type GlobalConfigPath = Array<string>;
+type GlobalConfigPath = $ReadOnlyArray<string>;
 
 /**
  * @typedef {string | Array<string>}
@@ -32,14 +32,14 @@ export type GlobalConfigValue =
     | boolean
     | number
     | string
-    | Array<GlobalConfigValue>
-    | {[string]: GlobalConfigValue};
+    | $ReadOnlyArray<GlobalConfigValue>
+    | {+[string]: GlobalConfigValue};
 
 export type GlobalConfigData = {[string]: ?GlobalConfigValue};
 
 export type GlobalConfigUpdate = {|
-    path: GlobalConfigPath,
-    value: GlobalConfigValue | void,
+    +path: GlobalConfigPath,
+    +value: GlobalConfigValue | void,
 |};
 
 type WatchableGlobalConfigKey = string;
@@ -141,7 +141,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * @private
      */
-    __formatKeyAsPath(key: GlobalConfigKey): Array<string> {
+    __formatKeyAsPath(key: GlobalConfigKey): $ReadOnlyArray<string> {
         if (!Array.isArray(key)) {
             return [key];
         }
@@ -308,7 +308,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @private
      * this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates()
      */
-    __setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
+    __setMultipleKvPaths(updates: $ReadOnlyArray<GlobalConfigUpdate>) {
         if (!Array.isArray(updates)) {
             throw spawnError(
                 'globalConfig updates must be an array. Provided type: %s',

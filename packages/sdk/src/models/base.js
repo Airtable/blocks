@@ -334,7 +334,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /**
      * @private
      */
-    __applyChangesWithoutTriggeringEvents(changes: Array<ModelChange>): ChangedPaths {
+    __applyChangesWithoutTriggeringEvents(changes: $ReadOnlyArray<ModelChange>): ChangedPaths {
         // Internal method.
         // After applying all changes, changedPaths will have the same shape as
         // the subset of this._data that changed. For example, if some table's

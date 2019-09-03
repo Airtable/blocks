@@ -14,36 +14,36 @@ export const MutationTypes = Object.freeze({
 export type MutationType = $Values<typeof MutationTypes>;
 
 export type SetMultipleRecordsCellValuesMutation = {|
-    type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
-    tableId: TableId,
-    records: Array<{
-        id: RecordId,
-        cellValuesByFieldId: {
-            [FieldId]: mixed,
+    +type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+    +tableId: TableId,
+    +records: $ReadOnlyArray<{
+        +id: RecordId,
+        +cellValuesByFieldId: {
+            +[FieldId]: mixed,
         },
     }>,
 |};
 
 export type DeleteMultipleRecordsMutation = {|
-    type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS,
-    tableId: TableId,
-    recordIds: Array<RecordId>,
+    +type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS,
+    +tableId: TableId,
+    +recordIds: $ReadOnlyArray<RecordId>,
 |};
 
 export type CreateMultipleRecordsMutation = {|
-    type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS,
-    tableId: TableId,
-    records: Array<{
-        id: RecordId,
-        cellValuesByFieldId: {
-            [FieldId]: mixed,
+    +type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS,
+    +tableId: TableId,
+    +records: $ReadOnlyArray<{
+        +id: RecordId,
+        +cellValuesByFieldId: {
+            +[FieldId]: mixed,
         },
     }>,
 |};
 
 export type SetMultipleGlobalConfigPathsMutation = {|
-    type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
-    updates: Array<GlobalConfigUpdate>,
+    +type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+    +updates: $ReadOnlyArray<GlobalConfigUpdate>,
 |};
 
 export type Mutation =
