@@ -37,7 +37,7 @@ type BuildPackagePaths = {|
     backendDeploymentPackagePath: FilePath | null,
 |};
 
-const FILES_TO_TRANSPILE_REGEX = /\.(es6|js|es|jsx)$/;
+const FILES_TO_TRANSPILE_REGEX = /\.(es6|js|es|jsx|ts|tsx)$/;
 
 // Minimal transpilation - the closer the result is to the source, the easier
 // debugging is, even with source maps.
@@ -371,7 +371,11 @@ class BlockBuilder {
         // We use the '@babel/transform-flow-strip-types' plugin instead of the
         // '@babel/preset-flow' preset due to a Babel bug:
         // https://github.com/babel/babel/issues/8593#issuecomment-419862386
-        const presets = [['@babel/preset-env', {targets}], '@babel/preset-react'];
+        const presets = [
+            ['@babel/preset-env', {targets}],
+            '@babel/preset-react',
+            '@babel/preset-typescript',
+        ];
         const plugins = [
             '@babel/plugin-transform-flow-strip-types',
             '@babel/plugin-proposal-class-properties',
@@ -414,9 +418,9 @@ class BlockBuilder {
         }
 
         if (stats && stats.isFile()) {
-            const filePathToTranspileOrCopy = path.join(
+            const targetFilePath = path.join(
                 targetDirPath,
-                path.basename(fileOrDirectoryPath),
+                this._replaceTranspiledFileExtension(path.basename(fileOrDirectoryPath)),
             );
             if (FILES_TO_TRANSPILE_REGEX.test(fileOrDirectoryPath)) {
                 let transpiledResult;
@@ -427,10 +431,9 @@ class BlockBuilder {
                     console.log(err.message);
                     return {err};
                 }
-
-                await fsUtils.writeFileAsync(filePathToTranspileOrCopy, transpiledResult.code);
+                await fsUtils.writeFileAsync(targetFilePath, transpiledResult.code);
             } else {
-                await fsUtils.copyFileAsync(fileOrDirectoryPath, filePathToTranspileOrCopy);
+                await fsUtils.copyFileAsync(fileOrDirectoryPath, targetFilePath);
             }
         }
 
@@ -479,6 +482,16 @@ class BlockBuilder {
             value: Buffer.from(result.code),
         };
     }
+    _replaceTranspiledFileExtension(srcFilePath: FilePath) {
+        if (FILES_TO_TRANSPILE_REGEX.test(srcFilePath)) {
+            return path.join(
+                path.dirname(srcFilePath),
+                path.basename(srcFilePath, path.extname(srcFilePath)) + '.js',
+            );
+        } else {
+            return srcFilePath;
+        }
+    }
     async _generateFrontendBundleAsync(): Promise<Result<void, ErrorWithCode>> {
         await fsUtils.mkdirPathAsync(this._outputBuildArtifactsDirPath);
 
@@ -506,7 +519,7 @@ class BlockBuilder {
         await fsUtils.mkdirPathAsync(this._outputUserTranspiledDirPath);
         const frontendEntryModulePath = path.join(
             this._outputUserTranspiledDirPath,
-            this._blockJson.frontendEntry,
+            this._replaceTranspiledFileExtension(this._blockJson.frontendEntry),
         );
         const clientWrapperFilePath = path.join(
             this._outputUserTranspiledDirPath,

@@ -43,6 +43,7 @@
         "@babel/polyfill": "^7.4.0",
         "@babel/preset-env": "^7.4.2",
         "@babel/preset-react": "^7.0.0",
+        "@babel/preset-typescript": "^7.3.3",
         "archiver": "2.0.0",
         "babelify": "^10.0.0",
         "body-parser": "^1.18.3",
