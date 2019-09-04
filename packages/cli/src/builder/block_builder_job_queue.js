@@ -3,8 +3,9 @@
 const EventEmitter = require('events');
 const invariant = require('invariant');
 const fs = require('fs');
-const path = require('path');
 const fsUtils = require('../fs_utils');
+const path = require('path');
+const {groupBy} = require('lodash');
 const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types');
 const {RESULT_OK} = require('../types/result');
 
@@ -30,7 +31,6 @@ type BundleBuildJob = {|
 |};
 
 type BuildJob = TranspileOrUnlinkBuildJob | BundleBuildJob;
-type BuildJobProperties = $Keys<TranspileOrUnlinkBuildJob> | $Keys<BundleBuildJob>;
 
 type TranspileOrCopyAsyncFn = (
     fileOrDirectoryPath: string,
@@ -104,10 +104,10 @@ class BlockBuilderJobQueue extends EventEmitter {
         // Copy all elements of the queue for processing, and clear out the queue.
         const currentQueueCopy = this._buildJobQueue.splice(0, this._buildJobQueue.length);
 
-        const jobsByAction = this._groupBuildJobsByKey(currentQueueCopy, 'action');
-        const transpileOrUnlinkJobs: Array<TranspileOrUnlinkBuildJob> = ((jobsByAction.get(
-            JobActions.TRANSPILE_OR_UNLINK,
-        ) || []: any): Array<TranspileOrUnlinkBuildJob>); // eslint-disable-line flowtype/no-weak-types
+        const jobsByAction = groupBy(currentQueueCopy, job => job.action);
+        const transpileOrUnlinkJobs: Array<TranspileOrUnlinkBuildJob> = ((jobsByAction[
+            JobActions.TRANSPILE_OR_UNLINK
+        ]: any): Array<TranspileOrUnlinkBuildJob>); // eslint-disable-line flowtype/no-weak-types
 
         if (transpileOrUnlinkJobs && transpileOrUnlinkJobs.length > 0) {
             if (this._blockBuilderStateData.status !== BlockBuilderStatuses.BUILDING) {
@@ -153,8 +153,9 @@ class BlockBuilderJobQueue extends EventEmitter {
             });
         }
 
+        const bundleJobs = jobsByAction[JobActions.BUNDLE];
         const shouldBundle =
-            jobsByAction.has(JobActions.BUNDLE) && this._transpileErrorByFilePath.size === 0;
+            bundleJobs && bundleJobs.length > 0 && this._transpileErrorByFilePath.size === 0;
         if (shouldBundle) {
             const frontendBundleResult = await this._processFrontendBundleJobAsync(
                 generateFrontendBundleAsyncFn,
@@ -181,11 +182,11 @@ class BlockBuilderJobQueue extends EventEmitter {
         transpileOrUnlinkJobs: Array<TranspileOrUnlinkBuildJob>,
         transpileOrCopyAsyncFn: TranspileOrCopyAsyncFn,
     ): Promise<void> {
-        const jobsByFilePath = this._groupBuildJobsByKey(transpileOrUnlinkJobs, 'fileOrDirPath');
+        const jobsByFilePath = groupBy(transpileOrUnlinkJobs, job => job.fileOrDirPath);
 
         const filesToTranspilePromises: Array<Promise<Result<string, TranspileError>>> = [];
         const filesToUnlinkPromises: Array<Promise<void>> = [];
-        for (const [fileOrDirPath, listOfBuildJobs] of jobsByFilePath.entries()) {
+        for (const [fileOrDirPath, listOfBuildJobs] of Object.entries(jobsByFilePath)) {
             const listOfTranspileOrUnlinkBuildJobs = ((listOfBuildJobs: any): Array<TranspileOrUnlinkBuildJob>); // eslint-disable-line flowtype/no-weak-types
             const fsStats = listOfTranspileOrUnlinkBuildJobs[0].fsStatsIfExists;
             const chokidarEvents = listOfTranspileOrUnlinkBuildJobs.map(
@@ -242,7 +243,6 @@ class BlockBuilderJobQueue extends EventEmitter {
 
         return RESULT_OK;
     }
-
     /**
      * TODO(richsinn): Make this into a FSM-like implementation.
      */
@@ -267,38 +267,6 @@ class BlockBuilderJobQueue extends EventEmitter {
         } else {
             // no-op
         }
-    }
-    _groupBuildJobsByKey(
-        buildJobs: $ReadOnlyArray<BuildJob>,
-        prop: BuildJobProperties,
-    ): Map<string, Array<BuildJob>> {
-        const buildJobsByKey = new Map();
-        for (const buildJob of buildJobs) {
-            let key;
-            switch (buildJob.action) {
-                case JobActions.BUNDLE:
-                    invariant(prop === 'action', 'expect prop to be literal "action"');
-                    key = buildJob[prop];
-                    break;
-
-                case JobActions.TRANSPILE_OR_UNLINK:
-                    key = buildJob[prop];
-                    break;
-
-                default:
-                    throw new Error(`Unknown ${(buildJob.action: empty)} value for JobActions`);
-            }
-
-            invariant(typeof key === 'string', 'expect key to be string');
-            const buildJobsForKey = buildJobsByKey.get(key) || [];
-            buildJobsForKey.push(buildJob);
-
-            if (!buildJobsByKey.has(key)) {
-                buildJobsByKey.set(key, buildJobsForKey);
-            }
-        }
-
-        return buildJobsByKey;
     }
 }
 
