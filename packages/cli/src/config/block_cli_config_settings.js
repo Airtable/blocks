@@ -46,8 +46,9 @@ module.exports = {
     // Wrapper file for blocks frontend code.
     CLIENT_WRAPPER_FILE_NAME: 'block_client_wrapper.js',
 
-    // Bundle file.
+    // Bundle files.
     BUNDLE_FILE_NAME: 'bundle.js',
+    BACKEND_BUNDLE_FILE_NAME: 'backend-bundle.zip',
 
     AIRTABLE_ACCOUNT_URL: 'https://airtable.com/account',
 
@@ -65,6 +66,11 @@ module.exports = {
     BACKEND_SDK_BASE_URL: 'https://airtable.com',
     // URL path to backend SDK.
     BACKEND_SDK_URL_PATH: '/js/compiled/block_backend_sdk.js',
+    // Module path to backend SDK.
+    BACKEND_SDK_MODULE: 'block_backend_sdk',
+
+    // Directory path of blocks backend wrapper in backend bundle.
+    BACKEND_WRAPPER_DIR: 'backend_wrapper',
 
     HELLO_WORLD_TEMPLATE: '@airtable/hello-world',
 };

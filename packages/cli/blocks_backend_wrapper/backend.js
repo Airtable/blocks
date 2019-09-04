@@ -23,10 +23,14 @@ require('@babel/polyfill');
 global.self = global;
 
 const BlocksBackendEventHandler = require('./blocks_backend_event_handler.js');
+
+// Keep the module name require'd below in sync with
+// blockCliConfigSettings.BACKEND_SDK_MODULE. We can't import blocksConfigSettings
+// here because it won't get copied into the deployment bundle.
 // flow-disable-next-line since the sdk file will be written as part of the build process.
-const BackendBlockSdkWrapper = require('./block_backend_sdk');
+const BackendBlockSdkWrapper = require('../block_backend_sdk');
 // flow-disable-next-line since the block.json file will be written as part of the build process.
-const blockJson: BlockJson = require('./block.json');
+const blockJson: BlockJson = require('../user/block.json');
 
 import type {LambdaEvent} from './types/lambda_event_type';
 
@@ -40,7 +44,7 @@ const blocksBackendEventHandler = new BlocksBackendEventHandler({
     enableUploadLogsToS3: true,
     resolveBackendRouteHandler: BlocksBackendEventHandler.resolveBackendRouteHandlerWithRequirePrefix.bind(
         null,
-        '../user/routes/',
+        '../user/',
     ),
 });
 

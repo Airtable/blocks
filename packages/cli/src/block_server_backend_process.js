@@ -3,11 +3,8 @@
 require('@babel/polyfill');
 const invariant = require('invariant');
 const path = require('path');
-const request = require('request');
-const util = require('util');
-const url = require('url');
-const blockCliConfigSettings = require('./config/block_cli_config_settings');
 const BlocksBackendEventHandler = require('../blocks_backend_wrapper/blocks_backend_event_handler');
+const downloadBackendSdkAsync = require('./helpers/download_backend_sdk_async');
 const {BackendProcessResponseTypes} = require('./types/block_server_backend_process_types');
 
 import type {
@@ -15,8 +12,6 @@ import type {
     BackendProcessRequest,
     BackendProcessResponse,
 } from './types/block_server_backend_process_types';
-
-const requestAsync = util.promisify(request);
 
 // Copied from https://stackoverflow.com/questions/17581830/load-node-js-module-from-string-in-memory
 function requireFromString(src) {
@@ -26,23 +21,8 @@ function requireFromString(src) {
     return m.exports;
 }
 
-async function downloadBackendSdkAsync(backendSdkBaseUrl: string) {
-    const sdkUrl = url.resolve(
-        backendSdkBaseUrl || blockCliConfigSettings.BACKEND_SDK_BASE_URL,
-        blockCliConfigSettings.BACKEND_SDK_URL_PATH,
-    );
-    const response = await requestAsync({
-        method: 'GET',
-        uri: sdkUrl,
-        headers: {
-            'User-Agent': blockCliConfigSettings.USER_AGENT,
-        },
-    });
-    if (response.statusCode !== 200) {
-        throw new Error(
-            `Failed to download backend SDK from ${sdkUrl} with status code: ${response.statusCode}`,
-        );
-    }
+async function requireBackendSdkAsync(backendSdkBaseUrl: string) {
+    const response = await downloadBackendSdkAsync(backendSdkBaseUrl);
     const backendSdkJs = response.body;
 
     // This is sketchy: some runtime checks for "am I running in Node" check that
@@ -64,7 +44,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
     const {blockDirPath, blockJson, backendSdkBaseUrl} = options;
 
     // Download the backend sdk.
-    const BackendBlockSdkWrapper = await downloadBackendSdkAsync(backendSdkBaseUrl);
+    const BackendBlockSdkWrapper = await requireBackendSdkAsync(backendSdkBaseUrl);
     const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();
 
     // Set up backend event handler.

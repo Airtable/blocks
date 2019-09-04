@@ -17,11 +17,15 @@ type DeployId = string;
 
 async function _generateBuildArtifactsAsync(
     blockJson: BlockJson,
+    backendSdkBaseUrl: string | null,
 ): Promise<{|
     frontendBundlePath: string,
     backendDeploymentPackagePath: string | null,
 |}> {
-    const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({blockJson});
+    const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
+        blockJson,
+        backendSdkBaseUrl,
+    });
     const buildResult = await blockBuilder.buildForReleaseAsync();
     if (buildResult.err) {
         throw new Error('Failed to build the block code!');
@@ -94,9 +98,11 @@ async function _uploadBackendDeploymentPackageAsync(
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
     blockJson: BlockJson,
+    backendSdkBaseUrl: string | null,
 ): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
     const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync(
         blockJson,
+        backendSdkBaseUrl,
     );
 
     const hasBackend = !!backendDeploymentPackagePath;
@@ -153,8 +159,14 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     const apiClient = apiClientResult.value;
 
+    const backendSdkBaseUrl = argv['backend-sdk-base-url'] || null;
+    invariant(
+        backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
+        'expects backendSdkBaseUrl to be null or a string',
+    );
+
     console.log('building');
-    const {buildId, deployId} = await _buildAndDeployAsync(apiClient, blockJson);
+    const {buildId, deployId} = await _buildAndDeployAsync(apiClient, blockJson, backendSdkBaseUrl);
 
     console.log('releasing');
     await apiClient.createReleaseAsync(buildId, deployId);

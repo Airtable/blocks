@@ -1,5 +1,6 @@
 // @flow
 /* eslint-disable no-console */
+const archiver = require('archiver');
 const path = require('path');
 const fs = require('fs');
 const {promisify} = require('util');
@@ -13,6 +14,8 @@ const {npmAsync} = require('../helpers/node_modules_command_helpers');
 const browserify = require('browserify');
 const watchify = require('watchify');
 const Terser = require('terser');
+const downloadBackendSdkAsync = require('../helpers/download_backend_sdk_async');
+const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
 const BlockBuildTypes = require('../types/block_build_types');
@@ -21,6 +24,7 @@ const BlockBuilderJobQueue = require('./block_builder_job_queue');
 const ErrorCodes = require('../types/error_codes');
 const {RESULT_OK} = require('../types/result');
 const {getBlockDirPath} = require('../get_block_dir_path');
+const hasBackendRoutes = require('../helpers/has_backend_routes');
 
 import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
@@ -75,15 +79,18 @@ class BlockBuilder {
     _browserify: browserify;
     _initialBuildResolveIfExists: PromiseResolveFunction | null;
     _blockBuilderJobQueue: BlockBuilderJobQueue;
+    _backendSdkBaseUrl: string | null;
 
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
         transpileForAllBrowsers?: boolean,
+        backendSdkBaseUrl?: string | null,
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
+        this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._blockDirPath = getBlockDirPath();
 
         const outputBuildDirPath = path.join(
@@ -114,13 +121,15 @@ class BlockBuilder {
     }
     static async createReleaseBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        backendSdkBaseUrl: string | null,
     }): Promise<BlockBuilder> {
-        const {blockJson} = args;
+        const {blockJson, backendSdkBaseUrl} = args;
 
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
             blockJson,
             transpileForAllBrowsers: true,
+            backendSdkBaseUrl,
         });
     }
     static getBlockBuilderError(
@@ -535,6 +544,107 @@ class BlockBuilder {
         );
         await fsUtils.writeFileAsync(clientWrapperFilePath, clientWrapperCode);
     }
+    /** Copy transpiled blocks_backend_wrapper (bundled with this tool) to transpiled directory. */
+    async _writeBlocksBackendWrapperAsync(): Promise<Result<void, Error>> {
+        const projectRootPath = getBlocksCliProjectRootPath();
+        const outputDirPath = path.join(
+            this._outputTranspiledDirPath,
+            blockCliConfigSettings.BACKEND_WRAPPER_DIR,
+        );
+        try {
+            const transpiledBlocksBackendWrapperDirPath = path.join(
+                projectRootPath,
+                'transpiled',
+                'blocks_backend_wrapper',
+            );
+            if (!(await fsUtils.existsAsync(transpiledBlocksBackendWrapperDirPath))) {
+                throw new Error(
+                    `missing blocks backend wrapper directory ${transpiledBlocksBackendWrapperDirPath}`,
+                );
+            }
+            await fsUtils.copyAsync(transpiledBlocksBackendWrapperDirPath, outputDirPath);
+            const blocksBackendWrapperPackageJsonPath = path.join(
+                projectRootPath,
+                'blocks_backend_wrapper',
+                'package.json',
+            );
+            if (!(await fsUtils.existsAsync(blocksBackendWrapperPackageJsonPath))) {
+                throw new Error(
+                    `missing blocks backend wrapper package.json at ${blocksBackendWrapperPackageJsonPath}`,
+                );
+            }
+            await fsUtils.copyFileAsync(
+                blocksBackendWrapperPackageJsonPath,
+                path.join(outputDirPath, 'package.json'),
+            );
+        } catch (err) {
+            return {err};
+        }
+        return await this._npmInstallAsync(outputDirPath);
+    }
+    async _writeBackendSdkAsync(): Promise<Result<void, Error>> {
+        try {
+            const response = await downloadBackendSdkAsync(this._backendSdkBaseUrl);
+            await fsUtils.writeFileAsync(
+                path.join(
+                    this._outputTranspiledDirPath,
+                    `${blockCliConfigSettings.BACKEND_SDK_MODULE}.js`,
+                ),
+                response.body,
+            );
+        } catch (err) {
+            return {err};
+        }
+        return RESULT_OK;
+    }
+    async _zipBackendDeploymentPackageAsync(
+        srcDirPath: string,
+        outputPath: string,
+    ): Promise<Result<void, Error>> {
+        const zip = archiver('zip');
+        try {
+            await new Promise((resolve, reject) => {
+                const output = fs.createWriteStream(outputPath);
+                output.on('close', resolve);
+                zip.on('error', reject);
+                zip.pipe(output);
+                // Add srcDirPath as root directory.
+                zip.directory(srcDirPath, false);
+                zip.finalize();
+            });
+            return RESULT_OK;
+        } catch (err) {
+            return {err};
+        }
+    }
+    async _generateBackendDeploymentPackageAsync(): Promise<Result<FilePath, Error>> {
+        // Set up blocks_backend_wrapper.
+        const writeBlocksBackendWrapperResult = await this._writeBlocksBackendWrapperAsync();
+        if (writeBlocksBackendWrapperResult.err) {
+            return writeBlocksBackendWrapperResult;
+        }
+
+        // Set up backend SDK.
+        const backendSdkResult = await this._writeBackendSdkAsync();
+        if (backendSdkResult.err) {
+            return backendSdkResult;
+        }
+
+        // Zip everything up.
+        const outputPath = path.join(
+            this._outputBuildArtifactsDirPath,
+            blockCliConfigSettings.BACKEND_BUNDLE_FILE_NAME,
+        );
+        const zipResult = await this._zipBackendDeploymentPackageAsync(
+            this._outputTranspiledDirPath,
+            outputPath,
+        );
+        if (zipResult.err) {
+            return zipResult;
+        }
+
+        return {value: outputPath};
+    }
     async _wipeOutputDirectoriesAsync(): Promise<void> {
         await Promise.all([
             fsUtils.emptyDirAsync(this._outputUserTranspiledDirPath),
@@ -659,10 +769,21 @@ class BlockBuilder {
         }
         await fsUtils.writeFileAsync(frontendBundlePath, minifiedFrontendBundleFileResult.value);
 
+        // 6.Generate backend bundle.
+        let backendDeploymentPackagePath = null;
+        if (hasBackendRoutes(this._blockJson)) {
+            console.log('generating backend bundle');
+            const backendDeploymentPackageResult = await this._generateBackendDeploymentPackageAsync();
+            if (backendDeploymentPackageResult.err) {
+                return backendDeploymentPackageResult;
+            }
+            backendDeploymentPackagePath = backendDeploymentPackageResult.value;
+        }
+
         return {
             value: {
                 frontendBundlePath,
-                backendDeploymentPackagePath: null, // TODO(richsinn): Fill here when backend blocks are implemented
+                backendDeploymentPackagePath,
             },
         };
     }
