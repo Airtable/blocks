@@ -16,6 +16,16 @@ const permissionHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/permissions/permission_helpers',
 );
 
+// Limit for how many items can be updated from a single batch mutation.
+// This is number of records for MULTIPLE_RECORDS type mutations, and number of global config paths
+// for SET_MULTIPLE_GLOBAL_CONFIG_PATHS.
+// Same limit is enforced liveapp-side
+const MUTATIONS_MAX_BATCH_SIZE = 50;
+
+// Liveapp requests must be under 2mb in size: we enforce a 1.9mb limit here to allow space for
+// the other parts of the request
+const MUTATIONS_MAX_BODY_SIZE = 1.9 * 1024 * 1024;
+
 const MUTATION_HOLD_FOR_MS = 100;
 
 const FIELD_TYPE_MUTATION_BAN_SET = new Set([
@@ -46,6 +56,7 @@ class Mutations {
     }
 
     async applyMutationAsync(mutation: Mutation): Promise<void> {
+        this._assertMutationUnderLimits(mutation);
         this._assertMutationIsValid(mutation);
 
         if (!this.doesCurrentUserHavePermissionToApplyMutation(mutation)) {
@@ -82,6 +93,40 @@ class Mutations {
     doesCurrentUserHavePermissionToApplyMutation(mutation: Mutation): boolean {
         // TODO: add permission checks to AirtableInterface and move this there - also accounting for field/table locking
         return permissionHelpers.can(this._session.__rawPermissionLevel, PermissionLevels.EDIT);
+    }
+
+    _assertMutationUnderLimits(mutation: Mutation) {
+        // Two limits to check here:
+        // - for record-related mutations, it isn't above MUTATIONS_MAX_BATCH_SIZE
+        // - mutation payload size won't exceed liveapp request payload size limit
+        // Requests are sent as form-encoded utf-8 (1 byte characters)
+        if (encodeURIComponent(JSON.stringify(mutation)).length > MUTATIONS_MAX_BODY_SIZE) {
+            throw spawnError(
+                'Request exceeds maximum size limit of %s bytes',
+                MUTATIONS_MAX_BODY_SIZE,
+            );
+        }
+
+        if (this._doesMutationExceedBatchSizeLimit(mutation)) {
+            throw spawnError(
+                'Request exceeds maximum batch size limit of %s items',
+                MUTATIONS_MAX_BATCH_SIZE,
+            );
+        }
+    }
+
+    _doesMutationExceedBatchSizeLimit(mutation: Mutation) {
+        switch (mutation.type) {
+            case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES:
+            case MutationTypes.CREATE_MULTIPLE_RECORDS:
+                return mutation.records.length > MUTATIONS_MAX_BATCH_SIZE;
+            case MutationTypes.DELETE_MULTIPLE_RECORDS:
+                return mutation.recordIds.length > MUTATIONS_MAX_BATCH_SIZE;
+            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS:
+                return mutation.updates.length > MUTATIONS_MAX_BATCH_SIZE;
+            default:
+                return false;
+        }
     }
 
     _assertFieldIsValidForMutation(field: Field, tableId: string) {
