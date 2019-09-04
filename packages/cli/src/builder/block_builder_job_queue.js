@@ -132,38 +132,35 @@ class BlockBuilderJobQueue extends EventEmitter {
 
             // Always enqueue a bundle job after transpilation to help with reliably resolving the
             // pending `buildingPromise`. Reasons:
-            // - We cannot reliably tell here if changes were for backend or frontend files.
+            // - We cannot reliably determine if changes were for backend or frontend files.
             //   Changes to backend only files doesn't actually require a bundle job, but then we
             //   don't have a reliable way to determine when to resolve the `buildingPromise`.
-            //   Therefore, we decide to only resolve the `buildingPromise` after a bundle job, and always
-            //   enqueue a bundle job after any transpilation.
+            //   Therefore, we decide to only resolve the `buildingPromise` after a bundle job, and
+            //   always enqueue a bundle job after any transpilation.
+            // - This guarantees `browserify.bundle()` is successfully called at least once after
+            //   initial startup.
             // NOTES:
             //  - By enqueuing the bundle job here, the bundle job will actually be processed
             //    in the next queue loop.
             //  - If there were any transpilation errors, the `shouldBundle` logic below will
             //    correctly skip the bundle job.
-            //  - For changes to frontend code, we still rely on watchfiy's 'update' event listener
-            //    to enqueue bundle jobs than relying on the enqueue here. This is to handle race
-            //    conditions because browserify will not properly recognize changes until watchfiy
-            //    watchify emits the `update` event. Any duplicate bundle jobs that are enqueued
-            //    in the same loop will be de-duplicated.
+            //  - For changes to frontend code, we still rely on watchify's 'update' event listener
+            //    to enqueue bundle jobs rather than relying on the enqueue here. This is to handle
+            //    race conditions because browserify will not properly recognize changes until
+            //    watchify emits the `update` event.
+            //  - Any duplicate bundle jobs that are enqueued in the same loop are de-duplicated.
             this.enqueue({
                 action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
             });
         }
 
         const shouldBundle =
-            (jobsByAction.has(JobActions.BUNDLE) || !this._didInitialBundleRunSuccessfully) &&
-            this._transpileErrorByFilePath.size === 0;
+            jobsByAction.has(JobActions.BUNDLE) && this._transpileErrorByFilePath.size === 0;
         if (shouldBundle) {
             const frontendBundleResult = await this._processFrontendBundleJobAsync(
                 generateFrontendBundleAsyncFn,
             );
-            if (frontendBundleResult.err) {
-                this._bundleErrorIfExists = frontendBundleResult.err;
-            } else {
-                this._bundleErrorIfExists = null;
-            }
+            this._bundleErrorIfExists = frontendBundleResult.err ? frontendBundleResult.err : null;
         }
 
         this._onBuildLoopComplete(shouldBundle);

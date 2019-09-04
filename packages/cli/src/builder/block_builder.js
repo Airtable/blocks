@@ -173,8 +173,8 @@ class BlockBuilder {
                 //      listening for `update` events after the initial `bundle()` completes,
                 //      otherwise we'll trigger two `bundle()` requests on initial building.
                 //   2. If the initial `bundle()` fails, the `update` event will never emit again,
-                //      until a successful `bundle()` completes. Therefore, we have to manually
-                //      trigger the `bundle()` call from the BlockBuildJobQueue before we can start
+                //      until a successful `bundle()` completes. Therefore, we rely on the
+                //      BlockBuildJobQueue to enqueue an initial `bundle()` success before we start
                 //      enqueuing bundle jobs from here.
                 this._browserify.on('update', () => {
                     this._blockBuilderJobQueue.enqueue({
@@ -331,6 +331,8 @@ class BlockBuilder {
             case BlockBuildTypes.DEVELOPMENT: {
                 nodeEnv = 'development';
 
+                // NOTE: The cache and packageCache properties are required by watchify
+                // src: https://github.com/browserify/watchify#watchifyb-opts
                 browserifyWatchOptions = {
                     cache: {},
                     packageCache: {},
