@@ -11,7 +11,6 @@ const {RESULT_OK} = require('../types/result');
 import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {Result} from '../types/result';
-import type {PromiseResolveFunction} from '../types/promise_types';
 import type {ErrorWithCode, TranspileError} from '../types/error_codes';
 
 const JobActions = Object.freeze({
