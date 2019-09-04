@@ -41,6 +41,7 @@ function createBackendProcessForTesting(backendSdkServerPort: number) {
         '..',
         'transpiled',
         'src',
+        'server',
         'block_server_backend_process',
     );
     const backendProcessOptions: BackendProcessOptions = {

@@ -3,15 +3,15 @@
 require('@babel/polyfill');
 const invariant = require('invariant');
 const path = require('path');
-const BlocksBackendEventHandler = require('../blocks_backend_wrapper/blocks_backend_event_handler');
-const downloadBackendSdkAsync = require('./helpers/download_backend_sdk_async');
-const {BackendProcessResponseTypes} = require('./types/block_server_backend_process_types');
+const BlocksBackendEventHandler = require('../../blocks_backend_wrapper/blocks_backend_event_handler');
+const downloadBackendSdkAsync = require('../helpers/download_backend_sdk_async');
+const {BackendProcessResponseTypes} = require('../types/block_server_backend_process_types');
 
 import type {
     BackendProcessOptions,
     BackendProcessRequest,
     BackendProcessResponse,
-} from './types/block_server_backend_process_types';
+} from '../types/block_server_backend_process_types';
 
 // Copied from https://stackoverflow.com/questions/17581830/load-node-js-module-from-string-in-memory
 function requireFromString(src) {

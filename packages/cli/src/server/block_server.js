@@ -9,23 +9,23 @@ const path = require('path');
 const fs = require('fs');
 const envify = require('envify/custom');
 const stripAnsi = require('strip-ansi');
-const ErrorCodes = require('./types/error_codes');
-const blockCliConfigSettings = require('./config/block_cli_config_settings');
-const generatePollForLiveReloadCode = require('./generate_poll_for_live_reload');
-const ApiClient = require('./api_client');
-const fsUtils = require('./fs_utils');
+const ErrorCodes = require('../types/error_codes');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
+const generatePollForLiveReloadCode = require('../generate_poll_for_live_reload');
+const ApiClient = require('../api_client');
+const fsUtils = require('../fs_utils');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
-const BlockBuilder = require('./builder/block_builder');
-const {BlockBuilderStatuses} = require('./types/block_builder_state_data_types');
-const getBlocksCliProjectRootPath = require('./helpers/get_blocks_cli_project_root_path');
+const BlockBuilder = require('../builder/block_builder');
+const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types');
+const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
 const clipboardy = require('clipboardy');
 
 import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
-import type {BlockJson} from './types/block_json_type';
-import type {RemoteJson} from './types/remote_json_type';
-import type {BlockBuilderStateData} from './types/block_builder_state_data_types';
-import type {PromiseResolveFunction, PromiseRejectFunction} from './types/promise_types';
+import type {BlockJson} from '../types/block_json_type';
+import type {RemoteJson} from '../types/remote_json_type';
+import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
+import type {PromiseResolveFunction, PromiseRejectFunction} from '../types/promise_types';
 
 type RequestWithRequestId = $Request & {
     requestId: number,

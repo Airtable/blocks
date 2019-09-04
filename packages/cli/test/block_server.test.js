@@ -1,5 +1,5 @@
 // @flow
-const BlockServer = require('../src/block_server');
+const BlockServer = require('../src/server/block_server');
 const BlockBuilder = require('../src/builder/block_builder');
 const BlockBuildTypes = require('../src/types/block_build_types');
 const sinon = require('sinon');
