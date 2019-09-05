@@ -197,6 +197,12 @@ class BlockBuilder {
                 }
             });
     }
+    _doesPathStartWith(sourcePath: string, searchPath: string): boolean {
+        const normalizedSourcePath = path.normalize(sourcePath);
+        const normalizedSearchPath = path.normalize(searchPath);
+
+        return normalizedSourcePath.startsWith(normalizedSearchPath);
+    }
     /**
      * Use chokidar to do the initial walk of the user's block directory.
      *
@@ -225,8 +231,12 @@ class BlockBuilder {
             // HACK: For some reason, we need to use a function here to ignore the 'build' and
             // the 'node_modules' directories. Using glob patterns is not properly ignored and
             // it copies things over in an endless recursion.
-            p => p.startsWith(path.join(this._blockDirPath, blockCliConfigSettings.BUILD_DIR)),
-            p => p.startsWith(path.join(this._blockDirPath, 'node_modules')),
+            p =>
+                this._doesPathStartWith(
+                    p,
+                    path.join(this._blockDirPath, blockCliConfigSettings.BUILD_DIR),
+                ),
+            p => this._doesPathStartWith(p, path.join(this._blockDirPath, 'node_modules')),
             path.join(this._blockDirPath, blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME),
             path.join(this._blockDirPath, blockCliConfigSettings.CONFIG_FILE_NAME),
             '.git',
