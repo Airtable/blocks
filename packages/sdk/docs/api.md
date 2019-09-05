@@ -1883,17 +1883,19 @@ Once you've got a query result, you need to load it before you can start working
 you're finished, unload it:
 
 ```js
-// query for all the records in "myTable"
-const queryResult = myTable.selectRecords();
+async function fetchRecordsAndDoSomethingAsync(myTable) {
+    // query for all the records in "myTable"
+    const queryResult = myTable.selectRecords();
 
-// load the data in the query result:
-await queryResult.loadDataAsync();
+    // load the data in the query result:
+    await queryResult.loadDataAsync();
 
-// work with the data in the query result
-doSomething(queryResult);
+    // work with the data in the query result
+    doSomething(queryResult);
 
-// when you're done, unload the data:
-queryResult.unloadData();
+    // when you're done, unload the data:
+    queryResult.unloadData();
+}
 ```
 
 If you're using a query result in a React component, you don't need to worry about this. Just use
@@ -2866,18 +2868,20 @@ Select the field order and visible fields from the view. See {@ViewMetadataQuery
 ##### Examples
 
 ```javascript
-const viewMetadata = view.selectMetadata();
-await viewMetadata.loadDataAsync();
+async function loadMetadataForViewAsync(view) {
+    const viewMetadata = view.selectMetadata();
+    await viewMetadata.loadDataAsync();
 
-console.log('Visible fields:');
-console.log(viewMetadata.visibleFields.map(field => field.name));
-// => ['Field 1', 'Field 2', 'Field 3']
+    console.log('Visible fields:');
+    console.log(viewMetadata.visibleFields.map(field => field.name));
+    // => ['Field 1', 'Field 2', 'Field 3']
 
-console.log('All fields:');
-console.log(viewMetadata.allFields.map(field => field.name));
-// => ['Field 1', 'Field 2', 'Field 3', 'Hidden field 4']
+    console.log('All fields:');
+    console.log(viewMetadata.allFields.map(field => field.name));
+    // => ['Field 1', 'Field 2', 'Field 3', 'Hidden field 4']
 
-viewMetadata.unloadData();
+    viewMetadata.unloadData();
+}
 ```
 
 Returns **[ViewMetadataQueryResult][107]** a {@ViewMetadataQueryResult}
@@ -2994,16 +2998,18 @@ In a React component, you might want to use [useViewMetadata][108].
 #### Examples
 
 ```javascript
-const viewMetadata = view.selectMetaData();
-await viewMetadata.loadDataAsync();
+async function loadMetadataForViewAsync(view) {
+    const viewMetadata = view.selectMetadata();
+    await viewMetadata.loadDataAsync();
 
-console.log(viewMetadata.visibleField);
-// => [Field, Field, Field]
+    console.log(viewMetadata.visibleField);
+    // => [Field, Field, Field]
 
-console.log(viewMetadata.allFields);
-// => [Field, Field, Field, Field, Field]
+    console.log(viewMetadata.allFields);
+    // => [Field, Field, Field, Field, Field]
 
-viewMetadata.unloadData();
+    viewMetadata.unloadData();
+}
 ```
 
 #### allFields
@@ -3939,16 +3945,18 @@ return null.
 ```javascript
 import {expandRecordPickerAsync} from '@airtable/blocks/ui';
 
-const recordA = await expandRecordPickerAsync([record1, record2, record3]);
-if (recordA !== null) {
-    alert(recordA.primaryCellValueAsString);
-} else {
-    alert('no record picked');
-}
+async function pickRecordsAsync() {
+    const recordA = await expandRecordPickerAsync([record1, record2, record3]);
+    if (recordA !== null) {
+        alert(recordA.primaryCellValueAsString);
+    } else {
+        alert('no record picked');
+    }
 
-const recordB = await expandRecordPickerAsync([record1, record2], {
-    fields: [field1, field2],
-});
+    const recordB = await expandRecordPickerAsync([record1, record2], {
+        fields: [field1, field2],
+    });
+}
 ```
 
 Returns **[Promise][99]&lt;(record | null)>** a Promise that resolves to the record chosen by the

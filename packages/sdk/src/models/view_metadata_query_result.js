@@ -38,16 +38,18 @@ const viewMetadataQueryResultPool: ObjectPool<
  * In a React component, you might want to use {@link useViewMetadata}.
  *
  * @example
- * const viewMetadata = view.selectMetaData();
- * await viewMetadata.loadDataAsync();
+ * async function loadMetadataForViewAsync(view) {
+ *     const viewMetadata = view.selectMetadata();
+ *     await viewMetadata.loadDataAsync();
  *
- * console.log(viewMetadata.visibleField);
- * // => [Field, Field, Field]
+ *     console.log(viewMetadata.visibleField);
+ *     // => [Field, Field, Field]
  *
- * console.log(viewMetadata.allFields);
- * // => [Field, Field, Field, Field, Field]
+ *     console.log(viewMetadata.allFields);
+ *     // => [Field, Field, Field, Field, Field]
  *
- * viewMetadata.unloadData();
+ *     viewMetadata.unloadData();
+ * }
  */
 class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     ViewMetadata,

@@ -75,17 +75,19 @@ export type NormalizedRecordQueryResultOpts = {|
  * Once you've got a query result, you need to load it before you can start working with it. When
  * you're finished, unload it:
  * ```js
- * // query for all the records in "myTable"
- * const queryResult = myTable.selectRecords();
+ * async function fetchRecordsAndDoSomethingAsync(myTable) {
+ *     // query for all the records in "myTable"
+ *     const queryResult = myTable.selectRecords();
  *
- * // load the data in the query result:
- * await queryResult.loadDataAsync();
+ *     // load the data in the query result:
+ *     await queryResult.loadDataAsync();
  *
- * // work with the data in the query result
- * doSomething(queryResult);
+ *     // work with the data in the query result
+ *     doSomething(queryResult);
  *
- * // when you're done, unload the data:
- * queryResult.unloadData();
+ *     // when you're done, unload the data:
+ *     queryResult.unloadData();
+ * }
  * ```
  *
  * If you're using a query result in a React component, you don't need to worry about this. Just

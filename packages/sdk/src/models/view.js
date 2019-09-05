@@ -174,18 +174,20 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *
      * @returns a {@ViewMetadataQueryResult}
      * @example
-     * const viewMetadata = view.selectMetadata();
-     * await viewMetadata.loadDataAsync();
+     * async function loadMetadataForViewAsync(view) {
+     *     const viewMetadata = view.selectMetadata();
+     *     await viewMetadata.loadDataAsync();
      *
-     * console.log('Visible fields:');
-     * console.log(viewMetadata.visibleFields.map(field => field.name));
-     * // => ['Field 1', 'Field 2', 'Field 3']
+     *     console.log('Visible fields:');
+     *     console.log(viewMetadata.visibleFields.map(field => field.name));
+     *     // => ['Field 1', 'Field 2', 'Field 3']
      *
-     * console.log('All fields:');
-     * console.log(viewMetadata.allFields.map(field => field.name));
-     * // => ['Field 1', 'Field 2', 'Field 3', 'Hidden field 4']
+     *     console.log('All fields:');
+     *     console.log(viewMetadata.allFields.map(field => field.name));
+     *     // => ['Field 1', 'Field 2', 'Field 3', 'Hidden field 4']
      *
-     * viewMetadata.unloadData();
+     *     viewMetadata.unloadData();
+     * }
      */
     selectMetadata(): ViewMetadataQueryResult {
         return ViewMetadataQueryResult.__createOrReuseQueryResult(this, this._viewDataStore);

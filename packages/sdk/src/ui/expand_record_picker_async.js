@@ -26,16 +26,18 @@ import type Field from '../models/field';
  * @example
  * import {expandRecordPickerAsync} from '@airtable/blocks/ui';
  *
- * const recordA = await expandRecordPickerAsync([record1, record2, record3]);
- * if (recordA !== null) {
- *     alert(recordA.primaryCellValueAsString);
- * } else {
- *     alert('no record picked');
- * }
+ * async function pickRecordsAsync() {
+ *     const recordA = await expandRecordPickerAsync([record1, record2, record3]);
+ *     if (recordA !== null) {
+ *         alert(recordA.primaryCellValueAsString);
+ *     } else {
+ *         alert('no record picked');
+ *     }
  *
- * const recordB = await expandRecordPickerAsync([record1, record2], {
- *     fields: [field1, field2],
- * });
+ *     const recordB = await expandRecordPickerAsync([record1, record2], {
+ *         fields: [field1, field2],
+ *     });
+ * }
  */
 async function expandRecordPickerAsync(
     records: Array<Record>,
