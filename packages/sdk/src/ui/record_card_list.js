@@ -16,7 +16,7 @@ const RECORD_CARD_SPACING = 10;
 /** @private */
 type FixedSizeListType = HTMLDivElement & {scrollTo: number => void, scrollToItem: number => void};
 /** @private */
-type RecordCardItemRendererProps = {|
+type RecordCardItemRendererProps = {
     data: {
         records: Array<Record | RecordDef>,
         fields?: Array<Field>,
@@ -31,7 +31,7 @@ type RecordCardItemRendererProps = {|
     style: {[string]: mixed, left: number, top: number},
     className?: string,
     index: number,
-|};
+};
 
 /**
  * Item renderer component for react-window FixedSizeList. Responsible for rendering each
@@ -185,11 +185,11 @@ const innerRecordCardListWindow = React.forwardRef((props: InnerWindowProps, ref
 type RecordCardListProps = {|
     records: Array<Record | RecordDef>,
 
-    onScroll?: ({|
-        scrollDirection: string,
+    onScroll?: ({
+        scrollDirection: 'forward' | 'backward',
         scrollOffset: number,
         scrollUpdateWasRequested: boolean,
-    |}) => void,
+    }) => void,
     onRecordClick?: null | ((record: Record | RecordDef, index: number) => void),
     onRecordMouseEnter?: (record: Record | RecordDef, index: number) => void,
     onRecordMouseLeave?: (record: Record | RecordDef, index: number) => void,

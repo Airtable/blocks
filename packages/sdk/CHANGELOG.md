@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.30...HEAD)
 
-No changes.
+-   Upgrade flow to 0.106.3
+-   Fix a flow error with `react-window`.
 
 ## [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.29...@airtable/blocks@0.0.30) - 2019-08-26
 
