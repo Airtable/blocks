@@ -175,7 +175,7 @@ class BlockBuilder {
         this._blockBuilderJobQueue = new BlockBuilderJobQueue(this._buildTypeMode);
         this._blockBuilderJobQueue
             .on('initialBundleSuccessfullyCompleted', () => {
-                // NOTE: The `update` event handler will enqueue `bundle` jobs, but we only attach
+                // NOTE: The `update` event handler will enqueue `BUNDLE` jobs, but we only attach
                 // the `update` event handler after the first successful bundle for two reasons:
                 //   1. The watchify plugin will emit the `update` event on the first call
                 //      to `bundle()` before `bundle()` even completes. But we only want to start
@@ -183,8 +183,8 @@ class BlockBuilder {
                 //      otherwise we'll trigger two `bundle()` requests on initial building.
                 //   2. If the initial `bundle()` fails, the `update` event will never emit again,
                 //      until a successful `bundle()` completes. Therefore, we rely on the
-                //      BlockBuildJobQueue to enqueue an initial `bundle()` success before we start
-                //      enqueuing bundle jobs from here.
+                //      BlockBuildJobQueue to enqueue until an initial `bundle()` success before
+                //      we start enqueuing `BUNDLE` jobs from here.
                 this._browserify.on('update', () => {
                     this._blockBuilderJobQueue.enqueue({
                         action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
@@ -311,21 +311,23 @@ class BlockBuilder {
             });
     }
     /**
-     * Use browserify to bundle the user's frontend code. NOTE: browserify references the user's
-     * 'transpiled' directory (i.e. _outputUserTranspiledDirPath), NOT the user code directory, to
-     * bundle the code.
+     * Use browserify to bundle the user's transpiled frontend code. NOTE: browserify acts on
+     * the user's transpiled files in the `transpiled` directory, NOT the raw user code files to
+     * bundle the frontend file.
      *
      * In DEVELOPMENT mode:
-     *   - Use the watchify plugin to watch the transpiled directory for any changes.
-     *     NOTE: The browserify.bundle() method must be triggered at least once for watchify to
-     *     start. Logic to trigger the first bundle() method actually occurs in
-     *     BlockBuilderJobQueue, and is not actually placed on the queue.
+     *   - Instantiate browserify instance with the watchify plugin. The watchify plugin watches
+     *     the `transpiled` directory for any changes.
+     *     NOTE: The `browserify.bundle()` method must be triggered at least once for watchify to
+     *     start. Logic to guarantee a successful `bundle()` after startup actually occurs in
+     *     BlockBuilderJobQueue.
      *   - When watchify detects changes to the transpiled code, it is responsible for enqueuing
-     *     the 'bundle' jobs to the BlockBuilderJobQueue.
-     *   - Set NODE_ENV to 'development' via envify for proper bundling of node_modules
+     *     the `BUNDLE` jobs to the BlockBuilderJobQueue.
+     *   - Set NODE_ENV to 'development' via envify for proper bundling of `node_modules`
      *     dependencies
      *
      * In RELEASE mode:
+     *   - Instantiates browserify instance with all default options.
      *   - Set NODE_ENV to 'production' via envify for proper bundling of node_modules dependencies.
      */
     _setupBrowserify(): void {
@@ -334,7 +336,6 @@ class BlockBuilder {
             blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME,
         );
 
-        let browserifyWatchOptions;
         let nodeEnv;
         switch (this._buildTypeMode) {
             case BlockBuildTypes.DEVELOPMENT: {
@@ -342,24 +343,24 @@ class BlockBuilder {
 
                 // NOTE: The cache and packageCache properties are required by watchify
                 // src: https://github.com/browserify/watchify#watchifyb-opts
-                browserifyWatchOptions = {
+                const browserifyWatchOptions = {
                     cache: {},
                     packageCache: {},
                     debug: true,
-                    plugin: [watchify],
                     paths: [this._blockDirPath],
                 };
+                this._browserify = browserify(clientWrapperFilePath, browserifyWatchOptions);
+                this._browserify.plugin(watchify, {delay: 0});
                 break;
             }
             case BlockBuildTypes.RELEASE:
                 nodeEnv = 'production';
-                browserifyWatchOptions = {};
+                this._browserify = browserify(clientWrapperFilePath);
                 break;
 
             default:
                 throw new Error(`unrecognized buildTypeMode: ${this._buildTypeMode}`);
         }
-        this._browserify = browserify(clientWrapperFilePath, browserifyWatchOptions);
         this._browserify.transform(
             // 'global' is required in order to process node_modules files
             {global: true},
@@ -367,8 +368,8 @@ class BlockBuilder {
                 NODE_ENV: nodeEnv,
             }),
         );
-
         this._browserify.bundleAsync = promisify(this._browserify.bundle.bind(this._browserify));
+
         if (this._buildTypeMode === BlockBuildTypes.DEVELOPMENT) {
             this._browserify.on('bundle', () => console.log('Updating bundle...'));
         }

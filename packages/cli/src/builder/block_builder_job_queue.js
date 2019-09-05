@@ -43,7 +43,8 @@ type QueueConsumerArgs = {|
     generateFrontendBundleAsyncFn: GenerateFrontendBundleAsyncFn,
 |};
 
-const BUILD_JOB_TIMER_DELAY_MS = 200;
+const QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS = 200;
+const BUNDLE_JOB_TIMER_DELAY_MS = 200;
 
 class BlockBuilderJobQueue extends EventEmitter {
     _buildTypeMode: BlockBuildType;
@@ -81,7 +82,7 @@ class BlockBuilderJobQueue extends EventEmitter {
         if (this._buildJobQueueConsumerTimerIfExists === null) {
             this._buildJobQueueConsumerTimerIfExists = setTimeout(
                 this._queueConsumerLoopAsync.bind(this, args),
-                BUILD_JOB_TIMER_DELAY_MS,
+                QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS,
             );
         }
     }
@@ -97,7 +98,7 @@ class BlockBuilderJobQueue extends EventEmitter {
         if (this._buildJobQueue.length === 0) {
             this._buildJobQueueConsumerTimerIfExists = setTimeout(
                 this._queueConsumerLoopAsync.bind(this, args),
-                BUILD_JOB_TIMER_DELAY_MS,
+                QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS,
             );
             return;
         }
@@ -129,33 +130,43 @@ class BlockBuilderJobQueue extends EventEmitter {
                 transpileOrCopyAsyncFn,
             );
 
-            // Always enqueue a bundle job after transpilation to help with reliably resolving the
-            // pending `buildingPromise`. Reasons:
-            // - We cannot reliably determine if changes were for backend or frontend files.
-            //   Changes to backend only files doesn't actually require a bundle job, but then we
-            //   don't have a reliable way to determine when to resolve the `buildingPromise`.
-            //   Therefore, we decide to only resolve the `buildingPromise` after a bundle job, and
-            //   always enqueue a bundle job after any transpilation.
-            // - This guarantees `browserify.bundle()` is successfully called at least once after
-            //   initial startup.
+            // After transpilation, always enqueue a `BUNDLE` job with a timer to help with reliably
+            // resolving the `buildingPromise`. Reasons:
+            // 1. We cannot reliably determine if transpilation was for backend or frontend files.
+            // 2. Backend file changes do not trigger a `BUNDLE` job, whereas frontend file changes
+            //    trigger a `BUNDLE` job. But because we cannot reliably detect if a backend or
+            //    frontend file changed/transpiled, we need some mechanism for consistently
+            //    resolving the `buildingPromise`.
+            // 3. By always enqueuing a `BUNDLE` job after transpilation, we can handle the case for
+            //    when only backend files changed because we can now resolve the `buildingPromise`
+            //    if a `BUNDLE` job should be processed and this._blockBuilderStateData is currently
+            //    in BUILDING state.
+            // 4. By enqueuing after some timeout, we handle race conditions with watchify for
+            //    frontend code changes; if the BUNDLE job enqueued by watchify executes first, then
+            //    the `BUNDLE` job enqueued here will be de-duplicated or appropriately ignored
+            //    because this._blockBuilderStateData will have transitioned to a "terminal" state
+            //    of READY or ERROR, thus allowing the `shouldBundle` logic below to ignore
+            //    the `BUNDLE`.
+            // 5. This also guarantees that `browserify.bundle()` is successfully called at least
+            //    once after initial startup.
             // NOTES:
-            //  - By enqueuing the bundle job here, the bundle job will actually be processed
-            //    in the next queue loop.
             //  - If there were any transpilation errors, the `shouldBundle` logic below will
-            //    correctly skip the bundle job.
-            //  - For changes to frontend code, we still rely on watchify's 'update' event listener
-            //    to enqueue bundle jobs rather than relying on the enqueue here. This is to handle
-            //    race conditions because browserify will not properly recognize changes until
-            //    watchify emits the `update` event.
-            //  - Any duplicate bundle jobs that are enqueued in the same loop are de-duplicated.
-            this.enqueue({
-                action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
-            });
+            //    correctly skip the `BUNDLE` job because we would've transitioned to the terminal
+            //    ERROR state.
+            //  - Any duplicate `BUNDLE` jobs that are enqueued in the same loop are de-duplicated.
+            setTimeout(() => {
+                this.enqueue({
+                    action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
+                });
+            }, BUNDLE_JOB_TIMER_DELAY_MS);
         }
 
         const bundleJobs = jobsByAction[JobActions.BUNDLE];
         const shouldBundle =
-            bundleJobs && bundleJobs.length > 0 && this._transpileErrorByFilePath.size === 0;
+            bundleJobs &&
+            bundleJobs.length > 0 &&
+            this._blockBuilderStateData.status === BlockBuilderStatuses.BUILDING &&
+            this._transpileErrorByFilePath.size === 0;
         if (shouldBundle) {
             const frontendBundleResult = await this._processFrontendBundleJobAsync(
                 generateFrontendBundleAsyncFn,
@@ -165,13 +176,11 @@ class BlockBuilderJobQueue extends EventEmitter {
 
         this._onBuildLoopComplete(shouldBundle);
 
-        // We're restarting the timer loop here with a very small delay (as opposed to on
-        // BUILD_JOB_TIMER_DELAY_MS delay) because we want the next loop to more "immediately"
-        // process the queue for more items.
-        // For example, in a typical `transpile` -> `bundle` cycle, the `bundle` job will actually
-        // be processed on a loop after the `transpile`. This is because `chokidar` watches the
-        // user code and enqueues the `transpile` jobs, while `browserify` watches the transpiled
-        // code and enqueues the `bundle` jobs.
+        // Use recursive timeouts to loop with a very small delay (as opposed to on
+        // QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS delay) because we want the next loop to more
+        // "immediately" process the queue for more items.
+        // For example, in a typical `TRANSPILE_OR_UNLINK` -> `BUNDLE` cycle, the `BUNDLE` job will
+        // actually be processed on a loop after the `TRANSPILE_OR_UNLINK`.
         this._buildJobQueueConsumerTimerIfExists = setTimeout(
             this._queueConsumerLoopAsync.bind(this, args),
             10,
