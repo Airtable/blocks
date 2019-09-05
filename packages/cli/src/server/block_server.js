@@ -19,6 +19,7 @@ const chalk = require('chalk');
 const BlockBuilder = require('../builder/block_builder');
 const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types');
 const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
+const setRequestIdMiddleware = require('./set_request_id_middleware');
 const clipboardy = require('clipboardy');
 
 import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
@@ -26,24 +27,20 @@ import type {BlockJson} from '../types/block_json_type';
 import type {RemoteJson} from '../types/remote_json_type';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {PromiseResolveFunction, PromiseRejectFunction} from '../types/promise_types';
-
-type RequestWithRequestId = $Request & {
-    requestId: number,
-};
+import type {RequestId, RequestWithRequestId} from './set_request_id_middleware';
 
 const BUNDLE_TIMEOUT_MS = 10000; // 10 seconds
 const LONG_POLL_TIMEOUT_MS = 30000; // 30 seconds
 
 class BlockServer {
     _pendingLongPollResolveRejectByRequestId: Map<
-        number,
+        RequestId,
         {
             resolve: PromiseResolveFunction,
             reject: PromiseRejectFunction,
         },
     >;
     _expressApp: $Application;
-    _nextRequestId: number;
     _apiKey: string;
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
@@ -57,7 +54,6 @@ class BlockServer {
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
-        this._nextRequestId = 0;
         this._blockBuilder = blockBuilder;
         this._apiKey = apiKey;
         this._remoteJson = remoteJson;
@@ -77,14 +73,7 @@ class BlockServer {
         });
 
         // Set a requestId on each request.
-        this._expressApp.use((req: $Request, res: $Response, next: NextFunction) => {
-            // Flow typecasting the `req` const to be `RequestWithRequestId`
-            // because all request objects after this middleware should
-            // have the "requestId" attribute defined to `req`.
-            ((req: any): RequestWithRequestId).requestId = this._nextRequestId; // eslint-disable-line flowtype/no-weak-types
-            this._nextRequestId++;
-            next();
-        });
+        this._expressApp.use(setRequestIdMiddleware());
 
         // TODO(richsinn): Add URL to instructions or docs?
         // TODO(richsinn): We'll need to figure out how to avoid conflicts when
