@@ -6,6 +6,7 @@ import {type Mutation, MutationTypes} from '../types/mutations';
 import {FieldTypes} from '../types/field';
 import {entries} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
+import {type GlobalConfigUpdate} from '../global_config';
 import cellValueUtils from './cell_value_utils';
 import type Session from './session';
 import type Base from './base';
@@ -27,17 +28,20 @@ class Mutations {
     _session: Session;
     _base: Base;
     _applyModelChanges: (Array<ModelChange>) => void;
+    _applyGlobalConfigUpdates: (Array<GlobalConfigUpdate>) => void;
 
     constructor(
         airtableInterface: AirtableInterface,
         session: Session,
         base: Base,
         applyModelChanges: (Array<ModelChange>) => void,
+        applyGlobalConfigUpdates: (Array<GlobalConfigUpdate>) => void,
     ) {
         this._airtableInterface = airtableInterface;
         this._session = session;
         this._base = base;
         this._applyModelChanges = applyModelChanges;
+        this._applyGlobalConfigUpdates = applyGlobalConfigUpdates;
     }
 
     async applyMutationAsync(mutation: Mutation): Promise<void> {
@@ -206,12 +210,27 @@ class Mutations {
                 return;
             }
 
+            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
+                // globalConfig update is a special case: globalConfig handles validation before
+                // invoking this mutation, since it relies on internal state to validate the
+                // paths being set.
+                return;
+            }
+
             default:
                 throw spawnUnknownSwitchCaseError('mutation type', (mutation.type: empty));
         }
     }
 
     _applyOptimisticUpdatesForMutation(mutation: Mutation): boolean {
+        // GlobalConfig updates are different to other mutations (on models): for models, we
+        // only apply optimistic updates if the relevant models are loaded, whereas for
+        // SET_MULTIPLE_GLOBAL_CONFIG_PATHS we always apply optimistic updates.
+        if (mutation.type === MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS) {
+            this._applyGlobalConfigUpdates(mutation.updates);
+            return true;
+        }
+
         const modelChanges = this._getOptimisticModelChangesForMutation(mutation);
 
         if (modelChanges.length > 0) {
@@ -303,6 +322,12 @@ class Mutations {
                         ]);
                     }),
                 ];
+            }
+
+            case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
+                throw spawnError(
+                    'attempting to generate model updates for SET_MULTIPLE_GLOBAL_CONFIG_PATH',
+                );
             }
 
             default:

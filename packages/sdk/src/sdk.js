@@ -214,8 +214,12 @@ class BlockSdk {
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
         this.session = new Session(sdkInitData.baseData, airtableInterface);
-        this.__mutations = new Mutations(airtableInterface, this.session, this.base, changes =>
-            this.__applyModelChanges(changes),
+        this.__mutations = new Mutations(
+            airtableInterface,
+            this.session,
+            this.base,
+            changes => this.__applyModelChanges(changes),
+            updates => this.__applyGlobalConfigUpdates(updates),
         );
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);

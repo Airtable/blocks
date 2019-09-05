@@ -2,8 +2,9 @@
 import {PermissionLevels} from './types/permission_levels';
 import Watchable from './watchable';
 import getSdk from './get_sdk';
-import {type AirtableInterface, type AirtableWriteAction} from './injected/airtable_interface';
+import {type AirtableInterface} from './injected/airtable_interface';
 import {spawnError} from './error_utils';
+import {MutationTypes} from './types/mutations';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
@@ -192,7 +193,6 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
-     * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -200,9 +200,30 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     globalConfig.set('favoriteColor', 'purple');
      * }
      */
-    set(key: GlobalConfigKey, value: GlobalConfigValue | void): AirtableWriteAction<void, {}> {
+    set(key: GlobalConfigKey, value: GlobalConfigValue | void) {
+        this.setAsync(key, value);
+    }
+    /**
+     * Asynchronous version of [set][#set].
+     * Use this if you wish to wait for the updates to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in
+     * {@link GlobalConfig} before the promise resolves.
+     *
+     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
+     * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
+     * @returns {Promise<void>} A promise that will resolve once the update is persisted to Airtable.
+     * @example
+     * import {globalConfig} from '@airtable/blocks';
+     *
+     * async function updateFavoriteColorIfPossibleAsync(color) {
+     *     if (globalConfig.canSet('favoriteColor')) {
+     *         await globalConfig.setAsync('favoriteColor', color);
+     *     }
+     * }
+     */
+    async setAsync(key: GlobalConfigKey, value: GlobalConfigValue | void): Promise<void> {
         const path = this.__formatKeyAsPath(key);
-        return this.setPaths([{path, value}]);
+        await this.setPathsAsync([{path, value}]);
     }
     /**
      * Returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
@@ -231,7 +252,6 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Sets multiple values. Throws if any path or value is invalid.
      *
      * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
-     * @returns {{}}
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
@@ -243,7 +263,29 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     globalConfig.setPaths(updates);
      * }
      */
-    setPaths(updates: Array<GlobalConfigUpdate>): AirtableWriteAction<void, {}> {
+    setPaths(updates: Array<GlobalConfigUpdate>) {
+        this.setPathsAsync(updates);
+    }
+    /**
+     * Asynchronous version of [setPaths](#setPaths).
+     * Use this if you wish to wait for the updates to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in
+     * {@link GlobalConfig} before the promise resolves.
+     *
+     * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
+     * @returns {Promise<void>} A promise that will resolve once the update is persisted to Airtable.
+     * @example
+     * import {globalConfig} from '@airtable/blocks';
+     *
+     * async function applyUpdatesIfPossibleAsync(updates) {
+     *     if (globalConfig.canSetPaths(updates)) {
+     *         await globalConfig.setPathsAsync(updates);
+     *     }
+     * }
+     */
+    async setPathsAsync(updates: Array<GlobalConfigUpdate>): Promise<void> {
+        // Validate the updates. Usually applyMutationAsync performs validations, but globalConfig
+        // updates are a special case because it relies on internal globalConfig state to validate.
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
         if (!this.canSetPaths(updates)) {
@@ -256,13 +298,11 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
                 throw spawnError('Invalid globalConfig path: %s', pathValidation.reason);
             }
         }
-        getSdk().__applyGlobalConfigUpdates(updates);
 
-        // Now send the update to Airtable.
-        const completionPromise = this._airtableInterface.setMultipleKvPathsAsync(updates);
-        return {
-            completion: completionPromise,
-        };
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+            updates,
+        });
     }
     /**
      * @private

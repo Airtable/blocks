@@ -23,10 +23,6 @@ export type SdkInitData = {|
     isFirstRun: boolean,
 |};
 
-export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {
-    completion: Promise<CompletionResponseData>,
-} & AdditionalArgs;
-
 /*
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable. The mechanism through which we communicate with Airtable
