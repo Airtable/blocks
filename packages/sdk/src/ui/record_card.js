@@ -204,7 +204,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         const {record, view, fields, attachmentCoverField} = props;
 
         if (record && record instanceof Record && record.isDeleted) {
-            throw spawnError('Record is deleted');
+            throw spawnError('Record %s is deleted', record.id);
         }
 
         if (!record) {
@@ -214,7 +214,10 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (record && record instanceof Record && attachmentCoverField) {
             if (attachmentCoverField.parentTable.id !== record.parentTable.id) {
                 throw spawnError(
-                    'Attachment cover field must have the same parent table as record',
+                    'Attachment cover field %s must have the same parent table as record (record ID %s, table ID %s)',
+                    attachmentCoverField.id,
+                    record.id,
+                    record.parentTable.id,
                 );
             }
         }
@@ -222,14 +225,24 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (record && record instanceof Record && fields) {
             for (const field of fields) {
                 if (!field.isDeleted && field.parentTable.id !== record.parentTable.id) {
-                    throw spawnError('All fields must have the same parent table as record');
+                    throw spawnError(
+                        'Field %s must have the same parent table as record (record ID %s, table ID %s)',
+                        field.id,
+                        record.id,
+                        record.parentTable.id,
+                    );
                 }
             }
         }
 
         if (record && record instanceof Record && view && !view.isDeleted) {
             if (view.parentTable.id !== record.parentTable.id) {
-                throw spawnError('View must have the same parent table as record');
+                throw spawnError(
+                    'View %s must have the same parent table as record (record ID %s, table ID %s)',
+                    view.id,
+                    record.id,
+                    record.parentTable.id,
+                );
             }
         }
     }

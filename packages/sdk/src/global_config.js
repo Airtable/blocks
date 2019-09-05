@@ -270,7 +270,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      */
     __setMultipleKvPaths(updates: Array<GlobalConfigUpdate>) {
         if (!Array.isArray(updates)) {
-            throw spawnError('globalConfig updates must be an array');
+            throw spawnError(
+                'globalConfig updates must be an array. Provided type: %s',
+                typeof updates,
+            );
         }
 
         const topLevelKeySet = {};

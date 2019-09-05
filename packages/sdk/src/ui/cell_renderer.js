@@ -67,7 +67,11 @@ class CellRenderer extends React.Component<CellRendererProps> {
             !props.field.isDeleted &&
             props.record.parentTable.id !== props.field.parentTable.id
         ) {
-            throw spawnError('CellRenderer: record and field must have the same parent table');
+            throw spawnError(
+                'CellRenderer: record %s and field %s do not have the same parent table',
+                props.record.parentTable.id,
+                props.field.parentTable.id,
+            );
         }
     }
     render() {
