@@ -80,6 +80,7 @@ class BlockBuilder {
     _initialBuildResolveIfExists: PromiseResolveFunction<void> | null;
     _blockBuilderJobQueue: BlockBuilderJobQueue;
     _backendSdkBaseUrl: string | null;
+    _browserifyCache: {[FilePath]: mixed};
 
     constructor(args: {
         buildTypeMode: BlockBuildType,
@@ -103,6 +104,7 @@ class BlockBuilder {
         this._outputBuildArtifactsDirPath = path.join(outputBuildDirPath, 'build_artifacts');
 
         this._initialBuildResolveIfExists = null;
+        this._browserifyCache = {};
 
         this._setupBlockBuilderJobQueue();
         this._setupBrowserify();
@@ -173,29 +175,11 @@ class BlockBuilder {
     }
     _setupBlockBuilderJobQueue(): void {
         this._blockBuilderJobQueue = new BlockBuilderJobQueue(this._buildTypeMode);
-        this._blockBuilderJobQueue
-            .on('initialBundleSuccessfullyCompleted', () => {
-                // NOTE: The `update` event handler will enqueue `BUNDLE` jobs, but we only attach
-                // the `update` event handler after the first successful bundle for two reasons:
-                //   1. The watchify plugin will emit the `update` event on the first call
-                //      to `bundle()` before `bundle()` even completes. But we only want to start
-                //      listening for `update` events after the initial `bundle()` completes,
-                //      otherwise we'll trigger two `bundle()` requests on initial building.
-                //   2. If the initial `bundle()` fails, the `update` event will never emit again,
-                //      until a successful `bundle()` completes. Therefore, we rely on the
-                //      BlockBuildJobQueue to enqueue until an initial `bundle()` success before
-                //      we start enqueuing `BUNDLE` jobs from here.
-                this._browserify.on('update', () => {
-                    this._blockBuilderJobQueue.enqueue({
-                        action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
-                    });
-                });
-            })
-            .on('buildComplete', () => {
-                if (this._initialBuildResolveIfExists !== null) {
-                    this._initialBuildResolveIfExists();
-                }
-            });
+        this._blockBuilderJobQueue.on('buildComplete', () => {
+            if (this._initialBuildResolveIfExists !== null) {
+                this._initialBuildResolveIfExists();
+            }
+        });
     }
     _doesPathStartWith(sourcePath: string, searchPath: string): boolean {
         const normalizedSourcePath = path.normalize(sourcePath);
@@ -313,6 +297,7 @@ class BlockBuilder {
                 this._blockBuilderJobQueue.startQueueConsumerLoop({
                     outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
                     transpileOrCopyAsyncFn: this._transpileOrCopyAsync.bind(this),
+                    unlinkAsyncFn: this._unlinkAsync.bind(this),
                     generateFrontendBundleAsyncFn: this._generateFrontendBundleAsync.bind(this),
                 }),
             )
@@ -354,7 +339,7 @@ class BlockBuilder {
                 // NOTE: The cache and packageCache properties are required by watchify
                 // src: https://github.com/browserify/watchify#watchifyb-opts
                 const browserifyWatchOptions = {
-                    cache: {},
+                    cache: this._browserifyCache,
                     packageCache: {},
                     debug: true,
                     paths: [this._blockDirPath],
@@ -457,9 +442,19 @@ class BlockBuilder {
             } else {
                 await fsUtils.copyFileAsync(fileOrDirectoryPath, targetFilePath);
             }
+
+            delete this._browserifyCache[targetFilePath];
         }
 
         return {value: fileOrDirectoryPath};
+    }
+    async _unlinkAsync(filePath: FilePath): Promise<void> {
+        const targetFilePath = path.join(
+            this._outputUserTranspiledDirPath,
+            this._replaceTranspiledFileExtension(filePath),
+        );
+        await fsUtils.removeAsync(targetFilePath);
+        delete this._browserifyCache[targetFilePath];
     }
     _getErrorFromNpmInstallStderr(stderr: string): Error | null {
         const errorMessageLines = stderr.split('\n').filter(message => {

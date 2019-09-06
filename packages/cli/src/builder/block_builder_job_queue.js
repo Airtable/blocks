@@ -36,15 +36,16 @@ type TranspileOrCopyAsyncFn = (
     fileOrDirectoryPath: string,
     stats?: fs.Stats | null,
 ) => Promise<Result<string, TranspileError>>;
+type UnlinkAsyncFn = (filePath: string) => Promise<void>;
 type GenerateFrontendBundleAsyncFn = () => Promise<Result<void, ErrorWithCode>>;
 type QueueConsumerArgs = {|
     outputUserTranspiledDirPath: string,
     transpileOrCopyAsyncFn: TranspileOrCopyAsyncFn,
+    unlinkAsyncFn: UnlinkAsyncFn,
     generateFrontendBundleAsyncFn: GenerateFrontendBundleAsyncFn,
 |};
 
 const QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS = 200;
-const BUNDLE_JOB_TIMER_DELAY_MS = 200;
 
 class BlockBuilderJobQueue extends EventEmitter {
     _buildTypeMode: BlockBuildType;
@@ -93,7 +94,7 @@ class BlockBuilderJobQueue extends EventEmitter {
         }
     }
     async _queueConsumerLoopAsync(args: QueueConsumerArgs): Promise<void> {
-        const {transpileOrCopyAsyncFn, generateFrontendBundleAsyncFn} = args;
+        const {transpileOrCopyAsyncFn, unlinkAsyncFn, generateFrontendBundleAsyncFn} = args;
 
         if (this._buildJobQueue.length === 0) {
             this._buildJobQueueConsumerTimerIfExists = setTimeout(
@@ -128,44 +129,21 @@ class BlockBuilderJobQueue extends EventEmitter {
                 args.outputUserTranspiledDirPath,
                 transpileOrUnlinkJobs,
                 transpileOrCopyAsyncFn,
+                unlinkAsyncFn,
             );
 
-            // After transpilation, always enqueue a `BUNDLE` job with a timer to help with reliably
-            // resolving the `buildingPromise`. Reasons:
-            // 1. We cannot reliably determine if transpilation was for backend or frontend files.
-            // 2. Backend file changes do not trigger a `BUNDLE` job, whereas frontend file changes
-            //    trigger a `BUNDLE` job. But because we cannot reliably detect if a backend or
-            //    frontend file changed/transpiled, we need some mechanism for consistently
-            //    resolving the `buildingPromise`.
-            // 3. By always enqueuing a `BUNDLE` job after transpilation, we can handle the case for
-            //    when only backend files changed because we can now resolve the `buildingPromise`
-            //    if a `BUNDLE` job should be processed and this._blockBuilderStateData is currently
-            //    in BUILDING state.
-            // 4. By enqueuing after some timeout, we handle race conditions with watchify for
-            //    frontend code changes; if the BUNDLE job enqueued by watchify executes first, then
-            //    the `BUNDLE` job enqueued here will be de-duplicated or appropriately ignored
-            //    because this._blockBuilderStateData will have transitioned to a "terminal" state
-            //    of READY or ERROR, thus allowing the `shouldBundle` logic below to ignore
-            //    the `BUNDLE`.
-            // 5. This also guarantees that `browserify.bundle()` is successfully called at least
-            //    once after initial startup.
-            // NOTES:
-            //  - If there were any transpilation errors, the `shouldBundle` logic below will
-            //    correctly skip the `BUNDLE` job because we would've transitioned to the terminal
-            //    ERROR state.
-            //  - Any duplicate `BUNDLE` jobs that are enqueued in the same loop are de-duplicated.
-            setTimeout(() => {
-                this.enqueue({
-                    action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
-                });
-            }, BUNDLE_JOB_TIMER_DELAY_MS);
+            // TODO: Refactor the BlockBuilderJobQueue loop to simplify the build cycle.
+            this.enqueue({
+                action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
+            });
         }
 
         const bundleJobs = jobsByAction[JobActions.BUNDLE];
         const shouldBundle =
             bundleJobs &&
             bundleJobs.length > 0 &&
-            this._blockBuilderStateData.status === BlockBuilderStatuses.BUILDING &&
+            (this._blockBuilderStateData.status === BlockBuilderStatuses.BUILDING ||
+                this._blockBuilderStateData.status === BlockBuilderStatuses.ERROR) &&
             this._transpileErrorByFilePath.size === 0;
         if (shouldBundle) {
             const frontendBundleResult = await this._processFrontendBundleJobAsync(
@@ -190,6 +168,7 @@ class BlockBuilderJobQueue extends EventEmitter {
         outputUserTranspiledDirPath: string,
         transpileOrUnlinkJobs: Array<TranspileOrUnlinkBuildJob>,
         transpileOrCopyAsyncFn: TranspileOrCopyAsyncFn,
+        unlinkAsyncFn: UnlinkAsyncFn,
     ): Promise<void> {
         const jobsByFilePath = groupBy(transpileOrUnlinkJobs, job => job.fileOrDirPath);
 
@@ -211,9 +190,7 @@ class BlockBuilderJobQueue extends EventEmitter {
                     break;
 
                 case 'unlink': {
-                    // TODO(richsinn): Removing the file does not re-trigger a bundle. Investigate.
-                    const filePathToUnlink = path.join(outputUserTranspiledDirPath, fileOrDirPath);
-                    filesToUnlinkPromises.push(fsUtils.removeAsync(filePathToUnlink));
+                    filesToUnlinkPromises.push(unlinkAsyncFn(fileOrDirPath));
                     break;
                 }
 
