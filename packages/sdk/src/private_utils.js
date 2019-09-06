@@ -208,3 +208,9 @@ export function uniqBy<Item, Key>(array: $ReadOnlyArray<Item>, getKey: Item => K
 
     return result;
 }
+
+let idCount = 0;
+/** @private */
+export function getLocallyUniqueId(prefix: string = ''): string {
+    return `${prefix}.${idCount++}`;
+}

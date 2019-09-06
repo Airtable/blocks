@@ -12,7 +12,6 @@ toc:
     - name: '@airtable/blocks/models'
       children:
           - fieldTypes
-          - generateGuid
           - viewTypes
           - recordColoring
           - AbstractModel
