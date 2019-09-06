@@ -77,7 +77,7 @@ class BlockBuilder {
     _outputUserTranspiledDirPath: string;
     _outputBuildArtifactsDirPath: string;
     _browserify: browserify;
-    _initialBuildResolveIfExists: PromiseResolveFunction | null;
+    _initialBuildResolveIfExists: PromiseResolveFunction<void> | null;
     _blockBuilderJobQueue: BlockBuilderJobQueue;
     _backendSdkBaseUrl: string | null;
 

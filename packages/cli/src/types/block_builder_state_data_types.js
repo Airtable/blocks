@@ -16,7 +16,7 @@ type BlockBuilderStateStart = {|
 type BlockBuilderStateBuilding = {
     status: typeof BlockBuilderStatuses.BUILDING,
     promise: Promise<void>,
-    resolvePromise: PromiseResolveFunction,
+    resolvePromise: PromiseResolveFunction<void>,
 };
 
 type BlockBuilderStateReady = {|status: typeof BlockBuilderStatuses.READY|};

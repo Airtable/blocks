@@ -36,7 +36,7 @@ class BlockServer {
     _pendingLongPollResolveRejectByRequestId: Map<
         RequestId,
         {
-            resolve: PromiseResolveFunction,
+            resolve: PromiseResolveFunction<void>,
             reject: PromiseRejectFunction,
         },
     >;
