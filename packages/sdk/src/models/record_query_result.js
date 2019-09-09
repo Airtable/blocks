@@ -234,12 +234,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             ? null
             : opts.sorts.map(sort => {
                   const field = table.__getFieldMatching(sort.field);
-                  if (!field) {
-                      throw spawnError(
-                          'No field found for sort: %s',
-                          sort.field ? sort.field.toString() : typeof sort.field,
-                      );
-                  }
                   if (
                       sort.direction !== undefined &&
                       sort.direction !== 'asc' &&
@@ -273,9 +267,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     );
                 }
                 const field = table.__getFieldMatching(fieldOrFieldIdOrFieldName);
-                if (!field) {
-                    throw spawnError('No field found: %s', fieldOrFieldIdOrFieldName);
-                }
                 fieldIdsOrNullIfAllFields.push(field.id);
             }
         }

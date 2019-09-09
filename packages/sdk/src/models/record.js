@@ -210,13 +210,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     /**
      * @private
      */
-    _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
+    _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field {
         return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
     /**
      * @private
      */
-    _getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
+    _getViewMatching(viewOrViewIdOrViewName: View | string): View {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
     /**
@@ -231,24 +231,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): mixed {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        const fieldStringForErrors =
-            fieldOrFieldIdOrFieldName instanceof Field
-                ? fieldOrFieldIdOrFieldName.id
-                : fieldOrFieldIdOrFieldName;
-
-        invariant(field, 'Field %s does not exist', fieldStringForErrors);
-        invariant(!field.isDeleted, 'Field %s has been deleted', fieldStringForErrors);
-        invariant(
-            field.parentTable.id === this.parentTable.id,
-            'Field %s must have same parent table as record (record ID: %s, table ID: %s)',
-            fieldStringForErrors,
-            this.id,
-            this.parentTable.id,
-        );
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field %s are not loaded',
-            fieldStringForErrors,
+            field.id,
         );
         const {cellValuesByFieldId} = this._data;
         if (!cellValuesByFieldId) {
@@ -308,23 +294,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     getCellValueAsString(fieldOrFieldIdOrFieldName: Field | FieldId | string): string {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        const fieldStringForErrors =
-            fieldOrFieldIdOrFieldName instanceof Field
-                ? fieldOrFieldIdOrFieldName.id
-                : fieldOrFieldIdOrFieldName;
-        invariant(field, 'Field %s does not exist', fieldStringForErrors);
-        invariant(!field.isDeleted, 'Field %s has been deleted', fieldStringForErrors);
-        invariant(
-            field.parentTable.id === this.parentTable.id,
-            'Field %s must have same parent table as record (record ID: %s, table ID: %s)',
-            fieldStringForErrors,
-            this.id,
-            this.parentTable.id,
-        );
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field %s are not loaded',
-            fieldStringForErrors,
+            field.id,
         );
         const rawCellValue = this.__getRawCellValue(field.id);
 
@@ -393,19 +366,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     getColorInView(viewOrViewIdOrViewName: View | ViewId | string): Color | null {
         const view = this._getViewMatching(viewOrViewIdOrViewName);
-        const viewStringForErrors =
-            viewOrViewIdOrViewName instanceof View
-                ? viewOrViewIdOrViewName.id
-                : viewOrViewIdOrViewName;
-        invariant(view, 'View %s does not exist', viewStringForErrors);
-        invariant(!view.isDeleted, 'View %s has been deleted', viewStringForErrors);
-        invariant(
-            view.parentTable.id === this.parentTable.id,
-            'View %s must have same parent table as record (record ID: %s, table ID: %s)',
-            viewStringForErrors,
-            this.id,
-            this.parentTable.id,
-        );
 
         return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
@@ -437,19 +397,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         opts: RecordQueryResultOpts = {},
     ): LinkedRecordsQueryResult {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        const fieldStringForErrors =
-            fieldOrFieldIdOrFieldName instanceof Field
-                ? fieldOrFieldIdOrFieldName.id
-                : fieldOrFieldIdOrFieldName;
-        invariant(field, 'Field %s does not exist', fieldStringForErrors);
-        invariant(!field.isDeleted, 'Field %s has been deleted', fieldStringForErrors);
-        invariant(
-            field.parentTable.id === this.parentTable.id,
-            'Field %s must have same parent table as record (record ID: %s, table ID: %s)',
-            fieldStringForErrors,
-            this.id,
-            this.parentTable.id,
-        );
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
     /**

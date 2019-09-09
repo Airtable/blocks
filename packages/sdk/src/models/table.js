@@ -529,13 +529,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return Object.fromEntries(
             entries(cellValuesByFieldIdOrName).map(([fieldIdOrName, cellValue]) => {
                 const field = this.__getFieldMatching(fieldIdOrName);
-                if (!field) {
-                    throw spawnError(
-                        "Field '%s' doesn't exist in table %s",
-                        fieldIdOrName,
-                        this.id,
-                    );
-                }
                 return [field.id, cellValue];
             }),
         );
@@ -543,28 +536,66 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /**
      * @private
      */
-    __getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
+    __getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field {
         let field: Field | null;
         if (fieldOrFieldIdOrFieldName instanceof Field) {
+            if (fieldOrFieldIdOrFieldName.parentTable.id !== this.id) {
+                throw spawnError(
+                    "Field '%s' is from a different table than table '%s'",
+                    fieldOrFieldIdOrFieldName.id,
+                    this.id,
+                );
+            }
             field = fieldOrFieldIdOrFieldName;
         } else {
             field =
                 this.getFieldByIdIfExists(fieldOrFieldIdOrFieldName) ||
                 this.getFieldByNameIfExists(fieldOrFieldIdOrFieldName);
+
+            if (field === null) {
+                throw spawnError(
+                    "Field '%s' does not exist in table '%s'",
+                    fieldOrFieldIdOrFieldName,
+                    this.id,
+                );
+            }
+        }
+
+        if (field.isDeleted) {
+            throw spawnError("Field '%s' was deleted from table '%s'", field.id, this.id);
         }
         return field;
     }
     /**
      * @private
      */
-    __getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
+    __getViewMatching(viewOrViewIdOrViewName: View | string): View {
         let view: View | null;
         if (viewOrViewIdOrViewName instanceof View) {
+            if (viewOrViewIdOrViewName.parentTable.id !== this.id) {
+                throw spawnError(
+                    "View '%s' is from a different table than table '%s'",
+                    viewOrViewIdOrViewName.id,
+                    this.id,
+                );
+            }
             view = viewOrViewIdOrViewName;
         } else {
             view =
                 this.getViewByIdIfExists(viewOrViewIdOrViewName) ||
                 this.getViewByNameIfExists(viewOrViewIdOrViewName);
+
+            if (view === null) {
+                throw spawnError(
+                    "View '%s' does not exist in table '%s'",
+                    viewOrViewIdOrViewName,
+                    this.id,
+                );
+            }
+        }
+
+        if (view.isDeleted) {
+            throw spawnError("View '%s' was deleted from table '%s'", view.id, this.id);
         }
         return view;
     }
