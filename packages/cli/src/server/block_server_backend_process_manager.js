@@ -134,6 +134,9 @@ class BlockServerBackendProcessManager {
     }
 
     async _restartAsync() {
+        if (!hasBackendRoutes(this._blockJson)) {
+            return;
+        }
         console.log('Updating backend...');
         try {
             await this._stopAsync();
