@@ -448,6 +448,9 @@ that was added.
 
 Add a minimum frame size constraint. Use \`.minSize`` to get the aggregate of all added constraints.
 
+Upon adding a constraint, if the block is focused and the frame is smaller than the minimum size,
+the block will enter fullscreen mode.
+
 ##### Parameters
 
 -   `sizeConstraint` **{width: ([number][75] | null), height: ([number][75] | null)}** The width and
@@ -5634,7 +5637,8 @@ function Block() {
 
 -   **See: sdk.viewport**
 
-ViewportConstraint - when mounted, applies constraints to the viewport.
+ViewportConstraint - when mounted, applies constraints to the viewport. Like [addMinSize][162], will
+fullscreen the block if necessary and possible when `minSize` is updated.
 
 ##### Examples
 
@@ -5652,13 +5656,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][162]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][162]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][163]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][163]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][162]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][162]?**
+-   `minSize` **[ViewportSizeConstraintProp][163]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][163]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -5831,4 +5835,5 @@ Type: {width: ([number][75] | null)?, height: ([number][75] | null)?}
 [159]: #tooltipprops
 [160]: #viewpickerprops
 [161]: #viewpickersyncedprops
-[162]: #viewportsizeconstraintprop
+[162]: #addminsize
+[163]: #viewportsizeconstraintprop

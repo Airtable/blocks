@@ -26,6 +26,8 @@ const didSizeChange = (
 
 /**
  * ViewportConstraint - when mounted, applies constraints to the viewport.
+ * Like [addMinSize](#addminsize), will fullscreen the block if necessary and possible when
+ * `minSize` is updated.
  *
  * @see sdk.viewport
  * @example
