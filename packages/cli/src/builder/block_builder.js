@@ -200,9 +200,9 @@ class BlockBuilder {
      *   - chokidar is only needed for the initial walk of the user's block directory. We don't
      *     need to watch for code changes, so we set the `persistent` option to false.
      *
-     * As chokidar detects files/changes, it will enqueue 'transpile' jobs to the BlockBuilderJobQueue.
-     * It is also responsible for starting the BlockBuilderJobQueue consumer after it finishes the
-     * initial walk through of the block directory.
+     * As chokidar detects files/changes, it will enqueue 'transpile' or 'unlink' jobs to the
+     * BlockBuilderJobQueue. Chokidar is also responsible for starting the BlockBuilderJobQueue's
+     * queue consumer after it finishes the initial walk through of the block directory.
      *
      * see: https://github.com/paulmillr/chokidar#persistence
      */
@@ -269,8 +269,7 @@ class BlockBuilder {
                 }
 
                 invariant(stats, 'stats');
-                this._blockBuilderJobQueue.enqueue({
-                    action: BlockBuilderJobQueue.JOB_ACTIONS.TRANSPILE_OR_UNLINK,
+                this._blockBuilderJobQueue.enqueueTranspileOrUnlinkJob({
                     eventType: chokidarEvent,
                     fileOrDirPath,
                     fsStatsIfExists: stats,
@@ -289,8 +288,7 @@ class BlockBuilder {
                     process.exit(1);
                 }
 
-                this._blockBuilderJobQueue.enqueue({
-                    action: BlockBuilderJobQueue.JOB_ACTIONS.TRANSPILE_OR_UNLINK,
+                this._blockBuilderJobQueue.enqueueTranspileOrUnlinkJob({
                     eventType: 'unlink',
                     fileOrDirPath: filePath,
                     fsStatsIfExists: null,

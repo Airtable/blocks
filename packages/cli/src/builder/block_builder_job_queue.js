@@ -3,8 +3,6 @@
 const EventEmitter = require('events');
 const invariant = require('invariant');
 const fs = require('fs');
-const fsUtils = require('../fs_utils');
-const path = require('path');
 const {groupBy} = require('lodash');
 const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types');
 const {RESULT_OK} = require('../types/result');
@@ -12,6 +10,7 @@ const {RESULT_OK} = require('../types/result');
 import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {Result} from '../types/result';
+import type {PromiseResolveFunction} from '../types/promise_types';
 import type {ErrorWithCode, TranspileError} from '../types/error_codes';
 
 const JobActions = Object.freeze({
@@ -20,17 +19,10 @@ const JobActions = Object.freeze({
 });
 
 type TranspileOrUnlinkBuildJob = {|
-    action: typeof JobActions.TRANSPILE_OR_UNLINK,
     eventType: 'add' | 'addDir' | 'change' | 'unlink',
     fileOrDirPath: string,
     fsStatsIfExists: fs.Stats | null,
 |};
-
-type BundleBuildJob = {|
-    action: typeof JobActions.BUNDLE,
-|};
-
-type BuildJob = TranspileOrUnlinkBuildJob | BundleBuildJob;
 
 type TranspileOrCopyAsyncFn = (
     fileOrDirectoryPath: string,
@@ -49,13 +41,13 @@ const QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS = 200;
 
 class BlockBuilderJobQueue extends EventEmitter {
     _buildTypeMode: BlockBuildType;
-    _buildJobQueue: Array<BuildJob>;
+    _transpileOrUnlinkBuildJobQueue: Array<TranspileOrUnlinkBuildJob>;
     _blockBuilderStateData: BlockBuilderStateData;
     _transpileErrorByFilePath: Map<string, TranspileError>;
     _bundleErrorIfExists: ErrorWithCode | null;
     // The flow type for _buildJobQueueConsumerTimerIfExists should be node's native Timeout
     // class but flow type definitions are missing for the Timeout class.
-    // - docs: https://nodejs.org/api/timers.html#timers_class_timeout)
+    // - docs: https://nodejs.org/api/timers.html#timers_class_timeout
     // - bug: https://github.com/facebook/flow/issues/3480
     _buildJobQueueConsumerTimerIfExists: Object | null;
     _didInitialBundleRunSuccessfully: boolean;
@@ -63,7 +55,7 @@ class BlockBuilderJobQueue extends EventEmitter {
     constructor(buildTypeMode: BlockBuildType) {
         super();
         this._buildTypeMode = buildTypeMode;
-        this._buildJobQueue = [];
+        this._transpileOrUnlinkBuildJobQueue = [];
         this._transpileErrorByFilePath = new Map();
         this._bundleErrorIfExists = null;
         this._blockBuilderStateData = {status: BlockBuilderStatuses.START};
@@ -76,8 +68,8 @@ class BlockBuilderJobQueue extends EventEmitter {
     get blockBuilderStateData(): BlockBuilderStateData {
         return this._blockBuilderStateData;
     }
-    enqueue(job: BuildJob): void {
-        this._buildJobQueue.push(job);
+    enqueueTranspileOrUnlinkJob(job: TranspileOrUnlinkBuildJob): void {
+        this._transpileOrUnlinkBuildJobQueue.push(job);
     }
     startQueueConsumerLoop(args: QueueConsumerArgs): void {
         if (this._buildJobQueueConsumerTimerIfExists === null) {
@@ -96,7 +88,7 @@ class BlockBuilderJobQueue extends EventEmitter {
     async _queueConsumerLoopAsync(args: QueueConsumerArgs): Promise<void> {
         const {transpileOrCopyAsyncFn, unlinkAsyncFn, generateFrontendBundleAsyncFn} = args;
 
-        if (this._buildJobQueue.length === 0) {
+        if (this._transpileOrUnlinkBuildJobQueue.length === 0) {
             this._buildJobQueueConsumerTimerIfExists = setTimeout(
                 this._queueConsumerLoopAsync.bind(this, args),
                 QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS,
@@ -104,55 +96,28 @@ class BlockBuilderJobQueue extends EventEmitter {
             return;
         }
         // Copy all elements of the queue for processing, and clear out the queue.
-        const currentQueueCopy = this._buildJobQueue.splice(0, this._buildJobQueue.length);
+        const transpileOrUnlinkJobs = this._transpileOrUnlinkBuildJobQueue.splice(
+            0,
+            this._transpileOrUnlinkBuildJobQueue.length,
+        );
 
-        const jobsByAction = groupBy(currentQueueCopy, job => job.action);
-        const transpileOrUnlinkJobs: Array<TranspileOrUnlinkBuildJob> = ((jobsByAction[
-            JobActions.TRANSPILE_OR_UNLINK
-        ]: any): Array<TranspileOrUnlinkBuildJob>); // eslint-disable-line flowtype/no-weak-types
+        this._transitionBlockBuilderState();
 
-        if (transpileOrUnlinkJobs && transpileOrUnlinkJobs.length > 0) {
-            if (this._blockBuilderStateData.status !== BlockBuilderStatuses.BUILDING) {
-                let buildingResolve;
-                const buildingPromise = new Promise((resolve, reject) => {
-                    buildingResolve = resolve;
-                });
-                invariant(buildingResolve, 'buildingResolve');
-                this._blockBuilderStateData = {
-                    status: BlockBuilderStatuses.BUILDING,
-                    promise: buildingPromise,
-                    resolvePromise: buildingResolve,
-                };
-            }
+        await this._processTranspileAndUnlinkJobsAsync(
+            args.outputUserTranspiledDirPath,
+            transpileOrUnlinkJobs,
+            transpileOrCopyAsyncFn,
+            unlinkAsyncFn,
+        );
 
-            await this._processTranspileAndUnlinkJobsAsync(
-                args.outputUserTranspiledDirPath,
-                transpileOrUnlinkJobs,
-                transpileOrCopyAsyncFn,
-                unlinkAsyncFn,
-            );
-
-            // TODO: Refactor the BlockBuilderJobQueue loop to simplify the build cycle.
-            this.enqueue({
-                action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
-            });
-        }
-
-        const bundleJobs = jobsByAction[JobActions.BUNDLE];
-        const shouldBundle =
-            bundleJobs &&
-            bundleJobs.length > 0 &&
-            (this._blockBuilderStateData.status === BlockBuilderStatuses.BUILDING ||
-                this._blockBuilderStateData.status === BlockBuilderStatuses.ERROR) &&
-            this._transpileErrorByFilePath.size === 0;
-        if (shouldBundle) {
+        if (this._transpileErrorByFilePath.size === 0) {
             const frontendBundleResult = await this._processFrontendBundleJobAsync(
                 generateFrontendBundleAsyncFn,
             );
             this._bundleErrorIfExists = frontendBundleResult.err ? frontendBundleResult.err : null;
         }
 
-        this._onBuildLoopComplete(shouldBundle);
+        this._transitionBlockBuilderState();
 
         // Use recursive timeouts to loop with a very small delay (as opposed to on
         // QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS delay) because we want the next loop to more
@@ -229,29 +194,66 @@ class BlockBuilderJobQueue extends EventEmitter {
 
         return RESULT_OK;
     }
-    /**
-     * TODO(richsinn): Make this into a FSM-like implementation.
-     */
-    _onBuildLoopComplete(shouldBundle: boolean): void {
-        const buildingResolve =
-            this._blockBuilderStateData.status === BlockBuilderStatuses.BUILDING
-                ? this._blockBuilderStateData.resolvePromise
-                : () => {};
+    _buildHasErrors(): boolean {
+        return this._bundleErrorIfExists !== null || this._transpileErrorByFilePath.size > 0;
+    }
+    _transitionToBuildingState(): void {
+        let buildingResolve;
+        const buildingPromise = new Promise((resolve, reject) => {
+            buildingResolve = resolve;
+        });
+        invariant(buildingResolve, 'buildingResolve');
+        this._blockBuilderStateData = {
+            status: BlockBuilderStatuses.BUILDING,
+            promise: buildingPromise,
+            resolvePromise: buildingResolve,
+        };
+    }
+    _transitionToReadyState(resolveBuildingPromise: PromiseResolveFunction<void>): void {
+        if (this._buildHasErrors()) {
+            // This should not happen, unless there's a programming error.
+            throw new Error(`Incorrect transition to ${BlockBuilderStatuses.READY}! Errors exist!`);
+        }
 
-        if (this._bundleErrorIfExists !== null || this._transpileErrorByFilePath.size > 0) {
-            this._blockBuilderStateData = {
-                status: BlockBuilderStatuses.ERROR,
-                bundleErr: this._bundleErrorIfExists,
-                transpileErrs: [...this._transpileErrorByFilePath.values()],
-            };
-            this.emit('buildComplete');
-            buildingResolve();
-        } else if (shouldBundle) {
-            this._blockBuilderStateData = {status: BlockBuilderStatuses.READY};
-            this.emit('buildComplete');
-            buildingResolve();
-        } else {
-            // no-op
+        this._blockBuilderStateData = {status: BlockBuilderStatuses.READY};
+        resolveBuildingPromise();
+    }
+    _transitionToErrorState(resolveBuildingPromise: PromiseResolveFunction<void>): void {
+        if (!this._buildHasErrors()) {
+            // This should not happen, unless there's a programming error.
+            throw new Error('Incorrect build state transition! Missing error attributes!');
+        }
+        this._blockBuilderStateData = {
+            status: BlockBuilderStatuses.ERROR,
+            bundleErr: this._bundleErrorIfExists,
+            transpileErrs: [...this._transpileErrorByFilePath.values()],
+        };
+        resolveBuildingPromise();
+    }
+    _transitionBlockBuilderState(): void {
+        const currentBlockBuilderStateData = this._blockBuilderStateData;
+        switch (currentBlockBuilderStateData.status) {
+            case BlockBuilderStatuses.START:
+            case BlockBuilderStatuses.READY:
+            case BlockBuilderStatuses.ERROR:
+                this._transitionToBuildingState();
+                break;
+
+            case BlockBuilderStatuses.BUILDING:
+                if (this._buildHasErrors()) {
+                    this._transitionToErrorState(currentBlockBuilderStateData.resolvePromise);
+                    this.emit('buildComplete');
+                } else {
+                    this._transitionToReadyState(currentBlockBuilderStateData.resolvePromise);
+                }
+
+                this.emit('buildComplete');
+                break;
+
+            default:
+                throw new Error(
+                    `Unknown ${(currentBlockBuilderStateData.status: empty)} value for BlockBuilderStatuses`,
+                );
         }
     }
 }

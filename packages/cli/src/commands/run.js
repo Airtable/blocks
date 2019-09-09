@@ -57,7 +57,6 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     const blockServer = new BlockServer({
         apiKey,
         transpileAll,
-        blockJson,
         remoteJson,
         blockBuilder,
         backendSdkBaseUrl,
