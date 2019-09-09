@@ -6,7 +6,8 @@
         "@babel/polyfill": "^7.4.4",
         "invariant": "2.2.2",
         "path-to-regexp": "2.0.0",
-        "request": "2.87.0"
+        "request": "2.87.0",
+        "strip-ansi": "5.2.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.2.3",

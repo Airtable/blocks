@@ -21,7 +21,7 @@ function requireFromString(src) {
     return m.exports;
 }
 
-async function requireBackendSdkAsync(backendSdkBaseUrl: string) {
+async function requireBackendSdkAsync(backendSdkBaseUrl: string | null) {
     const response = await downloadBackendSdkAsync(backendSdkBaseUrl);
     const backendSdkJs = response.body;
 
@@ -41,24 +41,23 @@ function sendResponse(response: BackendProcessResponse) {
 }
 
 async function setUpBackendProcessAsync(options: BackendProcessOptions) {
-    const {blockDirPath, blockJson, backendSdkBaseUrl} = options;
+    const {outputUserTranspiledDirPath, blockJson, backendSdkBaseUrl} = options;
 
     // Download the backend sdk.
     const BackendBlockSdkWrapper = await requireBackendSdkAsync(backendSdkBaseUrl);
     const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();
 
     // Set up backend event handler.
-    // TODO(Chuan): Update this when build process is able to handle backend routes.
-    const blockDirPathWithTrailingSep = blockDirPath.endsWith(path.sep)
-        ? blockDirPath
-        : blockDirPath + path.sep;
+    const backendRouteHandlerModulePrefix = outputUserTranspiledDirPath.endsWith(path.sep)
+        ? outputUserTranspiledDirPath
+        : outputUserTranspiledDirPath + path.sep;
     const blocksBackendEventHandler = new BlocksBackendEventHandler({
         blockJson,
         backendBlockSdkWrapperInstance,
         enableUploadLogsToS3: false,
         resolveBackendRouteHandler: BlocksBackendEventHandler.resolveBackendRouteHandlerWithRequirePrefix.bind(
             null,
-            blockDirPathWithTrailingSep,
+            backendRouteHandlerModulePrefix,
         ),
     });
 
@@ -67,6 +66,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
         const response = await blocksBackendEventHandler.handleEventAsync(event);
         sendResponse({
             messageType: BackendProcessResponseTypes.EVENT_RESPONSE,
+            pid: process.pid,
             requestId: event.requestId,
             ...response,
         });

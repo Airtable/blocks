@@ -21,6 +21,7 @@ const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types'
 const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
 const setRequestIdMiddleware = require('./set_request_id_middleware');
 const clipboardy = require('clipboardy');
+const BlockServerBackendProcessManager = require('./block_server_backend_process_manager');
 
 import type {$Application, $Request, $Response, Middleware, NextFunction} from 'express';
 import type {BlockJson} from '../types/block_json_type';
@@ -48,9 +49,15 @@ class BlockServer {
     _blockServerUrlIfExists: string | null;
     _apiClient: ApiClient;
     _blockBuilder: BlockBuilder;
+    _backenedProcessManager: BlockServerBackendProcessManager;
 
-    constructor(args: {blockBuilder: BlockBuilder, apiKey: string, remoteJson: RemoteJson}) {
-        const {blockBuilder, apiKey, remoteJson} = args;
+    constructor(args: {
+        blockBuilder: BlockBuilder,
+        apiKey: string,
+        remoteJson: RemoteJson,
+        backendSdkBaseUrl?: string | null,
+    }) {
+        const {blockBuilder, apiKey, remoteJson, backendSdkBaseUrl} = args;
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
@@ -60,9 +67,16 @@ class BlockServer {
         this._blockJson = this._blockBuilder.blockJson;
         this._blockDirPath = this._blockBuilder.blockDirPath;
         this._blockServerUrlIfExists = null;
+        this._backenedProcessManager = new BlockServerBackendProcessManager({
+            blockJson: this._blockJson,
+            outputUserTranspiledDirPath: this._blockBuilder.outputUserTranspiledDirPath,
+            backendSdkBaseUrl: backendSdkBaseUrl || null,
+            getApiClient: () => this._apiClient,
+        });
 
         this._setUpExpressRoutes();
         this._setUpRunFrameRoutes();
+        this._setUpBackendRoutes();
         this._validateBlockDirectory();
     }
     _setUpExpressRoutes(): void {
@@ -74,29 +88,6 @@ class BlockServer {
 
         // Set a requestId on each request.
         this._expressApp.use(setRequestIdMiddleware());
-
-        // TODO(richsinn): Add URL to instructions or docs?
-        // TODO(richsinn): We'll need to figure out how to avoid conflicts when
-        //   implementing backend blocks routes
-        this._expressApp.get('/', (req: $Request, res: $Response) => {
-            res.send(
-                `
-                    <!doctype html>
-                    <body>
-                        <style>
-                        body {
-                            font-family: system-ui;
-                            padding: 24px;
-                            font-size: 18px;
-                        }
-                        </style>
-                        <div style="font-size: 36px; margin: 0">🎉</div>
-                        <p>Your block is running!</p>
-                        <p>Go to your <a href="https://airtable.com/${this._remoteJson.baseId}">Airtable base</a> to build your block.</p>
-                    </body>
-                `,
-            );
-        });
     }
     async _ensureBundleIsReadyAsync(): Promise<void> {
         const {blockBuilderStateData} = this._blockBuilder;
@@ -335,6 +326,42 @@ class BlockServer {
 
         this._expressApp.use('/__runFrame', runFrameRoutes);
     }
+    _setUpBackendRoutes() {
+        const textBodyParser = bodyParser.text({
+            type: () => true,
+            limit: blockCliConfigSettings.BLOCK_REQUEST_BODY_LIMIT,
+        });
+        // TODO(richsinn): Add URL to instructions or docs?
+        this._expressApp.get(
+            '/',
+            textBodyParser,
+            this._backenedProcessManager.tryForwardRequestToBackendProcessMiddleware(),
+            (req: $Request, res: $Response) => {
+                res.send(
+                    `
+                    <!doctype html>
+                    <body>
+                        <style>
+                        body {
+                            font-family: system-ui;
+                            padding: 24px;
+                            font-size: 18px;
+                        }
+                        </style>
+                        <div style="font-size: 36px; margin: 0">🎉</div>
+                        <p>Your block is running!</p>
+                        <p>Go to your <a href="https://airtable.com/${this._remoteJson.baseId}">Airtable base</a> to build your block.</p>
+                    </body>
+                `,
+                );
+            },
+        );
+        this._expressApp.all(
+            '*',
+            textBodyParser,
+            this._backenedProcessManager.tryForwardRequestToBackendProcessMiddleware(),
+        );
+    }
     _validateBlockDirectory() {
         const blockDirPath = this._blockDirPath;
 
@@ -382,14 +409,20 @@ class BlockServer {
         this._blockServerUrlIfExists = url;
         this.setEnvironmentVariablesForBundle(url);
 
-        // Listen for events from the BlockBuilder to resolve the polling Promises.
+        // Listen for events from the BlockBuilder to resolve the polling
+        // Promises and restart backend process.
         this._blockBuilder.blockBuilderJobQueue.on('buildComplete', () => {
             this._resolveLongPollPromises(this._blockBuilder.blockBuilderStateData);
+            // TODO(Chuan): The backend process only depends on transpiled code,
+            // not on the frontend bundle. Consider triggering a restart on
+            // transpile complete instead.
+            this._backenedProcessManager.scheduleRestartAsync();
         });
         this._blockBuilder.blockBuilderJobQueue.on('error', err => {
             throw err;
         });
         await this._blockBuilder.buildAndWatchAsync();
+        await this._backenedProcessManager.waitForRestartsAsync();
 
         console.log(chalk.bold(`\n✅ Your block is running locally at ${url} `));
         try {

@@ -159,7 +159,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
     const apiClient = apiClientResult.value;
 
-    const backendSdkBaseUrl = argv['backend-sdk-base-url'] || null;
+    const backendSdkBaseUrl = argv.backendSdkBaseUrl || null;
     invariant(
         backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
         'expects backendSdkBaseUrl to be null or a string',

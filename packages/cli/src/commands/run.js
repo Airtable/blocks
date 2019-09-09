@@ -14,11 +14,16 @@ const DEFAULT_PORT = 9000;
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const {transpileAll, sdkRepo} = argv;
-    const remoteName = argv.remote || null;
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
+    const remoteName = argv.remote || null;
     invariant(
         remoteName === null || typeof remoteName === 'string',
         'expects remoteName to be null or a string',
+    );
+    const backendSdkBaseUrl = argv.backendSdkBaseUrl || null;
+    invariant(
+        backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
+        'expects backendSdkBaseUrl to be null or a string',
     );
 
     const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
@@ -55,6 +60,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockJson,
         remoteJson,
         blockBuilder,
+        backendSdkBaseUrl,
     });
 
     let port = DEFAULT_PORT;

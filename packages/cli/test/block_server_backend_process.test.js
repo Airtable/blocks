@@ -55,7 +55,7 @@ function createBackendProcessForTesting(backendSdkServerPort: number) {
                 {urlPath: '/check-backend-sdk', handler: 'check_backend_sdk', methods: ['post']},
             ],
         },
-        blockDirPath: path.join(__dirname, '..', 'transpiled', 'test', 'handlers'),
+        outputUserTranspiledDirPath: path.join(__dirname, '..', 'transpiled', 'test', 'handlers'),
         backendSdkBaseUrl: `http://localhost:${backendSdkServerPort}`,
     };
     const backendProcess = childProcessHelpers.fork(backendProcessModulePath, [

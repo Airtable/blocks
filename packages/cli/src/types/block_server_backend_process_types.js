@@ -7,8 +7,8 @@ import type {LambdaEvent} from './lambda_event_type';
 /** Init options passed to block server backend process. */
 export type BackendProcessOptions = {|
     blockJson: BlockJson,
-    blockDirPath: string,
-    backendSdkBaseUrl: string,
+    outputUserTranspiledDirPath: string,
+    backendSdkBaseUrl: string | null,
 |};
 
 /** Message types sent from backend process to block server main process. */
@@ -28,6 +28,7 @@ export type BackendProcessReadyResponse = {
 /** Response message for EVENT_RESPONSE. */
 export type BackendProcessEventResponse = {
     messageType: typeof BackendProcessResponseTypes.EVENT_RESPONSE,
+    pid: number,
     requestId: string,
 } & BackendRouteResponse;
 

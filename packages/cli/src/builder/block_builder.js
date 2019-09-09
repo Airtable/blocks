@@ -161,6 +161,9 @@ class BlockBuilder {
     get blockDirPath(): DirectoryPath {
         return this._blockDirPath;
     }
+    get outputUserTranspiledDirPath(): DirectoryPath {
+        return this._outputUserTranspiledDirPath;
+    }
     get browserify(): browserify {
         return this._browserify;
     }

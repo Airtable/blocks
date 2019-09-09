@@ -1,9 +1,10 @@
 // @flow
 const fs = require('fs');
-const util = require('util');
 const invariant = require('invariant');
 const pathToRegexp = require('path-to-regexp');
 const request = require('request');
+const stripAnsi = require('strip-ansi');
+const util = require('util');
 const {
     BlocksBackendExecutionStatuses,
     createBlocksBackendExecutionStatusHeaders,
@@ -133,7 +134,7 @@ class BlocksBackendEventHandler {
         console.error(err); // eslint-disable-line no-console
         return {
             statusCode: 500,
-            body: {error: 'SERVER_ERROR'},
+            body: JSON.stringify({error: 'SERVER_ERROR', message: stripAnsi(err.message)}),
             errorData: {stack: err.stack, message: err.message, name: err.name},
             headers: createBlocksBackendExecutionStatusHeaders(status),
         };
