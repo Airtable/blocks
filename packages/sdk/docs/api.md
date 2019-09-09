@@ -2512,6 +2512,453 @@ Returns **[Array][68]&lt;WatchableRecordKey>** the array of keys that were watch
 
 Model class representing a table. Every [Base][13] has one or more tables.
 
+#### checkPermissionsForCreateRecord
+
+Checks whether the current user has permission to create the specified record.
+
+Accepts partial input, in the same format as [createRecordAsync][102]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `fields` **[object][74]?** object mapping `FieldId` or field name to value for that field.
+
+##### Examples
+
+```javascript
+// Check if user can create a specific record, when you already know what fields/cell values
+// will be set for the record.
+const createRecordCheckResult = table.checkPermissionsForCreateRecord({
+    'Project Name': 'Advertising campaign',
+    Budget: 100,
+});
+if (!createRecordCheckResult.hasPermission) {
+    alert(createRecordCheckResult.reasonDisplayString);
+}
+
+// Like createRecordAsync, you can use either field names or field IDs.
+const createRecordCheckResultWithFieldIds = table.checkPermissionsForCreateRecord({
+    [projectNameField.id]: 'Cat video',
+    [budgetField.id]: 200,
+});
+
+// Check if user could potentially create a record.
+// Use when you don't know the specific fields/cell values yet (for example, to show or hide
+// UI controls that let you start creating a record.)
+const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecord();
+```
+
+Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
+can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+`reasonDisplayString` may be used to display an error message to the user.
+
+#### checkPermissionsForCreateRecords
+
+Checks whether the current user has permission to create the specified records.
+
+Accepts partial input, in the same format as [createRecordsAsync][103]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `records` **[Array][68]&lt;[object][74]>?** Array of objects mapping `FieldId` or field name to
+    value for that field.
+
+##### Examples
+
+```javascript
+// Check if user can create specific records, when you already know what fields/cell values
+// will be set for the records.
+const createRecordsCheckResult = table.checkPermissionsForCreateRecords([
+    // Like createRecordsAsync, fields can be specified by name or ID
+    {
+        'Project Name': 'Advertising campaign',
+        Budget: 100,
+    },
+    {
+        [projectNameField.id]: 'Cat video',
+        [budgetField.id]: 200,
+    },
+    {},
+]);
+if (!createRecordsCheckResult.hasPermission) {
+    alert(createRecordsCheckResult.reasonDisplayString);
+}
+
+// Check if user could potentially create records.
+// Use when you don't know the specific fields/cell values yet (for example, to show or hide
+// UI controls that let you start creating records.)
+// Equivalent to table.checkPermissionsForCreateRecord()
+const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecords();
+```
+
+Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
+can create the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+`reasonDisplayString` may be used to display an error message to the user.
+
+#### checkPermissionsForDeleteRecord
+
+Checks whether the current user has permission to delete the specified record.
+
+Accepts optional input, in the same format as [deleteRecordAsync][104]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][85] | RecordId)?** the record to be deleted
+
+##### Examples
+
+```javascript
+// Check if user can delete a specific record
+const deleteRecordCheckResult = table.checkPermissionsForDeleteRecord(record);
+if (!deleteRecordCheckResult.hasPermission) {
+    alert(deleteRecordCheckResult.reasonDisplayString);
+}
+
+// Check if user could potentially delete a record.
+// Use when you don't know the specific record you want to delete yet (for example, to show
+// or hide UI controls that let you select a record to delete.)
+const deleteUnknownRecordCheckResult = table.checkPermissionsForDeleteRecord();
+```
+
+Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
+can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+`reasonDisplayString` may be used to display an error message to the user.
+
+#### checkPermissionsForDeleteRecords
+
+Checks whether the current user has permission to delete the specified records.
+
+Accepts optional input, in the same format as [deleteRecordsAsync][105]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `recordsOrRecordIds` **[Array][68]&lt;([Record][85] | RecordId)>?** the records to be deleted
+
+##### Examples
+
+```javascript
+// Check if user can delete specific records
+const deleteRecordsCheckResult = table.checkPermissionsForDeleteRecords([record1, record2]);
+if (!deleteRecordsCheckResult.hasPermission) {
+    alert(deleteRecordsCheckResult.reasonDisplayString);
+}
+
+// Check if user could potentially delete records.
+// Use when you don't know the specific records you want to delete yet (for example, to show
+// or hide UI controls that let you select records to delete.)
+// Equivalent to table.checkPermissionsForDeleteRecord()
+const deleteUnknownRecordsCheckResult = table.checkPermissionsForDeleteRecords();
+```
+
+Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
+can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+`reasonDisplayString` may be used to display an error message to the user.
+
+#### checkPermissionsForUpdateRecord
+
+Checks whether the current user has permission to perform the given record update.
+
+Accepts partial input, in the same format as [updateRecordAsync][106]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][85] | RecordId)?** the record to update
+-   `fields` **[object][74]?** cell values to update in that record, specified as object mapping
+    `FieldId` or field name to value for that field.
+
+##### Examples
+
+```javascript
+// Check if user can update specific fields for a specific record.
+const updateRecordCheckResult = table.checkPermissionsForUpdateRecord(record, {
+    'Post Title': 'How to make: orange-mango pound cake',
+    'Publication Date': '2020-01-01',
+});
+if (!updateRecordCheckResult.hasPermission) {
+    alert(updateRecordCheckResult.reasonDisplayString);
+}
+
+// Like updateRecordAsync, you can use either field names or field IDs.
+const updateRecordCheckResultWithFieldIds = table.checkPermissionsForUpdateRecord(record, {
+    [postTitleField.id]: 'Cake decorating tips & tricks',
+    [publicationDateField.id]: '2020-02-02',
+});
+
+// Check if user could update a given record, when you don't know the specific fields that
+// will be updated yet. (for example, to check whether you should allow a user to select
+// a certain record to update)
+const updateUnknownRecordCheckResult = table.checkPermissionsForUpdateRecord(record);
+
+// Check if user could update specific fields, when you don't know the specific record that
+// will be updated yet. (for example, if the field is selected by the user and you want to
+// check if your block can write to it)
+const updateUnknownFieldsCheckResult = table.checkPermissionsForUpdateRecord(undefined, {
+    'My field name': 'updated value',
+    // You can use undefined if you know you're going to update a field, but don't know
+    // the new cell value yet.
+    'Another field name': undefined,
+});
+
+// Check if user could perform updates within the table, without knowing the specific record
+// or fields that will be updated yet. (for example, to render your block in "read only"
+// mode)
+const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateRecord();
+```
+
+Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
+can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+`reasonDisplayString` may be used to display an error message to the user.
+
+#### checkPermissionsForUpdateRecords
+
+Checks whether the current user has permission to perform the given record updates.
+
+Accepts partial input, in the same format as [updateRecordsAsync][107]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `records` **(\$ReadOnlyArray&lt;{id: (RecordId | void)?, fields: ({} | void)?}> | void)?**
+
+##### Examples
+
+```javascript
+const recordsToUpdate = [
+    {
+        // Validating a complete record update
+        id: record1.id,
+        fields: {
+            'Post Title': 'How to make: orange-mango pound cake',
+            'Publication Date': '2020-01-01',
+        },
+    },
+    {
+        // Like updateRecordsAsync, fields can be specified by name or ID
+        id: record2.id,
+        fields: {
+            [postTitleField.id]: 'Cake decorating tips & tricks',
+            [publicationDateField.id]: '2020-02-02',
+        },
+    },
+    {
+        // Validating an update to a specific record, not knowing what fields will be updated
+        id: record3.id,
+    },
+    {
+        // Validating an update to specific cell values, not knowing what record will be updated
+        fields: {
+            'My field name': 'updated value for unknown record',
+            // You can use undefined if you know you're going to update a field, but don't know
+            // the new cell value yet.
+            'Another field name': undefined,
+        },
+    },
+];
+
+const updateRecordsCheckResult = table.checkPermissionsForUpdateRecords(recordsToUpdate);
+if (!updateRecordsCheckResult.hasPermission) {
+    alert(updateRecordsCheckResult.reasonDisplayString);
+}
+
+// Check if user could potentially update records.
+// Equivalent to table.checkPermissionsForUpdateRecord()
+const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateRecords();
+```
+
+Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
+can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+`reasonDisplayString` may be used to display an error message to the user.
+
+#### createRecordAsync
+
+Creates a new record with the specified cell values.
+
+Throws an error if the user does not have permission to create the given records, or if invalid
+input is provided (eg. invalid cell values).
+
+This action is asynchronous: `await` the returned promise if you wish to wait for the new record to
+be persisted to Airtable servers. Updates are applied optimistically locally, so your changes will
+be reflected in your block before the promise resolves.
+
+##### Parameters
+
+-   `fields` **[object][74]** object mapping `FieldId` or field name to value for that field.
+    (optional, default `{}`)
+
+##### Examples
+
+```javascript
+function createNewRecord(recordFields) {
+    if (table.checkPermissionsForCreateRecord(recordFields).hasPermission) {
+        table.createRecordAsync(recordFields);
+    }
+    // You can now access the new record in your block (eg `table.selectRecords()`) but it is
+    // still being saved to Airtable servers (eg. other users may not be able to see it yet.)
+}
+
+async function createNewRecordAsync(recordFields) {
+    if (table.checkPermissionsForCreateRecord(recordFields).hasPermission) {
+        const newRecordId = await table.createRecordAsync(recordFields);
+    }
+    // New record has been saved to Airtable servers.
+    alert(`new record with ID ${newRecordId} has been created`);
+}
+
+// Fields can be specified by name or ID
+createNewRecord({
+    'Project Name': 'Advertising campaign',
+    Budget: 100,
+});
+createNewRecord({
+    [projectNameField.id]: 'Cat video',
+    [budgetField.id]: 200,
+});
+```
+
+Returns **[Promise][71]&lt;RecordId>** A promise that will resolve to the RecordId of the new
+record, once the new record is persisted to Airtable.
+
+#### createRecordsAsync
+
+Creates new records with the specified cell values.
+
+Throws an error if the user does not have permission to create the given records, or if invalid
+input is provided (eg. invalid cell values).
+
+You may only create up to 50 records in one call to `createRecordsAsync`. See [Writing changes to
+records][108] for more information about write limits.
+
+This action is asynchronous: `await` the returned promise if you wish to wait for the new record to
+be persisted to Airtable servers. Updates are applied optimistically locally, so your changes will
+be reflected in your block before the promise resolves.
+
+##### Parameters
+
+-   `records` **[Array][68]&lt;[object][74]>** Array of objects mapping `FieldId` or field name to
+    value for that field.
+
+##### Examples
+
+```javascript
+const recordDefs = [
+    // Fields can be specified by name or ID
+    {
+        'Project Name': 'Advertising campaign',
+        Budget: 100,
+    },
+    {
+        [projectNameField.id]: 'Cat video',
+        [budgetField.id]: 200,
+    },
+    // Specifying no fields will create a new record with no cell values set
+    {},
+];
+
+function createNewRecords() {
+    if (table.checkPermissionsForCreateRecords(recordDefs).hasPermission) {
+        table.createRecordsAsync(recordDefs);
+    }
+    // You can now access the new records in your block (eg `table.selectRecords()`) but they
+    // are still being saved to Airtable servers (eg. other users may not be able to see them
+    // yet.)
+}
+
+async function createNewRecordsAsync() {
+    if (table.checkPermissionsForCreateRecords(recordDefs).hasPermission) {
+        const newRecordIds = await table.createRecordsAsync(recordDefs);
+    }
+    // New records have been saved to Airtable servers.
+    alert(`new records with IDs ${newRecordIds} have been created`);
+}
+```
+
+Returns **[Promise][71]&lt;[Array][68]&lt;RecordId>>** A promise that will resolve to array of
+RecordIds of the new records, once the new records are persisted to Airtable.
+
+#### deleteRecordAsync
+
+Delete the given record.
+
+Throws an error if the user does not have permission to delete the given record.
+
+This action is asynchronous: `await` the returned promise if you wish to wait for the delete to be
+persisted to Airtable servers. Updates are applied optimistically locally, so your changes will be
+reflected in your block before the promise resolves.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][85] | RecordId)** the record to be deleted
+
+##### Examples
+
+```javascript
+function deleteRecord(record) {
+    if (table.checkPermissionsForDeleteRecord(record).hasPermission) {
+        table.deleteRecordAsync(record);
+    }
+    // The record is now deleted within your block (eg will not be returned in
+    // `table.selectRecords`) but it is still being saved to Airtable servers (eg. it may
+    // not look deleted to other users yet)
+}
+
+async function deleteRecordAsync(record) {
+    if (table.checkPermissionsForDeleteRecord(record).hasPermission) {
+        await table.deleteRecordAsync(record);
+    }
+    // Record deletion has been saved to Airtable servers.
+    alert('record has been deleted');
+}
+```
+
+Returns **[Promise][71]&lt;void>** A promise that will resolve once the delete is persisted to
+Airtable.
+
+#### deleteRecordsAsync
+
+Delete the given records.
+
+Throws an error if the user does not have permission to delete the given records.
+
+You may only delete up to 50 records in one call to `deleteRecordsAsync`. See [Writing changes to
+records][108] for more information about write limits.
+
+This action is asynchronous: `await` the returned promise if you wish to wait for the delete to be
+persisted to Airtable servers. Updates are applied optimistically locally, so your changes will be
+reflected in your block before the promise resolves.
+
+##### Parameters
+
+-   `recordsOrRecordIds` **[Array][68]&lt;([Record][85] | RecordId)>** Array of Records and
+    RecordIds
+
+##### Examples
+
+```javascript
+function deleteRecords(records) {
+    if (table.checkPermissionsForDeleteRecords(records).hasPermission) {
+        table.deleteRecordsAsync(records);
+    }
+    // The records are now deleted within your block (eg will not be returned in
+    // `table.selectRecords()`) but are still being saved to Airtable servers (eg. they
+    // may not look deleted to other users yet)
+}
+
+async function deleteRecordsAsync(records) {
+    if (table.checkPermissionsForDeleteRecords(records).hasPermission) {
+        await table.deleteRecordsAsync(records);
+    }
+    // Record deletions have been saved to Airtable servers.
+    alert('records have been deleted');
+}
+```
+
+Returns **[Promise][71]&lt;void>** A promise that will resolve once the deletes are persisted to
+Airtable.
+
 #### fields
 
 Type: [Array][68]&lt;[Field][82]>
@@ -2542,7 +2989,7 @@ console.log(field.name);
 ```
 
 Returns **[Field][82]** The field matching the given ID. Throws if that field does not exist in this
-table. Use [getFieldByIdIfExists][102] instead if you are unsure whether a field exists with the
+table. Use [getFieldByIdIfExists][109] instead if you are unsure whether a field exists with the
 given ID.
 
 #### getFieldByIdIfExists
@@ -2581,7 +3028,7 @@ console.log(field.id);
 ```
 
 Returns **[Field][82]** The field matching the given name. Throws if no field exists with that name
-in this table. Use [getFieldByNameIfExists][103] instead if you are unsure whether a field exists
+in this table. Use [getFieldByNameIfExists][110] instead if you are unsure whether a field exists
 with the given name.
 
 #### getFieldByNameIfExists
@@ -2647,7 +3094,7 @@ console.log(view.name);
 ```
 
 Returns **[View][83]** The view matching the given ID. Throws if that view does not exist in this
-table. Use [getViewByIdIfExists][104] instead if you are unsure whether a view exists with the given
+table. Use [getViewByIdIfExists][111] instead if you are unsure whether a view exists with the given
 ID.
 
 #### getViewByIdIfExists
@@ -2686,7 +3133,7 @@ console.log(view.id);
 ```
 
 Returns **[View][83]** The view matching the given name. Throws if no view exists with that name in
-this table. Use [getViewByNameIfExists][105] instead if you are unsure whether a view exists with
+this table. Use [getViewByNameIfExists][112] instead if you are unsure whether a view exists with
 the given name.
 
 #### getViewByNameIfExists
@@ -2798,7 +3245,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][106]** A query result.
+Returns **[TableOrViewQueryResult][113]** A query result.
 
 #### unwatch
 
@@ -2813,6 +3260,127 @@ Should be called with the same arguments given to `.watch`.
 -   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][68]&lt;WatchableTableKey>** the array of keys that were unwatched
+
+#### updateRecordAsync
+
+Updates cell values for a record.
+
+Throws an error if the user does not have permission to update the given cell values in the record,
+or if invalid input is provided (eg. invalid cell values).
+
+This action is asynchronous: `await` the returned promise if you wish to wait for the updated cell
+values to be persisted to Airtable servers. Updates are applied optimistically locally, so your
+changes will be reflected in your block before the promise resolves.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][85] | RecordId)** the record to update
+-   `fields` **[object][74]** cell values to update in that record, specified as object mapping
+    `FieldId` or field name to value for that field.
+
+##### Examples
+
+```javascript
+function updateRecord(record, recordFields) {
+    if (table.checkPermissionsForUpdateRecord(record, recordFields).hasPermission) {
+        table.updateRecordAsync(record, recordFields);
+    }
+    // The updated values will now show in your block (eg in `table.selectRecords()` result)
+    // but are still being saved to Airtable servers (eg. other users may not be able to see
+    // them yet.)
+}
+
+async function updateRecordAsync(record, recordFields) {
+    if (table.checkPermissionsForUpdateRecord(record, recordFields).hasPermission) {
+        await table.updateRecordAsync(record, recordFields);
+    }
+    // New record has been saved to Airtable servers.
+    alert(`record with ID ${record.id} has been updated`);
+}
+
+// Fields can be specified by name or ID
+updateRecord(record1, {
+    'Post Title': 'How to make: orange-mango pound cake',
+    'Publication Date': '2020-01-01',
+});
+updateRecord(record2, {
+    [postTitleField.id]: 'Cake decorating tips & tricks',
+    [publicationDateField.id]: '2020-02-02',
+});
+```
+
+Returns **[Promise][71]&lt;RecordId>** A promise that will resolve to the RecordId of the new
+record, once the new record is persisted to Airtable.
+
+#### updateRecordsAsync
+
+Updates cell values for records.
+
+Throws an error if the user does not have permission to update the given cell values in the records,
+or if invalid input is provided (eg. invalid cell values).
+
+You may only update up to 50 records in one call to `updateRecordsAsync`. See [Writing changes to
+records][108] for more information about write limits.
+
+This action is asynchronous: `await` the returned promise if you wish to wait for the updates to be
+persisted to Airtable servers. Updates are applied optimistically locally, so your changes will be
+reflected in your block before the promise resolves.
+
+##### Parameters
+
+-   `records` **[Array][68]&lt;{id: RecordId, fields: [object][74]}>** Array of objects containing
+    recordId and fields/cellValues to update for that record (specified as an object mapping
+    `FieldId` or field name to cell value)
+
+##### Examples
+
+```javascript
+const recordsToUpdate = [
+    // Fields can be specified by name or ID
+    {
+        id: record1.id,
+        fields: {
+            'Post Title': 'How to make: orange-mango pound cake',
+            'Publication Date': '2020-01-01',
+        },
+    },
+    {
+        id: record2.id,
+        fields: {
+            // Sets the cell values to be empty.
+            'Post Title': '',
+            'Publication Date': '',
+        },
+    },
+    {
+        id: record3.id,
+        fields: {
+            [postTitleField.id]: 'Cake decorating tips & tricks',
+            [publicationDateField.id]: '2020-02-02',
+        },
+    },
+];
+
+function updateRecords() {
+    if (table.checkPermissionsForUpdateRecords(recordsToUpdate).hasPermission) {
+        table.updateRecordsAsync(recordsToUpdate);
+    }
+    // The records are now updated within your block (eg will be reflected in
+    // `table.selectRecords()`) but are still being saved to Airtable servers (eg. they
+    // may not be updated for other users yet)
+}
+
+async function updateRecordsAsync() {
+    if (table.checkPermissionsForUpdateRecords(recordsToUpdate).hasPermission) {
+        await table.updateRecordsAsync(recordsToUpdate);
+    }
+    // Record updates have been saved to Airtable servers.
+    alert('records have been updated');
+}
+```
+
+Returns **[Promise][71]&lt;void>** A promise that will resolve once the updates are persisted to
+Airtable.
 
 #### url
 
@@ -2933,7 +3501,7 @@ async function loadMetadataForViewAsync(view) {
 }
 ```
 
-Returns **[ViewMetadataQueryResult][107]** a {@ViewMetadataQueryResult}
+Returns **[ViewMetadataQueryResult][114]** a {@ViewMetadataQueryResult}
 
 #### selectRecords
 
@@ -2968,7 +3536,7 @@ function TodoList() {
 }
 ```
 
-Returns **[TableOrViewQueryResult][106]** A record query result.
+Returns **[TableOrViewQueryResult][113]** A record query result.
 
 #### type
 
@@ -3036,7 +3604,7 @@ Returns **any** the array of keys that were watched
 
 Contains information about a view that isn't loaded by default e.g. field order and visible fields.
 
-In a React component, you might want to use [useViewMetadata][108].
+In a React component, you might want to use [useViewMetadata][115].
 
 #### Parameters
 
@@ -3189,7 +3757,7 @@ import {loadCSSFromString} from '@airtable/blocks/ui';
 loadCSSFromString('body { background: red; }');
 ```
 
-Returns **[HTMLStyleElement][109]** the style tag inserted into the page.
+Returns **[HTMLStyleElement][116]** the style tag inserted into the page.
 
 #### loadCSSFromURLAsync
 
@@ -3206,7 +3774,7 @@ import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][71]&lt;[HTMLLinkElement][110]>** a Promise that resolves to the style tag
+Returns **[Promise][71]&lt;[HTMLLinkElement][117]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -3224,14 +3792,14 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][71]&lt;[HTMLScriptElement][111]>** a Promise that resolves to the script tag
+Returns **[Promise][71]&lt;[HTMLScriptElement][118]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
 
 #### Color
 
-A value from the [colors][112] enum
+A value from the [colors][119] enum
 
 Type: \$Values&lt;any>
 
@@ -3247,7 +3815,7 @@ Type: {r: [number][75], g: [number][75], b: [number][75]}
 
 #### colorUtils
 
-Utilities for working with [Color][99] names from the [colors][112] enum.
+Utilities for working with [Color][99] names from the [colors][119] enum.
 
 ##### getHexForColor
 
@@ -3274,7 +3842,7 @@ Returns **([string][67] | null)**
 
 ##### getRgbForColor
 
-Given a [Color][99], return an [RGB][113] object representing it, or null if the value isn't a
+Given a [Color][99], return an [RGB][120] object representing it, or null if the value isn't a
 [Color][99]
 
 ###### Parameters
@@ -3293,7 +3861,7 @@ colorUtils.getRgbForColor('disgruntled pink');
 // => null
 ```
 
-Returns **([RGB][114] | null)**
+Returns **([RGB][121] | null)**
 
 ##### shouldUseLightTextOnColor
 
@@ -3427,8 +3995,8 @@ An enum of color names
 React hooks are a new feature in React 16.8. They allow you to use state and other React features
 without writing a class, and form the core of how you can connect React components to data from your
 Airtable base when writing Blocks. If you've never used hooks before, don't worry - the React team
-[has some great resources][115] for learning about them. You can use hooks with class components too
-with the help of the [withHooks][116] higher-order component.
+[has some great resources][122] for learning about them. You can use hooks with class components too
+with the help of the [withHooks][123] higher-order component.
 
 > **Important Note:** right now, most of these hooks cause your component to re-render, but return
 > the same mutable instance of the underlying model. This means that it's often not safe to use
@@ -3445,7 +4013,7 @@ actual records in the base.
 
 useBase should meet most of your needs for working with Base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][117] hook might help.
+[useWatchable][124] hook might help.
 
 ##### Examples
 
@@ -3464,7 +4032,7 @@ function TableList() {
 }
 ```
 
-Returns **[Base][118]** Base
+Returns **[Base][125]** Base
 
 #### useGlobalConfig
 
@@ -3497,7 +4065,7 @@ function SyncedCounter() {
 }
 ```
 
-Returns **[GlobalConfig][119]** the [GlobalConfig][3]
+Returns **[GlobalConfig][126]** the [GlobalConfig][3]
 
 #### useRecords
 
@@ -3638,7 +4206,7 @@ user's permissions change or when the current user's name changes).
 
 useSession should meet most of your needs for working with Session. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
-[useWatchable][117] hook might help.
+[useWatchable][124] hook might help.
 
 ##### Examples
 
@@ -3658,7 +4226,7 @@ function CurrentUserGreeter() {
 }
 ```
 
-Returns **[Session][120]** Session
+Returns **[Session][127]** Session
 
 #### useViewport
 
@@ -3690,7 +4258,7 @@ function ViewportSize() {
 }
 ```
 
-Returns **[Viewport][121]** the current [Viewport][5]
+Returns **[Viewport][128]** the current [Viewport][5]
 
 #### useViewMetadata
 
@@ -3732,13 +4300,13 @@ convenient model-specific hooks available:
 -   For [Base][13], [Table][19], [View][20] & [Field][16], use [useBase][63]
 -   For [RecordQueryResult][17] & [Record][18], use [useRecords][94], [useRecordIds][95], or
     [useRecordById][96]
--   For [Viewport][5], use [useViewport][122].
+-   For [Viewport][5], use [useViewport][129].
 
-If you're writing a class component and still want to be able to use hooks, try [withHooks][116].
+If you're writing a class component and still want to be able to use hooks, try [withHooks][123].
 
 ##### Parameters
 
--   `model` **[Watchable][123]?** the model to watch
+-   `model` **[Watchable][130]?** the model to watch
 -   `keys` **[Array][68]&lt;[string][67]?>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 
@@ -3777,7 +4345,7 @@ loaded when your component mounts, and unloaded when your component unmounts. By
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [&lt;React.Suspense />][124] around the component that uses the hook.
+looks, use [&lt;React.Suspense />][131] around the component that uses the hook.
 
 You can pass several models to `useLoadable` in an array - it will load all of them simultaneously.
 We'll memoize this array using shallow equality, so there's no need to use `useMemo`.
@@ -3789,7 +4357,7 @@ trying to use the data you loaded.
 
 ##### Parameters
 
--   `models` **(QueryResult | [Cursor][125] \| [Array][68]&lt;(QueryResult | [Cursor][125] | null)>
+-   `models` **(QueryResult | [Cursor][132] \| [Array][68]&lt;(QueryResult | [Cursor][132] | null)>
     | null)** the models to load.
 -   `options` **[object][74]?** Optional options to control how the hook works (optional, default
     `{}`)
@@ -3848,7 +4416,7 @@ function LoadAllRecords() {
 
 A helper method for working with react hooks in class-based components. It takes a React component
 and wraps it, injecting values from hooks as additional props. `withHooks` uses
-[React.forwardRef][126] to make sure that you can use refs with your wrapped component in exactly
+[React.forwardRef][133] to make sure that you can use refs with your wrapped component in exactly
 the same way you would if you weren't using withHooks.
 
 ##### Parameters
@@ -4033,14 +4601,14 @@ user or null
 
 ##### Parameters
 
--   `props` **[AutocompletePopoverProps][127]**
+-   `props` **[AutocompletePopoverProps][134]**
 
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][68]&lt;[AutocompleteItem][128]>, renderItem: function (item: [AutocompleteItem][128], isFocused: [boolean][69]): React$Element&lt;any>?,
-filterItems: function (query: [string][67], items: [Array][68]&lt;[AutocompleteItem][128]>):
-[Array][68]&lt;[AutocompleteItem][128]>?, onSelect: function ([AutocompleteItem][128]): void,
+React$Element&lt;any>, items: [Array][68]&lt;[AutocompleteItem][135]>, renderItem: function (item: [AutocompleteItem][135], isFocused: [boolean][69]): React$Element&lt;any>?,
+filterItems: function (query: [string][67], items: [Array][68]&lt;[AutocompleteItem][135]>):
+[Array][68]&lt;[AutocompleteItem][135]>?, onSelect: function ([AutocompleteItem][135]): void,
 placeholder: [string][67]?, focusOnOpen: [boolean][69]?, className: [string][67]?, style:
 [Object][74]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][75]?, placementOffsetY: [number][75]?, fitInWindowMode: FitInWindowMode?, isOpen:
@@ -4049,12 +4617,12 @@ placeholder: [string][67]?, focusOnOpen: [boolean][69]?, className: [string][67]
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
--   `items` **[Array][68]&lt;[AutocompleteItem][128]>**
--   `renderItem` **function (item: [AutocompleteItem][128], isFocused: [boolean][69]):
+-   `items` **[Array][68]&lt;[AutocompleteItem][135]>**
+-   `renderItem` **function (item: [AutocompleteItem][135], isFocused: [boolean][69]):
     React\$Element&lt;any>?**
--   `filterItems` **function (query: [string][67], items: [Array][68]&lt;[AutocompleteItem][128]>):
-    [Array][68]&lt;[AutocompleteItem][128]>?**
--   `onSelect` **function ([AutocompleteItem][128]): void**
+-   `filterItems` **function (query: [string][67], items: [Array][68]&lt;[AutocompleteItem][135]>):
+    [Array][68]&lt;[AutocompleteItem][135]>?**
+-   `onSelect` **function ([AutocompleteItem][135]): void**
 -   `placeholder` **[string][67]?**
 -   `focusOnOpen` **[boolean][69]?**
 -   `className` **[string][67]?**
@@ -4087,7 +4655,7 @@ Clickable button component.
 
 ##### Parameters
 
--   `props` **[ButtonProps][129]**
+-   `props` **[ButtonProps][136]**
 
 ##### Examples
 
@@ -4128,7 +4696,7 @@ Type: [object][74]
 
 ##### Parameters
 
--   `props` **[CellRendererProps][130]**
+-   `props` **[CellRendererProps][137]**
 
 #### CellRendererProps
 
@@ -4158,7 +4726,7 @@ choices.
 
 ##### Parameters
 
--   `props` **[ChoiceTokenProps][131]**
+-   `props` **[ChoiceTokenProps][138]**
 
 ##### Examples
 
@@ -4203,7 +4771,7 @@ of choices.
 
 ##### Parameters
 
--   `props` **[CollaboratorTokenProps][132]**
+-   `props` **[CollaboratorTokenProps][139]**
 
 ##### Examples
 
@@ -4245,7 +4813,7 @@ Type: [object][74]
 
 ##### Parameters
 
--   `props` **[ColorPaletteProps][133]**
+-   `props` **[ColorPaletteProps][140]**
 
 #### ColorPaletteProps
 
@@ -4290,7 +4858,7 @@ the action.
 
 ##### Parameters
 
--   `props` **[ConfirmationDialogProps][134]**
+-   `props` **[ConfirmationDialogProps][141]**
 
 ##### Examples
 
@@ -4354,7 +4922,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][135]**
+-   `props` **[DialogProps][142]**
 
 ##### Examples
 
@@ -4413,7 +4981,7 @@ A button that closes [Dialog][39].
 
 ##### Parameters
 
--   `props` **[DialogCloseButtonProps][136]**
+-   `props` **[DialogCloseButtonProps][143]**
 
 #### DialogCloseButtonProps
 
@@ -4436,7 +5004,7 @@ Dropdown menu component for selecting fields.
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][137]**
+-   `props` **[FieldPickerProps][144]**
 
 ##### Examples
 
@@ -4522,7 +5090,7 @@ Type: [object][74]
 
 -   `table` **[Table][87]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][138]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][145]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected field changes. This
@@ -4549,7 +5117,7 @@ Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 
 #### Parameters
 
--   `props` **[FieldPickerSyncedProps][139]**
+-   `props` **[FieldPickerSyncedProps][146]**
 
 #### Examples
 
@@ -4609,7 +5177,7 @@ A vector icon from the Airtable icon set.
 
 ##### Parameters
 
--   `props` **[IconProps][140]**
+-   `props` **[IconProps][147]**
 
 ##### Examples
 
@@ -4631,7 +5199,7 @@ Type: [object][74]
 ##### Properties
 
 -   `name` **[string][67]** The name of the icon. For more details, see the [list of supported
-    icons][141].
+    icons][148].
 -   `size` **[number][75]?** The width/height of the icon.
 -   `fillColor` **[string][67]?** The color of the icon.
 -   `className` **[string][67]?** Additional class names to apply to the icon.
@@ -4647,7 +5215,7 @@ A vector icon for a field's type.
 
 ##### Parameters
 
--   `props` **[FieldIconProps][142]**
+-   `props` **[FieldIconProps][149]**
 
 ##### Examples
 
@@ -4699,7 +5267,7 @@ An input component. A wrapper around `<input>` that fits in with Airtable's user
 
 ##### Parameters
 
--   `props` **[InputProps][143]**
+-   `props` **[InputProps][150]**
 
 ##### Examples
 
@@ -4769,7 +5337,7 @@ A wrapper around the `UI.Input` component that syncs with global config.
 
 #### Parameters
 
--   `props` **[InputSyncedProps][144]**
+-   `props` **[InputSyncedProps][151]**
 
 #### Examples
 
@@ -4794,14 +5362,14 @@ A wrapper around the `<a>` tag that offers a few security benefits:
 
 -   Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be
     prepended.
--   There is [reverse tabnabbing prevention][145]. If `target` is set, the `rel` attribute will be
+-   There is [reverse tabnabbing prevention][152]. If `target` is set, the `rel` attribute will be
     set to `noopener noreferrer`.
 
 Developers should use `Link` instead of `a` when possible.
 
 ##### Parameters
 
--   `props` **[LinkProps][146]**
+-   `props` **[LinkProps][153]**
 
 ##### Examples
 
@@ -4836,7 +5404,7 @@ A loading spinner component.
 
 ##### Parameters
 
--   `props` **[LoaderProps][147]**
+-   `props` **[LoaderProps][154]**
 
 ##### Examples
 
@@ -4874,7 +5442,7 @@ A popover component, which is used to "float" some content above some other cont
 
 ##### Parameters
 
--   `props` **[PopoverProps][148]**
+-   `props` **[PopoverProps][155]**
 
 #### PopoverProps
 
@@ -4927,7 +5495,7 @@ A progress bar.
 
 ##### Parameters
 
--   `props` **[ProgressBarProps][149]**
+-   `props` **[ProgressBarProps][156]**
 
 ##### Examples
 
@@ -4962,7 +5530,7 @@ Type: [object][74]
 
 ##### Parameters
 
--   `props` **[RecordCardProps][150]**
+-   `props` **[RecordCardProps][157]**
 
 #### RecordCardProps
 
@@ -4999,7 +5567,7 @@ Scrollable list of record cards.
 
 ##### Parameters
 
--   `props` **[RecordCardListProps][151]**
+-   `props` **[RecordCardListProps][158]**
 
 ##### Examples
 
@@ -5061,7 +5629,7 @@ Dropdown menu component. A wrapper around `<select>` that fits in with Airtable'
 
 ##### Parameters
 
--   `props` **[SelectProps][152]**
+-   `props` **[SelectProps][159]**
 
 ##### Examples
 
@@ -5098,7 +5666,7 @@ Type: [object][74]
 -   `onChange` **[function][73]?** A function to be called when the selected option changes.
 -   `value` **([string][67] \| [number][75] \| [boolean][69] | null)?** The value of the selected
     option.
--   `options` **[Array][68]&lt;[SelectOption][153]>** The list of select options.
+-   `options` **[Array][68]&lt;[SelectOption][160]>** The list of select options.
 -   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the button.
 -   `id` **[string][67]?** The ID of the select element.
 -   `className` **[string][67]?** Additional class names to apply to the select.
@@ -5125,12 +5693,12 @@ Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][138]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][145]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected option changes. This
     should only be used for side effects.
--   `options` **[Array][68]&lt;[SelectOption][153]>** The list of select options.
+-   `options` **[Array][68]&lt;[SelectOption][160]>** The list of select options.
 -   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
 -   `id` **[string][67]?** The ID of the select element.
 -   `className` **[string][67]?** Additional class names to apply to the select.
@@ -5149,7 +5717,7 @@ Airtable's user interface.
 
 #### Parameters
 
--   `props` **[SelectSyncedProps][154]**
+-   `props` **[SelectSyncedProps][161]**
 
 #### Examples
 
@@ -5203,7 +5771,7 @@ Dropdown menu component for selecting tables.
 
 ##### Parameters
 
--   `props` **[TablePickerProps][155]**
+-   `props` **[TablePickerProps][162]**
 
 ##### Examples
 
@@ -5262,7 +5830,7 @@ Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][138]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][145]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected table changes. This
@@ -5287,7 +5855,7 @@ Dropdown menu component for selecting tables, synced with [GlobalConfig][3].
 
 #### Parameters
 
--   `props` **[TablePickerSyncedProps][156]**
+-   `props` **[TablePickerSyncedProps][163]**
 
 #### Examples
 
@@ -5329,7 +5897,7 @@ A toggleable switch for controlling boolean values. Functionally analogous to a 
 
 ##### Parameters
 
--   `props` **[ToggleProps][157]**
+-   `props` **[ToggleProps][164]**
 
 ##### Examples
 
@@ -5371,7 +5939,7 @@ Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][138]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][145]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the switch is toggled. This should
@@ -5399,7 +5967,7 @@ analogous to a checkbox.
 
 #### Parameters
 
--   `props` **[ToggleSyncedProps][158]**
+-   `props` **[ToggleSyncedProps][165]**
 
 #### Examples
 
@@ -5426,7 +5994,7 @@ A component that shows a tooltip. Wraps its children.
 
 ##### Parameters
 
--   `props` **[TooltipProps][159]**
+-   `props` **[TooltipProps][166]**
 
 ##### Examples
 
@@ -5493,7 +6061,7 @@ Dropdown menu component for selecting views.
 
 ##### Parameters
 
--   `props` **[ViewPickerProps][160]**
+-   `props` **[ViewPickerProps][167]**
 
 ##### Examples
 
@@ -5575,7 +6143,7 @@ Type: [object][74]
 
 -   `table` **[Table][87]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][138]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][145]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected view changes. This
@@ -5602,7 +6170,7 @@ Dropdown menu component for selecting views, synced with [GlobalConfig][3].
 
 #### Parameters
 
--   `props` **[ViewPickerSyncedProps][161]**
+-   `props` **[ViewPickerSyncedProps][168]**
 
 #### Examples
 
@@ -5662,7 +6230,7 @@ function Block() {
 
 -   **See: sdk.viewport**
 
-ViewportConstraint - when mounted, applies constraints to the viewport. Like [addMinSize][162], will
+ViewportConstraint - when mounted, applies constraints to the viewport. Like [addMinSize][169], will
 fullscreen the block if necessary and possible when `minSize` is updated.
 
 ##### Examples
@@ -5681,13 +6249,13 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 
 #### ViewportConstraintProps
 
-Type: {minSize: [ViewportSizeConstraintProp][163]?, maxFullscreenSize:
-[ViewportSizeConstraintProp][163]?, children: React.Node?}
+Type: {minSize: [ViewportSizeConstraintProp][170]?, maxFullscreenSize:
+[ViewportSizeConstraintProp][170]?, children: React.Node?}
 
 ##### Properties
 
--   `minSize` **[ViewportSizeConstraintProp][163]?**
--   `maxFullscreenSize` **[ViewportSizeConstraintProp][163]?**
+-   `minSize` **[ViewportSizeConstraintProp][170]?**
+-   `maxFullscreenSize` **[ViewportSizeConstraintProp][170]?**
 -   `children` **React.Node?**
 
 #### ViewportSizeConstraintProp
@@ -5800,65 +6368,72 @@ Type: {width: ([number][75] | null)?, height: ([number][75] | null)?}
 [99]: #color
 [100]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date
 [101]: #linkedrecordsqueryresult
-[102]: #getfieldbyidifexists
-[103]: #getfieldbynameifexists
-[104]: #getviewbyidifexists
-[105]: #getviewbynameifexists
-[106]: #tableorviewqueryresult
-[107]: #viewmetadataqueryresult
-[108]: #useviewmetadata
-[109]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
-[110]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
-[111]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
-[112]: #colors
-[113]: #rgb
-[114]: #rgb
-[115]: https://reactjs.org/docs/hooks-intro.html
-[116]: #withhooks
-[117]: #usewatchable
-[118]: #base
-[119]: #globalconfig
-[120]: #session
-[121]: #viewport
-[122]: #useviewport
-[123]: #watchable
-[124]: https://reactjs.org/docs/react-api.html#reactsuspense
-[125]: #cursor
-[126]: https://reactjs.org/docs/forwarding-refs.html
-[127]: #autocompletepopoverprops
-[128]: #autocompleteitem
-[129]: #buttonprops
-[130]: #cellrendererprops
-[131]: #choicetokenprops
-[132]: #collaboratortokenprops
-[133]: #colorpaletteprops
-[134]: #confirmationdialogprops
-[135]: #dialogprops
-[136]: #dialogclosebuttonprops
-[137]: #fieldpickerprops
-[138]: #globalconfigkey
-[139]: #fieldpickersyncedprops
-[140]: #iconprops
-[141]: /packages/sdk/docs/icons.md
-[142]: #fieldiconprops
-[143]: #inputprops
-[144]: #inputsyncedprops
-[145]: https://www.owasp.org/index.php/Reverse_Tabnabbing
-[146]: #linkprops
-[147]: #loaderprops
-[148]: #popoverprops
-[149]: #progressbarprops
-[150]: #recordcardprops
-[151]: #recordcardlistprops
-[152]: #selectprops
-[153]: #selectoption
-[154]: #selectsyncedprops
-[155]: #tablepickerprops
-[156]: #tablepickersyncedprops
-[157]: #toggleprops
-[158]: #togglesyncedprops
-[159]: #tooltipprops
-[160]: #viewpickerprops
-[161]: #viewpickersyncedprops
-[162]: #addminsize
-[163]: #viewportsizeconstraintprop
+[102]: #createrecordasync
+[103]: #createrecordsasync
+[104]: #deleteRecordAsync
+[105]: #deleteRecordsAsync
+[106]: #updateRecordAsync
+[107]: #updateRecordsAsync
+[108]: /packages/sdk/docs/guide_writes.md
+[109]: #getfieldbyidifexists
+[110]: #getfieldbynameifexists
+[111]: #getviewbyidifexists
+[112]: #getviewbynameifexists
+[113]: #tableorviewqueryresult
+[114]: #viewmetadataqueryresult
+[115]: #useviewmetadata
+[116]: https://developer.mozilla.org/docs/Web/API/HTMLStyleElement
+[117]: https://developer.mozilla.org/docs/Web/API/HTMLLinkElement
+[118]: https://developer.mozilla.org/docs/Web/API/HTMLScriptElement
+[119]: #colors
+[120]: #rgb
+[121]: #rgb
+[122]: https://reactjs.org/docs/hooks-intro.html
+[123]: #withhooks
+[124]: #usewatchable
+[125]: #base
+[126]: #globalconfig
+[127]: #session
+[128]: #viewport
+[129]: #useviewport
+[130]: #watchable
+[131]: https://reactjs.org/docs/react-api.html#reactsuspense
+[132]: #cursor
+[133]: https://reactjs.org/docs/forwarding-refs.html
+[134]: #autocompletepopoverprops
+[135]: #autocompleteitem
+[136]: #buttonprops
+[137]: #cellrendererprops
+[138]: #choicetokenprops
+[139]: #collaboratortokenprops
+[140]: #colorpaletteprops
+[141]: #confirmationdialogprops
+[142]: #dialogprops
+[143]: #dialogclosebuttonprops
+[144]: #fieldpickerprops
+[145]: #globalconfigkey
+[146]: #fieldpickersyncedprops
+[147]: #iconprops
+[148]: /packages/sdk/docs/icons.md
+[149]: #fieldiconprops
+[150]: #inputprops
+[151]: #inputsyncedprops
+[152]: https://www.owasp.org/index.php/Reverse_Tabnabbing
+[153]: #linkprops
+[154]: #loaderprops
+[155]: #popoverprops
+[156]: #progressbarprops
+[157]: #recordcardprops
+[158]: #recordcardlistprops
+[159]: #selectprops
+[160]: #selectoption
+[161]: #selectsyncedprops
+[162]: #tablepickerprops
+[163]: #tablepickersyncedprops
+[164]: #toggleprops
+[165]: #togglesyncedprops
+[166]: #tooltipprops
+[167]: #viewpickerprops
+[168]: #viewpickersyncedprops
+[169]: #addminsize
+[170]: #viewportsizeconstraintprop
