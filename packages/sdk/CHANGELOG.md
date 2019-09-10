@@ -11,7 +11,10 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.32...HEAD)
 
-No changes.
+-   New settings button helpers: `useSettingsButton`, `settingsButton.show()` and
+    `settingsButton.hide()`.
+-   **BREAKING**: `settingsButton.isVisible` is no longer settable. Use `settingsButton.show()` and
+    `settingsButton.hide()` instead.
 
 ## [0.0.32](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.31...@airtable/blocks@0.0.32) - 2019-09-20
 

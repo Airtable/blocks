@@ -67,6 +67,7 @@ toc:
                 - useRecordIds
                 - useRecordById
                 - useSession
+                - useSettingsButton
                 - useViewport
                 - useViewMetadata
                 - useWatchable
