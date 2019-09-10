@@ -1,0 +1,9 @@
+{
+    "version": "1.0",
+    "frontendEntry": "index.jsx",
+    "routes": [
+        {"urlPath": "/echo", "handler": "echo", "methods": ["GET", "POST"]},
+        {"urlPath": "/throw", "handler": "throw", "methods": ["GET"]},
+        {"urlPath": "/check-backend-sdk", "handler": "check_backend_sdk", "methods": ["POST"]}
+    ]
+}

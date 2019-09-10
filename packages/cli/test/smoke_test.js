@@ -12,7 +12,7 @@
  * re-install the globally installed blocks-cli in the current node environment.
  *
  * Requires access to:
- *     https://airtable.com/tbleA2gWqSbqgtXFD?blocks=bipHcxcRpB0ObTAGo
+ *     https://airtable.com/appQOxbW7k6mK0Eqd?blocks=bipHcxcRpB0ObTAGo
  */
 
 require('@babel/polyfill');
@@ -36,6 +36,7 @@ type CommandResultPromise = Promise<{error: ?Error, stdout: string, stderr: stri
 
 const APP_ID = 'appQOxbW7k6mK0Eqd';
 const BLOCK_ID = 'blkDOYCZmdADueASi';
+const BLOCK_INSTALLATION_ID = 'bipHcxcRpB0ObTAGo';
 const DEFAULT_BLOCK_RUN_WAIT_MS = 10 * 1000;
 const BLOCK_RUN_PORT = 9000;
 const BLOCK_RUN_URL = `https://localhost:${BLOCK_RUN_PORT}/`;
@@ -79,7 +80,13 @@ class SmokeTest {
                     options,
                 ),
             );
-            console.log(chalk.dim(response.body));
+            const BODY_TRUNCATION_LIMIT = 5 * 80;
+            const truncatedBody =
+                response.body.length < BODY_TRUNCATION_LIMIT
+                    ? response.body
+                    : response.body.substr(0, BODY_TRUNCATION_LIMIT) + '...(truncated)';
+            console.log(chalk.dim(truncatedBody));
+            return response;
         } catch (e) {
             log(`Failed to fetch from ${requestUrl}:\n`, e);
             throw e;
@@ -186,8 +193,34 @@ class SmokeTest {
             throw e;
         }
 
+        log('Please open a browser to edit the block:');
+        console.log(
+            `-> ${chalk.bold.underline(
+                `https://airtable.com/${APP_ID}?blocks=${BLOCK_INSTALLATION_ID}`,
+            )}\n` +
+                '-> Click on block dropdown menu and select "Edit block"\n' +
+                `-> Enter ${chalk.bold.underline(BLOCK_RUN_URL)} and click "Start editing block"`,
+        );
+        await inquirer.prompt([
+            {
+                type: 'input',
+                name: 'unused',
+                message: 'Press ENTER to continue...',
+            },
+        ]);
+
         log('Checking blocks-cli server is up');
-        await this._requestBlockServerRouteAsync('/', {method: 'GET'});
+        for (const requestFn of [
+            () => this._requestBlockServerRouteAsync('/', {method: 'GET'}),
+            () => this._requestBlockServerRouteAsync('/__runFrame/ping', {method: 'HEAD'}),
+            () => this._requestBlockServerRouteAsync('/__runFrame/bundle.js', {method: 'GET'}),
+        ]) {
+            const response = await requestFn();
+            if (response.statusCode !== 200) {
+                throw new Error(`Unexpected status code: ${response.statusCode}`);
+            }
+        }
+
         return {runProcess, runResultPromise};
     }
 
@@ -239,7 +272,60 @@ class SmokeTest {
     }
 
     async _runBlocksCliWorkflowForBlockWithBackendRoutesAsync() {
-        // TODO
+        log('Testing workflow on block with backend routes');
+
+        const npmPath = await whichAsync('npm');
+
+        await this._createTempDirAsync();
+
+        // Set up test block in temporary directory.
+        // TODO(Chuan): Make this a template when we add support for custom templates.
+        await fsExtra.ensureDir(this._blockDirPath);
+        const blockTemplateDirPath = path.join(
+            __dirname,
+            '..',
+            '..',
+            'test',
+            'block_with_backend_routes',
+        );
+        log(`Copying from ${blockTemplateDirPath}`);
+        await fsExtra.copy(blockTemplateDirPath, this._blockDirPath);
+        log('Installing packages');
+        await this._runCommand(npmPath, ['install'], this._blockDirPath).commandResultPromise;
+
+        // Check block run.
+        const runState = await this._startBlocksCliRunAsync();
+
+        // Check backend routes.
+        log('Checking backend routes');
+        const echoPayload = Math.random()
+            .toString()
+            .substr(2);
+        const echoPostResponse = await this._requestBlockServerRouteAsync('/echo', {
+            method: 'POST',
+            body: echoPayload,
+        });
+        if (!echoPostResponse.body.includes(echoPayload)) {
+            throw new Error(`Expected POST /echo to return '${echoPayload}'`);
+        }
+        const echoGetResponse = await this._requestBlockServerRouteAsync('/echo', {
+            method: 'GET',
+            qs: {payload: echoPayload},
+        });
+        if (!echoGetResponse.body.includes(echoPayload)) {
+            throw new Error(`Expected GET /echo to return '${echoPayload}'`);
+        }
+        const checkBackendSdkResponse = await this._requestBlockServerRouteAsync(
+            '/check-backend-sdk',
+            {method: 'POST'},
+        );
+        if (checkBackendSdkResponse.statusCode !== 200) {
+            throw new Error(`Unexpected status code: ${checkBackendSdkResponse.statusCode}`);
+        }
+
+        await this._stopBlocksCliRunAsync(runState);
+
+        await this._removeTempDirAsync();
     }
 
     async _doRunAsync() {
