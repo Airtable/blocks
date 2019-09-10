@@ -23,12 +23,16 @@ const detectPort = require('detect-port');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
 const invariant = require('invariant');
+const {merge} = require('lodash');
 const os = require('os');
 const path = require('path');
 const request = require('request');
 const util = require('util');
+const url = require('url');
 const which = require('which');
 const isWindows = require('is-windows');
+
+type CommandResultPromise = Promise<{error: ?Error, stdout: string, stderr: string}>;
 
 const APP_ID = 'appQOxbW7k6mK0Eqd';
 const BLOCK_ID = 'blkDOYCZmdADueASi';
@@ -36,6 +40,7 @@ const DEFAULT_BLOCK_RUN_WAIT_MS = 10 * 1000;
 const BLOCK_RUN_PORT = 9000;
 const BLOCK_RUN_URL = `https://localhost:${BLOCK_RUN_PORT}/`;
 const BLOCKS_CLI_PACKAGE = '@airtable/blocks-cli';
+const BLOCK_DIR_NAME = 'smoke_test';
 
 const whichAsync = util.promisify(which);
 const requestAsync = util.promisify(request);
@@ -59,28 +64,54 @@ class SmokeTest {
         this._blocksCliRunWaitMs = blocksCliRunWaitMs;
     }
 
-    _runCommand(command: string, args: Array<string>, cwd?: string) {
+    async _requestBlockServerRouteAsync(urlPath, options) {
+        const requestUrl = url.resolve(BLOCK_RUN_URL, urlPath);
+        console.log(chalk.dim(`---> ${requestUrl}`));
+        try {
+            const response = await requestAsync(
+                requestUrl,
+                merge(
+                    {
+                        agentOptions: {
+                            rejectUnauthorized: false,
+                        },
+                    },
+                    options,
+                ),
+            );
+            console.log(chalk.dim(response.body));
+        } catch (e) {
+            log(`Failed to fetch from ${requestUrl}:\n`, e);
+            throw e;
+        }
+    }
+
+    _runCommand(
+        command: string,
+        args: Array<string>,
+        cwd?: string,
+    ): {
+        commandProcess: childProcess.ChildProcess,
+        commandResultPromise: CommandResultPromise,
+    } {
         invariant(command, 'command');
         console.log(chalk.dim(`$ ${command} ${args.join(' ')}`));
         let commandProcess;
-        const commandResultPromise = new Promise<{error: ?Error, stdout: string, stderr: string}>(
-            resolve => {
-                commandProcess = childProcess.execFile(
-                    command,
-                    args,
-                    {cwd, encoding: 'utf-8'},
-                    (error, stdout, stderr) => {
-                        resolve({
-                            error,
-                            // flow-disable-next-line because it isn't aware these will be strings.
-                            stdout,
-                            // flow-disable-next-line ditto
-                            stderr,
-                        });
-                    },
-                );
-            },
-        );
+        const commandResultPromise = new Promise(resolve => {
+            commandProcess = childProcess.execFile(
+                command,
+                args,
+                {cwd, encoding: 'utf-8'},
+                // eslint-disable-next-line flowtype/no-weak-types
+                (error, stdout: any, stderr: any) => {
+                    resolve({
+                        error,
+                        stdout,
+                        stderr,
+                    });
+                },
+            );
+        });
         // Suppresses uninitialized variable warnings in FLow.
         invariant(commandProcess, 'commandProcess');
         const {pid} = commandProcess;
@@ -91,17 +122,29 @@ class SmokeTest {
         return {commandProcess, commandResultPromise};
     }
 
+    async _createTempDirAsync() {
+        this._tempDirPath = path.join(os.tmpdir(), `blocks-cli-smoke-test-${new Date().getTime()}`);
+        log(`Using temporary directory '${this._tempDirPath}'`);
+        await fsExtra.mkdirs(this._tempDirPath);
+        this._blockDirPath = path.join(this._tempDirPath, BLOCK_DIR_NAME);
+    }
+
+    async _removeTempDirAsync() {
+        log(`Removing temporary directory '${this._tempDirPath}'`);
+        await fsExtra.remove(this._tempDirPath);
+    }
+
     _runBlocksCli(args: Array<string>, cwd?: string) {
         return this._runCommand(this._blocksCliPath, args, cwd);
     }
 
-    async _doRunAsync(): Promise<boolean> {
+    async _checkBlocksCliIsExecutableAsync() {
         // Check block command exists.
         try {
             this._blocksCliPath = await whichAsync(this._blocksCliCommand);
         } catch (e) {
             log(`Could not find blocks-cli command '${this._blocksCliCommand}'`, e);
-            return false;
+            throw e;
         }
         log(`Starting smoke test using blocks-cli at '${this._blocksCliPath}'`);
 
@@ -111,7 +154,7 @@ class SmokeTest {
                 `Port ${BLOCK_RUN_PORT} is currently in use. ` +
                     'Please kill or wait for termination before running this test.',
             );
-            return false;
+            throw new Error(`Port ${BLOCK_RUN_PORT} is busy`);
         }
 
         // Check block --version.
@@ -120,75 +163,96 @@ class SmokeTest {
             .commandResultPromise;
         if (versionError) {
             log('Failed to get blocks-cli version');
-            return false;
+            throw versionError;
         }
         const version = versionStdout.trim();
         log(`blocks-cli reports version '${version}'`);
+    }
 
-        // Set up temp dir for block code.
-        this._tempDirPath = path.join(os.tmpdir(), `blocks-cli-smoke-test-${new Date().getTime()}`);
-        log(`Using temporary directory '${this._tempDirPath}'`);
-        await fsExtra.mkdirs(this._tempDirPath);
-
-        // Check block init.
-        log('Creating block');
-        const {error: initError} = await this._runBlocksCli(
-            ['init', `${APP_ID}/${BLOCK_ID}`, 'smoke_test'],
-            this._tempDirPath,
-        ).commandResultPromise;
-        if (initError) {
-            log('Failed to create block');
-            return false;
-        }
-        const blockDir = path.join(this._tempDirPath, 'smoke_test');
-
+    async _startBlocksCliRunAsync() {
         // Check block run.
         log(`Running block and waiting ${this._blocksCliRunWaitMs}ms`);
         const {
             commandProcess: runProcess,
             commandResultPromise: runResultPromise,
-        } = this._runBlocksCli(['run'], blockDir);
+        } = this._runBlocksCli(['run'], this._blockDirPath);
         log(`Started blocks-cli with PID ${runProcess.pid}`);
+
         await delay(this._blocksCliRunWaitMs);
         try {
             process.kill(runProcess.pid, 0);
         } catch (e) {
             log('blocks-cli is not running');
-            return false;
+            throw e;
         }
 
-        log(`Checking blocks-cli server at ${BLOCK_RUN_URL}`);
-        try {
-            let response = await requestAsync(BLOCK_RUN_URL, {
-                method: 'GET',
-                agentOptions: {
-                    rejectUnauthorized: false,
-                },
-            });
-            log(`Successfully fetched from ${BLOCK_RUN_URL}:\n`, response.body);
-        } catch (e) {
-            log(`Failed to fetch from ${BLOCK_RUN_URL}:\n`, e);
-            return false;
-        }
+        log('Checking blocks-cli server is up');
+        await this._requestBlockServerRouteAsync('/', {method: 'GET'});
+        return {runProcess, runResultPromise};
+    }
 
+    async _stopBlocksCliRunAsync(runState: {
+        runProcess: childProcess.ChildProcess,
+        runResultPromise: CommandResultPromise,
+    }) {
+        const {runProcess, runResultPromise} = runState;
         log(`Stopping blocks-cli with PID ${runProcess.pid}`);
         kill(runProcess.pid);
         await runResultPromise;
+    }
 
-        // Check block release.
+    async _doBlocksCliReleaseAsync() {
         log('Releasing block');
-        const {error: releaseError} = await this._runBlocksCli(['release'], blockDir)
+        const {error: releaseError} = await this._runBlocksCli(['release'], this._blockDirPath)
             .commandResultPromise;
         if (releaseError) {
             log('Failed to release block');
-            return false;
+            throw releaseError;
+        }
+    }
+
+    async _runBlocksCliWorkflowForDefaultTemplateAsync() {
+        log('Testing workflow with default template');
+
+        await this._createTempDirAsync();
+
+        // Check block init.
+        log('Creating block');
+        const {error: initError} = await this._runBlocksCli(
+            ['init', `${APP_ID}/${BLOCK_ID}`, BLOCK_DIR_NAME],
+            this._tempDirPath,
+        ).commandResultPromise;
+        if (initError) {
+            log('Failed to create block');
+            throw initError;
         }
 
-        log(`Removing temporary directory '${this._tempDirPath}'`);
-        await fsExtra.remove(this._tempDirPath);
+        // Check block run.
+        const runState = await this._startBlocksCliRunAsync();
+
+        await this._stopBlocksCliRunAsync(runState);
+
+        // Check block release.
+        await this._doBlocksCliReleaseAsync();
+
+        await this._removeTempDirAsync();
+    }
+
+    async _runBlocksCliWorkflowForBlockWithBackendRoutesAsync() {
+        // TODO
+    }
+
+    async _doRunAsync() {
+        // Basic sanity checks.
+        await this._checkBlocksCliIsExecutableAsync();
+
+        // Test with default block template.
+        await this._runBlocksCliWorkflowForDefaultTemplateAsync();
+
+        // Test with block with backend routes.
+        await this._runBlocksCliWorkflowForBlockWithBackendRoutesAsync();
 
         log('Success!');
-        return true;
     }
 
     async _cleanUpAsync() {
@@ -211,8 +275,7 @@ class SmokeTest {
                 },
             ]);
             if (shouldDeleteTempDir) {
-                log(`Removing '${this._tempDirPath}'`);
-                await fsExtra.remove(this._tempDirPath);
+                await this._removeTempDirAsync();
             } else {
                 log(`Not removing ${this._tempDirPath}`);
             }
@@ -229,9 +292,10 @@ class SmokeTest {
         // Run _doAsync() and catch all errors.
         let exitCode;
         try {
-            exitCode = (await this._doRunAsync()) ? 0 : 1;
+            await this._doRunAsync();
+            exitCode = 0;
         } catch (e) {
-            console.error(chalk.red('\nUnexpected error:\n', e));
+            console.error(e);
             exitCode = 1;
         }
         await this._cleanUpAsync();
@@ -279,6 +343,7 @@ class SmokeTest {
     _blocksCliRunWaitMs: number;
     _blocksCliPath: string;
     _tempDirPath: string;
+    _blockDirPath: string;
     _childProcessPids = new Set<number>();
 }
 
