@@ -17,6 +17,7 @@ type DeployId = string;
 
 async function _generateBuildArtifactsAsync(
     blockJson: BlockJson,
+    enableDeprecatedAbsolutePathImport: boolean,
     backendSdkBaseUrl: string | null,
 ): Promise<{|
     frontendBundlePath: string,
@@ -24,6 +25,7 @@ async function _generateBuildArtifactsAsync(
 |}> {
     const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
         blockJson,
+        enableDeprecatedAbsolutePathImport,
         backendSdkBaseUrl,
     });
     const buildResult = await blockBuilder.buildForReleaseAsync();
@@ -98,10 +100,12 @@ async function _uploadBackendDeploymentPackageAsync(
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
     blockJson: BlockJson,
+    enableDeprecatedAbsolutePathImport: boolean,
     backendSdkBaseUrl: string | null,
 ): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
     const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync(
         blockJson,
+        enableDeprecatedAbsolutePathImport,
         backendSdkBaseUrl,
     );
 
@@ -153,6 +157,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         remoteName === null || typeof remoteName === 'string',
         'expects remoteName to be null or a string',
     );
+    const enableDeprecatedAbsolutePathImport = argv.enableDeprecatedAbsolutePathImport || false;
+    invariant(
+        typeof enableDeprecatedAbsolutePathImport === 'boolean',
+        'expects enableDeprecatedAbsolutePathImport to be a boolean',
+    );
     const apiClientResult = await ApiClient.constructApiClientForRemoteAsync(remoteName);
     if (apiClientResult.err) {
         throw apiClientResult.err;
@@ -166,7 +175,12 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     );
 
     console.log('building');
-    const {buildId, deployId} = await _buildAndDeployAsync(apiClient, blockJson, backendSdkBaseUrl);
+    const {buildId, deployId} = await _buildAndDeployAsync(
+        apiClient,
+        blockJson,
+        enableDeprecatedAbsolutePathImport,
+        backendSdkBaseUrl,
+    );
 
     console.log('releasing');
     await apiClient.createReleaseAsync(buildId, deployId);

@@ -25,6 +25,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
         'expects backendSdkBaseUrl to be null or a string',
     );
+    const enableDeprecatedAbsolutePathImport = argv.enableDeprecatedAbsolutePathImport || false;
+    invariant(
+        typeof enableDeprecatedAbsolutePathImport === 'boolean',
+        'expects enableDeprecatedAbsolutePathImport to be a boolean',
+    );
 
     const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
     if (blockJsonValidationResult.err) {
@@ -52,6 +57,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const blockBuilder = await BlockBuilder.createDevelopmentBlockBuilderAsync({
         blockJson,
+        enableDeprecatedAbsolutePathImport,
         transpileForAllBrowsers: transpileAll,
     });
     const blockServer = new BlockServer({

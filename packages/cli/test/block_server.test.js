@@ -57,9 +57,9 @@ describe('BlockServer', function() {
             blockBuilder = new BlockBuilder({
                 buildTypeMode: BlockBuildTypes.DEVELOPMENT,
                 blockJson,
+                enableDeprecatedAbsolutePathImport: false,
                 transpileForAllBrowsers: true,
             });
-            // blockBuilder.blockBuilderStateData = {status: BlockBuilderStatuses.READY};
 
             blockServer = new BlockServer({
                 blockBuilder: blockBuilder,

@@ -71,6 +71,7 @@ const allSupportedBrowsers: Array<string> = [
 class BlockBuilder {
     _buildTypeMode: BlockBuildType;
     _blockJson: BlockJson;
+    _enableDeprecatedAbsolutePathImport: boolean;
     _shouldTranspileForAllBrowsers: boolean;
     _blockDirPath: DirectoryPath;
     _outputTranspiledDirPath: string;
@@ -85,11 +86,13 @@ class BlockBuilder {
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
+        enableDeprecatedAbsolutePathImport: boolean,
         transpileForAllBrowsers?: boolean,
         backendSdkBaseUrl?: string | null,
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
+        this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._blockDirPath = getBlockDirPath();
@@ -112,24 +115,28 @@ class BlockBuilder {
 
     static async createDevelopmentBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        enableDeprecatedAbsolutePathImport: boolean,
         transpileForAllBrowsers?: boolean,
     }): Promise<BlockBuilder> {
-        const {blockJson, transpileForAllBrowsers} = args;
+        const {blockJson, enableDeprecatedAbsolutePathImport, transpileForAllBrowsers} = args;
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.DEVELOPMENT,
+            enableDeprecatedAbsolutePathImport,
             blockJson,
             transpileForAllBrowsers,
         });
     }
     static async createReleaseBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        enableDeprecatedAbsolutePathImport: boolean,
         backendSdkBaseUrl: string | null,
     }): Promise<BlockBuilder> {
-        const {blockJson, backendSdkBaseUrl} = args;
+        const {blockJson, enableDeprecatedAbsolutePathImport, backendSdkBaseUrl} = args;
 
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
             blockJson,
+            enableDeprecatedAbsolutePathImport,
             transpileForAllBrowsers: true,
             backendSdkBaseUrl,
         });
@@ -402,12 +409,11 @@ class BlockBuilder {
         await fsUtils.mkdirPathAsync(targetDirPath);
 
         // Create symlinks in node_modules for the user's block code's top-level directories to
-        // allow require with absolute paths:
+        // support require/import using absolute paths:
         // - For DEVELOPMENT the node_modules is in blocksDir.
         // - For RELEASE, it should be the newly installed node_modules
-        // TODO(richsinn): revisit this symlinking strategy because it's possible to conflict
-        //   with existing node_modules packages.
-        if (stats && stats.isDirectory()) {
+        // see: https://github.com/browserify/browserify-handbook#avoiding-
+        if (stats && stats.isDirectory() && this._enableDeprecatedAbsolutePathImport) {
             const isTopLevelDir = !fileOrDirectoryPath.includes(path.sep);
             if (isTopLevelDir) {
                 const symLinkToNodeModulesDir =
@@ -436,7 +442,7 @@ class BlockBuilder {
                     transpiledResult = await this._transpileFileAsync(fileOrDirectoryPath);
                 } catch (err) {
                     err.filePath = fileOrDirectoryPath;
-                    console.log(err.message);
+                    console.error(err.message);
                     return {err};
                 }
                 await fsUtils.writeFileAsync(targetFilePath, transpiledResult.code);
@@ -517,7 +523,7 @@ class BlockBuilder {
         try {
             bundle = await this._browserify.bundleAsync();
         } catch (err) {
-            console.log(err.message);
+            console.error('Bundle Error:', err.message);
             err.code = ErrorCodes.BUNDLE_ERROR;
             return {err};
         }

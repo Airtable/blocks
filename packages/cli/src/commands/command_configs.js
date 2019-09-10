@@ -91,6 +91,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 type: 'string',
                 hidden: true, // hide from --help output
             },
+            'enable-deprecated-absolute-path-import': {
+                description:
+                    'Supports using absolute paths for modules import/require via symlinking into node_modules',
+                type: 'boolean',
+                default: false,
+                hidden: true, // hide from --help output
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),
     },
@@ -108,6 +115,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             'backend-sdk-base-url': {
                 description: 'Base URL to download backend SDK from',
                 type: 'string',
+                hidden: true, // hide from --help output
+            },
+            'enable-deprecated-absolute-path-import': {
+                description:
+                    'Supports using absolute paths for modules import/require via symlinking into node_modules',
+                type: 'boolean',
+                default: false,
                 hidden: true, // hide from --help output
             },
         },
