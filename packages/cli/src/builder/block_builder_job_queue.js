@@ -242,7 +242,6 @@ class BlockBuilderJobQueue extends EventEmitter {
             case BlockBuilderStatuses.BUILDING:
                 if (this._buildHasErrors()) {
                     this._transitionToErrorState(currentBlockBuilderStateData.resolvePromise);
-                    this.emit('buildComplete');
                 } else {
                     this._transitionToReadyState(currentBlockBuilderStateData.resolvePromise);
                 }
