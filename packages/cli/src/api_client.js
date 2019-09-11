@@ -12,6 +12,7 @@ request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
 
 import type {Result} from './types/result';
+import type {S3UploadInfo} from './types/s3_upload_info';
 
 type ApplicationId = string;
 type BlockInstallationId = string;
@@ -122,6 +123,8 @@ class ApiClient {
         buildId: BuildId,
         frontendBundleUploadUrl: string,
         backendDeploymentPackageUploadUrl: string | null,
+        frontendBundleS3UploadInfo: S3UploadInfo,
+        backendDeploymentPackageS3UploadInfo: S3UploadInfo | null,
     }> {
         const options = {
             url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/start`,

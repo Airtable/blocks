@@ -1,35 +1,59 @@
 // @flow
 /* eslint-disable no-console */
+const _ = require('lodash');
 const BlockBuilder = require('../builder/block_builder');
 const ApiClient = require('../api_client');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
 const fsUtils = require('../helpers/fs_utils');
 const invariant = require('invariant');
 const request = require('request');
+const FormData = require('form-data');
 const {promisify} = require('util');
+request.postAsync = promisify(request.post);
 request.putAsync = promisify(request.put);
 
 import type {Argv} from 'yargs';
+import type {S3UploadInfo} from '../types/s3_upload_info';
 
 type BuildId = string;
 type DeployId = string;
 
-async function _uploadFrontendBundleAsync(
-    frontendBundlePath: string,
-    frontendBundleUploadUrl: string,
+async function _uploadViaSignedPostAsync(
+    filePath: string,
+    uploadInfo: S3UploadInfo,
 ): Promise<void> {
-    const bundle = await fsUtils.readFileAsync(frontendBundlePath);
-    const response = await request.putAsync({
-        url: frontendBundleUploadUrl,
-        body: bundle,
-        headers: {
-            'Content-Type': 'application/javascript',
-            'Cache-Control': 'max-age=31536000,immutable',
-            'x-amz-server-side-encryption': 'AES256',
-        },
-    });
-    if (response.statusCode !== 200 && response.statusCode !== 204) {
-        throw new Error('Failed to upload frontend bundle');
+    // We always expect `key` to be in the info object; the server should never
+    // send upload info without a specific key.
+    invariant(uploadInfo.key, 'uploadInfo.key');
+
+    const data = await fsUtils.readFileAsync(filePath);
+
+    // S3 demands that the 'file' field be last in the form data, since it will
+    // ignore any options following it. To make sure this always happens, we
+    // generate the form data manually here instead of letting request do it.
+    const formData = new FormData();
+    formData.append('key', uploadInfo.key);
+    for (const [key, value] of _.entries(uploadInfo.params)) {
+        formData.append(key, value);
+    }
+    formData.append('file', data);
+
+    const formLength = formData.getLengthSync();
+    const headers = {
+        'Cache-Control': 'max-age=31536000,immutable',
+        'Content-Length': formLength,
+        'x-amz-server-side-encryption': 'AES256',
+        ...formData.getHeaders(),
+    };
+    const body = formData.getBuffer();
+
+    const response = await request.postAsync({url: uploadInfo.endpointUrl, headers, body});
+
+    // It's reasonable for AWS to respond with 200 (OK), 201 (Created) or 202
+    // (Accepted), so treat all of those as successes even though we usually
+    // explicitly request 201 through the success_action_status field.
+    if (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 202) {
+        throw new Error('Failed to upload ' + filePath);
     }
 }
 
@@ -61,21 +85,6 @@ async function _createDeployAndWaitUntilCompletionAsync(
     return deployId;
 }
 
-async function _uploadBackendDeploymentPackageAsync(
-    backendDeploymentPackagePath: string,
-    backendDeploymentPackageUploadUrl: string,
-): Promise<void> {
-    const backendDeploymentPackage = await fsUtils.readFileAsync(backendDeploymentPackagePath);
-    const response = await request.putAsync({
-        url: backendDeploymentPackageUploadUrl,
-        body: backendDeploymentPackage,
-        headers: {'x-amz-server-side-encryption': 'AES256'},
-    });
-    if (response.statusCode !== 200 && response.statusCode !== 204) {
-        throw new Error('Failed to upload backend deployment package');
-    }
-}
-
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
     blockBuilder: BlockBuilder,
@@ -89,20 +98,20 @@ async function _buildAndDeployAsync(
     const hasBackend = !!backendDeploymentPackagePath;
     const {
         buildId,
-        frontendBundleUploadUrl,
-        backendDeploymentPackageUploadUrl,
+        frontendBundleS3UploadInfo,
+        backendDeploymentPackageS3UploadInfo,
     } = await apiClient.startBuildAsync(hasBackend);
 
     try {
         console.log('uploading build artifacts');
-        await _uploadFrontendBundleAsync(frontendBundlePath, frontendBundleUploadUrl);
+        await _uploadViaSignedPostAsync(frontendBundlePath, frontendBundleS3UploadInfo);
 
         if (hasBackend) {
             invariant(backendDeploymentPackagePath, 'backendDeploymentPackagePath');
-            invariant(backendDeploymentPackageUploadUrl, 'backendDeploymentPackageUploadUrl');
-            await _uploadBackendDeploymentPackageAsync(
+            invariant(backendDeploymentPackageS3UploadInfo, 'backendDeploymentPackageS3UploadInfo');
+            await _uploadViaSignedPostAsync(
                 backendDeploymentPackagePath,
-                backendDeploymentPackageUploadUrl,
+                backendDeploymentPackageS3UploadInfo,
             );
         }
     } catch (err) {
