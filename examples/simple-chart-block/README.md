@@ -29,4 +29,4 @@ instructions on how to do this.)
 
 ## See the block running
 
-![Block updating chart as the user changes data](https://raw.githubusercontent.com/Airtable/blocks/master/examples/simple-chart-block/media/block.gif?token=AAAAVHACQNAO3R36HUCFZ4C5M4LME)
+![Block updating chart as the user changes data](media/block.gif)

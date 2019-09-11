@@ -30,4 +30,4 @@ instructions on how to do this.)
 
 ## See the block running
 
-![Block showing YouTube video when user selects record in grid view](https://raw.githubusercontent.com/Airtable/blocks/master/examples/youtube-preview-block/media/block.gif?token=AAAAVHCRD6WDC7QHFQZCTF25M4LNM)
+![Block showing YouTube video when user selects record in grid view](media/block.gif)

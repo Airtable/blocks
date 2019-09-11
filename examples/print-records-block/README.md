@@ -37,4 +37,4 @@ instructions on how to do this.)
 
 ## See the block running
 
-![Seeing a layout of artists and their artworks grouped by collection, printing the layout](https://raw.githubusercontent.com/Airtable/blocks/master/examples/print-records-block/media/block.gif?token=AAAAVHESBFKL77UBJYDDCPK5M4LL2)
+![Seeing a layout of artists and their artworks grouped by collection, printing the layout](media/block.gif)

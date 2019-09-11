@@ -24,4 +24,4 @@ instructions on how to do this.)
 
 ## See the block running
 
-![Block updating summaries as the user changes data](https://raw.githubusercontent.com/Airtable/blocks/master/examples/summary-block/media/block.gif?token=AAAAVHB3RCRMK43DMXZSBA25M4LMQ)
+![Block updating summaries as the user changes data](media/block.gif)

@@ -66,3 +66,5 @@ practices for blocks development. And you can use it as a jumping off point for 
 ##### Print records
 
 [![Seeing a layout of artists and their artworks grouped by collection, printing the layout](examples/print-records-block/media/block.gif?raw=true)](examples/print-records-block)
+
+trigger airbuild
