@@ -6,6 +6,7 @@ import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import RecordCardListExample from './RecordCardListExample';
+import SelectExample from './SelectExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
 import {type Example} from './Example';
 
@@ -28,6 +29,10 @@ const examples: Array<Example> = [
         name: 'RecordCardList',
         component: RecordCardListExample,
         hasSettings: true,
+    },
+    {
+        name: 'Select',
+        component: SelectExample,
     },
     {
         name: 'TablePickerSynced',

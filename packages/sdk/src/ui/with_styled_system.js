@@ -74,7 +74,7 @@ import {type AllStylesProps} from './system';
  *     stylePropTypes,
  *     {
  *         // Optional default style props.
- *         width: '100%'
+ *         margin: 3
  *     }
  * );
  */
