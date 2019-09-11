@@ -10,30 +10,9 @@ const {promisify} = require('util');
 request.putAsync = promisify(request.put);
 
 import type {Argv} from 'yargs';
-import type {BlockJson} from '../types/block_json_type';
 
 type BuildId = string;
 type DeployId = string;
-
-async function _generateBuildArtifactsAsync(
-    blockJson: BlockJson,
-    enableDeprecatedAbsolutePathImport: boolean,
-    backendSdkBaseUrl: string | null,
-): Promise<{|
-    frontendBundlePath: string,
-    backendDeploymentPackagePath: string | null,
-|}> {
-    const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
-        blockJson,
-        enableDeprecatedAbsolutePathImport,
-        backendSdkBaseUrl,
-    });
-    const buildResult = await blockBuilder.buildForReleaseAsync();
-    if (buildResult.err) {
-        throw new Error('Failed to build the block code!');
-    }
-    return buildResult.value;
-}
 
 async function _uploadFrontendBundleAsync(
     frontendBundlePath: string,
@@ -99,15 +78,13 @@ async function _uploadBackendDeploymentPackageAsync(
 
 async function _buildAndDeployAsync(
     apiClient: ApiClient,
-    blockJson: BlockJson,
-    enableDeprecatedAbsolutePathImport: boolean,
-    backendSdkBaseUrl: string | null,
+    blockBuilder: BlockBuilder,
 ): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
-    const {frontendBundlePath, backendDeploymentPackagePath} = await _generateBuildArtifactsAsync(
-        blockJson,
-        enableDeprecatedAbsolutePathImport,
-        backendSdkBaseUrl,
-    );
+    const buildResult = await blockBuilder.buildForReleaseAsync();
+    if (buildResult.err) {
+        throw new Error('Failed to build the block code!');
+    }
+    const {frontendBundlePath, backendDeploymentPackagePath} = buildResult.value;
 
     const hasBackend = !!backendDeploymentPackagePath;
     const {
@@ -174,16 +151,23 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects backendSdkBaseUrl to be null or a string',
     );
 
-    console.log('building');
-    const {buildId, deployId} = await _buildAndDeployAsync(
-        apiClient,
+    const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
         blockJson,
         enableDeprecatedAbsolutePathImport,
         backendSdkBaseUrl,
-    );
+    });
 
-    console.log('releasing');
-    await apiClient.createReleaseAsync(buildId, deployId);
+    try {
+        console.log('building');
+        const {buildId, deployId} = await _buildAndDeployAsync(apiClient, blockBuilder);
+
+        console.log('releasing');
+        await apiClient.createReleaseAsync(buildId, deployId);
+    } catch (err) {
+        throw err;
+    } finally {
+        await blockBuilder.wipeBaseOutputBuildDirAsync();
+    }
 
     console.log('✅ successfully released block!');
 }

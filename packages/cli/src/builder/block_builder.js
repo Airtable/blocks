@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable no-console */
 const archiver = require('archiver');
+const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const {promisify} = require('util');
@@ -74,6 +75,7 @@ class BlockBuilder {
     _enableDeprecatedAbsolutePathImport: boolean;
     _shouldTranspileForAllBrowsers: boolean;
     _blockDirPath: DirectoryPath;
+    _baseOutputBuildDirPath: string;
     _outputTranspiledDirPath: string;
     _outputUserTranspiledDirPath: string;
     _outputBuildArtifactsDirPath: string;
@@ -97,18 +99,10 @@ class BlockBuilder {
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._blockDirPath = getBlockDirPath();
 
-        const outputBuildDirPath = path.join(
-            this._blockDirPath,
-            blockCliConfigSettings.BUILD_DIR,
-            this._buildTypeMode.toLowerCase(),
-        );
-        this._outputTranspiledDirPath = path.join(outputBuildDirPath, 'transpiled');
-        this._outputUserTranspiledDirPath = path.join(this._outputTranspiledDirPath, 'user');
-        this._outputBuildArtifactsDirPath = path.join(outputBuildDirPath, 'build_artifacts');
-
         this._initialBuildResolveIfExists = null;
         this._browserifyCache = {};
 
+        this._setupBuildOutputDirPaths();
         this._setupBlockBuilderJobQueue();
         this._setupBrowserify();
     }
@@ -183,6 +177,36 @@ class BlockBuilder {
     get blockBuilderJobQueue(): BlockBuilderJobQueue {
         return this._blockBuilderJobQueue;
     }
+    _setupBuildOutputDirPaths(): void {
+        switch (this._buildTypeMode) {
+            case BlockBuildTypes.DEVELOPMENT:
+                this._baseOutputBuildDirPath = path.join(
+                    this._blockDirPath,
+                    blockCliConfigSettings.BUILD_DIR,
+                    this._buildTypeMode.toLowerCase(),
+                );
+                break;
+
+            case BlockBuildTypes.RELEASE:
+                this._baseOutputBuildDirPath = path.join(
+                    os.tmpdir(),
+                    'airtableBlocks',
+                    blockCliConfigSettings.BUILD_DIR,
+                    new Date().getTime().toString(),
+                );
+                break;
+
+            default:
+                throw new Error(`unrecognized buildTypeMode: ${this._buildTypeMode}`);
+        }
+
+        this._outputTranspiledDirPath = path.join(this._baseOutputBuildDirPath, 'transpiled');
+        this._outputUserTranspiledDirPath = path.join(this._outputTranspiledDirPath, 'user');
+        this._outputBuildArtifactsDirPath = path.join(
+            this._baseOutputBuildDirPath,
+            'build_artifacts',
+        );
+    }
     _setupBlockBuilderJobQueue(): void {
         this._blockBuilderJobQueue = new BlockBuilderJobQueue(this._buildTypeMode);
         this._blockBuilderJobQueue.on('buildComplete', () => {
@@ -220,7 +244,6 @@ class BlockBuilder {
     ): void {
         const {persistent = true} = chokidarOpts;
 
-        // TODO(richsinn): Should we respect the user's .gitignore contents here?
         const ignored = [
             // HACK: For some reason, we need to use a function here to ignore the 'build' and
             // the 'node_modules' directories. Using glob patterns is not properly ignored and
@@ -799,6 +822,9 @@ class BlockBuilder {
                 backendDeploymentPackagePath,
             },
         };
+    }
+    async wipeBaseOutputBuildDirAsync(): Promise<void> {
+        await fsUtils.removeAsync(path.join(this._baseOutputBuildDirPath));
     }
 }
 
