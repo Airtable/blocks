@@ -2,11 +2,14 @@
 import * as React from 'react';
 import {cx} from 'emotion';
 import useStyledSystem, {type StyleParser} from './use_styled_system';
+import {type AllStylesProps} from './system';
 
 /**
  * @private
  * A helper method for working with the useStyledSystem hook in class-based components.
  * It takes a React component and converts style props into a single className prop.
+ *
+ * Generate boilerplate for using this hook with our scaffolding tool: https://o80pm.csb.app/
  *
  * @param {React.Component} Component The React component you want to use with styled system
  * @param {StyleParser} styleParser The style parser, constructed with `compose`
@@ -29,7 +32,7 @@ import useStyledSystem, {type StyleParser} from './use_styled_system';
  * } from './system';
  *
  * type Props = {|
- *     className: string,
+ *     className?: string,
  *     onClick: () => void,
  *     children: React.Node,
  * |};
@@ -40,11 +43,11 @@ import useStyledSystem, {type StyleParser} from './use_styled_system';
  *     ...MarginProps,
  * |};
  *
- * const styleParser = compose({
- *     ...flexContainerSet,
- *     ...flexItemSet,
- *     ...margin,
- * });
+ * const styleParser = compose(
+ *     flexContainerSet,
+ *     flexItemSet,
+ *     margin,
+ * );
  *
  * const stylePropTypes = {
  *     ...flexContainerSetPropTypes,
@@ -67,17 +70,26 @@ import useStyledSystem, {type StyleParser} from './use_styled_system';
  *     MyComponent,
  *     styleParser,
  *     stylePropTypes,
+ *     {
+ *         // Optional default style props.
+ *         width: '100%'
+ *     }
  * );
  */
-export default function withStyledSystem<Props: {className: string}, StyleProps: {}, Instance>(
+export default function withStyledSystem<
+    Props: {className?: string},
+    StyleProps: $Shape<AllStylesProps>,
+    Instance,
+>(
     Component: React.AbstractComponent<$Exact<Props>, Instance>,
     styleParser: StyleParser<StyleProps>,
     stylePropTypes: {[string]: mixed},
-): React.AbstractComponent<{...Props, ...StyleProps}, Instance> {
+    defaultStyleProps?: StyleProps,
+): React.AbstractComponent<Props, Instance> {
     const stylePropNamesSet = new Set(styleParser.propNames);
     const WithStyledSystem = React.forwardRef((props, ref) => {
         // eslint-disable-next-line flowtype/no-weak-types
-        const styleProps: any = {};
+        const styleProps: any = defaultStyleProps || {};
         // eslint-disable-next-line flowtype/no-weak-types
         const nonStyleProps: any = {};
         for (const propName of Object.keys(props)) {
