@@ -134,6 +134,7 @@ export type NormalizedRecordQueryResultOpts = {|
  *         'Rating',
  *     ],
  * });
+ * ```
  *
  * ##### recordColorMode
  * Just like a view in Airtable, you can control the colors of records in a field. There are three
@@ -143,7 +144,7 @@ export type NormalizedRecordQueryResultOpts = {|
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
 
- * someView.selectRecords({
+ * someTable.selectRecords({
  *     recordColorMode: recordColoring.modes.byView(someView),
  * });
  * ```
@@ -156,12 +157,20 @@ export type NormalizedRecordQueryResultOpts = {|
  *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
  * });
  * ```
- *
- * Or with no color at all (the default):
+ * 
+ * By default, views will have whichever coloring is set up in Airtable and tables won't have any
+ * record coloring:
+ * 
  * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- *
+ * // these two are the same:
+ * someView.selectRecords();
  * someView.selectRecords({
+ *     recordColorMode: recordColoring.modes.byView(someView),
+ * });
+ * 
+ * // as are these two:
+ * someTable.selectRecords();
+ * someTable.selectRecords({
  *     recordColorMode: recordColoring.modes.none(),
  * });
  * ```

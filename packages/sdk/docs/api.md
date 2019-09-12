@@ -1974,7 +1974,7 @@ The fields option lets you make sure that only data relevant to you is loaded.
 
 You can specify fields with a [Field][16], by ID, or by name:
 
-````js
+```js
 view.selectRecords({
     fields: [
         // we want to only load fieldA:
@@ -1985,19 +1985,22 @@ view.selectRecords({
         'Rating',
     ],
 });
+```
 
 ##### recordColorMode
+
 Just like a view in Airtable, you can control the colors of records in a field. There are three
 supported record color modes:
 
 By taking the colors the records have according to the rules of a specific view:
+
 ```js
 import {recordColoring} from '@airtable/blocks/models';
 
-someView.selectRecords({
+someTable.selectRecords({
     recordColorMode: recordColoring.modes.byView(someView),
 });
-````
+```
 
 Based on the color of a single select field in the table:
 
@@ -2009,12 +2012,19 @@ someView.selectRecords({
 });
 ```
 
-Or with no color at all (the default):
+By default, views will have whichever coloring is set up in Airtable and tables won't have any
+record coloring:
 
 ```js
-import {recordColoring} from '@airtable/blocks/models';
-
+// these two are the same:
+someView.selectRecords();
 someView.selectRecords({
+    recordColorMode: recordColoring.modes.byView(someView),
+});
+
+// as are these two:
+someTable.selectRecords();
+someTable.selectRecords({
     recordColorMode: recordColoring.modes.none(),
 });
 ```
@@ -2931,8 +2941,8 @@ Select records from the view. Returns a query result. See {@RecordQueryResult} f
 
 ##### Parameters
 
--   `opts` **RecordQueryResultOpts?** Options for the query, such as sorts and fields. (optional,
-    default `{}`)
+-   `opts` **RecordQueryResultOpts** Options for the query, such as sorts, fields, and record
+    coloring. By default, records will be coloured according to the view. (optional, default `{}`)
 
 ##### Examples
 

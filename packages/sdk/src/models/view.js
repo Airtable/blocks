@@ -8,6 +8,7 @@ import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import type ViewDataStore from './view_data_store';
 import ViewMetadataQueryResult from './view_metadata_query_result';
+import * as RecordColoring from './record_coloring';
 
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
@@ -137,7 +138,8 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     /**
      * Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
      *
-     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @param [opts={}] Options for the query, such as sorts, fields, and record coloring. By
+     * default, records will be coloured according to the view.
      * @returns A record query result.
      * @example
      * import {UI} from '@airtable/blocks';
@@ -162,11 +164,19 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *     );
      * }
      */
-    selectRecords(opts?: RecordQueryResultOpts): TableOrViewQueryResult {
+    selectRecords(opts: RecordQueryResultOpts = {}): TableOrViewQueryResult {
+        const defaultedOpts = {
+            ...opts,
+            recordColorMode:
+                opts.recordColorMode === undefined
+                    ? RecordColoring.modes.byView(this)
+                    : opts.recordColorMode,
+        };
+
         return TableOrViewQueryResult.__createOrReuseQueryResult(
             this,
             this._viewDataStore.parentRecordStore,
-            opts || {},
+            defaultedOpts,
         );
     }
     /**
