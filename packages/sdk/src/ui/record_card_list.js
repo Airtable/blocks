@@ -18,7 +18,7 @@ type FixedSizeListType = HTMLDivElement & {scrollTo: number => void, scrollToIte
 /** @private */
 type RecordCardItemRendererProps = {
     data: {
-        records: Array<Record | RecordDef>,
+        records: Array<Record> | Array<RecordDef>,
         fields?: Array<Field>,
         view?: View,
         width: number,
@@ -183,7 +183,7 @@ const innerRecordCardListWindow = React.forwardRef((props: InnerWindowProps, ref
  * @property {object} [style] Additional styles to apply to the record card list.
  */
 type RecordCardListProps = {|
-    records: Array<Record | RecordDef>,
+    records: Array<Record> | Array<RecordDef>,
 
     onScroll?: ({
         scrollDirection: 'forward' | 'backward',
