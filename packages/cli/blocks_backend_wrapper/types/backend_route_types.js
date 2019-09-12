@@ -21,8 +21,12 @@ export type BackendRouteRequest = {
 /** Response from backend route handlers. */
 export type BackendRouteResponse = {
     statusCode?: number,
-    body?: mixed,
-    headers?: {[string]: mixed},
+    body?: string | Buffer | Object | Array<mixed>,
+    // Supported header formats:
+    //   - {'X-Key': 'value'}
+    //   - {'X-Key': ['value1', 'value2']}
+    //   - ['X-Key', 'value1', 'X-Key', 'value2']
+    headers?: {[string]: string | $ReadOnlyArray<string>},
     errorData?: {
         stack: string,
         message: string,

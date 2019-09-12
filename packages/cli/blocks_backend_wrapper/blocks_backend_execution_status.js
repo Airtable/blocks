@@ -16,6 +16,8 @@ const BlocksBackendExecutionStatuses = Object.freeze({
     // Could not initialize backend SDK. If this happens at runtime, it would
     // indicate a programming error.
     BACKEND_SDK_INIT_ERROR: ('backend-sdk-init-error', 'backend-sdk-init-error'),
+    // The handler returned an invalid response.
+    HANDLER_RESPONSE_VALIDATION_ERROR: ('handler-response-validation-error': 'handler-response-validation-error'),
 });
 
 /** Execution status. */
@@ -23,22 +25,23 @@ export type BlocksBackendExecutionStatus = $Values<typeof BlocksBackendExecution
 
 /** Constructs a headers object for the given execution status. */
 function createBlocksBackendExecutionStatusHeaders(status: BlocksBackendExecutionStatus) {
-    return {[BLOCKS_BACKEND_EXECUTION_STATUS_HEADER]: status};
+    return {[BLOCKS_BACKEND_EXECUTION_STATUS_HEADER]: [status]};
 }
 
 /** Extracts execution status from a headers object. */
 function getBlocksBackendExecutionStatus(
-    headers: {[string]: mixed} | void,
+    headers: {[string]: string | $ReadOnlyArray<string>} | void,
 ): BlocksBackendExecutionStatus | null {
     if (!headers) {
         return null;
     }
-    const value = Object.entries(headers)
+    const headerValue = Object.entries(headers)
         .filter(
             ([k, v]) => k.toLowerCase() === BLOCKS_BACKEND_EXECUTION_STATUS_HEADER.toLowerCase(),
         )
         .map(([k, v]) => v)
         .pop();
+    const value = Array.isArray(headerValue) ? headerValue[0] : headerValue;
     if (!value || !Object.values(BlocksBackendExecutionStatuses).includes(value)) {
         return null;
     }

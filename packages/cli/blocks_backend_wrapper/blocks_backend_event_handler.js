@@ -5,10 +5,8 @@ const pathToRegexp = require('path-to-regexp');
 const request = require('request');
 const stripAnsi = require('strip-ansi');
 const util = require('util');
-const {
-    BlocksBackendExecutionStatuses,
-    createBlocksBackendExecutionStatusHeaders,
-} = require('./blocks_backend_execution_status');
+const {BlocksBackendExecutionStatuses} = require('./blocks_backend_execution_status');
+const normalizeBackendRouteResponse = require('./normalize_backend_route_response');
 
 import type {BackendRoute, BlockJson} from './types/block_json_type';
 import type {
@@ -132,25 +130,27 @@ class BlocksBackendEventHandler {
 
     _createResponseForExecutionError(err: Error, status: BlocksBackendExecutionStatus) {
         console.error(err); // eslint-disable-line no-console
-        return {
-            statusCode: 500,
-            body: JSON.stringify({error: 'SERVER_ERROR', message: stripAnsi(err.message)}),
-            errorData: {stack: err.stack, message: err.message, name: err.name},
-            headers: createBlocksBackendExecutionStatusHeaders(status),
-        };
+        return normalizeBackendRouteResponse(
+            {
+                statusCode: 500,
+                body: JSON.stringify({error: 'SERVER_ERROR', message: stripAnsi(err.message)}),
+                errorData: {stack: err.stack, message: err.message, name: err.name},
+            },
+            status,
+        );
     }
 
     async _callUserCodeForEventAsync(event: LambdaEvent): Promise<BackendRouteResponse> {
         const routeAndParams = this._getRouteAndParamsForEvent(event);
         if (routeAndParams === null) {
             // No matching route, so treat this as a 404.
-            return {
-                statusCode: 404,
-                body: 'NOT_FOUND',
-                headers: createBlocksBackendExecutionStatusHeaders(
-                    BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES,
-                ),
-            };
+            return normalizeBackendRouteResponse(
+                {
+                    statusCode: 404,
+                    body: 'NOT_FOUND',
+                },
+                BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES,
+            );
         }
         const {route, params} = routeAndParams;
 
@@ -186,44 +186,48 @@ class BlocksBackendEventHandler {
             );
         }
 
+        const requestObj: BackendRouteRequest = {
+            method: event.method,
+            query: event.query,
+            params,
+            path: event.path,
+            body: event.body,
+            headers: event.headers,
+
+            // Private fields for SDK consumption:
+            _apiBaseUrl: event.apiBaseUrl,
+            _apiAccessPolicyString: event.apiAccessPolicyString,
+            _applicationId: event.applicationId,
+            _blockInstallationId: event.blockInstallationId,
+            _blockInvocationId: event.blockInvocationId,
+            _kvValuesByKey: event.kvValuesByKey,
+        };
+        let response: BackendRouteResponse;
         try {
-            const requestObj: BackendRouteRequest = {
-                method: event.method,
-                query: event.query,
-                params,
-                path: event.path,
-                body: event.body,
-                headers: event.headers,
-
-                // Private fields for SDK consumption:
-                _apiBaseUrl: event.apiBaseUrl,
-                _apiAccessPolicyString: event.apiAccessPolicyString,
-                _applicationId: event.applicationId,
-                _blockInstallationId: event.blockInstallationId,
-                _blockInvocationId: event.blockInvocationId,
-                _kvValuesByKey: event.kvValuesByKey,
-            };
-
             // A backend route handler function may return a promise or a non-promise
             // value. For consistency, let's always convert it to a promise so that we
             // can handle both formats the same.
-            const responsePromise = Promise.resolve(handler(requestObj));
-
-            // TODO(Chuan): Validate response from user code.
-            const response: BackendRouteResponse = await responsePromise;
-            response.headers = {
-                ...(response.headers || {}),
-                ...createBlocksBackendExecutionStatusHeaders(
-                    BlocksBackendExecutionStatuses.SUCCESS,
-                ),
-            };
-            return response;
+            response = await Promise.resolve(handler(requestObj));
         } catch (err) {
             return this._createResponseForExecutionError(
                 err,
                 BlocksBackendExecutionStatuses.HANDLER_EXECUTION_ERROR,
             );
         }
+
+        let normalizedResponse: BackendRouteResponse;
+        try {
+            normalizedResponse = normalizeBackendRouteResponse(
+                response,
+                BlocksBackendExecutionStatuses.SUCCESS,
+            );
+        } catch (err) {
+            return this._createResponseForExecutionError(
+                err,
+                BlocksBackendExecutionStatuses.HANDLER_RESPONSE_VALIDATION_ERROR,
+            );
+        }
+        return normalizedResponse;
     }
 
     async handleEventAsync(event: LambdaEvent): Promise<BackendRouteResponse> {
@@ -238,7 +242,7 @@ class BlocksBackendEventHandler {
             this._wrapConsole(console, logStream);
         }
 
-        const response = await this._callUserCodeForEventAsync(event);
+        const normalizedResponse = await this._callUserCodeForEventAsync(event);
 
         if (this._enableUploadLogsToS3) {
             // Before returning, let's upload the logs to S3, but ignore any
@@ -261,7 +265,7 @@ class BlocksBackendEventHandler {
             }
         }
 
-        return response;
+        return normalizedResponse;
     }
 }
 

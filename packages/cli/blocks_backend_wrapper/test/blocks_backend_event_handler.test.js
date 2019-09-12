@@ -7,6 +7,7 @@ const {
     BlocksBackendExecutionStatuses,
     getBlocksBackendExecutionStatus,
 } = require('../blocks_backend_execution_status');
+const normalizeBackendRouteResponse = require('../normalize_backend_route_response');
 
 import type {BackendRoute, BlockJson} from '../types/block_json_type';
 import type {BackendRouteHandler, BackendRouteResponse} from '../types/backend_route_types';
@@ -83,10 +84,10 @@ describe('BlocksBackendEventHandler', function() {
         ]) {
             it(`passes when ${testName}`, async function() {
                 const resp = await eventHandler.handleEventAsync({...EVENT_TEMPLATE, path, method});
-                assert.equal(resp.statusCode, 404);
+                assert.strictEqual(resp.statusCode, 404);
                 assert(resp.body);
                 assert(backendRouteHandler.notCalled);
-                assert.equal(
+                assert.strictEqual(
                     getBlocksBackendExecutionStatus(resp.headers),
                     BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES,
                 );
@@ -113,13 +114,13 @@ describe('BlocksBackendEventHandler', function() {
                 method: 'post',
                 path: '/foo',
             });
-            assert.equal(resp.statusCode, 500);
+            assert.strictEqual(resp.statusCode, 500);
             assert(resp.body);
             assert(resp.errorData);
             // flow-disable-next-line because we expect errorData to be populated.
-            assert.equal(resp.errorData.message, ERROR_MESSAGE);
+            assert.strictEqual(resp.errorData.message, ERROR_MESSAGE);
             assert(backendRouteHandler.calledOnce);
-            assert.equal(
+            assert.strictEqual(
                 getBlocksBackendExecutionStatus(resp.headers),
                 BlocksBackendExecutionStatuses.HANDLER_EXECUTION_ERROR,
             );
@@ -164,8 +165,7 @@ describe('BlocksBackendEventHandler', function() {
                 backendRouteHandler,
             );
             it(`passes with ${testName}`, async function() {
-                const resp = await eventHandler.handleEventAsync(event);
-                assert.deepEqual(resp, backendRouteResponse);
+                const actualResponse = await eventHandler.handleEventAsync(event);
                 assert(backendRouteHandler.calledOnce);
                 assert(
                     backendRouteHandler.calledWithMatch({
@@ -183,8 +183,14 @@ describe('BlocksBackendEventHandler', function() {
                         _kvValuesByKey: event.kvValuesByKey,
                     }),
                 );
-                assert.equal(
-                    getBlocksBackendExecutionStatus(resp.headers),
+                const expectedResponse = normalizeBackendRouteResponse(
+                    backendRouteResponse,
+                    BlocksBackendExecutionStatuses.SUCCESS,
+                );
+                assert.strictEqual(actualResponse.statusCode, expectedResponse.statusCode);
+                assert.deepStrictEqual(actualResponse.body, expectedResponse.body);
+                assert.strictEqual(
+                    getBlocksBackendExecutionStatus(actualResponse.headers),
                     BlocksBackendExecutionStatuses.SUCCESS,
                 );
                 backendRouteHandler.resetHistory();
