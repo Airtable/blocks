@@ -277,7 +277,7 @@ async function createRemoteJsonFileAsync(
     await fsUtils.mkdirPathAsync(blockConfigDirPath);
     await fsUtils.writeFileAsync(
         path.join(blockConfigDirPath, blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH),
-        JSON.stringify(remoteJson, null, 4),
+        JSON.stringify(remoteJson, null, 4) + '\n',
     );
 }
 
@@ -293,7 +293,7 @@ async function setupHelloWorldBlockAsync(
     };
     const writeBlockJsonPromise = fsUtils.writeFileAsync(
         path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
-        JSON.stringify(blockJson, null, 4),
+        JSON.stringify(blockJson, null, 4) + '\n',
     );
 
     const writeDefaultFrontendFilesPromise = _writeDefaultFrontendFilesAsync(blockDirPath);
@@ -310,7 +310,7 @@ async function setupHelloWorldBlockAsync(
     await fsUtils.mkdirPathAsync(blockConfigDirPath);
     const writeRemoteJsonPromise = fsUtils.writeFileAsync(
         path.join(blockConfigDirPath, blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH),
-        JSON.stringify(remoteJson, null, 4),
+        JSON.stringify(remoteJson, null, 4) + '\n',
     );
 
     // Create a package json so the user can `npm install`.
@@ -327,7 +327,7 @@ async function setupHelloWorldBlockAsync(
             },
             null,
             4,
-        ),
+        ) + '\n',
     );
 
     // Create a .gitignore file.

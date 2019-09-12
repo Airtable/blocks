@@ -67,13 +67,13 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     await fsUtils.mkdirPathAsync(blockConfigDirPath);
     await fsUtils.writeFileAsync(
         path.join(blockConfigDirPath, blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH),
-        JSON.stringify(remoteJson, null, 4),
+        JSON.stringify(remoteJson, null, 4) + '\n',
     );
 
     // Overwrite block.json
     await fsUtils.writeFileAsync(
         path.join(blockDirPath, blockCliConfigSettings.BLOCK_FILE_NAME),
-        JSON.stringify(newBlockJson, null, 4),
+        JSON.stringify(newBlockJson, null, 4) + '\n',
     );
 }
 
