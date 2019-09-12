@@ -102,7 +102,10 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
                 (containerWidth + 2 * this.props.squareMargin) /
                     (DEFAULT_COLOR_SQUARE_SIZE + 2 * this.props.squareMargin),
             );
-            squareSize = calculateSquareSize(numColorsThatWillFitAsDefaultSize);
+            squareSize = squareSize =
+                numColorsThatWillFitAsDefaultSize === 0
+                    ? DEFAULT_COLOR_SQUARE_SIZE
+                    : calculateSquareSize(numColorsThatWillFitAsDefaultSize);
         } else {
             squareSize = Math.min(MAX_COLOR_SQUARE_SIZE, calculatedSquareSize);
         }
