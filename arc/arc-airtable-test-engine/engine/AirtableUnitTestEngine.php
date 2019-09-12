@@ -20,7 +20,7 @@ final class AirtableUnitTestEngine extends ArcanistUnitTestEngine {
 
     public function run() {
         print("*** Checking if your local commits have been pushed to GitHub\n");
-        $cmd = 'git --no-pager log origin/`git branch  | grep "\\*" | cut -d" " -f2`..HEAD 2>&1';
+        $cmd = 'git --no-pager log "@{upstream}..HEAD" 2>&1';
         print("*** Running command: '$cmd'\n");
         exec($cmd, $output, $exitCode);
 
