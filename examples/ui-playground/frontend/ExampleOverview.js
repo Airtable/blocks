@@ -11,7 +11,7 @@ export default function ExampleOverview(props: Props) {
     const {examples, onSelect} = props;
 
     return (
-        <div>
+        <div className="baymax">
             <div className="border-bottom border-darken2 p2 flex items-center">
                 <div className="strong big center flex-auto">Component examples</div>
             </div>

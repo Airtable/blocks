@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment, useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
     Button,
     CellRenderer,
@@ -18,7 +18,6 @@ import {
     Tooltip,
     colors,
     colorUtils,
-    loadCSSFromURLAsync,
     useBase,
     useRecords,
     useSession,
@@ -34,39 +33,16 @@ export default function BaymaxExample() {
     const view = table.views[0];
     const queryResult = table.selectRecords();
     const records = useRecords(queryResult);
-    const allowedColors = Object.values(colors).slice(0, 8);
+    // Map to string to appease flow.
+    const allowedColors = Object.values(colors)
+        .slice(0, 8)
+        .map(String);
     const [color, setColor] = useState(allowedColors[0]);
 
-    const stylesheetRef = useRef(document.querySelector('link'));
-    const [shouldUseLocalBlockFrameCSS, setShouldUseLocalBlockFrameCSS] = useState(true);
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [selectValue, setSelectValue] = useState('foo');
     const [isToggleEnabled, setIsToggleEnabled] = useState(false);
-
-    async function addLocalBlockFrameCSSAsync() {
-        stylesheetRef.current.remove();
-        await loadCSSFromURLAsync('https://hyperbasedev.com:3000/css/compiled/block_frame.css');
-        document.body.classList.remove('baymax');
-    }
-
-    function removeLocalBlockFrameCSS() {
-        if (shouldUseLocalBlockFrameCSS) {
-            document.querySelector('link').remove();
-            document.head.appendChild(stylesheetRef.current);
-            document.body.classList.add('baymax');
-        }
-    }
-
-    useEffect(() => {
-        if (shouldUseLocalBlockFrameCSS) {
-            addLocalBlockFrameCSSAsync();
-        } else {
-            removeLocalBlockFrameCSS();
-        }
-
-        return removeLocalBlockFrameCSS;
-    }, [shouldUseLocalBlockFrameCSS]);
 
     return (
         <div
@@ -78,16 +54,6 @@ export default function BaymaxExample() {
                 padding: 4,
             }}
         >
-            <Toggle
-                value={shouldUseLocalBlockFrameCSS}
-                onChange={setShouldUseLocalBlockFrameCSS}
-                label="Use local block frame CSS"
-                style={{
-                    alignSelf: 'start',
-                    paddingTop: 4,
-                    paddingBottom: 4,
-                }}
-            />
             <table
                 style={{
                     flex: '1 1 auto',
@@ -127,7 +93,8 @@ export default function BaymaxExample() {
                     <tr>
                         <td>CollaboratorToken</td>
                         <td>
-                            <CollaboratorToken collaborator={session.currentUser} />
+                            {/* eslint-disable-next-line flowtype/no-weak-types */}
+                            <CollaboratorToken collaborator={(session.currentUser: any)} />
                         </td>
                     </tr>
                     <tr>

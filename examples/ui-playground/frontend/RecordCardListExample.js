@@ -18,9 +18,11 @@ export default function RecordCardListExample(props: Props) {
     const table = base.getTableByIdIfExists(base.tables[0].id);
     const view = table ? table.getViewByIdIfExists(table.views[0].id) : null;
     const records = useRecords(view ? view.selectRecords() : null);
-    const numAdditionalFieldsToShowOptions = Array(table.fields.length)
-        .fill(null)
-        .map((_, i) => ({value: i, label: i}));
+    const numAdditionalFieldsToShowOptions = table
+        ? Array(table.fields.length)
+              .fill(null)
+              .map((_, i) => ({value: i, label: i}))
+        : [];
 
     const onRecordClick = () => {
         setNumRecordClicks(numRecordClicks + 1);
@@ -42,7 +44,7 @@ export default function RecordCardListExample(props: Props) {
                         <label>Number of additional fields to show</label>
                         <Select
                             value={numAdditionalFieldsToShow}
-                            onChange={setNumAdditionalFieldsToShow}
+                            onChange={value => setNumAdditionalFieldsToShow(Number(value))}
                             options={numAdditionalFieldsToShowOptions}
                         />
                     </div>
@@ -72,16 +74,20 @@ export default function RecordCardListExample(props: Props) {
                     </div>
                 </div>
             )}
-            <RecordCardList
-                view={view}
-                fields={table.fields.slice(1, numAdditionalFieldsToShow + 1)}
-                onRecordClick={useDefaultOnClick ? undefined : onRecordClick}
-                onScroll={onScroll}
-                onRecordMouseEnter={onRecordMouseEnter}
-                onRecordMouseLeave={onRecordMouseLeave}
-                records={records}
-                className="flex-auto"
-            />
+            {view && table && records && (
+                <RecordCardList
+                    view={view}
+                    fields={table.fields.slice(1, numAdditionalFieldsToShow + 1)}
+                    onRecordClick={useDefaultOnClick ? undefined : onRecordClick}
+                    onScroll={onScroll}
+                    onRecordMouseEnter={onRecordMouseEnter}
+                    onRecordMouseLeave={onRecordMouseLeave}
+                    // NOTE(jay): I think type `RecordCardListProps` is mistyped as `Array<Record | RecordDef>` and should be `Array<Record> | Array<RecordDef>`
+                    // eslint-disable-next-line flowtype/no-weak-types
+                    records={(records: any)}
+                    className="flex-auto"
+                />
+            )}
         </div>
     );
 }

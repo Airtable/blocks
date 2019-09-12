@@ -19,7 +19,7 @@ export default function ColorPaletteSyncedExample(props: Props) {
                         <Input
                             type="number"
                             value={numColors}
-                            onChange={e => setNumColors(e.target.value)}
+                            onChange={e => setNumColors(Number(e.target.value))}
                         />
                     </div>
                     <div className="flex p2 justify-between items-center border-bottom border-darken2">

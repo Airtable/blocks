@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {Button} from '@airtable/blocks/ui';
+import {Box, Button} from '@airtable/blocks/ui';
 import {type Example} from './Example';
 
 type Props = {
@@ -17,7 +17,15 @@ export default function ExamplePlayground(props: Props) {
     }
 
     return (
-        <div className="absolute all-0 flex flex-column">
+        <Box
+            position="absolute"
+            top={0}
+            right={0}
+            bottom={0}
+            left={0}
+            display="flex"
+            flexDirection="column"
+        >
             <div className="baymax">
                 <div className="border-bottom border-darken2 p1 flex items-center">
                     <div style={{width: 80}}>
@@ -43,9 +51,9 @@ export default function ExamplePlayground(props: Props) {
                     </div>
                 </div>
             </div>
-            <div className="flex flex-auto items-center justify-center">
+            <Box display="flex" flex="auto" alignItems="center" justifyContent="center">
                 <example.component shouldShowSettings={shouldShowSettings} />
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }

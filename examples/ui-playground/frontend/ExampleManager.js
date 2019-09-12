@@ -16,7 +16,7 @@ export default function ExampleManager(props: Props) {
     const selectedExample = examples.find(({name}) => name === selectedExampleName);
 
     useEffect(() => {
-        localStorage.setItem('selectedExampleName', selectedExampleName);
+        localStorage.setItem('selectedExampleName', selectedExampleName || '');
     }, [selectedExampleName]);
 
     if (selectedExample) {
