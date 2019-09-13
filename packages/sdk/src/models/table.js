@@ -4,7 +4,7 @@ import {type TableData} from '../types/table';
 import {type ViewType, type ViewId} from '../types/view';
 import {type FieldId} from '../types/field';
 import {type RecordId} from '../types/record';
-import {MutationTypes} from '../types/mutations';
+import {MutationTypes, type PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has} from '../private_utils';
 import {spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
@@ -489,6 +489,23 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         ]);
     }
     /** @private */
+    checkPermissionsForUpdateRecord(
+        recordOrRecordId?: Record | RecordId | void,
+        fields?: {[fieldIdOrName: FieldId | string]: mixed | void} | void,
+    ): PermissionCheckResult {
+        const recordId =
+            typeof recordOrRecordId === 'object' && recordOrRecordId !== null
+                ? recordOrRecordId.id
+                : recordOrRecordId;
+
+        return this.checkPermissionsForUpdateRecords([
+            {
+                id: recordId,
+                fields,
+            },
+        ]);
+    }
+    /** @private */
     async updateRecordsAsync(
         records: $ReadOnlyArray<{
             +id: RecordId,
@@ -509,8 +526,38 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         });
     }
     /** @private */
+    checkPermissionsForUpdateRecords(
+        records?: $ReadOnlyArray<{
+            +id?: RecordId | void,
+            +fields?: {
+                +[FieldId | string]: mixed | void,
+            } | void,
+        }> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+            tableId: this.id,
+            records: records
+                ? records.map(record => ({
+                      id: record.id || undefined,
+                      cellValuesByFieldId: record.fields
+                          ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields)
+                          : undefined,
+                  }))
+                : undefined,
+        });
+    }
+    /** @private */
     async deleteRecordAsync(recordOrRecordId: Record | RecordId): Promise<void> {
         await this.deleteRecordsAsync([recordOrRecordId]);
+    }
+    /** @private */
+    checkPermissionsForDeleteRecord(
+        recordOrRecordId?: Record | RecordId | void,
+    ): PermissionCheckResult {
+        return this.checkPermissionsForDeleteRecords(
+            recordOrRecordId ? [recordOrRecordId] : undefined,
+        );
     }
     /** @private */
     async deleteRecordsAsync(recordsOrRecordIds: $ReadOnlyArray<Record | RecordId>): Promise<void> {
@@ -525,6 +572,20 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         });
     }
     /** @private */
+    checkPermissionsForDeleteRecords(
+        recordsOrRecordIds?: $ReadOnlyArray<Record | RecordId> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+            tableId: this.id,
+            recordIds: recordsOrRecordIds
+                ? recordsOrRecordIds.map(recordOrRecordId =>
+                      typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
+                  )
+                : undefined,
+        });
+    }
+    /** @private */
     async createRecordAsync(
         fields: {
             +[fieldIdOrName: FieldId | string]: mixed,
@@ -532,6 +593,18 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     ): Promise<RecordId> {
         const recordIds = await this.createRecordsAsync([fields]);
         return recordIds[0];
+    }
+    /** @private */
+    checkPermissionsForCreateRecord(
+        fields?: {
+            [fieldIdOrName: FieldId | string]: mixed | void,
+        } | void,
+    ): PermissionCheckResult {
+        return this.checkPermissionsForCreateRecords([
+            {
+                fields: fields || undefined,
+            },
+        ]);
     }
     /** @private */
     async createRecordsAsync(
@@ -551,6 +624,25 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         });
 
         return recordsToCreate.map(record => record.id);
+    }
+    /** @private */
+    checkPermissionsForCreateRecords(
+        records?: $ReadOnlyArray<{
+            +fields?: {[FieldId | string]: mixed | void} | void,
+        }> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+            tableId: this.id,
+            records: records
+                ? records.map(record => ({
+                      id: undefined,
+                      cellValuesByFieldId: record.fields
+                          ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields)
+                          : undefined,
+                  }))
+                : undefined,
+        });
     }
     _cellValuesByFieldIdOrNameToCellValuesByFieldId(cellValuesByFieldIdOrName: {
         +[fieldIdOrName: FieldId | string]: mixed,
@@ -648,6 +740,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                     delete this._viewModelsById[viewId];
                 }
             }
+        }
+        if (dirtyPaths.lock) {
+            didTableSchemaChange = true;
         }
         if (dirtyPaths.viewsById) {
             for (const [viewId, dirtyViewPaths] of entries(dirtyPaths.viewsById)) {

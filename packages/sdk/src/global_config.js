@@ -1,17 +1,13 @@
 // @flow
-import {PermissionLevels} from './types/permission_levels';
 import Watchable from './watchable';
 import getSdk from './get_sdk';
 import {type AirtableInterface} from './injected/airtable_interface';
 import {spawnError} from './error_utils';
-import {MutationTypes} from './types/mutations';
+import {MutationTypes, type PermissionCheckResult} from './types/mutations';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_kv_helpers',
-);
-const permissionHelpers = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_helpers',
 );
 const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/fork_object_path_for_write_by_reference',
@@ -141,7 +137,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * @private
      */
-    __formatKeyAsPath(key: GlobalConfigKey): $ReadOnlyArray<string> {
+    _formatKeyAsPath<T: string | void>(key: $ReadOnlyArray<T> | T): $ReadOnlyArray<T> {
         if (!Array.isArray(key)) {
             return [key];
         }
@@ -159,7 +155,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
      */
     get(key: GlobalConfigKey): GlobalConfigValue | void {
-        const path = this.__formatKeyAsPath(key);
+        const path = this._formatKeyAsPath(key);
 
         const pathValidationResult = validatePath(path, this._kvStore);
         if (!pathValidationResult.isValid) {
@@ -182,11 +178,16 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * }
      */
     canSet(key: GlobalConfigKey): boolean {
-        // This takes the key to future-proof against having per-key
-        // permissions.
-        // For now, just need at least edit permissions to update globalConfig.
-        const {session} = getSdk();
-        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
+        return this.checkPermissionsForSet(key).hasPermission;
+    }
+    /** @private */
+    checkPermissionsForSet(
+        key?: $ReadOnlyArray<string | void> | string | void,
+        value?: GlobalConfigValue | void,
+    ): PermissionCheckResult {
+        return this.checkPermissionsForSetPaths([
+            {path: key ? this._formatKeyAsPath(key) : undefined, value},
+        ]);
     }
     /**
      * Sets a value at a path. Throws an error if the path or value is invalid.
@@ -222,7 +223,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * }
      */
     async setAsync(key: GlobalConfigKey, value: GlobalConfigValue | void): Promise<void> {
-        const path = this.__formatKeyAsPath(key);
+        const path = this._formatKeyAsPath(key);
         await this.setPathsAsync([{path, value}]);
     }
     /**
@@ -242,11 +243,21 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * }
      */
     canSetPaths(updates: Array<GlobalConfigUpdate>): boolean {
-        // This takes the updates to future-proof against having per-key
-        // permissions.
-        // For now, just need at least edit permissions to update globalConfig.
-        const {session} = getSdk();
-        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
+        return this.checkPermissionsForSetPaths(updates).hasPermission;
+    }
+    /** @private */
+    checkPermissionsForSetPaths(
+        updates?: $ReadOnlyArray<{|
+            +path?: $ReadOnlyArray<string | void> | void,
+            +value?: GlobalConfigValue | void,
+        |}> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+            updates: updates
+                ? updates.map(({path, value}) => ({path: path || undefined, value}))
+                : undefined,
+        });
     }
     /**
      * Sets multiple values. Throws if any path or value is invalid.

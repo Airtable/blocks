@@ -1,8 +1,12 @@
 // @flow
 import {type AirtableInterface} from '../injected/airtable_interface';
-import {PermissionLevels} from '../types/permission_levels';
 import {type ModelChange} from '../types/base';
-import {type Mutation, MutationTypes} from '../types/mutations';
+import {
+    type Mutation,
+    type PartialMutation,
+    type PermissionCheckResult,
+    MutationTypes,
+} from '../types/mutations';
 import {FieldTypes} from '../types/field';
 import {entries} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
@@ -11,10 +15,6 @@ import cellValueUtils from './cell_value_utils';
 import type Session from './session';
 import type Base from './base';
 import type Field from './field';
-
-const permissionHelpers = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_helpers',
-);
 
 // Limit for how many items can be updated from a single batch mutation.
 // This is number of records for MULTIPLE_RECORDS type mutations, and number of global config paths
@@ -59,10 +59,12 @@ class Mutations {
         this._assertMutationUnderLimits(mutation);
         this._assertMutationIsValid(mutation);
 
-        if (!this.doesCurrentUserHavePermissionToApplyMutation(mutation)) {
+        const permissionCheck = this.checkPermissionsForMutation(mutation);
+        if (!permissionCheck.hasPermission) {
             throw spawnError(
-                "The current user doesn't have permission to apply a %s mutation",
+                'Cannot apply %s mutation: %s',
                 mutation.type,
+                permissionCheck.reasonDisplayString,
             );
         }
 
@@ -90,9 +92,11 @@ class Mutations {
         }
     }
 
-    doesCurrentUserHavePermissionToApplyMutation(mutation: Mutation): boolean {
-        // TODO: add permission checks to AirtableInterface and move this there - also accounting for field/table locking
-        return permissionHelpers.can(this._session.__rawPermissionLevel, PermissionLevels.EDIT);
+    checkPermissionsForMutation(mutation: PartialMutation): PermissionCheckResult {
+        return this._airtableInterface.checkPermissionsForMutation(
+            mutation,
+            this._base.__getBaseData(),
+        );
     }
 
     _assertMutationUnderLimits(mutation: Mutation) {

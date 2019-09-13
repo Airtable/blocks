@@ -667,9 +667,19 @@ export const FieldTypes = Object.freeze({
 
 export type FieldType = $Values<typeof FieldTypes>;
 
+export opaque type FieldLock = mixed;
+
 export type FieldData = {|
     id: FieldId,
     name: string,
     type: PrivateColumnType,
     typeOptions: ?{[string]: mixed},
+    lock: FieldLock | null,
 |};
+
+export type FieldPermissionData = {
+    +id: FieldId,
+    +name: string,
+    +type: PrivateColumnType,
+    +lock: FieldLock | null,
+};
