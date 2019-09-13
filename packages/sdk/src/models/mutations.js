@@ -7,7 +7,6 @@ import {
     type PermissionCheckResult,
     MutationTypes,
 } from '../types/mutations';
-import {FieldTypes} from '../types/field';
 import {entries} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
 import {type GlobalConfigUpdate} from '../global_config';
@@ -27,11 +26,6 @@ const MUTATIONS_MAX_BATCH_SIZE = 50;
 const MUTATIONS_MAX_BODY_SIZE = 1.9 * 1024 * 1024;
 
 const MUTATION_HOLD_FOR_MS = 100;
-
-const FIELD_TYPE_MUTATION_BAN_SET = new Set([
-    FieldTypes.MULTIPLE_ATTACHMENTS,
-    FieldTypes.MULTIPLE_RECORD_LINKS,
-]);
 
 /** @private */
 class Mutations {
@@ -136,10 +130,6 @@ class Mutations {
     _assertFieldIsValidForMutation(field: Field, tableId: string) {
         if (field.isComputed) {
             throw spawnError('Field %s is computed and cannot be set', field.id);
-        }
-
-        if (FIELD_TYPE_MUTATION_BAN_SET.has(field.type)) {
-            throw spawnError('Fields of type %s cannot currently be mutated', field.type);
         }
     }
 

@@ -303,12 +303,8 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (record && record instanceof Record) {
             return record.__getRawCellValue(field.id);
         } else {
-            let publicCellValue = record[field.id];
+            const publicCellValue = record[field.id];
             cellValueUtils.validatePublicCellValueForUpdate(publicCellValue, null, field);
-            publicCellValue = cellValueUtils.normalizePublicCellValueForUpdate(
-                publicCellValue,
-                field,
-            );
             return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
         }
     }

@@ -113,7 +113,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
             // TODO: handle "preview" cell values that are not yet valid in the given field
             // but that *could* be.
             cellValueUtils.validatePublicCellValueForUpdate(cellValue, null, field);
-            publicCellValue = cellValueUtils.normalizePublicCellValueForUpdate(cellValue, field);
+            publicCellValue = cellValue;
         }
         const privateCellValue = cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
 
