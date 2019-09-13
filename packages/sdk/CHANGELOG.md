@@ -14,8 +14,10 @@ commit that affects the code in a way that consumers might care about should inc
 -   **BREAKING:** Remove `models.generateGuid()`. Use an ID generator like
     [`uuid`](https://www.npmjs.com/package/uuid) instead.
 -   Upgrade flow to 0.106.3
--   Fix a flow error with `react-window`.
--   `view.selectRecords()` now colors records according to that view by default.
+-   Fix a flow error with `react-window`. <<<<<<< HEAD
+-   # `view.selectRecords()` now colors records according to that view by default.
+-   Allow passing an array of models to `useLoadable` to load several things at once.
+    > > > > > > > update changelog
 
 ## [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.29...@airtable/blocks@0.0.30) - 2019-08-26
 
