@@ -22,8 +22,10 @@ function requireFromString(src) {
 }
 
 async function requireBackendSdkAsync(backendSdkBaseUrl: string | null) {
-    const response = await downloadBackendSdkAsync(backendSdkBaseUrl);
-    const backendSdkJs = response.body;
+    const backendSdkJs = await downloadBackendSdkAsync(
+        backendSdkBaseUrl,
+        true /* canUseCachedFile */,
+    );
 
     // This is sketchy: some runtime checks for "am I running in Node" check that
     // typeof self === 'undefined', so this breaks that...

@@ -189,8 +189,7 @@ class BlockBuilder {
 
             case BlockBuildTypes.RELEASE:
                 this._baseOutputBuildDirPath = path.join(
-                    os.tmpdir(),
-                    'airtableBlocks',
+                    blockCliConfigSettings.TEMP_DIR_PATH,
                     blockCliConfigSettings.BUILD_DIR,
                     new Date().getTime().toString(),
                 );
@@ -620,13 +619,16 @@ class BlockBuilder {
     }
     async _writeBackendSdkAsync(): Promise<Result<void, Error>> {
         try {
-            const response = await downloadBackendSdkAsync(this._backendSdkBaseUrl);
+            const backendSdkJs = await downloadBackendSdkAsync(
+                this._backendSdkBaseUrl,
+                false /* canUseCachedFile */,
+            );
             await fsUtils.writeFileAsync(
                 path.join(
                     this._outputTranspiledDirPath,
                     `${blockCliConfigSettings.BACKEND_SDK_MODULE}.js`,
                 ),
-                response.body,
+                backendSdkJs,
             );
         } catch (err) {
             return {err};

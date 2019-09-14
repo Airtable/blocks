@@ -1,4 +1,5 @@
 // @flow
+const os = require('os');
 const path = require('path');
 const UserAgentBag = require('user-agent-bag');
 const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
@@ -40,6 +41,9 @@ module.exports = {
         ['OS', process.platform],
     ]).toString(),
 
+    // Root temporary directory used by the CLI.
+    TEMP_DIR_PATH: path.join(os.tmpdir(), 'airtableBlocks'),
+
     // Build directory for the user's block code (including frontend bundle and transpiled backend code).
     BUILD_DIR: 'build',
 
@@ -68,6 +72,8 @@ module.exports = {
     BACKEND_SDK_URL_PATH: '/js/compiled/block_backend_sdk.js',
     // Module path to backend SDK.
     BACKEND_SDK_MODULE: 'block_backend_sdk',
+    // How long to cache downloaded backend SDK file on local disk, in milliseconds.
+    BACKEND_SDK_CACHE_TTL_MS: 24 * 60 * 60 * 1000, // 1 day
 
     // Directory path of blocks backend wrapper in backend bundle.
     BACKEND_WRAPPER_DIR: 'backend_wrapper',
