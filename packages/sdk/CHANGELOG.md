@@ -11,6 +11,18 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.30...HEAD)
 
+-   New record writes API! You can now create, update, and delete records directly from your block.
+    Check out the new
+    [writes guide](https://github.com/Airtable/blocks/blob/master/packages/sdk/docs/guide_writes.md)
+    for more information.
+-   **BREAKING**: several `globalConfig` APIs have changed to be consistent with the new record
+    writes & permissions APIs:
+    -   `globalConfig.set()` has been removed - use the new `globalConfig.setAsync()` method
+        instead.
+    -   `globalConfig.canSet()` has been renamed to `globalConfig.hasPermissionToSet()`.
+    -   `globalConfig.setPaths()` has been removed - use the new `globalConfig.setPathsAsync()`
+        method instead.
+    -   `globalConfig.canSetPaths()` has been renamed to `globalConfig.hasPermissionToSetPaths()`.
 -   **BREAKING:** Remove `models.generateGuid()`. Use an ID generator like
     [`uuid`](https://www.npmjs.com/package/uuid) instead.
 -   Upgrade flow to 0.106.3
