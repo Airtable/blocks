@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import {cx} from 'emotion';
+import hoistNonReactStatic from 'hoist-non-react-statics';
 import useStyledSystem, {type StyleParser} from './use_styled_system';
 import {type AllStylesProps} from './system';
 
@@ -56,6 +57,7 @@ import {type AllStylesProps} from './system';
  * };
  *
  * class MyComponent extends React.Component<Props, void> {
+ *     static staticProp = 'STATIC';
  *     render() {
  *         const {className, onClick, children} = this.props;
  *         return (
@@ -66,7 +68,7 @@ import {type AllStylesProps} from './system';
  *     }
  * }
  *
- * export default withStyledSystem<Props, StyleProps, MyComponent>(
+ * export default withStyledSystem<Props, StyleProps, MyComponent, { staticProp: string }>(
  *     MyComponent,
  *     styleParser,
  *     stylePropTypes,
@@ -80,12 +82,13 @@ export default function withStyledSystem<
     Props: {className?: string},
     StyleProps: $Shape<AllStylesProps>,
     Instance,
+    Statics: {},
 >(
-    Component: React.AbstractComponent<$Exact<Props>, Instance>,
+    Component: React.AbstractComponent<Props, Instance>,
     styleParser: StyleParser<StyleProps>,
     stylePropTypes: {[string]: mixed},
     defaultStyleProps?: StyleProps,
-): React.AbstractComponent<Props, Instance> {
+): React.AbstractComponent<{...$Diff<Props, StyleProps>, ...StyleProps}, Instance> & Statics {
     const stylePropNamesSet = new Set(styleParser.propNames);
     const WithStyledSystem = React.forwardRef((props, ref) => {
         // eslint-disable-next-line flowtype/no-weak-types
@@ -116,5 +119,6 @@ export default function withStyledSystem<
     };
     const componentName = Component.displayName || Component.name || 'Component';
     WithStyledSystem.displayName = `WithStyledSystem(${componentName})`;
-    return WithStyledSystem;
+    hoistNonReactStatic(WithStyledSystem, Component);
+    return (WithStyledSystem: any);
 }
