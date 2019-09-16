@@ -9,6 +9,7 @@ export type BackendProcessOptions = {|
     blockJson: BlockJson,
     outputUserTranspiledDirPath: string,
     backendSdkBaseUrl: string | null,
+    canUseCachedBackendSdk: boolean,
 |};
 
 /** Message types sent from backend process to block server main process. */

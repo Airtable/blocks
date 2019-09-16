@@ -33,16 +33,19 @@ async function fetchBackendSdkAsync(backendSdkBaseUrl: string | null): Promise<s
 
 async function downloadBackendSdkAsync(
     backendSdkBaseUrl: string | null,
-    canUseCachedFile: boolean,
+    canUseCachedBackendSdk: boolean,
 ): Promise<string> {
+    const backendSdkBaseUrlSuffix = backendSdkBaseUrl
+        ? `-${Buffer.from(backendSdkBaseUrl).toString('base64')}`
+        : '';
     const cachedBackendSdkJsFilePath = path.join(
         blockCliConfigSettings.TEMP_DIR_PATH,
-        `${blockCliConfigSettings.BACKEND_SDK_MODULE}-cached.js`,
+        `${blockCliConfigSettings.BACKEND_SDK_MODULE}-cached${backendSdkBaseUrlSuffix}.js`,
     );
     const stats = await fsUtils.statIfExistsAsync(cachedBackendSdkJsFilePath);
     const now = new Date();
     if (
-        canUseCachedFile &&
+        canUseCachedBackendSdk &&
         stats &&
         stats.size > 0 &&
         stats.mtime.getTime() + blockCliConfigSettings.BACKEND_SDK_CACHE_TTL_MS > now.getTime()

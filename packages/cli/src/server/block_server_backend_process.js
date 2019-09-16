@@ -21,11 +21,11 @@ function requireFromString(src) {
     return m.exports;
 }
 
-async function requireBackendSdkAsync(backendSdkBaseUrl: string | null) {
-    const backendSdkJs = await downloadBackendSdkAsync(
-        backendSdkBaseUrl,
-        true /* canUseCachedFile */,
-    );
+async function requireBackendSdkAsync(
+    backendSdkBaseUrl: string | null,
+    canUseCachedBackendSdk: boolean,
+) {
+    const backendSdkJs = await downloadBackendSdkAsync(backendSdkBaseUrl, canUseCachedBackendSdk);
 
     // This is sketchy: some runtime checks for "am I running in Node" check that
     // typeof self === 'undefined', so this breaks that...
@@ -43,10 +43,18 @@ function sendResponse(response: BackendProcessResponse) {
 }
 
 async function setUpBackendProcessAsync(options: BackendProcessOptions) {
-    const {outputUserTranspiledDirPath, blockJson, backendSdkBaseUrl} = options;
+    const {
+        outputUserTranspiledDirPath,
+        blockJson,
+        backendSdkBaseUrl,
+        canUseCachedBackendSdk,
+    } = options;
 
     // Download the backend sdk.
-    const BackendBlockSdkWrapper = await requireBackendSdkAsync(backendSdkBaseUrl);
+    const BackendBlockSdkWrapper = await requireBackendSdkAsync(
+        backendSdkBaseUrl,
+        canUseCachedBackendSdk,
+    );
     const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();
 
     // Set up backend event handler.

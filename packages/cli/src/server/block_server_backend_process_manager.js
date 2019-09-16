@@ -71,6 +71,7 @@ class BlockServerBackendProcessManager {
             blockJson: this._blockJson,
             outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
             backendSdkBaseUrl: this._backendSdkBaseUrlIfExists,
+            canUseCachedBackendSdk: true,
         };
         this._backendProcess = childProcessHelpers.fork(
             path.join(__dirname, 'block_server_backend_process'),

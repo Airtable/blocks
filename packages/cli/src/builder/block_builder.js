@@ -1,7 +1,6 @@
 // @flow
 /* eslint-disable no-console */
 const archiver = require('archiver');
-const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const {promisify} = require('util');
@@ -621,7 +620,7 @@ class BlockBuilder {
         try {
             const backendSdkJs = await downloadBackendSdkAsync(
                 this._backendSdkBaseUrl,
-                false /* canUseCachedFile */,
+                false /* canUseCachedBackendSdk */,
             );
             await fsUtils.writeFileAsync(
                 path.join(
