@@ -40,6 +40,7 @@ const BLOCK_INSTALLATION_ID = 'bipHcxcRpB0ObTAGo';
 const DEFAULT_BLOCK_RUN_WAIT_MS = 10 * 1000;
 const BLOCK_RUN_PORT = 9000;
 const BLOCK_RUN_URL = `https://localhost:${BLOCK_RUN_PORT}/`;
+const BLOCK_RELEASE_URL = 'https://block---q-oxb-w7k6m-k0-eqd--suk0375.airtableblocks.com/';
 const BLOCKS_CLI_PACKAGE = '@airtable/blocks-cli';
 const BLOCK_DIR_NAME = 'smoke_test';
 
@@ -65,8 +66,8 @@ class SmokeTest {
         this._blocksCliRunWaitMs = blocksCliRunWaitMs;
     }
 
-    async _requestBlockServerRouteAsync(urlPath, options) {
-        const requestUrl = url.resolve(BLOCK_RUN_URL, urlPath);
+    async _requestBlockServerRouteAsync(urlBase, urlPath, options) {
+        const requestUrl = url.resolve(urlBase, urlPath);
         console.log(chalk.dim(`---> ${requestUrl}`));
         try {
             const response = await requestAsync(
@@ -211,9 +212,15 @@ class SmokeTest {
 
         log('Checking blocks-cli server is up');
         for (const requestFn of [
-            () => this._requestBlockServerRouteAsync('/', {method: 'GET'}),
-            () => this._requestBlockServerRouteAsync('/__runFrame/ping', {method: 'HEAD'}),
-            () => this._requestBlockServerRouteAsync('/__runFrame/bundle.js', {method: 'GET'}),
+            () => this._requestBlockServerRouteAsync(BLOCK_RUN_URL, '/', {method: 'GET'}),
+            () =>
+                this._requestBlockServerRouteAsync(BLOCK_RUN_URL, '/__runFrame/ping', {
+                    method: 'HEAD',
+                }),
+            () =>
+                this._requestBlockServerRouteAsync(BLOCK_RUN_URL, '/__runFrame/bundle.js', {
+                    method: 'GET',
+                }),
         ]) {
             const response = await requestFn();
             if (response.statusCode !== 200) {
@@ -241,6 +248,16 @@ class SmokeTest {
         if (releaseError) {
             log('Failed to release block');
             throw releaseError;
+        }
+
+        log('Checking released block is available');
+        const runFrameResponse = await this._requestBlockServerRouteAsync(
+            BLOCK_RELEASE_URL,
+            '/__runFrame',
+            {method: 'GET'},
+        );
+        if (runFrameResponse.statusCode !== 200) {
+            throw new Error(`Unexpected status code: ${runFrameResponse.statusCode}`);
         }
     }
 
@@ -271,6 +288,35 @@ class SmokeTest {
         await this._removeTempDirAsync();
     }
 
+    async _checkBackendRoutesAsync(urlBase: string) {
+        log('Checking backend routes');
+        const echoPayload = Math.random()
+            .toString()
+            .substr(2);
+        const echoPostResponse = await this._requestBlockServerRouteAsync(urlBase, '/echo', {
+            method: 'POST',
+            body: echoPayload,
+        });
+        if (!echoPostResponse.body.includes(echoPayload)) {
+            throw new Error(`Expected POST /echo to return '${echoPayload}'`);
+        }
+        const echoGetResponse = await this._requestBlockServerRouteAsync(urlBase, '/echo', {
+            method: 'GET',
+            qs: {payload: echoPayload},
+        });
+        if (!echoGetResponse.body.includes(echoPayload)) {
+            throw new Error(`Expected GET /echo to return '${echoPayload}'`);
+        }
+        const checkBackendSdkResponse = await this._requestBlockServerRouteAsync(
+            urlBase,
+            '/check-backend-sdk',
+            {method: 'POST'},
+        );
+        if (checkBackendSdkResponse.statusCode !== 200) {
+            throw new Error(`Unexpected status code: ${checkBackendSdkResponse.statusCode}`);
+        }
+    }
+
     async _runBlocksCliWorkflowForBlockWithBackendRoutesAsync() {
         log('Testing workflow on block with backend routes');
 
@@ -296,34 +342,16 @@ class SmokeTest {
         // Check block run.
         const runState = await this._startBlocksCliRunAsync();
 
-        // Check backend routes.
-        log('Checking backend routes');
-        const echoPayload = Math.random()
-            .toString()
-            .substr(2);
-        const echoPostResponse = await this._requestBlockServerRouteAsync('/echo', {
-            method: 'POST',
-            body: echoPayload,
-        });
-        if (!echoPostResponse.body.includes(echoPayload)) {
-            throw new Error(`Expected POST /echo to return '${echoPayload}'`);
-        }
-        const echoGetResponse = await this._requestBlockServerRouteAsync('/echo', {
-            method: 'GET',
-            qs: {payload: echoPayload},
-        });
-        if (!echoGetResponse.body.includes(echoPayload)) {
-            throw new Error(`Expected GET /echo to return '${echoPayload}'`);
-        }
-        const checkBackendSdkResponse = await this._requestBlockServerRouteAsync(
-            '/check-backend-sdk',
-            {method: 'POST'},
-        );
-        if (checkBackendSdkResponse.statusCode !== 200) {
-            throw new Error(`Unexpected status code: ${checkBackendSdkResponse.statusCode}`);
-        }
+        // Check backend routes on local server.
+        await this._checkBackendRoutesAsync(BLOCK_RUN_URL);
 
         await this._stopBlocksCliRunAsync(runState);
+
+        // Check block release.
+        await this._doBlocksCliReleaseAsync();
+
+        // Check backend routes on released block.
+        await this._checkBackendRoutesAsync(BLOCK_RELEASE_URL);
 
         await this._removeTempDirAsync();
     }
