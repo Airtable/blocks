@@ -4,6 +4,7 @@ import React from 'react';
 import ExampleManager from './ExampleManager';
 import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
+import ButtonExample from './ButtonExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectExample from './SelectExample';
@@ -19,6 +20,10 @@ const examples: Array<Example> = [
     {
         name: 'Box',
         component: BoxExample,
+    },
+    {
+        name: 'Button',
+        component: ButtonExample,
     },
     {
         name: 'ColorPaletteSynced',

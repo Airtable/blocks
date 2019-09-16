@@ -2,8 +2,30 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import {invariant} from '../error_utils';
+import withStyledSystem from './with_styled_system';
 import {baymax} from './baymax_utils';
+import {
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 
 const themes = Object.freeze({
     RED: 'red',
@@ -29,8 +51,8 @@ type ButtonTheme = $Values<typeof themes>;
  * @property {number | string} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  * @property {string} [aria-label] The label for the button. Use this if the button lacks a visible text label.
  */
-type ButtonProps = {
-    theme: ButtonTheme,
+type ButtonProps = {|
+    theme?: ButtonTheme,
     id?: string,
     className?: string,
     style?: Object,
@@ -40,6 +62,33 @@ type ButtonProps = {
     tabIndex?: number | string,
     'aria-label'?: string,
     children?: React.Node,
+|};
+
+type StyleProps = {|
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...WidthProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+const stylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
 };
 
 const classNamesByTheme = {
@@ -118,6 +167,7 @@ class Button extends React.Component<ButtonProps> {
             children,
         } = this.props;
 
+        invariant(theme, 'button theme');
         const themeClassNames = classNamesByTheme[theme] || '';
 
         return (
@@ -148,4 +198,11 @@ class Button extends React.Component<ButtonProps> {
     }
 }
 
-export default Button;
+export default withStyledSystem<
+    ButtonProps,
+    StyleProps,
+    Button,
+    {|
+        themes: typeof themes,
+    |},
+>(Button, styleParser, stylePropTypes);

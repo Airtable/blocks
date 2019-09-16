@@ -89,7 +89,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
     };
     _onConfirm: () => void;
     _onCancel: () => void;
-    _confirmButtonRef: Button | null;
+    _confirmButtonRef: React.ElementRef<typeof Button> | null;
     constructor(props: ConfirmationDialogProps) {
         super(props);
         this._onConfirm = this._onConfirm.bind(this);
