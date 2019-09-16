@@ -20,7 +20,9 @@
         "pretest": "yarn run lint && yarn run flow",
         "test": "yarn run build && mocha test blocks_backend_wrapper/test",
         "test:smokeTest": "yarn run build && npm_config_registry=https://registry.npmjs.org/ ./transpiled/test/smoke_test.js --blocks_cli_command=\"$PWD/bin/block\"",
+        "test:smokeTest-win": "test\\windows_smoke_test.bat",
         "test:releaseSmokeTest": "yarn run build && npm_config_registry=https://registry.npmjs.org/ ./transpiled/test/smoke_test.js --reinstall_from_npm --blocks_cli_command=$(npm config get prefix)/bin/block",
+        "test:releaseSmokeTest-win": "test\\windows_release_smoke_test.bat",
         "version": "changelog-publish --github-repo-url 'https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks-cli@' && git add CHANGELOG.md",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },
