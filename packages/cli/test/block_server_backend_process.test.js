@@ -151,7 +151,8 @@ describe('Block server backend process', function() {
         assert.strictEqual(resp.messageType, BackendProcessResponseTypes.EVENT_RESPONSE);
         assert.strictEqual(resp.requestId, req.requestId);
         assert.strictEqual(resp.statusCode, 200);
-        assert.strictEqual(resp.body, req.body);
+        // eslint-disable-next-line flowtype/no-weak-types
+        assert.strictEqual(resp.body, Buffer.from((req.body: any)).toString('base64'));
     });
 
     it('should not crash if user code throws exception', async function() {
@@ -204,6 +205,9 @@ describe('Block server backend process', function() {
         assert.strictEqual(resp.messageType, BackendProcessResponseTypes.EVENT_RESPONSE);
         assert.strictEqual(resp.requestId, req.requestId);
         assert.strictEqual(resp.statusCode, 200);
-        assert.strictEqual(resp.body, 'DummyBackendBlockSdkWrapper');
+        assert.strictEqual(
+            resp.body,
+            Buffer.from('DummyBackendBlockSdkWrapper').toString('base64'),
+        );
     });
 });

@@ -1,6 +1,6 @@
 // @flow
 
-import type {BackendRouteResponse} from './backend_route_types';
+import type {NormalizedBackendRouteResponse} from './backend_route_types';
 import type {BlockJson} from './block_json_type';
 import type {LambdaEvent} from './lambda_event_type';
 
@@ -30,7 +30,7 @@ export type BackendProcessEventResponse = {
     messageType: typeof BackendProcessResponseTypes.EVENT_RESPONSE,
     pid: number,
     requestId: string,
-} & BackendRouteResponse;
+} & NormalizedBackendRouteResponse;
 
 /** Message sent from backend process to block server main process. */
 export type BackendProcessResponse = BackendProcessReadyResponse | BackendProcessEventResponse;

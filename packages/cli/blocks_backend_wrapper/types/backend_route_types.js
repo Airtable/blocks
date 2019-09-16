@@ -26,13 +26,21 @@ export type BackendRouteResponse = {
     //   - {'X-Key': 'value'}
     //   - {'X-Key': ['value1', 'value2']}
     //   - ['X-Key', 'value1', 'X-Key', 'value2']
-    headers?: {[string]: string | $ReadOnlyArray<string>},
+    headers?: {[string]: string | $ReadOnlyArray<string>} | {[string]: $ReadOnlyArray<string>},
     errorData?: {
         stack: string,
         message: string,
         name: string,
     },
 };
+
+/** Normalized response returned from AWS Lambda. */
+export type NormalizedBackendRouteResponse = {
+    statusCode: number,
+    body: string, // base64-encoded string,
+    bodyFormat: 'base64',
+    headers: {[string]: $ReadOnlyArray<string>},
+} & BackendRouteResponse;
 
 /** Type signature of backend route handlers. */
 export type BackendRouteHandler = (

@@ -6,13 +6,14 @@ const request = require('request');
 const stripAnsi = require('strip-ansi');
 const util = require('util');
 const {BlocksBackendExecutionStatuses} = require('./blocks_backend_execution_status');
-const normalizeBackendRouteResponse = require('./normalize_backend_route_response');
+const {normalizeBackendRouteResponse} = require('./normalize_backend_route_response');
 
 import type {BackendRoute, BlockJson} from './types/block_json_type';
 import type {
     BackendRouteHandler,
     BackendRouteRequest,
     BackendRouteResponse,
+    NormalizedBackendRouteResponse,
 } from './types/backend_route_types';
 import type {LambdaEvent} from './types/lambda_event_type';
 import type {BlocksBackendExecutionStatus} from './blocks_backend_execution_status';
@@ -128,7 +129,10 @@ class BlocksBackendEventHandler {
         return null;
     }
 
-    _createResponseForExecutionError(err: Error, status: BlocksBackendExecutionStatus) {
+    _createResponseForExecutionError(
+        err: Error,
+        status: BlocksBackendExecutionStatus,
+    ): NormalizedBackendRouteResponse {
         console.error(err); // eslint-disable-line no-console
         return normalizeBackendRouteResponse(
             {
@@ -140,7 +144,7 @@ class BlocksBackendEventHandler {
         );
     }
 
-    async _callUserCodeForEventAsync(event: LambdaEvent): Promise<BackendRouteResponse> {
+    async _callUserCodeForEventAsync(event: LambdaEvent): Promise<NormalizedBackendRouteResponse> {
         const routeAndParams = this._getRouteAndParamsForEvent(event);
         if (routeAndParams === null) {
             // No matching route, so treat this as a 404.
@@ -230,7 +234,7 @@ class BlocksBackendEventHandler {
         return normalizedResponse;
     }
 
-    async handleEventAsync(event: LambdaEvent): Promise<BackendRouteResponse> {
+    async handleEventAsync(event: LambdaEvent): Promise<NormalizedBackendRouteResponse> {
         let logFilePath: string;
         let logStream: fs.WriteStream;
 

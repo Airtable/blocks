@@ -7,7 +7,7 @@ const {
     BlocksBackendExecutionStatuses,
     getBlocksBackendExecutionStatus,
 } = require('../blocks_backend_execution_status');
-const normalizeBackendRouteResponse = require('../normalize_backend_route_response');
+const {normalizeBackendRouteResponse} = require('../normalize_backend_route_response');
 
 import type {BackendRoute, BlockJson} from '../types/block_json_type';
 import type {BackendRouteHandler, BackendRouteResponse} from '../types/backend_route_types';

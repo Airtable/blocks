@@ -234,13 +234,13 @@ class BlockServerBackendProcessManager {
                 return;
             }
             // Send back backend process response.
-            // TODO(Chuan): Currently the normalization function
-            // (normalizeUserResponse) only supports base64-encoded bodies. We
-            // should reconsider the backend response format and adapt it
-            // accordingly.
-            // const {statusCode, headers, body} = normalizeUserResponse(response);
-            const {statusCode, headers, body} = response;
-            res.writeHead(statusCode || 200, (headers: any)); // eslint-disable-line flowtype/no-weak-types
+            const {statusCode, headers, body: encodedBody, bodyFormat} = response;
+            if (bodyFormat !== 'base64') {
+                // This should not be possible - it would indicate a normalization bug.
+                throw new Error('Expected base64-encoded body');
+            }
+            const body = Buffer.from(encodedBody, 'base64');
+            res.writeHead(statusCode, (headers: any)); // eslint-disable-line flowtype/no-weak-types
             res.end(body);
         };
     }

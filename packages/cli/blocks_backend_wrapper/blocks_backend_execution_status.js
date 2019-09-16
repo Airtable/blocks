@@ -30,7 +30,10 @@ function createBlocksBackendExecutionStatusHeaders(status: BlocksBackendExecutio
 
 /** Extracts execution status from a headers object. */
 function getBlocksBackendExecutionStatus(
-    headers: {[string]: string | $ReadOnlyArray<string>} | void,
+    headers:
+        | {[string]: string | $ReadOnlyArray<string>}
+        | {[string]: $ReadOnlyArray<string>}
+        | void,
 ): BlocksBackendExecutionStatus | null {
     if (!headers) {
         return null;
