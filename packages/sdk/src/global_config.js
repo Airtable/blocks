@@ -198,6 +198,37 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         ]);
     }
     /**
+     * An alias for `globalConfig.checkPermissionsForSet(key, value).hasPermission`.
+     *
+     * Checks whether the current user has permission to set the given global config key.
+     *
+     * Accepts partial input, in the same format as [setAsync](#setAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {string|Array<string>} [key] A string for the top-level key, or an array of strings describing the path to set.
+     * @param [value] The value to set at the specified path. Use `undefined` to delete the value at the given path.
+     * @returns boolean Whether or not the user can set the specified key.
+     *
+     * @example
+     * // Check if user can update a specific key and value.
+     * const canSetFavoriteColorToPurple = globalConfig.hasPermissionToSet('favoriteColor', 'purple');
+     * if (!canSetFavoriteColorToPurple) {
+     *     alert('Not allowed!');
+     * }
+     *
+     * // Check if user can update a specific key, when you don't know the value yet.
+     * const canSetFavoriteColor = globalConfig.hasPermissionToSet('favoriteColor');
+     *
+     * // Check if user could set globalConfig values, without knowing the specific key/value yet
+     * const canSetGlobalConfig = globalConfig.hasPermissionToSet();
+     */
+    hasPermissionToSet(
+        key?: $ReadOnlyArray<string | void> | string | void,
+        value?: GlobalConfigValue | void,
+    ): boolean {
+        return this.checkPermissionsForSet(key, value).hasPermission;
+    }
+    /**
      * Sets a value at a path. Throws an error if the path or value is invalid.
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
@@ -212,7 +243,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * import {globalConfig} from '@airtable/blocks';
      *
      * function updateFavoriteColorIfPossible(color) {
-     *     if (globalConfig.checkPermissionsForSetPaths('favoriteColor', color).hasPermission) {
+     *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
      *         globalConfig.setPathsAsync('favoriteColor', color);
      *     }
      *     // The update is now applied within your block (eg will be reflected in
@@ -221,7 +252,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * }
      *
      * async function updateFavoriteColorIfPossibleAsync(color) {
-     *     if (globalConfig.checkPermissionsForSet('favoriteColor', color).hasPermission) {
+     *     if (globalConfig.hasPermissionToSet('favoriteColor', color)) {
      *         await globalConfig.setAsync('favoriteColor', color);
      *     }
      *     // globalConfig updates have been saved to Airtable servers.
@@ -269,6 +300,39 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         });
     }
     /**
+     * An alias for `globalConfig.checkPermissionsForSetPaths(updates).hasPermission`.
+     *
+     * Checks whether the current user has permission to perform the specified updates to global config.
+     *
+     * Accepts partial input, in the same format as [setPathsAsync](#setPathsAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<{path?: Array<string>, value?: GlobalConfigValue}>} [updates] The paths and values to set.
+     * @returns boolean Whether or not the user has permission to apply the specified updates to globalConfig.
+     *
+     * @example
+     * // Check if user can update a specific keys and values.
+     * const canSetPaths = globalConfig.hasPermissionToSetPaths([
+     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     * ]);
+     * if (!canSetPaths) {
+     *     alert('not allowed!');
+     * }
+     *
+     * // Check if user could potentially set globalConfig values.
+     * // Equivalent to globalConfig.hasPermissionToSet()
+     * const canSetAnyPaths = globalConfig.hasPermissionToSetPaths();
+     */
+    hasPermissionToSetPaths(
+        updates?: $ReadOnlyArray<{|
+            +path?: $ReadOnlyArray<string | void> | void,
+            +value?: GlobalConfigValue | void,
+        |}> | void,
+    ): boolean {
+        return this.checkPermissionsForSetPaths(updates).hasPermission;
+    }
+    /**
      * Sets multiple values. Throws if any path or value is invalid.
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
@@ -287,7 +351,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * ];
      *
      * function applyUpdatesIfPossible() {
-     *     if (globalConfig.checkPermissionsForSetPaths(updates).hasPermission) {
+     *     if (globalConfig.hasPermissionToSetPaths(updates)) {
      *         globalConfig.setPathsAsync(updates);
      *     }
      *     // The updates are now applied within your block (eg will be reflected in
@@ -296,7 +360,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * }
      *
      * async function applyUpdatesIfPossibleAsync() {
-     *     if (globalConfig.checkPermissionsForSetPaths(updates).hasPermission) {
+     *     if (globalConfig.hasPermissionToSetPaths(updates)) {
      *         await globalConfig.setPathsAsync(updates);
      *     }
      *     // globalConfig updates have been saved to Airtable servers.
@@ -308,7 +372,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // updates are a special case because it relies on internal globalConfig state to validate.
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
-        if (!this.checkPermissionsForSetPaths(updates).hasPermission) {
+        if (!this.hasPermissionToSetPaths(updates)) {
             throw spawnError('Your permission level does not allow setting globalConfig values');
         }
 

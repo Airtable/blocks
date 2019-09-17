@@ -235,6 +235,74 @@ const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
 Returns **([GlobalConfigValue][70] | void)** The value at the provided path, or `undefined` if no
 value exists at that path.
 
+##### hasPermissionToSet
+
+An alias for `globalConfig.checkPermissionsForSet(key, value).hasPermission`.
+
+Checks whether the current user has permission to set the given global config key.
+
+Accepts partial input, in the same format as [setAsync][67]. The more information provided, the more
+accurate the permissions check will be.
+
+###### Parameters
+
+-   `key` **([string][68] \| [Array][69]&lt;[string][68]>)?** A string for the top-level key, or an
+    array of strings describing the path to set.
+-   `value` **([GlobalConfigValue][70] | void)?** The value to set at the specified path. Use
+    `undefined` to delete the value at the given path.
+
+###### Examples
+
+```javascript
+// Check if user can update a specific key and value.
+const canSetFavoriteColorToPurple = globalConfig.hasPermissionToSet('favoriteColor', 'purple');
+if (!canSetFavoriteColorToPurple) {
+    alert('Not allowed!');
+}
+
+// Check if user can update a specific key, when you don't know the value yet.
+const canSetFavoriteColor = globalConfig.hasPermissionToSet('favoriteColor');
+
+// Check if user could set globalConfig values, without knowing the specific key/value yet
+const canSetGlobalConfig = globalConfig.hasPermissionToSet();
+```
+
+Returns **[boolean][72]** boolean Whether or not the user can set the specified key.
+
+##### hasPermissionToSetPaths
+
+An alias for `globalConfig.checkPermissionsForSetPaths(updates).hasPermission`.
+
+Checks whether the current user has permission to perform the specified updates to global config.
+
+Accepts partial input, in the same format as [setPathsAsync][71]. The more information provided, the
+more accurate the permissions check will be.
+
+###### Parameters
+
+-   `updates` **($ReadOnlyArray&lt;{path: ($ReadOnlyArray&lt;([string][68] | void)> | void)?, value:
+    ([GlobalConfigValue][70] | void)?}> | void)?**
+
+###### Examples
+
+```javascript
+// Check if user can update a specific keys and values.
+const canSetPaths = globalConfig.hasPermissionToSetPaths([
+    {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+    {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+]);
+if (!canSetPaths) {
+    alert('not allowed!');
+}
+
+// Check if user could potentially set globalConfig values.
+// Equivalent to globalConfig.hasPermissionToSet()
+const canSetAnyPaths = globalConfig.hasPermissionToSetPaths();
+```
+
+Returns **[boolean][72]** boolean Whether or not the user has permission to apply the specified
+updates to globalConfig.
+
 ##### setAsync
 
 Sets a value at a path. Throws an error if the path or value is invalid.
@@ -256,7 +324,7 @@ reflected in [GlobalConfig][3] before the promise resolves.
 import {globalConfig} from '@airtable/blocks';
 
 function updateFavoriteColorIfPossible(color) {
-    if (globalConfig.checkPermissionsForSetPaths('favoriteColor', color).hasPermission) {
+    if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
         globalConfig.setPathsAsync('favoriteColor', color);
     }
     // The update is now applied within your block (eg will be reflected in
@@ -265,7 +333,7 @@ function updateFavoriteColorIfPossible(color) {
 }
 
 async function updateFavoriteColorIfPossibleAsync(color) {
-    if (globalConfig.checkPermissionsForSet('favoriteColor', color).hasPermission) {
+    if (globalConfig.hasPermissionToSet('favoriteColor', color)) {
         await globalConfig.setAsync('favoriteColor', color);
     }
     // globalConfig updates have been saved to Airtable servers.
@@ -273,7 +341,7 @@ async function updateFavoriteColorIfPossibleAsync(color) {
 }
 ```
 
-Returns **[Promise][72]&lt;void>** A promise that will resolve once the update is persisted to
+Returns **[Promise][73]&lt;void>** A promise that will resolve once the update is persisted to
 Airtable.
 
 ##### setPathsAsync
@@ -300,7 +368,7 @@ const updates = [
 ];
 
 function applyUpdatesIfPossible() {
-    if (globalConfig.checkPermissionsForSetPaths(updates).hasPermission) {
+    if (globalConfig.hasPermissionToSetPaths(updates)) {
         globalConfig.setPathsAsync(updates);
     }
     // The updates are now applied within your block (eg will be reflected in
@@ -309,7 +377,7 @@ function applyUpdatesIfPossible() {
 }
 
 async function applyUpdatesIfPossibleAsync() {
-    if (globalConfig.checkPermissionsForSetPaths(updates).hasPermission) {
+    if (globalConfig.hasPermissionToSetPaths(updates)) {
         await globalConfig.setPathsAsync(updates);
     }
     // globalConfig updates have been saved to Airtable servers.
@@ -317,7 +385,7 @@ async function applyUpdatesIfPossibleAsync() {
 }
 ```
 
-Returns **[Promise][72]&lt;void>** A promise that will resolve once the update is persisted to
+Returns **[Promise][73]&lt;void>** A promise that will resolve once the update is persisted to
 Airtable.
 
 ##### unwatch
@@ -330,8 +398,8 @@ Should be called with the same arguments given to `.watch`.
 
 -   `keys` **(WatchableGlobalConfigKey | [Array][69]&lt;WatchableGlobalConfigKey>)** the keys to
     unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableGlobalConfigKey>** the array of keys that were unwatched
 
@@ -347,8 +415,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 -   `keys` **(WatchableGlobalConfigKey | [Array][69]&lt;WatchableGlobalConfigKey>)** the keys to
     watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableGlobalConfigKey>** the array of keys that were watched
 
@@ -358,8 +426,8 @@ Type: ([string][68] \| [Array][69]&lt;[string][68]>)
 
 #### GlobalConfigValue
 
-Type: (null | [boolean][75] \| [number][76] \| [string][68] \|
-[Array][69]&lt;[GlobalConfigValue][70]> | [Object][74]&lt;[string][68], [GlobalConfigValue][70]>)
+Type: (null | [boolean][72] \| [number][76] \| [string][68] \|
+[Array][69]&lt;[GlobalConfigValue][70]> | [Object][75]&lt;[string][68], [GlobalConfigValue][70]>)
 
 ### settingsButton
 
@@ -389,8 +457,8 @@ Should be called with the same arguments given to `.watch`.
 
 -   `keys` **(WatchableSettingsButtonKey | [Array][69]&lt;WatchableSettingsButtonKey>)** the keys to
     unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableSettingsButtonKey>** the array of keys that were unwatched
 
@@ -409,8 +477,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 -   `keys` **(WatchableSettingsButtonKey | [Array][69]&lt;WatchableSettingsButtonKey>)** the keys to
     watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableSettingsButtonKey>** the array of keys that were watched
 
@@ -419,9 +487,9 @@ Returns **[Array][69]&lt;WatchableSettingsButtonKey>** the array of keys that we
 Whether the settings button is being shown. Set to `true` to show the settings button. Can be
 watched.
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]**
+Returns **[boolean][72]**
 
 ### Viewport
 
@@ -446,7 +514,7 @@ added constraints.
     height constraints to add. Both `width` and `height` are optional - if either is set to null,
     that means there is no max size in that dimension.
 
-Returns **[Function][73]** A function that can be called to remove the fullscreen size constraint
+Returns **[Function][74]** A function that can be called to remove the fullscreen size constraint
 that was added.
 
 #### addMinSize
@@ -462,7 +530,7 @@ the block will enter fullscreen mode.
     height constraints to add. Both `width` and `height` are optional - if either is set to null,
     that means there is no min size in that dimension.
 
-Returns **[Function][73]** A function that can be called to remove the size constraint that was
+Returns **[Function][74]** A function that can be called to remove the size constraint that was
 added.
 
 #### enterFullscreenIfPossible
@@ -482,17 +550,17 @@ Boolean to denote whether the block is currently fullscreen.
 
 Can be watched.
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]** `true` if the block is fullscreen, `false` otherwise.
+Returns **[boolean][72]** `true` if the block is fullscreen, `false` otherwise.
 
 #### isSmallerThanMinSize
 
 Boolean to denote whether the block frame is smaller than the `minSize`.
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]** `true` if the block frame is smaller than `minSize`, `false` otherwise.
+Returns **[boolean][72]** `true` if the block frame is smaller than `minSize`, `false` otherwise.
 
 #### maxFullscreenSize
 
@@ -536,8 +604,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableViewportKey | [Array][69]&lt;WatchableViewportKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableViewportKey>** the array of keys that were unwatched
 
@@ -557,8 +625,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableViewportKey | [Array][69]&lt;WatchableViewportKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableViewportKey>** the array of keys that were watched
 
@@ -1294,9 +1362,9 @@ it may be deleted and trying to access any data of a deleted object (other than 
 But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
 data.
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]** `true` if the model has been deleted, and `false` otherwise.
+Returns **[boolean][72]** `true` if the model has been deleted, and `false` otherwise.
 
 #### toString
 
@@ -1315,9 +1383,9 @@ Abstract superclass for all block SDK models that need to fetch async data.
 
 #### isDataLoaded
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]**
+Returns **[boolean][72]**
 
 #### loadDataAsync
 
@@ -1336,8 +1404,8 @@ released. Once the data is available, the callback will be called.
 ##### Parameters
 
 -   `keys` **(WatchableKey | [Array][69]&lt;WatchableKey>)**
--   `callback` **[Function][73]**
--   `context` **[Object][74]??**
+-   `callback` **[Function][74]**
+-   `context` **[Object][75]??**
 
 Returns **[Array][69]&lt;WatchableKey>**
 
@@ -1349,8 +1417,8 @@ fetched. Once the data is available, the callback will be called.
 ##### Parameters
 
 -   `keys` **(WatchableKey | [Array][69]&lt;WatchableKey>)**
--   `callback` **[Function][73]**
--   `context` **[Object][74]??**
+-   `callback` **[Function][74]**
+-   `context` **[Object][75]??**
 
 Returns **[Array][69]&lt;WatchableKey>**
 
@@ -1516,8 +1584,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableBaseKey | [Array][69]&lt;WatchableBaseKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableBaseKey>** the array of keys that were unwatched
 
@@ -1536,8 +1604,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableBaseKey | [Array][69]&lt;WatchableBaseKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableBaseKey>** the array of keys that were watched
 
@@ -1586,8 +1654,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableSessionKey | [Array][69]&lt;WatchableSessionKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableSessionKey>** the array of keys that were unwatched
 
@@ -1604,8 +1672,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableSessionKey | [Array][69]&lt;WatchableSessionKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableSessionKey>** the array of keys that were watched
 
@@ -1651,7 +1719,7 @@ Checks whether a given record is selected.
 
 -   `recordOrRecordId` **([Record][86] \| [string][68])** The record or record ID to check for.
 
-Returns **[boolean][75]** `true` if the given record is selected, `false` otherwise.
+Returns **[boolean][72]** `true` if the given record is selected, `false` otherwise.
 
 #### selectedRecordIds
 
@@ -1673,8 +1741,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableCursorKey | [Array][69]&lt;WatchableCursorKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableCursorKey>** the array of keys that were unwatched
 
@@ -1694,8 +1762,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableCursorKey | [Array][69]&lt;WatchableCursorKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableCursorKey>** the array of keys that were watched
 
@@ -1780,12 +1848,12 @@ console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
 // => false
 ```
 
-Returns **[boolean][75]** `true` if the given aggregator is available for this field, `false`
+Returns **[boolean][72]** `true` if the given aggregator is available for this field, `false`
 otherwise.
 
 #### isComputed
 
-Type: [boolean][75]
+Type: [boolean][72]
 
 ##### Examples
 
@@ -1796,7 +1864,7 @@ console.log(myAutoNumberField.isComputed);
 // => true
 ```
 
-Returns **[boolean][75]** `true` if this field is computed, `false` otherwise. A field is "computed"
+Returns **[boolean][72]** `true` if this field is computed, `false` otherwise. A field is "computed"
 if it's value is not set by user input (e.g. autoNumber, formula, etc.). Can be watched.
 
 #### isDeleted
@@ -1816,13 +1884,13 @@ if (!myField.isDeleted) {
 }
 ```
 
-Returns **[boolean][75]** `true` if the field has been deleted, `false` otherwise.
+Returns **[boolean][72]** `true` if the field has been deleted, `false` otherwise.
 
 #### isPrimaryField
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]** `true` if this field is its parent table's primary field, `false`
+Returns **[boolean][72]** `true` if this field is its parent table's primary field, `false`
 otherwise. Should never change because the primary field of a table cannot change.
 
 #### name
@@ -1878,8 +1946,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableFieldKey | [Array][69]&lt;WatchableFieldKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableFieldKey>** the array of keys that were unwatched
 
@@ -1899,8 +1967,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableFieldKey | [Array][69]&lt;WatchableFieldKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableFieldKey>** the array of keys that were watched
 
@@ -2087,7 +2155,7 @@ the record has been deleted or is filtered out.
 -   `recordOrRecordId` **(RecordId | [Record][86])** the record or record id to check the presence
     of
 
-Returns **[boolean][75]** whether the record exists in this query result
+Returns **[boolean][72]** whether the record exists in this query result
 
 ##### loadDataAsync
 
@@ -2095,7 +2163,7 @@ Loads all data for the query result.
 
 Every call to `loadDataAsync` should have a matching call to `unloadData`.
 
-Returns **[Promise][72]&lt;void>** A promise that will resolve once the data is loaded.
+Returns **[Promise][73]&lt;void>** A promise that will resolve once the data is loaded.
 
 ##### recordIds
 
@@ -2134,8 +2202,8 @@ unloaded.
 
 -   `keys` **(WatchableRecordQueryResultKey | [Array][69]&lt;WatchableRecordQueryResultKey>)** the
     keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableRecordQueryResultKey>** the array of keys that were unwatched
 
@@ -2161,8 +2229,8 @@ fetched. Once the data is available, the `callback` will be called.
 
 -   `keys` **(WatchableRecordQueryResultKey | [Array][69]&lt;WatchableRecordQueryResultKey>)** the
     keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableRecordQueryResultKey>** the array of keys that were watched
 
@@ -2228,9 +2296,9 @@ field config changes to link to a different table or a type other than MULTIPLE_
 `isValid` has become false, it will never become true again. Many fields will throw on attempting to
 access them, and watches will no longer fire.
 
-Type: [boolean][75]
+Type: [boolean][72]
 
-Returns **[boolean][75]** whether the query result is valid
+Returns **[boolean][72]** whether the query result is valid
 
 ##### recordIds
 
@@ -2414,7 +2482,7 @@ if (!myRecord.isDeleted) {
 }
 ```
 
-Returns **[boolean][75]** `true` if the record has been deleted, `false` otherwise.
+Returns **[boolean][72]** `true` if the record has been deleted, `false` otherwise.
 
 #### primaryCellValue
 
@@ -2470,8 +2538,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableRecordKey | [Array][69]&lt;WatchableRecordKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableRecordKey>** the array of keys that were unwatched
 
@@ -2506,8 +2574,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableRecordKey | [Array][69]&lt;WatchableRecordKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableRecordKey>** the array of keys that were watched
 
@@ -2526,7 +2594,7 @@ provided, the more accurate the permissions check will be.
 
 ##### Parameters
 
--   `fields` **[object][74]?** object mapping `FieldId` or field name to value for that field.
+-   `fields` **[object][75]?** object mapping `FieldId` or field name to value for that field.
 
 ##### Examples
 
@@ -2566,7 +2634,7 @@ provided, the more accurate the permissions check will be.
 
 ##### Parameters
 
--   `records` **[Array][69]&lt;[object][74]>?** Array of objects mapping `FieldId` or field name to
+-   `records` **[Array][69]&lt;[object][75]>?** Array of objects mapping `FieldId` or field name to
     value for that field.
 
 ##### Examples
@@ -2628,7 +2696,7 @@ const deleteUnknownRecordCheckResult = table.checkPermissionsForDeleteRecord();
 ```
 
 Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
-can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+can delete the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
 `reasonDisplayString` may be used to display an error message to the user.
 
 #### checkPermissionsForDeleteRecords
@@ -2654,12 +2722,12 @@ if (!deleteRecordsCheckResult.hasPermission) {
 // Check if user could potentially delete records.
 // Use when you don't know the specific records you want to delete yet (for example, to show
 // or hide UI controls that let you select records to delete.)
-// Equivalent to table.checkPermissionsForDeleteRecord()
+// Equivalent to table.hasPermissionToDeleteRecord()
 const deleteUnknownRecordsCheckResult = table.checkPermissionsForDeleteRecords();
 ```
 
 Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
-can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+can delete the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise.
 `reasonDisplayString` may be used to display an error message to the user.
 
 #### checkPermissionsForUpdateRecord
@@ -2672,7 +2740,7 @@ provided, the more accurate the permissions check will be.
 ##### Parameters
 
 -   `recordOrRecordId` **([Record][86] | RecordId)?** the record to update
--   `fields` **[object][74]?** cell values to update in that record, specified as object mapping
+-   `fields` **[object][75]?** cell values to update in that record, specified as object mapping
     `FieldId` or field name to value for that field.
 
 ##### Examples
@@ -2696,12 +2764,12 @@ const updateRecordCheckResultWithFieldIds = table.checkPermissionsForUpdateRecor
 // Check if user could update a given record, when you don't know the specific fields that
 // will be updated yet. (for example, to check whether you should allow a user to select
 // a certain record to update)
-const updateUnknownRecordCheckResult = table.checkPermissionsForUpdateRecord(record);
+const updateUnknownFieldsCheckResult = table.checkPermissionsForUpdateRecord(record);
 
 // Check if user could update specific fields, when you don't know the specific record that
 // will be updated yet. (for example, if the field is selected by the user and you want to
 // check if your block can write to it)
-const updateUnknownFieldsCheckResult = table.checkPermissionsForUpdateRecord(undefined, {
+const updateUnknownRecordCheckResult = table.checkPermissionsForUpdateRecord(undefined, {
     'My field name': 'updated value',
     // You can use undefined if you know you're going to update a field, but don't know
     // the new cell value yet.
@@ -2715,7 +2783,7 @@ const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateR
 ```
 
 Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
-can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+can update the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
 `reasonDisplayString` may be used to display an error message to the user.
 
 #### checkPermissionsForUpdateRecords
@@ -2775,7 +2843,7 @@ const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateR
 ```
 
 Returns **PermissionCheckResult** PermissionCheckResult `{hasPermission: true}` if the current user
-can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise.
+can update the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise.
 `reasonDisplayString` may be used to display an error message to the user.
 
 #### createRecordAsync
@@ -2791,14 +2859,14 @@ be reflected in your block before the promise resolves.
 
 ##### Parameters
 
--   `fields` **[object][74]** object mapping `FieldId` or field name to value for that field.
+-   `fields` **[object][75]** object mapping `FieldId` or field name to value for that field.
     (optional, default `{}`)
 
 ##### Examples
 
 ```javascript
 function createNewRecord(recordFields) {
-    if (table.checkPermissionsForCreateRecord(recordFields).hasPermission) {
+    if (table.hasPermissionToCreateRecord(recordFields)) {
         table.createRecordAsync(recordFields);
     }
     // You can now access the new record in your block (eg `table.selectRecords()`) but it is
@@ -2806,7 +2874,7 @@ function createNewRecord(recordFields) {
 }
 
 async function createNewRecordAsync(recordFields) {
-    if (table.checkPermissionsForCreateRecord(recordFields).hasPermission) {
+    if (table.hasPermissionToCreateRecord(recordFields)) {
         const newRecordId = await table.createRecordAsync(recordFields);
     }
     // New record has been saved to Airtable servers.
@@ -2824,7 +2892,7 @@ createNewRecord({
 });
 ```
 
-Returns **[Promise][72]&lt;RecordId>** A promise that will resolve to the RecordId of the new
+Returns **[Promise][73]&lt;RecordId>** A promise that will resolve to the RecordId of the new
 record, once the new record is persisted to Airtable.
 
 #### createRecordsAsync
@@ -2843,7 +2911,7 @@ be reflected in your block before the promise resolves.
 
 ##### Parameters
 
--   `records` **[Array][69]&lt;[object][74]>** Array of objects mapping `FieldId` or field name to
+-   `records` **[Array][69]&lt;[object][75]>** Array of objects mapping `FieldId` or field name to
     value for that field.
 
 ##### Examples
@@ -2864,7 +2932,7 @@ const recordDefs = [
 ];
 
 function createNewRecords() {
-    if (table.checkPermissionsForCreateRecords(recordDefs).hasPermission) {
+    if (table.hasPermissionToCreateRecords(recordDefs)) {
         table.createRecordsAsync(recordDefs);
     }
     // You can now access the new records in your block (eg `table.selectRecords()`) but they
@@ -2873,7 +2941,7 @@ function createNewRecords() {
 }
 
 async function createNewRecordsAsync() {
-    if (table.checkPermissionsForCreateRecords(recordDefs).hasPermission) {
+    if (table.hasPermissionToCreateRecords(recordDefs)) {
         const newRecordIds = await table.createRecordsAsync(recordDefs);
     }
     // New records have been saved to Airtable servers.
@@ -2881,7 +2949,7 @@ async function createNewRecordsAsync() {
 }
 ```
 
-Returns **[Promise][72]&lt;[Array][69]&lt;RecordId>>** A promise that will resolve to array of
+Returns **[Promise][73]&lt;[Array][69]&lt;RecordId>>** A promise that will resolve to array of
 RecordIds of the new records, once the new records are persisted to Airtable.
 
 #### deleteRecordAsync
@@ -2902,7 +2970,7 @@ reflected in your block before the promise resolves.
 
 ```javascript
 function deleteRecord(record) {
-    if (table.checkPermissionsForDeleteRecord(record).hasPermission) {
+    if (table.hasPermissionToDeleteRecord(record)) {
         table.deleteRecordAsync(record);
     }
     // The record is now deleted within your block (eg will not be returned in
@@ -2911,7 +2979,7 @@ function deleteRecord(record) {
 }
 
 async function deleteRecordAsync(record) {
-    if (table.checkPermissionsForDeleteRecord(record).hasPermission) {
+    if (table.hasPermissionToDeleteRecord(record)) {
         await table.deleteRecordAsync(record);
     }
     // Record deletion has been saved to Airtable servers.
@@ -2919,7 +2987,7 @@ async function deleteRecordAsync(record) {
 }
 ```
 
-Returns **[Promise][72]&lt;void>** A promise that will resolve once the delete is persisted to
+Returns **[Promise][73]&lt;void>** A promise that will resolve once the delete is persisted to
 Airtable.
 
 #### deleteRecordsAsync
@@ -2944,7 +3012,7 @@ reflected in your block before the promise resolves.
 
 ```javascript
 function deleteRecords(records) {
-    if (table.checkPermissionsForDeleteRecords(records).hasPermission) {
+    if (table.hasPermissionToDeleteRecords(records)) {
         table.deleteRecordsAsync(records);
     }
     // The records are now deleted within your block (eg will not be returned in
@@ -2953,7 +3021,7 @@ function deleteRecords(records) {
 }
 
 async function deleteRecordsAsync(records) {
-    if (table.checkPermissionsForDeleteRecords(records).hasPermission) {
+    if (table.hasPermissionToDeleteRecords(records)) {
         await table.deleteRecordsAsync(records);
     }
     // Record deletions have been saved to Airtable servers.
@@ -2961,7 +3029,7 @@ async function deleteRecordsAsync(records) {
 }
 ```
 
-Returns **[Promise][72]&lt;void>** A promise that will resolve once the deletes are persisted to
+Returns **[Promise][73]&lt;void>** A promise that will resolve once the deletes are persisted to
 Airtable.
 
 #### fields
@@ -3161,6 +3229,268 @@ if (view !== null) {
 Returns **([View][84] | null)** The view matching the given name, or `null` if no view exists with
 that name in this table.
 
+#### hasPermissionToCreateRecord
+
+An alias for `checkPermissionsForCreateRecord(fields).hasPermission`.
+
+Checks whether the current user has permission to create the specified record.
+
+Accepts partial input, in the same format as [createRecordAsync][103]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `fields` **[object][75]?** object mapping `FieldId` or field name to value for that field.
+
+##### Examples
+
+```javascript
+// Check if user can create a specific record, when you already know what fields/cell values
+// will be set for the record.
+const canCreateRecord = table.hasPermissionToCreateRecord({
+    'Project Name': 'Advertising campaign',
+    Budget: 100,
+});
+if (!canCreateRecord) {
+    alert('not allowed!');
+}
+
+// Like createRecordAsync, you can use either field names or field IDs.
+const canCreateRecordWithFieldIds = table.hasPermissionToCreateRecord({
+    [projectNameField.id]: 'Cat video',
+    [budgetField.id]: 200,
+});
+
+// Check if user could potentially create a record.
+// Use when you don't know the specific fields/cell values yet (for example, to show or hide
+// UI controls that let you start creating a record.)
+const canCreateUnknownRecord = table.hasPermissionToCreateRecord();
+```
+
+Returns **[boolean][72]** boolean Whether the current user can create the specified record.
+
+#### hasPermissionToCreateRecords
+
+An alias for `checkPermissionsForCreateRecords(records).hasPermission`.
+
+Checks whether the current user has permission to create the specified records.
+
+Accepts partial input, in the same format as [createRecordsAsync][104]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `records` **[Array][69]&lt;[object][75]>?** Array of objects mapping `FieldId` or field name to
+    value for that field.
+
+##### Examples
+
+```javascript
+// Check if user can create specific records, when you already know what fields/cell values
+// will be set for the records.
+const canCreateRecords = table.hasPermissionToCreateRecords([
+    // Like createRecordsAsync, fields can be specified by name or ID
+    {
+        'Project Name': 'Advertising campaign',
+        Budget: 100,
+    },
+    {
+        [projectNameField.id]: 'Cat video',
+        [budgetField.id]: 200,
+    },
+    {},
+]);
+if (!canCreateRecords) {
+    alert('not allowed');
+}
+
+// Check if user could potentially create records.
+// Use when you don't know the specific fields/cell values yet (for example, to show or hide
+// UI controls that let you start creating records.)
+// Equivalent to table.hasPermissionToCreateRecord()
+const canCreateUnknownRecords = table.hasPermissionToCreateRecords();
+```
+
+Returns **[boolean][72]** boolean Whether the current user can create the specified records.
+
+#### hasPermissionToDeleteRecord
+
+An alias for `checkPermissionsForDeleteRecord(recordOrRecordId).hasPermission`.
+
+Checks whether the current user has permission to delete the specified record.
+
+Accepts optional input, in the same format as [deleteRecordAsync][105]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][86] | RecordId)?** the record to be deleted
+
+##### Examples
+
+```javascript
+// Check if user can delete a specific record
+const canDeleteRecord = table.hasPermissionToDeleteRecord(record);
+if (!canDeleteRecord) {
+    alert('not allowed');
+}
+
+// Check if user could potentially delete a record.
+// Use when you don't know the specific record you want to delete yet (for example, to show
+// or hide UI controls that let you select a record to delete.)
+const canDeleteUnknownRecord = table.hasPermissionToDeleteRecord();
+```
+
+Returns **[boolean][72]** boolean Whether the current user can delete the specified record.
+
+#### hasPermissionToDeleteRecords
+
+An alias for `checkPermissionsForDeleteRecords(recordsOrRecordIds).hasPermission`.
+
+Checks whether the current user has permission to delete the specified records.
+
+Accepts optional input, in the same format as [deleteRecordsAsync][106]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `recordsOrRecordIds` **[Array][69]&lt;([Record][86] | RecordId)>?** the records to be deleted
+
+##### Examples
+
+```javascript
+// Check if user can delete specific records
+const canDeleteRecords = table.hasPermissionToDeleteRecords([record1, record2]);
+if (!canDeleteRecords) {
+    alert('not allowed!');
+}
+
+// Check if user could potentially delete records.
+// Use when you don't know the specific records you want to delete yet (for example, to show
+// or hide UI controls that let you select records to delete.)
+// Equivalent to table.hasPermissionToDeleteRecord()
+const canDeleteUnknownRecords = table.hasPermissionToDeleteRecords();
+```
+
+Returns **[boolean][72]** boolean Whether the current user can delete the specified records.
+
+#### hasPermissionToUpdateRecord
+
+An alias for `checkPermissionsForUpdateRecord(recordOrRecordId, fields).hasPermission`.
+
+Checks whether the current user has permission to perform the given record update.
+
+Accepts partial input, in the same format as [updateRecordAsync][107]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `recordOrRecordId` **([Record][86] | RecordId)?** the record to update
+-   `fields` **[object][75]?** cell values to update in that record, specified as object mapping
+    `FieldId` or field name to value for that field.
+
+##### Examples
+
+```javascript
+// Check if user can update specific fields for a specific record.
+const canUpdateRecord = table.hasPermissionToUpdateRecord(record, {
+    'Post Title': 'How to make: orange-mango pound cake',
+    'Publication Date': '2020-01-01',
+});
+if (!canUpdateRecord) {
+    alert('not allowed!');
+}
+
+// Like updateRecordAsync, you can use either field names or field IDs.
+const canUpdateRecordWithFieldIds = table.hasPermissionToUpdateRecord(record, {
+    [postTitleField.id]: 'Cake decorating tips & tricks',
+    [publicationDateField.id]: '2020-02-02',
+});
+
+// Check if user could update a given record, when you don't know the specific fields that
+// will be updated yet. (for example, to check whether you should allow a user to select
+// a certain record to update)
+const canUpdateUnknownFields = table.hasPermissionToUpdateRecord(record);
+
+// Check if user could update specific fields, when you don't know the specific record that
+// will be updated yet. (for example, if the field is selected by the user and you want to
+// check if your block can write to it)
+const canUpdateUnknownRecord = table.hasPermissionToUpdateRecord(undefined, {
+    'My field name': 'updated value',
+    // You can use undefined if you know you're going to update a field, but don't know
+    // the new cell value yet.
+    'Another field name': undefined,
+});
+
+// Check if user could perform updates within the table, without knowing the specific record
+// or fields that will be updated yet. (for example, to render your block in "read only"
+// mode)
+const canUpdateUnknownRecordAndFields = table.hasPermissionToUpdateRecord();
+```
+
+Returns **[boolean][72]** boolean `{hasPermission: true}` whether the user can update the specified
+record
+
+#### hasPermissionToUpdateRecords
+
+An alias for `checkPermissionsForUpdateRecords(records).hasPermission`.
+
+Checks whether the current user has permission to perform the given record updates.
+
+Accepts partial input, in the same format as [updateRecordsAsync][108]. The more information
+provided, the more accurate the permissions check will be.
+
+##### Parameters
+
+-   `records` **(\$ReadOnlyArray&lt;{id: (RecordId | void)?, fields: ({} | void)?}> | void)?**
+
+##### Examples
+
+```javascript
+const recordsToUpdate = [
+    {
+        // Validating a complete record update
+        id: record1.id,
+        fields: {
+            'Post Title': 'How to make: orange-mango pound cake',
+            'Publication Date': '2020-01-01',
+        },
+    },
+    {
+        // Like updateRecordsAsync, fields can be specified by name or ID
+        id: record2.id,
+        fields: {
+            [postTitleField.id]: 'Cake decorating tips & tricks',
+            [publicationDateField.id]: '2020-02-02',
+        },
+    },
+    {
+        // Validating an update to a specific record, not knowing what fields will be updated
+        id: record3.id,
+    },
+    {
+        // Validating an update to specific cell values, not knowing what record will be updated
+        fields: {
+            'My field name': 'updated value for unknown record',
+            // You can use undefined if you know you're going to update a field, but don't know
+            // the new cell value yet.
+            'Another field name': undefined,
+        },
+    },
+];
+
+const canUpdateRecords = table.hasPermissionToUpdateRecords(recordsToUpdate);
+if (!canUpdateRecords) {
+    alert('not allowed');
+}
+
+// Check if user could potentially update records.
+// Equivalent to table.hasPermissionToUpdateRecord()
+const canUpdateUnknownRecordsAndFields = table.hasPermissionToUpdateRecords();
+```
+
+Returns **[boolean][72]** boolean Whether the current user can update the specified records.
+
 #### id
 
 ##### Examples
@@ -3189,7 +3519,7 @@ if (!myTable.isDeleted) {
 }
 ```
 
-Returns **[boolean][75]** `true` if the table has been deleted, `false` otherwise.
+Returns **[boolean][72]** `true` if the table has been deleted, `false` otherwise.
 
 #### name
 
@@ -3261,8 +3591,8 @@ Should be called with the same arguments given to `.watch`.
 ##### Parameters
 
 -   `keys` **(WatchableTableKey | [Array][69]&lt;WatchableTableKey>)** the keys to unwatch
--   `callback` **[Function][73]** the function passed to `.watch` for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `callback` **[Function][74]** the function passed to `.watch` for these keys
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableTableKey>** the array of keys that were unwatched
 
@@ -3280,14 +3610,14 @@ changes will be reflected in your block before the promise resolves.
 ##### Parameters
 
 -   `recordOrRecordId` **([Record][86] | RecordId)** the record to update
--   `fields` **[object][74]** cell values to update in that record, specified as object mapping
+-   `fields` **[object][75]** cell values to update in that record, specified as object mapping
     `FieldId` or field name to value for that field.
 
 ##### Examples
 
 ```javascript
 function updateRecord(record, recordFields) {
-    if (table.checkPermissionsForUpdateRecord(record, recordFields).hasPermission) {
+    if (table.hasPermissionToUpdateRecord(record, recordFields)) {
         table.updateRecordAsync(record, recordFields);
     }
     // The updated values will now show in your block (eg in `table.selectRecords()` result)
@@ -3296,7 +3626,7 @@ function updateRecord(record, recordFields) {
 }
 
 async function updateRecordAsync(record, recordFields) {
-    if (table.checkPermissionsForUpdateRecord(record, recordFields).hasPermission) {
+    if (table.hasPermissionToUpdateRecord(record, recordFields)) {
         await table.updateRecordAsync(record, recordFields);
     }
     // New record has been saved to Airtable servers.
@@ -3314,7 +3644,7 @@ updateRecord(record2, {
 });
 ```
 
-Returns **[Promise][72]&lt;RecordId>** A promise that will resolve to the RecordId of the new
+Returns **[Promise][73]&lt;RecordId>** A promise that will resolve to the RecordId of the new
 record, once the new record is persisted to Airtable.
 
 #### updateRecordsAsync
@@ -3333,7 +3663,7 @@ reflected in your block before the promise resolves.
 
 ##### Parameters
 
--   `records` **[Array][69]&lt;{id: RecordId, fields: [object][74]}>** Array of objects containing
+-   `records` **[Array][69]&lt;{id: RecordId, fields: [object][75]}>** Array of objects containing
     recordId and fields/cellValues to update for that record (specified as an object mapping
     `FieldId` or field name to cell value)
 
@@ -3367,7 +3697,7 @@ const recordsToUpdate = [
 ];
 
 function updateRecords() {
-    if (table.checkPermissionsForUpdateRecords(recordsToUpdate).hasPermission) {
+    if (table.hasPermissionToUpdateRecords(recordsToUpdate)) {
         table.updateRecordsAsync(recordsToUpdate);
     }
     // The records are now updated within your block (eg will be reflected in
@@ -3376,7 +3706,7 @@ function updateRecords() {
 }
 
 async function updateRecordsAsync() {
-    if (table.checkPermissionsForUpdateRecords(recordsToUpdate).hasPermission) {
+    if (table.hasPermissionToUpdateRecords(recordsToUpdate)) {
         await table.updateRecordsAsync(recordsToUpdate);
     }
     // Record updates have been saved to Airtable servers.
@@ -3384,7 +3714,7 @@ async function updateRecordsAsync() {
 }
 ```
 
-Returns **[Promise][72]&lt;void>** A promise that will resolve once the updates are persisted to
+Returns **[Promise][73]&lt;void>** A promise that will resolve once the updates are persisted to
 Airtable.
 
 #### url
@@ -3429,8 +3759,8 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 ##### Parameters
 
 -   `keys` **(WatchableTableKey | [Array][69]&lt;WatchableTableKey>)** the keys to watch
--   `callback` **[Function][73]** a function to call when those keys change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `callback` **[Function][74]** a function to call when those keys change
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableTableKey>** the array of keys that were watched
 
@@ -3468,7 +3798,7 @@ if (!myView.isDeleted) {
 }
 ```
 
-Returns **[boolean][75]** `true` if the view has been deleted, `false` otherwise.
+Returns **[boolean][72]** `true` if the view has been deleted, `false` otherwise.
 
 #### name
 
@@ -3702,7 +4032,7 @@ Should be called with the same arguments given to `.watch`.
 -   `keys` **(WatchableKey | [Array][69]&lt;WatchableKey>)** the keys to unwatch
 -   `callback` **function (model: this, key: WatchableKey): any** the function passed to `.watch`
     for these keys
--   `context` **[Object][74]??** the context that was passed to `.watch` for this `callback`
+-   `context` **[Object][75]??** the context that was passed to `.watch` for this `callback`
 
 Returns **[Array][69]&lt;WatchableKey>** the array of keys that were unwatched
 
@@ -3717,7 +4047,7 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 -   `keys` **(WatchableKey | [Array][69]&lt;WatchableKey>)** the keys to watch
 -   `callback` **function (model: this, key: WatchableKey): any** a function to call when those keys
     change
--   `context` **[Object][74]??** an optional context for `this` in `callback`.
+-   `context` **[Object][75]??** an optional context for `this` in `callback`.
 
 Returns **[Array][69]&lt;WatchableKey>** the array of keys that were watched
 
@@ -3779,7 +4109,7 @@ import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
 loadCSSFromURLAsync('https://example.com/style.css');
 ```
 
-Returns **[Promise][72]&lt;[HTMLLinkElement][118]>** a Promise that resolves to the style tag
+Returns **[Promise][73]&lt;[HTMLLinkElement][118]>** a Promise that resolves to the style tag
 inserted into the page.
 
 #### loadScriptFromURLAsync
@@ -3797,7 +4127,7 @@ import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
 loadScriptFromURLAsync('https://example.com/script.js');
 ```
 
-Returns **[Promise][72]&lt;[HTMLScriptElement][119]>** a Promise that resolves to the script tag
+Returns **[Promise][73]&lt;[HTMLScriptElement][119]>** a Promise that resolves to the script tag
 inserted into the page.
 
 ### Color utilities
@@ -3889,7 +4219,7 @@ colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
 // => true
 ```
 
-Returns **[boolean][75]** boolean
+Returns **[boolean][72]** boolean
 
 #### colors
 
@@ -4054,7 +4384,7 @@ function SyncedCounter() {
 
     const increment = () => globalConfig.setAsync('count', count + 1);
     const decrement = () => globalConfig.setAsync('count', count - 1);
-    const isEnabled = globalConfig.checkPermissionsForSet('count').hasPermission;
+    const isEnabled = globalConfig.hasPermissionToSet('count');
 
     return (
         <React.Fragment>
@@ -4364,9 +4694,9 @@ trying to use the data you loaded.
 
 -   `models` **(QueryResult | [Cursor][133] \| [Array][69]&lt;(QueryResult | [Cursor][133] | null)>
     | null)** the models to load.
--   `options` **[object][74]?** Optional options to control how the hook works (optional, default
+-   `options` **[object][75]?** Optional options to control how the hook works (optional, default
     `{}`)
-    -   `options.shouldSuspend` **[boolean][75]** pass {shouldSuspend: false} to disable suspense
+    -   `options.shouldSuspend` **[boolean][72]** pass {shouldSuspend: false} to disable suspense
         mode. If suspense is disabled, you need to manually check model.isDataLoaded so you don't
         use your model before it's ready. (optional, default `true`)
 
@@ -4427,7 +4757,7 @@ the same way you would if you weren't using withHooks.
 ##### Parameters
 
 -   `Component` **React.Component** The React component you want to inject hooks into
--   `getAdditionalPropsToInject` **[Function][73]** a function that takes props and returns more
+-   `getAdditionalPropsToInject` **[Function][74]** a function that takes props and returns more
     props to be injected into the wrapped component
 
 ##### Examples
@@ -4513,7 +4843,7 @@ Expands the given record in the Airtable UI.
 ##### Parameters
 
 -   `record` **[Record][86]** the record to expand
--   `opts` **[object][74]?** An optional options object.
+-   `opts` **[object][75]?** An optional options object.
     -   `opts.records` **[Array][69]&lt;[Record][86]>?** If `records` is provided, the list will be
         used to page through records from the expanded record dialog.
 
@@ -4569,7 +4899,7 @@ return null.
 
 -   `records` **[Array][69]&lt;[Record][86]>** the records the user can pick from. Duplicate records
     will be removed.
--   `opts` **{fields: [Array][69]&lt;[Field][83]>?, shouldAllowCreatingRecord: [boolean][75]?}?** An
+-   `opts` **{fields: [Array][69]&lt;[Field][83]>?, shouldAllowCreatingRecord: [boolean][72]?}?** An
     optional options object.
     -   `opts.fields` optionally include an array of fields to control which fields are shown in the
         record cards. The primary field will always be shown. Duplicate fields will be removed.
@@ -4595,7 +4925,7 @@ async function pickRecordsAsync() {
 }
 ```
 
-Returns **[Promise][72]&lt;(record | null)>** a Promise that resolves to the record chosen by the
+Returns **[Promise][73]&lt;(record | null)>** a Promise that resolves to the record chosen by the
 user or null
 
 ### AutocompletePopover
@@ -4611,34 +4941,34 @@ user or null
 #### AutocompletePopoverProps
 
 Type: {children:
-React$Element&lt;any>, items: [Array][69]&lt;[AutocompleteItem][136]>, renderItem: function (item: [AutocompleteItem][136], isFocused: [boolean][75]): React$Element&lt;any>?,
+React$Element&lt;any>, items: [Array][69]&lt;[AutocompleteItem][136]>, renderItem: function (item: [AutocompleteItem][136], isFocused: [boolean][72]): React$Element&lt;any>?,
 filterItems: function (query: [string][68], items: [Array][69]&lt;[AutocompleteItem][136]>):
 [Array][69]&lt;[AutocompleteItem][136]>?, onSelect: function ([AutocompleteItem][136]): void,
-placeholder: [string][68]?, focusOnOpen: [boolean][75]?, className: [string][68]?, style:
-[Object][74]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
+placeholder: [string][68]?, focusOnOpen: [boolean][72]?, className: [string][68]?, style:
+[Object][75]?, placementX: PopoverPlacementX?, placementY: PopoverPlacementY?, placementOffsetX:
 [number][76]?, placementOffsetY: [number][76]?, fitInWindowMode: FitInWindowMode?, isOpen:
-[boolean][75]?, onClose: function (opts: {wasFromEscape: [boolean][75]}): void?}
+[boolean][72]?, onClose: function (opts: {wasFromEscape: [boolean][72]}): void?}
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>**
 -   `items` **[Array][69]&lt;[AutocompleteItem][136]>**
--   `renderItem` **function (item: [AutocompleteItem][136], isFocused: [boolean][75]):
+-   `renderItem` **function (item: [AutocompleteItem][136], isFocused: [boolean][72]):
     React\$Element&lt;any>?**
 -   `filterItems` **function (query: [string][68], items: [Array][69]&lt;[AutocompleteItem][136]>):
     [Array][69]&lt;[AutocompleteItem][136]>?**
 -   `onSelect` **function ([AutocompleteItem][136]): void**
 -   `placeholder` **[string][68]?**
--   `focusOnOpen` **[boolean][75]?**
+-   `focusOnOpen` **[boolean][72]?**
 -   `className` **[string][68]?**
--   `style` **[Object][74]?**
+-   `style` **[Object][75]?**
 -   `placementX` **PopoverPlacementX?**
 -   `placementY` **PopoverPlacementY?**
 -   `placementOffsetX` **[number][76]?**
 -   `placementOffsetY` **[number][76]?**
 -   `fitInWindowMode` **FitInWindowMode?**
--   `isOpen` **[boolean][75]?**
--   `onClose` **function (opts: {wasFromEscape: [boolean][75]}): void?**
+-   `isOpen` **[boolean][72]?**
+-   `onClose` **function (opts: {wasFromEscape: [boolean][72]}): void?**
 
 #### AutocompleteItem
 
@@ -4676,7 +5006,7 @@ const button = (
 
 #### ButtonProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -4684,10 +5014,10 @@ Type: [object][74]
     Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT)?**
     The color theme for the button.
 -   `className` **[string][68]?** Extra `className`s to apply to the button, separated by spaces.
--   `style` **[object][74]?** Extra styles to apply to the button.
--   `onClick` **[function][73]?** Click event handler. Also handles Space and Enter keypress events.
+-   `style` **[object][75]?** Extra styles to apply to the button.
+-   `onClick` **[function][74]?** Click event handler. Also handles Space and Enter keypress events.
 -   `type` **[string][68]?** The type of the button.
--   `disabled` **[boolean][75]?** Indicates whether or not the user can interact with the button.
+-   `disabled` **[boolean][72]?** Indicates whether or not the user can interact with the button.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the button can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-label` **[string][68]?** The label for the button. Use this if the button lacks a visible
@@ -4705,20 +5035,20 @@ Type: [object][74]
 
 #### CellRendererProps
 
-Type: {record: [Record][86]??, cellValue: any?, field: [Field][83], shouldWrap: [boolean][75]?,
-className: [string][68]?, style: [Object][74]?, cellClassName: [string][68]?, cellStyle:
-[Object][74]?}
+Type: {record: [Record][86]??, cellValue: any?, field: [Field][83], shouldWrap: [boolean][72]?,
+className: [string][68]?, style: [Object][75]?, cellClassName: [string][68]?, cellStyle:
+[Object][75]?}
 
 ##### Properties
 
 -   `record` **[Record][86]??**
 -   `cellValue` **any?**
 -   `field` **[Field][83]**
--   `shouldWrap` **[boolean][75]?**
+-   `shouldWrap` **[boolean][72]?**
 -   `className` **[string][68]?**
--   `style` **[Object][74]?**
+-   `style` **[Object][75]?**
 -   `cellClassName` **[string][68]?**
--   `cellStyle` **[Object][74]?**
+-   `cellStyle` **[Object][75]?**
 
 ### ChoiceToken
 
@@ -4754,11 +5084,11 @@ function ChoicesForSelectField({selectField}) {
 
 #### ChoiceTokenProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
--   `choice` **[object][74]** An object representing a select option. You should not create these
+-   `choice` **[object][75]** An object representing a select option. You should not create these
     objects from scratch, but should instead grab them from base data.
     -   `choice.id` **[string][68]** The ID of the select option.
     -   `choice.name` **[string][68]** The name of the select option.
@@ -4796,11 +5126,11 @@ function CurrentUserGreeter() {
 
 #### CollaboratorTokenProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
--   `collaborator` **[object][74]** An object representing a collaborator. You should not create
+-   `collaborator` **[object][75]** An object representing a collaborator. You should not create
     these objects from scratch, but should instead grab them from base data.
     -   `collaborator.id` **[string][68]?** The user ID of the collaborator.
     -   `collaborator.email` **[string][68]?** The email address of the collaborator.
@@ -4823,8 +5153,8 @@ Type: [object][74]
 #### ColorPaletteProps
 
 Type: {color: [string][68]?, allowedColors: [Array][69]&lt;[string][68]>, onChange: function
-([string][68]): any?, squareMargin: [number][76]?, className: [string][68]?, style: [Object][74]?,
-disabled: [boolean][75]?}
+([string][68]): any?, squareMargin: [number][76]?, className: [string][68]?, style: [Object][75]?,
+disabled: [boolean][72]?}
 
 ##### Properties
 
@@ -4833,18 +5163,18 @@ disabled: [boolean][75]?}
 -   `onChange` **function ([string][68]): any?**
 -   `squareMargin` **[number][76]?**
 -   `className` **[string][68]?**
--   `style` **[Object][74]?**
--   `disabled` **[boolean][75]?**
+-   `style` **[Object][75]?**
+-   `disabled` **[boolean][72]?**
 
 #### ColorPaletteSyncedProps
 
-Type: {globalConfigKey: [string][68], disabled: [boolean][75]?, onChange: function ([string][68]):
+Type: {globalConfigKey: [string][68], disabled: [boolean][72]?, onChange: function ([string][68]):
 any?}
 
 ##### Properties
 
 -   `globalConfigKey` **[string][68]**
--   `disabled` **[boolean][75]?**
+-   `disabled` **[boolean][72]?**
 -   `onChange` **function ([string][68]): any?**
 
 ### ColorPaletteSynced
@@ -4896,7 +5226,7 @@ function Block() {
 
 #### ConfirmationDialogProps
 
-Type: [Object][74]
+Type: [Object][75]
 
 ##### Properties
 
@@ -4904,17 +5234,17 @@ Type: [Object][74]
 -   `body` **React.Node?** The body of the dialog.
 -   `cancelButtonText` **[string][68]?** The label for the cancel button.
 -   `confirmButtonText` **[string][68]?** The label for the confirm button.
--   `isConfirmActionDangerous` **[boolean][75]?** Whether the action is dangerous (potentially
+-   `isConfirmActionDangerous` **[boolean][72]?** Whether the action is dangerous (potentially
     destructive or not easily reversible).
 -   `className` **[string][68]?** Extra `className`s to apply to the dialog element, separated by
     spaces.
--   `style` **[Object][74]?** Extra styles to apply to the dialog element.
+-   `style` **[Object][75]?** Extra styles to apply to the dialog element.
 -   `backgroundClassName` **[string][68]?** Extra `className`s to apply to the lightbox element,
     separated by spaces.
--   `backgroundStyle` **[Object][74]?** Extra styles to apply to the lightbox element.
--   `onCancel` **[function][73]** Cancel button event handler. Handles click events and Space and
+-   `backgroundStyle` **[Object][75]?** Extra styles to apply to the lightbox element.
+-   `onCancel` **[function][74]** Cancel button event handler. Handles click events and Space and
     Enter keypress events.
--   `onConfirm` **[function][73]** Confirm button event handler. Handles click events and Space and
+-   `onConfirm` **[function][74]** Confirm button event handler. Handles click events and Space and
     Enter keypress events.
 
 ### Dialog
@@ -4966,17 +5296,17 @@ function Block() {
 
 #### DialogProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
--   `onClose` **[function][73]** Callback function to fire when the dialog is closed.
+-   `onClose` **[function][74]** Callback function to fire when the dialog is closed.
 -   `className` **[string][68]?** Extra `className`s to apply to the dialog element, separated by
     spaces.
--   `style` **[Object][74]?** Extra styles to apply to the dialog element.
+-   `style` **[Object][75]?** Extra styles to apply to the dialog element.
 -   `backgroundClassName` **[string][68]?** Extra `className`s to apply to the lightbox element,
     separated by spaces.
--   `backgroundStyle` **[Object][74]?** Extra styles to apply to the lightbox element.
+-   `backgroundStyle` **[Object][75]?** Extra styles to apply to the lightbox element.
 
 #### Dialog.CloseButton
 
@@ -4990,12 +5320,12 @@ A button that closes [Dialog][39].
 
 #### DialogCloseButtonProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `className` **[string][68]?** `className`s to apply to the close button, separated by spaces.
--   `style` **[object][74]?** Styles to apply to the dialog element.
+-   `style` **[object][75]?** Styles to apply to the dialog element.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the button can be focused and
     if/where it participates in sequential keyboard navigation.
 
@@ -5065,23 +5395,23 @@ function Block() {
 
 #### FieldPickerProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `table` **[Table][88]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
 -   `field` **[Field][83]?** The selected field model.
--   `onChange` **[function][73]?** A function to be called when the selected field changes.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the picker.
+-   `onChange` **[function][74]?** A function to be called when the selected field changes.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the picker.
 -   `allowedTypes` **[Array][69]&lt;FieldType>?** An array indicating which field types can be
     selected.
--   `shouldAllowPickingNone` **[boolean][75]?** If set to `true`, the user can unset the selected
+-   `shouldAllowPickingNone` **[boolean][72]?** If set to `true`, the user can unset the selected
     field.
 -   `placeholder` **[string][68]?** The placeholder text when no field is selected.
 -   `id` **[string][68]?** The ID of the picker element.
 -   `className` **[string][68]?** Additional class names to apply to the picker.
--   `style` **[object][74]?** Additional styles to apply to the picker.
+-   `style` **[object][75]?** Additional styles to apply to the picker.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5089,7 +5419,7 @@ Type: [object][74]
 
 #### FieldPickerSyncedProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5098,17 +5428,17 @@ Type: [object][74]
 -   `globalConfigKey` **[GlobalConfigKey][146]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
--   `onChange` **[function][73]?** A function to be called when the selected field changes. This
+-   `onChange` **[function][74]?** A function to be called when the selected field changes. This
     should only be used for side effects.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the picker.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the picker.
 -   `allowedTypes` **[Array][69]&lt;FieldType>?** An array indicating which field types can be
     selected.
--   `shouldAllowPickingNone` **[boolean][75]?** If set to `true`, the user can unset the selected
+-   `shouldAllowPickingNone` **[boolean][72]?** If set to `true`, the user can unset the selected
     field.
 -   `placeholder` **[string][68]?** The placeholder text when no field is selected.
 -   `id` **[string][68]?** The ID of the picker element.
 -   `className` **[string][68]?** Additional class names to apply to the picker.
--   `style` **[object][74]?** Additional styles to apply to the picker.
+-   `style` **[object][75]?** Additional styles to apply to the picker.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5199,7 +5529,7 @@ const LikeButton = (
 
 #### IconProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5208,9 +5538,9 @@ Type: [object][74]
 -   `size` **[number][76]?** The width/height of the icon.
 -   `fillColor` **[string][68]?** The color of the icon.
 -   `className` **[string][68]?** Additional class names to apply to the icon.
--   `style` **[object][74]?** Additional styles to apply to the icon.
+-   `style` **[object][75]?** Additional styles to apply to the icon.
 -   `pathClassName` **[string][68]?** Additional class names to apply to the icon path.
--   `pathStyle` **[object][74]?** Additional styles to apply to the icon path.
+-   `pathStyle` **[object][75]?** Additional styles to apply to the icon path.
 
 #### FieldIcon
 
@@ -5250,7 +5580,7 @@ const FieldToken = (
 
 #### FieldIconProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5258,9 +5588,9 @@ Type: [object][74]
 -   `size` **[number][76]?** The width/height of the icon.
 -   `fillColor` **[string][68]?** The color of the icon.
 -   `className` **[string][68]?** Additional class names to apply to the icon.
--   `style` **[object][74]?** Additional styles to apply to the icon.
+-   `style` **[object][75]?** Additional styles to apply to the icon.
 -   `pathClassName` **[string][68]?** Additional class names to apply to the icon path.
--   `pathStyle` **[object][74]?** Additional styles to apply to the icon path.
+-   `pathStyle` **[object][75]?** Additional styles to apply to the icon path.
 
 ### Input
 
@@ -5299,29 +5629,29 @@ function HelloSomeone() {
 
 #### InputProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `value` **[string][68]** The input's current value.
--   `onChange` **[function][73]** A function to be called when the input changes.
+-   `onChange` **[function][74]** A function to be called when the input changes.
 -   `type` **[string][68]?** The `type` for the input. Defaults to `text`.
 -   `placeholder` **[string][68]?** The placeholder for the input.
--   `style` **[object][74]?** Additional styles to apply to the input.
+-   `style` **[object][75]?** Additional styles to apply to the input.
 -   `className` **[string][68]?** Additional class names to apply to the input, separated by spaces.
--   `disabled` **[boolean][75]?** The `disabled` attribute.
--   `required` **[boolean][75]?** The `required` attribute.
--   `spellCheck` **[boolean][75]?** The `spellcheck` attribute.
+-   `disabled` **[boolean][72]?** The `disabled` attribute.
+-   `required` **[boolean][72]?** The `required` attribute.
+-   `spellCheck` **[boolean][72]?** The `spellcheck` attribute.
 -   `name` **[string][68]?** The `name` attribute.
 -   `id` **[string][68]?** The `id` attribute.
--   `autoFocus` **[boolean][75]?** The `autoFocus` attribute.
+-   `autoFocus` **[boolean][72]?** The `autoFocus` attribute.
 -   `max` **([number][76] \| [string][68])?** The `max` attribute.
 -   `maxLength` **[number][76]?** The `maxLength` attribute.
 -   `min` **([number][76] \| [string][68])?** The `min` attribute.
 -   `minLength` **[number][76]?** The `minLength` attribute.
 -   `step` **([number][76] \| [string][68])?** The `step` attribute.
 -   `pattern` **[string][68]?** The `pattern` attribute.
--   `readOnly` **[boolean][75]?** The `readOnly` attribute.
+-   `readOnly` **[boolean][72]?** The `readOnly` attribute.
 -   `autoComplete` **[string][68]?** The `autoComplete` attribute.
 -   `tabIndex` **([number][76] \| [string][68])?** The `tabindex` attribute.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5329,30 +5659,30 @@ Type: [object][74]
 
 #### InputSyncedProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `globalConfigKey` **([string][68] \| [Array][69]&lt;[string][68]>)** The key, or path to a key,
     in global config.
--   `onChange` **[function][73]** A function to be called when the input changes.
+-   `onChange` **[function][74]** A function to be called when the input changes.
 -   `type` **[string][68]?** The `type` for the input. Defaults to `text`.
 -   `placeholder` **[string][68]?** The placeholder for the input.
--   `style` **[object][74]?** Additional styles to apply to the input.
+-   `style` **[object][75]?** Additional styles to apply to the input.
 -   `className` **[string][68]?** Additional class names to apply to the input, separated by spaces.
--   `disabled` **[boolean][75]?** The `disabled` attribute.
--   `required` **[boolean][75]?** The `required` attribute.
--   `spellCheck` **[boolean][75]?** The `spellcheck` attribute.
+-   `disabled` **[boolean][72]?** The `disabled` attribute.
+-   `required` **[boolean][72]?** The `required` attribute.
+-   `spellCheck` **[boolean][72]?** The `spellcheck` attribute.
 -   `name` **[string][68]?** The `name` attribute.
 -   `id` **[string][68]?** The `id` attribute.
--   `autoFocus` **[boolean][75]?** The `autoFocus` attribute.
+-   `autoFocus` **[boolean][72]?** The `autoFocus` attribute.
 -   `max` **([number][76] \| [string][68])?** The `max` attribute.
 -   `maxLength` **[number][76]?** The `maxLength` attribute.
 -   `min` **([number][76] \| [string][68])?** The `min` attribute.
 -   `minLength` **[number][76]?** The `minLength` attribute.
 -   `step` **([number][76] \| [string][68])?** The `step` attribute.
 -   `pattern` **[string][68]?** The `pattern` attribute.
--   `readOnly` **[boolean][75]?** The `readOnly` attribute.
+-   `readOnly` **[boolean][72]?** The `readOnly` attribute.
 -   `autoComplete` **[string][68]?** The `autoComplete` attribute.
 -   `tabIndex` **([number][76] \| [string][68])?** The `tabindex` attribute.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5376,7 +5706,7 @@ import {globalConfig} from '@airtable/blocks';
 import React from 'react';
 
 function ApiKeyInput() {
-    const canEditApiKey = globalConfig.checkPermissionsForSetPaths('apiKey').hasPermission;
+    const canEditApiKey = globalConfig.hasPermissionToSetPaths('apiKey');
     return <UI.InputSynced globalConfigKey="apiKey" disabled={!canEditApiKey} />;
 }
 ```
@@ -5412,7 +5742,7 @@ function MyLinkComponent() {
 
 #### LinkProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5421,7 +5751,7 @@ Type: [object][74]
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the link can be focused and if/where
     it participates in sequential keyboard navigation.
 -   `className` **[string][68]?** Additional class names to apply to the link.
--   `style` **[object][74]?** Additional styles to apply to the link.
+-   `style` **[object][75]?** Additional styles to apply to the link.
 
 ### Loader
 
@@ -5451,7 +5781,7 @@ function MyDataComponent() {
 
 #### LoaderProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5475,12 +5805,12 @@ A popover component, which is used to "float" some content above some other cont
 
 #### PopoverProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>** Child components to render.
--   `renderContent` **[function][73]** A function that returns the contents of the popover as React
+-   `renderContent` **[function][74]** A function that returns the contents of the popover as React
     elements.
 -   `placementX` **(Popover.placements.LEFT | Popover.placements.CENTER |
     Popover.placements.RIGHT)?** The horizontal placement of the popover.
@@ -5500,11 +5830,11 @@ Type: [object][74]
     placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving
     the popover from the left to the right). If `NUDGE`, the popover will be "nudged" just enough to
     fit on screen.
--   `onClose` **[function][73]?** A function that will be called when the popover closes.
--   `isOpen` **[boolean][75]** A boolean that dictates whether the popover is open.
+-   `onClose` **[function][74]?** A function that will be called when the popover closes.
+-   `isOpen` **[boolean][72]** A boolean that dictates whether the popover is open.
 -   `backgroundClassName` **[string][68]?** Extra class names for the background of the popover,
     separated by spaces.
--   `backgroundStyle` **[object][74]?** Extra styles for the background of the popover.
+-   `backgroundStyle` **[object][75]?** Extra styles for the background of the popover.
 
 #### Popover.fitInWindowModes
 
@@ -5538,7 +5868,7 @@ function MyComponent() {
 
 #### ProgressBarProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5549,7 +5879,7 @@ Type: [object][74]
 -   `backgroundColor` **[string][68]?** A CSS color, such as `#ff9900`.
 -   `height` **[number][76]?** A height, in pixels.
 -   `className` **[string][68]?** Extra `className`s to apply to the element, separated by spaces.
--   `style` **[object][74]?** Extra styles to apply to the progress bar.
+-   `style` **[object][75]?** Extra styles to apply to the progress bar.
 
 ### RecordCard
 
@@ -5563,7 +5893,7 @@ Type: [object][74]
 
 #### RecordCardProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -5576,15 +5906,15 @@ Type: [object][74]
     field in `fields`. If `fields` is not defined, it uses the first attachment field in the view.
 -   `width` **[number][76]?** Width of the record card.
 -   `height` **[number][76]?** Height of the record card.
--   `expandRecordOptions` **[object][74]?** Options object for expanding a record.
+-   `expandRecordOptions` **[object][75]?** Options object for expanding a record.
     -   `expandRecordOptions.records` **[Array][69]&lt;[Record][86]>?** List of all records, used
         for cycling through records in the same expanded record window.
--   `onClick` **[function][73]?** Click event handler for the record card. If undefined, uses
+-   `onClick` **[function][74]?** Click event handler for the record card. If undefined, uses
     default behavior to expand record. If null, no operation is performed.
--   `onMouseEnter` **[function][73]?** Mouse enter event handler for the record card.
--   `onMouseLeave` **[function][73]?** Mouse leave event handler for the record card.
+-   `onMouseEnter` **[function][74]?** Mouse enter event handler for the record card.
+-   `onMouseLeave` **[function][74]?** Mouse leave event handler for the record card.
 -   `className` **[string][68]?** Additional class names to apply to the record card.
--   `style` **[object][74]?** Additional styles to apply to the record card.
+-   `style` **[object][75]?** Additional styles to apply to the record card.
 
 ### RecordCardList
 
@@ -5626,17 +5956,17 @@ function Block() {
 
 #### RecordCardListProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `records` **[Array][69]&lt;[Record][86]>** Records to display in card list.
--   `onScroll` **[function][73]?** Scroll event handler for the list window.
--   `onRecordClick` **[function][73]?** Click event handler for an individual record card. If
+-   `onScroll` **[function][74]?** Scroll event handler for the list window.
+-   `onRecordClick` **[function][74]?** Click event handler for an individual record card. If
     undefined, uses default behavior to expand record. If null, no operation is performed.
--   `onRecordMouseEnter` **[function][73]?** Mouse enter event handler for an individual record
+-   `onRecordMouseEnter` **[function][74]?** Mouse enter event handler for an individual record
     card.
--   `onRecordMouseLeave` **[function][73]?** Mouse leave event handler for an individual record
+-   `onRecordMouseLeave` **[function][74]?** Mouse leave event handler for an individual record
     card.
 -   `fields` **[Array][69]&lt;[Field][83]>?** Fields to display in each record card. The primary
     field is always displayed.
@@ -5646,7 +5976,7 @@ Type: [object][74]
     attachment field in `fields`. If `fields` is not defined, it uses the first attachment field in
     the view.
 -   `className` **[string][68]?** Additional class names to apply to the record card list.
--   `style` **[object][74]?** Additional styles to apply to the record card list.
+-   `style` **[object][75]?** Additional styles to apply to the record card list.
 
 ### Select
 
@@ -5688,18 +6018,18 @@ function ColorPicker() {
 
 #### SelectProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
--   `onChange` **[function][73]?** A function to be called when the selected option changes.
--   `value` **([string][68] \| [number][76] \| [boolean][75] | null)?** The value of the selected
+-   `onChange` **[function][74]?** A function to be called when the selected option changes.
+-   `value` **([string][68] \| [number][76] \| [boolean][72] | null)?** The value of the selected
     option.
 -   `options` **[Array][69]&lt;[SelectOption][161]>** The list of select options.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the button.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the button.
 -   `id` **[string][68]?** The ID of the select element.
 -   `className` **[string][68]?** Additional class names to apply to the select.
--   `style` **[object][74]?** Additional styles to apply to the select.
+-   `style` **[object][75]?** Additional styles to apply to the select.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the select can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5707,31 +6037,31 @@ Type: [object][74]
 
 #### SelectOption
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
--   `value` **([string][68] \| [number][76] \| [boolean][75] | null)** The value for the select
+-   `value` **([string][68] \| [number][76] \| [boolean][72] | null)** The value for the select
     option.
 -   `label` **React.Node** The label for the select option.
--   `disabled` **[boolean][75]?** If set to `true`, this option will not be selectable.
+-   `disabled` **[boolean][72]?** If set to `true`, this option will not be selectable.
 
 #### SelectSyncedProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `globalConfigKey` **[GlobalConfigKey][146]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
--   `onChange` **[function][73]?** A function to be called when the selected option changes. This
+-   `onChange` **[function][74]?** A function to be called when the selected option changes. This
     should only be used for side effects.
 -   `options` **[Array][69]&lt;[SelectOption][161]>** The list of select options.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the select.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the select.
 -   `id` **[string][68]?** The ID of the select element.
 -   `className` **[string][68]?** Additional class names to apply to the select.
--   `style` **[object][74]?** Additional styles to apply to the select.
+-   `style` **[object][75]?** Additional styles to apply to the select.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the select can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5835,19 +6165,19 @@ function Block() {
 
 #### TablePickerProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `table` **[Table][88]?** The selected table model.
--   `onChange` **[function][73]?** A function to be called when the selected table changes.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the picker.
--   `shouldAllowPickingNone` **[boolean][75]?** If set to `true`, the user can unset the selected
+-   `onChange` **[function][74]?** A function to be called when the selected table changes.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the picker.
+-   `shouldAllowPickingNone` **[boolean][72]?** If set to `true`, the user can unset the selected
     table.
 -   `placeholder` **[string][68]?** The placeholder text when no table is selected.
 -   `id` **[string][68]?** The ID of the picker element.
 -   `className` **[string][68]?** Additional class names to apply to the picker.
--   `style` **[object][74]?** Additional styles to apply to the picker.
+-   `style` **[object][75]?** Additional styles to apply to the picker.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5855,22 +6185,22 @@ Type: [object][74]
 
 #### TablePickerSyncedProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `globalConfigKey` **[GlobalConfigKey][146]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
--   `onChange` **[function][73]?** A function to be called when the selected table changes. This
+-   `onChange` **[function][74]?** A function to be called when the selected table changes. This
     should only be used for side effects.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the picker.
--   `shouldAllowPickingNone` **[boolean][75]?** If set to `true`, the user can unset the selected
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the picker.
+-   `shouldAllowPickingNone` **[boolean][72]?** If set to `true`, the user can unset the selected
     table.
 -   `placeholder` **[string][68]?** The placeholder text when no table is selected.
 -   `id` **[string][68]?** The ID of the picker element.
 -   `className` **[string][68]?** Additional class names to apply to the picker.
--   `style` **[object][74]?** Additional styles to apply to the picker.
+-   `style` **[object][75]?** Additional styles to apply to the picker.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -5942,19 +6272,19 @@ function Block() {
 
 #### ToggleProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
--   `value` **[boolean][75]** If set to `true`, the switch will be toggled on.
--   `onChange` **[function][73]?** A function to be called when the switch is toggled.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the switch.
+-   `value` **[boolean][72]** If set to `true`, the switch will be toggled on.
+-   `onChange` **[function][74]?** A function to be called when the switch is toggled.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the switch.
 -   `label` **React.Node?** The label node for the switch.
 -   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
     Toggle.themes.GRAY)?** The color theme for the switch.
 -   `id` **[string][68]?** The ID of the switch element.
 -   `className` **[string][68]?** Additional class names to apply to the switch.
--   `style` **[object][74]?** Additional styles to apply to the switch.
+-   `style` **[object][75]?** Additional styles to apply to the switch.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the switch can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-label` **[string][68]?** The label for the switch. Use this if the switch lacks a visible
@@ -5964,22 +6294,22 @@ Type: [object][74]
 
 #### ToggleSyncedProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `globalConfigKey` **[GlobalConfigKey][146]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
--   `onChange` **[function][73]?** A function to be called when the switch is toggled. This should
+-   `onChange` **[function][74]?** A function to be called when the switch is toggled. This should
     only be used for side effects.
 -   `label` **React.Node?** The label node for the switch.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the switch.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the switch.
 -   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
     Toggle.themes.GRAY)?** The color theme for the switch.
 -   `id` **[string][68]?** The ID of the switch element.
 -   `className` **[string][68]?** Additional class names to apply to the switch.
--   `style` **[object][74]?** Additional styles to apply to the switch.
+-   `style` **[object][75]?** Additional styles to apply to the switch.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the switch can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-label` **[string][68]?** The label for the switch. Use this if the switch lacks a visible
@@ -6045,12 +6375,12 @@ function MyComponent() {
 
 #### TooltipProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `children` **React\$Element&lt;any>** Child components to render.
--   `content` **([string][68] \| [function][73])** A string representing the contents.
+-   `content` **([string][68] \| [function][74])** A string representing the contents.
     Alternatively, you can include a function that returns a React node to place into the tooltip,
     which is useful for things like italicization in the tooltip.
 -   `placementX` **(UI.Tooltip.placements.LEFT | UI.Tooltip.placements.CENTER |
@@ -6073,12 +6403,12 @@ Type: [object][74]
     placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving
     the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to
     fit on screen.
--   `shouldHideTooltipOnClick` **[boolean][75]?** Should the tooltip be hidden when clicked?
--   `disabled` **[boolean][75]?** If set to `true`, this tooltip will not be shown. Useful when
+-   `shouldHideTooltipOnClick` **[boolean][72]?** Should the tooltip be hidden when clicked?
+-   `disabled` **[boolean][72]?** If set to `true`, this tooltip will not be shown. Useful when
     trying to disable the tooltip dynamically.
 -   `className` **[string][68]?** Additional class names to attach to the tooltip, separated by
     spaces.
--   `style` **[object][74]?** Additional styles names to attach to the tooltip.
+-   `style` **[object][75]?** Additional styles names to attach to the tooltip.
 
 ### ViewPicker
 
@@ -6142,23 +6472,23 @@ function Block() {
 
 #### ViewPickerProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
 -   `table` **[Table][88]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
 -   `view` **[View][84]?** The selected view model.
--   `onChange` **[function][73]?** A function to be called when the selected view changes.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the picker.
+-   `onChange` **[function][74]?** A function to be called when the selected view changes.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the picker.
 -   `allowedTypes` **[Array][69]&lt;ViewType>?** An array indicating which view types can be
     selected.
--   `shouldAllowPickingNone` **[boolean][75]?** If set to `true`, the user can unset the selected
+-   `shouldAllowPickingNone` **[boolean][72]?** If set to `true`, the user can unset the selected
     view.
 -   `placeholder` **[string][68]?** The placeholder text when no view is selected.
 -   `id` **[string][68]?** The ID of the picker element.
 -   `className` **[string][68]?** Additional class names to apply to the picker.
--   `style` **[object][74]?** Additional styles to apply to the picker.
+-   `style` **[object][75]?** Additional styles to apply to the picker.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -6166,7 +6496,7 @@ Type: [object][74]
 
 #### ViewPickerSyncedProps
 
-Type: [object][74]
+Type: [object][75]
 
 ##### Properties
 
@@ -6175,17 +6505,17 @@ Type: [object][74]
 -   `globalConfigKey` **[GlobalConfigKey][146]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
--   `onChange` **[function][73]?** A function to be called when the selected view changes. This
+-   `onChange` **[function][74]?** A function to be called when the selected view changes. This
     should only be used for side effects.
--   `disabled` **[boolean][75]?** If set to `true`, the user cannot interact with the picker.
+-   `disabled` **[boolean][72]?** If set to `true`, the user cannot interact with the picker.
 -   `allowedTypes` **[Array][69]&lt;ViewType>?** An array indicating which view types can be
     selected.
--   `shouldAllowPickingNone` **[boolean][75]?** If set to `true`, the user can unset the selected
+-   `shouldAllowPickingNone` **[boolean][72]?** If set to `true`, the user can unset the selected
     view.
 -   `placeholder` **[string][68]?** The placeholder text when no view is selected.
 -   `id` **[string][68]?** The ID of the picker element.
 -   `className` **[string][68]?** Additional class names to apply to the picker.
--   `style` **[object][74]?** Additional styles to apply to the picker.
+-   `style` **[object][75]?** Additional styles to apply to the picker.
 -   `tabIndex` **([number][76] \| [string][68])?** Indicates if the picker can be focused and
     if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
@@ -6367,10 +6697,10 @@ Type: {width: ([number][76] | null)?, height: ([number][76] | null)?}
 [69]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 [70]: #globalconfigvalue
 [71]: #setPathsAsync
-[72]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
-[73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-[74]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
-[75]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[72]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[73]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[74]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[75]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 [76]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 [77]: #addmaxfullscreensize
 [78]: #minsize

@@ -17,7 +17,7 @@ import useWatchable from './use_watchable';
  *
  *     const increment = () => globalConfig.setAsync('count', count + 1);
  *     const decrement = () => globalConfig.setAsync('count', count - 1);
- *     const isEnabled = globalConfig.checkPermissionsForSet('count').hasPermission;
+ *     const isEnabled = globalConfig.hasPermissionToSet('count');
  *
  *     return (
  *         <React.Fragment>

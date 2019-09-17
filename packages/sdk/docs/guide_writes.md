@@ -59,18 +59,20 @@ function updateRecordIfPossible(record, fieldValue) {
 ```
 
 In situations where you don't have the full specifics of the write yet (eg. you want to know whether
-to enable or disable a record creation interface), these helpers all accept _partial_ inputs.
+to enable or disable a record creation interface), these helpers all accept _partial_ inputs. There
+are also `hasPermissionTo` variants of each permission check that return `boolean` values but no
+`reasonDisplayString`:
 
 ```js
 function shouldShowRecordCreationButton() {
-    return table.checkPermissionsForCreateRecord();
+    return table.hasPermissionToCreateRecord();
 }
 
 function isFieldValidForEditing(field) {
     // undefined is used as a placeholder for unknown values (eg record being edited, new cell value)
-    return table.checkPermissionsForUpdateRecord(undefined, {
+    return table.hasPermissionToUpdateRecord(undefined, {
         [field.id]: undefined,
-    }).hasPermission;
+    });
 }
 ```
 

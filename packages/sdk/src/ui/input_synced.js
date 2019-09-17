@@ -52,7 +52,7 @@ type InputSyncedProps = {|
  * import React from 'react';
  *
  * function ApiKeyInput() {
- *     const canEditApiKey = globalConfig.checkPermissionsForSetPaths('apiKey').hasPermission;
+ *     const canEditApiKey = globalConfig.hasPermissionToSetPaths('apiKey');
  *     return (
  *         <UI.InputSynced
  *             globalConfigKey="apiKey"
