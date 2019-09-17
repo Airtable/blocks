@@ -2,11 +2,33 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import colorUtils from '../color_utils';
 import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
 import Icon from './icon';
 import createDetectElementResize from './create_detect_element_resize';
+import withStyledSystem from './with_styled_system';
+import {
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 
 const MIN_COLOR_SQUARE_SIZE = 16;
 const DEFAULT_COLOR_SQUARE_SIZE = 24;
@@ -15,16 +37,43 @@ const MAX_COLOR_SQUARE_SIZE = 32;
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
 
+type StyleProps = {|
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...WidthProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+const stylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
 /** @typedef */
-type ColorPaletteProps = {
+type ColorPaletteProps = {|
     color?: string,
     allowedColors: Array<string>,
     onChange?: string => mixed,
-    squareMargin: number,
-    className: string,
-    style: Object,
+    squareMargin?: number,
+    className?: string,
+    style?: Object,
     disabled?: boolean,
-};
+|};
 
 type ColorPaletteState = {
     squareSize: number,
@@ -86,10 +135,12 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
     }
     // Attempts to fit all `allowedColors` onto one line by adjusting color square size.
     _setColorSquareSize() {
+        const {squareMargin} = this.props;
+        invariant(squareMargin, 'colorPalette.squareMargin');
         invariant(this._colorPaletteContainerRef.current, 'No container to set color square size');
         // Calculates the size of each square required to fit `numSquares` squares on one line.
         const calculateSquareSize = numSquares => {
-            return (containerWidth - this.props.squareMargin * 2 * numSquares) / numSquares;
+            return (containerWidth - squareMargin * 2 * numSquares) / numSquares;
         };
         const containerWidth = this._colorPaletteContainerRef.current.getBoundingClientRect().width;
         const numColors = this.props.allowedColors.length;
@@ -99,8 +150,8 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         // fills the row and let flexbox wrap the remainder
         if (calculatedSquareSize < MIN_COLOR_SQUARE_SIZE) {
             const numColorsThatWillFitAsDefaultSize = Math.round(
-                (containerWidth + 2 * this.props.squareMargin) /
-                    (DEFAULT_COLOR_SQUARE_SIZE + 2 * this.props.squareMargin),
+                (containerWidth + 2 * squareMargin) /
+                    (DEFAULT_COLOR_SQUARE_SIZE + 2 * squareMargin),
             );
             squareSize = squareSize =
                 numColorsThatWillFitAsDefaultSize === 0
@@ -119,6 +170,7 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
     render() {
         const {color, allowedColors, squareMargin, className, style, disabled} = this.props;
         const {squareSize} = this.state;
+        invariant(squareMargin, 'colorPalette.squareMargin');
         return (
             <div className={cx(baymax('overflow-hidden'), className)} style={style}>
                 <div
@@ -164,4 +216,8 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
     }
 }
 
-export default ColorPalette;
+export default withStyledSystem<ColorPaletteProps, StyleProps, ColorPalette, {}>(
+    ColorPalette,
+    styleParser,
+    stylePropTypes,
+);

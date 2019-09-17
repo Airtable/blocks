@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {ColorPaletteSynced, Input, colors} from '@airtable/blocks/ui';
+import {Box, ColorPaletteSynced, Input, colors} from '@airtable/blocks/ui';
 
 type Props = {
     shouldShowSettings: boolean,
@@ -11,9 +11,9 @@ export default function ColorPaletteSyncedExample(props: Props) {
     const [marginSize, setMarginSize] = useState(2);
 
     return (
-        <div className="flex flex-column width-full height-full">
+        <Box display="flex" flexDirection="column" width="100%" height="100%">
             {props.shouldShowSettings && (
-                <React.Fragment>
+                <div className="baymax">
                     <div className="flex p2 justify-between items-center border-bottom border-darken2">
                         <span>Number of colors</span>
                         <Input
@@ -31,14 +31,15 @@ export default function ColorPaletteSyncedExample(props: Props) {
                             onChange={e => setMarginSize(e.target.value)}
                         />
                     </div>
-                </React.Fragment>
+                </div>
             )}
             <ColorPaletteSynced
-                className="width-full mt1"
                 globalConfigKey="color"
                 squareMargin={marginSize ? parseInt(marginSize, 10) : 0}
                 allowedColors={Object.values(colors).slice(0, numColors)}
+                width="100%"
+                marginTop={2}
             />
-        </div>
+        </Box>
     );
 }
