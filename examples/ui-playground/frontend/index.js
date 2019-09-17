@@ -16,7 +16,10 @@ import ModalExample from './ModalExample';
 import IconExample from './IconExample';
 import FieldIconExample from './FieldIconExample';
 import RecordCardListExample from './RecordCardListExample';
+import SelectButtonsExample from './SelectButtonsExample';
+import SelectButtonsSyncedExample from './SelectButtonsSyncedExample';
 import SelectExample from './SelectExample';
+import SelectSyncedExample from './SelectSyncedExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
 import {type Example} from './Example';
 
@@ -77,8 +80,24 @@ const examples: Array<Example> = [
         hasSettings: true,
     },
     {
+        name: 'Modal',
+        component: ModalExample,
+    },
+    {
+        name: 'SelectButtons',
+        component: SelectButtonsExample,
+    },
+    {
+        name: 'SelectButtonsSynced',
+        component: SelectButtonsSyncedExample,
+    },
+    {
         name: 'Select',
         component: SelectExample,
+    },
+    {
+        name: 'SelectSynced',
+        component: SelectSyncedExample,
     },
     {
         name: 'TablePickerSynced',

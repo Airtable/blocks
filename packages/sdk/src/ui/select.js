@@ -1,6 +1,7 @@
 // @flow
 import {cx} from 'emotion';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {invariant, spawnError} from '../error_utils';
 import withStyledSystem from './with_styled_system';
@@ -26,11 +27,12 @@ import {
 } from './system';
 import {baymax} from './baymax_utils';
 import {
-    SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
     stringToOptionValue,
-    type SelectAndSelectButtonsProps,
+    SelectOptionValuePropType,
+    type SelectOptionValue,
+    type SelectOption,
 } from './select_and_select_buttons_helpers';
 
 const styleForChevron = {
@@ -41,20 +43,60 @@ const styleForChevron = {
     paddingRight: 22,
 };
 
+export type SharedSelectProps = {|
+    options: Array<SelectOption>,
+    onChange?: (value: SelectOptionValue) => mixed,
+    autoFocus?: boolean,
+    disabled?: boolean,
+    id?: string,
+    name?: string,
+    tabIndex?: number | string,
+    className?: string,
+    style?: {[string]: mixed},
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
+|};
+
+export const sharedPropTypes = {
+    // We do more strict checks in render.
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: SelectOptionValuePropType,
+            label: PropTypes.node,
+            disabled: PropTypes.bool,
+        }),
+    ).isRequired,
+    onChange: PropTypes.func,
+    autoFocus: PropTypes.bool,
+    disabled: PropTypes.bool,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    'aria-labelledby': PropTypes.string,
+    'aria-describedby': PropTypes.string,
+};
+
 /**
  * @typedef {object} SelectProps
- * @property {function} [onChange] A function to be called when the selected option changes.
  * @property {string | number | boolean | null} [value] The value of the selected option.
  * @property {Array.<SelectOption>} options The list of select options.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the button.
- * @property {string} [id] The ID of the select element.
+ * @property {function} [onChange] A function to be called when the selected option changes.
+ * @property {string} [autoFocus] The `autoFocus` attribute.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
+ * @property {string} [id] The `id` attribute.
+ * @property {string} [name] The `name` attribute.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
  * @property {string} [className] Additional class names to apply to the select.
  * @property {object} [style] Additional styles to apply to the select.
- * @property {number | string} [tabIndex] Indicates if the select can be focused and if/where it participates in sequential keyboard navigation.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type SelectProps = SelectAndSelectButtonsProps;
+export type SelectProps = {|
+    value: SelectOptionValue,
+    ...SharedSelectProps,
+|};
 
 // This component isn't great right now. It's just a styled <select> with a really hacky
 // way of getting the chevron arrow to show up. It also behaves weirdly when you give it
@@ -62,7 +104,7 @@ type SelectProps = SelectAndSelectButtonsProps;
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
 
-type StyleProps = {|
+export type StyleProps = {|
     ...MaxWidthProps,
     ...MinWidthProps,
     ...WidthProps,
@@ -80,7 +122,7 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+export const stylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -116,7 +158,10 @@ const stylePropTypes = {
  * }
  */
 class Select extends React.Component<SelectProps> {
-    static propTypes = SelectAndSelectButtonsPropTypes;
+    static propTypes = {
+        value: SelectOptionValuePropType,
+        ...sharedPropTypes,
+    };
     props: SelectProps;
     _select: HTMLSelectElement | null;
     constructor(props: SelectProps) {
@@ -147,7 +192,19 @@ class Select extends React.Component<SelectProps> {
         this._select.click();
     }
     render() {
-        const {id, className, style, options: originalOptions = [], value, disabled} = this.props;
+        const {
+            value,
+            options: originalOptions = [],
+            autoFocus,
+            disabled,
+            id,
+            name,
+            tabIndex,
+            className,
+            style,
+            'aria-describedby': ariaDescribedBy,
+            'aria-labelledby': ariaLabelledBy,
+        } = this.props;
 
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
@@ -183,7 +240,13 @@ class Select extends React.Component<SelectProps> {
         return (
             <select
                 ref={el => (this._select = el)}
+                value={optionValueToString(value)}
+                onChange={this._onChange}
+                autoFocus={autoFocus}
+                disabled={disabled}
                 id={id}
+                name={name}
+                tabIndex={tabIndex}
                 className={cx(
                     baymax('styled-input p1 rounded normal no-outline darken1 text-dark'),
                     {
@@ -196,9 +259,8 @@ class Select extends React.Component<SelectProps> {
                     ...styleForChevron,
                     ...style,
                 }}
-                value={optionValueToString(value)}
-                onChange={this._onChange}
-                disabled={disabled}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
             >
                 {options &&
                     options.map(option => {

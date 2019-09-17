@@ -6039,16 +6039,17 @@ Type: [object][72]
 
 ##### Properties
 
--   `onChange` **[function][71]?** A function to be called when the selected option changes.
 -   `value` **([string][65] \| [number][73] \| [boolean][69] | null)?** The value of the selected
     option.
 -   `options` **[Array][66]&lt;[SelectOption][156]>** The list of select options.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the button.
--   `id` **[string][65]?** The ID of the select element.
+-   `onChange` **[function][71]?** A function to be called when the selected option changes.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the select.
 -   `style` **[object][72]?** Additional styles to apply to the select.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the select can be focused and
-    if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6109,15 +6110,16 @@ Type: [object][72]
 -   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
+-   `options` **[Array][66]&lt;[SelectOption][156]>** The list of select options.
 -   `onChange` **[function][71]?** A function to be called when the selected option changes. This
     should only be used for side effects.
--   `options` **[Array][66]&lt;[SelectOption][156]>** The list of select options.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
 -   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
--   `id` **[string][65]?** The ID of the select element.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the select.
 -   `style` **[object][72]?** Additional styles to apply to the select.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the select can be focused and
-    if/where it participates in sequential keyboard navigation.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6129,7 +6131,20 @@ Type: [object][72]
 
 #### SelectButtonsProps
 
-Type: SelectAndSelectButtonsProps
+Type: [object][72]
+
+##### Properties
+
+-   `value` **([string][65] \| [number][73] \| [boolean][69] | null)?** The value of the selected
+    option.
+-   `options` **[Array][66]&lt;[SelectOption][156]>** The list of select options.
+-   `onChange` **[function][71]?** A function to be called when the selected option changes.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
+-   `className` **[string][65]?** Additional class names to apply to the select.
+-   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
 ### SelectButtonsSynced
 
@@ -6139,7 +6154,21 @@ Type: SelectAndSelectButtonsProps
 
 #### SelectButtonsSyncedProps
 
-Type: SelectAndSelectButtonsSyncedProps
+Type: [object][72]
+
+##### Properties
+
+-   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
+    [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
+    for this key. Selecting a new option will update `globalConfig`.
+-   `options` **[Array][66]&lt;[SelectOption][156]>** The list of select options.
+-   `onChange` **[function][71]?** A function to be called when the selected option changes.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
+-   `className` **[string][65]?** Additional class names to apply to the select.
+-   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
 ### TablePicker
 

@@ -1,8 +1,6 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {type GlobalConfigKey} from '../global_config';
-import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 // JSON stringify the value so you can use any primitive.
 // Regular <select> coerces all values to string, which is confusing.
@@ -14,76 +12,17 @@ export type SelectOptionValue = string | number | boolean | null | void;
  * @property {React.Node} label The label for the select option.
  * @property {boolean} [disabled=false] If set to `true`, this option will not be selectable.
  */
-type SelectOption = {
+export type SelectOption = {
     value: SelectOptionValue,
     label: React.Node,
     disabled?: boolean,
 };
 
-export type SelectAndSelectButtonsProps = {|
-    onChange?: SelectOptionValue => void,
-    value: ?SelectOptionValue,
-    options: Array<SelectOption>,
-    disabled?: boolean,
-    id?: string,
-    className?: string,
-    style?: {[string]: mixed},
-    tabIndex?: number | string,
-    'aria-labelledby'?: string,
-    'aria-describedby'?: string,
-|};
-
-export type SelectAndSelectButtonsSyncedProps = {|
-    globalConfigKey: GlobalConfigKey,
-    options: Array<SelectOption>,
-    onChange?: (value: SelectOptionValue) => void,
-    disabled?: boolean,
-    id?: string,
-    className?: string,
-    style?: {[string]: mixed},
-    tabIndex?: number | string,
-    'aria-labelledby'?: string,
-    'aria-describedby'?: string,
-|};
-
-const SelectOptionValueProp = PropTypes.oneOfType([
+export const SelectOptionValuePropType = PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
     PropTypes.bool,
 ]);
-
-export const SelectAndSelectButtonsPropTypes = {
-    onChange: PropTypes.func,
-    value: SelectOptionValueProp,
-    // We do more strict checks in render.
-    options: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: SelectOptionValueProp,
-            label: PropTypes.node,
-            disabled: PropTypes.bool,
-        }),
-    ).isRequired,
-    disabled: PropTypes.bool,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-export const SelectAndSelectButtonsSyncedPropTypes = {
-    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-    options: PropTypes.arrayOf(
-        PropTypes.shape({
-            value: SelectOptionValueProp,
-            label: PropTypes.node,
-            disabled: PropTypes.bool,
-        }),
-    ).isRequired,
-    onChange: PropTypes.func,
-    disabled: PropTypes.bool,
-    style: PropTypes.object,
-    className: PropTypes.string,
-    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
 
 export const validateOptions = (options: Array<SelectOption>) => {
     if (options) {
@@ -113,6 +52,6 @@ export function optionValueToString(value: SelectOptionValue): string {
 /** @private */
 export function stringToOptionValue(valueJson: string): SelectOptionValue {
     const parsed = JSON.parse(valueJson);
-    const value = parsed.isUndefined ? undefined : parsed.notUndefinedValue;
+    const value = parsed.isUndefined ? null : parsed.notUndefinedValue;
     return value;
 }
