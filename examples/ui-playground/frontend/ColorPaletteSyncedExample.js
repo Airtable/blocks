@@ -18,7 +18,7 @@ export default function ColorPaletteSyncedExample(props: Props) {
                         <span>Number of colors</span>
                         <Input
                             type="number"
-                            value={numColors}
+                            value={String(numColors)}
                             onChange={e => setNumColors(Number(e.target.value))}
                         />
                     </div>
@@ -26,9 +26,9 @@ export default function ColorPaletteSyncedExample(props: Props) {
                         <span>Margin size (px)</span>
                         <Input
                             type="number"
-                            value={marginSize}
+                            value={String(marginSize)}
                             step={1}
-                            onChange={e => setMarginSize(e.target.value)}
+                            onChange={e => setMarginSize(Number(e.target.value))}
                         />
                     </div>
                 </div>

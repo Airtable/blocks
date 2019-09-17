@@ -6,6 +6,8 @@ import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
 import ButtonExample from './ButtonExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
+import InputExample from './InputExample';
+import InputSyncedExample from './InputSyncedExample';
 import ModalExample from './ModalExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectExample from './SelectExample';
@@ -32,13 +34,21 @@ const examples: Array<Example> = [
         hasSettings: true,
     },
     {
-        name: 'Modal',
-        component: ModalExample,
+        name: 'Input',
+        component: InputExample,
+    },
+    {
+        name: 'InputSynced',
+        component: InputSyncedExample,
     },
     {
         name: 'RecordCardList',
         component: RecordCardListExample,
         hasSettings: true,
+    },
+    {
+        name: 'Modal',
+        component: ModalExample,
     },
     {
         name: 'Select',

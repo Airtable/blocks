@@ -5303,18 +5303,29 @@ Type: [object][74]
 
 ##### Properties
 
+-   `value` **[string][68]** The input's current value.
+-   `onChange` **[function][73]** A function to be called when the input changes.
 -   `type` **[string][68]?** The `type` for the input. Defaults to `text`.
 -   `placeholder` **[string][68]?** The placeholder for the input.
--   `value` **[string][68]?** The input's current value. Required if `onChange` is set.
--   `onChange` **[function][73]?** A function to be called when the input changes. Required if
-    `value` is set.
 -   `style` **[object][74]?** Additional styles to apply to the input.
 -   `className` **[string][68]?** Additional class names to apply to the input, separated by spaces.
--   `disabled` **[boolean][75]?** If set to `true`, the input will be disabled.
--   `required` **[boolean][75]?** If set to `true`, the input will be required.
--   `spellCheck` **[boolean][75]?** If set to `true`, the `spellcheck` property will be set on the
-    input.
--   `tabIndex` **([number][76] \| [string][68])?** The `tabindex` for the input.
+-   `disabled` **[boolean][75]?** The `disabled` attribute.
+-   `required` **[boolean][75]?** The `required` attribute.
+-   `spellCheck` **[boolean][75]?** The `spellcheck` attribute.
+-   `name` **[string][68]?** The `name` attribute.
+-   `id` **[string][68]?** The `id` attribute.
+-   `autoFocus` **[boolean][75]?** The `autoFocus` attribute.
+-   `max` **([number][76] \| [string][68])?** The `max` attribute.
+-   `maxLength` **[number][76]?** The `maxLength` attribute.
+-   `min` **([number][76] \| [string][68])?** The `min` attribute.
+-   `minLength` **[number][76]?** The `minLength` attribute.
+-   `step` **([number][76] \| [string][68])?** The `step` attribute.
+-   `pattern` **[string][68]?** The `pattern` attribute.
+-   `readOnly` **[boolean][75]?** The `readOnly` attribute.
+-   `autoComplete` **[string][68]?** The `autoComplete` attribute.
+-   `tabIndex` **([number][76] \| [string][68])?** The `tabindex` attribute.
+-   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][68]?** A space separated list of description element IDs.
 
 #### InputSyncedProps
 
@@ -5322,17 +5333,30 @@ Type: [object][74]
 
 ##### Properties
 
--   `type` **[string][68]?** The `type` for the input. Defaults to `text`.
 -   `globalConfigKey` **([string][68] \| [Array][69]&lt;[string][68]>)** The key, or path to a key,
     in global config.
+-   `onChange` **[function][73]** A function to be called when the input changes.
+-   `type` **[string][68]?** The `type` for the input. Defaults to `text`.
 -   `placeholder` **[string][68]?** The placeholder for the input.
--   `onChange` **[function][73]?** A function to be called when the input changes. Note that this
-    component will sync to global config, so you won't always need to set this.
 -   `style` **[object][74]?** Additional styles to apply to the input.
 -   `className` **[string][68]?** Additional class names to apply to the input, separated by spaces.
--   `disabled` **[boolean][75]?** If set to `true`, the input will be disabled.
--   `spellCheck` **[boolean][75]?** If set to `true`, the `spellcheck` property will be set on the
-    input.
+-   `disabled` **[boolean][75]?** The `disabled` attribute.
+-   `required` **[boolean][75]?** The `required` attribute.
+-   `spellCheck` **[boolean][75]?** The `spellcheck` attribute.
+-   `name` **[string][68]?** The `name` attribute.
+-   `id` **[string][68]?** The `id` attribute.
+-   `autoFocus` **[boolean][75]?** The `autoFocus` attribute.
+-   `max` **([number][76] \| [string][68])?** The `max` attribute.
+-   `maxLength` **[number][76]?** The `maxLength` attribute.
+-   `min` **([number][76] \| [string][68])?** The `min` attribute.
+-   `minLength` **[number][76]?** The `minLength` attribute.
+-   `step` **([number][76] \| [string][68])?** The `step` attribute.
+-   `pattern` **[string][68]?** The `pattern` attribute.
+-   `readOnly` **[boolean][75]?** The `readOnly` attribute.
+-   `autoComplete` **[string][68]?** The `autoComplete` attribute.
+-   `tabIndex` **([number][76] \| [string][68])?** The `tabindex` attribute.
+-   `aria-labelledby` **[string][68]?** A space separated list of label element IDs.
+-   `aria-describedby` **[string][68]?** A space separated list of description element IDs.
 
 ### InputSynced
 
