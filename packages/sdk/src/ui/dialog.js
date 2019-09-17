@@ -183,7 +183,7 @@ class Dialog extends React.Component<DialogProps> {
         return (
             <Modal
                 onClose={onClose}
-                className={cx(baymax('relative p2 big line-height-4'), className)}
+                className={cx(baymax('big line-height-4'), className)}
                 style={style}
                 backgroundClassName={backgroundClassName}
                 backgroundStyle={backgroundStyle}

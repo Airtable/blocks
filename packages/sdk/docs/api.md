@@ -3772,21 +3772,25 @@ away. We need to load it from Airtable first. This hook is a low-level tool for 
 might not need to use it directly though - if you're working with a [RecordQueryResult][17], try
 [useRecords][94], [useRecordIds][95], or [useRecordById][96] first.
 
-When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
+When you need to use a loadable model, `useLoadable(theModel)` will make sure that the model is
 loaded when your component mounts, and unloaded when your component unmounts. By default, you don't
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
 looks, use [&lt;React.Suspense />][124] around the component that uses the hook.
 
-If you need more control (for example, if you have two models you want to load at the same time
-rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to the
-hook. In that case though, you should check each model's `.isDataLoaded` property before trying to
-use the data you loaded.
+You can pass several models to `useLoadable` in an array - it will load all of them simultaneously.
+We'll memoize this array using shallow equality, so there's no need to use `useMemo`.
+
+If you need more control, you can pass `{shouldSuspend: false}` as a second argument to the hook. In
+that case though, `useLoadable` will cause your component to re-render whenever the load-state of
+any model you passed in changes, and you should check each model's `.isDataLoaded` property before
+trying to use the data you loaded.
 
 ##### Parameters
 
--   `model` **(QueryResult | [Cursor][125] | null)** the model to load.
+-   `models` **(QueryResult | [Cursor][125] \| [Array][68]&lt;(QueryResult | [Cursor][125] | null)>
+    | null)** the models to load.
 -   `options` **[object][74]?** Optional options to control how the hook works (optional, default
     `{}`)
     -   `options.shouldSuspend` **[boolean][69]** pass {shouldSuspend: false} to disable suspense
@@ -3815,18 +3819,28 @@ function SelectedRecordIds() {
 import {useLoadable} from '@airtable/blocks/ui';
 
 function LoadTwoQueryResults({queryResultA, queryResultB}) {
-    // we have two query results. load them without suspense so they can be loaded together,
-    // rather than one after the other
-    useLoadable(queryResultA, {shouldSuspend: false});
-    useLoadable(queryResultB, {shouldSuspend: false});
-
-    // manually check whether loading is finished or not before continuing
-    if (!queryResultA.isDataLoaded || !queryResultB.isDataLoaded) {
-        return <div>Loading...</div>;
-    }
+    // load the queryResults:
+    useLoadable([queryResultA, queryResultB]);
 
     // now, we can use the data
     return <SomeFancyComponent />;
+}
+```
+
+```javascript
+import {useLoadable, useBase} from '@airtable/blocks/ui';
+
+function LoadAllRecords() {
+    const base = useBase();
+
+    // get a query result for every table in the base:
+    const queryResults = base.tables.map(table => table.selectRecords());
+
+    // load them all:
+    useLoadable(queryResults);
+
+    // use the data:
+    return <SomeFancyComponent queryResults={queryResults} />;
 }
 ```
 
@@ -4218,6 +4232,7 @@ Type: [object][74]
     -   `collaborator.id` **[string][67]?** The user ID of the collaborator.
     -   `collaborator.email` **[string][67]?** The email address of the collaborator.
     -   `collaborator.name` **[string][67]?** The name of the collaborator.
+    -   `collaborator.status` **[string][67]?** The status of the collaborator.
     -   `collaborator.profilePicUrl` **[string][67]?** The URL of the collaborator's profile
         picture.
 -   `className` **[string][67]?** Additional class names to apply to the collaborator token.
@@ -4235,7 +4250,7 @@ Type: [object][74]
 #### ColorPaletteProps
 
 Type: {color: [string][67]?, allowedColors: [Array][68]&lt;[string][67]>, onChange: function
-([string][67]): any?, squareMargin: [number][75], className: [string][67], style: [Object][74],
+([string][67]): any?, squareMargin: [number][75]?, className: [string][67]?, style: [Object][74]?,
 disabled: [boolean][69]?}
 
 ##### Properties
@@ -4243,9 +4258,9 @@ disabled: [boolean][69]?}
 -   `color` **[string][67]?**
 -   `allowedColors` **[Array][68]&lt;[string][67]>**
 -   `onChange` **function ([string][67]): any?**
--   `squareMargin` **[number][75]**
--   `className` **[string][67]**
--   `style` **[Object][74]**
+-   `squareMargin` **[number][75]?**
+-   `className` **[string][67]?**
+-   `style` **[Object][74]?**
 -   `disabled` **[boolean][69]?**
 
 #### ColorPaletteSyncedProps
