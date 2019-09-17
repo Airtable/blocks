@@ -154,7 +154,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
                 // NOTE: just verify that the permission level is a string (rather than
                 // checking isEnumValue against PermissionLevels) in case new permission
                 // levels are added on the liveapp side. Permissions behavior gets routed
-                // through the private permission_helpers module from Airtable, so we
+                // through the checkPermissionsForMutation AirtableInterface helper, so we
                 // should still be able to handle unknown permission levels.
                 invariant(typeof value === 'string', 'permissionLevel must be a string');
                 this._sessionData.permissionLevel = (value: any); // eslint-disable-line flowtype/no-weak-types

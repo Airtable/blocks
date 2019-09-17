@@ -12,10 +12,6 @@ import LinkedRecordsQueryResult from './linked_records_query_result';
 import aggregators from './aggregators';
 import * as recordColoring from './record_coloring';
 
-const permissionHelpers = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_helpers',
-);
-
 const models = {
     Base,
     Table,
@@ -29,7 +25,6 @@ const models = {
     recordColoring,
     fieldTypes: FieldTypes,
     viewTypes: ViewTypes,
-    permissionLevels: permissionHelpers.ApiPermissionLevels,
 };
 
 export default models;
