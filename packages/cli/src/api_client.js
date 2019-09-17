@@ -28,6 +28,8 @@ const ApiTypes = Object.freeze({
 });
 type ApiType = $Values<typeof ApiTypes>;
 
+const INVALID_API_KEY_MESSAGE = `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
+
 class ApiClient {
     _apiBaseUrl: string;
     _applicationId: ApplicationId;
@@ -84,22 +86,34 @@ class ApiClient {
         return new URL(path, this._apiBaseUrl).href;
     }
 
-    _parseErrorMessages(statusCode: number, body: {[string]: mixed}): string {
-        invariant(Array.isArray(body.errors), 'expect body.errors to be Array');
+    _processErrorMessageForApiKeyIfUnauthorized(statusCode: number, errMessage: string): string {
+        if (statusCode === 401) {
+            return INVALID_API_KEY_MESSAGE;
+        } else {
+            return errMessage;
+        }
+    }
 
-        return body.errors
-            .map(errObj => {
-                // eslint-disable-next-line flowtype/no-weak-types
-                const o = ((errObj: any): {code: string, message: string});
-                let errorMessages;
-                if (statusCode === 401) {
-                    errorMessages = `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
-                } else {
-                    errorMessages = o.message;
-                }
-                return errorMessages;
-            })
-            .join('\n');
+    _parseErrorMessages(statusCode: number, body: {[string]: mixed}): string {
+        const {error, errors} = body;
+        if (Array.isArray(errors)) {
+            return errors
+                .map(errObj => {
+                    if (errObj && typeof errObj.message === 'string') {
+                        return this._processErrorMessageForApiKeyIfUnauthorized(
+                            statusCode,
+                            errObj.message,
+                        );
+                    } else {
+                        throw new Error(`API failed with ${JSON.stringify(errors, null, 4)}`);
+                    }
+                })
+                .join('\n');
+        } else if (error && typeof error.message === 'string') {
+            return this._processErrorMessageForApiKeyIfUnauthorized(statusCode, error.message);
+        } else {
+            throw new Error(`API failed with statusCode ${statusCode}`);
+        }
     }
 
     async startBuildAsync(
