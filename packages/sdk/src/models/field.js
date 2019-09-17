@@ -158,23 +158,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return this._data.name;
     }
     /**
-     * @private
-     */
-    _getConfig(): {type: string, options: Object | null} {
-        // TODO: add separate methods for getting type and options and
-        const {type, options} = columnTypeProvider.getConfigForPublicApi(
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
-            getSdk().__appInterface,
-            this.parentTable.__getFieldNamesById(),
-        );
-
-        return {
-            type,
-            options: options ? cloneDeep(options) : null,
-        };
-    }
-    /**
      * @function
      * @returns The type of the field. Can be watched.
      * @example
