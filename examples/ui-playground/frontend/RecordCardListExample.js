@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {RecordCardList, Select, Toggle, useBase, useRecords} from '@airtable/blocks/ui';
+import {Box, RecordCardList, Select, Toggle, useBase, useRecords} from '@airtable/blocks/ui';
 
 type Props = {
     shouldShowSettings: boolean,
@@ -37,42 +37,44 @@ export default function RecordCardListExample(props: Props) {
         setNumRecordMouseLeaves(numRecordMouseLeaves + 1);
     };
     return (
-        <div className="flex flex-column width-full self-stretch">
+        <Box display="flex" flexDirection="column" width="100%" alignSelf="stretch">
             {props.shouldShowSettings && (
-                <div className="border-bottom border-darken2 flex flex-none flex-column">
-                    <div className="border-bottom border-darken2 p1 justify-between items-center flex">
-                        <label>Number of additional fields to show</label>
-                        <Select
-                            value={numAdditionalFieldsToShow}
-                            onChange={value => setNumAdditionalFieldsToShow(Number(value))}
-                            options={numAdditionalFieldsToShowOptions}
-                        />
-                    </div>
-                    <div className="border-bottom border-darken2 p1 justify-between items-center flex">
-                        <label>
-                            Use default <span className="monospace">onRecordClick</span>
-                        </label>
-                        <Toggle value={useDefaultOnClick} onChange={setUseDefaultOnClick} />
-                    </div>
-                    {!useDefaultOnClick && (
+                <Box className="baymax" flex="none">
+                    <div className="border-bottom border-darken2 flex flex-none flex-column">
                         <div className="border-bottom border-darken2 p1 justify-between items-center flex">
-                            <label>Number of record clicks</label>
-                            <span className="red p1 pill text-white">{numRecordClicks}</span>
+                            <label>Number of additional fields to show</label>
+                            <Select
+                                value={numAdditionalFieldsToShow}
+                                onChange={value => setNumAdditionalFieldsToShow(Number(value))}
+                                options={numAdditionalFieldsToShowOptions}
+                            />
                         </div>
-                    )}
-                    <div className="border-bottom border-darken2 p1 justify-between items-center flex">
-                        <label>Number of list scrolls</label>
-                        <span className="red p1 pill text-white">{numListScrolls}</span>
+                        <div className="border-bottom border-darken2 p1 justify-between items-center flex">
+                            <label>
+                                Use default <span className="monospace">onRecordClick</span>
+                            </label>
+                            <Toggle value={useDefaultOnClick} onChange={setUseDefaultOnClick} />
+                        </div>
+                        {!useDefaultOnClick && (
+                            <div className="border-bottom border-darken2 p1 justify-between items-center flex">
+                                <label>Number of record clicks</label>
+                                <span className="red p1 pill text-white">{numRecordClicks}</span>
+                            </div>
+                        )}
+                        <div className="border-bottom border-darken2 p1 justify-between items-center flex">
+                            <label>Number of list scrolls</label>
+                            <span className="red p1 pill text-white">{numListScrolls}</span>
+                        </div>
+                        <div className="border-bottom border-darken2 p1 justify-between items-center flex">
+                            <label>Number of record mouse enters</label>
+                            <span className="red p1 pill text-white">{numRecordMouseEnters}</span>
+                        </div>
+                        <div className="border-bottom border-darken2 p1 justify-between items-center flex">
+                            <label>Number of record mouse leaves</label>
+                            <span className="red p1 pill text-white">{numRecordMouseLeaves}</span>
+                        </div>
                     </div>
-                    <div className="border-bottom border-darken2 p1 justify-between items-center flex">
-                        <label>Number of record mouse enters</label>
-                        <span className="red p1 pill text-white">{numRecordMouseEnters}</span>
-                    </div>
-                    <div className="border-bottom border-darken2 p1 justify-between items-center flex">
-                        <label>Number of record mouse leaves</label>
-                        <span className="red p1 pill text-white">{numRecordMouseLeaves}</span>
-                    </div>
-                </div>
+                </Box>
             )}
             {view && table && records && (
                 <RecordCardList
@@ -82,12 +84,10 @@ export default function RecordCardListExample(props: Props) {
                     onScroll={onScroll}
                     onRecordMouseEnter={onRecordMouseEnter}
                     onRecordMouseLeave={onRecordMouseLeave}
-                    // NOTE(jay): I think type `RecordCardListProps` is mistyped as `Array<Record | RecordDef>` and should be `Array<Record> | Array<RecordDef>`
-                    // eslint-disable-next-line flowtype/no-weak-types
-                    records={(records: any)}
-                    className="flex-auto"
+                    records={records}
+                    flex="1 1 0"
                 />
             )}
-        </div>
+        </Box>
     );
 }
