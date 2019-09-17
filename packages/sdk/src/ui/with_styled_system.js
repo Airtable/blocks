@@ -3,7 +3,6 @@ import * as React from 'react';
 import {cx} from 'emotion';
 import hoistNonReactStatic from 'hoist-non-react-statics';
 import useStyledSystem, {type StyleParser} from './use_styled_system';
-import {type AllStylesProps} from './system';
 
 /**
  * @private
@@ -80,7 +79,7 @@ import {type AllStylesProps} from './system';
  */
 export default function withStyledSystem<
     Props: {className?: string},
-    StyleProps: $Shape<AllStylesProps>,
+    StyleProps: {},
     Instance,
     Statics: {},
 >(
@@ -88,7 +87,7 @@ export default function withStyledSystem<
     styleParser: StyleParser<StyleProps>,
     stylePropTypes: {[string]: mixed},
     defaultStyleProps?: StyleProps,
-): React.AbstractComponent<{...$Diff<Props, StyleProps>, ...StyleProps}, Instance> & Statics {
+): React.AbstractComponent<{|...$Diff<Props, StyleProps>, ...StyleProps|}, Instance> & Statics {
     const stylePropNamesSet = new Set(styleParser.propNames);
     const WithStyledSystem = React.forwardRef((props, ref) => {
         // eslint-disable-next-line flowtype/no-weak-types
@@ -120,5 +119,6 @@ export default function withStyledSystem<
     const componentName = Component.displayName || Component.name || 'Component';
     WithStyledSystem.displayName = `WithStyledSystem(${componentName})`;
     hoistNonReactStatic(WithStyledSystem, Component);
+    // eslint-disable-next-line flowtype/no-weak-types
     return (WithStyledSystem: any);
 }
