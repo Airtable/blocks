@@ -1,7 +1,6 @@
 // @flow
 import {type BaseData} from '../types/base';
 import {type FieldData, type PrivateColumnType} from '../types/field';
-import {PermissionLevels} from '../types/permission_levels';
 import {isEnumValue, cloneDeep, values} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -20,9 +19,6 @@ const ApiCellFormats = window.__requirePrivateModuleFromAirtable(
 );
 const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_versions',
-);
-const permissionHelpers = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/permissions/permission_helpers',
 );
 
 // This doesn't follow our enum naming conventions because we want the keys
@@ -261,24 +257,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             this.__getRawTypeOptions(),
         );
         return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
-    }
-    /**
-     * @private (since we're not documenting write operations)
-     * Determines whether the current user has permission to update the cell values
-     * in this field. Should be called before calling {@link Record#setCellValue} or
-     * {@link Table#setCellValues}.
-     *
-     * @returns `true` if the current user has permission to update the cell values in this field, `false` otherwise.
-     * @example
-     * if (mySingleLineTextField.canSetCellValues()) {
-     *     myRecord.setCellValue(mySingleLineTextField, 'new cell value');
-     * }
-     */
-    canSetCellValues(): boolean {
-        // For now, just need at least edit permissions. Once field locking is shipped,
-        // this method should also check if the field is locked.
-        const {session} = getSdk();
-        return permissionHelpers.can(session.__rawPermissionLevel, PermissionLevels.EDIT);
     }
     /**
      * Given a string, will attempt to parse it and return a valid cell value for
