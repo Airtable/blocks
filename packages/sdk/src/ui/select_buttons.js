@@ -4,6 +4,7 @@ import * as React from 'react';
 import omit from 'lodash.omit';
 import {spawnError} from '../error_utils';
 import {baymax} from './baymax_utils';
+import {KeyCodes} from './key_codes';
 
 // Disable the "react/prop-types" rule in this file, since it doesn't support this
 // "shared/reusable prop types" pattern:
@@ -16,8 +17,6 @@ import {
     type SelectOptionValue,
     type SelectAndSelectButtonsProps,
 } from './select_and_select_buttons_helpers';
-
-const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
 /** @typedef */
 type SelectButtonsProps = SelectAndSelectButtonsProps;

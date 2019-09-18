@@ -21,6 +21,7 @@ import CellRenderer from './cell_renderer';
 import useWatchable from './use_watchable';
 import withHooks from './with_hooks';
 import useViewMetadata from './use_view_metadata';
+import {isCommandModifierKeyEvent} from './key_codes';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -28,7 +29,6 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
 const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/read_mode_renderers/attachment_preview_renderer',
 );
-const keyCodeUtils = window.__requirePrivateModuleFromAirtable('client/mylib/key_code_utils');
 const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
@@ -255,7 +255,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             const {record} = this.props;
             const recordModel = record && record instanceof Record ? record : null;
             if (recordModel) {
-                if (keyCodeUtils.isCommandModifierKeyEvent(e) || e.shiftKey) {
+                if (isCommandModifierKeyEvent(e) || e.shiftKey) {
                     // No-op, let the <a> tag handle opening in new tab or window.
                 } else {
                     e.preventDefault();
