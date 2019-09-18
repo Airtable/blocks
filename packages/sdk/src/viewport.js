@@ -1,10 +1,8 @@
 // @flow
 import Watchable from './watchable';
-import {isEnumValue} from './private_utils';
+import {isEnumValue, debounce} from './private_utils';
 import {invariant} from './error_utils';
 import {type AirtableInterface} from './injected/airtable_interface';
-
-const u = window.__requirePrivateModuleFromAirtable('client_server_shared/u');
 
 const WatchableViewportKeys = Object.freeze({
     isFullscreen: ('isFullscreen': 'isFullscreen'),
@@ -71,7 +69,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
         // listening anymore.
         this._sizeWatchCount = 0;
 
-        this._onSizeChangeDebounced = u.debounce(this._onSizeChange.bind(this), 200);
+        this._onSizeChangeDebounced = debounce(this._onSizeChange.bind(this), 200);
 
         // whenever maxFullscreenSize changes, we want to sync it back to the
         // containing frame

@@ -252,3 +252,21 @@ export function arrayDifference<T>(a: $ReadOnlyArray<T>, b: $ReadOnlyArray<T>): 
     const bSet = new Set(b);
     return a.filter(item => !bSet.has(item));
 }
+
+/** @private */
+export function debounce<Args: Array<any>>(
+    fn: (...args: Args) => void,
+    timeoutMs: number,
+): (...args: Args) => void {
+    let lastTimeoutId = null;
+
+    return (...args) => {
+        if (lastTimeoutId !== null) {
+            clearTimeout(lastTimeoutId);
+        }
+        lastTimeoutId = setTimeout(() => {
+            lastTimeoutId = null;
+            fn(...args);
+        }, timeoutMs);
+    };
+}

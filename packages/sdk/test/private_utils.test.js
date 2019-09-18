@@ -10,8 +10,11 @@ import {
     uniqBy,
     getValueAtOwnPath,
     arrayDifference,
+    debounce,
 } from '../src/private_utils';
 import {flowTest} from './test_helpers';
+
+jest.useFakeTimers();
 
 describe('has', () => {
     it('returns true if the key is an "own" property of the object', () => {
@@ -257,5 +260,43 @@ describe('arrayDifference', () => {
         const obj = {x: 1};
         expect(arrayDifference([obj, {x: 2}], [{x: 1}, {x: 2}])).toEqual([{x: 1}, {x: 2}]);
         expect(arrayDifference([obj, {x: 2}], [obj, {x: 2}])).toEqual([{x: 2}]);
+    });
+});
+
+describe('debounce', () => {
+    it('returns a debounced version of the function that gets called with the last arg', () => {
+        const fn = jest.fn();
+        const debounced = debounce(fn, 100);
+
+        debounced(1);
+        expect(fn).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(99);
+        expect(fn).not.toHaveBeenCalled();
+
+        jest.advanceTimersByTime(1);
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(fn).toHaveBeenLastCalledWith(1);
+
+        debounced(2);
+        debounced(3);
+
+        jest.advanceTimersByTime(99);
+        expect(fn).toHaveBeenCalledTimes(1);
+
+        jest.advanceTimersByTime(1);
+        expect(fn).toHaveBeenCalledTimes(2);
+        expect(fn).toHaveBeenLastCalledWith(3);
+
+        debounced(4);
+        jest.advanceTimersByTime(99);
+        debounced(5);
+
+        jest.advanceTimersByTime(99);
+        expect(fn).toHaveBeenCalledTimes(2);
+
+        jest.advanceTimersByTime(1);
+        expect(fn).toHaveBeenCalledTimes(3);
+        expect(fn).toHaveBeenLastCalledWith(5);
     });
 });
