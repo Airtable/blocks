@@ -2,13 +2,40 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import getSdk from '../get_sdk';
 import {spawnError} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
 import cellValueUtils from '../models/cell_value_utils';
+import {type PrivateColumnType} from '../types/field';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
+import {
+    display,
+    displayPropTypes,
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
+import useStyledSystem from './use_styled_system';
+import {splitStyleProps} from './with_styled_system';
+import {type Prop} from './system/utils/types';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -20,21 +47,90 @@ const CellContextTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/cell_context/cell_context_types',
 );
 
-/** @typedef */
+type StyleProps = {|
+    display?: Prop<'block' | 'inline' | 'inline-block'>,
+    ...FlexItemSetProps,
+    ...MarginProps,
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...PositionSetProps,
+    ...WidthProps,
+|};
+
+const styleParser = compose(
+    display,
+    flexItemSet,
+    margin,
+    maxWidth,
+    minWidth,
+    positionSet,
+    width,
+);
+
+const stylePropTypes = {
+    // TODO (billy): currently, this will accept all values for display, not just block/inline/inline-block
+    ...displayPropTypes,
+    ...flexItemSetPropTypes,
+    ...marginPropTypes,
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...positionSetPropTypes,
+    ...widthPropTypes,
+};
+
+/**
+ * @typedef {object} CellRendererProps
+ * @property {Record} [record] The {@link Record} from which to render a cell. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used.
+ * @property {string|number|Object|Array.<Object>} [cellValue] The cell value to render. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used.
+ * @property {Field} field The {@link Field} for a given {@link Record} being rendered as a cell.
+ * @property {boolean} [shouldWrap] Whether to wrap cell contents. Defaults to true.
+ * @property {string} [className] Additional class names to apply to the cell renderer container, separated by spaces.
+ * @property {object} [style] Additional styles to apply to the cell renderer container.
+ * @property {string} [cellClassName] Additional class names to apply to the cell itself, separated by spaces.
+ * @property {object} [cellStyle] Additional styles to apply to the cell itself.
+ */
 type CellRendererProps = {|
     record?: ?Record,
     cellValue?: mixed,
     field: Field,
     shouldWrap?: boolean,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     // These props exist to separate styling on the baymax wrapper div
     // (e.g. layout/sizing) from styling on the cell div (needed by RecordCard).
     cellClassName?: string,
-    cellStyle?: Object,
+    cellStyle?: {[string]: mixed},
+    ...StyleProps,
 |};
 
-/** */
+/**
+ * Displays the contents of a cell.
+ *
+ * @example
+ * import React, {useState} from 'react';
+ * import {Box, CellRenderer, FieldPicker, useBase, useRecords} from '@airtable/blocks/ui';
+ *
+ * export default function CellRendererExample(props: void) {
+ *    const [field, setField] = useState(null);
+ *    const base = useBase();
+ *    const table = base.tables[0];
+ *    const queryResult = table.selectRecords();
+ *    const records = useRecords(queryResult);
+ *    return (
+ *        <Box display="flex" flexDirection="column">
+ *            <FieldPicker table={table} field={field} onChange={setField} />
+ *            {field && (
+ *                <CellRenderer
+ *                    className="user-defined-class"
+ *                    field={field}
+ *                    record={records[0]}
+ *                    margin={3}
+ *                />
+ *            )}
+ *        </Box>
+ *    );
+ * }
+ */
 class CellRenderer extends React.Component<CellRendererProps> {
     static propTypes = {
         // NOTE: must pass in one of record or cellValue. It will default to using
@@ -47,6 +143,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
         style: PropTypes.object,
         cellClassName: PropTypes.string,
         cellStyle: PropTypes.object,
+        ...stylePropTypes,
     };
     static defaultProps = {
         shouldWrap: true,
@@ -128,7 +225,10 @@ class CellRenderer extends React.Component<CellRendererProps> {
             getSdk().__appInterface,
             CellReadModeContext.forContextType(cellContextType),
         );
-        const attributes: Object = {
+        const attributes: {|
+            'data-columntype': PrivateColumnType,
+            'data-formatting'?: {[string]: mixed},
+        |} = {
             'data-columntype': field.__getRawType(),
         };
         const typeOptions = field.__getRawTypeOptions();
@@ -151,7 +251,14 @@ class CellRenderer extends React.Component<CellRendererProps> {
 }
 
 export default withHooks<CellRendererProps, {}, CellRenderer>(CellRenderer, props => {
+    const {styleProps, nonStyleProps} = splitStyleProps<CellRendererProps, StyleProps>(
+        props,
+        styleParser.propNames,
+        {display: 'block'},
+    );
+    const {className} = nonStyleProps;
+    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
     useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
     useWatchable(props.field, ['type', 'options']);
-    return {};
+    return {className: cx(classNameForStyleProps, className)};
 });

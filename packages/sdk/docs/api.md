@@ -4975,26 +4975,59 @@ Type: [object][74]
 
 **Extends React.Component**
 
+Displays the contents of a cell.
+
 ##### Parameters
 
 -   `props` **[CellRendererProps][135]**
 
+##### Examples
+
+```javascript
+import React, {useState} from 'react';
+import {Box, CellRenderer, FieldPicker, useBase, useRecords} from '@airtable/blocks/ui';
+
+export default function CellRendererExample(props: void) {
+    const [field, setField] = useState(null);
+    const base = useBase();
+    const table = base.tables[0];
+    const queryResult = table.selectRecords();
+    const records = useRecords(queryResult);
+    return (
+        <Box display="flex" flexDirection="column">
+            <FieldPicker table={table} field={field} onChange={setField} />
+            {field && (
+                <CellRenderer
+                    className="user-defined-class"
+                    field={field}
+                    record={records[0]}
+                    margin={3}
+                />
+            )}
+        </Box>
+    );
+}
+```
+
 #### CellRendererProps
 
-Type: {record: [Record][85]??, cellValue: any?, field: [Field][82], shouldWrap: [boolean][71]?,
-className: [string][67]?, style: [Object][74]?, cellClassName: [string][67]?, cellStyle:
-[Object][74]?}
+Type: [object][74]
 
 ##### Properties
 
--   `record` **[Record][85]??**
--   `cellValue` **any?**
--   `field` **[Field][82]**
--   `shouldWrap` **[boolean][71]?**
--   `className` **[string][67]?**
--   `style` **[Object][74]?**
--   `cellClassName` **[string][67]?**
--   `cellStyle` **[Object][74]?**
+-   `record` **[Record][85]?** The [Record][18] from which to render a cell. Either `record` or
+    `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used.
+-   `cellValue` **([string][67] \| [number][75] \| [Object][74] \| [Array][68]&lt;[Object][74]>)?**
+    The cell value to render. Either `record` or `cellValue` must be provided to the CellRenderer.
+    If both are provided, `record` will be used.
+-   `field` **[Field][82]** The [Field][16] for a given [Record][18] being rendered as a cell.
+-   `shouldWrap` **[boolean][71]?** Whether to wrap cell contents. Defaults to true.
+-   `className` **[string][67]?** Additional class names to apply to the cell renderer container,
+    separated by spaces.
+-   `style` **[object][74]?** Additional styles to apply to the cell renderer container.
+-   `cellClassName` **[string][67]?** Additional class names to apply to the cell itself, separated
+    by spaces.
+-   `cellStyle` **[object][74]?** Additional styles to apply to the cell itself.
 
 ### ChoiceToken
 
