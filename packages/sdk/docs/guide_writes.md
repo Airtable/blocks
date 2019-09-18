@@ -118,8 +118,7 @@ Two size limits apply to writes:
 
 -   Batch methods (`updateRecordsAsync`, `createRecordsAsync`, `deleteRecordsAsync`) may only
     update/create/delete up to 50 records in one call.
-    -   Similarly, `globalConfig.setPaths` and `globalConfig.setPathsAsync` may only set 50 paths in
-        one call.
+    -   Similarly, `globalConfig.setPathsAsync` can only set 50 paths in one call.
 -   Any individual write cannot have a payload (eg. `fields` content for `updateRecordAsync`)
     exceeding 1.9mb in size
 

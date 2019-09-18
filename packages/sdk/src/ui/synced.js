@@ -29,12 +29,13 @@ class Synced extends React.Component<SyncedProps> {
         this._setValue = this._setValue.bind(this);
     }
     _setValue(newValue: GlobalConfigValue) {
-        getSdk().globalConfig.set(this.props.globalConfigKey, newValue);
+        getSdk().globalConfig.setAsync(this.props.globalConfigKey, newValue);
     }
     render() {
         const {globalConfig} = getSdk();
         const value = globalConfig.get(this.props.globalConfigKey);
-        const canSetValue = globalConfig.canSet(this.props.globalConfigKey);
+        const canSetValue = globalConfig.checkPermissionsForSet(this.props.globalConfigKey)
+            .hasPermission;
         return this.props.render({
             value,
             canSetValue,

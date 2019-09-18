@@ -165,22 +165,30 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         const value = u.get(this._kvStore, path);
         return value;
     }
+
     /**
-     * Returns `true` if the current user can set the global config value at `key`, `false` otherwise.
+     * Checks whether the current user has permission to set the given global config key.
      *
-     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
-     * @returns `true` if the current user can set the global config value at `key`, and `false` otherwise.
+     * Accepts partial input, in the same format as [setAsync](#setAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {string|Array<string>} [key] A string for the top-level key, or an array of strings describing the path to set.
+     * @param [value] The value to set at the specified path. Use `undefined` to delete the value at the given path.
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     *
      * @example
-     * import {globalConfig} from '@airtable/blocks';
-     *
-     * if (globalConfig.canSet('favoriteColor')) {
-     *     globalConfig.set('favoriteColor', 'purple');
+     * // Check if user can update a specific key and value.
+     * const setCheckResult = globalConfig.checkPermissionsForSet('favoriteColor', 'purple');
+     * if (!setCheckResult.hasPermission) {
+     *     alert(setCheckResult.reasonDisplayString);
      * }
+     *
+     * // Check if user can update a specific key, when you don't know the value yet.
+     * const setKeyCheckResult = globalConfig.checkPermissionsForSet('favoriteColor');
+     *
+     * // Check if user could set globalConfig values, without knowing the specific key/value yet
+     * const setUnknownKeyCheckResult = globalConfig.checkPermissionsForSet();
      */
-    canSet(key: GlobalConfigKey): boolean {
-        return this.checkPermissionsForSet(key).hasPermission;
-    }
-    /** @private */
     checkPermissionsForSet(
         key?: $ReadOnlyArray<string | void> | string | void,
         value?: GlobalConfigValue | void,
@@ -192,22 +200,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Sets a value at a path. Throws an error if the path or value is invalid.
      *
-     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
-     * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
-     * @example
-     * import {globalConfig} from '@airtable/blocks';
-     *
-     * if (globalConfig.canSet('favoriteColor')) {
-     *     globalConfig.set('favoriteColor', 'purple');
-     * }
-     */
-    set(key: GlobalConfigKey, value: GlobalConfigValue | void) {
-        this.setAsync(key, value);
-    }
-    /**
-     * Asynchronous version of [set][#set].
-     * Use this if you wish to wait for the updates to be persisted to Airtable servers.
-     * Updates are applied optimistically locally, so your changes will be reflected in
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the
+     * update to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your change will be reflected in
      * {@link GlobalConfig} before the promise resolves.
      *
      * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
@@ -216,10 +211,21 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
+     * function updateFavoriteColorIfPossible(color) {
+     *     if (globalConfig.checkPermissionsForSetPaths('favoriteColor', color).hasPermission) {
+     *         globalConfig.setPathsAsync('favoriteColor', color);
+     *     }
+     *     // The update is now applied within your block (eg will be reflected in
+     *     // globalConfig) but are still being saved to Airtable servers (eg.
+     *     // may not be updated for other users yet)
+     * }
+     *
      * async function updateFavoriteColorIfPossibleAsync(color) {
-     *     if (globalConfig.canSet('favoriteColor')) {
+     *     if (globalConfig.checkPermissionsForSet('favoriteColor', color).hasPermission) {
      *         await globalConfig.setAsync('favoriteColor', color);
      *     }
+     *     // globalConfig updates have been saved to Airtable servers.
+     *     alert('favoriteColor has been updated');
      * }
      */
     async setAsync(key: GlobalConfigKey, value: GlobalConfigValue | void): Promise<void> {
@@ -227,25 +233,28 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         await this.setPathsAsync([{path, value}]);
     }
     /**
-     * Returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
+     * Checks whether the current user has permission to perform the specified updates to global config.
      *
-     * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
-     * @returns `true` if the current user can perform the specified updates to global config, `false` otherwise.
+     * Accepts partial input, in the same format as [setPathsAsync](#setPathsAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<{path?: Array<string>, value?: GlobalConfigValue}>} [updates] The paths and values to set.
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     *
      * @example
-     * import {globalConfig} from '@airtable/blocks';
-     *
-     * const updates = [
+     * // Check if user can update a specific keys and values.
+     * const setPathsCheckResult = globalConfig.checkPermissionsForSet([
      *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
      *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
-     * ];
-     * if (globalConfig.canSetPaths(updates)) {
-     *     globalConfig.setPaths(updates);
+     * ]);
+     * if (!setPathsCheckResult.hasPermission) {
+     *     alert(setPathsCheckResult.reasonDisplayString);
      * }
+     *
+     * // Check if user could potentially set globalConfig values.
+     * // Equivalent to globalConfig.checkPermissionsForSet()
+     * const setUnknownPathsCheckResult = globalConfig.checkPermissionsForSetPaths();
      */
-    canSetPaths(updates: Array<GlobalConfigUpdate>): boolean {
-        return this.checkPermissionsForSetPaths(updates).hasPermission;
-    }
-    /** @private */
     checkPermissionsForSetPaths(
         updates?: $ReadOnlyArray<{|
             +path?: $ReadOnlyArray<string | void> | void,
@@ -262,24 +271,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Sets multiple values. Throws if any path or value is invalid.
      *
-     * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
-     * @example
-     * import {globalConfig} from '@airtable/blocks';
-     *
-     * const updates = [
-     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
-     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
-     * ];
-     * if (globalConfig.canSetPaths(updates)) {
-     *     globalConfig.setPaths(updates);
-     * }
-     */
-    setPaths(updates: Array<GlobalConfigUpdate>) {
-        this.setPathsAsync(updates);
-    }
-    /**
-     * Asynchronous version of [setPaths](#setPaths).
-     * Use this if you wish to wait for the updates to be persisted to Airtable servers.
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the
+     * updates to be persisted to Airtable servers.
      * Updates are applied optimistically locally, so your changes will be reflected in
      * {@link GlobalConfig} before the promise resolves.
      *
@@ -288,10 +281,26 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @example
      * import {globalConfig} from '@airtable/blocks';
      *
-     * async function applyUpdatesIfPossibleAsync(updates) {
-     *     if (globalConfig.canSetPaths(updates)) {
+     * const updates = [
+     *     {path: ['topLevelKey1', 'nestedKey1'], value: 'foo'},
+     *     {path: ['topLevelKey2', 'nestedKey2'], value: 'bar'},
+     * ];
+     *
+     * function applyUpdatesIfPossible() {
+     *     if (globalConfig.checkPermissionsForSetPaths(updates).hasPermission) {
+     *         globalConfig.setPathsAsync(updates);
+     *     }
+     *     // The updates are now applied within your block (eg will be reflected in
+     *     // globalConfig) but are still being saved to Airtable servers (eg. they
+     *     // may not be updated for other users yet)
+     * }
+     *
+     * async function applyUpdatesIfPossibleAsync() {
+     *     if (globalConfig.checkPermissionsForSetPaths(updates).hasPermission) {
      *         await globalConfig.setPathsAsync(updates);
      *     }
+     *     // globalConfig updates have been saved to Airtable servers.
+     *     alert('globalConfig has been updated');
      * }
      */
     async setPathsAsync(updates: Array<GlobalConfigUpdate>): Promise<void> {
@@ -299,7 +308,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // updates are a special case because it relies on internal globalConfig state to validate.
         // We check here, instead of deeper (e.g. on the liveapp side) so the user
         // gets a more useful error stack trace.
-        if (!this.canSetPaths(updates)) {
+        if (!this.checkPermissionsForSetPaths(updates).hasPermission) {
             throw spawnError('Your permission level does not allow setting globalConfig values');
         }
 
