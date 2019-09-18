@@ -5522,7 +5522,7 @@ const FieldToken = (
             borderRadius: 3,
         }}
     >
-        <FieldIcon field={primaryField} style={{marginRight: 8}} />
+        <FieldIcon field={primaryField} marginRight={2} />
         {primaryField.name}
     </div>
 );

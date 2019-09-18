@@ -11,6 +11,8 @@ import InputSyncedExample from './InputSyncedExample';
 import ConfirmationDialogExample from './ConfirmationDialogExample';
 import DialogExample from './DialogExample';
 import ModalExample from './ModalExample';
+import IconExample from './IconExample';
+import FieldIconExample from './FieldIconExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectExample from './SelectExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
@@ -44,21 +46,21 @@ const examples: Array<Example> = [
         hasSettings: true,
     },
     {
-        name: 'Input',
-        component: InputExample,
+        name: 'FieldIcon',
+        component: FieldIconExample,
     },
     {
-        name: 'InputSynced',
-        component: InputSyncedExample,
+        name: 'Icon',
+        component: IconExample,
+    },
+    {
+        name: 'Modal',
+        component: ModalExample,
     },
     {
         name: 'RecordCardList',
         component: RecordCardListExample,
         hasSettings: true,
-    },
-    {
-        name: 'Modal',
-        component: ModalExample,
     },
     {
         name: 'Select',
