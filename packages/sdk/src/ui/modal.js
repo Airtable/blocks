@@ -29,8 +29,8 @@ import {type Prop} from './system/utils/types';
  * @property {function} [onClose] Callback function to fire when the modal is closed.
  * @property {string} [className] Extra `className`s to apply to the modal element, separated by spaces.
  * @property {Object} [style] Extra styles to apply to the modal element.
- * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
- * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the background element.
  */
 type ModalProps = {|
     onClose?: () => mixed,
@@ -41,7 +41,7 @@ type ModalProps = {|
     children: React.Node,
 |};
 
-type StyleProps = {|
+export type StyleProps = {|
     display?: Prop<'block' | 'flex'>,
     ...DimensionsSetProps,
     ...FlexContainerSetProps,
@@ -55,7 +55,7 @@ const styleParser = compose(
     spacingSet,
 );
 
-const stylePropTypes = {
+export const stylePropTypes = {
     ...dimensionsSetPropTypes,
     // TODO (stephen): currently, this will accept all values for display, not just block/flex
     ...displayPropTypes,
@@ -68,6 +68,7 @@ const stylePropTypes = {
  *
  * @private
  */
+// TODO (stephen): refactor so Modal only includes the background element and renders the dialog via children
 class Modal extends React.Component<ModalProps> {
     static propTypes = {
         onClose: PropTypes.func,
@@ -174,6 +175,7 @@ export default withStyledSystem<ModalProps, StyleProps, Modal, {}>(
     Modal,
     styleParser,
     stylePropTypes,
+    // TODO (stephen): move these to Dialog
     {
         display: 'block',
         width: '100%',

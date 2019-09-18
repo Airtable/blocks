@@ -8,6 +8,8 @@ import ButtonExample from './ButtonExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import InputExample from './InputExample';
 import InputSyncedExample from './InputSyncedExample';
+import ConfirmationDialogExample from './ConfirmationDialogExample';
+import DialogExample from './DialogExample';
 import ModalExample from './ModalExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectExample from './SelectExample';
@@ -27,6 +29,14 @@ const examples: Array<Example> = [
     {
         name: 'Button',
         component: ButtonExample,
+    },
+    {
+        name: 'ConfirmationDialog',
+        component: ConfirmationDialogExample,
+    },
+    {
+        name: 'Dialog',
+        component: DialogExample,
     },
     {
         name: 'ColorPaletteSynced',

@@ -5187,13 +5187,13 @@ Type: [Object][74]
 -   `className` **[string][67]?** Extra `className`s to apply to the dialog element, separated by
     spaces.
 -   `style` **[Object][74]?** Extra styles to apply to the dialog element.
--   `backgroundClassName` **[string][67]?** Extra `className`s to apply to the lightbox element,
+-   `backgroundClassName` **[string][67]?** Extra `className`s to apply to the background element,
     separated by spaces.
--   `backgroundStyle` **[Object][74]?** Extra styles to apply to the lightbox element.
--   `onCancel` **[function][73]** Cancel button event handler. Handles click events and Space and
-    Enter keypress events.
--   `onConfirm` **[function][73]** Confirm button event handler. Handles click events and Space and
-    Enter keypress events.
+-   `backgroundStyle` **[Object][74]?** Extra styles to apply to the background element.
+-   `onCancel` **[function][73]** Cancel button event handler. Handles click events and Space/Enter
+    keypress events.
+-   `onConfirm` **[function][73]** Confirm button event handler. Handles click events and
+    Space/Enter keypress events.
 
 ### Dialog
 
@@ -5252,9 +5252,9 @@ Type: [object][74]
 -   `className` **[string][67]?** Extra `className`s to apply to the dialog element, separated by
     spaces.
 -   `style` **[Object][74]?** Extra styles to apply to the dialog element.
--   `backgroundClassName` **[string][67]?** Extra `className`s to apply to the lightbox element,
+-   `backgroundClassName` **[string][67]?** Extra `className`s to apply to the background element,
     separated by spaces.
--   `backgroundStyle` **[Object][74]?** Extra styles to apply to the lightbox element.
+-   `backgroundStyle` **[Object][74]?** Extra styles to apply to the background element.
 
 #### Dialog.CloseButton
 
