@@ -9,9 +9,14 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.34...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.35...HEAD)
 
--   Flexible directory structures are now supported. Blocks code no longer needs to conform to a specific directory structure.
+No changes.
+
+## [0.0.35](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.34...@airtable/blocks-cli@0.0.35) - 2019-09-18
+
+-   Flexible directory structures are now supported. Blocks code no longer needs to conform to a
+    specific directory structure.
 -   In blocks' code, using relative paths for `import`/`require` statements is now the default.
 -   Enables transpilation of TypeScript source code.
 -   Improved build process and bug fixes.
