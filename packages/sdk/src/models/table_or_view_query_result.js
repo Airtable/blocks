@@ -1,7 +1,7 @@
 // @flow
 import getSdk from '../get_sdk';
 import {type FieldId} from '../types/field';
-import {has} from '../private_utils';
+import {has, compact} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
@@ -272,7 +272,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     get _cellValuesForSortWatchKeys(): Array<string> {
         return this._groupLevels
-            ? u.compact(
+            ? compact(
                   this._groupLevels.map(groupLevel => {
                       if (groupLevel.isCreatedTime) {
                           return null;
