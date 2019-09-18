@@ -6,7 +6,6 @@ import {spawnError} from './error_utils';
 import {MutationTypes, type PermissionCheckResult} from './types/mutations';
 import {getValueAtOwnPath} from './private_utils';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_kv_helpers',
 );
@@ -408,7 +407,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         // in memory if the updates don't pass validation or limit checks.
         // First, let's shallow clone the starting kvStore.
         const clonedObjectsSet = new Set();
-        const workingKvStore = u.clone(this._kvStore);
+        const workingKvStore = {...this._kvStore};
 
         // Before applying each update, fork the working kvStore so we can roll
         // back any changes we make.
