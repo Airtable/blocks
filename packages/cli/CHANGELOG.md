@@ -11,7 +11,10 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.34...HEAD)
 
-No changes.
+-   Flexible directory structures are now supported. Blocks code no longer needs to conform to a specific directory structure.
+-   In blocks' code, using relative paths for `import`/`require` statements is now the default.
+-   Enables transpilation of TypeScript source code.
+-   Improved build process and bug fixes.
 
 ## [0.0.34](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.33...@airtable/blocks-cli@0.0.34) - 2019-08-30
 
