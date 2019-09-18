@@ -37,7 +37,6 @@ import ConfirmationDialog from './confirmation_dialog';
 import Toggle from './toggle';
 import ToggleSynced from './toggle_synced';
 import Popover from './popover';
-import AutocompletePopover from './autocomplete_popover';
 import ViewportConstraint from './viewport_constraint';
 import Link from './link';
 import Box from './box';
@@ -56,7 +55,6 @@ import useViewMetadata from './use_view_metadata';
 // TODO: freeze this object before we ship the code editor.
 const UI = {
     Popover,
-    AutocompletePopover,
     loadCSSFromString,
     loadScriptFromURLAsync,
     loadCSSFromURLAsync,

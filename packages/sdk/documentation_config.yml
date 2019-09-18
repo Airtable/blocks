@@ -78,11 +78,6 @@ toc:
                 - ExpandRecordOpts
           - expandRecordList
           - expandRecordPickerAsync
-          - name: AutocompletePopover
-            children:
-                - AutocompletePopover
-                - AutocompletePopoverProps
-                - AutocompleteItem
           - name: Button
             children:
                 - Button

@@ -25,6 +25,7 @@ commit that affects the code in a way that consumers might care about should inc
     -   `globalConfig.canSetPaths()` has been renamed to `globalConfig.hasPermissionToSetPaths()`.
 -   **BREAKING:** Remove `models.generateGuid()`. Use an ID generator like
     [`uuid`](https://www.npmjs.com/package/uuid) instead.
+-   **BREAKING:** Deprecated `UI.AutocompletePopover`.
 -   Upgrade flow to 0.106.3
 -   Fix a flow error with `react-window`.
 -   `view.selectRecords()` now colors records according to that view by default.
