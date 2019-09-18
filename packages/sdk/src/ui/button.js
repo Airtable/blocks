@@ -55,7 +55,7 @@ type ButtonProps = {|
     theme?: ButtonTheme,
     id?: string,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     onClick?: (e?: SyntheticMouseEvent<HTMLButtonElement>) => mixed,
     type?: string,
     disabled?: boolean,
