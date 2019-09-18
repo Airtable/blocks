@@ -88,19 +88,12 @@ export default function withStyledSystem<
     stylePropTypes: {[string]: mixed},
     defaultStyleProps?: StyleProps,
 ): React.AbstractComponent<{|...$Diff<Props, StyleProps>, ...StyleProps|}, Instance> & Statics {
-    const stylePropNamesSet = new Set(styleParser.propNames);
     const WithStyledSystem = React.forwardRef((props, ref) => {
-        // eslint-disable-next-line flowtype/no-weak-types
-        const styleProps: any = defaultStyleProps || {};
-        // eslint-disable-next-line flowtype/no-weak-types
-        const nonStyleProps: any = {};
-        for (const propName of Object.keys(props)) {
-            if (stylePropNamesSet.has(propName)) {
-                styleProps[propName] = props[propName];
-            } else {
-                nonStyleProps[propName] = props[propName];
-            }
-        }
+        const {styleProps, nonStyleProps} = splitStyleProps<Props & StyleProps, StyleProps>(
+            props,
+            styleParser.propNames,
+            defaultStyleProps,
+        );
         const classNameForStyleProps = useStyledSystem((styleProps: StyleProps), styleParser);
         return (
             <Component
@@ -121,4 +114,41 @@ export default function withStyledSystem<
     hoistNonReactStatic(WithStyledSystem, Component);
     // eslint-disable-next-line flowtype/no-weak-types
     return (WithStyledSystem: any);
+}
+
+/**
+ * @private
+ * A helper method to split props into style props (for use with styled system) and
+ * non-style props (to be passed into the wrapped component).
+ *
+ * @param {Object} props Props to be split into style and non-style props.
+ * @param {Array.<string>} stylePropNames The list of allowed style prop names.
+ * @param {Object} [defaultStyleProps] Default values for style props.
+ * @returns {{styleProps: Object, nonStyleProps: Object}} A result object with two keys: `styleProps`
+ * and `nonStyleProps`, which contain the respective split props.
+ */
+export function splitStyleProps<AllProps: {className?: string}, StyleProps: {}>(
+    props: AllProps,
+    stylePropNames: Array<string>,
+    defaultStyleProps?: StyleProps,
+): {|
+    styleProps: StyleProps,
+    nonStyleProps: $Diff<AllProps, StyleProps>,
+|} {
+    const stylePropNamesSet = new Set(stylePropNames);
+    // eslint-disable-next-line flowtype/no-weak-types
+    const styleProps: any = defaultStyleProps || {};
+    // eslint-disable-next-line flowtype/no-weak-types
+    const nonStyleProps: any = {};
+    for (const propName of Object.keys(props)) {
+        if (stylePropNamesSet.has(propName)) {
+            styleProps[propName] = props[propName];
+        } else {
+            nonStyleProps[propName] = props[propName];
+        }
+    }
+    return {
+        styleProps,
+        nonStyleProps,
+    };
 }
