@@ -127,6 +127,25 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         },
         runCommandAsync: commandRunner(CommandNames.RELEASE),
     },
+    [CommandNames.ADD_REMOTE]: {
+        name: CommandNames.ADD_REMOTE,
+        command: `${CommandNames.ADD_REMOTE} <blockIdentifier> <remoteName>`,
+        description: 'Add a new remote configuration',
+        example: `block ${CommandNames.ADD_REMOTE} app123/blk456 new_remote`,
+        runCommandAsync: commandRunner(CommandNames.ADD_REMOTE),
+        optionMap: {
+            server: {
+                type: 'string',
+                description: 'API server endpoint for the remote',
+                hidden: true, // hide from --help output
+            },
+            'api-key-name': {
+                type: 'string',
+                description: 'The name of the API key this remote should use',
+                hidden: true, // hide from --help output
+            },
+        },
+    },
     [CommandNames.SET_API_KEY]: {
         name: CommandNames.SET_API_KEY,
         command: `${CommandNames.SET_API_KEY}`,
@@ -140,7 +159,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: ConfigLocations.USER,
             },
             'api-key-name': {
-                description: 'The name of the API Key to set',
+                description: 'The name of the API key to set',
                 type: 'string',
                 hidden: true, // hide from --help output
             },

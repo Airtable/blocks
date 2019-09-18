@@ -4,6 +4,7 @@ const CommandNames = {
     RUN: ('run': 'run'),
     RELEASE: ('release': 'release'),
     SET_API_KEY: ('set-api-key': 'set-api-key'),
+    ADD_REMOTE: ('add-remote': 'add-remote'),
 
     // This command is a helper to migrate old blocks to the standalone CLI world.
     // TODO(jb): remove this once all blocks are migrated to the standalone CLI world.
