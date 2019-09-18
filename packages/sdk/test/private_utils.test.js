@@ -9,6 +9,7 @@ import {
     keyBy,
     uniqBy,
     getValueAtOwnPath,
+    arrayDifference,
 } from '../src/private_utils';
 import {flowTest} from './test_helpers';
 
@@ -244,5 +245,17 @@ describe('getValueAtOwnPath', () => {
         expect(() =>
             getValueAtOwnPath(object, ['nonPlain', 'a']),
         ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'a\' in non-plain object"');
+    });
+});
+
+describe('arrayDifference', () => {
+    it('returns a copy of the first array with any items also present in the second array removed', () => {
+        expect(arrayDifference([1, 2, 3], [])).toEqual([1, 2, 3]);
+        expect(arrayDifference([1, 2, 3], [3, 4, 5])).toEqual([1, 2]);
+        expect(arrayDifference([1, 2, 3], [3, 2, 1])).toEqual([]);
+
+        const obj = {x: 1};
+        expect(arrayDifference([obj, {x: 2}], [{x: 1}, {x: 2}])).toEqual([{x: 1}, {x: 2}]);
+        expect(arrayDifference([obj, {x: 2}], [obj, {x: 2}])).toEqual([{x: 2}]);
     });
 });

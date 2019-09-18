@@ -246,3 +246,9 @@ export function getValueAtOwnPath(value: mixed, path: $ReadOnlyArray<string>): m
     }
     return currentValue;
 }
+
+/** @private */
+export function arrayDifference<T>(a: $ReadOnlyArray<T>, b: $ReadOnlyArray<T>): Array<T> {
+    const bSet = new Set(b);
+    return a.filter(item => !bSet.has(item));
+}
