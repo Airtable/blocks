@@ -8,6 +8,7 @@ import {
     flattenDeep,
     keyBy,
     uniqBy,
+    getValueAtOwnPath,
 } from '../src/private_utils';
 import {flowTest} from './test_helpers';
 
@@ -181,5 +182,67 @@ describe('uniqBy', () => {
             ),
         ).toEqual([{id: 1, group: 'a'}, {id: 2, group: 'b'}]);
         expect(uniqBy([2.1, 1.2, 2.3], Math.floor)).toEqual([2.1, 1.2]);
+    });
+});
+
+describe('getValueAtOwnPath', () => {
+    const object = {
+        a: 1,
+        b: {c: 'foo', notThere: null},
+        bool: true,
+        array: [1, {x: 4}],
+        nonPlain: new Map([['a', 1], ['b', 2]]),
+    };
+
+    it('returns the value at that path', () => {
+        expect(getValueAtOwnPath(object, ['a'])).toBe(object.a);
+        expect(getValueAtOwnPath(object, ['b'])).toBe(object.b);
+        expect(getValueAtOwnPath(object, ['b', 'c'])).toBe(object.b.c);
+    });
+
+    it("returns undefined if the value isn't found", () => {
+        expect(getValueAtOwnPath(object, ['unknown'])).toBe(undefined);
+        expect(getValueAtOwnPath(object, ['b', 'd'])).toBe(undefined);
+        expect(getValueAtOwnPath(object, ['very', 'unknown'])).toBe(undefined);
+    });
+
+    it('throws an error if you try and index into a primitive', () => {
+        expect(() => getValueAtOwnPath(object, ['a', 'a'])).toThrowErrorMatchingInlineSnapshot(
+            '"Cannot get \'a\' in primitive value"',
+        );
+        expect(() =>
+            getValueAtOwnPath(object, ['b', 'c', 'length']),
+        ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'length\' in primitive value"');
+        expect(() =>
+            getValueAtOwnPath(object, ['b', 'notThere', 'length']),
+        ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'length\' in primitive value"');
+        expect(() =>
+            getValueAtOwnPath(object, ['bool', 'length']),
+        ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'length\' in primitive value"');
+    });
+
+    it('throws an error if you try and index into an array', () => {
+        expect(() =>
+            getValueAtOwnPath(object, ['array', 'length']),
+        ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'length\' in array"');
+        expect(() => getValueAtOwnPath(object, ['array', '0'])).toThrowErrorMatchingInlineSnapshot(
+            '"Cannot get \'0\' in array"',
+        );
+    });
+
+    it("treats non-own properties as if they aren't there", () => {
+        expect(getValueAtOwnPath(object, ['toString'])).toBe(undefined);
+        expect(getValueAtOwnPath(object, ['hasOwnProperty'])).toBe(undefined);
+        expect(getValueAtOwnPath(object, ['b', 'hasOwnProperty'])).toBe(undefined);
+        expect(getValueAtOwnPath(object, ['__proto__'])).toBe(undefined);
+    });
+
+    it('throws an error if you try and index into a non-plain object', () => {
+        expect(() =>
+            getValueAtOwnPath(object, ['nonPlain', 'size']),
+        ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'size\' in non-plain object"');
+        expect(() =>
+            getValueAtOwnPath(object, ['nonPlain', 'a']),
+        ).toThrowErrorMatchingInlineSnapshot('"Cannot get \'a\' in non-plain object"');
     });
 });

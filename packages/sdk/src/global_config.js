@@ -4,6 +4,7 @@ import getSdk from './get_sdk';
 import {type AirtableInterface} from './injected/airtable_interface';
 import {spawnError} from './error_utils';
 import {MutationTypes, type PermissionCheckResult} from './types/mutations';
+import {getValueAtOwnPath} from './private_utils';
 
 const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
@@ -162,7 +163,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             throw spawnError('Invalid globalConfig path: %s', pathValidationResult.reason);
         }
 
-        const value = u.get(this._kvStore, path);
+        const value = getValueAtOwnPath(this._kvStore, path);
+        // $FlowFixMe value is returned as `mixed` from getValueAtOwnPath, but we know it must be a `GlobalConfigValue | void`
         return value;
     }
 

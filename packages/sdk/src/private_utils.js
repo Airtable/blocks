@@ -214,3 +214,35 @@ let idCount = 0;
 export function getLocallyUniqueId(prefix: string = ''): string {
     return `${prefix}.${idCount++}`;
 }
+
+const plainObjectPrototype = Object.getPrototypeOf({});
+/**
+ * A more restrictive version of Lodash's `get`. Notable differences:
+ * - Will only search an object's own properties
+ * - Only allows indexing into plain objects - searching in `number`, `string`, `Array`, `null`, or non-plain objects will throw
+ * @private
+ */
+export function getValueAtOwnPath(value: mixed, path: $ReadOnlyArray<string>): mixed {
+    let currentValue = value;
+    for (const part of path) {
+        if (currentValue === undefined) {
+            return undefined;
+        }
+
+        if (currentValue === null || typeof currentValue !== 'object') {
+            throw spawnError("Cannot get '%s' in primitive value", part);
+        }
+
+        if (Array.isArray(currentValue)) {
+            throw spawnError("Cannot get '%s' in array", part);
+        }
+
+        const prototype = Object.getPrototypeOf(currentValue);
+        if (prototype !== null && prototype !== plainObjectPrototype) {
+            throw spawnError("Cannot get '%s' in non-plain object", part);
+        }
+
+        currentValue = has(currentValue, part) ? currentValue[part] : undefined;
+    }
+    return currentValue;
+}
