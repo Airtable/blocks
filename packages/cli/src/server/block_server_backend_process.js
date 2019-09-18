@@ -39,7 +39,13 @@ async function requireBackendSdkAsync(
 /** Send message to block server main process. */
 function sendResponse(response: BackendProcessResponse) {
     invariant(process.send, 'process.send'); // Suppresses flow warning
-    process.send(response);
+    try {
+        process.send(response);
+    } catch (err) {
+        // This can happen when the main process has called disconnect(). Since
+        // this process is about to be killed anyway there's nothing we need to
+        // do here.
+    }
 }
 
 async function setUpBackendProcessAsync(options: BackendProcessOptions) {

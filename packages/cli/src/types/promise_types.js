@@ -5,3 +5,7 @@
 //   type definitions for the "static" Promise.resolve and Promise.reject functions.
 export type PromiseResolveFunction<-R> = (Promise<R> | R) => void;
 export type PromiseRejectFunction = (error: any) => void; // eslint-disable-line flowtype/no-weak-types
+export type PromiseResolveRejectFunctions<R> = {|
+    resolve: PromiseResolveFunction<R>,
+    reject: PromiseRejectFunction,
+|};

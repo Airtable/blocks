@@ -24,7 +24,7 @@ import type {
     BackendProcessResponse,
     BackendProcessEventResponse,
 } from '../types/block_server_backend_process_types';
-import type {PromiseResolveFunction, PromiseRejectFunction} from '../types/promise_types';
+import type {PromiseResolveFunction, PromiseResolveRejectFunctions} from '../types/promise_types';
 import type {RequestId, RequestWithRequestId} from './set_request_id_middleware';
 
 const LAMBDA_SIMULATION_DELAY_MS = 300;
@@ -36,10 +36,12 @@ class BlockServerBackendProcessManager {
     _getApiClient: () => ApiClient;
     _backendProcess: childProcess.ChildProcess | null;
     _isReady: boolean;
-    _resolveStartFn: PromiseResolveFunction<void> | null;
-    _rejectStartFn: PromiseRejectFunction | null;
+    _startResolveRejectFns: PromiseResolveRejectFunctions<void> | null;
     _resolveStopFn: PromiseResolveFunction<void> | null;
-    _resolvePendingRequestFns: Map<RequestId, PromiseResolveFunction<BackendProcessEventResponse>>;
+    _pendingRequestResolveRejectFns: Map<
+        RequestId,
+        PromiseResolveRejectFunctions<BackendProcessEventResponse>,
+    >;
     _inProgressRestartPromise: Promise<void> | null;
     _scheduledRestartPromise: Promise<void> | null;
 
@@ -55,10 +57,9 @@ class BlockServerBackendProcessManager {
         this._getApiClient = args.getApiClient;
         this._backendProcess = null;
         this._isReady = false;
-        this._resolveStartFn = null;
-        this._rejectStartFn = null;
+        this._startResolveRejectFns = null;
         this._resolveStopFn = null;
-        this._resolvePendingRequestFns = new Map();
+        this._pendingRequestResolveRejectFns = new Map();
         this._inProgressRestartPromise = null;
         this._scheduledRestartPromise = null;
     }
@@ -104,8 +105,7 @@ class BlockServerBackendProcessManager {
         //    - _onBackendProcessError in response to 'error' event from backend process, or
         //    - _onBackendProcessExit in response to 'exit' event from backend process.
         const startPromise = new Promise<void>((resolve, reject) => {
-            this._resolveStartFn = resolve;
-            this._rejectStartFn = reject;
+            this._startResolveRejectFns = {resolve, reject};
         });
         try {
             await startPromise;
@@ -115,8 +115,7 @@ class BlockServerBackendProcessManager {
             console.log('Could not start backend');
             this._backendProcess = null;
         }
-        this._resolveStartFn = null;
-        this._rejectStartFn = null;
+        this._startResolveRejectFns = null;
     }
 
     async _stopAsync() {
@@ -130,6 +129,7 @@ class BlockServerBackendProcessManager {
         await new Promise(resolve => {
             this._resolveStopFn = resolve;
         });
+        this._rejectPendingRequests();
         this._resolveStopFn = null;
         this._backendProcess = null;
     }
@@ -249,19 +249,11 @@ class BlockServerBackendProcessManager {
     async _forwardRequestToBackendProcessAsync(
         req: RequestWithRequestId,
     ): Promise<BackendProcessEventResponse> {
-        // Set up promise to be resolved by _onBackendProcessResponse in response
-        // to corresponding 'message' event from backend process.
         const {requestId} = req;
-        if (this._resolvePendingRequestFns.has(requestId)) {
+        if (this._pendingRequestResolveRejectFns.has(requestId)) {
             // This should not be possible unless there's a programming error.
             throw new Error(`Duplicate request ID ${requestId}`);
         }
-        let resolveFn;
-        const responsePromise = new Promise<BackendProcessEventResponse>(resolve => {
-            resolveFn = resolve;
-        });
-        invariant(resolveFn, 'resolveFn');
-        this._resolvePendingRequestFns.set(requestId, resolveFn);
 
         // Fetch an access policy for this invocation, so the backend code can
         // make requests to Airtable.
@@ -298,11 +290,33 @@ class BlockServerBackendProcessManager {
         invariant(this._backendProcess, 'this._backendProcess');
         this._backendProcess.send(event);
 
+        // Set up promise to be resolved by _onBackendProcessResponse in response
+        // to corresponding 'message' event from backend process.
+        let resolveRejectFns;
+        const responsePromise = new Promise<BackendProcessEventResponse>((resolve, reject) => {
+            resolveRejectFns = {resolve, reject};
+        });
+        invariant(resolveRejectFns, 'resolveRejectFns');
+        this._pendingRequestResolveRejectFns.set(requestId, resolveRejectFns);
+
         // Wait for response. To be resolved by _onBackendProcessResponse in
         // response to corresponding 'message' event from backend process.
-        const response = await responsePromise;
-        this._resolvePendingRequestFns.delete(requestId);
+        let response;
+        try {
+            response = await responsePromise;
+        } catch (err) {
+            this._pendingRequestResolveRejectFns.delete(requestId);
+            throw err;
+        }
+        this._pendingRequestResolveRejectFns.delete(requestId);
         return response;
+    }
+
+    _rejectPendingRequests() {
+        this._pendingRequestResolveRejectFns.forEach(({reject}) =>
+            reject(new Error('Backend unavailable')),
+        );
+        this._pendingRequestResolveRejectFns.clear();
     }
 
     _onBackendProcessResponse(response: BackendProcessResponse) {
@@ -314,20 +328,20 @@ class BlockServerBackendProcessManager {
 
         switch (response.messageType) {
             case BackendProcessResponseTypes.READY:
-                if (this._resolveStartFn) {
-                    this._resolveStartFn();
+                if (this._startResolveRejectFns) {
+                    this._startResolveRejectFns.resolve();
                 }
                 break;
             case BackendProcessResponseTypes.EVENT_RESPONSE: {
-                const resolveFn = this._resolvePendingRequestFns.get(
+                const resolveRejectFns = this._pendingRequestResolveRejectFns.get(
                     parseInt(response.requestId, 10),
                 );
-                if (!resolveFn) {
+                if (!resolveRejectFns) {
                     throw new Error(
                         `Received response to unknown request ID ${response.requestId}`,
                     );
                 }
-                resolveFn(response);
+                resolveRejectFns.resolve(response);
                 break;
             }
             default:
@@ -341,20 +355,21 @@ class BlockServerBackendProcessManager {
         // Swallow any errors and log in console. This will allow for recovery on
         // next bundle update.
         console.error('Backend exception: ', error);
-        if (this._rejectStartFn) {
-            this._rejectStartFn(error);
+        if (this._startResolveRejectFns) {
+            this._startResolveRejectFns.reject(error);
         }
     }
 
     _onBackendProcessExit() {
         if (this._resolveStopFn) {
             this._resolveStopFn();
-        } else if (this._rejectStartFn) {
-            this._rejectStartFn();
+        } else if (this._startResolveRejectFns) {
+            this._startResolveRejectFns.reject();
         } else {
             console.error('Backend process exited unexpectedly!');
             this._isReady = false;
             this._backendProcess = null;
+            this._rejectPendingRequests();
             this.scheduleRestartAsync();
         }
     }
