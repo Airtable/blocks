@@ -1,6 +1,8 @@
 // @flow
 import {spawnError} from './error_utils';
 
+export {default as isDeepEqual} from 'fast-deep-equal';
+
 /**
  * @private
  */

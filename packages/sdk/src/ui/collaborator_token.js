@@ -2,8 +2,7 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
-import isEqual from 'fast-deep-equal';
-import {has} from '../private_utils';
+import {has, isDeepEqual} from '../private_utils';
 import getSdk from '../get_sdk';
 import {type CollaboratorData} from '../types/collaborator';
 import {baymax} from './baymax_utils';
@@ -73,7 +72,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     let userName;
     let profilePicUrl;
     let isActive;
-    if (userObj !== null && isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    if (userObj !== null && isDeepEqual(collaborator, userObjFormattedForPublicApiV2)) {
         // Since the object we got passed and the formatted v2 obj are the same, we can just use
         // the private obj and our helpers. We do this so that we can use sized prof pic urls
         // and name helper functions that we couldn't otherwise use.
