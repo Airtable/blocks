@@ -36,12 +36,6 @@ import getSdk from './get_sdk';
  * #### import {installationId} from '@airtable/blocks';
  * A unique ID for this block installation.
  *
- * #### import {localStorage, sessionStorage} from '@airtable/blocks';
- * Wrappers for {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage window.localStorage}
- * and {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage window.sessionStorage}
- * which will automatically fall back to an in-memory alternative when the browser version is
- * unavailable.
- *
  * #### [import * as models from '@airtable/blocks/models';](#airtableblocksmodels)
  * Model classes, field types, view types, and utilities for working with record coloring and
  * record aggregation.

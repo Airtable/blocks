@@ -34,15 +34,6 @@ if (!React.PropTypes) {
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
 );
-const InMemoryStorage = window.__requirePrivateModuleFromAirtable(
-    'client/helpers/browser_storage/in_memory_storage',
-);
-const {
-    isLocalStorageAvailable,
-    isSessionStorageAvailable,
-} = window.__requirePrivateModuleFromAirtable(
-    'client/helpers/browser_storage/is_storage_available',
-);
 const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/user_scoped_app_interface',
 );
@@ -112,28 +103,6 @@ class BlockSdk {
      */
     installationId: string;
 
-    /**
-     * Wrapper for
-     * [`window.localStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) which
-     * will automatically fall back to in-memory storage when `window.localStorage` is unavailable.
-     *
-     * @example
-     * import {localStorage} from '@airtable/blocks';
-     * localStorage.setItem('lastScrollTop', 0);
-     */
-    localStorage: Storage | InMemoryStorage;
-
-    /**
-     * Wrapper for
-     * [`window.sessionStorage`](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) which
-     * will automatically fall back to in-memory storage when `window.sessionStorage` is unavailable.
-     *
-     * @example
-     * import {sessionStorage} from '@airtable/blocks';
-     * sessionStorage.setItem('lastScrollTop', 0);
-     */
-    sessionStorage: Storage | InMemoryStorage;
-
     /** Controls the block's viewport. You can fullscreen the block and add size
      * constrains using `viewport`.
      */
@@ -201,15 +170,6 @@ class BlockSdk {
         // just the method, e.g.
         // import {reload} from '@airtable/blocks';
         this.reload = this.reload.bind(this);
-
-        // When localStorage/sessionStorage aren't available (e.g. when
-        // "Block third-party cookies" is enabled in Chrome), we provide
-        // an in-memory replacement. Otherwise, accessing window.localStorage or
-        // window.sessionStorage will throw an exception.
-        this.localStorage = isLocalStorageAvailable() ? window.localStorage : new InMemoryStorage();
-        this.sessionStorage = isSessionStorageAvailable()
-            ? window.sessionStorage
-            : new InMemoryStorage();
 
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
