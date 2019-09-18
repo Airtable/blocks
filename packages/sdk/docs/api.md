@@ -5627,7 +5627,6 @@ import {globalConfig} from '@airtable/blocks';
 import React from 'react';
 
 function ApiKeyInput() {
-    const canEditApiKey = globalConfig.hasPermissionToSetPaths('apiKey');
     return <UI.InputSynced globalConfigKey="apiKey" disabled={!canEditApiKey} />;
 }
 ```
