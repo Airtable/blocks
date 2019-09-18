@@ -5,7 +5,7 @@ import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
 import {FieldTypes, type FieldId} from '../types/field';
 import {type ViewId} from '../types/view';
-import {isEnumValue, cloneDeep, entries} from '../private_utils';
+import {isEnumValue, cloneDeep, entries, isObjectEmpty} from '../private_utils';
 import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';
@@ -17,7 +17,6 @@ import {type RecordQueryResultOpts} from './record_query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
@@ -460,7 +459,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     __triggerOnChangeForDirtyPaths(dirtyPaths: Object) {
         const {cellValuesByFieldId, commentCount} = dirtyPaths;
 
-        if (cellValuesByFieldId && u.isObjectNonEmpty(cellValuesByFieldId)) {
+        if (cellValuesByFieldId && !isObjectEmpty(cellValuesByFieldId)) {
             // TODO: don't trigger changes for fields that aren't supposed to be loaded
             // (in some cases, e.g. record created, liveapp will send cell values
             // that we're not subscribed to).
