@@ -51,6 +51,11 @@ practices for blocks development. And you can use it as a jumping off point for 
     from the record and plays the corresponding video.
 -   [Print records](https://github.com/Airtable/blocks/tree/master/examples/print-records-block) -
     Creates a printable, custom layout with many records on one page.
+-   [Wikipedia enrichment](https://github.com/Airtable/blocks/tree/master/examples/wikipedia-enrichment-block) -
+    Finds extracts and images from Wikipedia for records in your base and saves the information back
+    to your base.
+-   [Update records](https://github.com/Airtable/blocks/tree/master/examples/update-records-block) -
+    Updates the cell values of the selected records in your base.
 
 ##### Simple chart
 
@@ -71,3 +76,11 @@ practices for blocks development. And you can use it as a jumping off point for 
 ##### Print records
 
 [![Seeing a layout of artists and their artworks grouped by collection, printing the layout](examples/print-records-block/media/block.gif?raw=true)](examples/print-records-block)
+
+##### Wikipedia enrichment
+
+[![Block updating the base with content from Wikipedia](examples/wikipedia-enrichment-block/media/block.gif?raw=true)](examples/wikipedia-enrichment-block)
+
+##### Update records
+
+[![Block with a button that adds 1 to 'In Stock' for each selected record](examples/update-records-block/media/block.gif?raw=true)](examples/update-records-block)
