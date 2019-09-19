@@ -18,6 +18,7 @@ const downloadBackendSdkAsync = require('../helpers/download_backend_sdk_async')
 const getBlocksCliProjectRootPath = require('../helpers/get_blocks_cli_project_root_path');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const generateBlockClientWrapperCode = require('./generate_block_client_wrapper');
+const generateLegacyAirtableBlockModuleCode = require('./generate_legacy_airtable_block_module');
 const BlockBuildTypes = require('../types/block_build_types');
 const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types');
 const BlockBuilderJobQueue = require('./block_builder_job_queue');
@@ -175,6 +176,14 @@ class BlockBuilder {
     }
     get blockBuilderJobQueue(): BlockBuilderJobQueue {
         return this._blockBuilderJobQueue;
+    }
+    get outputNodeModulesDirPath(): DirectoryPath {
+        return path.join(
+            this._buildTypeMode === BlockBuildTypes.DEVELOPMENT
+                ? this._blockDirPath
+                : this._outputUserTranspiledDirPath,
+            'node_modules',
+        );
     }
     _setupBuildOutputDirPaths(): void {
         switch (this._buildTypeMode) {
@@ -437,14 +446,10 @@ class BlockBuilder {
         if (stats && stats.isDirectory() && this._enableDeprecatedAbsolutePathImport) {
             const isTopLevelDir = !fileOrDirectoryPath.includes(path.sep);
             if (isTopLevelDir) {
-                const symLinkToNodeModulesDir =
-                    this._buildTypeMode === BlockBuildTypes.DEVELOPMENT
-                        ? path.join(this._blockDirPath, 'node_modules', fileOrDirectoryPath)
-                        : path.join(
-                              this._outputUserTranspiledDirPath,
-                              'node_modules',
-                              fileOrDirectoryPath,
-                          );
+                const symLinkToNodeModulesDir = path.join(
+                    this.outputNodeModulesDirPath,
+                    fileOrDirectoryPath,
+                );
                 await fsUtils.symlinkIfNeededAsync(
                     path.join(targetDirPath, fileOrDirectoryPath),
                     symLinkToNodeModulesDir,
@@ -577,6 +582,13 @@ class BlockBuilder {
             isDevelopment,
         );
         await fsUtils.writeFileAsync(clientWrapperFilePath, clientWrapperCode);
+    }
+    /** Create legacy airtable-block module. */
+    async _writeLegacyAirtableBlockModuleAsync(): Promise<void> {
+        const moduleDirPath = path.join(this.outputNodeModulesDirPath, 'airtable-block');
+        await fsUtils.mkdirPathAsync(moduleDirPath);
+        const moduleFilePath = path.join(moduleDirPath, 'index.js');
+        await fsUtils.writeFileAsync(moduleFilePath, generateLegacyAirtableBlockModuleCode());
     }
     /** Copy transpiled blocks_backend_wrapper (bundled with this tool) to transpiled directory. */
     async _writeBlocksBackendWrapperAsync(): Promise<Result<void, Error>> {
@@ -722,6 +734,7 @@ class BlockBuilder {
         await this._cleanupLegacyBuildDirectoryAsync();
         await this._wipeOutputDirectoriesAsync();
         await this._writeFrontendClientWrapperFileAsync();
+        await this._writeLegacyAirtableBlockModuleAsync();
     }
     async _waitForInitialBuildAsync(): Promise<void> {
         // This promise will be resolved outside of this function when the initial bundle triggered

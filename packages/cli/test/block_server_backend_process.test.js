@@ -208,7 +208,9 @@ describe('Block server backend process', function() {
         assert.strictEqual(resp.statusCode, 200);
         assert.strictEqual(
             resp.body,
-            Buffer.from('DummyBackendBlockSdkWrapper').toString('base64'),
+            // airtable-block module is injected by the build process, so not
+            // available in this unit test.
+            Buffer.from('["DummyBackendBlockSdkWrapper","Error"]').toString('base64'),
         );
     });
 });
