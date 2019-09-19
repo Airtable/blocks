@@ -136,7 +136,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
     }
 
     __generateChangesForParentTableDeleteMultipleRecords(
-        recordIds: Array<RecordId>,
+        recordIds: $ReadOnlyArray<RecordId>,
     ): Array<ModelChange> {
         const recordIdsToDeleteSet = {};
         for (const recordId of recordIds) {

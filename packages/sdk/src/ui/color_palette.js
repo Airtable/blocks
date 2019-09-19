@@ -2,33 +2,114 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import colorUtils from '../color_utils';
 import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
+import Box from './box';
 import Icon from './icon';
 import createDetectElementResize from './create_detect_element_resize';
+import withStyledSystem from './with_styled_system';
+import {
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 
 const MIN_COLOR_SQUARE_SIZE = 16;
 const DEFAULT_COLOR_SQUARE_SIZE = 24;
 const MAX_COLOR_SQUARE_SIZE = 32;
 
 
-/** @typedef */
-type ColorPaletteProps = {
-    color?: string,
+export type StyleProps = {|
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...WidthProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+export const stylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
+export type SharedColorPaletteProps = {|
     allowedColors: Array<string>,
     onChange?: string => mixed,
-    squareMargin: number,
-    className: string,
-    style: Object,
+    squareMargin?: number,
+    className?: string,
+    style?: {[string]: mixed},
     disabled?: boolean,
-};
+|};
+
+/**
+ * @typedef {object} ColorPaletteProps
+ * @property {string} [color] The current selected {@link Color} option.
+ * @property {Array<string>} allowedColors The list of {@link colors} to display in the color palette.
+ * @property {function} [onChange] A function to be called when the selected color changes.
+ * @property {number} [squareMargin] The margin between color squares in the color palette.
+ * @property {string} [className] Additional class names to apply to the color palette, separated by spaces.
+ * @property {object} [style] Additional styles to apply to the color palette.
+ * @property {boolean} [disabled] If set to `true`, the color palette will not allow color selection.
+ */
+type ColorPaletteProps = {|
+    color?: string | null,
+    ...SharedColorPaletteProps,
+|};
 
 type ColorPaletteState = {
     squareSize: number,
 };
 
-/** */
+/**
+ * A color selection component. Accepts a list of `allowedColors` to be displayed
+ * as selectable color squares.
+ *
+ * @example
+ * import {ColorPalette, colors} from '@airtable/blocks/ui';
+ * import React, {useState} from 'react';
+ *
+ * function DisplayOptions() {
+ *     const allowedColors = [colors.GREEN, colors.BLUE, colors.RED];
+ *     const [selectedColor, setSelectedColor] = useState(colors.GREEN);
+ *     return (
+ *         <ColorPalette
+ *             allowedColors={allowedColors}
+ *             onChange={setSelectedColor}
+ *         />
+ *     );
+ * }
+ */
 class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState> {
     static propTypes = {
         color: PropTypes.string,
@@ -49,7 +130,7 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         removeResizeListener: (element: HTMLElement, fn: () => void) => void,
     |};
     _setColorSquareSize: () => void;
-    _colorPaletteContainerRef: {current: HTMLDivElement | null};
+    _colorPaletteContainerRef: {current: HTMLElement | null};
     constructor(props: ColorPaletteProps) {
         super(props);
 
@@ -83,9 +164,11 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         }
     }
     _setColorSquareSize() {
+        const {squareMargin} = this.props;
+        invariant(squareMargin, 'colorPalette.squareMargin');
         invariant(this._colorPaletteContainerRef.current, 'No container to set color square size');
         const calculateSquareSize = numSquares => {
-            return (containerWidth - this.props.squareMargin * 2 * numSquares) / numSquares;
+            return (containerWidth - squareMargin * 2 * numSquares) / numSquares;
         };
         const containerWidth = this._colorPaletteContainerRef.current.getBoundingClientRect().width;
         const numColors = this.props.allowedColors.length;
@@ -93,10 +176,13 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         let squareSize;
         if (calculatedSquareSize < MIN_COLOR_SQUARE_SIZE) {
             const numColorsThatWillFitAsDefaultSize = Math.round(
-                (containerWidth + 2 * this.props.squareMargin) /
-                    (DEFAULT_COLOR_SQUARE_SIZE + 2 * this.props.squareMargin),
+                (containerWidth + 2 * squareMargin) /
+                    (DEFAULT_COLOR_SQUARE_SIZE + 2 * squareMargin),
             );
-            squareSize = calculateSquareSize(numColorsThatWillFitAsDefaultSize);
+            squareSize = squareSize =
+                numColorsThatWillFitAsDefaultSize === 0
+                    ? DEFAULT_COLOR_SQUARE_SIZE
+                    : calculateSquareSize(numColorsThatWillFitAsDefaultSize);
         } else {
             squareSize = Math.min(MAX_COLOR_SQUARE_SIZE, calculatedSquareSize);
         }
@@ -110,14 +196,14 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
     render() {
         const {color, allowedColors, squareMargin, className, style, disabled} = this.props;
         const {squareSize} = this.state;
+        invariant(squareMargin, 'colorPalette.squareMargin');
         return (
-            <div className={cx(baymax('overflow-hidden'), className)} style={style}>
-                <div
-                    className={baymax('flex flex-wrap')}
+            <Box className={className} style={style} overflow="hidden">
+                <Box
                     ref={this._colorPaletteContainerRef}
-                    style={{
-                        margin: -squareMargin,
-                    }}
+                    display="flex"
+                    flexWrap="wrap"
+                    margin={`${-squareMargin}px`}
                 >
                     {allowedColors.map(allowedColor => (
                         <label
@@ -147,10 +233,14 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
                             )}
                         </label>
                     ))}
-                </div>
-            </div>
+                </Box>
+            </Box>
         );
     }
 }
 
-export default ColorPalette;
+export default withStyledSystem<ColorPaletteProps, StyleProps, ColorPalette, {}>(
+    ColorPalette,
+    styleParser,
+    stylePropTypes,
+);

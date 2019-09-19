@@ -1,10 +1,11 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
+import {stylePropTypes, type StyleProps} from './modal';
 import Dialog from './dialog';
 import Button from './button';
+import Box from './box';
 
 /**
  * @typedef {Object} ConfirmationDialogProps
@@ -15,10 +16,10 @@ import Button from './button';
  * @property {boolean} [isConfirmActionDangerous=false] Whether the action is dangerous (potentially destructive or not easily reversible).
  * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
  * @property {Object} [style] Extra styles to apply to the dialog element.
- * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
- * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
- * @property {function} onCancel Cancel button event handler. Handles click events and Space and Enter keypress events.
- * @property {function} onConfirm Confirm button event handler. Handles click events and Space and Enter keypress events.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the background element.
+ * @property {function} onCancel Cancel button event handler. Handles click events and Space/Enter keypress events.
+ * @property {function} onConfirm Confirm button event handler. Handles click events and Space/Enter keypress events.
  */
 type ConfirmationDialogProps = {|
     title: string,
@@ -27,11 +28,12 @@ type ConfirmationDialogProps = {|
     confirmButtonText: string,
     isConfirmActionDangerous: boolean,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     backgroundClassName?: string,
-    backgroundStyle?: Object,
+    backgroundStyle?: {[string]: mixed},
     onCancel: () => mixed,
     onConfirm: () => mixed,
+    ...StyleProps,
 |};
 
 /**
@@ -81,15 +83,17 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         backgroundStyle: PropTypes.object,
         onCancel: PropTypes.func.isRequired,
         onConfirm: PropTypes.func.isRequired,
+        ...stylePropTypes,
     };
     static defaultProps = {
         cancelButtonText: 'Cancel',
         confirmButtonText: 'Confirm',
         isConfirmActionDangerous: false,
+        width: '400px',
     };
     _onConfirm: () => void;
     _onCancel: () => void;
-    _confirmButtonRef: Button | null;
+    _confirmButtonRef: React.ElementRef<typeof Button> | null;
     constructor(props: ConfirmationDialogProps) {
         super(props);
         this._onConfirm = this._onConfirm.bind(this);
@@ -100,12 +104,6 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         if (this._confirmButtonRef !== null) {
             this._confirmButtonRef.focus();
         }
-    }
-    _onCancel() {
-        this.props.onCancel();
-    }
-    _onConfirm() {
-        this.props.onConfirm();
     }
     render() {
         const {
@@ -118,46 +116,50 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
             style,
             backgroundClassName,
             backgroundStyle,
+            onCancel,
+            onConfirm,
+            ...restOfProps
         } = this.props;
 
         return (
             <Dialog
                 onClose={this._onCancel}
                 className={className}
-                style={{
-                    width: 400, 
-                    ...style,
-                }}
+                style={style}
                 backgroundClassName={backgroundClassName}
                 backgroundStyle={backgroundStyle}
+                {...restOfProps}
             >
                 <Dialog.CloseButton />
                 <h1 className={baymax('mt0 mb1 strong')} style={{fontSize: 20}}>
                     {title}
                 </h1>
                 {body}
-                <div
-                    className={baymax(
-                        'width-full flex flex-reverse items-center justify-start mt2',
-                    )}
+                <Box
+                    display="flex"
+                    flexDirection="row-reverse"
+                    alignItems="center"
+                    justifyContent="start"
+                    width="100%"
+                    marginTop={3}
                 >
                     <Button
                         ref={el => (this._confirmButtonRef = el)}
-                        onClick={this._onConfirm}
+                        onClick={onConfirm}
                         theme={isConfirmActionDangerous ? Button.themes.RED : Button.themes.BLUE}
                     >
                         {confirmButtonText}
                     </Button>
                     <Button
-                        onClick={this._onCancel}
+                        onClick={onCancel}
                         theme={Button.themes.TRANSPARENT}
-                        className={baymax(
-                            'self-end mr1 quiet link-unquiet-focusable text-blue-focus',
-                        )}
+                        alignSelf="end"
+                        marginRight={2}
+                        className={baymax('quiet link-unquiet-focusable text-blue-focus')}
                     >
                         {cancelButtonText}
                     </Button>
-                </div>
+                </Box>
             </Dialog>
         );
     }

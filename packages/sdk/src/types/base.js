@@ -1,6 +1,6 @@
 // @flow
 import {type PermissionLevel} from './permission_levels';
-import {type TableData, type TableId} from './table';
+import {type TableData, type TablePermissionData, type TableId} from './table';
 import {type CursorData} from './cursor';
 import {type UserId} from './collaborator';
 
@@ -44,3 +44,8 @@ export type BaseData = {|
 
     cursorData: CursorData | null,
 |};
+
+export type BasePermissionData = {
+    +permissionLevel: PermissionLevel,
+    +tablesById: {+[TableId]: TablePermissionData},
+};

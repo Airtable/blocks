@@ -600,14 +600,14 @@ const tableId = globalConfig.get('selectedTableId');
 Previously, the table ID was stored in the component state with the `useState` hook. Now we’re
 storing it in `globalConfig`, so we get its value by calling `globalConfig.get()`. We’re choosing to
 use “selectedTableId” as the key in globalConfig, but you could call it whatever you want—it just
-has to match the key you pass to `globalConfig.set()` below.
+has to match the key you pass to `globalConfig.setAsync()` below.
 
 ```js
-globalConfig.set('selectedTableId', newTable.id);
+globalConfig.setAsync('selectedTableId', newTable.id);
 ```
 
-When the user picks a new table from the `TablePicker`, we use `globalConfig.set()` to update the
-table ID that’s stored in `globalConfig`.
+When the user picks a new table from the `TablePicker`, we use `globalConfig.setAsync()` to update
+the table ID that’s stored in `globalConfig`.
 
 Values in `globalConfig` can be strings, numbers, booleans, null, arrays, and plain objects—anything
 that can be encoded as JSON. This means we can’t store the table object directly in `globalConfig`,
@@ -625,7 +625,7 @@ this out by clicking “Simulate,” then choosing “Read” or “Comment” f
 ![](/packages/sdk/docs/images/tutorial_todo_5.gif)
 
 We could fix this by disabling the `TablePicker` if the user doesn’t have permission to change
-`globalConfig` by using `globalConfig.canSet()`.
+`globalConfig` by using `globalConfig.checkPermissionsForSetPaths()`.
 
 But there’s an easier way! The `TablePicker` component has a sibling component called
 `TablePickerSynced` which automatically reads and writes to `globalConfig` with the proper

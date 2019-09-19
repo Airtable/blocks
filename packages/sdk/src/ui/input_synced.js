@@ -1,33 +1,47 @@
 // @flow
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import omit from 'lodash.omit';
-import {invariant} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {type GlobalConfigKey} from '../global_config';
-import Input from './input';
+import Input, {
+    stylePropTypes,
+    type StyleProps,
+    sharedInputPropTypes,
+    type SharedInputProps,
+} from './input';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/** @type {object}
- * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
+/**
+ * @typedef {object} InputSyncedProps
  * @property {string|Array<string>} globalConfigKey The key, or path to a key, in global config.
- * @property {string} [placeholder=''] The placeholder for the input.
- * @property {function} [onChange] A function to be called when the input changes. Note that this component will sync to global config, so you won't always need to set this.
- * @property {object} [style={}] Additional styles to apply to the input.
- * @property {string} [className=''] Additional class names to apply to the input, separated by spaces.
- * @property {boolean} [disabled=false] If set to `true`, the input will be disabled.
- * @property {boolean} [spellCheck=false] If set to `true`, the `spellcheck` property will be set on the input.
+ * @property {function} onChange A function to be called when the input changes.
+ * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
+ * @property {string} [placeholder] The placeholder for the input.
+ * @property {object} [style] Additional styles to apply to the input.
+ * @property {string} [className] Additional class names to apply to the input, separated by spaces.
+ * @property {boolean} [disabled] The `disabled` attribute.
+ * @property {boolean} [required] The `required` attribute.
+ * @property {boolean} [spellCheck] The `spellcheck` attribute.
+ * @property {string} [name] The `name` attribute.
+ * @property {string} [id] The `id` attribute.
+ * @property {boolean} [autoFocus] The `autoFocus` attribute.
+ * @property {number | string} [max] The `max` attribute.
+ * @property {number} [maxLength] The `maxLength` attribute.
+ * @property {number | string} [min] The `min` attribute.
+ * @property {number} [minLength] The `minLength` attribute.
+ * @property {number | string} [step] The `step` attribute.
+ * @property {string} [pattern] The `pattern` attribute.
+ * @property {boolean} [readOnly] The `readOnly` attribute.
+ * @property {string} [autoComplete] The `autoComplete` attribute.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type InputSyncedProps = {
-    type?: string,
+type InputSyncedProps = {|
     globalConfigKey: GlobalConfigKey,
-    placeholder?: string,
-    onChange?: (SyntheticInputEvent<>) => void,
-    style?: Object,
-    className?: string,
-    disabled?: boolean,
-    spellCheck?: boolean,
-};
+    ...SharedInputProps,
+    ...StyleProps,
+|};
 
 /**
  * A wrapper around the `UI.Input` component that syncs with global config.
@@ -38,7 +52,6 @@ type InputSyncedProps = {
  * import React from 'react';
  *
  * function ApiKeyInput() {
- *     const canEditApiKey = globalConfig.canSet('apiKey');
  *     return (
  *         <UI.InputSynced
  *             globalConfigKey="apiKey"
@@ -54,17 +67,12 @@ class InputSynced extends React.Component<InputSyncedProps> {
     };
 
     static propTypes = {
-        type: PropTypes.oneOf(Object.keys(Input.validTypesSet)),
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        placeholder: PropTypes.string,
-        onChange: PropTypes.func,
-        style: PropTypes.object,
-        className: PropTypes.string,
-        disabled: PropTypes.bool,
-        spellCheck: PropTypes.bool,
+        ...sharedInputPropTypes,
+        ...stylePropTypes,
     };
     props: InputSyncedProps;
-    _input: Input | null;
+    _input: React.ElementRef<typeof Input> | null;
     constructor(props: InputSyncedProps) {
         super(props);
         this._input = null;
@@ -86,31 +94,33 @@ class InputSynced extends React.Component<InputSyncedProps> {
         this._input.select();
     }
     render() {
-        const restOfProps = omit(this.props, ['globalConfigKey', 'onChange', 'disabled']);
+        const {globalConfigKey, disabled, onChange, ...restOfProps} = this.props;
         return (
             <Synced
-                globalConfigKey={this.props.globalConfigKey}
+                globalConfigKey={globalConfigKey}
                 render={({value, canSetValue, setValue}) => {
-                    const isCheckbox = this.props.type === 'checkbox';
-
-                    const isNullOrUndefined = value === null || value === undefined;
-
-                    const valueObj = isCheckbox
-                        ? {checked: isNullOrUndefined ? false : value}
-                        : {value: isNullOrUndefined ? '' : value};
+                    let inputValue;
+                    if (value === null || value === undefined) {
+                        inputValue = '';
+                    } else if (typeof value === 'string') {
+                        inputValue = value;
+                    } else {
+                        throw spawnError(
+                            'InputSynced only works with a global config value that is a string, null or undefined.',
+                        );
+                    }
 
                     return (
                         <Input
                             ref={el => (this._input = el)}
-                            disabled={this.props.disabled || !canSetValue}
-                            onChange={(e: SyntheticInputEvent<>) => {
-                                setValue(isCheckbox ? e.target.checked : e.target.value);
-                                if (this.props.onChange) {
-                                    this.props.onChange(e);
+                            disabled={disabled || !canSetValue}
+                            onChange={(e: SyntheticInputEvent<HTMLInputElement>) => {
+                                setValue(e.target.value);
+                                if (onChange) {
+                                    onChange(e);
                                 }
                             }}
-                            spellCheck={this.props.spellCheck}
-                            {...valueObj}
+                            value={inputValue}
                             {...restOfProps}
                         />
                     );

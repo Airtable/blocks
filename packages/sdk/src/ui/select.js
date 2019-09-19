@@ -1,7 +1,29 @@
 // @flow
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import {invariant, spawnError} from '../error_utils';
+import withStyledSystem from './with_styled_system';
+import {
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 import {baymax} from './baymax_utils';
 import {
     SelectAndSelectButtonsPropTypes,
@@ -34,6 +56,33 @@ const styleForChevron = {
  */
 type SelectProps = SelectAndSelectButtonsProps;
 
+
+type StyleProps = {|
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...WidthProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+const stylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
 
 /**
  * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
@@ -155,4 +204,11 @@ class Select extends React.Component<SelectProps> {
     }
 }
 
-export default Select;
+export default withStyledSystem<SelectProps, StyleProps, Select, {}>(
+    Select,
+    styleParser,
+    stylePropTypes,
+    {
+        width: '100%',
+    },
+);

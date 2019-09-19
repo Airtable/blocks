@@ -1,8 +1,8 @@
 // @flow
 import {useMemo, useRef} from 'react';
+import {useSubscription} from 'use-subscription';
 import {compact} from '../private_utils';
 import type Watchable from '../watchable';
-import useSubscription from './use_subscription';
 
 const noopSubscription = {
     getCurrentValue: () => null,

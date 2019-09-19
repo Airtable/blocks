@@ -12,7 +12,6 @@ toc:
     - name: '@airtable/blocks/models'
       children:
           - fieldTypes
-          - generateGuid
           - viewTypes
           - recordColoring
           - AbstractModel
@@ -79,11 +78,6 @@ toc:
                 - ExpandRecordOpts
           - expandRecordList
           - expandRecordPickerAsync
-          - name: AutocompletePopover
-            children:
-                - AutocompletePopover
-                - AutocompletePopoverProps
-                - AutocompleteItem
           - name: Button
             children:
                 - Button
@@ -104,9 +98,10 @@ toc:
             children:
                 - ColorPalette
                 - ColorPaletteProps
+          - name: ColorPaletteSynced
+            children:
                 - ColorPaletteSynced
                 - ColorPaletteSyncedProps
-          - ColorPaletteSynced
           - name: ConfirmationDialog
             children:
                 - ConfirmationDialog
@@ -121,9 +116,10 @@ toc:
             children:
                 - FieldPicker
                 - FieldPickerProps
+          - name: FieldPickerSynced
+            children:
                 - FieldPickerSynced
                 - FieldPickerSyncedProps
-          - FieldPickerSynced
           - name: Icon
             children:
                 - Icon
@@ -134,9 +130,10 @@ toc:
             children:
                 - Input
                 - InputProps
+          - name: InputSynced
+            children:
                 - InputSynced
                 - InputSyncedProps
-          - InputSynced
           - name: Link
             children:
                 - Link
@@ -168,30 +165,34 @@ toc:
                 - Select
                 - SelectProps
                 - SelectOption
+          - name: SelectSynced
+            children:
                 - SelectSynced
                 - SelectSyncedProps
-          - SelectSynced
           - name: SelectButtons
             children:
                 - SelectButtons
                 - SelectButtonsProps
+          - name: SelectButtonsSynced
+            children:
                 - SelectButtonsSynced
                 - SelectButtonsSyncedProps
-          - SelectButtonsSynced
           - name: TablePicker
             children:
                 - TablePicker
                 - TablePickerProps
+          - name: TablePickerSynced
+            children:
                 - TablePickerSynced
                 - TablePickerSyncedProps
-          - TablePickerSynced
           - name: Toggle
             children:
                 - Toggle
                 - ToggleProps
+          - name: ToggleSynced
+            children:
                 - ToggleSynced
                 - ToggleSyncedProps
-          - ToggleSynced
           - name: Tooltip
             children:
                 - Tooltip
@@ -200,9 +201,10 @@ toc:
             children:
                 - ViewPicker
                 - ViewPickerProps
+          - name: ViewPickerSynced
+            children:
                 - ViewPickerSynced
                 - ViewPickerSyncedProps
-          - ViewPickerSynced
           - name: ViewportConstraint
             children:
                 - ViewportConstraint

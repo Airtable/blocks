@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
-import Icon from './icon';
+import Icon, {stylePropTypes, type SharedIconProps} from './icon';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -19,15 +19,10 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
  * @property {string} [pathClassName] Additional class names to apply to the icon path.
  * @property {object} [pathStyle] Additional styles to apply to the icon path.
  */
-type FieldIconProps = {
+type FieldIconProps = {|
     field: Field,
-    size?: number,
-    fillColor?: string,
-    className?: string,
-    style?: Object,
-    pathClassName?: string,
-    pathStyle?: Object,
-};
+    ...SharedIconProps,
+|};
 
 /**
  * A vector icon for a field's type.
@@ -53,14 +48,23 @@ type FieldIconProps = {
  *     }}>
  *         <FieldIcon
  *             field={primaryField}
- *             style={{marginRight: 8}}
+ *             marginRight={2}
  *         />
  *         {primaryField.name}
  *     </div>
  * );
  */
 const FieldIcon = (props: FieldIconProps) => {
-    const {field, size, fillColor, className, style, pathClassName, pathStyle} = props;
+    const {
+        field,
+        size = 16,
+        fillColor,
+        className,
+        style,
+        pathClassName,
+        pathStyle,
+        ...restOfProps
+    } = props;
 
     const type = field.__getRawType();
     const typeOptions = field.__getRawTypeOptions();
@@ -80,6 +84,7 @@ const FieldIcon = (props: FieldIconProps) => {
             style={style}
             pathClassName={pathClassName}
             pathStyle={pathStyle}
+            {...restOfProps}
         />
     );
 };
@@ -92,6 +97,7 @@ FieldIcon.propTypes = {
     style: PropTypes.object,
     pathClassName: PropTypes.string,
     pathStyle: PropTypes.object,
+    ...stylePropTypes,
 };
 
 export default FieldIcon;

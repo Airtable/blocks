@@ -4,7 +4,7 @@ import {type TableData} from '../types/table';
 import {type ViewType, type ViewId} from '../types/view';
 import {type FieldId} from '../types/field';
 import {type RecordId} from '../types/record';
-import {MutationTypes} from '../types/mutations';
+import {MutationTypes, type PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has} from '../private_utils';
 import {spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
@@ -18,7 +18,6 @@ import {type RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import type RecordStore from './record_store';
 
-const hyperId = window.__requirePrivateModuleFromAirtable('client_server_shared/hyper_id');
 const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
@@ -466,73 +465,878 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
         return cellValuesByFieldId;
     }
-    /** @private */
+    /**
+     * Updates cell values for a record.
+     *
+     * Throws an error if the user does not have permission to update the given cell values in
+     * the record, or if invalid input is provided (eg. invalid cell values).
+     *
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the updated
+     * cell values to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * before the promise resolves.
+     *
+     * @param {Record | RecordId} recordOrRecordId the record to update
+     * @param {object} fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
+     * @returns {Promise<RecordId>} A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
+     * @example
+     * function updateRecord(record, recordFields) {
+     *     if (table.hasPermissionToUpdateRecord(record, recordFields)) {
+     *         table.updateRecordAsync(record, recordFields);
+     *     }
+     *     // The updated values will now show in your block (eg in `table.selectRecords()` result)
+     *     // but are still being saved to Airtable servers (eg. other users may not be able to see
+     *     // them yet.)
+     * }
+     *
+     * async function updateRecordAsync(record, recordFields) {
+     *     if (table.hasPermissionToUpdateRecord(record, recordFields)) {
+     *         await table.updateRecordAsync(record, recordFields);
+     *     }
+     *     // New record has been saved to Airtable servers.
+     *     alert(`record with ID ${record.id} has been updated`);
+     * }
+     *
+     * // Fields can be specified by name or ID
+     * updateRecord(record1, {
+     *     'Post Title': 'How to make: orange-mango pound cake',
+     *     'Publication Date': '2020-01-01',
+     * });
+     * updateRecord(record2, {
+     *     [postTitleField.id]: 'Cake decorating tips & tricks',
+     *     [publicationDateField.id]: '2020-02-02',
+     * });
+     */
     async updateRecordAsync(
         recordOrRecordId: Record | RecordId,
-        cellValuesByFieldIdOrName: {[fieldIdOrName: FieldId | string]: mixed},
+        fields: {+[fieldIdOrName: FieldId | string]: mixed},
     ): Promise<void> {
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
 
-        const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
-            cellValuesByFieldIdOrName,
+        await this.updateRecordsAsync([
+            {
+                id: recordId,
+                fields,
+            },
+        ]);
+    }
+    /**
+     * Checks whether the current user has permission to perform the given record update.
+     *
+     * Accepts partial input, in the same format as [updateRecordAsync](#updateRecordAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Record | RecordId} [recordOrRecordId] the record to update
+     * @param {object} [fields] cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * // Check if user can update specific fields for a specific record.
+     * const updateRecordCheckResult = table.checkPermissionsForUpdateRecord(record, {
+     *     'Post Title': 'How to make: orange-mango pound cake',
+     *     'Publication Date': '2020-01-01',
+     * });
+     * if (!updateRecordCheckResult.hasPermission) {
+     *     alert(updateRecordCheckResult.reasonDisplayString);
+     * }
+     *
+     * // Like updateRecordAsync, you can use either field names or field IDs.
+     * const updateRecordCheckResultWithFieldIds = table.checkPermissionsForUpdateRecord(record, {
+     *     [postTitleField.id]: 'Cake decorating tips & tricks',
+     *     [publicationDateField.id]: '2020-02-02',
+     * });
+     *
+     * // Check if user could update a given record, when you don't know the specific fields that
+     * // will be updated yet. (for example, to check whether you should allow a user to select
+     * // a certain record to update)
+     * const updateUnknownFieldsCheckResult = table.checkPermissionsForUpdateRecord(record);
+     *
+     * // Check if user could update specific fields, when you don't know the specific record that
+     * // will be updated yet. (for example, if the field is selected by the user and you want to
+     * // check if your block can write to it)
+     * const updateUnknownRecordCheckResult = table.checkPermissionsForUpdateRecord(undefined, {
+     *     'My field name': 'updated value',
+     *     // You can use undefined if you know you're going to update a field, but don't know
+     *     // the new cell value yet.
+     *     'Another field name': undefined,
+     * });
+     *
+     * // Check if user could perform updates within the table, without knowing the specific record
+     * // or fields that will be updated yet. (for example, to render your block in "read only"
+     * // mode)
+     * const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateRecord();
+     */
+    checkPermissionsForUpdateRecord(
+        recordOrRecordId?: Record | RecordId | void,
+        fields?: {[fieldIdOrName: FieldId | string]: mixed | void} | void,
+    ): PermissionCheckResult {
+        const recordId =
+            typeof recordOrRecordId === 'object' && recordOrRecordId !== null
+                ? recordOrRecordId.id
+                : recordOrRecordId;
+
+        return this.checkPermissionsForUpdateRecords([
+            {
+                id: recordId,
+                fields,
+            },
+        ]);
+    }
+    /**
+     * An alias for `checkPermissionsForUpdateRecord(recordOrRecordId, fields).hasPermission`.
+     *
+     * Checks whether the current user has permission to perform the given record update.
+     *
+     * Accepts partial input, in the same format as [updateRecordAsync](#updateRecordAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Record | RecordId} [recordOrRecordId] the record to update
+     * @param {object} [fields] cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
+     * @returns boolean Whether the user can update the specified record.
+     * @example
+     * // Check if user can update specific fields for a specific record.
+     * const canUpdateRecord = table.hasPermissionToUpdateRecord(record, {
+     *     'Post Title': 'How to make: orange-mango pound cake',
+     *     'Publication Date': '2020-01-01',
+     * });
+     * if (!canUpdateRecord) {
+     *     alert('not allowed!');
+     * }
+     *
+     * // Like updateRecordAsync, you can use either field names or field IDs.
+     * const canUpdateRecordWithFieldIds = table.hasPermissionToUpdateRecord(record, {
+     *     [postTitleField.id]: 'Cake decorating tips & tricks',
+     *     [publicationDateField.id]: '2020-02-02',
+     * });
+     *
+     * // Check if user could update a given record, when you don't know the specific fields that
+     * // will be updated yet. (for example, to check whether you should allow a user to select
+     * // a certain record to update)
+     * const canUpdateUnknownFields = table.hasPermissionToUpdateRecord(record);
+     *
+     * // Check if user could update specific fields, when you don't know the specific record that
+     * // will be updated yet. (for example, if the field is selected by the user and you want to
+     * // check if your block can write to it)
+     * const canUpdateUnknownRecord = table.hasPermissionToUpdateRecord(undefined, {
+     *     'My field name': 'updated value',
+     *     // You can use undefined if you know you're going to update a field, but don't know
+     *     // the new cell value yet.
+     *     'Another field name': undefined,
+     * });
+     *
+     * // Check if user could perform updates within the table, without knowing the specific record
+     * // or fields that will be updated yet. (for example, to render your block in "read only"
+     * // mode)
+     * const canUpdateUnknownRecordAndFields = table.hasPermissionToUpdateRecord();
+     */
+    hasPermissionToUpdateRecord(
+        recordOrRecordId?: Record | RecordId | void,
+        fields?: {[fieldIdOrName: FieldId | string]: mixed | void} | void,
+    ): boolean {
+        return this.checkPermissionsForUpdateRecord(recordOrRecordId, fields).hasPermission;
+    }
+    /**
+     * Updates cell values for records.
+     *
+     * Throws an error if the user does not have permission to update the given cell values in
+     * the records, or if invalid input is provided (eg. invalid cell values).
+     *
+     * You may only update up to 50 records in one call to `updateRecordsAsync`.
+     * See [Writing changes to records](/packages/sdk/docs/guide_writes.md) for more information
+     * about write limits.
+     *
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the
+     * updates to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * before the promise resolves.
+     *
+     * @param {Array<{id: RecordId, fields: object}>} records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
+     * @returns {Promise<void>} A promise that will resolve once the updates are persisted to Airtable.
+     * @example
+     * const recordsToUpdate = [
+     *     // Fields can be specified by name or ID
+     *     {
+     *         id: record1.id,
+     *         fields: {
+     *             'Post Title': 'How to make: orange-mango pound cake',
+     *             'Publication Date': '2020-01-01',
+     *         },
+     *     },
+     *     {
+     *         id: record2.id,
+     *         fields: {
+     *             // Sets the cell values to be empty.
+     *             'Post Title': '',
+     *             'Publication Date': '',
+     *         },
+     *     },
+     *     {
+     *         id: record3.id,
+     *         fields: {
+     *             [postTitleField.id]: 'Cake decorating tips & tricks',
+     *             [publicationDateField.id]: '2020-02-02',
+     *         },
+     *     },
+     * ];
+     *
+     * function updateRecords() {
+     *     if (table.hasPermissionToUpdateRecords(recordsToUpdate)) {
+     *         table.updateRecordsAsync(recordsToUpdate);
+     *     }
+     *     // The records are now updated within your block (eg will be reflected in
+     *     // `table.selectRecords()`) but are still being saved to Airtable servers (eg. they
+     *     // may not be updated for other users yet)
+     * }
+     *
+     * async function updateRecordsAsync() {
+     *     if (table.hasPermissionToUpdateRecords(recordsToUpdate)) {
+     *         await table.updateRecordsAsync(recordsToUpdate);
+     *     }
+     *     // Record updates have been saved to Airtable servers.
+     *     alert('records have been updated');
+     * }
+     */
+    async updateRecordsAsync(
+        records: $ReadOnlyArray<{
+            +id: RecordId,
+            +fields: {+[fieldIdOrName: FieldId | string]: mixed},
+        }>,
+    ): Promise<void> {
+        const recordsWithCellValuesByFieldId = records.map(record => ({
+            id: record.id,
+            cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
+                record.fields,
+            ),
+        }));
+
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+            tableId: this.id,
+            records: recordsWithCellValuesByFieldId,
+        });
+    }
+    /**
+     * Checks whether the current user has permission to perform the given record updates.
+     *
+     * Accepts partial input, in the same format as [updateRecordsAsync](#updateRecordsAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<{id?: RecordId, fields?: object}>} [records] Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * const recordsToUpdate = [
+     *     {
+     *         // Validating a complete record update
+     *         id: record1.id,
+     *         fields: {
+     *             'Post Title': 'How to make: orange-mango pound cake',
+     *             'Publication Date': '2020-01-01',
+     *         },
+     *     },
+     *     {
+     *         // Like updateRecordsAsync, fields can be specified by name or ID
+     *         id: record2.id,
+     *         fields: {
+     *             [postTitleField.id]: 'Cake decorating tips & tricks',
+     *             [publicationDateField.id]: '2020-02-02',
+     *         },
+     *     },
+     *     {
+     *         // Validating an update to a specific record, not knowing what fields will be updated
+     *         id: record3.id,
+     *     },
+     *     {
+     *         // Validating an update to specific cell values, not knowing what record will be updated
+     *         fields: {
+     *             'My field name': 'updated value for unknown record',
+     *             // You can use undefined if you know you're going to update a field, but don't know
+     *             // the new cell value yet.
+     *             'Another field name': undefined,
+     *         },
+     *     },
+     * ];
+     *
+     * const updateRecordsCheckResult = table.checkPermissionsForUpdateRecords(recordsToUpdate);
+     * if (!updateRecordsCheckResult.hasPermission) {
+     *     alert(updateRecordsCheckResult.reasonDisplayString);
+     * }
+     *
+     * // Check if user could potentially update records.
+     * // Equivalent to table.checkPermissionsForUpdateRecord()
+     * const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateRecords();
+     */
+    checkPermissionsForUpdateRecords(
+        records?: $ReadOnlyArray<{
+            +id?: RecordId | void,
+            +fields?: {
+                +[FieldId | string]: mixed | void,
+            } | void,
+        }> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+            tableId: this.id,
+            records: records
+                ? records.map(record => ({
+                      id: record.id || undefined,
+                      cellValuesByFieldId: record.fields
+                          ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields)
+                          : undefined,
+                  }))
+                : undefined,
+        });
+    }
+    /**
+     * An alias for `checkPermissionsForUpdateRecords(records).hasPermission`.
+     *
+     * Checks whether the current user has permission to perform the given record updates.
+     *
+     * Accepts partial input, in the same format as [updateRecordsAsync](#updateRecordsAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<{id?: RecordId, fields?: object}>} [records] Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
+     * @returns boolean Whether the current user can update the specified records.
+     * @example
+     * const recordsToUpdate = [
+     *     {
+     *         // Validating a complete record update
+     *         id: record1.id,
+     *         fields: {
+     *             'Post Title': 'How to make: orange-mango pound cake',
+     *             'Publication Date': '2020-01-01',
+     *         },
+     *     },
+     *     {
+     *         // Like updateRecordsAsync, fields can be specified by name or ID
+     *         id: record2.id,
+     *         fields: {
+     *             [postTitleField.id]: 'Cake decorating tips & tricks',
+     *             [publicationDateField.id]: '2020-02-02',
+     *         },
+     *     },
+     *     {
+     *         // Validating an update to a specific record, not knowing what fields will be updated
+     *         id: record3.id,
+     *     },
+     *     {
+     *         // Validating an update to specific cell values, not knowing what record will be updated
+     *         fields: {
+     *             'My field name': 'updated value for unknown record',
+     *             // You can use undefined if you know you're going to update a field, but don't know
+     *             // the new cell value yet.
+     *             'Another field name': undefined,
+     *         },
+     *     },
+     * ];
+     *
+     * const canUpdateRecords = table.hasPermissionToUpdateRecords(recordsToUpdate);
+     * if (!canUpdateRecords) {
+     *     alert('not allowed');
+     * }
+     *
+     * // Check if user could potentially update records.
+     * // Equivalent to table.hasPermissionToUpdateRecord()
+     * const canUpdateUnknownRecordsAndFields = table.hasPermissionToUpdateRecords();
+     */
+    hasPermissionToUpdateRecords(
+        records?: $ReadOnlyArray<{
+            +id?: RecordId | void,
+            +fields?: {
+                +[FieldId | string]: mixed | void,
+            } | void,
+        }> | void,
+    ): boolean {
+        return this.checkPermissionsForUpdateRecords(records).hasPermission;
+    }
+    /**
+     * Delete the given record.
+     *
+     * Throws an error if the user does not have permission to delete the given record.
+     *
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the
+     * delete to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * before the promise resolves.
+     *
+     * @param {Record | RecordId} recordOrRecordId the record to be deleted
+     * @returns {Promise<void>} A promise that will resolve once the delete is persisted to Airtable.
+     * @example
+     * function deleteRecord(record) {
+     *     if (table.hasPermissionToDeleteRecord(record)) {
+     *         table.deleteRecordAsync(record);
+     *     }
+     *     // The record is now deleted within your block (eg will not be returned in
+     *     // `table.selectRecords`) but it is still being saved to Airtable servers (eg. it may
+     *     // not look deleted to other users yet)
+     * }
+     *
+     * async function deleteRecordAsync(record) {
+     *     if (table.hasPermissionToDeleteRecord(record)) {
+     *         await table.deleteRecordAsync(record);
+     *     }
+     *     // Record deletion has been saved to Airtable servers.
+     *     alert('record has been deleted');
+     * }
+     */
+    async deleteRecordAsync(recordOrRecordId: Record | RecordId): Promise<void> {
+        await this.deleteRecordsAsync([recordOrRecordId]);
+    }
+    /**
+     * Checks whether the current user has permission to delete the specified record.
+     *
+     * Accepts optional input, in the same format as [deleteRecordAsync](#deleteRecordAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Record | RecordId} [recordOrRecordId] the record to be deleted
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * // Check if user can delete a specific record
+     * const deleteRecordCheckResult = table.checkPermissionsForDeleteRecord(record);
+     * if (!deleteRecordCheckResult.hasPermission) {
+     *     alert(deleteRecordCheckResult.reasonDisplayString);
+     * }
+     *
+     * // Check if user could potentially delete a record.
+     * // Use when you don't know the specific record you want to delete yet (for example, to show
+     * // or hide UI controls that let you select a record to delete.)
+     * const deleteUnknownRecordCheckResult = table.checkPermissionsForDeleteRecord();
+     */
+    checkPermissionsForDeleteRecord(
+        recordOrRecordId?: Record | RecordId | void,
+    ): PermissionCheckResult {
+        return this.checkPermissionsForDeleteRecords(
+            recordOrRecordId ? [recordOrRecordId] : undefined,
+        );
+    }
+    /**
+     * An alias for `checkPermissionsForDeleteRecord(recordOrRecordId).hasPermission`.
+     *
+     * Checks whether the current user has permission to delete the specified record.
+     *
+     * Accepts optional input, in the same format as [deleteRecordAsync](#deleteRecordAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Record | RecordId} [recordOrRecordId] the record to be deleted
+     * @returns boolean Whether the current user can delete the specified record.
+     * @example
+     * // Check if user can delete a specific record
+     * const canDeleteRecord = table.hasPermissionToDeleteRecord(record);
+     * if (!canDeleteRecord) {
+     *     alert('not allowed');
+     * }
+     *
+     * // Check if user could potentially delete a record.
+     * // Use when you don't know the specific record you want to delete yet (for example, to show
+     * // or hide UI controls that let you select a record to delete.)
+     * const canDeleteUnknownRecord = table.hasPermissionToDeleteRecord();
+     */
+    hasPermissionToDeleteRecord(recordOrRecordId?: Record | RecordId | void): boolean {
+        return this.checkPermissionsForDeleteRecord(recordOrRecordId).hasPermission;
+    }
+    /**
+     * Delete the given records.
+     *
+     * Throws an error if the user does not have permission to delete the given records.
+     *
+     * You may only delete up to 50 records in one call to `deleteRecordsAsync`.
+     * See [Writing changes to records](/packages/sdk/docs/guide_writes.md) for more information
+     * about write limits.
+     *
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the
+     * delete to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * before the promise resolves.
+     *
+     * @param {Array<Record | RecordId>} recordsOrRecordIds Array of Records and RecordIds
+     * @returns {Promise<void>} A promise that will resolve once the deletes are persisted to Airtable.
+     * @example
+     *
+     * function deleteRecords(records) {
+     *     if (table.hasPermissionToDeleteRecords(records)) {
+     *         table.deleteRecordsAsync(records);
+     *     }
+     *     // The records are now deleted within your block (eg will not be returned in
+     *     // `table.selectRecords()`) but are still being saved to Airtable servers (eg. they
+     *     // may not look deleted to other users yet)
+     * }
+     *
+     * async function deleteRecordsAsync(records) {
+     *     if (table.hasPermissionToDeleteRecords(records)) {
+     *         await table.deleteRecordsAsync(records);
+     *     }
+     *     // Record deletions have been saved to Airtable servers.
+     *     alert('records have been deleted');
+     * }
+     */
+    async deleteRecordsAsync(recordsOrRecordIds: $ReadOnlyArray<Record | RecordId>): Promise<void> {
+        const recordIds = recordsOrRecordIds.map(recordOrRecordId =>
+            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
         );
 
-        await getSdk().unstable_mutations.applyMutationAsync({
-            type: MutationTypes.SET_SINGLE_RECORD_CELL_VALUES,
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.DELETE_MULTIPLE_RECORDS,
             tableId: this.id,
-            recordId,
-            cellValuesByFieldId,
+            recordIds,
         });
     }
-    /** @private */
-    async deleteRecordAsync(recordOrRecordId: Record | RecordId): Promise<void> {
-        const recordId =
-            typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
+    /**
+     * Checks whether the current user has permission to delete the specified records.
+     *
+     * Accepts optional input, in the same format as [deleteRecordsAsync](#deleteRecordsAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<Record | RecordId>} [recordsOrRecordIds] the records to be deleted
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * // Check if user can delete specific records
+     * const deleteRecordsCheckResult = table.checkPermissionsForDeleteRecords([record1, record2]);
+     * if (!deleteRecordsCheckResult.hasPermission) {
+     *     alert(deleteRecordsCheckResult.reasonDisplayString);
+     * }
+     *
+     * // Check if user could potentially delete records.
+     * // Use when you don't know the specific records you want to delete yet (for example, to show
+     * // or hide UI controls that let you select records to delete.)
+     * // Equivalent to table.hasPermissionToDeleteRecord()
+     * const deleteUnknownRecordsCheckResult = table.checkPermissionsForDeleteRecords();
+     */
+    checkPermissionsForDeleteRecords(
+        recordsOrRecordIds?: $ReadOnlyArray<Record | RecordId> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+            tableId: this.id,
+            recordIds: recordsOrRecordIds
+                ? recordsOrRecordIds.map(recordOrRecordId =>
+                      typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id,
+                  )
+                : undefined,
+        });
+    }
+    /**
+     * An alias for `checkPermissionsForDeleteRecords(recordsOrRecordIds).hasPermission`.
+     *
+     * Checks whether the current user has permission to delete the specified records.
+     *
+     * Accepts optional input, in the same format as [deleteRecordsAsync](#deleteRecordsAsync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<Record | RecordId>} [recordsOrRecordIds] the records to be deleted
+     * @returns boolean Whether the current user can delete the specified records.
+     * @example
+     * // Check if user can delete specific records
+     * const canDeleteRecords = table.hasPermissionToDeleteRecords([record1, record2]);
+     * if (!canDeleteRecords) {
+     *     alert('not allowed!');
+     * }
+     *
+     * // Check if user could potentially delete records.
+     * // Use when you don't know the specific records you want to delete yet (for example, to show
+     * // or hide UI controls that let you select records to delete.)
+     * // Equivalent to table.hasPermissionToDeleteRecord()
+     * const canDeleteUnknownRecords = table.hasPermissionToDeleteRecords();
+     */
+    hasPermissionToDeleteRecords(
+        recordsOrRecordIds?: $ReadOnlyArray<Record | RecordId> | void,
+    ): boolean {
+        return this.checkPermissionsForDeleteRecords(recordsOrRecordIds).hasPermission;
+    }
 
-        await getSdk().unstable_mutations.applyMutationAsync({
-            type: MutationTypes.DELETE_SINGLE_RECORD,
-            tableId: this.id,
-            recordId,
-        });
-    }
-    /** @private */
-    createRecordAsync(
-        cellValuesByFieldIdOrName: {
-            [fieldIdOrName: FieldId | string]: mixed,
+    /**
+     * Creates a new record with the specified cell values.
+     *
+     * Throws an error if the user does not have permission to create the given records, or
+     * if invalid input is provided (eg. invalid cell values).
+     *
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the new
+     * record to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * before the promise resolves.
+     *
+     * @param {object} fields object mapping `FieldId` or field name to value for that field.
+     * @returns {Promise<RecordId>} A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
+     * @example
+     * function createNewRecord(recordFields) {
+     *     if (table.hasPermissionToCreateRecord(recordFields)) {
+     *         table.createRecordAsync(recordFields);
+     *     }
+     *     // You can now access the new record in your block (eg `table.selectRecords()`) but it is
+     *     // still being saved to Airtable servers (eg. other users may not be able to see it yet.)
+     * }
+     *
+     * async function createNewRecordAsync(recordFields) {
+     *     if (table.hasPermissionToCreateRecord(recordFields)) {
+     *         const newRecordId = await table.createRecordAsync(recordFields);
+     *     }
+     *     // New record has been saved to Airtable servers.
+     *     alert(`new record with ID ${newRecordId} has been created`);
+     * }
+     *
+     * // Fields can be specified by name or ID
+     * createNewRecord({
+     *     'Project Name': 'Advertising campaign',
+     *     'Budget': 100,
+     * });
+     * createNewRecord({
+     *     [projectNameField.id]: 'Cat video',
+     *     [budgetField.id]: 200,
+     * });
+     */
+    async createRecordAsync(
+        fields: {
+            +[fieldIdOrName: FieldId | string]: mixed,
         } = {},
-    ) {
-        const recordId = hyperId.generateRowId();
-        const promise = (async () => {
-            const cellValuesByFieldId = this._cellValuesByFieldIdOrNameToCellValuesByFieldId(
-                cellValuesByFieldIdOrName,
-            );
+    ): Promise<RecordId> {
+        const recordIds = await this.createRecordsAsync([fields]);
+        return recordIds[0];
+    }
 
-            await getSdk().unstable_mutations.applyMutationAsync({
-                type: MutationTypes.CREATE_SINGLE_RECORD,
-                tableId: this.id,
-                recordId,
-                cellValuesByFieldId,
-            });
+    /**
+     * Checks whether the current user has permission to create the specified record.
+     *
+     * Accepts partial input, in the same format as [createRecordAsync](#createrecordasync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {object} [fields] object mapping `FieldId` or field name to value for that field.
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * // Check if user can create a specific record, when you already know what fields/cell values
+     * // will be set for the record.
+     * const createRecordCheckResult = table.checkPermissionsForCreateRecord({
+     *     'Project Name': 'Advertising campaign',
+     *     'Budget': 100,
+     * });
+     * if (!createRecordCheckResult.hasPermission) {
+     *     alert(createRecordCheckResult.reasonDisplayString);
+     * }
+     *
+     * // Like createRecordAsync, you can use either field names or field IDs.
+     * const createRecordCheckResultWithFieldIds = table.checkPermissionsForCreateRecord({
+     *     [projectNameField.id]: 'Cat video',
+     *     [budgetField.id]: 200,
+     * });
+     *
+     * // Check if user could potentially create a record.
+     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
+     * // UI controls that let you start creating a record.)
+     * const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecord();
+     */
+    checkPermissionsForCreateRecord(
+        fields?: {
+            [fieldIdOrName: FieldId | string]: mixed | void,
+        } | void,
+    ): PermissionCheckResult {
+        return this.checkPermissionsForCreateRecords([
+            {
+                fields: fields || undefined,
+            },
+        ]);
+    }
+    /**
+     * An alias for `checkPermissionsForCreateRecord(fields).hasPermission`.
+     *
+     * Checks whether the current user has permission to create the specified record.
+     *
+     * Accepts partial input, in the same format as [createRecordAsync](#createrecordasync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {object} [fields] object mapping `FieldId` or field name to value for that field.
+     * @returns boolean Whether the current user can create the specified record.
+     * @example
+     * // Check if user can create a specific record, when you already know what fields/cell values
+     * // will be set for the record.
+     * const canCreateRecord = table.hasPermissionToCreateRecord({
+     *     'Project Name': 'Advertising campaign',
+     *     'Budget': 100,
+     * });
+     * if (!canCreateRecord) {
+     *     alert('not allowed!');
+     * }
+     *
+     * // Like createRecordAsync, you can use either field names or field IDs.
+     * const canCreateRecordWithFieldIds = table.hasPermissionToCreateRecord({
+     *     [projectNameField.id]: 'Cat video',
+     *     [budgetField.id]: 200,
+     * });
+     *
+     * // Check if user could potentially create a record.
+     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
+     * // UI controls that let you start creating a record.)
+     * const canCreateUnknownRecord = table.hasPermissionToCreateRecord();
+     */
+    hasPermissionToCreateRecord(
+        fields?: {
+            [fieldIdOrName: FieldId | string]: mixed | void,
+        } | void,
+    ): boolean {
+        return this.checkPermissionsForCreateRecord(fields).hasPermission;
+    }
+    /**
+     * Creates new records with the specified cell values.
+     *
+     * Throws an error if the user does not have permission to create the given records, or
+     * if invalid input is provided (eg. invalid cell values).
+     *
+     * You may only create up to 50 records in one call to `createRecordsAsync`.
+     * See [Writing changes to records](/packages/sdk/docs/guide_writes.md) for more information
+     * about write limits.
+     *
+     * This action is asynchronous: `await` the returned promise if you wish to wait for the new
+     * record to be persisted to Airtable servers.
+     * Updates are applied optimistically locally, so your changes will be reflected in your block
+     * before the promise resolves.
+     *
+     * @param {Array<object>} records Array of objects mapping `FieldId` or field name to value for that field.
+     * @returns {Promise<Array<RecordId>>} A promise that will resolve to array of RecordIds of the new records, once the new records are persisted to Airtable.
+     * @example
+     * const recordDefs = [
+     *     // Fields can be specified by name or ID
+     *     {
+     *         'Project Name': 'Advertising campaign',
+     *         'Budget': 100,
+     *     },
+     *     {
+     *         [projectNameField.id]: 'Cat video',
+     *         [budgetField.id]: 200,
+     *     },
+     *     // Specifying no fields will create a new record with no cell values set
+     *     {},
+     * ];
+     *
+     * function createNewRecords() {
+     *     if (table.hasPermissionToCreateRecords(recordDefs)) {
+     *         table.createRecordsAsync(recordDefs);
+     *     }
+     *     // You can now access the new records in your block (eg `table.selectRecords()`) but they
+     *     // are still being saved to Airtable servers (eg. other users may not be able to see them
+     *     // yet.)
+     * }
+     *
+     * async function createNewRecordsAsync() {
+     *     if (table.hasPermissionToCreateRecords(recordDefs)) {
+     *         const newRecordIds = await table.createRecordsAsync(recordDefs);
+     *     }
+     *     // New records have been saved to Airtable servers.
+     *     alert(`new records with IDs ${newRecordIds} have been created`);
+     * }
+     */
+    async createRecordsAsync(
+        records: $ReadOnlyArray<{
+            +[fieldIdOrName: FieldId | string]: mixed,
+        }>,
+    ): Promise<Array<RecordId>> {
+        const recordsToCreate = records.map(recordDef => ({
+            id: this._airtableInterface.idGenerator.generateRecordId(),
+            cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(recordDef),
+        }));
 
-            return recordId;
-        })();
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+            tableId: this.id,
+            records: recordsToCreate,
+        });
 
-        return promise;
+        return recordsToCreate.map(record => record.id);
+    }
+    /**
+     * Checks whether the current user has permission to create the specified records.
+     *
+     * Accepts partial input, in the same format as [createRecordsAsync](#createrecordsasync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<object>} [records] Array of objects mapping `FieldId` or field name to value for that field.
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * // Check if user can create specific records, when you already know what fields/cell values
+     * // will be set for the records.
+     * const createRecordsCheckResult = table.checkPermissionsForCreateRecords([
+     *     // Like createRecordsAsync, fields can be specified by name or ID
+     *     {
+     *         'Project Name': 'Advertising campaign',
+     *         'Budget': 100,
+     *     },
+     *     {
+     *         [projectNameField.id]: 'Cat video',
+     *         [budgetField.id]: 200,
+     *     },
+     *     {},
+     * ]);
+     * if (!createRecordsCheckResult.hasPermission) {
+     *     alert(createRecordsCheckResult.reasonDisplayString);
+     * }
+     *
+     * // Check if user could potentially create records.
+     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
+     * // UI controls that let you start creating records.)
+     * // Equivalent to table.checkPermissionsForCreateRecord()
+     * const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecords();
+     */
+    checkPermissionsForCreateRecords(
+        records?: $ReadOnlyArray<{
+            +fields?: {[FieldId | string]: mixed | void} | void,
+        }> | void,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+            tableId: this.id,
+            records: records
+                ? records.map(record => ({
+                      id: undefined,
+                      cellValuesByFieldId: record.fields
+                          ? this._cellValuesByFieldIdOrNameToCellValuesByFieldId(record.fields)
+                          : undefined,
+                  }))
+                : undefined,
+        });
+    }
+    /**
+     * An alias for `checkPermissionsForCreateRecords(records).hasPermission`.
+     *
+     * Checks whether the current user has permission to create the specified records.
+     *
+     * Accepts partial input, in the same format as [createRecordsAsync](#createrecordsasync).
+     * The more information provided, the more accurate the permissions check will be.
+     *
+     * @param {Array<object>} [records] Array of objects mapping `FieldId` or field name to value for that field.
+     * @returns boolean Whether the current user can create the specified records.
+     * @example
+     * // Check if user can create specific records, when you already know what fields/cell values
+     * // will be set for the records.
+     * const canCreateRecords = table.hasPermissionToCreateRecords([
+     *     // Like createRecordsAsync, fields can be specified by name or ID
+     *     {
+     *         'Project Name': 'Advertising campaign',
+     *         'Budget': 100,
+     *     },
+     *     {
+     *         [projectNameField.id]: 'Cat video',
+     *         [budgetField.id]: 200,
+     *     },
+     *     {},
+     * ]);
+     * if (!canCreateRecords) {
+     *     alert('not allowed');
+     * }
+     *
+     * // Check if user could potentially create records.
+     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
+     * // UI controls that let you start creating records.)
+     * // Equivalent to table.hasPermissionToCreateRecord()
+     * const canCreateUnknownRecords = table.hasPermissionToCreateRecords();
+     */
+    hasPermissionToCreateRecords(
+        records?: $ReadOnlyArray<{
+            +fields?: {[FieldId | string]: mixed | void} | void,
+        }> | void,
+    ): boolean {
+        return this.checkPermissionsForCreateRecords(records).hasPermission;
     }
     _cellValuesByFieldIdOrNameToCellValuesByFieldId(cellValuesByFieldIdOrName: {
-        [fieldIdOrName: FieldId | string]: mixed,
+        +[fieldIdOrName: FieldId | string]: mixed,
     }): {[FieldId]: mixed} {
         return Object.fromEntries(
             entries(cellValuesByFieldIdOrName).map(([fieldIdOrName, cellValue]) => {
                 const field = this.__getFieldMatching(fieldIdOrName);
-                if (!field) {
-                    throw spawnError(
-                        "Field '%s' doesn't exist in table %s",
-                        fieldIdOrName,
-                        this.id,
-                    );
-                }
                 return [field.id, cellValue];
             }),
         );
@@ -540,28 +1344,66 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /**
      * @private
      */
-    __getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
+    __getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field {
         let field: Field | null;
         if (fieldOrFieldIdOrFieldName instanceof Field) {
+            if (fieldOrFieldIdOrFieldName.parentTable.id !== this.id) {
+                throw spawnError(
+                    "Field '%s' is from a different table than table '%s'",
+                    fieldOrFieldIdOrFieldName.id,
+                    this.id,
+                );
+            }
             field = fieldOrFieldIdOrFieldName;
         } else {
             field =
                 this.getFieldByIdIfExists(fieldOrFieldIdOrFieldName) ||
                 this.getFieldByNameIfExists(fieldOrFieldIdOrFieldName);
+
+            if (field === null) {
+                throw spawnError(
+                    "Field '%s' does not exist in table '%s'",
+                    fieldOrFieldIdOrFieldName,
+                    this.id,
+                );
+            }
+        }
+
+        if (field.isDeleted) {
+            throw spawnError("Field '%s' was deleted from table '%s'", field.id, this.id);
         }
         return field;
     }
     /**
      * @private
      */
-    __getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
+    __getViewMatching(viewOrViewIdOrViewName: View | string): View {
         let view: View | null;
         if (viewOrViewIdOrViewName instanceof View) {
+            if (viewOrViewIdOrViewName.parentTable.id !== this.id) {
+                throw spawnError(
+                    "View '%s' is from a different table than table '%s'",
+                    viewOrViewIdOrViewName.id,
+                    this.id,
+                );
+            }
             view = viewOrViewIdOrViewName;
         } else {
             view =
                 this.getViewByIdIfExists(viewOrViewIdOrViewName) ||
                 this.getViewByNameIfExists(viewOrViewIdOrViewName);
+
+            if (view === null) {
+                throw spawnError(
+                    "View '%s' does not exist in table '%s'",
+                    viewOrViewIdOrViewName,
+                    this.id,
+                );
+            }
+        }
+
+        if (view.isDeleted) {
+            throw spawnError("View '%s' was deleted from table '%s'", view.id, this.id);
         }
         return view;
     }
@@ -584,6 +1426,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                     delete this._viewModelsById[viewId];
                 }
             }
+        }
+        if (dirtyPaths.lock) {
+            didTableSchemaChange = true;
         }
         if (dirtyPaths.viewsById) {
             for (const [viewId, dirtyViewPaths] of entries(dirtyPaths.viewsById)) {

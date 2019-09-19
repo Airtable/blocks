@@ -139,7 +139,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * @private
      */
     __applyChangesWithoutTriggeringEvents(
-        changes: Array<ModelChange>,
+        changes: $ReadOnlyArray<ModelChange>,
     ): {[WatchableSessionKey]: boolean} {
         const changedKeys = {
             [WatchableSessionKeys.permissionLevel]: false,

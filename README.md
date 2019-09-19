@@ -19,6 +19,11 @@ terms of the [developer preview agreement](/DEVELOPER_AGREEMENT.md).
 
 ## If you want to figure out how to do something specific
 
+### Guides
+
+-   [Writing changes to records](/packages/sdk/docs/guide_writes.md) covers creating, deleting and
+    updating records from your block
+
 ### API documentation
 
 The [API reference](https://github.com/Airtable/blocks/tree/master/packages/sdk/docs/api.md)

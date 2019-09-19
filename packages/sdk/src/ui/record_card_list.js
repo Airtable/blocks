@@ -2,13 +2,30 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {FixedSizeList} from 'react-window';
+import {compose} from '@styled-system/core';
 import {invariant, spawnError} from '../error_utils';
 import {type RecordDef} from '../types/record';
 import Record from '../models/record';
 import Field from '../models/field';
 import View from '../models/view';
 import RecordCard from './record_card';
+import Box from './box';
 import createDetectElementResize from './create_detect_element_resize';
+import withStyledSystem from './with_styled_system';
+import {
+    dimensionsSet,
+    dimensionsSetPropTypes,
+    type DimensionsSetProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 
 const RECORD_CARD_ROW_HEIGHT = 80;
 const RECORD_CARD_SPACING = 10;
@@ -16,9 +33,9 @@ const RECORD_CARD_SPACING = 10;
 /** @private */
 type FixedSizeListType = HTMLDivElement & {scrollTo: number => void, scrollToItem: number => void};
 /** @private */
-type RecordCardItemRendererProps = {|
+type RecordCardItemRendererProps = {
     data: {
-        records: Array<Record | RecordDef>,
+        records: Array<Record> | Array<RecordDef>,
         fields?: Array<Field>,
         view?: View,
         width: number,
@@ -30,7 +47,7 @@ type RecordCardItemRendererProps = {|
     style: {[string]: mixed, left: number, top: number},
     className?: string,
     index: number,
-|};
+};
 
 /**
  * Item renderer component for react-window FixedSizeList. Responsible for rendering each
@@ -174,13 +191,12 @@ const innerRecordCardListWindow = React.forwardRef((props: InnerWindowProps, ref
  * @property {object} [style] Additional styles to apply to the record card list.
  */
 type RecordCardListProps = {|
-    records: Array<Record | RecordDef>,
-
-    onScroll?: ({|
-        scrollDirection: string,
+    records: Array<Record> | Array<RecordDef>,
+    onScroll?: ({
+        scrollDirection: 'forward' | 'backward',
         scrollOffset: number,
         scrollUpdateWasRequested: boolean,
-    |}) => void,
+    }) => void,
     onRecordClick?: null | ((record: Record | RecordDef, index: number) => void),
     onRecordMouseEnter?: (record: Record | RecordDef, index: number) => void,
     onRecordMouseLeave?: (record: Record | RecordDef, index: number) => void,
@@ -191,6 +207,27 @@ type RecordCardListProps = {|
     className?: string,
     style?: {[string]: mixed},
 |};
+
+type StyleProps = {|
+    ...DimensionsSetProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    dimensionsSet,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+const stylePropTypes = {
+    ...dimensionsSetPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
 
 type RecordCardListState = {|
     cardListWidth: number,
@@ -240,7 +277,7 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
         className: PropTypes.string,
         style: PropTypes.object,
     };
-    _container: {|current: HTMLDivElement | null|};
+    _container: {|current: HTMLElement | null|};
     _cardList: {|current: FixedSizeListType | null|};
     _cardListInnerWindow: {|current: HTMLDivElement | null|};
     _detectElementResize: {|
@@ -326,7 +363,13 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
             className: '',
         };
         return (
-            <div ref={this._container} className={className} style={style}>
+            <Box
+                ref={this._container}
+                className={className}
+                overflow="hidden"
+                height="100%"
+                style={style}
+            >
                 <FixedSizeList
                     outerRef={this._cardList}
                     width={this.state.cardListWidth}
@@ -341,9 +384,13 @@ class RecordCardList extends React.Component<RecordCardListProps, RecordCardList
                 >
                     {RecordCardItemRenderer}
                 </FixedSizeList>
-            </div>
+            </Box>
         );
     }
 }
 
-export default RecordCardList;
+export default withStyledSystem<RecordCardListProps, StyleProps, RecordCardList, {}>(
+    RecordCardList,
+    styleParser,
+    stylePropTypes,
+);

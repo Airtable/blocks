@@ -9,9 +9,31 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.30...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.31...HEAD)
 
 No changes.
+
+## [0.0.31](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.30...@airtable/blocks@0.0.31) - 2019-09-18
+
+-   New record writes API! You can now create, update, and delete records directly from your block.
+    Check out the new
+    [writes guide](https://github.com/Airtable/blocks/blob/master/packages/sdk/docs/guide_writes.md)
+    for more information.
+-   **BREAKING**: several `globalConfig` APIs have changed to be consistent with the new record
+    writes & permissions APIs:
+    -   `globalConfig.set()` has been removed - use the new `globalConfig.setAsync()` method
+        instead.
+    -   `globalConfig.canSet()` has been renamed to `globalConfig.hasPermissionToSet()`.
+    -   `globalConfig.setPaths()` has been removed - use the new `globalConfig.setPathsAsync()`
+        method instead.
+    -   `globalConfig.canSetPaths()` has been renamed to `globalConfig.hasPermissionToSetPaths()`.
+-   **BREAKING:** Remove `models.generateGuid()`. Use an ID generator like
+    [`uuid`](https://www.npmjs.com/package/uuid) instead.
+-   **BREAKING:** Deprecated `UI.AutocompletePopover`.
+-   Upgrade flow to 0.106.3
+-   Fix a flow error with `react-window`.
+-   `view.selectRecords()` now colors records according to that view by default.
+-   Allow passing an array of models to `useLoadable` to load several things at once.
 
 ## [0.0.30](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.29...@airtable/blocks@0.0.30) - 2019-08-26
 

@@ -3,14 +3,13 @@ import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordId} from '../types/record';
 import {FieldTypes} from '../types/field';
-import {isEnumValue, assertEnumValue} from '../private_utils';
+import {isEnumValue, assertEnumValue, getLocallyUniqueId} from '../private_utils';
 import {
     spawnAbstractMethodError,
     spawnUnknownSwitchCaseError,
     spawnError,
     invariant,
 } from '../error_utils';
-import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type Table from './table';
 import Field from './field';
@@ -72,17 +71,19 @@ export type NormalizedRecordQueryResultOpts = {|
  * Once you've got a query result, you need to load it before you can start working with it. When
  * you're finished, unload it:
  * ```js
- * // query for all the records in "myTable"
- * const queryResult = myTable.selectRecords();
+ * async function fetchRecordsAndDoSomethingAsync(myTable) {
+ *     // query for all the records in "myTable"
+ *     const queryResult = myTable.selectRecords();
  *
- * // load the data in the query result:
- * await queryResult.loadDataAsync();
+ *     // load the data in the query result:
+ *     await queryResult.loadDataAsync();
  *
- * // work with the data in the query result
- * doSomething(queryResult);
+ *     // work with the data in the query result
+ *     doSomething(queryResult);
  *
- * // when you're done, unload the data:
- * queryResult.unloadData();
+ *     // when you're done, unload the data:
+ *     queryResult.unloadData();
+ * }
  * ```
  *
  * If you're using a query result in a React component, you don't need to worry about this. Just
@@ -130,6 +131,7 @@ export type NormalizedRecordQueryResultOpts = {|
  *         'Rating',
  *     ],
  * });
+ * ```
  *
  * ##### recordColorMode
  * Just like a view in Airtable, you can control the colors of records in a field. There are three
@@ -139,7 +141,7 @@ export type NormalizedRecordQueryResultOpts = {|
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
 
- * someView.selectRecords({
+ * someTable.selectRecords({
  *     recordColorMode: recordColoring.modes.byView(someView),
  * });
  * ```
@@ -152,12 +154,20 @@ export type NormalizedRecordQueryResultOpts = {|
  *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
  * });
  * ```
- *
- * Or with no color at all (the default):
+ * 
+ * By default, views will have whichever coloring is set up in Airtable and tables won't have any
+ * record coloring:
+ * 
  * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- *
+ * // these two are the same:
+ * someView.selectRecords();
  * someView.selectRecords({
+ *     recordColorMode: recordColoring.modes.byView(someView),
+ * });
+ * 
+ * // as are these two:
+ * someTable.selectRecords();
+ * someTable.selectRecords({
  *     recordColorMode: recordColoring.modes.none(),
  * });
  * ```
@@ -228,12 +238,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             ? null
             : opts.sorts.map(sort => {
                   const field = table.__getFieldMatching(sort.field);
-                  if (!field) {
-                      throw spawnError(
-                          'No field found for sort: %s',
-                          sort.field ? sort.field.toString() : typeof sort.field,
-                      );
-                  }
                   if (
                       sort.direction !== undefined &&
                       sort.direction !== 'asc' &&
@@ -265,9 +269,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
                     );
                 }
                 const field = table.__getFieldMatching(fieldOrFieldIdOrFieldName);
-                if (!field) {
-                    throw spawnError('No field found: %s', fieldOrFieldIdOrFieldName);
-                }
                 fieldIdsOrNullIfAllFields.push(field.id);
             }
         }
@@ -321,7 +322,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @private
      */
     constructor(normalizedOpts: NormalizedRecordQueryResultOpts, baseData: BaseData) {
-        super(baseData, getSdk().models.generateGuid());
+        super(baseData, getLocallyUniqueId('RecordQueryResult'));
         this._normalizedOpts = normalizedOpts;
         this._recordStore = normalizedOpts.recordStore;
     }

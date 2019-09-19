@@ -75,7 +75,15 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
                         </div>
                     }
                 >
-                    {this.props.children}
+                    <div
+                        className={
+                            viewport.isSmallerThanMinSize
+                                ? baymax('absolute all-0 overflow-hidden')
+                                : ''
+                        }
+                    >
+                        {this.props.children}
+                    </div>
                 </React.Suspense>
 
                 {/*

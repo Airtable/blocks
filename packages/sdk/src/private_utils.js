@@ -163,16 +163,6 @@ export function flattenDeep<T>(array: ReadOnlyDeepArray<T>): Array<T> {
 /**
  * @private
  */
-export function flatMap<In, Out>(
-    array: Array<In>,
-    mapFn: (In, number, Array<In>) => Array<Out>,
-): Array<Out> {
-    return array.flatMap(mapFn);
-}
-
-/**
- * @private
- */
 export function keyBy<Item, Key: string>(
     array: $ReadOnlyArray<Item>,
     getKey: Item => Key,
@@ -200,4 +190,10 @@ export function uniqBy<Item, Key>(array: $ReadOnlyArray<Item>, getKey: Item => K
     }
 
     return result;
+}
+
+let idCount = 0;
+/** @private */
+export function getLocallyUniqueId(prefix: string = ''): string {
+    return `${prefix}.${idCount++}`;
 }

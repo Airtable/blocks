@@ -18,31 +18,31 @@ type SelectOption = {
     disabled?: boolean,
 };
 
-export type SelectAndSelectButtonsProps = {
+export type SelectAndSelectButtonsProps = {|
     onChange?: SelectOptionValue => void,
     value: ?SelectOptionValue,
     options: Array<SelectOption>,
     disabled?: boolean,
     id?: string,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     tabIndex?: number | string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
-};
+|};
 
-export type SelectAndSelectButtonsSyncedProps = {
+export type SelectAndSelectButtonsSyncedProps = {|
     globalConfigKey: GlobalConfigKey,
     options: Array<SelectOption>,
     onChange?: (value: SelectOptionValue) => void,
     disabled?: boolean,
     id?: string,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     tabIndex?: number | string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
-};
+|};
 
 const SelectOptionValueProp = PropTypes.oneOfType([
     PropTypes.string,

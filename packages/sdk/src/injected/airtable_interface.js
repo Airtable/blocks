@@ -1,12 +1,12 @@
 // @flow
-import {type BaseData} from '../types/base';
+import {type BaseData, type BasePermissionData} from '../types/base';
 import {type BlockInstallationId} from '../types/block';
 import {type HostToBlockMessageType} from '../types/block_frame';
 import {type GlobalConfigUpdate, type GlobalConfigData} from '../global_config';
 import {type RecordData, type RecordDef} from '../types/record';
 import {type UndoRedoMode} from '../types/undo_redo';
 import {type ViewportSizeConstraint} from '../types/viewport';
-import {type Mutation} from '../types/mutations';
+import {type Mutation, type PartialMutation, type PermissionCheckResult} from '../types/mutations';
 import {spawnError} from '../error_utils';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
@@ -21,9 +21,9 @@ export type SdkInitData = {|
     isFirstRun: boolean,
 |};
 
-export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {
-    completion: Promise<CompletionResponseData>,
-} & AdditionalArgs;
+type IdGenerator = {|
+    generateRecordId: () => string,
+|};
 
 /*
  * AirtableInterface is designed as the communication interface between the
@@ -33,6 +33,7 @@ export type AirtableWriteAction<CompletionResponseData, AdditionalArgs: {}> = {
  */
 export interface AirtableInterface {
     sdkInitData: SdkInitData;
+    idGenerator: IdGenerator;
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 
@@ -69,6 +70,10 @@ export interface AirtableInterface {
     ): Promise<{[string]: mixed}>;
 
     applyMutationAsync(mutation: Mutation, opts?: {holdForMs?: number}): Promise<void>;
+    checkPermissionsForMutation(
+        mutation: PartialMutation,
+        basePermissionData: BasePermissionData,
+    ): PermissionCheckResult;
 
     registerHandler(type: HostToBlockMessageType, handlerFn: (data: Object) => void): void;
     fetchAndSubscribeToCursorDataAsync(): Promise<any>;

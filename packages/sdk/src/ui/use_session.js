@@ -29,7 +29,8 @@ import useWatchable from './use_watchable';
  * }
  */
 export default function useSession(): Session {
-    const {session} = getSdk();
+    const {session, base} = getSdk();
     useWatchable(session, ['permissionLevel', 'currentUser']);
+    useWatchable(base, ['schema']);
     return session;
 }

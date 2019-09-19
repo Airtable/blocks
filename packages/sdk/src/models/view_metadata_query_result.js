@@ -2,8 +2,7 @@
 import {type BaseData} from '../types/base';
 import {type FieldId} from '../types/field';
 import {invariant} from '../error_utils';
-import {isEnumValue} from '../private_utils';
-import getSdk from '../get_sdk';
+import {isEnumValue, getLocallyUniqueId} from '../private_utils';
 import ObjectPool from './object_pool';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import type ViewDataStore from './view_data_store';
@@ -38,16 +37,18 @@ const viewMetadataQueryResultPool: ObjectPool<
  * In a React component, you might want to use {@link useViewMetadata}.
  *
  * @example
- * const viewMetadata = view.selectMetaData();
- * await viewMetadata.loadDataAsync();
+ * async function loadMetadataForViewAsync(view) {
+ *     const viewMetadata = view.selectMetadata();
+ *     await viewMetadata.loadDataAsync();
  *
- * console.log(viewMetadata.visibleField);
- * // => [Field, Field, Field]
+ *     console.log(viewMetadata.visibleField);
+ *     // => [Field, Field, Field]
  *
- * console.log(viewMetadata.allFields);
- * // => [Field, Field, Field, Field, Field]
+ *     console.log(viewMetadata.allFields);
+ *     // => [Field, Field, Field, Field, Field]
  *
- * viewMetadata.unloadData();
+ *     viewMetadata.unloadData();
+ * }
  */
 class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     ViewMetadata,
@@ -82,7 +83,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     +_viewDataStore: ViewDataStore;
 
     constructor(baseData: BaseData, parentView: View, viewDataStore: ViewDataStore) {
-        super(baseData, getSdk().models.generateGuid());
+        super(baseData, getLocallyUniqueId('ViewMetadataQueryResult'));
         this.parentView = parentView;
         this._viewDataStore = viewDataStore;
 

@@ -214,6 +214,12 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return newRecordStore;
     }
     /**
+     * @private
+     */
+    __getBaseData(): BaseData {
+        return this._data;
+    }
+    /**
      * @param tableId The ID of the table.
      * @returns The table matching the given ID, or `null` if that table does not exist in this base.
      */
@@ -311,7 +317,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /**
      * @private
      */
-    __applyChangesWithoutTriggeringEvents(changes: Array<ModelChange>): ChangedPaths {
+    __applyChangesWithoutTriggeringEvents(changes: $ReadOnlyArray<ModelChange>): ChangedPaths {
         const changedPaths = {};
         for (const change of changes) {
             this._applyChange(change.path, change.value, changedPaths);

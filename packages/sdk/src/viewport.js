@@ -180,6 +180,9 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * Add a minimum frame size constraint. Use `.minSize`` to get the aggregate
      * of all added constraints.
      *
+     * Upon adding a constraint, if the block is focused and the frame is smaller than the
+     * minimum size, the block will enter fullscreen mode.
+     *
      * @param {{width: (number|null), height: (number|null)}} sizeConstraint The width and height constraints to add. Both `width`
      * and `height` are optional - if either is set to null, that means there is
      * no min size in that dimension.
@@ -198,6 +201,10 @@ class Viewport extends Watchable<WatchableViewportKey> {
         this._minSizes.add(size);
         this._onChange(WatchableViewportKeys.minSize);
         this._onChange(WatchableViewportKeys.maxFullscreenSize);
+
+        if (this.isSmallerThanMinSize) {
+            this.enterFullscreenIfPossible();
+        }
 
         return () => {
             invariant(this._minSizes.has(size), 'UnsetFn can only be called once');

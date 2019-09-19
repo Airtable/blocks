@@ -5,6 +5,7 @@ import * as React from 'react';
 import isEqual from 'fast-deep-equal';
 import {has} from '../private_utils';
 import getSdk from '../get_sdk';
+import {type CollaboratorData} from '../types/collaborator';
 import {baymax} from './baymax_utils';
 
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
@@ -23,17 +24,12 @@ const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
  * @property {string} [collaborator.id] The user ID of the collaborator.
  * @property {string} [collaborator.email] The email address of the collaborator.
  * @property {string} [collaborator.name] The name of the collaborator.
+ * @property {string} [collaborator.status] The status of the collaborator.
  * @property {string} [collaborator.profilePicUrl] The URL of the collaborator's profile picture.
  * @property {string} [className] Additional class names to apply to the collaborator token.
  */
 type CollaboratorTokenProps = {
-    collaborator: {
-        id?: string,
-        email?: string,
-        name?: string,
-        profilePicUrl?: string,
-        status?: string,
-    },
+    collaborator: $Shape<CollaboratorData>,
     className?: string,
 };
 

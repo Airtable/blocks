@@ -20,6 +20,7 @@ import CellRenderer from './cell_renderer';
 import useWatchable from './use_watchable';
 import withHooks from './with_hooks';
 import useViewMetadata from './use_view_metadata';
+import {isCommandModifierKeyEvent} from './key_codes';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -27,7 +28,6 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
 const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/read_mode_renderers/attachment_preview_renderer',
 );
-const keyCodeUtils = window.__requirePrivateModuleFromAirtable('client/mylib/key_code_utils');
 const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
@@ -190,7 +190,7 @@ class RecordCard extends React.Component<RecordCardProps> {
         const {record, view, fields, attachmentCoverField} = props;
 
         if (record && record instanceof Record && record.isDeleted) {
-            throw spawnError('Record is deleted');
+            throw spawnError('Record %s is deleted', record.id);
         }
 
         if (!record) {
@@ -200,7 +200,10 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (record && record instanceof Record && attachmentCoverField) {
             if (attachmentCoverField.parentTable.id !== record.parentTable.id) {
                 throw spawnError(
-                    'Attachment cover field must have the same parent table as record',
+                    'Attachment cover field %s must have the same parent table as record (record ID %s, table ID %s)',
+                    attachmentCoverField.id,
+                    record.id,
+                    record.parentTable.id,
                 );
             }
         }
@@ -208,14 +211,24 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (record && record instanceof Record && fields) {
             for (const field of fields) {
                 if (!field.isDeleted && field.parentTable.id !== record.parentTable.id) {
-                    throw spawnError('All fields must have the same parent table as record');
+                    throw spawnError(
+                        'Field %s must have the same parent table as record (record ID %s, table ID %s)',
+                        field.id,
+                        record.id,
+                        record.parentTable.id,
+                    );
                 }
             }
         }
 
         if (record && record instanceof Record && view && !view.isDeleted) {
             if (view.parentTable.id !== record.parentTable.id) {
-                throw spawnError('View must have the same parent table as record');
+                throw spawnError(
+                    'View %s must have the same parent table as record (record ID %s, table ID %s)',
+                    view.id,
+                    record.id,
+                    record.parentTable.id,
+                );
             }
         }
     }
@@ -227,7 +240,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             const {record} = this.props;
             const recordModel = record && record instanceof Record ? record : null;
             if (recordModel) {
-                if (keyCodeUtils.isCommandModifierKeyEvent(e) || e.shiftKey) {
+                if (isCommandModifierKeyEvent(e) || e.shiftKey) {
                 } else {
                     e.preventDefault();
                     const opts = this.props.expandRecordOptions || {};
@@ -269,12 +282,8 @@ class RecordCard extends React.Component<RecordCardProps> {
         if (record && record instanceof Record) {
             return record.__getRawCellValue(field.id);
         } else {
-            let publicCellValue = record[field.id];
+            const publicCellValue = record[field.id];
             cellValueUtils.validatePublicCellValueForUpdate(publicCellValue, null, field);
-            publicCellValue = cellValueUtils.normalizePublicCellValueForUpdate(
-                publicCellValue,
-                field,
-            );
             return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
         }
     }

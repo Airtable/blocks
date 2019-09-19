@@ -4,6 +4,7 @@ import {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordData, type RecordDef} from '../types/record';
 import {FieldTypes, type FieldId} from '../types/field';
+import {type ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, entries} from '../private_utils';
 import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
@@ -11,7 +12,7 @@ import AbstractModel from './abstract_model';
 import Field from './field';
 import cellValueUtils from './cell_value_utils';
 import type Table from './table';
-import type View from './view';
+import View from './view';
 import {type RecordQueryResultOpts} from './record_query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
@@ -198,13 +199,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     /**
      * @private
      */
-    _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field | null {
+    _getFieldMatching(fieldOrFieldIdOrFieldName: Field | string): Field {
         return this.parentTable.__getFieldMatching(fieldOrFieldIdOrFieldName);
     }
     /**
      * @private
      */
-    _getViewMatching(viewOrViewIdOrViewName: View | string): View | null {
+    _getViewMatching(viewOrViewIdOrViewName: View | string): View {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
     /**
@@ -219,15 +220,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): mixed {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        invariant(field, 'Field does not exist');
-        invariant(!field.isDeleted, 'Field has been deleted');
-        invariant(
-            field.parentTable.id === this.parentTable.id,
-            'Field must have same parent table as record',
-        );
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
-            'Cell values for field are not loaded',
+            'Cell values for field %s are not loaded',
+            field.id,
         );
         const {cellValuesByFieldId} = this._data;
         if (!cellValuesByFieldId) {
@@ -278,13 +274,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * console.log(cellValueAsString);
      * // => '42'
      */
-    getCellValueAsString(fieldOrFieldIdOrFieldName: Field | string): string {
+    getCellValueAsString(fieldOrFieldIdOrFieldName: Field | FieldId | string): string {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        invariant(field, 'Field does not exist');
-        invariant(!field.isDeleted, 'Field has been deleted');
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
-            'Cell values for field are not loaded',
+            'Cell values for field %s are not loaded',
+            field.id,
         );
         const rawCellValue = this.__getRawCellValue(field.id);
 
@@ -350,10 +345,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
      * @returns The color of this record in the given view, or null if the record has no color in that view.
      */
-    getColorInView(viewOrViewIdOrViewName: View | string): Color | null {
+    getColorInView(viewOrViewIdOrViewName: View | ViewId | string): Color | null {
         const view = this._getViewMatching(viewOrViewIdOrViewName);
-        invariant(view, 'View does not exist');
-        invariant(!view.isDeleted, 'View has been deleted');
 
         return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
@@ -381,12 +374,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @returns A query result containing the records in the given `multipleRecordLinks` field.
      */
     selectLinkedRecordsFromCell(
-        fieldOrFieldIdOrFieldName: Field | string,
+        fieldOrFieldIdOrFieldName: Field | FieldId | string,
         opts: RecordQueryResultOpts = {},
     ): LinkedRecordsQueryResult {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        invariant(field, 'Field does not exist');
-        invariant(!field.isDeleted, 'Field has been deleted');
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
     /**

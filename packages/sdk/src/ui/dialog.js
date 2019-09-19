@@ -1,101 +1,28 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
-import Icon from './icon';
-import Modal from './modal';
-
-/**
- * @typedef {object} DialogCloseButtonProps
- * @property {string} [className] `className`s to apply to the close button, separated by spaces.
- * @property {object} [style] Styles to apply to the dialog element.
- * @property {number | string} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
- */
-type DialogCloseButtonProps = {|
-    className?: string,
-    style?: Object,
-    tabIndex?: number | string,
-    children?: React.Node,
-|};
-
-/**
- * A button that closes {@link Dialog}.
- *
- * @alias Dialog.CloseButton
- */
-class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
-    static propTypes = {
-        className: PropTypes.string,
-        style: PropTypes.object,
-        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        children: PropTypes.node,
-    };
-    static contextTypes = {
-        onDialogClose: PropTypes.func,
-    };
-    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLDivElement>) => void;
-    constructor(props: DialogCloseButtonProps) {
-        super(props);
-        this._onKeyDown = this._onKeyDown.bind(this);
-    }
-    _onKeyDown(e: SyntheticKeyboardEvent<HTMLDivElement>) {
-        if (e.ctrlKey || e.altKey || e.metaKey) {
-            return;
-        }
-        if (['Enter', ' '].includes(e.key)) {
-            e.preventDefault();
-            this.context.onDialogClose();
-        }
-    }
-    render() {
-        const {className, style, tabIndex, children} = this.props;
-        const shouldUseDefaultStyling = !children;
-        const defaultClassName =
-            'absolute top-0 right-0 mt1 mr1 flex items-center justify-center circle darken1-hover darken1-focus no-outline pointer';
-        const defaultStyle = {width: 24, height: 24};
-
-        return (
-            <div
-                onClick={this.context.onDialogClose}
-                onKeyDown={this._onKeyDown}
-                className={cx(
-                    {
-                        [baymax(defaultClassName)]: shouldUseDefaultStyling,
-                    },
-                    className,
-                )}
-                style={{
-                    ...(shouldUseDefaultStyling ? defaultStyle : {}),
-                    ...style,
-                }}
-                tabIndex={tabIndex || 0}
-                role="button"
-                aria-label="Close dialog"
-            >
-                {children ? children : <Icon name="x" size={12} className={baymax('quieter')} />}
-            </div>
-        );
-    }
-}
+import Modal, {stylePropTypes, type StyleProps} from './modal';
+import DialogCloseButton from './dialog_close_button';
 
 /**
  * @typedef {object} DialogProps
  * @property {function} onClose Callback function to fire when the dialog is closed.
  * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
  * @property {Object} [style] Extra styles to apply to the dialog element.
- * @property {string} [backgroundClassName] Extra `className`s to apply to the lightbox element, separated by spaces.
- * @property {Object} [backgroundStyle] Extra styles to apply to the lightbox element.
+ * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
+ * @property {Object} [backgroundStyle] Extra styles to apply to the background element.
  */
-type DialogProps = {
+type DialogProps = {|
     onClose: () => mixed,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     backgroundClassName?: string,
-    backgroundStyle?: Object,
+    backgroundStyle?: {[string]: mixed},
     children: React.Node,
-};
+    ...StyleProps,
+|};
 
 /**
  * A styled modal dialog component.
@@ -145,6 +72,7 @@ class Dialog extends React.Component<DialogProps> {
         backgroundClassName: PropTypes.string,
         backgroundStyle: PropTypes.object,
         children: PropTypes.node.isRequired,
+        ...stylePropTypes,
     };
     static childContextTypes = {
         onDialogClose: PropTypes.func,
@@ -178,14 +106,17 @@ class Dialog extends React.Component<DialogProps> {
             backgroundClassName,
             backgroundStyle,
             children,
+            ...restOfProps
         } = this.props;
+
         return (
             <Modal
                 onClose={onClose}
-                className={cx(baymax('relative p2 big line-height-4'), className)}
+                className={cx(baymax('big line-height-4'), className)}
                 style={style}
                 backgroundClassName={backgroundClassName}
                 backgroundStyle={backgroundStyle}
+                {...restOfProps}
             >
                 {children}
             </Modal>

@@ -50,7 +50,7 @@ type SelectSyncedProps = SelectAndSelectButtonsSyncedProps;
 class SelectSynced extends React.Component<SelectSyncedProps> {
     static propTypes = SelectAndSelectButtonsSyncedPropTypes;
     props: SelectSyncedProps;
-    _select: Select | null;
+    _select: React.ElementRef<typeof Select> | null;
     constructor(props: SelectSyncedProps) {
         super(props);
         this._select = null;

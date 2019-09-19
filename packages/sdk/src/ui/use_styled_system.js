@@ -2,7 +2,7 @@
 import {css} from 'emotion';
 import useTheme from './theme/use_theme';
 
-type Parser<T> = {
+export type StyleParser<T> = {
     (props: T): {},
     config: {+[string]: mixed},
     propNames: Array<string>,
@@ -10,10 +10,10 @@ type Parser<T> = {
 };
 
 /** @private */
-export default function useStyledSystem<T>(styleProps: T, parser: Parser<T>): string {
+export default function useStyledSystem<T>(styleProps: T, styleParser: StyleParser<T>): string {
     const theme = useTheme();
 
-    const styles = parser({...styleProps, theme});
+    const styles = styleParser({...styleProps, theme});
 
     const classNameForStyleProps = css(styles);
 

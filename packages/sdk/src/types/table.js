@@ -1,9 +1,10 @@
 // @flow
-import {type FieldData, type FieldId} from './field';
+import {type FieldData, type FieldPermissionData, type FieldId} from './field';
 import {type ViewData, type ViewId} from './view';
 import {type RecordData, type RecordId} from './record';
 
 export type TableId = string;
+export opaque type TableLock = mixed;
 
 export type TableData = {|
     id: TableId,
@@ -14,4 +15,12 @@ export type TableData = {|
     viewOrder: Array<ViewId>,
     viewsById: {[ViewId]: ViewData},
     recordsById?: {[RecordId]: RecordData},
+    lock: TableLock | null,
 |};
+
+export type TablePermissionData = {
+    +id: TableId,
+    +name: string,
+    +fieldsById: {+[string]: FieldPermissionData},
+    +lock: TableLock | null,
+};

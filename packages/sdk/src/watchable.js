@@ -1,14 +1,6 @@
 // @flow
+import {getLocallyUniqueId} from './private_utils';
 import {spawnError} from './error_utils';
-
-let idCount = 0;
-/**
- * @private
- */
-function getId() {
-    idCount++;
-    return idCount;
-}
 
 /**
  * Abstract superclass for watchable models. All watchable models expose `watch`
@@ -22,7 +14,7 @@ class Watchable<WatchableKey: string> {
         return false;
     }
     _changeCount = 0;
-    +_watchableId = getId();
+    +_watchableId = getLocallyUniqueId();
     _changeWatchersByKey: {
         [string]: Array<{
             callback: (model: Watchable<*>, key: WatchableKey, ...args: Array<any>) => mixed,

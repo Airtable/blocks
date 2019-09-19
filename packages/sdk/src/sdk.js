@@ -84,7 +84,7 @@ class BlockSdk {
     session: Session;
 
     /** @private */
-    unstable_mutations: Mutations;
+    __mutations: Mutations;
 
     /**
      * Contains the model classes, field types, view types, and utilities for
@@ -184,11 +184,12 @@ class BlockSdk {
         this.viewport = new Viewport(sdkInitData.isFullscreen, airtableInterface);
         this.cursor = new Cursor(sdkInitData.baseData, airtableInterface);
         this.session = new Session(sdkInitData.baseData, airtableInterface);
-        this.unstable_mutations = new Mutations(
+        this.__mutations = new Mutations(
             airtableInterface,
             this.session,
             this.base,
             changes => this.__applyModelChanges(changes),
+            updates => this.__applyGlobalConfigUpdates(updates),
         );
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
@@ -202,7 +203,7 @@ class BlockSdk {
         this._registerHandlers();
 
     }
-    __applyModelChanges(changes: Array<ModelChange>) {
+    __applyModelChanges(changes: $ReadOnlyArray<ModelChange>) {
         this._runWithUpdateBatching(() => {
             const changedBasePaths = this.base.__applyChangesWithoutTriggeringEvents(changes);
             const changedCursorKeys = this.cursor.__applyChangesWithoutTriggeringEvents(changes);
@@ -212,7 +213,7 @@ class BlockSdk {
             this.session.__triggerOnChangeForChangedKeys(changedSessionKeys);
         });
     }
-    __applyGlobalConfigUpdates(updates: Array<GlobalConfigUpdate>) {
+    __applyGlobalConfigUpdates(updates: $ReadOnlyArray<GlobalConfigUpdate>) {
         this._runWithUpdateBatching(() => {
             this.globalConfig.__setMultipleKvPaths(updates);
         });

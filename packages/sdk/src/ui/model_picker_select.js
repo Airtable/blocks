@@ -41,7 +41,7 @@ const ModelWatcher = ({
 };
 
 class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
-    _select: Select | null;
+    _select: React.ElementRef<typeof Select> | null;
     _onChange: SelectOptionValue => void;
     constructor(props: ModelPickerSelectProps<Model>) {
         super(props);

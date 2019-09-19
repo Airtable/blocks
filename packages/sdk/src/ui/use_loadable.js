@@ -1,7 +1,9 @@
 // @flow
 import {useMemo, useEffect} from 'react';
+import {useSubscription} from 'use-subscription';
+import {compact} from '../private_utils';
 import {spawnError} from '../error_utils';
-import useSubscription from './use_subscription';
+import useArrayIdentity from './use_array_identity';
 
 interface LoadableModel {
     +isDataLoaded: boolean;
@@ -11,12 +13,6 @@ interface LoadableModel {
     unwatch('isDataLoaded', () => mixed): $ReadOnlyArray<string>;
 }
 
-const noop = () => {};
-const noopSubscription = {
-    getCurrentValue: () => null,
-    subscribe: () => () => {},
-};
-
 const SUSPENSE_CLEAN_UP_MS = 60000;
 
 /**
@@ -25,7 +21,7 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  * You might not need to use it directly though - if you're working with a {@link RecordQueryResult}, try
  * {@link useRecords}, {@link useRecordIds}, or {@link useRecordById} first.
  *
- * When you need to use a loadable mode, `useLoadable(theModel)` will make sure that the model is
+ * When you need to use a loadable model, `useLoadable(theModel)` will make sure that the model is
  * loaded when your component mounts, and unloaded when your component unmounts. By default, you
  * don't need to worry about waiting for the data to load - the hook uses React Suspense to make
  * sure the rest of your component doesn't run until the data is loaded. Whilst the data is
@@ -33,12 +29,15 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  * indicator shows or how it looks, use {@link https://reactjs.org/docs/react-api.html#reactsuspense <React.Suspense />}
  * around the component that uses the hook.
  *
- * If you need more control (for example, if you have two models you want to load at the same time
- * rather than one after the other), you can pass `{shouldSuspend: false}` as a second argument to
- * the hook. In that case though, you should check each model's `.isDataLoaded` property before
- * trying to use the data you loaded.
+ * You can pass several models to `useLoadable` in an array - it will load all of them simultaneously.
+ * We'll memoize this array using shallow equality, so there's no need to use `useMemo`.
  *
- * @param {QueryResult | Cursor | null} model the model to load.
+ * If you need more control, you can pass `{shouldSuspend: false}` as a second argument to
+ * the hook. In that case though, `useLoadable` will cause your component to re-render whenever the
+ * load-state of any model you passed in changes, and you should check each model's `.isDataLoaded`
+ *  property before trying to use the data you loaded.
+ *
+ * @param {QueryResult | Cursor | Array<QueryResult | Cursor | null> | null} models the models to load.
  * @param {object} [options] Optional options to control how the hook works
  * @param {boolean} [options.shouldSuspend=true] pass {shouldSuspend: false} to disable suspense
  * mode. If suspense is disabled, you need to manually check model.isDataLoaded so you don't use
@@ -63,68 +62,90 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  *  import {useLoadable} from '@airtable/blocks/ui';
  *
  *  function LoadTwoQueryResults({queryResultA, queryResultB}) {
- *      // we have two query results. load them without suspense so they can be loaded together,
- *      // rather than one after the other
- *      useLoadable(queryResultA, {shouldSuspend: false});
- *      useLoadable(queryResultB, {shouldSuspend: false});
- *
- *      // manually check whether loading is finished or not before continuing
- *      if (!queryResultA.isDataLoaded || !queryResultB.isDataLoaded) {
- *          return <div>Loading...</div>
- *      }
+ *      // load the queryResults:
+ *      useLoadable([queryResultA, queryResultB]);
  *
  *      // now, we can use the data
  *      return <SomeFancyComponent />;
  *  }
+ *
+ * @example
+ *  import {useLoadable, useBase} from '@airtable/blocks/ui';
+ *
+ *  function LoadAllRecords() {
+ *      const base = useBase();
+ *
+ *      // get a query result for every table in the base:
+ *      const queryResults = base.tables.map(table => table.selectRecords());
+ *
+ *      // load them all:
+ *      useLoadable(queryResults);
+ *
+ *      // use the data:
+ *      return <SomeFancyComponent queryResults={queryResults} />;
+ *  }
  */
 export default function useLoadable(
-    model: LoadableModel | null,
+    models: $ReadOnlyArray<LoadableModel | null> | LoadableModel | null,
     {shouldSuspend = true}: {|shouldSuspend?: boolean|} = {},
 ) {
-    const modelConst = model;
-    if (modelConst !== null && typeof modelConst.loadDataAsync !== 'function') {
-        throw spawnError(
-            'useLoadable called with %s, which is not a loadable',
-            typeof modelConst === 'object' ? modelConst.toString() : typeof modelConst,
+    const constModels = useArrayIdentity(Array.isArray(models) ? models : [models]);
+    const compactModels = useMemo(() => {
+        const compacted = compact(constModels);
+
+        for (const model of compacted) {
+            if (typeof model.loadDataAsync !== 'function') {
+                throw spawnError(
+                    'useLoadable called with %s, which is not a loadable',
+                    typeof model === 'object' ? model.toString() : typeof model,
+                );
+            }
+        }
+        return compacted;
+    }, [constModels]);
+
+    const areAllModelsLoaded = compactModels.every(model => model.isDataLoaded);
+
+    if (shouldSuspend && !areAllModelsLoaded) {
+        setTimeout(() => {
+            for (const model of compactModels) {
+                model.unloadData();
+            }
+        }, SUSPENSE_CLEAN_UP_MS);
+        throw Promise.all(
+            compactModels.map(model => {
+                return model.loadDataAsync();
+            }),
         );
     }
 
-    if (shouldSuspend && modelConst && !modelConst.isDataLoaded) {
-        setTimeout(() => {
-            modelConst.unloadData();
-        }, SUSPENSE_CLEAN_UP_MS);
-        throw modelConst.loadDataAsync();
-    }
-
     const modelIsLoadedSubscription = useMemo(
-        () =>
-            modelConst
-                ? {
-                      getCurrentValue: () => modelConst.isDataLoaded,
-                      subscribe: cb => {
-                          const onChange = (...args) => {
-                              cb();
-                          };
-                          modelConst.watch('isDataLoaded', onChange);
-                          return () => {
-                              modelConst.unwatch('isDataLoaded', onChange);
-                          };
-                      },
-                  }
-                : noopSubscription,
-        [modelConst],
+        () => ({
+            getCurrentValue: () => compactModels.map(model => model.isDataLoaded).join(','),
+            subscribe: onChange => {
+                for (const model of compactModels) {
+                    model.watch('isDataLoaded', onChange);
+                }
+                return () => {
+                    for (const model of compactModels) {
+                        model.unwatch('isDataLoaded', onChange);
+                    }
+                };
+            },
+        }),
+        [compactModels],
     );
     useSubscription(modelIsLoadedSubscription);
 
     useEffect(() => {
-        if (modelConst) {
-            modelConst.loadDataAsync();
-
-            return () => {
-                modelConst.unloadData();
-            };
-        } else {
-            return noop;
+        for (const model of compactModels) {
+            model.loadDataAsync();
         }
-    }, [modelConst]);
+
+        return () => {
+            for (const model of compactModels) {
+                model.unloadData();
+            }
+        };
+    }, [compactModels]);
 }
