@@ -11,7 +11,11 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.31...HEAD)
 
--   **BREAKING:** Removed `localStorage` and `sessionStorage` wrappers.
+<<<<<<< HEAD
+
+-   # **BREAKING:** Removed `localStorage` and `sessionStorage` wrappers.
+-   Fix a bug where the `value` prop wouldn't get correctly passed through to `Input`
+    > > > > > > > fix bug
 
 ## [0.0.31](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.30...@airtable/blocks@0.0.31) - 2019-09-18
 

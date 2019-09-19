@@ -217,6 +217,7 @@ class Input extends React.Component<InputProps> {
     render() {
         const {
             type,
+            value,
             placeholder,
             onChange,
             style,
@@ -242,6 +243,7 @@ class Input extends React.Component<InputProps> {
         return (
             <input
                 ref={el => (this._input = el)}
+                value={value}
                 type={type}
                 placeholder={placeholder}
                 style={style}
