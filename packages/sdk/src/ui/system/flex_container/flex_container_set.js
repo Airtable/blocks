@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as alignContentConfig, type AlignContentProps} from './align_content';
 import {config as alignItemsConfig, type AlignItemsProps} from './align_items';
 import {config as flexDirectionConfig, type FlexDirectionProps} from './flex_direction';
@@ -26,4 +26,4 @@ export const flexContainerSet = system({
     ...justifyItemsConfig,
 });
 
-export const flexContainerSetPropTypes = createPropTypes(flexContainerSet.propNames);
+export const flexContainerSetPropTypes = createStylePropTypes(flexContainerSet.propNames);

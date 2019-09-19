@@ -6,7 +6,7 @@ import {
     type OverflowYProperty,
 } from './utils/csstype';
 import {type Prop} from './utils/types';
-import createPropTypes from './utils/create_prop_types';
+import createStylePropTypes from './utils/create_style_prop_types';
 
 export type OverflowProps = {|
     overflow?: Prop<OverflowProperty>,
@@ -17,4 +17,4 @@ export type OverflowProps = {|
 const config: Config = {overflow: true, overflowY: true, overflowX: true};
 
 export const overflow = system(config);
-export const overflowPropTypes = createPropTypes(overflow.propNames);
+export const overflowPropTypes = createStylePropTypes(overflow.propNames);

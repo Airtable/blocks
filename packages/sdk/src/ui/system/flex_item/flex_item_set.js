@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as flexConfig, type FlexProps} from './flex';
 import {config as flexGrowConfig, type FlexGrowProps} from './flex_grow';
 import {config as flexShrinkConfig, type FlexShrinkProps} from './flex_shrink';
@@ -29,4 +29,4 @@ export const flexItemSet = system({
     ...orderConfig,
 });
 
-export const flexItemSetPropTypes = createPropTypes(flexItemSet.propNames);
+export const flexItemSetPropTypes = createStylePropTypes(flexItemSet.propNames);

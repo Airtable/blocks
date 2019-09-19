@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as marginConfig, type MarginProps} from './margin';
 import {config as paddingConfig, type PaddingProps} from './padding';
 
@@ -14,4 +14,4 @@ export const spacingSet = system({
     ...paddingConfig,
 });
 
-export const spacingSetPropTypes = createPropTypes(spacingSet.propNames);
+export const spacingSetPropTypes = createStylePropTypes(spacingSet.propNames);

@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as heightConfig, type HeightProps} from './height';
 import {config as maxWidthConfig, type MaxWidthProps} from './max_width';
 import {config as maxHeightConfig, type MaxHeightProps} from './max_height';
@@ -26,4 +26,4 @@ export const dimensionsSet = system({
     ...widthConfig,
 });
 
-export const dimensionsSetPropTypes = createPropTypes(dimensionsSet.propNames);
+export const dimensionsSetPropTypes = createStylePropTypes(dimensionsSet.propNames);

@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as backgroundColorConfig, type BackgroundColorProps} from './background_color';
 import {config as borderRadiusConfig, type BorderRadiusProps} from './border_radius';
 import {config as borderConfig, type BorderProps} from './border';
@@ -23,4 +23,4 @@ export const appearanceSet = system({
     ...opacityConfig,
 });
 
-export const appearanceSetPropTypes = createPropTypes(appearanceSet.propNames);
+export const appearanceSetPropTypes = createStylePropTypes(appearanceSet.propNames);

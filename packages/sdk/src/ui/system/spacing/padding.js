@@ -8,7 +8,7 @@ import {
     type PaddingLeftProperty,
 } from '../utils/csstype';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type Prop, type Length} from '../utils/types';
 
 export type PaddingProps = {|
@@ -74,4 +74,4 @@ export const config: Config = {
 };
 
 export const padding = system(config);
-export const paddingPropTypes = createPropTypes(padding.propNames);
+export const paddingPropTypes = createStylePropTypes(padding.propNames);

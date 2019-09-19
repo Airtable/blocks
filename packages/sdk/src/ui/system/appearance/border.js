@@ -10,7 +10,7 @@ import {
     type BorderBottomProperty,
     type BorderLeftProperty,
 } from '../utils/csstype';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type Prop, type Length} from '../utils/types';
 
 export type BorderProps = {|
@@ -70,4 +70,4 @@ export const config: Config = {
 };
 
 export const border = system(config);
-export const borderPropTypes = createPropTypes(border.propNames);
+export const borderPropTypes = createStylePropTypes(border.propNames);

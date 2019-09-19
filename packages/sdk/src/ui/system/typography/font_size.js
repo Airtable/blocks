@@ -1,6 +1,6 @@
 // @flow
 import {system, Config} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type FontSizeProperty} from '../utils/csstype';
 import {type Prop, type Length} from '../utils/types';
 
@@ -16,4 +16,4 @@ export const config: Config = {
 };
 
 export const fontSize = system(config);
-export const fontSizePropTypes = createPropTypes(fontSize.propNames);
+export const fontSizePropTypes = createStylePropTypes(fontSize.propNames);
