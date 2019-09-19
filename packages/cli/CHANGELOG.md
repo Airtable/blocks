@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.35...HEAD)
 
-No changes.
+-   Add `block add-remote` command
 
 ## [0.0.35](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.34...@airtable/blocks-cli@0.0.35) - 2019-09-18
 
