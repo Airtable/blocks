@@ -5067,7 +5067,8 @@ Type: [object][72]
     -   `choice.id` **[string][65]** The ID of the select option.
     -   `choice.name` **[string][65]** The name of the select option.
     -   `choice.color` **[string][65]?** The color of the select option.
--   `className` **[string][65]?** Additional class names to apply to the collaborator token.
+-   `style` **[string][65]?** Additional styles to apply to the choice token.
+-   `className` **[string][65]?** Additional class names to apply to the choice token.
 
 ### CollaboratorToken
 

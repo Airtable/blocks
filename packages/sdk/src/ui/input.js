@@ -96,7 +96,7 @@ export const sharedInputPropTypes = {
     maxLength: PropTypes.number,
     min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     minLength: PropTypes.number,
-    step: PropTypes.oneOfType([PropTypes.number, PropTypes.sstring]),
+    step: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     pattern: PropTypes.string,
     readOnly: PropTypes.bool,
     autoComplete: PropTypes.string,

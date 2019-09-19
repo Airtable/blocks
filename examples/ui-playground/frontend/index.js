@@ -5,6 +5,7 @@ import ExampleManager from './ExampleManager';
 import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
 import ButtonExample from './ButtonExample';
+import ChoiceTokenExample from './ChoiceTokenExample';
 import CellRendererExample from './CellRendererExample';
 import ColorPaletteExample from './ColorPaletteExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
@@ -40,6 +41,10 @@ const examples: Array<Example> = [
     {
         name: 'CellRenderer',
         component: CellRendererExample,
+    },
+    {
+        name: 'ChoiceToken',
+        component: ChoiceTokenExample,
     },
     {
         name: 'ColorPalette',
@@ -78,10 +83,6 @@ const examples: Array<Example> = [
         name: 'RecordCardList',
         component: RecordCardListExample,
         hasSettings: true,
-    },
-    {
-        name: 'Modal',
-        component: ModalExample,
     },
     {
         name: 'SelectButtons',
