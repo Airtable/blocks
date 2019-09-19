@@ -1,0 +1,20 @@
+{
+    "name": "@airtable/update-records-block",
+    "version": "1.0.0",
+    "description": "A button that updates the currently selected records when clicked",
+    "author": "",
+    "license": "UNLICENSED",
+    "scripts": {
+        "lint": "eslint frontend"
+    },
+    "dependencies": {
+        "@airtable/blocks": "^0.0.31",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0"
+    },
+    "devDependencies": {
+        "eslint": "^6.3.0",
+        "eslint-plugin-react": "^7.14.3",
+        "eslint-plugin-react-hooks": "^2.0.1"
+    }
+}
