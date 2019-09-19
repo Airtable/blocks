@@ -12,6 +12,10 @@ The code shows:
 
 -   How to store settings in `globalConfig`.
 
+-   How to create, update, and delete records in your base.
+
+-   How to make your block adapt to the current user's permissions.
+
 ## How to run this block
 
 1. Copy
