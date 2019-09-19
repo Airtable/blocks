@@ -7,6 +7,7 @@ import BoxExample from './BoxExample';
 import ButtonExample from './ButtonExample';
 import ChoiceTokenExample from './ChoiceTokenExample';
 import CellRendererExample from './CellRendererExample';
+import CollaboratorTokenExample from './CollaboratorTokenExample';
 import ColorPaletteExample from './ColorPaletteExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import InputExample from './InputExample';
@@ -45,6 +46,10 @@ const examples: Array<Example> = [
     {
         name: 'ChoiceToken',
         component: ChoiceTokenExample,
+    },
+    {
+        name: 'CollaboratorToken',
+        component: CollaboratorTokenExample,
     },
     {
         name: 'ColorPalette',

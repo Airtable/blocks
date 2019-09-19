@@ -5114,6 +5114,7 @@ Type: [object][72]
     -   `collaborator.profilePicUrl` **[string][65]?** The URL of the collaborator's profile
         picture.
 -   `className` **[string][65]?** Additional class names to apply to the collaborator token.
+-   `style` **[string][65]?** Additional styles to apply to the collaborator token.
 
 ### ColorPalette
 
