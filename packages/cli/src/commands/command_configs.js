@@ -84,7 +84,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             remote: {
                 description: 'Configure which remote to use',
                 type: 'string',
-                hidden: true, // hide from --help output
             },
             'backend-sdk-base-url': {
                 description: 'Base URL to download backend SDK from',
@@ -110,7 +109,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             remote: {
                 description: 'Configure which remote to use',
                 type: 'string',
-                hidden: true, // hide from --help output
             },
             'backend-sdk-base-url': {
                 description: 'Base URL to download backend SDK from',
