@@ -1,10 +1,10 @@
 // @flow
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {spawnError} from '../error_utils';
 import {type GlobalConfigKey} from '../global_config';
 import ColorPalette, {
     stylePropTypes,
+    sharedColorPalettePropTypes,
     type SharedColorPaletteProps,
     type StyleProps,
 } from './color_palette';
@@ -48,12 +48,7 @@ type ColorPaletteSyncedProps = {|
 class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        disabled: PropTypes.bool,
-        onChange: PropTypes.func,
-        allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
-        squareMargin: PropTypes.number,
-        className: PropTypes.string,
-        style: PropTypes.object,
+        ...sharedColorPalettePropTypes,
         ...stylePropTypes,
     };
     render() {

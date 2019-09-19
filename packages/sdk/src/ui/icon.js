@@ -50,6 +50,16 @@ export type SharedIconProps = {|
     ...StyleProps,
 |};
 
+export const sharedIconPropTypes = {
+    size: PropTypes.number,
+    fillColor: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    pathClassName: PropTypes.string,
+    pathStyle: PropTypes.object,
+    ...stylePropTypes,
+};
+
 /**
  * @typedef {object} IconProps
  * @property {string} name The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
@@ -130,12 +140,7 @@ const Icon = (props: IconProps) => {
 
 Icon.propTypes = {
     name: PropTypes.string.isRequired,
-    size: PropTypes.number,
-    fillColor: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    pathClassName: PropTypes.string,
-    pathStyle: PropTypes.object,
+    ...sharedIconPropTypes,
 };
 
 Icon.defaultProps = {

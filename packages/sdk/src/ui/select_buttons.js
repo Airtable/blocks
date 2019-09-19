@@ -22,6 +22,8 @@ export type SharedSelectButtonsProps = {|
     className?: string,
     tabIndex?: number | string,
     style?: {[string]: mixed},
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
 |};
 
 /**
