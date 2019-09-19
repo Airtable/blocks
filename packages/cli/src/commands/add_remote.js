@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const CommandNames = require('./command_names');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const getBlockDirPathModule = require('../get_block_dir_path');
-const fsUtils = require('../fs_utils');
+const fsUtils = require('../helpers/fs_utils');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 
 import type {Argv} from 'yargs';

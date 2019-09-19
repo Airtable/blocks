@@ -5,7 +5,7 @@ const request = require('request');
 const util = require('util');
 const url = require('url');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
-const fsUtils = require('../fs_utils');
+const fsUtils = require('./fs_utils');
 
 import type {Response} from 'request';
 

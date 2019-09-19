@@ -3,7 +3,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 const path = require('path');
-const fsUtils = require('../../src/fs_utils');
+const fsUtils = require('../../src/helpers/fs_utils');
 const {getTemporaryDirectoryPath, assertThrowsAsync} = require('../helpers');
 const getBlockDirPathModule = require('../../src/get_block_dir_path');
 const addRemote = require('../../src/commands/add_remote');

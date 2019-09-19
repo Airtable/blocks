@@ -1,6 +1,6 @@
 // @flow
 const path = require('path');
-const fsUtils = require('../fs_utils');
+const fsUtils = require('./fs_utils');
 const {npmAsync} = require('./node_modules_command_helpers');
 
 const TMP_DIRECTORY_NAME = 'tmp';
