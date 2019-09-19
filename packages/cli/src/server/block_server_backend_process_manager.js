@@ -216,6 +216,19 @@ class BlockServerBackendProcessManager {
                 });
                 return;
             }
+            // If there is no installation context, return a 503.
+            const apiClient = this._getApiClient();
+            if (!apiClient || !apiClient.applicationId || !apiClient.blockInstallationId) {
+                console.error(
+                    'Could not serve backend request without block information from Airtable. ' +
+                        'Did you start "Edit block" in the browser?',
+                );
+                res.status(503).send({
+                    error: 'SERVICE_UNAVAILABLE',
+                    message: 'No block information received from Airtable.',
+                });
+                return;
+            }
             // Forward to backend process.
             let response: BackendProcessEventResponse;
             try {
@@ -285,11 +298,6 @@ class BlockServerBackendProcessManager {
         // Fetch an access policy for this invocation, so the backend code can
         // make requests to Airtable.
         const apiClient = this._getApiClient();
-        if (!apiClient || !apiClient.applicationId || !apiClient.blockInstallationId) {
-            throw new Error(
-                'Did not receive block information from Airtable. Cannot fulfill backend request',
-            );
-        }
         const apiAccessPolicyString = await apiClient.fetchAccessPolicyAsync();
 
         // Send request to backend process.
