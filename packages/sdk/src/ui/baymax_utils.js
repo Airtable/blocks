@@ -24,6 +24,18 @@ const bounceIn = keyframes`
     }
 `;
 
+const spinScale = keyframes`
+    0% {
+        transform: rotate(0) scale(1);
+    }
+    50% {
+        transform: rotate(360deg) scale(0.9);
+    }
+    100% {
+        transform: rotate(720deg) scale(1);
+    }
+`;
+
 // TODO (stephen): import values from theme object?
 const emotionClassNameByBaymaxClassName = {
     absolute: css`
@@ -41,6 +53,14 @@ const emotionClassNameByBaymaxClassName = {
     'animate-bounce-in': css`
         animation-name: ${bounceIn};
         animation-duration: 240ms;
+    `,
+    'animate-infinite': css`
+        animation-iteration-count: infinite;
+    `,
+    'animate-spin-scale': css`
+        animation-name: ${spinScale};
+        animation-duration: 1800ms;
+        animation-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
     `,
     appFontColorLight: css`
         color: hsl(0, 0%, 33%);

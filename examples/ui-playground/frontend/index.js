@@ -14,6 +14,7 @@ import InputExample from './InputExample';
 import InputSyncedExample from './InputSyncedExample';
 import ConfirmationDialogExample from './ConfirmationDialogExample';
 import DialogExample from './DialogExample';
+import LoaderExample from './LoaderExample';
 import ModalExample from './ModalExample';
 import IconExample from './IconExample';
 import FieldIconExample from './FieldIconExample';
@@ -79,6 +80,10 @@ const examples: Array<Example> = [
     {
         name: 'Input',
         component: InputExample,
+    },
+    {
+        name: 'Loader',
+        component: LoaderExample,
     },
     {
         name: 'Modal',
