@@ -4,8 +4,6 @@ import {TablePickerSynced} from '@airtable/blocks/ui';
 
 export default function TablePickerSyncedExample(props: void) {
     return (
-        <div style={{width: 280}}>
-            <TablePickerSynced globalConfigKey="table" style={{width: '100%'}} />
-        </div>
+        <TablePickerSynced globalConfigKey="TablePickerSyncedExample" margin={3} maxWidth="400px" />
     );
 }

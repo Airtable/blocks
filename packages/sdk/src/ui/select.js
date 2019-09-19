@@ -43,9 +43,8 @@ const styleForChevron = {
     paddingRight: 22,
 };
 
-export type SharedSelectProps = {|
-    options: Array<SelectOption>,
-    onChange?: (value: SelectOptionValue) => mixed,
+// Shared with `Select`, `SelectSynced` and `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`.
+export type SharedSelectBaseProps = {|
     autoFocus?: boolean,
     disabled?: boolean,
     id?: string,
@@ -53,10 +52,33 @@ export type SharedSelectProps = {|
     tabIndex?: number | string,
     className?: string,
     style?: {[string]: mixed},
+    'aria-label'?: string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
 |};
 
+// Shared with `Select`, `SelectSynced`, `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`
+export const sharedSelectBasePropTypes = {
+    autoFocus: PropTypes.bool,
+    disabled: PropTypes.bool,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    className: PropTypes.string,
+    style: PropTypes.object,
+    'aria-label': PropTypes.string,
+    'aria-labelledby': PropTypes.string,
+    'aria-describedby': PropTypes.string,
+};
+
+// Shared with `Select` and `SelectSynced`.
+export type SharedSelectProps = {|
+    options: Array<SelectOption>,
+    onChange?: (value: SelectOptionValue) => mixed,
+    ...SharedSelectBaseProps,
+|};
+
+// Shared with `Select` and `SelectSynced`.
 export const sharedSelectPropTypes = {
     // We do more strict checks in render.
     options: PropTypes.arrayOf(
@@ -67,15 +89,7 @@ export const sharedSelectPropTypes = {
         }),
     ).isRequired,
     onChange: PropTypes.func,
-    autoFocus: PropTypes.bool,
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    name: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    'aria-labelledby': PropTypes.string,
-    'aria-describedby': PropTypes.string,
+    ...sharedSelectBasePropTypes,
 };
 
 /**
@@ -90,6 +104,7 @@ export const sharedSelectPropTypes = {
  * @property {number | string} [tabIndex] The `tabindex` attribute.
  * @property {string} [className] Additional class names to apply to the select.
  * @property {object} [style] Additional styles to apply to the select.
+ * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
@@ -202,6 +217,7 @@ class Select extends React.Component<SelectProps> {
             tabIndex,
             className,
             style,
+            'aria-label': ariaLabel,
             'aria-describedby': ariaDescribedBy,
             'aria-labelledby': ariaLabelledBy,
         } = this.props;
@@ -259,6 +275,7 @@ class Select extends React.Component<SelectProps> {
                     ...styleForChevron,
                     ...style,
                 }}
+                aria-label={ariaLabel}
                 aria-labelledby={ariaLabelledBy}
                 aria-describedby={ariaDescribedBy}
             >

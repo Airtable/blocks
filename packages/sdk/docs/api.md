@@ -5415,21 +5415,24 @@ Type: [object][72]
 
 ##### Properties
 
+-   `field` **[Field][80]?** The selected field model.
 -   `table` **[Table][85]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `field` **[Field][80]?** The selected field model.
--   `onChange` **[function][71]?** A function to be called when the selected field changes.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
 -   `allowedTypes` **[Array][66]&lt;FieldType>?** An array indicating which field types can be
     selected.
 -   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     field.
 -   `placeholder` **[string][65]?** The placeholder text when no field is selected.
--   `id` **[string][65]?** The ID of the picker element.
--   `className` **[string][65]?** Additional class names to apply to the picker.
--   `style` **[object][72]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
+-   `onChange` **[function][71]?** A function to be called when the selected field changes.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
+-   `className` **[string][65]?** Additional class names to apply to the select.
+-   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -5499,24 +5502,27 @@ Type: [object][72]
 
 ##### Properties
 
--   `table` **[Table][85]?** The parent table model to select fields from. If `null` or `undefined`,
-    the picker won't render.
 -   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
--   `onChange` **[function][71]?** A function to be called when the selected field changes. This
-    should only be used for side effects.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `table` **[Table][85]?** The parent table model to select fields from. If `null` or `undefined`,
+    the picker won't render.
 -   `allowedTypes` **[Array][66]&lt;FieldType>?** An array indicating which field types can be
     selected.
 -   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     field.
 -   `placeholder` **[string][65]?** The placeholder text when no field is selected.
--   `id` **[string][65]?** The ID of the picker element.
--   `className` **[string][65]?** Additional class names to apply to the picker.
--   `style` **[object][72]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
+-   `onChange` **[function][71]?** A function to be called when the selected field changes. This
+    should only be used for side effects.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the select.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
+-   `className` **[string][65]?** Additional class names to apply to the select.
+-   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6054,6 +6060,8 @@ Type: [object][72]
 -   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the select.
 -   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6124,6 +6132,8 @@ Type: [object][72]
 -   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the select.
 -   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6224,16 +6234,19 @@ Type: [object][72]
 ##### Properties
 
 -   `table` **[Table][85]?** The selected table model.
--   `onChange` **[function][71]?** A function to be called when the selected table changes.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
 -   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     table.
 -   `placeholder` **[string][65]?** The placeholder text when no table is selected.
--   `id` **[string][65]?** The ID of the picker element.
+-   `onChange` **[function][71]?** A function to be called when the selected table changes.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the picker.
 -   `style` **[object][72]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6288,17 +6301,20 @@ Type: [object][72]
 -   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
--   `onChange` **[function][71]?** A function to be called when the selected table changes. This
-    should only be used for side effects.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
 -   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     table.
 -   `placeholder` **[string][65]?** The placeholder text when no table is selected.
--   `id` **[string][65]?** The ID of the picker element.
+-   `onChange` **[function][71]?** A function to be called when the selected table changes. This
+    should only be used for side effects.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the picker.
 -   `style` **[object][72]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6534,21 +6550,24 @@ Type: [object][72]
 
 ##### Properties
 
+-   `view` **[View][81]?** The selected view model.
 -   `table` **[Table][85]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `view` **[View][81]?** The selected view model.
--   `onChange` **[function][71]?** A function to be called when the selected view changes.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
 -   `allowedTypes` **[Array][66]&lt;ViewType>?** An array indicating which view types can be
     selected.
 -   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     view.
 -   `placeholder` **[string][65]?** The placeholder text when no view is selected.
--   `id` **[string][65]?** The ID of the picker element.
+-   `onChange` **[function][71]?** A function to be called when the selected view changes.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the picker.
 -   `style` **[object][72]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
@@ -6620,24 +6639,27 @@ Type: [object][72]
 
 ##### Properties
 
--   `table` **[Table][85]?** The parent table model to select views from. If `null` or `undefined`,
-    the picker won't render.
 -   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
--   `onChange` **[function][71]?** A function to be called when the selected view changes. This
-    should only be used for side effects.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `table` **[Table][85]?** The parent table model to select views from. If `null` or `undefined`,
+    the picker won't render.
 -   `allowedTypes` **[Array][66]&lt;ViewType>?** An array indicating which view types can be
     selected.
 -   `shouldAllowPickingNone` **[boolean][69]?** If set to `true`, the user can unset the selected
     view.
 -   `placeholder` **[string][65]?** The placeholder text when no view is selected.
--   `id` **[string][65]?** The ID of the picker element.
+-   `onChange` **[function][71]?** A function to be called when the selected view changes. This
+    should only be used for side effects.
+-   `autoFocus` **[string][65]?** The `autoFocus` attribute.
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the picker.
+-   `id` **[string][65]?** The `id` attribute.
+-   `name` **[string][65]?** The `name` attribute.
+-   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the picker.
 -   `style` **[object][72]?** Additional styles to apply to the picker.
--   `tabIndex` **([number][73] \| [string][65])?** Indicates if the picker can be focused and
-    if/where it participates in sequential keyboard navigation.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 

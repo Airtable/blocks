@@ -18,14 +18,19 @@ import LoaderExample from './LoaderExample';
 import ModalExample from './ModalExample';
 import IconExample from './IconExample';
 import FieldIconExample from './FieldIconExample';
+import FieldPickerExample from './FieldPickerExample';
+import FieldPickerSyncedExample from './FieldPickerSyncedExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectButtonsExample from './SelectButtonsExample';
 import SelectButtonsSyncedExample from './SelectButtonsSyncedExample';
 import SelectExample from './SelectExample';
 import SelectSyncedExample from './SelectSyncedExample';
+import TablePickerExample from './TablePickerExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
 import ToggleExample from './ToggleExample';
 import ToggleSyncedExample from './ToggleExample';
+import ViewPickerExample from './ViewPickerExample';
+import ViewPickerSyncedExample from './ViewPickerSyncedExample';
 import {type Example} from './Example';
 
 // Alphabetically ordered by name.
@@ -76,6 +81,14 @@ const examples: Array<Example> = [
         component: FieldIconExample,
     },
     {
+        name: 'FieldPicker',
+        component: FieldPickerExample,
+    },
+    {
+        name: 'FieldPickerSynced',
+        component: FieldPickerSyncedExample,
+    },
+    {
         name: 'Icon',
         component: IconExample,
     },
@@ -113,6 +126,10 @@ const examples: Array<Example> = [
         component: SelectSyncedExample,
     },
     {
+        name: 'TablePicker',
+        component: TablePickerExample,
+    },
+    {
         name: 'TablePickerSynced',
         component: TablePickerSyncedExample,
     },
@@ -123,6 +140,14 @@ const examples: Array<Example> = [
     {
         name: 'ToggleSynced',
         component: ToggleSyncedExample,
+    },
+    {
+        name: 'ViewPicker',
+        component: ViewPickerExample,
+    },
+    {
+        name: 'ViewPickerSynced',
+        component: ViewPickerSyncedExample,
     },
 ];
 
