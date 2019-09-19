@@ -229,20 +229,47 @@ class BlockServerBackendProcessManager {
                 return;
             }
             const executionStatus = getBlocksBackendExecutionStatus(response.headers);
-            // If backend process doesn't recognize the request path, proceed to next callback.
-            if (executionStatus === BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES) {
+            if (executionStatus !== BlocksBackendExecutionStatuses.NO_MATCHING_ROUTES) {
+                // The request was handled by backend process, so send back the
+                // returned response.
+                const {statusCode, headers, body: encodedBody, bodyFormat} = response;
+                if (bodyFormat !== 'base64') {
+                    // This should not be possible - it would indicate a
+                    // normalization bug.
+                    throw new Error('Expected base64-encoded body');
+                }
+                const body = Buffer.from(encodedBody, 'base64');
+                // eslint-disable-next-line flowtype/no-weak-types
+                res.writeHead(statusCode, (headers: any));
+                res.end(body);
+            } else if (req.method === 'OPTIONS') {
+                // The request was not handled by backend process, but is a CORS
+                // preflight request. We need to send back the necessary headers
+                // along with a 2xx status code to allow the actual request to
+                // be sent.
+                //
+                // This is necessary in development because the block's frontend
+                // code is currently served from a different origin (i.e.
+                // https://devblock--xxx.airtableblocks.com) than the backend
+                // code, which runs on localhost.
+                //
+                // TODO(Chuan): Only handle OPTIONS requests if the origin
+                // matches the block frame origin. Right now, we're being *more*
+                // lenient than the block router.
+                const requestHeaders = req.header('Access-Control-Request-Headers');
+                const requestMethod = req.header('Access-Control-Request-Method');
+                res.writeHead(200, {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Max-Age': '86400',
+                    ...(requestHeaders ? {'Access-Control-Allow-Headers': requestHeaders} : {}),
+                    ...(requestMethod ? {'Access-Control-Allow-Methods': requestMethod} : {}),
+                });
+                res.end();
+            } else {
+                // The request cannot be handled as a backend route, so proceed
+                // to next callback.
                 next();
-                return;
             }
-            // Send back backend process response.
-            const {statusCode, headers, body: encodedBody, bodyFormat} = response;
-            if (bodyFormat !== 'base64') {
-                // This should not be possible - it would indicate a normalization bug.
-                throw new Error('Expected base64-encoded body');
-            }
-            const body = Buffer.from(encodedBody, 'base64');
-            res.writeHead(statusCode, (headers: any)); // eslint-disable-line flowtype/no-weak-types
-            res.end(body);
         };
     }
 
