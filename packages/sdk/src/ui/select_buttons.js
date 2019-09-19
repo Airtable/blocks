@@ -41,7 +41,7 @@ type SelectButtonsProps = {|
     ...SharedSelectButtonsProps,
 |};
 
-export const sharedPropTypes = {
+export const sharedSelectButtonsPropTypes = {
     // We do more strict checks in render.
     options: PropTypes.arrayOf(
         PropTypes.shape({
@@ -63,7 +63,7 @@ export const sharedPropTypes = {
 class SelectButtons extends React.Component<SelectButtonsProps> {
     static propTypes = {
         value: SelectOptionValuePropType,
-        ...sharedPropTypes,
+        ...sharedSelectButtonsPropTypes,
     };
     props: SelectButtonsProps;
     _onChange(newValue: SelectOptionValue) {

@@ -2,7 +2,10 @@
 import * as React from 'react';
 import {spawnError} from '../error_utils';
 import {type GlobalConfigKey} from '../global_config';
-import SelectButtons, {sharedPropTypes, type SharedSelectButtonsProps} from './select_buttons';
+import SelectButtons, {
+    sharedSelectButtonsPropTypes,
+    type SharedSelectButtonsProps,
+} from './select_buttons';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
 
@@ -27,7 +30,7 @@ type SelectButtonsSyncedProps = {|
 class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...sharedPropTypes,
+        ...sharedSelectButtonsPropTypes,
     };
     props: SelectButtonsSyncedProps;
     render() {

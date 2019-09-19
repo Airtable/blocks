@@ -4,7 +4,7 @@ import {invariant, spawnError} from '../error_utils';
 import {type GlobalConfigKey} from '../global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Select, {
-    sharedPropTypes,
+    sharedSelectPropTypes,
     stylePropTypes,
     type SharedSelectProps,
     type StyleProps,
@@ -59,7 +59,7 @@ type SelectSyncedProps = {|
 class SelectSynced extends React.Component<SelectSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...sharedPropTypes,
+        ...sharedSelectPropTypes,
         ...stylePropTypes,
     };
     props: SelectSyncedProps;

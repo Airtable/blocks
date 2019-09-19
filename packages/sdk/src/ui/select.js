@@ -57,7 +57,7 @@ export type SharedSelectProps = {|
     'aria-describedby'?: string,
 |};
 
-export const sharedPropTypes = {
+export const sharedSelectPropTypes = {
     // We do more strict checks in render.
     options: PropTypes.arrayOf(
         PropTypes.shape({
@@ -160,7 +160,7 @@ export const stylePropTypes = {
 class Select extends React.Component<SelectProps> {
     static propTypes = {
         value: SelectOptionValuePropType,
-        ...sharedPropTypes,
+        ...sharedSelectPropTypes,
     };
     props: SelectProps;
     _select: HTMLSelectElement | null;
