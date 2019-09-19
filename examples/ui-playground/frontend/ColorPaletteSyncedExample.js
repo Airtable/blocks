@@ -9,6 +9,8 @@ type Props = {
 export default function ColorPaletteSyncedExample(props: Props) {
     const [numColors, setNumColors] = useState(15);
     const [marginSize, setMarginSize] = useState(2);
+    // eslint-disable-next-line flowtype/no-weak-types
+    const allowedColors = ((Object.values(colors): any): Array<string>);
 
     return (
         <Box display="flex" flexDirection="column" width="100%" height="100%">
@@ -36,7 +38,7 @@ export default function ColorPaletteSyncedExample(props: Props) {
             <ColorPaletteSynced
                 globalConfigKey="color"
                 squareMargin={marginSize ? parseInt(marginSize, 10) : 0}
-                allowedColors={Object.values(colors).slice(0, numColors)}
+                allowedColors={allowedColors.slice(0, numColors)}
                 width="100%"
                 marginTop={2}
             />

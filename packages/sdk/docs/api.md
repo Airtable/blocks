@@ -5125,25 +5125,42 @@ Type: [object][74]
 
 **Extends React.Component**
 
+A color selection component. Accepts a list of `allowedColors` to be displayed as selectable color
+squares.
+
 ##### Parameters
 
 -   `props` **[ColorPaletteProps][138]**
 
+##### Examples
+
+```javascript
+import {ColorPalette, colors} from '@airtable/blocks/ui';
+import React, {useState} from 'react';
+
+function DisplayOptions() {
+    const allowedColors = [colors.GREEN, colors.BLUE, colors.RED];
+    const [selectedColor, setSelectedColor] = useState(colors.GREEN);
+    return <ColorPalette allowedColors={allowedColors} onChange={setSelectedColor} />;
+}
+```
+
 #### ColorPaletteProps
 
-Type: {color: [string][67]?, allowedColors: [Array][68]&lt;[string][67]>, onChange: function
-([string][67]): any?, squareMargin: [number][75]?, className: [string][67]?, style: [Object][74]?,
-disabled: [boolean][71]?}
+Type: [object][74]
 
 ##### Properties
 
--   `color` **[string][67]?**
--   `allowedColors` **[Array][68]&lt;[string][67]>**
--   `onChange` **function ([string][67]): any?**
--   `squareMargin` **[number][75]?**
--   `className` **[string][67]?**
--   `style` **[Object][74]?**
--   `disabled` **[boolean][71]?**
+-   `color` **[string][67]?** The current selected [Color][99] option.
+-   `allowedColors` **[Array][68]&lt;[string][67]>** The list of [colors][119] to display in the
+    color palette.
+-   `onChange` **[function][73]?** A function to be called when the selected color changes.
+-   `squareMargin` **[number][75]?** The margin between color squares in the color palette.
+-   `className` **[string][67]?** Additional class names to apply to the color palette, separated by
+    spaces.
+-   `style` **[object][74]?** Additional styles to apply to the color palette.
+-   `disabled` **[boolean][71]?** If set to `true`, the color palette will not allow color
+    selection.
 
 ### ColorPaletteSynced
 
@@ -5151,16 +5168,37 @@ disabled: [boolean][71]?}
 
 **Extends React.Component**
 
+A wrapper around the [ColorPalette][35] component that syncs with global config.
+
+##### Examples
+
+```javascript
+import {ColorPaletteSynced, colors} from '@airtable/blocks/ui';
+import {globalConfig} from '@airtable/blocks';
+import React from 'react';
+
+function DisplayOptions() {
+    const allowedColors = [colors.GREEN, colors.BLUE, colors.RED];
+    return <ColorPaletteSynced allowedColors={allowedColors} globalConfigKey="displayColor" />;
+}
+```
+
 #### ColorPaletteSyncedProps
 
-Type: {globalConfigKey: [string][67], disabled: [boolean][71]?, onChange: function ([string][67]):
-any?}
+Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[string][67]**
--   `disabled` **[boolean][71]?**
--   `onChange` **function ([string][67]): any?**
+-   `globalConfigKey` **[GlobalConfigKey][139]** The key, or path to a key, in global config.
+-   `allowedColors` **[Array][68]&lt;[string][67]>** The list of [colors][119] to display in the
+    color palette.
+-   `squareMargin` **[number][75]?** The margin between color squares in the color palette.
+-   `className` **[string][67]?** Additional class names to apply to the color palette, separated by
+    spaces.
+-   `style` **[object][74]?** Additional styles to apply to the color palette.
+-   `disabled` **[boolean][71]?** If set to `true`, the color palette will not allow color
+    selection.
+-   `onChange` **[function][73]?** A function to be called when the selected color changes.
 
 ### ConfirmationDialog
 
@@ -5174,7 +5212,7 @@ the action.
 
 ##### Parameters
 
--   `props` **[ConfirmationDialogProps][139]**
+-   `props` **[ConfirmationDialogProps][140]**
 
 ##### Examples
 
@@ -5238,7 +5276,7 @@ A styled modal dialog component.
 
 ##### Parameters
 
--   `props` **[DialogProps][140]**
+-   `props` **[DialogProps][141]**
 
 ##### Examples
 
@@ -5297,7 +5335,7 @@ A button that closes [Dialog][38].
 
 ##### Parameters
 
--   `props` **[DialogCloseButtonProps][141]**
+-   `props` **[DialogCloseButtonProps][142]**
 
 #### DialogCloseButtonProps
 
@@ -5320,7 +5358,7 @@ Dropdown menu component for selecting fields.
 
 ##### Parameters
 
--   `props` **[FieldPickerProps][142]**
+-   `props` **[FieldPickerProps][143]**
 
 ##### Examples
 
@@ -5408,7 +5446,7 @@ Dropdown menu component for selecting fields, synced with [GlobalConfig][3].
 
 ##### Parameters
 
--   `props` **[FieldPickerSyncedProps][143]**
+-   `props` **[FieldPickerSyncedProps][144]**
 
 ##### Examples
 
@@ -5466,7 +5504,7 @@ Type: [object][74]
 
 -   `table` **[Table][87]?** The parent table model to select fields from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][144]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][139]** A string key or array key path in
     [GlobalConfig][3]. The selected field will always reflect the field id stored in `globalConfig`
     for this key. Selecting a new field will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected field changes. This
@@ -6073,7 +6111,7 @@ Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][144]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][139]** A string key or array key path in
     [GlobalConfig][3]. The selected option will always reflect the value stored in `globalConfig`
     for this key. Selecting a new option will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected option changes. This
@@ -6219,7 +6257,7 @@ Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][144]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][139]** A string key or array key path in
     [GlobalConfig][3]. The selected table will always reflect the table id stored in `globalConfig`
     for this key. Selecting a new table will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected table changes. This
@@ -6316,7 +6354,7 @@ Type: [object][74]
 
 ##### Properties
 
--   `globalConfigKey` **[GlobalConfigKey][144]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][139]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the switch is toggled. This should
@@ -6556,7 +6594,7 @@ Type: [object][74]
 
 -   `table` **[Table][87]?** The parent table model to select views from. If `null` or `undefined`,
     the picker won't render.
--   `globalConfigKey` **[GlobalConfigKey][144]** A string key or array key path in
+-   `globalConfigKey` **[GlobalConfigKey][139]** A string key or array key path in
     [GlobalConfig][3]. The selected view will always reflect the view id stored in `globalConfig`
     for this key. Selecting a new view will update `globalConfig`.
 -   `onChange` **[function][73]?** A function to be called when the selected view changes. This
@@ -6758,12 +6796,12 @@ Type: {width: ([number][75] | null)?, height: ([number][75] | null)?}
 [136]: #choicetokenprops
 [137]: #collaboratortokenprops
 [138]: #colorpaletteprops
-[139]: #confirmationdialogprops
-[140]: #dialogprops
-[141]: #dialogclosebuttonprops
-[142]: #fieldpickerprops
-[143]: #fieldpickersyncedprops
-[144]: #globalconfigkey
+[139]: #globalconfigkey
+[140]: #confirmationdialogprops
+[141]: #dialogprops
+[142]: #dialogclosebuttonprops
+[143]: #fieldpickerprops
+[144]: #fieldpickersyncedprops
 [145]: #iconprops
 [146]: /packages/sdk/docs/icons.md
 [147]: #fieldiconprops

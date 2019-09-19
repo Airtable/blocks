@@ -6,6 +6,7 @@ import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
 import ButtonExample from './ButtonExample';
 import CellRendererExample from './CellRendererExample';
+import ColorPaletteExample from './ColorPaletteExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import InputExample from './InputExample';
 import InputSyncedExample from './InputSyncedExample';
@@ -38,9 +39,8 @@ const examples: Array<Example> = [
         component: CellRendererExample,
     },
     {
-        name: 'ColorPaletteSynced',
-        component: ColorPaletteSyncedExample,
-        hasSettings: true,
+        name: 'ColorPalette',
+        component: ColorPaletteExample,
     },
     {
         name: 'ColorPaletteSynced',
@@ -60,12 +60,12 @@ const examples: Array<Example> = [
         component: FieldIconExample,
     },
     {
-        name: 'Input',
-        component: InputExample,
-    },
-    {
         name: 'Icon',
         component: IconExample,
+    },
+    {
+        name: 'Input',
+        component: InputExample,
     },
     {
         name: 'Modal',
