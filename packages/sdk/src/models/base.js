@@ -3,13 +3,13 @@ import {type BaseData, type AppBlanketData, type ModelChange, type ObjectId} fro
 import {type CollaboratorData, type UserId} from '../types/collaborator';
 import {type TableId} from '../types/table';
 import {type AirtableInterface} from '../injected/airtable_interface';
-import {isEnumValue, values, entries} from '../private_utils';
+import {isEnumValue, values, entries, isDeepEqual} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
 
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
 );
@@ -345,7 +345,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             dirtySubtree = dirtySubtree[part];
         }
         const lastPathPart = path[path.length - 1];
-        const didChange = !u.isEqual(dataSubtree[lastPathPart], value);
+        const didChange = !isDeepEqual(dataSubtree[lastPathPart], value);
         if (value === undefined) {
             delete dataSubtree[lastPathPart];
         } else {

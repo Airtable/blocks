@@ -94,7 +94,7 @@ export const sharedInputPropTypes = {
     maxLength: PropTypes.number,
     min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     minLength: PropTypes.number,
-    step: PropTypes.oneOfType([PropTypes.number, PropTypes.sstring]),
+    step: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     pattern: PropTypes.string,
     readOnly: PropTypes.bool,
     autoComplete: PropTypes.string,
@@ -215,6 +215,7 @@ class Input extends React.Component<InputProps> {
     render() {
         const {
             type,
+            value,
             placeholder,
             onChange,
             style,
@@ -240,6 +241,7 @@ class Input extends React.Component<InputProps> {
         return (
             <input
                 ref={el => (this._input = el)}
+                value={value}
                 type={type}
                 placeholder={placeholder}
                 style={style}

@@ -1,6 +1,6 @@
 // @flow
 import {system, Config} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type FontWeightProperty} from '../utils/csstype';
 import {type Prop} from '../utils/types';
 
@@ -16,4 +16,4 @@ export const config: Config = {
 };
 
 export const fontWeight = system(config);
-export const fontWeightPropTypes = createPropTypes(fontWeight.propNames);
+export const fontWeightPropTypes = createStylePropTypes(fontWeight.propNames);

@@ -1,4 +1,5 @@
 // @flow
+import React from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {cx} from 'emotion';
@@ -16,8 +17,6 @@ import {
     type MarginProps,
 } from './system';
 
-const React = window.__requirePrivateModuleFromAirtable('client_server_shared/react/react');
-const Svg = window.__requirePrivateModuleFromAirtable('client_server_shared/react/assets/svg'); 
 const iconConfig = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/react/assets/icon_config',
 );
@@ -49,6 +48,16 @@ export type SharedIconProps = {|
     pathStyle?: {[string]: mixed},
     ...StyleProps,
 |};
+
+export const sharedIconPropTypes = {
+    size: PropTypes.number,
+    fillColor: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    pathClassName: PropTypes.string,
+    pathStyle: PropTypes.object,
+    ...stylePropTypes,
+};
 
 /**
  * @typedef {object} IconProps
@@ -108,14 +117,19 @@ const Icon = (props: IconProps) => {
         return null;
     }
 
+    const originalSize = isMicro ? 12 : 16;
+
     return (
-        <Svg
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
             width={size}
             height={size}
-            originalWidth={isMicro ? 12 : 16}
-            originalHeight={isMicro ? 12 : 16}
+            viewBox={`0 0 ${originalSize} ${originalSize}`}
             className={cx(classNameForStyleProps, className)}
-            style={style}
+            style={{
+                shapeRendering: 'geometricPrecision',
+                ...style,
+            }}
         >
             <path
                 fillRule="evenodd"
@@ -124,18 +138,13 @@ const Icon = (props: IconProps) => {
                 fill={fillColor}
                 d={pathData}
             />
-        </Svg>
+        </svg>
     );
 };
 
 Icon.propTypes = {
     name: PropTypes.string.isRequired,
-    size: PropTypes.number,
-    fillColor: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    pathClassName: PropTypes.string,
-    pathStyle: PropTypes.object,
+    ...sharedIconPropTypes,
 };
 
 Icon.defaultProps = {

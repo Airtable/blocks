@@ -1,7 +1,7 @@
 // @flow
 import {system, Config} from '@styled-system/core';
 import {type ColorProperty} from '../utils/csstype';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type Prop} from '../utils/types';
 
 export type TextColorProps = {|
@@ -16,4 +16,4 @@ export const config: Config = {
 };
 
 export const textColor = system(config);
-export const textColorPropTypes = createPropTypes(textColor.propNames);
+export const textColorPropTypes = createStylePropTypes(textColor.propNames);

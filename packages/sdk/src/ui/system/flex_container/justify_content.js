@@ -1,6 +1,6 @@
 // @flow
 import {system, Config} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type JustifyContentProperty} from '../utils/csstype';
 import {type Prop} from '../utils/types';
 
@@ -11,4 +11,4 @@ export type JustifyContentProps = {|
 export const config: Config = {justifyContent: true};
 
 export const justifyContent = system(config);
-export const justifyContentPropTypes = createPropTypes(justifyContent.propNames);
+export const justifyContentPropTypes = createStylePropTypes(justifyContent.propNames);

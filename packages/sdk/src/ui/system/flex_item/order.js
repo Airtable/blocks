@@ -1,6 +1,6 @@
 // @flow
 import {system, Config} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type GlobalsNumber} from '../utils/csstype';
 import {type Prop} from '../utils/types';
 
@@ -11,4 +11,4 @@ export type OrderProps = {|
 export const config: Config = {order: true};
 
 export const order = system(config);
-export const orderPropTypes = createPropTypes(order.propNames);
+export const orderPropTypes = createStylePropTypes(order.propNames);

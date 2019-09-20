@@ -1,6 +1,6 @@
 // @flow
 import {system, Config} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type FlexDirectionProperty} from '../utils/csstype';
 import {type Prop} from '../utils/types';
 
@@ -11,4 +11,4 @@ export type FlexDirectionProps = {|
 export const config: Config = {flexDirection: true};
 
 export const flexDirection = system(config);
-export const flexDirectionPropTypes = createPropTypes(flexDirection.propNames);
+export const flexDirectionPropTypes = createStylePropTypes(flexDirection.propNames);

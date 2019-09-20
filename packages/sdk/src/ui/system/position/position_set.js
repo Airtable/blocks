@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as positionConfig, type PositionProps} from './position';
 import {config as zIndexConfig, type ZIndexProps} from './z_index';
 import {config as topConfig, type TopProps} from './top';
@@ -26,4 +26,4 @@ export const positionSet = system({
     ...leftConfig,
 });
 
-export const positionSetPropTypes = createPropTypes(positionSet.propNames);
+export const positionSetPropTypes = createStylePropTypes(positionSet.propNames);

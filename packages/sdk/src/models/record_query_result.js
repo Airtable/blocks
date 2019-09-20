@@ -3,7 +3,7 @@ import Colors, {type Color} from '../colors';
 import {type BaseData} from '../types/base';
 import {type RecordId} from '../types/record';
 import {FieldTypes} from '../types/field';
-import {isEnumValue, assertEnumValue, getLocallyUniqueId} from '../private_utils';
+import {isEnumValue, assertEnumValue, getLocallyUniqueId, isDeepEqual} from '../private_utils';
 import {
     spawnAbstractMethodError,
     spawnUnknownSwitchCaseError,
@@ -20,8 +20,6 @@ import {
     modes as recordColorModes,
     type RecordColorMode,
 } from './record_coloring';
-
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 
 const WatchableRecordQueryResultKeys = Object.freeze({
     records: ('records': 'records'),
@@ -354,7 +352,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @private
      */
     __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordQueryResultOpts): boolean {
-        return u.isEqual(this._normalizedOpts, normalizedOpts);
+        return isDeepEqual(this._normalizedOpts, normalizedOpts);
     }
 
     /**

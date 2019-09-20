@@ -2,11 +2,23 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
-import isEqual from 'fast-deep-equal';
-import {has} from '../private_utils';
+import {compose} from '@styled-system/core';
+import {has, isDeepEqual} from '../private_utils';
 import getSdk from '../get_sdk';
 import {type CollaboratorData} from '../types/collaborator';
-import {baymax} from './baymax_utils';
+import Box from './box';
+import useStyledSystem from './use_styled_system';
+import {
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 
 const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
@@ -18,6 +30,24 @@ const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/components/collaborator_token',
 );
 
+type StyleProps = {|
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+const stylePropTypes = {
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
 /**
  * @typedef {object} CollaboratorTokenProps
  * @property {object} collaborator An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data.
@@ -27,11 +57,14 @@ const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
  * @property {string} [collaborator.status] The status of the collaborator.
  * @property {string} [collaborator.profilePicUrl] The URL of the collaborator's profile picture.
  * @property {string} [className] Additional class names to apply to the collaborator token.
+ * @property {string} [style] Additional styles to apply to the collaborator token.
  */
-type CollaboratorTokenProps = {
+type CollaboratorTokenProps = {|
     collaborator: $Shape<CollaboratorData>,
     className?: string,
-};
+    style?: {[string]: mixed},
+    ...StyleProps,
+|};
 
 /**
  * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
@@ -53,7 +86,8 @@ type CollaboratorTokenProps = {
  * }
  */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
-    const {collaborator, className} = props;
+    const {collaborator, className, style, ...styleProps} = props;
+    const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
 
     const userInfoById = getSdk().__appInterface.getCollaboratorInfoById();
     const userObj =
@@ -67,7 +101,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     let userName;
     let profilePicUrl;
     let isActive;
-    if (userObj !== null && isEqual(collaborator, userObjFormattedForPublicApiV2)) {
+    if (userObj !== null && isDeepEqual(collaborator, userObjFormattedForPublicApiV2)) {
         profilePicUrl = appBlanketUserObjMethods.getTokenSizedProfilePicUrl(userObj);
         userName = appBlanketUserObjMethods.getName(userObj) || 'Unknown';
         isActive = appBlanketUserObjMethods.isActive(userObj);
@@ -79,14 +113,14 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     }
 
     return (
-        <div className={cx('baymax', baymax('flex-inline'))}>
+        <Box className={cx('baymax', classNameForStyledProps)} style={style} display="inline-block">
             <_CollaboratorToken
                 profilePicUrl={profilePicUrl}
                 userName={userName}
                 className={className}
                 shouldDim={!isActive}
             />
-        </div>
+        </Box>
     );
 };
 
@@ -99,6 +133,8 @@ CollaboratorToken.propTypes = {
         status: PropTypes.string,
     }).isRequired,
     className: PropTypes.string,
+    style: PropTypes.object,
+    ...stylePropTypes,
 };
 
 export default CollaboratorToken;

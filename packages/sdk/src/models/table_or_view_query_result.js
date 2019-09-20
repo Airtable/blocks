@@ -1,7 +1,7 @@
 // @flow
 import getSdk from '../get_sdk';
 import {type FieldId} from '../types/field';
-import {has} from '../private_utils';
+import {has, compact, arrayDifference} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
@@ -17,7 +17,7 @@ import type Record from './record';
 import RecordStore, {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 
-const {h, u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
+const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/vis_lists/grouped_row_vis_list',
 );
@@ -247,7 +247,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     get _cellValuesForSortWatchKeys(): Array<string> {
         return this._groupLevels
-            ? u.compact(
+            ? compact(
                   this._groupLevels.map(groupLevel => {
                       if (groupLevel.isCreatedTime) {
                           return null;
@@ -557,8 +557,14 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             if (this._orderedRecordIds) {
                 const visibleRecordIds = this._recordStore.getViewDataStore(model.viewId)
                     .visibleRecordIds;
-                const addedRecordIds = u.difference(visibleRecordIds, this._orderedRecordIds);
-                const removedRecordIds = u.difference(this._orderedRecordIds, visibleRecordIds);
+                const addedRecordIds = arrayDifference(
+                    visibleRecordIds,
+                    this._orderedRecordIds || [],
+                );
+                const removedRecordIds = arrayDifference(
+                    this._orderedRecordIds || [],
+                    visibleRecordIds,
+                );
                 updates = {addedRecordIds, removedRecordIds};
             } else {
                 updates = null;

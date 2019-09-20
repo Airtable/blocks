@@ -2,7 +2,7 @@
 import {system, Config} from '@styled-system/core';
 import {type HeightProperty} from '../utils/csstype';
 import {type Prop, type Length} from '../utils/types';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 
 export type HeightProps = {|
     height?: Prop<HeightProperty<Length>>,
@@ -16,4 +16,4 @@ export const config: Config = {
 };
 
 export const height = system(config);
-export const heightPropTypes = createPropTypes(height.propNames);
+export const heightPropTypes = createStylePropTypes(height.propNames);

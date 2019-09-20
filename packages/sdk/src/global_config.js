@@ -4,8 +4,8 @@ import getSdk from './get_sdk';
 import {type AirtableInterface} from './injected/airtable_interface';
 import {spawnError} from './error_utils';
 import {MutationTypes, type PermissionCheckResult} from './types/mutations';
+import {getValueAtOwnPath} from './private_utils';
 
-const {u} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
 const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/blocks/block_kv_helpers',
 );
@@ -153,7 +153,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
             throw spawnError('Invalid globalConfig path: %s', pathValidationResult.reason);
         }
 
-        const value = u.get(this._kvStore, path);
+        const value = getValueAtOwnPath(this._kvStore, path);
         return value;
     }
 
@@ -390,7 +390,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         const topLevelKeySet = {};
 
         const clonedObjectsSet = new Set();
-        const workingKvStore = u.clone(this._kvStore);
+        const workingKvStore = {...this._kvStore};
 
         for (const update of updates) {
             const updateValidationResult = blockKvHelpers.validateKvStoreUpdate(

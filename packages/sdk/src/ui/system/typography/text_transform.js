@@ -1,6 +1,6 @@
 // @flow
 import {system, Config} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {type TextTransformProperty} from '../utils/csstype';
 import {type Prop} from '../utils/types';
 
@@ -13,4 +13,4 @@ export const config: Config = {
 };
 
 export const textTransform = system(config);
-export const textTransformPropTypes = createPropTypes(textTransform.propNames);
+export const textTransformPropTypes = createStylePropTypes(textTransform.propNames);

@@ -1,26 +1,71 @@
 // @flow
 import {cx} from 'emotion';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import omit from 'lodash.omit';
 import {spawnError} from '../error_utils';
 import {baymax} from './baymax_utils';
-import {KeyCodes} from './key_codes';
-
-/* eslint-disable react/prop-types */
 import {
-    SelectAndSelectButtonsPropTypes,
     validateOptions,
     optionValueToString,
+    SelectOptionValuePropType,
+    type SelectOption,
     type SelectOptionValue,
-    type SelectAndSelectButtonsProps,
 } from './select_and_select_buttons_helpers';
 
-/** @typedef */
-type SelectButtonsProps = SelectAndSelectButtonsProps;
+const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
+
+export type SharedSelectButtonsProps = {|
+    options: Array<SelectOption>,
+    onChange?: (value: SelectOptionValue) => void,
+    disabled?: boolean,
+    className?: string,
+    tabIndex?: number | string,
+    style?: {[string]: mixed},
+    'aria-labelledby'?: string,
+    'aria-describedby'?: string,
+|};
+
+/**
+ * @typedef {object} SelectButtonsProps
+ * @property {string | number | boolean | null} [value] The value of the selected option.
+ * @property {Array.<SelectOption>} options The list of select options.
+ * @property {function} [onChange] A function to be called when the selected option changes.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
+ * @property {string} [className] Additional class names to apply to the select.
+ * @property {object} [style] Additional styles to apply to the select.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
+type SelectButtonsProps = {|
+    value: SelectOptionValue,
+    ...SharedSelectButtonsProps,
+|};
+
+export const sharedSelectButtonsPropTypes = {
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: SelectOptionValuePropType,
+            label: PropTypes.node,
+            disabled: PropTypes.bool,
+        }),
+    ).isRequired,
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    'aria-labelledby': PropTypes.string,
+    'aria-describedby': PropTypes.string,
+};
 
 /** */
 class SelectButtons extends React.Component<SelectButtonsProps> {
-    static propTypes = SelectAndSelectButtonsPropTypes;
+    static propTypes = {
+        value: SelectOptionValuePropType,
+        ...sharedSelectButtonsPropTypes,
+    };
     props: SelectButtonsProps;
     _onChange(newValue: SelectOptionValue) {
         const {value, onChange} = this.props;

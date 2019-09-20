@@ -1,27 +1,36 @@
 // @flow
 import * as React from 'react';
-import {invariant} from '../error_utils';
-import Select from './select';
-import {
-    SelectAndSelectButtonsSyncedPropTypes,
-    type SelectAndSelectButtonsSyncedProps,
-} from './select_and_select_buttons_helpers';
+import {invariant, spawnError} from '../error_utils';
+import {type GlobalConfigKey} from '../global_config';
+import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
+import Select, {
+    sharedSelectPropTypes,
+    stylePropTypes,
+    type SharedSelectProps,
+    type StyleProps,
+} from './select';
 import Synced from './synced';
 
 /**
  * @typedef {object} SelectSyncedProps
  * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`.
- * @property {function} [onChange] A function to be called when the selected option changes. This should only be used for side effects.
  * @property {Array.<SelectOption>} options The list of select options.
+ * @property {function} [onChange] A function to be called when the selected option changes. This should only be used for side effects.
+ * @property {string} [autoFocus] The `autoFocus` attribute.
  * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {string} [id] The ID of the select element.
+ * @property {string} [id] The `id` attribute.
+ * @property {string} [name] The `name` attribute.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
  * @property {string} [className] Additional class names to apply to the select.
  * @property {object} [style] Additional styles to apply to the select.
- * @property {number | string} [tabIndex] Indicates if the select can be focused and if/where it participates in sequential keyboard navigation.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type SelectSyncedProps = SelectAndSelectButtonsSyncedProps;
+type SelectSyncedProps = {|
+    globalConfigKey: GlobalConfigKey,
+    ...SharedSelectProps,
+    ...StyleProps,
+|};
 
 /**
  * Dropdown menu component synced with {@link GlobalConfig}. A wrapper around `<select>` that fits in with Airtable's user interface.
@@ -48,7 +57,11 @@ type SelectSyncedProps = SelectAndSelectButtonsSyncedProps;
  * }
  */
 class SelectSynced extends React.Component<SelectSyncedProps> {
-    static propTypes = SelectAndSelectButtonsSyncedPropTypes;
+    static propTypes = {
+        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+        ...sharedSelectPropTypes,
+        ...stylePropTypes,
+    };
     props: SelectSyncedProps;
     _select: React.ElementRef<typeof Select> | null;
     constructor(props: SelectSyncedProps) {
@@ -68,37 +81,32 @@ class SelectSynced extends React.Component<SelectSyncedProps> {
         this._select.click();
     }
     render() {
-        const {
-            globalConfigKey,
-            onChange,
-            options,
-            disabled,
-            id,
-            className,
-            style,
-            tabIndex,
-        } = this.props;
+        const {globalConfigKey, disabled, onChange, ...restOfProps} = this.props;
 
         return (
             <Synced
                 globalConfigKey={globalConfigKey}
                 render={({value, canSetValue, setValue}) => {
-                    if (value === undefined) {
-                        value = null;
-                    }
-                    invariant(
+                    let selectValue;
+                    if (value === null || value === undefined) {
+                        selectValue = null;
+                    } else if (
                         typeof value === 'string' ||
-                            typeof value === 'number' ||
-                            typeof value === 'boolean' ||
-                            value === null,
-                        'value should be a primitive type',
-                    );
+                        typeof value === 'number' ||
+                        typeof value === 'boolean'
+                    ) {
+                        selectValue = value;
+                    } else {
+                        throw spawnError(
+                            'SelectSynced only works with a global config value that is a string, number, boolean, null or undefined.',
+                        );
+                    }
+
                     return (
                         <Select
+                            {...restOfProps}
                             ref={el => (this._select = el)}
-                            disabled={disabled || !canSetValue}
-                            value={value}
-                            options={options}
+                            value={selectValue}
                             onChange={newValue => {
                                 if (newValue === undefined) {
                                     newValue = null;
@@ -108,12 +116,7 @@ class SelectSynced extends React.Component<SelectSyncedProps> {
                                     onChange(newValue);
                                 }
                             }}
-                            id={id}
-                            className={className}
-                            style={style}
-                            tabIndex={tabIndex}
-                            aria-labelledby={this.props['aria-labelledby']}
-                            aria-describedby={this.props['aria-describedby']}
+                            disabled={disabled || !canSetValue}
                         />
                     );
                 }}

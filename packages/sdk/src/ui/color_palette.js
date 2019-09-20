@@ -72,6 +72,15 @@ export type SharedColorPaletteProps = {|
     disabled?: boolean,
 |};
 
+export const sharedColorPalettePropTypes = {
+    allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onChange: PropTypes.func,
+    squareMargin: PropTypes.number,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    disabled: PropTypes.bool,
+};
+
 /**
  * @typedef {object} ColorPaletteProps
  * @property {string} [color] The current selected {@link Color} option.
@@ -113,12 +122,7 @@ type ColorPaletteState = {
 class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState> {
     static propTypes = {
         color: PropTypes.string,
-        allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
-        onChange: PropTypes.func,
-        squareMargin: PropTypes.number,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        disabled: PropTypes.bool,
+        ...sharedColorPalettePropTypes,
     };
     static defaultProps = {
         squareMargin: 4,

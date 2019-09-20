@@ -1,7 +1,7 @@
 // @flow
 import {system, Config} from '@styled-system/core';
 import {type RightProperty} from '../utils/csstype';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
 import {type Prop, type Length} from '../utils/types';
 
@@ -21,4 +21,4 @@ export const config: Config = {
 };
 
 export const right = system(config);
-export const rightPropTypes = createPropTypes(right.propNames);
+export const rightPropTypes = createStylePropTypes(right.propNames);

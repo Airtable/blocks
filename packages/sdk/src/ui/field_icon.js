@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
-import Icon, {stylePropTypes, type SharedIconProps} from './icon';
+import Icon, {sharedIconPropTypes, type SharedIconProps} from './icon';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -91,13 +91,7 @@ const FieldIcon = (props: FieldIconProps) => {
 
 FieldIcon.propTypes = {
     field: PropTypes.instanceOf(Field).isRequired,
-    size: PropTypes.number,
-    fillColor: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    pathClassName: PropTypes.string,
-    pathStyle: PropTypes.object,
-    ...stylePropTypes,
+    ...sharedIconPropTypes,
 };
 
 export default FieldIcon;

@@ -11,7 +11,7 @@ type SyncedProps = {
     render: ({
         value: mixed,
         canSetValue: boolean,
-        setValue: GlobalConfigValue => void,
+        setValue: (newValue: GlobalConfigValue | void) => void,
     }) => React.Element<*>,
 };
 
@@ -22,13 +22,13 @@ class Synced extends React.Component<SyncedProps> {
         render: PropTypes.func.isRequired,
     };
     props: SyncedProps;
-    _setValue: GlobalConfigValue => void;
+    _setValue: (newValue: GlobalConfigValue | void) => void;
     constructor(props: SyncedProps) {
         super(props);
 
         this._setValue = this._setValue.bind(this);
     }
-    _setValue(newValue: GlobalConfigValue) {
+    _setValue(newValue: GlobalConfigValue | void) {
         getSdk().globalConfig.setAsync(this.props.globalConfigKey, newValue);
     }
     render() {

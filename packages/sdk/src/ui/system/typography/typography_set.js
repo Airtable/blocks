@@ -1,6 +1,6 @@
 // @flow
 import {system} from '@styled-system/core';
-import createPropTypes from '../utils/create_prop_types';
+import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as fontSizeConfig, type FontSizeProps} from './font_size';
 import {config as fontStyleConfig, type FontStyleProps} from './font_style';
 import {config as fontFamilyConfig, type FontFamilyProps} from './font_family';
@@ -35,4 +35,4 @@ export const typographySet = system({
     ...textColorConfig,
 });
 
-export const typographySetPropTypes = createPropTypes(typographySet.propNames);
+export const typographySetPropTypes = createStylePropTypes(typographySet.propNames);
