@@ -5920,6 +5920,8 @@ An enum describing popover placements. One of `Popover.placements.TOP`, `Popover
 
 #### ProgressBar
 
+**Extends React.StatelessFunctionalComponent**
+
 A progress bar.
 
 ##### Parameters

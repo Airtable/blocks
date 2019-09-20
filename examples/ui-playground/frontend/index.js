@@ -12,14 +12,15 @@ import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
 import ConfirmationDialogExample from './ConfirmationDialogExample';
 import DialogExample from './DialogExample';
 import ExampleManager from './ExampleManager';
-import InputExample from './InputExample';
-import InputSyncedExample from './InputSyncedExample';
-import IconExample from './IconExample';
 import FieldIconExample from './FieldIconExample';
 import FieldPickerExample from './FieldPickerExample';
 import FieldPickerSyncedExample from './FieldPickerSyncedExample';
+import IconExample from './IconExample';
+import InputExample from './InputExample';
+import InputSyncedExample from './InputSyncedExample';
 import LoaderExample from './LoaderExample';
 import ModalExample from './ModalExample';
+import ProgressBarExample from './ProgressBarExample';
 import RecordCardExample from './RecordCardExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectButtonsExample from './SelectButtonsExample';
@@ -104,6 +105,10 @@ const examples: Array<Example> = [
     {
         name: 'Modal',
         component: ModalExample,
+    },
+    {
+        name: 'ProgressBar',
+        component: ProgressBarExample,
     },
     {
         name: 'RecordCard',
