@@ -6332,17 +6332,17 @@ Type: [object][72]
 
 ##### Properties
 
--   `value` **[boolean][69]** If set to `true`, the switch will be toggled on.
--   `onChange` **[function][71]?** A function to be called when the switch is toggled.
 -   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the switch.
--   `label` **React.Node?** The label node for the switch.
--   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
-    Toggle.themes.GRAY)?** The color theme for the switch.
 -   `id` **[string][65]?** The ID of the switch element.
--   `className` **[string][65]?** Additional class names to apply to the switch.
--   `style` **[object][72]?** Additional styles to apply to the switch.
+-   `label` **React.Node?** The label node for the switch.
+-   `onChange` **[function][71]?** A function to be called when the switch is toggled.
 -   `tabIndex` **([number][73] \| [string][65])?** Indicates if the switch can be focused and
     if/where it participates in sequential keyboard navigation.
+-   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
+    Toggle.themes.GRAY)?** The color theme for the switch.
+-   `value` **[boolean][69]** If set to `true`, the switch will be toggled on.
+-   `className` **[string][65]?** Additional class names to apply to the switch.
+-   `style` **[object][72]?** Additional styles to apply to the switch.
 -   `aria-label` **[string][65]?** The label for the switch. Use this if the switch lacks a visible
     text label.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
@@ -6382,20 +6382,20 @@ Type: [object][72]
 
 ##### Properties
 
+-   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the switch.
 -   `globalConfigKey` **[GlobalConfigKey][137]** A string key or array key path in
     [GlobalConfig][3]. The switch option will always reflect the boolean value stored in
     `globalConfig` for this key. Toggling the switch will update `globalConfig`.
+-   `id` **[string][65]?** The ID of the switch element.
+-   `label` **React.Node?** The label node for the switch.
 -   `onChange` **[function][71]?** A function to be called when the switch is toggled. This should
     only be used for side effects.
--   `label` **React.Node?** The label node for the switch.
--   `disabled` **[boolean][69]?** If set to `true`, the user cannot interact with the switch.
--   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
-    Toggle.themes.GRAY)?** The color theme for the switch.
--   `id` **[string][65]?** The ID of the switch element.
--   `className` **[string][65]?** Additional class names to apply to the switch.
--   `style` **[object][72]?** Additional styles to apply to the switch.
 -   `tabIndex` **([number][73] \| [string][65])?** Indicates if the switch can be focused and
     if/where it participates in sequential keyboard navigation.
+-   `theme` **(Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW |
+    Toggle.themes.GRAY)?** The color theme for the switch.
+-   `className` **[string][65]?** Additional class names to apply to the switch.
+-   `style` **[object][72]?** Additional styles to apply to the switch.
 -   `aria-label` **[string][65]?** The label for the switch. Use this if the switch lacks a visible
     text label.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
