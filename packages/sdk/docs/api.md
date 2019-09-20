@@ -5805,8 +5805,10 @@ Type: [object][72]
 ##### Properties
 
 -   `fillColor` **[string][65]?** The color of the loading spinner.
--   `scale` **[number][73]?** A scalar for the loader. Increasing the scale increases the size of
-    the loader.
+-   `scale` **[number][73]?** A scalar for the loading spinner. Increasing the scale increases the
+    size of the loading spinner.
+-   `className` **[string][65]?** Additional class names to apply to the loading spinner.
+-   `style` **[object][72]?** Additional styles to apply to the loading spinner.
 
 ### Popover
 
