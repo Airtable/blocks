@@ -2,7 +2,7 @@
 import {cx} from 'emotion';
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import omit from 'lodash.omit';
+import {compose} from '@styled-system/core';
 import {spawnError} from '../error_utils';
 import {baymax} from './baymax_utils';
 import {
@@ -12,9 +12,31 @@ import {
     type SelectOption,
     type SelectOptionValue,
 } from './select_and_select_buttons_helpers';
+import withStyledSystem from './with_styled_system';
+import {
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
 
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
+// Shared with `SelectButtons` and `SelectButtonsSynced`.
 export type SharedSelectButtonsProps = {|
     options: Array<SelectOption>,
     onChange?: (value: SelectOptionValue) => void,
@@ -22,25 +44,9 @@ export type SharedSelectButtonsProps = {|
     className?: string,
     tabIndex?: number | string,
     style?: {[string]: mixed},
+    'aria-label'?: string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
-|};
-
-/**
- * @typedef {object} SelectButtonsProps
- * @property {string | number | boolean | null} [value] The value of the selected option.
- * @property {Array.<SelectOption>} options The list of select options.
- * @property {function} [onChange] A function to be called when the selected option changes.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {number | string} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
- */
-type SelectButtonsProps = {|
-    value: SelectOptionValue,
-    ...SharedSelectButtonsProps,
 |};
 
 export const sharedSelectButtonsPropTypes = {
@@ -54,12 +60,58 @@ export const sharedSelectButtonsPropTypes = {
     ).isRequired,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
+    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     className: PropTypes.string,
     style: PropTypes.object,
-    tabIndex: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
 };
+
+export type StyleProps = {|
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...WidthProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+export const stylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
+/**
+ * @typedef {object} SelectButtonsProps
+ * @property {string | number | boolean | null} [value] The value of the selected option.
+ * @property {Array.<SelectOption>} options The list of select options.
+ * @property {function} [onChange] A function to be called when the selected option changes.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
+ * @property {string} [className] Additional class names to apply to the select.
+ * @property {object} [style] Additional styles to apply to the select.
+ * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
+ * @property {string} [aria-labelledby] A space separated list of label element IDs.
+ * @property {string} [aria-describedby] A space separated list of description element IDs.
+ */
+type SelectButtonsProps = {|
+    value: SelectOptionValue,
+    ...SharedSelectButtonsProps,
+|};
 
 /** */
 class SelectButtons extends React.Component<SelectButtonsProps> {
@@ -82,7 +134,17 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
         }
     }
     render() {
-        const {className, style, options, disabled, value, tabIndex = 0} = this.props;
+        const {
+            className,
+            style,
+            options,
+            disabled,
+            value,
+            tabIndex = 0,
+            'aria-label': ariaLabel,
+            'aria-describedby': ariaDescribedBy,
+            'aria-labelledby': ariaLabelledBy,
+        } = this.props;
 
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
@@ -91,9 +153,6 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
         if (!validationResult.isValid) {
             throw spawnError('<SelectButtons> %s', validationResult.reason);
         }
-
-        // TODO (stephen): remove restOfProps
-        const restOfProps = omit(this.props, Object.keys(SelectButtons.propTypes));
 
         return (
             <div
@@ -105,7 +164,9 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
                     className,
                 )}
                 style={style}
-                {...restOfProps}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
             >
                 {options &&
                     options.map(option => {
@@ -143,4 +204,11 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
     }
 }
 
-export default SelectButtons;
+export default withStyledSystem<SelectButtonsProps, StyleProps, SelectButtons, {}>(
+    SelectButtons,
+    styleParser,
+    stylePropTypes,
+    {
+        width: '100%',
+    },
+);

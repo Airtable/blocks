@@ -5,6 +5,8 @@ import {type GlobalConfigKey} from '../global_config';
 import SelectButtons, {
     sharedSelectButtonsPropTypes,
     type SharedSelectButtonsProps,
+    stylePropTypes,
+    type StyleProps,
 } from './select_buttons';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
@@ -24,6 +26,7 @@ import Synced from './synced';
 type SelectButtonsSyncedProps = {|
     globalConfigKey: GlobalConfigKey,
     ...SharedSelectButtonsProps,
+    ...StyleProps,
 |};
 
 /** */
@@ -31,6 +34,7 @@ class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         ...sharedSelectButtonsPropTypes,
+        ...stylePropTypes,
     };
     props: SelectButtonsSyncedProps;
     render() {

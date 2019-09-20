@@ -13,6 +13,8 @@ export default function SelectButtonsExample(props: void) {
                 {value: 'bar', label: 'bar'},
                 {value: 'baz', label: 'baz'},
             ]}
+            margin={3}
+            maxWidth="400px"
         />
     );
 }

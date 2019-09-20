@@ -6200,6 +6200,8 @@ Type: [object][72]
 -   `tabIndex` **([number][73] \| [string][65])?** The `tabindex` attribute.
 -   `className` **[string][65]?** Additional class names to apply to the select.
 -   `style` **[object][72]?** Additional styles to apply to the select.
+-   `aria-label` **[string][65]?** The `aria-label` attribute. Use this if the select is not
+    referenced by a label element.
 -   `aria-labelledby` **[string][65]?** A space separated list of label element IDs.
 -   `aria-describedby` **[string][65]?** A space separated list of description element IDs.
 
