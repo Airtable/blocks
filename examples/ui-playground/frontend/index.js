@@ -24,6 +24,8 @@ import SelectButtonsSyncedExample from './SelectButtonsSyncedExample';
 import SelectExample from './SelectExample';
 import SelectSyncedExample from './SelectSyncedExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
+import ToggleExample from './ToggleExample';
+import ToggleSyncedExample from './ToggleExample';
 import {type Example} from './Example';
 
 // Alphabetically ordered by name.
@@ -113,6 +115,14 @@ const examples: Array<Example> = [
     {
         name: 'TablePickerSynced',
         component: TablePickerSyncedExample,
+    },
+    {
+        name: 'Toggle',
+        component: ToggleExample,
+    },
+    {
+        name: 'ToggleSynced',
+        component: ToggleSyncedExample,
     },
 ];
 
