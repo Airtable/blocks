@@ -108,7 +108,7 @@ async function createRecordWithAsyncAwait(fieldValue) {
 }
 
 function createRecordWithCallback(record, fieldValue) {
-    table.updateRecordAsync(record, {'My field name': fieldValue}).then(function(recordId) {
+    table.createRecordAsync({'My field name': fieldValue}).then(function(recordId) {
         alert(`new record created! ID: ${recordId}`);
     });
 }
