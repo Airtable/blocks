@@ -1,7 +1,6 @@
 // @flow
 import {initializeBlock} from '@airtable/blocks/ui';
 import React from 'react';
-import ExampleManager from './ExampleManager';
 import BaymaxExample from './BaymaxExample';
 import BoxExample from './BoxExample';
 import ButtonExample from './ButtonExample';
@@ -10,16 +9,18 @@ import CellRendererExample from './CellRendererExample';
 import CollaboratorTokenExample from './CollaboratorTokenExample';
 import ColorPaletteExample from './ColorPaletteExample';
 import ColorPaletteSyncedExample from './ColorPaletteSyncedExample';
-import InputExample from './InputExample';
-import InputSyncedExample from './InputSyncedExample';
 import ConfirmationDialogExample from './ConfirmationDialogExample';
 import DialogExample from './DialogExample';
-import LoaderExample from './LoaderExample';
-import ModalExample from './ModalExample';
+import ExampleManager from './ExampleManager';
+import InputExample from './InputExample';
+import InputSyncedExample from './InputSyncedExample';
 import IconExample from './IconExample';
 import FieldIconExample from './FieldIconExample';
 import FieldPickerExample from './FieldPickerExample';
 import FieldPickerSyncedExample from './FieldPickerSyncedExample';
+import LoaderExample from './LoaderExample';
+import ModalExample from './ModalExample';
+import RecordCardExample from './RecordCardExample';
 import RecordCardListExample from './RecordCardListExample';
 import SelectButtonsExample from './SelectButtonsExample';
 import SelectButtonsSyncedExample from './SelectButtonsSyncedExample';
@@ -103,6 +104,10 @@ const examples: Array<Example> = [
     {
         name: 'Modal',
         component: ModalExample,
+    },
+    {
+        name: 'RecordCard',
+        component: RecordCardExample,
     },
     {
         name: 'RecordCardList',
