@@ -144,6 +144,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             },
         },
     },
+    [CommandNames.LIST_REMOTES]: {
+        name: CommandNames.LIST_REMOTES,
+        command: `${CommandNames.LIST_REMOTES}`,
+        description: 'List remote configurations',
+        example: `block ${CommandNames.LIST_REMOTES}`,
+        runCommandAsync: commandRunner(CommandNames.LIST_REMOTES),
+    },
     [CommandNames.SET_API_KEY]: {
         name: CommandNames.SET_API_KEY,
         command: `${CommandNames.SET_API_KEY}`,

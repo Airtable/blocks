@@ -11,8 +11,9 @@ import type {RemoteJson} from '../types/remote_json_type';
 
 async function parseAndValidateRemoteJsonAsync(
     remoteName: string | null,
+    opts: {blockDirPath?: string} = {},
 ): Promise<Result<RemoteJson>> {
-    const blockDirPath = getBlockDirPath();
+    const {blockDirPath = getBlockDirPath()} = opts;
 
     let remoteJsonFileName = blockCliConfigSettings.REMOTE_JSON_BASE_FILE_PATH;
     if (remoteName) {
