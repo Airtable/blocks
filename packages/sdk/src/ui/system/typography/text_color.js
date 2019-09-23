@@ -11,7 +11,7 @@ export type TextColorProps = {|
 export const config: Config = {
     textColor: {
         property: 'color',
-        scale: 'colors',
+        scale: 'textColors',
     },
 };
 

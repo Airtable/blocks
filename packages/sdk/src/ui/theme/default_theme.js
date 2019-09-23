@@ -5,6 +5,8 @@ const colors = {
     // neutrals
     white: 'hsl(0, 0%, 100%)',
     dark: 'hsl(0, 0%, 20%)',
+    // light is the lightest text color possible.
+    light: 'hsl(0, 0%, 46%)',
 
     lighten1: 'hsla(0, 0%, 100%, 0.05)',
     lighten2: 'hsla(0, 0%, 100%, 0.1)',
@@ -159,6 +161,11 @@ const textColorsByBackgroundColor: {[Color]: string} = {
     yellowLight2: 'rgb(66, 10, 0)',
 };
 
+const textColors = {
+    dark: colors.dark,
+    light: colors.light,
+};
+
 const breakpoints = {
     xsmallViewport: '480px',
     smallViewport: '640px',
@@ -182,12 +189,101 @@ const fontFamilies = {
     monospace: ' Menlo, Courier, monospace',
 };
 
-// TODO(jay): Typography coming in future diff.
-const fontSizes = [];
-const textSizes = [];
+// On Mac OS X when `-apple-system` is used, two different fonts are rendered at different font sizes.
+// SF Pro Text is used under 21px (0-5) and SF Pro Display is used from 21px and up (6-9).
+// SF Pro Text visually looks slightly bigger than SF Pro Display.
+export const fontSizes = [
+    '9px', // 0
+    '11px', // 1
+    '13px', // 2
+    '15px', // 3
+    '17px', // 4
+    '19px', // 5
+    '21px', // 6
+    '23px', // 7
+    '27px', // 8
+    '35px', // 9
+];
+
+const textSizesByVariant = {
+    default: {
+        xsmall: {
+            fontSize: 1,
+            textColor: 'dark',
+            lineHeight: '14px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+        small: {
+            fontSize: 2,
+            textColor: 'dark',
+            lineHeight: '16px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+        default: {
+            fontSize: 3,
+            textColor: 'dark',
+            lineHeight: '20px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+        large: {
+            fontSize: 4,
+            textColor: 'dark',
+            lineHeight: '24px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+    },
+    paragraph: {
+        xsmall: {
+            fontSize: 1,
+            textColor: 'dark',
+            lineHeight: '16px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+        small: {
+            fontSize: 2,
+            textColor: 'dark',
+            lineHeight: '20px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+        default: {
+            fontSize: 3,
+            textColor: 'dark',
+            lineHeight: '22px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+        large: {
+            fontSize: 4,
+            textColor: 'dark',
+            lineHeight: '26px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+    },
+};
+
 const headingSizes = [];
-const fontWeights = {};
-const lineHeights = {};
+const fontWeights = {
+    strong: 500,
+};
 
 const opacities = {
     normal: 1,
@@ -208,15 +304,15 @@ const space = [0, 4, 8, 16, 32, 64, 128];
 export default {
     colors,
     textColorsByBackgroundColor,
+    textColors,
     breakpoints,
     borderWidths,
     borders,
     fontFamilies,
     fontSizes,
-    textSizes,
+    textSizesByVariant,
     headingSizes,
     fontWeights,
-    lineHeights,
     opacities,
     radii,
     space,

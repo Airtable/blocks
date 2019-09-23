@@ -1869,10 +1869,10 @@
     telejson "^2.2.1"
     util-deprecate "^1.0.2"
 
-"@styled-system/core@^5.0.18":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@styled-system/core/-/core-5.1.0.tgz#ac70447d913f13981f916b2e93f3b2c909bc9566"
-  integrity sha512-HW2ds0qCbmCeGufu0OjQhQ7w8gBHyUT7eeC6XwXwJm6vvLyclt23ervgdMiLhNF2i41Xu+tYFQnfeREZV9j9IA==
+"@styled-system/core@^5.1.1":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@styled-system/core/-/core-5.1.2.tgz#b8b7b86455d5a0514f071c4fa8e434b987f6a772"
+  integrity sha512-XclBDdNIy7OPOsN4HBsawG2eiWfCcuFt6gxKn1x4QfMIgeO6TOlA2pZZ5GWZtIhCUqEPTgIBta6JXsGyCkLBYw==
   dependencies:
     object-assign "^4.1.1"
 
