@@ -6,7 +6,7 @@ export default function CollaboratorTokenExample(props: void) {
     const base = useBase();
     const {activeCollaborators} = base;
     return (
-        <Box display="flex" flexDirection="column">
+        <Box width="400px" maxWidth="100%" marginX={2}>
             {activeCollaborators.slice(0, 10).map((collaborator, index) => (
                 <CollaboratorToken key={index} collaborator={collaborator} margin={1} />
             ))}

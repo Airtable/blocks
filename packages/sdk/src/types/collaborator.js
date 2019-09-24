@@ -1,7 +1,12 @@
 // @flow
 export type UserId = string;
 
-export type CollaboratorStatus = 'former' | 'invited' | 'current';
+export const CollaboratorStatuses = Object.freeze({
+    FORMER: 'former',
+    INVITED: 'invited',
+    CURRENT: 'current',
+});
+export type CollaboratorStatus = $Values<typeof CollaboratorStatuses>;
 
 export type CollaboratorData = {
     id: UserId,

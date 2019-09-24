@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {has, isDeepEqual} from '../private_utils';
-import getSdk from '../get_sdk';
-import {type CollaboratorData} from '../types/collaborator';
+import {CollaboratorStatuses, type CollaboratorData} from '../types/collaborator';
 import Box from './box';
+import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
@@ -20,16 +19,8 @@ import {
     type MarginProps,
 } from './system';
 
-// TODO(kasra): don't depend on liveapp components.
-const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
-);
-const profilePicHelper = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/profile_pic_helper',
-);
-const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/components/collaborator_token',
-);
+const UNKNOWN_PROFILE_PIC_URL =
+    'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
 
 type StyleProps = {|
     ...FlexItemSetProps,
@@ -90,48 +81,52 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {collaborator, className, style, ...styleProps} = props;
     const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
 
-    // NOTE: this is a bit strange. We pull the user obj out of app blanket, format it for api v2,
-    // and then compare it to the user obj that got passed in. This way, if they are equal, we can
-    // do some nice things like use our helper methods and get token-sized prof pic urls. If the two
-    // objects are not equal, then we can't use these, so we'll just render what we were given without
-    // formatting it nicely.
-    const userInfoById = getSdk().__appInterface.getCollaboratorInfoById();
-    const userObj =
-        userInfoById && collaborator.id && has(userInfoById, collaborator.id)
-            ? userInfoById[collaborator.id]
-            : null;
-    const userObjFormattedForPublicApiV2 = userObj
-        ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj)
-        : null;
-
-    let userName;
-    let profilePicUrl;
-    let isActive;
-    if (userObj !== null && isDeepEqual(collaborator, userObjFormattedForPublicApiV2)) {
-        // Since the object we got passed and the formatted v2 obj are the same, we can just use
-        // the private obj and our helpers. We do this so that we can use sized prof pic urls
-        // and name helper functions that we couldn't otherwise use.
-        profilePicUrl = appBlanketUserObjMethods.getTokenSizedProfilePicUrl(userObj);
-        userName = appBlanketUserObjMethods.getName(userObj) || 'Unknown';
-        // Note: we purposely don't filter out unaccepted invitees to match liveapp styling
-        isActive = appBlanketUserObjMethods.isActive(userObj);
-    } else {
-        // Can't use helpers to get token-sized prof pic url, since we can't be sure we were
-        // given an airtable url.
-        profilePicUrl =
-            collaborator.profilePicUrl || profilePicHelper.getSizedUnknownProfilePicUrl(18);
-        userName = collaborator.name || collaborator.email || 'Unknown';
-        isActive = true;
-    }
+    const userName =
+        collaborator.name ||
+        collaborator.email ||
+        (collaborator.status === CollaboratorStatuses.INVITED && 'Invited user') ||
+        'Unknown';
+    const profilePicUrl = collaborator.profilePicUrl || UNKNOWN_PROFILE_PIC_URL;
+    const isActive = collaborator.status
+        ? collaborator.status === CollaboratorStatuses.CURRENT
+        : true;
 
     return (
-        <Box className={cx('baymax', classNameForStyledProps)} style={style} display="inline-block">
-            <_CollaboratorToken
-                profilePicUrl={profilePicUrl}
-                userName={userName}
-                className={className}
-                shouldDim={!isActive}
-            />
+        <Box
+            className={cx(baymax('truncate print-color-exact'), classNameForStyledProps, className)}
+            style={style}
+            alignItems="center"
+            display="inline-flex"
+        >
+            {profilePicUrl && (
+                <Box
+                    className={baymax('background-cover background-center')}
+                    style={{backgroundImage: `url("${profilePicUrl}")`}}
+                    border="1px solid #eee"
+                    width="22px"
+                    height="22px"
+                    borderRadius="circle"
+                    zIndex={1}
+                    flex="none"
+                    opacity={isActive ? 1 : 0.5}
+                    backgroundColor="grayLight2"
+                />
+            )}
+            <Box
+                className={baymax('truncate')}
+                paddingRight={2}
+                paddingLeft={3}
+                textColor="dark"
+                display="inline-flex"
+                borderRadius="circle"
+                alignItems="center"
+                flex="none"
+                backgroundColor="grayLight2"
+                marginLeft="-12px"
+                lineHeight={1.4}
+            >
+                {userName}
+            </Box>
         </Box>
     );
 };
