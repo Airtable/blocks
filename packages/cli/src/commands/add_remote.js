@@ -8,11 +8,10 @@ const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const getBlockDirPathModule = require('../get_block_dir_path');
 const fsUtils = require('../helpers/fs_utils');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
+const validateRemoteName = require('../helpers/validate_remote_name');
 
 import type {Argv} from 'yargs';
 import type {RemoteJson} from '../types/remote_json_type';
-
-const VALID_REMOTE_NAME_REGEX = /^[a-zA-Z0-9_-]+$/;
 
 async function runCommandAsync(argv: Argv): Promise<void> {
     const {blockIdentifier, remoteName} = argv;
@@ -30,10 +29,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects apiKeyName to be null or a string',
     );
 
-    if (!VALID_REMOTE_NAME_REGEX.test(remoteName)) {
-        throw new Error(
-            '❌ Incorrect characters for the remote name! Only alphanumeric, -, or _ characters are allowed',
-        );
+    const remoteNameValidationResult = validateRemoteName(remoteName);
+    if (!remoteNameValidationResult.pass) {
+        throw new Error(`❌ ${remoteNameValidationResult.reason}`);
     }
 
     const blockIdentifierParseResult = parseBlockIdentifier(blockIdentifier);
@@ -64,9 +62,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     if (await fsUtils.existsAsync(remoteJsonFilePath)) {
         console.error(`❌ The ${chalk.bold(remoteName)} remote already exists!
-If you want to update the remote, please delete the ${chalk.bold(
-            remoteJsonFilePathRelative,
-        )} file, and re-run ${chalk.bold(`block ${CommandNames.ADD_REMOTE}`)}!`);
+If you want to update the remote, please run ${chalk.bold(
+            `block ${CommandNames.REMOVE_REMOTE} ${remoteName}`,
+        )} and re-run ${chalk.bold(`block ${CommandNames.ADD_REMOTE}`)}!`);
         return;
     }
 

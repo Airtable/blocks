@@ -151,6 +151,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         example: `block ${CommandNames.LIST_REMOTES}`,
         runCommandAsync: commandRunner(CommandNames.LIST_REMOTES),
     },
+    [CommandNames.REMOVE_REMOTE]: {
+        name: CommandNames.REMOVE_REMOTE,
+        command: `${CommandNames.REMOVE_REMOTE} <remoteName>`,
+        description: 'Remove a remote configuration',
+        example: `block ${CommandNames.REMOVE_REMOTE} remote_to_delete`,
+        runCommandAsync: commandRunner(CommandNames.REMOVE_REMOTE),
+    },
     [CommandNames.SET_API_KEY]: {
         name: CommandNames.SET_API_KEY,
         command: `${CommandNames.SET_API_KEY}`,

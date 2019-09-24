@@ -5,6 +5,7 @@ const CommandNames = {
     RELEASE: ('release': 'release'),
     SET_API_KEY: ('set-api-key': 'set-api-key'),
     ADD_REMOTE: ('add-remote': 'add-remote'),
+    REMOVE_REMOTE: ('remove-remote': 'remove-remote'),
     LIST_REMOTES: ('list-remotes': 'list-remotes'),
 
     // This command is a helper to migrate old blocks to the standalone CLI world.
