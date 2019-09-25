@@ -43,9 +43,6 @@ export type SharedInputProps = {|
         | 'url'
         | 'week',
     placeholder?: string,
-    onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => mixed,
-    style?: {[string]: mixed},
-    className?: string,
     disabled?: boolean,
     required?: boolean,
     spellCheck?: boolean,
@@ -61,6 +58,9 @@ export type SharedInputProps = {|
     pattern?: string,
     readOnly?: boolean,
     autoComplete?: string,
+    style?: {[string]: mixed},
+    className?: string,
+    onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => mixed,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
 |};
@@ -84,9 +84,6 @@ const validTypesSet = Object.freeze({
 export const sharedInputPropTypes = {
     type: PropTypes.oneOf(Object.keys(validTypesSet)),
     placeholder: PropTypes.string,
-    onChange: PropTypes.func,
-    style: PropTypes.object,
-    className: PropTypes.string,
     disabled: PropTypes.bool,
     required: PropTypes.bool,
     spellCheck: PropTypes.bool,
@@ -100,6 +97,9 @@ export const sharedInputPropTypes = {
     pattern: PropTypes.string,
     readOnly: PropTypes.bool,
     autoComplete: PropTypes.string,
+    onChange: PropTypes.func,
+    style: PropTypes.object,
+    className: PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
 };
@@ -226,6 +226,8 @@ class Input extends React.Component<InputProps> {
             required,
             spellCheck,
             tabIndex,
+            id,
+            name,
             autoFocus,
             max,
             maxLength,
@@ -246,20 +248,12 @@ class Input extends React.Component<InputProps> {
                 value={value}
                 type={type}
                 placeholder={placeholder}
-                style={style}
-                className={cx(
-                    baymax(defaultClassName),
-                    {
-                        [baymax('quieter')]: disabled,
-                        [baymax('link-quiet')]: !disabled,
-                    },
-                    className,
-                )}
                 disabled={disabled}
                 required={required}
-                onChange={onChange}
                 spellCheck={spellCheck}
                 tabIndex={tabIndex}
+                id={id}
+                name={name}
                 autoFocus={autoFocus}
                 max={max}
                 maxLength={maxLength}
@@ -269,6 +263,16 @@ class Input extends React.Component<InputProps> {
                 pattern={pattern}
                 readOnly={readOnly}
                 autoComplete={autoComplete}
+                onChange={onChange}
+                style={style}
+                className={cx(
+                    baymax(defaultClassName),
+                    {
+                        [baymax('quieter')]: disabled,
+                        [baymax('link-quiet')]: !disabled,
+                    },
+                    className,
+                )}
                 aria-labelledby={ariaLabelledBy}
                 aria-describedby={ariaDescribedBy}
             />
