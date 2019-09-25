@@ -19,6 +19,7 @@ import IconExample from './IconExample';
 import InputExample from './InputExample';
 import InputSyncedExample from './InputSyncedExample';
 import LoaderExample from './LoaderExample';
+import PopoverExample from './PopoverExample';
 import ModalExample from './ModalExample';
 import ProgressBarExample from './ProgressBarExample';
 import RecordCardExample from './RecordCardExample';
@@ -106,6 +107,10 @@ const examples: Array<Example> = [
     {
         name: 'Modal',
         component: ModalExample,
+    },
+    {
+        name: 'Popover',
+        component: PopoverExample,
     },
     {
         name: 'ProgressBar',

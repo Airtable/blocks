@@ -30,6 +30,7 @@ export default function getStylePropsForResponsiveProp<T>(
     }
 
     /**
+     * @private
      * If multiple values are the same for each viewport, just use a string value.
      *
      * For example turn the following object:

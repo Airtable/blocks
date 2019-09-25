@@ -7,8 +7,7 @@ import {values} from '../private_utils';
 import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
 import createDetectElementResize from './create_detect_element_resize';
-
-const Geometry = window.__requirePrivateModuleFromAirtable('client/geometry/geometry');
+import Geometry from './geometry/geometry';
 
 // NOTE(evanhahn) I wasn't figure out a better way to document these enums
 // with JSDoc. The @memberof directive doesn't seem to work when the token
