@@ -33,6 +33,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import Box from './box';
 
 const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
 
@@ -155,15 +156,15 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
         }
 
         return (
-            <div
-                className={cx(
-                    baymax('flex rounded overflow-hidden p-half darken2'),
-                    {
-                        [baymax('quieter')]: disabled,
-                    },
-                    className,
-                )}
+            <Box
+                className={className}
                 style={style}
+                display="flex"
+                padding={1}
+                backgroundColor="darken2"
+                borderRadius="default"
+                opacity={disabled ? 'quieter' : 'normal'}
+                overflow="hidden"
                 aria-label={ariaLabel}
                 aria-labelledby={ariaLabelledBy}
                 aria-describedby={ariaDescribedBy}
@@ -199,7 +200,7 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
                             </div>
                         );
                     })}
-            </div>
+            </Box>
         );
     }
 }
