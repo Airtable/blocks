@@ -135,6 +135,10 @@ toc:
             children:
                 - InputSynced
                 - InputSyncedProps
+          - name: Label
+            children:
+                - Label
+                - LabelProps
           - name: Link
             children:
                 - Link

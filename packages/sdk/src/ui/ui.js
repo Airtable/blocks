@@ -42,6 +42,7 @@ import Link from './link';
 import Box from './box';
 import Text from './text';
 import Heading from './heading';
+import Label from './label';
 import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 import initializeBlock from './initialize_block';
 import withHooks from './with_hooks';
@@ -88,6 +89,7 @@ const UI = {
     Box,
     Text,
     Heading,
+    Label,
     ProgressBar,
     Button,
     RecordCard,
