@@ -17,10 +17,7 @@ import {
     type MarginProps,
 } from './system';
 import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
-
-const iconConfig = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/react/assets/icon_config',
-);
+import iconConfig from './icon_config';
 
 export type StyleProps = {|
     ...FlexItemSetProps,
