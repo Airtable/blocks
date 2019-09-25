@@ -41,6 +41,9 @@ const emotionClassNameByBaymaxClassName = {
     absolute: css`
         position: absolute;
     `,
+    'align-top': css`
+        vertical-align: top;
+    `,
     'all-0': css`
         top: 0;
         left: 0;

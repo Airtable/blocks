@@ -1,11 +1,13 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
+import {type Color} from '../colors';
+import {baymax} from './baymax_utils';
 import Box from './box';
 import useStyledSystem from './use_styled_system';
+import useTextColorForBackgroundColor from './use_text_color_for_background_color';
 import {
     flexItemSet,
     flexItemSetPropTypes,
@@ -17,11 +19,6 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
-
-const _ChoiceToken = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/components/choice_token',
-); // TODO(kasra): don't depend on liveapp components.
-const colors = window.__requirePrivateModuleFromAirtable('client_server_shared/colors');
 
 type StyleProps = {|
     ...FlexItemSetProps,
@@ -41,6 +38,8 @@ const stylePropTypes = {
     ...marginPropTypes,
 };
 
+const DEFAULT_CHOICE_COLOR = 'gray';
+
 /**
  * @typedef {object} ChoiceTokenProps
  * @property {object} choice An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data.
@@ -54,7 +53,7 @@ type ChoiceTokenProps = {|
     choice: {|
         id: string,
         name: string,
-        color?: string,
+        color?: Color,
     |},
     style?: {[string]: mixed},
     className?: string,
@@ -89,21 +88,30 @@ type ChoiceTokenProps = {|
 const ChoiceToken = (props: ChoiceTokenProps) => {
     const {choice, className, style, ...styleProps} = props;
     const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
-    // Convert the choice color back to a private api choice color.
-    const color = choice.color
-        ? colors.getColorForColorClass(choice.color)
-        : colors.DEFAULT_CHOICE_COLOR;
+    const color = choice.color || DEFAULT_CHOICE_COLOR;
+    const textColor = useTextColorForBackgroundColor(color);
+
     return (
-        <Box className={cx('baymax', classNameForStyleProps)} style={style} display="inline-block">
-            <_ChoiceToken
-                color={color}
-                className={cx(
-                    'block border-box truncate pill px1 choiceToken line-height-4',
-                    className,
-                )}
+        <Box className={cx(className, classNameForStyleProps)} style={style} display="inline-block">
+            <Box
+                className={baymax('print-color-exact align-top')}
+                backgroundColor={color}
+                minWidth="18px"
+                height="18px"
+                borderRadius="circle"
+                paddingX={2}
             >
-                <div className="flex-auto truncate">{choice.name}</div>
-            </_ChoiceToken>
+                {/* TODO: Replace with <Text> component once it is available */}
+                <Box
+                    className={baymax('truncate')}
+                    textColor={textColor}
+                    fontSize="13px"
+                    fontWeight="400"
+                    lineHeight={1.5}
+                >
+                    {choice.name}
+                </Box>
+            </Box>
         </Box>
     );
 };

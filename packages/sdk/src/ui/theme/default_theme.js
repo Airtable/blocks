@@ -1,4 +1,6 @@
 // @flow
+import {type Color} from '../../colors';
+
 const colors = {
     // neutrals
     white: 'hsl(0, 0%, 100%)',
@@ -85,6 +87,78 @@ const colors = {
     yellowLight2: 'rgb(255, 234, 182)',
 };
 
+const textColorsByBackgroundColor: {[Color]: string} = {
+    // blue bg
+    blueBright: 'white',
+    blue: 'white',
+    blueDark1: 'rgb(207, 223, 255)',
+    blueLight1: 'rgb(0, 0, 60)',
+    blueLight2: 'rgb(0, 0, 60)',
+
+    // cyan bg
+    cyanBright: 'white',
+    cyan: 'white',
+    cyanDark1: 'rgb(208, 240, 253)',
+    cyanLight1: 'rgb(0, 17, 68)',
+    cyanLight2: 'rgb(0, 17, 68)',
+
+    // gray bg
+    grayBright: 'white',
+    gray: 'white',
+    grayDark1: 'rgb(238, 238, 238)',
+    grayLight1: 'rgb(0, 0, 0)',
+    grayLight2: 'rgb(0, 0, 0)',
+
+    // green bg
+    greenBright: 'white',
+    green: 'white',
+    greenDark1: 'rgb(209, 247, 196)',
+    greenLight1: 'rgb(0, 34, 0)',
+    greenLight2: 'rgb(0, 34, 0)',
+
+    // orange bg
+    orangeBright: 'white',
+    orange: 'white',
+    orangeDark1: 'rgb(254, 226, 213)',
+    orangeLight1: 'rgb(83, 0, 0)',
+    orangeLight2: 'rgb(83, 0, 0)',
+
+    // pink bg
+    pinkBright: 'white',
+    pink: 'white',
+    pinkDark1: 'rgb(255, 218, 246)',
+    pinkLight1: 'rgb(58, 0, 33)',
+    pinkLight2: 'rgb(58, 0, 33)',
+
+    // purple bg
+    purpleBright: 'white',
+    purple: 'white',
+    purpleDark1: 'rgb(237, 226, 254)',
+    purpleLight1: 'rgb(12, 0, 62)',
+    purpleLight2: 'rgb(12, 0, 62)',
+
+    // red bg
+    redBright: 'white',
+    red: 'white',
+    redDark1: 'rgb(255, 220, 229)',
+    redLight1: 'rgb(64, 0, 0)',
+    redLight2: 'rgb(64, 0, 0)',
+
+    // teal bg
+    tealBright: 'white',
+    teal: 'white',
+    tealDark1: 'rgb(194, 245, 233)',
+    tealLight1: 'rgb(0, 47, 46)',
+    tealLight2: 'rgb(0, 47, 46)',
+
+    // yellow bg
+    yellowBright: 'white',
+    yellow: 'white',
+    yellowDark1: 'rgb(255, 234, 182)',
+    yellowLight1: 'rgb(66, 10, 0)',
+    yellowLight2: 'rgb(66, 10, 0)',
+};
+
 const breakpoints = {
     xsmallViewport: '480px',
     smallViewport: '640px',
@@ -133,6 +207,7 @@ const space = [0, 4, 8, 16, 32, 64, 128];
 
 export default {
     colors,
+    textColorsByBackgroundColor,
     breakpoints,
     borderWidths,
     borders,

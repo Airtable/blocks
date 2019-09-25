@@ -9,20 +9,21 @@ export default function ChoiceTokenExample(props: void) {
     const table = base.tables[0];
 
     return (
-        <Box display="flex" alignSelf="stretch" flexDirection="column">
+        <Box display="flex" alignSelf="stretch" alignItems="center" flexDirection="column">
             <FieldPicker
-                style={{marginTop: 100, width: 200}}
                 table={table}
                 field={field}
-                onChange={setField}
+                onChange={val => setField((val: any))}
                 allowedTypes={[fieldTypes.SINGLE_SELECT, fieldTypes.MULTIPLE_SELECTS]}
+                marginTop="100px"
+                width="200px"
             />
-            <Box display="flex">
+            <Box width="200px" marginTop={2}>
                 {field &&
                     field.options &&
                     Array.isArray(field.options.choices) &&
                     field.options.choices.map((choice, index) => (
-                        <ChoiceToken key={index} choice={(choice: Object)} margin={3} />
+                        <ChoiceToken key={index} choice={choice} margin={1} />
                     ))}
             </Box>
         </Box>
