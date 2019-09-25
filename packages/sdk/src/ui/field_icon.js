@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
-import Icon, {sharedIconPropTypes, type SharedIconProps} from './icon';
+import Icon, {
+    sharedIconPropTypes,
+    type SharedIconProps,
+    stylePropTypes,
+    type StyleProps,
+} from './icon';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -22,6 +27,7 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
 type FieldIconProps = {|
     field: Field,
     ...SharedIconProps,
+    ...StyleProps,
 |};
 
 /**
@@ -55,16 +61,7 @@ type FieldIconProps = {|
  * );
  */
 const FieldIcon = (props: FieldIconProps) => {
-    const {
-        field,
-        size = 16,
-        fillColor,
-        className,
-        style,
-        pathClassName,
-        pathStyle,
-        ...restOfProps
-    } = props;
+    const {field, ...restOfProps} = props;
 
     const type = field.__getRawType();
     const typeOptions = field.__getRawTypeOptions();
@@ -75,23 +72,13 @@ const FieldIcon = (props: FieldIconProps) => {
     const config = displayTypeConfigs[displayType];
 
     const name = config.displayTypeIcon;
-    return (
-        <Icon
-            name={name}
-            size={size}
-            fillColor={fillColor}
-            className={className}
-            style={style}
-            pathClassName={pathClassName}
-            pathStyle={pathStyle}
-            {...restOfProps}
-        />
-    );
+    return <Icon name={name} {...restOfProps} />;
 };
 
 FieldIcon.propTypes = {
     field: PropTypes.instanceOf(Field).isRequired,
     ...sharedIconPropTypes,
+    ...stylePropTypes,
 };
 
 export default FieldIcon;

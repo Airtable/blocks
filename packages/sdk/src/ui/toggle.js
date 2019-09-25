@@ -29,6 +29,7 @@ import {
     displayPropTypes,
 } from './system';
 import {type Prop} from './system/utils/types';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 
 // TODO (stephen): add size variants
@@ -82,6 +83,7 @@ export type SharedToggleProps = {|
     'aria-label'?: string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
+    ...TooltipAnchorProps,
 |};
 
 type ToggleProps = {|
@@ -101,6 +103,7 @@ export const sharedTogglePropTypes = {
     'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
+    ...tooltipAnchorPropTypes,
 };
 
 export type StyleProps = {|
@@ -163,12 +166,14 @@ class Toggle extends React.Component<ToggleProps> {
         theme: themes.GREEN,
     };
     _container: HTMLElement | null;
-    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLElement>) => void;
+    _onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void;
+    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLDivElement>) => void;
     _toggleValue: () => void;
     constructor(props: ToggleProps) {
         super(props);
         // TODO (stephen): use React.forwardRef
         this._container = null;
+        this._onClick = this._onClick.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this);
         this._toggleValue = this._toggleValue.bind(this);
     }
@@ -183,6 +188,14 @@ class Toggle extends React.Component<ToggleProps> {
     click() {
         invariant(this._container, 'No toggle to click');
         this._container.click();
+    }
+    _onClick(e: SyntheticMouseEvent<HTMLDivElement>) {
+        const {onClick, disabled} = this.props;
+        // onClick should only be defined in the case of a tooltip
+        if (!disabled && onClick) {
+            onClick(e);
+        }
+        this._toggleValue();
     }
     _onKeyDown(e: SyntheticKeyboardEvent<HTMLDivElement>) {
         if (e.ctrlKey || e.altKey || e.metaKey) {
@@ -207,6 +220,8 @@ class Toggle extends React.Component<ToggleProps> {
             tabIndex,
             theme,
             value,
+            onMouseEnter,
+            onMouseLeave,
             className,
             style,
             'aria-label': ariaLabel,
@@ -219,14 +234,17 @@ class Toggle extends React.Component<ToggleProps> {
         return (
             <div
                 ref={el => (this._container = el)}
-                onClick={this._toggleValue}
+                // TODO (stephen): remove tooltip anchor props
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={this._onClick}
                 onKeyDown={this._onKeyDown}
                 id={id}
                 className={cx(
-                    baymax('focusable items-center rounded'),
+                    baymax('items-center rounded no-outline'),
                     {
-                        [baymax('pointer link-quiet')]: !disabled,
-                        [baymax('noevents quieter')]: disabled,
+                        [baymax('pointer link-quiet focusable')]: !disabled,
+                        [baymax('quieter')]: disabled,
                     },
                     className,
                 )}

@@ -18,6 +18,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
@@ -55,6 +56,7 @@ type CollaboratorTokenProps = {|
     collaborator: $Shape<CollaboratorData>,
     className?: string,
     style?: {[string]: mixed},
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -78,7 +80,17 @@ type CollaboratorTokenProps = {|
  * }
  */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
-    const {collaborator, className, style, ...styleProps} = props;
+    const {
+        collaborator,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line no-unused-vars
+        hasOnClick,
+        className,
+        style,
+        ...styleProps
+    } = props;
     const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
 
     const userName =
@@ -93,6 +105,10 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
 
     return (
         <Box
+            // TODO (stephen): remove tooltip anchor props
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
             className={cx(baymax('truncate print-color-exact'), classNameForStyledProps, className)}
             style={style}
             alignItems="center"
@@ -141,6 +157,7 @@ CollaboratorToken.propTypes = {
     }).isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
+    ...tooltipAnchorPropTypes,
     ...stylePropTypes,
 };
 

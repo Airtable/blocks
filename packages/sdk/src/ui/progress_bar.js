@@ -36,6 +36,7 @@ import {
     displayPropTypes,
 } from './system';
 import {type Prop} from './system/utils/types';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 
 type StyleProps = {|
@@ -89,6 +90,7 @@ type ProgressBarProps = {|
     progress: number,
     className?: string,
     style?: {[string]: mixed},
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -111,13 +113,28 @@ type ProgressBarProps = {|
  * }
  */
 const ProgressBar = (props: ProgressBarProps) => {
-    const {barColor, progress, className, style, ...styleProps} = props;
+    const {
+        barColor,
+        progress,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line no-unused-vars
+        hasOnClick,
+        className,
+        style,
+        ...styleProps
+    } = props;
 
     const clampedProgress = clamp(progress, 0, 1);
     const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
 
     return (
         <Box
+            // TODO (stephen): remove tooltip anchor props
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
             className={cx(classNameForStyleProps, className)}
             style={style}
             position="relative"
@@ -139,6 +156,7 @@ ProgressBar.propTypes = {
     barColor: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
+    ...tooltipAnchorPropTypes,
     ...stylePropTypes,
 };
 

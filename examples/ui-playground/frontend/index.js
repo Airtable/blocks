@@ -31,6 +31,7 @@ import TablePickerExample from './TablePickerExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
 import ToggleExample from './ToggleExample';
 import ToggleSyncedExample from './ToggleExample';
+import TooltipExample from './TooltipExample';
 import ViewPickerExample from './ViewPickerExample';
 import ViewPickerSyncedExample from './ViewPickerSyncedExample';
 import {type Example} from './Example';
@@ -150,6 +151,10 @@ const examples: Array<Example> = [
     {
         name: 'ToggleSynced',
         component: ToggleSyncedExample,
+    },
+    {
+        name: 'Tooltip',
+        component: TooltipExample,
     },
     {
         name: 'ViewPicker',

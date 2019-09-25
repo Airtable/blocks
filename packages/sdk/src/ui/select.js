@@ -25,6 +25,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {baymax} from './baymax_utils';
 import {
     validateOptions,
@@ -55,6 +56,7 @@ export type SharedSelectBaseProps = {|
     'aria-label'?: string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
+    ...TooltipAnchorProps,
 |};
 
 // Shared with `Select`, `SelectSynced`, `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`
@@ -69,6 +71,7 @@ export const sharedSelectBasePropTypes = {
     'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
+    ...tooltipAnchorPropTypes,
 };
 
 // Shared with `Select` and `SelectSynced`.
@@ -215,6 +218,10 @@ class Select extends React.Component<SelectProps> {
             id,
             name,
             tabIndex,
+            // TODO (stephen): remove tooltip anchor props
+            onMouseEnter,
+            onMouseLeave,
+            onClick,
             className,
             style,
             'aria-label': ariaLabel,
@@ -258,6 +265,9 @@ class Select extends React.Component<SelectProps> {
                 ref={el => (this._select = el)}
                 value={optionValueToString(value)}
                 onChange={this._onChange}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
                 autoFocus={autoFocus}
                 disabled={disabled}
                 id={id}

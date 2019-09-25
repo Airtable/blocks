@@ -26,6 +26,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 // Shared with `Input` and `InputSynced`.
 export type SharedInputProps = {|
@@ -63,6 +64,7 @@ export type SharedInputProps = {|
     onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => mixed,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
+    ...TooltipAnchorProps,
 |};
 
 const validTypesSet = Object.freeze({
@@ -102,6 +104,7 @@ export const sharedInputPropTypes = {
     className: PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
+    ...tooltipAnchorPropTypes,
 };
 
 /**
@@ -219,6 +222,9 @@ class Input extends React.Component<InputProps> {
             type,
             value,
             placeholder,
+            onMouseEnter,
+            onMouseLeave,
+            onClick,
             onChange,
             style,
             className,
@@ -264,6 +270,10 @@ class Input extends React.Component<InputProps> {
                 readOnly={readOnly}
                 autoComplete={autoComplete}
                 onChange={onChange}
+                // TODO (stephen): remove tooltip anchor props
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
                 style={style}
                 className={cx(
                     baymax(defaultClassName),

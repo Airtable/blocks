@@ -33,9 +33,9 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
-
-const KeyCodes = window.__requirePrivateModuleFromAirtable('client_server_shared/key_codes');
+import {KeyCodes} from './key_codes';
 
 // Shared with `SelectButtons` and `SelectButtonsSynced`.
 export type SharedSelectButtonsProps = {|
@@ -48,6 +48,7 @@ export type SharedSelectButtonsProps = {|
     'aria-label'?: string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
+    ...TooltipAnchorProps,
 |};
 
 export const sharedSelectButtonsPropTypes = {
@@ -67,6 +68,7 @@ export const sharedSelectButtonsPropTypes = {
     'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
+    ...tooltipAnchorPropTypes,
 };
 
 export type StyleProps = {|
@@ -141,6 +143,9 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
             options,
             disabled,
             value,
+            onMouseEnter,
+            onMouseLeave,
+            onClick,
             tabIndex = 0,
             'aria-label': ariaLabel,
             'aria-describedby': ariaDescribedBy,
@@ -157,6 +162,10 @@ class SelectButtons extends React.Component<SelectButtonsProps> {
 
         return (
             <Box
+                // TODO (stephen): remove tooltip anchor props
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
                 className={className}
                 style={style}
                 display="flex"

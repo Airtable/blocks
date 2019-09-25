@@ -19,6 +19,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 type StyleProps = {|
     ...FlexItemSetProps,
@@ -57,6 +58,7 @@ type ChoiceTokenProps = {|
     |},
     style?: {[string]: mixed},
     className?: string,
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -86,7 +88,17 @@ type ChoiceTokenProps = {|
  * }
  */
 const ChoiceToken = (props: ChoiceTokenProps) => {
-    const {choice, className, style, ...styleProps} = props;
+    const {
+        choice,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line no-unused-vars
+        hasOnClick,
+        className,
+        style,
+        ...styleProps
+    } = props;
     const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
     const color = choice.color || DEFAULT_CHOICE_COLOR;
     const textColor = useTextColorForBackgroundColor(color);
@@ -94,6 +106,10 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
     return (
         <Box className={cx(className, classNameForStyleProps)} style={style} display="inline-block">
             <Box
+                // TODO (stephen): remove tooltip anchor props
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
                 className={baymax('print-color-exact align-top')}
                 backgroundColor={color}
                 minWidth="18px"
@@ -124,6 +140,7 @@ ChoiceToken.propTypes = {
     }).isRequired,
     style: PropTypes.object,
     className: PropTypes.string,
+    ...tooltipAnchorPropTypes,
     ...stylePropTypes,
 };
 

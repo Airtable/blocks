@@ -36,6 +36,7 @@ import {
 import useStyledSystem from './use_styled_system';
 import {splitStyleProps} from './with_styled_system';
 import {type Prop} from './system/utils/types';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -100,6 +101,7 @@ type CellRendererProps = {|
     // (e.g. layout/sizing) from styling on the cell div (needed by RecordCard).
     cellClassName?: string,
     cellStyle?: {[string]: mixed},
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -143,6 +145,7 @@ class CellRenderer extends React.Component<CellRendererProps> {
         style: PropTypes.object,
         cellClassName: PropTypes.string,
         cellStyle: PropTypes.object,
+        ...tooltipAnchorPropTypes,
         ...stylePropTypes,
     };
     static defaultProps = {
@@ -177,6 +180,9 @@ class CellRenderer extends React.Component<CellRendererProps> {
             cellValue,
             field,
             shouldWrap,
+            onMouseEnter,
+            onMouseLeave,
+            onClick,
             className,
             style,
             cellClassName,
@@ -236,7 +242,14 @@ class CellRenderer extends React.Component<CellRendererProps> {
             attributes['data-formatting'] = typeOptions.resultType;
         }
         return (
-            <div className={cx('baymax', className)} style={style}>
+            <div
+                // TODO (stephen): remove tooltip anchor props
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
+                className={cx('baymax', className)}
+                style={style}
+            >
                 <div
                     {...attributes}
                     className={cx('cell read', cellClassName)}

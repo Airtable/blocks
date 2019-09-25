@@ -36,6 +36,7 @@ import {
     type MarginProps,
 } from './system';
 import {splitStyleProps} from './with_styled_system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -142,14 +143,15 @@ type RecordCardProps = {|
     width?: number,
     height?: number,
     expandRecordOptions?: ExpandRecordOpts | null,
-    onClick?: ((SyntheticMouseEvent<>) => void) | null,
-    onMouseEnter?: ((SyntheticMouseEvent<>) => void) | null,
-    onMouseLeave?: ((SyntheticMouseEvent<>) => void) | null,
+    onClick?: ((e: SyntheticMouseEvent<HTMLAnchorElement>) => mixed) | null,
+    onMouseEnter?: ((e: SyntheticMouseEvent<HTMLAnchorElement>) => mixed) | null,
+    onMouseLeave?: ((e: SyntheticMouseEvent<HTMLAnchorElement>) => mixed) | null,
     className?: string,
     style?: {[string]: mixed},
 
     /** @private injected by withHooks */
     viewMetadata: ViewMetadataQueryResult | null,
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -200,12 +202,14 @@ class RecordCard extends React.Component<RecordCardProps> {
         width: PropTypes.number,
         height: PropTypes.number,
         onClick: PropTypes.func,
+        hasOnClick: PropTypes.bool,
         onMouseEnter: PropTypes.func,
         onMouseLeave: PropTypes.func,
         // TODO: add all other mouse events: https://facebook.github.io/react/docs/events.html#mouse-events
         className: PropTypes.string,
         style: PropTypes.object,
         expandRecordOptions: PropTypes.object,
+        ...tooltipAnchorPropTypes,
         ...stylePropTypes,
     };
     static defaultProps = {
@@ -271,10 +275,14 @@ class RecordCard extends React.Component<RecordCardProps> {
             }
         }
     }
-    _onClick(e: SyntheticMouseEvent<>): void {
+    _onClick(e: SyntheticMouseEvent<HTMLAnchorElement>): void {
         if (this.props.onClick) {
             this.props.onClick(e);
-        } else if (this.props.onClick === undefined) {
+        }
+        if (
+            this.props.onClick === undefined ||
+            !this.props.hasOnClick // TODO (stephen): remove tooltip anchor props
+        ) {
             // NOTE: `null` disables the default click behavior.
 
             const {record} = this.props;
