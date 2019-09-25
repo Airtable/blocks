@@ -7,8 +7,8 @@ import {values} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesParser, allStylesPropTypes, type AllStylesProps} from './system/index';
 import {type ResponsivePropObject} from './system/utils/types';
-import {stylePropType} from './system/utils/create_style_prop_types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
+import createResponsivePropType from './system/utils/create_responsive_prop_type';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, type AriaProps} from './types/aria_props';
 
@@ -37,7 +37,7 @@ export function useTextSize(
     if (typeof textSizeProp === 'string') {
         return textSizesForVariant[textSizeProp];
     }
-    return getStylePropsForResponsiveProp<TextSize>(textSizesForVariant, textSizeProp);
+    return getStylePropsForResponsiveProp<TextSize>(textSizeProp, textSizesForVariant);
 }
 
 type Props = {|
@@ -100,9 +100,9 @@ function Text(
     }: Props,
     ref,
 ) {
-    invariant(Component, 'as');
-    invariant(size, 'size');
-    invariant(variant, 'variant');
+    invariant(Component !== undefined, 'as');
+    invariant(size !== undefined, 'size');
+    invariant(variant !== undefined, 'variant');
     const stylePropsForTextSize = useTextSize(size, variant);
     const classNameForStyleProps = useStyledSystem(
         {...stylePropsForTextSize, ...styleProps},
@@ -159,7 +159,7 @@ const ForwardedRefText = React.forwardRef/* :: <Props, HTMLElement> */(Text);
         'var',
         'blockquote',
     ]),
-    size: stylePropType.isRequired,
+    size: createResponsivePropType(PropTypes.oneOf(values(TextSizes))),
     variant: PropTypes.oneOf(values(TextVariants)),
     children: PropTypes.node,
     id: PropTypes.string,

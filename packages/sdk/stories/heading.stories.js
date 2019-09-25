@@ -1,109 +1,79 @@
 // @flow
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import Text from '../src/ui/text';
+import Heading from '../src/ui/heading';
 
-const stories = storiesOf('Text', module);
+const stories = storiesOf('Heading', module);
 
 stories.add('as', () => (
     <>
-        {[
-            'p',
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'h6',
-            'span',
-            'li',
-            'em',
-            'strong',
-            'kbd',
-            'mark',
-            'q',
-            's',
-            'samp',
-            'small',
-            'sub',
-            'sup',
-            'time',
-            'var',
-            'blockquote',
-        ].map(as => (
-            <Text key={as} as={as}>
+        {['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map(as => (
+            <Heading key={as} as={as}>
                 {as}
-            </Text>
+            </Heading>
         ))}
-    </>
-));
-
-stories.add('textColor', () => (
-    <>
-        <Text textColor="light">(light) The brown fox jumped over the lazy dog</Text>
-        <Text>(default = dark) The brown fox jumped over the lazy dog</Text>
     </>
 ));
 
 stories.add('ref', () => (
     <>
-        <Text
+        <Heading
             ref={node => {
                 // eslint-disable-next-line no-console
                 console.log(node);
             }}
         >
             Look into your console to see the ref
-        </Text>
+        </Heading>
     </>
 ));
 
 stories.add('custom className', () => (
     <>
-        <Text className="user-provided-class">Inspect element to see class name</Text>
+        <Heading className="user-provided-class">Inspect element to see class name</Heading>
     </>
 ));
 
 stories.add('id attribute', () => (
     <>
-        <Text id="my-id">Inspect element to see id</Text>
+        <Heading id="my-id">Inspect element to see id</Heading>
     </>
 ));
 
 stories.add('style attribute', () => (
     <>
-        <Text
+        <Heading
             style={{
                 transform: 'scale(0.95)',
             }}
         >
             Inspect element to see style attribute
-        </Text>
+        </Heading>
     </>
 ));
 
 stories.add('data attributes', () => (
     <>
-        <Text
+        <Heading
             dataAttributes={{
                 'data-something': true,
                 'data-other': 'string value',
             }}
         >
             Inspect element to see data attributes
-        </Text>
+        </Heading>
     </>
 ));
 
 stories.add('role attribute', () => (
     <>
-        <Text role="nav">Inspect element to see role attribute</Text>
+        <Heading role="nav">Inspect element to see role attribute</Heading>
     </>
 ));
 
 stories.add('aria attributes', () => (
     <>
-        <Text
+        <Heading
             aria-label="__label__"
             aria-labelledby="__id__"
             aria-describedby="__id__"
@@ -114,6 +84,6 @@ stories.add('aria attributes', () => (
             aria-live={false}
         >
             Inspect element to see aria attributes
-        </Text>
+        </Heading>
     </>
 ));

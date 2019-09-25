@@ -10,8 +10,8 @@ import {type ResponsivePropObject} from './types';
  * @private
  */
 export default function getStylePropsForResponsiveProp<T>(
-    scale: {[option: T]: {[styleProp: string]: mixed}},
     responsivePropObject: ResponsivePropObject<T>,
+    scale: {[option: T]: {[styleProp: string]: mixed}},
 ): $Shape<AllStylesProps> {
     const responsiveStyleProps = {};
 

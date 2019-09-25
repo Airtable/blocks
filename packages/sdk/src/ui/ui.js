@@ -41,6 +41,7 @@ import ViewportConstraint from './viewport_constraint';
 import Link from './link';
 import Box from './box';
 import Text from './text';
+import Heading from './heading';
 import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 import initializeBlock from './initialize_block';
 import withHooks from './with_hooks';
@@ -86,6 +87,7 @@ const UI = {
     Link,
     Box,
     Text,
+    Heading,
     ProgressBar,
     Button,
     RecordCard,
