@@ -9,10 +9,7 @@ export type LineHeightProps = {|
 |};
 
 export const config: Config = {
-    lineHeight: {
-        property: 'lineHeight',
-        scale: 'lineHeights',
-    },
+    lineHeight: true,
 };
 
 export const lineHeight = system(config);

@@ -30,6 +30,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const MIN_COLOR_SQUARE_SIZE = 16;
 const DEFAULT_COLOR_SQUARE_SIZE = 24;
@@ -70,6 +71,7 @@ export type SharedColorPaletteProps = {|
     className?: string,
     style?: {[string]: mixed},
     disabled?: boolean,
+    ...TooltipAnchorProps,
 |};
 
 export const sharedColorPalettePropTypes = {
@@ -79,6 +81,7 @@ export const sharedColorPalettePropTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     disabled: PropTypes.bool,
+    ...tooltipAnchorPropTypes,
 };
 
 /**
@@ -198,11 +201,28 @@ class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState>
         }
     }
     render() {
-        const {color, allowedColors, squareMargin, className, style, disabled} = this.props;
+        const {
+            color,
+            allowedColors,
+            squareMargin,
+            onMouseEnter,
+            onMouseLeave,
+            onClick,
+            className,
+            style,
+            disabled,
+        } = this.props;
         const {squareSize} = this.state;
         invariant(squareMargin, 'colorPalette.squareMargin');
         return (
-            <Box className={className} style={style} overflow="hidden">
+            <Box
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
+                className={className}
+                style={style}
+                overflow="hidden"
+            >
                 <Box
                     ref={this._colorPaletteContainerRef}
                     display="flex"

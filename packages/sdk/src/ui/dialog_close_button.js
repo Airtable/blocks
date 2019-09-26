@@ -28,6 +28,7 @@ import {
     spacingSetPropTypes,
     type SpacingSetProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Icon from './icon';
 
 /**
@@ -41,6 +42,7 @@ export type DialogCloseButtonProps = {|
     style?: {[string]: mixed},
     tabIndex?: number | string,
     children?: React.Node,
+    ...TooltipAnchorProps,
 |};
 
 type StyleProps = {|
@@ -85,14 +87,23 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
         style: PropTypes.object,
         tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         children: PropTypes.node,
+        ...tooltipAnchorPropTypes,
     };
     static contextTypes = {
         onDialogClose: PropTypes.func,
     };
+    _onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void;
     _onKeyDown: (e: SyntheticKeyboardEvent<HTMLDivElement>) => void;
     constructor(props: DialogCloseButtonProps) {
         super(props);
+        this._onClick = this._onClick.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this);
+    }
+    _onClick(e: SyntheticMouseEvent<HTMLDivElement>) {
+        if (this.props.onClick) {
+            this.props.onClick(e);
+        }
+        this.context.onDialogClose();
     }
     _onKeyDown(e: SyntheticKeyboardEvent<HTMLDivElement>) {
         if (e.ctrlKey || e.altKey || e.metaKey) {
@@ -104,10 +115,12 @@ class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
         }
     }
     render() {
-        const {className, style, tabIndex, children} = this.props;
+        const {onMouseEnter, onMouseLeave, className, style, tabIndex, children} = this.props;
         return (
             <div
-                onClick={this.context.onDialogClose}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={this._onClick}
                 onKeyDown={this._onKeyDown}
                 className={cx(baymax('darken1-hover darken1-focus no-outline pointer'), className)}
                 style={style}

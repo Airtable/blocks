@@ -1,10 +1,41 @@
 // @flow
-
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
+import withStyledSystem from './with_styled_system';
+import {
+    maxWidth,
+    maxWidthPropTypes,
+    type MaxWidthProps,
+    minWidth,
+    minWidthPropTypes,
+    type MinWidthProps,
+    width,
+    widthPropTypes,
+    type WidthProps,
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    spacingSet,
+    spacingSetPropTypes,
+    type SpacingSetProps,
+    display,
+    displayPropTypes,
+} from './system';
+import {type Prop} from './system/utils/types';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import Box from './box';
+
+const TOGGLE_WIDTH = 20;
+const TOGGLE_HEIGHT = 12;
+const TOGGLE_PADDING = 2;
+const CIRCLE_SIZE = TOGGLE_HEIGHT - 2 * TOGGLE_PADDING;
 
 const themes = Object.freeze({
     GREEN: 'green',
@@ -16,42 +47,92 @@ const themes = Object.freeze({
 
 export type ToggleTheme = $Values<typeof themes>;
 
-const classNamesByTheme = {
+const classNamesByTheme = Object.freeze({
     [themes.GREEN]: 'green',
     [themes.BLUE]: 'blue',
     [themes.RED]: 'red',
     [themes.YELLOW]: 'yellow',
     [themes.GRAY]: 'gray',
-};
+});
 
 /**
  * @typedef {object} ToggleProps
- * @property {boolean} value If set to `true`, the switch will be toggled on.
- * @property {function} [onChange] A function to be called when the switch is toggled.
  * @property {boolean} [disabled] If set to `true`, the user cannot interact with the switch.
- * @property {React.Node} [label] The label node for the switch.
- * @property {Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW | Toggle.themes.GRAY} [theme=Toggle.themes.GREEN] The color theme for the switch.
  * @property {string} [id] The ID of the switch element.
+ * @property {React.Node} [label] The label node for the switch.
+ * @property {function} [onChange] A function to be called when the switch is toggled.
+ * @property {number | string} [tabIndex] Indicates if the switch can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW | Toggle.themes.GRAY} [theme=Toggle.themes.GREEN] The color theme for the switch.
+ * @property {boolean} value If set to `true`, the switch will be toggled on.
  * @property {string} [className] Additional class names to apply to the switch.
  * @property {object} [style] Additional styles to apply to the switch.
- * @property {number | string} [tabIndex] Indicates if the switch can be focused and if/where it participates in sequential keyboard navigation.
  * @property {string} [aria-label] The label for the switch. Use this if the switch lacks a visible text label.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type ToggleProps = {
-    value: boolean,
-    onChange?: boolean => void,
+export type SharedToggleProps = {|
     disabled?: boolean,
-    label?: React.Node,
-    theme?: ToggleTheme,
     id?: string,
-    className?: string,
-    style?: Object,
+    label?: React.Node,
+    onChange?: boolean => mixed,
     tabIndex?: number | string,
+    theme?: ToggleTheme,
+    className?: string,
+    style?: {[string]: mixed},
     'aria-label'?: string,
     'aria-labelledby'?: string,
     'aria-describedby'?: string,
+    ...TooltipAnchorProps,
+|};
+
+type ToggleProps = {|
+    value: boolean,
+    ...SharedToggleProps,
+|};
+
+export const sharedTogglePropTypes = {
+    disabled: PropTypes.bool,
+    id: PropTypes.string,
+    label: PropTypes.node,
+    onChange: PropTypes.func,
+    tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    theme: PropTypes.oneOf(Object.keys(classNamesByTheme)),
+    className: PropTypes.string,
+    style: PropTypes.object,
+    'aria-label': PropTypes.string,
+    'aria-labelledby': PropTypes.string,
+    'aria-describedby': PropTypes.string,
+    ...tooltipAnchorPropTypes,
+};
+
+export type StyleProps = {|
+    display?: Prop<'flex' | 'inline-flex'>,
+    ...MaxWidthProps,
+    ...MinWidthProps,
+    ...WidthProps,
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...SpacingSetProps,
+|};
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    spacingSet,
+    display,
+);
+
+export const stylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...spacingSetPropTypes,
+    ...displayPropTypes,
 };
 
 /**
@@ -76,28 +157,20 @@ class Toggle extends React.Component<ToggleProps> {
     static themes = themes;
     static propTypes = {
         value: PropTypes.bool.isRequired,
-        onChange: PropTypes.func,
-        disabled: PropTypes.bool,
-        label: PropTypes.node,
-        theme: PropTypes.oneOf(Object.keys(classNamesByTheme)),
-        id: PropTypes.string,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-        'aria-label': PropTypes.string,
-        'aria-labelledby': PropTypes.string,
-        'aria-describedby': PropTypes.string,
+        ...sharedTogglePropTypes,
     };
     static defaultProps = {
         tabIndex: 0,
         theme: themes.GREEN,
     };
     _container: HTMLElement | null;
-    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLElement>) => void;
+    _onClick: (e: SyntheticMouseEvent<HTMLDivElement>) => void;
+    _onKeyDown: (e: SyntheticKeyboardEvent<HTMLDivElement>) => void;
     _toggleValue: () => void;
     constructor(props: ToggleProps) {
         super(props);
         this._container = null;
+        this._onClick = this._onClick.bind(this);
         this._onKeyDown = this._onKeyDown.bind(this);
         this._toggleValue = this._toggleValue.bind(this);
     }
@@ -112,6 +185,13 @@ class Toggle extends React.Component<ToggleProps> {
     click() {
         invariant(this._container, 'No toggle to click');
         this._container.click();
+    }
+    _onClick(e: SyntheticMouseEvent<HTMLDivElement>) {
+        const {onClick, disabled} = this.props;
+        if (!disabled && onClick) {
+            onClick(e);
+        }
+        this._toggleValue();
     }
     _onKeyDown(e: SyntheticKeyboardEvent<HTMLDivElement>) {
         if (e.ctrlKey || e.altKey || e.metaKey) {
@@ -129,53 +209,93 @@ class Toggle extends React.Component<ToggleProps> {
         }
     }
     render() {
-        const {value, disabled, label, theme, id, className, style, tabIndex} = this.props;
+        const {
+            disabled,
+            id,
+            label,
+            tabIndex,
+            theme,
+            value,
+            onMouseEnter,
+            onMouseLeave,
+            className,
+            style,
+            'aria-label': ariaLabel,
+            'aria-labelledby': ariaLabelledBy,
+            'aria-describedby': ariaDescribedBy,
+        } = this.props;
 
-        const toggleHeight = 12;
-        const togglePadding = 2;
         const toggleClassNameForTheme = theme && classNamesByTheme[theme];
 
         return (
-            <label
+            <div
                 ref={el => (this._container = el)}
-                onClick={this._toggleValue}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={this._onClick}
                 onKeyDown={this._onKeyDown}
                 id={id}
                 className={cx(
-                    baymax('focusable flex-inline items-center p-half rounded'),
+                    baymax('items-center rounded no-outline'),
                     {
-                        [baymax('pointer link-quiet')]: !disabled,
-                        [baymax('noevents quieter')]: disabled,
+                        [baymax('pointer link-quiet focusable')]: !disabled,
+                        [baymax('quieter')]: disabled,
                     },
                     className,
                 )}
                 style={style}
                 tabIndex={disabled ? -1 : tabIndex}
-                aria-label={this.props['aria-label']}
-                aria-labelledby={this.props['aria-labelledby']}
-                aria-describedby={this.props['aria-describedby']}
+                role="checkbox"
+                aria-checked={!!value}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
             >
-                <div
-                    className={cx(baymax('pill flex animate flex-none'), {
-                        [baymax('justify-start darken2')]: !value,
-                        [baymax('justify-end')]: value,
+                <Box
+                    className={cx(baymax('animate'), {
                         [baymax(toggleClassNameForTheme || '')]: value,
                     })}
-                    style={{
-                        height: toggleHeight,
-                        width: toggleHeight * 1.6,
-                        padding: togglePadding,
-                    }}
+                    flex="none"
+                    width={`${TOGGLE_WIDTH}px`}
+                    height={`${TOGGLE_HEIGHT}px`}
+                    padding={`${TOGGLE_PADDING}px`}
+                    backgroundColor={value ? null : 'darken2'}
+                    borderRadius="circle"
                 >
-                    <div
-                        className={baymax('white circle flex-none')}
-                        style={{width: toggleHeight - 2 * togglePadding}}
+                    <Box
+                        className={baymax('animate')}
+                        width={`${CIRCLE_SIZE}px`}
+                        height={`${CIRCLE_SIZE}px`}
+                        backgroundColor="white"
+                        borderRadius="circle"
+                        style={{
+                            transform: value ? 'translateX(100%)' : null,
+                        }}
                     />
-                </div>
-                {label && <div className={baymax('flex-auto ml1 normal text-dark')}>{label}</div>}
-            </label>
+                </Box>
+                {label && (
+                    <Box
+                        className={baymax('normal no-user-select')}
+                        flex="auto"
+                        marginLeft={2}
+                        textColor="dark"
+                    >
+                        {label}
+                    </Box>
+                )}
+            </div>
         );
     }
 }
 
-export default Toggle;
+export default withStyledSystem<
+    ToggleProps,
+    StyleProps,
+    Toggle,
+    {|
+        themes: typeof themes,
+    |},
+>(Toggle, styleParser, stylePropTypes, {
+    display: 'inline-flex',
+    padding: 1,
+});

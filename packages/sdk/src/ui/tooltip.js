@@ -9,6 +9,7 @@ import Popover, {
     type PopoverPlacementY,
     type FitInWindowMode,
 } from './popover';
+import Box from './box';
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
@@ -18,15 +19,15 @@ const FADE_IN_ANIMATION_DURATION = 150;
  * @property {string|function} content A string representing the contents. Alternatively, you can include a function that returns a React node to place into the tooltip, which is useful for things like italicization in the tooltip.
  * @property {UI.Tooltip.placements.LEFT|UI.Tooltip.placements.CENTER|UI.Tooltip.placements.RIGHT} [placementX=UI.Tooltip.placements.RIGHT] The horizontal placement of the tooltip.
  * @property {UI.Tooltip.placements.TOP|UI.Tooltip.placements.CENTER|UI.Tooltip.placements.BOTTOM} [placementY=UI.Tooltip.placements.CENTER] The vertical placement of the tooltip.
- * @property {number} [placementOffsetX=0] The horizontal offset, in pixels, of the tooltip. If `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has no effect.
+ * @property {number} [placementOffsetX=12] The horizontal offset, in pixels, of the tooltip. If `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has no effect.
  * @property {number} [placementOffsetY=0] The vertical offset, in pixels, of the tooltip. If `placementY` is set to `UI.Tooltip.placements.TOP`, a higher number will move the tooltip upward. If `placementY` is set to `UI.Tooltip.placements.BOTTOM`, a higher number moves the tooltip downard. If `placementY` is set to `UI.Tooltip.placements.CENTER`, this value has no effect.
  * @property {UI.Tooltip.fitInWindowModes.FLIP|UI.Tooltip.fitInWindowModes.NUDGE|UI.Tooltip.fitInWindowModes.NONE} [fitInWindowMode=UI.Tooltip.fitInWindowModes.FLIP] Dictates the behavior when the "normal" placement of the tooltip would be outside of the viewport. If `NONE`, this has no effect, and the tooltip may be placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to fit on screen.
  * @property {boolean} [shouldHideTooltipOnClick=false] Should the tooltip be hidden when clicked?
- * @property {boolean} [disabled=false] If set to `true`, this tooltip will not be shown. Useful when trying to disable the tooltip dynamically.
- * @property {string} [className=''] Additional class names to attach to the tooltip, separated by spaces.
- * @property {object} [style={}] Additional styles names to attach to the tooltip.
+ * @property {boolean} [disabled] If set to `true`, this tooltip will not be shown. Useful when trying to disable the tooltip dynamically.
+ * @property {string} [className] Additional class names to attach to the tooltip, separated by spaces.
+ * @property {object} [style] Additional styles names to attach to the tooltip.
  */
-type TooltipProps = {
+type TooltipProps = {|
     children: React$Element<*>,
     content?: string | (() => React$Element<*>),
     placementX?: PopoverPlacementX,
@@ -37,8 +38,8 @@ type TooltipProps = {
     shouldHideTooltipOnClick?: boolean,
     disabled?: boolean,
     className?: string,
-    style?: Object,
-};
+    style?: {[string]: mixed},
+|};
 type TooltipState = {|
     isShowingTooltip: boolean,
 |};
@@ -131,10 +132,11 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         }
     }
     _onClick(e: SyntheticMouseEvent<>) {
-        if (this.props.shouldHideTooltipOnClick) {
+        const {shouldHideTooltipOnClick, children} = this.props;
+        if (shouldHideTooltipOnClick) {
             this._hideTooltip();
         }
-        const originalOnClick = this.props.children.props.onClick;
+        const originalOnClick = children.props.onClick;
         if (originalOnClick) {
             originalOnClick(e);
         }
@@ -157,18 +159,18 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
             isContentAFunction = false;
         }
         return (
-            <div
-                className={cx(
-                    baymax('relative dark text-white rounded stroked1 overflow-hidden nowrap'),
-                    {
-                        [baymax('p1')]: !isContentAFunction,
-                    },
-                    className,
-                )}
+            <Box
+                className={cx(baymax('nowrap'), className)}
                 style={style}
+                position="relative"
+                padding={isContentAFunction ? null : 2}
+                backgroundColor="dark"
+                textColor="white"
+                borderRadius="default"
+                overflow="hidden"
             >
                 {renderedContent}
-            </div>
+            </Box>
         );
     }
     render() {
@@ -178,10 +180,11 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
             return children;
         }
 
-        const popoverAnchor = React.cloneElement(children, {
+        const popoverAnchor = React.cloneElement(React.Children.only(children), {
             onMouseEnter: this._onMouseEnter,
             onMouseLeave: this._onMouseLeave,
             onClick: this._onClick,
+            hasOnClick: children.props.onClick !== undefined,
         });
 
         return (

@@ -1,6 +1,7 @@
 // @flow
 import PropTypes from 'prop-types';
 import * as React from 'react';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
  * @typedef {object} LinkProps
@@ -15,8 +16,9 @@ type LinkProps = {
     target?: string,
     tabIndex?: number | string,
     className?: string,
-    style?: Object,
+    style?: {[string]: mixed},
     children: React.Node,
+    ...TooltipAnchorProps,
 };
 
 const reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
@@ -44,9 +46,22 @@ const reasonableUrlSchemeRegex = /^[a-z0-9]+:\/\//i;
  * }
  */
 const Link = (props: LinkProps) => {
-    const rel = props.target ? 'noopener noreferrer' : null;
+    const {
+        href,
+        target,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line no-unused-vars
+        hasOnClick,
+        tabIndex,
+        className,
+        style,
+        children,
+    } = props;
 
-    const {href} = props;
+    const rel = target ? 'noopener noreferrer' : null;
+
     let sanitizedHref;
     if (href) {
         const hasScheme = href.indexOf('://') !== -1;
@@ -67,13 +82,16 @@ const Link = (props: LinkProps) => {
         // eslint-disable-next-line airtable/noopener-noreferrer
         <a
             href={sanitizedHref}
-            target={props.target}
+            target={target}
             rel={rel}
-            tabIndex={props.tabIndex}
-            className={props.className}
-            style={props.style}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            tabIndex={tabIndex}
+            className={className}
+            style={style}
         >
-            {props.children}
+            {children}
         </a>
     );
 };
@@ -85,6 +103,7 @@ Link.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     children: PropTypes.node,
+    ...tooltipAnchorPropTypes,
 };
 
 export default Link;

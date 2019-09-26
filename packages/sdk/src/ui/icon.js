@@ -16,10 +16,8 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
-
-const iconConfig = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/react/assets/icon_config',
-);
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import iconConfig from './icon_config';
 
 export type StyleProps = {|
     ...FlexItemSetProps,
@@ -46,6 +44,7 @@ export type SharedIconProps = {|
     style?: {[string]: mixed},
     pathClassName?: string,
     pathStyle?: {[string]: mixed},
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -56,6 +55,7 @@ export const sharedIconPropTypes = {
     style: PropTypes.object,
     pathClassName: PropTypes.string,
     pathStyle: PropTypes.object,
+    ...tooltipAnchorPropTypes,
     ...stylePropTypes,
 };
 
@@ -102,6 +102,11 @@ const Icon = (props: IconProps) => {
         name,
         size,
         fillColor,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line no-unused-vars
+        hasOnClick,
         className,
         style,
         pathClassName,
@@ -125,6 +130,9 @@ const Icon = (props: IconProps) => {
             width={size}
             height={size}
             viewBox={`0 0 ${originalSize} ${originalSize}`}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
             className={cx(classNameForStyleProps, className)}
             style={{
                 shapeRendering: 'geometricPrecision',

@@ -1,51 +1,38 @@
 // @flow
-import PropTypes from 'prop-types';
 import * as React from 'react';
-import Table from '../models/table';
 import getSdk from '../get_sdk';
-import {FieldTypes, type FieldType} from '../types/field';
 import type Field from '../models/field';
 import {type GlobalConfigKey} from '../global_config';
-import {values} from '../private_utils';
 import {invariant} from '../error_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-import FieldPicker from './field_picker';
+import FieldPicker, {sharedFieldPickerPropTypes, type SharedFieldPickerProps} from './field_picker';
 import Synced from './synced';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} FieldPickerSyncedProps
- * @property {Table} [table] The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
  * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting a new field will update `globalConfig`.
- * @property {function} [onChange] A function to be called when the selected field changes. This should only be used for side effects.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
+ * @property {Table} [table] The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
  * @property {Array.<FieldType>} [allowedTypes] An array indicating which field types can be selected.
  * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected field.
  * @property {string} [placeholder='Pick a field...'] The placeholder text when no field is selected.
- * @property {string} [id] The ID of the picker element.
- * @property {string} [className] Additional class names to apply to the picker.
- * @property {object} [style] Additional styles to apply to the picker.
- * @property {number | string} [tabIndex] Indicates if the picker can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {function} [onChange] A function to be called when the selected field changes. This should only be used for side effects.
+ * @property {string} [autoFocus] The `autoFocus` attribute.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
+ * @property {string} [id] The `id` attribute.
+ * @property {string} [name] The `name` attribute.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
+ * @property {string} [className] Additional class names to apply to the select.
+ * @property {object} [style] Additional styles to apply to the select.
+ * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type FieldPickerSyncedProps = {
-    table?: Table | null,
+type FieldPickerSyncedProps = {|
     globalConfigKey: GlobalConfigKey,
-    onChange?: (fieldModel: Field | null) => void,
-    disabled?: boolean,
-
-    allowedTypes?: Array<FieldType>,
-    shouldAllowPickingNone?: boolean,
-    placeholder?: string,
-    id?: string,
-    className?: string,
-    style?: Object,
-    tabIndex?: number | string,
-    'aria-labelledby'?: string,
-    'aria-describedby'?: string,
-};
+    ...SharedFieldPickerProps,
+|};
 
 /**
  * Dropdown menu component for selecting fields, synced with {@link GlobalConfig}.
@@ -98,20 +85,8 @@ type FieldPickerSyncedProps = {
  */
 class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
     static propTypes = {
-        table: PropTypes.instanceOf(Table),
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        onChange: PropTypes.func,
-        disabled: PropTypes.bool,
-
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
-        shouldAllowPickingNone: PropTypes.bool,
-        placeholder: PropTypes.string,
-        id: PropTypes.string,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        tabIndex: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-        'aria-labelledby': PropTypes.string,
-        'aria-describedby': PropTypes.string,
+        ...sharedFieldPickerPropTypes,
     };
     props: FieldPickerSyncedProps;
     _fieldPicker: React.ElementRef<typeof FieldPicker> | null;
@@ -139,26 +114,14 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
         return typeof fieldId === 'string' && table ? table.getFieldByIdIfExists(fieldId) : null;
     }
     render() {
-        const {
-            table,
-            globalConfigKey,
-            onChange,
-            disabled,
-            allowedTypes,
-            shouldAllowPickingNone,
-            placeholder,
-            id,
-            className,
-            style,
-            tabIndex,
-        } = this.props;
+        const {globalConfigKey, onChange, disabled, ...restOfProps} = this.props;
         return (
             <Synced
                 globalConfigKey={globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <FieldPicker
+                        {...restOfProps}
                         ref={el => (this._fieldPicker = el)}
-                        table={table}
                         field={this._getFieldFromGlobalConfigValue(value)}
                         onChange={field => {
                             setValue(field ? field.id : null);
@@ -167,15 +130,6 @@ class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
                             }
                         }}
                         disabled={disabled || !canSetValue}
-                        allowedTypes={allowedTypes}
-                        shouldAllowPickingNone={shouldAllowPickingNone}
-                        placeholder={placeholder}
-                        id={id}
-                        className={className}
-                        style={style}
-                        tabIndex={tabIndex}
-                        aria-labelledby={this.props['aria-labelledby']}
-                        aria-describedby={this.props['aria-describedby']}
                     />
                 )}
             />

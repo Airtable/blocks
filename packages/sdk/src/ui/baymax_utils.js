@@ -41,6 +41,9 @@ const emotionClassNameByBaymaxClassName = {
     absolute: css`
         position: absolute;
     `,
+    'align-top': css`
+        vertical-align: top;
+    `,
     'all-0': css`
         top: 0;
         left: 0;
@@ -64,6 +67,12 @@ const emotionClassNameByBaymaxClassName = {
     `,
     appFontColorLight: css`
         color: hsl(0, 0%, 33%);
+    `,
+    'background-center': css`
+        background-position: center center;
+    `,
+    'background-cover': css`
+        background-size: cover;
     `,
     'background-transparent': css`
         background-color: transparent;
@@ -335,6 +344,9 @@ const emotionClassNameByBaymaxClassName = {
     `,
     pr1: css`
         padding-right: 0.5rem;
+    `,
+    'print-color-exact': css`
+        -webkit-print-color-adjust: exact;
     `,
     px1: css`
         padding-left: 0.5rem;

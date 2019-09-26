@@ -5,6 +5,7 @@ import {cx} from 'emotion';
 import useStyledSystem from './use_styled_system';
 import {allStylesParser, allStylesPropTypes, type AllStylesProps} from './system/index';
 import {ariaPropTypes, type AriaProps} from './types/aria_props';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 type Props = {|
     as?:
@@ -34,6 +35,7 @@ type Props = {|
     role?: string,
     dataAttributes?: {+[string]: mixed},
     ...AriaProps,
+    ...TooltipAnchorProps,
     ...AllStylesProps,
 |};
 
@@ -47,6 +49,10 @@ function Box(
         style,
         tabIndex,
         role,
+        onClick,
+        onMouseEnter,
+        onMouseLeave,
+        hasOnClick,
         dataAttributes = {},
         'aria-label': ariaLabel,
         'aria-labelledby': ariaLabelledBy,
@@ -70,6 +76,9 @@ function Box(
             style={style}
             tabIndex={tabIndex}
             role={role}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy}
@@ -117,6 +126,7 @@ const ForwardedRefBox = React.forwardRef/* :: <Props, HTMLElement> */(Box);
     role: PropTypes.string,
     dataAttributes: PropTypes.object,
     ...ariaPropTypes,
+    ...tooltipAnchorPropTypes,
     ...allStylesPropTypes,
 };
 

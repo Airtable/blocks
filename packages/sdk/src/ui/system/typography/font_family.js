@@ -11,7 +11,7 @@ export type FontFamilyProps = {|
 export const config: Config = {
     fontFamily: {
         property: 'fontFamily',
-        scale: 'fonts',
+        scale: 'fontFamilies',
     },
 };
 

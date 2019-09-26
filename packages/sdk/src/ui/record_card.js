@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
+import {compose} from '@styled-system/core';
 import getSdk from '../get_sdk';
 import {values, isNullOrUndefinedOrEmpty, flattenDeep, keyBy, uniqBy} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
@@ -16,11 +17,26 @@ import cellValueUtils from '../models/cell_value_utils';
 import colorUtils from '../color_utils';
 import {baymax} from './baymax_utils';
 import expandRecord, {type ExpandRecordOpts} from './expand_record';
+import Box from './box';
 import CellRenderer from './cell_renderer';
 import useWatchable from './use_watchable';
 import withHooks from './with_hooks';
 import useViewMetadata from './use_view_metadata';
 import {isCommandModifierKeyEvent} from './key_codes';
+import useStyledSystem from './use_styled_system';
+import {
+    flexItemSet,
+    flexItemSetPropTypes,
+    type FlexItemSetProps,
+    positionSet,
+    positionSetPropTypes,
+    type PositionSetProps,
+    margin,
+    marginPropTypes,
+    type MarginProps,
+} from './system';
+import {splitStyleProps} from './with_styled_system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -32,22 +48,25 @@ const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtabl
     'client_server_shared/client_server_shared_config_settings',
 );
 
-const CARD_PADDING = 12;
+type StyleProps = {|
+    ...FlexItemSetProps,
+    ...PositionSetProps,
+    ...MarginProps,
+|};
 
-const styles = {
-    cellValueAndFieldLabel: {
-        verticalAlign: 'top',
-    },
-    fieldLabel: {
-        lineHeight: '13px',
-        fontSize: 11,
-        color: '#898989',
-    },
-    cellValue: {
-        lineHeight: '16px',
-        fontSize: 12,
-    },
+const styleParser = compose(
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+const stylePropTypes = {
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
 };
+
+const CARD_PADDING = 12;
 
 type CellValueAndFieldLabelProps = {|
     record: Record | null,
@@ -60,25 +79,31 @@ const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndF
     useWatchable(field, ['name', 'type', 'options']);
 
     return (
-        <div
-            className={baymax('relative inline-block m0 pr1')}
-            style={{
-                width,
-                ...styles.cellValueAndFieldLabel,
-            }}
+        <Box
+            style={{verticalAlign: 'top'}}
+            position="relative"
+            display="inline-block"
+            margin={0}
+            paddingRight={2}
+            width={width}
         >
-            <div className={baymax('small caps truncate')} style={styles.fieldLabel}>
+            <Box
+                className={baymax('caps truncate')}
+                fontSize="11px"
+                lineHeight="13px"
+                textColor="#898989"
+            >
                 {field.name}
-            </div>
+            </Box>
             <CellRenderer
                 record={record}
                 cellValue={cellValue}
                 field={field}
                 shouldWrap={false}
                 cellClassName="recordCardCellValue truncate"
-                cellStyle={styles.cellValue}
+                cellStyle={{lineHeight: '16px', fontSize: '12px'}}
             />
-        </div>
+        </Box>
     );
 };
 
@@ -114,14 +139,16 @@ type RecordCardProps = {|
     width?: number,
     height?: number,
     expandRecordOptions?: ExpandRecordOpts | null,
-    onClick?: ((SyntheticMouseEvent<>) => void) | null,
-    onMouseEnter?: ((SyntheticMouseEvent<>) => void) | null,
-    onMouseLeave?: ((SyntheticMouseEvent<>) => void) | null,
+    onClick?: ((e: SyntheticMouseEvent<HTMLAnchorElement>) => mixed) | null,
+    onMouseEnter?: ((e: SyntheticMouseEvent<HTMLAnchorElement>) => mixed) | null,
+    onMouseLeave?: ((e: SyntheticMouseEvent<HTMLAnchorElement>) => mixed) | null,
     className?: string,
     style?: {[string]: mixed},
 
     /** @private injected by withHooks */
     viewMetadata: ViewMetadataQueryResult | null,
+    ...TooltipAnchorProps,
+    ...StyleProps,
 |};
 
 const FormulaicFieldTypes = {
@@ -163,11 +190,14 @@ class RecordCard extends React.Component<RecordCardProps> {
         width: PropTypes.number,
         height: PropTypes.number,
         onClick: PropTypes.func,
+        hasOnClick: PropTypes.bool,
         onMouseEnter: PropTypes.func,
         onMouseLeave: PropTypes.func,
         className: PropTypes.string,
         style: PropTypes.object,
         expandRecordOptions: PropTypes.object,
+        ...tooltipAnchorPropTypes,
+        ...stylePropTypes,
     };
     static defaultProps = {
         width: 568,
@@ -232,10 +262,14 @@ class RecordCard extends React.Component<RecordCardProps> {
             }
         }
     }
-    _onClick(e: SyntheticMouseEvent<>): void {
+    _onClick(e: SyntheticMouseEvent<HTMLAnchorElement>): void {
         if (this.props.onClick) {
             this.props.onClick(e);
-        } else if (this.props.onClick === undefined) {
+        }
+        if (
+            this.props.onClick === undefined ||
+            !this.props.hasOnClick 
+        ) {
 
             const {record} = this.props;
             const recordModel = record && record instanceof Record ? record : null;
@@ -249,7 +283,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             }
         }
     }
-    _getAttachmentCover(fieldsToUse: Array<Field>): Object | null {
+    _getAttachmentCover(fieldsToUse: Array<Field>): AttachmentData | null {
         const attachmentField = this._getAttachmentField(fieldsToUse);
         return attachmentField ? this._getFirstAttachmentInField(attachmentField) : null;
     }
@@ -287,7 +321,7 @@ class RecordCard extends React.Component<RecordCardProps> {
             return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
         }
     }
-    _getFirstAttachmentInField(attachmentField: Field): Object | null {
+    _getFirstAttachmentInField(attachmentField: Field): AttachmentData | null {
         let attachmentsInField;
         if (attachmentField.type === FieldTypes.LOOKUP) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
@@ -337,13 +371,13 @@ class RecordCard extends React.Component<RecordCardProps> {
                 widthAndFieldIdArray.push({width: desiredWidth, fieldId: field.id});
                 runningWidth += desiredWidth;
             } else {
-                const minWidth = columnTypeProvider.getMinCellWidthForRowCard(
+                const minCellWidth = columnTypeProvider.getMinCellWidthForRowCard(
                     field.__getRawType(),
                     field.__getRawTypeOptions(),
                 );
-                if (runningWidth + minWidth < cellContainerWidth) {
-                    widthAndFieldIdArray.push({width: minWidth, fieldId: field.id});
-                    runningWidth += minWidth;
+                if (runningWidth + minCellWidth < cellContainerWidth) {
+                    widthAndFieldIdArray.push({width: minCellWidth, fieldId: field.id});
+                    runningWidth += minCellWidth;
                 } else {
                     break;
                 }
@@ -453,12 +487,6 @@ class RecordCard extends React.Component<RecordCardProps> {
             );
         }
 
-        const containerStyles = {
-            ...style,
-            width,
-            height,
-        };
-
         let primaryValue;
         let isUnnamed;
 
@@ -487,53 +515,55 @@ class RecordCard extends React.Component<RecordCardProps> {
             primaryValue = primaryCellValueAsString;
             isUnnamed = false;
         }
-        const primaryClasses = cx(baymax('strong relative mt0 flex items-center line-height-4'), {
-            unnamed: isUnnamed,
-        });
-        const primaryStyles = {
-            height: 18,
-            fontSize: 14,
-        };
 
         return (
             <a
                 href={onClick === undefined && recordUrl ? recordUrl : undefined}
                 className={containerClasses}
-                style={containerStyles}
+                style={{...style, width, height}}
                 onClick={this._onClick}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
             >
-                <div
-                    className={baymax('absolute top-0 bottom-0 left-0 text-dark')}
-                    style={{
-                        right: attachmentSize,
-                        background: 'transparent',
-                        padding: CARD_PADDING,
-                    }}
+                <Box
+                    right={`${attachmentSize}px`}
+                    backgroundColor="transparent"
+                    padding={`${CARD_PADDING}px`}
+                    position="absolute"
+                    top={0}
+                    bottom={0}
+                    left={0}
+                    textColor="dark"
                 >
-                    <div className={primaryClasses} style={primaryStyles}>
+                    <Box
+                        className={cx({unnamed: isUnnamed})}
+                        fontWeight={500}
+                        position="relative"
+                        marginTop={0}
+                        display="flex"
+                        alignItems="center"
+                        lineHeight={1.5}
+                        height="18px"
+                        fontSize="14px"
+                    >
                         {recordColor && (
-                            <div
-                                className={baymax('flex-none pill mr-half')}
-                                style={{
-                                    width: 6,
-                                    height: 20,
-                                    backgroundColor: colorUtils.getHexForColor(recordColor),
-                                }}
+                            <Box
+                                width="6px"
+                                height="20px"
+                                flex="none"
+                                marginRight={1}
+                                borderRadius="circle"
+                                backgroundColor={colorUtils.getHexForColor(recordColor)}
                             />
                         )}
-                        <div className={baymax('flex-auto truncate')}>{primaryValue}</div>
-                    </div>
-                    <div
-                        className={baymax('absolute appFontColorLight')}
-                        style={{
-                            marginTop: 3,
-                        }}
-                    >
+                        <Box className={baymax('truncate')} flex="auto">
+                            {primaryValue}
+                        </Box>
+                    </Box>
+                    <Box textColor="#555555" position="absolute" marginTop="3px">
                         {this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse)}
-                    </div>
-                </div>
+                    </Box>
+                </Box>
                 <div dangerouslySetInnerHTML={{__html: imageHtml}} />
             </a>
         );
@@ -542,26 +572,34 @@ class RecordCard extends React.Component<RecordCardProps> {
 
 export default withHooks<
     RecordCardProps,
-    {|viewMetadata: ViewMetadataQueryResult | null|},
+    {viewMetadata: ViewMetadataQueryResult | null},
     RecordCard,
 >(RecordCard, props => {
-    const recordModel = props.record && props.record instanceof Record ? props.record : null;
+    const {styleProps, nonStyleProps} = splitStyleProps<
+        $Diff<RecordCardProps, {|viewMetadata: ViewMetadataQueryResult | null|}>,
+        StyleProps,
+    >(props, styleParser.propNames);
+
+    const {record, fields, view, className} = nonStyleProps;
+    const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
+
+    const recordModel = record && record instanceof Record ? record : null;
     let parentTable = null;
     if (recordModel) {
         parentTable = recordModel.parentTable;
-    } else if (props.fields && props.fields.length > 0) {
-        parentTable = props.fields[0].parentTable;
-    } else if (props.view) {
-        parentTable = props.view.parentTable;
+    } else if (fields && fields.length > 0) {
+        parentTable = fields[0].parentTable;
+    } else if (view) {
+        parentTable = view.parentTable;
     }
 
-    useWatchable(recordModel, [
-        'primaryCellValue',
-        props.view ? `colorInView:${props.view.id}` : null,
-    ]);
+    useWatchable(recordModel, ['primaryCellValue', view ? `colorInView:${view.id}` : null]);
     useWatchable(parentTable, ['fields']);
 
-    const viewMetadata = useViewMetadata(props.view);
+    const viewMetadata = useViewMetadata(view);
 
-    return {viewMetadata};
+    return {
+        viewMetadata,
+        className: cx(classNameForStyledProps, className),
+    };
 });

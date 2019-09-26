@@ -1,7 +1,10 @@
 // @flow
+import {type Color} from '../../colors';
+
 const colors = {
     white: 'hsl(0, 0%, 100%)',
     dark: 'hsl(0, 0%, 20%)',
+    light: 'hsl(0, 0%, 46%)',
 
     lighten1: 'hsla(0, 0%, 100%, 0.05)',
     lighten2: 'hsla(0, 0%, 100%, 0.1)',
@@ -74,6 +77,73 @@ const colors = {
     yellowLight2: 'rgb(255, 234, 182)',
 };
 
+const textColorsByBackgroundColor: {[Color]: string} = {
+    blueBright: 'white',
+    blue: 'white',
+    blueDark1: 'rgb(207, 223, 255)',
+    blueLight1: 'rgb(0, 0, 60)',
+    blueLight2: 'rgb(0, 0, 60)',
+
+    cyanBright: 'white',
+    cyan: 'white',
+    cyanDark1: 'rgb(208, 240, 253)',
+    cyanLight1: 'rgb(0, 17, 68)',
+    cyanLight2: 'rgb(0, 17, 68)',
+
+    grayBright: 'white',
+    gray: 'white',
+    grayDark1: 'rgb(238, 238, 238)',
+    grayLight1: 'rgb(0, 0, 0)',
+    grayLight2: 'rgb(0, 0, 0)',
+
+    greenBright: 'white',
+    green: 'white',
+    greenDark1: 'rgb(209, 247, 196)',
+    greenLight1: 'rgb(0, 34, 0)',
+    greenLight2: 'rgb(0, 34, 0)',
+
+    orangeBright: 'white',
+    orange: 'white',
+    orangeDark1: 'rgb(254, 226, 213)',
+    orangeLight1: 'rgb(83, 0, 0)',
+    orangeLight2: 'rgb(83, 0, 0)',
+
+    pinkBright: 'white',
+    pink: 'white',
+    pinkDark1: 'rgb(255, 218, 246)',
+    pinkLight1: 'rgb(58, 0, 33)',
+    pinkLight2: 'rgb(58, 0, 33)',
+
+    purpleBright: 'white',
+    purple: 'white',
+    purpleDark1: 'rgb(237, 226, 254)',
+    purpleLight1: 'rgb(12, 0, 62)',
+    purpleLight2: 'rgb(12, 0, 62)',
+
+    redBright: 'white',
+    red: 'white',
+    redDark1: 'rgb(255, 220, 229)',
+    redLight1: 'rgb(64, 0, 0)',
+    redLight2: 'rgb(64, 0, 0)',
+
+    tealBright: 'white',
+    teal: 'white',
+    tealDark1: 'rgb(194, 245, 233)',
+    tealLight1: 'rgb(0, 47, 46)',
+    tealLight2: 'rgb(0, 47, 46)',
+
+    yellowBright: 'white',
+    yellow: 'white',
+    yellowDark1: 'rgb(255, 234, 182)',
+    yellowLight1: 'rgb(66, 10, 0)',
+    yellowLight2: 'rgb(66, 10, 0)',
+};
+
+const textColors = {
+    dark: colors.dark,
+    light: colors.light,
+};
+
 const breakpoints = {
     xsmallViewport: '480px',
     smallViewport: '640px',
@@ -97,11 +167,98 @@ const fontFamilies = {
     monospace: ' Menlo, Courier, monospace',
 };
 
-const fontSizes = [];
-const textSizes = [];
+export const fontSizes = [
+    '9px', 
+    '11px', 
+    '13px', 
+    '15px', 
+    '17px', 
+    '19px', 
+    '21px', 
+    '23px', 
+    '27px', 
+    '35px', 
+];
+
+const textSizesByVariant = {
+    default: {
+        xsmall: {
+            fontSize: 1,
+            textColor: 'dark',
+            lineHeight: '14px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+        small: {
+            fontSize: 2,
+            textColor: 'dark',
+            lineHeight: '16px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+        default: {
+            fontSize: 3,
+            textColor: 'dark',
+            lineHeight: '20px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+        large: {
+            fontSize: 4,
+            textColor: 'dark',
+            lineHeight: '24px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginY: 0,
+        },
+    },
+    paragraph: {
+        xsmall: {
+            fontSize: 1,
+            textColor: 'dark',
+            lineHeight: '16px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+        small: {
+            fontSize: 2,
+            textColor: 'dark',
+            lineHeight: '20px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+        default: {
+            fontSize: 3,
+            textColor: 'dark',
+            lineHeight: '22px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+        large: {
+            fontSize: 4,
+            textColor: 'dark',
+            lineHeight: '26px',
+            fontWeight: 400,
+            fontFamily: 'default',
+            marginTop: 0,
+            marginBottom: '1em',
+        },
+    },
+};
+
 const headingSizes = [];
-const fontWeights = {};
-const lineHeights = {};
+const fontWeights = {
+    strong: 500,
+};
 
 const opacities = {
     normal: 1,
@@ -121,15 +278,16 @@ const space = [0, 4, 8, 16, 32, 64, 128];
 
 export default {
     colors,
+    textColorsByBackgroundColor,
+    textColors,
     breakpoints,
     borderWidths,
     borders,
     fontFamilies,
     fontSizes,
-    textSizes,
+    textSizesByVariant,
     headingSizes,
     fontWeights,
-    lineHeights,
     opacities,
     radii,
     space,

@@ -1,31 +1,32 @@
 // @flow
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {invariant} from '../error_utils';
 import Table from '../models/table';
 import View from '../models/view';
 import Field from '../models/field';
-import Select from './select';
+import Select, {
+    sharedSelectBasePropTypes,
+    type SharedSelectBaseProps,
+    stylePropTypes,
+    type StyleProps,
+} from './select';
 import {type SelectOptionValue} from './select_and_select_buttons_helpers';
 import useWatchable from './use_watchable';
 
 type AnyModel = Table | View | Field;
 
-type ModelPickerSelectProps<Model: AnyModel> = {
+type ModelPickerSelectProps<Model: AnyModel> = {|
     models: Array<Model>,
     selectedModelId: string | null,
     modelKeysToWatch: Array<string>,
     shouldAllowPickingNone?: boolean,
     shouldAllowPickingModelFn?: Model => boolean,
-    onChange: (string | null) => void,
-    id?: string,
-    className?: string,
-    style?: Object,
-    disabled?: boolean,
-    tabIndex?: number | string,
-    'aria-labelledby'?: string,
-    'aria-describedby'?: string,
     placeholder: string,
-};
+    onChange: (newValue: string | null) => mixed,
+    ...SharedSelectBaseProps,
+    ...StyleProps,
+|};
 
 const ModelWatcher = ({
     model,
@@ -41,6 +42,23 @@ const ModelWatcher = ({
 };
 
 class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSelectProps<Model>> {
+    static propTypes = {
+        models: PropTypes.arrayOf(
+            PropTypes.oneOfType([
+                PropTypes.instanceOf(Table),
+                PropTypes.instanceOf(View),
+                PropTypes.instanceOf(Field),
+            ]),
+        ),
+        selectedModelId: PropTypes.string,
+        modelKeysToWatch: PropTypes.arrayOf(PropTypes.string).isRequired,
+        shouldAllowPickingNone: PropTypes.bool,
+        shouldAllowPickingModelFn: PropTypes.func,
+        onChange: PropTypes.func,
+        placeholder: PropTypes.string,
+        ...sharedSelectBasePropTypes,
+        ...stylePropTypes,
+    };
     _select: React.ElementRef<typeof Select> | null;
     _onChange: SelectOptionValue => void;
     constructor(props: ModelPickerSelectProps<Model>) {
@@ -71,27 +89,19 @@ class ModelPickerSelect<Model: AnyModel> extends React.Component<ModelPickerSele
             selectedModelId,
             shouldAllowPickingNone,
             shouldAllowPickingModelFn,
-            id,
-            className,
-            style,
-            disabled,
-            tabIndex,
             placeholder,
+            // eslint-disable-next-line no-unused-vars
+            onChange,
+            ...restOfProps
         } = this.props;
 
         return (
             <React.Fragment>
                 <Select
+                    {...restOfProps}
                     ref={el => (this._select = el)}
                     value={selectedModelId}
                     onChange={this._onChange}
-                    id={id}
-                    className={className}
-                    style={style}
-                    disabled={disabled}
-                    tabIndex={tabIndex}
-                    aria-labelledby={this.props['aria-labelledby']}
-                    aria-describedby={this.props['aria-describedby']}
                     options={[
                         {value: null, label: placeholder, disabled: !shouldAllowPickingNone},
                         ...models.map(model => {

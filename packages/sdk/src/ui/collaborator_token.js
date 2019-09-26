@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {has, isDeepEqual} from '../private_utils';
-import getSdk from '../get_sdk';
-import {type CollaboratorData} from '../types/collaborator';
+import {CollaboratorStatuses, type CollaboratorData} from '../types/collaborator';
 import Box from './box';
+import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
@@ -19,16 +18,10 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
-const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
-);
-const profilePicHelper = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/profile_pic_helper',
-);
-const _CollaboratorToken = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/components/collaborator_token',
-);
+const UNKNOWN_PROFILE_PIC_URL =
+    'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
 
 type StyleProps = {|
     ...FlexItemSetProps,
@@ -63,6 +56,7 @@ type CollaboratorTokenProps = {|
     collaborator: $Shape<CollaboratorData>,
     className?: string,
     style?: {[string]: mixed},
+    ...TooltipAnchorProps,
     ...StyleProps,
 |};
 
@@ -86,40 +80,68 @@ type CollaboratorTokenProps = {|
  * }
  */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
-    const {collaborator, className, style, ...styleProps} = props;
+    const {
+        collaborator,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line no-unused-vars
+        hasOnClick,
+        className,
+        style,
+        ...styleProps
+    } = props;
     const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
 
-    const userInfoById = getSdk().__appInterface.getCollaboratorInfoById();
-    const userObj =
-        userInfoById && collaborator.id && has(userInfoById, collaborator.id)
-            ? userInfoById[collaborator.id]
-            : null;
-    const userObjFormattedForPublicApiV2 = userObj
-        ? appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj)
-        : null;
-
-    let userName;
-    let profilePicUrl;
-    let isActive;
-    if (userObj !== null && isDeepEqual(collaborator, userObjFormattedForPublicApiV2)) {
-        profilePicUrl = appBlanketUserObjMethods.getTokenSizedProfilePicUrl(userObj);
-        userName = appBlanketUserObjMethods.getName(userObj) || 'Unknown';
-        isActive = appBlanketUserObjMethods.isActive(userObj);
-    } else {
-        profilePicUrl =
-            collaborator.profilePicUrl || profilePicHelper.getSizedUnknownProfilePicUrl(18);
-        userName = collaborator.name || collaborator.email || 'Unknown';
-        isActive = true;
-    }
+    const userName =
+        collaborator.name ||
+        collaborator.email ||
+        (collaborator.status === CollaboratorStatuses.INVITED && 'Invited user') ||
+        'Unknown';
+    const profilePicUrl = collaborator.profilePicUrl || UNKNOWN_PROFILE_PIC_URL;
+    const isActive = collaborator.status
+        ? collaborator.status === CollaboratorStatuses.CURRENT
+        : true;
 
     return (
-        <Box className={cx('baymax', classNameForStyledProps)} style={style} display="inline-block">
-            <_CollaboratorToken
-                profilePicUrl={profilePicUrl}
-                userName={userName}
-                className={className}
-                shouldDim={!isActive}
-            />
+        <Box
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            className={cx(baymax('truncate print-color-exact'), classNameForStyledProps, className)}
+            style={style}
+            alignItems="center"
+            display="inline-flex"
+        >
+            {profilePicUrl && (
+                <Box
+                    className={baymax('background-cover background-center')}
+                    style={{backgroundImage: `url("${profilePicUrl}")`}}
+                    border="1px solid #eee"
+                    width="22px"
+                    height="22px"
+                    borderRadius="circle"
+                    zIndex={1}
+                    flex="none"
+                    opacity={isActive ? 1 : 0.5}
+                    backgroundColor="grayLight2"
+                />
+            )}
+            <Box
+                className={baymax('truncate')}
+                paddingRight={2}
+                paddingLeft={3}
+                textColor="dark"
+                display="inline-flex"
+                borderRadius="circle"
+                alignItems="center"
+                flex="none"
+                backgroundColor="grayLight2"
+                marginLeft="-12px"
+                lineHeight={1.4}
+            >
+                {userName}
+            </Box>
         </Box>
     );
 };
@@ -134,6 +156,7 @@ CollaboratorToken.propTypes = {
     }).isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
+    ...tooltipAnchorPropTypes,
     ...stylePropTypes,
 };
 

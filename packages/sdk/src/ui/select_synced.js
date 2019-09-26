@@ -23,6 +23,7 @@ import Synced from './synced';
  * @property {number | string} [tabIndex] The `tabindex` attribute.
  * @property {string} [className] Additional class names to apply to the select.
  * @property {object} [style] Additional styles to apply to the select.
+ * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */

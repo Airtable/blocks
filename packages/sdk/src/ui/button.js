@@ -26,6 +26,7 @@ import {
     marginPropTypes,
     type MarginProps,
 } from './system';
+import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const themes = Object.freeze({
     RED: 'red',
@@ -62,6 +63,7 @@ type ButtonProps = {|
     tabIndex?: number | string,
     'aria-label'?: string,
     children?: React.Node,
+    ...TooltipAnchorProps,
 |};
 
 type StyleProps = {|
@@ -129,6 +131,7 @@ class Button extends React.Component<ButtonProps> {
         disabled: PropTypes.bool,
         tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         'aria-label': PropTypes.string,
+        ...tooltipAnchorPropTypes,
     };
     static defaultProps = {
         theme: themes.BLUE,
@@ -158,6 +161,8 @@ class Button extends React.Component<ButtonProps> {
             id,
             className,
             style,
+            onMouseEnter,
+            onMouseLeave,
             onClick,
             type,
             disabled,
@@ -179,11 +184,13 @@ class Button extends React.Component<ButtonProps> {
                     baymax(themeClassNames),
                     {
                         [baymax('pointer link-quiet')]: !disabled,
-                        [baymax('noevents quieter')]: disabled,
+                        [baymax('quieter')]: disabled,
                     },
                     className,
                 )}
                 style={style}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
                 onClick={onClick}
                 type={type}
                 disabled={disabled}

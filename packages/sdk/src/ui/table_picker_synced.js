@@ -1,11 +1,10 @@
 // @flow
-import PropTypes from 'prop-types';
 import * as React from 'react';
 import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
 import type Table from '../models/table';
 import {type GlobalConfigKey} from '../global_config';
-import TablePicker from './table_picker';
+import TablePicker, {sharedTablePickerPropTypes, type SharedTablePickerProps} from './table_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
 import withHooks from './with_hooks';
@@ -14,30 +13,23 @@ import useWatchable from './use_watchable';
 /**
  * @typedef {object} TablePickerSyncedProps
  * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected table will always reflect the table id stored in `globalConfig` for this key. Selecting a new table will update `globalConfig`.
- * @property {function} [onChange] A function to be called when the selected table changes. This should only be used for side effects.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
  * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected table.
  * @property {string} [placeholder='Pick a table...'] The placeholder text when no table is selected.
- * @property {string} [id] The ID of the picker element.
+ * @property {function} [onChange] A function to be called when the selected table changes. This should only be used for side effects.
+ * @property {string} [autoFocus] The `autoFocus` attribute.
+ * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
+ * @property {string} [id] The `id` attribute.
+ * @property {string} [name] The `name` attribute.
+ * @property {number | string} [tabIndex] The `tabindex` attribute.
  * @property {string} [className] Additional class names to apply to the picker.
  * @property {object} [style] Additional styles to apply to the picker.
- * @property {number | string} [tabIndex] Indicates if the picker can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 type TablePickerSyncedProps = {
     globalConfigKey: GlobalConfigKey,
-    onChange?: (tableModel: Table | null) => void,
-    disabled?: boolean,
-
-    shouldAllowPickingNone?: boolean,
-    placeholder?: string,
-    id?: string,
-    className?: string,
-    style?: Object,
-    tabIndex?: number | string,
-    'aria-labelledby'?: string,
-    'aria-describedby'?: string,
+    ...SharedTablePickerProps,
 };
 
 /**
@@ -74,17 +66,7 @@ type TablePickerSyncedProps = {
 class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        onChange: PropTypes.func,
-        disabled: PropTypes.bool,
-
-        shouldAllowPickingNone: PropTypes.bool,
-        placeholder: PropTypes.string,
-        id: PropTypes.string,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        tabIndex: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-        'aria-labelledby': PropTypes.string,
-        'aria-describedby': PropTypes.string,
+        ...sharedTablePickerPropTypes,
     };
     props: TablePickerSyncedProps;
     _tablePicker: React.ElementRef<typeof TablePicker> | null;
@@ -108,22 +90,13 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
         return typeof tableId === 'string' ? getSdk().base.getTableByIdIfExists(tableId) : null;
     }
     render() {
-        const {
-            globalConfigKey,
-            onChange,
-            disabled,
-            shouldAllowPickingNone,
-            placeholder,
-            id,
-            className,
-            style,
-            tabIndex,
-        } = this.props;
+        const {globalConfigKey, onChange, disabled, ...restOfProps} = this.props;
         return (
             <Synced
                 globalConfigKey={globalConfigKey}
                 render={({value, canSetValue, setValue}) => (
                     <TablePicker
+                        {...restOfProps}
                         ref={el => (this._tablePicker = el)}
                         table={this._getTableFromGlobalConfigValue(value)}
                         onChange={table => {
@@ -133,14 +106,6 @@ class TablePickerSynced extends React.Component<TablePickerSyncedProps> {
                             }
                         }}
                         disabled={disabled || !canSetValue}
-                        shouldAllowPickingNone={shouldAllowPickingNone}
-                        placeholder={placeholder}
-                        id={id}
-                        className={className}
-                        style={style}
-                        tabIndex={tabIndex}
-                        aria-labelledby={this.props['aria-labelledby']}
-                        aria-describedby={this.props['aria-describedby']}
                     />
                 )}
             />

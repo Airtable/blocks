@@ -40,6 +40,7 @@ import Popover from './popover';
 import ViewportConstraint from './viewport_constraint';
 import Link from './link';
 import Box from './box';
+import Text from './text';
 import {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 import initializeBlock from './initialize_block';
 import withHooks from './with_hooks';
@@ -47,6 +48,7 @@ import useLoadable from './use_loadable';
 import {useRecordIds, useRecords, useRecordById} from './use_records';
 import useBase from './use_base';
 import useSession from './use_session';
+import useSettingsButton from './use_settings_button';
 import useWatchable from './use_watchable';
 import useViewport from './use_viewport';
 import useGlobalConfig from './use_global_config';
@@ -82,6 +84,7 @@ const UI = {
     ColorPaletteSynced,
     Link,
     Box,
+    Text,
     ProgressBar,
     Button,
     RecordCard,
@@ -101,6 +104,7 @@ const UI = {
     withHooks,
     useBase,
     useSession,
+    useSettingsButton,
     useViewport,
     useWatchable,
     useLoadable,
