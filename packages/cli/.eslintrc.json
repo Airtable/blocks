@@ -178,7 +178,7 @@
             {
                 "any": true,
                 "Object": false,
-                "Function": false
+                "Function": true
             }
         ],
         "flowtype/object-type-delimiter": "warn",
