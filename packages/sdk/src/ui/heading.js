@@ -79,7 +79,25 @@ function useHeadingSize(
     );
 }
 
-type Props = {|
+/**
+ * @typedef {object} HeadingProps
+ * @property {'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'} [as='h3'] The element that is rendered. Defaults to `h3`.
+ * @property {'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge'} [size='default'] The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
+ * @property {'default' | 'caps'} [size='default'] The `variant` of the heading. Defaults to `default`.
+ * @property {string} [role] The `role` attribute.
+ * @property {string} [className] Additional class names to apply, separated by spaces.
+ * @property {object} [style] Additional styles.
+ * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
+ * @property {string} [aria-label] The `aria-label` attribute.
+ * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
+ * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
+ * @property {string} [aria-controls] The `aria-controls` attribute.
+ * @property {string} [aria-expanded] The `aria-expanded` attribute.
+ * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
+ * @property {string} [aria-hidden] The `aria-hidden` attribute.
+ * @property {string} [aria-live] The `aria-live` attribute.
+ */
+type HeadingProps = {|
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
     size?: ResponsivePropObject<HeadingSize> | HeadingSize,
     variant?: HeadingVariant,
@@ -93,9 +111,32 @@ type Props = {|
     ...AllStylesProps,
 |};
 
-/** @private */
-function Heading(
-    {
+/**
+ * A heading component with sizes and variants.
+ *
+ * @example
+ * import {Heading} from '@airtable/blocks/ui';
+ * import React, {Fragment} from 'react';
+ *
+ * function HeadingExample() {
+ *     return (
+ *         <Fragment>
+ *             <Heading>Default heading</Heading>
+ *             <Heading size="small" variant="caps">Small all caps heading</Heading>
+ *             <Heading
+ *                  size={{
+ *                      xsmallViewport: 'xsmall',
+ *                      smallViewport: 'xsmall',
+ *                      mediumViewport: 'small',
+ *                      largeViewport: 'default'
+ *                  }}
+ *              >Responsive heading</Heading>
+ *         </Fragment>
+ *     );
+ * }
+ */
+function Heading(props: HeadingProps, ref) {
+    const {
         as: Component,
         size,
         variant,
@@ -114,9 +155,7 @@ function Heading(
         'aria-hidden': ariaHidden,
         'aria-live': ariaLive,
         ...styleProps
-    }: Props,
-    ref,
-) {
+    } = props;
     invariant(Component !== undefined, 'as');
     invariant(size !== undefined, 'size');
     invariant(variant !== undefined, 'variant');
@@ -148,7 +187,7 @@ function Heading(
 }
 
 // prettier-ignore
-const ForwardedRefHeading = React.forwardRef/* :: <Props, HTMLElement> */(Heading);
+const ForwardedRefHeading = React.forwardRef/* :: <HeadingProps, HTMLElement> */(Heading);
 
 // eslint-disable-next-line flowtype/no-weak-types
 (ForwardedRefHeading: any).propTypes = {

@@ -40,7 +40,25 @@ export function useTextSize(
     return getStylePropsForResponsiveProp<TextSize>(textSizeProp, textSizesForVariant);
 }
 
-type Props = {|
+/**
+ * @typedef {object} TextProps
+ * @property {'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'li' | 'em' | 'strong' | 'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'} [as='p'] The element that is rendered. Defaults to `p`.
+ * @property {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
+ * @property {'default' | 'paragraph'} [size='default'] The `variant` of the heading. Defaults to `default`.
+ * @property {string} [role] The `role` attribute.
+ * @property {string} [className] Additional class names to apply, separated by spaces.
+ * @property {object} [style] Additional styles.
+ * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
+ * @property {string} [aria-label] The `aria-label` attribute.
+ * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
+ * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
+ * @property {string} [aria-controls] The `aria-controls` attribute.
+ * @property {string} [aria-expanded] The `aria-expanded` attribute.
+ * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
+ * @property {string} [aria-hidden] The `aria-hidden` attribute.
+ * @property {string} [aria-live] The `aria-live` attribute.
+ */
+type TextProps = {|
     as?:
         | 'p'
         | 'h1'
@@ -76,9 +94,32 @@ type Props = {|
     ...AllStylesProps,
 |};
 
-/** @private */
-function Text(
-    {
+/**
+ * A text component with sizes and variants.
+ *
+ * @example
+ * import {Text} from '@airtable/blocks/ui';
+ * import React, {Fragment} from 'react';
+ *
+ * function TextExample() {
+ *     return (
+ *         <Fragment>
+ *             <Text>Default text, for single line text</Text>
+ *             <Text size="small" variant="paragraph">Small paragraph, for multiline paragraphs</Text>
+ *             <Text
+ *                  size={{
+ *                      xsmallViewport: 'xsmall',
+ *                      smallViewport: 'xsmall',
+ *                      mediumViewport: 'small',
+ *                      largeViewport: 'default'
+ *                  }}
+ *              >Responsive text</Text>
+ *         </Fragment>
+ *     );
+ * }
+ */
+function Text(props: TextProps, ref) {
+    const {
         as: Component,
         size,
         variant,
@@ -97,9 +138,7 @@ function Text(
         'aria-hidden': ariaHidden,
         'aria-live': ariaLive,
         ...styleProps
-    }: Props,
-    ref,
-) {
+    } = props;
     invariant(Component !== undefined, 'as');
     invariant(size !== undefined, 'size');
     invariant(variant !== undefined, 'variant');
@@ -131,7 +170,7 @@ function Text(
 }
 
 // prettier-ignore
-const ForwardedRefText = React.forwardRef/* :: <Props, HTMLElement> */(Text);
+const ForwardedRefText = React.forwardRef/* :: <TextProps, HTMLElement> */(Text);
 
 // eslint-disable-next-line flowtype/no-weak-types
 (ForwardedRefText: any).propTypes = {
