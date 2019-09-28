@@ -91,13 +91,9 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         isConfirmActionDangerous: false,
         width: '400px',
     };
-    _onConfirm: () => void;
-    _onCancel: () => void;
     _confirmButtonRef: React.ElementRef<typeof Button> | null;
     constructor(props: ConfirmationDialogProps) {
         super(props);
-        this._onConfirm = this._onConfirm.bind(this);
-        this._onCancel = this._onCancel.bind(this);
         this._confirmButtonRef = null;
     }
     componentDidMount() {
@@ -123,7 +119,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
 
         return (
             <Dialog
-                onClose={this._onCancel}
+                onClose={onCancel}
                 className={className}
                 style={style}
                 backgroundClassName={backgroundClassName}
