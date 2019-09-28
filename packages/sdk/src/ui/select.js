@@ -274,7 +274,7 @@ class Select extends React.Component<SelectProps> {
                 name={name}
                 tabIndex={tabIndex}
                 className={cx(
-                    baymax('styled-input p1 rounded normal no-outline darken1 text-dark'),
+                    baymax('styled-input px1 rounded normal no-outline darken1 text-dark'),
                     {
                         [baymax('link-quiet pointer')]: !disabled,
                         [baymax('quieter')]: disabled,
@@ -282,6 +282,8 @@ class Select extends React.Component<SelectProps> {
                     className,
                 )}
                 style={{
+                    // TODO (stephen): switch to size API
+                    height: 35,
                     ...styleForChevron,
                     ...style,
                 }}
