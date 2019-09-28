@@ -2,20 +2,22 @@
 # yarn lockfile v1
 
 
-"@airtable/blocks@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@airtable/blocks/-/blocks-0.0.30.tgz#c994eeac813e5cd6aa2c24655e1d20a8ea4bc71b"
-  integrity sha512-iUGhoSqw6n5rckZhkW104mhExDADd5vcDG4WkJ3pJRoHU2ySICMLs5HFxvkFsC+opI6QOkcFbKDJ8twoP8Nmuw==
+"@airtable/blocks@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@airtable/blocks/-/blocks-0.0.33.tgz#658d25c801fee1f289b8144424112e55e299bd88"
+  integrity sha512-eS3WVGEf3Ifoe900nOL95Z64ASUtxPeMauI1sMqmp1WAIKKHoKzHuqvwYs97jSHAm4Fx30kEk5k45SN9kLbSUg==
   dependencies:
     "@airtable/eslint-plugin-blocks" "^1.0.2"
     "@babel/runtime" "^7.4.4"
-    "@styled-system/core" "^5.0.18"
+    "@styled-system/core" "^5.1.1"
     core-js "^3.0.1"
     emotion "^10.0.14"
     fast-deep-equal "^2.0.1"
+    hoist-non-react-statics "^3.3.0"
     lodash.omit "^4.5.0"
     prop-types "15.7.2"
     react-window "1.8.5"
+    use-subscription "^1.0.0"
 
 "@airtable/eslint-plugin-blocks@^1.0.2":
   version "1.0.2"
@@ -152,7 +154,7 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
   integrity sha512-ONhaKPIufzzrlNbqtWFFd+jlnemX6lJAgq9ZeiZtS7I1PIf/la7CW4m83rTXRnVnsMbW2k56pGYu7AUFJD9Pow==
 
-"@styled-system/core@^5.0.18":
+"@styled-system/core@^5.1.1":
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@styled-system/core/-/core-5.1.2.tgz#b8b7b86455d5a0514f071c4fa8e434b987f6a772"
   integrity sha512-XclBDdNIy7OPOsN4HBsawG2eiWfCcuFt6gxKn1x4QfMIgeO6TOlA2pZZ5GWZtIhCUqEPTgIBta6JXsGyCkLBYw==
@@ -1051,6 +1053,13 @@ has@^1.0.1, has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+hoist-non-react-statics@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
+  integrity sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==
+  dependencies:
+    react-is "^16.7.0"
+
 http-cache-semantics@3.8.1:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/http-cache-semantics/-/http-cache-semantics-3.8.1.tgz#39b0e16add9b605bf0a9ef3d9daaf4843b4cacd2"
@@ -1751,6 +1760,11 @@ react-dom@^16.8.0:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
+react-is@^16.7.0:
+  version "16.10.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.0.tgz#3d6a031e57fff73c3cfa0347feb3e8f40c5141e5"
+  integrity sha512-WRki2sBb7MTpYp7FtDEmSeGKX2vamYyq3rc9o7fKUG+/DHVyJu69NnvJsiSwwhh2Tt8XN40MQHkDBEXwyfxncQ==
+
 react-is@^16.8.1:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
@@ -2174,6 +2188,11 @@ url-to-options@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/url-to-options/-/url-to-options-1.0.1.tgz#1505a03a289a48cbd7a434efbaeec5055f5633a9"
   integrity sha1-FQWgOiiaSMvXpDTvuu7FBV9WM6k=
+
+use-subscription@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.1.0.tgz#020f634821bc713e88195457b3928fd56e247ccd"
+  integrity sha512-EDNFOTZmLGoXcCUuTDaUl7IzQdEwfIJJQVRdbCRgTKga8L5yYs/7IVWhZi/PPaX33WqGD6EkUnxfq1SyB/SsrQ==
 
 util-deprecate@~1.0.1:
   version "1.0.2"
