@@ -33,7 +33,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
      * will be called.
      */
     watch(
-        keys: WatchableKey | Array<WatchableKey>,
+        keys: WatchableKey | $ReadOnlyArray<WatchableKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableKey> {
@@ -54,7 +54,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey: string> extends Abstrac
      * will be called.
      */
     unwatch(
-        keys: WatchableKey | Array<WatchableKey>,
+        keys: WatchableKey | $ReadOnlyArray<WatchableKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableKey> {

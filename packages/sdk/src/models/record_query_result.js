@@ -492,7 +492,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @returns the array of keys that were watched
      */
     watch(
-        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | $ReadOnlyArray<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordQueryResultKey> {
@@ -519,7 +519,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @returns the array of keys that were unwatched
      */
     unwatch(
-        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | $ReadOnlyArray<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordQueryResultKey> {

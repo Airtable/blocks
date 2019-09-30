@@ -615,7 +615,7 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableViewportKey | [Array][70]&lt;WatchableViewportKey>)** the keys to unwatch
+-   `keys` **(WatchableViewportKey | \$ReadOnlyArray&lt;WatchableViewportKey>)** the keys to unwatch
 -   `callback` **[Function][75]** the function passed to `.watch` for these keys
 -   `context` **[Object][76]??** the context that was passed to `.watch` for this `callback`
 
@@ -636,7 +636,7 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableViewportKey | [Array][70]&lt;WatchableViewportKey>)** the keys to watch
+-   `keys` **(WatchableViewportKey | \$ReadOnlyArray&lt;WatchableViewportKey>)** the keys to watch
 -   `callback` **[Function][75]** a function to call when those keys change
 -   `context` **[Object][76]??** an optional context for `this` in `callback`.
 
@@ -1415,7 +1415,7 @@ released. Once the data is available, the callback will be called.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][70]&lt;WatchableKey>)**
+-   `keys` **(WatchableKey | \$ReadOnlyArray&lt;WatchableKey>)**
 -   `callback` **[Function][75]**
 -   `context` **[Object][76]??**
 
@@ -1428,7 +1428,7 @@ fetched. Once the data is available, the callback will be called.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][70]&lt;WatchableKey>)**
+-   `keys` **(WatchableKey | \$ReadOnlyArray&lt;WatchableKey>)**
 -   `callback` **[Function][75]**
 -   `context` **[Object][76]??**
 
@@ -2212,8 +2212,8 @@ unloaded.
 
 ###### Parameters
 
--   `keys` **(WatchableRecordQueryResultKey | [Array][70]&lt;WatchableRecordQueryResultKey>)** the
-    keys to unwatch
+-   `keys` **(WatchableRecordQueryResultKey | \$ReadOnlyArray&lt;WatchableRecordQueryResultKey>)**
+    the keys to unwatch
 -   `callback` **[Function][75]** the function passed to `.watch` for these keys
 -   `context` **[Object][76]??** the context that was passed to `.watch` for this `callback`
 
@@ -2239,8 +2239,8 @@ fetched. Once the data is available, the `callback` will be called.
 
 ###### Parameters
 
--   `keys` **(WatchableRecordQueryResultKey | [Array][70]&lt;WatchableRecordQueryResultKey>)** the
-    keys to watch
+-   `keys` **(WatchableRecordQueryResultKey | \$ReadOnlyArray&lt;WatchableRecordQueryResultKey>)**
+    the keys to watch
 -   `callback` **[Function][75]** a function to call when those keys change
 -   `context` **[Object][76]??** an optional context for `this` in `callback`.
 
@@ -4040,7 +4040,7 @@ Should be called with the same arguments given to `.watch`.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][70]&lt;WatchableKey>)** the keys to unwatch
+-   `keys` **(WatchableKey | \$ReadOnlyArray&lt;WatchableKey>)** the keys to unwatch
 -   `callback` **function (model: this, key: WatchableKey): any** the function passed to `.watch`
     for these keys
 -   `context` **[Object][76]??** the context that was passed to `.watch` for this `callback`
@@ -4055,7 +4055,7 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 ##### Parameters
 
--   `keys` **(WatchableKey | [Array][70]&lt;WatchableKey>)** the keys to watch
+-   `keys` **(WatchableKey | \$ReadOnlyArray&lt;WatchableKey>)** the keys to watch
 -   `callback` **function (model: this, key: WatchableKey): any** a function to call when those keys
     change
 -   `context` **[Object][76]??** an optional context for `this` in `callback`.
@@ -4681,7 +4681,8 @@ If you're writing a class component and still want to be able to use hooks, try 
 
 ##### Parameters
 
--   `model` **[Watchable][133]?** the model to watch
+-   `models` **([Watchable][133]? | [Array][70]&lt;[Watchable][133]?>?)** the model or models to
+    watch
 -   `keys` **[Array][70]&lt;[string][69]?>** which keys we want to watch
 -   `callback` **function (): any?** an optional callback to call when any of the watch keys change
 

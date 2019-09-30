@@ -93,7 +93,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     watch(
-        keys: WatchableRecordStoreKey | Array<WatchableRecordStoreKey>,
+        keys: WatchableRecordStoreKey | $ReadOnlyArray<WatchableRecordStoreKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordStoreKey> {
@@ -106,7 +106,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     unwatch(
-        keys: WatchableRecordStoreKey | Array<WatchableRecordStoreKey>,
+        keys: WatchableRecordStoreKey | $ReadOnlyArray<WatchableRecordStoreKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordStoreKey> {

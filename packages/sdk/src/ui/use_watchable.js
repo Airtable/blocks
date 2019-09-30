@@ -3,11 +3,7 @@ import {useMemo, useRef} from 'react';
 import {useSubscription} from 'use-subscription';
 import {compact} from '../private_utils';
 import type Watchable from '../watchable';
-
-const noopSubscription = {
-    getCurrentValue: () => null,
-    subscribe: () => () => {},
-};
+import useArrayIdentity from './use_array_identity';
 
 /**
  * A React hook for watching data in Airtable models like {@link Table} and {@link Record}. Each
@@ -25,7 +21,7 @@ const noopSubscription = {
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
- * @param {?Watchable} model the model to watch
+ * @param {?Watchable | ?Array<?Watchable>} models the model or models to watch
  * @param {Array<?string>} keys which keys we want to watch
  * @param [callback] an optional callback to call when any of the watch keys change
  *
@@ -49,11 +45,12 @@ const noopSubscription = {
  * }
  */
 export default function useWatchable<Keys: string>(
-    model: ?Watchable<Keys>,
+    models: ?(Watchable<Keys> | $ReadOnlyArray<?Watchable<Keys>>),
     keys: $ReadOnlyArray<?Keys>,
     callback?: () => mixed,
 ) {
-    const compactKeys = compact(keys);
+    const compactModels = useArrayIdentity(compact(Array.isArray(models) ? models : [models]));
+    const compactKeys = useArrayIdentity(compact(keys));
 
     // use a ref to the callback so consumers don't have to provide their own memoization to avoid
     // unwatching and rewatching every render
@@ -71,35 +68,47 @@ export default function useWatchable<Keys: string>(
     //   3. is unique to that model. This means that if we change models, we're guaranteed to get
     //      re-rendered.
     const watchSubscription = useMemo(() => {
-        // flow treats arguments as `let` bindings, so we need to make this `const` to not have to
-        // worry about null values
-        const constModel = model;
-        if (!constModel) {
-            return noopSubscription;
-        }
-
         return {
-            getCurrentValue: () => constModel.__getWatchableKey(),
+            getCurrentValue: () => compactModels.map(model => model.__getWatchableKey()).join(','),
             subscribe: notifyChange => {
+                // sometimes, watching and unwatching a key has side effects - typically, these
+                // only happen when watching or unwatching something for the first or last time, as
+                // we use ref-counting to avoid unnecessary side effects. When the keys or models
+                // for this subscription change, we teardown the old subscription and create a new
+                // one. Often though, underlying model-key pairs will be the same - we'll remove
+                // the old subscription, but instantly re-add it. In this case, we don't want to
+                // trigger any side effects. To work around this, we defer unwatching the previous
+                // models and keys until _after_ we've watched the new ones. That way, the ref-
+                // count never reaches 0. We don't want the old watches to actually trigger in that
+                // time though - so `isDisabled` prevents that.
+                let isDisabled = false;
+
                 const onChange = (...args) => {
+                    if (isDisabled) {
+                        return;
+                    }
+
                     notifyChange();
                     if (callbackRef.current) {
                         callbackRef.current(...args);
                     }
                 };
 
-                constModel.watch(compactKeys, onChange);
+                for (const model of compactModels) {
+                    model.watch(compactKeys, onChange);
+                }
+
                 return () => {
-                    constModel.unwatch(compactKeys, onChange);
+                    isDisabled = true;
+                    setTimeout(() => {
+                        for (const model of compactModels) {
+                            model.unwatch(compactKeys, onChange);
+                        }
+                    }, 0);
                 };
             },
         };
-        // we spread keysArray below rather than using it as a direct dependency as we're likely to
-        // get different array instances containing the same keys across renders, and don't want to
-        // have to unwatch and watch after each render. that means that the lint rule can't track
-        // that we're using compactKeys though.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [model, ...compactKeys]);
+    }, [compactModels, compactKeys]);
 
     // we don't care about the return value - we just want useSubscription to correctly handle
     // re-rendering the component for us
