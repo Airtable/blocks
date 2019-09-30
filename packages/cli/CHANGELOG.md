@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.36...HEAD)
 
-No changes.
+-   New `block list-remotes` and `block remove-remote` commands.
 
 ## [0.0.36](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.35...@airtable/blocks-cli@0.0.36) - 2019-09-19
 
