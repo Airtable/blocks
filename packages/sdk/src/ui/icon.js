@@ -158,6 +158,7 @@ Icon.propTypes = {
 
 Icon.defaultProps = {
     size: 16,
+    fillColor: 'currentColor',
 };
 
 export default Icon;
