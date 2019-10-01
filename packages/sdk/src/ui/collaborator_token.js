@@ -91,7 +91,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
         style,
         ...styleProps
     } = props;
-    const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyledProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
     const userName =
         collaborator.name ||

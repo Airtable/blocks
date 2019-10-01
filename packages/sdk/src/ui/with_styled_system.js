@@ -94,7 +94,7 @@ export default function withStyledSystem<
             styleParser.propNames,
             defaultStyleProps,
         );
-        const classNameForStyleProps = useStyledSystem((styleProps: StyleProps), styleParser);
+        const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
         return (
             <Component
                 ref={ref}

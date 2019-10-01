@@ -72,7 +72,7 @@ type LoaderProps = {|
  */
 const Loader = (props: LoaderProps) => {
     const {fillColor, scale, className, style, ...styleProps} = props;
-    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
     return (
         <svg

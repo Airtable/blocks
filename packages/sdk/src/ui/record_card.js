@@ -622,7 +622,7 @@ export default withHooks<
     >(props, styleParser.propNames);
 
     const {record, fields, view, className} = nonStyleProps;
-    const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyledProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
     const recordModel = record && record instanceof Record ? record : null;
     let parentTable = null;

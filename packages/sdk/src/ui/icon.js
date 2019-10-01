@@ -113,7 +113,7 @@ const Icon = (props: IconProps) => {
         pathStyle,
         ...styleProps
     } = props;
-    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
     invariant(size, 'icon size');
     const isMicro = size <= 12;

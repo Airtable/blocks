@@ -5,7 +5,7 @@ import {cx} from 'emotion';
 import {invariant} from '../error_utils';
 import {values} from '../private_utils';
 import useStyledSystem from './use_styled_system';
-import {allStylesParser, allStylesPropTypes, type AllStylesProps} from './system/index';
+import {allStylesPropTypes, type AllStylesProps} from './system/index';
 import {type ResponsivePropObject} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import createResponsivePropType from './system/utils/create_responsive_prop_type';
@@ -143,10 +143,10 @@ function Text(props: TextProps, ref) {
     invariant(size !== undefined, 'size');
     invariant(variant !== undefined, 'variant');
     const stylePropsForTextSize = useTextSize(size, variant);
-    const classNameForStyleProps = useStyledSystem(
-        {...stylePropsForTextSize, ...styleProps},
-        allStylesParser,
-    );
+    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
+        ...stylePropsForTextSize,
+        ...styleProps,
+    });
     return (
         <Component
             ref={ref}

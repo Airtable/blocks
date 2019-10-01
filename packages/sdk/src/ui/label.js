@@ -5,7 +5,7 @@ import {cx} from 'emotion';
 import {invariant} from '../error_utils';
 import {values} from '../private_utils';
 import useStyledSystem from './use_styled_system';
-import {allStylesParser, allStylesPropTypes, type AllStylesProps} from './system/index';
+import {allStylesPropTypes, type AllStylesProps} from './system/index';
 import {stylePropType} from './system/utils/create_style_prop_types';
 import {ariaPropTypes, type AriaProps} from './types/aria_props';
 import {TextVariants, TextSizes, type TextSizeProp, useTextSize} from './text';
@@ -78,17 +78,14 @@ function Label(props: LabelProps, ref) {
     } = props;
     invariant(size !== undefined, 'size');
     const stylePropsForTextSize = useTextSize(size, TextVariants.DEFAULT);
-    const classNameForStyleProps = useStyledSystem(
-        {
-            ...stylePropsForTextSize,
-            display: 'inline-block',
-            textColor: 'light',
-            fontWeight: 600,
-            marginBottom: '6px',
-            ...styleProps,
-        },
-        allStylesParser,
-    );
+    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
+        ...stylePropsForTextSize,
+        display: 'inline-block',
+        textColor: 'light',
+        fontWeight: 600,
+        marginBottom: '6px',
+        ...styleProps,
+    });
     return (
         <label
             ref={ref}

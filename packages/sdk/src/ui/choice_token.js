@@ -99,7 +99,7 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
         style,
         ...styleProps
     } = props;
-    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
     const color = choice.color || DEFAULT_CHOICE_COLOR;
     const textColor = useTextColorForBackgroundColor(color);
 

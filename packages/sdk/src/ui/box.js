@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import useStyledSystem from './use_styled_system';
-import {allStylesParser, allStylesPropTypes, type AllStylesProps} from './system/index';
+import {allStylesPropTypes, type AllStylesProps} from './system/index';
 import {ariaPropTypes, type AriaProps} from './types/aria_props';
 import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
 
@@ -97,7 +97,7 @@ function Box(props: BoxProps, ref) {
         'aria-live': ariaLive,
         ...styleProps
     } = props;
-    const classNameForStyleProps = useStyledSystem((styleProps: AllStylesProps), allStylesParser);
+    const classNameForStyleProps = useStyledSystem<AllStylesProps>(styleProps);
 
     return (
         <Component
