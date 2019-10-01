@@ -13,6 +13,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Fix a regression where `UI.ConfirmationDialog` would crash the block.
 -   Allow passing an array of models to `useWatchable` to watch several models at once.
+-   **BREAKING**: `fieldTypes.LOOKUP` is now `fieldTypes.MULTIPLE_LOOKUP_VALUES`. The underlying
+    string has also changed from `lookup` to `multipleLookupValues`.
 
 ## [0.0.33](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.32...@airtable/blocks@0.0.33) - 2019-09-26
 

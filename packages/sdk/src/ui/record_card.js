@@ -154,7 +154,7 @@ type RecordCardProps = {|
 const FormulaicFieldTypes = {
     [FieldTypes.FORMULA]: true,
     [FieldTypes.ROLLUP]: true,
-    [FieldTypes.LOOKUP]: true,
+    [FieldTypes.MULTIPLE_LOOKUP_VALUES]: true,
 };
 const isFieldFormulaic = (field: Field): boolean => {
     return !!FormulaicFieldTypes[field.type];
@@ -363,7 +363,7 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
     _getFirstAttachmentInField(attachmentField: Field): AttachmentData | null {
         let attachmentsInField;
-        if (attachmentField.type === FieldTypes.LOOKUP) {
+        if (attachmentField.type === FieldTypes.MULTIPLE_LOOKUP_VALUES) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
             attachmentsInField = flattenDeep(
                 values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),

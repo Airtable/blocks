@@ -542,10 +542,10 @@ export const FieldTypes = Object.freeze({
      * ##### Options
      * UNSTABLE
      *
-     * @alias fieldTypes.LOOKUP
+     * @alias fieldTypes.MULTIPLE_LOOKUP_VALUES
      * @memberof fieldTypes
      */
-    LOOKUP: ('lookup': 'lookup'),
+    MULTIPLE_LOOKUP_VALUES: ('multipleLookupValues': 'multipleLookupValues'),
     /**
      * Automatically incremented unique counter for each record.
      *

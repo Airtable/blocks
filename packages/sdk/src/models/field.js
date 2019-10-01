@@ -1,6 +1,6 @@
 // @flow
 import {type BaseData} from '../types/base';
-import {type FieldData, type PrivateColumnType} from '../types/field';
+import {FieldTypes, type FieldData, type PrivateColumnType} from '../types/field';
 import {isEnumValue, cloneDeep, values} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -168,7 +168,13 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             getSdk().__appInterface,
             this.parentTable.__getFieldNamesById(),
         );
-        return type;
+        // We intend to switch from "lookup" to "multipleLookupValues", but need to support both
+        // until the transition is complete. See <https://airtable.quip.com/VxaMAmAfUscs> for more.
+        if (type === 'lookup') {
+            return FieldTypes.MULTIPLE_LOOKUP_VALUES;
+        } else {
+            return type;
+        }
     }
     /**
      * @function

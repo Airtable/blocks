@@ -246,7 +246,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             // HACK: while we migrate our blocks to the new lookup cell value
             // format, make the public cell value look like an array for
             // backwards compatibility.
-            if (!Record.shouldUseNewLookupFormat && field.type === FieldTypes.LOOKUP) {
+            if (
+                !Record.shouldUseNewLookupFormat &&
+                field.type === FieldTypes.MULTIPLE_LOOKUP_VALUES
+            ) {
                 const cellValueForMigration = [];
                 // $FlowFixMe
                 cellValueForMigration.linkedRecordIds = cloneDeep(cellValue.linkedRecordIds);

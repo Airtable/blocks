@@ -924,18 +924,6 @@ An [ISO 8601][81] formatted date time.
 
 See [fieldTypes.DATE][82] and [fieldTypes.DATE_TIME][83] for `result` options.
 
-#### fieldTypes.LOOKUP
-
-Lookup a field on linked records.
-
-##### Cell value format
-
-UNSTABLE
-
-##### Options
-
-UNSTABLE
-
 #### fieldTypes.MULTILINE_TEXT
 
 A long text field that can span multiple lines.
@@ -1027,6 +1015,18 @@ Array of selected choices.
     }>,
 }
 ```
+
+#### fieldTypes.MULTIPLE_LOOKUP_VALUES
+
+Lookup a field on linked records.
+
+##### Cell value format
+
+UNSTABLE
+
+##### Options
+
+UNSTABLE
 
 #### fieldTypes.MULTIPLE_RECORD_LINKS
 
