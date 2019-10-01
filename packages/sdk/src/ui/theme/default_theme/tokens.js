@@ -1,12 +1,18 @@
 // @flow
-import {type Color} from '../../colors';
+import {type Color} from '../../../colors';
 
-const colors = {
+export const colors = {
     // neutrals
     white: 'hsl(0, 0%, 100%)',
     dark: 'hsl(0, 0%, 20%)',
     // light is the lightest text color possible.
     light: 'hsl(0, 0%, 46%)',
+
+    // Light grays are solid colors used for backgrounds primarily.
+    lightGray1: 'hsl(0, 0%, 98%)',
+    lightGray2: 'hsl(0, 0%, 95%)',
+    lightGray3: 'hsl(0, 0%, 91%)',
+    lightGray4: 'hsl(0, 0%, 88%)',
 
     lighten1: 'hsla(0, 0%, 100%, 0.05)',
     lighten2: 'hsla(0, 0%, 100%, 0.1)',
@@ -89,7 +95,7 @@ const colors = {
     yellowLight2: 'rgb(255, 234, 182)',
 };
 
-const textColorsByBackgroundColor: {[Color]: string} = {
+export const textColorsByBackgroundColor: {[Color]: string} = {
     // blue bg
     blueBright: 'white',
     blue: 'white',
@@ -161,30 +167,30 @@ const textColorsByBackgroundColor: {[Color]: string} = {
     yellowLight2: 'rgb(66, 10, 0)',
 };
 
-const textColors = {
+export const textColors = {
     dark: colors.dark,
     default: colors.dark,
     light: colors.light,
 };
 
-const breakpoints = {
+export const breakpoints = {
     xsmallViewport: '480px',
     smallViewport: '640px',
     mediumViewport: '832px',
     largeViewport: '1152px',
 };
 
-const borderWidths = {
+export const borderWidths = {
     default: '1px',
     thick: '2px',
 };
 
-const borders = {
+export const borders = {
     default: `1px solid ${colors.darken2}`,
     thick: `2px solid ${colors.darken2}`,
 };
 
-const fontFamilies = {
+export const fontFamilies = {
     default:
         "-apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
     monospace: ' Menlo, Courier, monospace',
@@ -206,184 +212,11 @@ export const fontSizes = [
     '35px', // 9
 ];
 
-const textSizesByVariant = {
-    default: {
-        xsmall: {
-            fontSize: 1,
-            lineHeight: '14px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginY: 0,
-        },
-        small: {
-            fontSize: 2,
-            lineHeight: '16px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginY: 0,
-        },
-        default: {
-            fontSize: 3,
-            lineHeight: '20px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginY: 0,
-        },
-        large: {
-            fontSize: 4,
-            lineHeight: '24px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginY: 0,
-        },
-    },
-    paragraph: {
-        xsmall: {
-            fontSize: 1,
-            lineHeight: '16px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: '1em',
-        },
-        small: {
-            fontSize: 2,
-            lineHeight: '20px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: '1em',
-        },
-        default: {
-            fontSize: 3,
-            lineHeight: '22px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: '1em',
-        },
-        large: {
-            fontSize: 4,
-            lineHeight: '26px',
-            fontWeight: 400,
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: '1em',
-        },
-    },
-};
-
-export const headingSizesByVariant = {
-    default: {
-        xsmall: {
-            fontSize: 3,
-            fontWeight: 700,
-            lineHeight: '22px',
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 1,
-        },
-        small: {
-            fontSize: 4,
-            fontWeight: 600,
-            lineHeight: '24px',
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 1,
-        },
-        // We skip fontSize 5, because font sizes below 6 (21px) the font will render SF Pro Text instead of SF Pro Display.
-        // SF Pro Text visually looks slightly bigger than SF Pro Display and 5 and 6 would look very similar.
-        default: {
-            fontSize: 6,
-            fontWeight: 500,
-            lineHeight: '26px',
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 2,
-        },
-        large: {
-            fontSize: 7,
-            fontWeight: 500,
-            lineHeight: '29px',
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 2,
-        },
-        xlarge: {
-            fontSize: 8,
-            fontWeight: 500,
-            lineHeight: '34px',
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 3,
-        },
-        xxlarge: {
-            fontSize: 9,
-            fontWeight: 500,
-            lineHeight: '44px',
-            letterSpacing: '-0.01em',
-            textColor: 'default',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 3,
-        },
-    },
-    caps: {
-        xsmall: {
-            fontSize: 1,
-            fontWeight: 700,
-            lineHeight: '16px',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-            textColor: 'light',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 2,
-        },
-        small: {
-            fontSize: 2,
-            fontWeight: 600,
-            lineHeight: '16px',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-            textColor: 'light',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 2,
-        },
-        default: {
-            fontSize: 3,
-            fontWeight: 500,
-            lineHeight: '20px',
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
-            textColor: 'light',
-            fontFamily: 'default',
-            marginTop: 0,
-            marginBottom: 3,
-        },
-        // Bigger all caps heading sizes are are omitted since they are not desirable.
-    },
-};
-
-const fontWeights = {
+export const fontWeights = {
     strong: 500,
 };
 
-const opacities = {
+export const opacities = {
     normal: 1,
     quiet: 0.75,
     quieter: 0.5,
@@ -391,27 +224,10 @@ const opacities = {
     invisible: 0,
 };
 
-const radii = {
+export const radii = {
     default: 3,
     large: 6,
     circle: 9999,
 };
 
-const space = [0, 4, 8, 16, 32, 64, 128];
-
-export default {
-    colors,
-    textColorsByBackgroundColor,
-    textColors,
-    breakpoints,
-    borderWidths,
-    borders,
-    fontFamilies,
-    fontSizes,
-    textSizesByVariant,
-    headingSizesByVariant,
-    fontWeights,
-    opacities,
-    radii,
-    space,
-};
+export const space = [0, 4, 8, 16, 32, 64, 128];

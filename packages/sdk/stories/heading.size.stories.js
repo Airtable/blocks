@@ -3,7 +3,7 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Heading from '../src/ui/heading';
 import Text from '../src/ui/text';
-import theme from '../src/ui/theme/default_theme';
+import theme from '../src/ui/theme/default_theme/';
 
 const stories = storiesOf('Heading/size', module);
 
