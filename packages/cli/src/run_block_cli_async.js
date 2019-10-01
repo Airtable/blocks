@@ -66,7 +66,12 @@ function ensureCleanExit() {
 async function runBlockCliAsync() {
     ensureCleanExit();
     await setUpRollbarAsync();
-    updateNotifier({pkg: packageJson}).notify({isGlobal: true});
+    updateNotifier({
+        pkg: packageJson,
+        // Still notify if this is invoked as part of an NPM script, e.g. in
+        // case the developer is using the CLI as part of a `watch` command.
+        shouldNotifyInNpmScript: true,
+    }).notify({isGlobal: true});
 
     const yargs = setUpYargs();
     const config = yargs.argv;
