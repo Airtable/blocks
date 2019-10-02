@@ -1,4 +1,12 @@
-import {initializeBlock, useBase, useRecords, useLoadable, useWatchable} from '@airtable/blocks/ui';
+import UI, {
+    initializeBlock,
+    useBase,
+    useRecords,
+    useLoadable,
+    useWatchable,
+    Box,
+    Text,
+} from '@airtable/blocks/ui';
 import {cursor} from '@airtable/blocks';
 import React, {useState} from 'react';
 import {viewTypes} from '@airtable/blocks/models';
@@ -86,24 +94,40 @@ function RecordPreview({selectedRecordId}) {
     // selectedRecordId will be null on block initialization and after
     // the user switches table or view.
     if (selectedRecordId === null) {
-        return <Container>Select a record to see a preview.</Container>;
+        return (
+            <Container>
+                <Text>Select a record to see a preview.</Text>
+            </Container>
+        );
     }
 
     if (cursor.activeTableId !== table.id) {
-        return <Container>Switch to the &quot;{table.name}&quot; table to see previews.</Container>;
+        return (
+            <Container>
+                <Text>Switch to the &quot;{table.name}&quot; table to see previews.</Text>
+            </Container>
+        );
     }
 
     if (
         cursor.activeViewId === null || // activeViewId is briefly null when switching views
         table.getViewById(cursor.activeViewId).type !== viewTypes.GRID
     ) {
-        return <Container>Switch to a grid view to see previews.</Container>;
+        return (
+            <Container>
+                <Text>Switch to a grid view to see previews.</Text>
+            </Container>
+        );
     }
 
     // If the selectedRecordId is not in queryResult, the record
     // corresponding to selectedRecordId must have been deleted.
     if (!queryResult.hasRecord(selectedRecordId)) {
-        return <Container>Select a record to see a preview.</Container>;
+        return (
+            <Container>
+                <Text>Select a record to see a preview.</Text>
+            </Container>
+        );
     }
 
     const previewUrl = getPreviewUrlForRecord(
@@ -115,7 +139,11 @@ function RecordPreview({selectedRecordId}) {
     // record either contains no URL, or contains a URL that cannot be
     // resolved to a YouTube video.
     if (!previewUrl) {
-        return <Container>No video</Container>;
+        return (
+            <Container>
+                <Text>No video</Text>
+            </Container>
+        );
     }
 
     return (
@@ -128,7 +156,7 @@ function RecordPreview({selectedRecordId}) {
                 // one was loading, which would be a confusing user
                 // experience.
                 key={previewUrl}
-                style={{flexGrow: 1, width: '100%'}}
+                style={{flex: 'auto', width: '100%'}}
                 src={previewUrl}
                 frameBorder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -142,21 +170,19 @@ function RecordPreview({selectedRecordId}) {
 // children.
 function Container({children}) {
     return (
-        <div
-            style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
+        <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
         >
             {children}
-        </div>
+        </Box>
     );
 }
 
