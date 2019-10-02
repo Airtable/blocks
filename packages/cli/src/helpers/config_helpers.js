@@ -4,7 +4,7 @@ const path = require('path');
 
 const {CONFIG_FILE_NAME} = require('../config/block_cli_config_settings');
 const {ConfigKeys, ConfigLocations, DEFAULT_API_KEY_NAME} = require('../types/config_helpers_type');
-const getBlockDirPathModule = require('../get_block_dir_path');
+const getBlockDirPathModule = require('./get_block_dir_path');
 const fsUtils = require('./fs_utils');
 
 import type {

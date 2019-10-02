@@ -1,5 +1,5 @@
 // @flow
-const {getBlockDirPath} = require('../get_block_dir_path');
+const {getBlockDirPath} = require('./get_block_dir_path');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const fsUtils = require('./fs_utils');
 const path = require('path');

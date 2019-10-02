@@ -8,7 +8,7 @@ const {getTemporaryDirectoryPath} = require('./helpers');
 const fsUtils = require('../src/helpers/fs_utils');
 const configHelpers = require('../src/helpers/config_helpers');
 const {ConfigKeys, ConfigLocations} = require('../src/types/config_helpers_type');
-const getBlockDirPathModule = require('../src/get_block_dir_path');
+const getBlockDirPathModule = require('../src/helpers/get_block_dir_path');
 
 import type {UserOrBlockConfig} from '../src/types/config_helpers_type';
 

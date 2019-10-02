@@ -7,7 +7,7 @@ const fsUtils = require('../../src/helpers/fs_utils');
 // flow-disable-next-line because flow-type defs are missing for @oclif/test
 const {expect, test} = require('@oclif/test');
 const {getTemporaryDirectoryPath, assertThrowsAsync} = require('../helpers');
-const getBlockDirPathModule = require('../../src/get_block_dir_path');
+const getBlockDirPathModule = require('../../src/helpers/get_block_dir_path');
 const listRemotes = require('../../src/commands/list_remotes');
 
 describe('list-remotes', function() {

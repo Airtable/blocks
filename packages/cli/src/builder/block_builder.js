@@ -24,7 +24,7 @@ const {BlockBuilderStatuses} = require('../types/block_builder_state_data_types'
 const BlockBuilderJobQueue = require('./block_builder_job_queue');
 const ErrorCodes = require('../types/error_codes');
 const {RESULT_OK} = require('../types/result');
-const {getBlockDirPath} = require('../get_block_dir_path');
+const {getBlockDirPath} = require('../helpers/get_block_dir_path');
 const hasBackendRoutes = require('../helpers/has_backend_routes');
 
 import type {BlockBuildType} from '../types/block_build_types';

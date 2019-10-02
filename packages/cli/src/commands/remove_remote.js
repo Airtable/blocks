@@ -4,7 +4,7 @@ const path = require('path');
 const invariant = require('invariant');
 const chalk = require('chalk');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
-const getBlockDirPathModule = require('../get_block_dir_path');
+const getBlockDirPathModule = require('../helpers/get_block_dir_path');
 const fsUtils = require('../helpers/fs_utils');
 const validateRemoteName = require('../helpers/validate_remote_name');
 

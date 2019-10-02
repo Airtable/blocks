@@ -6,7 +6,7 @@ const {cli} = require('cli-ux');
 const fsUtils = require('../helpers/fs_utils');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
-const getBlockDirPathModule = require('../get_block_dir_path');
+const getBlockDirPathModule = require('../helpers/get_block_dir_path');
 
 import type {Argv} from 'yargs';
 import type {RemoteJson} from '../types/remote_json_type';

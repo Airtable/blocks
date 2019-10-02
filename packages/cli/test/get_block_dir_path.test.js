@@ -1,5 +1,5 @@
 // @flow
-const {getBlockDirPath} = require('../src/get_block_dir_path');
+const {getBlockDirPath} = require('../src/helpers/get_block_dir_path');
 const path = require('path');
 const fs = require('fs');
 const {getTemporaryDirectoryPath} = require('./helpers');

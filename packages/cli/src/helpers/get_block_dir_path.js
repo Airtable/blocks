@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const blockCliConfigSettings = require('./config/block_cli_config_settings');
+const blockCliConfigSettings = require('../config/block_cli_config_settings');
 
 const fileSystemRoot = path.parse(process.cwd()).root;
 

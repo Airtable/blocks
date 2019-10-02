@@ -7,7 +7,7 @@ const chalk = require('chalk');
 const cpx = require('cpx');
 const fsUtils = require('./helpers/fs_utils');
 const {SDK_PACKAGE_NAME} = require('./config/block_cli_config_settings');
-const {getBlockDirPath} = require('./get_block_dir_path');
+const {getBlockDirPath} = require('./helpers/get_block_dir_path');
 const {exitWithError} = require('./helpers/cli_helpers');
 const {_internal} = require('./helpers/child_process_helpers');
 
