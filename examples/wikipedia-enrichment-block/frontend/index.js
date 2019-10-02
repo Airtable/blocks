@@ -1,4 +1,4 @@
-import {initializeBlock, useBase, useRecords, Loader, Button} from '@airtable/blocks/ui';
+import {initializeBlock, useBase, useRecords, Loader, Button, Box} from '@airtable/blocks/ui';
 import React, {Fragment, useState} from 'react';
 
 // These values match the base for this example: https://airtable.com/shrIho8SB7RhrlUQL
@@ -50,17 +50,17 @@ function WikipediaEnrichmentBlock() {
     }
 
     return (
-        <div
-            style={{
-                // center the button/loading spinner horizontally and vertically.
-                width: '100vw',
-                height: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 16,
-            }}
+        <Box
+            // center the button/loading spinner horizontally and vertically.
+            position="absolute"
+            top="0"
+            bottom="0"
+            left="0"
+            right="0"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
         >
             {isUpdateInProgress ? (
                 <Loader />
@@ -69,7 +69,7 @@ function WikipediaEnrichmentBlock() {
                     <Button
                         onClick={onButtonClick}
                         disabled={!permissionCheck.hasPermission}
-                        style={{marginBottom: 16}}
+                        marginBottom={3}
                     >
                         Update summaries and images
                     </Button>
@@ -80,7 +80,7 @@ function WikipediaEnrichmentBlock() {
                         permissionCheck.reasonDisplayString}
                 </Fragment>
             )}
-        </div>
+        </Box>
     );
 }
 

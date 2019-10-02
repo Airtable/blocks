@@ -2,16 +2,18 @@
 # yarn lockfile v1
 
 
-"@airtable/blocks@/var/folders/nx/56kq78px0q7gh8k1czf7wygw0000zl/T/1568726388385-airtable-blocks-0.0.30-local.1568726366041.tgz":
-  version "0.0.30-local.1568726366041"
-  resolved "/var/folders/nx/56kq78px0q7gh8k1czf7wygw0000zl/T/1568726388385-airtable-blocks-0.0.30-local.1568726366041.tgz#5e5e48876aed7101ab1f86a2a938b0e52c61556d"
+"@airtable/blocks@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@airtable/blocks/-/blocks-0.0.33.tgz#658d25c801fee1f289b8144424112e55e299bd88"
+  integrity sha512-eS3WVGEf3Ifoe900nOL95Z64ASUtxPeMauI1sMqmp1WAIKKHoKzHuqvwYs97jSHAm4Fx30kEk5k45SN9kLbSUg==
   dependencies:
     "@airtable/eslint-plugin-blocks" "^1.0.2"
     "@babel/runtime" "^7.4.4"
-    "@styled-system/core" "^5.0.18"
+    "@styled-system/core" "^5.1.1"
     core-js "^3.0.1"
     emotion "^10.0.14"
     fast-deep-equal "^2.0.1"
+    hoist-non-react-statics "^3.3.0"
     lodash.omit "^4.5.0"
     prop-types "15.7.2"
     react-window "1.8.5"
@@ -117,10 +119,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.3.tgz#dfa0c92efe44a1d1a7974fb49ffeb40ef2da5a27"
   integrity sha512-zVgvPwGK7c1aVdUVc9Qv7SqepOGRDrqCw7KZPSZziWGxSlbII3gmvGLPzLX4d0n0BMbamBacUrN22zOMyFFEkQ==
 
-"@styled-system/core@^5.0.18":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@styled-system/core/-/core-5.1.1.tgz#7dcd7faf576a18f15a947241d260f170d6f783bf"
-  integrity sha512-8doP1Uptn1nlNrG44O/DfiRtLvoh9OkPqxEv9Gp1YAKAD2RgRTTQou/wYw/4y4pqmV3Hjb3NA/5Nbp/Uo5eGUQ==
+"@styled-system/core@^5.1.1":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@styled-system/core/-/core-5.1.2.tgz#b8b7b86455d5a0514f071c4fa8e434b987f6a772"
+  integrity sha512-XclBDdNIy7OPOsN4HBsawG2eiWfCcuFt6gxKn1x4QfMIgeO6TOlA2pZZ5GWZtIhCUqEPTgIBta6JXsGyCkLBYw==
   dependencies:
     object-assign "^4.1.1"
 
@@ -657,6 +659,13 @@ has@^1.0.1, has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+hoist-non-react-statics@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
+  integrity sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==
+  dependencies:
+    react-is "^16.7.0"
+
 iconv-lite@^0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -1037,6 +1046,11 @@ react-dom@^16.9.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.15.0"
+
+react-is@^16.7.0:
+  version "16.10.1"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.1.tgz#0612786bf19df406502d935494f0450b40b8294f"
+  integrity sha512-BXUMf9sIOPXXZWqr7+c5SeOKJykyVr2u0UDzEf4LNGc6taGkQe1A9DFD07umCIXz45RLr9oAAwZbAJ0Pkknfaw==
 
 react-is@^16.8.1:
   version "16.9.0"
