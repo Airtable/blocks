@@ -117,8 +117,8 @@ async function setApiKeyAsync(
 
     const existingApiKeyOrApiKeyObject = newConfig[ConfigKeys.API_KEY];
     if (existingApiKeyOrApiKeyObject instanceof Object) {
-        const remoteNameToUpdate = apiKeyName || DEFAULT_API_KEY_NAME;
-        existingApiKeyOrApiKeyObject[remoteNameToUpdate] = apiKey;
+        const apiKeyNameToUpdate = apiKeyName || DEFAULT_API_KEY_NAME;
+        existingApiKeyOrApiKeyObject[apiKeyNameToUpdate] = apiKey;
     } else {
         if (apiKeyName === null) {
             newConfig[ConfigKeys.API_KEY] = apiKey;

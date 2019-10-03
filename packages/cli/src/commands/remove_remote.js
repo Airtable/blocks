@@ -6,7 +6,7 @@ const chalk = require('chalk');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const getBlockDirPathModule = require('../helpers/get_block_dir_path');
 const fsUtils = require('../helpers/fs_utils');
-const validateRemoteName = require('../helpers/validate_remote_name');
+const validateRemoteOrApiKeyName = require('../helpers/validate_remote_or_api_key_name');
 
 import type {Argv} from 'yargs';
 
@@ -14,7 +14,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     const {remoteName} = argv;
     invariant(typeof remoteName === 'string', 'expects remoteName to be a string');
 
-    const remoteNameValidationResult = validateRemoteName(remoteName);
+    const remoteNameValidationResult = validateRemoteOrApiKeyName(remoteName);
     if (!remoteNameValidationResult.pass) {
         throw new Error(`❌ ${remoteNameValidationResult.reason}`);
     }

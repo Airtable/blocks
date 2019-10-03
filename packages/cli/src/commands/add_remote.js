@@ -8,7 +8,7 @@ const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const getBlockDirPathModule = require('../helpers/get_block_dir_path');
 const fsUtils = require('../helpers/fs_utils');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
-const validateRemoteName = require('../helpers/validate_remote_name');
+const validateRemoteOrApiKeyName = require('../helpers/validate_remote_or_api_key_name');
 
 import type {Argv} from 'yargs';
 import type {RemoteJson} from '../types/remote_json_type';
@@ -29,7 +29,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects apiKeyName to be null or a string',
     );
 
-    const remoteNameValidationResult = validateRemoteName(remoteName);
+    const remoteNameValidationResult = validateRemoteOrApiKeyName(remoteName);
     if (!remoteNameValidationResult.pass) {
         throw new Error(`❌ ${remoteNameValidationResult.reason}`);
     }

@@ -72,7 +72,7 @@ describe('remove-remote', function() {
                     });
                     assert.strictEqual(
                         err.message,
-                        '❌ Incorrect characters for the remote name! Only alphanumeric, -, or _ characters are allowed',
+                        '❌ Incorrect characters for the name! Only alphanumeric, -, or _ characters are allowed',
                     );
                 }
             });

@@ -3,6 +3,7 @@
 const invariant = require('invariant');
 const configHelpers = require('../helpers/config_helpers');
 const promptForApiKeyAsync = require('../helpers/prompt_for_api_key_async');
+const validateRemoteOrApiKeyName = require('../helpers/validate_remote_or_api_key_name');
 
 import type {Argv} from 'yargs';
 import type {ConfigLocation} from '../types/config_helpers_type';
@@ -14,6 +15,13 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         apiKeyName === null || typeof apiKeyName === 'string',
         'expects apiKeyName to be null or a string',
     );
+    if (apiKeyName !== null) {
+        const apiKeyNameValidationResult = validateRemoteOrApiKeyName(apiKeyName);
+        if (!apiKeyNameValidationResult.pass) {
+            throw new Error(`❌ ${apiKeyNameValidationResult.reason}`);
+        }
+    }
+
     const configPath = configHelpers.getConfigPath(location);
 
     console.log(`Updating config at ${configPath} (use --location to choose config scope)`);
