@@ -5,7 +5,7 @@ import {type LetterSpacingProperty} from '../utils/csstype';
 import {type Prop, type Length} from '../utils/types';
 
 export type LetterSpacingProps = {|
-    letterSpacing?: Prop<LetterSpacingProperty<Length>>,
+    letterSpacing?: Prop<LetterSpacingProperty<Length> | string>,
 |};
 
 export const config: Config = {

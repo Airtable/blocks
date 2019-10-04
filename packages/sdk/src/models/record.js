@@ -20,9 +20,6 @@ import RecordStore from './record_store';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const airtableUrls = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/airtable_urls',
-);
 const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
@@ -232,7 +229,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
 
         if (typeof cellValue === 'object' && cellValue !== null) {
-            if (!Record.shouldUseNewLookupFormat && field.type === FieldTypes.LOOKUP) {
+            if (
+                !Record.shouldUseNewLookupFormat &&
+                field.type === FieldTypes.MULTIPLE_LOOKUP_VALUES
+            ) {
                 const cellValueForMigration = [];
                 cellValueForMigration.linkedRecordIds = cloneDeep(cellValue.linkedRecordIds);
                 cellValueForMigration.valuesByLinkedRecordId = cloneDeep(
@@ -387,9 +387,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/recxxxxxxxxxxxxxx'
      */
     get url(): string {
-        return airtableUrls.getUrlForRow(this.id, this.parentTable.id, {
-            absolute: true,
-        });
+        return this.parentTable._airtableInterface.urlConstructor.getRecordUrl(
+            this.id,
+            this.parentTable.id,
+        );
     }
     /**
      * Gets the primary cell value in this record.

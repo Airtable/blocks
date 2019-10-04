@@ -33,7 +33,7 @@ export const sharedViewPickerPropTypes = {
     shouldAllowPickingNone: PropTypes.bool,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
-    sharedSelectBasePropTypes,
+    ...sharedSelectBasePropTypes,
     ...stylePropTypes,
 };
 

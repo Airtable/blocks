@@ -94,7 +94,7 @@ export default function withStyledSystem<
             styleParser.propNames,
             defaultStyleProps,
         );
-        const classNameForStyleProps = useStyledSystem((styleProps: StyleProps), styleParser);
+        const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
         return (
             <Component
                 ref={ref}
@@ -137,7 +137,7 @@ export function splitStyleProps<AllProps: {className?: string}, StyleProps: {}>(
 |} {
     const stylePropNamesSet = new Set(stylePropNames);
     // eslint-disable-next-line flowtype/no-weak-types
-    const styleProps: any = defaultStyleProps || {};
+    const styleProps: any = {...defaultStyleProps} || {};
     // eslint-disable-next-line flowtype/no-weak-types
     const nonStyleProps: any = {};
     for (const propName of Object.keys(props)) {

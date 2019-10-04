@@ -79,6 +79,10 @@ toc:
                 - ExpandRecordOpts
           - expandRecordList
           - expandRecordPickerAsync
+          - name: Box
+            children:
+                - Box
+                - BoxProps
           - name: Button
             children:
                 - Button
@@ -121,6 +125,10 @@ toc:
             children:
                 - FieldPickerSynced
                 - FieldPickerSyncedProps
+          - name: Heading
+            children:
+                - Heading
+                - HeadingProps
           - name: Icon
             children:
                 - Icon
@@ -135,6 +143,10 @@ toc:
             children:
                 - InputSynced
                 - InputSyncedProps
+          - name: Label
+            children:
+                - Label
+                - LabelProps
           - name: Link
             children:
                 - Link
@@ -186,6 +198,10 @@ toc:
             children:
                 - TablePickerSynced
                 - TablePickerSyncedProps
+          - name: Text
+            children:
+                - Text
+                - TextProps
           - name: Toggle
             children:
                 - Toggle

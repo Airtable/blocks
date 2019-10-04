@@ -2,16 +2,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
+import {invariant} from '../error_utils';
+import {values} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, type AllStylesProps} from './system/index';
+import {stylePropType} from './system/utils/create_style_prop_types';
 import {ariaPropTypes, type AriaProps} from './types/aria_props';
-import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {TextVariants, TextSizes, type TextSizeProp, useTextSize} from './text';
 
 /**
- * @typedef {object} BoxProps
- * @property {'div' | 'span' | 'section' | 'main' | 'nav' | 'header' | 'footer' | 'aside' | 'article' | 'address' | 'hgroup' | 'blockquote' | 'figure' | 'figcaption' | 'ol' | 'ul' | 'li' | 'pre'} [as='div'] The element that is rendered. Defaults to `div`.
- * @property {string} [id] The `id` attribute.
- * @property {string} [tabIndex] The `tabIndex` attribute.
+ * @typedef {object} LabelProps
+ * @property {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the label. Defaults to `default`. Can be a responsive prop object.
+ * @property {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
  * @property {object} [style] Additional styles.
@@ -25,68 +27,45 @@ import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_a
  * @property {string} [aria-hidden] The `aria-hidden` attribute.
  * @property {string} [aria-live] The `aria-live` attribute.
  */
-type BoxProps = {|
-    as?:
-        | 'div'
-        | 'span'
-        | 'section'
-        | 'main'
-        | 'nav'
-        | 'header'
-        | 'footer'
-        | 'aside'
-        | 'article'
-        | 'address'
-        | 'hgroup'
-        | 'blockquote'
-        | 'figure'
-        | 'figcaption'
-        | 'ol'
-        | 'ul'
-        | 'li'
-        | 'pre',
+type LabelProps = {|
+    size?: TextSizeProp,
+    htmlFor?: string,
     id?: string,
     children?: React.Node,
-    tabIndex?: number | string,
-    role?: string,
     className?: string,
     style?: {+[string]: mixed},
     dataAttributes?: {+[string]: mixed},
+    role?: string,
     ...AriaProps,
-    ...TooltipAnchorProps,
     ...AllStylesProps,
 |};
 
 /**
- * A box component for creating layouts.
+ * A label component.
  *
  * @example
- * import {Box} from '@airtable/blocks/ui';
+ * import {Label, Input} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';
  *
- * function BoxExample() {
+ * function LabelExample() {
  *     return (
- *         <Box display='flex' alignItems='center' justifyContent='center' padding={3} margin={3}>
- *             Hello world
- *         </Box>
+ *       <Fragment>
+ *           <Label htmlFor="my-input">Label</Label>
+ *           <Input id="my-input" onChange={() => {}} value="" />
+ *       </Fragment>
  *     );
  * }
  */
-function Box(props: BoxProps, ref) {
+function Label(props: LabelProps, ref) {
     const {
-        as: Component = 'div',
+        size,
+        htmlFor,
         id,
         children,
         className,
         style,
-        tabIndex,
+        dataAttributes,
         role,
-        onClick,
-        onMouseEnter,
-        onMouseLeave,
-        // eslint-disable-next-line no-unused-vars
-        hasOnClick,
-        dataAttributes = {},
         'aria-label': ariaLabel,
         'aria-labelledby': ariaLabelledBy,
         'aria-describedby': ariaDescribedBy,
@@ -97,19 +76,24 @@ function Box(props: BoxProps, ref) {
         'aria-live': ariaLive,
         ...styleProps
     } = props;
-    const classNameForStyleProps = useStyledSystem<AllStylesProps>(styleProps);
-
+    invariant(size !== undefined, 'size');
+    const stylePropsForTextSize = useTextSize(size, TextVariants.DEFAULT);
+    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
+        ...stylePropsForTextSize,
+        display: 'inline-block',
+        textColor: 'light',
+        fontWeight: 600,
+        marginBottom: '6px',
+        ...styleProps,
+    });
     return (
-        <Component
+        <label
             ref={ref}
+            htmlFor={htmlFor}
             id={id}
             className={cx(classNameForStyleProps, className)}
             style={style}
-            tabIndex={tabIndex}
             role={role}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-            onClick={onClick}
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy}
@@ -121,44 +105,30 @@ function Box(props: BoxProps, ref) {
             {...dataAttributes}
         >
             {children}
-        </Component>
+        </label>
     );
 }
 
-const ForwardedRefBox = React.forwardRef/* :: <BoxProps, HTMLElement> */(Box);
+const ForwardedRefLabel = React.forwardRef/* :: <LabelProps, HTMLLabelElement> */(Label);
 
 // eslint-disable-next-line flowtype/no-weak-types
-(ForwardedRefBox: any).propTypes = {
-    as: PropTypes.oneOf([
-        'div',
-        'span',
-        'section',
-        'main',
-        'nav',
-        'header',
-        'footer',
-        'aside',
-        'article',
-        'address',
-        'hgroup',
-        'blockquote',
-        'figure',
-        'figcaption',
-        'ol',
-        'ul',
-        'li',
-        'pre',
-    ]),
+(ForwardedRefLabel: any).propTypes = {
+    size: stylePropType,
+    variant: PropTypes.oneOf(values(TextVariants)),
+    htmlFor: PropTypes.string,
     id: PropTypes.string,
+    dataAttributes: PropTypes.object,
     children: PropTypes.node,
     className: PropTypes.string,
     style: PropTypes.object,
-    tabIndex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    role: PropTypes.string,
-    dataAttributes: PropTypes.object,
-    ...ariaPropTypes,
-    ...tooltipAnchorPropTypes,
     ...allStylesPropTypes,
+    ...ariaPropTypes,
 };
 
-export default ForwardedRefBox;
+// eslint-disable-next-line flowtype/no-weak-types
+(ForwardedRefLabel: any).defaultProps = {
+    size: TextSizes.DEFAULT,
+    variant: TextVariants.DEFAULT,
+};
+
+export default ForwardedRefLabel;

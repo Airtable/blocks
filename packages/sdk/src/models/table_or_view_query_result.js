@@ -289,7 +289,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
     }
     watch(
-        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | $ReadOnlyArray<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordQueryResultKey> {
@@ -338,7 +338,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         return validKeys;
     }
     unwatch(
-        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | $ReadOnlyArray<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordQueryResultKey> {

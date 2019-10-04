@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import getSdk from '../get_sdk';
 import {values, isNullOrUndefinedOrEmpty, flattenDeep, keyBy, uniqBy} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import {type AttachmentData} from '../types/attachment';
@@ -41,12 +40,8 @@ import {tooltipAnchorPropTypes, type TooltipAnchorProps} from './types/tooltip_a
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const attachmentPreviewRenderer = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/read_mode_renderers/attachment_preview_renderer',
-);
-const {FALLBACK_ROW_NAME_FOR_DISPLAY} = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/client_server_shared_config_settings',
-);
+
+const FALLBACK_ROW_NAME_FOR_DISPLAY = 'Unnamed record';
 
 type StyleProps = {|
     ...FlexItemSetProps,
@@ -154,7 +149,7 @@ type RecordCardProps = {|
 const FormulaicFieldTypes = {
     [FieldTypes.FORMULA]: true,
     [FieldTypes.ROLLUP]: true,
-    [FieldTypes.LOOKUP]: true,
+    [FieldTypes.MULTIPLE_LOOKUP_VALUES]: true,
 };
 const isFieldFormulaic = (field: Field): boolean => {
     return !!FormulaicFieldTypes[field.type];
@@ -176,6 +171,31 @@ const getFieldResultType = (field: Field): string => {
     } else {
         return field.type;
     }
+};
+
+/**
+ * @private
+ * Given a container size (ie, height of the record card), calculate the height and width of an
+ * attachment thumbnail image to fit inside the square attachment preview. Left and top margin
+ * are used to center non-square images.
+ */
+const calculateAttachmentDimensionsAndMargin = (
+    attachment: AttachmentData | null,
+    containerSize: number,
+): $Shape<{width: number, height: number, marginTop: number, marginLeft: number}> => {
+    if (!attachment || !attachment.largeThumbUrl) {
+        return {};
+    }
+    const {largeThumbHeight: thumbHeight, largeThumbWidth: thumbWidth} = attachment;
+    invariant(thumbHeight, 'Attachment object missing height');
+    invariant(thumbWidth, 'Attachment object missing width');
+
+    const height = Math.min(containerSize, thumbHeight);
+    const width = Math.round((thumbWidth * height) / thumbHeight);
+    const marginTop = Math.round((containerSize - height) / 2);
+    const marginLeft = Math.round((containerSize - width) / 2);
+
+    return {height, width, marginTop, marginLeft};
 };
 
 /** */
@@ -323,7 +343,7 @@ class RecordCard extends React.Component<RecordCardProps> {
     }
     _getFirstAttachmentInField(attachmentField: Field): AttachmentData | null {
         let attachmentsInField;
-        if (attachmentField.type === FieldTypes.LOOKUP) {
+        if (attachmentField.type === FieldTypes.MULTIPLE_LOOKUP_VALUES) {
             const rawCellValue = ((this._getRawCellValue(attachmentField): any): Object); // eslint-disable-line flowtype/no-weak-types
             attachmentsInField = flattenDeep(
                 values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),
@@ -457,35 +477,6 @@ class RecordCard extends React.Component<RecordCardProps> {
 
         invariant(typeof height === 'number', 'height in defaultProps');
         const attachmentSize = hasAttachment ? height : 0;
-        let imageHtml = '';
-        if (hasAttachment) {
-            const attachmentField = this._getAttachmentField(fieldsToUse);
-            invariant(
-                attachmentField,
-                'attachmentField must be present when we have an attachment',
-            );
-            invariant(
-                attachmentObjIfAvailable,
-                'attachmentObjIfAvailable is defined if hasAttachment',
-            );
-
-            const attachmentObj: AttachmentData = (attachmentObjIfAvailable: any); // eslint-disable-line flowtype/no-weak-types
-            const userScopedAppInterface = getSdk().__appInterface;
-            imageHtml = attachmentPreviewRenderer.renderSquarePreview(
-                attachmentObj,
-                userScopedAppInterface,
-                {
-                    extraClassString: baymax(
-                        'absolute right-0 height-full overflow-hidden noevents',
-                    ),
-                    extraStyles: {
-                        'border-top-right-radius': 2,
-                        'border-bottom-right-radius': 2,
-                    },
-                    size: attachmentSize,
-                },
-            );
-        }
 
         let primaryValue;
         let isUnnamed;
@@ -516,6 +507,10 @@ class RecordCard extends React.Component<RecordCardProps> {
             isUnnamed = false;
         }
 
+        const attachmentDimensionsAndPosition = calculateAttachmentDimensionsAndMargin(
+            attachmentObjIfAvailable,
+            attachmentSize,
+        );
         return (
             <a
                 href={onClick === undefined && recordUrl ? recordUrl : undefined}
@@ -564,7 +559,31 @@ class RecordCard extends React.Component<RecordCardProps> {
                         {this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse)}
                     </Box>
                 </Box>
-                <div dangerouslySetInnerHTML={{__html: imageHtml}} />
+                {attachmentObjIfAvailable && attachmentObjIfAvailable.largeThumbUrl && (
+                    <Box
+                        className={baymax('noevents')}
+                        style={{
+                            borderTopRightRadius: 2,
+                            borderBottomRightRadius: 2,
+                        }}
+                        height={`${attachmentSize}px`}
+                        width={`${attachmentSize}px`}
+                        position="absolute"
+                        right="0"
+                        overflow="hidden"
+                    >
+                        <img
+                            draggable="false"
+                            height={attachmentDimensionsAndPosition.height}
+                            width={attachmentDimensionsAndPosition.width}
+                            style={{
+                                marginTop: attachmentDimensionsAndPosition.marginTop,
+                                marginLeft: attachmentDimensionsAndPosition.marginLeft,
+                            }}
+                            src={attachmentObjIfAvailable.largeThumbUrl}
+                        />
+                    </Box>
+                )}
             </a>
         );
     }
@@ -581,7 +600,7 @@ export default withHooks<
     >(props, styleParser.propNames);
 
     const {record, fields, view, className} = nonStyleProps;
-    const classNameForStyledProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyledProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
     const recordModel = record && record instanceof Record ? record : null;
     let parentTable = null;

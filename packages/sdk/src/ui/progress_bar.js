@@ -126,7 +126,7 @@ const ProgressBar = (props: ProgressBarProps) => {
     } = props;
 
     const clampedProgress = clamp(progress, 0, 1);
-    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
     return (
         <Box

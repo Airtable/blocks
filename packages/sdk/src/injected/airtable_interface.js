@@ -3,10 +3,12 @@ import {type BaseData, type BasePermissionData} from '../types/base';
 import {type BlockInstallationId} from '../types/block';
 import {type HostToBlockMessageType} from '../types/block_frame';
 import {type GlobalConfigUpdate, type GlobalConfigData} from '../global_config';
-import {type RecordData, type RecordDef} from '../types/record';
+import {type RecordData, type RecordDef, type RecordId} from '../types/record';
 import {type UndoRedoMode} from '../types/undo_redo';
 import {type ViewportSizeConstraint} from '../types/viewport';
 import {type Mutation, type PartialMutation, type PermissionCheckResult} from '../types/mutations';
+import {type TableId} from '../types/table';
+import {type ViewId} from '../types/view';
 import {spawnError} from '../error_utils';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
@@ -25,6 +27,12 @@ type IdGenerator = {|
     generateRecordId: () => string,
 |};
 
+type UrlConstructor = {|
+    getTableUrl: (tableId: TableId) => string,
+    getViewUrl: (viewId: ViewId, tableId: TableId) => string,
+    getRecordUrl: (recordId: RecordId, tableId: TableId) => string,
+|};
+
 /*
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable. The mechanism through which we communicate with Airtable
@@ -34,6 +42,7 @@ type IdGenerator = {|
 export interface AirtableInterface {
     sdkInitData: SdkInitData;
     idGenerator: IdGenerator;
+    urlConstructor: UrlConstructor;
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 

@@ -13,9 +13,6 @@ import * as RecordColoring from './record_coloring';
 const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/view_types/view_type_provider',
 );
-const airtableUrls = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/airtable_urls',
-);
 
 const WatchableViewKeys = Object.freeze({
     name: ('name': 'name'),
@@ -129,9 +126,10 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * // => 'https://airtable.com/tblxxxxxxxxxxxxxx/viwxxxxxxxxxxxxxx'
      */
     get url(): string {
-        return airtableUrls.getUrlForView(this.id, this.parentTable.id, {
-            absolute: true,
-        });
+        return this.parentTable._airtableInterface.urlConstructor.getViewUrl(
+            this.id,
+            this.parentTable.id,
+        );
     }
     /**
      * Select records from the view. Returns a query result. See {@RecordQueryResult} for more.

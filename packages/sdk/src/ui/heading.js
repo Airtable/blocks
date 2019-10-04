@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {invariant} from '../error_utils';
-import {values} from '../private_utils';
+import {has, values} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, type AllStylesProps} from './system/index';
 import {type ResponsivePropObject} from './system/utils/types';
@@ -12,39 +12,77 @@ import createResponsivePropType from './system/utils/create_responsive_prop_type
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, type AriaProps} from './types/aria_props';
 
-export const TextVariants = Object.freeze({
-    DEFAULT: 'default',
-    PARAGRAPH: 'paragraph',
-});
-export type TextVariant = $Values<typeof TextVariants>;
-
-export const TextSizes = Object.freeze({
+const HeadingSizes = Object.freeze({
     XSMALL: 'xsmall',
     SMALL: 'small',
     DEFAULT: 'default',
     LARGE: 'large',
+    XLARGE: 'xlarge',
+    XXLARGE: 'xxlarge',
 });
-export type TextSize = $Values<typeof TextSizes>;
-export type TextSizeProp = ResponsivePropObject<TextSize> | TextSize;
+type HeadingSize = $Values<typeof HeadingSizes>;
+type HeadingSizeProp = ResponsivePropObject<HeadingSize> | HeadingSize;
+
+const HeadingVariants = Object.freeze({
+    DEFAULT: 'default',
+    CAPS: 'caps',
+});
+type HeadingVariant = $Values<typeof HeadingVariants>;
 
 /** @private */
-export function useTextSize(
-    textSizeProp: TextSizeProp,
-    variant: TextVariant,
-): $Shape<AllStylesProps> {
-    const {textSizesByVariant} = useTheme();
-    const textSizesForVariant = textSizesByVariant[variant];
-    if (typeof textSizeProp === 'string') {
-        return textSizesForVariant[textSizeProp];
+function warnIfHeadingSizeOutOfRangeForVariant(
+    size: HeadingSize,
+    variant: HeadingVariant,
+    headingSizesForVariant: {[HeadingSize]: mixed},
+): void {
+    if (process.env.NODE_ENV === 'development' && !has(headingSizesForVariant, size)) {
+        // eslint-disable-next-line
+        console.warn(
+            `[@airtable/blocks/ui] warning: <Heading variant='${variant}' /> only supports the following values for the size prop: ${Object.keys(
+                headingSizesForVariant,
+            ).join(', ')}. The component will fall back to the default size.`,
+        );
     }
-    return getStylePropsForResponsiveProp<TextSize>(textSizeProp, textSizesForVariant);
+}
+
+/** @private */
+function useHeadingSize(
+    headingSizeProp: HeadingSizeProp,
+    variant: HeadingVariant,
+): $Shape<AllStylesProps> {
+    const {headingSizesByVariant} = useTheme();
+    const headingSizesForVariant = headingSizesByVariant[variant];
+
+    if (typeof headingSizeProp === 'string') {
+        warnIfHeadingSizeOutOfRangeForVariant(headingSizeProp, variant, headingSizesForVariant);
+        return (
+            // flow-expect-error
+            headingSizesForVariant[headingSizeProp] || headingSizesForVariant[HeadingSizes.DEFAULT]
+        );
+    }
+
+    const responsiveSizePropObject = {};
+    for (const sizeKey of Object.keys(headingSizeProp)) {
+        invariant(headingSizeProp[sizeKey], 'headingSizeProp[sizeKey]');
+        warnIfHeadingSizeOutOfRangeForVariant(
+            headingSizeProp[sizeKey],
+            variant,
+            headingSizesForVariant,
+        );
+        responsiveSizePropObject[sizeKey] = headingSizeProp[sizeKey] || HeadingSizes.DEFAULT;
+    }
+
+    return getStylePropsForResponsiveProp<HeadingSize>(
+        responsiveSizePropObject,
+        headingSizesForVariant,
+    );
 }
 
 /**
- * @typedef {object} TextProps
- * @property {'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'li' | 'em' | 'strong' | 'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'} [as='p'] The element that is rendered. Defaults to `p`.
- * @property {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'paragraph'} [size='default'] The `variant` of the heading. Defaults to `default`.
+ * @typedef {object} HeadingProps
+ * @property {'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'} [as='h3'] The element that is rendered. Defaults to `h3`.
+ * @property {'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge'} [size='default'] The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
+ * @property {'default' | 'caps'} [size='default'] The `variant` of the heading. Defaults to `default`.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
  * @property {object} [style] Additional styles.
@@ -58,32 +96,10 @@ export function useTextSize(
  * @property {string} [aria-hidden] The `aria-hidden` attribute.
  * @property {string} [aria-live] The `aria-live` attribute.
  */
-type TextProps = {|
-    as?:
-        | 'p'
-        | 'h1'
-        | 'h2'
-        | 'h3'
-        | 'h4'
-        | 'h5'
-        | 'h6'
-        | 'span'
-        | 'li'
-        | 'em'
-        | 'strong'
-        | 'kbd'
-        | 'mark'
-        | 'q'
-        | 's'
-        | 'samp'
-        | 'small'
-        | 'sub'
-        | 'sup'
-        | 'time'
-        | 'var'
-        | 'blockquote',
-    size?: TextSizeProp,
-    variant?: TextVariant,
+type HeadingProps = {|
+    as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
+    size?: ResponsivePropObject<HeadingSize> | HeadingSize,
+    variant?: HeadingVariant,
     children?: React.Node,
     id?: string,
     role?: string,
@@ -95,30 +111,30 @@ type TextProps = {|
 |};
 
 /**
- * A text component with sizes and variants.
+ * A heading component with sizes and variants.
  *
  * @example
- * import {Text} from '@airtable/blocks/ui';
+ * import {Heading} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';
  *
- * function TextExample() {
+ * function HeadingExample() {
  *     return (
  *         <Fragment>
- *             <Text>Default text, for single line text</Text>
- *             <Text size="small" variant="paragraph">Small paragraph, for multiline paragraphs</Text>
- *             <Text
+ *             <Heading>Default heading</Heading>
+ *             <Heading size="small" variant="caps">Small all caps heading</Heading>
+ *             <Heading
  *                  size={{
  *                      xsmallViewport: 'xsmall',
  *                      smallViewport: 'xsmall',
  *                      mediumViewport: 'small',
  *                      largeViewport: 'default'
  *                  }}
- *              >Responsive text</Text>
+ *              >Responsive heading</Heading>
  *         </Fragment>
  *     );
  * }
  */
-function Text(props: TextProps, ref) {
+function Heading(props: HeadingProps, ref) {
     const {
         as: Component,
         size,
@@ -142,7 +158,7 @@ function Text(props: TextProps, ref) {
     invariant(Component !== undefined, 'as');
     invariant(size !== undefined, 'size');
     invariant(variant !== undefined, 'variant');
-    const stylePropsForTextSize = useTextSize(size, variant);
+    const stylePropsForTextSize = useHeadingSize(size, variant);
     const classNameForStyleProps = useStyledSystem<AllStylesProps>({
         ...stylePropsForTextSize,
         ...styleProps,
@@ -169,36 +185,13 @@ function Text(props: TextProps, ref) {
     );
 }
 
-const ForwardedRefText = React.forwardRef/* :: <TextProps, HTMLElement> */(Text);
+const ForwardedRefHeading = React.forwardRef/* :: <HeadingProps, HTMLElement> */(Heading);
 
 // eslint-disable-next-line flowtype/no-weak-types
-(ForwardedRefText: any).propTypes = {
-    as: PropTypes.oneOf([
-        'p',
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'span',
-        'li',
-        'em',
-        'strong',
-        'kbd',
-        'mark',
-        'q',
-        's',
-        'samp',
-        'small',
-        'sub',
-        'sup',
-        'time',
-        'var',
-        'blockquote',
-    ]),
-    size: createResponsivePropType(PropTypes.oneOf(values(TextSizes))),
-    variant: PropTypes.oneOf(values(TextVariants)),
+(ForwardedRefHeading: any).propTypes = {
+    as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
+    size: createResponsivePropType(PropTypes.oneOf(values(HeadingSizes))),
+    variant: PropTypes.oneOf(values(HeadingVariants)),
     children: PropTypes.node,
     id: PropTypes.string,
     role: PropTypes.string,
@@ -210,10 +203,10 @@ const ForwardedRefText = React.forwardRef/* :: <TextProps, HTMLElement> */(Text)
 };
 
 // eslint-disable-next-line flowtype/no-weak-types
-(ForwardedRefText: any).defaultProps = {
-    as: 'p',
-    size: TextSizes.DEFAULT,
-    variant: TextVariants.DEFAULT,
+(ForwardedRefHeading: any).defaultProps = {
+    as: 'h3',
+    size: HeadingSizes.DEFAULT,
+    variant: HeadingVariants.DEFAULT,
 };
 
-export default ForwardedRefText;
+export default ForwardedRefHeading;

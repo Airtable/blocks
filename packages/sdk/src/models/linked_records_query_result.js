@@ -180,7 +180,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     watch(
-        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | $ReadOnlyArray<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordQueryResultKey> {
@@ -205,7 +205,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     unwatch(
-        keys: WatchableRecordQueryResultKey | Array<WatchableRecordQueryResultKey>,
+        keys: WatchableRecordQueryResultKey | $ReadOnlyArray<WatchableRecordQueryResultKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableRecordQueryResultKey> {

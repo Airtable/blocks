@@ -3,11 +3,7 @@ import {useMemo, useRef} from 'react';
 import {useSubscription} from 'use-subscription';
 import {compact} from '../private_utils';
 import type Watchable from '../watchable';
-
-const noopSubscription = {
-    getCurrentValue: () => null,
-    subscribe: () => () => {},
-};
+import useArrayIdentity from './use_array_identity';
 
 /**
  * A React hook for watching data in Airtable models like {@link Table} and {@link Record}. Each
@@ -25,7 +21,7 @@ const noopSubscription = {
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
- * @param {?Watchable} model the model to watch
+ * @param {?Watchable | ?Array<?Watchable>} models the model or models to watch
  * @param {Array<?string>} keys which keys we want to watch
  * @param [callback] an optional callback to call when any of the watch keys change
  *
@@ -49,39 +45,48 @@ const noopSubscription = {
  * }
  */
 export default function useWatchable<Keys: string>(
-    model: ?Watchable<Keys>,
+    models: ?(Watchable<Keys> | $ReadOnlyArray<?Watchable<Keys>>),
     keys: $ReadOnlyArray<?Keys>,
     callback?: () => mixed,
 ) {
-    const compactKeys = compact(keys);
+    const compactModels = useArrayIdentity(compact(Array.isArray(models) ? models : [models]));
+    const compactKeys = useArrayIdentity(compact(keys));
 
     const callbackRef = useRef(callback);
     callbackRef.current = callback;
 
     const watchSubscription = useMemo(() => {
-        const constModel = model;
-        if (!constModel) {
-            return noopSubscription;
-        }
-
         return {
-            getCurrentValue: () => constModel.__getWatchableKey(),
+            getCurrentValue: () => compactModels.map(model => model.__getWatchableKey()).join(','),
             subscribe: notifyChange => {
+                let isDisabled = false;
+
                 const onChange = (...args) => {
+                    if (isDisabled) {
+                        return;
+                    }
+
                     notifyChange();
                     if (callbackRef.current) {
                         callbackRef.current(...args);
                     }
                 };
 
-                constModel.watch(compactKeys, onChange);
+                for (const model of compactModels) {
+                    model.watch(compactKeys, onChange);
+                }
+
                 return () => {
-                    constModel.unwatch(compactKeys, onChange);
+                    isDisabled = true;
+                    setTimeout(() => {
+                        for (const model of compactModels) {
+                            model.unwatch(compactKeys, onChange);
+                        }
+                    }, 0);
                 };
             },
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [model, ...compactKeys]);
+    }, [compactModels, compactKeys]);
 
     useSubscription(watchSubscription);
 }

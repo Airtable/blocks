@@ -5,6 +5,10 @@ describe('getStylePropForResponsiveProp', () => {
     it('returns responsive style props for scale', () => {
         const result = getStylePropsForResponsiveProp(
             {
+                smallViewport: 'xsmall',
+                mediumViewport: 'small',
+            },
+            {
                 xsmall: {
                     fontSize: 1,
                     textColor: 'dark',
@@ -21,10 +25,6 @@ describe('getStylePropForResponsiveProp', () => {
                     fontFamily: 'default',
                     marginY: 0,
                 },
-            },
-            {
-                smallViewport: 'xsmall',
-                mediumViewport: 'small',
             },
         );
 

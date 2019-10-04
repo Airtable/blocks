@@ -21,9 +21,6 @@ import type RecordStore from './record_store';
 const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/client_server_shared_config_settings',
 );
-const airtableUrls = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/airtable_urls',
-);
 
 export const WatchableTableKeys = Object.freeze({
     name: ('name': 'name'),
@@ -171,9 +168,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * // => 'https://airtable.com/tblxxxxxxxxxxxxxx'
      */
     get url(): string {
-        return airtableUrls.getUrlForTable(this.id, {
-            absolute: true,
-        });
+        return this._airtableInterface.urlConstructor.getTableUrl(this.id);
     }
     /**
      * @function

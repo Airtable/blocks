@@ -44,7 +44,7 @@ class Watchable<WatchableKey: string> {
      * @returns the array of keys that were watched
      */
     watch(
-        keys: WatchableKey | Array<WatchableKey>,
+        keys: WatchableKey | $ReadOnlyArray<WatchableKey>,
         callback: (model: this, key: WatchableKey, ...args: Array<any>) => mixed,
         context?: ?Object,
     ): Array<WatchableKey> {
@@ -85,7 +85,7 @@ class Watchable<WatchableKey: string> {
      * @returns the array of keys that were unwatched
      */
     unwatch(
-        keys: WatchableKey | Array<WatchableKey>,
+        keys: WatchableKey | $ReadOnlyArray<WatchableKey>,
         callback: (model: this, key: WatchableKey, ...args: Array<any>) => mixed,
         context?: ?Object,
     ): Array<WatchableKey> {

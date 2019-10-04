@@ -265,7 +265,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * @returns the array of keys that were watched
      */
     watch(
-        keys: WatchableViewportKey | Array<WatchableViewportKey>,
+        keys: WatchableViewportKey | $ReadOnlyArray<WatchableViewportKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableViewportKey> {
@@ -291,7 +291,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * @returns the array of keys that were unwatched
      */
     unwatch(
-        keys: WatchableViewportKey | Array<WatchableViewportKey>,
+        keys: WatchableViewportKey | $ReadOnlyArray<WatchableViewportKey>,
         callback: Function,
         context?: ?Object,
     ): Array<WatchableViewportKey> {

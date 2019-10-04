@@ -2,7 +2,7 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
-import theme from '../src/ui/theme/default_theme';
+import theme from '../src/ui/theme/default_theme/';
 
 const stories = storiesOf('Box/position', module);
 

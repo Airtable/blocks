@@ -257,7 +257,7 @@ export default withHooks<CellRendererProps, {}, CellRenderer>(CellRenderer, prop
         {display: 'block'},
     );
     const {className} = nonStyleProps;
-    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
     useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
     useWatchable(props.field, ['type', 'options']);
     return {className: cx(classNameForStyleProps, className)};

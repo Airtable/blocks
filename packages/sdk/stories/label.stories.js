@@ -1,109 +1,90 @@
 // @flow
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import Text from '../src/ui/text';
+import Box from '../src/ui/box';
+import Input from '../src/ui/input';
+import Select from '../src/ui/select';
+import Label from '../src/ui/label';
 
-const stories = storiesOf('Text', module);
+const stories = storiesOf('Label', module);
 
-stories.add('as', () => (
+stories.add('with input', () => (
     <>
-        {[
-            'p',
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'h6',
-            'span',
-            'li',
-            'em',
-            'strong',
-            'kbd',
-            'mark',
-            'q',
-            's',
-            'samp',
-            'small',
-            'sub',
-            'sup',
-            'time',
-            'var',
-            'blockquote',
-        ].map(as => (
-            <Text key={as} as={as}>
-                {as}
-            </Text>
-        ))}
+        <Box maxWidth="400px">
+            <Label htmlFor="my-input">Label</Label>
+            <Input id="my-input" onChange={() => {}} value="" />
+        </Box>
     </>
 ));
 
-stories.add('textColor', () => (
+stories.add('with select', () => (
     <>
-        <Text textColor="light">(light) The brown fox jumped over the lazy dog</Text>
-        <Text>(default = dark) The brown fox jumped over the lazy dog</Text>
+        <Box maxWidth="400px">
+            <Label htmlFor="my-input">Label</Label>
+            <Select id="my-input" onChange={() => {}} options={[]} value="" />
+        </Box>
     </>
 ));
 
 stories.add('ref', () => (
     <>
-        <Text
+        <Label
             ref={node => {
                 // eslint-disable-next-line no-console
                 console.log(node);
             }}
         >
             Look into your console to see the ref
-        </Text>
+        </Label>
     </>
 ));
 
 stories.add('custom className', () => (
     <>
-        <Text className="user-provided-class">Inspect element to see class name</Text>
+        <Label className="user-provided-class">Inspect element to see class name</Label>
     </>
 ));
 
 stories.add('id attribute', () => (
     <>
-        <Text id="my-id">Inspect element to see id</Text>
+        <Label id="my-id">Inspect element to see class name</Label>
     </>
 ));
 
 stories.add('style attribute', () => (
     <>
-        <Text
+        <Label
             style={{
                 transform: 'scale(0.95)',
             }}
         >
             Inspect element to see style attribute
-        </Text>
+        </Label>
     </>
 ));
 
 stories.add('data attributes', () => (
     <>
-        <Text
+        <Label
             dataAttributes={{
                 'data-something': true,
                 'data-other': 'string value',
             }}
         >
             Inspect element to see data attributes
-        </Text>
+        </Label>
     </>
 ));
 
 stories.add('role attribute', () => (
     <>
-        <Text role="nav">Inspect element to see role attribute</Text>
+        <Label role="nav">Inspect element to see role attribute</Label>
     </>
 ));
 
 stories.add('aria attributes', () => (
     <>
-        <Text
+        <Label
             aria-label="__label__"
             aria-labelledby="__id__"
             aria-describedby="__id__"
@@ -114,6 +95,6 @@ stories.add('aria attributes', () => (
             aria-live={false}
         >
             Inspect element to see aria attributes
-        </Text>
+        </Label>
     </>
 ));
