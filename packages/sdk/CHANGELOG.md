@@ -15,6 +15,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   Allow passing an array of models to `useWatchable` to watch several models at once.
 -   **BREAKING**: `fieldTypes.LOOKUP` is now `fieldTypes.MULTIPLE_LOOKUP_VALUES`. The underlying
     string has also changed from `lookup` to `multipleLookupValues`.
+-   Fix a regression where cover images in `UI.RecordCard` would render as `[Object object]`.
 
 ## [0.0.33](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.32...@airtable/blocks@0.0.33) - 2019-09-26
 

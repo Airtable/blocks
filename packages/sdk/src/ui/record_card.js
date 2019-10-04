@@ -603,7 +603,7 @@ class RecordCard extends React.Component<RecordCardProps> {
                                 marginLeft: attachmentDimensionsAndPosition.marginLeft,
                             }}
                             src={attachmentObjIfAvailable.largeThumbUrl}
-                        ></img>
+                        />
                     </Box>
                 )}
             </a>
