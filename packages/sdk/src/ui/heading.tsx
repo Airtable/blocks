@@ -1,0 +1,218 @@
+/** @module @airtable/blocks/ui: UI & typography primitives */ /** */
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import {cx} from 'emotion';
+import {spawnInvariantViolationError} from '../error_utils';
+import {has, values, ObjectValues, ObjectMap, keys} from '../private_utils';
+import useStyledSystem from './use_styled_system';
+import {allStylesPropTypes, AllStylesProps} from './system/index';
+import {ResponsivePropObject, ResponsiveKey} from './system/utils/types';
+import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
+import createResponsivePropType from './system/utils/create_responsive_prop_type';
+import useTheme from './theme/use_theme';
+import {ariaPropTypes, AriaProps} from './types/aria_props';
+
+const HeadingSizes = Object.freeze({
+    XSMALL: 'xsmall' as const,
+    SMALL: 'small' as const,
+    DEFAULT: 'default' as const,
+    LARGE: 'large' as const,
+    XLARGE: 'xlarge' as const,
+    XXLARGE: 'xxlarge' as const,
+});
+type HeadingSize = ObjectValues<typeof HeadingSizes>;
+type HeadingSizeProp = ResponsivePropObject<HeadingSize> | HeadingSize;
+
+const HeadingVariants = Object.freeze({
+    DEFAULT: 'default' as const,
+    CAPS: 'caps' as const,
+});
+type HeadingVariant = ObjectValues<typeof HeadingVariants>;
+
+/** @internal */
+function warnIfHeadingSizeOutOfRangeForVariant(
+    size: HeadingSize,
+    variant: HeadingVariant,
+    headingSizesForVariant: {[Size in HeadingSize]?: object},
+): void {
+    if (process.env.NODE_ENV === 'development' && !has(headingSizesForVariant, size)) {
+        // eslint-disable-next-line
+        console.warn(
+            `[@airtable/blocks/ui] warning: <Heading variant='${variant}' /> only supports the following values for the size prop: ${Object.keys(
+                headingSizesForVariant,
+            ).join(', ')}. The component will fall back to the default size.`,
+        );
+    }
+}
+
+/** @internal */
+function useHeadingSize(
+    headingSizeProp: HeadingSizeProp,
+    variant: HeadingVariant,
+): Partial<AllStylesProps> {
+    const {headingSizesByVariant} = useTheme();
+    const headingSizesForVariant = headingSizesByVariant[variant];
+
+    if (typeof headingSizeProp === 'string') {
+        warnIfHeadingSizeOutOfRangeForVariant(headingSizeProp, variant, headingSizesForVariant);
+        return (headingSizesForVariant[headingSizeProp] ||
+            headingSizesForVariant[HeadingSizes.DEFAULT]) as Partial<AllStylesProps>;
+    }
+
+    const responsiveSizePropObject = {} as ObjectMap<ResponsiveKey, HeadingSize>;
+    for (const sizeKey of keys(headingSizeProp)) {
+        const sizeProp = headingSizeProp[sizeKey];
+        if (!sizeProp) {
+            throw spawnInvariantViolationError('sizeProp');
+        }
+
+        warnIfHeadingSizeOutOfRangeForVariant(sizeProp, variant, headingSizesForVariant);
+        responsiveSizePropObject[sizeKey] = sizeProp || HeadingSizes.DEFAULT;
+    }
+
+    return getStylePropsForResponsiveProp<HeadingSize>(
+        responsiveSizePropObject,
+
+        // TODO: fix after typescript migration
+        headingSizesForVariant as any,
+    );
+}
+
+/**
+ * @typedef {object} HeadingProps
+ * @property {'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'} [as='h3'] The element that is rendered. Defaults to `h3`.
+ * @property {'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge'} [size='default'] The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
+ * @property {'default' | 'caps'} [size='default'] The `variant` of the heading. Defaults to `default`.
+ * @property {string} [role] The `role` attribute.
+ * @property {string} [className] Additional class names to apply, separated by spaces.
+ * @property {object} [style] Additional styles.
+ * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
+ * @property {string} [aria-label] The `aria-label` attribute.
+ * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
+ * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
+ * @property {string} [aria-controls] The `aria-controls` attribute.
+ * @property {string} [aria-expanded] The `aria-expanded` attribute.
+ * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
+ * @property {string} [aria-hidden] The `aria-hidden` attribute.
+ * @property {string} [aria-live] The `aria-live` attribute.
+ */
+type HeadingProps = {
+    role?: string;
+    as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+    variant?: HeadingVariant;
+    children?: React.ReactNode;
+    id?: string;
+    size?: ResponsivePropObject<HeadingSize> | HeadingSize;
+    dataAttributes?: {readonly [key: string]: unknown};
+    className?: string;
+    style?: React.CSSProperties;
+} & (AriaProps) &
+    (AllStylesProps);
+
+/**
+ * A heading component with sizes and variants.
+ *
+ * @reactComponent
+ * @example
+ * ```js
+ * import {Heading} from '@airtable/blocks/ui';
+ * import React, {Fragment} from 'react';
+ *
+ * function HeadingExample() {
+ *     return (
+ *         <Fragment>
+ *             <Heading>Default heading</Heading>
+ *             <Heading size="small" variant="caps">Small all caps heading</Heading>
+ *             <Heading
+ *                  size={{
+ *                      xsmallViewport: 'xsmall',
+ *                      smallViewport: 'xsmall',
+ *                      mediumViewport: 'small',
+ *                      largeViewport: 'default'
+ *                  }}
+ *              >Responsive heading</Heading>
+ *         </Fragment>
+ *     );
+ * }
+ * ```
+ */
+function Heading(props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) {
+    const {
+        as: Component,
+        size,
+        variant,
+        children,
+        id,
+        role,
+        dataAttributes = {},
+        className,
+        style,
+        'aria-label': ariaLabel,
+        'aria-labelledby': ariaLabelledBy,
+        'aria-describedby': ariaDescribedBy,
+        'aria-controls': ariaControls,
+        'aria-expanded': ariaExpanded,
+        'aria-haspopup': ariaHasPopup,
+        'aria-hidden': ariaHidden,
+        'aria-live': ariaLive,
+        ...styleProps
+    } = props;
+    if (!(Component !== undefined)) {
+        throw spawnInvariantViolationError('as');
+    }
+    if (!(size !== undefined)) {
+        throw spawnInvariantViolationError('size');
+    }
+    if (!(variant !== undefined)) {
+        throw spawnInvariantViolationError('variant');
+    }
+    const stylePropsForTextSize = useHeadingSize(size, variant);
+    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
+        ...stylePropsForTextSize,
+        ...styleProps,
+    });
+    return (
+        <Component
+            ref={ref}
+            id={id}
+            className={cx(classNameForStyleProps, className)}
+            style={style}
+            role={role}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            aria-controls={ariaControls}
+            aria-expanded={ariaExpanded}
+            aria-haspopup={ariaHasPopup}
+            aria-hidden={ariaHidden}
+            aria-live={ariaLive}
+            {...dataAttributes}
+        >
+            {children}
+        </Component>
+    );
+}
+
+const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(Heading);
+
+(ForwardedRefHeading as any).propTypes = {
+    as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
+    size: createResponsivePropType(PropTypes.oneOf(values(HeadingSizes))),
+    variant: PropTypes.oneOf(values(HeadingVariants)),
+    children: PropTypes.node,
+    id: PropTypes.string,
+    role: PropTypes.string,
+    dataAttributes: PropTypes.object,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    ...allStylesPropTypes,
+    ...ariaPropTypes,
+};
+
+(ForwardedRefHeading as any).defaultProps = {
+    as: 'h3',
+    size: HeadingSizes.DEFAULT,
+    variant: HeadingVariants.DEFAULT,
+};
+
+export default ForwardedRefHeading;

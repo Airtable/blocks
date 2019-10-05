@@ -1,4 +1,4 @@
-// @noflow
+// @ts-nocheck
 
 // Detect Element Resize.
 // https://github.com/sdecima/javascript-detect-element-resize
@@ -14,6 +14,9 @@
 // https://github.com/bvaughn/react-virtualized/blob/master/source/vendor/detectElementResize.js
 //
 // TODO: make this file conform to our styleguide.
+/**
+ * @internal
+ */
 export default function createDetectElementResize(nonce) {
     // Check `document` and `window` in case of server-side rendering
     var _window;

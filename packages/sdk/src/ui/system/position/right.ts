@@ -1,0 +1,23 @@
+import {system, Config} from '@styled-system/core';
+import {RightProperty} from '../utils/csstype';
+import createStylePropTypes from '../utils/create_style_prop_types';
+import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
+import {Prop, Length} from '../utils/types';
+
+export type RightProps = {
+    right?: Prop<RightProperty<Length>>;
+};
+
+export const config: Config = {
+    right: {
+        property: 'right',
+        scale: 'space',
+        transform: ensureNumbersAreWithinScale({
+            propertyName: 'right',
+            shouldAllowNegativeNumbers: true,
+        }),
+    },
+};
+
+export const right = system(config);
+export const rightPropTypes = createStylePropTypes(right.propNames);

@@ -1,5 +1,3 @@
-// @noflow
-
 // Transpile for node 8 and the set of browsers currently supported by Airtable
 // TODO(alex): once we're moved onto blocks-cli for builds and it supports transpiling node_modules,
 // replace this with a set of lighter-weight transforms.
@@ -18,6 +16,7 @@ const targets = {
 // [1]: https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md
 module.exports = {
     presets: [
+        '@babel/typescript',
         [
             '@babel/env',
             {
@@ -31,16 +30,6 @@ module.exports = {
         '@babel/react',
     ],
     plugins: [
-        // Rather than using @babel/preset-flow, we use the two plugins that make up that preset
-        // directly. This is to make sure they run before @babel/proposal-class-properties, which
-        // otherwise sets flow annotated properties without initial values to undefined:
-        // https://github.com/babel/babel/issues/8417
-        //
-        // TODO: remove this workaround. @babel/proposal-class-properties implements the spec
-        // correctly, but the code in this repo was written against an earlier version of the
-        // plugin which had different behaviour.
-        '@babel/syntax-flow',
-        '@babel/transform-flow-strip-types',
         '@babel/proposal-class-properties',
         '@babel/transform-runtime',
         ['transform-define', require('./global_constants')],

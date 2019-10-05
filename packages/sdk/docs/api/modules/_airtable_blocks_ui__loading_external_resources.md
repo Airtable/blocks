@@ -1,0 +1,96 @@
+[@airtable/blocks](../README.md) › [Globals](../globals.md) ›
+[@airtable/blocks/ui: loading external resources](_airtable_blocks_ui__loading_external_resources.md)
+
+# External module: @airtable/blocks/ui: loading external resources
+
+## Index
+
+### Functions
+
+-   [loadCSSFromString](_airtable_blocks_ui__loading_external_resources.md#loadcssfromstring)
+-   [loadCSSFromURLAsync](_airtable_blocks_ui__loading_external_resources.md#loadcssfromurlasync)
+-   [loadScriptFromURLAsync](_airtable_blocks_ui__loading_external_resources.md#loadscriptfromurlasync)
+
+## Functions
+
+### loadCSSFromString
+
+▸ **loadCSSFromString**(`css`: string): _HTMLStyleElement_
+
+_Defined in
+[src/ui/remote_utils.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/remote_utils.ts#L16)_
+
+Injects CSS from a string into the page.
+
+**`example`**
+
+```js
+import {loadCSSFromString} from '@airtable/blocks/ui';
+loadCSSFromString('body { background: red; }');
+```
+
+**Parameters:**
+
+| Name  | Type   |
+| ----- | ------ |
+| `css` | string |
+
+**Returns:** _HTMLStyleElement_
+
+the style tag inserted into the page.
+
+---
+
+### loadCSSFromURLAsync
+
+▸ **loadCSSFromURLAsync**(`url`: string): _Promise‹HTMLLinkElement›_
+
+_Defined in
+[src/ui/remote_utils.ts:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/remote_utils.ts#L38)_
+
+Injects CSS from a remote URL.
+
+**`example`**
+
+```js
+import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
+loadCSSFromURLAsync('https://example.com/style.css');
+```
+
+**Parameters:**
+
+| Name  | Type   |
+| ----- | ------ |
+| `url` | string |
+
+**Returns:** _Promise‹HTMLLinkElement›_
+
+a Promise that resolves to the style tag inserted into the page.
+
+---
+
+### loadScriptFromURLAsync
+
+▸ **loadScriptFromURLAsync**(`url`: string): _Promise‹HTMLScriptElement›_
+
+_Defined in
+[src/ui/remote_utils.ts:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/remote_utils.ts#L70)_
+
+Injects Javascript from a remote URL.
+
+**`example`**
+
+```js
+import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
+loadScriptFromURLAsync('https://example.com/script.js');
+```
+
+**Parameters:**
+
+| Name  | Type   |
+| ----- | ------ |
+| `url` | string |
+
+**Returns:** _Promise‹HTMLScriptElement›_
+
+a Promise that resolves to the script tag inserted into the page.

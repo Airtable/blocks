@@ -9,8 +9,8 @@
     },
     "scripts": {
         "pretest": "flow",
-        "test": "jest",
-        "test:watch": "jest --watch"
+        "test": "TZ=utc jest",
+        "test:watch": "TZ=utc jest --watch"
     },
     "devDependencies": {
         "flow-bin": "^0.102.0",

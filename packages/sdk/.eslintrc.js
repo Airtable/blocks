@@ -6,21 +6,24 @@ module.exports = {
         es6: true,
         node: true,
     },
-    extends: ['eslint:recommended', 'plugin:react/recommended'],
-    parser: 'babel-eslint',
+    extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:react/recommended',
+    ],
+    parser: '@typescript-eslint/parser',
     parserOptions: {
-        babelOptions: {
-            configFile: path.join(__dirname, 'babel.config.js'),
-        },
+        project: path.join(__dirname, './tsconfig.json'),
+        sourceType: 'module',
     },
     plugins: [
         'airtable',
         '@airtable/blocks',
         'react',
-        'flowtype',
         'react-hooks',
         'import',
         'jsdoc',
+        '@typescript-eslint',
     ],
     settings: {
         react: {
@@ -28,7 +31,9 @@ module.exports = {
         },
         jsdoc: {
             ignorePrivate: true,
-            configFile: path.join(__dirname, '.eslintrc_for_docs_examples.json'),
+            tagNamePreference: {
+                private: 'internal',
+            },
         },
     },
     rules: {
@@ -96,7 +101,7 @@ module.exports = {
         'no-unreachable': 'error',
         'no-unsafe-negation': 'error',
         'no-unused-expressions': 'error',
-        'no-unused-vars': ['error', {vars: 'all', args: 'none'}],
+        'no-unused-vars': 'off',
         'no-useless-call': 'error',
         'no-useless-computed-key': 'error',
         'no-useless-concat': 'error',
@@ -115,34 +120,35 @@ module.exports = {
         'airtable/no-missing-async-suffix': 'warn',
         'airtable/no-missing-await': 'warn',
         'airtable/no-process-domain': 'warn',
-        'airtable/noopener-noreferrer': 'warn',
+        // TODO(alex): re-enable this. It has a bug when used with typescript-eslint
+        'airtable/noopener-noreferrer': 'off',
         '@airtable/blocks/no-throw-new': 'error',
         '@airtable/blocks/no-node-modules-invariant': 'error',
         '@airtable/blocks/no-error-interpolation': ['error', {spawnError: 0, invariant: 1}],
 
-        'flowtype/array-style-complex-type': 'error',
-        'flowtype/array-style-simple-type': 'error',
-        'flowtype/define-flow-type': 'error',
-        'flowtype/no-primitive-constructor-types': 'error',
-        'flowtype/no-weak-types': 'warn',
-        'flowtype/require-valid-file-annotation': ['error', 'always'],
-        'flowtype/type-import-style': ['error', 'identifier', {ignoreTypeDefault: true}],
-        'flowtype/use-flow-type': 'error',
-
         'jsdoc/check-alignment': 'error',
-        'jsdoc/check-examples': 'error',
+        'jsdoc/check-examples': [
+            'error',
+            {
+                exampleCodeRegex: '^```(?:js|ts)([\\s\\S]*)```s*$',
+                configFile: path.join(__dirname, '.eslintrc_for_docs_examples.js'),
+            },
+        ],
         'jsdoc/check-indentation': 'off',
         'jsdoc/check-param-names': 'error',
         'jsdoc/check-syntax': 'off',
-        'jsdoc/check-tag-names': 'error',
+        'jsdoc/check-tag-names': ['error', {definedTags: ['hidden', 'reactComponent']}],
         'jsdoc/check-types': 'error',
         'jsdoc/implements-on-classes': 'error',
         'jsdoc/newline-after-description': 'error',
         'jsdoc/no-types': 'off',
         'jsdoc/require-hyphen-before-param-description': ['error', 'never'],
-        'jsdoc/require-jsdoc': 'warn',
+        'jsdoc/require-jsdoc': [
+            'error',
+            {contexts: ['ClassProperty', 'ClassDeclaration', 'MethodDefinition']},
+        ],
         'jsdoc/require-param-name': 'warn',
-        'jsdoc/require-param': 'warn',
+        'jsdoc/require-param': ['warn', {exemptedBy: ['internal', 'reactComponent', 'hidden']}],
         'jsdoc/require-returns-check': 'warn',
         'jsdoc/require-returns-description': 'warn',
 
@@ -156,5 +162,7 @@ module.exports = {
         'react/no-unescaped-entities': 'off',
         'react/prop-types': ['error'],
         'react/react-in-jsx-scope': 'error',
+
+        '@typescript-eslint/no-unused-vars': ['error', {vars: 'all', args: 'none'}],
     },
 };

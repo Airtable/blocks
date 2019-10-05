@@ -5,3 +5,4 @@
 /packages/*/transpiled
 /docs/.cache/
 /docs/public/
+/examples/*/build
