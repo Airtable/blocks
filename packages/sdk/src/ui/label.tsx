@@ -12,7 +12,7 @@ import {TextVariants, TextSizes, TextSizeProp, useTextSize} from './text';
 
 /**
  * @typedef {object} LabelProps
- * @property {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the label. Defaults to `default`. Can be a responsive prop object.
+ * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label. Defaults to `default`. Can be a responsive prop object.
  * @property {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
@@ -86,7 +86,7 @@ function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
         ...stylePropsForTextSize,
         display: 'inline-block',
         textColor: 'light',
-        fontWeight: 600,
+        fontWeight: 'strong',
         marginBottom: '6px',
         ...styleProps,
     });

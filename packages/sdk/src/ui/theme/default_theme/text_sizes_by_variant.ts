@@ -1,6 +1,6 @@
 const textSizesByVariant = {
     default: {
-        xsmall: {
+        small: {
             fontSize: 1,
             lineHeight: '14px',
             fontWeight: 400,
@@ -8,7 +8,7 @@ const textSizesByVariant = {
             fontFamily: 'default',
             marginY: 0,
         },
-        small: {
+        default: {
             fontSize: 2,
             lineHeight: '16px',
             fontWeight: 400,
@@ -16,7 +16,7 @@ const textSizesByVariant = {
             fontFamily: 'default',
             marginY: 0,
         },
-        default: {
+        large: {
             fontSize: 3,
             lineHeight: '20px',
             fontWeight: 400,
@@ -24,7 +24,7 @@ const textSizesByVariant = {
             fontFamily: 'default',
             marginY: 0,
         },
-        large: {
+        xlarge: {
             fontSize: 4,
             lineHeight: '24px',
             fontWeight: 400,
@@ -34,7 +34,7 @@ const textSizesByVariant = {
         },
     },
     paragraph: {
-        xsmall: {
+        small: {
             fontSize: 1,
             lineHeight: '16px',
             fontWeight: 400,
@@ -43,7 +43,7 @@ const textSizesByVariant = {
             marginTop: 0,
             marginBottom: '1em',
         },
-        small: {
+        default: {
             fontSize: 2,
             lineHeight: '20px',
             fontWeight: 400,
@@ -52,7 +52,7 @@ const textSizesByVariant = {
             marginTop: 0,
             marginBottom: '1em',
         },
-        default: {
+        large: {
             fontSize: 3,
             lineHeight: '22px',
             fontWeight: 400,
@@ -61,7 +61,7 @@ const textSizesByVariant = {
             marginTop: 0,
             marginBottom: '1em',
         },
-        large: {
+        xlarge: {
             fontSize: 4,
             lineHeight: '26px',
             fontWeight: 400,

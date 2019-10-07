@@ -41,10 +41,10 @@ stories.add('responsive size', () => (
         Breakpoints: <pre>{JSON.stringify(theme.breakpoints, null, 4)}</pre>
         <Text
             size={{
-                xsmallViewport: 'xsmall',
-                smallViewport: 'small',
-                mediumViewport: 'default',
-                largeViewport: 'large',
+                xsmallViewport: 'small',
+                smallViewport: 'default',
+                mediumViewport: 'large',
+                largeViewport: 'xlarge',
             }}
             marginTop={2}
             padding={2}

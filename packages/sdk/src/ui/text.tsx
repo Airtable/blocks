@@ -19,10 +19,10 @@ export const TextVariants = Object.freeze({
 export type TextVariant = ObjectValues<typeof TextVariants>;
 
 export const TextSizes = Object.freeze({
-    XSMALL: 'xsmall' as const,
     SMALL: 'small' as const,
     DEFAULT: 'default' as const,
     LARGE: 'large' as const,
+    XLARGE: 'xlarge' as const,
 });
 export type TextSize = ObjectValues<typeof TextSizes>;
 export type TextSizeProp = ResponsivePropObject<TextSize> | TextSize;
@@ -43,7 +43,7 @@ export function useTextSize(
 /**
  * @typedef {object} TextProps
  * @property {'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'li' | 'em' | 'strong' | 'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'} [as='p'] The element that is rendered. Defaults to `p`.
- * @property {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
+ * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
  * @property {'default' | 'paragraph'} [size='default'] The `variant` of the heading. Defaults to `default`.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
@@ -108,10 +108,10 @@ type TextProps = {
  *             <Text size="small" variant="paragraph">Small paragraph, for multiline paragraphs</Text>
  *             <Text
  *                  size={{
- *                      xsmallViewport: 'xsmall',
- *                      smallViewport: 'xsmall',
- *                      mediumViewport: 'small',
- *                      largeViewport: 'default'
+ *                      xsmallViewport: 'small',
+ *                      smallViewport: 'small',
+ *                      mediumViewport: 'default',
+ *                      largeViewport: 'large'
  *                  }}
  *              >Responsive text</Text>
  *         </Fragment>

@@ -28,7 +28,7 @@ _Defined in
 
 **`typedef`** {object} LabelProps
 
-**`property`** {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the label.
+**`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label.
 Defaults to `default`. Can be a responsive prop object.
 
 **`property`** {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.

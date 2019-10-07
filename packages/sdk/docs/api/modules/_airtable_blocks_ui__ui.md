@@ -137,7 +137,7 @@ _Defined in
 'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'}
 [as='p'] The element that is rendered. Defaults to `p`.
 
-**`property`** {'xsmall' | 'small' | 'default' | 'large'} [size='default'] The `size` of the text.
+**`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text.
 Defaults to `default`. Can be a responsive prop object.
 
 **`property`** {'default' | 'paragraph'} [size='default'] The `variant` of the heading. Defaults to
@@ -288,10 +288,10 @@ function TextExample() {
             </Text>
             <Text
                 size={{
-                    xsmallViewport: 'xsmall',
-                    smallViewport: 'xsmall',
-                    mediumViewport: 'small',
-                    largeViewport: 'default',
+                    xsmallViewport: 'small',
+                    smallViewport: 'small',
+                    mediumViewport: 'default',
+                    largeViewport: 'large',
                 }}
             >
                 Responsive text
