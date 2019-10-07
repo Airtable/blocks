@@ -3,7 +3,6 @@ import getSdk from '../get_sdk';
 import {FieldId} from '../types/field';
 import {
     has,
-    compact,
     arrayDifference,
     FlowAnyObject,
     FlowAnyExistential,
@@ -11,6 +10,7 @@ import {
     ObjectMap,
 } from '../private_utils';
 import {spawnInvariantViolationError, spawnError} from '../error_utils';
+import {VisList} from '../injected/airtable_interface';
 import {RecordId} from '../types/record';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';
@@ -18,6 +18,7 @@ import RecordQueryResult, {
     WatchableRecordQueryResultKey,
     RecordQueryResultOpts,
     NormalizedRecordQueryResultOpts,
+    NormalizedSortConfig,
 } from './record_query_result';
 import ObjectPool from './object_pool';
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
@@ -25,24 +26,6 @@ import Field from './field';
 import Record from './record';
 import RecordStore, {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
-
-const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const GroupedRowVisList = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/vis_lists/grouped_row_vis_list',
-);
-const GroupAssigner = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/filter_and_sort/group_assigner',
-);
-
-type GroupLevelOrderType = 'ascending' | 'descending';
-type GroupLevelId = string;
-type GroupLevelObj = {
-    id: GroupLevelId;
-    isCreatedTime?: true;
-    columnId?: FieldId;
-    order: GroupLevelOrderType;
-    groupingOptions?: any;
-};
 
 type TableOrViewQueryResultData = {
     recordIds: Array<string> | null; // null if data isn't loaded (or if it hasn't been lazily initialized).
@@ -108,14 +91,16 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     _fieldIdsSetToLoadOrNullIfAllFields: {[key: string]: true} | null;
 
-    // If custom sorts are specified, we'll use a vis list to handle sorting. If no sorts
-    // are specified, we'll use the underlying row order of the source model.
+    // If custom sorts are specified, we'll use a VisList to handle sorting.
+    // If no sorts are specified, we'll use the underlying row order of the source model.
+    // Note: we're currently handling visibility tracking for view query results within this class,
+    // not in the VisList. In other words, only visible records are added to the visList.
     /** @internal */
-    _visList: typeof GroupedRowVisList | null;
+    _visList: VisList | null;
     /** @internal */
-    _groupLevels: Array<GroupLevelObj> | null;
+    _sorts: Array<NormalizedSortConfig> | null;
 
-    // This is the ordered list of record ids (before any filters are applied).
+    // This is the ordered list of record ids.
     /** @internal */
     _orderedRecordIds: Array<string> | null;
 
@@ -144,32 +129,9 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         const {sorts} = this._normalizedOpts;
         if (sorts) {
-            const groupLevels: Array<GroupLevelObj> = sorts.map(sort => {
-                return {
-                    id: h.id.generateGroupLevelId(),
-                    columnId: sort.fieldId,
-                    order: sort.direction === 'desc' ? 'descending' : 'ascending',
-                    groupingOptions: {
-                        // Always use the raw cell value (rather than normalizing for grouping) so
-                        // that group behavior matches sort rather than group by.
-                        shouldUseRawCellValue: true,
-                    },
-                };
-            });
-
-            // Tie-break using record created time.
-            groupLevels.push({
-                id: h.id.generateGroupLevelId(),
-                isCreatedTime: true,
-                order: 'ascending',
-                groupingOptions: {
-                    shouldUseRawCellValue: true,
-                },
-            });
-
-            this._groupLevels = groupLevels;
+            this._sorts = sorts;
         } else {
-            this._groupLevels = null;
+            this._sorts = null;
         }
 
         this._visList = null;
@@ -185,11 +147,9 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             }
             // Need to load data for fields we're sorting by, even if
             // they're not explicitly requested in the `fields` opt.
-            if (this._groupLevels) {
-                for (const groupLevel of this._groupLevels) {
-                    if (!groupLevel.isCreatedTime && groupLevel.columnId) {
-                        fieldIdsSetToLoadOrNullIfAllFields[groupLevel.columnId] = true;
-                    }
+            if (this._sorts !== null) {
+                for (const sort of this._sorts) {
+                    fieldIdsSetToLoadOrNullIfAllFields[sort.fieldId] = true;
                 }
             }
 
@@ -294,16 +254,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     get _cellValuesForSortWatchKeys(): Array<string> {
-        return this._groupLevels
-            ? compact(
-                  this._groupLevels.map(groupLevel => {
-                      if (groupLevel.isCreatedTime) {
-                          return null;
-                      }
-                      return `cellValuesInField:${groupLevel.columnId}`;
-                  }),
-              )
-            : [];
+        return this._sorts ? this._sorts.map(sort => `cellValuesInField:${sort.fieldId}`) : [];
     }
     /** @internal */
     get _sourceModelRecordIds(): Array<string> {
@@ -476,7 +427,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
         await this._mostRecentSourceModelLoadPromise;
 
-        if (this._groupLevels) {
+        if (this._sorts) {
             this._replaceVisList();
         }
         this._orderedRecordIds = this._generateOrderedRecordIds();
@@ -497,12 +448,9 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         this._table.watch(WatchableTableKeys.fields, this._onTableFieldsChanged, this);
 
-        if (this._groupLevels) {
-            for (const groupLevel of this._groupLevels) {
-                if (!groupLevel.columnId) {
-                    continue;
-                }
-                const field = this._table.getFieldByIdIfExists(groupLevel.columnId);
+        if (this._sorts) {
+            for (const sort of this._sorts) {
+                const field = this._table.getFieldByIdIfExists(sort.fieldId);
                 if (field) {
                     field.watch('type', this._onFieldConfigChanged, this);
                     field.watch('options', this._onFieldConfigChanged, this);
@@ -573,12 +521,9 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         this._table.unwatch(WatchableTableKeys.fields, this._onTableFieldsChanged, this);
 
         // If the table is deleted, can't call getFieldById on it below.
-        if (!this._table.isDeleted && this._groupLevels) {
-            for (const groupLevel of this._groupLevels) {
-                if (!groupLevel.columnId) {
-                    continue;
-                }
-                const field = this._table.getFieldByIdIfExists(groupLevel.columnId);
+        if (!this._table.isDeleted && this._sorts) {
+            for (const sort of this._sorts) {
+                const field = this._table.getFieldByIdIfExists(sort.fieldId);
                 if (field) {
                     field.unwatch('type', this._onFieldConfigChanged, this);
                     field.unwatch('options', this._onFieldConfigChanged, this);
@@ -593,18 +538,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
     }
     /** @internal */
-    _getColumnsById(): {[key: string]: FlowAnyObject} {
-        return this._table.fields.reduce(
-            (result, field) => {
-                result[field.id] = field.__getRawColumn();
-                return result;
-            },
-            {} as ObjectMap<FieldId, unknown>,
-        );
-    }
-    /** @internal */
     _addRecordIdsToVisList(recordIds: Array<string>) {
-        const columnsById = this._getColumnsById();
         const visList = this._visList;
         if (!visList) {
             throw spawnInvariantViolationError('No vis list');
@@ -614,14 +548,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             if (!record) {
                 throw spawnInvariantViolationError('Record missing in table');
             }
-            const rowJson = record.__getRawRow();
-            const groupPath = GroupAssigner.getGroupPathForRow(
-                getSdk().__appInterface,
-                this._getGroupLevelsWithDeletedFieldsFiltered(),
-                columnsById,
-                rowJson,
-            );
-            visList.addIdToGroupAtEnd(recordId, true, groupPath);
+            visList.addRecordData(record._data);
         }
     }
     /** @internal */
@@ -660,14 +587,14 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         const {addedRecordIds, removedRecordIds} = updates;
 
-        if (this._groupLevels) {
+        if (this._sorts) {
             const visList = this._visList;
             if (!visList) {
                 throw spawnInvariantViolationError('No vis list');
             }
 
             if (removedRecordIds.length > 0) {
-                visList.removeMultipleIds(removedRecordIds);
+                visList.removeRecordIds(removedRecordIds);
             }
 
             if (addedRecordIds.length > 0) {
@@ -716,13 +643,18 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             return;
         }
 
-        // Move the record ids in the vis list.
-        // Note: the cell value changes may have resulted in the records
-        // being filtered out. So don't try to remove and re-add them if
-        // they're no longer visible.
-        const visibleRecordIds = recordIds.filter(recordId => visList.isIdVisible(recordId));
-        visList.removeMultipleIds(visibleRecordIds);
-        this._addRecordIdsToVisList(visibleRecordIds);
+        // Only move recordIds that are already in the visList.
+        // It's possible to have recordId that is not currently in the visList since
+        // this callback can run before onRecordsChanged. (eg. when a deleted record is
+        // restored, this is triggered for that record but the record is not yet in the visList:
+        // onRecordsChanged actually adds it)
+        // Note: cell value changes that result in the records being filtered out trigger
+        //       onRecordsChanged on the View model, so we don't have to worry about that here.
+        const visListRecordIdsSet = new Set(visList.getOrderedRecordIds());
+        const recordIdsToMove = recordIds.filter(recordId => visListRecordIdsSet.has(recordId));
+
+        visList.removeRecordIds(recordIdsToMove);
+        this._addRecordIdsToVisList(recordIdsToMove);
         this._orderedRecordIds = this._generateOrderedRecordIds();
 
         const changeData = {addedRecordIds: [], removedRecordIds: []};
@@ -743,21 +675,13 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         key: string,
         updates: {addedFieldIds: Array<string>; removedFieldIds: Array<string>},
     ) {
-        if (!this._groupLevels) {
+        if (!this._sorts) {
             // If we don't have any sorts, we don't have to do anything in response to field changes.
             return;
         }
 
         const {addedFieldIds, removedFieldIds} = updates;
-        const fieldIdsSet = this._groupLevels.reduce(
-            (result, groupLevel) => {
-                if (groupLevel.columnId) {
-                    result[groupLevel.columnId] = true;
-                }
-                return result;
-            },
-            {} as ObjectMap<string, true>,
-        );
+        const fieldIdsSet = new Set(this._sorts.map(sort => sort.fieldId));
 
         // Check if any fields that we rely on were created or deleted. If they were,
         // replace our vis list.
@@ -823,63 +747,43 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     _generateOrderedRecordIds(): Array<string> {
-        if (this._groupLevels) {
+        if (this._sorts) {
             if (!this._visList) {
                 throw spawnInvariantViolationError('Cannot generate record ids without a vis list');
             }
-            const recordIds: Array<RecordId> = [];
-            this._visList.eachVisibleIdInGroupedOrder((recordId: RecordId) =>
-                recordIds.push(recordId),
-            );
-            return recordIds;
+            return this._visList.getOrderedRecordIds();
         } else {
             return this._sourceModelRecordIds;
         }
     }
     /** @internal */
     _replaceVisList() {
-        const rowsById: ObjectMap<RecordId, unknown> = {};
-        const rowVisibilityObjArray = [];
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
 
-        for (const record of this._sourceModelRecords) {
-            rowsById[record.id] = record.__getRawRow();
-            rowVisibilityObjArray.push({rowId: record.id, visibility: true});
-        }
+        const recordDatas = this._sourceModelRecords.map(record => record._data);
+        const fieldDatas = this._table.fields.map(field => field._data);
+        const filteredSorts = this._getSortsWithDeletedFieldsFiltered();
 
-        const columnsById = this._getColumnsById();
-
-        const groupLevels = this._getGroupLevelsWithDeletedFieldsFiltered();
-
-        const groupAssigner = new GroupAssigner({
-            appInterface: getSdk().__appInterface,
-            groupLevels,
-            rowsById,
-            columnsById,
-        });
-
-        const groupKeyComparators = groupAssigner.getGroupKeyComparators();
-        const groupPathsByRowId = groupAssigner.getGroupPathsByRowId();
-        this._visList = new GroupedRowVisList(
-            groupKeyComparators,
-            rowVisibilityObjArray,
-            groupPathsByRowId,
+        this._visList = airtableInterface.createVisList(
+            appInterface,
+            recordDatas,
+            fieldDatas,
+            filteredSorts,
         );
     }
     /** @internal */
-    _getGroupLevelsWithDeletedFieldsFiltered(): Array<GroupLevelObj> {
-        if (!this._groupLevels) {
-            throw spawnInvariantViolationError('No group levels');
+    _getSortsWithDeletedFieldsFiltered(): Array<NormalizedSortConfig> {
+        if (!this._sorts) {
+            throw spawnInvariantViolationError('No sorts');
         }
 
-        // Filter out any group levels that rely on deleted fields.
+        // Filter out any sorts levels that rely on deleted fields.
         // NOTE: we keep deleted fields around (rather than filtering them out
         // in realtime) in case a field gets undeleted, in which case we want to
         // keep using it.
-        return this._groupLevels.filter(groupLevel => {
-            if (!groupLevel.columnId) {
-                return true;
-            }
-            const field = this._table.getFieldByIdIfExists(groupLevel.columnId);
+        return this._sorts.filter(sort => {
+            const field = this._table.getFieldByIdIfExists(sort.fieldId);
             return !!field;
         });
     }

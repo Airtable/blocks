@@ -51,6 +51,11 @@ type SortConfig = {
     direction?: 'asc' | 'desc';
 };
 
+export type NormalizedSortConfig = {
+    fieldId: string,
+    direction: 'asc' | 'desc',
+};
+
 export type RecordQueryResultOpts = {
     sorts?: Array<SortConfig>;
     // Allow falsey values for convenience of including
@@ -60,7 +65,7 @@ export type RecordQueryResultOpts = {
 };
 
 export type NormalizedRecordQueryResultOpts = {
-    sorts: Array<{fieldId: string; direction: 'asc' | 'desc'}> | null;
+    sorts: Array<NormalizedSortConfig> | null;
     fieldIdsOrNullIfAllFields: Array<string> | null;
     recordColorMode: RecordColorMode;
     table: Table;

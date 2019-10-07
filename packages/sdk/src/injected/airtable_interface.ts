@@ -2,6 +2,7 @@ import {FlowAnyObject} from '../private_utils';
 import {BaseData, BasePermissionData} from '../types/base';
 import {BlockInstallationId} from '../types/block';
 import {HostToBlockMessageType} from '../types/block_frame';
+import {FieldData} from '../types/field';
 import {GlobalConfigUpdate, GlobalConfigData} from '../global_config';
 import {RecordData, RecordDef, RecordId} from '../types/record';
 import {UndoRedoMode} from '../types/undo_redo';
@@ -9,6 +10,7 @@ import {ViewportSizeConstraint} from '../types/viewport';
 import {Mutation, PartialMutation, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
+import {NormalizedSortConfig} from '../models/record_query_result';
 import {spawnError} from '../error_utils';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
@@ -41,6 +43,12 @@ interface UrlConstructor {
 
 // AppInterface should never be used directly by the SDK, so we don't describe the type.
 export type AppInterface = unknown;
+
+export interface VisList {
+    removeRecordIds(recordIds: Array<RecordId>): void;
+    addRecordData(recordData: RecordData): void;
+    getOrderedRecordIds(): Array<RecordId>;
+}
 
 /**
  * AirtableInterface is designed as the communication interface between the
@@ -117,6 +125,12 @@ export interface AirtableInterface {
     setFullscreenMaxSize(maxFullscreenSize: ViewportSizeConstraint): void;
     enterFullscreen(): void;
     exitFullscreen(): void;
+    createVisList(
+        appInterface: AppInterface,
+        recordDatas: Array<RecordData>,
+        fieldDatas: Array<FieldData>,
+        sorts: Array<NormalizedSortConfig>,
+    ): VisList;
 }
 
 const getAirtableInterfaceAtVersion: ((arg1: number) => AirtableInterface) | void = (window as any)

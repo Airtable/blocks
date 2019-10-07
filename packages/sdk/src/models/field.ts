@@ -367,16 +367,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     /**
      * @internal
      */
-    __getRawColumn(): {id: string; type: string; typeOptions: FlowAnyObject | null | undefined} {
-        return {
-            id: this.id,
-            type: this.__getRawType(),
-            typeOptions: this.__getRawTypeOptions(),
-        };
-    }
-    /**
-     * @internal
-     */
     __triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject) {
         if (dirtyPaths.name) {
             this._onChange(WatchableFieldKeys.name);

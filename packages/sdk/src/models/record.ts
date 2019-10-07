@@ -2,17 +2,15 @@
 import getSdk from '../get_sdk';
 import {Color} from '../colors';
 import {BaseData} from '../types/base';
-import {RecordData, RecordDef} from '../types/record';
+import {RecordData} from '../types/record';
 import {FieldTypes, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
 import {
     isEnumValue,
     cloneDeep,
-    entries,
     isObjectEmpty,
     ObjectValues,
     FlowAnyObject,
-    ObjectMap,
 } from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
 import colorUtils from '../color_utils';
@@ -192,33 +190,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         const publicCellValue = this.getCellValue(fieldId);
         const field = this.parentTable.getFieldById(fieldId);
         return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
-    }
-    /**
-     * @internal
-     */
-    __getRawRow(): {id: string; createdTime: string; cellValuesByColumnId?: RecordDef} {
-        let cellValuesByColumnId;
-        const cellValuesByFieldId = this._data.cellValuesByFieldId;
-        if (cellValuesByFieldId) {
-            cellValuesByColumnId = {} as ObjectMap<FieldId, unknown>;
-            for (const [fieldId, publicCellValue] of entries(cellValuesByFieldId)) {
-                // When fields are deleted, we set the previously loaded cell value to
-                // undefined (vs deleting the key from the cellValuesByFieldId object, which
-                // would cause de-opts). So ignore undefined cell values, since the field is deleted.
-                if (publicCellValue !== undefined) {
-                    const field = this.parentTable.getFieldById(fieldId);
-                    cellValuesByColumnId[fieldId] = cellValueUtils.parsePublicApiCellValue(
-                        publicCellValue,
-                        field,
-                    );
-                }
-            }
-        }
-        return {
-            id: this.id,
-            createdTime: this._data.createdTime,
-            cellValuesByColumnId,
-        };
     }
     /**
      * @internal

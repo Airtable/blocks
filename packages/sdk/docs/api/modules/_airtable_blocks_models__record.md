@@ -16,7 +16,7 @@
 • **Record**:
 
 _Defined in
-[src/models/record.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L54)_
+[src/models/record.ts:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L52)_
 
 Model class representing a record in a table.
 
@@ -28,7 +28,7 @@ Do not instantiate. You can get instances of this class by calling `table.select
 • **commentCount**:
 
 _Defined in
-[src/models/record.ts:468](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L468)_
+[src/models/record.ts:439](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L439)_
 
 **`function`**
 
@@ -46,7 +46,7 @@ console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 
 • **createdTime**:
 
 _Defined in
-[src/models/record.ts:479](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L479)_
+[src/models/record.ts:450](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L450)_
 
 **`function`**
 
@@ -98,7 +98,7 @@ data.
 • **primaryCellValue**:
 
 _Defined in
-[src/models/record.ts:442](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L442)_
+[src/models/record.ts:413](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L413)_
 
 Gets the primary cell value in this record.
 
@@ -118,7 +118,7 @@ console.log(myRecord.primaryCellValue);
 • **primaryCellValueAsString**:
 
 _Defined in
-[src/models/record.ts:456](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L456)_
+[src/models/record.ts:427](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L427)_
 
 Gets the primary cell value in this record, formatted as a `string`.
 
@@ -138,7 +138,7 @@ console.log(myRecord.primaryCellValueAsString);
 • **url**:
 
 _Defined in
-[src/models/record.ts:425](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L425)_
+[src/models/record.ts:396](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L396)_
 
 **`function`**
 
@@ -158,7 +158,7 @@ console.log(myRecord.url);
 _string_
 
 _Defined in
-[src/models/record.ts:364](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L364)_
+[src/models/record.ts:335](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L335)_
 
 Returns a URL that is suitable for rendering an attachment on the current client. The URL that is
 returned will only work for the current user.
@@ -205,7 +205,7 @@ A URL that is suitable for rendering on the current client.
 FieldId | string): _unknown_
 
 _Defined in
-[src/models/record.ts:247](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L247)_
+[src/models/record.ts:218](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L218)_
 
 Gets a specific cell value in this record.
 
@@ -233,7 +233,7 @@ The cell value in the given field.
 [Field](_airtable_blocks_models__field.md#field) | FieldId | string): _string_
 
 _Defined in
-[src/models/record.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L316)_
+[src/models/record.ts:287](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L287)_
 
 Gets a specific cell value in this record, formatted as a `string`.
 
@@ -261,7 +261,7 @@ The cell value in the given field, formatted as a `string`.
 string): _string | null_
 
 _Defined in
-[src/models/record.ts:394](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L394)_
+[src/models/record.ts:365](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L365)_
 
 Gets the CSS hex string for this record in a given view.
 
@@ -284,7 +284,7 @@ view.
 ViewId | string): _[Color](_airtable_blocks__colors.md#color) | null_
 
 _Defined in
-[src/models/record.ts:381](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L381)_
+[src/models/record.ts:352](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L352)_
 
 Gets the color of this record in a given view.
 
@@ -307,7 +307,7 @@ The color of this record in the given view, or null if the record has no color i
 _[LinkedRecordsQueryResult](_airtable_blocks_models__recordqueryresult.md#linkedrecordsqueryresult)_
 
 _Defined in
-[src/models/record.ts:409](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L409)_
+[src/models/record.ts:380](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L380)_
 
 Select records referenced in a `multipleRecordLinks` cell value. Returns a query result. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for more.
