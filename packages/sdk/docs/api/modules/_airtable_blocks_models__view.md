@@ -96,7 +96,7 @@ _Defined in
 • **View**:
 
 _Defined in
-[src/models/view.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L27)_
+[src/models/view.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L23)_
 
 A class that represents an Airtable view. Every [Table](_airtable_blocks_models__table.md#table) has
 one or more views.
@@ -141,7 +141,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/view.ts:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L122)_
+[src/models/view.ts:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L118)_
 
 **`function`**
 
@@ -159,7 +159,7 @@ console.log(myView.name);
 • **type**:
 
 _Defined in
-[src/models/view.ts:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L134)_
+[src/models/view.ts:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L130)_
 
 **`function`**
 
@@ -178,7 +178,7 @@ console.log(myView.type);
 • **url**:
 
 _Defined in
-[src/models/view.ts:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L146)_
+[src/models/view.ts:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L142)_
 
 **`function`**
 
@@ -198,7 +198,7 @@ console.log(myView.url);
 _[ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult)_
 
 _Defined in
-[src/models/view.ts:220](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L220)_
+[src/models/view.ts:216](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L216)_
 
 Select the field order and visible fields from the view. See {@ViewMetadataQueryResult} for more.
 
@@ -231,7 +231,7 @@ a {@ViewMetadataQueryResult}
 _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)_
 
 _Defined in
-[src/models/view.ts:183](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L183)_
+[src/models/view.ts:179](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L179)_
 
 Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
 

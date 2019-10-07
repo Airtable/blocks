@@ -10,10 +10,6 @@ import ViewDataStore from './view_data_store';
 import ViewMetadataQueryResult from './view_metadata_query_result';
 import * as RecordColoring from './record_coloring';
 
-const viewTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/view_types/view_type_provider',
-);
-
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
 const WatchableViewKeys = Object.freeze({
@@ -132,7 +128,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * ```
      */
     get type(): ViewType {
-        return viewTypeProvider.getApiViewType(this._data.type);
+        return this._data.type;
     }
     /**
      * @function
