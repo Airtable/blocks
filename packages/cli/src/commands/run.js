@@ -1,7 +1,7 @@
 // @flow
 const invariant = require('invariant');
 const inquirer = require('inquirer');
-const getApiKeyWithWarningsAsync = require('../get_api_key_with_warnings');
+const getApiKeyWithWarningsAsync = require('../helpers/get_api_key_with_warnings');
 const BlockServer = require('../server/block_server');
 const BlockBuilder = require('../builder/block_builder');
 const LocalSdkBuilder = require('../local_sdk_builder');

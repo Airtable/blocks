@@ -2,8 +2,8 @@
 /* eslint-disable no-console */
 'use strict';
 
-const CommandNames = require('./commands/command_names');
-const configHelpers = require('./helpers/config_helpers');
+const CommandNames = require('../commands/command_names');
+const configHelpers = require('./config_helpers');
 const chalk = require('chalk');
 const invariant = require('invariant');
 
