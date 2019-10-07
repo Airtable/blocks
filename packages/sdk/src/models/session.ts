@@ -173,9 +173,8 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
                 changedKeys[WatchableSessionKeys.permissionLevel] = true;
             }
 
-            // TODO(jb): figure out a better way to trigger this that fires only when the
-            // current user changes (rather than firing whenever appBlanket changes).
-            if (path[0] === 'appBlanket') {
+            // TODO(emma): Check for collaboratorsById change instead
+            if (path[0] === 'appInterface') {
                 changedKeys[WatchableSessionKeys.currentUser] = true;
             }
         }

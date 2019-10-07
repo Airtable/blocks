@@ -32,7 +32,15 @@ interface UrlConstructor {
     getTableUrl(tableId: TableId): string;
     getViewUrl(viewId: ViewId, tableId: TableId): string;
     getRecordUrl(recordId: RecordId, tableId: TableId): string;
+    getAttachmentClientUrl(
+        appInterface: AppInterface,
+        attachmentId: string,
+        attachmentUrl: string,
+    ): string,
 }
+
+// AppInterface should never be used directly by the SDK, so we don't describe the type.
+export type AppInterface = unknown;
 
 /**
  * AirtableInterface is designed as the communication interface between the

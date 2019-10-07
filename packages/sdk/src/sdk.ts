@@ -20,7 +20,7 @@ import Viewport from './viewport';
 import * as UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
-import {AirtableInterface} from './injected/airtable_interface';
+import {AirtableInterface, AppInterface} from './injected/airtable_interface';
 import * as privateUtils from './private_utils';
 import {spawnError, invariant} from './error_utils';
 
@@ -30,12 +30,6 @@ if (!(React as any).PropTypes) {
 
 const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
     'client/blocks/block_message_types',
-);
-const UserScopedAppInterface = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/user_scoped_app_interface',
-);
-const {PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID} = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/client_server_shared_config_settings',
 );
 
 /**
@@ -156,7 +150,7 @@ export default class BlockSdk {
         this.__airtableInterface = airtableInterface;
         airtableInterface.assertAllowedSdkPackageVersion(global.PACKAGE_NAME, BlockSdk.VERSION);
 
-        const sdkInitData = privateUtils.cloneDeep(airtableInterface.sdkInitData);
+        const sdkInitData = airtableInterface.sdkInitData;
         this.globalConfig = new GlobalConfig(sdkInitData.initialKvValuesByKey, airtableInterface);
         this.base = new Base(sdkInitData.baseData, airtableInterface);
         this.models = models;
@@ -287,14 +281,7 @@ export default class BlockSdk {
     /**
      * @internal
      */
-    get __appInterface(): any {
-        return new UserScopedAppInterface({
-            applicationId: this.base.id,
-            appBlanket: this.base.__appBlanket,
-            sortTiebreakerKey: this.base.__sortTiebreakerKey,
-            currentSessionUserId:
-                this.session.__currentUserId || PUBLIC_READ_ONLY_SHARE_OR_PRINT_USER_ID,
-            isFeatureEnabled: (featureName: string) => this.session.__isFeatureEnabled(featureName),
-        });
+    get __appInterface(): AppInterface {
+        return this.base._baseData.appInterface;
     }
 }

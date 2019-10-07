@@ -28,10 +28,6 @@ import RecordStore from './record_store';
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/client_server_shared_config_settings',
-);
-const ATTACHMENTS_V3_CDN_BASE_URL = clientServerSharedConfigSettings.ATTACHMENTS_V3_CDN_BASE_URL;
 
 const WatchableRecordKeys = Object.freeze({
     primaryCellValue: 'primaryCellValue' as const,
@@ -366,20 +362,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * ```
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
+        const airtableInterface = getSdk().__airtableInterface;
         const appInterface = getSdk().__appInterface;
-        const isAttachmentsCdnV3Enabled = appInterface.isFeatureEnabled('attachmentsCdnV3');
-
-        if (isAttachmentsCdnV3Enabled) {
-            const applicationId = appInterface.getApplicationId();
-            const userId = appInterface.getCurrentSessionUserId();
-            // NOTE: normal images must be active in the base. We don't support rendering historical values here. see attachment_object_methods.js for more
-            const imagePathPrefix = 'attV3/';
-            attachmentUrl = attachmentUrl.replace(
-                /^https:\/\/([^/]+)\//,
-                `${ATTACHMENTS_V3_CDN_BASE_URL}/${imagePathPrefix}${userId}/${applicationId}/${attachmentId}/`,
-            );
-        }
-        return attachmentUrl;
+        return airtableInterface.urlConstructor.getAttachmentClientUrl(
+            appInterface,
+            attachmentId,
+            attachmentUrl,
+        );
     }
     /**
      * Gets the color of this record in a given view.

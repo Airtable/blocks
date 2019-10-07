@@ -161,7 +161,7 @@ this base.
 ▸ **getTableById**(`tableId`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:293](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L293)_
+[src/models/base.ts:288](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L288)_
 
 **Parameters:**
 
@@ -181,7 +181,7 @@ unsure whether a table exists with the given ID.
 null_
 
 _Defined in
-[src/models/base.ts:273](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L273)_
+[src/models/base.ts:268](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L268)_
 
 **Parameters:**
 
@@ -198,7 +198,7 @@ The table matching the given ID, or `null` if that table does not exist in this 
 ▸ **getTableByName**(`tableName`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L316)_
+[src/models/base.ts:311](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L311)_
 
 **Parameters:**
 
@@ -218,7 +218,7 @@ unsure whether a table exists with the given name.
 | null_
 
 _Defined in
-[src/models/base.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L304)_
+[src/models/base.ts:299](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L299)_
 
 **Parameters:**
 

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {BaseData, AppBlanketData, ModelChange, ObjectId} from '../types/base';
+import {BaseData, AppBlanketData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {TableId} from '../types/table';
 import {AirtableInterface} from '../injected/airtable_interface';
@@ -236,15 +236,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     }
     /**
      * @internal
+     * TODO(emma): Delete appBlanket when we've added collaboratorsById
      */
     get __appBlanket(): AppBlanketData {
         return this._data.appBlanket;
-    }
-    /**
-     * @internal
-     */
-    get __sortTiebreakerKey(): ObjectId | null {
-        return this._data.sortTiebreakerKey;
     }
     /**
      * @internal
@@ -357,7 +352,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                 }
             }
         }
-        if (changedPaths.appBlanket) {
+        if (changedPaths.appInterface) {
+            // TODO(emma): Trigger onChange on changedPaths.collaboratorsById instead
             this._onChange(WatchableBaseKeys.collaborators);
             didSchemaChange = true;
         }

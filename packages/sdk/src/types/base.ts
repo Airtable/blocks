@@ -1,3 +1,4 @@
+import {AppInterface} from '../injected/airtable_interface';
 import {ObjectMap} from '../private_utils';
 import {PermissionLevel} from './permission_levels';
 import {TableData, TablePermissionData, TableId} from './table';
@@ -27,16 +28,16 @@ export type AppBlanketData = {
 };
 
 export type BaseData = {
-    // NOTE: in rare cases where a base hasn't been loaded since 2016, AppBlanket may be null
-    // However, it should never be read from in that scenario since (as of Sep 2017)
-    // it's only used for collaborator fields which were introduced alongside AppBlanket
-    appBlanket: AppBlanketData;
     id: BaseId;
+    name: string;
     tableOrder: Array<TableId>;
     activeTableId: TableId | null;
     tablesById: ObjectMap<TableId, TableData>;
-    name: string;
-    sortTiebreakerKey: ObjectId | null;
+
+    // // TODO(emma): Delete appBlanket when we've added collaboratorsById
+    appBlanket: AppBlanketData;
+    appInterface: AppInterface;
+
     // These will be exposed through separate models, but stored
     // on base data for convenience.
 
