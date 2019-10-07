@@ -4,7 +4,9 @@ import {
     useBase,
     useRecords,
     useGlobalConfig,
+    Box,
     CellRenderer,
+    Heading,
     ViewPickerSynced,
 } from '@airtable/blocks/ui';
 import React from 'react';
@@ -32,9 +34,9 @@ function PrintRecordsBlock() {
     return (
         <div>
             <Toolbar table={table} />
-            <div style={{padding: 16}}>
+            <Box padding={3}>
                 <Report view={view} />
-            </div>
+            </Box>
         </div>
     );
 }
@@ -42,13 +44,8 @@ function PrintRecordsBlock() {
 // The toolbar contains the view picker and print button.
 function Toolbar({table}) {
     return (
-        <div
-            className="print-hide"
-            style={{padding: 8, borderBottom: '2px solid #eee', display: 'flex'}}
-        >
-            <div style={{flexGrow: 1}}>
-                <ViewPickerSynced table={table} globalConfigKey={GlobalConfigKeys.VIEW_ID} />
-            </div>
+        <Box className="print-hide" padding={2} borderBottom="thick" display="flex">
+            <ViewPickerSynced table={table} globalConfigKey={GlobalConfigKeys.VIEW_ID} />
             <Button
                 onClick={() => {
                     // Inject CSS to hide elements with the "print-hide" class name
@@ -56,10 +53,11 @@ function Toolbar({table}) {
                     // the print output.
                     printWithoutElementsWithClass('print-hide');
                 }}
+                marginLeft={2}
             >
                 Print
             </Button>
-        </div>
+        </Box>
     );
 }
 
@@ -97,8 +95,8 @@ function Record({record}) {
     );
 
     return (
-        <div style={{paddingBottom: 16}}>
-            <h3>{record.primaryCellValueAsString}</h3>
+        <Box paddingBottom={3}>
+            <Heading>{record.primaryCellValueAsString}</Heading>
             <table style={{borderCollapse: 'collapse', width: '100%'}}>
                 <tbody>
                     {linkedRecords.map(linkedRecord => {
@@ -123,7 +121,7 @@ function Record({record}) {
                     })}
                 </tbody>
             </table>
-        </div>
+        </Box>
     );
 }
 
