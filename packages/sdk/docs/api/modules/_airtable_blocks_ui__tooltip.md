@@ -44,14 +44,16 @@ function MyComponent() {
 
 ### `Static` fitInWindowModes
 
-▪ **fitInWindowModes**: _Object_ = Popover.fitInWindowModes
+▪ **fitInWindowModes**: _[FitInWindowModes](_airtable_blocks_ui__popover.md#fitinwindowmodes)_ =
+Popover.fitInWindowModes
 
 _Defined in
 [src/ui/tooltip.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L69)_
 
 ### `Static` placements
 
-▪ **placements**: _Object_ = Popover.placements
+▪ **placements**: _[PopoverPlacements](_airtable_blocks_ui__popover.md#popoverplacements)_ =
+Popover.placements
 
 _Defined in
 [src/ui/tooltip.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L67)_

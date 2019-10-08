@@ -5,6 +5,11 @@
 
 ## Index
 
+### Enumerations
+
+-   [FitInWindowModes](_airtable_blocks_ui__popover.md#fitinwindowmodes)
+-   [PopoverPlacements](_airtable_blocks_ui__popover.md#popoverplacements)
+
 ### Classes
 
 -   [Popover](_airtable_blocks_ui__popover.md#popover)
@@ -13,10 +18,87 @@
 
 -   [PopoverProps](_airtable_blocks_ui__popover.md#popoverprops)
 
-### Variables
+## Enumerations
 
--   [FitInWindowModes](_airtable_blocks_ui__popover.md#const-fitinwindowmodes)
--   [PopoverPlacements](_airtable_blocks_ui__popover.md#const-popoverplacements)
+### FitInWindowModes
+
+• **FitInWindowModes**:
+
+_Defined in
+[src/ui/popover.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L36)_
+
+An enum describing the fit-in-window mode.
+
+**`alias`** Popover.fitInWindowModes
+
+### FLIP
+
+• **FLIP**: = "flip"
+
+_Defined in
+[src/ui/popover.tsx:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L38)_
+
+### NONE
+
+• **NONE**: = "none"
+
+_Defined in
+[src/ui/popover.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L37)_
+
+### NUDGE
+
+• **NUDGE**: = "nudge"
+
+_Defined in
+[src/ui/popover.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L39)_
+
+---
+
+### PopoverPlacements
+
+• **PopoverPlacements**:
+
+_Defined in
+[src/ui/popover.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L21)_
+
+An enum describing popover placements.
+
+**`alias`** Popover.placements
+
+### BOTTOM
+
+• **BOTTOM**: = "bottom"
+
+_Defined in
+[src/ui/popover.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L24)_
+
+### CENTER
+
+• **CENTER**: = "center"
+
+_Defined in
+[src/ui/popover.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L23)_
+
+### LEFT
+
+• **LEFT**: = "left"
+
+_Defined in
+[src/ui/popover.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L25)_
+
+### RIGHT
+
+• **RIGHT**: = "right"
+
+_Defined in
+[src/ui/popover.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L26)_
+
+### TOP
+
+• **TOP**: = "top"
+
+_Defined in
+[src/ui/popover.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L22)_
 
 ## Classes
 
@@ -33,14 +115,16 @@ A popover component, which is used to "float" some content above some other cont
 
 ### `Static` fitInWindowModes
 
-▪ **fitInWindowModes**: _Object_ = FitInWindowModes
+▪ **fitInWindowModes**: _[FitInWindowModes](_airtable_blocks_ui__popover.md#fitinwindowmodes)_ =
+FitInWindowModes
 
 _Defined in
 [src/ui/popover.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L80)_
 
 ### `Static` placements
 
-▪ **placements**: _Object_ = PopoverPlacements
+▪ **placements**: _[PopoverPlacements](_airtable_blocks_ui__popover.md#popoverplacements)_ =
+PopoverPlacements
 
 _Defined in
 [src/ui/popover.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L78)_
@@ -93,33 +177,3 @@ screen.
 popover, separated by spaces.
 
 **`property`** {object} [backgroundStyle={}] Extra styles for the background of the popover.
-
-## Variables
-
-### `Const` FitInWindowModes
-
-• **FitInWindowModes**: _Object_ = Object.freeze({ NONE: 'none' as const, FLIP: 'flip' as const,
-NUDGE: 'nudge' as const, })
-
-_Defined in
-[src/ui/popover.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L36)_
-
-An enum describing the fit-in-window mode. One of `Popover.fitInWindowModes.NONE`,
-`Popover.fitInWindowModes.FLIP`, `Popover.fitInWindowModes.NUDGE`.
-
-**`alias`** Popover.fitInWindowModes
-
----
-
-### `Const` PopoverPlacements
-
-• **PopoverPlacements**: _Object_ = Object.freeze({ TOP: 'top' as const, CENTER: 'center' as const,
-BOTTOM: 'bottom' as const, LEFT: 'left' as const, RIGHT: 'right' as const, })
-
-_Defined in
-[src/ui/popover.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L21)_
-
-An enum describing popover placements. One of `Popover.placements.TOP`, `Popover.placements.CENTER`,
-`Popover.placements.BOTTOM`, `Popover.placements.LEFT`, `Popover.placements.RIGHT`.
-
-**`alias`** Popover.placements

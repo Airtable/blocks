@@ -15,6 +15,7 @@ import View from './view';
  * @alias recordColoring.ModeTypes
  * @memberof recordColoring
  */
+// TODO(emma): update this to be an enum
 export const ModeTypes = Object.freeze({
     /**
      * @alias recordColoring.ModeTypes.NONE

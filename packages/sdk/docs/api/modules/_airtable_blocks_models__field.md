@@ -5,13 +5,892 @@
 
 ## Index
 
+### Enumerations
+
+-   [FieldTypes](_airtable_blocks_models__field.md#fieldtypes)
+
 ### Classes
 
 -   [Field](_airtable_blocks_models__field.md#field)
 
-### Variables
+## Enumerations
 
--   [FieldTypes](_airtable_blocks_models__field.md#const-fieldtypes)
+### FieldTypes
+
+• **FieldTypes**:
+
+_Defined in
+[src/types/field.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L18)_
+
+An enum of Airtable's field types
+
+**`alias`** fieldTypes
+
+**`example`**
+
+```js
+import {fieldTypes} from '@airtable/blocks/models';
+const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NUMBER);
+```
+
+### AUTO_NUMBER
+
+• **AUTO_NUMBER**: = "autoNumber"
+
+_Defined in
+[src/types/field.ts:568](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L568)_
+
+Automatically incremented unique counter for each record.
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+None
+
+**`alias`** fieldTypes.AUTO_NUMBER
+
+**`memberof`** fieldTypes
+
+### BARCODE
+
+• **BARCODE**: = "barcode"
+
+_Defined in
+[src/types/field.ts:588](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L588)_
+
+Use the Airtable iOS or Android app to scan barcodes.
+
+##### Cell value format
+
+```js
+{
+    // the text value of the barcode
+    text: string,
+    // the type of barcode
+    type?: string,
+}
+```
+
+##### Options
+
+None
+
+**`alias`** fieldTypes.BARCODE
+
+**`memberof`** fieldTypes
+
+### CHECKBOX
+
+• **CHECKBOX**: = "checkbox"
+
+_Defined in
+[src/types/field.ts:426](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L426)_
+
+A checkbox.
+
+##### Cell value format
+
+```js
+boolean;
+```
+
+This field is "true" when checked and otherwise empty.
+
+##### Options
+
+```js
+{
+    // an [Icon](_airtable_blocks_ui__icon.md#const-icon) name
+    icon: string,
+    // the color of the check box
+    color: Color,
+}
+```
+
+**`alias`** fieldTypes.CHECKBOX
+
+**`memberof`** fieldTypes
+
+### COUNT
+
+• **COUNT**: = "count"
+
+_Defined in
+[src/types/field.ts:540](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L540)_
+
+Count the number of linked records.
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+```js
+{
+   // is the field currently valid (false if e.g. the linked record field is switched to a different type)
+   isValid: boolean,
+   // the linked record field in this table that we're counting
+   recordLinkFieldId: FieldId,
+}
+```
+
+**`alias`** fieldTypes.COUNT
+
+**`memberof`** fieldTypes
+
+### CREATED_TIME
+
+• **CREATED_TIME**: = "createdTime"
+
+_Defined in
+[src/types/field.ts:483](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L483)_
+
+The time the record was created in UTC.
+
+##### Cell value format
+
+```js
+string;
+```
+
+An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+
+##### Options
+
+```js
+{
+    result: {
+        type: 'date' | 'dateTime',
+        options: DateOrDateTimeFieldOptions,
+    },
+}
+```
+
+See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options.
+
+**`alias`** fieldTypes.CREATED_TIME
+
+**`memberof`** fieldTypes
+
+### CURRENCY
+
+• **CURRENCY**: = "currency"
+
+_Defined in
+[src/types/field.ts:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L139)_
+
+An amount of a currency.
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+```js
+{
+    precision: number,
+    symbol: string,
+}
+```
+
+**`alias`** fieldTypes.CURRENCY
+
+**`memberof`** fieldTypes
+
+### DATE
+
+• **DATE**: = "date"
+
+_Defined in
+[src/types/field.ts:312](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L312)_
+
+A date.
+
+##### Cell value format
+
+```js
+string;
+```
+
+An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date.
+
+##### Options
+
+```js
+{
+    dateFormat: {
+        name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
+        // a date format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
+        format: string,
+    }
+}
+```
+
+**`alias`** fieldTypes.DATE
+
+**`memberof`** fieldTypes
+
+### DATE_TIME
+
+• **DATE_TIME**: = "dateTime"
+
+_Defined in
+[src/types/field.ts:343](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L343)_
+
+A date & time.
+
+##### Cell value format
+
+```js
+string;
+```
+
+An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+
+##### Options
+
+```js
+{
+    dateFormat: {
+        name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
+        // a date format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
+        format: string,
+    },
+    timeFormat: {
+        name: '12hour' | '24hour',
+        // a time format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
+        format: string,
+    },
+    timeZone: 'utc' | 'client',
+}
+```
+
+**`alias`** fieldTypes.DATE_TIME
+
+**`memberof`** fieldTypes
+
+### DURATION
+
+• **DURATION**: = "duration"
+
+_Defined in
+[src/types/field.ts:638](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L638)_
+
+A duration of time in seconds.
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+```js
+{
+    // a time format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
+    durationFormat: string,
+}
+```
+
+**`alias`** fieldTypes.DURATION
+
+**`memberof`** fieldTypes
+
+### EMAIL
+
+• **EMAIL**: = "email"
+
+_Defined in
+[src/types/field.ts:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L48)_
+
+A valid email address (e.g. andrew@example.com).
+
+##### Cell value format
+
+```js
+string;
+```
+
+##### Options
+
+None
+
+**`alias`** fieldTypes.EMAIL
+
+**`memberof`** fieldTypes
+
+### FORMULA
+
+• **FORMULA**: = "formula"
+
+_Defined in
+[src/types/field.ts:457](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L457)_
+
+Compute a value in each record based on other fields in the same record.
+
+##### Cell value format
+
+```js
+any;
+```
+
+Check `options.result` to know the resulting field type.
+
+##### Options
+
+```js
+{
+    // false if the formula contains an error
+    isValid: boolean,
+    // the other fields in the record that are used in the formula
+    fieldIdsReferencedByFormulaText: Array<FieldId>,
+    // the resulting field type and options returned by the formula
+    result: {
+        // the field type of the formula result
+        type: string,
+        // that types options
+        options?: any,
+    },
+}
+```
+
+**`alias`** fieldTypes.FORMULA
+
+**`memberof`** fieldTypes
+
+### LAST_MODIFIED_TIME
+
+• **LAST_MODIFIED_TIME**: = "lastModifiedTime"
+
+_Defined in
+[src/types/field.ts:670](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L670)_
+
+Shows the date and time that a record was most recently modified in any editable field or just in
+specific editable fields.
+
+##### Cell value format
+
+```js
+string;
+```
+
+An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+
+##### Options
+
+```js
+{
+    // false if the formula contains an error
+    isValid: boolean,
+    // the fields to check the last modified time of
+    fieldIdsReferencedByFormulaText: Array<FieldId>,
+    // the cell value result type
+    result: {
+        type: 'date' | 'dateTime',
+        options: DateOrDateTimeFieldOptions,
+    },
+}
+```
+
+See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options.
+
+**`alias`** fieldTypes.LAST_MODIFIED_TIME
+
+**`memberof`** fieldTypes
+
+### MULTILINE_TEXT
+
+• **MULTILINE_TEXT**: = "multilineText"
+
+_Defined in
+[src/types/field.ts:81](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L81)_
+
+A long text field that can span multiple lines.
+
+###### Cell value format
+
+```js
+string;
+```
+
+Multiple lines of text, which may contain "mention tokens", e.g.
+`<airtable:mention id="menE1i9oBaGX3DseR">@Alex</airtable:mention>`
+
+###### Options
+
+None
+
+**`alias`** fieldTypes.MULTILINE_TEXT
+
+**`memberof`** fieldTypes
+
+### MULTIPLE_ATTACHMENTS
+
+• **MULTIPLE_ATTACHMENTS**: = "multipleAttachments"
+
+_Defined in
+[src/types/field.ts:402](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L402)_
+
+Attachments allow you to add images, documents, or other files which can then be viewed or
+downloaded.
+
+##### Cell value format
+
+```js
+Array<{
+    // unique attachment id
+    id: string,
+    // url, e.g. "https://dl.airtable.com/foo.jpg"
+    url: string,
+    // filename, e.g. "foo.jpg"
+    filename: string,
+    // file size, in bytes
+    size?: number,
+    // content type, e.g. "image/jpeg"
+    type?: string,
+    // thumbnails if available
+    thumbnails: {
+        small?: {
+            url: string,
+            width?: number,
+            height?: number,
+        },
+        large?: {
+            url: string,
+            width?: number,
+            height?: number,
+        },
+        full?: {
+            url: string,
+            width?: number,
+            height?: number,
+        },
+    },
+}>
+```
+
+##### Options
+
+None
+
+**`alias`** fieldTypes.MULTIPLE_ATTACHMENTS
+
+**`memberof`** fieldTypes
+
+### MULTIPLE_COLLABORATORS
+
+• **MULTIPLE_COLLABORATORS**: = "multipleCollaborators"
+
+_Defined in
+[src/types/field.ts:258](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L258)_
+
+A collaborator field lets you add collaborators to your records. Collaborators can optionally be
+notified when they're added.
+
+##### Cell value format
+
+```js
+Array<{
+    id: string,
+    email: string,
+    name?: string,
+    profilePicUrl?: string,
+}>
+```
+
+Array of selected choices.
+
+##### Options
+
+````js
+{
+    choices: Array<{
+        id: string,
+        email: string,
+        name?: string,
+        profilePicUrl?: string,
+    }>,
+}
+
+@alias fieldTypes.MULTIPLE_COLLABORATORS
+@memberof fieldTypes
+
+###  MULTIPLE_LOOKUP_VALUES
+
+• **MULTIPLE_LOOKUP_VALUES**: = "multipleLookupValues"
+
+*Defined in [src/types/field.ts:553](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L553)*
+
+Lookup a field on linked records.
+
+##### Cell value format
+UNSTABLE
+
+##### Options
+UNSTABLE
+
+**`alias`** fieldTypes.MULTIPLE_LOOKUP_VALUES
+
+**`memberof`** fieldTypes
+
+###  MULTIPLE_RECORD_LINKS
+
+• **MULTIPLE_RECORD_LINKS**: = "multipleRecordLinks"
+
+*Defined in [src/types/field.ts:287](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L287)*
+
+Link to another record.
+
+##### Cell value format
+```js
+Array<{
+    id: RecordId,
+    name: string,
+}>
+````
+
+Array of selected record IDs and their primary cell values from the linked table.
+
+##### Options
+
+```js
+{
+    // The ID of the table this field links to
+    linkedTableId: TableId,
+    // The ID of the field in the linked table that links back to this one
+    inverseLinkFieldId?: FieldId,
+    // The ID of the view in the linked table to use when showing a list of records to select from
+    viewIdForRecordSelection?: ViewId,
+}
+```
+
+**`alias`** fieldTypes.MULTIPLE_RECORD_LINKS
+
+**`memberof`** fieldTypes
+
+### MULTIPLE_SELECTS
+
+• **MULTIPLE_SELECTS**: = "multipleSelects"
+
+_Defined in
+[src/types/field.ts:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L197)_
+
+Multiple select allows you to select one or more predefined options from a dropdown
+
+##### Cell value format
+
+```js
+Array<{
+    id: string,
+    name: string,
+    color?: Color,
+}>
+```
+
+Array of selected choices.
+
+##### Options
+
+```js
+{
+    choices: Array<{
+        id: string,
+        name: string,
+        color?: Color,
+    }>,
+}
+```
+
+**`alias`** fieldTypes.MULTIPLE_SELECTS
+
+**`memberof`** fieldTypes
+
+### NUMBER
+
+• **NUMBER**: = "number"
+
+_Defined in
+[src/types/field.ts:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L100)_
+
+A number.
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+```js
+{
+    precision: number,
+}
+```
+
+**`alias`** fieldTypes.NUMBER
+
+**`memberof`** fieldTypes
+
+### PERCENT
+
+• **PERCENT**: = "percent"
+
+_Defined in
+[src/types/field.ts:119](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L119)_
+
+A percentage - 0 is 0%, 1 is 100%.
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+```js
+{
+    precision: number,
+}
+```
+
+**`alias`** fieldTypes.PERCENT
+
+**`memberof`** fieldTypes
+
+### PHONE_NUMBER
+
+• **PHONE_NUMBER**: = "phoneNumber"
+
+_Defined in
+[src/types/field.ts:358](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L358)_
+
+A telephone number (e.g. (415) 555-9876).
+
+##### Cell value format
+
+```js
+string;
+```
+
+##### Options
+
+None
+
+**`alias`** fieldTypes.PHONE_NUMBER
+
+**`memberof`** fieldTypes
+
+### RATING
+
+• **RATING**: = "rating"
+
+_Defined in
+[src/types/field.ts:612](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L612)_
+
+A rating (e.g. stars out of 5)
+
+##### Cell value format
+
+```js
+number;
+```
+
+##### Options
+
+```js
+{
+    // the [Icon](_airtable_blocks_ui__icon.md#const-icon) name used to display the rating
+    icon: string,
+    // the maximum value for the rating
+    max: number,
+    // the color of selected icons
+    color: Color,
+}
+```
+
+**`alias`** fieldTypes.RATING
+
+**`memberof`** fieldTypes
+
+### ROLLUP
+
+• **ROLLUP**: = "rollup"
+
+_Defined in
+[src/types/field.ts:518](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L518)_
+
+A rollup allows you to summarize data from records that are linked to this table.
+
+##### Cell value format
+
+```js
+any;
+```
+
+Check `options.result` to know the resulting field type.
+
+##### Options
+
+```js
+{
+    // false if the formula contains an error
+    isValid: boolean,
+    // the linked record field in this table that this field is summarizing.
+    recordLinkFieldId: FieldId,
+    // the field id in the linked table that this field is summarizing.
+    fieldIdInLinkedTable: FieldId,
+    // the other fields in the record that are used in the formula
+    fieldIdsReferencedByFormulaText: Array<FieldId>,
+    // the resulting field type and options returned by the formula
+    result: {
+        // the field type of the formula result
+        type: string,
+        // that types options
+        options?: any,
+    },
+}
+```
+
+**`alias`** fieldTypes.ROLLUP
+
+**`memberof`** fieldTypes
+
+### SINGLE_COLLABORATOR
+
+• **SINGLE_COLLABORATOR**: = "singleCollaborator"
+
+_Defined in
+[src/types/field.ts:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L228)_
+
+A collaborator field lets you add collaborators to your records. Collaborators can optionally be
+notified when they're added.
+
+##### Cell value format
+
+```js
+{
+    id: string,
+    email: string,
+    name?: string,
+    profilePicUrl?: string,
+}
+```
+
+The currently selected choice.
+
+##### Options
+
+```js
+{
+    choices: Array<{
+        id: string,
+        email: string,
+        name?: string,
+        profilePicUrl?: string,
+    }>,
+}
+```
+
+**`alias`** fieldTypes.SINGLE_COLLABORATOR
+
+**`memberof`** fieldTypes
+
+### SINGLE_LINE_TEXT
+
+• **SINGLE_LINE_TEXT**: = "singleLineText"
+
+_Defined in
+[src/types/field.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L33)_
+
+A single line of text.
+
+##### Cell value format
+
+```js
+string;
+```
+
+##### Options
+
+None
+
+**`alias`** fieldTypes.SINGLE_LINE_TEXT
+
+**`memberof`** fieldTypes
+
+### SINGLE_SELECT
+
+• **SINGLE_SELECT**: = "singleSelect"
+
+_Defined in
+[src/types/field.ts:168](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L168)_
+
+Single select allows you to select a single option from predefined options in a dropdown.
+
+##### Cell value format
+
+```js
+{
+    id: string,
+    name: string,
+    color?: Color
+}
+```
+
+The currently selected choice.
+
+##### Options
+
+```js
+{
+    choices: Array<{
+        id: string,
+        name: string,
+        color?: Color,
+    }>,
+}
+```
+
+**`alias`** fieldTypes.SINGLE_SELECT
+
+**`memberof`** fieldTypes
+
+### URL
+
+• **URL**: = "url"
+
+_Defined in
+[src/types/field.ts:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L63)_
+
+A valid URL (e.g. airtable.com or https://airtable.com/universe).
+
+###### Cell value format
+
+```js
+string;
+```
+
+###### Options
+
+None
+
+**`alias`** fieldTypes.URL
+
+**`memberof`** fieldTypes
 
 ## Classes
 
@@ -309,131 +1188,3 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 **Returns:** _Array‹WatchableFieldKey›_
 
 the array of keys that were watched
-
-## Variables
-
-### `Const` FieldTypes
-
-• **FieldTypes**: _Object_ = Object.freeze({ /** _ A single line of text. _ _ ##### Cell value
-format _ `js * string *` \* _ ##### Options _ None \* _ @alias fieldTypes.SINGLE_LINE_TEXT _
-@memberof fieldTypes \*/ SINGLE_LINE_TEXT: 'singleLineText' as const, /** _ A valid email address
-(e.g. andrew@example.com). _ _ ##### Cell value format _ `js * string *` \* _ ##### Options _
-None \* _ @alias fieldTypes.EMAIL _ @memberof fieldTypes _/ EMAIL: 'email' as const, /\*\* _ A valid
-URL (e.g. airtable.com or https://airtable.com/universe). \* _ ###### Cell value format _
-`js * string *` \* _ ###### Options _ None \* _ @alias fieldTypes.URL _ @memberof fieldTypes _/ URL:
-'url' as const, /\*\* _ A long text field that can span multiple lines. \* _ ###### Cell value
-format _ `js * string *` \* _ Multiple lines of text, which may contain "mention tokens", e.g. _
-`<airtable:mention id="menE1i9oBaGX3DseR">@Alex</airtable:mention>` \* _ ###### Options _ None \* _
-@alias fieldTypes.MULTILINE_TEXT _ @memberof fieldTypes _/ MULTILINE_TEXT: 'multilineText' as const,
-/\*\* _ A number. \* _ ##### Cell value format _ `js * number *` \* _ ##### Options _
-`js * { * precision: number, * } *` \* _ @alias fieldTypes.NUMBER _ @memberof fieldTypes _/ NUMBER:
-'number' as const, /\*\* _ A percentage - 0 is 0%, 1 is 100%. \* _ ##### Cell value format _
-`js * number *` \* _ ##### Options _ `js * { * precision: number, * } *` \* _ @alias
-fieldTypes.PERCENT _ @memberof fieldTypes _/ PERCENT: 'percent' as const, /\*\* _ An amount of a
-currency. \* _ ##### Cell value format _ `js * number *` \* _ ##### Options _
-`js * { * precision: number, * symbol: string, * } *` \* _ @alias fieldTypes.CURRENCY _ @memberof
-fieldTypes _/ CURRENCY: 'currency' as const, /\*\* _ Single select allows you to select a single
-option from predefined options in a dropdown. \* _ ##### Cell value format _
-`js * { * id: string, * name: string, * color?: Color * } *` \* _ The currently selected choice. _
-_ ##### Options _
-`js * { * choices: Array<{ * id: string, * name: string, * color?: Color, * }>, * } *` \* _ @alias
-fieldTypes.SINGLE_SELECT _ @memberof fieldTypes _/ SINGLE_SELECT: 'singleSelect' as const, /\*\* _
-Multiple select allows you to select one or more predefined options from a dropdown \* _ ##### Cell
-value format _ `js * Array<{ * id: string, * name: string, * color?: Color, * }> *` \* _ Array of
-selected choices. _ _ ##### Options _
-`js * { * choices: Array<{ * id: string, * name: string, * color?: Color, * }>, * } *` \* _ @alias
-fieldTypes.MULTIPLE_SELECTS _ @memberof fieldTypes _/ MULTIPLE_SELECTS: 'multipleSelects' as const,
-/\*\* _ A collaborator field lets you add collaborators to your records. Collaborators can
-optionally be notified when they're added. \* _ ##### Cell value format _
-`js * { * id: string, * email: string, * name?: string, * profilePicUrl?: string, * } *` \* _ The
-currently selected choice. _ _ ##### Options _
-`js * { * choices: Array<{ * id: string, * email: string, * name?: string, * profilePicUrl?: string, * }>, * } *` \*
-_ @alias fieldTypes.SINGLE_COLLABORATOR _ @memberof fieldTypes _/ SINGLE_COLLABORATOR:
-'singleCollaborator' as const, /\*\* _ A collaborator field lets you add collaborators to your
-records. Collaborators can optionally be notified when they're added. \* _ ##### Cell value format _
-`js * Array<{ * id: string, * email: string, * name?: string, * profilePicUrl?: string, * }> *` \* _
-Array of selected choices. _ _ ##### Options _
-`js * { * choices: Array<{ * id: string, * email: string, * name?: string, * profilePicUrl?: string, * }>, * } * * @alias fieldTypes.MULTIPLE_COLLABORATORS * @memberof fieldTypes */ MULTIPLE_COLLABORATORS: 'multipleCollaborators' as const, /** * Link to another record. * * ##### Cell value format *`js
-_ Array<{ _ id: RecordId, _ name: string, _ }> _ ``` _ _ Array of selected record IDs and their
-primary cell values from the linked table. _ _ ##### Options _
-`js * { * // The ID of the table this field links to * linkedTableId: TableId, * // The ID of the field in the linked table that links back to this one * inverseLinkFieldId?: FieldId, * // The ID of the view in the linked table to use when showing a list of records to select from * viewIdForRecordSelection?: ViewId, * } *` \*
-_ @alias fieldTypes.MULTIPLE_RECORD_LINKS _ @memberof fieldTypes _/ MULTIPLE_RECORD_LINKS:
-'multipleRecordLinks' as const, /\*\* _ A date. \* _ ##### Cell value format _ `js * string *` \* _
-An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date. _ _ #####
-Options _
-`js * { * dateFormat: { * name: 'local' | 'friendly' | 'us' | 'european' | 'iso', * // a date format string as documented here: https://momentjs.com/docs/#/parsing/string-format/ * format: string, * } * } *` \*
-_ @alias fieldTypes.DATE _ @memberof fieldTypes _/ DATE: 'date' as const, /\*\* _ A date & time. \*
-_ ##### Cell value format _ `js * string *` \* _ An
-[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time. _ _ #####
-Options _
-`js * { * dateFormat: { * name: 'local' | 'friendly' | 'us' | 'european' | 'iso', * // a date format string as documented here: https://momentjs.com/docs/#/parsing/string-format/ * format: string, * }, * timeFormat: { * name: '12hour' | '24hour', * // a time format string as documented here: https://momentjs.com/docs/#/parsing/string-format/ * format: string, * }, * timeZone: 'utc' | 'client', * } *` \*
-_ @alias fieldTypes.DATE_TIME _ @memberof fieldTypes _/ DATE_TIME: 'dateTime' as const, /\*\* _ A
-telephone number (e.g. (415) 555-9876). \* _ ##### Cell value format _ `js * string *` \* _ #####
-Options _ None \* _ @alias fieldTypes.PHONE_NUMBER _ @memberof fieldTypes _/ PHONE_NUMBER:
-'phoneNumber' as const, /\*\* _ Attachments allow you to add images, documents, or other files which
-can then be viewed or downloaded. \* _ ##### Cell value format _
-`js * Array<{ * // unique attachment id * id: string, * // url, e.g. "https://dl.airtable.com/foo.jpg" * url: string, * // filename, e.g. "foo.jpg" * filename: string, * // file size, in bytes * size?: number, * // content type, e.g. "image/jpeg" * type?: string, * // thumbnails if available * thumbnails: { * small?: { * url: string, * width?: number, * height?: number, * }, * large?: { * url: string, * width?: number, * height?: number, * }, * full?: { * url: string, * width?: number, * height?: number, * }, * }, * }> *` \*
-_ ##### Options _ None \* _ @alias fieldTypes.MULTIPLE_ATTACHMENTS _ @memberof fieldTypes _/
-MULTIPLE_ATTACHMENTS: 'multipleAttachments' as const, /\*\* _ A checkbox. \* _ ##### Cell value
-format _ `js * boolean *` \* _ This field is "true" when checked and otherwise empty. _ _ #####
-Options _
-`js * { * // an {@link Icon} name * icon: string, * // the color of the check box * color: Color, * } *` \*
-_ @alias fieldTypes.CHECKBOX _ @memberof fieldTypes _/ CHECKBOX: 'checkbox' as const, /\*\* _
-Compute a value in each record based on other fields in the same record. \* _ ##### Cell value
-format _ `js * any *` \* _ Check `options.result` to know the resulting field type. _ _ #####
-Options _
-`js * { * // false if the formula contains an error * isValid: boolean, * // the other fields in the record that are used in the formula * fieldIdsReferencedByFormulaText: Array<FieldId>, * // the resulting field type and options returned by the formula * result: { * // the field type of the formula result * type: string, * // that types options * options?: any, * }, * } *` \*
-_ @alias fieldTypes.FORMULA _ @memberof fieldTypes _/ FORMULA: 'formula' as const, /\*\* _ The time
-the record was created in UTC. \* _ ##### Cell value format _ `js * string *` \* _ An
-[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time. _ _ #####
-Options _
-`js * { * result: { * type: 'date' | 'dateTime', * options: DateOrDateTimeFieldOptions, * }, * } *` \*
-_ See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options. _ _ @alias
-fieldTypes.CREATED_TIME _ @memberof fieldTypes _/ CREATED_TIME: 'createdTime' as const, /\*\* _ A
-rollup allows you to summarize data from records that are linked to this table. \* _ ##### Cell
-value format _ `js * any *` \* _ Check `options.result` to know the resulting field type. _ _ #####
-Options _
-`js * { * // false if the formula contains an error * isValid: boolean, * // the linked record field in this table that this field is summarizing. * recordLinkFieldId: FieldId, * // the field id in the linked table that this field is summarizing. * fieldIdInLinkedTable: FieldId, * // the other fields in the record that are used in the formula * fieldIdsReferencedByFormulaText: Array<FieldId>, * // the resulting field type and options returned by the formula * result: { * // the field type of the formula result * type: string, * // that types options * options?: any, * }, * } *` \*
-_ @alias fieldTypes.ROLLUP _ @memberof fieldTypes _/ ROLLUP: 'rollup' as const, /\*\* _ Count the
-number of linked records. \* _ ##### Cell value format _ `js * number *` \* _ ##### Options _
-`js * { * // is the field currently valid (false if e.g. the linked record field is switched to a different type) * isValid: boolean, * // the linked record field in this table that we're counting * recordLinkFieldId: FieldId, * } *` \*
-_ @alias fieldTypes.COUNT _ @memberof fieldTypes _/ COUNT: 'count' as const, /\*\* _ Lookup a field
-on linked records. \* _ ##### Cell value format _ UNSTABLE \* _ ##### Options _ UNSTABLE \* _ @alias
-fieldTypes.MULTIPLE_LOOKUP_VALUES _ @memberof fieldTypes _/ MULTIPLE_LOOKUP_VALUES:
-'multipleLookupValues' as const, /\*\* _ Automatically incremented unique counter for each
-record. \* _ ##### Cell value format _ `js * number *` \* _ ##### Options _ None \* _ @alias
-fieldTypes.AUTO_NUMBER _ @memberof fieldTypes _/ AUTO_NUMBER: 'autoNumber' as const, /\*\* _ Use the
-Airtable iOS or Android app to scan barcodes. \* _ ##### Cell value format _
-`js * { * // the text value of the barcode * text: string, * // the type of barcode * type?: string, * } *` \*
-_ ##### Options _ None \* _ @alias fieldTypes.BARCODE _ @memberof fieldTypes _/ BARCODE: 'barcode'
-as const, /\*\* _ A rating (e.g. stars out of 5) \* _ ##### Cell value format _ `js * number *` \*
-_ ##### Options _
-`js * { * // the {@link Icon} name used to display the rating * icon: string, * // the maximum value for the rating * max: number, * // the color of selected icons * color: Color, * } *` \*
-_ @alias fieldTypes.RATING _ @memberof fieldTypes _/ RATING: 'rating' as const, /\*\* _ @internal -
-not yet generally available _ @alias fieldTypes.RICH_TEXT _ @memberof fieldTypes _/ RICH_TEXT:
-'richText' as const, /\*\* _ A duration of time in seconds. \* _ ##### Cell value format _
-`js * number *` \* _ ##### Options _
-`js * { * // a time format string as documented here: https://momentjs.com/docs/#/parsing/string-format/ * durationFormat: string, * } *` \*
-_ @alias fieldTypes.DURATION _ @memberof fieldTypes _/ DURATION: 'duration' as const, /\*\* _ Shows
-the date and time that a record was most recently modified in any editable field or _ just in
-specific editable fields. _ _ ##### Cell value format _ `js * string *` \* _ An
-[ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time. _ _ #####
-Options _
-`js * { * // false if the formula contains an error * isValid: boolean, * // the fields to check the last modified time of * fieldIdsReferencedByFormulaText: Array<FieldId>, * // the cell value result type * result: { * type: 'date' | 'dateTime', * options: DateOrDateTimeFieldOptions, * }, * } *` \*
-_ See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options. _ _ @alias
-fieldTypes.LAST_MODIFIED_TIME _ @memberof fieldTypes \*/ LAST_MODIFIED_TIME: 'lastModifiedTime' as
-const, })
-
-_Defined in
-[src/types/field.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L18)_
-
-An enum of Airtable's field types
-
-**`alias`** fieldTypes
-
-**`example`**
-
-```js
-import {fieldTypes} from '@airtable/blocks/models';
-const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NUMBER);
-```

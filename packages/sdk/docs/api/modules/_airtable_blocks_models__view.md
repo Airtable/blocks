@@ -5,14 +5,89 @@
 
 ## Index
 
+### Enumerations
+
+-   [ViewTypes](_airtable_blocks_models__view.md#viewtypes)
+
 ### Classes
 
 -   [View](_airtable_blocks_models__view.md#view)
 -   [ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult)
 
-### Variables
+## Enumerations
 
--   [ViewTypes](_airtable_blocks_models__view.md#const-viewtypes)
+### ViewTypes
+
+• **ViewTypes**:
+
+_Defined in
+[src/types/view.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L21)_
+
+An enum of Airtable's view types
+
+**`alias`** viewTypes
+
+**`example`**
+
+```js
+import {viewTypes} from '@airtable/blocks/models';
+const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
+```
+
+### CALENDAR
+
+• **CALENDAR**: = "calendar"
+
+_Defined in
+[src/types/view.ts:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L36)_
+
+**`alias`** viewTypes.CALENDAR
+
+**`memberof`** viewTypes
+
+### FORM
+
+• **FORM**: = "form"
+
+_Defined in
+[src/types/view.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L31)_
+
+**`alias`** viewTypes.FORM
+
+**`memberof`** viewTypes
+
+### GALLERY
+
+• **GALLERY**: = "gallery"
+
+_Defined in
+[src/types/view.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L41)_
+
+**`alias`** viewTypes.GALLERY
+
+**`memberof`** viewTypes
+
+### GRID
+
+• **GRID**: = "grid"
+
+_Defined in
+[src/types/view.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L26)_
+
+**`alias`** viewTypes.GRID
+
+**`memberof`** viewTypes
+
+### KANBAN
+
+• **KANBAN**: = "kanban"
+
+_Defined in
+[src/types/view.ts:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L46)_
+
+**`alias`** viewTypes.KANBAN
+
+**`memberof`** viewTypes
 
 ## Classes
 
@@ -463,27 +538,3 @@ fetched. Once the data is available, the callback will be called.
 | `context?` | FlowAnyObject &#124; null                                               |
 
 **Returns:** _Array‹WatchableViewMetadataKey›_
-
-## Variables
-
-### `Const` ViewTypes
-
-• **ViewTypes**: _Object_ = Object.freeze({ /** _ @alias viewTypes.GRID _ @memberof viewTypes \*/
-GRID: 'grid' as const, /** _ @alias viewTypes.FORM _ @memberof viewTypes _/ FORM: 'form' as const,
-/\*\* _ @alias viewTypes.CALENDAR _ @memberof viewTypes _/ CALENDAR: 'calendar' as const, /** _
-@alias viewTypes.GALLERY _ @memberof viewTypes \*/ GALLERY: 'gallery' as const, /** _ @alias
-viewTypes.KANBAN _ @memberof viewTypes \*/ KANBAN: 'kanban' as const, })
-
-_Defined in
-[src/types/view.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L21)_
-
-An enum of Airtable's view types
-
-**`alias`** viewTypes
-
-**`example`**
-
-```js
-import {viewTypes} from '@airtable/blocks/models';
-const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
-```

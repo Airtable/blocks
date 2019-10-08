@@ -23,7 +23,7 @@ recordColoring \*/ NONE: 'none' as const, /** _ @alias recordColoring.ModeTypes.
 recordColoring.ModeTypes.BY_VIEW _ @memberof recordColoring _/ BY_VIEW: 'byView' as const, })
 
 _Defined in
-[src/models/record_coloring.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L18)_
+[src/models/record_coloring.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L19)_
 
 An enum of the different types of {@link recordColoring.modes}
 
@@ -38,7 +38,7 @@ An enum of the different types of {@link recordColoring.modes}
 ### ▪ **modes**: _object_
 
 _Defined in
-[src/models/record_coloring.ts:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L63)_
+[src/models/record_coloring.ts:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L64)_
 
 Record coloring config creators.
 
@@ -67,7 +67,7 @@ const queryResult = table.selectRecords({recordColorMode});
 ▸ **bySelectField**(`selectField`: [Field](_airtable_blocks_models__field.md#field)): _Object_
 
 _Defined in
-[src/models/record_coloring.ts:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L78)_
+[src/models/record_coloring.ts:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L79)_
 
 **Parameters:**
 
@@ -84,7 +84,7 @@ a record coloring mode
 ▸ **byView**(`view`: [View](_airtable_blocks_models__view.md#view)): _Object_
 
 _Defined in
-[src/models/record_coloring.ts:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L88)_
+[src/models/record_coloring.ts:89](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L89)_
 
 **Parameters:**
 
@@ -101,7 +101,7 @@ a record coloring mode
 ▸ **none**(): _Object_
 
 _Defined in
-[src/models/record_coloring.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L69)_
+[src/models/record_coloring.ts:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L70)_
 
 **Returns:** _Object_
 

@@ -18,33 +18,33 @@ export type ViewId = string;
  * ));
  * ```
  */
-export const ViewTypes = Object.freeze({
+export enum ViewTypes {
     /**
      * @alias viewTypes.GRID
      * @memberof viewTypes
      */
-    GRID: 'grid' as const,
+    GRID = 'grid',
     /**
      * @alias viewTypes.FORM
      * @memberof viewTypes
      */
-    FORM: 'form' as const,
+    FORM = 'form',
     /**
      * @alias viewTypes.CALENDAR
      * @memberof viewTypes
      */
-    CALENDAR: 'calendar' as const,
+    CALENDAR = 'calendar',
     /**
      * @alias viewTypes.GALLERY
      * @memberof viewTypes
      */
-    GALLERY: 'gallery' as const,
+    GALLERY = 'gallery',
     /**
      * @alias viewTypes.KANBAN
      * @memberof viewTypes
      */
-    KANBAN: 'kanban' as const,
-});
+    KANBAN = 'kanban',
+}
 
 export type ViewType = ObjectValues<typeof ViewTypes>;
 

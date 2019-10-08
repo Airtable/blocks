@@ -15,7 +15,7 @@ export type PrivateColumnType = string;
  * ));
  * ```
  */
-export const FieldTypes = Object.freeze({
+export enum FieldTypes {
     /**
      * A single line of text.
      *
@@ -30,7 +30,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.SINGLE_LINE_TEXT
      * @memberof fieldTypes
      */
-    SINGLE_LINE_TEXT: 'singleLineText' as const,
+    SINGLE_LINE_TEXT = 'singleLineText',
     /**
      * A valid email address (e.g. andrew@example.com).
      *
@@ -45,7 +45,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.EMAIL
      * @memberof fieldTypes
      */
-    EMAIL: 'email' as const,
+    EMAIL = 'email',
     /**
      * A valid URL (e.g. airtable.com or https://airtable.com/universe).
      *
@@ -60,7 +60,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.URL
      * @memberof fieldTypes
      */
-    URL: 'url' as const,
+    URL = 'url',
     /**
      * A long text field that can span multiple lines.
      *
@@ -78,7 +78,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.MULTILINE_TEXT
      * @memberof fieldTypes
      */
-    MULTILINE_TEXT: 'multilineText' as const,
+    MULTILINE_TEXT = 'multilineText',
     /**
      * A number.
      *
@@ -97,7 +97,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.NUMBER
      * @memberof fieldTypes
      */
-    NUMBER: 'number' as const,
+    NUMBER = 'number',
     /**
      * A percentage - 0 is 0%, 1 is 100%.
      *
@@ -116,7 +116,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.PERCENT
      * @memberof fieldTypes
      */
-    PERCENT: 'percent' as const,
+    PERCENT = 'percent',
     /**
      * An amount of a currency.
      *
@@ -136,7 +136,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.CURRENCY
      * @memberof fieldTypes
      */
-    CURRENCY: 'currency' as const,
+    CURRENCY = 'currency',
     /**
      * Single select allows you to select a single option from predefined options in a dropdown.
      *
@@ -165,7 +165,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.SINGLE_SELECT
      * @memberof fieldTypes
      */
-    SINGLE_SELECT: 'singleSelect' as const,
+    SINGLE_SELECT = 'singleSelect',
     /**
      * Multiple select allows you to select one or more predefined options from a dropdown
      *
@@ -194,7 +194,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.MULTIPLE_SELECTS
      * @memberof fieldTypes
      */
-    MULTIPLE_SELECTS: 'multipleSelects' as const,
+    MULTIPLE_SELECTS = 'multipleSelects',
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally be notified when they're added.
      *
@@ -225,7 +225,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.SINGLE_COLLABORATOR
      * @memberof fieldTypes
      */
-    SINGLE_COLLABORATOR: 'singleCollaborator' as const,
+    SINGLE_COLLABORATOR = 'singleCollaborator',
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally be notified when they're added.
      *
@@ -255,7 +255,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.MULTIPLE_COLLABORATORS
      * @memberof fieldTypes
      */
-    MULTIPLE_COLLABORATORS: 'multipleCollaborators' as const,
+    MULTIPLE_COLLABORATORS = 'multipleCollaborators',
     /**
      * Link to another record.
      *
@@ -284,7 +284,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.MULTIPLE_RECORD_LINKS
      * @memberof fieldTypes
      */
-    MULTIPLE_RECORD_LINKS: 'multipleRecordLinks' as const,
+    MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
      * A date.
      *
@@ -309,7 +309,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.DATE
      * @memberof fieldTypes
      */
-    DATE: 'date' as const,
+    DATE = 'date',
     /**
      * A date & time.
      *
@@ -340,7 +340,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.DATE_TIME
      * @memberof fieldTypes
      */
-    DATE_TIME: 'dateTime' as const,
+    DATE_TIME = 'dateTime',
     /**
      * A telephone number (e.g. (415) 555-9876).
      *
@@ -355,7 +355,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.PHONE_NUMBER
      * @memberof fieldTypes
      */
-    PHONE_NUMBER: 'phoneNumber' as const,
+    PHONE_NUMBER = 'phoneNumber',
     /**
      * Attachments allow you to add images, documents, or other files which can then be viewed or downloaded.
      *
@@ -399,7 +399,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.MULTIPLE_ATTACHMENTS
      * @memberof fieldTypes
      */
-    MULTIPLE_ATTACHMENTS: 'multipleAttachments' as const,
+    MULTIPLE_ATTACHMENTS = 'multipleAttachments',
     /**
      * A checkbox.
      *
@@ -423,7 +423,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.CHECKBOX
      * @memberof fieldTypes
      */
-    CHECKBOX: 'checkbox' as const,
+    CHECKBOX = 'checkbox',
     /**
      * Compute a value in each record based on other fields in the same record.
      *
@@ -454,7 +454,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.FORMULA
      * @memberof fieldTypes
      */
-    FORMULA: 'formula' as const,
+    FORMULA = 'formula',
     /**
      * The time the record was created in UTC.
      *
@@ -480,7 +480,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.CREATED_TIME
      * @memberof fieldTypes
      */
-    CREATED_TIME: 'createdTime' as const,
+    CREATED_TIME = 'createdTime',
     /**
      * A rollup allows you to summarize data from records that are linked to this table.
      *
@@ -515,7 +515,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.ROLLUP
      * @memberof fieldTypes
      */
-    ROLLUP: 'rollup' as const,
+    ROLLUP = 'rollup',
     /**
      * Count the number of linked records.
      *
@@ -537,7 +537,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.COUNT
      * @memberof fieldTypes
      */
-    COUNT: 'count' as const,
+    COUNT = 'count',
     /**
      * Lookup a field on linked records.
      *
@@ -550,7 +550,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.MULTIPLE_LOOKUP_VALUES
      * @memberof fieldTypes
      */
-    MULTIPLE_LOOKUP_VALUES: 'multipleLookupValues' as const,
+    MULTIPLE_LOOKUP_VALUES = 'multipleLookupValues',
     /**
      * Automatically incremented unique counter for each record.
      *
@@ -565,7 +565,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.AUTO_NUMBER
      * @memberof fieldTypes
      */
-    AUTO_NUMBER: 'autoNumber' as const,
+    AUTO_NUMBER = 'autoNumber',
     /**
      * Use the Airtable iOS or Android app to scan barcodes.
      *
@@ -585,7 +585,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.BARCODE
      * @memberof fieldTypes
      */
-    BARCODE: 'barcode' as const,
+    BARCODE = 'barcode',
     /**
      * A rating (e.g. stars out of 5)
      *
@@ -609,13 +609,13 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.RATING
      * @memberof fieldTypes
      */
-    RATING: 'rating' as const,
+    RATING = 'rating',
     /**
      * @internal - not yet generally available
      * @alias fieldTypes.RICH_TEXT
      * @memberof fieldTypes
      */
-    RICH_TEXT: 'richText' as const,
+    RICH_TEXT = 'richText',
     /**
      * A duration of time in seconds.
      *
@@ -635,7 +635,7 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.DURATION
      * @memberof fieldTypes
      */
-    DURATION: 'duration' as const,
+    DURATION = 'duration',
     /**
      * Shows the date and time that a record was most recently modified in any editable field or
      * just in specific editable fields.
@@ -667,8 +667,8 @@ export const FieldTypes = Object.freeze({
      * @alias fieldTypes.LAST_MODIFIED_TIME
      * @memberof fieldTypes
      */
-    LAST_MODIFIED_TIME: 'lastModifiedTime' as const,
-});
+    LAST_MODIFIED_TIME = 'lastModifiedTime',
+}
 
 export type FieldType = ObjectValues<typeof FieldTypes>;
 

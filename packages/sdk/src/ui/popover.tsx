@@ -14,30 +14,30 @@ import * as Geometry from './geometry/geometry';
 // contains a period (as Popover.placements does).
 
 /**
- * An enum describing popover placements. One of `Popover.placements.TOP`, `Popover.placements.CENTER`, `Popover.placements.BOTTOM`, `Popover.placements.LEFT`, `Popover.placements.RIGHT`.
+ * An enum describing popover placements.
  *
  * @alias Popover.placements
  */
-const PopoverPlacements = Object.freeze({
-    TOP: 'top' as const,
-    CENTER: 'center' as const,
-    BOTTOM: 'bottom' as const,
-    LEFT: 'left' as const,
-    RIGHT: 'right' as const,
-});
+enum PopoverPlacements {
+    TOP = 'top',
+    CENTER = 'center',
+    BOTTOM = 'bottom',
+    LEFT = 'left',
+    RIGHT = 'right',
+}
 export type PopoverPlacementX = 'left' | 'center' | 'right';
 export type PopoverPlacementY = 'top' | 'center' | 'bottom';
 
 /**
- * An enum describing the fit-in-window mode. One of `Popover.fitInWindowModes.NONE`, `Popover.fitInWindowModes.FLIP`, `Popover.fitInWindowModes.NUDGE`.
+ * An enum describing the fit-in-window mode.
  *
  * @alias Popover.fitInWindowModes
  */
-const FitInWindowModes = Object.freeze({
-    NONE: 'none' as const,
-    FLIP: 'flip' as const,
-    NUDGE: 'nudge' as const,
-});
+enum FitInWindowModes {
+    NONE = 'none',
+    FLIP = 'flip',
+    NUDGE = 'nudge',
+}
 export type FitInWindowMode = ObjectValues<typeof FitInWindowModes>;
 
 /**
