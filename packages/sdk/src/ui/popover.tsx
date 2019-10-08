@@ -18,7 +18,7 @@ import * as Geometry from './geometry/geometry';
  *
  * @alias Popover.placements
  */
-enum PopoverPlacements {
+export enum PopoverPlacements {
     TOP = 'top',
     CENTER = 'center',
     BOTTOM = 'bottom',
@@ -33,7 +33,7 @@ export type PopoverPlacementY = 'top' | 'center' | 'bottom';
  *
  * @alias Popover.fitInWindowModes
  */
-enum FitInWindowModes {
+export enum FitInWindowModes {
     NONE = 'none',
     FLIP = 'flip',
     NUDGE = 'nudge',
