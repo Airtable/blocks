@@ -10,6 +10,8 @@ const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
 
 export type CellValueValidationResult = {isValid: true} | {isValid: false; reason: string};
 
+// TODO(emma): Delete this once removed from record_card: nothing should be using private types
+// in the SDK
 const publicCellValueUtils = {
     parsePublicApiCellValue(publicCellValue: unknown, field: Field): unknown {
         return columnTypeProvider.parsePublicApiCellValue(

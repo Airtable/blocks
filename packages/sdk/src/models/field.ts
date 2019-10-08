@@ -8,16 +8,6 @@ import AbstractModel from './abstract_model';
 import Aggregators, {Aggregator} from './aggregators';
 import Table from './table';
 
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_type_provider',
-);
-const ApiCellFormats = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/api_cell_formats',
-);
-const {PublicApiVersions} = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/api_versions',
-);
-
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
 const WatchableFieldKeys = Object.freeze({
@@ -173,15 +163,17 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get type(): FieldType {
-        // TODO: add separate methods for getting type and options and
-        const {type} = columnTypeProvider.getConfigForPublicApi(
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
-            getSdk().__appInterface,
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
+
+        const {type} = airtableInterface.fieldTypeProvider.getConfig(
+            appInterface,
+            this._data,
             this.parentTable.__getFieldNamesById(),
         );
         // We intend to switch from "lookup" to "multipleLookupValues", but need to support both
         // until the transition is complete. See <https://airtable.quip.com/VxaMAmAfUscs> for more.
+        // @ts-ignore
         if (type === 'lookup') {
             return FieldTypes.MULTIPLE_LOOKUP_VALUES;
         } else {
@@ -203,13 +195,16 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get options(): {[key: string]: unknown} | null {
-        const {options} = columnTypeProvider.getConfigForPublicApi(
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
-            getSdk().__appInterface,
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
+
+        const {options} = airtableInterface.fieldTypeProvider.getConfig(
+            appInterface,
+            this._data,
             this.parentTable.__getFieldNamesById(),
         );
 
+        // TODO(emma): can we remove this cloneDeep?
         return options ? cloneDeep(options) : null;
     }
     /**
@@ -226,8 +221,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get isComputed(): boolean {
-        const isComputed = columnTypeProvider.isComputed(this.__getRawType());
-        return isComputed;
+        const airtableInterface = getSdk().__airtableInterface;
+        return airtableInterface.fieldTypeProvider.isComputed(this._data);
     }
     /**
      * @function
@@ -300,32 +295,25 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     convertStringToCellValue(string: string): unknown {
-        // TODO(jb): figure out 'cacheForBulkConversion'
-        const privateCellValue = columnTypeProvider.convertStringToCellValue(
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
+
+        const cellValue = airtableInterface.fieldTypeProvider.convertStringToCellValue(
+            appInterface,
             string,
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
-            getSdk().__appInterface,
+            this._data,
         );
 
-        const publicCellValue = columnTypeProvider.formatCellValueForPublicApi(
-            privateCellValue,
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
-            getSdk().__appInterface,
-            {cellFormat: ApiCellFormats.JSON, apiVersion: PublicApiVersions.API2},
-        );
-        const validationResult = columnTypeProvider.validatePublicApiCellValueForUpdate(
-            publicCellValue,
+        // TODO(emma): do we need to validate here?
+        const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+            appInterface,
+            cellValue,
             null,
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
-            getSdk().__appInterface,
-            PublicApiVersions.API2,
+            this._data,
         );
 
         if (validationResult.isValid) {
-            return publicCellValue;
+            return cellValue;
         } else {
             return null;
         }

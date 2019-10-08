@@ -1,3 +1,4 @@
+import getSdk from '../get_sdk';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
@@ -5,7 +6,6 @@ import {entries, ObjectMap} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
 import {GlobalConfigUpdate} from '../global_config';
 import {FieldId} from '../types/field';
-import cellValueUtils from './cell_value_utils';
 import Session from './session';
 import Base from './base';
 import Field from './field';
@@ -150,6 +150,9 @@ class Mutations {
         // gives us slightly more confidence that we can do something other than completely crash
         // the block in the event of an invalid mutation.
 
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
+
         switch (mutation.type) {
             case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
                 const {tableId, records} = mutation;
@@ -190,11 +193,11 @@ class Mutations {
                         }
 
                         if (existingRecord && recordStore.areCellValuesLoadedForFieldId(fieldId)) {
-                            const oldCellValue = existingRecord.getCellValue(fieldId);
-                            const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                            const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                                appInterface,
                                 record.cellValuesByFieldId[fieldId],
-                                oldCellValue,
-                                field,
+                                existingRecord.getCellValue(fieldId),
+                                field._data,
                             );
                             if (!validationResult.isValid) {
                                 throw spawnError(validationResult.reason);
@@ -254,10 +257,11 @@ class Mutations {
                         }
 
                         // Current cell value is null since the record doesn't exist.
-                        const validationResult = cellValueUtils.validatePublicCellValueForUpdate(
+                        const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                            appInterface,
                             record.cellValuesByFieldId[fieldId],
                             null,
-                            field,
+                            field._data,
                         );
                         if (!validationResult.isValid) {
                             throw spawnError(validationResult.reason);

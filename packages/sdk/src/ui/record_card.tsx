@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
+import getSdk from '../get_sdk';
 import {
     values,
     isNullOrUndefinedOrEmpty,
@@ -45,9 +46,6 @@ import {
 import {splitStyleProps} from './with_styled_system';
 import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
 
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_type_provider',
-);
 // Mirrored from client_server_shared_config_settings
 const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 
@@ -372,6 +370,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
     }
     /** @internal */
     _getRawCellValue(field: Field): unknown {
+        // TODO(emma): delete this, just rely on public format
         const {record} = this.props;
         if (record && record instanceof Record) {
             return record.__getRawCellValue(field.id);
@@ -425,21 +424,22 @@ export class RecordCard extends React.Component<RecordCardProps> {
     _getWidthAndFieldIdArray(cellContainerWidth: number, fieldsToUse: Array<Field>) {
         const widthAndFieldIdArray = [];
         let runningWidth = 0;
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
 
         for (const field of fieldsToUse) {
-            const desiredWidth = columnTypeProvider.getDesiredCellWidthForRowCard(
-                field.__getRawType(),
-                field.__getRawTypeOptions(),
+            const uiConfig = airtableInterface.fieldTypeProvider.getUiConfig(
+                appInterface,
+                field._data,
             );
+            const desiredWidth = uiConfig.desiredCellWidthForRecordCard;
 
             if (runningWidth + desiredWidth < cellContainerWidth) {
                 widthAndFieldIdArray.push({width: desiredWidth, fieldId: field.id});
                 runningWidth += desiredWidth;
             } else {
-                const minCellWidth = columnTypeProvider.getMinCellWidthForRowCard(
-                    field.__getRawType(),
-                    field.__getRawTypeOptions(),
-                );
+                const minCellWidth = uiConfig.minimumCellWidthForRecordCard;
+
                 if (runningWidth + minCellWidth < cellContainerWidth) {
                     widthAndFieldIdArray.push({width: minCellWidth, fieldId: field.id});
                     runningWidth += minCellWidth;

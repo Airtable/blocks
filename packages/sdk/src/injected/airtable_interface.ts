@@ -1,8 +1,8 @@
-import {FlowAnyObject} from '../private_utils';
+import {FlowAnyObject, ObjectMap} from '../private_utils';
 import {BaseData, BasePermissionData} from '../types/base';
 import {BlockInstallationId} from '../types/block';
 import {HostToBlockMessageType} from '../types/block_frame';
-import {FieldData} from '../types/field';
+import {FieldData, FieldId, FieldType} from '../types/field';
 import {GlobalConfigUpdate, GlobalConfigData} from '../global_config';
 import {RecordData, RecordDef, RecordId} from '../types/record';
 import {UndoRedoMode} from '../types/undo_redo';
@@ -67,6 +67,46 @@ interface Aggregators {
     getAvailableAggregatorKeysForField(fieldData: FieldData): Array<AggregatorKey>;
 }
 
+type CellValueValidationResult = {isValid: true} | {isValid: false, reason: string};
+type FieldTypeConfig = {type: FieldType, options?: {[key: string]: unknown}};
+type FieldUiConfig = {
+    iconName: string,
+    desiredCellWidthForRecordCard: number,
+    minimumCellWidthForRecordCard: number,
+};
+
+interface FieldTypeProvider {
+    isComputed(fieldData: FieldData): boolean;
+    validateCellValueForUpdate(
+        appInterface: AppInterface,
+        newCellValue: unknown,
+        currentCellValue: unknown,
+        fieldData: FieldData,
+    ): CellValueValidationResult;
+    getConfig(
+        appInterface: AppInterface,
+        fieldData: FieldData,
+        fieldNamesById: ObjectMap<FieldId, string>,
+    ): FieldTypeConfig;
+    convertStringToCellValue(
+        appInterface: AppInterface,
+        string: string,
+        fieldData: FieldData,
+    ): unknown;
+    convertCellValueToString(
+        appInterface: AppInterface,
+        cellValue: unknown,
+        fieldData: FieldData,
+    ): string;
+    getCellRendererData(
+        appInterface: AppInterface,
+        cellValue: unknown,
+        fieldData: FieldData,
+        shouldWrap: boolean,
+    ): {cellValueHtml: string, attributes: {[key: string]: unknown}};
+    getUiConfig: (appInterface: AppInterface, fieldData: FieldData) => FieldUiConfig;
+}
+
 // AppInterface should never be used directly by the SDK, so we don't describe the type.
 export type AppInterface = unknown;
 
@@ -89,6 +129,7 @@ export interface AirtableInterface {
     idGenerator: IdGenerator;
     urlConstructor: UrlConstructor;
     aggregators: Aggregators;
+    fieldTypeProvider: FieldTypeProvider;
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 

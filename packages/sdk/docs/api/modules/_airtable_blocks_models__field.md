@@ -899,7 +899,7 @@ None
 • **Field**:
 
 _Defined in
-[src/models/field.ts:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L44)_
+[src/models/field.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L34)_
 
 Model class representing a field in a table.
 
@@ -918,7 +918,7 @@ console.log('The type of this field is', field.type);
 • **availableAggregators**:
 
 _Defined in
-[src/models/field.ts:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L248)_
+[src/models/field.ts:243](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L243)_
 
 **`function`**
 
@@ -949,7 +949,7 @@ _Defined in
 • **isComputed**:
 
 _Defined in
-[src/models/field.ts:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L228)_
+[src/models/field.ts:223](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L223)_
 
 **`function`**
 
@@ -991,7 +991,7 @@ data.
 • **isPrimaryField**:
 
 _Defined in
-[src/models/field.ts:237](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L237)_
+[src/models/field.ts:232](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L232)_
 
 **`function`**
 
@@ -1003,7 +1003,7 @@ never change because the primary field of a table cannot change.
 • **name**:
 
 _Defined in
-[src/models/field.ts:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L163)_
+[src/models/field.ts:153](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L153)_
 
 **`function`**
 
@@ -1021,7 +1021,7 @@ console.log(myField.name);
 • **options**:
 
 _Defined in
-[src/models/field.ts:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L205)_
+[src/models/field.ts:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L197)_
 
 **`function`**
 
@@ -1044,7 +1044,7 @@ if (myField.type === fieldTypes.CURRENCY) {
 • **type**:
 
 _Defined in
-[src/models/field.ts:175](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L175)_
+[src/models/field.ts:165](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L165)_
 
 **`function`**
 
@@ -1062,7 +1062,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:302](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L302)_
+[src/models/field.ts:297](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L297)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -1092,7 +1092,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 [Aggregator](_airtable_blocks_models__aggregators.md#aggregator) | AggregatorKey): _boolean_
 
 _Defined in
-[src/models/field.ts:276](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L276)_
+[src/models/field.ts:271](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L271)_
 
 **`function`**
 

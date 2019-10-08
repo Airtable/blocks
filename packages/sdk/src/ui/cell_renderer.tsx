@@ -7,8 +7,6 @@ import getSdk from '../get_sdk';
 import {spawnError} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
-import cellValueUtils from '../models/cell_value_utils';
-import {PrivateColumnType} from '../types/field';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 import {
@@ -37,16 +35,6 @@ import useStyledSystem from './use_styled_system';
 import {splitStyleProps} from './with_styled_system';
 import {Prop} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_type_provider',
-);
-const CellReadModeContext = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/cell_context/cell_read_mode_context',
-);
-const CellContextTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/cell_context/cell_context_types',
-);
 
 interface StyleProps
     extends FlexItemSetProps,
@@ -199,7 +187,10 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             return null;
         }
 
-        let publicCellValue;
+        const airtableInterface = getSdk().__airtableInterface;
+        const appInterface = getSdk().__appInterface;
+
+        let cellValueToRender;
         if (record) {
             if (cellValue !== undefined) {
                 // eslint-disable-next-line
@@ -212,7 +203,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
                 return null;
             }
 
-            publicCellValue = record.getCellValue(field.id);
+            cellValueToRender = record.getCellValue(field.id);
         } else {
             // NOTE: this will not work if you want to render a cell value for
             // foreign record, single/multi select, or single/multi collaborator
@@ -221,32 +212,30 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             // does not yet exist, this will throw.
             // TODO: handle "preview" cell values that are not yet valid in the given field
             // but that *could* be.
-            cellValueUtils.validatePublicCellValueForUpdate(cellValue, null, field);
-            publicCellValue = cellValue;
+            const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                appInterface,
+                cellValue,
+                null,
+                field._data,
+            );
+            if (!validationResult.isValid) {
+                throw spawnError(
+                    'Cannot render invalid cell value %s: %s',
+                    cellValue,
+                    validationResult.reason,
+                );
+            }
+
+            cellValueToRender = cellValue;
         }
-        const privateCellValue = cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
 
-        const cellContextType = shouldWrap
-            ? CellContextTypes.BLOCKS_READ_WRAP
-            : CellContextTypes.BLOCKS_READ_NO_WRAP;
-
-        const rawHtml = columnTypeProvider.renderReadModeCellValue(
-            privateCellValue,
-            field.__getRawType(),
-            field.__getRawTypeOptions(),
-            getSdk().__appInterface,
-            CellReadModeContext.forContextType(cellContextType),
+        const {cellValueHtml, attributes} = airtableInterface.fieldTypeProvider.getCellRendererData(
+            appInterface,
+            cellValueToRender,
+            field._data,
+            !!shouldWrap,
         );
-        const attributes: {
-            ['data-columntype']: PrivateColumnType;
-            ['data-formatting']?: {[key: string]: unknown};
-        } = {
-            'data-columntype': field.__getRawType(),
-        };
-        const typeOptions = field.__getRawTypeOptions();
-        if (typeOptions && typeOptions.resultType) {
-            attributes['data-formatting'] = typeOptions.resultType;
-        }
+
         return (
             <div
                 // TODO (stephen): remove tooltip anchor props
@@ -261,7 +250,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
                     className={cx('cell read', cellClassName)}
                     style={cellStyle}
                     dangerouslySetInnerHTML={{
-                        __html: rawHtml,
+                        __html: cellValueHtml,
                     }}
                 />
             </div>

@@ -5,10 +5,6 @@ import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Icon, {sharedIconPropTypes, SharedIconProps, stylePropTypes, StyleProps} from './icon';
 
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_type_provider',
-);
-
 /**
  * @typedef {object} FieldIconProps
  * @property {Field} field The field model to display an icon for.
@@ -58,15 +54,12 @@ interface FieldIconProps extends SharedIconProps, StyleProps {
 const FieldIcon = (props: FieldIconProps) => {
     const {field, ...restOfProps} = props;
 
-    const type = field.__getRawType();
-    const typeOptions = field.__getRawTypeOptions();
+    const airtableInterface = getSdk().__airtableInterface;
     const appInterface = getSdk().__appInterface;
 
-    const displayType = columnTypeProvider.getDisplayType(type, typeOptions, appInterface);
-    const displayTypeConfigs = columnTypeProvider.getDisplayTypeConfigs(type);
-    const config = displayTypeConfigs[displayType];
+    const uiConfig = airtableInterface.fieldTypeProvider.getUiConfig(appInterface, field._data);
 
-    const name = config.displayTypeIcon;
+    const name = uiConfig.iconName;
     return <Icon name={name} {...restOfProps} />;
 };
 

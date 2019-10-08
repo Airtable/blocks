@@ -23,10 +23,6 @@ import {RecordQueryResultOpts} from './record_query_result';
 import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
 
-const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_type_provider',
-);
-
 const WatchableRecordKeys = Object.freeze({
     primaryCellValue: 'primaryCellValue' as const,
     commentCount: 'commentCount' as const,
@@ -185,6 +181,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     }
     /**
      * @internal
+     * TODO: emma: delete this (used by record_card)
      */
     __getRawCellValue(fieldId: string): unknown {
         const publicCellValue = this.getCellValue(fieldId);
@@ -289,16 +286,17 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         if (!this._parentRecordStore.areCellValuesLoadedForFieldId(field.id)) {
             throw spawnInvariantViolationError('Cell values for field %s are not loaded', field.id);
         }
-        const rawCellValue = this.__getRawCellValue(field.id);
+        const cellValue = this.getCellValue(field.id);
 
-        if (rawCellValue === null || rawCellValue === undefined) {
+        if (cellValue === null || cellValue === undefined) {
             return '';
         } else {
-            return columnTypeProvider.convertCellValueToString(
-                rawCellValue,
-                field.__getRawType(),
-                field.__getRawTypeOptions(),
-                getSdk().__appInterface,
+            const airtableInterface = getSdk().__airtableInterface;
+            const appInterface = getSdk().__appInterface;
+            return airtableInterface.fieldTypeProvider.convertCellValueToString(
+                appInterface,
+                cellValue,
+                field._data,
             );
         }
     }

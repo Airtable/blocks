@@ -20,7 +20,7 @@
 • **CellRenderer**:
 
 _Defined in
-[src/ui/cell_renderer.tsx:136](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L136)_
+[src/ui/cell_renderer.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L124)_
 
 Displays the contents of a cell.
 
@@ -59,7 +59,7 @@ export default function CellRendererExample(props) {
 • **CellRendererProps**:
 
 _Defined in
-[src/ui/cell_renderer.tsx:93](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L93)_
+[src/ui/cell_renderer.tsx:81](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L81)_
 
 **`typedef`** {object} CellRendererProps
 
