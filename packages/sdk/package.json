@@ -16,7 +16,6 @@
         "types.d.ts"
     ],
     "scripts": {
-        "prepare": "yarn run build && yarn run docs",
         "pretest": "yarn run lint && yarn run types",
         "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run docs && git add CHANGELOG.md docs/api",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",

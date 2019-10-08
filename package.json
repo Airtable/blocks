@@ -28,7 +28,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "echo 'TODO(alex): restore pretty-quick --staged'"
+            "pre-commit": "echo 'TODO(alex): restore pretty-quick --staged' && if git diff --cached --name-only | grep --quiet 'packages/sdk'; then cd packages/sdk && yarn build && yarn docs && yarn test; fi"
         }
     }
 }
