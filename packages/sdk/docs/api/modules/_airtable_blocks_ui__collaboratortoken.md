@@ -21,7 +21,7 @@
 object & object & object & object & object & object & object & object & object & object_
 
 _Defined in
-[src/ui/collaborator_token.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L51)_
+[src/ui/collaborator_token.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L52)_
 
 **`typedef`** {object} CollaboratorTokenProps
 
@@ -51,7 +51,7 @@ these objects from scratch, but should instead grab them from base data.
 _Element_
 
 _Defined in
-[src/ui/collaborator_token.tsx:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L79)_
+[src/ui/collaborator_token.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L80)_
 
 A component that shows a single collaborator in a small token, to be displayed inline or in a list
 of choices.

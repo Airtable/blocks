@@ -1,11 +1,10 @@
 /** @module @airtable/blocks/models: Base */ /** */
-import {BaseData, AppBlanketData, ModelChange} from '../types/base';
+import {BaseData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {TableId} from '../types/table';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {
     isEnumValue,
-    values,
     entries,
     isDeepEqual,
     ObjectValues,
@@ -16,11 +15,6 @@ import {spawnError, spawnInvariantViolationError} from '../error_utils';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
-
-const {h} = window.__requirePrivateModuleFromAirtable('client_server_shared/hu');
-const appBlanketUserObjMethods = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/helpers/app_blanket_user_obj_methods',
-);
 
 // How these model classes work:
 //
@@ -181,40 +175,17 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * ```
      */
     get activeCollaborators(): Array<CollaboratorData> {
-        const collaborators = [];
-        const appBlanket = this.__appBlanket;
-        if (appBlanket) {
-            const {userInfoById} = appBlanket;
-            // Exclude invites and former collaborators.
-            if (userInfoById) {
-                for (const userObj of values(userInfoById)) {
-                    if (
-                        appBlanketUserObjMethods.isActive(userObj) &&
-                        !h.id.isInviteId(userObj.id)
-                    ) {
-                        collaborators.push(
-                            appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj),
-                        );
-                    }
-                }
-            }
-        }
-        return collaborators;
+        return this._data.activeCollaboratorIds.map(collaboratorId =>
+            this.getCollaboratorById(collaboratorId),
+        );
     }
     /**
      * @param collaboratorId The ID of the user.
      * @returns The user matching the given ID, or `null` if that user does not exist or does not have access to this base.
      */
     getCollaboratorByIdIfExists(collaboratorId: UserId): CollaboratorData | null {
-        const appBlanket = this.__appBlanket;
-        if (!appBlanket || !appBlanket.userInfoById) {
-            return null;
-        }
-        const userObj = appBlanket.userInfoById[collaboratorId];
-        if (!userObj) {
-            return null;
-        }
-        return appBlanketUserObjMethods.formatUserObjForPublicApiV2(userObj);
+        const collaboratorsById = this._data.collaboratorsById;
+        return has(collaboratorsById, collaboratorId) ? collaboratorsById[collaboratorId] : null;
     }
     /**
      * @param collaboratorId The ID of the user.
@@ -233,13 +204,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             );
         }
         return collaborator;
-    }
-    /**
-     * @internal
-     * TODO(emma): Delete appBlanket when we've added collaboratorsById
-     */
-    get __appBlanket(): AppBlanketData {
-        return this._data.appBlanket;
     }
     /**
      * @internal
@@ -352,9 +316,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
                 }
             }
         }
-        if (changedPaths.appInterface) {
-            // TODO(emma): Trigger onChange on changedPaths.collaboratorsById instead
+        if (changedPaths.collaboratorsById || changedPaths.activeCollaboratorIds) {
             this._onChange(WatchableBaseKeys.collaborators);
+        }
+        if (changedPaths.appInterface) {
             didSchemaChange = true;
         }
         if (didSchemaChange) {

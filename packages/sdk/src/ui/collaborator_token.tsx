@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {CollaboratorStatuses, CollaboratorData} from '../types/collaborator';
+import {CollaboratorData} from '../types/collaborator';
 import Box from './box';
 import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
@@ -19,6 +19,7 @@ import {
     MarginProps,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import useBase from './use_base';
 
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
@@ -88,17 +89,18 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
         style,
         ...styleProps
     } = props;
+    // Re-render when collaborator info updates. This is to ensure isActive is accurate.
+    const base = useBase();
+
     const classNameForStyledProps = useStyledSystem<StyleProps>(styleProps, styleParser);
 
-    const userName =
-        collaborator.name ||
-        collaborator.email ||
-        (collaborator.status === CollaboratorStatuses.INVITED && 'Invited user') ||
-        'Unknown';
+    const userName = collaborator.name || collaborator.email || 'Unknown';
     const profilePicUrl = collaborator.profilePicUrl || UNKNOWN_PROFILE_PIC_URL;
-    const isActive = collaborator.status
-        ? collaborator.status === CollaboratorStatuses.CURRENT
-        : true;
+
+    const activeCollaborators = base.activeCollaborators;
+    const isActive = activeCollaborators.some(activeCollaborator => {
+        return activeCollaborator.id === collaborator.id;
+    });
 
     return (
         <Box
@@ -110,6 +112,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
             style={style}
             alignItems="center"
             display="inline-flex"
+            opacity={isActive ? 1 : 0.5}
         >
             {profilePicUrl && (
                 <Box
@@ -121,7 +124,6 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
                     borderRadius="circle"
                     zIndex={1}
                     flex="none"
-                    opacity={isActive ? 1 : 0.5}
                     backgroundColor="grayLight2"
                 />
             )}

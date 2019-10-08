@@ -16,7 +16,7 @@
 • **Base**:
 
 _Defined in
-[src/models/base.ts:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L63)_
+[src/models/base.ts:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L57)_
 
 Model class representing a base.
 
@@ -33,7 +33,7 @@ console.log('The name of your base is', base.name);
 • **activeCollaborators**:
 
 _Defined in
-[src/models/base.ts:183](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L183)_
+[src/models/base.ts:177](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L177)_
 
 **`function`**
 
@@ -86,7 +86,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/base.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L147)_
+[src/models/base.ts:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L141)_
 
 **`function`**
 
@@ -104,7 +104,7 @@ console.log('The name of your base is', base.name);
 • **tables**:
 
 _Defined in
-[src/models/base.ts:159](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L159)_
+[src/models/base.ts:153](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L153)_
 
 **`function`**
 
@@ -123,7 +123,7 @@ console.log(`You have ${base.tables.length} tables`);
 ▸ **getCollaboratorById**(`collaboratorId`: UserId): _CollaboratorData_
 
 _Defined in
-[src/models/base.ts:226](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L226)_
+[src/models/base.ts:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L197)_
 
 **Parameters:**
 
@@ -143,7 +143,7 @@ if you are unsure whether a collaborator with the given ID exists and has access
 ▸ **getCollaboratorByIdIfExists**(`collaboratorId`: UserId): _CollaboratorData | null_
 
 _Defined in
-[src/models/base.ts:208](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L208)_
+[src/models/base.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L186)_
 
 **Parameters:**
 
@@ -161,7 +161,7 @@ this base.
 ▸ **getTableById**(`tableId`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:288](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L288)_
+[src/models/base.ts:252](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L252)_
 
 **Parameters:**
 
@@ -181,7 +181,7 @@ unsure whether a table exists with the given ID.
 null_
 
 _Defined in
-[src/models/base.ts:268](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L268)_
+[src/models/base.ts:232](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L232)_
 
 **Parameters:**
 
@@ -198,7 +198,7 @@ The table matching the given ID, or `null` if that table does not exist in this 
 ▸ **getTableByName**(`tableName`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:311](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L311)_
+[src/models/base.ts:275](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L275)_
 
 **Parameters:**
 
@@ -218,7 +218,7 @@ unsure whether a table exists with the given name.
 | null_
 
 _Defined in
-[src/models/base.ts:299](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L299)_
+[src/models/base.ts:263](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L263)_
 
 **Parameters:**
 

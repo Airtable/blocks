@@ -173,8 +173,8 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
                 changedKeys[WatchableSessionKeys.permissionLevel] = true;
             }
 
-            // TODO(emma): Check for collaboratorsById change instead
-            if (path[0] === 'appInterface') {
+            // TODO(emma): fire change only when the current user's info changes
+            if (path[0] === 'collaboratorsById') {
                 changedKeys[WatchableSessionKeys.currentUser] = true;
             }
         }

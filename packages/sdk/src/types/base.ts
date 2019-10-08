@@ -3,28 +3,13 @@ import {ObjectMap} from '../private_utils';
 import {PermissionLevel} from './permission_levels';
 import {TableData, TablePermissionData, TableId} from './table';
 import {CursorData} from './cursor';
-import {UserId} from './collaborator';
+import {CollaboratorData, UserId} from './collaborator';
 
 export type BaseId = string;
-export type ObjectId = string;
-export type InviteId = string;
 
 export type ModelChange = {
     path: Array<string>;
     value: unknown;
-};
-
-export type AppBlanketUserData = {
-    id: UserId | InviteId;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    profilePicUrl?: string;
-    permissionLevel: PermissionLevel;
-};
-
-export type AppBlanketData = {
-    userInfoById?: ObjectMap<UserId | InviteId, AppBlanketUserData>;
 };
 
 export type BaseData = {
@@ -34,9 +19,10 @@ export type BaseData = {
     activeTableId: TableId | null;
     tablesById: ObjectMap<TableId, TableData>;
 
-    // // TODO(emma): Delete appBlanket when we've added collaboratorsById
-    appBlanket: AppBlanketData;
     appInterface: AppInterface;
+
+    collaboratorsById: ObjectMap<UserId, CollaboratorData>;
+    activeCollaboratorIds: Array<UserId>;
 
     // These will be exposed through separate models, but stored
     // on base data for convenience.
