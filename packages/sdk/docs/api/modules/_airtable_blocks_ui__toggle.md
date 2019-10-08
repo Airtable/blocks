@@ -131,7 +131,7 @@ _Defined in
 
 ### SharedToggleProps
 
-Ƭ **SharedToggleProps**: _object & object_
+Ƭ **SharedToggleProps**: _object & TooltipAnchorProps_
 
 _Defined in
 [src/ui/toggle.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L75)_
@@ -169,9 +169,9 @@ visible text label.
 
 ### ToggleSyncedProps
 
-Ƭ **ToggleSyncedProps**: _object & object & object & object & object & object & object & object &
+Ƭ **ToggleSyncedProps**: _object & object & TooltipAnchorProps‹HTMLElement› & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object_
+object & object & object & object & object & object_
 
 _Defined in
 [src/ui/toggle_synced.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L30)_

@@ -17,10 +17,7 @@
 
 ### FieldIconProps
 
-Ƭ **FieldIconProps**: _object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object_
+Ƭ **FieldIconProps**: _object & SharedIconProps & StyleProps_
 
 _Defined in
 [src/ui/field_icon.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L22)_

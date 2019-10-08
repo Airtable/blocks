@@ -202,6 +202,10 @@ toc:
             children:
                 - Text
                 - TextProps
+          - name: TextButton
+            children:
+                - TextButton
+                - TextButtonProps
           - name: Toggle
             children:
                 - Toggle

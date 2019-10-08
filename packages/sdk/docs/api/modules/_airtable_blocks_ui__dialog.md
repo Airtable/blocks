@@ -174,7 +174,7 @@ Space/Enter keypress events.
 
 ### DialogCloseButtonProps
 
-Ƭ **DialogCloseButtonProps**: _object & object_
+Ƭ **DialogCloseButtonProps**: _object & TooltipAnchorProps_
 
 _Defined in
 [src/ui/dialog_close_button.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L40)_

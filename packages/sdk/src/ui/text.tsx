@@ -26,11 +26,12 @@ export const TextSizes = Object.freeze({
 });
 export type TextSize = ObjectValues<typeof TextSizes>;
 export type TextSizeProp = ResponsivePropObject<TextSize> | TextSize;
+export const textSizePropType = createResponsivePropType(PropTypes.oneOf(values(TextSizes)));
 
 /** @internal */
 export function useTextSize(
     textSizeProp: TextSizeProp,
-    variant: TextVariant,
+    variant: TextVariant = TextVariants.DEFAULT,
 ): Partial<AllStylesProps> {
     const {textSizesByVariant} = useTheme();
     const textSizesForVariant = textSizesByVariant[variant];
@@ -203,7 +204,7 @@ const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
         'var',
         'blockquote',
     ]),
-    size: createResponsivePropType(PropTypes.oneOf(values(TextSizes))),
+    size: textSizePropType,
     variant: PropTypes.oneOf(values(TextVariants)),
     children: PropTypes.node,
     id: PropTypes.string,
@@ -215,7 +216,7 @@ const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
     ...ariaPropTypes,
 };
 
-(ForwardedRefText as any).defaultProps = {
+ForwardedRefText.defaultProps = {
     as: 'p',
     size: TextSizes.DEFAULT,
     variant: TextVariants.DEFAULT,

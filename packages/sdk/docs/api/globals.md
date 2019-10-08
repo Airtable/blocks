@@ -40,6 +40,7 @@
 -   [@airtable/blocks/ui: Select](modules/_airtable_blocks_ui__select.md)
 -   [@airtable/blocks/ui: Synced](modules/_airtable_blocks_ui__synced.md)
 -   [@airtable/blocks/ui: TablePicker](modules/_airtable_blocks_ui__tablepicker.md)
+-   [@airtable/blocks/ui: TextButton](modules/_airtable_blocks_ui__textbutton.md)
 -   [@airtable/blocks/ui: Toggle](modules/_airtable_blocks_ui__toggle.md)
 -   [@airtable/blocks/ui: Tooltip](modules/_airtable_blocks_ui__tooltip.md)
 -   [@airtable/blocks/ui: UI](modules/_airtable_blocks_ui__ui.md)

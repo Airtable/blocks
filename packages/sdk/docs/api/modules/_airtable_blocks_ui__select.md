@@ -178,7 +178,7 @@ _Defined in
 
 ### SelectButtonsProps
 
-Ƭ **SelectButtonsProps**: _object & object & object_
+Ƭ **SelectButtonsProps**: _object & object & TooltipAnchorProps‹HTMLElement›_
 
 _Defined in
 [src/ui/select_buttons.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L111)_
@@ -210,9 +210,9 @@ referenced by a label element.
 
 ### SelectButtonsSyncedProps
 
-Ƭ **SelectButtonsSyncedProps**: _object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+Ƭ **SelectButtonsSyncedProps**: _object & object & TooltipAnchorProps‹HTMLElement› & object & object
+& object & object & object & object & object & object & object & object & object & object & object &
+object & object & object & object_
 
 _Defined in
 [src/ui/select_buttons_synced.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L26)_
@@ -261,7 +261,7 @@ _Defined in
 
 ### SelectProps
 
-Ƭ **SelectProps**: _object & object & object & object_
+Ƭ **SelectProps**: _object & object & object & TooltipAnchorProps‹HTMLElement›_
 
 _Defined in
 [src/ui/select.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L113)_
@@ -299,9 +299,9 @@ referenced by a label element.
 
 ### SelectSyncedProps
 
-Ƭ **SelectSyncedProps**: _object & object & object & object & object & object & object & object &
+Ƭ **SelectSyncedProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+object & object & object & object & object_
 
 _Defined in
 [src/ui/select_synced.tsx:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L31)_

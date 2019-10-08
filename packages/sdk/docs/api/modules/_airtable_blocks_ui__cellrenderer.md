@@ -56,9 +56,9 @@ export default function CellRendererExample(props) {
 
 ### CellRendererProps
 
-Ƭ **CellRendererProps**: _object & object & object & object & object & object & object & object &
+Ƭ **CellRendererProps**: _object & TooltipAnchorProps & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object_
+object & object_
 
 _Defined in
 [src/ui/cell_renderer.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L90)_

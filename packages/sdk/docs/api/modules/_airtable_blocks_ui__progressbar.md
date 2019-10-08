@@ -17,9 +17,9 @@
 
 ### ProgressBarProps
 
-Ƭ **ProgressBarProps**: _object & object & object & object & object & object & object & object &
+Ƭ **ProgressBarProps**: _object & TooltipAnchorProps & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object_
+object & object & object & object_
 
 _Defined in
 [src/ui/progress_bar.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/progress_bar.tsx#L85)_

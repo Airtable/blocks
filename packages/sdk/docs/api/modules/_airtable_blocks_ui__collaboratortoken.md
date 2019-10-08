@@ -17,8 +17,8 @@
 
 ### CollaboratorTokenProps
 
-Ƭ **CollaboratorTokenProps**: _object & object & object & object & object & object & object & object
-& object & object & object & object & object & object & object & object_
+Ƭ **CollaboratorTokenProps**: _object & TooltipAnchorProps & object & object & object & object &
+object & object & object & object & object & object & object & object & object & object_
 
 _Defined in
 [src/ui/collaborator_token.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L51)_

@@ -9,7 +9,7 @@
 
 -   [Button](_airtable_blocks_ui__button.md#button)
 
-### Type aliases
+### Interfaces
 
 -   [ButtonProps](_airtable_blocks_ui__button.md#buttonprops)
 
@@ -20,7 +20,7 @@
 • **Button**:
 
 _Defined in
-[src/ui/button.tsx:123](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L123)_
+[src/ui/button.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L124)_
 
 Clickable button component.
 
@@ -41,14 +41,14 @@ const button = (
 ▪ **themes**: _Object_ = themes
 
 _Defined in
-[src/ui/button.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L144)_
+[src/ui/button.tsx:145](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L145)_
 
 ### blur
 
 ▸ **blur**(): _void_
 
 _Defined in
-[src/ui/button.tsx:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L161)_
+[src/ui/button.tsx:162](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L162)_
 
 **Returns:** _void_
 
@@ -57,7 +57,7 @@ _Defined in
 ▸ **click**(): _void_
 
 _Defined in
-[src/ui/button.tsx:168](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L168)_
+[src/ui/button.tsx:169](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L169)_
 
 **Returns:** _void_
 
@@ -66,15 +66,15 @@ _Defined in
 ▸ **focus**(): _void_
 
 _Defined in
-[src/ui/button.tsx:154](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L154)_
+[src/ui/button.tsx:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L155)_
 
 **Returns:** _void_
 
-## Type aliases
+## Interfaces
 
 ### ButtonProps
 
-Ƭ **ButtonProps**: _object & object_
+• **ButtonProps**:
 
 _Defined in
 [src/ui/button.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L56)_

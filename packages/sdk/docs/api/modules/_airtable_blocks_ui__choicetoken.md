@@ -17,8 +17,8 @@
 
 ### ChoiceTokenProps
 
-Ƭ **ChoiceTokenProps**: _object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object_
+Ƭ **ChoiceTokenProps**: _object & TooltipAnchorProps & object & object & object & object & object &
+object & object & object & object & object & object & object & object & object_
 
 _Defined in
 [src/ui/choice_token.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/choice_token.tsx#L49)_

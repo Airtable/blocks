@@ -26,8 +26,8 @@ _Defined in
 
 ### RecordCardProps
 
-Ƭ **RecordCardProps**: _object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object_
+Ƭ **RecordCardProps**: _object & TooltipAnchorProps & object & object & object & object & object &
+object & object & object & object & object & object & object & object & object_
 
 _Defined in
 [src/ui/record_card.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L137)_

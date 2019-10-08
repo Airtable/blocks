@@ -53,18 +53,19 @@ type ButtonTheme = ObjectValues<typeof themes>;
  * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  * @property {string} [aria-label] The label for the button. Use this if the button lacks a visible text label.
  */
-type ButtonProps = {
+interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement> {
     type?: 'button' | 'submit' | 'reset';
     theme?: ButtonTheme;
     className?: string;
     style?: React.CSSProperties;
+    // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again.
     onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => unknown;
     id?: string;
     disabled?: boolean;
     tabIndex?: number;
     ['aria-label']?: string;
     children?: React.ReactNode;
-} & (TooltipAnchorProps);
+}
 
 type StyleProps = (MaxWidthProps) &
     (MinWidthProps) &

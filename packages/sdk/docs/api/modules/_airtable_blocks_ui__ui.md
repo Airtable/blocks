@@ -25,7 +25,7 @@
 object & object & object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object & object_
+object & object & object & object & TooltipAnchorProps & object_
 
 _Defined in
 [src/ui/box.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L28)_
@@ -129,7 +129,7 @@ object & object & object & object & object & object & object & object & object &
 object & object & object & object & object_
 
 _Defined in
-[src/ui/text.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L61)_
+[src/ui/text.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L62)_
 
 **`typedef`** {object} TextProps
 
@@ -267,7 +267,7 @@ function HeadingExample() {
 React.Ref‹HTMLElement›): _Element_
 
 _Defined in
-[src/ui/text.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L122)_
+[src/ui/text.tsx:123](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L123)_
 
 A text component with sizes and variants.
 

@@ -157,9 +157,9 @@ _Defined in
 
 ### TablePickerProps
 
-Ƭ **TablePickerProps**: _object & object & object & object & object & object & object & object &
+Ƭ **TablePickerProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+object & object & object & object & object_
 
 _Defined in
 [src/ui/table_picker.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L51)_
@@ -201,9 +201,9 @@ referenced by a label element.
 
 ### TablePickerSyncedProps
 
-Ƭ **TablePickerSyncedProps**: _object & object & object & object & object & object & object & object
-& object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+Ƭ **TablePickerSyncedProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object &
+object & object & object & object & object & object & object & object & object & object & object &
+object & object & object & object & object_
 
 _Defined in
 [src/ui/table_picker_synced.tsx:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L31)_

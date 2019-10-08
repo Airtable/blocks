@@ -20,7 +20,7 @@
 • **Tooltip**:
 
 _Defined in
-[src/ui/tooltip.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L65)_
+[src/ui/tooltip.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L66)_
 
 A component that shows a tooltip. Wraps its children.
 
@@ -48,7 +48,7 @@ function MyComponent() {
 Popover.fitInWindowModes
 
 _Defined in
-[src/ui/tooltip.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L69)_
+[src/ui/tooltip.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L70)_
 
 ### `Static` placements
 
@@ -56,7 +56,7 @@ _Defined in
 Popover.placements
 
 _Defined in
-[src/ui/tooltip.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L67)_
+[src/ui/tooltip.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L68)_
 
 ## Type aliases
 
@@ -65,7 +65,7 @@ _Defined in
 Ƭ **TooltipProps**: _Object_
 
 _Defined in
-[src/ui/tooltip.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L26)_
+[src/ui/tooltip.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L27)_
 
 **`type`** {object}
 

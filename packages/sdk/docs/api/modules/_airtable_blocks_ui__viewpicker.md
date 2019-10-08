@@ -194,9 +194,9 @@ _Defined in
 
 ### ViewPickerProps
 
-Ƭ **ViewPickerProps**: _object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+Ƭ **ViewPickerProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object & object
+& object & object & object & object & object & object & object & object & object & object & object &
+object & object & object & object_
 
 _Defined in
 [src/ui/view_picker.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L60)_
@@ -244,9 +244,9 @@ referenced by a label element.
 
 ### ViewPickerSyncedProps
 
-Ƭ **ViewPickerSyncedProps**: _object & object & object & object & object & object & object & object
-& object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+Ƭ **ViewPickerSyncedProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object &
+object & object & object & object & object & object & object & object & object & object & object &
+object & object & object & object & object_
 
 _Defined in
 [src/ui/view_picker_synced.tsx:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L33)_

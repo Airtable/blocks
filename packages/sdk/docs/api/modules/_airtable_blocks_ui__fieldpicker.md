@@ -196,9 +196,9 @@ _Defined in
 
 ### FieldPickerProps
 
-Ƭ **FieldPickerProps**: _object & object & object & object & object & object & object & object &
+Ƭ **FieldPickerProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+object & object & object & object & object_
 
 _Defined in
 [src/ui/field_picker.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L60)_
@@ -246,9 +246,9 @@ referenced by a label element.
 
 ### FieldPickerSyncedProps
 
-Ƭ **FieldPickerSyncedProps**: _object & object & object & object & object & object & object & object
-& object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+Ƭ **FieldPickerSyncedProps**: _object & object & object & TooltipAnchorProps‹HTMLElement› & object &
+object & object & object & object & object & object & object & object & object & object & object &
+object & object & object & object & object_
 
 _Defined in
 [src/ui/field_picker_synced.tsx:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L33)_

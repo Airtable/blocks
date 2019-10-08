@@ -17,7 +17,7 @@
 
 ### LinkProps
 
-Ƭ **LinkProps**: _object & object_
+Ƭ **LinkProps**: _object & TooltipAnchorProps_
 
 _Defined in
 [src/ui/link.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L14)_

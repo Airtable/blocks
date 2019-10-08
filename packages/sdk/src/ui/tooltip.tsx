@@ -6,6 +6,7 @@ import {values} from '../private_utils';
 import {baymax} from './baymax_utils';
 import Popover, {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
 import Box from './box';
+import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
@@ -25,7 +26,7 @@ const FADE_IN_ANIMATION_DURATION = 150;
  */
 type TooltipProps = {
     placementOffsetY?: number;
-    children: React.ReactElement;
+    children: React.ReactElement<TooltipAnchorProps>;
     placementX?: PopoverPlacementX;
     placementY?: PopoverPlacementY;
     placementOffsetX?: number;
@@ -130,7 +131,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
         }
     }
     /** @internal */
-    _onClick(e: React.MouseEvent) {
+    _onClick(e: React.MouseEvent | React.KeyboardEvent) {
         const {shouldHideTooltipOnClick, children} = this.props;
         if (shouldHideTooltipOnClick) {
             this._hideTooltip();

@@ -19,5 +19,5 @@ export const ariaPropTypes = {
     'aria-expanded': PropTypes.bool,
     'aria-haspopup': PropTypes.bool,
     'aria-hidden': PropTypes.bool,
-    'aria-live': PropTypes.oneOf(['off', 'assertive', 'polite']),
+    'aria-live': PropTypes.oneOf(['off', 'assertive', 'polite'] as const),
 };

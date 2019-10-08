@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {cx} from 'emotion';
-import {spawnInvariantViolationError} from '../error_utils';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
@@ -15,16 +14,22 @@ import {
     margin,
     marginPropTypes,
     MarginProps,
+    width,
+    WidthProps,
+    height,
+    HeightProps,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import iconConfig from './icon_config';
 
-export type StyleProps = (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
+export interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
     positionSet,
     margin,
+    width,
+    height,
 );
 
 export const stylePropTypes = {
@@ -33,18 +38,17 @@ export const stylePropTypes = {
     ...marginPropTypes,
 };
 
-export type SharedIconProps = {
-    size?: number;
+export interface SharedIconProps extends TooltipAnchorProps<SVGElement>, StyleProps {
+    size?: number | string;
     fillColor?: string;
     className?: string;
     style?: React.CSSProperties;
     pathClassName?: string;
     pathStyle?: React.CSSProperties;
-} & (TooltipAnchorProps) &
-    (StyleProps);
+}
 
 export const sharedIconPropTypes = {
-    size: PropTypes.number,
+    size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     fillColor: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
@@ -64,7 +68,9 @@ export const sharedIconPropTypes = {
  * @property {string} [pathClassName] Additional class names to apply to the icon path.
  * @property {object} [pathStyle] Additional styles to apply to the icon path.
  */
-type IconProps = {name: string} & (SharedIconProps);
+interface IconProps extends SharedIconProps {
+    name: string;
+}
 
 /**
  * A vector icon from the Airtable icon set.
@@ -91,27 +97,25 @@ type IconProps = {name: string} & (SharedIconProps);
  * );
  * ```
  */
-const Icon = (props: IconProps) => {
-    const {
-        name,
-        size,
-        fillColor,
-        onMouseEnter,
-        onMouseLeave,
-        onClick,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        hasOnClick,
-        className,
-        style,
-        pathClassName,
-        pathStyle,
-        ...styleProps
-    } = props;
-    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+function Icon({
+    name,
+    size = 16,
+    fillColor = 'currentColor',
+    onMouseEnter,
+    onMouseLeave,
+    onClick,
+    hasOnClick,
+    className,
+    style,
+    pathClassName,
+    pathStyle,
+    ...styleProps
+}: IconProps) {
+    const classNameForStyleProps = useStyledSystem<StyleProps & WidthProps & HeightProps>(
+        {...styleProps, width: size, height: size},
+        styleParser,
+    );
 
-    if (!size) {
-        throw spawnInvariantViolationError('icon size');
-    }
     const isMicro = size <= 12;
     const pathData = iconConfig[`${name}${isMicro ? 'Micro' : ''}`];
     if (!pathData) {
@@ -122,9 +126,6 @@ const Icon = (props: IconProps) => {
 
     return (
         <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={size}
-            height={size}
             viewBox={`0 0 ${originalSize} ${originalSize}`}
             // TODO (stephen): remove tooltip anchor props
             onMouseEnter={onMouseEnter}
@@ -145,16 +146,11 @@ const Icon = (props: IconProps) => {
             />
         </svg>
     );
-};
+}
 
 Icon.propTypes = {
     name: PropTypes.string.isRequired,
     ...sharedIconPropTypes,
-};
-
-Icon.defaultProps = {
-    size: 16,
-    fillColor: 'currentColor',
 };
 
 export default Icon;

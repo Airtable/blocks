@@ -141,7 +141,11 @@ stories.add('multiple formfields', () =>
                     />
                 </FormField>
                 <FormField label="Color palette" description="Pick a color from the color palette">
-                    <ColorPalette color={color} allowedColors={allowedColors} onChange={setColor} />
+                    <ColorPalette
+                        color={color}
+                        allowedColors={allowedColors}
+                        onChange={setColor as any}
+                    />
                 </FormField>
                 <FormField label="Select buttons">
                     <SelectButtons

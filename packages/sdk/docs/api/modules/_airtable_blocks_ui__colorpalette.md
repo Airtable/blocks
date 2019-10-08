@@ -69,7 +69,7 @@ function DisplayOptions() {
 
 ### ColorPaletteProps
 
-Ƭ **ColorPaletteProps**: _object & object & object_
+Ƭ **ColorPaletteProps**: _object & object & TooltipAnchorProps‹HTMLElement›_
 
 _Defined in
 [src/ui/color_palette.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L96)_
@@ -98,9 +98,9 @@ selection.
 
 ### ColorPaletteSyncedProps
 
-Ƭ **ColorPaletteSyncedProps**: _object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+Ƭ **ColorPaletteSyncedProps**: _object & object & TooltipAnchorProps‹HTMLElement› & object & object
+& object & object & object & object & object & object & object & object & object & object & object &
+object & object & object & object_
 
 _Defined in
 [src/ui/color_palette_synced.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L24)_

@@ -164,7 +164,7 @@ _Defined in
 
 ### InputProps
 
-Ƭ **InputProps**: _object & object & object & object_
+Ƭ **InputProps**: _object & object & TooltipAnchorProps‹HTMLElement› & object_
 
 _Defined in
 [src/ui/input.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L137)_
@@ -222,9 +222,9 @@ spaces.
 
 ### InputSyncedProps
 
-Ƭ **InputSyncedProps**: _object & object & object & object & object & object & object & object &
+Ƭ **InputSyncedProps**: _object & object & TooltipAnchorProps‹HTMLElement› & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object_
+object & object & object & object & object_
 
 _Defined in
 [src/ui/input_synced.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L36)_
