@@ -1,18 +1,15 @@
 /** @module @airtable/blocks/models: Field */ /** */
+import {AggregatorKey} from '../injected/airtable_interface';
 import {BaseData} from '../types/base';
 import {FieldTypes, FieldData, PrivateColumnType, FieldType} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
 import Aggregators, {Aggregator} from './aggregators';
-import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
 import Table from './table';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
-);
-const ColumnTypes = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/column_types/column_types',
 );
 const ApiCellFormats = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/api_cell_formats',
@@ -249,14 +246,13 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get availableAggregators(): Array<Aggregator> {
-        const possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
+        const airtableInterface = this._parentTable._airtableInterface;
+        const availableAggregatorKeysSet = new Set(
+            airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data),
         );
+
         return values(Aggregators).filter(aggregator => {
-            const liveappSummaryFunctionKey =
-                liveappSummaryFunctionKeyByAggregatorKey[aggregator.key];
-            return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
+            return availableAggregatorKeysSet.has(aggregator.key);
         });
     }
     /**
@@ -278,16 +274,16 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     isAggregatorAvailable(
-        aggregator: Aggregator | keyof typeof liveappSummaryFunctionKeyByAggregatorKey,
+        aggregator: Aggregator | AggregatorKey,
     ): boolean {
         const aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
-        const liveappSummaryFunctionKey = liveappSummaryFunctionKeyByAggregatorKey[aggregatorKey];
 
-        const possibleSummaryFunctionConfigs = columnTypeProvider.getPossibleSummaryFunctionConfigs(
-            this.__getRawType(),
-            this.__getRawTypeOptions(),
+        const airtableInterface = this._parentTable._airtableInterface;
+        const availableAggregatorKeys = airtableInterface.aggregators.getAvailableAggregatorKeysForField(
+            this._data,
         );
-        return !!possibleSummaryFunctionConfigs[liveappSummaryFunctionKey];
+
+        return availableAggregatorKeys.some(key => key === aggregatorKey);
     }
     /**
      * Given a string, will attempt to parse it and return a valid cell value for
@@ -345,24 +341,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      */
     __getRawTypeOptions(): FlowAnyObject | null | undefined {
         return this._data.typeOptions;
-    }
-    /**
-     * @internal
-     */
-    __getRawFormulaicResultType() {
-        // Copied from liveapp column model.
-        // We don't store resultType for count, for all intents and purposes on the
-        // client side, counts should use a "number" resultType.
-        if (this.__getRawType() === ColumnTypes.COUNT) {
-            return ColumnTypes.NUMBER;
-        } else {
-            const typeOptions = this.__getRawTypeOptions();
-            if (!typeOptions || typeOptions.resultType === undefined) {
-                return null;
-            } else {
-                return typeOptions.resultType;
-            }
-        }
     }
     /**
      * @internal

@@ -899,7 +899,7 @@ None
 • **Field**:
 
 _Defined in
-[src/models/field.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L47)_
+[src/models/field.ts:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L44)_
 
 Model class representing a field in a table.
 
@@ -918,7 +918,7 @@ console.log('The type of this field is', field.type);
 • **availableAggregators**:
 
 _Defined in
-[src/models/field.ts:251](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L251)_
+[src/models/field.ts:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L248)_
 
 **`function`**
 
@@ -949,7 +949,7 @@ _Defined in
 • **isComputed**:
 
 _Defined in
-[src/models/field.ts:231](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L231)_
+[src/models/field.ts:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L228)_
 
 **`function`**
 
@@ -991,7 +991,7 @@ data.
 • **isPrimaryField**:
 
 _Defined in
-[src/models/field.ts:240](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L240)_
+[src/models/field.ts:237](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L237)_
 
 **`function`**
 
@@ -1003,7 +1003,7 @@ never change because the primary field of a table cannot change.
 • **name**:
 
 _Defined in
-[src/models/field.ts:166](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L166)_
+[src/models/field.ts:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L163)_
 
 **`function`**
 
@@ -1021,7 +1021,7 @@ console.log(myField.name);
 • **options**:
 
 _Defined in
-[src/models/field.ts:208](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L208)_
+[src/models/field.ts:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L205)_
 
 **`function`**
 
@@ -1044,7 +1044,7 @@ if (myField.type === fieldTypes.CURRENCY) {
 • **type**:
 
 _Defined in
-[src/models/field.ts:178](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L178)_
+[src/models/field.ts:175](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L175)_
 
 **`function`**
 
@@ -1062,7 +1062,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:306](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L306)_
+[src/models/field.ts:302](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L302)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -1089,10 +1089,10 @@ The parsed cell value, or `null` if unable to parse the given string.
 ### isAggregatorAvailable
 
 ▸ **isAggregatorAvailable**(`aggregator`:
-[Aggregator](_airtable_blocks_models__aggregators.md#aggregator) | keyof object): _boolean_
+[Aggregator](_airtable_blocks_models__aggregators.md#aggregator) | AggregatorKey): _boolean_
 
 _Defined in
-[src/models/field.ts:280](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L280)_
+[src/models/field.ts:276](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L276)_
 
 **`function`**
 
@@ -1113,9 +1113,9 @@ console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
 
 **Parameters:**
 
-| Name         | Type                                                                                 | Description                              |
-| ------------ | ------------------------------------------------------------------------------------ | ---------------------------------------- |
-| `aggregator` | [Aggregator](_airtable_blocks_models__aggregators.md#aggregator) &#124; keyof object | The aggregator object or aggregator key. |
+| Name         | Type                                                                                  | Description                              |
+| ------------ | ------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `aggregator` | [Aggregator](_airtable_blocks_models__aggregators.md#aggregator) &#124; AggregatorKey | The aggregator object or aggregator key. |
 
 **Returns:** _boolean_
 

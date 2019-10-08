@@ -41,6 +41,32 @@ interface UrlConstructor {
     ): string,
 }
 
+export type AggregatorKey = string;
+
+type AggregatorConfig = {
+    key: AggregatorKey,
+    displayName: string,
+    shortDisplayName: string,
+};
+
+interface Aggregators {
+    aggregate(
+        appInterface: AppInterface,
+        summaryFunctionKey: AggregatorKey,
+        cellValues: Array<unknown>,
+        fieldData: FieldData,
+    ): unknown;
+    aggregateToString(
+        appInterface: AppInterface,
+        summaryFunctionKey: AggregatorKey,
+        cellValues: Array<unknown>,
+        fieldData: FieldData,
+    ): string;
+    getAggregatorConfig(summaryFunctionKey: AggregatorKey): AggregatorConfig;
+    getAllAvailableAggregatorKeys(): Array<AggregatorKey>;
+    getAvailableAggregatorKeysForField(fieldData: FieldData): Array<AggregatorKey>;
+}
+
 // AppInterface should never be used directly by the SDK, so we don't describe the type.
 export type AppInterface = unknown;
 
@@ -62,6 +88,7 @@ export interface AirtableInterface {
     sdkInitData: SdkInitData;
     idGenerator: IdGenerator;
     urlConstructor: UrlConstructor;
+    aggregators: Aggregators;
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 

@@ -1,27 +1,21 @@
 /** @module @airtable/blocks/models: Aggregators */ /** */
 import getSdk from '../get_sdk';
+import airtableInterface, {AggregatorKey} from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
-import {keys} from '../private_utils';
-import liveappSummaryFunctionKeyByAggregatorKey from './liveapp_summary_function_key_by_aggregator_key';
 import Record from './record';
 import Field from './field';
-
-const liveappSummaryFunctions = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/summary_functions',
-);
-
-type AggregatorKey = keyof typeof liveappSummaryFunctionKeyByAggregatorKey;
 
 /**
  * Aggregators can be used to compute aggregates for cell values.
  *
  * @example
  * ```js
+ * import {aggregators} from '@airtable/blocks/models';
+ *
  * // To get a list of aggregators supported for a specific field:
  * const fieldAggregators = myField.availableAggregators;
  *
  * // To compute the total attachment size of an attachment field:
- * import {aggregators} from '@airtable/blocks/models';
  * const aggregator = aggregators.totalAttachmentSize;
  * const value = aggregator.aggregate(myRecords, myAttachmentField);
  * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
@@ -31,16 +25,13 @@ export type Aggregator = {
     key: AggregatorKey;
     displayName: string;
     shortDisplayName: string;
+
     // TODO(jb): add better flow types for the result of these functions. This would
     // require manually defining each aggregation function below rather than doing it
     // dynamically on load.
     aggregate: (records: Array<Record>, field: Field) => unknown;
     aggregateToString: (records: Array<Record>, field: Field) => string;
 };
-
-const aggregatorKeys = keys(liveappSummaryFunctionKeyByAggregatorKey);
-
-const aggregators: {[key: string]: Aggregator} = {};
 
 const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
@@ -51,47 +42,44 @@ const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: 
         );
     }
 
-    if (liveappSummaryFunctions.isNone(aggregatorKey)) {
-        return null;
-    }
-
-    const values = records.map(record => {
-        return record.__getRawCellValue(field.id);
-    });
-
-    return liveappSummaryFunctions.aggregateValues(
+    const appInterface = getSdk().__appInterface;
+    const cellValues = records.map(record => record.getCellValue(field));
+    return airtableInterface.aggregators.aggregate(
+        appInterface,
         aggregatorKey,
-        field.__getRawType(),
-        field.__getRawTypeOptions(),
-        getSdk().__appInterface,
-        values,
-        {},
+        cellValues,
+        field._data,
     );
 };
 
 const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {
-    const summaryValue = aggregate(aggregatorKey, records, field);
-    const summaryFunction = liveappSummaryFunctionKeyByAggregatorKey[aggregatorKey];
-    const columnType = field.__getRawFormulaicResultType() || field.__getRawType();
-    return liveappSummaryFunctions.formatSummaryValueAsString(
-        summaryFunction,
-        summaryValue,
-        columnType,
-        field.__getRawTypeOptions(),
-        getSdk().__appInterface,
+    if (!field.isAggregatorAvailable(aggregatorKey)) {
+        throw spawnError(
+            'The %s aggregator is not available for %s fields',
+            aggregatorKey,
+            field.type,
+        );
+    }
+
+    const appInterface = getSdk().__appInterface;
+    const cellValues = records.map(record => record.getCellValue(field));
+    return airtableInterface.aggregators.aggregateToString(
+        appInterface,
+        aggregatorKey,
+        cellValues,
+        field._data,
     );
 };
 
+const aggregators: {[key: string]: Aggregator} = {};
+const aggregatorKeys = airtableInterface.aggregators.getAllAvailableAggregatorKeys();
+
 for (const key of aggregatorKeys) {
-    const liveappSummaryFunctionKey = liveappSummaryFunctionKeyByAggregatorKey[key];
+    const config = airtableInterface.aggregators.getAggregatorConfig(key);
     aggregators[key] = Object.freeze({
         key,
-        displayName:
-            liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey]
-                .menuDisplayName,
-        shortDisplayName:
-            liveappSummaryFunctions.summaryFunctionConfigs[liveappSummaryFunctionKey]
-                .cellDisplayName,
+        displayName: config.displayName,
+        shortDisplayName: config.shortDisplayName,
         aggregate: aggregate.bind(null, key),
         aggregateToString: aggregateToString.bind(null, key),
     });
