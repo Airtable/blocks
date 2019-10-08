@@ -1,6 +1,6 @@
 # Airtable icon set
 
-These icons are meant to be used with [`UI.Icon`](/packages/sdk/docs/api.md#icon). Each icon comes
+These icons are meant to be used with [`UI.Icon`](/packages/sdk/docs/api/modules/_airtable_blocks_ui__icon.md). Each icon comes
 with normal and micro (<=12px) variants.
 
 **android** <br/> ![android](/packages/sdk/docs/icons/android.svg)

@@ -1,4 +1,4 @@
-[@airtable/blocks](README.md) › [Globals](globals.md)
+[@airtable/blocks](README.md)
 
 # @airtable/blocks
 

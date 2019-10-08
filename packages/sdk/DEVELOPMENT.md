@@ -35,7 +35,7 @@ later.
 ### Top-level links
 
 Occasionally, you will want to create a link in a comment that points to a top-level entity in the
-[api docs](packages/sdk/docs/api.md). To do this, use a JSDoc `{@link}`.
+[api docs](/packages/sdk/docs/api). To do this, use a JSDoc `{@link}`.
 
 For example, the `@link` below points at the `RecordQueryResult` section of the API docs:
 
