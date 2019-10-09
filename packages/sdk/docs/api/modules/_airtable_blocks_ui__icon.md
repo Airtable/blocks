@@ -58,7 +58,7 @@ A vector icon from the Airtable icon set.
 import {Button, Icon} from '@airtable/blocks/ui';
 
 const LikeButton = (
-    <Button theme={Button.themes.RED} onClick={() => alert('Liked!')}>
+    <Button variant="danger" onClick={() => alert('Liked!')}>
         <Icon name="heart" fillColor="#fff" style={{marginRight: 8}} />
         Like
     </Button>

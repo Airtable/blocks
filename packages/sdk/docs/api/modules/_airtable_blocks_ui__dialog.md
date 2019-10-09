@@ -24,7 +24,7 @@
 • **ConfirmationDialog**:
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L75)_
+[src/ui/confirmation_dialog.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L74)_
 
 A styled modal dialog component that prompts the user to confirm or cancel an action. By default,
 this component will focus the "Confirm" button on mount, so that pressing the Enter key will confirm
@@ -40,7 +40,7 @@ function Block() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     return (
         <Fragment>
-            <Button theme={Button.themes.BLUE} onClick={() => setIsDialogOpen(true)}>
+            <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
                 Open dialog
             </Button>
             {isDialogOpen && (
@@ -80,7 +80,7 @@ function Block() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     return (
         <Fragment>
-            <Button theme={Button.themes.BLUE} onClick={() => setIsDialogOpen(true)}>
+            <Button variant="primary" onClick={() => setIsDialogOpen(true)}>
                 Open dialog
             </Button>
             {isDialogOpen && (
@@ -139,7 +139,7 @@ A button that closes [Dialog](_airtable_blocks_ui__dialog.md#dialog).
 object & object & object & object & object & object & object & object & object_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L25)_
+[src/ui/confirmation_dialog.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L24)_
 
 **`typedef`** {object} ConfirmationDialogProps
 

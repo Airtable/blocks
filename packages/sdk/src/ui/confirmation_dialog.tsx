@@ -1,7 +1,6 @@
 /** @module @airtable/blocks/ui: Dialog */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {ReactRefType} from '../private_utils';
 import {baymax} from './baymax_utils';
 import {stylePropTypes, StyleProps} from './modal';
 import Dialog from './dialog';
@@ -51,7 +50,7 @@ type ConfirmationDialogProps = {
  *     return (
  *         <Fragment>
  *             <Button
- *                 theme={Button.themes.BLUE}
+ *                 variant="primary"
  *                 onClick={() => setIsDialogOpen(true)}
  *             >
  *                 Open dialog
@@ -96,16 +95,11 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         width: '400px',
     };
     /** @internal */
-    _confirmButtonRef: ReactRefType<typeof Button> | null;
-    /** @hidden */
-    constructor(props: ConfirmationDialogProps) {
-        super(props);
-        this._confirmButtonRef = null;
-    }
+    _confirmButtonRef = React.createRef<HTMLButtonElement>();
     /** @hidden */
     componentDidMount() {
-        if (this._confirmButtonRef !== null) {
-            this._confirmButtonRef.focus();
+        if (this._confirmButtonRef.current !== null) {
+            this._confirmButtonRef.current.focus();
         }
     }
     /** @hidden */
@@ -148,15 +142,15 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                     marginTop={3}
                 >
                     <Button
-                        ref={el => (this._confirmButtonRef = el)}
+                        ref={this._confirmButtonRef}
                         onClick={onConfirm}
-                        theme={isConfirmActionDangerous ? Button.themes.RED : Button.themes.BLUE}
+                        variant={isConfirmActionDangerous ? 'danger' : 'primary'}
                     >
                         {confirmButtonText}
                     </Button>
                     <Button
                         onClick={onCancel}
-                        theme={Button.themes.TRANSPARENT}
+                        variant="secondary"
                         alignSelf="end"
                         marginRight={2}
                         className={baymax('quiet link-unquiet-focusable text-blue-focus')}

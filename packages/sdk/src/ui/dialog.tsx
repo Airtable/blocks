@@ -36,7 +36,7 @@ type DialogProps = {
  *     return (
  *         <Fragment>
  *             <Button
- *                 theme={Button.themes.BLUE}
+ *                 variant="primary"
  *                 onClick={() => setIsDialogOpen(true)}
  *             >
  *                 Open dialog

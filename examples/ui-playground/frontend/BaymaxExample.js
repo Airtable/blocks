@@ -110,10 +110,7 @@ export default function BaymaxExample() {
                     <tr>
                         <td>ConfirmationDialog, Dialog, Modal</td>
                         <td>
-                            <Button
-                                theme={Button.themes.GRAY}
-                                onClick={() => setIsConfirmationDialogOpen(true)}
-                            >
+                            <Button onClick={() => setIsConfirmationDialogOpen(true)}>
                                 Open dialog
                             </Button>
                         </td>

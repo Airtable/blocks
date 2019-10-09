@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {ObjectValues} from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
-import withStyledSystem from './with_styled_system';
-import {baymax} from './baymax_utils';
+import {ObjectValues, values} from '../private_utils';
+import useStyledSystem from './use_styled_system';
+import {Prop} from './system/utils/types';
+import createResponsivePropType from './system/utils/create_responsive_prop_type';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -26,55 +26,29 @@ import {
     margin,
     marginPropTypes,
     MarginProps,
+    display,
 } from './system';
+import useTheme from './theme/use_theme';
+import {controlSizePropType, ControlSizes, ControlSizeProp, useButtonSize} from './control_sizes';
+import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {IconName} from './icon_config';
+import Icon from './icon';
+import cssHelpers from './css_helpers';
+import Box from './box';
 
-const themes = Object.freeze({
-    RED: 'red',
-    GREEN: 'green',
-    BLUE: 'blue',
-    YELLOW: 'yellow',
-    WHITE: 'white',
-    GRAY: 'gray',
-    DARK: 'dark',
-    TRANSPARENT: 'transparent',
-});
-
-type ButtonTheme = ObjectValues<typeof themes>;
-
-/**
- * @typedef {object} ButtonProps
- * @property {Button.themes.RED | Button.themes.GREEN | Button.themes.BLUE | Button.themes.YELLOW | Button.themes.WHITE | Button.themes.GRAY | Button.themes.DARK | Button.themes.TRANSPARENT} [theme=Button.themes.BLUE] The color theme for the button.
- * @property {string} [className] Extra `className`s to apply to the button, separated by spaces.
- * @property {object} [style] Extra styles to apply to the button.
- * @property {Function} [onClick] Click event handler. Also handles Space and Enter keypress events.
- * @property {string} [type='button'] The type of the button.
- * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
- * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
- * @property {string} [aria-label] The label for the button. Use this if the button lacks a visible text label.
- */
-interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement> {
-    type?: 'button' | 'submit' | 'reset';
-    theme?: ButtonTheme;
-    className?: string;
-    style?: React.CSSProperties;
-    // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again.
-    onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => unknown;
-    id?: string;
-    disabled?: boolean;
-    tabIndex?: number;
-    ['aria-label']?: string;
-    children?: React.ReactNode;
+interface StyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {
+    display?: Prop<'inline-flex' | 'flex' | 'none'>;
 }
 
-type StyleProps = (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (MarginProps);
-
 const styleParser = compose(
+    display,
     maxWidth,
     minWidth,
     width,
@@ -84,6 +58,7 @@ const styleParser = compose(
 );
 
 const stylePropTypes = {
+    display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -92,16 +67,57 @@ const stylePropTypes = {
     ...marginPropTypes,
 };
 
-const classNamesByTheme = {
-    [themes.RED]: 'red text-white',
-    [themes.GREEN]: 'green text-white',
-    [themes.BLUE]: 'blue text-white',
-    [themes.YELLOW]: 'yellow text-dark',
-    [themes.WHITE]: 'white text-blue',
-    [themes.DARK]: 'dark text-white',
-    [themes.GRAY]: 'grayLight2 text-dark',
-    [themes.TRANSPARENT]: 'background-transparent text-dark',
-};
+const ButtonVariants = Object.freeze({
+    DEFAULT: 'default',
+    PRIMARY: 'primary',
+    SECONDARY: 'secondary',
+    DANGER: 'danger',
+} as const);
+type ButtonVariant = ObjectValues<typeof ButtonVariants>;
+
+/** @internal */
+function useButtonVariant(variant: ButtonVariant): string {
+    const {buttonVariants} = useTheme();
+    return buttonVariants[variant];
+}
+
+/**
+ * @typedef {object} ButtonProps
+ * @property {'small' | 'default' | 'large'} [size='default'] The size of the button. Defaults to `default`. Can be a responsive prop object.
+ * @property {'default' | 'primary' | 'secondary' | 'danger'} [variant='default'] The variant of the button. Defaults to `default`.
+ * @property {string | React.Node} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
+ * @property {'button' | 'submit' | 'reset'} [type='button'] The type of the button. Defaults to `button`.
+ * @property {string} [id] The `id` attribute.
+ * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
+ * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
+ * @property {Function} [onClick] Click event handler. Also handles Space and Enter keypress events.
+ * @property {string} [className] Extra `className`s to apply to the button, separated by spaces.
+ * @property {object} [style] Extra styles to apply to the button.
+ * @property {string} [aria-selected] The `aria-selected` attribute.
+ * @property {string} [aria-label] The `aria-label` attribute. Use this if the button lacks a visible text label.
+ * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
+ * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
+ * @property {string} [aria-controls] The `aria-controls` attribute.
+ * @property {string} [aria-expanded] The `aria-expanded` attribute.
+ * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
+ * @property {string} [aria-hidden] The `aria-hidden` attribute.
+ * @property {string} [aria-live] The `aria-live` attribute.
+ */
+interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement>, AriaProps, StyleProps {
+    size?: ControlSizeProp;
+    variant?: ButtonVariant;
+    icon?: IconName | React.ReactNode;
+    type?: 'button' | 'submit' | 'reset';
+    id?: string;
+    disabled?: boolean;
+    tabIndex?: number;
+    children: React.ReactNode;
+    // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again.
+    onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => unknown;
+    className?: string;
+    style?: React.CSSProperties;
+    'aria-selected'?: boolean;
+}
 
 /**
  * Clickable button component.
@@ -114,98 +130,52 @@ const classNamesByTheme = {
  *     <Button
  *         onClick={() => alert('Clicked!')}
  *         disabled={false}
- *         theme={Button.themes.BLUE}
+ *         variant="primary"
  *     >
  *         Click here!
  *     </Button>
  * );
  * ```
  */
-export class Button extends React.Component<ButtonProps> {
-    /** @hidden */
-    static propTypes = {
-        theme: PropTypes.oneOf(Object.keys(classNamesByTheme)),
-        id: PropTypes.string,
-        className: PropTypes.string,
-        style: PropTypes.object,
-        onClick: PropTypes.func,
-        type: PropTypes.string,
-        disabled: PropTypes.bool,
-        tabIndex: PropTypes.number,
-        'aria-label': PropTypes.string,
-        ...tooltipAnchorPropTypes,
-    };
-    /** @hidden */
-    static defaultProps = {
-        theme: themes.BLUE,
-        // Default type is "submit", which will submit the parent <form> if it exists.
-        type: 'button',
-    };
-    /** */
-    static themes = themes;
-    /** @internal */
-    _button: HTMLButtonElement | null;
-    /** @hidden */
-    constructor(props: ButtonProps) {
-        super(props);
-        // TODO (stephen): use React.forwardRef
-        this._button = null;
-    }
-    /** */
-    focus() {
-        if (!this._button) {
-            throw spawnInvariantViolationError('No button to focus');
-        }
-        this._button.focus();
-    }
-    /** */
-    blur() {
-        if (!this._button) {
-            throw spawnInvariantViolationError('No button to blur');
-        }
-        this._button.blur();
-    }
-    /** */
-    click() {
-        if (!this._button) {
-            throw spawnInvariantViolationError('No button to click');
-        }
-        this._button.click();
-    }
-    /** @hidden */
-    render() {
-        const {
-            theme,
+
+const Button = React.forwardRef(
+    (
+        {
+            size = ControlSizes.DEFAULT,
+            variant = ButtonVariants.DEFAULT,
+            icon,
             id,
             className,
             style,
             onMouseEnter,
             onMouseLeave,
             onClick,
-            type,
+            type = 'button',
             disabled,
             tabIndex,
             children,
-        } = this.props;
-
-        if (!theme) {
-            throw spawnInvariantViolationError('button theme');
-        }
-        const themeClassNames = classNamesByTheme[theme] || '';
+            'aria-label': ariaLabel,
+            'aria-selected': ariaSelected,
+            ...styleProps
+        }: ButtonProps,
+        ref: React.Ref<HTMLButtonElement>,
+    ) => {
+        const classNameForButtonSize = useButtonSize(size);
+        const classNameForButtonVariant = useButtonVariant(variant);
+        const classNameForStyleProps = useStyledSystem(
+            {display: 'inline-flex', ...styleProps},
+            styleParser,
+        );
+        const hasIcon = icon !== undefined;
 
         return (
             <button
-                ref={el => (this._button = el)}
+                ref={ref}
                 id={id}
                 className={cx(
-                    baymax(
-                        'styled-input rounded big strong p1 flex-inline items-center no-outline no-user-select',
-                    ),
-                    baymax(themeClassNames),
-                    {
-                        [baymax('pointer link-quiet')]: !disabled,
-                        [baymax('quieter')]: !!disabled,
-                    },
+                    classNameForButtonVariant,
+                    classNameForButtonSize,
+                    classNameForStyleProps,
                     className,
                 )}
                 style={style}
@@ -216,16 +186,45 @@ export class Button extends React.Component<ButtonProps> {
                 type={type}
                 disabled={disabled}
                 tabIndex={tabIndex}
-                aria-label={this.props['aria-label']}
+                aria-label={ariaLabel}
+                aria-selected={ariaSelected}
             >
-                {children}
+                {typeof icon === 'string' ? (
+                    <Icon name={icon} size="1em" fillColor="currentColor" flex="none" />
+                ) : (
+                    icon
+                )}
+
+                <Box
+                    as="span"
+                    // The margin is on the span, and not on the icon because it would mean that when using a custom icon
+                    // the consumer would manually need to figure out what the margin is supposed to be.
+                    marginLeft={hasIcon ? '0.5em' : undefined}
+                    className={cssHelpers.TRUNCATE}
+                >
+                    {children}
+                </Box>
             </button>
         );
-    }
-}
-
-export default withStyledSystem<ButtonProps, StyleProps, Button, {themes: typeof themes}>(
-    Button,
-    styleParser,
-    stylePropTypes,
+    },
 );
+
+Button.propTypes = {
+    size: controlSizePropType,
+    variant: PropTypes.oneOf(values(ButtonVariants)),
+    icon: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
+    id: PropTypes.string,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    // `onClick` is already defined in `tooltipAnchorPropTypes`, for clarity we list it again.
+    onClick: PropTypes.func,
+    type: PropTypes.oneOf(['button', 'submit', 'reset'] as const),
+    disabled: PropTypes.bool,
+    tabIndex: PropTypes.number,
+    children: PropTypes.node.isRequired,
+    ...stylePropTypes,
+    ...tooltipAnchorPropTypes,
+    ...ariaPropTypes,
+};
+
+export default Button;

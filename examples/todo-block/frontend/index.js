@@ -107,7 +107,7 @@ function TaskDeleteButton({table, record}) {
 
     return (
         <Button
-            theme={Button.themes.TRANSPARENT}
+            variant="secondary"
             style={{marginLeft: 8}}
             onClick={onClick}
             disabled={!table.hasPermissionToDeleteRecord(record)}

@@ -84,7 +84,7 @@ interface IconProps extends SharedIconProps {
  *
  * const LikeButton = (
  *     <Button
- *         theme={Button.themes.RED}
+ *         variant="danger"
  *         onClick={() => alert('Liked!')}
  *     >
  *         <Icon

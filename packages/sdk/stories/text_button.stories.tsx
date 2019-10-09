@@ -139,7 +139,7 @@ stories.add('with tooltip', () => (
     <Tooltip
         content="Tooltip content"
         placementX={Tooltip.placements.CENTER}
-        placementY={Tooltip.placements.TOP}
+        placementY={Tooltip.placements.BOTTOM}
         placementOffsetX={0}
         placementOffsetY={8}
     >
