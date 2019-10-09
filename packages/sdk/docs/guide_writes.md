@@ -28,8 +28,8 @@ table.deleteRecordAsync(record);
 table.deleteRecordsAsync([record1, record2]);
 ```
 
-That's all you need to get started! See the [API reference](/packages/sdk/docs/api) for
-per-function documentation and examples, or read on for more specific details about how writes work.
+That's all you need to get started! See the [API reference](/packages/sdk/docs/api) for per-function
+documentation and examples, or read on for more specific details about how writes work.
 
 ## Permissions
 

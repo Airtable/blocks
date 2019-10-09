@@ -14,6 +14,7 @@ import Select, {
 } from './select';
 import {SelectOptionValue} from './select_and_select_buttons_helpers';
 import useWatchable from './use_watchable';
+import {FormFieldIdContext} from './use_form_field_id';
 
 type AnyModel = Table | View | Field;
 
@@ -67,6 +68,8 @@ class ModelPickerSelect<Model extends AnyModel> extends React.Component<
     };
     /** @internal */
     _select: ReactRefType<typeof Select> | null;
+    /** */
+    static contextType = FormFieldIdContext;
     /** @hidden */
     constructor(props: ModelPickerSelectProps<Model>) {
         super(props);
@@ -111,11 +114,13 @@ class ModelPickerSelect<Model extends AnyModel> extends React.Component<
             shouldAllowPickingNone,
             shouldAllowPickingModelFn,
             placeholder,
+            id,
             // Destructure `onChange` to prevent it from being passed to `Select`.
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             onChange,
             ...restOfProps
         } = this.props;
+        const controlId = this.context;
 
         return (
             <React.Fragment>
@@ -123,6 +128,7 @@ class ModelPickerSelect<Model extends AnyModel> extends React.Component<
                     {...restOfProps}
                     ref={el => (this._select = el)}
                     value={selectedModelId}
+                    id={id || controlId}
                     onChange={this._onChange}
                     options={[
                         {value: null, label: placeholder, disabled: !shouldAllowPickingNone},

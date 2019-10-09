@@ -27,7 +27,7 @@
 • **Select**:
 
 _Defined in
-[src/ui/select.tsx:173](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L173)_
+[src/ui/select.tsx:174](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L174)_
 
 Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
 
@@ -57,12 +57,21 @@ function ColorPicker() {
 }
 ```
 
+### `Static` contextType
+
+▪ **contextType**: _Context‹string›_ = FormFieldIdContext
+
+_Overrides void_
+
+_Defined in
+[src/ui/select.tsx:181](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L181)_
+
 ### blur
 
 ▸ **blur**(): _void_
 
 _Defined in
-[src/ui/select.tsx:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L207)_
+[src/ui/select.tsx:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L210)_
 
 **Returns:** _void_
 
@@ -71,7 +80,7 @@ _Defined in
 ▸ **click**(): _void_
 
 _Defined in
-[src/ui/select.tsx:214](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L214)_
+[src/ui/select.tsx:217](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L217)_
 
 **Returns:** _void_
 
@@ -80,7 +89,7 @@ _Defined in
 ▸ **focus**(): _void_
 
 _Defined in
-[src/ui/select.tsx:200](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L200)_
+[src/ui/select.tsx:203](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L203)_
 
 **Returns:** _void_
 
@@ -255,7 +264,7 @@ _Defined in
 Ƭ **SelectProps**: _object & object & object & object_
 
 _Defined in
-[src/ui/select.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L112)_
+[src/ui/select.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L113)_
 
 **`typedef`** {object} SelectProps
 

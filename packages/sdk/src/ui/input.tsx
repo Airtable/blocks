@@ -6,6 +6,7 @@ import {compose} from '@styled-system/core';
 import {spawnInvariantViolationError} from '../error_utils';
 import {baymax} from './baymax_utils';
 import withStyledSystem from './with_styled_system';
+import {FormFieldIdContext} from './use_form_field_id';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -193,6 +194,8 @@ export class Input extends React.Component<InputProps> {
         value: PropTypes.string,
         ...sharedInputPropTypes,
     };
+    /** */
+    static contextType = FormFieldIdContext;
     /** @internal */
     _input: HTMLInputElement | null;
     /** @hidden */
@@ -258,6 +261,7 @@ export class Input extends React.Component<InputProps> {
             'aria-labelledby': ariaLabelledBy,
             'aria-describedby': ariaDescribedBy,
         } = this.props;
+        const controlId = this.context;
         const defaultClassName = 'styled-input rounded p1 darken1 text-dark normal';
 
         return (
@@ -270,7 +274,7 @@ export class Input extends React.Component<InputProps> {
                 required={required}
                 spellCheck={spellCheck}
                 tabIndex={tabIndex}
-                id={id}
+                id={id || controlId}
                 name={name}
                 autoFocus={autoFocus}
                 max={max}

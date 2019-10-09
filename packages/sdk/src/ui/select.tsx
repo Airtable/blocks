@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {spawnInvariantViolationError, spawnError} from '../error_utils';
 import withStyledSystem from './with_styled_system';
+import {FormFieldIdContext} from './use_form_field_id';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -176,6 +177,8 @@ export class Select extends React.Component<SelectProps> {
         value: SelectOptionValuePropType,
         ...sharedSelectPropTypes,
     };
+    /** */
+    static contextType = FormFieldIdContext;
     /** @internal */
     _select: HTMLSelectElement | null;
     /** @hidden */
@@ -237,6 +240,7 @@ export class Select extends React.Component<SelectProps> {
             'aria-describedby': ariaDescribedBy,
             'aria-labelledby': ariaLabelledBy,
         } = this.props;
+        const contextId = this.context;
 
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
@@ -279,7 +283,7 @@ export class Select extends React.Component<SelectProps> {
                 onClick={onClick}
                 autoFocus={autoFocus}
                 disabled={disabled}
-                id={id}
+                id={id || contextId}
                 name={name}
                 tabIndex={tabIndex}
                 className={cx(

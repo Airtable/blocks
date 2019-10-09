@@ -44,6 +44,7 @@ export {default as Box} from './box';
 export {default as Text} from './text';
 export {default as Heading} from './heading';
 export {default as Label} from './label';
+export {default as FormField} from './form_field';
 export {loadCSSFromString, loadCSSFromURLAsync, loadScriptFromURLAsync} from './remote_utils';
 export {default as initializeBlock} from './initialize_block';
 export {default as withHooks} from './with_hooks';

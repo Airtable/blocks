@@ -15,6 +15,7 @@ import ExampleManager from './ExampleManager';
 import FieldIconExample from './FieldIconExample';
 import FieldPickerExample from './FieldPickerExample';
 import FieldPickerSyncedExample from './FieldPickerSyncedExample';
+import FormFieldExample from './FormFieldExample';
 import IconExample from './IconExample';
 import InputExample from './InputExample';
 import InputSyncedExample from './InputSyncedExample';
@@ -91,6 +92,10 @@ const examples: Array<Example> = [
     {
         name: 'FieldPickerSynced',
         component: FieldPickerSyncedExample,
+    },
+    {
+        name: 'FormField',
+        component: FormFieldExample,
     },
     {
         name: 'Icon',
