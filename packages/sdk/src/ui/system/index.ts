@@ -115,6 +115,8 @@ export {textAlign, textAlignPropTypes} from './typography/text_align';
 export {TextAlignProps} from './typography/text_align';
 export {textColor, textColorPropTypes} from './typography/text_color';
 export {TextColorProps} from './typography/text_color';
+export {textDecoration, textDecorationPropTypes} from './typography/text_decoration';
+export {TextDecorationProps} from './typography/text_decoration';
 export {textTransform, textTransformPropTypes} from './typography/text_transform';
 export {TextTransformProps} from './typography/text_transform';
 

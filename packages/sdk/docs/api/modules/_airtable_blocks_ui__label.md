@@ -20,8 +20,8 @@
 Ƭ **LabelProps**: _object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object & object_
+object & object & object & object & object & object & object & object & object & object &
+TextDecorationProps & object & object & object & object_
 
 _Defined in
 [src/ui/label.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L30)_

@@ -1,9 +1,12 @@
 import * as tokens from './tokens';
 import {controlSizes, buttonSizes} from './control_sizes';
+// Typography sizes and variants
 import textSizesByVariant from './text_sizes_by_variant';
 import headingSizesByVariant from './heading_sizes_by_variant';
-import textButtonVariants from './text_button_variants';
+// Component variants
 import buttonVariants from './button_variants';
+import linkVariants from './link_variants';
+import textButtonVariants from './text_button_variants';
 
 const theme = {
     ...tokens,
@@ -15,8 +18,9 @@ const theme = {
     // This means `textButtonVariants.default` is just a CSS class name.
     // This has the benefit over exporting a style object
     // of not having to create a class name manually in the render function.
-    textButtonVariants,
     buttonVariants,
+    linkVariants,
+    textButtonVariants,
 };
 
 export default theme;

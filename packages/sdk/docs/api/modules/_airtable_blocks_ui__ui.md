@@ -24,8 +24,8 @@
 Ƭ **BoxProps**: _object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & TooltipAnchorProps & object_
+object & object & object & object & object & object & object & object & object & TextDecorationProps
+& object & object & object & object & object & object & TooltipAnchorProps & object_
 
 _Defined in
 [src/ui/box.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L28)_
@@ -74,8 +74,8 @@ of description element IDs.
 Ƭ **HeadingProps**: _object & object & object & object & object & object & object & object & object
 & object & object & object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object & object_
+object & object & object & object & object & object & object & object & object & object &
+TextDecorationProps & object & object & object & object_
 
 _Defined in
 [src/ui/heading.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L99)_
@@ -125,8 +125,8 @@ of description element IDs.
 Ƭ **TextProps**: _object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
 object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object & object & object & object & object & object & object &
-object & object & object & object & object_
+object & object & object & object & object & object & object & object & object & TextDecorationProps
+& object & object & object & object & object & object & object_
 
 _Defined in
 [src/ui/text.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L62)_
