@@ -373,21 +373,21 @@ export enum FieldTypes {
      *     // content type, e.g. "image/jpeg"
      *     type?: string,
      *     // thumbnails if available
-     *     thumbnails: {
+     *     thumbnails?: {
      *         small?: {
      *             url: string,
-     *             width?: number,
-     *             height?: number,
+     *             width: number,
+     *             height: number,
      *         },
      *         large?: {
      *             url: string,
-     *             width?: number,
-     *             height?: number,
+     *             width: number,
+     *             height: number,
      *         },
      *         full?: {
      *             url: string,
-     *             width?: number,
-     *             height?: number,
+     *             width: number,
+     *             height: number,
      *         },
      *     },
      * }>

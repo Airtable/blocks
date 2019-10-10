@@ -20,7 +20,7 @@
 • **RecordCard**:
 
 _Defined in
-[src/ui/record_card.tsx:217](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L217)_
+[src/ui/record_card.tsx:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L210)_
 
 ## Interfaces
 
@@ -29,7 +29,7 @@ _Defined in
 • **RecordCardProps**:
 
 _Defined in
-[src/ui/record_card.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L135)_
+[src/ui/record_card.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L134)_
 
 **`typedef`** {object} RecordCardProps
 

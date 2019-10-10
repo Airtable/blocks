@@ -21,7 +21,6 @@ import Field from '../models/field';
 import Record from '../models/record';
 import View from '../models/view';
 import ViewMetadataQueryResult from '../models/view_metadata_query_result';
-import cellValueUtils from '../models/cell_value_utils';
 import colorUtils from '../color_utils';
 import {baymax} from './baymax_utils';
 import expandRecord, {ExpandRecordOpts} from './expand_record';
@@ -194,16 +193,10 @@ const calculateAttachmentDimensionsAndMargin = (
     attachment: AttachmentData | null,
     containerSize: number,
 ): Partial<{width: number; height: number; marginTop: number; marginLeft: number}> => {
-    if (!attachment || !attachment.largeThumbUrl) {
+    if (!attachment || !attachment.thumbnails || !attachment.thumbnails.large) {
         return {};
     }
-    const {largeThumbHeight: thumbHeight, largeThumbWidth: thumbWidth} = attachment;
-    if (!thumbHeight) {
-        throw spawnInvariantViolationError('Attachment object missing height');
-    }
-    if (!thumbWidth) {
-        throw spawnInvariantViolationError('Attachment object missing width');
-    }
+    const {thumbnails: {large: {width: thumbWidth, height: thumbHeight}}} = attachment;
 
     const height = Math.min(containerSize, thumbHeight);
     const width = Math.round((thumbWidth * height) / thumbHeight);
@@ -369,27 +362,45 @@ export class RecordCard extends React.Component<RecordCardProps> {
         return getFieldResultType(field) === FieldTypes.MULTIPLE_ATTACHMENTS;
     }
     /** @internal */
-    _getRawCellValue(field: Field): unknown {
-        // TODO(emma): delete this, just rely on public format
+    _getCellValue(field: Field): unknown {
         const {record} = this.props;
         if (record && record instanceof Record) {
-            return record.__getRawCellValue(field.id);
+            return record.getCellValue(field.id);
         } else {
-            const publicCellValue = record[field.id];
-            cellValueUtils.validatePublicCellValueForUpdate(publicCellValue, null, field);
-            return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
+            const cellValue = record[field.id];
+
+            // To validate public cell values, we only have validateCellValueForUpdate
+            // However, this is not implemented for computed fields (since you can't update them)
+            // so we just skip the check.
+            // TODO(emma): actually check this somehow.
+            if (!field.isComputed) {
+                const airtableInterface = getSdk().__airtableInterface;
+                const appInterface = getSdk().__appInterface;
+
+                const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                    appInterface,
+                    cellValue,
+                    null,
+                    field._data,
+                );
+                if (!validationResult.isValid) {
+                    throw spawnError(validationResult.reason);
+                }
+            }
+
+            return cellValue;
         }
     }
     /** @internal */
     _getFirstAttachmentInField(attachmentField: Field): AttachmentData | null {
         let attachmentsInField;
         if (attachmentField.type === FieldTypes.MULTIPLE_LOOKUP_VALUES) {
-            const rawCellValue = this._getRawCellValue(attachmentField) as FlowAnyObject;
+            const cellValue = this._getCellValue(attachmentField) as FlowAnyObject;
             attachmentsInField = flattenDeep(
-                values(rawCellValue ? rawCellValue.valuesByForeignRowId : {}),
+                values(cellValue ? cellValue.valuesByLinkedRecordId: {}),
             );
         } else {
-            attachmentsInField = this._getRawCellValue(attachmentField) as Array<FlowAnyObject>;
+            attachmentsInField = this._getCellValue(attachmentField) as Array<FlowAnyObject>;
         }
         return attachmentsInField && attachmentsInField.length > 0 ? attachmentsInField[0] : null;
     }
@@ -612,7 +623,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
                         {this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse)}
                     </Box>
                 </Box>
-                {attachmentObjIfAvailable && attachmentObjIfAvailable.largeThumbUrl && (
+                {attachmentObjIfAvailable && attachmentObjIfAvailable.thumbnails && attachmentObjIfAvailable.thumbnails.large && (
                     <Box
                         className={baymax('noevents')}
                         style={{
@@ -633,7 +644,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
                                 marginTop: attachmentDimensionsAndPosition.marginTop,
                                 marginLeft: attachmentDimensionsAndPosition.marginLeft,
                             }}
-                            src={attachmentObjIfAvailable.largeThumbUrl}
+                            src={attachmentObjIfAvailable.thumbnails.large.url}
                         />
                     </Box>
                 )}

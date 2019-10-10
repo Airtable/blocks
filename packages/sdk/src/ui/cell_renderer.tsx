@@ -212,18 +212,24 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             // does not yet exist, this will throw.
             // TODO: handle "preview" cell values that are not yet valid in the given field
             // but that *could* be.
-            const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
-                appInterface,
-                cellValue,
-                null,
-                field._data,
-            );
-            if (!validationResult.isValid) {
-                throw spawnError(
-                    'Cannot render invalid cell value %s: %s',
+            // To validate public cell values, we only have validateCellValueForUpdate
+            // However, this is not implemented for computed fields (since you can't update them)
+            // so we just skip the check.
+            // TODO(emma): actually check this somehow.
+            if (!field.isComputed) {
+                const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
+                    appInterface,
                     cellValue,
-                    validationResult.reason,
+                    null,
+                    field._data,
                 );
+                if (!validationResult.isValid) {
+                    throw spawnError(
+                        'Cannot render invalid cell value %s: %s',
+                        cellValue,
+                        validationResult.reason,
+                    );
+                }
             }
 
             cellValueToRender = cellValue;

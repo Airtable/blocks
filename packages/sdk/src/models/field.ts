@@ -304,6 +304,14 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             this._data,
         );
 
+        // Temporarily bail out of validating computed values (since validation will crash)
+        // while we work out if we actually have to validate or not. Ideally we just delete all
+        // the validation
+        // TODO(emma): delete me or tidy me up
+        if (this.isComputed) {
+            return cellValue;
+        }
+
         // TODO(emma): do we need to validate here?
         const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
             appInterface,

@@ -16,7 +16,6 @@ import {spawnInvariantViolationError} from '../error_utils';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';
 import Field from './field';
-import cellValueUtils from './cell_value_utils';
 import Table from './table';
 import View from './view';
 import {RecordQueryResultOpts} from './record_query_result';
@@ -178,15 +177,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     get parentTable(): Table {
         return this._parentTable;
-    }
-    /**
-     * @internal
-     * TODO: emma: delete this (used by record_card)
-     */
-    __getRawCellValue(fieldId: string): unknown {
-        const publicCellValue = this.getCellValue(fieldId);
-        const field = this.parentTable.getFieldById(fieldId);
-        return cellValueUtils.parsePublicApiCellValue(publicCellValue, field);
     }
     /**
      * @internal
