@@ -36,6 +36,7 @@ import Icon from './icon';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import cssHelpers from './css_helpers';
 import Box from './box';
+import {DataAttributesProp} from './types/data_attributes';
 
 export interface StyleProps
     extends MaxWidthProps,
@@ -115,7 +116,7 @@ interface TextButtonProps extends TooltipAnchorProps<HTMLSpanElement>, AriaProps
     tabIndex?: number;
     className?: string;
     style?: React.CSSProperties;
-    dataAttributes?: {readonly [key: string]: string};
+    dataAttributes?: DataAttributesProp;
     ['aria-selected']?: boolean;
 }
 

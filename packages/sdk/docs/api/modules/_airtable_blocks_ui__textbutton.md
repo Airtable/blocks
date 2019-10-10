@@ -20,7 +20,7 @@
 • **TextButtonProps**:
 
 _Defined in
-[src/ui/text_button.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L104)_
+[src/ui/text_button.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L105)_
 
 **`typedef`** {object} TextButtonProps
 
@@ -159,7 +159,7 @@ padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%', ...styleProps, }, styl
 )
 
 _Defined in
-[src/ui/text_button.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L146)_
+[src/ui/text_button.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L147)_
 
 A text button component with sizes and variants.
 
