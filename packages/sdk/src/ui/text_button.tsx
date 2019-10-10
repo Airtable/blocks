@@ -30,7 +30,7 @@ import {
     SpacingSetProps,
     display,
 } from './system';
-import {useTextSize, TextSize, TextSizeProp, textSizePropType} from './text';
+import {useTextStyle, TextSize, TextSizeProp, textSizePropType} from './text';
 import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
@@ -171,14 +171,8 @@ const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
         }: TextButtonProps,
         ref: React.Ref<HTMLSpanElement>,
     ) => {
+        const classNameForTextStyle = useTextStyle(size);
         const classNameForTextButtonVariant = useTextButtonVariant(variant);
-        // Ignore text color since we define it in the variant.
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const {textColor, ...stylePropsForTextSize} = useTextSize(size);
-        const classNameForTextSize = useStyledSystem({
-            ...stylePropsForTextSize,
-            fontWeight: 'strong',
-        });
         const classNameForStyleProps = useStyledSystem<StyleProps>(
             {
                 display: 'inline-flex',
@@ -224,8 +218,9 @@ const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 className={cx(
+                    classNameForTextStyle,
+                    // TextButton goes 2nd because it overrides `fontWeight`.
                     classNameForTextButtonVariant,
-                    classNameForTextSize,
                     classNameForStyleProps,
                     className,
                 )}

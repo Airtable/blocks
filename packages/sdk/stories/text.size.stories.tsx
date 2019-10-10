@@ -9,7 +9,7 @@ const stories = storiesOf('Text/size', module);
 
 stories.add('default sizes', () => (
     <>
-        {keys(theme.textSizesByVariant.default).map(textSize => (
+        {keys(theme.textStyles.default).map(textSize => (
             <Text key={textSize} size={textSize}>
                 The brown fox jumped over the lazy dog
             </Text>
@@ -19,7 +19,7 @@ stories.add('default sizes', () => (
 
 stories.add('paragraph sizes', () => (
     <>
-        {keys(theme.textSizesByVariant.paragraph).map(textSize => (
+        {keys(theme.textStyles.paragraph).map(textSize => (
             <Box key={textSize} marginBottom="40px">
                 <Text variant="paragraph" size={textSize} maxWidth="40em">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor

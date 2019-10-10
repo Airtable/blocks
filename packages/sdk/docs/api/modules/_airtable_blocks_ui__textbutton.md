@@ -547,11 +547,8 @@ dataAttributes, onClick, className, style, onMouseEnter, onMouseLeave, hasOnClic
 ariaSelected, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby':
 ariaDescribedBy, 'aria-controls': ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup':
 ariaHasPopup, 'aria-hidden': ariaHidden, 'aria-live': ariaLive, ...styleProps }: TextButtonProps,
-ref: React.Ref<HTMLSpanElement>, ) => { const classNameForTextButtonVariant =
-useTextButtonVariant(variant); // Ignore text color since we define it in the variant. //
-eslint-disable-next-line @typescript-eslint/no-unused-vars const {textColor,
-...stylePropsForTextSize} = useTextSize(size); const classNameForTextSize = useStyledSystem({
-...stylePropsForTextSize, fontWeight: 'strong', }); const classNameForStyleProps =
+ref: React.Ref<HTMLSpanElement>, ) => { const classNameForTextStyle = useTextStyle(size); const
+classNameForTextButtonVariant = useTextButtonVariant(variant); const classNameForStyleProps =
 useStyledSystem<StyleProps>( { display: 'inline-flex', // Use a negative margin to undo the padding.
 padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%', ...styleProps, }, styleParser, );
 
@@ -588,8 +585,9 @@ padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%', ...styleProps, }, styl
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 className={cx(
+                    classNameForTextStyle,
+                    // TextButton goes 2nd because it overrides `fontWeight`.
                     classNameForTextButtonVariant,
-                    classNameForTextSize,
                     classNameForStyleProps,
                     className,
                 )}

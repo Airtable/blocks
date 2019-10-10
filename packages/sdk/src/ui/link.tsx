@@ -34,7 +34,7 @@ import {
     display,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {useTextSize, TextSize, TextSizeProp, textSizePropType} from './text';
+import {useTextStyle, TextSize, TextSizeProp, textSizePropType} from './text';
 import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 
@@ -203,12 +203,9 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
         }: LinkProps,
         ref: React.Ref<HTMLAnchorElement>,
     ) => {
+        const classNameForTextStyle = useTextStyle(size);
         const classNameForLinkVariant = useLinkVariant(variant);
-        // TODO (jay): Remove `textColor` from `useTextSize` in the future.
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const {textColor, ...stylePropsForTextSize} = useTextSize(size);
-        const classNameForTextSize = useStyledSystem({
-            ...stylePropsForTextSize,
+        const classNameForUnderline = useStyledSystem({
             textDecoration: underline ? 'underline' : 'none',
         });
         const classNameForStyleProps = useStyledSystem<StyleProps>(
@@ -218,6 +215,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
                 padding: '0 0.1em',
                 margin: '0 -0.1em',
                 maxWidth: '100%',
+
                 ...styleProps,
             },
             styleParser,
@@ -240,8 +238,9 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
                 onClick={onClick}
                 tabIndex={tabIndex}
                 className={cx(
+                    classNameForTextStyle,
                     classNameForLinkVariant,
-                    classNameForTextSize,
+                    classNameForUnderline,
                     classNameForStyleProps,
                     className,
                 )}

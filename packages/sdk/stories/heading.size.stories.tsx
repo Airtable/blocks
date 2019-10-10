@@ -9,7 +9,7 @@ const stories = storiesOf('Heading/size', module);
 
 stories.add('default sizes', () => (
     <>
-        {keys(theme.headingSizesByVariant.default).map(size => (
+        {keys(theme.headingStyles.default).map(size => (
             <React.Fragment key={size}>
                 <Heading key={size} size={size} marginTop="1em">
                     The brown fox jumped over the lazy dog
@@ -31,7 +31,7 @@ stories.add('default sizes', () => (
 
 stories.add('caps sizes', () => (
     <>
-        {keys(theme.headingSizesByVariant.caps).map(size => (
+        {keys(theme.headingStyles.caps).map(size => (
             <Heading key={size} size={size} variant="caps">
                 The brown fox jumped over the lazy dog
             </Heading>

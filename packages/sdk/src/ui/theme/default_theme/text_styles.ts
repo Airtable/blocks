@@ -1,4 +1,4 @@
-const textSizesByVariant = {
+const textStyles = {
     default: {
         small: {
             fontSize: 1,
@@ -73,4 +73,4 @@ const textSizesByVariant = {
     },
 };
 
-export default textSizesByVariant;
+export default textStyles;

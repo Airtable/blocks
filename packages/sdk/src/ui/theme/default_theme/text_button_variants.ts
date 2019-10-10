@@ -1,5 +1,5 @@
 import {css, cx} from 'emotion';
-import {colors, radii, opacities} from './tokens';
+import {colors, radii, opacities, fontWeights} from './tokens';
 
 const NOT_DISABLED = '&:not([aria-disabled="true"])';
 const DISABLED = '&[aria-disabled="true"]';
@@ -9,6 +9,7 @@ const baseStyles = css({
     justifyContent: 'center',
     borderRadius: radii.default,
     outline: 'none',
+    fontWeight: fontWeights.strong,
     [NOT_DISABLED]: {
         cursor: 'pointer',
         '&:hover': {

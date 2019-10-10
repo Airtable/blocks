@@ -18,6 +18,7 @@ import {ResponsiveProp, ResponsiveKey} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
 
 type HeadingSize = EnumType<typeof HeadingSize>;
 const HeadingSize = createEnum('xsmall', 'small', 'default', 'large', 'xlarge', 'xxlarge');
@@ -45,36 +46,36 @@ function warnIfHeadingSizeOutOfRangeForVariant(
 }
 
 /** @internal */
-function useHeadingSize(
-    headingSizeProp: HeadingSizeProp,
-    variant: HeadingVariant,
-): Partial<AllStylesProps> {
-    const {headingSizesByVariant} = useTheme();
-    const headingSizesForVariant = headingSizesByVariant[variant];
+function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVariant): string {
+    const {headingStyles} = useTheme();
+    const headingSizesForVariant = headingStyles[variant];
 
+    let styleProps;
     if (typeof headingSizeProp === 'string') {
         warnIfHeadingSizeOutOfRangeForVariant(headingSizeProp, variant, headingSizesForVariant);
-        return (headingSizesForVariant[headingSizeProp] ||
+        styleProps = (headingSizesForVariant[headingSizeProp] ||
             headingSizesForVariant[HeadingSize.default]) as Partial<AllStylesProps>;
-    }
+    } else {
+        const responsiveSizePropObject = {} as ObjectMap<ResponsiveKey, HeadingSize>;
+        for (const sizeKey of keys(headingSizeProp)) {
+            const sizeProp = headingSizeProp[sizeKey];
+            if (!sizeProp) {
+                throw spawnInvariantViolationError('sizeProp');
+            }
 
-    const responsiveSizePropObject = {} as ObjectMap<ResponsiveKey, HeadingSize>;
-    for (const sizeKey of keys(headingSizeProp)) {
-        const sizeProp = headingSizeProp[sizeKey];
-        if (!sizeProp) {
-            throw spawnInvariantViolationError('sizeProp');
+            warnIfHeadingSizeOutOfRangeForVariant(sizeProp, variant, headingSizesForVariant);
+            responsiveSizePropObject[sizeKey] = sizeProp || HeadingSize.default;
         }
 
-        warnIfHeadingSizeOutOfRangeForVariant(sizeProp, variant, headingSizesForVariant);
-        responsiveSizePropObject[sizeKey] = sizeProp || HeadingSize.default;
+        styleProps = getStylePropsForResponsiveProp<HeadingSize>(
+            responsiveSizePropObject,
+            // Cast to any to because `caps` don't all have the same sizes as `default`.
+            // This in turn requires each size to be typed as optional.
+            headingSizesForVariant as any,
+        );
     }
 
-    return getStylePropsForResponsiveProp<HeadingSize>(
-        responsiveSizePropObject,
-
-        // TODO: fix after typescript migration
-        headingSizesForVariant as any,
-    );
+    return useStyledSystem(styleProps);
 }
 
 /**
@@ -102,7 +103,7 @@ interface HeadingProps extends AriaProps, AllStylesProps {
     children?: React.ReactNode;
     id?: string;
     size?: HeadingSizeProp;
-    dataAttributes?: {readonly [key: string]: unknown};
+    dataAttributes?: DataAttributesProp;
     className?: string;
     style?: React.CSSProperties;
 }
@@ -132,83 +133,71 @@ interface HeadingProps extends AriaProps, AllStylesProps {
  * }
  * ```
  */
-function Heading(props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) {
-    const {
-        as: Component,
-        size,
-        variant,
-        children,
-        id,
-        role,
-        dataAttributes = {},
-        className,
-        style,
-        'aria-label': ariaLabel,
-        'aria-labelledby': ariaLabelledBy,
-        'aria-describedby': ariaDescribedBy,
-        'aria-controls': ariaControls,
-        'aria-expanded': ariaExpanded,
-        'aria-haspopup': ariaHasPopup,
-        'aria-hidden': ariaHidden,
-        'aria-live': ariaLive,
-        ...styleProps
-    } = props;
-    if (!(Component !== undefined)) {
-        throw spawnInvariantViolationError('as');
-    }
-    if (!(size !== undefined)) {
-        throw spawnInvariantViolationError('size');
-    }
-    if (!(variant !== undefined)) {
-        throw spawnInvariantViolationError('variant');
-    }
-    const stylePropsForTextSize = useHeadingSize(size, variant);
-    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
-        ...stylePropsForTextSize,
-        ...styleProps,
-    });
-    return (
-        <Component
-            ref={ref}
-            id={id}
-            className={cx(classNameForStyleProps, className)}
-            style={style}
-            role={role}
-            aria-label={ariaLabel}
-            aria-labelledby={ariaLabelledBy}
-            aria-describedby={ariaDescribedBy}
-            aria-controls={ariaControls}
-            aria-expanded={ariaExpanded}
-            aria-haspopup={ariaHasPopup}
-            aria-hidden={ariaHidden}
-            aria-live={ariaLive}
-            {...dataAttributes}
-        >
-            {children}
-        </Component>
-    );
-}
+const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
+    (
+        {
+            as: Component = 'h3',
+            size = HeadingSize.default,
+            variant = HeadingVariant.default,
+            children,
+            id,
+            role,
+            dataAttributes,
+            className,
+            style,
+            'aria-label': ariaLabel,
+            'aria-labelledby': ariaLabelledBy,
+            'aria-describedby': ariaDescribedBy,
+            'aria-controls': ariaControls,
+            'aria-expanded': ariaExpanded,
+            'aria-haspopup': ariaHasPopup,
+            'aria-hidden': ariaHidden,
+            'aria-live': ariaLive,
+            ...styleProps
+        }: HeadingProps,
+        ref: React.Ref<HTMLHeadingElement>,
+    ) => {
+        const classNameForHeadingSize = useHeadingStyle(size, variant);
+        const classNameForStyleProps = useStyledSystem({
+            fontFamily: 'default',
+            textColor: 'default',
+            ...styleProps,
+        });
+        return (
+            <Component
+                ref={ref}
+                id={id}
+                className={cx(classNameForHeadingSize, classNameForStyleProps, className)}
+                style={style}
+                role={role}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
+                aria-controls={ariaControls}
+                aria-expanded={ariaExpanded}
+                aria-haspopup={ariaHasPopup}
+                aria-hidden={ariaHidden}
+                aria-live={ariaLive}
+                {...dataAttributes}
+            >
+                {children}
+            </Component>
+        );
+    },
+);
 
-const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(Heading);
-
-(ForwardedRefHeading as any).propTypes = {
-    as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
+Heading.propTypes = {
+    as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const),
     size: headingSizePropType,
     variant: headingVariantPropType,
     children: PropTypes.node,
     id: PropTypes.string,
     role: PropTypes.string,
-    dataAttributes: PropTypes.object,
+    dataAttributes: dataAttributesPropType,
     className: PropTypes.string,
     style: PropTypes.object,
     ...allStylesPropTypes,
     ...ariaPropTypes,
 };
 
-ForwardedRefHeading.defaultProps = {
-    as: 'h3',
-    size: HeadingSize.default,
-    variant: HeadingVariant.default,
-};
-
-export default ForwardedRefHeading;
+export default Heading;

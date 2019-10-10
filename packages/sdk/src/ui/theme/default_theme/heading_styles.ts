@@ -4,7 +4,7 @@ import {TypographySetProps, MarginProps} from '../../system';
 type HeadingVariant = 'default' | 'caps';
 type HeadingSize = 'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge';
 
-const headingSizesByVariant: ObjectMap<
+const headingStyles: ObjectMap<
     HeadingVariant,
     {[Size in HeadingSize]?: TypographySetProps & MarginProps}
 > = {
@@ -14,7 +14,6 @@ const headingSizesByVariant: ObjectMap<
             fontWeight: 700,
             lineHeight: '22px',
             textColor: 'default',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 1,
         },
@@ -23,7 +22,6 @@ const headingSizesByVariant: ObjectMap<
             fontWeight: 600,
             lineHeight: '24px',
             textColor: 'default',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 1,
         },
@@ -34,7 +32,6 @@ const headingSizesByVariant: ObjectMap<
             fontWeight: 500,
             lineHeight: '26px',
             textColor: 'default',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 2,
         },
@@ -43,7 +40,6 @@ const headingSizesByVariant: ObjectMap<
             fontWeight: 500,
             lineHeight: '29px',
             textColor: 'default',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 2,
         },
@@ -52,7 +48,6 @@ const headingSizesByVariant: ObjectMap<
             fontWeight: 500,
             lineHeight: '34px',
             textColor: 'default',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 3,
         },
@@ -62,7 +57,6 @@ const headingSizesByVariant: ObjectMap<
             lineHeight: '44px',
             letterSpacing: '-0.01em',
             textColor: 'default',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 3,
         },
@@ -75,7 +69,6 @@ const headingSizesByVariant: ObjectMap<
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             textColor: 'light',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 2,
         },
@@ -86,7 +79,6 @@ const headingSizesByVariant: ObjectMap<
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             textColor: 'light',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 2,
         },
@@ -97,7 +89,6 @@ const headingSizesByVariant: ObjectMap<
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             textColor: 'light',
-            fontFamily: 'default',
             marginTop: 0,
             marginBottom: 3,
         },
@@ -105,4 +96,4 @@ const headingSizesByVariant: ObjectMap<
     },
 };
 
-export default headingSizesByVariant;
+export default headingStyles;

@@ -9,9 +9,9 @@
 
 -   [HeadingProps](_airtable_blocks_ui__heading.md#headingprops)
 
-### Functions
+### Variables
 
--   [Heading](_airtable_blocks_ui__heading.md#heading)
+-   [Heading](_airtable_blocks_ui__heading.md#const-heading)
 
 ## Interfaces
 
@@ -20,7 +20,7 @@
 • **HeadingProps**:
 
 _Defined in
-[src/ui/heading.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L98)_
+[src/ui/heading.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L99)_
 
 **`typedef`** {object} HeadingProps
 
@@ -161,15 +161,27 @@ _Defined in
 Indicates that an element will be updated, and describes the types of updates the user agents,
 assistive technologies, and user can expect from the live region.
 
-## Functions
+## Variables
 
-### Heading
+### `Const` Heading
 
-▸ **Heading**(`props`: [HeadingProps](_airtable_blocks_ui__heading.md#headingprops), `ref`:
-React.Ref‹HTMLHeadingElement›): _Element_
+• **Heading**:
+_ForwardRefExoticComponent‹[HeadingProps](_airtable_blocks_ui__heading.md#headingprops) &
+RefAttributes‹HTMLHeadingElement››_ = React.forwardRef<HTMLHeadingElement, HeadingProps>( ( { as:
+Component = 'h3', size = HeadingSize.default, variant = HeadingVariant.default, children, id, role,
+dataAttributes, className, style, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy,
+'aria-describedby': ariaDescribedBy, 'aria-controls': ariaControls, 'aria-expanded': ariaExpanded,
+'aria-haspopup': ariaHasPopup, 'aria-hidden': ariaHidden, 'aria-live': ariaLive, ...styleProps }:
+HeadingProps, ref: React.Ref<HTMLHeadingElement>, ) => { const classNameForHeadingSize =
+useHeadingStyle(size, variant); const classNameForStyleProps = useStyledSystem({ fontFamily:
+'default', textColor: 'default', ...styleProps, }); return ( <Component ref={ref} id={id}
+className={cx(classNameForHeadingSize, classNameForStyleProps, className)} style={style} role={role}
+aria-label={ariaLabel} aria-labelledby={ariaLabelledBy} aria-describedby={ariaDescribedBy}
+aria-controls={ariaControls} aria-expanded={ariaExpanded} aria-haspopup={ariaHasPopup}
+aria-hidden={ariaHidden} aria-live={ariaLive} {...dataAttributes} > {children} </Component> ); }, )
 
 _Defined in
-[src/ui/heading.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L135)_
+[src/ui/heading.tsx:136](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L136)_
 
 A heading component with sizes and variants.
 
@@ -198,12 +210,3 @@ function HeadingExample() {
     );
 }
 ```
-
-**Parameters:**
-
-| Name    | Type                                                         |
-| ------- | ------------------------------------------------------------ |
-| `props` | [HeadingProps](_airtable_blocks_ui__heading.md#headingprops) |
-| `ref`   | React.Ref‹HTMLHeadingElement›                                |
-
-**Returns:** _Element_

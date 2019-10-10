@@ -559,13 +559,16 @@ onMouseEnter, onMouseLeave, onClick, hasOnClick, tabIndex, className, style, chi
 dataAttributes, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby':
 ariaDescribedBy, 'aria-controls': ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup':
 ariaHasPopup, 'aria-hidden': ariaHidden, 'aria-live': ariaLive, ...styleProps }: LinkProps, ref:
-React.Ref<HTMLAnchorElement>, ) => { const classNameForLinkVariant = useLinkVariant(variant); //
-TODO (jay): Remove `textColor` from `useTextSize` in the future. // eslint-disable-next-line
-@typescript-eslint/no-unused-vars const {textColor, ...stylePropsForTextSize} = useTextSize(size);
-const classNameForTextSize = useStyledSystem({ ...stylePropsForTextSize, textDecoration: underline ?
-'underline' : 'none', }); const classNameForStyleProps = useStyledSystem<StyleProps>( { display:
-'inline-flex', // Use a negative margin to undo the padding. padding: '0 0.1em', margin: '0 -0.1em',
-maxWidth: '100%', ...styleProps, }, styleParser, );
+React.Ref<HTMLAnchorElement>, ) => { const classNameForTextStyle = useTextStyle(size); const
+classNameForLinkVariant = useLinkVariant(variant); const classNameForUnderline = useStyledSystem({
+textDecoration: underline ? 'underline' : 'none', }); const classNameForStyleProps =
+useStyledSystem<StyleProps>( { display: 'inline-flex', // Use a negative margin to undo the padding.
+padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%',
+
+                ...styleProps,
+            },
+            styleParser,
+        );
 
         // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
         // https://www.owasp.org/index.php/Reverse_Tabnabbing
@@ -584,8 +587,9 @@ maxWidth: '100%', ...styleProps, }, styleParser, );
                 onClick={onClick}
                 tabIndex={tabIndex}
                 className={cx(
+                    classNameForTextStyle,
                     classNameForLinkVariant,
-                    classNameForTextSize,
+                    classNameForUnderline,
                     classNameForStyleProps,
                     className,
                 )}

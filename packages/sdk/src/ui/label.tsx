@@ -12,7 +12,7 @@ import {
     textSizePropType,
     TextVariant,
     textVariantPropType,
-    useTextSize,
+    useTextStyle,
 } from './text';
 
 /**
@@ -85,9 +85,8 @@ function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
     if (!(size !== undefined)) {
         throw spawnInvariantViolationError('size');
     }
-    const stylePropsForTextSize = useTextSize(size, TextVariant.default);
-    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
-        ...stylePropsForTextSize,
+    const classNameForTextStyle = useTextStyle(size, TextVariant.default);
+    const classNameForStyleProps = useStyledSystem({
         display: 'inline-block',
         textColor: 'light',
         fontWeight: 'strong',
@@ -99,7 +98,7 @@ function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
             ref={ref}
             htmlFor={htmlFor}
             id={id}
-            className={cx(classNameForStyleProps, className)}
+            className={cx(classNameForTextStyle, classNameForStyleProps, className)}
             style={style}
             role={role}
             aria-label={ariaLabel}

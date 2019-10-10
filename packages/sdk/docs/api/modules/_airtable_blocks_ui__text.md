@@ -9,9 +9,9 @@
 
 -   [TextProps](_airtable_blocks_ui__text.md#textprops)
 
-### Functions
+### Variables
 
--   [Text](_airtable_blocks_ui__text.md#text)
+-   [Text](_airtable_blocks_ui__text.md#const-text)
 
 ## Interfaces
 
@@ -20,7 +20,7 @@
 • **TextProps**:
 
 _Defined in
-[src/ui/text.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L59)_
+[src/ui/text.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L62)_
 
 **`typedef`** {object} TextProps
 
@@ -162,15 +162,26 @@ _Defined in
 Indicates that an element will be updated, and describes the types of updates the user agents,
 assistive technologies, and user can expect from the live region.
 
-## Functions
+## Variables
 
-### Text
+### `Const` Text
 
-▸ **Text**(`props`: [TextProps](_airtable_blocks_ui__text.md#textprops), `ref`:
-React.Ref‹HTMLElement›): _Element_
+• **Text**: _ForwardRefExoticComponent‹[TextProps](_airtable_blocks_ui__text.md#textprops) &
+RefAttributes‹HTMLElement››_ = React.forwardRef( ( { as: Component = 'p', size = TextSize.default,
+variant = TextVariant.default, children, id, role, dataAttributes, className, style, 'aria-label':
+ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby': ariaDescribedBy, 'aria-controls':
+ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup': ariaHasPopup, 'aria-hidden':
+ariaHidden, 'aria-live': ariaLive, ...styleProps }: TextProps, ref: React.Ref<HTMLElement>, ) => {
+const classNameForTextStyle = useTextStyle(size, variant); const classNameForStyleProps =
+useStyledSystem({ textColor: 'default', fontFamily: 'default', ...styleProps, }); return (
+<Component ref={ref as any} id={id} className={cx(classNameForTextStyle, classNameForStyleProps,
+className)} style={style} role={role} aria-label={ariaLabel} aria-labelledby={ariaLabelledBy}
+aria-describedby={ariaDescribedBy} aria-controls={ariaControls} aria-expanded={ariaExpanded}
+aria-haspopup={ariaHasPopup} aria-hidden={ariaHidden} aria-live={ariaLive} {...dataAttributes} >
+{children} </Component> ); }, )
 
 _Defined in
-[src/ui/text.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L118)_
+[src/ui/text.tsx:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L121)_
 
 A text component with sizes and variants.
 
@@ -199,12 +210,3 @@ function TextExample() {
     );
 }
 ```
-
-**Parameters:**
-
-| Name    | Type                                                |
-| ------- | --------------------------------------------------- |
-| `props` | [TextProps](_airtable_blocks_ui__text.md#textprops) |
-| `ref`   | React.Ref‹HTMLElement›                              |
-
-**Returns:** _Element_

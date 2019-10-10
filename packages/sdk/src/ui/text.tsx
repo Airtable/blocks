@@ -2,7 +2,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
-import {spawnInvariantViolationError} from '../error_utils';
 import {
     createEnum,
     EnumType,
@@ -15,6 +14,7 @@ import {ResponsiveProp} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
 
 export type TextVariant = EnumType<typeof TextVariant>;
 export const TextVariant = createEnum('default', 'paragraph');
@@ -26,16 +26,19 @@ export type TextSizeProp = ResponsiveProp<TextSize>;
 export const textSizePropType = createResponsivePropTypeFromEnum(TextSize);
 
 /** @internal */
-export function useTextSize(
+export function useTextStyle(
     textSizeProp: TextSizeProp,
     variant: TextVariant = TextVariant.default,
-): Partial<AllStylesProps> {
-    const {textSizesByVariant} = useTheme();
-    const textSizesForVariant = textSizesByVariant[variant];
+): string {
+    const {textStyles} = useTheme();
+    const textSizesForVariant = textStyles[variant];
+    let styleProps;
     if (typeof textSizeProp === 'string') {
-        return textSizesForVariant[textSizeProp];
+        styleProps = textSizesForVariant[textSizeProp];
+    } else {
+        styleProps = getStylePropsForResponsiveProp<TextSize>(textSizeProp, textSizesForVariant);
     }
-    return getStylePropsForResponsiveProp<TextSize>(textSizeProp, textSizesForVariant);
+    return useStyledSystem(styleProps);
 }
 
 /**
@@ -56,7 +59,7 @@ export function useTextSize(
  * @property {string} [aria-hidden] The `aria-hidden` attribute.
  * @property {string} [aria-live] The `aria-live` attribute.
  */
-interface TextProps extends AllStylesProps, AriaProps {
+interface TextProps extends AriaProps, AllStylesProps {
     as?:
         | 'p'
         | 'h1'
@@ -84,10 +87,10 @@ interface TextProps extends AllStylesProps, AriaProps {
     children?: React.ReactNode;
     id?: string;
     size?: TextSizeProp;
-    role?: string;
-    dataAttributes?: {readonly [key: string]: unknown};
+    dataAttributes?: DataAttributesProp;
     className?: string;
     style?: React.CSSProperties;
+    role?: string;
 }
 
 /**
@@ -115,66 +118,60 @@ interface TextProps extends AllStylesProps, AriaProps {
  * }
  * ```
  */
-function Text(props: TextProps, ref: React.Ref<HTMLElement>) {
-    const {
-        as: Component,
-        size,
-        variant,
-        children,
-        id,
-        role,
-        dataAttributes = {},
-        className,
-        style,
-        'aria-label': ariaLabel,
-        'aria-labelledby': ariaLabelledBy,
-        'aria-describedby': ariaDescribedBy,
-        'aria-controls': ariaControls,
-        'aria-expanded': ariaExpanded,
-        'aria-haspopup': ariaHasPopup,
-        'aria-hidden': ariaHidden,
-        'aria-live': ariaLive,
-        ...styleProps
-    } = props;
-    if (!(Component !== undefined)) {
-        throw spawnInvariantViolationError('as');
-    }
-    if (!(size !== undefined)) {
-        throw spawnInvariantViolationError('size');
-    }
-    if (!(variant !== undefined)) {
-        throw spawnInvariantViolationError('variant');
-    }
-    const stylePropsForTextSize = useTextSize(size, variant);
-    const classNameForStyleProps = useStyledSystem<AllStylesProps>({
-        ...stylePropsForTextSize,
-        ...styleProps,
-    });
-    return (
-        <Component
-            ref={ref as any}
-            id={id}
-            className={cx(classNameForStyleProps, className)}
-            style={style}
-            role={role}
-            aria-label={ariaLabel}
-            aria-labelledby={ariaLabelledBy}
-            aria-describedby={ariaDescribedBy}
-            aria-controls={ariaControls}
-            aria-expanded={ariaExpanded}
-            aria-haspopup={ariaHasPopup}
-            aria-hidden={ariaHidden}
-            aria-live={ariaLive}
-            {...dataAttributes}
-        >
-            {children}
-        </Component>
-    );
-}
+const Text = React.forwardRef(
+    (
+        {
+            as: Component = 'p',
+            size = TextSize.default,
+            variant = TextVariant.default,
+            children,
+            id,
+            role,
+            dataAttributes,
+            className,
+            style,
+            'aria-label': ariaLabel,
+            'aria-labelledby': ariaLabelledBy,
+            'aria-describedby': ariaDescribedBy,
+            'aria-controls': ariaControls,
+            'aria-expanded': ariaExpanded,
+            'aria-haspopup': ariaHasPopup,
+            'aria-hidden': ariaHidden,
+            'aria-live': ariaLive,
+            ...styleProps
+        }: TextProps,
+        ref: React.Ref<HTMLElement>,
+    ) => {
+        const classNameForTextStyle = useTextStyle(size, variant);
+        const classNameForStyleProps = useStyledSystem({
+            textColor: 'default',
+            fontFamily: 'default',
+            ...styleProps,
+        });
+        return (
+            <Component
+                ref={ref as any}
+                id={id}
+                className={cx(classNameForTextStyle, classNameForStyleProps, className)}
+                style={style}
+                role={role}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
+                aria-controls={ariaControls}
+                aria-expanded={ariaExpanded}
+                aria-haspopup={ariaHasPopup}
+                aria-hidden={ariaHidden}
+                aria-live={ariaLive}
+                {...dataAttributes}
+            >
+                {children}
+            </Component>
+        );
+    },
+);
 
-const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
-
-(ForwardedRefText as any).propTypes = {
+Text.propTypes = {
     as: PropTypes.oneOf([
         'p',
         'h1',
@@ -198,23 +195,17 @@ const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
         'time',
         'var',
         'blockquote',
-    ]),
+    ] as const),
     size: textSizePropType,
     variant: textVariantPropType,
     children: PropTypes.node,
     id: PropTypes.string,
     role: PropTypes.string,
-    dataAttributes: PropTypes.object,
+    dataAttributes: dataAttributesPropType,
     className: PropTypes.string,
     style: PropTypes.object,
     ...allStylesPropTypes,
     ...ariaPropTypes,
 };
 
-ForwardedRefText.defaultProps = {
-    as: 'p',
-    size: TextSize.default,
-    variant: TextVariant.default,
-};
-
-export default ForwardedRefText;
+export default Text;
