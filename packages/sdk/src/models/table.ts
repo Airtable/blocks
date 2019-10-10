@@ -18,10 +18,6 @@ import {RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import RecordStore from './record_store';
 
-const clientServerSharedConfigSettings = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/client_server_shared_config_settings',
-);
-
 // This doesn't follow our enum naming conventions because we want the keys
 // to mirror the method/getter names on the model class.
 export const WatchableTableKeys = Object.freeze({
@@ -446,14 +442,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         );
     }
 
-    /**
-     * @function
-     * @internal (not documenting, since this should really be part of the canCreateRecords check)
-     * @returns The maximum number of records that the table can contain.
-     */
-    get recordLimit(): number {
-        return clientServerSharedConfigSettings.MAX_NUM_ROWS_PER_TABLE;
-    }
     /**
      * Returns the first view in the table where the type is one of `allowedViewTypes`.
      *

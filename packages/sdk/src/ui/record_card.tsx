@@ -48,8 +48,8 @@ import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
 );
-
-const FALLBACK_ROW_NAME_FOR_DISPLAY = 'Unnamed record';
+// Mirrored from client_server_shared_config_settings
+const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 
 type StyleProps = (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
 
@@ -552,7 +552,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
                     : String(primaryCellValue);
         }
         if (isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
-            primaryValue = FALLBACK_ROW_NAME_FOR_DISPLAY;
+            primaryValue = FALLBACK_RECORD_NAME_FOR_DISPLAY;
             isUnnamed = true;
         } else {
             primaryValue = primaryCellValueAsString;
