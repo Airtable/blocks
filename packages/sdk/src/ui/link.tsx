@@ -35,7 +35,7 @@ import {
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {useTextSize, TextSize, TextSizeProp, textSizePropType} from './text';
-import {IconName} from './icon_config';
+import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 
 export interface StyleProps
@@ -85,7 +85,7 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
  * @typedef {object} LinkProps
  * @property {'small' | 'default' | 'large' | 'xlarge'} [size="default"] The `size` of the link. Defaults to `default`. Can be a responsive prop object.
  * @property {'default' | 'dark' | 'light'} [variant="default"] The `variant` of the link which defines the color. Defaults to `default`.
- * @property {string | React.Node} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
+ * @property {IconName | React.Element} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
  * @property {boolean} [underline="false"] Adds an underline to the link when true.
  * @property {string} href The target URL or URL fragment for the link.
  * @property {string} [target] Specifies where to display the linked URL.
@@ -105,7 +105,7 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
 interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, StyleProps {
     size?: TextSizeProp;
     variant?: LinkVariant;
-    icon?: IconName | React.ReactNode;
+    icon?: IconName | React.ReactElement;
     underline?: boolean;
     href: string;
     target?: string;
@@ -257,7 +257,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
                 {...dataAttributes}
             >
                 {typeof icon === 'string' ? (
-                    <Icon name={icon} size="1em" flex="none" marginRight="0.5em" />
+                    <Icon name={icon as IconName} size="1em" flex="none" marginRight="0.5em" />
                 ) : (
                     icon
                 )}
@@ -270,7 +270,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 Link.propTypes = {
     size: textSizePropType,
     variant: linkVariantPropType,
-    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
     href: PropTypes.string.isRequired,
     target: PropTypes.string,
     tabIndex: PropTypes.number,

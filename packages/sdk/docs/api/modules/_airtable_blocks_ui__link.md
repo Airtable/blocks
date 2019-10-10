@@ -30,8 +30,8 @@ Defaults to `default`. Can be a responsive prop object.
 **`property`** {'default' | 'dark' | 'light'} [variant="default"] The `variant` of the link which
 defines the color. Defaults to `default`.
 
-**`property`** {string | React.Node} [icon] The name of the icon or a react node. For more details,
-see the [list of supported icons](/packages/sdk/docs/icons.md).
+**`property`** {IconName | React.Element} [icon] The name of the icon or a react node. For more
+details, see the [list of supported icons](/packages/sdk/docs/icons.md).
 
 **`property`** {boolean} [underline="false"] Adds an underline to the link when true.
 
@@ -601,7 +601,7 @@ maxWidth: '100%', ...styleProps, }, styleParser, );
                 {...dataAttributes}
             >
                 {typeof icon === 'string' ? (
-                    <Icon name={icon} size="1em" flex="none" marginRight="0.5em" />
+                    <Icon name={icon as IconName} size="1em" flex="none" marginRight="0.5em" />
                 ) : (
                     icon
                 )}

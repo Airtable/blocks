@@ -4,6 +4,7 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Icon, {sharedIconPropTypes, SharedIconProps, stylePropTypes, StyleProps} from './icon';
+import {IconName} from './icon_config';
 
 /**
  * @typedef {object} FieldIconProps
@@ -60,7 +61,7 @@ const FieldIcon = (props: FieldIconProps) => {
     const uiConfig = airtableInterface.fieldTypeProvider.getUiConfig(appInterface, field._data);
 
     const name = uiConfig.iconName;
-    return <Icon name={name} {...restOfProps} />;
+    return <Icon name={name as IconName} {...restOfProps} />;
 };
 
 FieldIcon.propTypes = {

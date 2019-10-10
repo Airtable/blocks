@@ -30,8 +30,8 @@ _Defined in
 **`property`** {'default' | 'primary' | 'secondary' | 'danger'} [variant='default'] The variant of
 the button. Defaults to `default`.
 
-**`property`** {string | React.Node} [icon] The name of the icon or a react node. For more details,
-see the [list of supported icons](/packages/sdk/docs/icons.md).
+**`property`** {IconName | React.Element} [icon] The name of the icon or a react node. For more
+details, see the [list of supported icons](/packages/sdk/docs/icons.md).
 
 **`property`** {'button' | 'submit' | 'reset'} [type='button'] The type of the button. Defaults to
 `button`.
@@ -490,7 +490,7 @@ const hasIcon = icon !== undefined;
                 aria-selected={ariaSelected}
             >
                 {typeof icon === 'string' ? (
-                    <Icon name={icon} size="1em" fillColor="currentColor" flex="none" />
+                    <Icon name={icon as IconName} size="1em" fillColor="currentColor" flex="none" />
                 ) : (
                     icon
                 )}

@@ -9,9 +9,9 @@
 
 -   [IconProps](_airtable_blocks_ui__icon.md#iconprops)
 
-### Functions
+### Variables
 
--   [Icon](_airtable_blocks_ui__icon.md#icon)
+-   [Icon](_airtable_blocks_ui__icon.md#const-icon)
 
 ## Interfaces
 
@@ -24,7 +24,7 @@ _Defined in
 
 **`typedef`** {object} IconProps
 
-**`property`** {string} name The name of the icon. For more details, see the
+**`property`** {IconName} name The name of the icon. For more details, see the
 [list of supported icons](/packages/sdk/docs/icons.md).
 
 **`property`** {number} [size=16] The width/height of the icon.
@@ -284,36 +284,67 @@ _Defined in
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
 
-## Functions
+## Variables
 
-### Icon
+### `Const` Icon
 
-▸ **Icon**(`__namedParameters`: Object): _null | Element_
+• **Icon**: _ForwardRefExoticComponent‹[IconProps](_airtable_blocks_ui__icon.md#iconprops) &
+RefAttributes‹SVGSVGElement››_ = React.forwardRef<SVGSVGElement, IconProps>( ( { name, size = 16,
+fillColor = 'currentColor', onMouseEnter, onMouseLeave, onClick, hasOnClick, className, style,
+pathClassName, pathStyle, ...styleProps }: IconProps, ref: React.Ref<SVGSVGElement>, ) => { const
+classNameForStyleProps = useStyledSystem<StyleProps & WidthProps & HeightProps>( {...styleProps,
+width: size, height: size}, styleParser, );
+
+        // TODO (jay): Figure out how we can support micro icons when the size is in relative ems.
+        const isMicro = typeof size === 'string' ? false : size <= 12;
+        const iconName = `${name}${isMicro ? 'Micro' : ''}` as AllIconName;
+        const pathData = allIconPaths[iconName];
+        if (!pathData) {
+            return null;
+        }
+
+        const originalSize = isMicro ? 12 : 16;
+
+        return (
+            <svg
+                ref={ref}
+                viewBox={`0 0 ${originalSize} ${originalSize}`}
+                // TODO (stephen): remove tooltip anchor props
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onClick}
+                className={cx(classNameForStyleProps, className)}
+                style={{
+                    shapeRendering: 'geometricPrecision',
+                    ...style,
+                }}
+            >
+                <path
+                    fillRule="evenodd"
+                    className={pathClassName}
+                    style={pathStyle}
+                    fill={fillColor}
+                    d={pathData}
+                />
+            </svg>
+        );
+    },
+
+)
 
 _Defined in
-[src/ui/icon.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L100)_
+[src/ui/icon.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L92)_
 
 A vector icon from the Airtable icon set.
 
 **`augments`** React.StatelessFunctionalComponent
 
+**`param`**
+
 **`example`**
 
 ```js
-import {Button, Icon} from '@airtable/blocks/ui';
+import {Icon} from '@airtable/blocks/ui';
 
-const LikeButton = (
-    <Button variant="danger" onClick={() => alert('Liked!')}>
-        <Icon name="heart" fillColor="#fff" style={{marginRight: 8}} />
-        Like
-    </Button>
-);
+const MyIcon = <Icon name="heart" />;
 ```
-
-**Parameters:**
-
-| Name                | Type   |
-| ------------------- | ------ |
-| `__namedParameters` | Object |
-
-**Returns:** _null | Element_

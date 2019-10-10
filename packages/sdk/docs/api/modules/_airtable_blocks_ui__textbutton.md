@@ -27,7 +27,7 @@ _Defined in
 **`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text.
 Defaults to `default`. Can be a responsive prop object.
 
-**`property`** {string | React.ReactNode} [icon] The name of the icon or a react node. For more
+**`property`** {IconName | React.ReactElement} [icon] The name of the icon or a react node. For more
 details, see the [list of supported icons](/packages/sdk/docs/icons.md).
 
 **`property`** {boolean} [disabled] Indicates whether or not the user can interact with the button.
@@ -611,7 +611,11 @@ padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%', ...styleProps, }, styl
                 aria-live={ariaLive}
                 {...dataAttributes}
             >
-                {typeof icon === 'string' ? <Icon name={icon} flex="none" size="1em" /> : icon}
+                {typeof icon === 'string' ? (
+                    <Icon name={icon as IconName} flex="none" size="1em" />
+                ) : (
+                    icon
+                )}
                 <Box
                     as="span"
                     // The margin is on the span, and not on the icon because it would mean that when using a custom icon

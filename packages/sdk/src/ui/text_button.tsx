@@ -31,7 +31,7 @@ import {
     display,
 } from './system';
 import {useTextSize, TextSize, TextSizeProp, textSizePropType} from './text';
-import {IconName} from './icon_config';
+import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import cssHelpers from './css_helpers';
@@ -81,7 +81,7 @@ function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.def
 /**
  * @typedef {object} TextButtonProps
  * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
- * @property {string | React.ReactNode} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
+ * @property {IconName | React.ReactElement} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
  * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
  * @property {string} [id] The `id` attribute.
  * @property {number} [tabIndex] The `tabIndex` attribute.
@@ -102,7 +102,7 @@ function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.def
 interface TextButtonProps extends TooltipAnchorProps<HTMLSpanElement>, AriaProps, StyleProps {
     size?: TextSizeProp;
     variant?: TextButtonVariant;
-    icon?: IconName | React.ReactNode;
+    icon?: IconName | React.ReactElement;
     disabled?: boolean;
     children: React.ReactNode;
     // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again and refine it to include `KeyboardEvent`.
@@ -247,7 +247,11 @@ const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
                 aria-live={ariaLive}
                 {...dataAttributes}
             >
-                {typeof icon === 'string' ? <Icon name={icon} flex="none" size="1em" /> : icon}
+                {typeof icon === 'string' ? (
+                    <Icon name={icon as IconName} flex="none" size="1em" />
+                ) : (
+                    icon
+                )}
                 <Box
                     as="span"
                     // The margin is on the span, and not on the icon because it would mean that when using a custom icon
@@ -265,7 +269,7 @@ const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
 TextButton.propTypes = {
     size: textSizePropType,
     variant: textButtonVariantPropType,
-    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+    icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
     disabled: PropTypes.bool,
     children: PropTypes.node,
     id: PropTypes.string,

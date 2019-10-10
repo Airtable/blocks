@@ -65,7 +65,7 @@ export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
  *
  * @hidden
  */
-export function createEnum<T extends string>(...enumValues: Array<T>): {[K in T]: T} {
+export function createEnum<T extends string>(...enumValues: Array<T>): {[K in T]: K} {
     const spec: any = {};
     for (const value of enumValues) {
         spec[value] = value;

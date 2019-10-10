@@ -32,7 +32,7 @@ import useTheme from './theme/use_theme';
 import {ControlSize, ControlSizeProp, controlSizePropType, useButtonSize} from './control_sizes';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {IconName} from './icon_config';
+import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 import cssHelpers from './css_helpers';
 import Box from './box';
@@ -81,7 +81,7 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
  * @typedef {object} ButtonProps
  * @property {'small' | 'default' | 'large'} [size='default'] The size of the button. Defaults to `default`. Can be a responsive prop object.
  * @property {'default' | 'primary' | 'secondary' | 'danger'} [variant='default'] The variant of the button. Defaults to `default`.
- * @property {string | React.Node} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
+ * @property {IconName | React.Element} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
  * @property {'button' | 'submit' | 'reset'} [type='button'] The type of the button. Defaults to `button`.
  * @property {string} [id] The `id` attribute.
  * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
@@ -102,7 +102,7 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
 interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement>, AriaProps, StyleProps {
     size?: ControlSizeProp;
     variant?: ButtonVariant;
-    icon?: IconName | React.ReactNode;
+    icon?: IconName | React.ReactElement;
     type?: 'button' | 'submit' | 'reset';
     id?: string;
     disabled?: boolean;
@@ -186,7 +186,7 @@ const Button = React.forwardRef(
                 aria-selected={ariaSelected}
             >
                 {typeof icon === 'string' ? (
-                    <Icon name={icon} size="1em" fillColor="currentColor" flex="none" />
+                    <Icon name={icon as IconName} size="1em" fillColor="currentColor" flex="none" />
                 ) : (
                     icon
                 )}
@@ -208,7 +208,7 @@ const Button = React.forwardRef(
 Button.propTypes = {
     size: controlSizePropType,
     variant: buttonVariantPropType,
-    icon: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
+    icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
     id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,

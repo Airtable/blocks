@@ -1,7 +1,8 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
+import {values} from '../src/private_utils';
 import Box from '../src/ui/box';
-import iconConfig from '../src/ui/icon_config';
+import {iconNames} from '../src/ui/icon_config';
 import Link from '../src/ui/link';
 import Text from '../src/ui/text';
 import Tooltip from '../src/ui/tooltip';
@@ -68,16 +69,14 @@ stories.add('with icon', () => (
 
 stories.add('with all icons', () => (
     <Box>
-        {Object.keys(iconConfig)
-            .filter(iconName => !iconName.toLowerCase().includes('micro'))
-            .map(iconName => (
-                <Box key={iconName}>
-                    <Link href="#" icon={iconName} padding={1} margin={1} onClick={() => {}}>
-                        {iconName.substr(0, 1).toUpperCase()}
-                        {iconName.substr(1)}
-                    </Link>
-                </Box>
-            ))}
+        {values(iconNames).map(iconName => (
+            <Box key={iconName}>
+                <Link href="#" icon={iconName} padding={1} margin={1} onClick={() => {}}>
+                    {iconName.substr(0, 1).toUpperCase()}
+                    {iconName.substr(1)}
+                </Link>
+            </Box>
+        ))}
     </Box>
 ));
 

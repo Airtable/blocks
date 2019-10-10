@@ -22,13 +22,7 @@ stories.add('variants & sizes', () => (
             >
                 Primary
             </Button>
-            <Button
-                icon="filter"
-                size="small"
-                variant="secondary"
-                onClick={action('clicked')}
-                marginRight={2}
-            >
+            <Button size="small" variant="secondary" onClick={action('clicked')} marginRight={2}>
                 Secondary
             </Button>
             <Button
@@ -160,6 +154,26 @@ stories.add('ref', () => (
             Look into your console to see the ref
         </Button>
     </>
+));
+
+stories.add('custom icon', () => (
+    <Button
+        icon={
+            <svg
+                viewBox="0 0 24 24"
+                preserveAspectRatio="xMidYMid meet"
+                style={{flex: 'none', width: '1em', height: '1em'}}
+            >
+                <path
+                    fill="currentColor"
+                    d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                ></path>
+            </svg>
+        }
+        size="large"
+    >
+        Custom icon
+    </Button>
 ));
 
 stories.add('with tooltip', () => (
