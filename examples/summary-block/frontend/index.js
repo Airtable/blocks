@@ -1,4 +1,4 @@
-import {initializeBlock, useBase, useRecords} from '@airtable/blocks/ui';
+import {initializeBlock, useBase, useRecords, Box, Text} from '@airtable/blocks/ui';
 import React from 'react';
 
 const TABLE_NAME = 'Opportunities';
@@ -20,7 +20,7 @@ function SummaryBlock() {
     const availableAggregators = field.availableAggregators;
 
     return (
-        <div style={{padding: 16}}>
+        <Box padding={3}>
             {availableAggregators
                 // Every field has a 'None' aggregator which outputs a
                 // blank. It's not very interesting to look at, so we
@@ -34,7 +34,7 @@ function SummaryBlock() {
                         records={records}
                     />
                 ))}
-        </div>
+        </Box>
     );
 }
 
@@ -44,12 +44,12 @@ function Aggregation({field, aggregator, records}) {
     // `aggregate()`
 
     return (
-        <div style={{marginBottom: 16}}>
-            {aggregator.displayName}
-            <div style={{fontSize: 14, fontWeight: 'bold'}}>
-                {aggregator.aggregateToString(records, field)}
-            </div>
-        </div>
+        <Box marginBottom={3}>
+            <Text size="small" textColor="light">
+                {aggregator.displayName}
+            </Text>
+            <Text fontWeight="strong">{aggregator.aggregateToString(records, field)}</Text>
+        </Box>
     );
 }
 
