@@ -27,7 +27,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type ToggleSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedToggleProps) & (StyleProps);
+interface ToggleSyncedProps extends SharedToggleProps, StyleProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * A toggleable switch for controlling boolean values, synced with {@link GlobalConfig}. Functionally analogous to a checkbox.

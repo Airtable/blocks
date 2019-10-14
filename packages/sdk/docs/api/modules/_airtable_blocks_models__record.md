@@ -281,7 +281,7 @@ view.
 ### getColorInView
 
 ▸ **getColorInView**(`viewOrViewIdOrViewName`: [View](_airtable_blocks_models__view.md#view) |
-ViewId | string): _[Color](_airtable_blocks__colors.md#color) | null_
+ViewId | string): _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
 _Defined in
 [src/models/record.ts:352](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L352)_
@@ -296,7 +296,7 @@ Can be watched with the 'colorInView:\${ViewId}' key.
 | ------------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------------- |
 | `viewOrViewIdOrViewName` | [View](_airtable_blocks_models__view.md#view) &#124; ViewId &#124; string | The view (or view ID or view name) to use for record coloring. |
 
-**Returns:** _[Color](_airtable_blocks__colors.md#color) | null_
+**Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
 The color of this record in the given view, or null if the record has no color in that view.
 

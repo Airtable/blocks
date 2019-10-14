@@ -39,12 +39,13 @@ const MAX_COLOR_SQUARE_SIZE = 32;
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
 
-export type StyleProps = (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (MarginProps);
+export interface StyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
 
 const styleParser = compose(
     maxWidth,
@@ -64,14 +65,14 @@ export const stylePropTypes = {
     ...marginPropTypes,
 };
 
-export type SharedColorPaletteProps = {
+export interface SharedColorPaletteProps extends TooltipAnchorProps {
     allowedColors: Array<string>;
     onChange?: (arg1: string) => unknown;
     squareMargin?: number;
     className?: string;
     style?: React.CSSProperties;
     disabled?: boolean;
-} & (TooltipAnchorProps);
+}
 
 export const sharedColorPalettePropTypes = {
     allowedColors: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -93,11 +94,13 @@ export const sharedColorPalettePropTypes = {
  * @property {object} [style] Additional styles to apply to the color palette.
  * @property {boolean} [disabled] If set to `true`, the color palette will not allow color selection.
  */
-type ColorPaletteProps = {color?: string | null} & (SharedColorPaletteProps);
+interface ColorPaletteProps extends SharedColorPaletteProps {
+    color?: string | null;
+}
 
-type ColorPaletteState = {
+interface ColorPaletteState {
     squareSize: number;
-};
+}
 
 /**
  * A color selection component. Accepts a list of `allowedColors` to be displayed

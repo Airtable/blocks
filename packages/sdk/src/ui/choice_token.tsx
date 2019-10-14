@@ -21,7 +21,7 @@ import {
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
-type StyleProps = (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
+interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -46,7 +46,7 @@ const DEFAULT_CHOICE_COLOR = 'gray';
  * @property {string} [style] Additional styles to apply to the choice token.
  * @property {string} [className] Additional class names to apply to the choice token.
  */
-type ChoiceTokenProps = {
+interface ChoiceTokenProps extends TooltipAnchorProps, StyleProps {
     choice: {
         id: string;
         name: string;
@@ -54,8 +54,7 @@ type ChoiceTokenProps = {
     };
     style?: React.CSSProperties;
     className?: string;
-} & (TooltipAnchorProps) &
-    (StyleProps);
+}
 
 /**
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.

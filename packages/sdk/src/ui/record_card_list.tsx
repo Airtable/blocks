@@ -36,7 +36,7 @@ type FixedSizeListType = HTMLDivElement & {
     scrollToItem: (arg1: number) => void;
 };
 /** @internal */
-type RecordCardItemRendererProps = {
+interface RecordCardItemRendererProps {
     data: {
         records: Array<Record> | Array<RecordDef>;
         fields?: Array<Field>;
@@ -51,7 +51,7 @@ type RecordCardItemRendererProps = {
     style: {left: number; top: number; [key: string]: unknown};
     className?: string;
     index: number;
-};
+}
 
 /**
  * Item renderer component for react-window FixedSizeList. Responsible for rendering each
@@ -161,10 +161,10 @@ function getScrollbarWidth() {
 /**
  * @internal
  */
-type InnerWindowProps = {
+interface InnerWindowProps {
     children: React.ReactNode;
     style: React.CSSProperties;
-};
+}
 
 /**
  * Wrapper component for RecordCardList's window (passed to FixedSizeList).
@@ -208,7 +208,7 @@ const innerRecordCardListWindow = React.forwardRef(
  * @property {string} [className] Additional class names to apply to the record card list.
  * @property {object} [style] Additional styles to apply to the record card list.
  */
-type RecordCardListProps = {
+interface RecordCardListProps {
     records: Array<Record> | Array<RecordDef>;
     onScroll?: (arg1: {
         scrollDirection: 'forward' | 'backward';
@@ -223,9 +223,9 @@ type RecordCardListProps = {
     attachmentCoverField?: Field;
     className?: string;
     style?: React.CSSProperties;
-};
+}
 
-type StyleProps = (DimensionsSetProps) & (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
+interface StyleProps extends DimensionsSetProps, FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     dimensionsSet,
@@ -241,11 +241,11 @@ const stylePropTypes = {
     ...marginPropTypes,
 };
 
-type RecordCardListState = {
+interface RecordCardListState {
     cardListWidth: number;
     cardListHeight: number;
     isScrollbarVisible: boolean;
-};
+}
 
 /**
  * Scrollable list of record cards.

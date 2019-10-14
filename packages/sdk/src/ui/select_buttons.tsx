@@ -38,7 +38,7 @@ import Box from './box';
 import {KeyCodes} from './key_codes';
 
 // Shared with `SelectButtons` and `SelectButtonsSynced`.
-export type SharedSelectButtonsProps = {
+export interface SharedSelectButtonsProps extends TooltipAnchorProps {
     options: Array<SelectOption>;
     onChange?: (value: SelectOptionValue) => void;
     disabled?: boolean;
@@ -48,7 +48,7 @@ export type SharedSelectButtonsProps = {
     ['aria-label']?: string;
     ['aria-labelledby']?: string;
     ['aria-describedby']?: string;
-} & (TooltipAnchorProps);
+}
 
 export const sharedSelectButtonsPropTypes = {
     // We do more strict checks in render.
@@ -70,12 +70,13 @@ export const sharedSelectButtonsPropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-export type StyleProps = (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (MarginProps);
+export interface StyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
 
 const styleParser = compose(
     maxWidth,
@@ -108,7 +109,9 @@ export const stylePropTypes = {
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type SelectButtonsProps = {value: SelectOptionValue} & (SharedSelectButtonsProps);
+interface SelectButtonsProps extends SharedSelectButtonsProps {
+    value: SelectOptionValue;
+}
 
 /** */
 export class SelectButtons extends React.Component<SelectButtonsProps> {

@@ -1,4 +1,4 @@
-/** @module @airtable/blocks: colors */ /** */
+/** @module @airtable/blocks/ui: colors */ /** */
 import {ObjectValues} from './private_utils';
 /**
  * An enum of color names

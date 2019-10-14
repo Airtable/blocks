@@ -9,9 +9,9 @@ import Loader from './loader';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
-type BlockWrapperProps = {
+interface BlockWrapperProps {
     children: React.ReactNode;
-};
+}
 
 class BlockWrapper extends React.Component<BlockWrapperProps> {
     /** @internal */

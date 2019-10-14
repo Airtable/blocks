@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: UI & typography primitives */ /** */
+/** @module @airtable/blocks/ui: Box */ /** */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
@@ -8,24 +8,13 @@ import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 /**
- * @typedef {object} BoxProps
- * @property {'div' | 'span' | 'section' | 'main' | 'nav' | 'header' | 'footer' | 'aside' | 'article' | 'address' | 'hgroup' | 'blockquote' | 'figure' | 'figcaption' | 'ol' | 'ul' | 'li' | 'pre'} [as='div'] The element that is rendered. Defaults to `div`.
- * @property {string} [id] The `id` attribute.
- * @property {number} [tabIndex] The `tabIndex` attribute.
- * @property {string} [role] The `role` attribute.
- * @property {string} [className] Additional class names to apply, separated by spaces.
- * @property {object} [style] Additional styles.
- * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
- * @property {string} [aria-label] The `aria-label` attribute.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
+ * Props for the Box component. Also accepts:
+ * * [[AriaProps]]
+ * * [[AllStylesProps]]
+ * @noInheritDoc
  */
-export type BoxProps = {
+export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps {
+    /** The element that is rendered. Defaults to `div`. */
     as?:
         | 'div'
         | 'span'
@@ -45,21 +34,24 @@ export type BoxProps = {
         | 'ul'
         | 'li'
         | 'pre';
-} & (AllStylesProps) & {
-        children?: React.ReactNode;
-        tabIndex?: number;
-        role?: string;
-        id?: string;
-        style?: React.CSSProperties;
-        dataAttributes?: {readonly [key: string]: unknown};
-    } & (AriaProps) &
-    (TooltipAnchorProps) & {className?: string};
+    children?: React.ReactNode;
+    /** The `tabIndex` attribute. */
+    tabIndex?: number;
+    /** The `role` attribute. */
+    role?: string;
+    /** The `id` attribute. */
+    id?: string;
+    /** Additional class names to apply, separated by spaces. */
+    className?: string;
+    /** Additional styles. */
+    style?: React.CSSProperties;
+    /** Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`. */
+    dataAttributes?: {readonly [key: string]: unknown};
+}
 
 /**
  * A box component for creating layouts.
  *
- * @reactComponent
- * @example
  * ```js
  * import {Box} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';

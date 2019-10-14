@@ -114,10 +114,10 @@ interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, St
     target?: string;
     id?: string;
     tabIndex?: number;
-    children: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
     dataAttributes?: {readonly [key: string]: unknown};
+    children: React.ReactNode;
 }
 
 // A "reasonable" scheme is one which does not have any escaped characters.

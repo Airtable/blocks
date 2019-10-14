@@ -19,7 +19,9 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
  * @property {string} [pathClassName] Additional class names to apply to the icon path.
  * @property {object} [pathStyle] Additional styles to apply to the icon path.
  */
-type FieldIconProps = {field: Field} & (SharedIconProps) & (StyleProps);
+interface FieldIconProps extends SharedIconProps, StyleProps {
+    field: Field;
+}
 
 /**
  * A vector icon for a field's type.

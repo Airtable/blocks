@@ -30,7 +30,9 @@ import useWatchable from './use_watchable';
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type ViewPickerSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedViewPickerProps);
+interface ViewPickerSyncedProps extends SharedViewPickerProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * Dropdown menu component for selecting views, synced with {@link GlobalConfig}.

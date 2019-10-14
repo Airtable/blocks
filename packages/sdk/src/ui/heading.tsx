@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: UI & typography primitives */ /** */
+/** @module @airtable/blocks/ui: Heading */ /** */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
@@ -96,7 +96,7 @@ function useHeadingSize(
  * @property {string} [aria-hidden] The `aria-hidden` attribute.
  * @property {string} [aria-live] The `aria-live` attribute.
  */
-type HeadingProps = {
+interface HeadingProps extends AriaProps, AllStylesProps {
     role?: string;
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
     variant?: HeadingVariant;
@@ -106,14 +106,11 @@ type HeadingProps = {
     dataAttributes?: {readonly [key: string]: unknown};
     className?: string;
     style?: React.CSSProperties;
-} & (AriaProps) &
-    (AllStylesProps);
+}
 
 /**
  * A heading component with sizes and variants.
  *
- * @reactComponent
- * @example
  * ```js
  * import {Heading} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';

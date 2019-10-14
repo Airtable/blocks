@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/models: Abstract Models */ /** */
+/** @module @airtable/blocks/models: Abstract models */ /** */
 import {BaseData} from '../types/base';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';
 import {spawnInvariantViolationError, spawnAbstractMethodError} from '../error_utils';

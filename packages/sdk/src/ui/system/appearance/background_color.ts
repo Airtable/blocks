@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Appearance */ /** */
 import {system, Config} from '@styled-system/core';
 import {BackgroundColorProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {Prop} from '../utils/types';
 
-export type BackgroundColorProps = {
+/** */
+export interface BackgroundColorProps {
+    /** Sets the background color of an element. */
     backgroundColor?: Prop<BackgroundColorProperty>;
-};
+}
 
 export const config: Config = {
     backgroundColor: {

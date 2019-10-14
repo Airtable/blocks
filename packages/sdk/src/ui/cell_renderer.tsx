@@ -48,12 +48,15 @@ const CellContextTypes = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/cell_context/cell_context_types',
 );
 
-type StyleProps = {display?: Prop<'block' | 'inline' | 'inline-block'>} & (FlexItemSetProps) &
-    (MarginProps) &
-    (MaxWidthProps) &
-    (MinWidthProps) &
-    (PositionSetProps) &
-    (WidthProps);
+interface StyleProps
+    extends FlexItemSetProps,
+        MarginProps,
+        MaxWidthProps,
+        MinWidthProps,
+        PositionSetProps,
+        WidthProps {
+    display?: Prop<'block' | 'inline' | 'inline-block'>;
+}
 
 const styleParser = compose(
     display,
@@ -87,7 +90,7 @@ const stylePropTypes = {
  * @property {string} [cellClassName] Additional class names to apply to the cell itself, separated by spaces.
  * @property {object} [cellStyle] Additional styles to apply to the cell itself.
  */
-type CellRendererProps = {
+interface CellRendererProps extends TooltipAnchorProps, StyleProps {
     record?: Record | null | undefined;
     cellValue?: unknown;
     field: Field;
@@ -98,8 +101,7 @@ type CellRendererProps = {
     // (e.g. layout/sizing) from styling on the cell div (needed by RecordCard).
     cellClassName?: string;
     cellStyle?: React.CSSProperties;
-} & (TooltipAnchorProps) &
-    (StyleProps);
+}
 
 /**
  * Displays the contents of a cell.

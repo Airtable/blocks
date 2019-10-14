@@ -28,7 +28,9 @@ import Synced from './synced';
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type SelectSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedSelectProps) & (StyleProps);
+interface SelectSyncedProps extends SharedSelectProps, StyleProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * Dropdown menu component synced with {@link GlobalConfig}. A wrapper around `<select>` that fits in with Airtable's user interface.

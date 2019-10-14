@@ -39,14 +39,17 @@ import {Prop} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 
-type StyleProps = {display?: Prop<'block' | 'inline' | 'inline-block'>} & (BackgroundColorProps) &
-    (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (HeightProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (MarginProps);
+interface StyleProps
+    extends BackgroundColorProps,
+        MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        HeightProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {
+    display?: Prop<'block' | 'inline' | 'inline-block'>;
+}
 
 const styleParser = compose(
     backgroundColor,
@@ -82,13 +85,12 @@ export const stylePropTypes = {
  * @property {string} [className] Extra `className`s to apply to the element, separated by spaces.
  * @property {object} [style] Extra styles to apply to the progress bar.
  */
-type ProgressBarProps = {
+interface ProgressBarProps extends TooltipAnchorProps, StyleProps {
     barColor?: string;
     progress: number;
     className?: string;
     style?: React.CSSProperties;
-} & (TooltipAnchorProps) &
-    (StyleProps);
+}
 
 /**
  * A progress bar.

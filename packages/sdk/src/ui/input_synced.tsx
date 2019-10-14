@@ -33,7 +33,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type InputSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedInputProps) & (StyleProps);
+interface InputSyncedProps extends SharedInputProps, StyleProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * A wrapper around the `UI.Input` component that syncs with global config.

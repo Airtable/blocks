@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/ui/system: Flex container */ /** */
 import {system} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {config as alignContentConfig, AlignContentProps} from './align_content';
@@ -7,12 +8,14 @@ import {config as flexWrapConfig, FlexWrapProps} from './flex_wrap';
 import {config as justifyContentConfig, JustifyContentProps} from './justify_content';
 import {config as justifyItemsConfig, JustifyItemsProps} from './justify_items';
 
-export type FlexContainerSetProps = (AlignItemsProps) &
-    (AlignContentProps) &
-    (JustifyItemsProps) &
-    (JustifyContentProps) &
-    (FlexWrapProps) &
-    (FlexDirectionProps);
+/** */
+export interface FlexContainerSetProps
+    extends AlignContentProps,
+        AlignItemsProps,
+        FlexDirectionProps,
+        FlexWrapProps,
+        JustifyContentProps,
+        JustifyItemsProps {}
 
 export const flexContainerSet = system({
     ...alignContentConfig,

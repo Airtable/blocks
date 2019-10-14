@@ -30,7 +30,7 @@ import {
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 // Shared with `Input` and `InputSynced`.
-export type SharedInputProps = {
+export interface SharedInputProps extends TooltipAnchorProps {
     type?:
         | 'text'
         | 'date'
@@ -44,29 +44,28 @@ export type SharedInputProps = {
         | 'time'
         | 'url'
         | 'week';
-} & (TooltipAnchorProps) & {
-        disabled?: boolean;
-        required?: boolean;
-        spellCheck?: boolean;
-        tabIndex?: number;
-        name?: string;
-        id?: string;
-        autoFocus?: boolean;
-        max?: number | string;
-        maxLength?: number;
-        placeholder?: string;
-        minLength?: number;
-        step?: number | string;
-        pattern?: string;
-        readOnly?: boolean;
-        autoComplete?: string;
-        style?: React.CSSProperties;
-        className?: string;
-        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => unknown;
-        ['aria-labelledby']?: string;
-        ['aria-describedby']?: string;
-        min?: number | string;
-    };
+    disabled?: boolean;
+    required?: boolean;
+    spellCheck?: boolean;
+    tabIndex?: number;
+    name?: string;
+    id?: string;
+    autoFocus?: boolean;
+    max?: number | string;
+    maxLength?: number;
+    placeholder?: string;
+    minLength?: number;
+    step?: number | string;
+    pattern?: string;
+    readOnly?: boolean;
+    autoComplete?: string;
+    style?: React.CSSProperties;
+    className?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => unknown;
+    ['aria-labelledby']?: string;
+    ['aria-describedby']?: string;
+    min?: number | string;
+}
 
 const validTypesSet = Object.freeze({
     date: true,
@@ -134,14 +133,17 @@ export const sharedInputPropTypes = {
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type InputProps = {value: string} & (SharedInputProps);
+interface InputProps extends SharedInputProps {
+    value: string;
+}
 
-export type StyleProps = (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (MarginProps);
+export interface StyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
 
 const styleParser = compose(
     maxWidth,

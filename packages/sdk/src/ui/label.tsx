@@ -27,7 +27,7 @@ import {TextVariants, TextSizes, TextSizeProp, useTextSize} from './text';
  * @property {string} [aria-hidden] The `aria-hidden` attribute.
  * @property {string} [aria-live] The `aria-live` attribute.
  */
-type LabelProps = {
+interface LabelProps extends AriaProps, AllStylesProps {
     size?: TextSizeProp;
     htmlFor?: string;
     id?: string;
@@ -36,14 +36,11 @@ type LabelProps = {
     style?: React.CSSProperties;
     dataAttributes?: {readonly [key: string]: unknown};
     role?: string;
-} & (AriaProps) &
-    (AllStylesProps);
+}
 
 /**
  * A label component.
  *
- * @reactComponent
- * @example
  * ```js
  * import {Label, Input} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';

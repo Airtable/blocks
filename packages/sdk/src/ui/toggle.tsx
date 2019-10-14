@@ -72,7 +72,7 @@ const classNamesByTheme = Object.freeze({
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-export type SharedToggleProps = {
+export interface SharedToggleProps extends TooltipAnchorProps {
     className?: string;
     disabled?: boolean;
     label?: React.ReactNode;
@@ -84,9 +84,11 @@ export type SharedToggleProps = {
     ['aria-label']?: string;
     ['aria-labelledby']?: string;
     ['aria-describedby']?: string;
-} & (TooltipAnchorProps);
+}
 
-type ToggleProps = {value: boolean} & (SharedToggleProps);
+interface ToggleProps extends SharedToggleProps {
+    value: boolean;
+}
 
 export const sharedTogglePropTypes = {
     disabled: PropTypes.bool,
@@ -103,12 +105,15 @@ export const sharedTogglePropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-export type StyleProps = {display?: Prop<'flex' | 'inline-flex'>} & (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (SpacingSetProps);
+export interface StyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        SpacingSetProps {
+    display?: Prop<'flex' | 'inline-flex'>;
+}
 
 const styleParser = compose(
     maxWidth,

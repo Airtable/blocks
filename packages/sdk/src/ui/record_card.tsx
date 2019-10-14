@@ -43,7 +43,7 @@ import {
     MarginProps,
 } from './system';
 import {splitStyleProps} from './with_styled_system';
-import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
 
 const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
     'client_server_shared/column_types/column_type_provider',
@@ -51,7 +51,7 @@ const columnTypeProvider = window.__requirePrivateModuleFromAirtable(
 // Mirrored from client_server_shared_config_settings
 const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 
-type StyleProps = (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
+interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -67,12 +67,12 @@ const stylePropTypes = {
 
 const CARD_PADDING = 12;
 
-type CellValueAndFieldLabelProps = {
+interface CellValueAndFieldLabelProps {
     record?: Record | null;
     cellValue?: unknown;
     field: Field;
     width: number;
-};
+}
 
 const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndFieldLabelProps) => {
     useWatchable(field, ['name', 'type', 'options']);
@@ -134,8 +134,7 @@ CellValueAndFieldLabel.propTypes = {
  * @property {string} [className] Additional class names to apply to the record card.
  * @property {object} [style] Additional styles to apply to the record card.
  */
-type RecordCardProps = {
-    onClick?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
+interface RecordCardProps extends StyleProps {
     record: Record | RecordDef;
     view?: View;
     attachmentCoverField?: Field;
@@ -143,14 +142,16 @@ type RecordCardProps = {
     height?: number;
     expandRecordOptions?: ExpandRecordOpts | null;
     fields?: Array<Field>;
+    // TODO (stephen): consider deprecating onMouseEnter/onMouseLeave
     onMouseEnter?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
     onMouseLeave?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
+    onClick?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
+    hasOnClick?: boolean;
     className?: string;
     style?: React.CSSProperties;
     /** @internal injected by withHooks */
     viewMetadata: ViewMetadataQueryResult | null;
-} & (TooltipAnchorProps) &
-    (StyleProps);
+}
 
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
 const FormulaicFieldTypes = {
@@ -569,8 +570,8 @@ export class RecordCard extends React.Component<RecordCardProps> {
                 className={containerClasses}
                 style={{...style, width, height}}
                 onClick={this._onClick}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
+                onMouseEnter={onMouseEnter || undefined}
+                onMouseLeave={onMouseLeave || undefined}
             >
                 <Box
                     right={`${attachmentSize}px`}

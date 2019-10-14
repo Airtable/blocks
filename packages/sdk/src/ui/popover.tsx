@@ -54,7 +54,7 @@ export type FitInWindowMode = ObjectValues<typeof FitInWindowModes>;
  * @property {string} [backgroundClassName=''] Extra class names for the background of the popover, separated by spaces.
  * @property {object} [backgroundStyle={}] Extra styles for the background of the popover.
  */
-type PopoverProps = {
+interface PopoverProps {
     placementOffsetY: number;
     children: React.ReactElement;
     placementX: PopoverPlacementX;
@@ -66,7 +66,7 @@ type PopoverProps = {
     isOpen: boolean;
     backgroundClassName?: string;
     backgroundStyle?: FlowAnyObject;
-};
+}
 
 /**
  * A popover component, which is used to "float" some content above some other content.

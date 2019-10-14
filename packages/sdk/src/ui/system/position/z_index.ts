@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Position */ /** */
 import {system, Config} from '@styled-system/core';
 import {ZIndexProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {Prop} from '../utils/types';
 
-export type ZIndexProps = {
+/** */
+export interface ZIndexProps {
+    /** Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements with larger z-indexes cover those with smaller ones. */
     zIndex?: Prop<ZIndexProperty>;
-};
+}
 
 export const config: Config = {
     zIndex: {

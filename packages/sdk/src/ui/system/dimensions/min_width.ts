@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Dimensions */ /** */
 import {system, Config} from '@styled-system/core';
 import {MinWidthProperty} from '../utils/csstype';
 import {Prop, Length} from '../utils/types';
 import createStylePropTypes from '../utils/create_style_prop_types';
 
-export type MinWidthProps = {
+/** */
+export interface MinWidthProps {
+    /** Sets the minimum width of an element. It prevents the used value of the `width` property from becoming smaller than the value specified for `minWidth`. */
     minWidth?: Prop<MinWidthProperty<Length>>;
-};
+}
 
 export const config: Config = {
     minWidth: {

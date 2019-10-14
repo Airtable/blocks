@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/ui/system: Appearance */ /** */
 import {system, Config} from '@styled-system/core';
 import {
     BorderProperty,
@@ -12,18 +13,29 @@ import {
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {Prop, Length} from '../utils/types';
 
-export type BorderProps = {
+/** */
+export interface BorderProps {
+    /** Sets an element's border. It's a shorthand for `borderWidth`, `borderStyle`, and `borderColor`. */
     border?: Prop<BorderProperty<Length>>;
+    /** Sets the widths of all four sides of an element's border. */
     borderWidth?: Prop<BorderWidthProperty<Length>>;
+    /** Sets the line style for all four sides of an element's border. */
     borderStyle?: Prop<BorderStyleProperty>;
+    /** Sets the color of all sides of an element's border. */
     borderColor?: Prop<BorderColorProperty>;
+    /** Sets the width, line style, and color for an element's top border. */
     borderTop?: Prop<BorderTopProperty<Length>>;
+    /** Sets the width, line style, and color for an element's right border. */
     borderRight?: Prop<BorderRightProperty<Length>>;
+    /** Sets the width, line style, and color for an element's bottom border. */
     borderBottom?: Prop<BorderBottomProperty<Length>>;
+    /** Sets the width, line style, and color for an element's left border. */
     borderLeft?: Prop<BorderLeftProperty<Length>>;
+    /** Sets the width, line style, and color for an element's left and right borders. */
     borderX?: Prop<BorderProperty<Length>>;
+    /** Sets the width, line style, and color for an element's top and bottom borders. */
     borderY?: Prop<BorderProperty<Length>>;
-};
+}
 
 export const config: Config = {
     border: {

@@ -14,14 +14,14 @@ import DialogCloseButton from './dialog_close_button';
  * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
  * @property {object} [backgroundStyle] Extra styles to apply to the background element.
  */
-type DialogProps = {
+interface DialogProps extends StyleProps {
     onClose: () => unknown;
     className?: string;
     style?: React.CSSProperties;
     backgroundClassName?: string;
     backgroundStyle?: React.CSSProperties;
     children: React.ReactNode;
-} & (StyleProps);
+}
 
 /**
  * A styled modal dialog component.

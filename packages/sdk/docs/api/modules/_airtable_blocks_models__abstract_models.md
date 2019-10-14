@@ -1,7 +1,7 @@
 [@airtable/blocks](../README.md) › [Globals](../globals.md) ›
-[@airtable/blocks/models: Abstract Models](_airtable_blocks_models__abstract_models.md)
+[@airtable/blocks/models: Abstract models](_airtable_blocks_models__abstract_models.md)
 
-# External module: @airtable/blocks/models: Abstract Models
+# External module: @airtable/blocks/models: Abstract models
 
 ## Index
 

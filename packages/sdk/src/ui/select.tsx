@@ -46,7 +46,7 @@ const styleForChevron = {
 };
 
 // Shared with `Select`, `SelectSynced` and `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`.
-export type SharedSelectBaseProps = {
+export interface SharedSelectBaseProps extends TooltipAnchorProps {
     className?: string;
     autoFocus?: boolean;
     id?: string;
@@ -57,7 +57,7 @@ export type SharedSelectBaseProps = {
     ['aria-label']?: string;
     ['aria-labelledby']?: string;
     ['aria-describedby']?: string;
-} & (TooltipAnchorProps);
+}
 
 // Shared with `Select`, `SelectSynced`, `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`
 export const sharedSelectBasePropTypes = {
@@ -75,10 +75,10 @@ export const sharedSelectBasePropTypes = {
 };
 
 // Shared with `Select` and `SelectSynced`.
-export type SharedSelectProps = {
+export interface SharedSelectProps extends SharedSelectBaseProps {
     options: Array<SelectOption>;
     onChange?: (value: SelectOptionValue) => unknown;
-} & (SharedSelectBaseProps);
+}
 
 // Shared with `Select` and `SelectSynced`.
 export const sharedSelectPropTypes = {
@@ -110,7 +110,9 @@ export const sharedSelectPropTypes = {
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-export type SelectProps = {value: SelectOptionValue} & (SharedSelectProps);
+export interface SelectProps extends SharedSelectProps {
+    value: SelectOptionValue;
+}
 
 // This component isn't great right now. It's just a styled <select> with a really hacky
 // way of getting the chevron arrow to show up. It also behaves weirdly when you give it
@@ -118,12 +120,13 @@ export type SelectProps = {value: SelectOptionValue} & (SharedSelectProps);
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
 
-export type StyleProps = (MaxWidthProps) &
-    (MinWidthProps) &
-    (WidthProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (MarginProps);
+export interface StyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
 
 const styleParser = compose(
     maxWidth,

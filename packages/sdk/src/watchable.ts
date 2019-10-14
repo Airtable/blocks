@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/models: Abstract Models */ /** */
+/** @module @airtable/blocks/models: Abstract models */ /** */
 import {getLocallyUniqueId, FlowAnyExistential, FlowAnyObject} from './private_utils';
 import {spawnError} from './error_utils';
 

@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/ui/system: Spacing */ /** */
 import {system, Config} from '@styled-system/core';
 import {
     MarginProperty,
@@ -10,15 +11,23 @@ import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scal
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {Prop, Length} from '../utils/types';
 
-export type MarginProps = {
+/** */
+export interface MarginProps {
+    /** Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`, `marginRight`, `marginBottom`, and `marginLeft`. */
     margin?: Prop<MarginProperty<Length>>;
+    /** Sets the margin area on the top of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginTop?: Prop<MarginTopProperty<Length>>;
+    /** Sets the margin area on the right of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginRight?: Prop<MarginRightProperty<Length>>;
+    /** Sets the margin area on the bottom of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginBottom?: Prop<MarginBottomProperty<Length>>;
+    /** Sets the margin area on the left of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginLeft?: Prop<MarginLeftProperty<Length>>;
+    /** Sets the margin area on the top and bottom of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginX?: Prop<MarginProperty<Length>>;
+    /** Sets the margin area on the left and right of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginY?: Prop<MarginProperty<Length>>;
-};
+}
 
 export const config: Config = {
     margin: {

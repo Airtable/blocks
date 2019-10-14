@@ -1,7 +1,7 @@
 [@airtable/blocks](../README.md) › [Globals](../globals.md) ›
-[@airtable/blocks/ui: loading external resources](_airtable_blocks_ui__loading_external_resources.md)
+[@airtable/blocks/ui: Loading external resources](_airtable_blocks_ui__loading_external_resources.md)
 
-# External module: @airtable/blocks/ui: loading external resources
+# External module: @airtable/blocks/ui: Loading external resources
 
 ## Index
 

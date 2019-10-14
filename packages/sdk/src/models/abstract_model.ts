@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/models: Abstract Models */ /** */
+/** @module @airtable/blocks/models: Abstract models */ /** */
 import {spawnInvariantViolationError, spawnAbstractMethodError, spawnError} from '../error_utils';
 import {BaseData} from '../types/base';
 import Watchable from '../watchable';

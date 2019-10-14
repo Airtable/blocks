@@ -18,14 +18,13 @@ import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `ViewPicker` and `ViewPickerSynced`.
-export type SharedViewPickerProps = {
+export interface SharedViewPickerProps extends SharedSelectBaseProps, StyleProps {
     table?: Table | null;
     allowedTypes?: Array<ViewType>;
     shouldAllowPickingNone?: boolean;
     placeholder?: string;
     onChange?: (viewModel: View | null) => void;
-} & (SharedSelectBaseProps) &
-    (StyleProps);
+}
 
 // Shared with `ViewPicker` and `ViewPickerSynced`.
 export const sharedViewPickerPropTypes = {
@@ -57,7 +56,9 @@ export const sharedViewPickerPropTypes = {
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type ViewPickerProps = {view?: View | null} & (SharedViewPickerProps);
+interface ViewPickerProps extends SharedViewPickerProps {
+    view?: View | null;
+}
 
 /**
  * Dropdown menu component for selecting views.

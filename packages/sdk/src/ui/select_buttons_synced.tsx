@@ -23,8 +23,9 @@ import Synced from './synced';
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type SelectButtonsSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedSelectButtonsProps) &
-    (StyleProps);
+interface SelectButtonsSyncedProps extends SharedSelectButtonsProps, StyleProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /** */
 class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {

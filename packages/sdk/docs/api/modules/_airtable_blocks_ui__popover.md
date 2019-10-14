@@ -14,7 +14,7 @@
 
 -   [Popover](_airtable_blocks_ui__popover.md#popover)
 
-### Type aliases
+### Interfaces
 
 -   [PopoverProps](_airtable_blocks_ui__popover.md#popoverprops)
 
@@ -129,11 +129,11 @@ PopoverPlacements
 _Defined in
 [src/ui/popover.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L78)_
 
-## Type aliases
+## Interfaces
 
 ### PopoverProps
 
-Ƭ **PopoverProps**: _Object_
+• **PopoverProps**:
 
 _Defined in
 [src/ui/popover.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L57)_

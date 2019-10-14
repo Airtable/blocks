@@ -28,7 +28,9 @@ import useWatchable from './use_watchable';
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type TablePickerSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedTablePickerProps);
+interface TablePickerSyncedProps extends SharedTablePickerProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * Dropdown menu component for selecting tables, synced with {@link GlobalConfig}.

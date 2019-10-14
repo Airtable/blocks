@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @internal */
 import {ObjectMap} from '../private_utils';
 
 // This file is lifted from Hyperbase. New icons should be added to both.

@@ -5,15 +5,15 @@
 
 ## Index
 
-### Type aliases
+### Interfaces
 
 -   [ModalProps](_airtable_blocks_ui__modal.md#modalprops)
 
-## Type aliases
+## Interfaces
 
 ### ModalProps
 
-Ƭ **ModalProps**: _Object_
+• **ModalProps**:
 
 _Defined in
 [src/ui/modal.tsx:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L34)_

@@ -31,18 +31,18 @@ import {Prop} from './system/utils/types';
  * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
  * @property {object} [backgroundStyle] Extra styles to apply to the background element.
  */
-type ModalProps = {
+interface ModalProps {
     onClose?: () => unknown;
     className?: string;
     style?: React.CSSProperties;
     backgroundClassName?: string;
     backgroundStyle?: React.CSSProperties;
     children: React.ReactNode;
-};
+}
 
-export type StyleProps = {display?: Prop<'block' | 'flex'>} & (DimensionsSetProps) &
-    (FlexContainerSetProps) &
-    (SpacingSetProps);
+export interface StyleProps extends DimensionsSetProps, FlexContainerSetProps, SpacingSetProps {
+    display?: Prop<'block' | 'flex'>;
+}
 
 const styleParser = compose(
     dimensionsSet,

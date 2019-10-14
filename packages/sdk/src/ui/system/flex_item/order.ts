@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Flex item */ /** */
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {GlobalsNumber} from '../utils/csstype';
 import {Prop} from '../utils/types';
 
-export type OrderProps = {
+/** */
+export interface OrderProps {
+    /** Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value and then by their source code order. */
     order?: Prop<GlobalsNumber>;
-};
+}
 
 export const config: Config = {order: true};
 

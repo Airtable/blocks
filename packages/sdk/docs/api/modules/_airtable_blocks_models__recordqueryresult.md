@@ -176,8 +176,8 @@ the record
 ### getRecordColor
 
 ▸ **getRecordColor**(`recordOrRecordId`: RecordId |
-[Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks__colors.md#color) |
-null_
+[Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks_ui__colors.md#color)
+| null_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
@@ -194,9 +194,9 @@ RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 | ------------------ | ------------------------------------------------------------------- | ---------------------------------------------- |
 | `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
 
-**Returns:** _[Color](_airtable_blocks__colors.md#color) | null_
+**Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
-a [Color](_airtable_blocks__colors.md#color), or null if the record has no color in this query
+a [Color](_airtable_blocks_ui__colors.md#color), or null if the record has no color in this query
 result.
 
 ### hasRecord
@@ -568,8 +568,8 @@ the record
 ### getRecordColor
 
 ▸ **getRecordColor**(`recordOrRecordId`: RecordId |
-[Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks__colors.md#color) |
-null_
+[Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks_ui__colors.md#color)
+| null_
 
 _Defined in
 [src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
@@ -583,9 +583,9 @@ RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 | ------------------ | ------------------------------------------------------------------- | ---------------------------------------------- |
 | `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
 
-**Returns:** _[Color](_airtable_blocks__colors.md#color) | null_
+**Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
-a [Color](_airtable_blocks__colors.md#color), or null if the record has no color in this query
+a [Color](_airtable_blocks_ui__colors.md#color), or null if the record has no color in this query
 result.
 
 ### hasRecord
@@ -873,8 +873,8 @@ the record
 ### getRecordColor
 
 ▸ **getRecordColor**(`recordOrRecordId`: RecordId |
-[Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks__colors.md#color) |
-null_
+[Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks_ui__colors.md#color)
+| null_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
@@ -891,9 +891,9 @@ RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 | ------------------ | ------------------------------------------------------------------- | ---------------------------------------------- |
 | `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
 
-**Returns:** _[Color](_airtable_blocks__colors.md#color) | null_
+**Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
-a [Color](_airtable_blocks__colors.md#color), or null if the record has no color in this query
+a [Color](_airtable_blocks_ui__colors.md#color), or null if the record has no color in this query
 result.
 
 ### hasRecord

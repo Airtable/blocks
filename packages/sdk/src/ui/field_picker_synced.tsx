@@ -30,7 +30,9 @@ import useWatchable from './use_watchable';
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type FieldPickerSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedFieldPickerProps);
+interface FieldPickerSyncedProps extends SharedFieldPickerProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * Dropdown menu component for selecting fields, synced with {@link GlobalConfig}.

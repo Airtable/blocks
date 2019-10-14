@@ -21,7 +21,7 @@ import Box from './box';
  * @property {Function} onCancel Cancel button event handler. Handles click events and Space/Enter keypress events.
  * @property {Function} onConfirm Confirm button event handler. Handles click events and Space/Enter keypress events.
  */
-type ConfirmationDialogProps = {
+interface ConfirmationDialogProps extends StyleProps {
     style?: React.CSSProperties;
     title: string;
     cancelButtonText: string;
@@ -33,7 +33,7 @@ type ConfirmationDialogProps = {
     backgroundStyle?: React.CSSProperties;
     onCancel: () => unknown;
     onConfirm: () => unknown;
-} & (StyleProps);
+}
 
 /**
  * A styled modal dialog component that prompts the user to confirm or cancel an action.

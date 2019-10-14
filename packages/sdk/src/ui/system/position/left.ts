@@ -1,12 +1,15 @@
+/** @module @airtable/blocks/ui/system: Position */ /** */
 import {system, Config} from '@styled-system/core';
 import {LeftProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
 import {Prop, Length} from '../utils/types';
 
-export type LeftProps = {
+/** */
+export interface LeftProps {
+    /** Specifies the horizontal position of a positioned element. It has no effect on non-positioned elements. */
     left?: Prop<LeftProperty<Length>>;
-};
+}
 
 export const config: Config = {
     left: {

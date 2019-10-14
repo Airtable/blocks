@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Flex item */ /** */
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {FlexBasisProperty} from '../utils/csstype';
 import {Prop, Length} from '../utils/types';
 
-export type FlexBasisProps = {
+/** */
+export interface FlexBasisProps {
+    /** Sets the initial main size of a flex item. */
     flexBasis?: Prop<FlexBasisProperty<Length>>;
-};
+}
 
 export const config: Config = {flexBasis: true};
 

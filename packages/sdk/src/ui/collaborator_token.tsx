@@ -24,7 +24,7 @@ import useBase from './use_base';
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
 
-type StyleProps = (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
+interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -49,12 +49,11 @@ const stylePropTypes = {
  * @property {string} [className] Additional class names to apply to the collaborator token.
  * @property {string} [style] Additional styles to apply to the collaborator token.
  */
-type CollaboratorTokenProps = {
+interface CollaboratorTokenProps extends TooltipAnchorProps, StyleProps {
     collaborator: Partial<CollaboratorData>;
     className?: string;
     style?: React.CSSProperties;
-} & (TooltipAnchorProps) &
-    (StyleProps);
+}
 
 /**
  * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.

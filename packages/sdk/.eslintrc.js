@@ -22,18 +22,11 @@ module.exports = {
         'react',
         'react-hooks',
         'import',
-        'jsdoc',
         '@typescript-eslint',
     ],
     settings: {
         react: {
             version: '16.8',
-        },
-        jsdoc: {
-            ignorePrivate: true,
-            tagNamePreference: {
-                private: 'internal',
-            },
         },
     },
     rules: {
@@ -125,32 +118,6 @@ module.exports = {
         '@airtable/blocks/no-throw-new': 'error',
         '@airtable/blocks/no-node-modules-invariant': 'error',
         '@airtable/blocks/no-error-interpolation': ['error', {spawnError: 0, invariant: 1}],
-
-        'jsdoc/check-alignment': 'error',
-        'jsdoc/check-examples': [
-            'error',
-            {
-                exampleCodeRegex: '^```(?:js|ts)([\\s\\S]*)```s*$',
-                configFile: path.join(__dirname, '.eslintrc_for_docs_examples.js'),
-            },
-        ],
-        'jsdoc/check-indentation': 'off',
-        'jsdoc/check-param-names': 'error',
-        'jsdoc/check-syntax': 'off',
-        'jsdoc/check-tag-names': ['error', {definedTags: ['hidden', 'reactComponent']}],
-        'jsdoc/check-types': 'error',
-        'jsdoc/implements-on-classes': 'error',
-        'jsdoc/newline-after-description': 'error',
-        'jsdoc/no-types': 'off',
-        'jsdoc/require-hyphen-before-param-description': ['error', 'never'],
-        'jsdoc/require-jsdoc': [
-            'error',
-            {contexts: ['ClassProperty', 'ClassDeclaration', 'MethodDefinition']},
-        ],
-        'jsdoc/require-param-name': 'warn',
-        'jsdoc/require-param': ['warn', {exemptedBy: ['internal', 'reactComponent', 'hidden']}],
-        'jsdoc/require-returns-check': 'warn',
-        'jsdoc/require-returns-description': 'warn',
 
         'import/first': 'error',
         'import/order': 'error',

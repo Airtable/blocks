@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: UI & typography primitives */ /** */
+/** @module @airtable/blocks/ui: Text */ /** */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
@@ -59,7 +59,7 @@ export function useTextSize(
  * @property {string} [aria-hidden] The `aria-hidden` attribute.
  * @property {string} [aria-live] The `aria-live` attribute.
  */
-type TextProps = {
+interface TextProps extends AllStylesProps, AriaProps {
     as?:
         | 'p'
         | 'h1'
@@ -83,21 +83,19 @@ type TextProps = {
         | 'time'
         | 'var'
         | 'blockquote';
-} & (AllStylesProps) & {
-        variant?: TextVariant;
-        children?: React.ReactNode;
-        id?: string;
-        size?: TextSizeProp;
-        dataAttributes?: {readonly [key: string]: unknown};
-        className?: string;
-        style?: React.CSSProperties;
-    } & (AriaProps) & {role?: string};
+    variant?: TextVariant;
+    children?: React.ReactNode;
+    id?: string;
+    size?: TextSizeProp;
+    role?: string;
+    dataAttributes?: {readonly [key: string]: unknown};
+    className?: string;
+    style?: React.CSSProperties;
+}
 
 /**
  * A text component with sizes and variants.
  *
- * @reactComponent
- * @example
  * ```js
  * import {Text} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';

@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Typography */ /** */
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {FontSizeProperty} from '../utils/csstype';
 import {Prop, Length} from '../utils/types';
 
-export type FontSizeProps = {
+/** */
+export interface FontSizeProps {
+    /** Sets the size of the font. This property is also used to compute the size of `em`, `ex`, and other relative length units. */
     fontSize?: Prop<FontSizeProperty<Length>>;
-};
+}
 
 export const config: Config = {
     fontSize: {

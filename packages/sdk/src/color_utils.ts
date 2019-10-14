@@ -1,4 +1,4 @@
-/** @module @airtable/blocks: colors */ /** */
+/** @module @airtable/blocks/ui: colorUtils */ /** */
 import {getEnumValueIfExists, has} from './private_utils';
 import Colors, {Color, rgbTuplesByColor} from './colors';
 

@@ -19,7 +19,7 @@ import {FormFieldIdContext} from './use_form_field_id';
 type AnyModel = Table | View | Field;
 
 // Private component used by TablePicker, ViewPicker, FieldPicker.
-type ModelPickerSelectProps<Model extends AnyModel> = {
+interface ModelPickerSelectProps<Model extends AnyModel> extends SharedSelectBaseProps, StyleProps {
     models: Array<Model>;
     selectedModelId: string | null;
     modelKeysToWatch: Array<string>;
@@ -27,8 +27,7 @@ type ModelPickerSelectProps<Model extends AnyModel> = {
     shouldAllowPickingModelFn?: (arg1: Model) => boolean;
     placeholder: string;
     onChange: (newValue: string | null) => unknown;
-} & (SharedSelectBaseProps) &
-    (StyleProps);
+}
 
 const ModelWatcher = ({
     model,

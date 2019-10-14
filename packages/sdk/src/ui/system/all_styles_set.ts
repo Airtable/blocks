@@ -1,3 +1,5 @@
+/** @module @airtable/blocks/ui/system: All style props */ /** */
+// TODO (stephen): write full description
 import {compose} from '@styled-system/core';
 import {
     appearanceSet,
@@ -29,15 +31,29 @@ import {
     OverflowProps,
 } from './index';
 
-export type AllStylesProps = (AppearanceSetProps) &
-    (DimensionsSetProps) &
-    (FlexContainerSetProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (SpacingSetProps) &
-    (TypographySetProps) &
-    (DisplayProps) &
-    (OverflowProps);
+/**
+ * All supported style props:
+ * * [[AppearanceSetProps|Appearance]]
+ * * [[DimensionsSetProps|Dimensions]]
+ * * [[FlexContainerSetProps|Flex container]]
+ * * [[FlexItemSetProps|Flex item]]
+ * * [[PositionSetProps|Position]]
+ * * [[SpacingSetProps|Spacing]]
+ * * [[TypographySetProps|Typography]]
+ * * [[DisplayProps|Display]]
+ * * [[OverflowProps|Overflow]]
+ * @noInheritDoc
+ */
+export interface AllStylesProps
+    extends AppearanceSetProps,
+        DimensionsSetProps,
+        FlexContainerSetProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        SpacingSetProps,
+        TypographySetProps,
+        DisplayProps,
+        OverflowProps {}
 
 export const allStylesParser = compose(
     appearanceSet,

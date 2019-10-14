@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/ui/system: Spacing */ /** */
 import {system, Config} from '@styled-system/core';
 import {
     PaddingProperty,
@@ -10,15 +11,23 @@ import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scal
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {Prop, Length} from '../utils/types';
 
-export type PaddingProps = {
+/** */
+export interface PaddingProps {
+    /** Sets the padding area on all four sides of an element. It is a shorthand for `paddingTop`, `paddingRight`, `paddingBottom`, and `paddingLeft`. */
     padding?: Prop<PaddingProperty<Length>>;
+    /** Sets the height of the padding area on the top side of an element. */
     paddingTop?: Prop<PaddingTopProperty<Length>>;
+    /** Sets the width of the padding area on the right side of an element. */
     paddingRight?: Prop<PaddingRightProperty<Length>>;
+    /** Sets the height of the padding area on the bottom side of an element. */
     paddingBottom?: Prop<PaddingBottomProperty<Length>>;
+    /** Sets the width of the padding area on the left side of an element. */
     paddingLeft?: Prop<PaddingLeftProperty<Length>>;
+    /** Sets the width of the padding area on the left and right sides of an element. */
     paddingX?: Prop<PaddingProperty<Length>>;
+    /** Sets the height of the padding area on the top and bottom sides of an element. */
     paddingY?: Prop<PaddingProperty<Length>>;
-};
+}
 
 export const config: Config = {
     padding: {

@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Flex item */ /** */
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {FlexProperty} from '../utils/csstype';
 import {Prop, Length} from '../utils/types';
 
-export type FlexProps = {
+/** */
+export interface FlexProps {
+    /** Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a shorthand for `flexGrow`, `flexShrink`, and `flexBasis`. */
     flex?: Prop<FlexProperty<Length>>;
-};
+}
 
 export const config: Config = {flex: true};
 

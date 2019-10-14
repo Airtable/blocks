@@ -10,11 +10,11 @@ type ViewportSizeConstraintProp = {
 };
 
 /** @typedef */
-type ViewportConstraintProps = {
+interface ViewportConstraintProps {
     minSize?: ViewportSizeConstraintProp;
     maxFullscreenSize?: ViewportSizeConstraintProp;
     children?: React.ReactNode;
-};
+}
 
 const didSizeChange = (
     prev?: ViewportSizeConstraintProp | null,

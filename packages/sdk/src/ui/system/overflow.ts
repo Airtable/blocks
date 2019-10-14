@@ -1,13 +1,18 @@
+/** @module @airtable/blocks/ui/system: Overflow */ /** */
 import {system, Config} from '@styled-system/core';
-import {OverflowProperty, OverflowXProperty, OverflowYProperty} from './utils/csstype';
+import {OverflowProperty, OverflowXProperty, OverflowYProperty} from 'csstype';
 import {Prop} from './utils/types';
 import createStylePropTypes from './utils/create_style_prop_types';
 
-export type OverflowProps = {
+/** */
+export interface OverflowProps {
+    /** Sets what to do when an element's content is too big to fit in its block formatting context. It is a shorthand for `overflowX` and `overflowY`. */
     overflow?: Prop<OverflowProperty>;
+    /** Sets what shows when content overflows a block-level element's top and bottom edges. This may be nothing, a scroll bar, or the overflow content. */
     overflowY?: Prop<OverflowXProperty>;
+    /** Sets what shows when content overflows a block-level element's left and right edges. This may be nothing, a scroll bar, or the overflow content. */
     overflowX?: Prop<OverflowYProperty>;
-};
+}
 
 const config: Config = {overflow: true, overflowY: true, overflowX: true};
 

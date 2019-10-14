@@ -15,12 +15,11 @@ import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `TablePicker` and `TablePickerSynced`.
-export type SharedTablePickerProps = {
+export interface SharedTablePickerProps extends SharedSelectBaseProps, StyleProps {
     shouldAllowPickingNone?: boolean;
     placeholder?: string;
     onChange?: (tableModel: Table | null) => void;
-} & (SharedSelectBaseProps) &
-    (StyleProps);
+}
 
 // Shared with `TablePicker` and `TablePickerSynced`.
 export const sharedTablePickerPropTypes = {
@@ -48,7 +47,9 @@ export const sharedTablePickerPropTypes = {
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type TablePickerProps = {table?: Table | null} & (SharedTablePickerProps);
+interface TablePickerProps extends SharedTablePickerProps {
+    table?: Table | null;
+}
 
 /**
  * Dropdown menu component for selecting tables.

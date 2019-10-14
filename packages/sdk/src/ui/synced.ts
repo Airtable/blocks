@@ -6,14 +6,14 @@ import getSdk from '../get_sdk';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import withHooks from './with_hooks';
 
-type SyncedProps = {
+interface SyncedProps {
     globalConfigKey: GlobalConfigKey;
     render: (arg1: {
         value: GlobalConfigValue | undefined;
         canSetValue: boolean;
         setValue: (newValue: GlobalConfigValue | undefined) => void;
     }) => React.ReactElement;
-};
+}
 
 /** @hidden */
 export class Synced extends React.Component<SyncedProps> {

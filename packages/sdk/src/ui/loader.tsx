@@ -19,7 +19,7 @@ import {
 
 const ORIGINAL_SIZE = 54;
 
-type StyleProps = (FlexItemSetProps) & (PositionSetProps) & (MarginProps);
+interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -40,12 +40,12 @@ const stylePropTypes = {
  * @property {string} [className] Additional class names to apply to the loading spinner.
  * @property {object} [style] Additional styles to apply to the loading spinner.
  */
-type LoaderProps = {
+interface LoaderProps extends StyleProps {
     fillColor: string;
     scale: number;
     className?: string;
     style?: React.CSSProperties;
-} & (StyleProps);
+}
 
 // Override the default props and then just proxy through to our loader.
 /**

@@ -24,7 +24,7 @@ const FADE_IN_ANIMATION_DURATION = 150;
  * @property {string} [className] Additional class names to attach to the tooltip, separated by spaces.
  * @property {object} [style] Additional styles names to attach to the tooltip.
  */
-type TooltipProps = {
+interface TooltipProps {
     placementOffsetY?: number;
     children: React.ReactElement<TooltipAnchorProps>;
     placementX?: PopoverPlacementX;
@@ -36,10 +36,10 @@ type TooltipProps = {
     disabled?: boolean;
     className?: string;
     style?: React.CSSProperties;
-};
-type TooltipState = {
+}
+interface TooltipState {
     isShowingTooltip: boolean;
-};
+}
 
 /**
  * A component that shows a tooltip. Wraps its children.

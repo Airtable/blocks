@@ -37,20 +37,21 @@ import Icon from './icon';
  * @property {object} [style] Styles to apply to the dialog element.
  * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  */
-export type DialogCloseButtonProps = {
+export interface DialogCloseButtonProps extends TooltipAnchorProps {
     className?: string;
     style?: React.CSSProperties;
     tabIndex?: number;
     children?: React.ReactNode;
-} & (TooltipAnchorProps);
+}
 
-type StyleProps = (BorderRadiusProps) &
-    (DimensionsSetProps) &
-    (DisplayProps) &
-    (FlexContainerSetProps) &
-    (FlexItemSetProps) &
-    (PositionSetProps) &
-    (SpacingSetProps);
+export interface StyleProps
+    extends BorderRadiusProps,
+        DimensionsSetProps,
+        DisplayProps,
+        FlexContainerSetProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        SpacingSetProps {}
 
 const styleParser = compose(
     borderRadius,

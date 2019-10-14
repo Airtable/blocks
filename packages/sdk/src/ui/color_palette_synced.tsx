@@ -21,8 +21,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
  * @property {boolean} [disabled=false] If set to `true`, the color palette will not allow color selection.
  * @property {Function} [onChange] A function to be called when the selected color changes.
  */
-type ColorPaletteSyncedProps = {globalConfigKey: GlobalConfigKey} & (SharedColorPaletteProps) &
-    (StyleProps);
+interface ColorPaletteSyncedProps extends SharedColorPaletteProps, StyleProps {
+    globalConfigKey: GlobalConfigKey;
+}
 
 /**
  * A wrapper around the {@link ColorPalette} component that syncs with global config.

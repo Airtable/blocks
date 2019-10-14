@@ -1,11 +1,14 @@
+/** @module @airtable/blocks/ui/system: Position */ /** */
 import {system, Config} from '@styled-system/core';
 import {PositionProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {Prop} from '../utils/types';
 
-export type PositionProps = {
+/** */
+export interface PositionProps {
+    /** Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties determine the final location of positioned elements. */
     position?: Prop<PositionProperty>;
-};
+}
 
 export const config: Config = {position: true};
 

@@ -1,12 +1,15 @@
+/** @module @airtable/blocks/ui/system: Typography */ /** */
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {FontWeightProperty} from '../utils/csstype';
 import {Prop} from '../utils/types';
 
-export type FontWeightProps = {
+/** */
+export interface FontWeightProps {
+    /** Specifies the weight (or boldness) of the font. */
     // Add `string` to support properties from theme scale.
     fontWeight?: Prop<FontWeightProperty | string>;
-};
+}
 
 export const config: Config = {
     fontWeight: {

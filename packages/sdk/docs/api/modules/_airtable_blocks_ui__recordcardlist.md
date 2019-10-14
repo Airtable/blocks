@@ -9,7 +9,7 @@
 
 -   [RecordCardList](_airtable_blocks_ui__recordcardlist.md#recordcardlist)
 
-### Type aliases
+### Interfaces
 
 -   [RecordCardListProps](_airtable_blocks_ui__recordcardlist.md#recordcardlistprops)
 
@@ -50,11 +50,11 @@ function Block() {
 }
 ```
 
-## Type aliases
+## Interfaces
 
 ### RecordCardListProps
 
-Ƭ **RecordCardListProps**: _Object_
+• **RecordCardListProps**:
 
 _Defined in
 [src/ui/record_card_list.tsx:211](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card_list.tsx#L211)_

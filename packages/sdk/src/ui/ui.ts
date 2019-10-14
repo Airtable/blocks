@@ -1,3 +1,4 @@
+/** @ignore */
 import GlobalAlert from './global_alert';
 
 export {default as colors} from '../colors';

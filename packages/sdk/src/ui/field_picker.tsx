@@ -18,14 +18,13 @@ import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `FieldPicker` and `FieldPickerSynced`.
-export type SharedFieldPickerProps = {
+export interface SharedFieldPickerProps extends SharedSelectBaseProps, StyleProps {
     table?: Table | null;
     allowedTypes?: Array<FieldType>;
     shouldAllowPickingNone?: boolean;
     placeholder?: string;
     onChange?: (fieldModel: Field | null) => void;
-} & (SharedSelectBaseProps) &
-    (StyleProps);
+}
 
 // Shared with `FieldPicker` and `FieldPickerSynced`.
 export const sharedFieldPickerPropTypes = {
@@ -57,7 +56,9 @@ export const sharedFieldPickerPropTypes = {
  * @property {string} [aria-labelledby] A space separated list of label element IDs.
  * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-type FieldPickerProps = {field?: Field | null} & (SharedFieldPickerProps);
+interface FieldPickerProps extends SharedFieldPickerProps {
+    field?: Field | null;
+}
 
 /**
  * Dropdown menu component for selecting fields.

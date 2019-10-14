@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: loading external resources */ /** */
+/** @module @airtable/blocks/ui: Loading external resources */ /** */
 import {spawnInvariantViolationError} from '../error_utils';
 
 /**

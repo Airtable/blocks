@@ -9,7 +9,7 @@
 
 -   [Tooltip](_airtable_blocks_ui__tooltip.md#tooltip)
 
-### Type aliases
+### Interfaces
 
 -   [TooltipProps](_airtable_blocks_ui__tooltip.md#tooltipprops)
 
@@ -58,11 +58,11 @@ Popover.placements
 _Defined in
 [src/ui/tooltip.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L68)_
 
-## Type aliases
+## Interfaces
 
 ### TooltipProps
 
-Ƭ **TooltipProps**: _Object_
+• **TooltipProps**:
 
 _Defined in
 [src/ui/tooltip.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L27)_
