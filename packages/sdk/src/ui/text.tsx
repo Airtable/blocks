@@ -3,35 +3,32 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {spawnInvariantViolationError} from '../error_utils';
-import {values, ObjectValues} from '../private_utils';
+import {
+    createEnum,
+    EnumType,
+    createPropTypeFromEnum,
+    createResponsivePropTypeFromEnum,
+} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, AllStylesProps} from './system/index';
-import {ResponsivePropObject} from './system/utils/types';
+import {ResponsiveProp} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
-import createResponsivePropType from './system/utils/create_responsive_prop_type';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 
-export const TextVariants = Object.freeze({
-    DEFAULT: 'default' as const,
-    PARAGRAPH: 'paragraph' as const,
-});
-export type TextVariant = ObjectValues<typeof TextVariants>;
+export type TextVariant = EnumType<typeof TextVariant>;
+export const TextVariant = createEnum('default', 'paragraph');
+export const textVariantPropType = createPropTypeFromEnum(TextVariant);
 
-export const TextSizes = Object.freeze({
-    SMALL: 'small' as const,
-    DEFAULT: 'default' as const,
-    LARGE: 'large' as const,
-    XLARGE: 'xlarge' as const,
-});
-export type TextSize = ObjectValues<typeof TextSizes>;
-export type TextSizeProp = ResponsivePropObject<TextSize> | TextSize;
-export const textSizePropType = createResponsivePropType(PropTypes.oneOf(values(TextSizes)));
+export type TextSize = EnumType<typeof TextSize>;
+export const TextSize = createEnum('small', 'default', 'large', 'xlarge');
+export type TextSizeProp = ResponsiveProp<TextSize>;
+export const textSizePropType = createResponsivePropTypeFromEnum(TextSize);
 
 /** @internal */
 export function useTextSize(
     textSizeProp: TextSizeProp,
-    variant: TextVariant = TextVariants.DEFAULT,
+    variant: TextVariant = TextVariant.default,
 ): Partial<AllStylesProps> {
     const {textSizesByVariant} = useTheme();
     const textSizesForVariant = textSizesByVariant[variant];
@@ -45,7 +42,7 @@ export function useTextSize(
  * @typedef {object} TextProps
  * @property {'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'li' | 'em' | 'strong' | 'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'} [as='p'] The element that is rendered. Defaults to `p`.
  * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'paragraph'} [size='default'] The `variant` of the heading. Defaults to `default`.
+ * @property {'default' | 'paragraph'} [variant='default'] The `variant` of the text. Defaults to `default`.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
  * @property {object} [style] Additional styles.
@@ -203,7 +200,7 @@ const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
         'blockquote',
     ]),
     size: textSizePropType,
-    variant: PropTypes.oneOf(values(TextVariants)),
+    variant: textVariantPropType,
     children: PropTypes.node,
     id: PropTypes.string,
     role: PropTypes.string,
@@ -216,8 +213,8 @@ const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
 
 ForwardedRefText.defaultProps = {
     as: 'p',
-    size: TextSizes.DEFAULT,
-    variant: TextVariants.DEFAULT,
+    size: TextSize.default,
+    variant: TextVariant.default,
 };
 
 export default ForwardedRefText;

@@ -3,31 +3,30 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {spawnInvariantViolationError} from '../error_utils';
-import {has, values, ObjectValues, ObjectMap, keys} from '../private_utils';
+import {
+    has,
+    createEnum,
+    createPropTypeFromEnum,
+    createResponsivePropTypeFromEnum,
+    ObjectMap,
+    keys,
+    EnumType,
+} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, AllStylesProps} from './system/index';
-import {ResponsivePropObject, ResponsiveKey} from './system/utils/types';
+import {ResponsiveProp, ResponsiveKey} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
-import createResponsivePropType from './system/utils/create_responsive_prop_type';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 
-const HeadingSizes = Object.freeze({
-    XSMALL: 'xsmall' as const,
-    SMALL: 'small' as const,
-    DEFAULT: 'default' as const,
-    LARGE: 'large' as const,
-    XLARGE: 'xlarge' as const,
-    XXLARGE: 'xxlarge' as const,
-});
-type HeadingSize = ObjectValues<typeof HeadingSizes>;
-type HeadingSizeProp = ResponsivePropObject<HeadingSize> | HeadingSize;
+type HeadingSize = EnumType<typeof HeadingSize>;
+const HeadingSize = createEnum('xsmall', 'small', 'default', 'large', 'xlarge', 'xxlarge');
+type HeadingSizeProp = ResponsiveProp<HeadingSize>;
+const headingSizePropType = createResponsivePropTypeFromEnum(HeadingSize);
 
-const HeadingVariants = Object.freeze({
-    DEFAULT: 'default' as const,
-    CAPS: 'caps' as const,
-});
-type HeadingVariant = ObjectValues<typeof HeadingVariants>;
+type HeadingVariant = EnumType<typeof HeadingVariant>;
+const HeadingVariant = createEnum('default', 'caps');
+const headingVariantPropType = createPropTypeFromEnum(HeadingVariant);
 
 /** @internal */
 function warnIfHeadingSizeOutOfRangeForVariant(
@@ -56,7 +55,7 @@ function useHeadingSize(
     if (typeof headingSizeProp === 'string') {
         warnIfHeadingSizeOutOfRangeForVariant(headingSizeProp, variant, headingSizesForVariant);
         return (headingSizesForVariant[headingSizeProp] ||
-            headingSizesForVariant[HeadingSizes.DEFAULT]) as Partial<AllStylesProps>;
+            headingSizesForVariant[HeadingSize.default]) as Partial<AllStylesProps>;
     }
 
     const responsiveSizePropObject = {} as ObjectMap<ResponsiveKey, HeadingSize>;
@@ -67,7 +66,7 @@ function useHeadingSize(
         }
 
         warnIfHeadingSizeOutOfRangeForVariant(sizeProp, variant, headingSizesForVariant);
-        responsiveSizePropObject[sizeKey] = sizeProp || HeadingSizes.DEFAULT;
+        responsiveSizePropObject[sizeKey] = sizeProp || HeadingSize.default;
     }
 
     return getStylePropsForResponsiveProp<HeadingSize>(
@@ -82,7 +81,7 @@ function useHeadingSize(
  * @typedef {object} HeadingProps
  * @property {'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'} [as='h3'] The element that is rendered. Defaults to `h3`.
  * @property {'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge'} [size='default'] The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'caps'} [size='default'] The `variant` of the heading. Defaults to `default`.
+ * @property {'default' | 'caps'} [variant='default'] The `variant` of the heading. Defaults to `default`.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
  * @property {object} [style] Additional styles.
@@ -102,7 +101,7 @@ interface HeadingProps extends AriaProps, AllStylesProps {
     variant?: HeadingVariant;
     children?: React.ReactNode;
     id?: string;
-    size?: ResponsivePropObject<HeadingSize> | HeadingSize;
+    size?: HeadingSizeProp;
     dataAttributes?: {readonly [key: string]: unknown};
     className?: string;
     style?: React.CSSProperties;
@@ -194,8 +193,8 @@ const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(H
 
 (ForwardedRefHeading as any).propTypes = {
     as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
-    size: createResponsivePropType(PropTypes.oneOf(values(HeadingSizes))),
-    variant: PropTypes.oneOf(values(HeadingVariants)),
+    size: headingSizePropType,
+    variant: headingVariantPropType,
     children: PropTypes.node,
     id: PropTypes.string,
     role: PropTypes.string,
@@ -206,10 +205,10 @@ const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(H
     ...ariaPropTypes,
 };
 
-(ForwardedRefHeading as any).defaultProps = {
+ForwardedRefHeading.defaultProps = {
     as: 'h3',
-    size: HeadingSizes.DEFAULT,
-    variant: HeadingVariants.DEFAULT,
+    size: HeadingSize.default,
+    variant: HeadingVariant.default,
 };
 
 export default ForwardedRefHeading;

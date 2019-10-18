@@ -1,5 +1,7 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {spawnError} from './error_utils';
+import createResponsivePropType from './ui/system/utils/create_responsive_prop_type';
 
 export {default as isDeepEqual} from 'fast-deep-equal';
 
@@ -53,6 +55,56 @@ export type ReactRefType<C> = C extends React.Component
  * @hidden
  */
 export type ObjectMap<K extends PropertyKey, V> = {[P in K]: V};
+
+/**
+ * Creates an enum from provided string arguments.
+ *
+ * Useful for consumer-facing enums (eg `Button#variant`) where we want to make the external
+ * developer experience convenient by providing a string value, but also want to internally
+ * reference enum values using object notation.
+ *
+ * @hidden
+ */
+export function createEnum<T extends string>(...enumValues: Array<T>): {[K in T]: T} {
+    const spec: any = {};
+    for (const value of enumValues) {
+        spec[value] = value;
+    }
+    return Object.freeze(spec);
+}
+
+/**
+ * Creates a React propType for a provided enum.
+ *
+ * @hidden
+ */
+export function createPropTypeFromEnum<T extends string>(
+    enumData: {[K in T]: T},
+): PropTypes.Requireable<T> {
+    return PropTypes.oneOf(values(enumData));
+}
+
+/**
+ * Creates a responsive React propType for a provided enum.
+ *
+ * This allows the prop to be either a valid enum property, or a map of viewport sizes to valid enum
+ * properties.
+ *
+ * @hidden
+ */
+export function createResponsivePropTypeFromEnum<T extends string>(
+    enumData: {[K in T]: T},
+): PropTypes.Validator<any> {
+    const propType: PropTypes.Requireable<T> = createPropTypeFromEnum(enumData);
+    return createResponsivePropType(propType);
+}
+
+/**
+ * Creates a Type for an enum created using `createEnum`.
+ *
+ * @hidden
+ */
+export type EnumType<T> = keyof T;
 
 /**
  * Safely cast a value to the type passed in as a type parameter.

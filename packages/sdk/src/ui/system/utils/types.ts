@@ -7,6 +7,8 @@ export type ResponsivePropObject<T> = {
 
 export type ResponsiveKey = keyof ResponsivePropObject<unknown>;
 
-export type Prop<T> = T | ResponsivePropObject<T> | void | null;
+export type ResponsiveProp<T> = T | ResponsivePropObject<T>;
+
+export type Prop<T> = ResponsiveProp<T> | void | null;
 
 export type Length = number;

@@ -3,16 +3,22 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {spawnInvariantViolationError} from '../error_utils';
-import {values} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, AllStylesProps} from './system/index';
-import {stylePropType} from './system/utils/create_style_prop_types';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {TextVariants, TextSizes, TextSizeProp, useTextSize} from './text';
+import {
+    TextSize,
+    TextSizeProp,
+    textSizePropType,
+    TextVariant,
+    textVariantPropType,
+    useTextSize,
+} from './text';
 
 /**
  * @typedef {object} LabelProps
  * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label. Defaults to `default`. Can be a responsive prop object.
+ * @property {'default' | 'paragraph'} [variant='default'] The `variant` of the label. Defaults to `default`.
  * @property {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
@@ -29,6 +35,7 @@ import {TextVariants, TextSizes, TextSizeProp, useTextSize} from './text';
  */
 interface LabelProps extends AriaProps, AllStylesProps {
     size?: TextSizeProp;
+    variant?: TextVariant;
     htmlFor?: string;
     id?: string;
     children?: React.ReactNode;
@@ -78,7 +85,7 @@ function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
     if (!(size !== undefined)) {
         throw spawnInvariantViolationError('size');
     }
-    const stylePropsForTextSize = useTextSize(size, TextVariants.DEFAULT);
+    const stylePropsForTextSize = useTextSize(size, TextVariant.default);
     const classNameForStyleProps = useStyledSystem<AllStylesProps>({
         ...stylePropsForTextSize,
         display: 'inline-block',
@@ -113,8 +120,8 @@ function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
 const ForwardedRefLabel = React.forwardRef<HTMLLabelElement, LabelProps>(Label);
 
 (ForwardedRefLabel as any).propTypes = {
-    size: stylePropType,
-    variant: PropTypes.oneOf(values(TextVariants)),
+    size: textSizePropType,
+    variant: textVariantPropType,
     htmlFor: PropTypes.string,
     id: PropTypes.string,
     dataAttributes: PropTypes.object,
@@ -125,9 +132,9 @@ const ForwardedRefLabel = React.forwardRef<HTMLLabelElement, LabelProps>(Label);
     ...ariaPropTypes,
 };
 
-(ForwardedRefLabel as any).defaultProps = {
-    size: TextSizes.DEFAULT,
-    variant: TextVariants.DEFAULT,
+ForwardedRefLabel.defaultProps = {
+    size: TextSize.default,
+    variant: TextVariant.default,
 };
 
 export default ForwardedRefLabel;

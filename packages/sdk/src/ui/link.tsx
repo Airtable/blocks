@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
-import {values, ObjectValues} from '../private_utils';
+import {createEnum, EnumType, createPropTypeFromEnum} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
@@ -34,7 +34,7 @@ import {
     display,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {useTextSize, TextSizes, TextSizeProp, textSizePropType} from './text';
+import {useTextSize, TextSize, TextSizeProp, textSizePropType} from './text';
 import {IconName} from './icon_config';
 import Icon from './icon';
 
@@ -71,15 +71,12 @@ export const stylePropTypes = {
     ...spacingSetPropTypes,
 };
 
-const LinkVariants = Object.freeze({
-    DEFAULT: 'default',
-    DARK: 'dark',
-    LIGHT: 'light',
-} as const);
-type LinkVariant = ObjectValues<typeof LinkVariants>;
+type LinkVariant = EnumType<typeof LinkVariant>;
+const LinkVariant = createEnum('default', 'dark', 'light');
+const linkVariantPropType = createPropTypeFromEnum(LinkVariant);
 
 /** @internal */
-function useLinkVariant(variant: LinkVariant = LinkVariants.DEFAULT): string {
+function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
     const {linkVariants} = useTheme();
     return linkVariants[variant];
 }
@@ -178,8 +175,8 @@ function _getSanitizedHref(href: string): string | undefined {
 const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     (
         {
-            size = TextSizes.DEFAULT,
-            variant = LinkVariants.DEFAULT,
+            size = TextSize.default,
+            variant = LinkVariant.default,
             underline = false,
             icon,
             href,
@@ -272,7 +269,7 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
 Link.propTypes = {
     size: textSizePropType,
-    variant: PropTypes.oneOf(values(LinkVariants)),
+    variant: linkVariantPropType,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     href: PropTypes.string.isRequired,
     target: PropTypes.string,

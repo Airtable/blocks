@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
-import {values, ObjectValues} from '../private_utils';
+import {createEnum, EnumType, createPropTypeFromEnum} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
@@ -30,7 +30,7 @@ import {
     SpacingSetProps,
     display,
 } from './system';
-import {useTextSize, TextSizes, TextSizeProp, textSizePropType} from './text';
+import {useTextSize, TextSize, TextSizeProp, textSizePropType} from './text';
 import {IconName} from './icon_config';
 import Icon from './icon';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
@@ -68,15 +68,12 @@ export const stylePropTypes = {
     ...spacingSetPropTypes,
 };
 
-const TextButtonVariants = Object.freeze({
-    DEFAULT: 'default',
-    DARK: 'dark',
-    LIGHT: 'light',
-} as const);
-type TextButtonVariant = ObjectValues<typeof TextButtonVariants>;
+type TextButtonVariant = EnumType<typeof TextButtonVariant>;
+const TextButtonVariant = createEnum('default', 'dark', 'light');
+const textButtonVariantPropType = createPropTypeFromEnum(TextButtonVariant);
 
 /** @internal */
-function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariants.DEFAULT): string {
+function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.default): string {
     const {textButtonVariants} = useTheme();
     return textButtonVariants[variant];
 }
@@ -147,8 +144,8 @@ interface TextButtonProps extends TooltipAnchorProps<HTMLSpanElement>, AriaProps
 const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
     (
         {
-            size = TextSizes.DEFAULT,
-            variant = TextButtonVariants.DEFAULT,
+            size = TextSize.default,
+            variant = TextButtonVariant.default,
             icon,
             children,
             disabled,
@@ -267,7 +264,7 @@ const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
 
 TextButton.propTypes = {
     size: textSizePropType,
-    variant: PropTypes.oneOf(values(TextButtonVariants)),
+    variant: textButtonVariantPropType,
     icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     disabled: PropTypes.bool,
     children: PropTypes.node,

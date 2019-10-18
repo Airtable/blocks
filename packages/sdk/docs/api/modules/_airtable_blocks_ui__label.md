@@ -20,12 +20,15 @@
 • **LabelProps**:
 
 _Defined in
-[src/ui/label.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L30)_
+[src/ui/label.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L36)_
 
 **`typedef`** {object} LabelProps
 
 **`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label.
 Defaults to `default`. Can be a responsive prop object.
+
+**`property`** {'default' | 'paragraph'} [variant='default'] The `variant` of the label. Defaults to
+`default`.
 
 **`property`** {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
 
@@ -165,7 +168,7 @@ assistive technologies, and user can expect from the live region.
 React.Ref‹HTMLLabelElement›): _Element_
 
 _Defined in
-[src/ui/label.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L58)_
+[src/ui/label.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L65)_
 
 A label component.
 

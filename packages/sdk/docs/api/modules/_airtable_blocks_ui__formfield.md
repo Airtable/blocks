@@ -416,7 +416,7 @@ with larger z-indexes cover those with smaller ones.
 _ForwardRefExoticComponent‹[FormFieldProps](_airtable_blocks_ui__formfield.md#formfieldprops) &
 RefAttributes‹HTMLDivElement››_ = React.forwardRef<HTMLDivElement, FormFieldProps>( (props:
 FormFieldProps, ref: React.Ref<HTMLDivElement>) => { const { id, className, style, label =
-TextSizes.DEFAULT, htmlFor, description, children, ...styleProps } = props; const
+TextSize.default, htmlFor, description, children, ...styleProps } = props; const
 classNameForStyleProps = useStyledSystem(styleProps, styleParser); const [generatedId] =
 useState(getLocallyUniqueId('form-field-')); const controlId = htmlFor || generatedId;
 

@@ -20,7 +20,7 @@
 • **TextButtonProps**:
 
 _Defined in
-[src/ui/text_button.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L105)_
+[src/ui/text_button.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L102)_
 
 **`typedef`** {object} TextButtonProps
 
@@ -542,7 +542,7 @@ with larger z-indexes cover those with smaller ones.
 • **TextButton**:
 _ForwardRefExoticComponent‹[TextButtonProps](_airtable_blocks_ui__textbutton.md#textbuttonprops) &
 RefAttributes‹HTMLSpanElement››_ = React.forwardRef<HTMLSpanElement, TextButtonProps>( ( { size =
-TextSizes.DEFAULT, variant = TextButtonVariants.DEFAULT, icon, children, disabled, id, tabIndex = 0,
+TextSize.default, variant = TextButtonVariant.default, icon, children, disabled, id, tabIndex = 0,
 dataAttributes, onClick, className, style, onMouseEnter, onMouseLeave, hasOnClick, 'aria-selected':
 ariaSelected, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby':
 ariaDescribedBy, 'aria-controls': ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup':
@@ -628,7 +628,7 @@ padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%', ...styleProps, }, styl
 )
 
 _Defined in
-[src/ui/text_button.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L147)_
+[src/ui/text_button.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L144)_
 
 A text button component with sizes and variants.
 

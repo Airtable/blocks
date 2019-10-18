@@ -20,7 +20,7 @@
 • **LinkProps**:
 
 _Defined in
-[src/ui/link.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L108)_
+[src/ui/link.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L105)_
 
 **`typedef`** {object} LinkProps
 
@@ -554,7 +554,7 @@ with larger z-indexes cover those with smaller ones.
 
 • **Link**: _ForwardRefExoticComponent‹[LinkProps](_airtable_blocks_ui__link.md#linkprops) &
 RefAttributes‹HTMLAnchorElement››_ = React.forwardRef<HTMLAnchorElement, LinkProps>( ( { size =
-TextSizes.DEFAULT, variant = LinkVariants.DEFAULT, underline = false, icon, href, id, target,
+TextSize.default, variant = LinkVariant.default, underline = false, icon, href, id, target,
 onMouseEnter, onMouseLeave, onClick, hasOnClick, tabIndex, className, style, children,
 dataAttributes, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby':
 ariaDescribedBy, 'aria-controls': ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup':
@@ -613,7 +613,7 @@ maxWidth: '100%', ...styleProps, }, styleParser, );
 )
 
 _Defined in
-[src/ui/link.tsx:178](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L178)_
+[src/ui/link.tsx:175](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L175)_
 
 A wrapper around the `<a>` tag that offers a few security benefits:
 

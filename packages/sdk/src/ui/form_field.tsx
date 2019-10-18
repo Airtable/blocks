@@ -5,7 +5,7 @@ import {cx} from 'emotion';
 import {compose} from '@styled-system/core';
 import {getLocallyUniqueId} from '../private_utils';
 import Box from './box';
-import Text, {TextSizes} from './text';
+import Text, {TextSize} from './text';
 import Label from './label';
 import {FormFieldIdContext} from './use_form_field_id';
 import useStyledSystem from './use_styled_system';
@@ -116,7 +116,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
             id,
             className,
             style,
-            label = TextSizes.DEFAULT,
+            label = TextSize.default,
             htmlFor,
             description,
             children,
@@ -156,7 +156,7 @@ const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
     },
 );
 
-(FormField as any).propTypes = {
+FormField.propTypes = {
     id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,

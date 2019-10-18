@@ -20,7 +20,7 @@
 • **TextProps**:
 
 _Defined in
-[src/ui/text.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L62)_
+[src/ui/text.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L59)_
 
 **`typedef`** {object} TextProps
 
@@ -31,7 +31,7 @@ _Defined in
 **`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text.
 Defaults to `default`. Can be a responsive prop object.
 
-**`property`** {'default' | 'paragraph'} [size='default'] The `variant` of the heading. Defaults to
+**`property`** {'default' | 'paragraph'} [variant='default'] The `variant` of the text. Defaults to
 `default`.
 
 **`property`** {string} [role] The `role` attribute.
@@ -170,7 +170,7 @@ assistive technologies, and user can expect from the live region.
 React.Ref‹HTMLElement›): _Element_
 
 _Defined in
-[src/ui/text.tsx:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L121)_
+[src/ui/text.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L118)_
 
 A text component with sizes and variants.
 

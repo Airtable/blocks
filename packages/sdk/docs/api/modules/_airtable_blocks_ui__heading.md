@@ -20,7 +20,7 @@
 • **HeadingProps**:
 
 _Defined in
-[src/ui/heading.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L99)_
+[src/ui/heading.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L98)_
 
 **`typedef`** {object} HeadingProps
 
@@ -30,7 +30,7 @@ Defaults to `h3`.
 **`property`** {'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge'} [size='default']
 The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
 
-**`property`** {'default' | 'caps'} [size='default'] The `variant` of the heading. Defaults to
+**`property`** {'default' | 'caps'} [variant='default'] The `variant` of the heading. Defaults to
 `default`.
 
 **`property`** {string} [role] The `role` attribute.
@@ -169,7 +169,7 @@ assistive technologies, and user can expect from the live region.
 React.Ref‹HTMLHeadingElement›): _Element_
 
 _Defined in
-[src/ui/heading.tsx:136](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L136)_
+[src/ui/heading.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L135)_
 
 A heading component with sizes and variants.
 

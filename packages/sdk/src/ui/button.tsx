@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
-import {ObjectValues, values} from '../private_utils';
+import {createEnum, EnumType, createPropTypeFromEnum} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import {Prop} from './system/utils/types';
 import createResponsivePropType from './system/utils/create_responsive_prop_type';
@@ -29,7 +29,7 @@ import {
     display,
 } from './system';
 import useTheme from './theme/use_theme';
-import {controlSizePropType, ControlSizes, ControlSizeProp, useButtonSize} from './control_sizes';
+import {ControlSize, ControlSizeProp, controlSizePropType, useButtonSize} from './control_sizes';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {IconName} from './icon_config';
@@ -67,16 +67,12 @@ const stylePropTypes = {
     ...marginPropTypes,
 };
 
-const ButtonVariants = Object.freeze({
-    DEFAULT: 'default',
-    PRIMARY: 'primary',
-    SECONDARY: 'secondary',
-    DANGER: 'danger',
-} as const);
-type ButtonVariant = ObjectValues<typeof ButtonVariants>;
+type ButtonVariant = EnumType<typeof ButtonVariant>;
+const ButtonVariant = createEnum('default', 'primary', 'secondary', 'danger');
+const buttonVariantPropType = createPropTypeFromEnum(ButtonVariant);
 
 /** @internal */
-function useButtonVariant(variant: ButtonVariant): string {
+function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): string {
     const {buttonVariants} = useTheme();
     return buttonVariants[variant];
 }
@@ -141,8 +137,8 @@ interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement>, AriaProps, 
 const Button = React.forwardRef(
     (
         {
-            size = ControlSizes.DEFAULT,
-            variant = ButtonVariants.DEFAULT,
+            size = ControlSize.default,
+            variant = ButtonVariant.default,
             icon,
             id,
             className,
@@ -211,7 +207,7 @@ const Button = React.forwardRef(
 
 Button.propTypes = {
     size: controlSizePropType,
-    variant: PropTypes.oneOf(values(ButtonVariants)),
+    variant: buttonVariantPropType,
     icon: PropTypes.oneOf([PropTypes.string, PropTypes.node]),
     id: PropTypes.string,
     className: PropTypes.string,

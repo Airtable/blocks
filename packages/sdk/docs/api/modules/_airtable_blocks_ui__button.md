@@ -20,7 +20,7 @@
 • **ButtonProps**:
 
 _Defined in
-[src/ui/button.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L106)_
+[src/ui/button.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L102)_
 
 **`typedef`** {object} ButtonProps
 
@@ -460,8 +460,8 @@ with larger z-indexes cover those with smaller ones.
 ### `Const` Button
 
 • **Button**: _ForwardRefExoticComponent‹[ButtonProps](_airtable_blocks_ui__button.md#buttonprops) &
-RefAttributes‹HTMLButtonElement››_ = React.forwardRef( ( { size = ControlSizes.DEFAULT, variant =
-ButtonVariants.DEFAULT, icon, id, className, style, onMouseEnter, onMouseLeave, onClick, type =
+RefAttributes‹HTMLButtonElement››_ = React.forwardRef( ( { size = ControlSize.default, variant =
+ButtonVariant.default, icon, id, className, style, onMouseEnter, onMouseLeave, onClick, type =
 'button', disabled, tabIndex, children, 'aria-label': ariaLabel, 'aria-selected': ariaSelected,
 ...styleProps }: ButtonProps, ref: React.Ref<HTMLButtonElement>, ) => { const classNameForButtonSize
 = useButtonSize(size); const classNameForButtonVariant = useButtonVariant(variant); const
@@ -511,7 +511,7 @@ const hasIcon = icon !== undefined;
 )
 
 _Defined in
-[src/ui/button.tsx:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L141)_
+[src/ui/button.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L137)_
 
 Clickable button component.
 
