@@ -233,8 +233,14 @@ class Popover extends React.Component<PopoverProps> {
         await this._renderPopoverAtPositionAsync(anchorRect.right(), anchorRect.top());
 
         const measurementPopover = this._popoverContent;
+        // HACK(10/17/19): The measurementPopover is sometimes not set, possibly due to some race
+        // condition with the the popover being unmounted but we've been unable to identify the root
+        // cause. Calling this function again on the next frame works as a workaround. We plan to
+        // rebuild popover/tooltip in the new SDK without using ReactDOM.unstable_renderSubtreeIntoContainer,
+        // so this is hopefully just a temporary measure.
         if (!measurementPopover) {
-            throw spawnInvariantViolationError('No popover after render');
+            requestAnimationFrame(this._refreshContainerAsync);
+            return;
         }
         const measurementPopoverBoundingRect = measurementPopover.getBoundingClientRect();
         const popoverSize = new Geometry.Size(
