@@ -2,23 +2,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
-import {spawnInvariantViolationError} from '../error_utils';
 import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, AllStylesProps} from './system/index';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {
-    TextSize,
-    TextSizeProp,
-    textSizePropType,
-    TextVariant,
-    textVariantPropType,
-    useTextStyle,
-} from './text';
+import {TextSize, textSizePropType, TextSizeProp, useTextStyle} from './text';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
 
 /**
  * @typedef {object} LabelProps
  * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'paragraph'} [variant='default'] The `variant` of the label. Defaults to `default`.
  * @property {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
  * @property {string} [role] The `role` attribute.
  * @property {string} [className] Additional class names to apply, separated by spaces.
@@ -35,13 +27,12 @@ import {
  */
 interface LabelProps extends AriaProps, AllStylesProps {
     size?: TextSizeProp;
-    variant?: TextVariant;
     htmlFor?: string;
     id?: string;
     children?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
-    dataAttributes?: {readonly [key: string]: unknown};
+    dataAttributes?: DataAttributesProp;
     role?: string;
 }
 
@@ -62,68 +53,66 @@ interface LabelProps extends AriaProps, AllStylesProps {
  * }
  * ```
  */
-function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
-    const {
-        size,
-        htmlFor,
-        id,
-        children,
-        className,
-        style,
-        dataAttributes,
-        role,
-        'aria-label': ariaLabel,
-        'aria-labelledby': ariaLabelledBy,
-        'aria-describedby': ariaDescribedBy,
-        'aria-controls': ariaControls,
-        'aria-expanded': ariaExpanded,
-        'aria-haspopup': ariaHasPopup,
-        'aria-hidden': ariaHidden,
-        'aria-live': ariaLive,
-        ...styleProps
-    } = props;
-    if (!(size !== undefined)) {
-        throw spawnInvariantViolationError('size');
-    }
-    const classNameForTextStyle = useTextStyle(size, TextVariant.default);
-    const classNameForStyleProps = useStyledSystem({
-        display: 'inline-block',
-        textColor: 'light',
-        fontWeight: 'strong',
-        marginBottom: '6px',
-        ...styleProps,
-    });
-    return (
-        <label
-            ref={ref}
-            htmlFor={htmlFor}
-            id={id}
-            className={cx(classNameForTextStyle, classNameForStyleProps, className)}
-            style={style}
-            role={role}
-            aria-label={ariaLabel}
-            aria-labelledby={ariaLabelledBy}
-            aria-describedby={ariaDescribedBy}
-            aria-controls={ariaControls}
-            aria-expanded={ariaExpanded}
-            aria-haspopup={ariaHasPopup}
-            aria-hidden={ariaHidden}
-            aria-live={ariaLive}
-            {...dataAttributes}
-        >
-            {children}
-        </label>
-    );
-}
+const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
+    (
+        {
+            size = TextSize.default,
+            htmlFor,
+            id,
+            children,
+            className,
+            style,
+            dataAttributes,
+            role,
+            'aria-label': ariaLabel,
+            'aria-labelledby': ariaLabelledBy,
+            'aria-describedby': ariaDescribedBy,
+            'aria-controls': ariaControls,
+            'aria-expanded': ariaExpanded,
+            'aria-haspopup': ariaHasPopup,
+            'aria-hidden': ariaHidden,
+            'aria-live': ariaLive,
+            ...styleProps
+        }: LabelProps,
+        ref: React.Ref<HTMLLabelElement>,
+    ) => {
+        const classNameForTextStyle = useTextStyle(size);
+        const classNameForStyleProps = useStyledSystem({
+            display: 'inline-block',
+            textColor: 'light',
+            fontWeight: 'strong',
+            marginBottom: '6px',
+            ...styleProps,
+        });
+        return (
+            <label
+                ref={ref}
+                htmlFor={htmlFor}
+                id={id}
+                className={cx(classNameForTextStyle, classNameForStyleProps, className)}
+                style={style}
+                role={role}
+                aria-label={ariaLabel}
+                aria-labelledby={ariaLabelledBy}
+                aria-describedby={ariaDescribedBy}
+                aria-controls={ariaControls}
+                aria-expanded={ariaExpanded}
+                aria-haspopup={ariaHasPopup}
+                aria-hidden={ariaHidden}
+                aria-live={ariaLive}
+                {...dataAttributes}
+            >
+                {children}
+            </label>
+        );
+    },
+);
 
-const ForwardedRefLabel = React.forwardRef<HTMLLabelElement, LabelProps>(Label);
-
-(ForwardedRefLabel as any).propTypes = {
+Label.propTypes = {
     size: textSizePropType,
-    variant: textVariantPropType,
     htmlFor: PropTypes.string,
     id: PropTypes.string,
-    dataAttributes: PropTypes.object,
+    dataAttributes: dataAttributesPropType,
     children: PropTypes.node,
     className: PropTypes.string,
     style: PropTypes.object,
@@ -131,9 +120,4 @@ const ForwardedRefLabel = React.forwardRef<HTMLLabelElement, LabelProps>(Label);
     ...ariaPropTypes,
 };
 
-ForwardedRefLabel.defaultProps = {
-    size: TextSize.default,
-    variant: TextVariant.default,
-};
-
-export default ForwardedRefLabel;
+export default Label;

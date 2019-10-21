@@ -9,9 +9,9 @@
 
 -   [LabelProps](_airtable_blocks_ui__label.md#labelprops)
 
-### Functions
+### Variables
 
--   [Label](_airtable_blocks_ui__label.md#label)
+-   [Label](_airtable_blocks_ui__label.md#const-label)
 
 ## Interfaces
 
@@ -20,15 +20,12 @@
 • **LabelProps**:
 
 _Defined in
-[src/ui/label.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L36)_
+[src/ui/label.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L28)_
 
 **`typedef`** {object} LabelProps
 
 **`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label.
 Defaults to `default`. Can be a responsive prop object.
-
-**`property`** {'default' | 'paragraph'} [variant='default'] The `variant` of the label. Defaults to
-`default`.
 
 **`property`** {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
 
@@ -160,15 +157,26 @@ _Defined in
 Indicates that an element will be updated, and describes the types of updates the user agents,
 assistive technologies, and user can expect from the live region.
 
-## Functions
+## Variables
 
-### Label
+### `Const` Label
 
-▸ **Label**(`props`: [LabelProps](_airtable_blocks_ui__label.md#labelprops), `ref`:
-React.Ref‹HTMLLabelElement›): _Element_
+• **Label**: _ForwardRefExoticComponent‹[LabelProps](_airtable_blocks_ui__label.md#labelprops) &
+RefAttributes‹HTMLLabelElement››_ = React.forwardRef<HTMLLabelElement, LabelProps>( ( { size =
+TextSize.default, htmlFor, id, children, className, style, dataAttributes, role, 'aria-label':
+ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby': ariaDescribedBy, 'aria-controls':
+ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup': ariaHasPopup, 'aria-hidden':
+ariaHidden, 'aria-live': ariaLive, ...styleProps }: LabelProps, ref: React.Ref<HTMLLabelElement>, )
+=> { const classNameForTextStyle = useTextStyle(size); const classNameForStyleProps =
+useStyledSystem({ display: 'inline-block', textColor: 'light', fontWeight: 'strong', marginBottom:
+'6px', ...styleProps, }); return ( <label ref={ref} htmlFor={htmlFor} id={id}
+className={cx(classNameForTextStyle, classNameForStyleProps, className)} style={style} role={role}
+aria-label={ariaLabel} aria-labelledby={ariaLabelledBy} aria-describedby={ariaDescribedBy}
+aria-controls={ariaControls} aria-expanded={ariaExpanded} aria-haspopup={ariaHasPopup}
+aria-hidden={ariaHidden} aria-live={ariaLive} {...dataAttributes} > {children} </label> ); }, )
 
 _Defined in
-[src/ui/label.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L65)_
+[src/ui/label.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L56)_
 
 A label component.
 
@@ -185,12 +193,3 @@ function LabelExample() {
     );
 }
 ```
-
-**Parameters:**
-
-| Name    | Type                                                   |
-| ------- | ------------------------------------------------------ |
-| `props` | [LabelProps](_airtable_blocks_ui__label.md#labelprops) |
-| `ref`   | React.Ref‹HTMLLabelElement›                            |
-
-**Returns:** _Element_
