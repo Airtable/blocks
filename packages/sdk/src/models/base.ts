@@ -3,14 +3,7 @@ import {BaseData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {TableId} from '../types/table';
 import {AirtableInterface} from '../injected/airtable_interface';
-import {
-    isEnumValue,
-    entries,
-    isDeepEqual,
-    ObjectValues,
-    ObjectMap,
-    has,
-} from '../private_utils';
+import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
 import {spawnError, spawnInvariantViolationError} from '../error_utils';
 import Table from './table';
 import RecordStore from './record_store';

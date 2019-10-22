@@ -268,9 +268,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * // => false
      * ```
      */
-    isAggregatorAvailable(
-        aggregator: Aggregator | AggregatorKey,
-    ): boolean {
+    isAggregatorAvailable(aggregator: Aggregator | AggregatorKey): boolean {
         const aggregatorKey = typeof aggregator === 'string' ? aggregator : aggregator.key;
 
         const airtableInterface = this._parentTable._airtableInterface;

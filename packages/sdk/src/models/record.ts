@@ -5,13 +5,7 @@ import {BaseData} from '../types/base';
 import {RecordData} from '../types/record';
 import {FieldTypes, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
-import {
-    isEnumValue,
-    cloneDeep,
-    isObjectEmpty,
-    ObjectValues,
-    FlowAnyObject,
-} from '../private_utils';
+import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';

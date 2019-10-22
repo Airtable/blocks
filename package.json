@@ -23,13 +23,13 @@
         "typescript": "^3.6.3"
     },
     "scripts": {
-        "format": "prettier --write '**/*.{js,md,json,yml}'",
+        "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",
         "test": "yarn workspaces run test",
         "airbuild": "yarn workspaces run airbuild"
     },
     "husky": {
         "hooks": {
-            "pre-commit": "echo 'TODO(alex): restore pretty-quick --staged'"
+            "pre-commit": "pretty-quick --staged"
         }
     }
 }

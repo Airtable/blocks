@@ -52,8 +52,8 @@ type SortConfig = {
 };
 
 export type NormalizedSortConfig = {
-    fieldId: string,
-    direction: 'asc' | 'desc',
+    fieldId: string;
+    direction: 'asc' | 'desc';
 };
 
 export type RecordQueryResultOpts = {

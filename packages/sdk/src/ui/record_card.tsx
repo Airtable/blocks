@@ -196,7 +196,11 @@ const calculateAttachmentDimensionsAndMargin = (
     if (!attachment || !attachment.thumbnails || !attachment.thumbnails.large) {
         return {};
     }
-    const {thumbnails: {large: {width: thumbWidth, height: thumbHeight}}} = attachment;
+    const {
+        thumbnails: {
+            large: {width: thumbWidth, height: thumbHeight},
+        },
+    } = attachment;
 
     const height = Math.min(containerSize, thumbHeight);
     const width = Math.round((thumbWidth * height) / thumbHeight);
@@ -397,7 +401,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         if (attachmentField.type === FieldTypes.MULTIPLE_LOOKUP_VALUES) {
             const cellValue = this._getCellValue(attachmentField) as FlowAnyObject;
             attachmentsInField = flattenDeep(
-                values(cellValue ? cellValue.valuesByLinkedRecordId: {}),
+                values(cellValue ? cellValue.valuesByLinkedRecordId : {}),
             );
         } else {
             attachmentsInField = this._getCellValue(attachmentField) as Array<FlowAnyObject>;
@@ -623,31 +627,33 @@ export class RecordCard extends React.Component<RecordCardProps> {
                         {this._renderCellsAndFieldLabels(attachmentSize, fieldsToUse)}
                     </Box>
                 </Box>
-                {attachmentObjIfAvailable && attachmentObjIfAvailable.thumbnails && attachmentObjIfAvailable.thumbnails.large && (
-                    <Box
-                        className={baymax('noevents')}
-                        style={{
-                            borderTopRightRadius: 2,
-                            borderBottomRightRadius: 2,
-                        }}
-                        height={`${attachmentSize}px`}
-                        width={`${attachmentSize}px`}
-                        position="absolute"
-                        right="0"
-                        overflow="hidden"
-                    >
-                        <img
-                            draggable={false}
-                            height={attachmentDimensionsAndPosition.height}
-                            width={attachmentDimensionsAndPosition.width}
+                {attachmentObjIfAvailable &&
+                    attachmentObjIfAvailable.thumbnails &&
+                    attachmentObjIfAvailable.thumbnails.large && (
+                        <Box
+                            className={baymax('noevents')}
                             style={{
-                                marginTop: attachmentDimensionsAndPosition.marginTop,
-                                marginLeft: attachmentDimensionsAndPosition.marginLeft,
+                                borderTopRightRadius: 2,
+                                borderBottomRightRadius: 2,
                             }}
-                            src={attachmentObjIfAvailable.thumbnails.large.url}
-                        />
-                    </Box>
-                )}
+                            height={`${attachmentSize}px`}
+                            width={`${attachmentSize}px`}
+                            position="absolute"
+                            right="0"
+                            overflow="hidden"
+                        >
+                            <img
+                                draggable={false}
+                                height={attachmentDimensionsAndPosition.height}
+                                width={attachmentDimensionsAndPosition.width}
+                                style={{
+                                    marginTop: attachmentDimensionsAndPosition.marginTop,
+                                    marginLeft: attachmentDimensionsAndPosition.marginLeft,
+                                }}
+                                src={attachmentObjIfAvailable.thumbnails.large.url}
+                            />
+                        </Box>
+                    )}
             </a>
         );
     }

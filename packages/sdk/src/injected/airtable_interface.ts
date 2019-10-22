@@ -38,15 +38,15 @@ interface UrlConstructor {
         appInterface: AppInterface,
         attachmentId: string,
         attachmentUrl: string,
-    ): string,
+    ): string;
 }
 
 export type AggregatorKey = string;
 
 type AggregatorConfig = {
-    key: AggregatorKey,
-    displayName: string,
-    shortDisplayName: string,
+    key: AggregatorKey;
+    displayName: string;
+    shortDisplayName: string;
 };
 
 interface Aggregators {
@@ -67,12 +67,12 @@ interface Aggregators {
     getAvailableAggregatorKeysForField(fieldData: FieldData): Array<AggregatorKey>;
 }
 
-type CellValueValidationResult = {isValid: true} | {isValid: false, reason: string};
-type FieldTypeConfig = {type: FieldType, options?: {[key: string]: unknown}};
+type CellValueValidationResult = {isValid: true} | {isValid: false; reason: string};
+type FieldTypeConfig = {type: FieldType; options?: {[key: string]: unknown}};
 type FieldUiConfig = {
-    iconName: string,
-    desiredCellWidthForRecordCard: number,
-    minimumCellWidthForRecordCard: number,
+    iconName: string;
+    desiredCellWidthForRecordCard: number;
+    minimumCellWidthForRecordCard: number;
 };
 
 interface FieldTypeProvider {
@@ -103,7 +103,7 @@ interface FieldTypeProvider {
         cellValue: unknown,
         fieldData: FieldData,
         shouldWrap: boolean,
-    ): {cellValueHtml: string, attributes: {[key: string]: unknown}};
+    ): {cellValueHtml: string; attributes: {[key: string]: unknown}};
     getUiConfig: (appInterface: AppInterface, fieldData: FieldData) => FieldUiConfig;
 }
 

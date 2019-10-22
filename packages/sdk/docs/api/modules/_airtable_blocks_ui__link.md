@@ -635,6 +635,7 @@ Developers should use `Link` instead of `a` when possible.
 **`example`** import {Link} from '@airtable/blocks/ui';
 
 function MyLinkComponent() { return ( <Link href="https://example.com"> Check out my homepage!
+
 </Link> ); }
 
 ```

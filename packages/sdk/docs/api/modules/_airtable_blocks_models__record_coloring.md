@@ -20,7 +20,7 @@
 • **ModeTypes**: _Object_ = Object.freeze({ /** _ @alias recordColoring.ModeTypes.NONE _ @memberof
 recordColoring \*/ NONE: 'none' as const, /** _ @alias recordColoring.ModeTypes.BY_SELECT_FIELD _
 @memberof recordColoring _/ BY_SELECT_FIELD: 'bySelectField' as const, /\*\* _ @alias
-recordColoring.ModeTypes.BY_VIEW _ @memberof recordColoring _/ BY_VIEW: 'byView' as const, })
+recordColoring.ModeTypes.BY*VIEW * @memberof recordColoring \_/ BY_VIEW: 'byView' as const, })
 
 _Defined in
 [src/models/record_coloring.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L19)_
