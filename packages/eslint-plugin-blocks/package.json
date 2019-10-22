@@ -11,6 +11,7 @@
         "lib"
     ],
     "scripts": {
+        "airbuild": "yarn run test",
         "test": "mocha 'test/**/*.js'",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it"
     },

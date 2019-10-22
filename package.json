@@ -24,12 +24,12 @@
     },
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml}'",
-        "test": "yarn workspaces run test"
+        "test": "yarn workspaces run test",
+        "airbuild": "yarn workspaces run airbuild"
     },
     "husky": {
         "hooks": {
-            "pre-commit": "echo 'TODO(alex): restore pretty-quick --staged'",
-            "pre-push": "if git diff origin --cached --name-only | grep --quiet 'packages/sdk'; then cd packages/sdk && yarn build && yarn docs && yarn test; fi"
+            "pre-commit": "echo 'TODO(alex): restore pretty-quick --staged'"
         }
     }
 }
