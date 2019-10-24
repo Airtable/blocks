@@ -51,16 +51,16 @@ export enum ViewTypes {
 export type ViewType = ObjectValues<typeof ViewTypes>;
 
 /** @hidden */
-export type ViewFieldOrderData = {
+export interface ViewFieldOrderData {
     fieldIds: Array<FieldId>;
     visibleFieldCount: number;
-};
+}
 
 /** @hidden */
 export type ViewColorsByRecordIdData = ObjectMap<RecordId, Color | null | undefined>;
 
 /** @hidden */
-export type ViewData = {
+export interface ViewData {
     id: ViewId;
     name: string;
     type: ViewType;
@@ -70,4 +70,4 @@ export type ViewData = {
     fieldOrder?: ViewFieldOrderData;
     // colorsByRecordId will be absent until the block explicity loads the view's data.
     colorsByRecordId?: ViewColorsByRecordIdData;
-};
+}

@@ -145,5 +145,6 @@ module.exports = {
         'react/react-in-jsx-scope': 'error',
 
         '@typescript-eslint/no-unused-vars': ['error', {vars: 'all', args: 'none'}],
+        '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
     },
 };

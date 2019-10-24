@@ -2,11 +2,11 @@
 import {spawnInvariantViolationError, spawnError} from '../error_utils';
 import {TimeoutId} from '../private_utils';
 
-type ObjectPoolOptions<T, Opts> = {
+interface ObjectPoolOptions<T, Opts> {
     getKeyFromObject: (arg1: T) => string;
     getKeyFromObjectOptions: (arg1: Opts) => string;
     canObjectBeReusedForOptions: (arg1: T, arg2: Opts) => boolean;
-};
+}
 
 const WEAK_RETAIN_TIME_MS = 10000;
 

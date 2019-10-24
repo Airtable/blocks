@@ -5,7 +5,7 @@
 
 ## Index
 
-### Type aliases
+### Interfaces
 
 -   [ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts)
 
@@ -13,11 +13,11 @@
 
 -   [expandRecord](_airtable_blocks_ui__expandrecord.md#expandrecord)
 
-## Type aliases
+## Interfaces
 
 ### ExpandRecordOpts
 
-Ƭ **ExpandRecordOpts**: _Object_
+• **ExpandRecordOpts**:
 
 _Defined in
 [src/ui/expand_record.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L6)_

@@ -28,9 +28,9 @@ import RecordStore, {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 
 /** @hidden */
-type TableOrViewQueryResultData = {
+interface TableOrViewQueryResultData {
     recordIds: Array<string> | null; // null if data isn't loaded (or if it hasn't been lazily initialized).
-};
+}
 
 const tableOrViewQueryResultPool: ObjectPool<
     TableOrViewQueryResult,

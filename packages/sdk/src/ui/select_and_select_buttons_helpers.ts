@@ -23,11 +23,11 @@ export function isSelectOptionValue(value: unknown): value is SelectOptionValue 
  * @property {React.ReactNode} label The label for the select option.
  * @property {boolean} [disabled=false] If set to `true`, this option will not be selectable.
  */
-export type SelectOption = {
+export interface SelectOption {
     value: SelectOptionValue;
     label: React.ReactNode;
     disabled?: boolean;
-};
+}
 
 export const SelectOptionValuePropType = PropTypes.oneOfType([
     PropTypes.string,

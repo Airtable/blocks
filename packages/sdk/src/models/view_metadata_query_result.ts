@@ -24,10 +24,10 @@ const WatchableViewMetadataKeys = {
 type WatchableViewMetadataKey = ObjectValues<typeof WatchableViewMetadataKeys>;
 
 /** @internal */
-type ViewMetadata = {
+interface ViewMetadata {
     visibleFieldIds: Array<FieldId> | null;
     allFieldIds: Array<FieldId> | null;
-};
+}
 
 const viewMetadataQueryResultPool: ObjectPool<
     ViewMetadataQueryResult,

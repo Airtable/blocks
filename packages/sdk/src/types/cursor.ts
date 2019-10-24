@@ -2,6 +2,6 @@ import {ObjectMap} from '../private_utils';
 import {RecordId} from './record';
 
 /** @hidden */
-export type CursorData = {
+export interface CursorData {
     selectedRecordIdSet: ObjectMap<RecordId, boolean>;
-};
+}

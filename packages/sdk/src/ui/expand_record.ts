@@ -3,9 +3,9 @@ import getSdk from '../get_sdk';
 import Record from '../models/record';
 
 /** @typedef */
-export type ExpandRecordOpts = {
+export interface ExpandRecordOpts {
     records?: Array<Record>;
-};
+}
 
 /**
  * Expands the given record in the Airtable UI.

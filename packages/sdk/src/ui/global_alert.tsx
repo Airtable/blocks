@@ -10,9 +10,9 @@ const WatchableGlobalAlertKeys = Object.freeze({
 });
 type WatchableGlobalAlertKey = ObjectValues<typeof WatchableGlobalAlertKeys>;
 
-type AlertInfo = {
+interface AlertInfo {
     content: React.ReactElement;
-};
+}
 
 /**
  * @hidden

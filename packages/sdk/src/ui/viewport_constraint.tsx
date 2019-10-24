@@ -4,10 +4,10 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 
 /** @typedef */
-type ViewportSizeConstraintProp = {
+interface ViewportSizeConstraintProp {
     width?: number | null;
     height?: number | null;
-};
+}
 
 /** @typedef */
 interface ViewportConstraintProps {

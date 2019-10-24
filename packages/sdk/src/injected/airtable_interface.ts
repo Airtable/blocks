@@ -16,7 +16,7 @@ import {spawnError} from '../error_utils';
 const AIRTABLE_INTERFACE_VERSION = 0;
 
 /** @hidden */
-export type SdkInitData = {
+export interface SdkInitData {
     initialKvValuesByKey: GlobalConfigData;
     isDevelopmentMode: boolean;
     baseData: BaseData;
@@ -25,7 +25,7 @@ export type SdkInitData = {
     // TODO: figure out what to do with them.
     isFullscreen: boolean;
     isFirstRun: boolean;
-};
+}
 
 /** @hidden */
 interface IdGenerator {
@@ -48,11 +48,11 @@ interface UrlConstructor {
 export type AggregatorKey = string;
 
 /** @hidden */
-type AggregatorConfig = {
+interface AggregatorConfig {
     key: AggregatorKey;
     displayName: string;
     shortDisplayName: string;
-};
+}
 
 /** @hidden */
 interface Aggregators {
@@ -76,13 +76,16 @@ interface Aggregators {
 /** @hidden */
 type CellValueValidationResult = {isValid: true} | {isValid: false; reason: string};
 /** @hidden */
-type FieldTypeConfig = {type: FieldType; options?: {[key: string]: unknown}};
+interface FieldTypeConfig {
+    type: FieldType;
+    options?: {[key: string]: unknown};
+}
 /** @hidden */
-type FieldUiConfig = {
+interface FieldUiConfig {
     iconName: string;
     desiredCellWidthForRecordCard: number;
     minimumCellWidthForRecordCard: number;
-};
+}
 
 /** @hidden */
 interface FieldTypeProvider {

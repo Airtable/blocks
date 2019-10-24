@@ -38,7 +38,9 @@ export type GlobalConfigValue =
     | GlobalConfigObject;
 
 /** @hidden */
-export type GlobalConfigData = {[key: string]: GlobalConfigValue | undefined};
+export interface GlobalConfigData {
+    [key: string]: GlobalConfigValue | undefined;
+}
 
 /** An instruction to set `path` within globalConfig to `value`. */
 export interface GlobalConfigUpdate {

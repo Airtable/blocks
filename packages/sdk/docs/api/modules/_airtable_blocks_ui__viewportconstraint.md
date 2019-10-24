@@ -12,9 +12,6 @@
 ### Interfaces
 
 -   [ViewportConstraintProps](_airtable_blocks_ui__viewportconstraint.md#viewportconstraintprops)
-
-### Type aliases
-
 -   [ViewportSizeConstraintProp](_airtable_blocks_ui__viewportconstraint.md#viewportsizeconstraintprop)
 
 ## Classes
@@ -59,11 +56,11 @@ _Defined in
 
 **`typedef`**
 
-## Type aliases
+---
 
 ### ViewportSizeConstraintProp
 
-Ƭ **ViewportSizeConstraintProp**: _Object_
+• **ViewportSizeConstraintProp**:
 
 _Defined in
 [src/ui/viewport_constraint.tsx:7](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L7)_

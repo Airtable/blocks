@@ -1,9 +1,9 @@
-export type ResponsivePropObject<T> = {
+export interface ResponsivePropObject<T> {
     xsmallViewport?: T;
     smallViewport?: T;
     mediumViewport?: T;
     largeViewport?: T;
-};
+}
 
 export type ResponsiveKey = keyof ResponsivePropObject<unknown>;
 

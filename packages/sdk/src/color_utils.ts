@@ -3,7 +3,11 @@ import {getEnumValueIfExists, has} from './private_utils';
 import Colors, {Color, rgbTuplesByColor} from './colors';
 
 /** A red/green/blue color object. Each property is a number from 0 to 255. */
-type RGB = {r: number; g: number; b: number};
+interface RGB {
+    r: number;
+    g: number;
+    b: number;
+}
 
 /** Utilities for working with {@link Color} names from the {@link colors} enum. */
 interface ColorUtils {

@@ -64,10 +64,10 @@ interface SortConfig {
 }
 
 /** @hidden */
-export type NormalizedSortConfig = {
+export interface NormalizedSortConfig {
     fieldId: string;
     direction: 'asc' | 'desc';
-};
+}
 
 /** */
 export interface RecordQueryResultOpts {
@@ -80,13 +80,13 @@ export interface RecordQueryResultOpts {
 }
 
 /** @hidden */
-export type NormalizedRecordQueryResultOpts = {
+export interface NormalizedRecordQueryResultOpts {
     sorts: Array<NormalizedSortConfig> | null;
     fieldIdsOrNullIfAllFields: Array<string> | null;
     recordColorMode: RecordColorMode;
     table: Table;
     recordStore: RecordStore;
-};
+}
 
 /**
  * A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable: it

@@ -5,15 +5,15 @@
 
 ## Index
 
-### Type aliases
+### Interfaces
 
 -   [Aggregator](_airtable_blocks_models__aggregators.md#aggregator)
 
-## Type aliases
+## Interfaces
 
 ### Aggregator
 
-Ƭ **Aggregator**: _Object_
+• **Aggregator**:
 
 _Defined in
 [src/models/aggregators.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/aggregators.ts#L24)_

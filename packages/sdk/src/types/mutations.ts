@@ -17,73 +17,73 @@ export const MutationTypes = Object.freeze({
 export type MutationType = ObjectValues<typeof MutationTypes>;
 
 /** @hidden */
-export type SetMultipleRecordsCellValuesMutation = {
+export interface SetMultipleRecordsCellValuesMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
     readonly tableId: TableId;
     readonly records: ReadonlyArray<{
         readonly id: RecordId;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
     }>;
-};
+}
 
 /** @hidden */
-export type PartialSetMultipleRecordsCellValuesMutation = {
+export interface PartialSetMultipleRecordsCellValuesMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
     readonly tableId: TableId | void;
     readonly records: ReadonlyArray<{
         readonly id: RecordId | void;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | void> | void;
     }> | void;
-};
+}
 
 /** @hidden */
-export type DeleteMultipleRecordsMutation = {
+export interface DeleteMultipleRecordsMutation {
     readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
     readonly tableId: TableId;
     readonly recordIds: ReadonlyArray<RecordId>;
-};
+}
 
 /** @hidden */
-export type PartialDeleteMultipleRecordsMutation = {
+export interface PartialDeleteMultipleRecordsMutation {
     readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
     readonly tableId: TableId | void;
     readonly recordIds: ReadonlyArray<RecordId> | void;
-};
+}
 
 /** @hidden */
-export type CreateMultipleRecordsMutation = {
+export interface CreateMultipleRecordsMutation {
     readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
     readonly tableId: TableId;
     readonly records: ReadonlyArray<{
         readonly id: RecordId;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown>;
     }>;
-};
+}
 
 /** @hidden */
-export type PartialCreateMultipleRecordsMutation = {
+export interface PartialCreateMultipleRecordsMutation {
     readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
     readonly tableId: TableId | void;
     readonly records: ReadonlyArray<{
         readonly id: RecordId | void;
         readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | void> | void;
     }> | void;
-};
+}
 
 /** @hidden */
-export type SetMultipleGlobalConfigPathsMutation = {
+export interface SetMultipleGlobalConfigPathsMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS;
     readonly updates: ReadonlyArray<GlobalConfigUpdate>;
-};
+}
 
 /** @hidden */
-export type PartialSetMultipleGlobalConfigPathsMutation = {
+export interface PartialSetMultipleGlobalConfigPathsMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS;
     readonly updates: ReadonlyArray<{
         readonly path: ReadonlyArray<string | void> | void;
         readonly value: GlobalConfigValue | void | void;
     }> | void;
-};
+}
 
 /** @hidden */
 export type Mutation =

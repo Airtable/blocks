@@ -10,7 +10,7 @@ export type TableId = string;
 export type TableLock = unknown;
 
 /** @hidden */
-export type TableData = {
+export interface TableData {
     id: TableId;
     name: string;
     primaryFieldId: string;
@@ -21,12 +21,12 @@ export type TableData = {
     // recordsById will be absent until the block explicity loads the table's data.
     recordsById?: ObjectMap<RecordId, RecordData>;
     lock: TableLock | null;
-};
+}
 
 /** @hidden */
-export type TablePermissionData = {
+export interface TablePermissionData {
     readonly id: TableId;
     readonly name: string;
     readonly fieldsById: {readonly [key: string]: FieldPermissionData};
     readonly lock: TableLock | null;
-};
+}

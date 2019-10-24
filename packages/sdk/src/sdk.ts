@@ -46,10 +46,10 @@ const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
  * }
  * ```
  */
-export type RunInfo = {
+export interface RunInfo {
     isFirstRun: boolean;
     isDevelopmentMode: boolean;
-};
+}
 
 /** @hidden */
 type UpdateBatcher = (applyUpdates: () => void) => void;

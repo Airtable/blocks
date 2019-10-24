@@ -16,12 +16,9 @@
 
 -   [SelectButtonsProps](_airtable_blocks_ui__select.md#selectbuttonsprops)
 -   [SelectButtonsSyncedProps](_airtable_blocks_ui__select.md#selectbuttonssyncedprops)
+-   [SelectOption](_airtable_blocks_ui__select.md#selectoption)
 -   [SelectProps](_airtable_blocks_ui__select.md#selectprops)
 -   [SelectSyncedProps](_airtable_blocks_ui__select.md#selectsyncedprops)
-
-### Type aliases
-
--   [SelectOption](_airtable_blocks_ui__select.md#selectoption)
 
 ## Classes
 
@@ -526,6 +523,23 @@ with larger z-indexes cover those with smaller ones.
 
 ---
 
+### SelectOption
+
+• **SelectOption**:
+
+_Defined in
+[src/ui/select_and_select_buttons_helpers.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L26)_
+
+**`typedef`** {object} SelectOption
+
+**`property`** {string | number | boolean | null} value The value for the select option.
+
+**`property`** {React.ReactNode} label The label for the select option.
+
+**`property`** {boolean} [disabled=false] If set to `true`, this option will not be selectable.
+
+---
+
 ### SelectProps
 
 • **SelectProps**:
@@ -886,20 +900,3 @@ _Defined in
 
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
-
-## Type aliases
-
-### SelectOption
-
-Ƭ **SelectOption**: _Object_
-
-_Defined in
-[src/ui/select_and_select_buttons_helpers.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L26)_
-
-**`typedef`** {object} SelectOption
-
-**`property`** {string | number | boolean | null} value The value for the select option.
-
-**`property`** {React.ReactNode} label The label for the select option.
-
-**`property`** {boolean} [disabled=false] If set to `true`, this option will not be selectable.

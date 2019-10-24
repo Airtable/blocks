@@ -9,12 +9,12 @@ import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import AbstractModel from './abstract_model';
 
 /** @hidden */
-type SessionData = {
+interface SessionData {
     // currentUserId will be null for backend block requests and publicly shared bases.
     currentUserId: UserId | null;
     permissionLevel: PermissionLevel;
     enabledFeatureNames: Array<string>;
-};
+}
 
 const WatchableSessionKeys = Object.freeze({
     permissionLevel: 'permissionLevel' as const,

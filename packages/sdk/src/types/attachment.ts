@@ -2,7 +2,7 @@
 export type AttachmentId = string;
 
 /** @hidden */
-export type AttachmentData = {
+export interface AttachmentData {
     id: AttachmentId;
     url: string;
     filename: string;
@@ -25,4 +25,4 @@ export type AttachmentData = {
             height: number;
         };
     };
-};
+}

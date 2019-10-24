@@ -21,7 +21,7 @@ import Field from './field';
  * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
  * ```
  */
-export type Aggregator = {
+export interface Aggregator {
     key: AggregatorKey;
     displayName: string;
     shortDisplayName: string;
@@ -31,7 +31,7 @@ export type Aggregator = {
     // dynamically on load.
     aggregate: (records: Array<Record>, field: Field) => unknown;
     aggregateToString: (records: Array<Record>, field: Field) => string;
-};
+}
 
 const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {

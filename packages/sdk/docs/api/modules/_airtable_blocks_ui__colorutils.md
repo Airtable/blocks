@@ -8,9 +8,6 @@
 ### Interfaces
 
 -   [ColorUtils](_airtable_blocks_ui__colorutils.md#colorutils)
-
-### Type aliases
-
 -   [RGB](_airtable_blocks_ui__colorutils.md#rgb)
 
 ## Interfaces
@@ -20,7 +17,7 @@
 • **ColorUtils**:
 
 _Defined in
-[src/color_utils.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L9)_
+[src/color_utils.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L13)_
 
 Utilities for working with [Color](_airtable_blocks_ui__colors.md#color) names from the {@link
 colors} enum.
@@ -30,7 +27,7 @@ colors} enum.
 ▸ **shouldUseLightTextOnColor**(`colorString`: string): _boolean_
 
 _Defined in
-[src/color_utils.ts:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L67)_
+[src/color_utils.ts:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L71)_
 
 Given a [Color](_airtable_blocks_ui__colors.md#color), returns true or false to indicate whether
 that color should have light text on top of it when used as a background color.
@@ -59,11 +56,11 @@ colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
 
 boolean
 
-## Type aliases
+---
 
 ### RGB
 
-Ƭ **RGB**: _Object_
+• **RGB**:
 
 _Defined in
 [src/color_utils.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L6)_

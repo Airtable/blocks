@@ -3,7 +3,7 @@
 // that have string as part of the type definition, which makes them somewhat useless.
 // Package repo: https://github.com/frenic/csstype
 
-export type StandardLonghandProperties<TLength = string | 0> = {
+export interface StandardLonghandProperties<TLength = string | 0> {
     marginBottom?: MarginBottomProperty<TLength>;
     alignContent?: AlignContentProperty;
     alignSelf?: AlignSelfProperty;
@@ -338,9 +338,9 @@ export type StandardLonghandProperties<TLength = string | 0> = {
     writingMode?: WritingModeProperty;
     zIndex?: ZIndexProperty;
     zoom?: ZoomProperty;
-};
+}
 
-export type StandardShorthandProperties<TLength = string | 0> = {
+export interface StandardShorthandProperties<TLength = string | 0> {
     flexFlow?: FlexFlowProperty;
     all?: Globals;
     background?: BackgroundProperty<TLength>;
@@ -385,12 +385,12 @@ export type StandardShorthandProperties<TLength = string | 0> = {
     textDecoration?: TextDecorationProperty;
     textEmphasis?: TextEmphasisProperty;
     transition?: TransitionProperty;
-};
+}
 
 export type StandardProperties<TLength = string | 0> = StandardLonghandProperties<TLength> &
     StandardShorthandProperties<TLength>;
 
-export type VendorLonghandProperties<TLength = string | 0> = {
+export interface VendorLonghandProperties<TLength = string | 0> {
     msTransitionProperty?: TransitionPropertyProperty;
     MozAnimationDelay?: GlobalsString;
     MozAnimationDuration?: GlobalsString;
@@ -616,9 +616,9 @@ export type VendorLonghandProperties<TLength = string | 0> = {
     WebkitUserModify?: WebkitUserModifyProperty;
     WebkitUserSelect?: UserSelectProperty;
     WebkitWritingMode?: WritingModeProperty;
-};
+}
 
-export type VendorShorthandProperties<TLength = string | 0> = {
+export interface VendorShorthandProperties<TLength = string | 0> {
     WebkitAnimation?: AnimationProperty;
     MozAnimation?: AnimationProperty;
     MozColumnRule?: ColumnRuleProperty<TLength>;
@@ -643,12 +643,12 @@ export type VendorShorthandProperties<TLength = string | 0> = {
     WebkitTextEmphasis?: TextEmphasisProperty;
     WebkitTextStroke?: WebkitTextStrokeProperty<TLength>;
     WebkitTransition?: TransitionProperty;
-};
+}
 
 export type VendorProperties<TLength = string | 0> = VendorLonghandProperties<TLength> &
     VendorShorthandProperties<TLength>;
 
-export type ObsoleteProperties<TLength = string | 0> = {
+export interface ObsoleteProperties<TLength = string | 0> {
     MozBoxAlign?: BoxAlignProperty;
     boxAlign?: BoxAlignProperty;
     boxFlex?: GlobalsNumber;
@@ -745,9 +745,9 @@ export type ObsoleteProperties<TLength = string | 0> = {
     WebkitBoxPack?: BoxPackProperty;
     WebkitScrollSnapPointsX?: ScrollSnapPointsXProperty;
     WebkitScrollSnapPointsY?: ScrollSnapPointsYProperty;
-};
+}
 
-export type SvgProperties<TLength = string | 0> = {
+export interface SvgProperties<TLength = string | 0> {
     lineHeight?: LineHeightProperty<TLength>;
     alignmentBaseline?: AlignmentBaselineProperty;
     clip?: ClipProperty;
@@ -808,14 +808,14 @@ export type SvgProperties<TLength = string | 0> = {
     whiteSpace?: WhiteSpaceProperty;
     wordSpacing?: WordSpacingProperty<TLength>;
     writingMode?: WritingModeProperty;
-};
+}
 
 export type Properties<TLength = string | 0> = StandardProperties<TLength> &
     VendorProperties<TLength> &
     ObsoleteProperties<TLength> &
     SvgProperties<TLength>;
 
-export type StandardLonghandPropertiesHyphen<TLength = string | 0> = {
+export interface StandardLonghandPropertiesHyphen<TLength = string | 0> {
     ['margin-bottom']?: MarginBottomProperty<TLength>;
     ['align-content']?: AlignContentProperty;
     ['align-self']?: AlignSelfProperty;
@@ -1150,9 +1150,9 @@ export type StandardLonghandPropertiesHyphen<TLength = string | 0> = {
     ['writing-mode']?: WritingModeProperty;
     ['z-index']?: ZIndexProperty;
     zoom?: ZoomProperty;
-};
+}
 
-export type StandardShorthandPropertiesHyphen<TLength = string | 0> = {
+export interface StandardShorthandPropertiesHyphen<TLength = string | 0> {
     ['flex-flow']?: FlexFlowProperty;
     all?: Globals;
     background?: BackgroundProperty<TLength>;
@@ -1197,14 +1197,14 @@ export type StandardShorthandPropertiesHyphen<TLength = string | 0> = {
     ['text-decoration']?: TextDecorationProperty;
     ['text-emphasis']?: TextEmphasisProperty;
     transition?: TransitionProperty;
-};
+}
 
 export type StandardPropertiesHyphen<TLength = string | 0> = StandardLonghandPropertiesHyphen<
     TLength
 > &
     StandardShorthandPropertiesHyphen<TLength>;
 
-export type VendorLonghandPropertiesHyphen<TLength = string | 0> = {
+export interface VendorLonghandPropertiesHyphen<TLength = string | 0> {
     ['-ms-transition-property']?: TransitionPropertyProperty;
     ['-moz-animation-delay']?: GlobalsString;
     ['-moz-animation-duration']?: GlobalsString;
@@ -1430,9 +1430,9 @@ export type VendorLonghandPropertiesHyphen<TLength = string | 0> = {
     ['-webkit-user-modify']?: WebkitUserModifyProperty;
     ['-webkit-user-select']?: UserSelectProperty;
     ['-webkit-writing-mode']?: WritingModeProperty;
-};
+}
 
-export type VendorShorthandPropertiesHyphen<TLength = string | 0> = {
+export interface VendorShorthandPropertiesHyphen<TLength = string | 0> {
     ['-webkit-animation']?: AnimationProperty;
     ['-moz-animation']?: AnimationProperty;
     ['-moz-column-rule']?: ColumnRuleProperty<TLength>;
@@ -1457,12 +1457,12 @@ export type VendorShorthandPropertiesHyphen<TLength = string | 0> = {
     ['-webkit-text-emphasis']?: TextEmphasisProperty;
     ['-webkit-text-stroke']?: WebkitTextStrokeProperty<TLength>;
     ['-webkit-transition']?: TransitionProperty;
-};
+}
 
 export type VendorPropertiesHyphen<TLength = string | 0> = VendorLonghandPropertiesHyphen<TLength> &
     VendorShorthandPropertiesHyphen<TLength>;
 
-export type ObsoletePropertiesHyphen<TLength = string | 0> = {
+export interface ObsoletePropertiesHyphen<TLength = string | 0> {
     ['-moz-box-align']?: BoxAlignProperty;
     ['box-align']?: BoxAlignProperty;
     ['box-flex']?: GlobalsNumber;
@@ -1559,9 +1559,9 @@ export type ObsoletePropertiesHyphen<TLength = string | 0> = {
     ['-webkit-box-pack']?: BoxPackProperty;
     ['-webkit-scroll-snap-points-x']?: ScrollSnapPointsXProperty;
     ['-webkit-scroll-snap-points-y']?: ScrollSnapPointsYProperty;
-};
+}
 
-export type SvgPropertiesHyphen<TLength = string | 0> = {
+export interface SvgPropertiesHyphen<TLength = string | 0> {
     ['line-height']?: LineHeightProperty<TLength>;
     ['alignment-baseline']?: AlignmentBaselineProperty;
     clip?: ClipProperty;
@@ -1622,14 +1622,14 @@ export type SvgPropertiesHyphen<TLength = string | 0> = {
     ['white-space']?: WhiteSpaceProperty;
     ['word-spacing']?: WordSpacingProperty<TLength>;
     ['writing-mode']?: WritingModeProperty;
-};
+}
 
 export type PropertiesHyphen<TLength = string | 0> = StandardPropertiesHyphen<TLength> &
     VendorPropertiesHyphen<TLength> &
     ObsoletePropertiesHyphen<TLength> &
     SvgPropertiesHyphen<TLength>;
 
-export type StandardLonghandPropertiesFallback<TLength = string | 0> = {
+export interface StandardLonghandPropertiesFallback<TLength = string | 0> {
     marginInlineStart?:
         | MarginInlineStartProperty<TLength>
         | Array<MarginInlineStartProperty<TLength>>;
@@ -2050,9 +2050,9 @@ export type StandardLonghandPropertiesFallback<TLength = string | 0> = {
     writingMode?: WritingModeProperty | Array<WritingModeProperty>;
     zIndex?: ZIndexProperty | Array<ZIndexProperty>;
     zoom?: ZoomProperty | Array<ZoomProperty>;
-};
+}
 
-export type StandardShorthandPropertiesFallback<TLength = string | 0> = {
+export interface StandardShorthandPropertiesFallback<TLength = string | 0> {
     flexFlow?: FlexFlowProperty | Array<FlexFlowProperty>;
     borderInlineStart?:
         | BorderInlineStartProperty<TLength>
@@ -2099,14 +2099,14 @@ export type StandardShorthandPropertiesFallback<TLength = string | 0> = {
     textDecoration?: TextDecorationProperty | Array<TextDecorationProperty>;
     textEmphasis?: TextEmphasisProperty | Array<TextEmphasisProperty>;
     transition?: TransitionProperty | Array<TransitionProperty>;
-};
+}
 
 export type StandardPropertiesFallback<TLength = string | 0> = StandardLonghandPropertiesFallback<
     TLength
 > &
     StandardShorthandPropertiesFallback<TLength>;
 
-export type VendorLonghandPropertiesFallback<TLength = string | 0> = {
+export interface VendorLonghandPropertiesFallback<TLength = string | 0> {
     WebkitAnimationIterationCount?:
         | AnimationIterationCountProperty
         | Array<AnimationIterationCountProperty>;
@@ -2412,9 +2412,9 @@ export type VendorLonghandPropertiesFallback<TLength = string | 0> = {
     WebkitUserModify?: WebkitUserModifyProperty | Array<WebkitUserModifyProperty>;
     WebkitUserSelect?: UserSelectProperty | Array<UserSelectProperty>;
     WebkitWritingMode?: WritingModeProperty | Array<WritingModeProperty>;
-};
+}
 
-export type VendorShorthandPropertiesFallback<TLength = string | 0> = {
+export interface VendorShorthandPropertiesFallback<TLength = string | 0> {
     WebkitAnimation?: AnimationProperty | Array<AnimationProperty>;
     WebkitBorderBefore?:
         | WebkitBorderBeforeProperty<TLength>
@@ -2441,14 +2441,14 @@ export type VendorShorthandPropertiesFallback<TLength = string | 0> = {
     WebkitTextEmphasis?: TextEmphasisProperty | Array<TextEmphasisProperty>;
     WebkitTextStroke?: WebkitTextStrokeProperty<TLength> | Array<WebkitTextStrokeProperty<TLength>>;
     WebkitTransition?: TransitionProperty | Array<TransitionProperty>;
-};
+}
 
 export type VendorPropertiesFallback<TLength = string | 0> = VendorLonghandPropertiesFallback<
     TLength
 > &
     VendorShorthandPropertiesFallback<TLength>;
 
-export type ObsoletePropertiesFallback<TLength = string | 0> = {
+export interface ObsoletePropertiesFallback<TLength = string | 0> {
     MozBorderRadiusBottomright?:
         | BorderBottomRightRadiusProperty<TLength>
         | Array<BorderBottomRightRadiusProperty<TLength>>;
@@ -2565,9 +2565,9 @@ export type ObsoletePropertiesFallback<TLength = string | 0> = {
     WebkitBoxPack?: BoxPackProperty | Array<BoxPackProperty>;
     WebkitScrollSnapPointsX?: ScrollSnapPointsXProperty | Array<ScrollSnapPointsXProperty>;
     WebkitScrollSnapPointsY?: ScrollSnapPointsYProperty | Array<ScrollSnapPointsYProperty>;
-};
+}
 
-export type SvgPropertiesFallback<TLength = string | 0> = {
+export interface SvgPropertiesFallback<TLength = string | 0> {
     lineHeight?: LineHeightProperty<TLength> | Array<LineHeightProperty<TLength>>;
     glyphOrientationVertical?:
         | GlyphOrientationVerticalProperty
@@ -2630,14 +2630,14 @@ export type SvgPropertiesFallback<TLength = string | 0> = {
     whiteSpace?: WhiteSpaceProperty | Array<WhiteSpaceProperty>;
     wordSpacing?: WordSpacingProperty<TLength> | Array<WordSpacingProperty<TLength>>;
     writingMode?: WritingModeProperty | Array<WritingModeProperty>;
-};
+}
 
 export type PropertiesFallback<TLength = string | 0> = StandardPropertiesFallback<TLength> &
     VendorPropertiesFallback<TLength> &
     ObsoletePropertiesFallback<TLength> &
     SvgPropertiesFallback<TLength>;
 
-export type StandardLonghandPropertiesHyphenFallback<TLength = string | 0> = {
+export interface StandardLonghandPropertiesHyphenFallback<TLength = string | 0> {
     ['inset-block-start']?:
         | InsetBlockStartProperty<TLength>
         | Array<InsetBlockStartProperty<TLength>>;
@@ -3116,9 +3116,9 @@ export type StandardLonghandPropertiesHyphenFallback<TLength = string | 0> = {
     ['writing-mode']?: WritingModeProperty | Array<WritingModeProperty>;
     ['z-index']?: ZIndexProperty | Array<ZIndexProperty>;
     zoom?: ZoomProperty | Array<ZoomProperty>;
-};
+}
 
-export type StandardShorthandPropertiesHyphenFallback<TLength = string | 0> = {
+export interface StandardShorthandPropertiesHyphenFallback<TLength = string | 0> {
     ['flex-flow']?: FlexFlowProperty | Array<FlexFlowProperty>;
     ['border-block-start']?:
         | BorderBlockStartProperty<TLength>
@@ -3169,14 +3169,14 @@ export type StandardShorthandPropertiesHyphenFallback<TLength = string | 0> = {
     ['text-decoration']?: TextDecorationProperty | Array<TextDecorationProperty>;
     ['text-emphasis']?: TextEmphasisProperty | Array<TextEmphasisProperty>;
     transition?: TransitionProperty | Array<TransitionProperty>;
-};
+}
 
 export type StandardPropertiesHyphenFallback<
     TLength = string | 0
 > = StandardLonghandPropertiesHyphenFallback<TLength> &
     StandardShorthandPropertiesHyphenFallback<TLength>;
 
-export type VendorLonghandPropertiesHyphenFallback<TLength = string | 0> = {
+export interface VendorLonghandPropertiesHyphenFallback<TLength = string | 0> {
     ['-ms-transform-origin']?:
         | TransformOriginProperty<TLength>
         | Array<TransformOriginProperty<TLength>>;
@@ -3574,9 +3574,9 @@ export type VendorLonghandPropertiesHyphenFallback<TLength = string | 0> = {
     ['-webkit-user-modify']?: WebkitUserModifyProperty | Array<WebkitUserModifyProperty>;
     ['-webkit-user-select']?: UserSelectProperty | Array<UserSelectProperty>;
     ['-webkit-writing-mode']?: WritingModeProperty | Array<WritingModeProperty>;
-};
+}
 
-export type VendorShorthandPropertiesHyphenFallback<TLength = string | 0> = {
+export interface VendorShorthandPropertiesHyphenFallback<TLength = string | 0> {
     ['-webkit-animation']?: AnimationProperty | Array<AnimationProperty>;
     ['-webkit-border-before']?:
         | WebkitBorderBeforeProperty<TLength>
@@ -3607,14 +3607,14 @@ export type VendorShorthandPropertiesHyphenFallback<TLength = string | 0> = {
     ['-webkit-text-emphasis']?: TextEmphasisProperty | Array<TextEmphasisProperty>;
     ['-moz-column-rule']?: ColumnRuleProperty<TLength> | Array<ColumnRuleProperty<TLength>>;
     ['-webkit-transition']?: TransitionProperty | Array<TransitionProperty>;
-};
+}
 
 export type VendorPropertiesHyphenFallback<
     TLength = string | 0
 > = VendorLonghandPropertiesHyphenFallback<TLength> &
     VendorShorthandPropertiesHyphenFallback<TLength>;
 
-export type ObsoletePropertiesHyphenFallback<TLength = string | 0> = {
+export interface ObsoletePropertiesHyphenFallback<TLength = string | 0> {
     ['-moz-border-radius-bottomleft']?:
         | BorderBottomLeftRadiusProperty<TLength>
         | Array<BorderBottomLeftRadiusProperty<TLength>>;
@@ -3749,9 +3749,9 @@ export type ObsoletePropertiesHyphenFallback<TLength = string | 0> = {
     ['-webkit-box-pack']?: BoxPackProperty | Array<BoxPackProperty>;
     ['-webkit-scroll-snap-points-x']?: ScrollSnapPointsXProperty | Array<ScrollSnapPointsXProperty>;
     ['-webkit-scroll-snap-points-y']?: ScrollSnapPointsYProperty | Array<ScrollSnapPointsYProperty>;
-};
+}
 
-export type SvgPropertiesHyphenFallback<TLength = string | 0> = {
+export interface SvgPropertiesHyphenFallback<TLength = string | 0> {
     ['line-height']?: LineHeightProperty<TLength> | Array<LineHeightProperty<TLength>>;
     ['glyph-orientation-vertical']?:
         | GlyphOrientationVerticalProperty
@@ -3818,7 +3818,7 @@ export type SvgPropertiesHyphenFallback<TLength = string | 0> = {
     ['white-space']?: WhiteSpaceProperty | Array<WhiteSpaceProperty>;
     ['word-spacing']?: WordSpacingProperty<TLength> | Array<WordSpacingProperty<TLength>>;
     ['writing-mode']?: WritingModeProperty | Array<WritingModeProperty>;
-};
+}
 
 export type PropertiesHyphenFallback<TLength = string | 0> = StandardPropertiesHyphenFallback<
     TLength
@@ -3827,7 +3827,7 @@ export type PropertiesHyphenFallback<TLength = string | 0> = StandardPropertiesH
     ObsoletePropertiesHyphenFallback<TLength> &
     SvgPropertiesHyphenFallback<TLength>;
 
-export type CounterStyle = {
+export interface CounterStyle {
     additiveSymbols?: string;
     fallback?: string;
     negative?: string;
@@ -3838,9 +3838,9 @@ export type CounterStyle = {
     suffix?: string;
     symbols?: string;
     system?: CounterStyleSystemProperty;
-};
+}
 
-export type CounterStyleHyphen = {
+export interface CounterStyleHyphen {
     ['additive-symbols']?: string;
     fallback?: string;
     negative?: string;
@@ -3851,9 +3851,9 @@ export type CounterStyleHyphen = {
     suffix?: string;
     symbols?: string;
     system?: CounterStyleSystemProperty;
-};
+}
 
-export type CounterStyleFallback = {
+export interface CounterStyleFallback {
     additiveSymbols?: string | Array<string>;
     fallback?: string | Array<string>;
     negative?: string | Array<string>;
@@ -3864,9 +3864,9 @@ export type CounterStyleFallback = {
     suffix?: string | Array<string>;
     symbols?: string | Array<string>;
     system?: CounterStyleSystemProperty | Array<CounterStyleSystemProperty>;
-};
+}
 
-export type CounterStyleHyphenFallback = {
+export interface CounterStyleHyphenFallback {
     ['additive-symbols']?: string | Array<string>;
     fallback?: string | Array<string>;
     negative?: string | Array<string>;
@@ -3877,9 +3877,9 @@ export type CounterStyleHyphenFallback = {
     suffix?: string | Array<string>;
     symbols?: string | Array<string>;
     system?: CounterStyleSystemProperty | Array<CounterStyleSystemProperty>;
-};
+}
 
-export type FontFace = {
+export interface FontFace {
     fontStyle?: FontFaceFontStyleProperty;
     MozFontFeatureSettings?: FontFaceFontFeatureSettingsProperty;
     fontFamily?: string;
@@ -3891,9 +3891,9 @@ export type FontFace = {
     fontWeight?: FontFaceFontWeightProperty;
     src?: string;
     unicodeRange?: string;
-};
+}
 
-export type FontFaceHyphen = {
+export interface FontFaceHyphen {
     ['font-style']?: FontFaceFontStyleProperty;
     ['-moz-font-feature-settings']?: FontFaceFontFeatureSettingsProperty;
     ['font-family']?: string;
@@ -3905,9 +3905,9 @@ export type FontFaceHyphen = {
     ['font-weight']?: FontFaceFontWeightProperty;
     src?: string;
     ['unicode-range']?: string;
-};
+}
 
-export type FontFaceFallback = {
+export interface FontFaceFallback {
     MozFontFeatureSettings?:
         | FontFaceFontFeatureSettingsProperty
         | Array<FontFaceFontFeatureSettingsProperty>;
@@ -3925,9 +3925,9 @@ export type FontFaceFallback = {
     fontWeight?: FontFaceFontWeightProperty | Array<FontFaceFontWeightProperty>;
     src?: string | Array<string>;
     fontStyle?: FontFaceFontStyleProperty | Array<FontFaceFontStyleProperty>;
-};
+}
 
-export type FontFaceHyphenFallback = {
+export interface FontFaceHyphenFallback {
     ['-moz-font-feature-settings']?:
         | FontFaceFontFeatureSettingsProperty
         | Array<FontFaceFontFeatureSettingsProperty>;
@@ -3945,29 +3945,29 @@ export type FontFaceHyphenFallback = {
     ['font-weight']?: FontFaceFontWeightProperty | Array<FontFaceFontWeightProperty>;
     src?: string | Array<string>;
     ['font-style']?: FontFaceFontStyleProperty | Array<FontFaceFontStyleProperty>;
-};
+}
 
-export type Page<TLength = string | 0> = {
+export interface Page<TLength = string | 0> {
     bleed?: PageBleedProperty<TLength>;
     marks?: PageMarksProperty;
-};
+}
 
-export type PageHyphen<TLength = string | 0> = {
+export interface PageHyphen<TLength = string | 0> {
     bleed?: PageBleedProperty<TLength>;
     marks?: PageMarksProperty;
-};
+}
 
-export type PageFallback<TLength = string | 0> = {
+export interface PageFallback<TLength = string | 0> {
     bleed?: PageBleedProperty<TLength> | Array<PageBleedProperty<TLength>>;
     marks?: PageMarksProperty | Array<PageMarksProperty>;
-};
+}
 
-export type PageHyphenFallback<TLength = string | 0> = {
+export interface PageHyphenFallback<TLength = string | 0> {
     bleed?: PageBleedProperty<TLength> | Array<PageBleedProperty<TLength>>;
     marks?: PageMarksProperty | Array<PageMarksProperty>;
-};
+}
 
-export type Viewport<TLength = string | 0> = {
+export interface Viewport<TLength = string | 0> {
     OOrientation?: ViewportOrientationProperty;
     msHeight?: ViewportHeightProperty<TLength>;
     msMaxWidth?: ViewportMaxWidthProperty<TLength>;
@@ -3991,9 +3991,9 @@ export type Viewport<TLength = string | 0> = {
     userZoom?: ViewportUserZoomProperty;
     width?: ViewportWidthProperty<TLength>;
     zoom?: ViewportZoomProperty;
-};
+}
 
-export type ViewportHyphen<TLength = string | 0> = {
+export interface ViewportHyphen<TLength = string | 0> {
     ['-o-orientation']?: ViewportOrientationProperty;
     ['-ms-height']?: ViewportHeightProperty<TLength>;
     ['-ms-max-width']?: ViewportMaxWidthProperty<TLength>;
@@ -4017,9 +4017,9 @@ export type ViewportHyphen<TLength = string | 0> = {
     ['user-zoom']?: ViewportUserZoomProperty;
     width?: ViewportWidthProperty<TLength>;
     zoom?: ViewportZoomProperty;
-};
+}
 
-export type ViewportFallback<TLength = string | 0> = {
+export interface ViewportFallback<TLength = string | 0> {
     OOrientation?: ViewportOrientationProperty | Array<ViewportOrientationProperty>;
     msHeight?: ViewportHeightProperty<TLength> | Array<ViewportHeightProperty<TLength>>;
     msMaxWidth?: ViewportMaxWidthProperty<TLength> | Array<ViewportMaxWidthProperty<TLength>>;
@@ -4043,9 +4043,9 @@ export type ViewportFallback<TLength = string | 0> = {
     userZoom?: ViewportUserZoomProperty | Array<ViewportUserZoomProperty>;
     width?: ViewportWidthProperty<TLength> | Array<ViewportWidthProperty<TLength>>;
     zoom?: ViewportZoomProperty | Array<ViewportZoomProperty>;
-};
+}
 
-export type ViewportHyphenFallback<TLength = string | 0> = {
+export interface ViewportHyphenFallback<TLength = string | 0> {
     ['-o-orientation']?: ViewportOrientationProperty | Array<ViewportOrientationProperty>;
     ['-ms-min-height']?:
         | ViewportMinHeightProperty<TLength>
@@ -4077,7 +4077,7 @@ export type ViewportHyphenFallback<TLength = string | 0> = {
     ['user-zoom']?: ViewportUserZoomProperty | Array<ViewportUserZoomProperty>;
     width?: ViewportWidthProperty<TLength> | Array<ViewportWidthProperty<TLength>>;
     zoom?: ViewportZoomProperty | Array<ViewportZoomProperty>;
-};
+}
 
 export type AtRules =
     | '@charset'

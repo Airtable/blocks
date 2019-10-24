@@ -10,13 +10,13 @@ import {CollaboratorData, UserId} from './collaborator';
 export type BaseId = string;
 
 /** @hidden */
-export type ModelChange = {
+export interface ModelChange {
     path: Array<string>;
     value: unknown;
-};
+}
 
 /** @hidden */
-export type BaseData = {
+export interface BaseData {
     id: BaseId;
     name: string;
     tableOrder: Array<TableId>;
@@ -39,10 +39,10 @@ export type BaseData = {
     // Exposed through Cursor model
     // cursorData will be null if it has not been subscribed to.
     cursorData: CursorData | null;
-};
+}
 
 /** @hidden */
-export type BasePermissionData = {
+export interface BasePermissionData {
     readonly permissionLevel: PermissionLevel;
     readonly tablesById: ObjectMap<TableId, TablePermissionData>;
-};
+}

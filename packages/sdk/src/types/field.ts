@@ -679,18 +679,18 @@ export type FieldType = ObjectValues<typeof FieldTypes>;
 /** @hidden */
 export type FieldLock = unknown;
 /** @hidden */
-export type FieldData = {
+export interface FieldData {
     id: FieldId;
     name: string;
     type: PrivateColumnType;
     typeOptions: {[key: string]: unknown} | null | undefined;
     lock: FieldLock | null;
-};
+}
 
 /** @hidden */
-export type FieldPermissionData = {
+export interface FieldPermissionData {
     readonly id: FieldId;
     readonly name: string;
     readonly type: PrivateColumnType;
     readonly lock: FieldLock | null;
-};
+}

@@ -26,11 +26,11 @@ const WatchableCursorKeys = Object.freeze({
 type WatchableCursorKey = ObjectValues<typeof WatchableCursorKeys>;
 
 /** @hidden */
-type CursorData = {
+interface CursorData {
     selectedRecordIdSet: ObjectMap<RecordId, boolean> | null;
     activeTableId: TableId | null;
     activeViewId: ViewId | null;
-};
+}
 
 // NOTE: cursor is an AbstractModel because it includes loadable data.
 /**
