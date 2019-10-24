@@ -33,7 +33,11 @@ const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 const WatchableRecordIdsInViewKeyPrefix = 'recordIdsInView:';
 const WatchableRecordColorsInViewKeyPrefix = 'recordColorsInView:';
 
-// The string case is to accommodate prefix keys
+/**
+ * The string case is to accommodate prefix keys
+ *
+ * @internal
+ */
 export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKeys> | string;
 
 /**
@@ -43,9 +47,7 @@ export type WatchableRecordStoreKey = ObjectValues<typeof WatchableRecordStoreKe
  * @internal
  */
 class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordStoreKey> {
-    /** @internal */
     static _className = 'RecordStore';
-    /** @internal */
     static _isWatchableKey(key: string): boolean {
         return (
             isEnumValue(WatchableRecordStoreKeys, key) ||
@@ -54,7 +56,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             key.startsWith(WatchableRecordColorsInViewKeyPrefix)
         );
     }
-    /** @internal */
     static _shouldLoadDataForKey(key: WatchableRecordStoreKey): boolean {
         // "Data" means *all* cell values in the table. If only watching records/recordIds,
         // we'll just load record metadata (id, createdTime, commentCount).
@@ -64,32 +65,23 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return key === WatchableRecordStoreKeys.cellValues;
     }
 
-    /** */
     readonly tableId: TableId;
-    /** @internal */
     _recordModelsById: ObjectMap<RecordId, Record> = {};
-    /** @internal */
     readonly _primaryFieldId: FieldId;
-    /** @internal */
     readonly _airtableInterface: AirtableInterface;
-    /** @internal */
     readonly _viewDataStoresByViewId: ObjectMap<ViewId, ViewDataStore> = {};
 
     // There is a lot of duplication here and in AbstractModelWithAsyncData.
     // Alternatively, phase out AbstractModelWithAsyncData as a superclass
     // and instead create a helper class for managing each part of the data
     // tree that is loaded.
-    /** @internal */
     _areCellValuesLoadedByFieldId: ObjectMap<FieldId, boolean | undefined> = {};
-    /** @internal */
     _pendingCellValuesLoadPromiseByFieldId: ObjectMap<
         FieldId,
         Promise<Array<WatchableRecordStoreKey>> | undefined
     > = {};
-    /** @internal */
     _cellValuesRetainCountByFieldId: ObjectMap<FieldId, number> = {};
 
-    /** @hidden */
     constructor(baseData: BaseData, airtableInterface: AirtableInterface, tableId: TableId) {
         super(baseData, `${tableId}-RecordStore`);
 
@@ -102,7 +94,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         this._primaryFieldId = this._data.primaryFieldId;
     }
 
-    /** @hidden */
     getViewDataStore(viewId: ViewId): ViewDataStore {
         if (this._viewDataStoresByViewId[viewId]) {
             return this._viewDataStoresByViewId[viewId];
@@ -120,7 +111,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return viewDataStore;
     }
 
-    /** @hidden */
     watch(
         keys: WatchableRecordStoreKey | ReadonlyArray<WatchableRecordStoreKey>,
         callback: FlowAnyFunction,
@@ -134,7 +124,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return validKeys;
     }
 
-    /** @hidden */
     unwatch(
         keys: WatchableRecordStoreKey | ReadonlyArray<WatchableRecordStoreKey>,
         callback: FlowAnyFunction,
@@ -148,7 +137,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return validKeys;
     }
 
-    /** @internal */
     _getFieldIdsToLoadFromWatchableKeys(keys: Array<WatchableRecordStoreKey>): Array<string> {
         const fieldIdsToLoad = [];
         for (const key of keys) {
@@ -165,12 +153,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return fieldIdsToLoad;
     }
 
-    /** @internal */
     get _dataOrNullIfDeleted(): TableData | null {
         return this._baseData.tablesById[this.tableId] || null;
     }
 
-    /** @internal */
     _onChangeIsDataLoaded() {
         // noop
     }
@@ -206,7 +192,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return Object.keys(recordsById);
     }
 
-    /** @hidden */
     getRecordByIdIfExists(recordId: string): Record | null {
         const recordsById = this._data.recordsById;
         if (!recordsById) {
@@ -241,19 +226,16 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return !!this._data.recordsById;
     }
 
-    /** @hidden */
     async loadRecordMetadataAsync() {
         return await this.loadCellValuesInFieldIdsAsync([
             this._getFieldIdForCausingRecordMetadataToLoad(),
         ]);
     }
 
-    /** @hidden */
     unloadRecordMetadata() {
         this.unloadCellValuesInFieldIds([this._getFieldIdForCausingRecordMetadataToLoad()]);
     }
 
-    /** @internal */
     _getFieldIdForCausingRecordMetadataToLoad(): FieldId {
         // As a shortcut, we'll load the primary field cell values to
         // cause record metadata (id, createdTime, commentCount) to be loaded
@@ -262,12 +244,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return this._primaryFieldId;
     }
 
-    /** @hidden */
     areCellValuesLoadedForFieldId(fieldId: FieldId): boolean {
         return this.isDataLoaded || this._areCellValuesLoadedByFieldId[fieldId] || false;
     }
 
-    /** @hidden */
     async loadCellValuesInFieldIdsAsync(fieldIds: Array<FieldId>) {
         const fieldIdsWhichAreNotAlreadyLoadedOrLoading: Array<FieldId> = [];
         const pendingLoadPromises: Array<Promise<Array<WatchableRecordStoreKey>>> = [];
@@ -328,7 +308,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         await Promise.all(pendingLoadPromises);
     }
 
-    /** @internal */
     async _loadCellValuesInFieldIdsAsync(
         fieldIds: Array<FieldId>,
     ): Promise<Array<WatchableRecordStoreKey>> {
@@ -385,7 +364,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return changedKeys;
     }
 
-    /** @hidden */
     unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
         const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
         for (const fieldId of fieldIds) {
@@ -424,13 +402,11 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         }
     }
 
-    /** @internal */
     _unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
         this._airtableInterface.unsubscribeFromCellValuesInFields(this.tableId, fieldIds);
         this._afterUnloadDataOrUnloadCellValuesInFieldIds(fieldIds);
     }
 
-    /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableRecordStoreKey>> {
         const tableData = await this._airtableInterface.fetchAndSubscribeToTableDataAsync(
             this.tableId,
@@ -450,13 +426,11 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return changedKeys;
     }
 
-    /** @internal */
     _unloadData() {
         this._airtableInterface.unsubscribeFromTableData(this.tableId);
         this._afterUnloadDataOrUnloadCellValuesInFieldIds();
     }
 
-    /** @internal */
     _afterUnloadDataOrUnloadCellValuesInFieldIds(unloadedFieldIds?: Array<FieldId>) {
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
@@ -494,7 +468,6 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         }
     }
 
-    /** @hidden */
     triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<TableData>) {
         if (this.isRecordMetadataLoaded && dirtyPaths.recordsById) {
             // Since tables don't have a record order, need to detect if a record

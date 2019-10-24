@@ -15,6 +15,7 @@ import {spawnError} from '../error_utils';
 
 const AIRTABLE_INTERFACE_VERSION = 0;
 
+/** @hidden */
 export type SdkInitData = {
     initialKvValuesByKey: GlobalConfigData;
     isDevelopmentMode: boolean;
@@ -26,10 +27,12 @@ export type SdkInitData = {
     isFirstRun: boolean;
 };
 
+/** @hidden */
 interface IdGenerator {
     generateRecordId(): string;
 }
 
+/** @hidden */
 interface UrlConstructor {
     getTableUrl(tableId: TableId): string;
     getViewUrl(viewId: ViewId, tableId: TableId): string;
@@ -41,14 +44,17 @@ interface UrlConstructor {
     ): string;
 }
 
+/** @hidden */
 export type AggregatorKey = string;
 
+/** @hidden */
 type AggregatorConfig = {
     key: AggregatorKey;
     displayName: string;
     shortDisplayName: string;
 };
 
+/** @hidden */
 interface Aggregators {
     aggregate(
         appInterface: AppInterface,
@@ -67,14 +73,18 @@ interface Aggregators {
     getAvailableAggregatorKeysForField(fieldData: FieldData): Array<AggregatorKey>;
 }
 
+/** @hidden */
 type CellValueValidationResult = {isValid: true} | {isValid: false; reason: string};
+/** @hidden */
 type FieldTypeConfig = {type: FieldType; options?: {[key: string]: unknown}};
+/** @hidden */
 type FieldUiConfig = {
     iconName: string;
     desiredCellWidthForRecordCard: number;
     minimumCellWidthForRecordCard: number;
 };
 
+/** @hidden */
 interface FieldTypeProvider {
     isComputed(fieldData: FieldData): boolean;
     validateCellValueForUpdate(
@@ -107,9 +117,14 @@ interface FieldTypeProvider {
     getUiConfig: (appInterface: AppInterface, fieldData: FieldData) => FieldUiConfig;
 }
 
-// AppInterface should never be used directly by the SDK, so we don't describe the type.
+/**
+ * AppInterface should never be used directly by the SDK, so we don't describe the type.
+ *
+ * @hidden
+ */
 export type AppInterface = unknown;
 
+/** @hidden */
 export interface VisList {
     removeRecordIds(recordIds: Array<RecordId>): void;
     addRecordData(recordData: RecordData): void;

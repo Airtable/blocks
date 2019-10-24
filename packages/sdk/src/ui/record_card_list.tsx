@@ -57,7 +57,7 @@ interface RecordCardItemRendererProps {
  * Item renderer component for react-window FixedSizeList. Responsible for rendering each
  * individual record card item, identified by the index prop.
  *
- * @param {RecordCardItemRendererProps} props
+ * @param props
  * @internal
  */
 function RecordCardItemRenderer(props: RecordCardItemRendererProps) {

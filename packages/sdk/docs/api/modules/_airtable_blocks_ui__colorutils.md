@@ -5,109 +5,32 @@
 
 ## Index
 
+### Interfaces
+
+-   [ColorUtils](_airtable_blocks_ui__colorutils.md#colorutils)
+
 ### Type aliases
 
 -   [RGB](_airtable_blocks_ui__colorutils.md#rgb)
 
-### Object literals
+## Interfaces
 
--   [colorUtils](_airtable_blocks_ui__colorutils.md#const-colorutils)
+### ColorUtils
 
-## Type aliases
-
-### RGB
-
-Ƭ **RGB**: _Object_
+• **ColorUtils**:
 
 _Defined in
-[src/color_utils.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L6)_
-
-**`typedef`**
-
-## Object literals
-
-### `Const` colorUtils
-
-### ▪ **colorUtils**: _object_
-
-_Defined in
-[src/color_utils.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L13)_
+[src/color_utils.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L9)_
 
 Utilities for working with [Color](_airtable_blocks_ui__colors.md#color) names from the {@link
 colors} enum.
-
-### getHexForColor
-
-• **getHexForColor**: _function & function_ = ((colorString: string) => { const color =
-getEnumValueIfExists(Colors, colorString); if (!color) { return null; } const rgbTuple =
-rgbTuplesByColor[color];
-
-        const hexNumber = (rgbTuple[0] << 16) | (rgbTuple[1] << 8) | rgbTuple[2];
-        return `#${hexNumber.toString(16).padStart(6, '0')}`;
-    }) as GetHexForColorType
-
-_Defined in
-[src/color_utils.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L31)_
-
-Given a [Color](_airtable_blocks_ui__colors.md#color), return the hex color value for that color, or
-null if the value isn't a [Color](_airtable_blocks_ui__colors.md#color)
-
-**`function`**
-
-**`param`**
-
-**`returns`** the color hex string or null
-
-**`example`**
-
-```js
-import {colorUtils, colors} from '@airtable/blocks/ui';
-
-colorUtils.getHexForColor(colors.RED);
-// => '#ef3061'
-
-colorUtils.getHexForColor('uncomfortable beige');
-// => null
-```
-
-### getRgbForColor
-
-• **getRgbForColor**: _function & function_ = ((colorString: string) => { const color =
-getEnumValueIfExists(Colors, colorString); if (!color) { return null; } const rgbTuple =
-rgbTuplesByColor[color]; return {r: rgbTuple[0], g: rgbTuple[1], b: rgbTuple[2]}; }) as
-GetRgbForColorType
-
-_Defined in
-[src/color_utils.ts:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L58)_
-
-Given a [Color](_airtable_blocks_ui__colors.md#color), return an
-[RGB](_airtable_blocks_ui__colorutils.md#rgb) object representing it, or null if the value isn't a
-[Color](_airtable_blocks_ui__colors.md#color)
-
-**`function`**
-
-**`param`**
-
-**`returns`** the color object or null
-
-**`example`**
-
-```js
-import {colorUtils, colors} from '@airtable/blocks/ui';
-
-colorUtils.getRgbForColor(colors.PURPLE_DARK_1);
-// => {r: 107, g: 28, b: 176}
-
-colorUtils.getRgbForColor('disgruntled pink');
-// => null
-```
 
 ### shouldUseLightTextOnColor
 
 ▸ **shouldUseLightTextOnColor**(`colorString`: string): _boolean_
 
 _Defined in
-[src/color_utils.ts:83](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L83)_
+[src/color_utils.ts:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L67)_
 
 Given a [Color](_airtable_blocks_ui__colors.md#color), returns true or false to indicate whether
 that color should have light text on top of it when used as a background color.
@@ -135,3 +58,14 @@ colorUtils.shouldUseLightTextOnColor(colors.PINK_DARK_1);
 **Returns:** _boolean_
 
 boolean
+
+## Type aliases
+
+### RGB
+
+Ƭ **RGB**: _Object_
+
+_Defined in
+[src/color_utils.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L6)_
+
+A red/green/blue color object. Each property is a number from 0 to 255.

@@ -1,11 +1,15 @@
+/** @module @airtable/blocks/models: Table */ /** */
 import {ObjectMap} from '../private_utils';
 import {FieldData, FieldPermissionData, FieldId} from './field';
 import {ViewData, ViewId} from './view';
 import {RecordData, RecordId} from './record';
 
+/** */
 export type TableId = string;
+/** @hidden */
 export type TableLock = unknown;
 
+/** @hidden */
 export type TableData = {
     id: TableId;
     name: string;
@@ -19,6 +23,7 @@ export type TableData = {
     lock: TableLock | null;
 };
 
+/** @hidden */
 export type TablePermissionData = {
     readonly id: TableId;
     readonly name: string;

@@ -60,7 +60,7 @@ interface ChoiceTokenProps extends TooltipAnchorProps, StyleProps {
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {ChoiceTokenProps} props
+ * @param props
  *
  * @example
  * ```js

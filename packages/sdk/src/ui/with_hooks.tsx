@@ -8,9 +8,9 @@ import * as React from 'react';
  * use refs with your wrapped component in exactly the same way you would if you weren't using
  * withHooks.
  *
- * @param {React.Component} Component The React component you want to inject hooks into
- * @param {Function} getAdditionalPropsToInject a function that takes props and returns more props to be injected into the wrapped component
- * @returns {React.Component} the wrapped React component
+ * @param Component The React component you want to inject hooks into
+ * @param getAdditionalPropsToInject a function that takes props and returns more props to be injected into the wrapped component
+ * @returns the wrapped React component
  *
  * @example
  * ```js

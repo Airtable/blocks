@@ -17,6 +17,13 @@ const WatchableFieldKeys = Object.freeze({
     isComputed: 'isComputed' as const,
 });
 
+/**
+ * All the watchable keys in a field.
+ * - `name`
+ * - `type`
+ * - `options`
+ * - `isComputed`
+ */
 export type WatchableFieldKey = ObjectValues<typeof WatchableFieldKeys>;
 
 /**
@@ -53,7 +60,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * @function id
      * @memberof Field
      * @instance
-     * @returns {string} This field's ID.
+     * @returns This field's ID.
      * @example
      * ```js
      * console.log(myField.id);
@@ -73,7 +80,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * @function isDeleted
      * @memberof Field
      * @instance
-     * @returns {boolean} `true` if the field has been deleted, `false` otherwise.
+     * @returns `true` if the field has been deleted, `false` otherwise.
      * @example
      * ```js
      * if (!myField.isDeleted) {
@@ -96,10 +103,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * @function watch
      * @memberof Field
      * @instance
-     * @param {(WatchableFieldKey|Array<WatchableFieldKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableFieldKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -110,10 +117,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * @function unwatch
      * @memberof Field
      * @instance
-     * @param {(WatchableFieldKey|Array<WatchableFieldKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableFieldKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**

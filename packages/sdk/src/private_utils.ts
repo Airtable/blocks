@@ -289,6 +289,7 @@ export function clamp(n: number, lowerBound: number, upperBound: number): number
     }
 }
 
+/** @hidden */
 interface ReadonlyDeepArray<T> extends Array<T | ReadonlyDeepArray<T>> {}
 
 /**

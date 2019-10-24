@@ -15,6 +15,11 @@ import * as RecordColoring from './record_coloring';
 const WatchableViewKeys = Object.freeze({
     name: 'name' as const,
 });
+
+/**
+ * A key in {@link View} that can be watched.
+ * - `name`
+ */
 export type WatchableViewKey = ObjectValues<typeof WatchableViewKeys>;
 
 /**
@@ -52,7 +57,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * @function id
      * @memberof View
      * @instance
-     * @returns {string} This view's ID.
+     * @returns This view's ID.
      * @example
      * ```js
      * console.log(myView.id);
@@ -72,7 +77,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * @function isDeleted
      * @memberof View
      * @instance
-     * @returns {boolean} `true` if the view has been deleted, `false` otherwise.
+     * @returns `true` if the view has been deleted, `false` otherwise.
      * @example
      * ```js
      * if (!myView.isDeleted) {
@@ -148,7 +153,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     /**
      * Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
      *
-     * @param [opts={}] Options for the query, such as sorts, fields, and record coloring. By
+     * @param opts Options for the query, such as sorts, fields, and record coloring. By
      * default, records will be coloured according to the view.
      * @returns A record query result.
      * @example
@@ -230,7 +235,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * @instance
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
-     * @param [context] an optional context for `this` in `callback`.
+     * @param context an optional context for `this` in `callback`.
      * @returns the array of keys that were watched
      */
 
@@ -244,7 +249,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * @instance
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
-     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @param context the context that was passed to `.watch` for this `callback`
      * @returns the array of keys that were unwatched
      */
 

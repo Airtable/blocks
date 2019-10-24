@@ -42,6 +42,7 @@ import {
  * * [[TypographySetProps|Typography]]
  * * [[DisplayProps|Display]]
  * * [[OverflowProps|Overflow]]
+ *
  * @noInheritDoc
  */
 export interface AllStylesProps

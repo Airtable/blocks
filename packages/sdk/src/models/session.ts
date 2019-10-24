@@ -8,6 +8,7 @@ import {PermissionLevel} from '../types/permission_levels';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import AbstractModel from './abstract_model';
 
+/** @hidden */
 type SessionData = {
     // currentUserId will be null for backend block requests and publicly shared bases.
     currentUserId: UserId | null;
@@ -21,6 +22,12 @@ const WatchableSessionKeys = Object.freeze({
     // NOTE: the current user's identity will never change, but their name/email/profile pic/etc. can.
     currentUser: 'currentUser' as const,
 });
+
+/**
+ * Watchable keys in {@link Session}.
+ * - `currentUser`
+ * - `permissionLevel`
+ */
 type WatchableSessionKey = ObjectValues<typeof WatchableSessionKeys>;
 
 /**
@@ -77,10 +84,10 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * @function watch
      * @memberof Session
      * @instance
-     * @param {(WatchableSessionKey|Array<WatchableSessionKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableSessionKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -91,10 +98,10 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * @function unwatch
      * @memberof Session
      * @instance
-     * @param {(WatchableSessionKey|Array<WatchableSessionKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableSessionKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**

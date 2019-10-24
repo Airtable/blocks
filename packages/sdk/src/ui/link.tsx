@@ -158,7 +158,7 @@ function _getSanitizedHref(href: string): string | undefined {
  * Developers should use `Link` instead of `a` when possible.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {LinkProps} props
+ * @param props
  *
  * @example
  * import {Link} from '@airtable/blocks/ui';
@@ -172,101 +172,100 @@ function _getSanitizedHref(href: string): string | undefined {
  * }
  * ```
  */
-const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
-    (
+function Link(props: LinkProps, ref: React.Ref<HTMLAnchorElement>) {
+    const {
+        size = TextSize.default,
+        variant = LinkVariant.default,
+        underline = false,
+        icon,
+        href,
+        id,
+        target,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        hasOnClick,
+        tabIndex,
+        className,
+        style,
+        children,
+        dataAttributes,
+        'aria-label': ariaLabel,
+        'aria-labelledby': ariaLabelledBy,
+        'aria-describedby': ariaDescribedBy,
+        'aria-controls': ariaControls,
+        'aria-expanded': ariaExpanded,
+        'aria-haspopup': ariaHasPopup,
+        'aria-hidden': ariaHidden,
+        'aria-live': ariaLive,
+        ...styleProps
+    } = props;
+    const classNameForTextStyle = useTextStyle(size);
+    const classNameForLinkVariant = useLinkVariant(variant);
+    const classNameForUnderline = useStyledSystem({
+        textDecoration: underline ? 'underline' : 'none',
+    });
+    const classNameForStyleProps = useStyledSystem<StyleProps>(
         {
-            size = TextSize.default,
-            variant = LinkVariant.default,
-            underline = false,
-            icon,
-            href,
-            id,
-            target,
-            onMouseEnter,
-            onMouseLeave,
-            onClick,
-            hasOnClick,
-            tabIndex,
-            className,
-            style,
-            children,
-            dataAttributes,
-            'aria-label': ariaLabel,
-            'aria-labelledby': ariaLabelledBy,
-            'aria-describedby': ariaDescribedBy,
-            'aria-controls': ariaControls,
-            'aria-expanded': ariaExpanded,
-            'aria-haspopup': ariaHasPopup,
-            'aria-hidden': ariaHidden,
-            'aria-live': ariaLive,
-            ...styleProps
-        }: LinkProps,
-        ref: React.Ref<HTMLAnchorElement>,
-    ) => {
-        const classNameForTextStyle = useTextStyle(size);
-        const classNameForLinkVariant = useLinkVariant(variant);
-        const classNameForUnderline = useStyledSystem({
-            textDecoration: underline ? 'underline' : 'none',
-        });
-        const classNameForStyleProps = useStyledSystem<StyleProps>(
-            {
-                display: 'inline-flex',
-                // Use a negative margin to undo the padding.
-                padding: '0 0.1em',
-                margin: '0 -0.1em',
-                maxWidth: '100%',
+            display: 'inline-flex',
+            // Use a negative margin to undo the padding.
+            padding: '0 0.1em',
+            margin: '0 -0.1em',
+            maxWidth: '100%',
 
-                ...styleProps,
-            },
-            styleParser,
-        );
+            ...styleProps,
+        },
+        styleParser,
+    );
 
-        // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
-        // https://www.owasp.org/index.php/Reverse_Tabnabbing
-        const rel = target ? 'noopener noreferrer' : undefined;
+    // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
+    // https://www.owasp.org/index.php/Reverse_Tabnabbing
+    const rel = target ? 'noopener noreferrer' : undefined;
 
-        return (
-            <a
-                ref={ref}
-                href={_getSanitizedHref(href)}
-                target={target}
-                id={id}
-                rel={rel}
-                // TODO (stephen): remove tooltip anchor props
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={onClick}
-                tabIndex={tabIndex}
-                className={cx(
-                    classNameForTextStyle,
-                    classNameForLinkVariant,
-                    classNameForUnderline,
-                    classNameForStyleProps,
-                    className,
-                )}
-                style={style}
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-                aria-describedby={ariaDescribedBy}
-                aria-controls={ariaControls}
-                aria-expanded={ariaExpanded}
-                aria-haspopup={ariaHasPopup}
-                aria-hidden={ariaHidden}
-                aria-live={ariaLive}
-                {...dataAttributes}
-            >
-                {typeof icon === 'string' ? (
-                    <Icon name={icon as IconName} size="1em" flex="none" marginRight="0.5em" />
-                ) : (
-                    icon
-                )}
-                {children}
-            </a>
-        );
-    },
-);
+    return (
+        <a
+            ref={ref}
+            href={_getSanitizedHref(href)}
+            target={target}
+            id={id}
+            rel={rel}
+            // TODO (stephen): remove tooltip anchor props
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            tabIndex={tabIndex}
+            className={cx(
+                classNameForTextStyle,
+                classNameForLinkVariant,
+                classNameForUnderline,
+                classNameForStyleProps,
+                className,
+            )}
+            style={style}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            aria-controls={ariaControls}
+            aria-expanded={ariaExpanded}
+            aria-haspopup={ariaHasPopup}
+            aria-hidden={ariaHidden}
+            aria-live={ariaLive}
+            {...dataAttributes}
+        >
+            {typeof icon === 'string' ? (
+                <Icon name={icon as IconName} size="1em" flex="none" marginRight="0.5em" />
+            ) : (
+                icon
+            )}
+            {children}
+        </a>
+    );
+}
 
-Link.propTypes = {
+const ForwardedRefLink = React.forwardRef<HTMLAnchorElement, LinkProps>(Link);
+
+ForwardedRefLink.propTypes = {
     size: textSizePropType,
     variant: linkVariantPropType,
     icon: PropTypes.oneOfType([iconNamePropType, PropTypes.element]),
@@ -281,4 +280,4 @@ Link.propTypes = {
     ...ariaPropTypes,
 };
 
-export default Link;
+export default ForwardedRefLink;

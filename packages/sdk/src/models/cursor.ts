@@ -16,8 +16,16 @@ const WatchableCursorKeys = Object.freeze({
     isDataLoaded: 'isDataLoaded' as const,
 });
 
+/**
+ * Watchable keys in {@link Cursor}.
+ * - `selectedRecordIds`
+ * - `activeTableId`
+ * - `activeViewId`
+ * - `isDataLoaded`
+ */
 type WatchableCursorKey = ObjectValues<typeof WatchableCursorKeys>;
 
+/** @hidden */
 type CursorData = {
     selectedRecordIdSet: ObjectMap<RecordId, boolean> | null;
     activeTableId: TableId | null;
@@ -83,10 +91,10 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @function watch
      * @memberof Cursor
      * @instance
-     * @param {(WatchableCursorKey|Array<WatchableCursorKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableCursorKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -97,10 +105,10 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * @function unwatch
      * @memberof Cursor
      * @instance
-     * @param {(WatchableCursorKey|Array<WatchableCursorKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableCursorKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**

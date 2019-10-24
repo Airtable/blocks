@@ -59,7 +59,7 @@ interface CollaboratorTokenProps extends TooltipAnchorProps, StyleProps {
  * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {CollaboratorTokenProps} props
+ * @param props
  *
  * @example
  * ```js

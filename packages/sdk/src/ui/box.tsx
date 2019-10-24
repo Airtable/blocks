@@ -11,6 +11,7 @@ import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor
  * Props for the Box component. Also accepts:
  * * [[AriaProps]]
  * * [[AllStylesProps]]
+ *
  * @noInheritDoc
  */
 export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps {

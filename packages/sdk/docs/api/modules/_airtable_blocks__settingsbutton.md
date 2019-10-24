@@ -9,6 +9,10 @@
 
 -   [SettingsButton](_airtable_blocks__settingsbutton.md#settingsbutton)
 
+### Type aliases
+
+-   [WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)
+
 ## Classes
 
 ### SettingsButton
@@ -16,7 +20,7 @@
 • **SettingsButton**:
 
 _Defined in
-[src/settings_button.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L32)_
+[src/settings_button.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L37)_
 
 Interface to the settings button that lives outside the block's viewport.
 
@@ -43,7 +47,7 @@ settingsButton.watch('click', () => {
 • **isVisible**:
 
 _Defined in
-[src/settings_button.ts:89](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L89)_
+[src/settings_button.ts:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L94)_
 
 Whether the settings button is being shown. Can be watched.
 
@@ -54,7 +58,7 @@ Whether the settings button is being shown. Can be watched.
 ▸ **hide**(): _void_
 
 _Defined in
-[src/settings_button.ts:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L116)_
+[src/settings_button.ts:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L121)_
 
 Hide the settings button.
 
@@ -70,7 +74,7 @@ visible if there are more calls to `show()` than `hide()`.
 ▸ **show**(): _void_
 
 _Defined in
-[src/settings_button.ts:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L98)_
+[src/settings_button.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L103)_
 
 Show the settings button.
 
@@ -80,8 +84,11 @@ Show the settings button.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableSettingsButtonKey | ReadonlyArray‹WatchableSettingsButtonKey›,
-`callback`: Object, `context?`: FlowAnyObject | null): _Array‹WatchableSettingsButtonKey›_
+▸ **unwatch**(`keys`:
+[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey) |
+ReadonlyArray‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)›,
+`callback`: Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -95,20 +102,24 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                        | Description                                    |
-| ---------- | --------------------------------------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableSettingsButtonKey &#124; ReadonlyArray‹WatchableSettingsButtonKey› | the keys to unwatch                            |
-| `callback` | Object                                                                      | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                                                   | -                                              |
+| Name       | Type                                                                                                                                                                                                            | Description                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | [WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey) &#124; ReadonlyArray‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)› | the keys to unwatch                                         |
+| `callback` | Object                                                                                                                                                                                                          | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                       | the context that was passed to `.watch` for this `callback` |
 
-**Returns:** _Array‹WatchableSettingsButtonKey›_
+**Returns:**
+_Array‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)›_
 
 the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableSettingsButtonKey | ReadonlyArray‹WatchableSettingsButtonKey›,
-`callback`: Object, `context?`: FlowAnyObject | null): _Array‹WatchableSettingsButtonKey›_
+▸ **watch**(`keys`:
+[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey) |
+ReadonlyArray‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)›,
+`callback`: Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -122,12 +133,27 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                        | Description                               |
-| ---------- | --------------------------------------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableSettingsButtonKey &#124; ReadonlyArray‹WatchableSettingsButtonKey› | the keys to watch                         |
-| `callback` | Object                                                                      | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                                                   | -                                         |
+| Name       | Type                                                                                                                                                                                                            | Description                                   |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `keys`     | [WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey) &#124; ReadonlyArray‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)› | the keys to watch                             |
+| `callback` | Object                                                                                                                                                                                                          | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                       | an optional context for `this` in `callback`. |
 
-**Returns:** _Array‹WatchableSettingsButtonKey›_
+**Returns:**
+_Array‹[WatchableSettingsButtonKey](_airtable_blocks__settingsbutton.md#watchablesettingsbuttonkey)›_
 
 the array of keys that were watched
+
+## Type aliases
+
+### WatchableSettingsButtonKey
+
+Ƭ **WatchableSettingsButtonKey**: _ObjectValues‹object›_
+
+_Defined in
+[src/settings_button.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L16)_
+
+A watchable key in [SettingsButton](_airtable_blocks__settingsbutton.md#settingsbutton).
+
+-   `isVisible`
+-   `click`

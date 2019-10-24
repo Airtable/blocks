@@ -24,7 +24,7 @@ interface FieldIconProps extends SharedIconProps, StyleProps {
  * A vector icon for a field's type.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {FieldIconProps} props
+ * @param props
  *
  * @example
  * ```js

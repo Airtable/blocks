@@ -76,10 +76,10 @@ function ActiveView({cursor}) {
 
 **Parameters:**
 
-| Name        | Type                                                                                                                                                                                                                              | Description                  |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `models`    | [Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; ReadonlyArray‹[Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; null &#124; undefined› &#124; null &#124; undefined | the model or models to watch |
-| `keys`      | ReadonlyArray‹Keys &#124; null &#124; undefined›                                                                                                                                                                                  | which keys we want to watch  |
-| `callback?` | undefined &#124; function                                                                                                                                                                                                         | -                            |
+| Name        | Type                                                                                                                                                                                                                              | Description                                                    |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `models`    | [Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; ReadonlyArray‹[Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; null &#124; undefined› &#124; null &#124; undefined | the model or models to watch                                   |
+| `keys`      | ReadonlyArray‹Keys &#124; null &#124; undefined›                                                                                                                                                                                  | which keys we want to watch                                    |
+| `callback?` | undefined &#124; function                                                                                                                                                                                                         | an optional callback to call when any of the watch keys change |
 
 **Returns:** _void_

@@ -39,9 +39,9 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  * load-state of any model you passed in changes, and you should check each model's `.isDataLoaded`
  *  property before trying to use the data you loaded.
  *
- * @param {QueryResult | Cursor | Array<QueryResult | Cursor | null> | null} models the models to load.
- * @param {object} [options] Optional options to control how the hook works
- * @param {boolean} [options.shouldSuspend=true] pass {shouldSuspend: false} to disable suspense
+ * @param models the models to load.
+ * @param options Optional options to control how the hook works
+ * @param options.shouldSuspend pass {shouldSuspend: false} to disable suspense
  * mode. If suspense is disabled, you need to manually check model.isDataLoaded so you don't use
  * your model before it's ready.
  *

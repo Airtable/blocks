@@ -1,5 +1,7 @@
+/** @hidden */
 export type AttachmentId = string;
 
+/** @hidden */
 export type AttachmentData = {
     id: AttachmentId;
     url: string;

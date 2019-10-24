@@ -49,7 +49,7 @@ async function pickRecordsAsync() {
 | Name      | Type                                                       | Description                                                            |
 | --------- | ---------------------------------------------------------- | ---------------------------------------------------------------------- |
 | `records` | Array‹[Record](_airtable_blocks_models__record.md#record)› | the records the user can pick from. Duplicate records will be removed. |
-| `opts?`   | undefined &#124; object                                    | -                                                                      |
+| `opts?`   | undefined &#124; object                                    | An optional options object.                                            |
 
 **Returns:** _Promise‹[Record](_airtable_blocks_models__record.md#record) | null›_
 

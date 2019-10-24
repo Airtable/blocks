@@ -47,9 +47,9 @@ expandRecord(record1, {
 
 **Parameters:**
 
-| Name     | Type                                                                      | Description          |
-| -------- | ------------------------------------------------------------------------- | -------------------- |
-| `record` | [Record](_airtable_blocks_models__record.md#record)                       | the record to expand |
-| `opts?`  | [ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts) | -                    |
+| Name     | Type                                                                      | Description                 |
+| -------- | ------------------------------------------------------------------------- | --------------------------- |
+| `record` | [Record](_airtable_blocks_models__record.md#record)                       | the record to expand        |
+| `opts?`  | [ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts) | An optional options object. |
 
 **Returns:** _void_

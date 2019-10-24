@@ -51,12 +51,19 @@ export type RunInfo = {
     isDevelopmentMode: boolean;
 };
 
+/** @hidden */
 type UpdateBatcher = (applyUpdates: () => void) => void;
+
 /** @internal */
 function defaultUpdateBatcher(applyUpdates: () => void) {
     applyUpdates();
 }
 
+/**
+ * We document this manually.
+ *
+ * @hidden
+ */
 export default class BlockSdk {
     /** @hidden */
     static VERSION = global.PACKAGE_VERSION;

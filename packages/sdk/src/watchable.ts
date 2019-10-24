@@ -55,7 +55,7 @@ class Watchable<WatchableKey extends string> {
      *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
-     * @param [context] an optional context for `this` in `callback`.
+     * @param context an optional context for `this` in `callback`.
      * @returns the array of keys that were watched
      */
     watch(
@@ -101,7 +101,7 @@ class Watchable<WatchableKey extends string> {
      *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
-     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @param context the context that was passed to `.watch` for this `callback`
      * @returns the array of keys that were unwatched
      */
     unwatch(

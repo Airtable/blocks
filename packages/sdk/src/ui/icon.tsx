@@ -76,7 +76,7 @@ interface IconProps extends SharedIconProps {
  * A vector icon from the Airtable icon set.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {IconProps} props
+ * @param props
  *
  * @example
  * ```js

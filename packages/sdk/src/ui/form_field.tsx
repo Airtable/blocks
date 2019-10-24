@@ -85,7 +85,7 @@ interface FormFieldProps extends StyleProps {
  * `htmlFor` prop to this component and manually set the `id` attribute on your wrapped control to
  * the same value.
  *
- * @param {FormFieldProps} props
+ * @param props
  *
  * @example
  * ```js

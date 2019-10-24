@@ -9,6 +9,10 @@
 
 -   [Cursor](_airtable_blocks_models__cursor.md#cursor)
 
+### Type aliases
+
+-   [WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)
+
 ## Classes
 
 ### Cursor
@@ -16,7 +20,7 @@
 • **Cursor**:
 
 _Defined in
-[src/models/cursor.ts:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L36)_
+[src/models/cursor.ts:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L44)_
 
 Contains information about the state of the user's current interactions in Airtable
 
@@ -31,7 +35,7 @@ import {cursor} from '@airtable/blocks';
 • **activeTableId**:
 
 _Defined in
-[src/models/cursor.ts:176](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L176)_
+[src/models/cursor.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L184)_
 
 The currently active table ID.
 
@@ -45,7 +49,7 @@ is not yet loaded.
 • **activeViewId**:
 
 _Defined in
-[src/models/cursor.ts:187](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L187)_
+[src/models/cursor.ts:195](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L195)_
 
 The currently active view ID. This will always be a view belonging to `activeTableId`
 
@@ -104,7 +108,7 @@ data.
 • **selectedRecordIds**:
 
 _Defined in
-[src/models/cursor.ts:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L141)_
+[src/models/cursor.ts:149](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L149)_
 
 The record IDs of all currently selected records, or an empty array if no records are selected.
 
@@ -119,7 +123,7 @@ selected.
 string): _boolean_
 
 _Defined in
-[src/models/cursor.ts:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L155)_
+[src/models/cursor.ts:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L163)_
 
 Checks whether a given record is selected.
 
@@ -178,8 +182,10 @@ _Defined in
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableCursorKey | ReadonlyArray‹WatchableCursorKey›, `callback`:
-FlowAnyFunction, `context?`: FlowAnyObject | null): _Array‹WatchableCursorKey›_
+▸ **unwatch**(`keys`: [WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey) |
+ReadonlyArray‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)›,
+`callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
+_Array‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)›_
 
 _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -197,18 +203,20 @@ released. Once the data is available, the callback will be called.
 
 **Parameters:**
 
-| Name       | Type                                                        |
-| ---------- | ----------------------------------------------------------- |
-| `keys`     | WatchableCursorKey &#124; ReadonlyArray‹WatchableCursorKey› |
-| `callback` | FlowAnyFunction                                             |
-| `context?` | FlowAnyObject &#124; null                                   |
+| Name       | Type                                                                                                                                                                          |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey) &#124; ReadonlyArray‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                               |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                     |
 
-**Returns:** _Array‹WatchableCursorKey›_
+**Returns:** _Array‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)›_
 
 ### watch
 
-▸ **watch**(`keys`: WatchableCursorKey | ReadonlyArray‹WatchableCursorKey›, `callback`:
-FlowAnyFunction, `context?`: FlowAnyObject | null): _Array‹WatchableCursorKey›_
+▸ **watch**(`keys`: [WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey) |
+ReadonlyArray‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)›,
+`callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
+_Array‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)›_
 
 _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -226,10 +234,26 @@ fetched. Once the data is available, the callback will be called.
 
 **Parameters:**
 
-| Name       | Type                                                        |
-| ---------- | ----------------------------------------------------------- |
-| `keys`     | WatchableCursorKey &#124; ReadonlyArray‹WatchableCursorKey› |
-| `callback` | FlowAnyFunction                                             |
-| `context?` | FlowAnyObject &#124; null                                   |
+| Name       | Type                                                                                                                                                                          |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey) &#124; ReadonlyArray‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                               |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                     |
 
-**Returns:** _Array‹WatchableCursorKey›_
+**Returns:** _Array‹[WatchableCursorKey](_airtable_blocks_models__cursor.md#watchablecursorkey)›_
+
+## Type aliases
+
+### WatchableCursorKey
+
+Ƭ **WatchableCursorKey**: _ObjectValues‹object›_
+
+_Defined in
+[src/models/cursor.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L26)_
+
+Watchable keys in [Cursor](_airtable_blocks_models__cursor.md#cursor).
+
+-   `selectedRecordIds`
+-   `activeTableId`
+-   `activeViewId`
+-   `isDataLoaded`

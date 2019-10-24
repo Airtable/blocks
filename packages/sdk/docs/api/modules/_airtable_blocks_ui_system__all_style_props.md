@@ -16,7 +16,7 @@
 • **AllStylesProps**:
 
 _Defined in
-[src/ui/system/all_styles_set.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/all_styles_set.ts#L47)_
+[src/ui/system/all_styles_set.ts:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/all_styles_set.ts#L48)_
 
 All supported style props:
 

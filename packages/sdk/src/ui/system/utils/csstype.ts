@@ -1,3 +1,4 @@
+/** @hidden */ /** */
 // We have lifted this file from `csstype` package to fine tune some of the enum types
 // that have string as part of the type definition, which makes them somewhat useless.
 // Package repo: https://github.com/frenic/csstype

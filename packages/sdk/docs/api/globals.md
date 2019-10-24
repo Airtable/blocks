@@ -78,5 +78,6 @@
 -   [@airtable/blocks/ui: useWatchable](modules/_airtable_blocks_ui__usewatchable.md)
 -   [@airtable/blocks/ui: withHooks](modules/_airtable_blocks_ui__withhooks.md)
 -   [@airtable/blocks: globalConfig](modules/_airtable_blocks__globalconfig.md)
+-   [@airtable/blocks: mutations](modules/_airtable_blocks__mutations.md)
 -   [@airtable/blocks: settingsButton](modules/_airtable_blocks__settingsbutton.md)
 -   [@airtable/blocks: viewport](modules/_airtable_blocks__viewport.md)

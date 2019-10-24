@@ -96,7 +96,7 @@ interface ProgressBarProps extends TooltipAnchorProps, StyleProps {
  * A progress bar.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {ProgressBarProps} props
+ * @param props
  *
  * @example
  * ```js

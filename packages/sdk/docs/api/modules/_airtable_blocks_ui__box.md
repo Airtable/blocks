@@ -20,7 +20,7 @@
 • **BoxProps**:
 
 _Defined in
-[src/ui/box.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L16)_
+[src/ui/box.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L17)_
 
 Props for the Box component. Also accepts:
 
@@ -33,7 +33,7 @@ Props for the Box component. Also accepts:
 | "address" | "hgroup" | "blockquote" | "figure" | "figcaption" | "ol" | "ul" | "li" | "pre"_
 
 _Defined in
-[src/ui/box.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L18)_
+[src/ui/box.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L19)_
 
 The element that is rendered. Defaults to `div`.
 
@@ -42,7 +42,7 @@ The element that is rendered. Defaults to `div`.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/box.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L45)_
+[src/ui/box.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L46)_
 
 Additional class names to apply, separated by spaces.
 
@@ -51,7 +51,7 @@ Additional class names to apply, separated by spaces.
 • **dataAttributes**? : _undefined | object_
 
 _Defined in
-[src/ui/box.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L49)_
+[src/ui/box.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L50)_
 
 Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`.
 
@@ -60,7 +60,7 @@ Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/box.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L43)_
+[src/ui/box.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L44)_
 
 The `id` attribute.
 
@@ -69,7 +69,7 @@ The `id` attribute.
 • **role**? : _undefined | string_
 
 _Defined in
-[src/ui/box.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L41)_
+[src/ui/box.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L42)_
 
 The `role` attribute.
 
@@ -78,7 +78,7 @@ The `role` attribute.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/box.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L47)_
+[src/ui/box.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L48)_
 
 Additional styles.
 
@@ -87,7 +87,7 @@ Additional styles.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/box.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L39)_
+[src/ui/box.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L40)_
 
 The `tabIndex` attribute.
 
@@ -99,7 +99,7 @@ The `tabIndex` attribute.
 _Element_
 
 _Defined in
-[src/ui/box.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L68)_
+[src/ui/box.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/box.tsx#L69)_
 
 A box component for creating layouts.
 

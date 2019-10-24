@@ -27,6 +27,7 @@ import Record from './record';
 import RecordStore, {WatchableRecordStoreKeys} from './record_store';
 import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 
+/** @hidden */
 type TableOrViewQueryResultData = {
     recordIds: Array<string> | null; // null if data isn't loaded (or if it hasn't been lazily initialized).
 };

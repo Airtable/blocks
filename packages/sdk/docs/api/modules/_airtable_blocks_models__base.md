@@ -9,6 +9,16 @@
 
 -   [Base](_airtable_blocks_models__base.md#base)
 
+### Interfaces
+
+-   [CollaboratorData](_airtable_blocks_models__base.md#collaboratordata)
+
+### Type aliases
+
+-   [BaseId](_airtable_blocks_models__base.md#baseid)
+-   [UserId](_airtable_blocks_models__base.md#userid)
+-   [WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)
+
 ## Classes
 
 ### Base
@@ -16,7 +26,7 @@
 • **Base**:
 
 _Defined in
-[src/models/base.ts:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L57)_
+[src/models/base.ts:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L59)_
 
 Model class representing a base.
 
@@ -33,7 +43,7 @@ console.log('The name of your base is', base.name);
 • **activeCollaborators**:
 
 _Defined in
-[src/models/base.ts:177](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L177)_
+[src/models/base.ts:179](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L179)_
 
 **`function`**
 
@@ -86,7 +96,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/base.ts:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L141)_
+[src/models/base.ts:143](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L143)_
 
 **`function`**
 
@@ -104,7 +114,7 @@ console.log('The name of your base is', base.name);
 • **tables**:
 
 _Defined in
-[src/models/base.ts:153](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L153)_
+[src/models/base.ts:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L155)_
 
 **`function`**
 
@@ -120,18 +130,19 @@ console.log(`You have ${base.tables.length} tables`);
 
 ### getCollaboratorById
 
-▸ **getCollaboratorById**(`collaboratorId`: UserId): _CollaboratorData_
+▸ **getCollaboratorById**(`collaboratorId`: [UserId](_airtable_blocks_models__base.md#userid)):
+_[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata)_
 
 _Defined in
-[src/models/base.ts:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L197)_
+[src/models/base.ts:199](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L199)_
 
 **Parameters:**
 
-| Name             | Type   | Description         |
-| ---------------- | ------ | ------------------- |
-| `collaboratorId` | UserId | The ID of the user. |
+| Name             | Type                                              | Description         |
+| ---------------- | ------------------------------------------------- | ------------------- |
+| `collaboratorId` | [UserId](_airtable_blocks_models__base.md#userid) | The ID of the user. |
 
-**Returns:** _CollaboratorData_
+**Returns:** _[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata)_
 
 The user matching the given ID. Throws if that user does not exist or does not have access to this
 base. Use
@@ -140,18 +151,20 @@ if you are unsure whether a collaborator with the given ID exists and has access
 
 ### getCollaboratorByIdIfExists
 
-▸ **getCollaboratorByIdIfExists**(`collaboratorId`: UserId): _CollaboratorData | null_
+▸ **getCollaboratorByIdIfExists**(`collaboratorId`:
+[UserId](_airtable_blocks_models__base.md#userid)):
+_[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata) | null_
 
 _Defined in
-[src/models/base.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L186)_
+[src/models/base.ts:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L188)_
 
 **Parameters:**
 
-| Name             | Type   | Description         |
-| ---------------- | ------ | ------------------- |
-| `collaboratorId` | UserId | The ID of the user. |
+| Name             | Type                                              | Description         |
+| ---------------- | ------------------------------------------------- | ------------------- |
+| `collaboratorId` | [UserId](_airtable_blocks_models__base.md#userid) | The ID of the user. |
 
-**Returns:** _CollaboratorData | null_
+**Returns:** _[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata) | null_
 
 The user matching the given ID, or `null` if that user does not exist or does not have access to
 this base.
@@ -161,7 +174,7 @@ this base.
 ▸ **getTableById**(`tableId`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:252](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L252)_
+[src/models/base.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L254)_
 
 **Parameters:**
 
@@ -181,7 +194,7 @@ unsure whether a table exists with the given ID.
 null_
 
 _Defined in
-[src/models/base.ts:232](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L232)_
+[src/models/base.ts:234](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L234)_
 
 **Parameters:**
 
@@ -198,7 +211,7 @@ The table matching the given ID, or `null` if that table does not exist in this 
 ▸ **getTableByName**(`tableName`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:275](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L275)_
+[src/models/base.ts:277](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L277)_
 
 **Parameters:**
 
@@ -218,7 +231,7 @@ unsure whether a table exists with the given name.
 | null_
 
 _Defined in
-[src/models/base.ts:263](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L263)_
+[src/models/base.ts:265](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L265)_
 
 **Parameters:**
 
@@ -246,8 +259,10 @@ A string representation of the model for use in debugging.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableBaseKey | ReadonlyArray‹WatchableBaseKey›, `callback`: Object,
-`context?`: FlowAnyObject | null): _Array‹WatchableBaseKey›_
+▸ **unwatch**(`keys`: [WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey) |
+ReadonlyArray‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)›, `callback`:
+Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -261,20 +276,22 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                    | Description                                    |
-| ---------- | ------------------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableBaseKey &#124; ReadonlyArray‹WatchableBaseKey› | the keys to unwatch                            |
-| `callback` | Object                                                  | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                               | -                                              |
+| Name       | Type                                                                                                                                                              | Description                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | [WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey) &#124; ReadonlyArray‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)› | the keys to unwatch                                         |
+| `callback` | Object                                                                                                                                                            | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                         | the context that was passed to `.watch` for this `callback` |
 
-**Returns:** _Array‹WatchableBaseKey›_
+**Returns:** _Array‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)›_
 
 the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableBaseKey | ReadonlyArray‹WatchableBaseKey›, `callback`: Object,
-`context?`: FlowAnyObject | null): _Array‹WatchableBaseKey›_
+▸ **watch**(`keys`: [WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey) |
+ReadonlyArray‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)›, `callback`:
+Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -288,12 +305,83 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                    | Description                               |
-| ---------- | ------------------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableBaseKey &#124; ReadonlyArray‹WatchableBaseKey› | the keys to watch                         |
-| `callback` | Object                                                  | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                               | -                                         |
+| Name       | Type                                                                                                                                                              | Description                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `keys`     | [WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey) &#124; ReadonlyArray‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)› | the keys to watch                             |
+| `callback` | Object                                                                                                                                                            | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                         | an optional context for `this` in `callback`. |
 
-**Returns:** _Array‹WatchableBaseKey›_
+**Returns:** _Array‹[WatchableBaseKey](_airtable_blocks_models__base.md#watchablebasekey)›_
 
 the array of keys that were watched
+
+## Interfaces
+
+### CollaboratorData
+
+• **CollaboratorData**:
+
+_Defined in
+[src/types/collaborator.ts:7](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L7)_
+
+### email
+
+• **email**: _string_
+
+_Defined in
+[src/types/collaborator.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L11)_
+
+### id
+
+• **id**: _[UserId](_airtable_blocks_models__base.md#userid)_
+
+_Defined in
+[src/types/collaborator.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L9)_
+
+### `Optional` name
+
+• **name**? : _undefined | string_
+
+_Defined in
+[src/types/collaborator.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L13)_
+
+### `Optional` profilePicUrl
+
+• **profilePicUrl**? : _undefined | string_
+
+_Defined in
+[src/types/collaborator.ts:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L15)_
+
+## Type aliases
+
+### BaseId
+
+Ƭ **BaseId**: _string_
+
+_Defined in
+[src/types/base.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/base.ts#L10)_
+
+---
+
+### UserId
+
+Ƭ **UserId**: _string_
+
+_Defined in
+[src/types/collaborator.ts:4](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L4)_
+
+---
+
+### WatchableBaseKey
+
+Ƭ **WatchableBaseKey**: _ObjectValues‹object›_
+
+_Defined in
+[src/models/base.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L40)_
+
+Any key in base that can be watched:
+
+-   `name`: the name of the base
+-   `tables`: the order of tables in the base
+-   `collaborators`: all the collaborators in the base
+-   `schema`: the base schema (essentially everything except for record data)

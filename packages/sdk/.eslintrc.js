@@ -22,11 +22,18 @@ module.exports = {
         'react',
         'react-hooks',
         'import',
+        'jsdoc',
         '@typescript-eslint',
     ],
     settings: {
         react: {
             version: '16.8',
+        },
+        jsdoc: {
+            ignorePrivate: true,
+            tagNamePreference: {
+                private: 'internal',
+            },
         },
     },
     rules: {
@@ -118,6 +125,13 @@ module.exports = {
         '@airtable/blocks/no-throw-new': 'error',
         '@airtable/blocks/no-node-modules-invariant': 'error',
         '@airtable/blocks/no-error-interpolation': ['error', {spawnError: 0, invariant: 1}],
+
+        'jsdoc/check-tag-names': [
+            'error',
+            {definedTags: ['hidden', 'reactComponent', 'noInheritDoc']},
+        ],
+        'jsdoc/newline-after-description': 'error',
+        'jsdoc/no-types': 'error',
 
         'import/first': 'error',
         'import/order': 'error',

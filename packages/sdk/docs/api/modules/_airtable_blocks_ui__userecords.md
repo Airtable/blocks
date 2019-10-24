@@ -13,7 +13,8 @@
 
 ### useRecordById
 
-▸ **useRecordById**(`queryResult`: AnyQueryResult | null, `recordId`: RecordId):
+▸ **useRecordById**(`queryResult`: AnyQueryResult | null, `recordId`:
+[RecordId](_airtable_blocks_models__record.md#recordid)):
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Defined in
@@ -62,10 +63,10 @@ function RecordList() {
 
 **Parameters:**
 
-| Name          | Type                       | Description                                         |
-| ------------- | -------------------------- | --------------------------------------------------- |
-| `queryResult` | AnyQueryResult &#124; null | the query result you want a record from             |
-| `recordId`    | RecordId                   | the ID of the record you want from the query result |
+| Name          | Type                                                    | Description                                         |
+| ------------- | ------------------------------------------------------- | --------------------------------------------------- |
+| `queryResult` | AnyQueryResult &#124; null                              | the query result you want a record from             |
+| `recordId`    | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the record you want from the query result |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record) | null_
 

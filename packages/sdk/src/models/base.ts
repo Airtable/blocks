@@ -30,11 +30,20 @@ const WatchableBaseKeys = Object.freeze({
     schema: 'schema' as const,
 });
 
+/**
+ * Any key in base that can be watched:
+ * - `name`: the name of the base
+ * - `tables`: the order of tables in the base
+ * - `collaborators`: all the collaborators in the base
+ * - `schema`: the base schema (essentially everything except for record data)
+ */
 type WatchableBaseKey = ObjectValues<typeof WatchableBaseKeys>;
 
+/** @internal */
 type ChangedPathsForObject<T extends object> = {[K in keyof T]?: ChangedPathsForType<T[K]>} & {
     _isDirty?: true;
 };
+/** @internal */
 export type ChangedPathsForType<T> = T extends {} ? ChangedPathsForObject<T> : {_isDirty?: true};
 
 /**
@@ -74,7 +83,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function id
      * @memberof Base
      * @instance
-     * @returns {string} This base's ID.
+     * @returns This base's ID.
      * @example
      * ```js
      * import {base} from '@airtable/blocks';
@@ -96,10 +105,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function watch
      * @memberof Base
      * @instance
-     * @param {(WatchableBaseKey|Array<WatchableBaseKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {object?} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableBaseKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -110,10 +119,10 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @function unwatch
      * @memberof Base
      * @instance
-     * @param {(WatchableBaseKey|Array<WatchableBaseKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {object?} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableBaseKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**

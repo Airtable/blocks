@@ -14,6 +14,13 @@
 -   [View](_airtable_blocks_models__view.md#view)
 -   [ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult)
 
+### Type aliases
+
+-   [ViewId](_airtable_blocks_models__view.md#viewid)
+-   [ViewType](_airtable_blocks_models__view.md#viewtype)
+-   [WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)
+-   [WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)
+
 ## Enumerations
 
 ### ViewTypes
@@ -21,7 +28,7 @@
 • **ViewTypes**:
 
 _Defined in
-[src/types/view.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L21)_
+[src/types/view.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L22)_
 
 An enum of Airtable's view types
 
@@ -39,7 +46,7 @@ const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
 • **CALENDAR**: = "calendar"
 
 _Defined in
-[src/types/view.ts:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L36)_
+[src/types/view.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L37)_
 
 **`alias`** viewTypes.CALENDAR
 
@@ -50,7 +57,7 @@ _Defined in
 • **FORM**: = "form"
 
 _Defined in
-[src/types/view.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L31)_
+[src/types/view.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L32)_
 
 **`alias`** viewTypes.FORM
 
@@ -61,7 +68,7 @@ _Defined in
 • **GALLERY**: = "gallery"
 
 _Defined in
-[src/types/view.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L41)_
+[src/types/view.ts:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L42)_
 
 **`alias`** viewTypes.GALLERY
 
@@ -72,7 +79,7 @@ _Defined in
 • **GRID**: = "grid"
 
 _Defined in
-[src/types/view.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L26)_
+[src/types/view.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L27)_
 
 **`alias`** viewTypes.GRID
 
@@ -83,7 +90,7 @@ _Defined in
 • **KANBAN**: = "kanban"
 
 _Defined in
-[src/types/view.ts:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L46)_
+[src/types/view.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L47)_
 
 **`alias`** viewTypes.KANBAN
 
@@ -96,7 +103,7 @@ _Defined in
 • **View**:
 
 _Defined in
-[src/models/view.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L23)_
+[src/models/view.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L28)_
 
 A class that represents an Airtable view. Every [Table](_airtable_blocks_models__table.md#table) has
 one or more views.
@@ -141,7 +148,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/view.ts:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L118)_
+[src/models/view.ts:123](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L123)_
 
 **`function`**
 
@@ -159,7 +166,7 @@ console.log(myView.name);
 • **type**:
 
 _Defined in
-[src/models/view.ts:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L130)_
+[src/models/view.ts:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L135)_
 
 **`function`**
 
@@ -178,7 +185,7 @@ console.log(myView.type);
 • **url**:
 
 _Defined in
-[src/models/view.ts:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L142)_
+[src/models/view.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L147)_
 
 **`function`**
 
@@ -198,7 +205,7 @@ console.log(myView.url);
 _[ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult)_
 
 _Defined in
-[src/models/view.ts:216](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L216)_
+[src/models/view.ts:221](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L221)_
 
 Select the field order and visible fields from the view. See {@ViewMetadataQueryResult} for more.
 
@@ -227,11 +234,12 @@ a {@ViewMetadataQueryResult}
 
 ### selectRecords
 
-▸ **selectRecords**(`opts`: RecordQueryResultOpts):
+▸ **selectRecords**(`opts`:
+[RecordQueryResultOpts](_airtable_blocks_models__recordqueryresult.md#recordqueryresultopts)):
 _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)_
 
 _Defined in
-[src/models/view.ts:179](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L179)_
+[src/models/view.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L184)_
 
 Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
 
@@ -261,9 +269,9 @@ function TodoList() {
 
 **Parameters:**
 
-| Name   | Type                  | Default |
-| ------ | --------------------- | ------- |
-| `opts` | RecordQueryResultOpts | {}      |
+| Name   | Type                                                                                         | Default | Description                                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `opts` | [RecordQueryResultOpts](_airtable_blocks_models__recordqueryresult.md#recordqueryresultopts) | {}      | Options for the query, such as sorts, fields, and record coloring. By default, records will be coloured according to the view. |
 
 **Returns:**
 _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)_
@@ -286,8 +294,10 @@ A string representation of the model for use in debugging.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableViewKey | ReadonlyArray‹WatchableViewKey›, `callback`: Object,
-`context?`: FlowAnyObject | null): _Array‹WatchableViewKey›_
+▸ **unwatch**(`keys`: [WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey) |
+ReadonlyArray‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)›, `callback`:
+Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -301,20 +311,22 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                    | Description                                    |
-| ---------- | ------------------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableViewKey &#124; ReadonlyArray‹WatchableViewKey› | the keys to unwatch                            |
-| `callback` | Object                                                  | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                               | -                                              |
+| Name       | Type                                                                                                                                                              | Description                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | [WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey) &#124; ReadonlyArray‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)› | the keys to unwatch                                         |
+| `callback` | Object                                                                                                                                                            | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                         | the context that was passed to `.watch` for this `callback` |
 
-**Returns:** _Array‹WatchableViewKey›_
+**Returns:** _Array‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)›_
 
 the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableViewKey | ReadonlyArray‹WatchableViewKey›, `callback`: Object,
-`context?`: FlowAnyObject | null): _Array‹WatchableViewKey›_
+▸ **watch**(`keys`: [WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey) |
+ReadonlyArray‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)›, `callback`:
+Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -328,13 +340,13 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                    | Description                               |
-| ---------- | ------------------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableViewKey &#124; ReadonlyArray‹WatchableViewKey› | the keys to watch                         |
-| `callback` | Object                                                  | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                               | -                                         |
+| Name       | Type                                                                                                                                                              | Description                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `keys`     | [WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey) &#124; ReadonlyArray‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)› | the keys to watch                             |
+| `callback` | Object                                                                                                                                                            | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                         | an optional context for `this` in `callback`. |
 
-**Returns:** _Array‹WatchableViewKey›_
+**Returns:** _Array‹[WatchableViewKey](_airtable_blocks_models__view.md#watchableviewkey)›_
 
 the array of keys that were watched
 
@@ -345,7 +357,7 @@ the array of keys that were watched
 • **ViewMetadataQueryResult**:
 
 _Defined in
-[src/models/view_metadata_query_result.ts:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L55)_
+[src/models/view_metadata_query_result.ts:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L62)_
 
 Contains information about a view that isn't loaded by default e.g. field order and visible fields.
 
@@ -373,14 +385,14 @@ async function loadMetadataForViewAsync(view) {
 • **parentView**: _[View](_airtable_blocks_models__view.md#view)_
 
 _Defined in
-[src/models/view_metadata_query_result.ts:89](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L89)_
+[src/models/view_metadata_query_result.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L96)_
 
 ### allFields
 
 • **allFields**:
 
 _Defined in
-[src/models/view_metadata_query_result.ts:187](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L187)_
+[src/models/view_metadata_query_result.ts:194](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L194)_
 
 Returns every field in the table in the order they appear in this view. Watchable.
 
@@ -434,7 +446,7 @@ data.
 • **visibleFields**:
 
 _Defined in
-[src/models/view_metadata_query_result.ts:198](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L198)_
+[src/models/view_metadata_query_result.ts:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L205)_
 
 Returns every field visible in this view. Watchable.
 
@@ -483,8 +495,11 @@ _Defined in
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableViewMetadataKey | ReadonlyArray‹WatchableViewMetadataKey›,
-`callback`: FlowAnyFunction, `context?`: FlowAnyObject | null): _Array‹WatchableViewMetadataKey›_
+▸ **unwatch**(`keys`:
+[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey) |
+ReadonlyArray‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)›,
+`callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
+_Array‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)›_
 
 _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -502,18 +517,22 @@ released. Once the data is available, the callback will be called.
 
 **Parameters:**
 
-| Name       | Type                                                                    |
-| ---------- | ----------------------------------------------------------------------- |
-| `keys`     | WatchableViewMetadataKey &#124; ReadonlyArray‹WatchableViewMetadataKey› |
-| `callback` | FlowAnyFunction                                                         |
-| `context?` | FlowAnyObject &#124; null                                               |
+| Name       | Type                                                                                                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey) &#124; ReadonlyArray‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                                                   |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                         |
 
-**Returns:** _Array‹WatchableViewMetadataKey›_
+**Returns:**
+_Array‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)›_
 
 ### watch
 
-▸ **watch**(`keys`: WatchableViewMetadataKey | ReadonlyArray‹WatchableViewMetadataKey›, `callback`:
-FlowAnyFunction, `context?`: FlowAnyObject | null): _Array‹WatchableViewMetadataKey›_
+▸ **watch**(`keys`:
+[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey) |
+ReadonlyArray‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)›,
+`callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
+_Array‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)›_
 
 _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -531,10 +550,58 @@ fetched. Once the data is available, the callback will be called.
 
 **Parameters:**
 
-| Name       | Type                                                                    |
-| ---------- | ----------------------------------------------------------------------- |
-| `keys`     | WatchableViewMetadataKey &#124; ReadonlyArray‹WatchableViewMetadataKey› |
-| `callback` | FlowAnyFunction                                                         |
-| `context?` | FlowAnyObject &#124; null                                               |
+| Name       | Type                                                                                                                                                                                              |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey) &#124; ReadonlyArray‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                                                   |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                         |
 
-**Returns:** _Array‹WatchableViewMetadataKey›_
+**Returns:**
+_Array‹[WatchableViewMetadataKey](_airtable_blocks_models__view.md#watchableviewmetadatakey)›_
+
+## Type aliases
+
+### ViewId
+
+Ƭ **ViewId**: _string_
+
+_Defined in
+[src/types/view.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L8)_
+
+---
+
+### ViewType
+
+Ƭ **ViewType**: _ObjectValues‹[ViewTypes](_airtable_blocks_models__view.md#viewtypes)›_
+
+_Defined in
+[src/types/view.ts:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L51)_
+
+---
+
+### WatchableViewKey
+
+Ƭ **WatchableViewKey**: _ObjectValues‹object›_
+
+_Defined in
+[src/models/view.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L23)_
+
+A key in [View](_airtable_blocks_models__view.md#view) that can be watched.
+
+-   `name`
+
+---
+
+### WatchableViewMetadataKey
+
+Ƭ **WatchableViewMetadataKey**: _ObjectValues‹object›_
+
+_Defined in
+[src/models/view_metadata_query_result.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L24)_
+
+A key in [ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult) that
+can be watched.
+
+-   `allFields`
+-   `visibleFields`
+-   `isDataLoaded`

@@ -29,7 +29,14 @@ const WatchableRecordKeys = Object.freeze({
 const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 // TODO: load view data when this is watched. see previous comment.
 const WatchableColorInViewKeyPrefix = 'colorInView:';
-// The string case is to accommodate cellValueInField:$FieldId.
+/**
+ * Any key within record that can be watched:
+ * - `primaryCellValue`
+ * - `commentCount`
+ * - `cellValues`
+ * - `cellValueInField:{FIELD_ID}`
+ * - `colorInView:{VIEW_ID}`
+ */
 type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
 
 /**
@@ -77,7 +84,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @function id
      * @memberof Record
      * @instance
-     * @returns {string} This record's ID.
+     * @returns This record's ID.
      * @example
      * ```js
      * console.log(myRecord.id);
@@ -97,7 +104,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @function isDeleted
      * @memberof Record
      * @instance
-     * @returns {boolean} `true` if the record has been deleted, `false` otherwise.
+     * @returns `true` if the record has been deleted, `false` otherwise.
      * @example
      * ```js
      * if (!myRecord.isDeleted) {
@@ -121,10 +128,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @function watch
      * @memberof Record
      * @instance
-     * @param {(WatchableRecordKey|Array<WatchableRecordKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableRecordKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -135,10 +142,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @function unwatch
      * @memberof Record
      * @instance
-     * @param {(WatchableRecordKey|Array<WatchableRecordKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableRecordKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**
@@ -356,7 +363,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * See {@link RecordQueryResult} for more.
      *
      * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
-     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @param opts Options for the query, such as sorts and fields.
      * @returns A query result containing the records in the given `multipleRecordLinks` field.
      */
     selectLinkedRecordsFromCell(

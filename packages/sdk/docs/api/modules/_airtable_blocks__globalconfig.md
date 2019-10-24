@@ -9,10 +9,21 @@
 
 -   [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig)
 
+### Interfaces
+
+-   [GlobalConfigArray](_airtable_blocks__globalconfig.md#globalconfigarray)
+-   [GlobalConfigObject](_airtable_blocks__globalconfig.md#globalconfigobject)
+-   [GlobalConfigUpdate](_airtable_blocks__globalconfig.md#globalconfigupdate)
+-   [PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#partialglobalconfigupdate)
+
 ### Type aliases
 
 -   [GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)
+-   [GlobalConfigPath](_airtable_blocks__globalconfig.md#globalconfigpath)
 -   [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)
+-   [PartialGlobalConfigKey](_airtable_blocks__globalconfig.md#partialglobalconfigkey)
+-   [PartialGlobalConfigPath](_airtable_blocks__globalconfig.md#partialglobalconfigpath)
+-   [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)
 
 ## Classes
 
@@ -21,7 +32,7 @@
 • **GlobalConfig**:
 
 _Defined in
-[src/global_config.ts:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L84)_
+[src/global_config.ts:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L100)_
 
 A key-value store for persisting configuration options for a block installation.
 
@@ -40,11 +51,13 @@ import {globalConfig} from '@airtable/blocks';
 
 ### checkPermissionsForSet
 
-▸ **checkPermissionsForSet**(`key?`: ReadonlyArray‹string | undefined› | string, `value?`:
-[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)): _PermissionCheckResult_
+▸ **checkPermissionsForSet**(`key?`:
+[PartialGlobalConfigKey](_airtable_blocks__globalconfig.md#partialglobalconfigkey), `value?`:
+[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/global_config.ts:206](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L206)_
+[src/global_config.ts:222](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L222)_
 
 Checks whether the current user has permission to set the given global config key.
 
@@ -69,12 +82,12 @@ const setUnknownKeyCheckResult = globalConfig.checkPermissionsForSet();
 
 **Parameters:**
 
-| Name     | Type                                                                     |
-| -------- | ------------------------------------------------------------------------ |
-| `key?`   | ReadonlyArray‹string &#124; undefined› &#124; string                     |
-| `value?` | [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) |
+| Name     | Type                                                                               | Description                                                                                    |
+| -------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `key?`   | [PartialGlobalConfigKey](_airtable_blocks__globalconfig.md#partialglobalconfigkey) | A string for the top-level key, or an array of strings describing the path to set.             |
+| `value?` | [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)           | The value to set at the specified path. Use `undefined` to delete the value at the given path. |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -82,10 +95,12 @@ to display an error message to the user.
 
 ### checkPermissionsForSetPaths
 
-▸ **checkPermissionsForSetPaths**(`updates?`: ReadonlyArray‹object›): _PermissionCheckResult_
+▸ **checkPermissionsForSetPaths**(`updates?`:
+ReadonlyArray‹[PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#partialglobalconfigupdate)›):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/global_config.ts:309](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L309)_
+[src/global_config.ts:322](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L322)_
 
 Checks whether the current user has permission to perform the specified updates to global config.
 
@@ -112,11 +127,11 @@ const setUnknownPathsCheckResult = globalConfig.checkPermissionsForSetPaths();
 
 **Parameters:**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| `updates?` | ReadonlyArray‹object› |
+| Name       | Type                                                                                                    | Description                  |
+| ---------- | ------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `updates?` | ReadonlyArray‹[PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#partialglobalconfigupdate)› | The paths and values to set. |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -128,7 +143,7 @@ to display an error message to the user.
 _[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) | undefined_
 
 _Defined in
-[src/global_config.ts:168](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L168)_
+[src/global_config.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L184)_
 
 Get the value at a path. Throws an error if the path is invalid.
 
@@ -153,11 +168,12 @@ The value at the provided path, or `undefined` if no value exists at that path.
 
 ### hasPermissionToSet
 
-▸ **hasPermissionToSet**(`key?`: ReadonlyArray‹string | undefined› | string, `value?`:
+▸ **hasPermissionToSet**(`key?`:
+[PartialGlobalConfigKey](_airtable_blocks__globalconfig.md#partialglobalconfigkey), `value?`:
 [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)): _boolean_
 
 _Defined in
-[src/global_config.ts:241](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L241)_
+[src/global_config.ts:257](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L257)_
 
 An alias for `globalConfig.checkPermissionsForSet(key, value).hasPermission`.
 
@@ -184,10 +200,10 @@ const canSetGlobalConfig = globalConfig.hasPermissionToSet();
 
 **Parameters:**
 
-| Name     | Type                                                                     |
-| -------- | ------------------------------------------------------------------------ |
-| `key?`   | ReadonlyArray‹string &#124; undefined› &#124; string                     |
-| `value?` | [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) |
+| Name     | Type                                                                               | Description                                                                                    |
+| -------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `key?`   | [PartialGlobalConfigKey](_airtable_blocks__globalconfig.md#partialglobalconfigkey) | A string for the top-level key, or an array of strings describing the path to set.             |
+| `value?` | [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)           | The value to set at the specified path. Use `undefined` to delete the value at the given path. |
 
 **Returns:** _boolean_
 
@@ -195,10 +211,12 @@ boolean Whether or not the user can set the specified key.
 
 ### hasPermissionToSetPaths
 
-▸ **hasPermissionToSetPaths**(`updates?`: ReadonlyArray‹object›): _boolean_
+▸ **hasPermissionToSetPaths**(`updates?`:
+ReadonlyArray‹[PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#partialglobalconfigupdate)›):
+_boolean_
 
 _Defined in
-[src/global_config.ts:349](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L349)_
+[src/global_config.ts:359](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L359)_
 
 An alias for `globalConfig.checkPermissionsForSetPaths(updates).hasPermission`.
 
@@ -227,9 +245,9 @@ const canSetAnyPaths = globalConfig.hasPermissionToSetPaths();
 
 **Parameters:**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| `updates?` | ReadonlyArray‹object› |
+| Name       | Type                                                                                                    | Description                  |
+| ---------- | ------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `updates?` | ReadonlyArray‹[PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#partialglobalconfigupdate)› | The paths and values to set. |
 
 **Returns:** _boolean_
 
@@ -241,7 +259,7 @@ boolean Whether or not the user has permission to apply the specified updates to
 `value?`: [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)): _Promise‹void›_
 
 _Defined in
-[src/global_config.ts:280](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L280)_
+[src/global_config.ts:293](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L293)_
 
 Sets a value at a path. Throws an error if the path or value is invalid.
 
@@ -286,10 +304,11 @@ A promise that will resolve once the update is persisted to Airtable.
 
 ### setPathsAsync
 
-▸ **setPathsAsync**(`updates`: Array‹GlobalConfigUpdate›): _Promise‹void›_
+▸ **setPathsAsync**(`updates`:
+Array‹[GlobalConfigUpdate](_airtable_blocks__globalconfig.md#globalconfigupdate)›): _Promise‹void›_
 
 _Defined in
-[src/global_config.ts:394](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L394)_
+[src/global_config.ts:399](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L399)_
 
 Sets multiple values. Throws if any path or value is invalid.
 
@@ -328,9 +347,9 @@ async function applyUpdatesIfPossibleAsync() {
 
 **Parameters:**
 
-| Name      | Type                      |
-| --------- | ------------------------- |
-| `updates` | Array‹GlobalConfigUpdate› |
+| Name      | Type                                                                              | Description                  |
+| --------- | --------------------------------------------------------------------------------- | ---------------------------- |
+| `updates` | Array‹[GlobalConfigUpdate](_airtable_blocks__globalconfig.md#globalconfigupdate)› | The paths and values to set. |
 
 **Returns:** _Promise‹void›_
 
@@ -338,8 +357,11 @@ A promise that will resolve once the update is persisted to Airtable.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableGlobalConfigKey | ReadonlyArray‹WatchableGlobalConfigKey›,
-`callback`: Object, `context?`: FlowAnyObject | null): _Array‹WatchableGlobalConfigKey›_
+▸ **unwatch**(`keys`:
+[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) |
+ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›,
+`callback`: Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -353,20 +375,24 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                    | Description                                    |
-| ---------- | ----------------------------------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableGlobalConfigKey &#124; ReadonlyArray‹WatchableGlobalConfigKey› | the keys to unwatch                            |
-| `callback` | Object                                                                  | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                                               | -                                              |
+| Name       | Type                                                                                                                                                                                                | Description                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) &#124; ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)› | the keys to unwatch                                         |
+| `callback` | Object                                                                                                                                                                                              | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                           | the context that was passed to `.watch` for this `callback` |
 
-**Returns:** _Array‹WatchableGlobalConfigKey›_
+**Returns:**
+_Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
 
 the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableGlobalConfigKey | ReadonlyArray‹WatchableGlobalConfigKey›, `callback`:
-Object, `context?`: FlowAnyObject | null): _Array‹WatchableGlobalConfigKey›_
+▸ **watch**(`keys`:
+[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) |
+ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›,
+`callback`: Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -380,35 +406,169 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                    | Description                               |
-| ---------- | ----------------------------------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableGlobalConfigKey &#124; ReadonlyArray‹WatchableGlobalConfigKey› | the keys to watch                         |
-| `callback` | Object                                                                  | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                                               | -                                         |
+| Name       | Type                                                                                                                                                                                                | Description                                   |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `keys`     | [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) &#124; ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)› | the keys to watch                             |
+| `callback` | Object                                                                                                                                                                                              | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                           | an optional context for `this` in `callback`. |
 
-**Returns:** _Array‹WatchableGlobalConfigKey›_
+**Returns:**
+_Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
 
 the array of keys that were watched
+
+## Interfaces
+
+### GlobalConfigArray
+
+• **GlobalConfigArray**:
+
+_Defined in
+[src/global_config.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L25)_
+
+An array of [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)s
+
+---
+
+### GlobalConfigObject
+
+• **GlobalConfigObject**:
+
+_Defined in
+[src/global_config.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L27)_
+
+An object containing {@GlobalConfigValue}s
+
+---
+
+### GlobalConfigUpdate
+
+• **GlobalConfigUpdate**:
+
+_Defined in
+[src/global_config.ts:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L44)_
+
+An instruction to set `path` within globalConfig to `value`.
+
+### path
+
+• **path**: _[GlobalConfigPath](_airtable_blocks__globalconfig.md#globalconfigpath)_
+
+_Defined in
+[src/global_config.ts:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L46)_
+
+The path to update.
+
+### value
+
+• **value**: _[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) | undefined_
+
+_Defined in
+[src/global_config.ts:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L48)_
+
+The value at `path` after updating.
+
+---
+
+### PartialGlobalConfigUpdate
+
+• **PartialGlobalConfigUpdate**:
+
+_Defined in
+[src/global_config.ts:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L52)_
+
+A version of [GlobalConfigUpdate](_airtable_blocks__globalconfig.md#globalconfigupdate) where not
+all values are yet known.
+
+### `Optional` path
+
+• **path**? : _[PartialGlobalConfigPath](_airtable_blocks__globalconfig.md#partialglobalconfigpath)
+| undefined_
+
+_Defined in
+[src/global_config.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L54)_
+
+The path to update.
+
+### `Optional` value
+
+• **value**? : _[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) |
+undefined_
+
+_Defined in
+[src/global_config.ts:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L56)_
+
+The value at `path` after updating.
 
 ## Type aliases
 
 ### GlobalConfigKey
 
-Ƭ **GlobalConfigKey**: _GlobalConfigPath | string_
+Ƭ **GlobalConfigKey**: _[GlobalConfigPath](_airtable_blocks__globalconfig.md#globalconfigpath) |
+string_
 
 _Defined in
-[src/global_config.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L21)_
+[src/global_config.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L19)_
 
-**`typedef`** {string | Array<string>}
+A single top level key or a path into the global config object
+
+---
+
+### GlobalConfigPath
+
+Ƭ **GlobalConfigPath**: _ReadonlyArray‹string›_
+
+_Defined in
+[src/global_config.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L17)_
+
+A path of keys indexing into the global config object
 
 ---
 
 ### GlobalConfigValue
 
-Ƭ **GlobalConfigValue**: _null | boolean | number | string | GlobalConfigArray | GlobalConfigObject_
+Ƭ **GlobalConfigValue**: _null | boolean | number | string |
+[GlobalConfigArray](_airtable_blocks__globalconfig.md#globalconfigarray) |
+[GlobalConfigObject](_airtable_blocks__globalconfig.md#globalconfigobject)_
 
 _Defined in
-[src/global_config.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L29)_
+[src/global_config.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L32)_
 
-**`typedef`** {null|boolean|number|string|Array<GlobalConfigValue>|object.<string,
-GlobalConfigValue>}
+The types of value that can be stored in globalConfig.
+
+---
+
+### PartialGlobalConfigKey
+
+Ƭ **PartialGlobalConfigKey**:
+_[PartialGlobalConfigPath](_airtable_blocks__globalconfig.md#partialglobalconfigpath) | string |
+undefined_
+
+_Defined in
+[src/global_config.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L23)_
+
+A [GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey) with some parts of the
+path/key unknown (`undefined`)
+
+---
+
+### PartialGlobalConfigPath
+
+Ƭ **PartialGlobalConfigPath**: _ReadonlyArray‹string | undefined›_
+
+_Defined in
+[src/global_config.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L21)_
+
+A [GlobalConfigPath](_airtable_blocks__globalconfig.md#globalconfigpath), with some parts of the
+path unknown (`undefined`)
+
+---
+
+### WatchableGlobalConfigKey
+
+Ƭ **WatchableGlobalConfigKey**: _string_
+
+_Defined in
+[src/global_config.ts:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L60)_
+
+Any top-level key within global config

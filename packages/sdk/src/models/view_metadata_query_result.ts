@@ -15,8 +15,15 @@ const WatchableViewMetadataKeys = {
     isDataLoaded: 'isDataLoaded' as const,
 };
 
+/**
+ * A key in {@link ViewMetadataQueryResult} that can be watched.
+ * - `allFields`
+ * - `visibleFields`
+ * - `isDataLoaded`
+ */
 type WatchableViewMetadataKey = ObjectValues<typeof WatchableViewMetadataKeys>;
 
+/** @internal */
 type ViewMetadata = {
     visibleFieldIds: Array<FieldId> | null;
     allFieldIds: Array<FieldId> | null;
@@ -114,7 +121,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
      * @instance
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
-     * @param [context] an optional context for `this` in `callback`.
+     * @param context an optional context for `this` in `callback`.
      * @returns the array of keys that were watched
      */
 
@@ -128,7 +135,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
      * @instance
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
-     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @param context the context that was passed to `.watch` for this `callback`
      * @returns the array of keys that were unwatched
      */
 

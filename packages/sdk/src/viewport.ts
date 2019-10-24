@@ -1,4 +1,5 @@
 /** @module @airtable/blocks: viewport */ /** */
+import {ViewportSizeConstraint} from './types/viewport';
 import Watchable from './watchable';
 import {isEnumValue, debounce, ObjectValues, FlowAnyFunction, FlowAnyObject} from './private_utils';
 import {spawnInvariantViolationError} from './error_utils';
@@ -11,13 +12,16 @@ const WatchableViewportKeys = Object.freeze({
     maxFullscreenSize: 'maxFullscreenSize' as const,
 });
 
+/**
+ * Watchable keys in {@link Viewport}.
+ * - `isFullscreen`
+ * - `size`
+ * - `minSize`
+ * - `maxFullscreenSize`
+ */
 type WatchableViewportKey = ObjectValues<typeof WatchableViewportKeys>;
+/** */
 type UnsetFn = () => void;
-
-export type ViewportSizeConstraint = {
-    width: number | null;
-    height: number | null;
-};
 
 const compareWithNulls = (
     a: number | null,
@@ -112,8 +116,6 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * If `width` or `height` is null, it means there is
      * no max size constraint on that dimension. If `maxFullscreenSize` would be
      * smaller than {@link minSize}, it is constrained to be at least `minSize`.
-     *
-     * @returns {{width: (number|null), height: (number|null)}} maxSize
      */
     get maxFullscreenSize(): ViewportSizeConstraint {
         if (!this._cachedMaxFullscreenSize) {
@@ -145,10 +147,10 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * Add a maximum fullscreen size constraint. Use `.maxFullscreenSize`` to get
      * the aggregate of all added constraints.
      *
-     * @param {{width: (number|null), height: (number|null)}} sizeConstraint The width and height constraints to add. Both
+     * @param sizeConstraint The width and height constraints to add. Both
      * `width` and `height` are optional - if either is set to null, that means
      * there is no max size in that dimension.
-     * @returns {Function} A function that can be called to remove the fullscreen
+     * @returns A function that can be called to remove the fullscreen
      * size constraint that was added.
      */
     addMaxFullscreenSize(sizeConstraint: Partial<ViewportSizeConstraint>): UnsetFn {
@@ -176,7 +178,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * The minimum dimensions of the block - if the viewport gets smaller than this
      * size, an overlay will be shown asking the user to resize the block to be bigger.
      *
-     * @returns {{width: (number|null), height: (number|null)}} The largest set of dimensions
+     * @returns The largest set of dimensions
      * added with addMinSize. If `width` or `height` is null, it means there is no minSize
      * constraint on that dimension.
      */
@@ -201,10 +203,10 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * Upon adding a constraint, if the block is focused and the frame is smaller than the
      * minimum size, the block will enter fullscreen mode.
      *
-     * @param {{width: (number|null), height: (number|null)}} sizeConstraint The width and height constraints to add. Both `width`
+     * @param sizeConstraint The width and height constraints to add. Both `width`
      * and `height` are optional - if either is set to null, that means there is
      * no min size in that dimension.
-     * @returns {Function} A function that can be called to remove the  size constraint
+     * @returns A function that can be called to remove the  size constraint
      * that was added.
      */
     addMinSize(sizeConstraint: Partial<ViewportSizeConstraint>): UnsetFn {
@@ -285,7 +287,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
-     * @param [context] an optional context for `this` in `callback`.
+     * @param context an optional context for `this` in `callback`.
      * @returns the array of keys that were watched
      */
     watch(
@@ -311,7 +313,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
      *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
-     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @param context the context that was passed to `.watch` for this `callback`
      * @returns the array of keys that were unwatched
      */
     unwatch(

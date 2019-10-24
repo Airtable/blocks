@@ -8,6 +8,7 @@ import {Prop} from '../utils/types';
 export interface TextColorProps {
     /**
      * Sets the foreground color value of an element's text and text decorations, and sets the `currentcolor` value.
+     *
      * @see [[colors]]
      */
     textColor?: Prop<ColorProperty>;

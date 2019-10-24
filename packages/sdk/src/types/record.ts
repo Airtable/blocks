@@ -1,10 +1,14 @@
+/** @module @airtable/blocks/models: Record */ /** */
 import {ObjectMap} from '../private_utils';
 import {FieldId} from './field';
 
+/** */
 export type RecordId = string;
 
+/** */
 export type RecordDef = ObjectMap<FieldId, unknown>;
 
+/** @hidden */
 export type RecordData = {
     id: RecordId;
     // cellValuesByFieldId comes directly from liveapp (as cellValuesByColumnId),

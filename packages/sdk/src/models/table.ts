@@ -26,6 +26,12 @@ export const WatchableTableKeys = Object.freeze({
     fields: 'fields' as const,
 });
 
+/**
+ * A key in {@link Table} that can be watched.
+ * - `name`
+ * - `views`
+ * - `fields`
+ */
 export type WatchableTableKey = ObjectValues<typeof WatchableTableKeys>;
 
 /**
@@ -78,7 +84,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @function id
      * @memberof Table
      * @instance
-     * @returns {string} This table's ID.
+     * @returns This table's ID.
      * @example
      * ```js
      * console.log(myTable.id);
@@ -98,7 +104,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @function isDeleted
      * @memberof Table
      * @instance
-     * @returns {boolean} `true` if the table has been deleted, `false` otherwise.
+     * @returns `true` if the table has been deleted, `false` otherwise.
      * @example
      * ```js
      * if (!myTable.isDeleted) {
@@ -120,10 +126,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @function watch
      * @memberof Table
      * @instance
-     * @param {(WatchableTableKey|Array<WatchableTableKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableTableKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -134,10 +140,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @function unwatch
      * @memberof Table
      * @instance
-     * @param {(WatchableTableKey|Array<WatchableTableKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableTableKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**
@@ -408,7 +414,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /**
      * Select records from the table. Returns a query result. See {@link RecordQueryResult} for more.
      *
-     * @param [opts={}] Options for the query, such as sorts and fields.
+     * @param opts Options for the query, such as sorts and fields.
      * @returns A query result.
      * @example
      * ```js
@@ -511,9 +517,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param {Record | RecordId} recordOrRecordId the record to update
-     * @param {object} fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
-     * @returns {Promise<RecordId>} A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
+     * @param recordOrRecordId the record to update
+     * @param fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
+     * @returns A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
      * @example
      * ```js
      * function updateRecord(record, recordFields) {
@@ -564,8 +570,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link updateRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Record | RecordId} [recordOrRecordId] the record to update
-     * @param {object} [fields] cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
+     * @param recordOrRecordId the record to update
+     * @param fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
@@ -629,8 +635,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link updateRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Record | RecordId} [recordOrRecordId] the record to update
-     * @param {object} [fields] cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
+     * @param recordOrRecordId the record to update
+     * @param fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
      * @returns boolean Whether the user can update the specified record.
      * @example
      * ```js
@@ -691,8 +697,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param {Array<{id: RecordId, fields: object}>} records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
-     * @returns {Promise<void>} A promise that will resolve once the updates are persisted to Airtable.
+     * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
+     * @returns A promise that will resolve once the updates are persisted to Airtable.
      * @example
      * ```js
      * const recordsToUpdate = [
@@ -764,7 +770,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link updateRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<{id?: RecordId, fields?: object}>} [records] Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
+     * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
@@ -837,7 +843,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link updateRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<{id?: RecordId, fields?: object}>} [records] Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
+     * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
      * @returns boolean Whether the current user can update the specified records.
      * @example
      * ```js
@@ -901,8 +907,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param {Record | RecordId} recordOrRecordId the record to be deleted
-     * @returns {Promise<void>} A promise that will resolve once the delete is persisted to Airtable.
+     * @param recordOrRecordId the record to be deleted
+     * @returns A promise that will resolve once the delete is persisted to Airtable.
      * @example
      * ```js
      * function deleteRecord(record) {
@@ -932,7 +938,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts optional input, in the same format as {@link deleteRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Record | RecordId} [recordOrRecordId] the record to be deleted
+     * @param recordOrRecordId the record to be deleted
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
@@ -961,7 +967,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts optional input, in the same format as {@link deleteRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Record | RecordId} [recordOrRecordId] the record to be deleted
+     * @param recordOrRecordId the record to be deleted
      * @returns boolean Whether the current user can delete the specified record.
      * @example
      * ```js
@@ -994,8 +1000,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param {Array<Record | RecordId>} recordsOrRecordIds Array of Records and RecordIds
-     * @returns {Promise<void>} A promise that will resolve once the deletes are persisted to Airtable.
+     * @param recordsOrRecordIds Array of Records and RecordIds
+     * @returns A promise that will resolve once the deletes are persisted to Airtable.
      * @example
      * ```js
      *
@@ -1034,7 +1040,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts optional input, in the same format as {@link deleteRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<Record | RecordId>} [recordsOrRecordIds] the records to be deleted
+     * @param recordsOrRecordIds the records to be deleted
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
@@ -1072,7 +1078,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts optional input, in the same format as {@link deleteRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<Record | RecordId>} [recordsOrRecordIds] the records to be deleted
+     * @param recordsOrRecordIds the records to be deleted
      * @returns boolean Whether the current user can delete the specified records.
      * @example
      * ```js
@@ -1104,8 +1110,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param {object} fields object mapping `FieldId` or field name to value for that field.
-     * @returns {Promise<RecordId>} A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
+     * @param fields object mapping `FieldId` or field name to value for that field.
+     * @returns A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
      * @example
      * ```js
      * function createNewRecord(recordFields) {
@@ -1146,7 +1152,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link createRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {object} [fields] object mapping `FieldId` or field name to value for that field.
+     * @param fields object mapping `FieldId` or field name to value for that field.
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
@@ -1189,7 +1195,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link createRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {object} [fields] object mapping `FieldId` or field name to value for that field.
+     * @param fields object mapping `FieldId` or field name to value for that field.
      * @returns boolean Whether the current user can create the specified record.
      * @example
      * ```js
@@ -1233,8 +1239,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param {Array<object>} records Array of objects mapping `FieldId` or field name to value for that field.
-     * @returns {Promise<Array<RecordId>>} A promise that will resolve to array of RecordIds of the new records, once the new records are persisted to Airtable.
+     * @param records Array of objects mapping `FieldId` or field name to value for that field.
+     * @returns A promise that will resolve to array of RecordIds of the new records, once the new records are persisted to Airtable.
      * @example
      * ```js
      * const recordDefs = [
@@ -1291,7 +1297,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link createRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<object>} [records] Array of objects mapping `FieldId` or field name to value for that field.
+     * @param records Array of objects mapping `FieldId` or field name to value for that field.
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
@@ -1346,7 +1352,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link createRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<object>} [records] Array of objects mapping `FieldId` or field name to value for that field.
+     * @param records Array of objects mapping `FieldId` or field name to value for that field.
      * @returns boolean Whether the current user can create the specified records.
      * @example
      * ```js

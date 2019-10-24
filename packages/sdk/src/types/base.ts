@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/models: Base */ /** */
 import {AppInterface} from '../injected/airtable_interface';
 import {ObjectMap} from '../private_utils';
 import {PermissionLevel} from './permission_levels';
@@ -5,13 +6,16 @@ import {TableData, TablePermissionData, TableId} from './table';
 import {CursorData} from './cursor';
 import {CollaboratorData, UserId} from './collaborator';
 
+/** */
 export type BaseId = string;
 
+/** @hidden */
 export type ModelChange = {
     path: Array<string>;
     value: unknown;
 };
 
+/** @hidden */
 export type BaseData = {
     id: BaseId;
     name: string;
@@ -37,6 +41,7 @@ export type BaseData = {
     cursorData: CursorData | null;
 };
 
+/** @hidden */
 export type BasePermissionData = {
     readonly permissionLevel: PermissionLevel;
     readonly tablesById: ObjectMap<TableId, TablePermissionData>;

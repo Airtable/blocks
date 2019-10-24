@@ -20,7 +20,7 @@
 • **RecordCard**:
 
 _Defined in
-[src/ui/record_card.tsx:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L210)_
+[src/ui/record_card.tsx:214](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/record_card.tsx#L214)_
 
 ## Interfaces
 

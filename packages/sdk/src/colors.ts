@@ -276,6 +276,7 @@ export default Colors;
  */
 export type Color = ObjectValues<typeof Colors>;
 
+/** @hidden */
 export const rgbTuplesByColor = {
     [Colors.BLUE_BRIGHT]: [45, 127, 249],
     [Colors.BLUE_DARK_1]: [39, 80, 174],

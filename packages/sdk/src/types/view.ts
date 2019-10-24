@@ -4,6 +4,7 @@ import {Color} from '../colors';
 import {FieldId} from './field';
 import {RecordId} from './record';
 
+/** */
 export type ViewId = string;
 
 /**
@@ -46,15 +47,19 @@ export enum ViewTypes {
     KANBAN = 'kanban',
 }
 
+/** */
 export type ViewType = ObjectValues<typeof ViewTypes>;
 
+/** @hidden */
 export type ViewFieldOrderData = {
     fieldIds: Array<FieldId>;
     visibleFieldCount: number;
 };
 
+/** @hidden */
 export type ViewColorsByRecordIdData = ObjectMap<RecordId, Color | null | undefined>;
 
+/** @hidden */
 export type ViewData = {
     id: ViewId;
     name: string;

@@ -11,6 +11,15 @@
 -   [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult)
 -   [TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)
 
+### Interfaces
+
+-   [RecordQueryResultOpts](_airtable_blocks_models__recordqueryresult.md#recordqueryresultopts)
+-   [SortConfig](_airtable_blocks_models__recordqueryresult.md#sortconfig)
+
+### Type aliases
+
+-   [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+
 ## Classes
 
 ### LinkedRecordsQueryResult
@@ -128,22 +137,23 @@ Watchable.
 
 ### getRecordById
 
-▸ **getRecordById**(`recordId`: RecordId): _[Record](_airtable_blocks_models__record.md#record)_
+▸ **getRecordById**(`recordId`: [RecordId](_airtable_blocks_models__record.md#recordid)):
+_[Record](_airtable_blocks_models__record.md#record)_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordById](_airtable_blocks_models__recordqueryresult.md#getrecordbyid)_
 
 _Defined in
-[src/models/record_query_result.ts:439](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L439)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 **Parameters:**
 
-| Name       | Type     | Description                                                                |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `recordId` | RecordId | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
+| Name       | Type                                                    | Description                                                                |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `recordId` | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record)_
 
@@ -151,23 +161,23 @@ the record
 
 ### getRecordByIdIfExists
 
-▸ **getRecordByIdIfExists**(`recordId`: RecordId):
+▸ **getRecordByIdIfExists**(`recordId`: [RecordId](_airtable_blocks_models__record.md#recordid)):
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordByIdIfExists](_airtable_blocks_models__recordqueryresult.md#getrecordbyidifexists)_
 
 _Defined in
-[src/models/record_query_result.ts:423](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L423)_
+[src/models/record_query_result.ts:438](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L438)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 **Parameters:**
 
-| Name       | Type     | Description                                                                |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `recordId` | RecordId | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
+| Name       | Type                                                    | Description                                                                |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `recordId` | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record) | null_
 
@@ -175,7 +185,7 @@ the record
 
 ### getRecordColor
 
-▸ **getRecordColor**(`recordOrRecordId`: RecordId |
+▸ **getRecordColor**(`recordOrRecordId`: [RecordId](_airtable_blocks_models__record.md#recordid) |
 [Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks_ui__colors.md#color)
 | null_
 
@@ -183,16 +193,16 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
 
 _Defined in
-[src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
+[src/models/record_query_result.ts:491](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L491)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                    |
-| ------------------ | ------------------------------------------------------------------- | ---------------------------------------------- |
-| `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
+| Name               | Type                                                                                                               | Description                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `recordOrRecordId` | [RecordId](_airtable_blocks_models__record.md#recordid) &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
 
 **Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
@@ -201,23 +211,23 @@ result.
 
 ### hasRecord
 
-▸ **hasRecord**(`recordOrRecordId`: RecordId | [Record](_airtable_blocks_models__record.md#record)):
-_boolean_
+▸ **hasRecord**(`recordOrRecordId`: [RecordId](_airtable_blocks_models__record.md#recordid) |
+[Record](_airtable_blocks_models__record.md#record)): _boolean_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[hasRecord](_airtable_blocks_models__recordqueryresult.md#hasrecord)_
 
 _Defined in
-[src/models/record_query_result.ts:463](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L463)_
+[src/models/record_query_result.ts:478](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L478)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                      |
-| ------------------ | ------------------------------------------------------------------- | ------------------------------------------------ |
-| `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record id to check the presence of |
+| Name               | Type                                                                                                               | Description                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| `recordOrRecordId` | [RecordId](_airtable_blocks_models__record.md#recordid) &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record id to check the presence of |
 
 **Returns:** _boolean_
 
@@ -265,9 +275,12 @@ _Defined in
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableRecordQueryResultKey | ReadonlyArray‹WatchableRecordQueryResultKey›,
+▸ **unwatch**(`keys`:
+[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+|
+ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›,
 `callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
-_Array‹WatchableRecordQueryResultKey›_
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[unwatch](_airtable_blocks_models__recordqueryresult.md#unwatch)_
@@ -279,19 +292,23 @@ _Defined in
 
 **Parameters:**
 
-| Name       | Type                                                                              |
-| ---------- | --------------------------------------------------------------------------------- |
-| `keys`     | WatchableRecordQueryResultKey &#124; ReadonlyArray‹WatchableRecordQueryResultKey› |
-| `callback` | FlowAnyFunction                                                                   |
-| `context?` | FlowAnyObject &#124; null                                                         |
+| Name       | Type                                                                                                                                                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey) &#124; ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                                                                                                 |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                                                       |
 
-**Returns:** _Array‹WatchableRecordQueryResultKey›_
+**Returns:**
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 ### watch
 
-▸ **watch**(`keys`: WatchableRecordQueryResultKey | ReadonlyArray‹WatchableRecordQueryResultKey›,
+▸ **watch**(`keys`:
+[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+|
+ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›,
 `callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
-_Array‹WatchableRecordQueryResultKey›_
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[watch](_airtable_blocks_models__recordqueryresult.md#watch)_
@@ -303,13 +320,14 @@ _Defined in
 
 **Parameters:**
 
-| Name       | Type                                                                              |
-| ---------- | --------------------------------------------------------------------------------- |
-| `keys`     | WatchableRecordQueryResultKey &#124; ReadonlyArray‹WatchableRecordQueryResultKey› |
-| `callback` | FlowAnyFunction                                                                   |
-| `context?` | FlowAnyObject &#124; null                                                         |
+| Name       | Type                                                                                                                                                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey) &#124; ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                                                                                                 |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                                                       |
 
-**Returns:** _Array‹WatchableRecordQueryResultKey›_
+**Returns:**
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 ---
 
@@ -318,7 +336,7 @@ _Defined in
 • **RecordQueryResult**:
 
 _Defined in
-[src/models/record_query_result.ts:194](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L194)_
+[src/models/record_query_result.ts:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L210)_
 
 A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable:
 it contains a bunch of records, filtered to a useful subset of the records in the table. Those
@@ -454,7 +472,7 @@ someTable.selectRecords({
 • **fields**:
 
 _Defined in
-[src/models/record_query_result.ts:224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L224)_
+[src/models/record_query_result.ts:240](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L240)_
 
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
 the QueryResult will load all fields in the table.
@@ -509,7 +527,7 @@ data.
 • **recordIds**:
 
 _Defined in
-[src/models/record_query_result.ts:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L207)_
+[src/models/record_query_result.ts:223](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L223)_
 
 The record IDs in this QueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -518,7 +536,7 @@ The record IDs in this QueryResult. Throws if data is not loaded yet. Can be wat
 • **records**:
 
 _Defined in
-[src/models/record_query_result.ts:406](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L406)_
+[src/models/record_query_result.ts:421](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L421)_
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -526,19 +544,20 @@ The records in this RecordQueryResult. Throws if data is not loaded yet. Can be 
 
 ### getRecordById
 
-▸ **getRecordById**(`recordId`: RecordId): _[Record](_airtable_blocks_models__record.md#record)_
+▸ **getRecordById**(`recordId`: [RecordId](_airtable_blocks_models__record.md#recordid)):
+_[Record](_airtable_blocks_models__record.md#record)_
 
 _Defined in
-[src/models/record_query_result.ts:439](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L439)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 **Parameters:**
 
-| Name       | Type     | Description                                                                |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `recordId` | RecordId | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
+| Name       | Type                                                    | Description                                                                |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `recordId` | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record)_
 
@@ -546,20 +565,20 @@ the record
 
 ### getRecordByIdIfExists
 
-▸ **getRecordByIdIfExists**(`recordId`: RecordId):
+▸ **getRecordByIdIfExists**(`recordId`: [RecordId](_airtable_blocks_models__record.md#recordid)):
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Defined in
-[src/models/record_query_result.ts:423](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L423)_
+[src/models/record_query_result.ts:438](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L438)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 **Parameters:**
 
-| Name       | Type     | Description                                                                |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `recordId` | RecordId | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
+| Name       | Type                                                    | Description                                                                |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `recordId` | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record) | null_
 
@@ -567,21 +586,21 @@ the record
 
 ### getRecordColor
 
-▸ **getRecordColor**(`recordOrRecordId`: RecordId |
+▸ **getRecordColor**(`recordOrRecordId`: [RecordId](_airtable_blocks_models__record.md#recordid) |
 [Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks_ui__colors.md#color)
 | null_
 
 _Defined in
-[src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
+[src/models/record_query_result.ts:491](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L491)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                    |
-| ------------------ | ------------------------------------------------------------------- | ---------------------------------------------- |
-| `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
+| Name               | Type                                                                                                               | Description                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `recordOrRecordId` | [RecordId](_airtable_blocks_models__record.md#recordid) &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
 
 **Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
@@ -590,20 +609,20 @@ result.
 
 ### hasRecord
 
-▸ **hasRecord**(`recordOrRecordId`: RecordId | [Record](_airtable_blocks_models__record.md#record)):
-_boolean_
+▸ **hasRecord**(`recordOrRecordId`: [RecordId](_airtable_blocks_models__record.md#recordid) |
+[Record](_airtable_blocks_models__record.md#record)): _boolean_
 
 _Defined in
-[src/models/record_query_result.ts:463](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L463)_
+[src/models/record_query_result.ts:478](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L478)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                      |
-| ------------------ | ------------------------------------------------------------------- | ------------------------------------------------ |
-| `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record id to check the presence of |
+| Name               | Type                                                                                                               | Description                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| `recordOrRecordId` | [RecordId](_airtable_blocks_models__record.md#recordid) &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record id to check the presence of |
 
 **Returns:** _boolean_
 
@@ -654,15 +673,18 @@ _Defined in
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableRecordQueryResultKey | ReadonlyArray‹WatchableRecordQueryResultKey›,
+▸ **unwatch**(`keys`:
+[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+|
+ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›,
 `callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
-_Array‹WatchableRecordQueryResultKey›_
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/models/record_query_result.ts:559](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L559)_
+[src/models/record_query_result.ts:574](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L574)_
 
 Unwatch keys watched with `.watch`.
 
@@ -673,27 +695,31 @@ unloaded.
 
 **Parameters:**
 
-| Name       | Type                                                                              | Description                                    |
-| ---------- | --------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableRecordQueryResultKey &#124; ReadonlyArray‹WatchableRecordQueryResultKey› | the keys to unwatch                            |
-| `callback` | FlowAnyFunction                                                                   | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                                                         | -                                              |
+| Name       | Type                                                                                                                                                                                                                                            | Description                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey) &#124; ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)› | the keys to unwatch                                         |
+| `callback` | FlowAnyFunction                                                                                                                                                                                                                                 | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                                                       | the context that was passed to `.watch` for this `callback` |
 
-**Returns:** _Array‹WatchableRecordQueryResultKey›_
+**Returns:**
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableRecordQueryResultKey | ReadonlyArray‹WatchableRecordQueryResultKey›,
+▸ **watch**(`keys`:
+[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+|
+ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›,
 `callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
-_Array‹WatchableRecordQueryResultKey›_
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/models/record_query_result.ts:532](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L532)_
+[src/models/record_query_result.ts:547](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L547)_
 
 Get notified of changes to the query result.
 
@@ -713,13 +739,14 @@ fetched. Once the data is available, the `callback` will be called.
 
 **Parameters:**
 
-| Name       | Type                                                                              | Description                               |
-| ---------- | --------------------------------------------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableRecordQueryResultKey &#124; ReadonlyArray‹WatchableRecordQueryResultKey› | the keys to watch                         |
-| `callback` | FlowAnyFunction                                                                   | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                                                         | -                                         |
+| Name       | Type                                                                                                                                                                                                                                            | Description                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `keys`     | [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey) &#124; ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)› | the keys to watch                             |
+| `callback` | FlowAnyFunction                                                                                                                                                                                                                                 | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                                                       | an optional context for `this` in `callback`. |
 
-**Returns:** _Array‹WatchableRecordQueryResultKey›_
+**Returns:**
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 the array of keys that were watched
 
@@ -730,7 +757,7 @@ the array of keys that were watched
 • **TableOrViewQueryResult**:
 
 _Defined in
-[src/models/table_or_view_query_result.ts:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L55)_
+[src/models/table_or_view_query_result.ts:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L56)_
 
 Represents a set of records directly from a view or table. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for main
@@ -747,7 +774,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[fields](_airtable_blocks_models__recordqueryresult.md#fields)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:236](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L236)_
+[src/models/table_or_view_query_result.ts:237](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L237)_
 
 The fields that were used to create this RecordQueryResult. Null if fields were not specified, which
 means the RecordQueryResult will load all fields in the table.
@@ -805,7 +832,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[recordIds](_airtable_blocks_models__recordqueryresult.md#recordids)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L205)_
+[src/models/table_or_view_query_result.ts:206](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L206)_
 
 The record IDs in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -817,7 +844,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[records](_airtable_blocks_models__recordqueryresult.md#records)_
 
 _Defined in
-[src/models/record_query_result.ts:406](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L406)_
+[src/models/record_query_result.ts:421](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L421)_
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -825,22 +852,23 @@ The records in this RecordQueryResult. Throws if data is not loaded yet. Can be 
 
 ### getRecordById
 
-▸ **getRecordById**(`recordId`: RecordId): _[Record](_airtable_blocks_models__record.md#record)_
+▸ **getRecordById**(`recordId`: [RecordId](_airtable_blocks_models__record.md#recordid)):
+_[Record](_airtable_blocks_models__record.md#record)_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordById](_airtable_blocks_models__recordqueryresult.md#getrecordbyid)_
 
 _Defined in
-[src/models/record_query_result.ts:439](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L439)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 **Parameters:**
 
-| Name       | Type     | Description                                                                |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `recordId` | RecordId | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
+| Name       | Type                                                    | Description                                                                |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `recordId` | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record)_
 
@@ -848,23 +876,23 @@ the record
 
 ### getRecordByIdIfExists
 
-▸ **getRecordByIdIfExists**(`recordId`: RecordId):
+▸ **getRecordByIdIfExists**(`recordId`: [RecordId](_airtable_blocks_models__record.md#recordid)):
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordByIdIfExists](_airtable_blocks_models__recordqueryresult.md#getrecordbyidifexists)_
 
 _Defined in
-[src/models/record_query_result.ts:423](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L423)_
+[src/models/record_query_result.ts:438](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L438)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
 
 **Parameters:**
 
-| Name       | Type     | Description                                                                |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `recordId` | RecordId | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
+| Name       | Type                                                    | Description                                                                |
+| ---------- | ------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `recordId` | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the [Record](_airtable_blocks_models__record.md#record) you want |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record) | null_
 
@@ -872,7 +900,7 @@ the record
 
 ### getRecordColor
 
-▸ **getRecordColor**(`recordOrRecordId`: RecordId |
+▸ **getRecordColor**(`recordOrRecordId`: [RecordId](_airtable_blocks_models__record.md#recordid) |
 [Record](_airtable_blocks_models__record.md#record)): _[Color](_airtable_blocks_ui__colors.md#color)
 | null_
 
@@ -880,16 +908,16 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
 
 _Defined in
-[src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
+[src/models/record_query_result.ts:491](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L491)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                    |
-| ------------------ | ------------------------------------------------------------------- | ---------------------------------------------- |
-| `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
+| Name               | Type                                                                                                               | Description                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| `recordOrRecordId` | [RecordId](_airtable_blocks_models__record.md#recordid) &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record ID you want the color of. |
 
 **Returns:** _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
@@ -898,23 +926,23 @@ result.
 
 ### hasRecord
 
-▸ **hasRecord**(`recordOrRecordId`: RecordId | [Record](_airtable_blocks_models__record.md#record)):
-_boolean_
+▸ **hasRecord**(`recordOrRecordId`: [RecordId](_airtable_blocks_models__record.md#recordid) |
+[Record](_airtable_blocks_models__record.md#record)): _boolean_
 
 _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[hasRecord](_airtable_blocks_models__recordqueryresult.md#hasrecord)_
 
 _Defined in
-[src/models/record_query_result.ts:463](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L463)_
+[src/models/record_query_result.ts:478](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L478)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                      |
-| ------------------ | ------------------------------------------------------------------- | ------------------------------------------------ |
-| `recordOrRecordId` | RecordId &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record id to check the presence of |
+| Name               | Type                                                                                                               | Description                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------ |
+| `recordOrRecordId` | [RecordId](_airtable_blocks_models__record.md#recordid) &#124; [Record](_airtable_blocks_models__record.md#record) | the record or record id to check the presence of |
 
 **Returns:** _boolean_
 
@@ -928,7 +956,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[loadDataAsync](_airtable_blocks_models__abstract_models.md#loaddataasync)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:386](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L386)_
+[src/models/table_or_view_query_result.ts:387](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L387)_
 
 **`inheritdoc`**
 
@@ -956,7 +984,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unloadData](_airtable_blocks_models__abstract_models.md#unloaddata)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:478](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L478)_
+[src/models/table_or_view_query_result.ts:479](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L479)_
 
 **`inheritdoc`**
 
@@ -964,48 +992,141 @@ _Defined in
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableRecordQueryResultKey | ReadonlyArray‹WatchableRecordQueryResultKey›,
+▸ **unwatch**(`keys`:
+[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+|
+ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›,
 `callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
-_Array‹WatchableRecordQueryResultKey›_
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[unwatch](_airtable_blocks_models__recordqueryresult.md#unwatch)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:351](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L351)_
+[src/models/table_or_view_query_result.ts:352](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L352)_
 
 **`inheritdoc`**
 
 **Parameters:**
 
-| Name       | Type                                                                              |
-| ---------- | --------------------------------------------------------------------------------- |
-| `keys`     | WatchableRecordQueryResultKey &#124; ReadonlyArray‹WatchableRecordQueryResultKey› |
-| `callback` | FlowAnyFunction                                                                   |
-| `context?` | FlowAnyObject &#124; null                                                         |
+| Name       | Type                                                                                                                                                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey) &#124; ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                                                                                                 |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                                                       |
 
-**Returns:** _Array‹WatchableRecordQueryResultKey›_
+**Returns:**
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 ### watch
 
-▸ **watch**(`keys`: WatchableRecordQueryResultKey | ReadonlyArray‹WatchableRecordQueryResultKey›,
+▸ **watch**(`keys`:
+[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)
+|
+ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›,
 `callback`: FlowAnyFunction, `context?`: FlowAnyObject | null):
-_Array‹WatchableRecordQueryResultKey›_
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
 
 _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[watch](_airtable_blocks_models__recordqueryresult.md#watch)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L304)_
+[src/models/table_or_view_query_result.ts:305](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L305)_
 
 **`inheritdoc`**
 
 **Parameters:**
 
-| Name       | Type                                                                              |
-| ---------- | --------------------------------------------------------------------------------- |
-| `keys`     | WatchableRecordQueryResultKey &#124; ReadonlyArray‹WatchableRecordQueryResultKey› |
-| `callback` | FlowAnyFunction                                                                   |
-| `context?` | FlowAnyObject &#124; null                                                         |
+| Name       | Type                                                                                                                                                                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keys`     | [WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey) &#124; ReadonlyArray‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)› |
+| `callback` | FlowAnyFunction                                                                                                                                                                                                                                 |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                                                                                                       |
 
-**Returns:** _Array‹WatchableRecordQueryResultKey›_
+**Returns:**
+_Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryresult.md#watchablerecordqueryresultkey)›_
+
+## Interfaces
+
+### RecordQueryResultOpts
+
+• **RecordQueryResultOpts**:
+
+_Defined in
+[src/models/record_query_result.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L73)_
+
+### `Optional` fields
+
+• **fields**? : _Array‹[Field](_airtable_blocks_models__field.md#field) | string | void | null |
+false›_
+
+_Defined in
+[src/models/record_query_result.ts:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L77)_
+
+The fields (or field names or field ids) to load. Falsey values will be removed.
+
+### `Optional` recordColorMode
+
+• **recordColorMode**? : _null |
+[RecordColorMode](_airtable_blocks_models__record_coloring.md#recordcolormode)_
+
+_Defined in
+[src/models/record_query_result.ts:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L79)_
+
+How records in this QueryResult should be colored.
+
+### `Optional` sorts
+
+• **sorts**? : _Array‹[SortConfig](_airtable_blocks_models__recordqueryresult.md#sortconfig)›_
+
+_Defined in
+[src/models/record_query_result.ts:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L75)_
+
+The order in which to sort the query result
+
+---
+
+### SortConfig
+
+• **SortConfig**:
+
+_Defined in
+[src/models/record_query_result.ts:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L59)_
+
+### `Optional` direction
+
+• **direction**? : _"asc" | "desc"_
+
+_Defined in
+[src/models/record_query_result.ts:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L63)_
+
+The order to sort in. Defaults to asc.
+
+### field
+
+• **field**: _[Field](_airtable_blocks_models__field.md#field) |
+[FieldId](_airtable_blocks_models__field.md#fieldid) | string_
+
+_Defined in
+[src/models/record_query_result.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L61)_
+
+A field, field id, or field name.
+
+## Type aliases
+
+### WatchableRecordQueryResultKey
+
+Ƭ **WatchableRecordQueryResultKey**: _ObjectValues‹object› | string_
+
+_Defined in
+[src/models/record_query_result.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L54)_
+
+A key in [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) that
+can be watched
+
+-   `records`
+-   `recordIds`
+-   `cellValues`
+-   `recordColors`
+-   `isDataLoaded`
+-   `cellValuesInField:{FIELD_ID}`

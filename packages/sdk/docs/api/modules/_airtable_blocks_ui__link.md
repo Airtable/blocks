@@ -9,9 +9,9 @@
 
 -   [LinkProps](_airtable_blocks_ui__link.md#linkprops)
 
-### Variables
+### Functions
 
--   [Link](_airtable_blocks_ui__link.md#const-link)
+-   [Link](_airtable_blocks_ui__link.md#link)
 
 ## Interfaces
 
@@ -548,73 +548,12 @@ _Defined in
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
 
-## Variables
+## Functions
 
-### `Const` Link
+### Link
 
-• **Link**: _ForwardRefExoticComponent‹[LinkProps](_airtable_blocks_ui__link.md#linkprops) &
-RefAttributes‹HTMLAnchorElement››_ = React.forwardRef<HTMLAnchorElement, LinkProps>( ( { size =
-TextSize.default, variant = LinkVariant.default, underline = false, icon, href, id, target,
-onMouseEnter, onMouseLeave, onClick, hasOnClick, tabIndex, className, style, children,
-dataAttributes, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledBy, 'aria-describedby':
-ariaDescribedBy, 'aria-controls': ariaControls, 'aria-expanded': ariaExpanded, 'aria-haspopup':
-ariaHasPopup, 'aria-hidden': ariaHidden, 'aria-live': ariaLive, ...styleProps }: LinkProps, ref:
-React.Ref<HTMLAnchorElement>, ) => { const classNameForTextStyle = useTextStyle(size); const
-classNameForLinkVariant = useLinkVariant(variant); const classNameForUnderline = useStyledSystem({
-textDecoration: underline ? 'underline' : 'none', }); const classNameForStyleProps =
-useStyledSystem<StyleProps>( { display: 'inline-flex', // Use a negative margin to undo the padding.
-padding: '0 0.1em', margin: '0 -0.1em', maxWidth: '100%',
-
-                ...styleProps,
-            },
-            styleParser,
-        );
-
-        // Set rel="noopener noreferrer" to avoid reverse tabnabbing.
-        // https://www.owasp.org/index.php/Reverse_Tabnabbing
-        const rel = target ? 'noopener noreferrer' : undefined;
-
-        return (
-            <a
-                ref={ref}
-                href={_getSanitizedHref(href)}
-                target={target}
-                id={id}
-                rel={rel}
-                // TODO (stephen): remove tooltip anchor props
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={onClick}
-                tabIndex={tabIndex}
-                className={cx(
-                    classNameForTextStyle,
-                    classNameForLinkVariant,
-                    classNameForUnderline,
-                    classNameForStyleProps,
-                    className,
-                )}
-                style={style}
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-                aria-describedby={ariaDescribedBy}
-                aria-controls={ariaControls}
-                aria-expanded={ariaExpanded}
-                aria-haspopup={ariaHasPopup}
-                aria-hidden={ariaHidden}
-                aria-live={ariaLive}
-                {...dataAttributes}
-            >
-                {typeof icon === 'string' ? (
-                    <Icon name={icon as IconName} size="1em" flex="none" marginRight="0.5em" />
-                ) : (
-                    icon
-                )}
-                {children}
-            </a>
-        );
-    },
-
-)
+▸ **Link**(`props`: [LinkProps](_airtable_blocks_ui__link.md#linkprops), `ref`:
+React.Ref‹HTMLAnchorElement›): _Element_
 
 _Defined in
 [src/ui/link.tsx:175](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L175)_
@@ -630,8 +569,6 @@ Developers should use `Link` instead of `a` when possible.
 
 **`augments`** React.StatelessFunctionalComponent
 
-**`param`**
-
 **`example`** import {Link} from '@airtable/blocks/ui';
 
 function MyLinkComponent() { return ( <Link href="https://example.com"> Check out my homepage!
@@ -640,4 +577,12 @@ function MyLinkComponent() { return ( <Link href="https://example.com"> Check ou
 
 ```
 
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`props` | [LinkProps](_airtable_blocks_ui__link.md#linkprops) |   |
+`ref` | React.Ref‹HTMLAnchorElement› | - |
+
+**Returns:** *Element*
 ```

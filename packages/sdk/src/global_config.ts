@@ -13,19 +13,22 @@ const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirta
     'client_server_shared/fork_object_path_for_write_by_reference',
 );
 
-type GlobalConfigPath = ReadonlyArray<string>;
-
-/**
- * @typedef {string | Array<string>}
- */
+/** A path of keys indexing into the global config object */
+export type GlobalConfigPath = ReadonlyArray<string>;
+/** A single top level key or a path into the global config object */
 export type GlobalConfigKey = GlobalConfigPath | string;
-
+/** A {@link GlobalConfigPath}, with some parts of the path unknown (`undefined`) */
+export type PartialGlobalConfigPath = ReadonlyArray<string | undefined>;
+/** A {@link GlobalConfigKey} with some parts of the path/key unknown (`undefined`) */
+export type PartialGlobalConfigKey = PartialGlobalConfigPath | string | undefined;
+/** An array of {@link GlobalConfigValue}s */
 export interface GlobalConfigArray extends ReadonlyArray<GlobalConfigValue> {}
-type GlobalConfigObject = Readonly<{[key: string]: GlobalConfigValue}>;
+/** An object containing {@GlobalConfigValue}s */
+export interface GlobalConfigObject {
+    readonly [key: string]: GlobalConfigValue | undefined;
+}
 
-/**
- * @typedef {null|boolean|number|string|Array<GlobalConfigValue>|object.<string, GlobalConfigValue>}
- */
+/** The types of value that can be stored in globalConfig. */
 export type GlobalConfigValue =
     | null
     | boolean
@@ -34,13 +37,26 @@ export type GlobalConfigValue =
     | GlobalConfigArray
     | GlobalConfigObject;
 
-export type GlobalConfigData = {[key: string]: GlobalConfigValue | null | undefined};
+/** @hidden */
+export type GlobalConfigData = {[key: string]: GlobalConfigValue | undefined};
 
-export type GlobalConfigUpdate = {
+/** An instruction to set `path` within globalConfig to `value`. */
+export interface GlobalConfigUpdate {
+    /** The path to update. */
     readonly path: GlobalConfigPath;
-    readonly value: GlobalConfigValue | void;
-};
+    /** The value at `path` after updating. */
+    readonly value: GlobalConfigValue | undefined;
+}
 
+/** A version of {@link GlobalConfigUpdate} where not all values are yet known. */
+export interface PartialGlobalConfigUpdate {
+    /** The path to update. */
+    readonly path?: PartialGlobalConfigPath | undefined;
+    /** The value at `path` after updating. */
+    readonly value?: GlobalConfigValue | undefined;
+}
+
+/** Any top-level key within global config */
 type WatchableGlobalConfigKey = string;
 
 /** @internal */
@@ -114,10 +130,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @function watch
      * @memberof GlobalConfig
      * @instance
-     * @param {(WatchableGlobalConfigKey|Array<WatchableGlobalConfigKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableGlobalConfigKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -128,10 +144,10 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * @function unwatch
      * @memberof GlobalConfig
      * @instance
-     * @param {(WatchableGlobalConfigKey|Array<WatchableGlobalConfigKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableGlobalConfigKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**
@@ -155,7 +171,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Get the value at a path. Throws an error if the path is invalid.
      *
-     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to the value.
+     * @param key A string for the top-level key, or an array of strings describing the path to the value.
      * @returns The value at the provided path, or `undefined` if no value exists at that path.
      * @example
      * ```js
@@ -184,8 +200,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Accepts partial input, in the same format as {@link setAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {string|Array<string>} [key] A string for the top-level key, or an array of strings describing the path to set.
-     * @param [value] The value to set at the specified path. Use `undefined` to delete the value at the given path.
+     * @param key A string for the top-level key, or an array of strings describing the path to set.
+     * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      *
      * @example
@@ -204,7 +220,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * ```
      */
     checkPermissionsForSet(
-        key?: ReadonlyArray<string | undefined> | string,
+        key?: PartialGlobalConfigKey,
         value?: GlobalConfigValue,
     ): PermissionCheckResult {
         return this.checkPermissionsForSetPaths([
@@ -219,8 +235,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Accepts partial input, in the same format as {@link setAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {string|Array<string>} [key] A string for the top-level key, or an array of strings describing the path to set.
-     * @param [value] The value to set at the specified path. Use `undefined` to delete the value at the given path.
+     * @param key A string for the top-level key, or an array of strings describing the path to set.
+     * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
      * @returns boolean Whether or not the user can set the specified key.
      *
      * @example
@@ -238,10 +254,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * const canSetGlobalConfig = globalConfig.hasPermissionToSet();
      * ```
      */
-    hasPermissionToSet(
-        key?: ReadonlyArray<string | undefined> | string,
-        value?: GlobalConfigValue,
-    ): boolean {
+    hasPermissionToSet(key?: PartialGlobalConfigKey, value?: GlobalConfigValue): boolean {
         return this.checkPermissionsForSet(key, value).hasPermission;
     }
     /**
@@ -252,9 +265,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Updates are applied optimistically locally, so your change will be reflected in
      * {@link GlobalConfig} before the promise resolves.
      *
-     * @param {string|Array<string>} key A string for the top-level key, or an array of strings describing the path to set.
+     * @param key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
-     * @returns {Promise<void>} A promise that will resolve once the update is persisted to Airtable.
+     * @returns A promise that will resolve once the update is persisted to Airtable.
      * @example
      * ```js
      * import {globalConfig} from '@airtable/blocks';
@@ -287,7 +300,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Accepts partial input, in the same format as {@link setPathsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<{path?: Array<string>, value?: GlobalConfigValue}>} [updates] The paths and values to set.
+     * @param updates The paths and values to set.
      * @returns PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      *
      * @example
@@ -307,10 +320,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * ```
      */
     checkPermissionsForSetPaths(
-        updates?: ReadonlyArray<{
-            readonly path?: ReadonlyArray<string | void> | void;
-            readonly value?: GlobalConfigValue | void;
-        }>,
+        updates?: ReadonlyArray<PartialGlobalConfigUpdate>,
     ): PermissionCheckResult {
         return getSdk().__mutations.checkPermissionsForMutation({
             type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
@@ -327,7 +337,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Accepts partial input, in the same format as {@link setPathsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param {Array<{path?: Array<string>, value?: GlobalConfigValue}>} [updates] The paths and values to set.
+     * @param updates The paths and values to set.
      * @returns boolean Whether or not the user has permission to apply the specified updates to globalConfig.
      *
      * @example
@@ -346,12 +356,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * const canSetAnyPaths = globalConfig.hasPermissionToSetPaths();
      * ```
      */
-    hasPermissionToSetPaths(
-        updates?: ReadonlyArray<{
-            readonly path?: ReadonlyArray<string | void> | void;
-            readonly value?: GlobalConfigValue | void;
-        }>,
-    ): boolean {
+    hasPermissionToSetPaths(updates?: ReadonlyArray<PartialGlobalConfigUpdate>): boolean {
         return this.checkPermissionsForSetPaths(updates).hasPermission;
     }
     /**
@@ -362,8 +367,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in
      * {@link GlobalConfig} before the promise resolves.
      *
-     * @param {Array<{path: Array<string>, value: GlobalConfigValue}>} updates The paths and values to set.
-     * @returns {Promise<void>} A promise that will resolve once the update is persisted to Airtable.
+     * @param updates The paths and values to set.
+     * @returns A promise that will resolve once the update is persisted to Airtable.
      * @example
      * ```js
      * import {globalConfig} from '@airtable/blocks';

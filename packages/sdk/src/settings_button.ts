@@ -8,6 +8,11 @@ const WatchableSettingsButtonKeys = Object.freeze({
     click: 'click' as const,
 });
 
+/**
+ * A watchable key in {@link SettingsButton}.
+ * - `isVisible`
+ * - `click`
+ */
 type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKeys>;
 
 /**
@@ -60,10 +65,10 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
      * @function watch
      * @memberof settingsButton
      * @instance
-     * @param {(WatchableSettingsButtonKey|Array<WatchableSettingsButtonKey>)} keys the keys to watch
-     * @param {Function} callback a function to call when those keys change
-     * @param {?object} [context] an optional context for `this` in `callback`.
-     * @returns {Array<WatchableSettingsButtonKey>} the array of keys that were watched
+     * @param keys the keys to watch
+     * @param callback a function to call when those keys change
+     * @param context an optional context for `this` in `callback`.
+     * @returns the array of keys that were watched
      */
 
     /**
@@ -74,10 +79,10 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
      * @function unwatch
      * @memberof settingsButton
      * @instance
-     * @param {(WatchableSettingsButtonKey|Array<WatchableSettingsButtonKey>)} keys the keys to unwatch
-     * @param {Function} callback the function passed to `.watch` for these keys
-     * @param {?object} [context] the context that was passed to `.watch` for this `callback`
-     * @returns {Array<WatchableSettingsButtonKey>} the array of keys that were unwatched
+     * @param keys the keys to unwatch
+     * @param callback the function passed to `.watch` for these keys
+     * @param context the context that was passed to `.watch` for this `callback`
+     * @returns the array of keys that were unwatched
      */
 
     /**

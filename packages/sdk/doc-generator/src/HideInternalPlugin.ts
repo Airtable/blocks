@@ -20,6 +20,7 @@ class HideInternalPlugin extends ConverterComponent {
     private reflectionsToExclude: Array<Reflection> = [];
     private visitedModules: Set<Reflection> = new Set();
     private modulesWithoutDocumentation: Set<Reflection> = new Set();
+    private reflectionsMissingExplicitAnnotations: Set<Reflection> = new Set();
 
     initialize() {
         this.listenTo(this.owner, {
@@ -27,6 +28,7 @@ class HideInternalPlugin extends ConverterComponent {
             [Converter.EVENT_CREATE_DECLARATION]: this.onCreateDeclarationOrSignature,
             [Converter.EVENT_CREATE_SIGNATURE]: this.onCreateDeclarationOrSignature,
             [Converter.EVENT_RESOLVE_BEGIN]: this.onBeginResolve,
+            [Converter.EVENT_END]: this.onEnd,
         });
     }
 
@@ -34,6 +36,42 @@ class HideInternalPlugin extends ConverterComponent {
         this.reflectionsToExclude = [];
         this.modulesWithoutDocumentation = new Set();
         this.visitedModules = new Set();
+        this.reflectionsMissingExplicitAnnotations = new Set();
+    }
+
+    private onEnd() {
+        if (this.reflectionsMissingExplicitAnnotations.size > 0) {
+            const lines = Array.from(this.reflectionsMissingExplicitAnnotations)
+                .map(reflection => {
+                    const source = reflection.sources ? reflection.sources[0] : undefined;
+                    return {
+                        description: `${reflection.name} (${ReflectionKind[reflection.kind]})`,
+                        loc: source ? `${source.fileName}:${source.line}` : '<unknown>',
+                    };
+                })
+                .sort((a, b) => (a.loc < b.loc ? -1 : 1))
+                .map(({description, loc}) => `- ${description} at ${loc}`);
+
+            const uniqueLines = new Set(lines);
+
+            console.log(
+                [
+                    'Nodes missing explicit annotations:',
+                    ...uniqueLines,
+                    '',
+                    `Total: ${uniqueLines.size}.`,
+                    '',
+                    'You need to add an explicit doc comment to these declarations to include or exclude them from the documentation:',
+                    '  - Add /** */ (ideally with more details) to include the declaration in the docs.',
+                    '  - Add /** @hidden */ to exclude the declaration from the docs, but keep its type information available to consumers (e.g. undocumented private APIs for 1st-party blocks).',
+                    '  - Add /** @internal */ to exclude the declaration from both the docs and the generated type definitions for the SDK.',
+                    '',
+                    'Right now, this is a warning, and declarations without explicit annotations are /** @hidden */ by default.',
+                    'In the future, these missing doc annotations will be errors.',
+                    '',
+                ].join('\n'),
+            );
+        }
     }
 
     private onCreateDeclarationOrSignature(
@@ -61,6 +99,10 @@ class HideInternalPlugin extends ConverterComponent {
                 this.modulesWithoutDocumentation.delete(moduleReflection);
             } else {
                 this.exclude(reflection);
+
+                if (this.doesRequireExplicitAnnotation(reflection.kind)) {
+                    this.reflectionsMissingExplicitAnnotations.add(reflection);
+                }
             }
         }
     }
@@ -158,6 +200,10 @@ class HideInternalPlugin extends ConverterComponent {
             default:
                 return false;
         }
+    }
+
+    private doesRequireExplicitAnnotation(kind: ReflectionKind): boolean {
+        return kind !== ReflectionKind.Variable;
     }
 }
 

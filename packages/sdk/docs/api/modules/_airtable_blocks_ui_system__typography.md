@@ -163,7 +163,7 @@ _Defined in
 • **textColor**? : _Prop‹ColorProperty›_
 
 _Defined in
-[src/ui/system/typography/text_color.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_color.ts#L13)_
+[src/ui/system/typography/text_color.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_color.ts#L14)_
 
 Sets the foreground color value of an element's text and text decorations, and sets the
 `currentcolor` value.
@@ -312,7 +312,7 @@ _Inherited from
 [TextColorProps](_airtable_blocks_ui_system__typography.md#textcolorprops).[textColor](_airtable_blocks_ui_system__typography.md#optional-textcolor)_
 
 _Defined in
-[src/ui/system/typography/text_color.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_color.ts#L13)_
+[src/ui/system/typography/text_color.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_color.ts#L14)_
 
 Sets the foreground color value of an element's text and text decorations, and sets the
 `currentcolor` value.

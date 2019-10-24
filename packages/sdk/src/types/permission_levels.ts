@@ -1,4 +1,6 @@
 import {ObjectValues} from '../private_utils';
+
+/** @hidden */
 export const PermissionLevels = Object.freeze({
     NONE: 'none' as const,
     READ: 'read' as const,
@@ -8,4 +10,5 @@ export const PermissionLevels = Object.freeze({
     OWNER: 'owner' as const,
 });
 
+/** @hidden */
 export type PermissionLevel = ObjectValues<typeof PermissionLevels>;

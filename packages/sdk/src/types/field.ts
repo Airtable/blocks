@@ -1,6 +1,9 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {ObjectValues} from '../private_utils';
+
+/** */
 export type FieldId = string;
+/** @hidden */
 export type PrivateColumnType = string;
 
 /**
@@ -670,10 +673,12 @@ export enum FieldTypes {
     LAST_MODIFIED_TIME = 'lastModifiedTime',
 }
 
+/** */
 export type FieldType = ObjectValues<typeof FieldTypes>;
 
+/** @hidden */
 export type FieldLock = unknown;
-
+/** @hidden */
 export type FieldData = {
     id: FieldId;
     name: string;
@@ -682,6 +687,7 @@ export type FieldData = {
     lock: FieldLock | null;
 };
 
+/** @hidden */
 export type FieldPermissionData = {
     readonly id: FieldId;
     readonly name: string;

@@ -21,9 +21,9 @@ import useArrayIdentity from './use_array_identity';
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
- * @param {?Watchable | ?Array<?Watchable>} models the model or models to watch
- * @param {Array<?string>} keys which keys we want to watch
- * @param [callback] an optional callback to call when any of the watch keys change
+ * @param models the model or models to watch
+ * @param keys which keys we want to watch
+ * @param callback an optional callback to call when any of the watch keys change
  *
  * @example
  * ```js

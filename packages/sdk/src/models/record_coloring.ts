@@ -3,20 +3,14 @@ import {ObjectValues} from '../private_utils';
 import Field from './field';
 import View from './view';
 
-/**
- * Record coloring configuration used with {@link RecordQueryResult}s.
- *
- * @namespace recordColoring
- */
-
+// TODO(emma): update this to be an enum
 /**
  * An enum of the different types of {@link recordColoring.modes}
  *
  * @alias recordColoring.ModeTypes
  * @memberof recordColoring
  */
-// TODO(emma): update this to be an enum
-export const ModeTypes = Object.freeze({
+export const ModeTypes = {
     /**
      * @alias recordColoring.ModeTypes.NONE
      * @memberof recordColoring
@@ -32,14 +26,38 @@ export const ModeTypes = Object.freeze({
      * @memberof recordColoring
      */
     BY_VIEW: 'byView' as const,
-});
+};
 
+/** */
 export type RecordColorModeType = ObjectValues<typeof ModeTypes>;
 
+/** */
+interface NoRecordColorMode {
+    /** */
+    type: typeof ModeTypes.NONE;
+}
+
+/** */
+interface BySelectFieldRecordColorMode {
+    /** */
+    type: typeof ModeTypes.BY_SELECT_FIELD;
+    /** */
+    selectField: Field;
+}
+
+/** */
+interface ByViewRecordColorMode {
+    /** */
+    type: typeof ModeTypes.BY_VIEW;
+    /** */
+    view: View;
+}
+
+/** */
 export type RecordColorMode =
-    | {type: typeof ModeTypes.NONE}
-    | {type: typeof ModeTypes.BY_SELECT_FIELD; selectField: Field}
-    | {type: typeof ModeTypes.BY_VIEW; view: View};
+    | NoRecordColorMode
+    | BySelectFieldRecordColorMode
+    | ByViewRecordColorMode;
 
 /**
  * Record coloring config creators.
@@ -65,29 +83,35 @@ export const modes = {
     /**
      * @alias recordColoring.modes.none
      * @memberof recordColoring
-     * @returns {{type: recordColoring.ModeTypes.NONE}} a record coloring mode
+     * @returns a record coloring mode
      */
-    none: () => ({
-        type: ModeTypes.NONE,
-    }),
+    none(): NoRecordColorMode {
+        return {
+            type: ModeTypes.NONE,
+        };
+    },
     /**
      * @alias recordColoring.modes.bySelectField
      * @memberof recordColoring
      * @param selectField
-     * @returns {{type: recordColoring.ModeTypes.BY_SELECT_FIELD, selectField: Field}} a record coloring mode
+     * @returns a record coloring mode
      */
-    bySelectField: (selectField: Field) => ({
-        type: ModeTypes.BY_SELECT_FIELD,
-        selectField,
-    }),
+    bySelectField(selectField: Field): BySelectFieldRecordColorMode {
+        return {
+            type: ModeTypes.BY_SELECT_FIELD,
+            selectField,
+        };
+    },
     /**
      * @alias recordColoring.modes.byView
      * @memberof recordColoring
      * @param view
-     * @returns {{type: recordColoring.ModeTypes.BY_VIEW, view: View}} a record coloring mode
+     * @returns a record coloring mode
      */
-    byView: (view: View) => ({
-        type: ModeTypes.BY_VIEW,
-        view,
-    }),
+    byView(view: View): ByViewRecordColorMode {
+        return {
+            type: ModeTypes.BY_VIEW,
+            view,
+        };
+    },
 };

@@ -24,6 +24,8 @@ export const WatchableViewDataStoreKeys = Object.freeze({
     allFieldIds: 'allFieldIds' as const,
     visibleFieldIds: 'visibleFieldIds' as const,
 });
+
+/** @internal */
 export type WatchableViewDataStoreKey = ObjectValues<typeof WatchableViewDataStoreKeys>;
 
 // ViewDataStore contains loadable data for a specific view. That means the set of visible records,
@@ -31,27 +33,19 @@ export type WatchableViewDataStoreKey = ObjectValues<typeof WatchableViewDataSto
 // data here doesn't belong in View as it's record data or conditionally loaded.
 /** @internal */
 class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDataStoreKey> {
-    /** @internal */
     static _className = 'ViewDataStore';
-    /** @internal */
     static _isWatchableKey(key: string): boolean {
         return isEnumValue(WatchableViewDataStoreKeys, key);
     }
-    /** @internal */
     static _shouldLoadDataForKey(key: WatchableViewDataStoreKey): boolean {
         return true;
     }
 
-    /** @hidden */
     readonly viewId: ViewId;
-    /** @hidden */
     readonly parentRecordStore: RecordStore;
-    /** @internal */
     _mostRecentTableLoadPromise: Promise<FlowAnyExistential> | null;
-    /** @internal */
     readonly _airtableInterface: AirtableInterface;
 
-    /** @hidden */
     constructor(
         baseData: BaseData,
         parentRecordStore: RecordStore,
@@ -65,7 +59,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         this.viewId = viewId;
     }
 
-    /** @internal */
     get _dataOrNullIfDeleted(): ViewData | null {
         const tableData = this._baseData.tablesById[this.parentRecordStore.tableId];
         if (!tableData) {
@@ -74,17 +67,14 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return tableData.viewsById[this.viewId] || null;
     }
 
-    /** @internal */
     _onChangeIsDataLoaded() {
         // noop
     }
 
-    /** @inheritdoc */
     get isDataLoaded(): boolean {
         return this._isDataLoaded && this.parentRecordStore.isRecordMetadataLoaded;
     }
 
-    /** @inheritdoc */
     async loadDataAsync() {
         // Override this method to also load table data.
         // NOTE: it's important that we call loadDataAsync on the table here and not in
@@ -97,7 +87,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         await super.loadDataAsync();
     }
 
-    /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableViewDataStoreKey>> {
         // We need to be sure that the table data is loaded *before* we return
         // from this method.
@@ -135,7 +124,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         ];
     }
 
-    /** @inheritdoc */
     unloadData() {
         // Override this method to also unload the table's data.
         // NOTE: it's important that we do this here, since we want the view and table's
@@ -145,7 +133,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         this.parentRecordStore.unloadRecordMetadata();
     }
 
-    /** @internal */
     _unloadData() {
         this._mostRecentTableLoadPromise = null;
         this._airtableInterface.unsubscribeFromViewData(
@@ -158,7 +145,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         }
     }
 
-    /** @internal */
     __generateChangesForParentTableAddMultipleRecords(
         recordIds: Array<RecordId>,
     ): Array<ModelChange> {
@@ -177,7 +163,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         ];
     }
 
-    /** @internal */
     __generateChangesForParentTableDeleteMultipleRecords(
         recordIds: ReadonlyArray<RecordId>,
     ): Array<ModelChange> {
@@ -251,8 +236,8 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      * Get the color name for the specified record in this view, or null if no
      * color is available. Watch with 'recordColors'
      *
-     * @param recordOrRecordId {RecordId | Record} the record/record id to get the color for
-     * @returns {Color | null} the color name for that record, or null if the record isn't colored.
+     * @param recordOrRecordId the record/record id to get the color for
+     * @returns the color name for that record, or null if the record isn't colored.
      */
     getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
         if (!this.isDataLoaded) {
@@ -269,7 +254,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return color || null;
     }
 
-    /** @hidden */
     get allFieldIds(): Array<FieldId> {
         const fieldOrder = this._data.fieldOrder;
         if (!fieldOrder) {
@@ -278,7 +262,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return fieldOrder.fieldIds;
     }
 
-    /** @hidden */
     get visibleFieldIds(): Array<FieldId> {
         const fieldOrder = this._data.fieldOrder;
         if (!fieldOrder) {
@@ -288,7 +271,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return fieldIds.slice(0, fieldOrder.visibleFieldCount);
     }
 
-    /** @internal */
     triggerOnChangeForDirtyPaths(dirtyPaths: FlowAnyObject) {
         if (dirtyPaths.visibleRecordIds) {
             this._onChange(WatchableViewDataStoreKeys.visibleRecords);

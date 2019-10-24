@@ -37,6 +37,6 @@ expandRecordList([record1, record2], {
 | Name      | Type                                                       | Description                                               |
 | --------- | ---------------------------------------------------------- | --------------------------------------------------------- |
 | `records` | Array‹[Record](_airtable_blocks_models__record.md#record)› | the records to expand. Duplicate records will be removed. |
-| `opts?`   | undefined &#124; object                                    | -                                                         |
+| `opts?`   | undefined &#124; object                                    | An optional options object.                               |
 
 **Returns:** _void_

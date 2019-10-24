@@ -52,7 +52,7 @@ interface LoaderProps extends StyleProps {
  * A loading spinner component.
  *
  * @augments React.StatelessFunctionalComponent
- * @param {LoaderProps} props
+ * @param props
  *
  * @example
  * ```js

@@ -16,7 +16,7 @@ function useViewMetadata(
  * Returns a {@link ViewMetadataQueryResult} for the specified view and re-renders whenever the
  * view meta data changes. Suspends if the view is not already loaded.
  *
- * @param {*} viewOrViewMetadataQueryResult
+ * @param viewOrViewMetadataQueryResult
  *
  * @example
  * ```js

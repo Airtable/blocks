@@ -79,11 +79,11 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                                    |
-| ---------- | ----------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to unwatch                            |
-| `callback` | Object                                          | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                       | -                                              |
+| Name       | Type                                            | Description                                                 |
+| ---------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to unwatch                                         |
+| `callback` | Object                                          | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                       | the context that was passed to `.watch` for this `callback` |
 
 **Returns:** _Array‹WatchableKey›_
 
@@ -106,11 +106,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                               |
-| ---------- | ----------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to watch                         |
-| `callback` | Object                                          | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                       | -                                         |
+| Name       | Type                                            | Description                                   |
+| ---------- | ----------------------------------------------- | --------------------------------------------- |
+| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to watch                             |
+| `callback` | Object                                          | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                       | an optional context for `this` in `callback`. |
 
 **Returns:** _Array‹WatchableKey›_
 
@@ -286,11 +286,11 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                                    |
-| ---------- | ----------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to unwatch                            |
-| `callback` | Object                                          | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                       | -                                              |
+| Name       | Type                                            | Description                                                 |
+| ---------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to unwatch                                         |
+| `callback` | Object                                          | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                       | the context that was passed to `.watch` for this `callback` |
 
 **Returns:** _Array‹WatchableKey›_
 
@@ -310,11 +310,11 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                               |
-| ---------- | ----------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to watch                         |
-| `callback` | Object                                          | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                       | -                                         |
+| Name       | Type                                            | Description                                   |
+| ---------- | ----------------------------------------------- | --------------------------------------------- |
+| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to watch                             |
+| `callback` | Object                                          | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                       | an optional context for `this` in `callback`. |
 
 **Returns:** _Array‹WatchableKey›_
 

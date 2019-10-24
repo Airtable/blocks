@@ -2,7 +2,7 @@
 import Colors, {Color} from '../colors';
 import {BaseData} from '../types/base';
 import {RecordId} from '../types/record';
-import {FieldTypes} from '../types/field';
+import {FieldTypes, FieldId} from '../types/field';
 import {
     isEnumValue,
     assertEnumValue,
@@ -42,28 +42,44 @@ const WatchableRecordQueryResultKeys = Object.freeze({
 const WatchableCellValuesInFieldKeyPrefix = 'cellValuesInField:';
 
 // The string case is to accommodate cellValuesInField:$FieldId.
+/**
+ * A key in {@link RecordQueryResult} that can be watched
+ * - `records`
+ * - `recordIds`
+ * - `cellValues`
+ * - `recordColors`
+ * - `isDataLoaded`
+ * - `cellValuesInField:{FIELD_ID}`
+ */
 export type WatchableRecordQueryResultKey =
     | ObjectValues<typeof WatchableRecordQueryResultKeys>
     | string;
 
-type SortConfig = {
-    field: Field | string;
+/** */
+interface SortConfig {
+    /** A field, field id, or field name. */
+    field: Field | FieldId | string;
+    /** The order to sort in. Defaults to asc. */
     direction?: 'asc' | 'desc';
-};
+}
 
+/** @hidden */
 export type NormalizedSortConfig = {
     fieldId: string;
     direction: 'asc' | 'desc';
 };
 
-export type RecordQueryResultOpts = {
+/** */
+export interface RecordQueryResultOpts {
+    /** The order in which to sort the query result */
     sorts?: Array<SortConfig>;
-    // Allow falsey values for convenience of including
-    // fields conditionally. They'll be filtered out.
+    /** The fields (or field names or field ids) to load. Falsey values will be removed. */
     fields?: Array<Field | string | void | null | false>;
+    /** How records in this QueryResult should be colored. */
     recordColorMode?: null | RecordColorMode;
-};
+}
 
+/** @hidden */
 export type NormalizedRecordQueryResultOpts = {
     sorts: Array<NormalizedSortConfig> | null;
     fieldIdsOrNullIfAllFields: Array<string> | null;
@@ -375,7 +391,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @function loadDataAsync
      * @memberof RecordQueryResult
      * @instance
-     * @returns {Promise<void>} A promise that will resolve once the data is loaded.
+     * @returns A promise that will resolve once the data is loaded.
      */
 
     /**
@@ -386,7 +402,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * @function unloadData
      * @memberof RecordQueryResult
      * @instance
-     * @returns {void}
      */
 
     /**
@@ -526,7 +541,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
-     * @param [context] an optional context for `this` in `callback`.
+     * @param context an optional context for `this` in `callback`.
      * @returns the array of keys that were watched
      */
     watch(
@@ -553,7 +568,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
-     * @param [context] the context that was passed to `.watch` for this `callback`
+     * @param context the context that was passed to `.watch` for this `callback`
      * @returns the array of keys that were unwatched
      */
     unwatch(

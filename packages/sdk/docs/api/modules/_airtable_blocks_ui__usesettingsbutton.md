@@ -43,8 +43,8 @@ function ComponentWithSettings() {
 
 **Parameters:**
 
-| Name              | Type            |
-| ----------------- | --------------- |
-| `onClickCallback` | FlowAnyFunction |
+| Name              | Type            | Description                                   |
+| ----------------- | --------------- | --------------------------------------------- |
+| `onClickCallback` | FlowAnyFunction | a callback to call when the button is clicked |
 
 **Returns:** _void_

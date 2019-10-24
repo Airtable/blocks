@@ -12,9 +12,9 @@ import useStyledSystem from './use_styled_system';
  *
  * Generate boilerplate for using this hook with our scaffolding tool: https://o80pm.csb.app/
  *
- * @param {React.Component} Component The React component you want to use with styled system
- * @param {StyleParser} styleParser The style parser, constructed with `compose`
- * @returns {React.Component} The transformed React component
+ * @param Component The React component you want to use with styled system
+ * @param styleParser The style parser, constructed with `compose`
+ * @returns The transformed React component
  *
  * @description
  * <!-- TODO(alex): switch this back to example (it has lint syntax errors currently) -->
@@ -127,10 +127,10 @@ export default function withStyledSystem<
  * A helper method to split props into style props (for use with styled system) and
  * non-style props (to be passed into the wrapped component).
  *
- * @param {object} props Props to be split into style and non-style props.
- * @param {Array.<string>} stylePropNames The list of allowed style prop names.
- * @param {object} [defaultStyleProps] Default values for style props.
- * @returns {{styleProps: object, nonStyleProps: object}} A result object with two keys: `styleProps`
+ * @param props Props to be split into style and non-style props.
+ * @param stylePropNames The list of allowed style prop names.
+ * @param defaultStyleProps Default values for style props.
+ * @returns A result object with two keys: `styleProps`
  * and `nonStyleProps`, which contain the respective split props.
  */
 export function splitStyleProps<AllProps extends {className?: string}, StyleProps extends {}>(

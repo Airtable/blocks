@@ -9,6 +9,11 @@
 
 -   [Table](_airtable_blocks_models__table.md#table)
 
+### Type aliases
+
+-   [TableId](_airtable_blocks_models__table.md#tableid)
+-   [WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)
+
 ## Classes
 
 ### Table
@@ -16,7 +21,7 @@
 • **Table**:
 
 _Defined in
-[src/models/table.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L34)_
+[src/models/table.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L40)_
 
 Model class representing a table. Every [Base](_airtable_blocks_models__base.md#base) has one or
 more tables.
@@ -26,7 +31,7 @@ more tables.
 • **fields**:
 
 _Defined in
-[src/models/table.ts:214](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L214)_
+[src/models/table.ts:220](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L220)_
 
 **`function`**
 
@@ -81,7 +86,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/table.ts:174](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L174)_
+[src/models/table.ts:180](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L180)_
 
 **`function`**
 
@@ -99,7 +104,7 @@ console.log(myTable.name);
 • **primaryField**:
 
 _Defined in
-[src/models/table.ts:199](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L199)_
+[src/models/table.ts:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L205)_
 
 **`function`**
 
@@ -118,7 +123,7 @@ console.log(myTable.primaryField.name);
 • **url**:
 
 _Defined in
-[src/models/table.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L186)_
+[src/models/table.ts:192](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L192)_
 
 **`function`**
 
@@ -137,7 +142,7 @@ console.log(myTable.url);
 • **views**:
 
 _Defined in
-[src/models/table.ts:314](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L314)_
+[src/models/table.ts:320](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L320)_
 
 **`function`**
 
@@ -152,11 +157,12 @@ console.log(`This table has ${myTable.views.length} views`);
 
 ### checkPermissionsForCreateRecord
 
-▸ **checkPermissionsForCreateRecord**(`fields?`: ObjectMap‹FieldId | string, unknown | void›):
-_PermissionCheckResult_
+▸ **checkPermissionsForCreateRecord**(`fields?`:
+ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) | string, unknown | void›):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/models/table.ts:1175](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1175)_
+[src/models/table.ts:1181](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1181)_
 
 Checks whether the current user has permission to create the specified record.
 
@@ -191,11 +197,11 @@ const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecord();
 
 **Parameters:**
 
-| Name      | Type                                                  |
-| --------- | ----------------------------------------------------- |
-| `fields?` | ObjectMap‹FieldId &#124; string, unknown &#124; void› |
+| Name      | Type                                                                                               | Description                                                     |
+| --------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `fields?` | ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown &#124; void› | object mapping `FieldId` or field name to value for that field. |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can create the specified record,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -203,10 +209,11 @@ to display an error message to the user.
 
 ### checkPermissionsForCreateRecords
 
-▸ **checkPermissionsForCreateRecords**(`records?`: ReadonlyArray‹object›): _PermissionCheckResult_
+▸ **checkPermissionsForCreateRecords**(`records?`: ReadonlyArray‹object›):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/models/table.ts:1323](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1323)_
+[src/models/table.ts:1329](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1329)_
 
 Checks whether the current user has permission to create the specified records.
 
@@ -244,11 +251,11 @@ const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecords();
 
 **Parameters:**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| `records?` | ReadonlyArray‹object› |
+| Name       | Type                  | Description                                                               |
+| ---------- | --------------------- | ------------------------------------------------------------------------- |
+| `records?` | ReadonlyArray‹object› | Array of objects mapping `FieldId` or field name to value for that field. |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can create the specified records,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -257,10 +264,12 @@ to display an error message to the user.
 ### checkPermissionsForDeleteRecord
 
 ▸ **checkPermissionsForDeleteRecord**(`recordOrRecordId?`:
-[Record](_airtable_blocks_models__record.md#record) | RecordId): _PermissionCheckResult_
+[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid)):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/models/table.ts:951](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L951)_
+[src/models/table.ts:957](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L957)_
 
 Checks whether the current user has permission to delete the specified record.
 
@@ -285,11 +294,11 @@ const deleteUnknownRecordCheckResult = table.checkPermissionsForDeleteRecord();
 
 **Parameters:**
 
-| Name                | Type                                                                |
-| ------------------- | ------------------------------------------------------------------- |
-| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; RecordId |
+| Name                | Type                                                                                                               | Description              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid) | the record to be deleted |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified record,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -298,11 +307,12 @@ to display an error message to the user.
 ### checkPermissionsForDeleteRecords
 
 ▸ **checkPermissionsForDeleteRecords**(`recordsOrRecordIds?`:
-ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) | RecordId›):
-_PermissionCheckResult_
+ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid)›):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/models/table.ts:1054](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1054)_
+[src/models/table.ts:1060](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1060)_
 
 Checks whether the current user has permission to delete the specified records.
 
@@ -328,11 +338,11 @@ const deleteUnknownRecordsCheckResult = table.checkPermissionsForDeleteRecords()
 
 **Parameters:**
 
-| Name                  | Type                                                                               |
-| --------------------- | ---------------------------------------------------------------------------------- |
-| `recordsOrRecordIds?` | ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) &#124; RecordId› |
+| Name                  | Type                                                                                                                              | Description               |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `recordsOrRecordIds?` | ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid)› | the records to be deleted |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified records,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -341,11 +351,13 @@ to display an error message to the user.
 ### checkPermissionsForUpdateRecord
 
 ▸ **checkPermissionsForUpdateRecord**(`recordOrRecordId?`:
-[Record](_airtable_blocks_models__record.md#record) | RecordId, `fields?`: ObjectMap‹FieldId |
-string, unknown | void›): _PermissionCheckResult_
+[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid), `fields?`:
+ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) | string, unknown | void›):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/models/table.ts:608](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L608)_
+[src/models/table.ts:614](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L614)_
 
 Checks whether the current user has permission to perform the given record update.
 
@@ -394,12 +406,12 @@ const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateR
 
 **Parameters:**
 
-| Name                | Type                                                                |
-| ------------------- | ------------------------------------------------------------------- |
-| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; RecordId |
-| `fields?`           | ObjectMap‹FieldId &#124; string, unknown &#124; void›               |
+| Name                | Type                                                                                                               | Description                                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid) | the record to update                                                                                               |
+| `fields?`           | ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown &#124; void›                 | cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field. |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can update the specified record,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -407,10 +419,11 @@ to display an error message to the user.
 
 ### checkPermissionsForUpdateRecords
 
-▸ **checkPermissionsForUpdateRecords**(`records?`: ReadonlyArray‹object›): _PermissionCheckResult_
+▸ **checkPermissionsForUpdateRecords**(`records?`: ReadonlyArray‹object›):
+_[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/models/table.ts:813](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L813)_
+[src/models/table.ts:819](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L819)_
 
 Checks whether the current user has permission to perform the given record updates.
 
@@ -465,11 +478,11 @@ const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateR
 
 **Parameters:**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| `records?` | ReadonlyArray‹object› |
+| Name       | Type                  | Description                                                                                                                                                 |
+| ---------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `records?` | ReadonlyArray‹object› | Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value) |
 
-**Returns:** _PermissionCheckResult_
+**Returns:** _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 PermissionCheckResult `{hasPermission: true}` if the current user can update the specified records,
 `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used
@@ -477,10 +490,11 @@ to display an error message to the user.
 
 ### createRecordAsync
 
-▸ **createRecordAsync**(`fields`: ObjectMap‹FieldId | string, unknown›): _Promise‹RecordId›_
+▸ **createRecordAsync**(`fields`: ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) |
+string, unknown›): _Promise‹[RecordId](_airtable_blocks_models__record.md#recordid)›_
 
 _Defined in
-[src/models/table.ts:1138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1138)_
+[src/models/table.ts:1144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1144)_
 
 Creates a new record with the specified cell values.
 
@@ -523,22 +537,23 @@ createNewRecord({
 
 **Parameters:**
 
-| Name     | Type                                      | Default | Description                                                     |
-| -------- | ----------------------------------------- | ------- | --------------------------------------------------------------- |
-| `fields` | ObjectMap‹FieldId &#124; string, unknown› | {}      | object mapping `FieldId` or field name to value for that field. |
+| Name     | Type                                                                                   | Default | Description                                                     |
+| -------- | -------------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------- |
+| `fields` | ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown› | {}      | object mapping `FieldId` or field name to value for that field. |
 
-**Returns:** _Promise‹RecordId›_
+**Returns:** _Promise‹[RecordId](_airtable_blocks_models__record.md#recordid)›_
 
 A promise that will resolve to the RecordId of the new record, once the new record is persisted to
 Airtable.
 
 ### createRecordsAsync
 
-▸ **createRecordsAsync**(`records`: ReadonlyArray‹ObjectMap‹FieldId | string, unknown››):
-_Promise‹Array‹RecordId››_
+▸ **createRecordsAsync**(`records`:
+ReadonlyArray‹ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) | string, unknown››):
+_Promise‹Array‹[RecordId](_airtable_blocks_models__record.md#recordid)››_
 
 _Defined in
-[src/models/table.ts:1272](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1272)_
+[src/models/table.ts:1278](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1278)_
 
 Creates new records with the specified cell values.
 
@@ -590,11 +605,11 @@ async function createNewRecordsAsync() {
 
 **Parameters:**
 
-| Name      | Type                                                     | Description                                                               |
-| --------- | -------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `records` | ReadonlyArray‹ObjectMap‹FieldId &#124; string, unknown›› | Array of objects mapping `FieldId` or field name to value for that field. |
+| Name      | Type                                                                                                  | Description                                                               |
+| --------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `records` | ReadonlyArray‹ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown›› | Array of objects mapping `FieldId` or field name to value for that field. |
 
-**Returns:** _Promise‹Array‹RecordId››_
+**Returns:** _Promise‹Array‹[RecordId](_airtable_blocks_models__record.md#recordid)››_
 
 A promise that will resolve to array of RecordIds of the new records, once the new records are
 persisted to Airtable.
@@ -602,10 +617,10 @@ persisted to Airtable.
 ### deleteRecordAsync
 
 ▸ **deleteRecordAsync**(`recordOrRecordId`: [Record](_airtable_blocks_models__record.md#record) |
-RecordId): _Promise‹void›_
+[RecordId](_airtable_blocks_models__record.md#recordid)): _Promise‹void›_
 
 _Defined in
-[src/models/table.ts:926](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L926)_
+[src/models/table.ts:932](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L932)_
 
 Delete the given record.
 
@@ -638,9 +653,9 @@ async function deleteRecordAsync(record) {
 
 **Parameters:**
 
-| Name               | Type                                                                | Description              |
-| ------------------ | ------------------------------------------------------------------- | ------------------------ |
-| `recordOrRecordId` | [Record](_airtable_blocks_models__record.md#record) &#124; RecordId | the record to be deleted |
+| Name               | Type                                                                                                               | Description              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `recordOrRecordId` | [Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid) | the record to be deleted |
 
 **Returns:** _Promise‹void›_
 
@@ -649,10 +664,11 @@ A promise that will resolve once the delete is persisted to Airtable.
 ### deleteRecordsAsync
 
 ▸ **deleteRecordsAsync**(`recordsOrRecordIds`:
-ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) | RecordId›): _Promise‹void›_
+ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid)›): _Promise‹void›_
 
 _Defined in
-[src/models/table.ts:1020](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1020)_
+[src/models/table.ts:1026](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1026)_
 
 Delete the given records.
 
@@ -689,9 +705,9 @@ async function deleteRecordsAsync(records) {
 
 **Parameters:**
 
-| Name                 | Type                                                                               | Description                    |
-| -------------------- | ---------------------------------------------------------------------------------- | ------------------------------ |
-| `recordsOrRecordIds` | ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) &#124; RecordId› | Array of Records and RecordIds |
+| Name                 | Type                                                                                                                              | Description                    |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `recordsOrRecordIds` | ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid)› | Array of Records and RecordIds |
 
 **Returns:** _Promise‹void›_
 
@@ -699,10 +715,11 @@ A promise that will resolve once the deletes are persisted to Airtable.
 
 ### getFieldById
 
-▸ **getFieldById**(`fieldId`: FieldId): _[Field](_airtable_blocks_models__field.md#field)_
+▸ **getFieldById**(`fieldId`: [FieldId](_airtable_blocks_models__field.md#fieldid)):
+_[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/models/table.ts:260](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L260)_
+[src/models/table.ts:266](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L266)_
 
 **`example`**
 
@@ -715,9 +732,9 @@ console.log(field.name);
 
 **Parameters:**
 
-| Name      | Type    | Description          |
-| --------- | ------- | -------------------- |
-| `fieldId` | FieldId | The ID of the field. |
+| Name      | Type                                                 | Description          |
+| --------- | ---------------------------------------------------- | -------------------- |
+| `fieldId` | [FieldId](_airtable_blocks_models__field.md#fieldid) | The ID of the field. |
 
 **Returns:** _[Field](_airtable_blocks_models__field.md#field)_
 
@@ -727,11 +744,11 @@ unsure whether a field exists with the given ID.
 
 ### getFieldByIdIfExists
 
-▸ **getFieldByIdIfExists**(`fieldId`: FieldId): _[Field](_airtable_blocks_models__field.md#field) |
-null_
+▸ **getFieldByIdIfExists**(`fieldId`: [FieldId](_airtable_blocks_models__field.md#fieldid)):
+_[Field](_airtable_blocks_models__field.md#field) | null_
 
 _Defined in
-[src/models/table.ts:239](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L239)_
+[src/models/table.ts:245](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L245)_
 
 **`example`**
 
@@ -747,9 +764,9 @@ if (field !== null) {
 
 **Parameters:**
 
-| Name      | Type    | Description          |
-| --------- | ------- | -------------------- |
-| `fieldId` | FieldId | The ID of the field. |
+| Name      | Type                                                 | Description          |
+| --------- | ---------------------------------------------------- | -------------------- |
+| `fieldId` | [FieldId](_airtable_blocks_models__field.md#fieldid) | The ID of the field. |
 
 **Returns:** _[Field](_airtable_blocks_models__field.md#field) | null_
 
@@ -760,7 +777,7 @@ The field matching the given ID, or `null` if that field does not exist in this 
 ▸ **getFieldByName**(`fieldName`: string): _[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/models/table.ts:298](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L298)_
+[src/models/table.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L304)_
 
 **`example`**
 
@@ -788,7 +805,7 @@ are unsure whether a field exists with the given name.
 | null_
 
 _Defined in
-[src/models/table.ts:280](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L280)_
+[src/models/table.ts:286](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L286)_
 
 **`example`**
 
@@ -813,12 +830,14 @@ The field matching the given name, or `null` if no field exists with that name i
 
 ### getFirstViewOfType
 
-▸ **getFirstViewOfType**(`allowedViewTypes`: Array‹ViewType› | ViewType, `preferredViewOrViewId?`:
-[View](_airtable_blocks_models__view.md#view) | ViewId | null):
-_[View](_airtable_blocks_models__view.md#view) | null_
+▸ **getFirstViewOfType**(`allowedViewTypes`:
+Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)› |
+[ViewType](_airtable_blocks_models__view.md#viewtype), `preferredViewOrViewId?`:
+[View](_airtable_blocks_models__view.md#view) | [ViewId](_airtable_blocks_models__view.md#viewid) |
+null): _[View](_airtable_blocks_models__view.md#view) | null_
 
 _Defined in
-[src/models/table.ts:463](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L463)_
+[src/models/table.ts:469](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L469)_
 
 Returns the first view in the table where the type is one of `allowedViewTypes`.
 
@@ -836,10 +855,10 @@ if (firstCalendarView !== null) {
 
 **Parameters:**
 
-| Name                     | Type                                                                    | Description                                                                                                                                            |
-| ------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `allowedViewTypes`       | Array‹ViewType› &#124; ViewType                                         | An array of view types or a single view type to match against.                                                                                         |
-| `preferredViewOrViewId?` | [View](_airtable_blocks_models__view.md#view) &#124; ViewId &#124; null | If a view or view ID is supplied and that view exists & has the correct type, that view will be returned before checking the other views in the table. |
+| Name                     | Type                                                                                                                      | Description                                                                                                                                            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `allowedViewTypes`       | Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)› &#124; [ViewType](_airtable_blocks_models__view.md#viewtype) | An array of view types or a single view type to match against.                                                                                         |
+| `preferredViewOrViewId?` | [View](_airtable_blocks_models__view.md#view) &#124; [ViewId](_airtable_blocks_models__view.md#viewid) &#124; null        | If a view or view ID is supplied and that view exists & has the correct type, that view will be returned before checking the other views in the table. |
 
 **Returns:** _[View](_airtable_blocks_models__view.md#view) | null_
 
@@ -848,10 +867,11 @@ table.
 
 ### getViewById
 
-▸ **getViewById**(`viewId`: ViewId): _[View](_airtable_blocks_models__view.md#view)_
+▸ **getViewById**(`viewId`: [ViewId](_airtable_blocks_models__view.md#viewid)):
+_[View](_airtable_blocks_models__view.md#view)_
 
 _Defined in
-[src/models/table.ts:363](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L363)_
+[src/models/table.ts:369](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L369)_
 
 **`example`**
 
@@ -864,9 +884,9 @@ console.log(view.name);
 
 **Parameters:**
 
-| Name     | Type   | Description         |
-| -------- | ------ | ------------------- |
-| `viewId` | ViewId | The ID of the view. |
+| Name     | Type                                              | Description         |
+| -------- | ------------------------------------------------- | ------------------- |
+| `viewId` | [ViewId](_airtable_blocks_models__view.md#viewid) | The ID of the view. |
 
 **Returns:** _[View](_airtable_blocks_models__view.md#view)_
 
@@ -876,10 +896,11 @@ unsure whether a view exists with the given ID.
 
 ### getViewByIdIfExists
 
-▸ **getViewByIdIfExists**(`viewId`: ViewId): _[View](_airtable_blocks_models__view.md#view) | null_
+▸ **getViewByIdIfExists**(`viewId`: [ViewId](_airtable_blocks_models__view.md#viewid)):
+_[View](_airtable_blocks_models__view.md#view) | null_
 
 _Defined in
-[src/models/table.ts:337](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L337)_
+[src/models/table.ts:343](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L343)_
 
 **`example`**
 
@@ -895,9 +916,9 @@ if (view !== null) {
 
 **Parameters:**
 
-| Name     | Type   | Description         |
-| -------- | ------ | ------------------- |
-| `viewId` | ViewId | The ID of the view. |
+| Name     | Type                                              | Description         |
+| -------- | ------------------------------------------------- | ------------------- |
+| `viewId` | [ViewId](_airtable_blocks_models__view.md#viewid) | The ID of the view. |
 
 **Returns:** _[View](_airtable_blocks_models__view.md#view) | null_
 
@@ -908,7 +929,7 @@ The view matching the given ID, or `null` if that view does not exist in this ta
 ▸ **getViewByName**(`viewName`: string): _[View](_airtable_blocks_models__view.md#view)_
 
 _Defined in
-[src/models/table.ts:401](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L401)_
+[src/models/table.ts:407](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L407)_
 
 **`example`**
 
@@ -936,7 +957,7 @@ unsure whether a view exists with the given name.
 null_
 
 _Defined in
-[src/models/table.ts:383](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L383)_
+[src/models/table.ts:389](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L389)_
 
 **`example`**
 
@@ -961,10 +982,11 @@ The view matching the given name, or `null` if no view exists with that name in 
 
 ### hasPermissionToCreateRecord
 
-▸ **hasPermissionToCreateRecord**(`fields?`: ObjectMap‹FieldId | string, unknown | void›): _boolean_
+▸ **hasPermissionToCreateRecord**(`fields?`:
+ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) | string, unknown | void›): _boolean_
 
 _Defined in
-[src/models/table.ts:1218](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1218)_
+[src/models/table.ts:1224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1224)_
 
 An alias for `checkPermissionsForCreateRecord(fields).hasPermission`.
 
@@ -1001,9 +1023,9 @@ const canCreateUnknownRecord = table.hasPermissionToCreateRecord();
 
 **Parameters:**
 
-| Name      | Type                                                  |
-| --------- | ----------------------------------------------------- |
-| `fields?` | ObjectMap‹FieldId &#124; string, unknown &#124; void› |
+| Name      | Type                                                                                               | Description                                                     |
+| --------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `fields?` | ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown &#124; void› | object mapping `FieldId` or field name to value for that field. |
 
 **Returns:** _boolean_
 
@@ -1014,7 +1036,7 @@ boolean Whether the current user can create the specified record.
 ▸ **hasPermissionToCreateRecords**(`records?`: ReadonlyArray‹object›): _boolean_
 
 _Defined in
-[src/models/table.ts:1378](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1378)_
+[src/models/table.ts:1384](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1384)_
 
 An alias for `checkPermissionsForCreateRecords(records).hasPermission`.
 
@@ -1054,9 +1076,9 @@ const canCreateUnknownRecords = table.hasPermissionToCreateRecords();
 
 **Parameters:**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| `records?` | ReadonlyArray‹object› |
+| Name       | Type                  | Description                                                               |
+| ---------- | --------------------- | ------------------------------------------------------------------------- |
+| `records?` | ReadonlyArray‹object› | Array of objects mapping `FieldId` or field name to value for that field. |
 
 **Returns:** _boolean_
 
@@ -1065,10 +1087,11 @@ boolean Whether the current user can create the specified records.
 ### hasPermissionToDeleteRecord
 
 ▸ **hasPermissionToDeleteRecord**(`recordOrRecordId?`:
-[Record](_airtable_blocks_models__record.md#record) | RecordId): _boolean_
+[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid)): _boolean_
 
 _Defined in
-[src/models/table.ts:980](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L980)_
+[src/models/table.ts:986](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L986)_
 
 An alias for `checkPermissionsForDeleteRecord(recordOrRecordId).hasPermission`.
 
@@ -1095,9 +1118,9 @@ const canDeleteUnknownRecord = table.hasPermissionToDeleteRecord();
 
 **Parameters:**
 
-| Name                | Type                                                                |
-| ------------------- | ------------------------------------------------------------------- |
-| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; RecordId |
+| Name                | Type                                                                                                               | Description              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid) | the record to be deleted |
 
 **Returns:** _boolean_
 
@@ -1106,10 +1129,11 @@ boolean Whether the current user can delete the specified record.
 ### hasPermissionToDeleteRecords
 
 ▸ **hasPermissionToDeleteRecords**(`recordsOrRecordIds?`:
-ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) | RecordId›): _boolean_
+ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid)›): _boolean_
 
 _Defined in
-[src/models/table.ts:1092](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1092)_
+[src/models/table.ts:1098](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L1098)_
 
 An alias for `checkPermissionsForDeleteRecords(recordsOrRecordIds).hasPermission`.
 
@@ -1137,9 +1161,9 @@ const canDeleteUnknownRecords = table.hasPermissionToDeleteRecords();
 
 **Parameters:**
 
-| Name                  | Type                                                                               |
-| --------------------- | ---------------------------------------------------------------------------------- |
-| `recordsOrRecordIds?` | ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) &#124; RecordId› |
+| Name                  | Type                                                                                                                              | Description               |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `recordsOrRecordIds?` | ReadonlyArray‹[Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid)› | the records to be deleted |
 
 **Returns:** _boolean_
 
@@ -1148,11 +1172,12 @@ boolean Whether the current user can delete the specified records.
 ### hasPermissionToUpdateRecord
 
 ▸ **hasPermissionToUpdateRecord**(`recordOrRecordId?`:
-[Record](_airtable_blocks_models__record.md#record) | RecordId, `fields?`: ObjectMap‹FieldId |
-string, unknown | void›): _boolean_
+[Record](_airtable_blocks_models__record.md#record) |
+[RecordId](_airtable_blocks_models__record.md#recordid), `fields?`:
+ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) | string, unknown | void›): _boolean_
 
 _Defined in
-[src/models/table.ts:673](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L673)_
+[src/models/table.ts:679](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L679)_
 
 An alias for `checkPermissionsForUpdateRecord(recordOrRecordId, fields).hasPermission`.
 
@@ -1203,10 +1228,10 @@ const canUpdateUnknownRecordAndFields = table.hasPermissionToUpdateRecord();
 
 **Parameters:**
 
-| Name                | Type                                                                |
-| ------------------- | ------------------------------------------------------------------- |
-| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; RecordId |
-| `fields?`           | ObjectMap‹FieldId &#124; string, unknown &#124; void›               |
+| Name                | Type                                                                                                               | Description                                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `recordOrRecordId?` | [Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid) | the record to update                                                                                               |
+| `fields?`           | ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown &#124; void›                 | cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field. |
 
 **Returns:** _boolean_
 
@@ -1217,7 +1242,7 @@ boolean Whether the user can update the specified record.
 ▸ **hasPermissionToUpdateRecords**(`records?`: ReadonlyArray‹object›): _boolean_
 
 _Defined in
-[src/models/table.ts:886](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L886)_
+[src/models/table.ts:892](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L892)_
 
 An alias for `checkPermissionsForUpdateRecords(records).hasPermission`.
 
@@ -1274,9 +1299,9 @@ const canUpdateUnknownRecordsAndFields = table.hasPermissionToUpdateRecords();
 
 **Parameters:**
 
-| Name       | Type                  |
-| ---------- | --------------------- |
-| `records?` | ReadonlyArray‹object› |
+| Name       | Type                  | Description                                                                                                                                                 |
+| ---------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `records?` | ReadonlyArray‹object› | Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value) |
 
 **Returns:** _boolean_
 
@@ -1284,11 +1309,12 @@ boolean Whether the current user can update the specified records.
 
 ### selectRecords
 
-▸ **selectRecords**(`opts?`: RecordQueryResultOpts):
+▸ **selectRecords**(`opts?`:
+[RecordQueryResultOpts](_airtable_blocks_models__recordqueryresult.md#recordqueryresultopts)):
 _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)_
 
 _Defined in
-[src/models/table.ts:437](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L437)_
+[src/models/table.ts:443](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L443)_
 
 Select records from the table. Returns a query result. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for more.
@@ -1318,9 +1344,9 @@ function TodoList() {
 
 **Parameters:**
 
-| Name    | Type                  |
-| ------- | --------------------- |
-| `opts?` | RecordQueryResultOpts |
+| Name    | Type                                                                                         | Description                                      |
+| ------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `opts?` | [RecordQueryResultOpts](_airtable_blocks_models__recordqueryresult.md#recordqueryresultopts) | Options for the query, such as sorts and fields. |
 
 **Returns:**
 _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)_
@@ -1343,8 +1369,10 @@ A string representation of the model for use in debugging.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableTableKey | ReadonlyArray‹WatchableTableKey›, `callback`: Object,
-`context?`: FlowAnyObject | null): _Array‹WatchableTableKey›_
+▸ **unwatch**(`keys`: [WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey) |
+ReadonlyArray‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)›, `callback`:
+Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
@@ -1358,23 +1386,24 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                      | Description                                    |
-| ---------- | --------------------------------------------------------- | ---------------------------------------------- |
-| `keys`     | WatchableTableKey &#124; ReadonlyArray‹WatchableTableKey› | the keys to unwatch                            |
-| `callback` | Object                                                    | the function passed to `.watch` for these keys |
-| `context?` | FlowAnyObject &#124; null                                 | -                                              |
+| Name       | Type                                                                                                                                                                    | Description                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `keys`     | [WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey) &#124; ReadonlyArray‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)› | the keys to unwatch                                         |
+| `callback` | Object                                                                                                                                                                  | the function passed to `.watch` for these keys              |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                               | the context that was passed to `.watch` for this `callback` |
 
-**Returns:** _Array‹WatchableTableKey›_
+**Returns:** _Array‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)›_
 
 the array of keys that were unwatched
 
 ### updateRecordAsync
 
 ▸ **updateRecordAsync**(`recordOrRecordId`: [Record](_airtable_blocks_models__record.md#record) |
-RecordId, `fields`: ObjectMap‹FieldId | string, unknown›): _Promise‹void›_
+[RecordId](_airtable_blocks_models__record.md#recordid), `fields`:
+ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) | string, unknown›): _Promise‹void›_
 
 _Defined in
-[src/models/table.ts:547](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L547)_
+[src/models/table.ts:553](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L553)_
 
 Updates cell values for a record.
 
@@ -1418,10 +1447,10 @@ updateRecord(record2, {
 
 **Parameters:**
 
-| Name               | Type                                                                | Description                                                                                                        |
-| ------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `recordOrRecordId` | [Record](_airtable_blocks_models__record.md#record) &#124; RecordId | the record to update                                                                                               |
-| `fields`           | ObjectMap‹FieldId &#124; string, unknown›                           | cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field. |
+| Name               | Type                                                                                                               | Description                                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `recordOrRecordId` | [Record](_airtable_blocks_models__record.md#record) &#124; [RecordId](_airtable_blocks_models__record.md#recordid) | the record to update                                                                                               |
+| `fields`           | ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid) &#124; string, unknown›                             | cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field. |
 
 **Returns:** _Promise‹void›_
 
@@ -1433,7 +1462,7 @@ Airtable.
 ▸ **updateRecordsAsync**(`records`: ReadonlyArray‹object›): _Promise‹void›_
 
 _Defined in
-[src/models/table.ts:742](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L742)_
+[src/models/table.ts:748](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L748)_
 
 Updates cell values for records.
 
@@ -1497,9 +1526,9 @@ async function updateRecordsAsync() {
 
 **Parameters:**
 
-| Name      | Type                  |
-| --------- | --------------------- |
-| `records` | ReadonlyArray‹object› |
+| Name      | Type                  | Description                                                                                                                                                 |
+| --------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `records` | ReadonlyArray‹object› | Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value) |
 
 **Returns:** _Promise‹void›_
 
@@ -1507,8 +1536,10 @@ A promise that will resolve once the updates are persisted to Airtable.
 
 ### watch
 
-▸ **watch**(`keys`: WatchableTableKey | ReadonlyArray‹WatchableTableKey›, `callback`: Object,
-`context?`: FlowAnyObject | null): _Array‹WatchableTableKey›_
+▸ **watch**(`keys`: [WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey) |
+ReadonlyArray‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)›, `callback`:
+Object, `context?`: FlowAnyObject | null):
+_Array‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
@@ -1522,12 +1553,36 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                      | Description                               |
-| ---------- | --------------------------------------------------------- | ----------------------------------------- |
-| `keys`     | WatchableTableKey &#124; ReadonlyArray‹WatchableTableKey› | the keys to watch                         |
-| `callback` | Object                                                    | a function to call when those keys change |
-| `context?` | FlowAnyObject &#124; null                                 | -                                         |
+| Name       | Type                                                                                                                                                                    | Description                                   |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `keys`     | [WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey) &#124; ReadonlyArray‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)› | the keys to watch                             |
+| `callback` | Object                                                                                                                                                                  | a function to call when those keys change     |
+| `context?` | FlowAnyObject &#124; null                                                                                                                                               | an optional context for `this` in `callback`. |
 
-**Returns:** _Array‹WatchableTableKey›_
+**Returns:** _Array‹[WatchableTableKey](_airtable_blocks_models__table.md#watchabletablekey)›_
 
 the array of keys that were watched
+
+## Type aliases
+
+### TableId
+
+Ƭ **TableId**: _string_
+
+_Defined in
+[src/types/table.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/table.ts#L8)_
+
+---
+
+### WatchableTableKey
+
+Ƭ **WatchableTableKey**: _ObjectValues‹object›_
+
+_Defined in
+[src/models/table.ts:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L35)_
+
+A key in [Table](_airtable_blocks_models__table.md#table) that can be watched.
+
+-   `name`
+-   `views`
+-   `fields`
