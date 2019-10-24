@@ -1116,7 +1116,8 @@ A field, field id, or field name.
 
 ### WatchableRecordQueryResultKey
 
-Ƭ **WatchableRecordQueryResultKey**: _ObjectValues‹object› | string_
+Ƭ **WatchableRecordQueryResultKey**: _"recordColors" | "records" | "recordIds" | "cellValues" |
+"isDataLoaded" | string_
 
 _Defined in
 [src/models/record_query_result.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L54)_

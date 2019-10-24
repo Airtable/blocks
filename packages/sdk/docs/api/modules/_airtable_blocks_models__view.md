@@ -572,7 +572,11 @@ _Defined in
 
 ### ViewType
 
-Ƭ **ViewType**: _ObjectValues‹[ViewTypes](_airtable_blocks_models__view.md#viewtypes)›_
+Ƭ **ViewType**: _[GRID](_airtable_blocks_models__view.md#grid) |
+[FORM](_airtable_blocks_models__view.md#form) |
+[CALENDAR](_airtable_blocks_models__view.md#calendar) |
+[GALLERY](_airtable_blocks_models__view.md#gallery) |
+[KANBAN](_airtable_blocks_models__view.md#kanban)_
 
 _Defined in
 [src/types/view.ts:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L51)_
@@ -594,7 +598,7 @@ A key in [View](_airtable_blocks_models__view.md#view) that can be watched.
 
 ### WatchableViewMetadataKey
 
-Ƭ **WatchableViewMetadataKey**: _ObjectValues‹object›_
+Ƭ **WatchableViewMetadataKey**: _"isDataLoaded" | "allFields" | "visibleFields"_
 
 _Defined in
 [src/models/view_metadata_query_result.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L24)_

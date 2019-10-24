@@ -1576,7 +1576,7 @@ _Defined in
 
 ### WatchableTableKey
 
-Ƭ **WatchableTableKey**: _ObjectValues‹object›_
+Ƭ **WatchableTableKey**: _"name" | "views" | "fields"_
 
 _Defined in
 [src/models/table.ts:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L35)_

@@ -1027,7 +1027,7 @@ with larger z-indexes cover those with smaller ones.
 
 ### LinkVariant
 
-Ƭ **LinkVariant**: _EnumType‹object›_
+Ƭ **LinkVariant**: _"default" | "dark" | "light"_
 
 _Defined in
 [src/ui/link.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L77)_

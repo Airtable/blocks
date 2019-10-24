@@ -99,7 +99,7 @@ _Defined in
 
 ### RecordColorModeType
 
-Ƭ **RecordColorModeType**: _ObjectValues‹object›_
+Ƭ **RecordColorModeType**: _"none" | "bySelectField" | "byView"_
 
 _Defined in
 [src/models/record_coloring.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L32)_

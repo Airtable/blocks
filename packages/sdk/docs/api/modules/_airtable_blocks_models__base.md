@@ -385,7 +385,7 @@ _Defined in
 
 ### WatchableBaseKey
 
-Ƭ **WatchableBaseKey**: _ObjectValues‹object›_
+Ƭ **WatchableBaseKey**: _"name" | "tables" | "collaborators" | "schema"_
 
 _Defined in
 [src/models/base.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L40)_

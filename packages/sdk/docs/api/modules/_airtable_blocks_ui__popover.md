@@ -258,8 +258,8 @@ A function that returns the contents of the popover as React elements.
 
 ### FitInWindowMode
 
-Ƭ **FitInWindowMode**:
-_ObjectValues‹[FitInWindowModes](_airtable_blocks_ui__popover.md#fitinwindowmodes)›_
+Ƭ **FitInWindowMode**: _[NONE](_airtable_blocks_ui__popover.md#none) |
+[FLIP](_airtable_blocks_ui__popover.md#flip) | [NUDGE](_airtable_blocks_ui__popover.md#nudge)_
 
 _Defined in
 [src/ui/popover.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/popover.tsx#L45)_

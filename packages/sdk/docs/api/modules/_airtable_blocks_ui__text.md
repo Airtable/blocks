@@ -216,7 +216,7 @@ The `variant` of the text. Defaults to `default`.
 
 ### TextSize
 
-Ƭ **TextSize**: _EnumType‹object›_
+Ƭ **TextSize**: _"small" | "default" | "large" | "xlarge"_
 
 _Defined in
 [src/ui/text.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L25)_
@@ -234,7 +234,7 @@ _Defined in
 
 ### TextVariant
 
-Ƭ **TextVariant**: _EnumType‹object›_
+Ƭ **TextVariant**: _"default" | "paragraph"_
 
 _Defined in
 [src/ui/text.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L20)_

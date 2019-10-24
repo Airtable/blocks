@@ -169,7 +169,7 @@ the array of keys that were watched
 
 ### WatchableSessionKey
 
-Ƭ **WatchableSessionKey**: _ObjectValues‹object›_
+Ƭ **WatchableSessionKey**: _"permissionLevel" | "currentUser"_
 
 _Defined in
 [src/models/session.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L31)_

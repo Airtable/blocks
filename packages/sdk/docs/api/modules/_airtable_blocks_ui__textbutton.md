@@ -1004,7 +1004,7 @@ with larger z-indexes cover those with smaller ones.
 
 ### TextButtonVariant
 
-Ƭ **TextButtonVariant**: _EnumType‹object›_
+Ƭ **TextButtonVariant**: _"default" | "dark" | "light"_
 
 _Defined in
 [src/ui/text_button.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L74)_

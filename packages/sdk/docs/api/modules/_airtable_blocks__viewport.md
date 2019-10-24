@@ -277,7 +277,7 @@ _Defined in
 
 ### WatchableViewportKey
 
-Ƭ **WatchableViewportKey**: _ObjectValues‹object›_
+Ƭ **WatchableViewportKey**: _"isFullscreen" | "size" | "minSize" | "maxFullscreenSize"_
 
 _Defined in
 [src/viewport.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L22)_

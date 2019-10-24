@@ -215,7 +215,7 @@ The `variant` of the heading. Defaults to `default`.
 
 ### HeadingSize
 
-Ƭ **HeadingSize**: _EnumType‹object›_
+Ƭ **HeadingSize**: _"small" | "default" | "large" | "xsmall" | "xlarge" | "xxlarge"_
 
 _Defined in
 [src/ui/heading.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L24)_
@@ -233,7 +233,7 @@ _Defined in
 
 ### HeadingVariant
 
-Ƭ **HeadingVariant**: _EnumType‹object›_
+Ƭ **HeadingVariant**: _"default" | "caps"_
 
 _Defined in
 [src/ui/heading.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L32)_

@@ -838,7 +838,7 @@ with larger z-indexes cover those with smaller ones.
 
 ### ButtonVariant
 
-Ƭ **ButtonVariant**: _EnumType‹object›_
+Ƭ **ButtonVariant**: _"default" | "primary" | "secondary" | "danger"_
 
 _Defined in
 [src/ui/button.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/button.tsx#L73)_

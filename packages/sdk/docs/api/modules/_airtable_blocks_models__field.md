@@ -1212,7 +1212,32 @@ _Defined in
 
 ### FieldType
 
-Ƭ **FieldType**: _ObjectValues‹[FieldTypes](_airtable_blocks_models__field.md#fieldtypes)›_
+Ƭ **FieldType**: _[SINGLE_LINE_TEXT](_airtable_blocks_models__field.md#single_line_text) |
+[EMAIL](_airtable_blocks_models__field.md#email) | [URL](_airtable_blocks_models__field.md#url) |
+[MULTILINE_TEXT](_airtable_blocks_models__field.md#multiline_text) |
+[NUMBER](_airtable_blocks_models__field.md#number) |
+[PERCENT](_airtable_blocks_models__field.md#percent) |
+[CURRENCY](_airtable_blocks_models__field.md#currency) |
+[SINGLE_SELECT](_airtable_blocks_models__field.md#single_select) |
+[MULTIPLE_SELECTS](_airtable_blocks_models__field.md#multiple_selects) |
+[SINGLE_COLLABORATOR](_airtable_blocks_models__field.md#single_collaborator) |
+[MULTIPLE_COLLABORATORS](_airtable_blocks_models__field.md#multiple_collaborators) |
+[MULTIPLE_RECORD_LINKS](_airtable_blocks_models__field.md#multiple_record_links) |
+[DATE](_airtable_blocks_models__field.md#date) |
+[DATE_TIME](_airtable_blocks_models__field.md#date_time) |
+[PHONE_NUMBER](_airtable_blocks_models__field.md#phone_number) |
+[MULTIPLE_ATTACHMENTS](_airtable_blocks_models__field.md#multiple_attachments) |
+[CHECKBOX](_airtable_blocks_models__field.md#checkbox) |
+[FORMULA](_airtable_blocks_models__field.md#formula) |
+[CREATED_TIME](_airtable_blocks_models__field.md#created_time) |
+[ROLLUP](_airtable_blocks_models__field.md#rollup) |
+[COUNT](_airtable_blocks_models__field.md#count) |
+[MULTIPLE_LOOKUP_VALUES](_airtable_blocks_models__field.md#multiple_lookup_values) |
+[AUTO_NUMBER](_airtable_blocks_models__field.md#auto_number) |
+[BARCODE](_airtable_blocks_models__field.md#barcode) |
+[RATING](_airtable_blocks_models__field.md#rating) | RICH_TEXT |
+[DURATION](_airtable_blocks_models__field.md#duration) |
+[LAST_MODIFIED_TIME](_airtable_blocks_models__field.md#last_modified_time)_
 
 _Defined in
 [src/types/field.ts:677](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L677)_
@@ -1221,7 +1246,7 @@ _Defined in
 
 ### WatchableFieldKey
 
-Ƭ **WatchableFieldKey**: _ObjectValues‹object›_
+Ƭ **WatchableFieldKey**: _"name" | "type" | "options" | "isComputed"_
 
 _Defined in
 [src/models/field.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L27)_

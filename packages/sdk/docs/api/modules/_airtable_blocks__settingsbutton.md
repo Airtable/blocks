@@ -148,7 +148,7 @@ the array of keys that were watched
 
 ### WatchableSettingsButtonKey
 
-Ƭ **WatchableSettingsButtonKey**: _ObjectValues‹object›_
+Ƭ **WatchableSettingsButtonKey**: _"isVisible" | "click"_
 
 _Defined in
 [src/settings_button.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L16)_

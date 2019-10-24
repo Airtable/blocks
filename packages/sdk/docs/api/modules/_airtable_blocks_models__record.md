@@ -428,7 +428,7 @@ _Defined in
 
 ### WatchableRecordKey
 
-Ƭ **WatchableRecordKey**: _ObjectValues‹object› | string_
+Ƭ **WatchableRecordKey**: _"cellValues" | "primaryCellValue" | "commentCount" | string_
 
 _Defined in
 [src/models/record.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record.ts#L40)_

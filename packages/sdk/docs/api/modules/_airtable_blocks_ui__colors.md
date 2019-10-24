@@ -17,7 +17,14 @@
 
 ### Color
 
-Ƭ **Color**: _ObjectValues‹object›_
+Ƭ **Color**: _"blueBright" | "blueDark1" | "blueLight1" | "blueLight2" | "blue" | "cyanBright" |
+"cyanDark1" | "cyanLight1" | "cyanLight2" | "cyan" | "grayBright" | "grayDark1" | "grayLight1" |
+"grayLight2" | "gray" | "greenBright" | "greenDark1" | "greenLight1" | "greenLight2" | "green" |
+"orangeBright" | "orangeDark1" | "orangeLight1" | "orangeLight2" | "orange" | "pinkBright" |
+"pinkDark1" | "pinkLight1" | "pinkLight2" | "pink" | "purpleBright" | "purpleDark1" | "purpleLight1"
+| "purpleLight2" | "purple" | "redBright" | "redDark1" | "redLight1" | "redLight2" | "red" |
+"tealBright" | "tealDark1" | "tealLight1" | "tealLight2" | "teal" | "yellowBright" | "yellowDark1" |
+"yellowLight1" | "yellowLight2" | "yellow"_
 
 _Defined in
 [src/colors.ts:277](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/colors.ts#L277)_

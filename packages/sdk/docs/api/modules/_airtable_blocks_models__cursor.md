@@ -246,7 +246,7 @@ fetched. Once the data is available, the callback will be called.
 
 ### WatchableCursorKey
 
-Ƭ **WatchableCursorKey**: _ObjectValues‹object›_
+Ƭ **WatchableCursorKey**: _"isDataLoaded" | "selectedRecordIds" | "activeTableId" | "activeViewId"_
 
 _Defined in
 [src/models/cursor.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L26)_
