@@ -16,12 +16,15 @@ import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
 
+/** */
 export type TextVariant = EnumType<typeof TextVariant>;
 export const TextVariant = createEnum('default', 'paragraph');
 export const textVariantPropType = createPropTypeFromEnum(TextVariant);
 
+/** */
 export type TextSize = EnumType<typeof TextSize>;
 export const TextSize = createEnum('small', 'default', 'large', 'xlarge');
+/** */
 export type TextSizeProp = ResponsiveProp<TextSize>;
 export const textSizePropType = createResponsivePropTypeFromEnum(TextSize);
 
@@ -43,23 +46,9 @@ export function useTextStyle(
 
 /**
  * @typedef {object} TextProps
- * @property {'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'li' | 'em' | 'strong' | 'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'} [as='p'] The element that is rendered. Defaults to `p`.
- * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'paragraph'} [variant='default'] The `variant` of the text. Defaults to `default`.
- * @property {string} [role] The `role` attribute.
- * @property {string} [className] Additional class names to apply, separated by spaces.
- * @property {object} [style] Additional styles.
- * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
- * @property {string} [aria-label] The `aria-label` attribute.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
  */
 interface TextProps extends AriaProps, AllStylesProps {
+    /** The element that is rendered. Defaults to `p`. */
     as?:
         | 'p'
         | 'h1'
@@ -83,13 +72,21 @@ interface TextProps extends AriaProps, AllStylesProps {
         | 'time'
         | 'var'
         | 'blockquote';
+    /** The `variant` of the text. Defaults to `default`. */
     variant?: TextVariant;
+    /** */
     children?: React.ReactNode;
+    /** The `id` attribute. */
     id?: string;
+    /** The `size` of the text. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
+    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
+    /** Additional class names to apply, separated by spaces. */
     className?: string;
+    /** Additional styles. */
     style?: React.CSSProperties;
+    /** The `role` attribute. */
     role?: string;
 }
 

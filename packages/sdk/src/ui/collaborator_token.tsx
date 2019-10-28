@@ -24,7 +24,8 @@ import useBase from './use_base';
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
 
-interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
+/** */
+interface CollaboratorTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -32,7 +33,7 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+const collaboratorTokenStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
@@ -40,18 +41,13 @@ const stylePropTypes = {
 
 /**
  * @typedef {object} CollaboratorTokenProps
- * @property {object} collaborator An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data.
- * @property {string} [collaborator.id] The user ID of the collaborator.
- * @property {string} [collaborator.email] The email address of the collaborator.
- * @property {string} [collaborator.name] The name of the collaborator.
- * @property {string} [collaborator.status] The status of the collaborator.
- * @property {string} [collaborator.profilePicUrl] The URL of the collaborator's profile picture.
- * @property {string} [className] Additional class names to apply to the collaborator token.
- * @property {string} [style] Additional styles to apply to the collaborator token.
  */
-interface CollaboratorTokenProps extends TooltipAnchorProps, StyleProps {
+interface CollaboratorTokenProps extends TooltipAnchorProps, CollaboratorTokenStyleProps {
+    /** An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data. */
     collaborator: Partial<CollaboratorData>;
+    /** Additional class names to apply to the collaborator token. */
     className?: string;
+    /** Additional styles to apply to the collaborator token. */
     style?: React.CSSProperties;
 }
 
@@ -91,7 +87,10 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     // Re-render when collaborator info updates. This is to ensure isActive is accurate.
     const base = useBase();
 
-    const classNameForStyledProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+    const classNameForStyledProps = useStyledSystem<CollaboratorTokenStyleProps>(
+        styleProps,
+        styleParser,
+    );
 
     const userName = collaborator.name || collaborator.email || 'Unknown';
     const profilePicUrl = collaborator.profilePicUrl || UNKNOWN_PROFILE_PIC_URL;
@@ -156,7 +155,7 @@ CollaboratorToken.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     ...tooltipAnchorPropTypes,
-    ...stylePropTypes,
+    ...collaboratorTokenStylePropTypes,
 };
 
 export default CollaboratorToken;

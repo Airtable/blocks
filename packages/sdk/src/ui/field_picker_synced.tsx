@@ -13,24 +13,9 @@ import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} FieldPickerSyncedProps
- * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting a new field will update `globalConfig`.
- * @property {Table} [table] The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
- * @property {Array.<FieldType>} [allowedTypes] An array indicating which field types can be selected.
- * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected field.
- * @property {string} [placeholder='Pick a field...'] The placeholder text when no field is selected.
- * @property {Function} [onChange] A function to be called when the selected field changes. This should only be used for side effects.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface FieldPickerSyncedProps extends SharedFieldPickerProps {
+    /** A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting a new field will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;
 }
 

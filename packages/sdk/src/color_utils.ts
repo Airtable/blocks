@@ -4,8 +4,11 @@ import Colors, {Color, rgbTuplesByColor} from './colors';
 
 /** A red/green/blue color object. Each property is a number from 0 to 255. */
 interface RGB {
+    /** The red component. */
     r: number;
+    /** The green component. */
     g: number;
+    /** The blue component. */
     b: number;
 }
 

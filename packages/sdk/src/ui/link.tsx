@@ -38,7 +38,8 @@ import {useTextStyle, TextSize, TextSizeProp, textSizePropType} from './text';
 import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 
-export interface StyleProps
+/** */
+export interface LinkStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
@@ -46,6 +47,7 @@ export interface StyleProps
         PositionSetProps,
         FontWeightProps,
         SpacingSetProps {
+    /** */
     display?: Prop<'inline-flex' | 'flex' | 'none'>;
 }
 
@@ -60,7 +62,7 @@ const styleParser = compose(
     spacingSet,
 );
 
-export const stylePropTypes = {
+export const linkStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'] as const)),
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
@@ -71,6 +73,7 @@ export const stylePropTypes = {
     ...spacingSetPropTypes,
 };
 
+/** */
 type LinkVariant = EnumType<typeof LinkVariant>;
 const LinkVariant = createEnum('default', 'dark', 'light');
 const linkVariantPropType = createPropTypeFromEnum(LinkVariant);
@@ -83,37 +86,31 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
 
 /**
  * @typedef {object} LinkProps
- * @property {'small' | 'default' | 'large' | 'xlarge'} [size="default"] The `size` of the link. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'dark' | 'light'} [variant="default"] The `variant` of the link which defines the color. Defaults to `default`.
- * @property {IconName | React.Element} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
- * @property {boolean} [underline="false"] Adds an underline to the link when true.
- * @property {string} href The target URL or URL fragment for the link.
- * @property {string} [target] Specifies where to display the linked URL.
- * @property {number} [tabIndex] Indicates if the link can be focused and if/where it participates in sequential keyboard navigation.
- * @property {string} [className] Additional class names to apply to the link.
- * @property {object} [style] Additional styles to apply to the link.
- * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
- * @property {string} [aria-label] The `aria-label` attribute.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
  */
-interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, StyleProps {
+interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, LinkStyleProps {
+    /** The `size` of the link. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
+    /** The `variant` of the link which defines the color. Defaults to `default`. */
     variant?: LinkVariant;
+    /** The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
     icon?: IconName | React.ReactElement;
+    /** Adds an underline to the link when true. */
     underline?: boolean;
+    /** The target URL or URL fragment for the link. */
     href: string;
+    /** Specifies where to display the linked URL. */
     target?: string;
+    /** The `id` attribute. */
     id?: string;
+    /** Indicates if the link can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
+    /** Additional class names to apply to the link. */
     className?: string;
+    /** Additional styles to apply to the link. */
     style?: React.CSSProperties;
+    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: {readonly [key: string]: unknown};
+    /** */
     children: React.ReactNode;
 }
 
@@ -206,7 +203,7 @@ function Link(props: LinkProps, ref: React.Ref<HTMLAnchorElement>) {
     const classNameForUnderline = useStyledSystem({
         textDecoration: underline ? 'underline' : 'none',
     });
-    const classNameForStyleProps = useStyledSystem<StyleProps>(
+    const classNameForStyleProps = useStyledSystem<LinkStyleProps>(
         {
             display: 'inline-flex',
             // Use a negative margin to undo the padding.
@@ -276,7 +273,7 @@ ForwardedRefLink.propTypes = {
     style: PropTypes.object,
     children: PropTypes.node,
     ...tooltipAnchorPropTypes,
-    ...stylePropTypes,
+    ...linkStylePropTypes,
     ...ariaPropTypes,
 };
 

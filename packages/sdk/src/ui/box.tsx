@@ -35,6 +35,7 @@ export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps 
         | 'ul'
         | 'li'
         | 'pre';
+    /** The contents of the box. */
     children?: React.ReactNode;
     /** The `tabIndex` attribute. */
     tabIndex?: number;

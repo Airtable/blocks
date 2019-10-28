@@ -4,6 +4,7 @@ import Record from '../models/record';
 
 /** @typedef */
 export interface ExpandRecordOpts {
+    /** If `records` is provided, the list will be used to page through records from the expanded record dialog. */
     records?: Array<Record>;
 }
 
@@ -12,8 +13,6 @@ export interface ExpandRecordOpts {
  *
  * @param record the record to expand
  * @param opts An optional options object.
- * @param opts.records If `records` is provided, the list will be used to page through
- * records from the expanded record dialog.
  *
  * @example
  * ```js

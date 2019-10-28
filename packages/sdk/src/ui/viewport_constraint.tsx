@@ -2,17 +2,18 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
+import {ViewportSizeConstraint} from '../types/viewport';
 
-/** @typedef */
-interface ViewportSizeConstraintProp {
-    width?: number | null;
-    height?: number | null;
-}
+/** */
+type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
 
 /** @typedef */
 interface ViewportConstraintProps {
+    /** */
     minSize?: ViewportSizeConstraintProp;
+    /** */
     maxFullscreenSize?: ViewportSizeConstraintProp;
+    /** */
     children?: React.ReactNode;
 }
 

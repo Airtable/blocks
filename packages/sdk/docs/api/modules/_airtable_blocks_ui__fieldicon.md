@@ -20,23 +20,9 @@
 • **FieldIconProps**:
 
 _Defined in
-[src/ui/field_icon.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L19)_
+[src/ui/field_icon.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L17)_
 
 **`typedef`** {object} FieldIconProps
-
-**`property`** {Field} field The field model to display an icon for.
-
-**`property`** {number} [size=16] The width/height of the icon.
-
-**`property`** {string} [fillColor] The color of the icon.
-
-**`property`** {string} [className] Additional class names to apply to the icon.
-
-**`property`** {object} [style] Additional styles to apply to the icon.
-
-**`property`** {string} [pathClassName] Additional class names to apply to the icon path.
-
-**`property`** {object} [pathStyle] Additional styles to apply to the icon path.
 
 ### `Optional` alignSelf
 
@@ -68,6 +54,39 @@ _Defined in
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
+
+### `Optional` className
+
+• **className**? : _undefined | string_
+
+_Inherited from
+[SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[className](_airtable_blocks_ui__icon.md#optional-classname)_
+
+_Defined in
+[src/ui/icon.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L49)_
+
+Additional class names to apply to the icon.
+
+### field
+
+• **field**: _[Field](_airtable_blocks_models__field.md#field)_
+
+_Defined in
+[src/ui/field_icon.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L19)_
+
+The field model to display an icon for.
+
+### `Optional` fillColor
+
+• **fillColor**? : _undefined | string_
+
+_Inherited from
+[SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[fillColor](_airtable_blocks_ui__icon.md#optional-fillcolor)_
+
+_Defined in
+[src/ui/icon.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L47)_
+
+The color of the icon.
 
 ### `Optional` flex
 
@@ -276,6 +295,30 @@ _Defined in
 Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
 and then by their source code order.
 
+### `Optional` pathClassName
+
+• **pathClassName**? : _undefined | string_
+
+_Inherited from
+[SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[pathClassName](_airtable_blocks_ui__icon.md#optional-pathclassname)_
+
+_Defined in
+[src/ui/icon.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L53)_
+
+Additional class names to apply to the icon path.
+
+### `Optional` pathStyle
+
+• **pathStyle**? : _React.CSSProperties_
+
+_Inherited from
+[SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[pathStyle](_airtable_blocks_ui__icon.md#optional-pathstyle)_
+
+_Defined in
+[src/ui/icon.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L55)_
+
+Additional styles to apply to the icon path.
+
 ### `Optional` position
 
 • **position**? : _Prop‹PositionProperty›_
@@ -307,6 +350,30 @@ _Defined in
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
+
+### `Optional` size
+
+• **size**? : _number | string_
+
+_Inherited from
+[SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[size](_airtable_blocks_ui__icon.md#optional-size)_
+
+_Defined in
+[src/ui/icon.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L45)_
+
+The width/height of the icon. Defaults to 16.
+
+### `Optional` style
+
+• **style**? : _React.CSSProperties_
+
+_Inherited from
+[SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[style](_airtable_blocks_ui__icon.md#optional-style)_
+
+_Defined in
+[src/ui/icon.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L51)_
+
+Additional styles to apply to the icon.
 
 ### `Optional` top
 
@@ -348,7 +415,7 @@ with larger z-indexes cover those with smaller ones.
 _Element_
 
 _Defined in
-[src/ui/field_icon.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L55)_
+[src/ui/field_icon.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L54)_
 
 A vector icon for a field's type.
 

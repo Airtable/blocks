@@ -5,29 +5,18 @@ import {GlobalConfigKey} from '../global_config';
 import {ReactRefType} from '../private_utils';
 import Toggle, {
     sharedTogglePropTypes,
-    stylePropTypes,
+    toggleStylePropTypes,
     SharedToggleProps,
-    StyleProps,
+    ToggleStyleProps,
 } from './toggle';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 /**
  * @typedef {object} ToggleSyncedProps
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the switch.
- * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The switch option will always reflect the boolean value stored in `globalConfig` for this key. Toggling the switch will update `globalConfig`.
- * @property {string} [id] The ID of the switch element.
- * @property {React.Node} [label] The label node for the switch.
- * @property {Function} [onChange] A function to be called when the switch is toggled. This should only be used for side effects.
- * @property {number} [tabIndex] Indicates if the switch can be focused and if/where it participates in sequential keyboard navigation.
- * @property {Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW | Toggle.themes.GRAY} [theme=Toggle.themes.GREEN] The color theme for the switch.
- * @property {string} [className] Additional class names to apply to the switch.
- * @property {object} [style] Additional styles to apply to the switch.
- * @property {string} [aria-label] The label for the switch. Use this if the switch lacks a visible text label.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-interface ToggleSyncedProps extends SharedToggleProps, StyleProps {
+interface ToggleSyncedProps extends SharedToggleProps, ToggleStyleProps {
+    /** A string key or array key path in {@link GlobalConfig}. The switch option will always reflect the boolean value stored in `globalConfig` for this key. Toggling the switch will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;
 }
 
@@ -56,7 +45,7 @@ class ToggleSynced extends React.Component<ToggleSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         ...sharedTogglePropTypes,
-        ...stylePropTypes,
+        ...toggleStylePropTypes,
     };
     /** @internal */
     _toggle: ReactRefType<typeof Toggle> | null;

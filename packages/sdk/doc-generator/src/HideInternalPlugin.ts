@@ -66,11 +66,9 @@ class HideInternalPlugin extends ConverterComponent {
                     '  - Add /** @hidden */ to exclude the declaration from the docs, but keep its type information available to consumers (e.g. undocumented private APIs for 1st-party blocks).',
                     '  - Add /** @internal */ to exclude the declaration from both the docs and the generated type definitions for the SDK.',
                     '',
-                    'Right now, this is a warning, and declarations without explicit annotations are /** @hidden */ by default.',
-                    'In the future, these missing doc annotations will be errors.',
-                    '',
                 ].join('\n'),
             );
+            process.exit(1);
         }
     }
 

@@ -8,8 +8,10 @@ import {baymax} from './baymax_utils';
 const WatchableGlobalAlertKeys = Object.freeze({
     __alertInfo: '__alertInfo' as const,
 });
+/** @hidden */
 type WatchableGlobalAlertKey = ObjectValues<typeof WatchableGlobalAlertKeys>;
 
+/** @hidden */
 interface AlertInfo {
     content: React.ReactElement;
 }

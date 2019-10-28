@@ -30,7 +30,8 @@ import {
     SpacingSetProps,
 } from './system';
 
-interface StyleProps
+/** */
+interface FormFieldStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
@@ -47,7 +48,7 @@ const styleParser = compose(
     spacingSet,
 );
 
-const stylePropTypes = {
+const formFieldStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -58,20 +59,21 @@ const stylePropTypes = {
 
 /**
  * @typedef {object} FieldPickerProps
- * @property {string} [id] The `id` attribute.
- * @property {string} [className] Additional class names to apply to the form field.
- * @property {object} [style] Additional styles to apply to the form field.
- * @property {React.ReactNode | string} [label] The label content for the form field.
- * @property {string} [htmlFor] The `for` attribute to be applied to the inner label. By default, the form field will automatically generate a random ID and set it on both the label and the wrapped input/select. Only use this property if you want to override the generated ID with your own custom ID.
- * @property {React.ReactNode | string} [description] The description content for the form field. Displayed beneath the label and above the wrapped control field.
  */
-interface FormFieldProps extends StyleProps {
+interface FormFieldProps extends FormFieldStyleProps {
+    /** The `id` attribute. */
     id?: string;
+    /** Additional class names to apply to the form field. */
     className?: string;
+    /** Additional styles to apply to the form field. */
     style?: React.CSSProperties;
+    /** The label content for the form field. */
     label?: React.ReactNode;
+    /** The `for` attribute to be applied to the inner label. By default, the form field will automatically generate a random ID and set it on both the label and the wrapped input/select. Only use this property if you want to override the generated ID with your own custom ID. */
     htmlFor?: string;
+    /** The description content for the form field. Displayed beneath the label and above the wrapped control field. */
     description?: React.ReactNode | string | null;
+    /** */
     children?: React.ReactNode | string;
 }
 
@@ -164,7 +166,7 @@ FormField.propTypes = {
     htmlFor: PropTypes.string,
     description: PropTypes.string,
     children: PropTypes.node,
-    ...stylePropTypes,
+    ...formFieldStylePropTypes,
 };
 
 export default FormField;

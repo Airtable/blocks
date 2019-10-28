@@ -2,36 +2,36 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
-import {stylePropTypes, StyleProps} from './modal';
+import {modalStylePropTypes, ModalStyleProps} from './modal';
 import Dialog from './dialog';
 import Button from './button';
 import Box from './box';
 
 /**
  * @typedef {object} ConfirmationDialogProps
- * @property {string} title The title of the dialog.
- * @property {React.ReactNode} [body] The body of the dialog.
- * @property {string} [cancelButtonText='Cancel'] The label for the cancel button.
- * @property {string} [confirmButtonText='Confirm'] The label for the confirm button.
- * @property {boolean} [isConfirmActionDangerous=false] Whether the action is dangerous (potentially destructive or not easily reversible).
- * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
- * @property {object} [style] Extra styles to apply to the dialog element.
- * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
- * @property {object} [backgroundStyle] Extra styles to apply to the background element.
- * @property {Function} onCancel Cancel button event handler. Handles click events and Space/Enter keypress events.
- * @property {Function} onConfirm Confirm button event handler. Handles click events and Space/Enter keypress events.
  */
-interface ConfirmationDialogProps extends StyleProps {
+interface ConfirmationDialogProps extends ModalStyleProps {
+    /** Extra styles to apply to the dialog element. */
     style?: React.CSSProperties;
+    /** The title of the dialog. */
     title: string;
-    cancelButtonText: string;
-    confirmButtonText: string;
+    /** The label for the cancel button. Defaults to 'Cancel'. */
+    cancelButtonText?: string;
+    /** The label for the confirm button. Defaults to 'Confirm'. */
+    confirmButtonText?: string;
+    /** Whether the action is dangerous (potentially destructive or not easily reversible). Defaults to `false`. */
     isConfirmActionDangerous: boolean;
+    /** Extra `className`s to apply to the dialog element, separated by spaces. */
     className?: string;
+    /** The body of the dialog. */
     body?: React.ReactNode;
+    /** Extra `className`s to apply to the background element, separated by spaces. */
     backgroundClassName?: string;
+    /** Extra styles to apply to the background element. */
     backgroundStyle?: React.CSSProperties;
+    /** Cancel button event handler. Handles click events and Space/Enter keypress events. */
     onCancel: () => unknown;
+    /** Confirm button event handler. Handles click events and Space/Enter keypress events. */
     onConfirm: () => unknown;
 }
 
@@ -85,7 +85,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         backgroundStyle: PropTypes.object,
         onCancel: PropTypes.func.isRequired,
         onConfirm: PropTypes.func.isRequired,
-        ...stylePropTypes,
+        ...modalStylePropTypes,
     };
     /** @hidden */
     static defaultProps = {

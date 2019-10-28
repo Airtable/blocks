@@ -1,7 +1,9 @@
 import {ObjectMap} from '../../../private_utils';
 import {TypographySetProps, MarginProps} from '../../system';
 
+/** @hidden */
 type HeadingVariant = 'default' | 'caps';
+/** @hidden */
 type HeadingSize = 'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge';
 
 const headingStyles: ObjectMap<

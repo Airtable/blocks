@@ -6,29 +6,17 @@ import {ReactRefType} from '../private_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Select, {
     sharedSelectPropTypes,
-    stylePropTypes,
+    selectStylePropTypes,
     SharedSelectProps,
-    StyleProps,
+    SelectStyleProps,
 } from './select';
 import Synced from './synced';
 
 /**
  * @typedef {object} SelectSyncedProps
- * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`.
- * @property {Array.<SelectOption>} options The list of select options.
- * @property {Function} [onChange] A function to be called when the selected option changes. This should only be used for side effects.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-interface SelectSyncedProps extends SharedSelectProps, StyleProps {
+interface SelectSyncedProps extends SharedSelectProps, SelectStyleProps {
+    /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;
 }
 
@@ -63,7 +51,7 @@ class SelectSynced extends React.Component<SelectSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         ...sharedSelectPropTypes,
-        ...stylePropTypes,
+        ...selectStylePropTypes,
     };
     /** @internal */
     _select: ReactRefType<typeof Select> | null;

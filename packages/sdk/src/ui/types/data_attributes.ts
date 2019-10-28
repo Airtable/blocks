@@ -1,6 +1,9 @@
+/** @module @airtable/blocks/ui/system: Core */ /** */
 import PropTypes from 'prop-types';
 
+/** */
 export interface DataAttributesProp {
+    /** */
     readonly [key: string]: unknown;
 }
 

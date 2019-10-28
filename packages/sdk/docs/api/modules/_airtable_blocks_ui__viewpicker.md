@@ -12,6 +12,7 @@
 
 ### Interfaces
 
+-   [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops)
 -   [ViewPickerProps](_airtable_blocks_ui__viewpicker.md#viewpickerprops)
 -   [ViewPickerSyncedProps](_airtable_blocks_ui__viewpicker.md#viewpickersyncedprops)
 
@@ -22,7 +23,7 @@
 • **ViewPicker**:
 
 _Defined in
-[src/ui/view_picker.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L111)_
+[src/ui/view_picker.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L102)_
 
 Dropdown menu component for selecting views.
 
@@ -79,7 +80,7 @@ function Block() {
 ▸ **blur**(): _void_
 
 _Defined in
-[src/ui/view_picker.tsx:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L139)_
+[src/ui/view_picker.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L130)_
 
 **Returns:** _void_
 
@@ -88,7 +89,7 @@ _Defined in
 ▸ **click**(): _void_
 
 _Defined in
-[src/ui/view_picker.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L146)_
+[src/ui/view_picker.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L137)_
 
 **Returns:** _void_
 
@@ -97,7 +98,7 @@ _Defined in
 ▸ **focus**(): _void_
 
 _Defined in
-[src/ui/view_picker.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L132)_
+[src/ui/view_picker.tsx:123](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L123)_
 
 **Returns:** _void_
 
@@ -108,7 +109,7 @@ _Defined in
 • **ViewPickerSynced**:
 
 _Defined in
-[src/ui/view_picker_synced.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L84)_
+[src/ui/view_picker_synced.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L69)_
 
 Dropdown menu component for selecting views, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
@@ -168,7 +169,7 @@ function Block() {
 ▸ **blur**(): _void_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L106)_
+[src/ui/view_picker_synced.tsx:91](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L91)_
 
 **Returns:** _void_
 
@@ -177,7 +178,7 @@ _Defined in
 ▸ **click**(): _void_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L113)_
+[src/ui/view_picker_synced.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L98)_
 
 **Returns:** _void_
 
@@ -186,57 +187,18 @@ _Defined in
 ▸ **focus**(): _void_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L99)_
+[src/ui/view_picker_synced.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L84)_
 
 **Returns:** _void_
 
 ## Interfaces
 
-### ViewPickerProps
+### SharedViewPickerProps
 
-• **ViewPickerProps**:
+• **SharedViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L59)_
-
-**`typedef`** {object} ViewPickerProps
-
-**`property`** {View} [view] The selected view model.
-
-**`property`** {Table} [table] The parent table model to select views from. If `null` or
-`undefined`, the picker won't render.
-
-**`property`** {Array.<ViewType>} [allowedTypes] An array indicating which view types can be
-selected.
-
-**`property`** {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected
-view.
-
-**`property`** {string} [placeholder='Pick a view...'] The placeholder text when no view is
-selected.
-
-**`property`** {Function} [onChange] A function to be called when the selected view changes.
-
-**`property`** {string} [autoFocus] The `autoFocus` attribute.
-
-**`property`** {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
-
-**`property`** {string} [id] The `id` attribute.
-
-**`property`** {string} [name] The `name` attribute.
-
-**`property`** {number} [tabIndex] The `tabindex` attribute.
-
-**`property`** {string} [className] Additional class names to apply to the picker.
-
-**`property`** {object} [style] Additional styles to apply to the picker.
-
-**`property`** {string} [aria-label] The `aria-label` attribute. Use this if the select is not
-referenced by a label element.
-
-**`property`** {string} [aria-labelledby] A space separated list of label element IDs.
-
-**`property`** {string} [aria-describedby] A space separated list of description element IDs.
+[src/ui/view_picker.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L22)_
 
 ### `Optional` alignSelf
 
@@ -250,6 +212,63 @@ _Defined in
 
 Aligns flex items of the current flex line, overriding the `alignItems` value.
 
+### `Optional` allowedTypes
+
+• **allowedTypes**? : _Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)›_
+
+_Defined in
+[src/ui/view_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L26)_
+
+An array indicating which view types can be selected.
+
+### `Optional` aria-describedby
+
+• **aria-describedby**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
+
+_Defined in
+[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+
+A space separated list of description element IDs.
+
+### `Optional` aria-label
+
+• **aria-label**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
+
+_Defined in
+[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+
+The `aria-label` attribute. Use this if the select is not referenced by a label element.
+
+### `Optional` aria-labelledby
+
+• **aria-labelledby**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
+
+_Defined in
+[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+
+A space separated list of label element IDs.
+
+### `Optional` autoFocus
+
+• **autoFocus**? : _undefined | false | true_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
+
+_Defined in
+[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+
+The `autoFocus` attribute.
+
 ### `Optional` bottom
 
 • **bottom**? : _Prop‹BottomProperty‹Length››_
@@ -262,6 +281,30 @@ _Defined in
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
+
+### `Optional` className
+
+• **className**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
+
+_Defined in
+[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+
+Additional class names to apply to the select.
+
+### `Optional` disabled
+
+• **disabled**? : _undefined | false | true_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
+
+_Defined in
+[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+
+If set to `true`, the user cannot interact with the select.
 
 ### `Optional` flex
 
@@ -313,6 +356,18 @@ _Defined in
 
 Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
 container, items shrink to fit according to `flexShrink`.
+
+### `Optional` id
+
+• **id**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
+
+_Defined in
+[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+
+The `id` attribute.
 
 ### `Optional` left
 
@@ -444,6 +499,27 @@ _Defined in
 Sets the minimum width of an element. It prevents the used value of the `width` property from
 becoming smaller than the value specified for `minWidth`.
 
+### `Optional` name
+
+• **name**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
+
+_Defined in
+[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+
+The `name` attribute.
+
+### `Optional` onChange
+
+• **onChange**? : _undefined | function_
+
+_Defined in
+[src/ui/view_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L32)_
+
+A function to be called when the selected view changes.
+
 ### `Optional` order
 
 • **order**? : _Prop‹GlobalsNumber›_
@@ -456,6 +532,15 @@ _Defined in
 
 Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
 and then by their source code order.
+
+### `Optional` placeholder
+
+• **placeholder**? : _undefined | string_
+
+_Defined in
+[src/ui/view_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L30)_
+
+The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 
 ### `Optional` position
 
@@ -482,6 +567,48 @@ _Defined in
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
+
+### `Optional` shouldAllowPickingNone
+
+• **shouldAllowPickingNone**? : _undefined | false | true_
+
+_Defined in
+[src/ui/view_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L28)_
+
+If set to `true`, the user can unset the selected view.
+
+### `Optional` style
+
+• **style**? : _React.CSSProperties_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
+
+_Defined in
+[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+
+Additional styles to apply to the select.
+
+### `Optional` tabIndex
+
+• **tabIndex**? : _undefined | number_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
+
+_Defined in
+[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+
+The `tabindex` attribute.
+
+### `Optional` table
+
+• **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
+
+_Defined in
+[src/ui/view_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L24)_
+
+The parent table model to select views from. If `null` or `undefined`, the picker won't render.
 
 ### `Optional` top
 
@@ -523,55 +650,14 @@ with larger z-indexes cover those with smaller ones.
 
 ---
 
-### ViewPickerSyncedProps
+### ViewPickerProps
 
-• **ViewPickerSyncedProps**:
+• **ViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker_synced.tsx:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L33)_
+[src/ui/view_picker.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L49)_
 
-**`typedef`** {object} ViewPickerSyncedProps
-
-**`property`** {GlobalConfigKey} globalConfigKey A string key or array key path in
-[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig). The selected view will always
-reflect the view id stored in `globalConfig` for this key. Selecting a new view will update
-`globalConfig`.
-
-**`property`** {Table} [table] The parent table model to select views from. If `null` or
-`undefined`, the picker won't render.
-
-**`property`** {Array.<ViewType>} [allowedTypes] An array indicating which view types can be
-selected.
-
-**`property`** {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected
-view.
-
-**`property`** {string} [placeholder='Pick a view...'] The placeholder text when no view is
-selected.
-
-**`property`** {Function} [onChange] A function to be called when the selected view changes. This
-should only be used for side effects.
-
-**`property`** {string} [autoFocus] The `autoFocus` attribute.
-
-**`property`** {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
-
-**`property`** {string} [id] The `id` attribute.
-
-**`property`** {string} [name] The `name` attribute.
-
-**`property`** {number} [tabIndex] The `tabindex` attribute.
-
-**`property`** {string} [className] Additional class names to apply to the picker.
-
-**`property`** {object} [style] Additional styles to apply to the picker.
-
-**`property`** {string} [aria-label] The `aria-label` attribute. Use this if the select is not
-referenced by a label element.
-
-**`property`** {string} [aria-labelledby] A space separated list of label element IDs.
-
-**`property`** {string} [aria-describedby] A space separated list of description element IDs.
+**`typedef`** {object} ViewPickerProps
 
 ### `Optional` alignSelf
 
@@ -585,6 +671,66 @@ _Defined in
 
 Aligns flex items of the current flex line, overriding the `alignItems` value.
 
+### `Optional` allowedTypes
+
+• **allowedTypes**? : _Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)›_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[allowedTypes](_airtable_blocks_ui__viewpicker.md#optional-allowedtypes)_
+
+_Defined in
+[src/ui/view_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L26)_
+
+An array indicating which view types can be selected.
+
+### `Optional` aria-describedby
+
+• **aria-describedby**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
+
+_Defined in
+[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+
+A space separated list of description element IDs.
+
+### `Optional` aria-label
+
+• **aria-label**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
+
+_Defined in
+[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+
+The `aria-label` attribute. Use this if the select is not referenced by a label element.
+
+### `Optional` aria-labelledby
+
+• **aria-labelledby**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
+
+_Defined in
+[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+
+A space separated list of label element IDs.
+
+### `Optional` autoFocus
+
+• **autoFocus**? : _undefined | false | true_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
+
+_Defined in
+[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+
+The `autoFocus` attribute.
+
 ### `Optional` bottom
 
 • **bottom**? : _Prop‹BottomProperty‹Length››_
@@ -597,6 +743,30 @@ _Defined in
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
+
+### `Optional` className
+
+• **className**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
+
+_Defined in
+[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+
+Additional class names to apply to the select.
+
+### `Optional` disabled
+
+• **disabled**? : _undefined | false | true_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
+
+_Defined in
+[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+
+If set to `true`, the user cannot interact with the select.
 
 ### `Optional` flex
 
@@ -648,6 +818,18 @@ _Defined in
 
 Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
 container, items shrink to fit according to `flexShrink`.
+
+### `Optional` id
+
+• **id**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
+
+_Defined in
+[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+
+The `id` attribute.
 
 ### `Optional` left
 
@@ -779,6 +961,30 @@ _Defined in
 Sets the minimum width of an element. It prevents the used value of the `width` property from
 becoming smaller than the value specified for `minWidth`.
 
+### `Optional` name
+
+• **name**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
+
+_Defined in
+[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+
+The `name` attribute.
+
+### `Optional` onChange
+
+• **onChange**? : _undefined | function_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[onChange](_airtable_blocks_ui__viewpicker.md#optional-onchange)_
+
+_Defined in
+[src/ui/view_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L32)_
+
+A function to be called when the selected view changes.
+
 ### `Optional` order
 
 • **order**? : _Prop‹GlobalsNumber›_
@@ -791,6 +997,18 @@ _Defined in
 
 Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
 and then by their source code order.
+
+### `Optional` placeholder
+
+• **placeholder**? : _undefined | string_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[placeholder](_airtable_blocks_ui__viewpicker.md#optional-placeholder)_
+
+_Defined in
+[src/ui/view_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L30)_
+
+The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 
 ### `Optional` position
 
@@ -817,6 +1035,548 @@ _Defined in
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
+
+### `Optional` shouldAllowPickingNone
+
+• **shouldAllowPickingNone**? : _undefined | false | true_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[shouldAllowPickingNone](_airtable_blocks_ui__viewpicker.md#optional-shouldallowpickingnone)_
+
+_Defined in
+[src/ui/view_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L28)_
+
+If set to `true`, the user can unset the selected view.
+
+### `Optional` style
+
+• **style**? : _React.CSSProperties_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
+
+_Defined in
+[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+
+Additional styles to apply to the select.
+
+### `Optional` tabIndex
+
+• **tabIndex**? : _undefined | number_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
+
+_Defined in
+[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+
+The `tabindex` attribute.
+
+### `Optional` table
+
+• **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[table](_airtable_blocks_ui__viewpicker.md#optional-table)_
+
+_Defined in
+[src/ui/view_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L24)_
+
+The parent table model to select views from. If `null` or `undefined`, the picker won't render.
+
+### `Optional` top
+
+• **top**? : _Prop‹TopProperty‹Length››_
+
+_Inherited from
+[TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
+
+_Defined in
+[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/top.ts#L11)_
+
+Specifies the vertical position of a positioned element. It has no effect on non-positioned
+elements.
+
+### `Optional` view
+
+• **view**? : _[View](_airtable_blocks_models__view.md#view) | null_
+
+_Defined in
+[src/ui/view_picker.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L51)_
+
+The selected view model.
+
+### `Optional` width
+
+• **width**? : _Prop‹WidthProperty‹Length››_
+
+_Inherited from
+[WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
+
+_Defined in
+[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
+
+Specifies the width of an element.
+
+### `Optional` zIndex
+
+• **zIndex**? : _Prop‹ZIndexProperty›_
+
+_Inherited from
+[ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
+
+_Defined in
+[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/z_index.ts#L10)_
+
+Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
+with larger z-indexes cover those with smaller ones.
+
+---
+
+### ViewPickerSyncedProps
+
+• **ViewPickerSyncedProps**:
+
+_Defined in
+[src/ui/view_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L17)_
+
+**`typedef`** {object} ViewPickerSyncedProps
+
+### `Optional` alignSelf
+
+• **alignSelf**? : _Prop‹AlignSelfProperty›_
+
+_Inherited from
+[AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
+
+_Defined in
+[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
+
+Aligns flex items of the current flex line, overriding the `alignItems` value.
+
+### `Optional` allowedTypes
+
+• **allowedTypes**? : _Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)›_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[allowedTypes](_airtable_blocks_ui__viewpicker.md#optional-allowedtypes)_
+
+_Defined in
+[src/ui/view_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L26)_
+
+An array indicating which view types can be selected.
+
+### `Optional` aria-describedby
+
+• **aria-describedby**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
+
+_Defined in
+[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+
+A space separated list of description element IDs.
+
+### `Optional` aria-label
+
+• **aria-label**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
+
+_Defined in
+[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+
+The `aria-label` attribute. Use this if the select is not referenced by a label element.
+
+### `Optional` aria-labelledby
+
+• **aria-labelledby**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
+
+_Defined in
+[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+
+A space separated list of label element IDs.
+
+### `Optional` autoFocus
+
+• **autoFocus**? : _undefined | false | true_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
+
+_Defined in
+[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+
+The `autoFocus` attribute.
+
+### `Optional` bottom
+
+• **bottom**? : _Prop‹BottomProperty‹Length››_
+
+_Inherited from
+[BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
+
+_Defined in
+[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/bottom.ts#L11)_
+
+Specifies the vertical position of a positioned element. It has no effect on non-positioned
+elements.
+
+### `Optional` className
+
+• **className**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
+
+_Defined in
+[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+
+Additional class names to apply to the select.
+
+### `Optional` disabled
+
+• **disabled**? : _undefined | false | true_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
+
+_Defined in
+[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+
+If set to `true`, the user cannot interact with the select.
+
+### `Optional` flex
+
+• **flex**? : _Prop‹FlexProperty‹Length››_
+
+_Inherited from
+[FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
+
+_Defined in
+[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
+
+Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a
+shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
+
+### `Optional` flexBasis
+
+• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
+
+_Inherited from
+[FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
+
+_Defined in
+[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
+
+Sets the initial main size of a flex item.
+
+### `Optional` flexGrow
+
+• **flexGrow**? : _Prop‹GlobalsNumber›_
+
+_Inherited from
+[FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
+
+_Defined in
+[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
+
+Sets the flex grow factor of a flex item. If the size of flex items is smaller than the flex
+container, items grow to fit according to `flexGrow`.
+
+### `Optional` flexShrink
+
+• **flexShrink**? : _Prop‹GlobalsNumber›_
+
+_Inherited from
+[FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
+
+_Defined in
+[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
+
+Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
+container, items shrink to fit according to `flexShrink`.
+
+### globalConfigKey
+
+• **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
+
+_Defined in
+[src/ui/view_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L19)_
+
+A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
+The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a
+new view will update `globalConfig`.
+
+### `Optional` id
+
+• **id**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
+
+_Defined in
+[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+
+The `id` attribute.
+
+### `Optional` left
+
+• **left**? : _Prop‹LeftProperty‹Length››_
+
+_Inherited from
+[LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
+
+_Defined in
+[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/left.ts#L11)_
+
+Specifies the horizontal position of a positioned element. It has no effect on non-positioned
+elements.
+
+### `Optional` margin
+
+• **margin**? : _Prop‹MarginProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[margin](_airtable_blocks_ui_system__spacing.md#optional-margin)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
+
+Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`,
+`marginRight`, `marginBottom`, and `marginLeft`.
+
+### `Optional` marginBottom
+
+• **marginBottom**? : _Prop‹MarginBottomProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginBottom](_airtable_blocks_ui_system__spacing.md#optional-marginbottom)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
+
+Sets the margin area on the bottom of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginLeft
+
+• **marginLeft**? : _Prop‹MarginLeftProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginLeft](_airtable_blocks_ui_system__spacing.md#optional-marginleft)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
+
+Sets the margin area on the left of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginRight
+
+• **marginRight**? : _Prop‹MarginRightProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginRight](_airtable_blocks_ui_system__spacing.md#optional-marginright)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
+
+Sets the margin area on the right of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginTop
+
+• **marginTop**? : _Prop‹MarginTopProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginTop](_airtable_blocks_ui_system__spacing.md#optional-margintop)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
+
+Sets the margin area on the top of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginX
+
+• **marginX**? : _Prop‹MarginProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginX](_airtable_blocks_ui_system__spacing.md#optional-marginx)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
+
+Sets the margin area on the top and bottom of an element. A positive value places it farther from
+its neighbors, while a negative value places it closer.
+
+### `Optional` marginY
+
+• **marginY**? : _Prop‹MarginProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginY](_airtable_blocks_ui_system__spacing.md#optional-marginy)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
+
+Sets the margin area on the left and right of an element. A positive value places it farther from
+its neighbors, while a negative value places it closer.
+
+### `Optional` maxWidth
+
+• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
+
+_Inherited from
+[MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
+
+_Defined in
+[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
+
+Sets the maximum width of an element. It prevents the used value of the `width` property from
+becoming larger than the value specified by `maxWidth`.
+
+### `Optional` minWidth
+
+• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
+
+_Inherited from
+[MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
+
+_Defined in
+[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
+
+Sets the minimum width of an element. It prevents the used value of the `width` property from
+becoming smaller than the value specified for `minWidth`.
+
+### `Optional` name
+
+• **name**? : _undefined | string_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
+
+_Defined in
+[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+
+The `name` attribute.
+
+### `Optional` onChange
+
+• **onChange**? : _undefined | function_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[onChange](_airtable_blocks_ui__viewpicker.md#optional-onchange)_
+
+_Defined in
+[src/ui/view_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L32)_
+
+A function to be called when the selected view changes.
+
+### `Optional` order
+
+• **order**? : _Prop‹GlobalsNumber›_
+
+_Inherited from
+[OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
+
+_Defined in
+[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
+
+Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
+and then by their source code order.
+
+### `Optional` placeholder
+
+• **placeholder**? : _undefined | string_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[placeholder](_airtable_blocks_ui__viewpicker.md#optional-placeholder)_
+
+_Defined in
+[src/ui/view_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L30)_
+
+The placeholder text when no view is selected. Defaults to `'Pick a view...'`
+
+### `Optional` position
+
+• **position**? : _Prop‹PositionProperty›_
+
+_Inherited from
+[PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
+
+_Defined in
+[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position.ts#L10)_
+
+Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
+determine the final location of positioned elements.
+
+### `Optional` right
+
+• **right**? : _Prop‹RightProperty‹Length››_
+
+_Inherited from
+[RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
+
+_Defined in
+[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/right.ts#L11)_
+
+Specifies the horizontal position of a positioned element. It has no effect on non-positioned
+elements.
+
+### `Optional` shouldAllowPickingNone
+
+• **shouldAllowPickingNone**? : _undefined | false | true_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[shouldAllowPickingNone](_airtable_blocks_ui__viewpicker.md#optional-shouldallowpickingnone)_
+
+_Defined in
+[src/ui/view_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L28)_
+
+If set to `true`, the user can unset the selected view.
+
+### `Optional` style
+
+• **style**? : _React.CSSProperties_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
+
+_Defined in
+[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+
+Additional styles to apply to the select.
+
+### `Optional` tabIndex
+
+• **tabIndex**? : _undefined | number_
+
+_Inherited from
+[SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
+
+_Defined in
+[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+
+The `tabindex` attribute.
+
+### `Optional` table
+
+• **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
+
+_Inherited from
+[SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[table](_airtable_blocks_ui__viewpicker.md#optional-table)_
+
+_Defined in
+[src/ui/view_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L24)_
+
+The parent table model to select views from. If `null` or `undefined`, the picker won't render.
 
 ### `Optional` top
 

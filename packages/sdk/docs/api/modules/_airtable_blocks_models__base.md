@@ -322,35 +322,46 @@ the array of keys that were watched
 • **CollaboratorData**:
 
 _Defined in
-[src/types/collaborator.ts:7](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L7)_
+[src/types/collaborator.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L10)_
+
+An object representing a collaborator. You should not create these objects from scratch, but should
+instead grab them from base data.
 
 ### email
 
 • **email**: _string_
 
 _Defined in
-[src/types/collaborator.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L11)_
+[src/types/collaborator.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L14)_
+
+The email address of the collaborator.
 
 ### id
 
 • **id**: _[UserId](_airtable_blocks_models__base.md#userid)_
 
 _Defined in
-[src/types/collaborator.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L9)_
+[src/types/collaborator.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L12)_
+
+The user ID of the collaborator.
 
 ### `Optional` name
 
 • **name**? : _undefined | string_
 
 _Defined in
-[src/types/collaborator.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L13)_
+[src/types/collaborator.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L16)_
+
+The name of the collaborator.
 
 ### `Optional` profilePicUrl
 
 • **profilePicUrl**? : _undefined | string_
 
 _Defined in
-[src/types/collaborator.ts:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L15)_
+[src/types/collaborator.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/collaborator.ts#L18)_
+
+The URL of the collaborator's profile picture.
 
 ## Type aliases
 

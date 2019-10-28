@@ -19,7 +19,8 @@ import {
 
 const ORIGINAL_SIZE = 54;
 
-interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
+/** */
+interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -27,7 +28,7 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+const loaderStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
@@ -35,15 +36,15 @@ const stylePropTypes = {
 
 /**
  * @typedef {object} LoaderProps
- * @property {string} [fillColor='#888'] The color of the loading spinner.
- * @property {number} [scale=0.3] A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner.
- * @property {string} [className] Additional class names to apply to the loading spinner.
- * @property {object} [style] Additional styles to apply to the loading spinner.
  */
-interface LoaderProps extends StyleProps {
+interface LoaderProps extends LoaderStyleProps {
+    /** The color of the loading spinner. Defaults to `'#888'` */
     fillColor: string;
+    /** A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner. Defaults to `0.3`. */
     scale: number;
+    /** Additional class names to apply to the loading spinner. */
     className?: string;
+    /** Additional styles to apply to the loading spinner. */
     style?: React.CSSProperties;
 }
 
@@ -69,7 +70,7 @@ interface LoaderProps extends StyleProps {
  */
 const Loader = (props: LoaderProps) => {
     const {fillColor, scale, className, style, ...styleProps} = props;
-    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<LoaderStyleProps>(styleProps, styleParser);
 
     return (
         <svg
@@ -109,7 +110,7 @@ Loader.propTypes = {
     scale: PropTypes.number.isRequired,
     className: PropTypes.string,
     style: PropTypes.object,
-    ...stylePropTypes,
+    ...loaderStylePropTypes,
 };
 
 Loader.defaultProps = {

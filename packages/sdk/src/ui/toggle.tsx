@@ -47,6 +47,7 @@ const themes = Object.freeze({
     GRAY: 'gray',
 });
 
+/** */
 export type ToggleTheme = ObjectValues<typeof themes>;
 
 const classNamesByTheme = Object.freeze({
@@ -59,34 +60,35 @@ const classNamesByTheme = Object.freeze({
 
 /**
  * @typedef {object} ToggleProps
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the switch.
- * @property {string} [id] The ID of the switch element.
- * @property {React.Node} [label] The label node for the switch.
- * @property {Function} [onChange] A function to be called when the switch is toggled.
- * @property {number} [tabIndex] Indicates if the switch can be focused and if/where it participates in sequential keyboard navigation.
- * @property {Toggle.themes.GREEN | Toggle.themes.BLUE | Toggle.themes.RED | Toggle.themes.YELLOW | Toggle.themes.GRAY} [theme=Toggle.themes.GREEN] The color theme for the switch.
- * @property {boolean} value If set to `true`, the switch will be toggled on.
- * @property {string} [className] Additional class names to apply to the switch.
- * @property {object} [style] Additional styles to apply to the switch.
- * @property {string} [aria-label] The label for the switch. Use this if the switch lacks a visible text label.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 export interface SharedToggleProps extends TooltipAnchorProps {
+    /** Additional class names to apply to the switch. */
     className?: string;
+    /** If set to `true`, the user cannot interact with the switch. */
     disabled?: boolean;
+    /** The label node for the switch. */
     label?: React.ReactNode;
+    /** A function to be called when the switch is toggled. */
     onChange?: (arg1: boolean) => unknown;
+    /** Indicates if the switch can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
+    /** The color theme for the switch. Defaults to Toggle.themes.GREEN. */
     theme?: ToggleTheme;
+    /** The ID of the switch element. */
     id?: string;
+    /** Additional styles to apply to the switch. */
     style?: React.CSSProperties;
+    /** The label for the switch. Use this if the switch lacks a visible text label. */
     ['aria-label']?: string;
+    /** A space separated list of label element IDs. */
     ['aria-labelledby']?: string;
+    /** A space separated list of description element IDs. */
     ['aria-describedby']?: string;
 }
 
+/** */
 interface ToggleProps extends SharedToggleProps {
+    /** If set to `true`, the switch will be toggled on. */
     value: boolean;
 }
 
@@ -105,13 +107,15 @@ export const sharedTogglePropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-export interface StyleProps
+/** */
+export interface ToggleStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
         FlexItemSetProps,
         PositionSetProps,
         SpacingSetProps {
+    /** */
     display?: Prop<'flex' | 'inline-flex'>;
 }
 
@@ -125,7 +129,7 @@ const styleParser = compose(
     display,
 );
 
-export const stylePropTypes = {
+export const toggleStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -311,12 +315,12 @@ export class Toggle extends React.Component<ToggleProps> {
 
 export default withStyledSystem<
     ToggleProps,
-    StyleProps,
+    ToggleStyleProps,
     Toggle,
     {
         themes: typeof themes;
     }
->(Toggle, styleParser, stylePropTypes, {
+>(Toggle, styleParser, toggleStylePropTypes, {
     display: 'inline-flex',
     padding: 1,
 });

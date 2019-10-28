@@ -37,13 +37,15 @@ import Icon from './icon';
 import cssHelpers from './css_helpers';
 import Box from './box';
 
-interface StyleProps
+/** */
+interface ButtonStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
         FlexItemSetProps,
         PositionSetProps,
         MarginProps {
+    /** */
     display?: Prop<'inline-flex' | 'flex' | 'none'>;
 }
 
@@ -57,7 +59,7 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+const buttonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
@@ -67,6 +69,7 @@ const stylePropTypes = {
     ...marginPropTypes,
 };
 
+/** */
 type ButtonVariant = EnumType<typeof ButtonVariant>;
 const ButtonVariant = createEnum('default', 'primary', 'secondary', 'danger');
 const buttonVariantPropType = createPropTypeFromEnum(ButtonVariant);
@@ -79,39 +82,32 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
 
 /**
  * @typedef {object} ButtonProps
- * @property {'small' | 'default' | 'large'} [size='default'] The size of the button. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'primary' | 'secondary' | 'danger'} [variant='default'] The variant of the button. Defaults to `default`.
- * @property {IconName | React.Element} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
- * @property {'button' | 'submit' | 'reset'} [type='button'] The type of the button. Defaults to `button`.
- * @property {string} [id] The `id` attribute.
- * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
- * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
- * @property {Function} [onClick] Click event handler. Also handles Space and Enter keypress events.
- * @property {string} [className] Extra `className`s to apply to the button, separated by spaces.
- * @property {object} [style] Extra styles to apply to the button.
- * @property {string} [aria-selected] The `aria-selected` attribute.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the button lacks a visible text label.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
  */
-interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement>, AriaProps, StyleProps {
+interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement>, AriaProps, ButtonStyleProps {
+    /** The size of the button. Defaults to `default`. Can be a responsive prop object. */
     size?: ControlSizeProp;
+    /** The variant of the button. Defaults to `default`. */
     variant?: ButtonVariant;
+    /** The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
     icon?: IconName | React.ReactElement;
+    /** The type of the button. Defaults to `button`. */
     type?: 'button' | 'submit' | 'reset';
+    /** The `id` attribute. */
     id?: string;
+    /** Indicates whether or not the user can interact with the button. */
     disabled?: boolean;
+    /** Indicates if the button can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
+    /** The contents of the button. */
     children: React.ReactNode;
     // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again.
+    /** Click event handler. Also handles Space and Enter keypress events. */
     onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => unknown;
+    /** Extra `className`s to apply to the button, separated by spaces. */
     className?: string;
+    /** Extra styles to apply to the button. */
     style?: React.CSSProperties;
+    /** The `aria-selected` attribute. */
     'aria-selected'?: boolean;
 }
 
@@ -218,7 +214,7 @@ Button.propTypes = {
     disabled: PropTypes.bool,
     tabIndex: PropTypes.number,
     children: PropTypes.node.isRequired,
-    ...stylePropTypes,
+    ...buttonStylePropTypes,
     ...tooltipAnchorPropTypes,
     ...ariaPropTypes,
 };

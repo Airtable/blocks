@@ -6,9 +6,12 @@ import Record from '../models/record';
 import useLoadable from './use_loadable';
 import useWatchable from './use_watchable';
 
+/** */
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 
+/** @hidden */
 export function useRecordIds(queryResult: AnyQueryResult): Array<RecordId>;
+/** @hidden */
 export function useRecordIds(queryResult: null): null;
 
 /**
@@ -47,7 +50,9 @@ export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId
     return queryResult ? queryResult.recordIds : null;
 }
 
+/** @hidden */
 export function useRecords(queryResult: AnyQueryResult): Array<Record>;
+/** @hidden */
 export function useRecords(queryResult: null): null;
 
 /**

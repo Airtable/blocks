@@ -5,20 +5,36 @@
 
 ## Index
 
+### Type aliases
+
+-   [AnyQueryResult](_airtable_blocks_ui__userecords.md#anyqueryresult)
+
 ### Functions
 
 -   [useRecordById](_airtable_blocks_ui__userecords.md#userecordbyid)
+
+## Type aliases
+
+### AnyQueryResult
+
+Ƭ **AnyQueryResult**:
+_[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult) |
+[LinkedRecordsQueryResult](_airtable_blocks_models__recordqueryresult.md#linkedrecordsqueryresult)_
+
+_Defined in
+[src/ui/use_records.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_records.ts#L10)_
 
 ## Functions
 
 ### useRecordById
 
-▸ **useRecordById**(`queryResult`: AnyQueryResult | null, `recordId`:
+▸ **useRecordById**(`queryResult`:
+[AnyQueryResult](_airtable_blocks_ui__userecords.md#anyqueryresult) | null, `recordId`:
 [RecordId](_airtable_blocks_models__record.md#recordid)):
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Defined in
-[src/ui/use_records.ts:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_records.ts#L141)_
+[src/ui/use_records.ts:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_records.ts#L146)_
 
 A hook for working with a single record from a query result. Automatically handles loading data in
 the query result and updating your component when the records cell values etc. change.
@@ -63,10 +79,10 @@ function RecordList() {
 
 **Parameters:**
 
-| Name          | Type                                                    | Description                                         |
-| ------------- | ------------------------------------------------------- | --------------------------------------------------- |
-| `queryResult` | AnyQueryResult &#124; null                              | the query result you want a record from             |
-| `recordId`    | [RecordId](_airtable_blocks_models__record.md#recordid) | the ID of the record you want from the query result |
+| Name          | Type                                                                            | Description                                         |
+| ------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `queryResult` | [AnyQueryResult](_airtable_blocks_ui__userecords.md#anyqueryresult) &#124; null | the query result you want a record from             |
+| `recordId`    | [RecordId](_airtable_blocks_models__record.md#recordid)                         | the ID of the record you want from the query result |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record) | null_
 

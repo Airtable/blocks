@@ -20,11 +20,15 @@ import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
 
+/** */
 type HeadingSize = EnumType<typeof HeadingSize>;
 const HeadingSize = createEnum('xsmall', 'small', 'default', 'large', 'xlarge', 'xxlarge');
+
+/** */
 type HeadingSizeProp = ResponsiveProp<HeadingSize>;
 const headingSizePropType = createResponsivePropTypeFromEnum(HeadingSize);
 
+/** */
 type HeadingVariant = EnumType<typeof HeadingVariant>;
 const HeadingVariant = createEnum('default', 'caps');
 const headingVariantPropType = createPropTypeFromEnum(HeadingVariant);
@@ -80,31 +84,25 @@ function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVaria
 
 /**
  * @typedef {object} HeadingProps
- * @property {'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'} [as='h3'] The element that is rendered. Defaults to `h3`.
- * @property {'xsmall' | 'small' | 'default' | 'large' | 'xlarge' | 'xxlarge'} [size='default'] The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
- * @property {'default' | 'caps'} [variant='default'] The `variant` of the heading. Defaults to `default`.
- * @property {string} [role] The `role` attribute.
- * @property {string} [className] Additional class names to apply, separated by spaces.
- * @property {object} [style] Additional styles.
- * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
- * @property {string} [aria-label] The `aria-label` attribute.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
  */
 interface HeadingProps extends AriaProps, AllStylesProps {
+    /** The `role` attribute. */
     role?: string;
+    /** The element that is rendered. Defaults to `h3`. */
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+    /** The `variant` of the heading. Defaults to `default`. */
     variant?: HeadingVariant;
+    /** */
     children?: React.ReactNode;
+    /** The `id` attribute. */
     id?: string;
+    /** The `size` of the heading. Defaults to `default`. Can be a responsive prop object. */
     size?: HeadingSizeProp;
+    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
+    /** Additional class names to apply, separated by spaces. */
     className?: string;
+    /** Additional styles. */
     style?: React.CSSProperties;
 }
 

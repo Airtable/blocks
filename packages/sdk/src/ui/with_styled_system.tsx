@@ -34,13 +34,13 @@ import useStyledSystem from './use_styled_system';
  *     MarginProps,
  * } from './system';
  *
- * type Props = {
- *     className?: string,
- *     onClick: () => void,
- *     children: React.ReactNode,
+ * interface Props {
+ *     className?: string;
+ *     onClick: () => void;
+ *     children: React.ReactNode;
  * };
  *
- * type StyleProps = FlexContainerSetProps & FlexItemSetProps & MarginProps;
+ * interface MyComponentStyleProps extends FlexContainerSetProps, FlexItemSetProps, MarginProps {}
  *
  * const styleParser = compose(
  *     flexContainerSet,
@@ -48,7 +48,7 @@ import useStyledSystem from './use_styled_system';
  *     margin,
  * );
  *
- * const stylePropTypes = {
+ * const myComponentStylePropTypes = {
  *     ...flexContainerSetPropTypes,
  *     ...flexItemSetPropTypes,
  *     ...marginPropTypes,
@@ -66,10 +66,10 @@ import useStyledSystem from './use_styled_system';
  *     }
  * }
  *
- * export default withStyledSystem<Props, StyleProps, MyComponent, { staticProp: string }>(
+ * export default withStyledSystem<Props, MyComponentStyleProps, MyComponent, { staticProp: string }>(
  *     MyComponent,
  *     styleParser,
- *     stylePropTypes,
+ *     myComponentStylePropTypes,
  *     {
  *         // Optional default style props.
  *         margin: 3

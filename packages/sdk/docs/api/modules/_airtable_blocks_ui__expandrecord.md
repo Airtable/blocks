@@ -24,6 +24,16 @@ _Defined in
 
 **`typedef`**
 
+### `Optional` records
+
+• **records**? : _Array‹[Record](_airtable_blocks_models__record.md#record)›_
+
+_Defined in
+[src/ui/expand_record.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L8)_
+
+If `records` is provided, the list will be used to page through records from the expanded record
+dialog.
+
 ## Functions
 
 ### expandRecord
@@ -32,7 +42,7 @@ _Defined in
 [ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts)): _void_
 
 _Defined in
-[src/ui/expand_record.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L26)_
+[src/ui/expand_record.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L25)_
 
 Expands the given record in the Airtable UI.
 

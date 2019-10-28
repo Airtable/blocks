@@ -3,25 +3,19 @@ import * as React from 'react';
 import {spawnError} from '../error_utils';
 import {GlobalConfigKey} from '../global_config';
 import ColorPalette, {
-    stylePropTypes,
+    colorPaletteStylePropTypes,
     sharedColorPalettePropTypes,
     SharedColorPaletteProps,
-    StyleProps,
+    ColorPaletteStyleProps,
 } from './color_palette';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 /**
  * @typedef {object} ColorPaletteSyncedProps
- * @property {GlobalConfigKey} globalConfigKey The key, or path to a key, in global config.
- * @property {Array<string>} allowedColors The list of {@link colors} to display in the color palette.
- * @property {number} [squareMargin] The margin between color squares in the color palette.
- * @property {string} [className=''] Additional class names to apply to the color palette, separated by spaces.
- * @property {object} [style={}] Additional styles to apply to the color palette.
- * @property {boolean} [disabled=false] If set to `true`, the color palette will not allow color selection.
- * @property {Function} [onChange] A function to be called when the selected color changes.
  */
-interface ColorPaletteSyncedProps extends SharedColorPaletteProps, StyleProps {
+interface ColorPaletteSyncedProps extends SharedColorPaletteProps, ColorPaletteStyleProps {
+    /** The key, or path to a key, in global config. */
     globalConfigKey: GlobalConfigKey;
 }
 
@@ -50,7 +44,7 @@ class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         ...sharedColorPalettePropTypes,
-        ...stylePropTypes,
+        ...colorPaletteStylePropTypes,
     };
     /** @hidden */
     render() {

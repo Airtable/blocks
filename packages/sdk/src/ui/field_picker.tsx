@@ -10,19 +10,25 @@ import {FieldTypes, FieldType} from '../types/field';
 import {
     SharedSelectBaseProps,
     sharedSelectBasePropTypes,
-    stylePropTypes,
-    StyleProps,
+    selectStylePropTypes,
+    SelectStyleProps,
 } from './select';
 import ModelPickerSelect from './model_picker_select';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `FieldPicker` and `FieldPickerSynced`.
-export interface SharedFieldPickerProps extends SharedSelectBaseProps, StyleProps {
+/** */
+export interface SharedFieldPickerProps extends SharedSelectBaseProps, SelectStyleProps {
+    /** The parent table model to select fields from. If `null` or `undefined`, the picker won't render. */
     table?: Table | null;
+    /** An array indicating which field types can be selected. */
     allowedTypes?: Array<FieldType>;
+    /** If set to `true`, the user can unset the selected field. */
     shouldAllowPickingNone?: boolean;
+    /** The placeholder text when no field is selected. */
     placeholder?: string;
+    /** A function to be called when the selected field changes. */
     onChange?: (fieldModel: Field | null) => void;
 }
 
@@ -34,29 +40,14 @@ export const sharedFieldPickerPropTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     ...sharedSelectBasePropTypes,
-    ...stylePropTypes,
+    ...selectStylePropTypes,
 };
 
 /**
  * @typedef {object} FieldPickerProps
- * @property {Field} [field] The selected field model.
- * @property {Table} [table] The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
- * @property {Array.<FieldType>} [allowedTypes] An array indicating which field types can be selected.
- * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected field.
- * @property {string} [placeholder='Pick a field...'] The placeholder text when no field is selected.
- * @property {Function} [onChange] A function to be called when the selected field changes.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface FieldPickerProps extends SharedFieldPickerProps {
+    /** The selected field model. */
     field?: Field | null;
 }
 

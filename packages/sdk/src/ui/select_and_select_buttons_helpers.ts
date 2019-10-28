@@ -4,6 +4,7 @@ import * as React from 'react';
 
 // JSON stringify the value so you can use any primitive.
 // Regular <select> coerces all values to string, which is confusing.
+/**  */
 export type SelectOptionValue = string | number | boolean | null | undefined;
 
 /** @internal */
@@ -19,13 +20,13 @@ export function isSelectOptionValue(value: unknown): value is SelectOptionValue 
 
 /**
  * @typedef {object} SelectOption
- * @property {string | number | boolean | null} value The value for the select option.
- * @property {React.ReactNode} label The label for the select option.
- * @property {boolean} [disabled=false] If set to `true`, this option will not be selectable.
  */
 export interface SelectOption {
+    /** The value for the select option. */
     value: SelectOptionValue;
+    /** The label for the select option. */
     label: React.ReactNode;
+    /** If set to `true`, this option will not be selectable. */
     disabled?: boolean;
 }
 

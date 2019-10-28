@@ -3,37 +3,20 @@ import * as React from 'react';
 import {spawnInvariantViolationError, spawnError} from '../error_utils';
 import {GlobalConfigKey} from '../global_config';
 import {ReactRefType} from '../private_utils';
-import Input, {stylePropTypes, StyleProps, sharedInputPropTypes, SharedInputProps} from './input';
+import Input, {
+    inputStylePropTypes,
+    InputStyleProps,
+    sharedInputPropTypes,
+    SharedInputProps,
+} from './input';
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 /**
  * @typedef {object} InputSyncedProps
- * @property {string|Array<string>} globalConfigKey The key, or path to a key, in global config.
- * @property {Function} onChange A function to be called when the input changes.
- * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
- * @property {string} [placeholder] The placeholder for the input.
- * @property {object} [style] Additional styles to apply to the input.
- * @property {string} [className] Additional class names to apply to the input, separated by spaces.
- * @property {boolean} [disabled] The `disabled` attribute.
- * @property {boolean} [required] The `required` attribute.
- * @property {boolean} [spellCheck] The `spellcheck` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {string} [id] The `id` attribute.
- * @property {boolean} [autoFocus] The `autoFocus` attribute.
- * @property {number | string} [max] The `max` attribute.
- * @property {number} [maxLength] The `maxLength` attribute.
- * @property {number | string} [min] The `min` attribute.
- * @property {number} [minLength] The `minLength` attribute.
- * @property {number | string} [step] The `step` attribute.
- * @property {string} [pattern] The `pattern` attribute.
- * @property {boolean} [readOnly] The `readOnly` attribute.
- * @property {string} [autoComplete] The `autoComplete` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-interface InputSyncedProps extends SharedInputProps, StyleProps {
+interface InputSyncedProps extends SharedInputProps, InputStyleProps {
+    /** The key, or path to a key, in global config. */
     globalConfigKey: GlobalConfigKey;
 }
 
@@ -67,7 +50,7 @@ class InputSynced extends React.Component<InputSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         ...sharedInputPropTypes,
-        ...stylePropTypes,
+        ...inputStylePropTypes,
     };
     /** @internal */
     _input: ReactRefType<typeof Input> | null;

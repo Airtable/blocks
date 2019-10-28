@@ -3,6 +3,7 @@ import getSdk from '../get_sdk';
 import {GlobalConfigKey} from '../global_config';
 import useWatchable from './use_watchable';
 
+/** @hidden */
 const globalConfigSyncedComponentHelpers = {
     globalConfigKeyPropType: PropTypes.oneOfType([
         PropTypes.string,

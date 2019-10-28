@@ -12,31 +12,33 @@ const FADE_IN_ANIMATION_DURATION = 150;
 
 /**
  * @type {object}
- * @property {React$Element<*>} children Child components to render.
- * @property {string|Function} content A string representing the contents. Alternatively, you can include a function that returns a React node to place into the tooltip, which is useful for things like italicization in the tooltip.
- * @property {UI.Tooltip.placements.LEFT|UI.Tooltip.placements.CENTER|UI.Tooltip.placements.RIGHT} [placementX=UI.Tooltip.placements.RIGHT] The horizontal placement of the tooltip.
- * @property {UI.Tooltip.placements.TOP|UI.Tooltip.placements.CENTER|UI.Tooltip.placements.BOTTOM} [placementY=UI.Tooltip.placements.CENTER] The vertical placement of the tooltip.
- * @property {number} [placementOffsetX=12] The horizontal offset, in pixels, of the tooltip. If `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has no effect.
- * @property {number} [placementOffsetY=0] The vertical offset, in pixels, of the tooltip. If `placementY` is set to `UI.Tooltip.placements.TOP`, a higher number will move the tooltip upward. If `placementY` is set to `UI.Tooltip.placements.BOTTOM`, a higher number moves the tooltip downard. If `placementY` is set to `UI.Tooltip.placements.CENTER`, this value has no effect.
- * @property {UI.Tooltip.fitInWindowModes.FLIP|UI.Tooltip.fitInWindowModes.NUDGE|UI.Tooltip.fitInWindowModes.NONE} [fitInWindowMode=UI.Tooltip.fitInWindowModes.FLIP] Dictates the behavior when the "normal" placement of the tooltip would be outside of the viewport. If `NONE`, this has no effect, and the tooltip may be placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to fit on screen.
- * @property {boolean} [shouldHideTooltipOnClick=false] Should the tooltip be hidden when clicked?
- * @property {boolean} [disabled] If set to `true`, this tooltip will not be shown. Useful when trying to disable the tooltip dynamically.
- * @property {string} [className] Additional class names to attach to the tooltip, separated by spaces.
- * @property {object} [style] Additional styles names to attach to the tooltip.
  */
 interface TooltipProps {
-    placementOffsetY?: number;
+    /** Child components to render. */
     children: React.ReactElement<TooltipAnchorProps>;
+    /** The horizontal placement of the tooltip. Defaults to `Tooltip.placements.RIGHT`. */
     placementX?: PopoverPlacementX;
+    /** The vertical placement of the tooltip. Defaults to `Tooltip.placements.CENTER`. */
     placementY?: PopoverPlacementY;
+    /** The horizontal offset, in pixels, of the tooltip. If `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has no effect. Defaults to 12. */
     placementOffsetX?: number;
+    /** The vertical offset, in pixels, of the tooltip. If `placementY` is set to `UI.Tooltip.placements.TOP`, a higher number will move the tooltip upward. If `placementY` is set to `UI.Tooltip.placements.BOTTOM`, a higher number moves the tooltip downard. If `placementY` is set to `UI.Tooltip.placements.CENTER`, this value has no effect. Defaults to 0. */
+    placementOffsetY?: number;
+    /** A string representing the contents. Alternatively, you can include a function that returns a React node to place into the tooltip, which is useful for things like italicization in the tooltip. */
     content?: string | (() => React.ReactElement<any>);
+    /** Dictates the behavior when the "normal" placement of the tooltip would be outside of the viewport. If `NONE`, this has no effect, and the tooltip may be placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to fit on screen. Defaults to Tooltip.fitInWindowModes.FLIP. */
     fitInWindowMode?: FitInWindowMode;
+    /** Should the tooltip be hidden when clicked? Defaults to `false`. */
     shouldHideTooltipOnClick?: boolean;
+    /** If set to `true`, this tooltip will not be shown. Useful when trying to disable the tooltip dynamically. */
     disabled?: boolean;
+    /** Additional class names to attach to the tooltip, separated by spaces. */
     className?: string;
+    /** Additional styles names to attach to the tooltip. */
     style?: React.CSSProperties;
 }
+
+/** @hidden */
 interface TooltipState {
     isShowingTooltip: boolean;
 }

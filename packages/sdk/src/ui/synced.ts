@@ -6,6 +6,7 @@ import getSdk from '../get_sdk';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import withHooks from './with_hooks';
 
+/** @hidden */
 interface SyncedProps {
     globalConfigKey: GlobalConfigKey;
     render: (arg1: {

@@ -5,25 +5,17 @@ import {GlobalConfigKey} from '../global_config';
 import SelectButtons, {
     sharedSelectButtonsPropTypes,
     SharedSelectButtonsProps,
-    stylePropTypes,
-    StyleProps,
+    selectButtonsStylePropTypes,
+    SelectButtonsStyleProps,
 } from './select_buttons';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Synced from './synced';
 
 /**
  * @typedef {object} SelectButtonsSyncedProps
- * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`.
- * @property {Array.<SelectOption>} options The list of select options.
- * @property {Function} [onChange] A function to be called when the selected option changes.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
-interface SelectButtonsSyncedProps extends SharedSelectButtonsProps, StyleProps {
+interface SelectButtonsSyncedProps extends SharedSelectButtonsProps, SelectButtonsStyleProps {
+    /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;
 }
 
@@ -33,7 +25,7 @@ class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {
     static propTypes = {
         globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
         ...sharedSelectButtonsPropTypes,
-        ...stylePropTypes,
+        ...selectButtonsStylePropTypes,
     };
     /** @hidden */
     render() {

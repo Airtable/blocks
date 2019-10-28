@@ -36,13 +36,15 @@ import {splitStyleProps} from './with_styled_system';
 import {Prop} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
-interface StyleProps
+/** */
+interface CellRendererStyleProps
     extends FlexItemSetProps,
         MarginProps,
         MaxWidthProps,
         MinWidthProps,
         PositionSetProps,
         WidthProps {
+    /** */
     display?: Prop<'block' | 'inline' | 'inline-block'>;
 }
 
@@ -56,7 +58,7 @@ const styleParser = compose(
     width,
 );
 
-const stylePropTypes = {
+const cellRendererStylePropTypes = {
     // TODO (billy): currently, this will accept all values for display, not just block/inline/inline-block
     ...displayPropTypes,
     ...flexItemSetPropTypes,
@@ -69,25 +71,25 @@ const stylePropTypes = {
 
 /**
  * @typedef {object} CellRendererProps
- * @property {Record} [record] The {@link Record} from which to render a cell. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used.
- * @property {string|number|object|Array.<object>} [cellValue] The cell value to render. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used.
- * @property {Field} field The {@link Field} for a given {@link Record} being rendered as a cell.
- * @property {boolean} [shouldWrap] Whether to wrap cell contents. Defaults to true.
- * @property {string} [className] Additional class names to apply to the cell renderer container, separated by spaces.
- * @property {object} [style] Additional styles to apply to the cell renderer container.
- * @property {string} [cellClassName] Additional class names to apply to the cell itself, separated by spaces.
- * @property {object} [cellStyle] Additional styles to apply to the cell itself.
  */
-interface CellRendererProps extends TooltipAnchorProps, StyleProps {
+interface CellRendererProps extends TooltipAnchorProps, CellRendererStyleProps {
+    /** The {@link Record} from which to render a cell. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used. */
     record?: Record | null | undefined;
+    /** The cell value to render. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used. */
     cellValue?: unknown;
+    /** The {@link Field} for a given {@link Record} being rendered as a cell. */
     field: Field;
+    /** Whether to wrap cell contents. Defaults to true. */
     shouldWrap?: boolean;
+    /** Additional class names to apply to the cell renderer container, separated by spaces. */
     className?: string;
+    /** Additional styles to apply to the cell renderer container. */
     style?: React.CSSProperties;
     // These props exist to separate styling on the baymax wrapper div
     // (e.g. layout/sizing) from styling on the cell div (needed by RecordCard).
+    /** Additional class names to apply to the cell itself, separated by spaces. */
     cellClassName?: string;
+    /** Additional styles to apply to the cell itself. */
     cellStyle?: React.CSSProperties;
 }
 
@@ -135,7 +137,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
         cellClassName: PropTypes.string,
         cellStyle: PropTypes.object,
         ...tooltipAnchorPropTypes,
-        ...stylePropTypes,
+        ...cellRendererStylePropTypes,
     };
     /** @hidden */
     static defaultProps = {
@@ -265,13 +267,13 @@ export class CellRenderer extends React.Component<CellRendererProps> {
 }
 
 export default withHooks<{}, CellRendererProps, CellRenderer>(CellRenderer, props => {
-    const {styleProps, nonStyleProps} = splitStyleProps<CellRendererProps, StyleProps>(
+    const {styleProps, nonStyleProps} = splitStyleProps<CellRendererProps, CellRendererStyleProps>(
         props,
         styleParser.propNames,
         {display: 'block'},
     );
     const {className} = nonStyleProps;
-    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<CellRendererStyleProps>(styleProps, styleParser);
     useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
     useWatchable(props.field, ['type', 'options']);
     return {className: cx(classNameForStyleProps, className)};

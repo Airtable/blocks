@@ -5,19 +5,95 @@
 
 ## Index
 
+### Interfaces
+
+-   [LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel)
+
 ### Functions
 
 -   [useLoadable](_airtable_blocks_ui__useloadable.md#useloadable)
+
+## Interfaces
+
+### LoadableModel
+
+• **LoadableModel**:
+
+_Defined in
+[src/ui/use_loadable.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L14)_
+
+A model that can be loaded. Usually a [Cursor](_airtable_blocks_models__cursor.md#cursor),
+[RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult), or a
+[ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult).
+
+### isDataLoaded
+
+• **isDataLoaded**: _boolean_
+
+_Defined in
+[src/ui/use_loadable.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L16)_
+
+### loadDataAsync
+
+▸ **loadDataAsync**(): _Promise‹void›_
+
+_Defined in
+[src/ui/use_loadable.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L18)_
+
+**Returns:** _Promise‹void›_
+
+### unloadData
+
+▸ **unloadData**(): _void_
+
+_Defined in
+[src/ui/use_loadable.ts:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L20)_
+
+**Returns:** _void_
+
+### unwatch
+
+▸ **unwatch**(`keys`: "isDataLoaded", `callback`: Object): _ReadonlyArray‹string›_
+
+_Defined in
+[src/ui/use_loadable.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L24)_
+
+**Parameters:**
+
+| Name       | Type           |
+| ---------- | -------------- |
+| `keys`     | "isDataLoaded" |
+| `callback` | Object         |
+
+**Returns:** _ReadonlyArray‹string›_
+
+### watch
+
+▸ **watch**(`keys`: "isDataLoaded", `callback`: Object): _ReadonlyArray‹string›_
+
+_Defined in
+[src/ui/use_loadable.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L22)_
+
+**Parameters:**
+
+| Name       | Type           |
+| ---------- | -------------- |
+| `keys`     | "isDataLoaded" |
+| `callback` | Object         |
+
+**Returns:** _ReadonlyArray‹string›_
 
 ## Functions
 
 ### useLoadable
 
-▸ **useLoadable**(`models`: ReadonlyArray‹LoadableModel | null› | LoadableModel | null,
-`__namedParameters`: Object): _void_
+▸ **useLoadable**(`models`:
+ReadonlyArray‹[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) | null› |
+[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) | null, `__namedParameters`:
+Object): _void_
 
 _Defined in
-[src/ui/use_loadable.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L96)_
+[src/ui/use_loadable.ts:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L105)_
 
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
@@ -95,9 +171,9 @@ function LoadAllRecords() {
 
 **Parameters:**
 
-| Name                | Type                                                                      | Default | Description         |
-| ------------------- | ------------------------------------------------------------------------- | ------- | ------------------- |
-| `models`            | ReadonlyArray‹LoadableModel &#124; null› &#124; LoadableModel &#124; null | -       | the models to load. |
-| `__namedParameters` | Object                                                                    | {}      | -                   |
+| Name                | Type                                                                                                                                                                                | Default | Description         |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------- |
+| `models`            | ReadonlyArray‹[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) &#124; null› &#124; [LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) &#124; null | -       | the models to load. |
+| `__namedParameters` | Object                                                                                                                                                                              | {}      | -                   |
 
 **Returns:** _void_

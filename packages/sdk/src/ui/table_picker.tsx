@@ -7,17 +7,21 @@ import Table from '../models/table';
 import {
     sharedSelectBasePropTypes,
     SharedSelectBaseProps,
-    stylePropTypes,
-    StyleProps,
+    selectStylePropTypes,
+    SelectStyleProps,
 } from './select';
 import ModelPickerSelect from './model_picker_select';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `TablePicker` and `TablePickerSynced`.
-export interface SharedTablePickerProps extends SharedSelectBaseProps, StyleProps {
+/** */
+export interface SharedTablePickerProps extends SharedSelectBaseProps, SelectStyleProps {
+    /** If set to `true`, the user can unset the selected table. */
     shouldAllowPickingNone?: boolean;
+    /** The placeholder text when no table is selected. */
     placeholder?: string;
+    /** A function to be called when the selected table changes. */
     onChange?: (tableModel: Table | null) => void;
 }
 
@@ -27,27 +31,14 @@ export const sharedTablePickerPropTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     ...sharedSelectBasePropTypes,
-    ...stylePropTypes,
+    ...selectStylePropTypes,
 };
 
 /**
  * @typedef {object} TablePickerProps
- * @property {Table} [table] The selected table model.
- * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected table.
- * @property {string} [placeholder='Pick a table...'] The placeholder text when no table is selected.
- * @property {Function} [onChange] A function to be called when the selected table changes.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the picker.
- * @property {object} [style] Additional styles to apply to the picker.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface TablePickerProps extends SharedTablePickerProps {
+    /** The selected table model. */
     table?: Table | null;
 }
 

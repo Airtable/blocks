@@ -20,6 +20,7 @@
 -   [@airtable/blocks/models: View](modules/_airtable_blocks_models__view.md)
 -   [@airtable/blocks/ui/system: All style props](modules/_airtable_blocks_ui_system__all_style_props.md)
 -   [@airtable/blocks/ui/system: Appearance](modules/_airtable_blocks_ui_system__appearance.md)
+-   [@airtable/blocks/ui/system: Core](modules/_airtable_blocks_ui_system__core.md)
 -   [@airtable/blocks/ui/system: Dimensions](modules/_airtable_blocks_ui_system__dimensions.md)
 -   [@airtable/blocks/ui/system: Display](modules/_airtable_blocks_ui_system__display.md)
 -   [@airtable/blocks/ui/system: Flex container](modules/_airtable_blocks_ui_system__flex_container.md)

@@ -21,7 +21,8 @@ import {
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
-interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
+/** */
+interface ChoiceTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -29,7 +30,7 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+const choiceTokenStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
@@ -37,22 +38,25 @@ const stylePropTypes = {
 
 const DEFAULT_CHOICE_COLOR = 'gray';
 
+/** An option from a select field. You should not create these objects from scratch, but should instead grab them from base data. */
+interface SelectOption {
+    /** The ID of the select option. */
+    id: string;
+    /** The name of the select option. */
+    name: string;
+    /** The color of the select option. */
+    color?: Color;
+}
+
 /**
  * @typedef {object} ChoiceTokenProps
- * @property {object} choice An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data.
- * @property {string} choice.id The ID of the select option.
- * @property {string} choice.name The name of the select option.
- * @property {string} [choice.color] The color of the select option.
- * @property {string} [style] Additional styles to apply to the choice token.
- * @property {string} [className] Additional class names to apply to the choice token.
  */
-interface ChoiceTokenProps extends TooltipAnchorProps, StyleProps {
-    choice: {
-        id: string;
-        name: string;
-        color?: Color;
-    };
+interface ChoiceTokenProps extends TooltipAnchorProps, ChoiceTokenStyleProps {
+    /** An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data. */
+    choice: SelectOption;
+    /** Additional styles to apply to the choice token. */
     style?: React.CSSProperties;
+    /** Additional class names to apply to the choice token. */
     className?: string;
 }
 
@@ -95,7 +99,7 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
         style,
         ...styleProps
     } = props;
-    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<ChoiceTokenStyleProps>(styleProps, styleParser);
     const color = choice.color || DEFAULT_CHOICE_COLOR;
     const textColor = useTextColorForBackgroundColor(color);
 
@@ -137,7 +141,7 @@ ChoiceToken.propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
     ...tooltipAnchorPropTypes,
-    ...stylePropTypes,
+    ...choiceTokenStylePropTypes,
 };
 
 export default ChoiceToken;

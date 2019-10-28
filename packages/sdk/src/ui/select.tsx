@@ -46,16 +46,27 @@ const styleForChevron = {
 };
 
 // Shared with `Select`, `SelectSynced` and `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`.
+/** */
 export interface SharedSelectBaseProps extends TooltipAnchorProps {
+    /** Additional class names to apply to the select. */
     className?: string;
+    /** The `autoFocus` attribute. */
     autoFocus?: boolean;
+    /** The `id` attribute. */
     id?: string;
+    /** The `name` attribute. */
     name?: string;
+    /** The `tabindex` attribute. */
     tabIndex?: number;
+    /** If set to `true`, the user cannot interact with the select. */
     disabled?: boolean;
+    /** Additional styles to apply to the select. */
     style?: React.CSSProperties;
+    /** The `aria-label` attribute. Use this if the select is not referenced by a label element. */
     ['aria-label']?: string;
+    /** A space separated list of label element IDs. */
     ['aria-labelledby']?: string;
+    /** A space separated list of description element IDs. */
     ['aria-describedby']?: string;
 }
 
@@ -75,8 +86,11 @@ export const sharedSelectBasePropTypes = {
 };
 
 // Shared with `Select` and `SelectSynced`.
+/** */
 export interface SharedSelectProps extends SharedSelectBaseProps {
+    /** The list of select options. */
     options: Array<SelectOption>;
+    /** A function to be called when the selected option changes. */
     onChange?: (value: SelectOptionValue) => unknown;
 }
 
@@ -96,21 +110,9 @@ export const sharedSelectPropTypes = {
 
 /**
  * @typedef {object} SelectProps
- * @property {string | number | boolean | null} [value] The value of the selected option.
- * @property {Array.<SelectOption>} options The list of select options.
- * @property {Function} [onChange] A function to be called when the selected option changes.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 export interface SelectProps extends SharedSelectProps {
+    /** The value of the selected option. */
     value: SelectOptionValue;
 }
 
@@ -120,7 +122,8 @@ export interface SelectProps extends SharedSelectProps {
 // something like react-select, which would give us nice features like rendering custom
 // elements for options (e.g. for field type icons) and typeahead search.
 
-export interface StyleProps
+/** */
+export interface SelectStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
@@ -137,7 +140,7 @@ const styleParser = compose(
     margin,
 );
 
-export const stylePropTypes = {
+export const selectStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -321,10 +324,10 @@ export class Select extends React.Component<SelectProps> {
     }
 }
 
-export default withStyledSystem<SelectProps, StyleProps, Select, {}>(
+export default withStyledSystem<SelectProps, SelectStyleProps, Select, {}>(
     Select,
     styleParser,
-    stylePropTypes,
+    selectStylePropTypes,
     {
         width: '100%',
     },

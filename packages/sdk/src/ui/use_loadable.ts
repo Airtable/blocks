@@ -7,12 +7,21 @@ import useArrayIdentity from './use_array_identity';
 
 // rather than asking for an AbstractModelWithAsyncData, we define a much more specific interface
 // that enforces 'isDataLoaded' as a watchable key.
+/**
+ * A model that can be loaded.
+ * Usually a {@link Cursor}, {@link RecordQueryResult}, or a {@link ViewMetadataQueryResult}.
+ */
 interface LoadableModel {
+    /** */
     readonly isDataLoaded: boolean;
+    /** */
     loadDataAsync(): Promise<void>;
+    /** */
     unloadData(): void;
-    watch(arg1: 'isDataLoaded', arg2: () => unknown): ReadonlyArray<string>;
-    unwatch(arg1: 'isDataLoaded', arg2: () => unknown): ReadonlyArray<string>;
+    /** */
+    watch(keys: 'isDataLoaded', callback: () => unknown): ReadonlyArray<string>;
+    /** */
+    unwatch(keys: 'isDataLoaded', callback: () => unknown): ReadonlyArray<string>;
 }
 
 const SUSPENSE_CLEAN_UP_MS = 60000;

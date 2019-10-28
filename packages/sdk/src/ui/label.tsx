@@ -10,29 +10,23 @@ import {dataAttributesPropType, DataAttributesProp} from './types/data_attribute
 
 /**
  * @typedef {object} LabelProps
- * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label. Defaults to `default`. Can be a responsive prop object.
- * @property {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
- * @property {string} [role] The `role` attribute.
- * @property {string} [className] Additional class names to apply, separated by spaces.
- * @property {object} [style] Additional styles.
- * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
- * @property {string} [aria-label] The `aria-label` attribute.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
  */
 interface LabelProps extends AriaProps, AllStylesProps {
+    /** The `size` of the label. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
+    /** The `for` attribute. Should contain the `id` of the input. */
     htmlFor?: string;
+    /** The `id` attribute. */
     id?: string;
+    /** */
     children?: React.ReactNode;
+    /** Additional class names to apply, separated by spaces. */
     className?: string;
+    /** Additional styles. */
     style?: React.CSSProperties;
+    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
+    /** The `role` attribute. */
     role?: string;
 }
 

@@ -22,15 +22,20 @@ import Field from './field';
  * ```
  */
 export interface Aggregator {
+    /** A unique key for this aggregator that can be used to identify it in code. */
     key: AggregatorKey;
+    /** A user friendly name for this aggregator that can be displayed to users. */
     displayName: string;
+    /** A short user friendly name for this aggregator that can be displayed to users. */
     shortDisplayName: string;
 
     // TODO(jb): add better flow types for the result of these functions. This would
     // require manually defining each aggregation function below rather than doing it
     // dynamically on load.
-    aggregate: (records: Array<Record>, field: Field) => unknown;
-    aggregateToString: (records: Array<Record>, field: Field) => string;
+    /** Aggregates the value of `field` in each of `records` to produce a single value. */
+    aggregate(records: Array<Record>, field: Field): unknown;
+    /** Aggregates the value of `field` in each of `records` to produce a single value, formatted as a string. */
+    aggregateToString(records: Array<Record>, field: Field): string;
 }
 
 const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {

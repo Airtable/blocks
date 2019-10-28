@@ -9,8 +9,8 @@ import {ReactRefType} from '../private_utils';
 import Select, {
     sharedSelectBasePropTypes,
     SharedSelectBaseProps,
-    stylePropTypes,
-    StyleProps,
+    selectStylePropTypes,
+    SelectStyleProps,
 } from './select';
 import {SelectOptionValue} from './select_and_select_buttons_helpers';
 import useWatchable from './use_watchable';
@@ -19,7 +19,9 @@ import {FormFieldIdContext} from './use_form_field_id';
 type AnyModel = Table | View | Field;
 
 // Private component used by TablePicker, ViewPicker, FieldPicker.
-interface ModelPickerSelectProps<Model extends AnyModel> extends SharedSelectBaseProps, StyleProps {
+interface ModelPickerSelectProps<Model extends AnyModel>
+    extends SharedSelectBaseProps,
+        SelectStyleProps {
     models: Array<Model>;
     selectedModelId: string | null;
     modelKeysToWatch: Array<string>;
@@ -63,7 +65,7 @@ class ModelPickerSelect<Model extends AnyModel> extends React.Component<
         onChange: PropTypes.func,
         placeholder: PropTypes.string,
         ...sharedSelectBasePropTypes,
-        ...stylePropTypes,
+        ...selectStylePropTypes,
     };
     /** @internal */
     _select: ReactRefType<typeof Select> | null;

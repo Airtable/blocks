@@ -3,23 +3,24 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
-import Modal, {stylePropTypes, StyleProps} from './modal';
+import Modal, {modalStylePropTypes, ModalStyleProps} from './modal';
 import DialogCloseButton from './dialog_close_button';
 
 /**
  * @typedef {object} DialogProps
- * @property {Function} onClose Callback function to fire when the dialog is closed.
- * @property {string} [className] Extra `className`s to apply to the dialog element, separated by spaces.
- * @property {object} [style] Extra styles to apply to the dialog element.
- * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
- * @property {object} [backgroundStyle] Extra styles to apply to the background element.
  */
-interface DialogProps extends StyleProps {
+interface DialogProps extends ModalStyleProps {
+    /** Callback function to fire when the dialog is closed. */
     onClose: () => unknown;
+    /** Extra `className`s to apply to the dialog element, separated by spaces. */
     className?: string;
+    /** Extra styles to apply to the dialog element. */
     style?: React.CSSProperties;
+    /** Extra `className`s to apply to the background element, separated by spaces. */
     backgroundClassName?: string;
+    /** Extra styles to apply to the background element. */
     backgroundStyle?: React.CSSProperties;
+    /** */
     children: React.ReactNode;
 }
 
@@ -75,7 +76,7 @@ class Dialog extends React.Component<DialogProps> {
         backgroundClassName: PropTypes.string,
         backgroundStyle: PropTypes.object,
         children: PropTypes.node.isRequired,
-        ...stylePropTypes,
+        ...modalStylePropTypes,
     };
     // automatically pass onClose to any descendants that are Dialog.CloseButton
     /** @hidden */

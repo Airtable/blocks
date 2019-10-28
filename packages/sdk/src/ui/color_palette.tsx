@@ -39,7 +39,8 @@ const MAX_COLOR_SQUARE_SIZE = 32;
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
 
-export interface StyleProps
+/** */
+export interface ColorPaletteStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
@@ -56,7 +57,7 @@ const styleParser = compose(
     margin,
 );
 
-export const stylePropTypes = {
+export const colorPaletteStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -65,12 +66,19 @@ export const stylePropTypes = {
     ...marginPropTypes,
 };
 
+/** */
 export interface SharedColorPaletteProps extends TooltipAnchorProps {
+    /** The list of {@link colors} to display in the color palette. */
     allowedColors: Array<string>;
+    /** A function to be called when the selected color changes. */
     onChange?: (arg1: string) => unknown;
+    /** The margin between color squares in the color palette. */
     squareMargin?: number;
+    /** Additional class names to apply to the color palette, separated by spaces. */
     className?: string;
+    /** Additional styles to apply to the color palette. */
     style?: React.CSSProperties;
+    /** If set to `true`, the color palette will not allow color selection. */
     disabled?: boolean;
 }
 
@@ -86,18 +94,13 @@ export const sharedColorPalettePropTypes = {
 
 /**
  * @typedef {object} ColorPaletteProps
- * @property {string} [color] The current selected {@link Color} option.
- * @property {Array<string>} allowedColors The list of {@link colors} to display in the color palette.
- * @property {Function} [onChange] A function to be called when the selected color changes.
- * @property {number} [squareMargin] The margin between color squares in the color palette.
- * @property {string} [className] Additional class names to apply to the color palette, separated by spaces.
- * @property {object} [style] Additional styles to apply to the color palette.
- * @property {boolean} [disabled] If set to `true`, the color palette will not allow color selection.
  */
 interface ColorPaletteProps extends SharedColorPaletteProps {
+    /** The current selected {@link Color} option. */
     color?: string | null;
 }
 
+/** @hidden */
 interface ColorPaletteState {
     squareSize: number;
 }
@@ -288,8 +291,8 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
     }
 }
 
-export default withStyledSystem<ColorPaletteProps, StyleProps, ColorPalette, {}>(
+export default withStyledSystem<ColorPaletteProps, ColorPaletteStyleProps, ColorPalette, {}>(
     ColorPalette,
     styleParser,
-    stylePropTypes,
+    colorPaletteStylePropTypes,
 );

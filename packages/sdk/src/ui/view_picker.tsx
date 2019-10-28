@@ -10,19 +10,25 @@ import {ViewTypes, ViewType} from '../types/view';
 import {
     sharedSelectBasePropTypes,
     SharedSelectBaseProps,
-    stylePropTypes,
-    StyleProps,
+    selectStylePropTypes,
+    SelectStyleProps,
 } from './select';
 import ModelPickerSelect from './model_picker_select';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `ViewPicker` and `ViewPickerSynced`.
-export interface SharedViewPickerProps extends SharedSelectBaseProps, StyleProps {
+/** */
+export interface SharedViewPickerProps extends SharedSelectBaseProps, SelectStyleProps {
+    /** The parent table model to select views from. If `null` or `undefined`, the picker won't render. */
     table?: Table | null;
+    /** An array indicating which view types can be selected. */
     allowedTypes?: Array<ViewType>;
+    /** If set to `true`, the user can unset the selected view. */
     shouldAllowPickingNone?: boolean;
+    /** The placeholder text when no view is selected. Defaults to `'Pick a view...'` */
     placeholder?: string;
+    /** A function to be called when the selected view changes. */
     onChange?: (viewModel: View | null) => void;
 }
 
@@ -34,29 +40,14 @@ export const sharedViewPickerPropTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     ...sharedSelectBasePropTypes,
-    ...stylePropTypes,
+    ...selectStylePropTypes,
 };
 
 /**
  * @typedef {object} ViewPickerProps
- * @property {View} [view] The selected view model.
- * @property {Table} [table] The parent table model to select views from. If `null` or `undefined`, the picker won't render.
- * @property {Array.<ViewType>} [allowedTypes] An array indicating which view types can be selected.
- * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected view.
- * @property {string} [placeholder='Pick a view...'] The placeholder text when no view is selected.
- * @property {Function} [onChange] A function to be called when the selected view changes.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the picker.
- * @property {object} [style] Additional styles to apply to the picker.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface ViewPickerProps extends SharedViewPickerProps {
+    /** The selected view model. */
     view?: View | null;
 }
 

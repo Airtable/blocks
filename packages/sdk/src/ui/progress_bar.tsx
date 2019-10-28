@@ -39,7 +39,8 @@ import {Prop} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 
-interface StyleProps
+/** */
+interface ProgressBarStyleProps
     extends BackgroundColorProps,
         MaxWidthProps,
         MinWidthProps,
@@ -48,6 +49,7 @@ interface StyleProps
         FlexItemSetProps,
         PositionSetProps,
         MarginProps {
+    /** */
     display?: Prop<'block' | 'inline' | 'inline-block'>;
 }
 
@@ -63,7 +65,7 @@ const styleParser = compose(
     display,
 );
 
-export const stylePropTypes = {
+export const progressBarStylePropTypes = {
     ...backgroundColorPropTypes,
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
@@ -78,17 +80,15 @@ export const stylePropTypes = {
 
 /**
  * @typedef {object} ProgressBarProps
- * @property {number} progress A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include a number outside of the range, the value will be clamped to be inside of the range.
- * @property {string} [barColor] A CSS color, such as `#ff9900`.
- * @property {string} [backgroundColor] A CSS color, such as `#ff9900`.
- * @property {number} [height] A height, in pixels.
- * @property {string} [className] Extra `className`s to apply to the element, separated by spaces.
- * @property {object} [style] Extra styles to apply to the progress bar.
  */
-interface ProgressBarProps extends TooltipAnchorProps, StyleProps {
+interface ProgressBarProps extends TooltipAnchorProps, ProgressBarStyleProps {
+    /** A CSS color, such as `#ff9900`. */
     barColor?: string;
+    /** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include a number outside of the range, the value will be clamped to be inside of the range. */
     progress: number;
+    /** Extra `className`s to apply to the element, separated by spaces. */
     className?: string;
+    /** Extra styles to apply to the progress bar. */
     style?: React.CSSProperties;
 }
 
@@ -127,7 +127,7 @@ const ProgressBar = (props: ProgressBarProps) => {
     } = props;
 
     const clampedProgress = clamp(progress, 0, 1);
-    const classNameForStyleProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem<ProgressBarStyleProps>(styleProps, styleParser);
 
     return (
         <Box
@@ -157,7 +157,7 @@ ProgressBar.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     ...tooltipAnchorPropTypes,
-    ...stylePropTypes,
+    ...progressBarStylePropTypes,
 };
 
 ProgressBar.defaultProps = {

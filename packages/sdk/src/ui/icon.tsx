@@ -22,7 +22,8 @@ import {
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {iconNamePropType, IconName, allIconPaths, AllIconName} from './icon_config';
 
-export interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
+/** */
+export interface IconStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -32,18 +33,25 @@ const styleParser = compose(
     height,
 );
 
-export const stylePropTypes = {
+export const iconStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
 };
 
-export interface SharedIconProps extends TooltipAnchorProps<SVGElement>, StyleProps {
+/** */
+export interface SharedIconProps extends TooltipAnchorProps<SVGElement>, IconStyleProps {
+    /** The width/height of the icon. Defaults to 16. */
     size?: number | string;
+    /** The color of the icon. */
     fillColor?: string;
+    /** Additional class names to apply to the icon. */
     className?: string;
+    /** Additional styles to apply to the icon. */
     style?: React.CSSProperties;
+    /** Additional class names to apply to the icon path. */
     pathClassName?: string;
+    /** Additional styles to apply to the icon path. */
     pathStyle?: React.CSSProperties;
 }
 
@@ -55,20 +63,14 @@ export const sharedIconPropTypes = {
     pathClassName: PropTypes.string,
     pathStyle: PropTypes.object,
     ...tooltipAnchorPropTypes,
-    ...stylePropTypes,
+    ...iconStylePropTypes,
 };
 
 /**
  * @typedef {object} IconProps
- * @property {IconName} name The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
- * @property {number} [size=16] The width/height of the icon.
- * @property {string} [fillColor] The color of the icon.
- * @property {string} [className] Additional class names to apply to the icon.
- * @property {object} [style] Additional styles to apply to the icon.
- * @property {string} [pathClassName] Additional class names to apply to the icon path.
- * @property {object} [pathStyle] Additional styles to apply to the icon path.
  */
 interface IconProps extends SharedIconProps {
+    /** The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
     name: IconName;
 }
 
@@ -107,7 +109,7 @@ const Icon = React.forwardRef<SVGSVGElement, IconProps>(
         }: IconProps,
         ref: React.Ref<SVGSVGElement>,
     ) => {
-        const classNameForStyleProps = useStyledSystem<StyleProps & WidthProps & HeightProps>(
+        const classNameForStyleProps = useStyledSystem<IconStyleProps & WidthProps & HeightProps>(
             {...styleProps, width: size, height: size},
             styleParser,
         );

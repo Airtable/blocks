@@ -25,22 +25,28 @@ import {Prop} from './system/utils/types';
 /**
  * @memberof Modal
  * @typedef {object} ModalProps
- * @property {Function} [onClose] Callback function to fire when the modal is closed.
- * @property {string} [className] Extra `className`s to apply to the modal element, separated by spaces.
- * @property {object} [style] Extra styles to apply to the modal element.
- * @property {string} [backgroundClassName] Extra `className`s to apply to the background element, separated by spaces.
- * @property {object} [backgroundStyle] Extra styles to apply to the background element.
  */
 interface ModalProps {
+    /** Callback function to fire when the modal is closed. */
     onClose?: () => unknown;
+    /** Extra `className`s to apply to the modal element, separated by spaces. */
     className?: string;
+    /** Extra styles to apply to the modal element. */
     style?: React.CSSProperties;
+    /** Extra `className`s to apply to the background element, separated by spaces. */
     backgroundClassName?: string;
+    /** Extra styles to apply to the background element. */
     backgroundStyle?: React.CSSProperties;
+    /** */
     children: React.ReactNode;
 }
 
-export interface StyleProps extends DimensionsSetProps, FlexContainerSetProps, SpacingSetProps {
+/** */
+export interface ModalStyleProps
+    extends DimensionsSetProps,
+        FlexContainerSetProps,
+        SpacingSetProps {
+    /** */
     display?: Prop<'block' | 'flex'>;
 }
 
@@ -51,7 +57,7 @@ const styleParser = compose(
     spacingSet,
 );
 
-export const stylePropTypes = {
+export const modalStylePropTypes = {
     ...dimensionsSetPropTypes,
     // TODO (stephen): currently, this will accept all values for display, not just block/flex
     ...displayPropTypes,
@@ -181,10 +187,10 @@ export class Modal extends React.Component<ModalProps> {
     }
 }
 
-export default withStyledSystem<ModalProps, StyleProps, Modal, {}>(
+export default withStyledSystem<ModalProps, ModalStyleProps, Modal, {}>(
     Modal,
     styleParser,
-    stylePropTypes,
+    modalStylePropTypes,
     // TODO (stephen): move these to Dialog
     {
         display: 'block',

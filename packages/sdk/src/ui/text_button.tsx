@@ -38,13 +38,15 @@ import cssHelpers from './css_helpers';
 import Box from './box';
 import {DataAttributesProp} from './types/data_attributes';
 
-export interface StyleProps
+/** */
+export interface TextButtonStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
         FlexItemSetProps,
         PositionSetProps,
         SpacingSetProps {
+    /** */
     display?: Prop<'inline-flex' | 'flex' | 'none'>;
 }
 
@@ -58,7 +60,7 @@ const styleParser = compose(
     spacingSet,
 );
 
-export const stylePropTypes = {
+export const textButtonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
@@ -68,6 +70,7 @@ export const stylePropTypes = {
     ...spacingSetPropTypes,
 };
 
+/** */
 type TextButtonVariant = EnumType<typeof TextButtonVariant>;
 const TextButtonVariant = createEnum('default', 'dark', 'light');
 const textButtonVariantPropType = createPropTypeFromEnum(TextButtonVariant);
@@ -80,40 +83,37 @@ function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.def
 
 /**
  * @typedef {object} TextButtonProps
- * @property {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text. Defaults to `default`. Can be a responsive prop object.
- * @property {IconName | React.ReactElement} [icon] The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md).
- * @property {boolean} [disabled] Indicates whether or not the user can interact with the button.
- * @property {string} [id] The `id` attribute.
- * @property {number} [tabIndex] The `tabIndex` attribute.
- * @property {Function} [onClick] Click event handler. Also handles Space and Enter keypress events.
- * @property {string} [className] Additional class names to apply, separated by spaces.
- * @property {object} [style] Additional styles.
- * @property {object} [dataAttributes] Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
- * @property {string} [aria-selected] The `aria-selected` attribute.
- * @property {string} [aria-label] The `aria-label` attribute.
- * @property {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of label element IDs.
- * @property {string} [aria-describedby] The `aria-describedby` attribute. A space separated list of description element IDs.
- * @property {string} [aria-controls] The `aria-controls` attribute.
- * @property {string} [aria-expanded] The `aria-expanded` attribute.
- * @property {string} [aria-haspopup] The `aria-haspopup` attribute.
- * @property {string} [aria-hidden] The `aria-hidden` attribute.
- * @property {string} [aria-live] The `aria-live` attribute.
  */
-interface TextButtonProps extends TooltipAnchorProps<HTMLSpanElement>, AriaProps, StyleProps {
+interface TextButtonProps
+    extends TooltipAnchorProps<HTMLSpanElement>,
+        AriaProps,
+        TextButtonStyleProps {
+    /** The `size` of the text. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
+    /** */
     variant?: TextButtonVariant;
+    /** The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
     icon?: IconName | React.ReactElement;
+    /** Indicates whether or not the user can interact with the button. */
     disabled?: boolean;
+    /** */
     children: React.ReactNode;
     // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again and refine it to include `KeyboardEvent`.
+    /** Click event handler. Also handles Space and Enter keypress events. */
     onClick?: (
         e: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>,
     ) => unknown;
+    /** The `id` attribute. */
     id?: string;
+    /** The `tabIndex` attribute. */
     tabIndex?: number;
+    /** Additional class names to apply, separated by spaces. */
     className?: string;
+    /** Additional styles. */
     style?: React.CSSProperties;
+    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
+    /** The `aria-selected` attribute. */
     ['aria-selected']?: boolean;
 }
 
@@ -173,7 +173,7 @@ const TextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(
     ) => {
         const classNameForTextStyle = useTextStyle(size);
         const classNameForTextButtonVariant = useTextButtonVariant(variant);
-        const classNameForStyleProps = useStyledSystem<StyleProps>(
+        const classNameForStyleProps = useStyledSystem<TextButtonStyleProps>(
             {
                 display: 'inline-flex',
                 // Use a negative margin to undo the padding.
@@ -275,7 +275,7 @@ TextButton.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     'aria-selected': PropTypes.bool,
-    ...stylePropTypes,
+    ...textButtonStylePropTypes,
     ...ariaPropTypes,
     ...tooltipAnchorPropTypes,
 };

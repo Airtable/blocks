@@ -38,15 +38,25 @@ import Box from './box';
 import {KeyCodes} from './key_codes';
 
 // Shared with `SelectButtons` and `SelectButtonsSynced`.
+/** */
 export interface SharedSelectButtonsProps extends TooltipAnchorProps {
+    /** The list of select options. */
     options: Array<SelectOption>;
+    /** A function to be called when the selected option changes. */
     onChange?: (value: SelectOptionValue) => void;
+    /** If set to `true`, the user cannot interact with the select. */
     disabled?: boolean;
+    /** Additional class names to apply to the select. */
     className?: string;
+    /** The `tabindex` attribute. */
     tabIndex?: number;
+    /** Additional styles to apply to the select. */
     style?: React.CSSProperties;
+    /** The `aria-label` attribute. Use this if the select is not referenced by a label element. */
     ['aria-label']?: string;
+    /** A space separated list of label element IDs. */
     ['aria-labelledby']?: string;
+    /** A space separated list of description element IDs. */
     ['aria-describedby']?: string;
 }
 
@@ -70,7 +80,8 @@ export const sharedSelectButtonsPropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-export interface StyleProps
+/** */
+export interface SelectButtonsStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
@@ -87,7 +98,7 @@ const styleParser = compose(
     margin,
 );
 
-export const stylePropTypes = {
+export const selectButtonsStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -98,18 +109,9 @@ export const stylePropTypes = {
 
 /**
  * @typedef {object} SelectButtonsProps
- * @property {string | number | boolean | null} [value] The value of the selected option.
- * @property {Array.<SelectOption>} options The list of select options.
- * @property {Function} [onChange] A function to be called when the selected option changes.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the select.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the select.
- * @property {object} [style] Additional styles to apply to the select.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface SelectButtonsProps extends SharedSelectButtonsProps {
+    /** The value of the selected option. */
     value: SelectOptionValue;
 }
 
@@ -220,10 +222,10 @@ export class SelectButtons extends React.Component<SelectButtonsProps> {
     }
 }
 
-export default withStyledSystem<SelectButtonsProps, StyleProps, SelectButtons, {}>(
+export default withStyledSystem<SelectButtonsProps, SelectButtonsStyleProps, SelectButtons, {}>(
     SelectButtons,
     styleParser,
-    stylePropTypes,
+    selectButtonsStylePropTypes,
     {
         width: '100%',
     },

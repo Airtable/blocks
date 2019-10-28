@@ -30,7 +30,9 @@ import {
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 // Shared with `Input` and `InputSynced`.
+/** */
 export interface SharedInputProps extends TooltipAnchorProps {
+    /** The `type` for the input. Defaults to `text`. */
     type?:
         | 'text'
         | 'date'
@@ -44,26 +46,47 @@ export interface SharedInputProps extends TooltipAnchorProps {
         | 'time'
         | 'url'
         | 'week';
+    /** The `disabled` attribute. */
     disabled?: boolean;
+    /** The `required` attribute. */
     required?: boolean;
+    /** The `spellcheck` attribute. */
     spellCheck?: boolean;
+    /** The `tabindex` attribute. */
     tabIndex?: number;
+    /** The `name` attribute. */
     name?: string;
+    /** The `id` attribute. */
     id?: string;
+    /** The `autoFocus` attribute. */
     autoFocus?: boolean;
+    /** The `max` attribute. */
     max?: number | string;
+    /** The `maxLength` attribute. */
     maxLength?: number;
+    /** The placeholder for the input. */
     placeholder?: string;
+    /** The `minLength` attribute. */
     minLength?: number;
+    /** The `step` attribute. */
     step?: number | string;
+    /** The `pattern` attribute. */
     pattern?: string;
+    /** The `readOnly` attribute. */
     readOnly?: boolean;
+    /** The `autoComplete` attribute. */
     autoComplete?: string;
+    /** Additional styles to apply to the input. */
     style?: React.CSSProperties;
+    /** Additional class names to apply to the input, separated by spaces. */
     className?: string;
+    /** A function to be called when the input changes. */
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => unknown;
+    /** A space separated list of label element IDs. */
     ['aria-labelledby']?: string;
+    /** A space separated list of description element IDs. */
     ['aria-describedby']?: string;
+    /** The `min` attribute. */
     min?: number | string;
 }
 
@@ -109,35 +132,14 @@ export const sharedInputPropTypes = {
 
 /**
  * @typedef {object} InputProps
- * @property {string} value The input's current value.
- * @property {Function} onChange A function to be called when the input changes.
- * @property {string} [type='text'] The `type` for the input. Defaults to `text`.
- * @property {string} [placeholder] The placeholder for the input.
- * @property {object} [style] Additional styles to apply to the input.
- * @property {string} [className] Additional class names to apply to the input, separated by spaces.
- * @property {boolean} [disabled] The `disabled` attribute.
- * @property {boolean} [required] The `required` attribute.
- * @property {boolean} [spellCheck] The `spellcheck` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {string} [id] The `id` attribute.
- * @property {boolean} [autoFocus] The `autoFocus` attribute.
- * @property {number | string} [max] The `max` attribute.
- * @property {number} [maxLength] The `maxLength` attribute.
- * @property {number | string} [min] The `min` attribute.
- * @property {number} [minLength] The `minLength` attribute.
- * @property {number | string} [step] The `step` attribute.
- * @property {string} [pattern] The `pattern` attribute.
- * @property {boolean} [readOnly] The `readOnly` attribute.
- * @property {string} [autoComplete] The `autoComplete` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface InputProps extends SharedInputProps {
+    /** The input's current value. */
     value: string;
 }
 
-export interface StyleProps
+/** */
+export interface InputStyleProps
     extends MaxWidthProps,
         MinWidthProps,
         WidthProps,
@@ -154,7 +156,7 @@ const styleParser = compose(
     margin,
 );
 
-export const stylePropTypes = {
+export const inputStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -310,9 +312,9 @@ export class Input extends React.Component<InputProps> {
 
 export default withStyledSystem<
     InputProps,
-    StyleProps,
+    InputStyleProps,
     Input,
     {validTypesSet: typeof validTypesSet}
->(Input, styleParser, stylePropTypes, {
+>(Input, styleParser, inputStylePropTypes, {
     width: '100%',
 });

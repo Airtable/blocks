@@ -13,24 +13,9 @@ import useWatchable from './use_watchable';
 
 /**
  * @typedef {object} ViewPickerSyncedProps
- * @property {GlobalConfigKey} globalConfigKey A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a new view will update `globalConfig`.
- * @property {Table} [table] The parent table model to select views from. If `null` or `undefined`, the picker won't render.
- * @property {Array.<ViewType>} [allowedTypes] An array indicating which view types can be selected.
- * @property {boolean} [shouldAllowPickingNone] If set to `true`, the user can unset the selected view.
- * @property {string} [placeholder='Pick a view...'] The placeholder text when no view is selected.
- * @property {Function} [onChange] A function to be called when the selected view changes. This should only be used for side effects.
- * @property {string} [autoFocus] The `autoFocus` attribute.
- * @property {boolean} [disabled] If set to `true`, the user cannot interact with the picker.
- * @property {string} [id] The `id` attribute.
- * @property {string} [name] The `name` attribute.
- * @property {number} [tabIndex] The `tabindex` attribute.
- * @property {string} [className] Additional class names to apply to the picker.
- * @property {object} [style] Additional styles to apply to the picker.
- * @property {string} [aria-label] The `aria-label` attribute. Use this if the select is not referenced by a label element.
- * @property {string} [aria-labelledby] A space separated list of label element IDs.
- * @property {string} [aria-describedby] A space separated list of description element IDs.
  */
 interface ViewPickerSyncedProps extends SharedViewPickerProps {
+    /** A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a new view will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;
 }
 

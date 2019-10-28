@@ -9,6 +9,12 @@
 
 -   [TextProps](_airtable_blocks_ui__text.md#textprops)
 
+### Type aliases
+
+-   [TextSize](_airtable_blocks_ui__text.md#textsize)
+-   [TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)
+-   [TextVariant](_airtable_blocks_ui__text.md#textvariant)
+
 ### Variables
 
 -   [Text](_airtable_blocks_ui__text.md#const-text)
@@ -20,46 +26,9 @@
 • **TextProps**:
 
 _Defined in
-[src/ui/text.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L62)_
+[src/ui/text.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L50)_
 
 **`typedef`** {object} TextProps
-
-**`property`** {'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'li' | 'em' | 'strong' |
-'kbd' | 'mark' | 'q' | 's' | 'samp' | 'small' | 'sub' | 'sup' | 'time' | 'var' | 'blockquote'}
-[as='p'] The element that is rendered. Defaults to `p`.
-
-**`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the text.
-Defaults to `default`. Can be a responsive prop object.
-
-**`property`** {'default' | 'paragraph'} [variant='default'] The `variant` of the text. Defaults to
-`default`.
-
-**`property`** {string} [role] The `role` attribute.
-
-**`property`** {string} [className] Additional class names to apply, separated by spaces.
-
-**`property`** {object} [style] Additional styles.
-
-**`property`** {object} [dataAttributes] Data attributes that are spread onto the element
-`dataAttributes={{'data-*': '...'}}`.
-
-**`property`** {string} [aria-label] The `aria-label` attribute.
-
-**`property`** {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of
-label element IDs.
-
-**`property`** {string} [aria-describedby] The `aria-describedby` attribute. A space separated list
-of description element IDs.
-
-**`property`** {string} [aria-controls] The `aria-controls` attribute.
-
-**`property`** {string} [aria-expanded] The `aria-expanded` attribute.
-
-**`property`** {string} [aria-haspopup] The `aria-haspopup` attribute.
-
-**`property`** {string} [aria-hidden] The `aria-hidden` attribute.
-
-**`property`** {string} [aria-live] The `aria-live` attribute.
 
 ### `Optional` aria-controls
 
@@ -162,6 +131,114 @@ _Defined in
 Indicates that an element will be updated, and describes the types of updates the user agents,
 assistive technologies, and user can expect from the live region.
 
+### `Optional` as
+
+• **as**? : _"p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span" | "li" | "em" | "strong" | "kbd"
+| "mark" | "q" | "s" | "samp" | "small" | "sub" | "sup" | "time" | "var" | "blockquote"_
+
+_Defined in
+[src/ui/text.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L52)_
+
+The element that is rendered. Defaults to `p`.
+
+### `Optional` children
+
+• **children**? : _React.ReactNode_
+
+_Defined in
+[src/ui/text.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L78)_
+
+### `Optional` className
+
+• **className**? : _undefined | string_
+
+_Defined in
+[src/ui/text.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L86)_
+
+Additional class names to apply, separated by spaces.
+
+### `Optional` dataAttributes
+
+• **dataAttributes**? :
+_[DataAttributesProp](_airtable_blocks_ui_system__core.md#dataattributesprop)_
+
+_Defined in
+[src/ui/text.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L84)_
+
+Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
+
+### `Optional` id
+
+• **id**? : _undefined | string_
+
+_Defined in
+[src/ui/text.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L80)_
+
+The `id` attribute.
+
+### `Optional` role
+
+• **role**? : _undefined | string_
+
+_Defined in
+[src/ui/text.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L90)_
+
+The `role` attribute.
+
+### `Optional` size
+
+• **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
+
+_Defined in
+[src/ui/text.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L82)_
+
+The `size` of the text. Defaults to `default`. Can be a responsive prop object.
+
+### `Optional` style
+
+• **style**? : _React.CSSProperties_
+
+_Defined in
+[src/ui/text.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L88)_
+
+Additional styles.
+
+### `Optional` variant
+
+• **variant**? : _[TextVariant](_airtable_blocks_ui__text.md#textvariant)_
+
+_Defined in
+[src/ui/text.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L76)_
+
+The `variant` of the text. Defaults to `default`.
+
+## Type aliases
+
+### TextSize
+
+Ƭ **TextSize**: _EnumType‹object›_
+
+_Defined in
+[src/ui/text.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L25)_
+
+---
+
+### TextSizeProp
+
+Ƭ **TextSizeProp**: _ResponsiveProp‹[TextSize](_airtable_blocks_ui__text.md#textsize)›_
+
+_Defined in
+[src/ui/text.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L28)_
+
+---
+
+### TextVariant
+
+Ƭ **TextVariant**: _EnumType‹object›_
+
+_Defined in
+[src/ui/text.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L20)_
+
 ## Variables
 
 ### `Const` Text
@@ -181,7 +258,7 @@ aria-haspopup={ariaHasPopup} aria-hidden={ariaHidden} aria-live={ariaLive} {...d
 {children} </Component> ); }, )
 
 _Defined in
-[src/ui/text.tsx:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L121)_
+[src/ui/text.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L118)_
 
 A text component with sizes and variants.
 

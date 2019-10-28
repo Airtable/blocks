@@ -33,18 +33,20 @@ import Icon from './icon';
 
 /**
  * @typedef {object} DialogCloseButtonProps
- * @property {string} [className] `className`s to apply to the close button, separated by spaces.
- * @property {object} [style] Styles to apply to the dialog element.
- * @property {number} [tabIndex] Indicates if the button can be focused and if/where it participates in sequential keyboard navigation.
  */
 export interface DialogCloseButtonProps extends TooltipAnchorProps {
+    /** `className`s to apply to the close button, separated by spaces. */
     className?: string;
+    /** Styles to apply to the dialog element. */
     style?: React.CSSProperties;
+    /** Indicates if the button can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
+    /** */
     children?: React.ReactNode;
 }
 
-export interface StyleProps
+/** */
+export interface DialogCloseButtonStyleProps
     extends BorderRadiusProps,
         DimensionsSetProps,
         DisplayProps,
@@ -63,7 +65,7 @@ const styleParser = compose(
     spacingSet,
 );
 
-const stylePropTypes = {
+const dialogCloseButtonStylePropTypes = {
     ...borderRadiusPropTypes,
     ...dimensionsSetPropTypes,
     ...displayPropTypes,
@@ -138,21 +140,21 @@ export class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
     }
 }
 
-export default withStyledSystem<DialogCloseButtonProps, StyleProps, DialogCloseButton, {}>(
+export default withStyledSystem<
+    DialogCloseButtonProps,
+    DialogCloseButtonStyleProps,
     DialogCloseButton,
-    styleParser,
-    stylePropTypes,
-    {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        marginTop: 2,
-        marginRight: 2,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '24px',
-        height: '24px',
-        borderRadius: 'circle',
-    },
-);
+    {}
+>(DialogCloseButton, styleParser, dialogCloseButtonStylePropTypes, {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    marginTop: 2,
+    marginRight: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '24px',
+    height: '24px',
+    borderRadius: 'circle',
+});

@@ -195,37 +195,48 @@ const innerRecordCardListWindow = React.forwardRef(
     },
 );
 
+/** */
+interface RecordCardListScrollEvent {
+    /** */
+    scrollDirection: 'forward' | 'backward';
+    /** */
+    scrollOffset: number;
+    /** */
+    scrollUpdateWasRequested: boolean;
+}
+
 /**
  * @typedef {object} RecordCardListProps
- * @property {Array.<Record>} records Records to display in card list.
- * @property {Function} [onScroll] Scroll event handler for the list window.
- * @property {Function} [onRecordClick] Click event handler for an individual record card. If undefined, uses default behavior to expand record. If null, no operation is performed.
- * @property {Function} [onRecordMouseEnter] Mouse enter event handler for an individual record card.
- * @property {Function} [onRecordMouseLeave] Mouse leave event handler for an individual record card.
- * @property {Array.<Field>} [fields] Fields to display in each record card. The primary field is always displayed.
- * @property {View} [view] The view model to use for field order and record coloring.
- * @property {Field} [attachmentCoverField] Attachment field to display as an image in the square preview for each record card. If omitted or not an attachment field, it uses for the first attachment field in `fields`. If `fields` is not defined, it uses the first attachment field in the view.
- * @property {string} [className] Additional class names to apply to the record card list.
- * @property {object} [style] Additional styles to apply to the record card list.
  */
 interface RecordCardListProps {
+    /** Records to display in card list. */
     records: Array<Record> | Array<RecordDef>;
-    onScroll?: (arg1: {
-        scrollDirection: 'forward' | 'backward';
-        scrollOffset: number;
-        scrollUpdateWasRequested: boolean;
-    }) => void;
+    /** Scroll event handler for the list window. */
+    onScroll?: (scrollEvent: RecordCardListScrollEvent) => void;
+    /** Click event handler for an individual record card. If undefined, uses default behavior to expand record. If null, no operation is performed. */
     onRecordClick?: null | ((record: Record | RecordDef, index: number) => void);
+    /** Mouse enter event handler for an individual record card. */
     onRecordMouseEnter?: (record: Record | RecordDef, index: number) => void;
+    /** Mouse leave event handler for an individual record card. */
     onRecordMouseLeave?: (record: Record | RecordDef, index: number) => void;
+    /** Fields to display in each record card. The primary field is always displayed. */
     fields?: Array<Field>;
+    /** The view model to use for field order and record coloring. */
     view?: View;
+    /** Attachment field to display as an image in the square preview for each record card. If omitted or not an attachment field, it uses for the first attachment field in `fields`. If `fields` is not defined, it uses the first attachment field in the view. */
     attachmentCoverField?: Field;
+    /** Additional class names to apply to the record card list. */
     className?: string;
+    /** Additional styles to apply to the record card list. */
     style?: React.CSSProperties;
 }
 
-interface StyleProps extends DimensionsSetProps, FlexItemSetProps, PositionSetProps, MarginProps {}
+/** */
+interface RecordCardListStyleProps
+    extends DimensionsSetProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
 
 const styleParser = compose(
     dimensionsSet,
@@ -234,13 +245,14 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+const recordCardListStylePropTypes = {
     ...dimensionsSetPropTypes,
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
 };
 
+/** @hidden */
 interface RecordCardListState {
     cardListWidth: number;
     cardListHeight: number;
@@ -432,8 +444,8 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
     }
 }
 
-export default withStyledSystem<RecordCardListProps, StyleProps, RecordCardList, {}>(
+export default withStyledSystem<RecordCardListProps, RecordCardListStyleProps, RecordCardList, {}>(
     RecordCardList,
     styleParser,
-    stylePropTypes,
+    recordCardListStylePropTypes,
 );

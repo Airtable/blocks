@@ -20,41 +20,9 @@
 • **LabelProps**:
 
 _Defined in
-[src/ui/label.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L28)_
+[src/ui/label.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L14)_
 
 **`typedef`** {object} LabelProps
-
-**`property`** {'small' | 'default' | 'large' | 'xlarge'} [size='default'] The `size` of the label.
-Defaults to `default`. Can be a responsive prop object.
-
-**`property`** {string} [htmlFor] The `for` attribute. Should contain the `id` of the input.
-
-**`property`** {string} [role] The `role` attribute.
-
-**`property`** {string} [className] Additional class names to apply, separated by spaces.
-
-**`property`** {object} [style] Additional styles.
-
-**`property`** {object} [dataAttributes] Data attributes that are spread onto the element
-`dataAttributes={{'data-*': '...'}}`.
-
-**`property`** {string} [aria-label] The `aria-label` attribute.
-
-**`property`** {string} [aria-labelledby] The `aria-labelledby` attribute. A space separated list of
-label element IDs.
-
-**`property`** {string} [aria-describedby] The `aria-describedby` attribute. A space separated list
-of description element IDs.
-
-**`property`** {string} [aria-controls] The `aria-controls` attribute.
-
-**`property`** {string} [aria-expanded] The `aria-expanded` attribute.
-
-**`property`** {string} [aria-haspopup] The `aria-haspopup` attribute.
-
-**`property`** {string} [aria-hidden] The `aria-hidden` attribute.
-
-**`property`** {string} [aria-live] The `aria-live` attribute.
 
 ### `Optional` aria-controls
 
@@ -157,6 +125,77 @@ _Defined in
 Indicates that an element will be updated, and describes the types of updates the user agents,
 assistive technologies, and user can expect from the live region.
 
+### `Optional` children
+
+• **children**? : _React.ReactNode_
+
+_Defined in
+[src/ui/label.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L22)_
+
+### `Optional` className
+
+• **className**? : _undefined | string_
+
+_Defined in
+[src/ui/label.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L24)_
+
+Additional class names to apply, separated by spaces.
+
+### `Optional` dataAttributes
+
+• **dataAttributes**? :
+_[DataAttributesProp](_airtable_blocks_ui_system__core.md#dataattributesprop)_
+
+_Defined in
+[src/ui/label.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L28)_
+
+Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
+
+### `Optional` htmlFor
+
+• **htmlFor**? : _undefined | string_
+
+_Defined in
+[src/ui/label.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L18)_
+
+The `for` attribute. Should contain the `id` of the input.
+
+### `Optional` id
+
+• **id**? : _undefined | string_
+
+_Defined in
+[src/ui/label.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L20)_
+
+The `id` attribute.
+
+### `Optional` role
+
+• **role**? : _undefined | string_
+
+_Defined in
+[src/ui/label.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L30)_
+
+The `role` attribute.
+
+### `Optional` size
+
+• **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
+
+_Defined in
+[src/ui/label.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L16)_
+
+The `size` of the label. Defaults to `default`. Can be a responsive prop object.
+
+### `Optional` style
+
+• **style**? : _React.CSSProperties_
+
+_Defined in
+[src/ui/label.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L26)_
+
+Additional styles.
+
 ## Variables
 
 ### `Const` Label
@@ -176,7 +215,7 @@ aria-controls={ariaControls} aria-expanded={ariaExpanded} aria-haspopup={ariaHas
 aria-hidden={ariaHidden} aria-live={ariaLive} {...dataAttributes} > {children} </label> ); }, )
 
 _Defined in
-[src/ui/label.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L56)_
+[src/ui/label.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L50)_
 
 A label component.
 

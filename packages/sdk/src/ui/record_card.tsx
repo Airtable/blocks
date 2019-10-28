@@ -48,7 +48,8 @@ import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
 // Mirrored from client_server_shared_config_settings
 const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 
-interface StyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
+/** */
+interface RecordCardStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
     flexItemSet,
@@ -56,7 +57,7 @@ const styleParser = compose(
     margin,
 );
 
-const stylePropTypes = {
+const recordCardStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
@@ -64,6 +65,7 @@ const stylePropTypes = {
 
 const CARD_PADDING = 12;
 
+/** @hidden */
 interface CellValueAndFieldLabelProps {
     record?: Record | null;
     cellValue?: unknown;
@@ -117,34 +119,34 @@ CellValueAndFieldLabel.propTypes = {
 
 /**
  * @typedef {object} RecordCardProps
- * @property {Record} record Record to display in the card.
- * @property {Array.<Field>} [fields] Fields to display in the card. The primary field is always displayed.
- * @property {View} [view] The view model to use for field order and record coloring.
- * @property {Field} [attachmentCoverField] Attachment field to display as an image in the square preview for the card. If omitted or not an attachment field, it uses for the first attachment field in `fields`. If `fields` is not defined, it uses the first attachment field in the view.
- * @property {number} [width] Width of the record card.
- * @property {number} [height] Height of the record card.
- * @property {object} [expandRecordOptions] Options object for expanding a record.
- * @property {Array.<Record>} [expandRecordOptions.records] List of all records, used for cycling through records in the same expanded record window.
- * @property {Function} [onClick] Click event handler for the record card. If undefined, uses default behavior to expand record. If null, no operation is performed.
- * @property {Function} [onMouseEnter] Mouse enter event handler for the record card.
- * @property {Function} [onMouseLeave] Mouse leave event handler for the record card.
- * @property {string} [className] Additional class names to apply to the record card.
- * @property {object} [style] Additional styles to apply to the record card.
  */
-interface RecordCardProps extends StyleProps {
+interface RecordCardProps extends RecordCardStyleProps {
+    /** Record to display in the card. */
     record: Record | RecordDef;
+    /** The view model to use for field order and record coloring. */
     view?: View;
+    /** Attachment field to display as an image in the square preview for the card. If omitted or not an attachment field, it uses for the first attachment field in `fields`. If `fields` is not defined, it uses the first attachment field in the view. */
     attachmentCoverField?: Field;
+    /** Width of the record card. */
     width?: number;
+    /** Height of the record card. */
     height?: number;
+    /** Options object for expanding a record. */
     expandRecordOptions?: ExpandRecordOpts | null;
+    /** Fields to display in the card. The primary field is always displayed. */
     fields?: Array<Field>;
     // TODO (stephen): consider deprecating onMouseEnter/onMouseLeave
+    /** Mouse enter event handler for the record card. */
     onMouseEnter?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
+    /** Mouse leave event handler for the record card. */
     onMouseLeave?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
+    /** Click event handler for the record card. If undefined, uses default behavior to expand record. If null, no operation is performed. */
     onClick?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
+    /** @hidden */
     hasOnClick?: boolean;
+    /** Additional class names to apply to the record card. */
     className?: string;
+    /** Additional styles to apply to the record card. */
     style?: React.CSSProperties;
     /** @internal injected by withHooks */
     viewMetadata: ViewMetadataQueryResult | null;
@@ -237,7 +239,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         style: PropTypes.object,
         expandRecordOptions: PropTypes.object,
         ...tooltipAnchorPropTypes,
-        ...stylePropTypes,
+        ...recordCardStylePropTypes,
     };
     /** @hidden */
     static defaultProps = {
@@ -666,11 +668,11 @@ export default withHooks<
 >(RecordCard, props => {
     const {styleProps, nonStyleProps} = splitStyleProps<
         Omit<RecordCardProps, 'viewMetadata'>,
-        StyleProps
+        RecordCardStyleProps
     >(props, styleParser.propNames);
 
     const {record, fields, view, className} = nonStyleProps;
-    const classNameForStyledProps = useStyledSystem<StyleProps>(styleProps, styleParser);
+    const classNameForStyledProps = useStyledSystem<RecordCardStyleProps>(styleProps, styleParser);
 
     const recordModel = record && record instanceof Record ? record : null;
     let parentTable = null;

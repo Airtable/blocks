@@ -3,20 +3,19 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
-import Icon, {sharedIconPropTypes, SharedIconProps, stylePropTypes, StyleProps} from './icon';
+import Icon, {
+    sharedIconPropTypes,
+    SharedIconProps,
+    iconStylePropTypes,
+    IconStyleProps,
+} from './icon';
 import {IconName} from './icon_config';
 
 /**
  * @typedef {object} FieldIconProps
- * @property {Field} field The field model to display an icon for.
- * @property {number} [size=16] The width/height of the icon.
- * @property {string} [fillColor] The color of the icon.
- * @property {string} [className] Additional class names to apply to the icon.
- * @property {object} [style] Additional styles to apply to the icon.
- * @property {string} [pathClassName] Additional class names to apply to the icon path.
- * @property {object} [pathStyle] Additional styles to apply to the icon path.
  */
-interface FieldIconProps extends SharedIconProps, StyleProps {
+interface FieldIconProps extends SharedIconProps, IconStyleProps {
+    /** The field model to display an icon for. */
     field: Field;
 }
 
@@ -67,7 +66,7 @@ const FieldIcon = (props: FieldIconProps) => {
 FieldIcon.propTypes = {
     field: PropTypes.instanceOf(Field).isRequired,
     ...sharedIconPropTypes,
-    ...stylePropTypes,
+    ...iconStylePropTypes,
 };
 
 export default FieldIcon;
