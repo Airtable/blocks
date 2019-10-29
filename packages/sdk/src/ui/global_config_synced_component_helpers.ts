@@ -6,8 +6,8 @@ import useWatchable from './use_watchable';
 /** @hidden */
 const globalConfigSyncedComponentHelpers = {
     globalConfigKeyPropType: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.string.isRequired,
+        PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     ]).isRequired,
     useDefaultWatchesForSyncedComponent(globalConfigKey: GlobalConfigKey): void {
         const {globalConfig, session} = getSdk();
