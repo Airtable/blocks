@@ -106,6 +106,10 @@ const examples: Array<Example> = [
         component: InputExample,
     },
     {
+        name: 'InputSynced',
+        component: InputSyncedExample,
+    },
+    {
         name: 'Loader',
         component: LoaderExample,
     },
