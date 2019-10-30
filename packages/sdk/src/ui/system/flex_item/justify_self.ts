@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @hidden */ /** */
 // TODO (stephen): This property does nothing in a flex container, consider deprecating
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';

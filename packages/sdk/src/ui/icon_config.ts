@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @hidden */ /** */
 import {createEnum, EnumType, createPropTypeFromEnum, ObjectMap} from '../private_utils';
 
 // New icons should be added to both Hyperbase and this file.

@@ -23,7 +23,7 @@ const WatchableViewMetadataKeys = {
  */
 type WatchableViewMetadataKey = ObjectValues<typeof WatchableViewMetadataKeys>;
 
-/** @internal */
+/** @hidden */
 interface ViewMetadata {
     visibleFieldIds: Array<FieldId> | null;
     allFieldIds: Array<FieldId> | null;

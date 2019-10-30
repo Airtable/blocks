@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @hidden */ /** */
 import {spawnInvariantViolationError, spawnError} from '../error_utils';
 import {TimeoutId} from '../private_utils';
 

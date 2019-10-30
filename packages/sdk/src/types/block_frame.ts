@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @hidden */ /** */
 import {ObjectValues} from '../private_utils';
 // TODO(alex): Remove npm SDK knowledge of these details
 export const BlockToHost = Object.freeze({

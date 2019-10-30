@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @hidden */ /** */
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {spawnInvariantViolationError} from '../error_utils';

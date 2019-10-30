@@ -1,4 +1,4 @@
-/** @internal */ /** */
+/** @hidden */ /** */
 import * as React from 'react';
 import {spawnInvariantViolationError} from '../error_utils';
 import getSdk from '../get_sdk';
