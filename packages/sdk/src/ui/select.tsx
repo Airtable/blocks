@@ -32,7 +32,7 @@ import {
     validateOptions,
     optionValueToString,
     stringToOptionValue,
-    SelectOptionValuePropType,
+    selectOptionValuePropType,
     SelectOptionValue,
     SelectOption,
 } from './select_and_select_buttons_helpers';
@@ -99,7 +99,7 @@ export const sharedSelectPropTypes = {
     // We do more strict checks in render.
     options: PropTypes.arrayOf(
         PropTypes.shape({
-            value: SelectOptionValuePropType,
+            value: selectOptionValuePropType,
             label: PropTypes.node,
             disabled: PropTypes.bool,
         }),
@@ -180,7 +180,7 @@ export const selectStylePropTypes = {
 export class Select extends React.Component<SelectProps> {
     /** @hidden */
     static propTypes = {
-        value: SelectOptionValuePropType,
+        value: selectOptionValuePropType,
         ...sharedSelectPropTypes,
     };
     /** */

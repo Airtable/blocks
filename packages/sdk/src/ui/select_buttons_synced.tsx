@@ -9,7 +9,7 @@ import SelectButtons, {
     SelectButtonsStyleProps,
 } from './select_buttons';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-import Synced from './synced';
+import useSynced from './use_synced';
 
 /**
  * @typedef {object} SelectButtonsSyncedProps
@@ -20,53 +20,49 @@ interface SelectButtonsSyncedProps extends SharedSelectButtonsProps, SelectButto
 }
 
 /** */
-class SelectButtonsSynced extends React.Component<SelectButtonsSyncedProps> {
-    /** @hidden */
-    static propTypes = {
-        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...sharedSelectButtonsPropTypes,
-        ...selectButtonsStylePropTypes,
-    };
-    /** @hidden */
-    render() {
-        const {globalConfigKey, onChange, disabled, ...restOfProps} = this.props;
+function SelectButtonsSynced(props: SelectButtonsSyncedProps, ref: React.Ref<HTMLDivElement>) {
+    const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
+    const {value, setValue, canSetValue} = useSynced(globalConfigKey);
 
-        return (
-            <Synced
-                globalConfigKey={globalConfigKey}
-                render={({value, canSetValue, setValue}) => {
-                    let selectValue;
-                    if (value === null || value === undefined) {
-                        selectValue = null;
-                    } else if (
-                        typeof value === 'string' ||
-                        typeof value === 'number' ||
-                        typeof value === 'boolean'
-                    ) {
-                        selectValue = value;
-                    } else {
-                        throw spawnError(
-                            'SelectButtonsSynced only works with a global config value that is a string, number, boolean, null or undefined.',
-                        );
-                    }
-
-                    return (
-                        <SelectButtons
-                            {...restOfProps}
-                            value={selectValue}
-                            onChange={newValue => {
-                                setValue(newValue);
-                                if (onChange) {
-                                    onChange(newValue);
-                                }
-                            }}
-                            disabled={disabled || !canSetValue}
-                        />
-                    );
-                }}
-            />
+    let selectValue;
+    if (value === null || value === undefined) {
+        selectValue = null;
+    } else if (
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean'
+    ) {
+        selectValue = value;
+    } else {
+        throw spawnError(
+            'SelectButtonsSynced only works with a global config value that is a string, number, boolean, null or undefined.',
         );
     }
+
+    return (
+        <SelectButtons
+            {...restOfProps}
+            ref={ref}
+            value={selectValue}
+            onChange={newValue => {
+                setValue(newValue);
+                if (onChange) {
+                    onChange(newValue);
+                }
+            }}
+            disabled={disabled || !canSetValue}
+        />
+    );
 }
 
-export default SelectButtonsSynced;
+const ForwardedRefSelectButtonsSynced = React.forwardRef(SelectButtonsSynced);
+
+ForwardedRefSelectButtonsSynced.propTypes = {
+    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+    ...sharedSelectButtonsPropTypes,
+    ...selectButtonsStylePropTypes,
+};
+
+ForwardedRefSelectButtonsSynced.displayName = 'SelectButtonsSynced';
+
+export default ForwardedRefSelectButtonsSynced;

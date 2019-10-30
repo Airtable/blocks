@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: Select */ /** */
 import {cx} from 'emotion';
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {spawnError} from '../error_utils';
@@ -8,11 +8,11 @@ import {baymax} from './baymax_utils';
 import {
     validateOptions,
     optionValueToString,
-    SelectOptionValuePropType,
+    selectOptionValuePropType,
     SelectOption,
     SelectOptionValue,
 } from './select_and_select_buttons_helpers';
-import withStyledSystem from './with_styled_system';
+import useStyledSystem from './use_styled_system';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -35,7 +35,6 @@ import {
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
-import {KeyCodes} from './key_codes';
 
 // Shared with `SelectButtons` and `SelectButtonsSynced`.
 /** */
@@ -64,10 +63,10 @@ export const sharedSelectButtonsPropTypes = {
     // We do more strict checks in render.
     options: PropTypes.arrayOf(
         PropTypes.shape({
-            value: SelectOptionValuePropType,
-            label: PropTypes.node,
+            value: selectOptionValuePropType,
+            label: PropTypes.node.isRequired,
             disabled: PropTypes.bool,
-        }),
+        }).isRequired,
     ).isRequired,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
@@ -110,50 +109,35 @@ export const selectButtonsStylePropTypes = {
 /**
  * @typedef {object} SelectButtonsProps
  */
-interface SelectButtonsProps extends SharedSelectButtonsProps {
+interface SelectButtonsProps extends SharedSelectButtonsProps, SelectButtonsStyleProps {
     /** The value of the selected option. */
     value: SelectOptionValue;
 }
 
 /** */
-export class SelectButtons extends React.Component<SelectButtonsProps> {
-    /** @hidden */
-    static propTypes = {
-        value: SelectOptionValuePropType,
-        ...sharedSelectButtonsPropTypes,
-    };
-    /** @internal */
-    _onChange(newValue: SelectOptionValue) {
-        const {value, onChange} = this.props;
-        if (onChange) {
-            if (newValue !== value) {
-                onChange(newValue);
-            }
-        }
-    }
-    /** @internal */
-    _onKeyDown(e: React.KeyboardEvent<HTMLDivElement>, value: SelectOptionValue) {
-        if (e.which === KeyCodes.ENTER || e.which === KeyCodes.SPACE) {
-            this._onChange(value);
-        }
-    }
-    /** @hidden */
-    render() {
-        const {
-            className,
-            style,
-            options,
-            disabled,
-            value,
-            onMouseEnter,
-            onMouseLeave,
-            onClick,
-            tabIndex = 0,
-            'aria-label': ariaLabel,
-            'aria-describedby': ariaDescribedBy,
-            'aria-labelledby': ariaLabelledBy,
-        } = this.props;
+function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>) {
+    const {
+        className,
+        style,
+        options,
+        disabled,
+        value,
+        tabIndex = 0,
+        onChange,
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        hasOnClick,
+        'aria-label': ariaLabel,
+        'aria-describedby': ariaDescribedBy,
+        'aria-labelledby': ariaLabelledBy,
+        ...styleProps
+    } = props;
 
+    const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
+
+    useEffect(() => {
         // Check options here for a cleaner stack trace.
         // Also, even though options are required, still check if it's set because
         // the error is really ugly and covers up the prop type check.
@@ -161,72 +145,82 @@ export class SelectButtons extends React.Component<SelectButtonsProps> {
         if (!validationResult.isValid) {
             throw spawnError('<SelectButtons> %s', validationResult.reason);
         }
+    }, [options]);
 
-        return (
-            <Box
-                // TODO (stephen): remove tooltip anchor props
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={onClick}
-                className={className}
-                style={style}
-                display="flex"
-                padding={1}
-                backgroundColor="darken2"
-                borderRadius="default"
-                opacity={disabled ? 'quieter' : 'normal'}
-                overflow="hidden"
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-                aria-describedby={ariaDescribedBy}
-            >
-                {options &&
-                    options.map(option => {
-                        const isSelected = option.value === value;
-                        const isOptionDisabled = disabled || option.disabled;
-                        return (
-                            <div
-                                key={optionValueToString(option.value)}
-                                onClick={
-                                    isOptionDisabled
-                                        ? undefined
-                                        : () => this._onChange(option.value)
-                                }
-                                onKeyDown={
-                                    isOptionDisabled
-                                        ? undefined
-                                        : e => this._onKeyDown(e, option.value)
-                                }
-                                tabIndex={isOptionDisabled ? -1 : tabIndex}
-                                className={cx(
-                                    baymax('flex-auto rounded p-half normal center no-outline'),
-                                    {
-                                        [baymax(
-                                            'link-unquiet pointer focusable',
-                                        )]: !isOptionDisabled,
-                                        [baymax('darken4 text-white')]: isSelected,
-                                        [baymax('text-dark')]: !isSelected,
-                                        [baymax('quiet')]: !isSelected && !disabled,
-                                    },
-                                )}
-                                style={{
-                                    flexBasis: 0,
-                                }}
-                            >
-                                {option.label}
-                            </div>
-                        );
-                    })}
-            </Box>
-        );
+    function _onChange(newValue: SelectOptionValue) {
+        if (onChange) {
+            if (newValue !== value) {
+                onChange(newValue);
+            }
+        }
     }
+
+    function _onKeyDown(e: React.KeyboardEvent<HTMLDivElement>, newValue: SelectOptionValue) {
+        if ([' ', 'Enter'].includes(e.key)) {
+            _onChange(newValue);
+        }
+    }
+
+    return (
+        <Box
+            // TODO (stephen): remove tooltip anchor props
+            ref={ref}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            className={cx(classNameForStyleProps, className)}
+            style={style}
+            display="flex"
+            padding={1}
+            backgroundColor="darken2"
+            borderRadius="default"
+            opacity={disabled ? 'quieter' : 'normal'}
+            overflow="hidden"
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+        >
+            {options &&
+                options.map(option => {
+                    const isSelected = option.value === value;
+                    const isOptionDisabled = disabled || option.disabled;
+                    return (
+                        <div
+                            key={optionValueToString(option.value)}
+                            onClick={isOptionDisabled ? undefined : () => _onChange(option.value)}
+                            onKeyDown={
+                                isOptionDisabled ? undefined : e => _onKeyDown(e, option.value)
+                            }
+                            tabIndex={isOptionDisabled ? -1 : tabIndex}
+                            className={cx(
+                                baymax('flex-auto rounded p-half normal center no-outline'),
+                                {
+                                    [baymax('link-unquiet pointer focusable')]: !isOptionDisabled,
+                                    [baymax('darken4 text-white')]: isSelected,
+                                    [baymax('text-dark')]: !isSelected,
+                                    [baymax('quiet')]: !isSelected && !disabled,
+                                },
+                            )}
+                            style={{
+                                flexBasis: 0,
+                            }}
+                        >
+                            {option.label}
+                        </div>
+                    );
+                })}
+        </Box>
+    );
 }
 
-export default withStyledSystem<SelectButtonsProps, SelectButtonsStyleProps, SelectButtons, {}>(
-    SelectButtons,
-    styleParser,
-    selectButtonsStylePropTypes,
-    {
-        width: '100%',
-    },
-);
+const ForwardedRefSelectButtons = React.forwardRef(SelectButtons);
+
+ForwardedRefSelectButtons.propTypes = {
+    value: selectOptionValuePropType,
+    ...sharedSelectButtonsPropTypes,
+    ...selectButtonsStylePropTypes,
+};
+
+ForwardedRefSelectButtons.displayName = 'SelectButtons';
+
+export default ForwardedRefSelectButtons;

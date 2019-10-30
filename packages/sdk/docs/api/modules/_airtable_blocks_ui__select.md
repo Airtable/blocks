@@ -8,8 +8,6 @@
 ### Classes
 
 -   [Select](_airtable_blocks_ui__select.md#select)
--   [SelectButtons](_airtable_blocks_ui__select.md#selectbuttons)
--   [SelectButtonsSynced](_airtable_blocks_ui__select.md#selectbuttonssynced)
 -   [SelectSynced](_airtable_blocks_ui__select.md#selectsynced)
 
 ### Interfaces
@@ -28,6 +26,11 @@
 ### Type aliases
 
 -   [SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)
+
+### Functions
+
+-   [SelectButtons](_airtable_blocks_ui__select.md#selectbuttons)
+-   [SelectButtonsSynced](_airtable_blocks_ui__select.md#selectbuttonssynced)
 
 ## Classes
 
@@ -104,24 +107,6 @@ _Defined in
 
 ---
 
-### SelectButtons
-
-• **SelectButtons**:
-
-_Defined in
-[src/ui/select_buttons.tsx:119](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L119)_
-
----
-
-### SelectButtonsSynced
-
-• **SelectButtonsSynced**:
-
-_Defined in
-[src/ui/select_buttons_synced.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L23)_
-
----
-
 ### SelectSynced
 
 • **SelectSynced**:
@@ -190,9 +175,21 @@ _Defined in
 • **SelectButtonsProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L113)_
+[src/ui/select_buttons.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L112)_
 
 **`typedef`** {object} SelectButtonsProps
+
+### `Optional` alignSelf
+
+• **alignSelf**? : _Prop‹AlignSelfProperty›_
+
+_Inherited from
+[AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
+
+_Defined in
+[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
+
+Aligns flex items of the current flex line, overriding the `alignItems` value.
 
 ### `Optional` aria-describedby
 
@@ -202,7 +199,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select_buttons.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L60)_
+[src/ui/select_buttons.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L59)_
 
 A space separated list of description element IDs.
 
@@ -214,7 +211,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select_buttons.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L56)_
+[src/ui/select_buttons.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L55)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -226,9 +223,22 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select_buttons.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L58)_
+[src/ui/select_buttons.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L57)_
 
 A space separated list of label element IDs.
+
+### `Optional` bottom
+
+• **bottom**? : _Prop‹BottomProperty‹Length››_
+
+_Inherited from
+[BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
+
+_Defined in
+[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/bottom.ts#L11)_
+
+Specifies the vertical position of a positioned element. It has no effect on non-positioned
+elements.
 
 ### `Optional` className
 
@@ -238,7 +248,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select_buttons.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L50)_
+[src/ui/select_buttons.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L49)_
 
 Additional class names to apply to the select.
 
@@ -250,9 +260,190 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select_buttons.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L48)_
+[src/ui/select_buttons.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L47)_
 
 If set to `true`, the user cannot interact with the select.
+
+### `Optional` flex
+
+• **flex**? : _Prop‹FlexProperty‹Length››_
+
+_Inherited from
+[FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
+
+_Defined in
+[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
+
+Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a
+shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
+
+### `Optional` flexBasis
+
+• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
+
+_Inherited from
+[FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
+
+_Defined in
+[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
+
+Sets the initial main size of a flex item.
+
+### `Optional` flexGrow
+
+• **flexGrow**? : _Prop‹GlobalsNumber›_
+
+_Inherited from
+[FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
+
+_Defined in
+[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
+
+Sets the flex grow factor of a flex item. If the size of flex items is smaller than the flex
+container, items grow to fit according to `flexGrow`.
+
+### `Optional` flexShrink
+
+• **flexShrink**? : _Prop‹GlobalsNumber›_
+
+_Inherited from
+[FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
+
+_Defined in
+[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
+
+Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
+container, items shrink to fit according to `flexShrink`.
+
+### `Optional` left
+
+• **left**? : _Prop‹LeftProperty‹Length››_
+
+_Inherited from
+[LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
+
+_Defined in
+[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/left.ts#L11)_
+
+Specifies the horizontal position of a positioned element. It has no effect on non-positioned
+elements.
+
+### `Optional` margin
+
+• **margin**? : _Prop‹MarginProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[margin](_airtable_blocks_ui_system__spacing.md#optional-margin)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
+
+Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`,
+`marginRight`, `marginBottom`, and `marginLeft`.
+
+### `Optional` marginBottom
+
+• **marginBottom**? : _Prop‹MarginBottomProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginBottom](_airtable_blocks_ui_system__spacing.md#optional-marginbottom)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
+
+Sets the margin area on the bottom of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginLeft
+
+• **marginLeft**? : _Prop‹MarginLeftProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginLeft](_airtable_blocks_ui_system__spacing.md#optional-marginleft)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
+
+Sets the margin area on the left of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginRight
+
+• **marginRight**? : _Prop‹MarginRightProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginRight](_airtable_blocks_ui_system__spacing.md#optional-marginright)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
+
+Sets the margin area on the right of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginTop
+
+• **marginTop**? : _Prop‹MarginTopProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginTop](_airtable_blocks_ui_system__spacing.md#optional-margintop)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
+
+Sets the margin area on the top of an element. A positive value places it farther from its
+neighbors, while a negative value places it closer.
+
+### `Optional` marginX
+
+• **marginX**? : _Prop‹MarginProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginX](_airtable_blocks_ui_system__spacing.md#optional-marginx)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
+
+Sets the margin area on the top and bottom of an element. A positive value places it farther from
+its neighbors, while a negative value places it closer.
+
+### `Optional` marginY
+
+• **marginY**? : _Prop‹MarginProperty‹Length››_
+
+_Inherited from
+[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginY](_airtable_blocks_ui_system__spacing.md#optional-marginy)_
+
+_Defined in
+[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
+
+Sets the margin area on the left and right of an element. A positive value places it farther from
+its neighbors, while a negative value places it closer.
+
+### `Optional` maxWidth
+
+• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
+
+_Inherited from
+[MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
+
+_Defined in
+[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
+
+Sets the maximum width of an element. It prevents the used value of the `width` property from
+becoming larger than the value specified by `maxWidth`.
+
+### `Optional` minWidth
+
+• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
+
+_Inherited from
+[MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
+
+_Defined in
+[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
+
+Sets the minimum width of an element. It prevents the used value of the `width` property from
+becoming smaller than the value specified for `minWidth`.
 
 ### `Optional` onChange
 
@@ -262,7 +453,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[onChange](_airtable_blocks_ui__select.md#optional-onchange)_
 
 _Defined in
-[src/ui/select_buttons.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L46)_
+[src/ui/select_buttons.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L45)_
 
 A function to be called when the selected option changes.
 
@@ -274,9 +465,48 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[options](_airtable_blocks_ui__select.md#options)_
 
 _Defined in
-[src/ui/select_buttons.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L44)_
+[src/ui/select_buttons.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L43)_
 
 The list of select options.
+
+### `Optional` order
+
+• **order**? : _Prop‹GlobalsNumber›_
+
+_Inherited from
+[OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
+
+_Defined in
+[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
+
+Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
+and then by their source code order.
+
+### `Optional` position
+
+• **position**? : _Prop‹PositionProperty›_
+
+_Inherited from
+[PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
+
+_Defined in
+[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position.ts#L10)_
+
+Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
+determine the final location of positioned elements.
+
+### `Optional` right
+
+• **right**? : _Prop‹RightProperty‹Length››_
+
+_Inherited from
+[RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
+
+_Defined in
+[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/right.ts#L11)_
+
+Specifies the horizontal position of a positioned element. It has no effect on non-positioned
+elements.
 
 ### `Optional` style
 
@@ -286,7 +516,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select_buttons.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L54)_
+[src/ui/select_buttons.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L53)_
 
 Additional styles to apply to the select.
 
@@ -298,18 +528,56 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select_buttons.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L52)_
+[src/ui/select_buttons.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L51)_
 
 The `tabindex` attribute.
+
+### `Optional` top
+
+• **top**? : _Prop‹TopProperty‹Length››_
+
+_Inherited from
+[TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
+
+_Defined in
+[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/top.ts#L11)_
+
+Specifies the vertical position of a positioned element. It has no effect on non-positioned
+elements.
 
 ### value
 
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select_buttons.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L115)_
+[src/ui/select_buttons.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L114)_
 
 The value of the selected option.
+
+### `Optional` width
+
+• **width**? : _Prop‹WidthProperty‹Length››_
+
+_Inherited from
+[WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
+
+_Defined in
+[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
+
+Specifies the width of an element.
+
+### `Optional` zIndex
+
+• **zIndex**? : _Prop‹ZIndexProperty›_
+
+_Inherited from
+[ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
+
+_Defined in
+[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/z_index.ts#L10)_
+
+Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
+with larger z-indexes cover those with smaller ones.
 
 ---
 
@@ -318,7 +586,7 @@ The value of the selected option.
 • **SelectButtonsStyleProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L84)_
+[src/ui/select_buttons.tsx:83](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L83)_
 
 ### `Optional` alignSelf
 
@@ -634,7 +902,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select_buttons.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L60)_
+[src/ui/select_buttons.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L59)_
 
 A space separated list of description element IDs.
 
@@ -646,7 +914,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select_buttons.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L56)_
+[src/ui/select_buttons.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L55)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -658,7 +926,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select_buttons.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L58)_
+[src/ui/select_buttons.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L57)_
 
 A space separated list of label element IDs.
 
@@ -683,7 +951,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select_buttons.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L50)_
+[src/ui/select_buttons.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L49)_
 
 Additional class names to apply to the select.
 
@@ -695,7 +963,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select_buttons.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L48)_
+[src/ui/select_buttons.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L47)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -899,7 +1167,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[onChange](_airtable_blocks_ui__select.md#optional-onchange)_
 
 _Defined in
-[src/ui/select_buttons.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L46)_
+[src/ui/select_buttons.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L45)_
 
 A function to be called when the selected option changes.
 
@@ -911,7 +1179,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[options](_airtable_blocks_ui__select.md#options)_
 
 _Defined in
-[src/ui/select_buttons.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L44)_
+[src/ui/select_buttons.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L43)_
 
 The list of select options.
 
@@ -962,7 +1230,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select_buttons.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L54)_
+[src/ui/select_buttons.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L53)_
 
 Additional styles to apply to the select.
 
@@ -974,7 +1242,7 @@ _Inherited from
 [SharedSelectButtonsProps](_airtable_blocks_ui__select.md#sharedselectbuttonsprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select_buttons.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L52)_
+[src/ui/select_buttons.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L51)_
 
 The `tabindex` attribute.
 
@@ -2065,14 +2333,14 @@ The `tabindex` attribute.
 • **SharedSelectButtonsProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L42)_
+[src/ui/select_buttons.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L41)_
 
 ### `Optional` aria-describedby
 
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L60)_
+[src/ui/select_buttons.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L59)_
 
 A space separated list of description element IDs.
 
@@ -2081,7 +2349,7 @@ A space separated list of description element IDs.
 • **aria-label**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L56)_
+[src/ui/select_buttons.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L55)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -2090,7 +2358,7 @@ The `aria-label` attribute. Use this if the select is not referenced by a label 
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L58)_
+[src/ui/select_buttons.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L57)_
 
 A space separated list of label element IDs.
 
@@ -2099,7 +2367,7 @@ A space separated list of label element IDs.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L50)_
+[src/ui/select_buttons.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L49)_
 
 Additional class names to apply to the select.
 
@@ -2108,7 +2376,7 @@ Additional class names to apply to the select.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/select_buttons.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L48)_
+[src/ui/select_buttons.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L47)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -2117,7 +2385,7 @@ If set to `true`, the user cannot interact with the select.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/select_buttons.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L46)_
+[src/ui/select_buttons.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L45)_
 
 A function to be called when the selected option changes.
 
@@ -2126,7 +2394,7 @@ A function to be called when the selected option changes.
 • **options**: _Array‹[SelectOption](_airtable_blocks_ui__select.md#selectoption)›_
 
 _Defined in
-[src/ui/select_buttons.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L44)_
+[src/ui/select_buttons.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L43)_
 
 The list of select options.
 
@@ -2135,7 +2403,7 @@ The list of select options.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/select_buttons.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L54)_
+[src/ui/select_buttons.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L53)_
 
 Additional styles to apply to the select.
 
@@ -2144,7 +2412,7 @@ Additional styles to apply to the select.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/select_buttons.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L52)_
+[src/ui/select_buttons.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L51)_
 
 The `tabindex` attribute.
 
@@ -2303,3 +2571,43 @@ The `tabindex` attribute.
 
 _Defined in
 [src/ui/select_and_select_buttons_helpers.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L8)_
+
+## Functions
+
+### SelectButtons
+
+▸ **SelectButtons**(`props`:
+[SelectButtonsProps](_airtable_blocks_ui__select.md#selectbuttonsprops), `ref`:
+React.Ref‹HTMLDivElement›): _Element_
+
+_Defined in
+[src/ui/select_buttons.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L118)_
+
+**Parameters:**
+
+| Name    | Type                                                                    |
+| ------- | ----------------------------------------------------------------------- |
+| `props` | [SelectButtonsProps](_airtable_blocks_ui__select.md#selectbuttonsprops) |
+| `ref`   | React.Ref‹HTMLDivElement›                                               |
+
+**Returns:** _Element_
+
+---
+
+### SelectButtonsSynced
+
+▸ **SelectButtonsSynced**(`props`:
+[SelectButtonsSyncedProps](_airtable_blocks_ui__select.md#selectbuttonssyncedprops), `ref`:
+React.Ref‹HTMLDivElement›): _Element_
+
+_Defined in
+[src/ui/select_buttons_synced.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L23)_
+
+**Parameters:**
+
+| Name    | Type                                                                                |
+| ------- | ----------------------------------------------------------------------------------- |
+| `props` | [SelectButtonsSyncedProps](_airtable_blocks_ui__select.md#selectbuttonssyncedprops) |
+| `ref`   | React.Ref‹HTMLDivElement›                                                           |
+
+**Returns:** _Element_

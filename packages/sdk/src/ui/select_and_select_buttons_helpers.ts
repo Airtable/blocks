@@ -30,11 +30,12 @@ export interface SelectOption {
     disabled?: boolean;
 }
 
-export const SelectOptionValuePropType = PropTypes.oneOfType([
+// We cast the following prop type because we allow `null` as a valid option.
+export const selectOptionValuePropType = PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
     PropTypes.bool,
-]);
+]) as PropTypes.Validator<NonNullable<SelectOptionValue>>;
 
 export const validateOptions = (options: Array<SelectOption>) => {
     if (options) {
