@@ -56,3 +56,18 @@ export function useInputSize(controlSizeProp: ControlSizeProp): string {
     }
     return useStyledSystem(styleProps);
 }
+
+/** @internal */
+export function useSelectButtonsSize(controlSizeProp: ControlSizeProp): string {
+    const {selectButtonsSizes} = useTheme();
+    let styleProps;
+    if (typeof controlSizeProp === 'string') {
+        styleProps = selectButtonsSizes[controlSizeProp];
+    } else {
+        styleProps = getStylePropsForResponsiveProp<ControlSize>(
+            controlSizeProp,
+            selectButtonsSizes,
+        );
+    }
+    return useStyledSystem(styleProps);
+}

@@ -4,7 +4,7 @@ import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {spawnError} from '../error_utils';
-import {baymax} from './baymax_utils';
+import {createEnum, EnumType} from '../private_utils';
 import {
     validateOptions,
     optionValueToString,
@@ -13,6 +13,8 @@ import {
     SelectOptionValue,
 } from './select_and_select_buttons_helpers';
 import useStyledSystem from './use_styled_system';
+import useTheme from './theme/use_theme';
+import cssHelpers from './css_helpers';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -34,11 +36,26 @@ import {
     MarginProps,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import Box from './box';
+import {
+    ControlSizeProp,
+    controlSizePropType,
+    ControlSize,
+    useSelectButtonsSize,
+} from './control_sizes';
+
+/** @internal */
+type SelectButtonsVariant = EnumType<typeof SelectButtonsVariant>;
+const SelectButtonsVariant = createEnum('default');
+
+/** @internal */
+function useSelectButtonsVariant(variant: SelectButtonsVariant = SelectButtonsVariant.default) {
+    const {selectButtonsVariants} = useTheme();
+    return selectButtonsVariants[variant];
+}
 
 // Shared with `SelectButtons` and `SelectButtonsSynced`.
 /** */
-export interface SharedSelectButtonsProps extends TooltipAnchorProps {
+export interface SharedSelectButtonsProps extends TooltipAnchorProps, SelectButtonsStyleProps {
     /** The list of select options. */
     options: Array<SelectOption>;
     /** A function to be called when the selected option changes. */
@@ -49,6 +66,8 @@ export interface SharedSelectButtonsProps extends TooltipAnchorProps {
     className?: string;
     /** The `tabindex` attribute. */
     tabIndex?: number;
+    /** The size of the select buttons. */
+    size?: ControlSizeProp;
     /** Additional styles to apply to the select. */
     style?: React.CSSProperties;
     /** The `aria-label` attribute. Use this if the select is not referenced by a label element. */
@@ -58,6 +77,15 @@ export interface SharedSelectButtonsProps extends TooltipAnchorProps {
     /** A space separated list of description element IDs. */
     ['aria-describedby']?: string;
 }
+
+export const selectButtonsStylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
 
 export const sharedSelectButtonsPropTypes = {
     // We do more strict checks in render.
@@ -71,12 +99,14 @@ export const sharedSelectButtonsPropTypes = {
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
     tabIndex: PropTypes.number,
+    size: controlSizePropType,
     className: PropTypes.string,
     style: PropTypes.object,
     'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
     ...tooltipAnchorPropTypes,
+    ...selectButtonsStylePropTypes,
 };
 
 /** */
@@ -97,19 +127,10 @@ const styleParser = compose(
     margin,
 );
 
-export const selectButtonsStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 /**
  * @typedef {object} SelectButtonsProps
  */
-interface SelectButtonsProps extends SharedSelectButtonsProps, SelectButtonsStyleProps {
+interface SelectButtonsProps extends SharedSelectButtonsProps {
     /** The value of the selected option. */
     value: SelectOptionValue;
 }
@@ -123,6 +144,7 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
         disabled,
         value,
         tabIndex = 0,
+        size = ControlSize.default,
         onChange,
         onMouseEnter,
         onMouseLeave,
@@ -134,7 +156,9 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
         'aria-labelledby': ariaLabelledBy,
         ...styleProps
     } = props;
-
+    // There is only a single default variant.
+    const {containerClassNameForVariant, optionClassNameForVariant} = useSelectButtonsVariant();
+    const containerClassNameForSize = useSelectButtonsSize(size);
     const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
 
     useEffect(() => {
@@ -162,54 +186,41 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
     }
 
     return (
-        <Box
+        <div
             // TODO (stephen): remove tooltip anchor props
             ref={ref}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={onClick}
-            className={cx(classNameForStyleProps, className)}
+            className={cx(
+                containerClassNameForSize,
+                containerClassNameForVariant,
+                classNameForStyleProps,
+                className,
+            )}
             style={style}
-            display="flex"
-            padding={1}
-            backgroundColor="darken2"
-            borderRadius="default"
-            opacity={disabled ? 'quieter' : 'normal'}
-            overflow="hidden"
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy}
         >
-            {options &&
-                options.map(option => {
-                    const isSelected = option.value === value;
-                    const isOptionDisabled = disabled || option.disabled;
-                    return (
-                        <div
-                            key={optionValueToString(option.value)}
-                            onClick={isOptionDisabled ? undefined : () => _onChange(option.value)}
-                            onKeyDown={
-                                isOptionDisabled ? undefined : e => _onKeyDown(e, option.value)
-                            }
-                            tabIndex={isOptionDisabled ? -1 : tabIndex}
-                            className={cx(
-                                baymax('flex-auto rounded p-half normal center no-outline'),
-                                {
-                                    [baymax('link-unquiet pointer focusable')]: !isOptionDisabled,
-                                    [baymax('darken4 text-white')]: isSelected,
-                                    [baymax('text-dark')]: !isSelected,
-                                    [baymax('quiet')]: !isSelected && !disabled,
-                                },
-                            )}
-                            style={{
-                                flexBasis: 0,
-                            }}
-                        >
-                            {option.label}
-                        </div>
-                    );
-                })}
-        </Box>
+            {options.map(option => {
+                const isSelected = option.value === value;
+                const isOptionDisabled = disabled || option.disabled;
+                return (
+                    <div
+                        key={optionValueToString(option.value)}
+                        onClick={isOptionDisabled ? undefined : () => _onChange(option.value)}
+                        onKeyDown={isOptionDisabled ? undefined : e => _onKeyDown(e, option.value)}
+                        aria-disabled={isOptionDisabled}
+                        aria-checked={isSelected}
+                        tabIndex={isOptionDisabled ? -1 : tabIndex}
+                        className={optionClassNameForVariant}
+                    >
+                        <span className={cssHelpers.TRUNCATE}>{option.label}</span>
+                    </div>
+                );
+            })}
+        </div>
     );
 }
 
@@ -218,7 +229,6 @@ const ForwardedRefSelectButtons = React.forwardRef(SelectButtons);
 ForwardedRefSelectButtons.propTypes = {
     value: selectOptionValuePropType,
     ...sharedSelectButtonsPropTypes,
-    ...selectButtonsStylePropTypes,
 };
 
 ForwardedRefSelectButtons.displayName = 'SelectButtons';

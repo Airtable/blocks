@@ -67,3 +67,24 @@ export const inputSizes = {
         paddingX: '12px',
     },
 };
+
+export const selectButtonsSizes = {
+    small: {
+        ...sharedControlSizes.small,
+        padding: 1,
+        lineHeight: '17px',
+        fontSize: 1,
+    },
+    default: {
+        ...sharedControlSizes.default,
+        padding: 1,
+        lineHeight: '19px',
+        fontSize: 2,
+    },
+    large: {
+        ...sharedControlSizes.large,
+        padding: 1,
+        lineHeight: '19px',
+        fontSize: 2,
+    },
+};
