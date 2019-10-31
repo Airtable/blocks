@@ -1,16 +1,16 @@
 const sharedControlSizes = {
     small: {
-        fontSize: 2,
+        fontSize: 2, // 13px
         height: '28px',
         lineHeight: '19px',
     },
     default: {
-        fontSize: 3,
+        fontSize: 3, // 15px
         height: '32px',
         lineHeight: '21px',
     },
     large: {
-        fontSize: 3,
+        fontSize: 3, // 15px
         height: '36px',
         lineHeight: '21px',
     },
@@ -49,5 +49,21 @@ export const selectSizes = {
         paddingLeft: '12px',
         paddingRight: '28px',
         backgroundPosition: 'calc(100% - 12px)',
+    },
+};
+
+export const inputSizes = {
+    small: {
+        ...sharedControlSizes.small,
+        paddingX: '8px',
+    },
+    default: {
+        ...sharedControlSizes.default,
+        fontSize: 2,
+        paddingX: '10px',
+    },
+    large: {
+        ...sharedControlSizes.large,
+        paddingX: '12px',
     },
 };

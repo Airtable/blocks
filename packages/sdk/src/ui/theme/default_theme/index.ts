@@ -6,6 +6,7 @@ import headingStyles from './heading_styles';
 // Component variants
 import buttonVariants from './button_variants';
 import linkVariants from './link_variants';
+import inputVariants from './input_variants';
 import textButtonVariants from './text_button_variants';
 import selectVariants from './select_variants';
 
@@ -20,6 +21,7 @@ const theme = {
     // of not having to create a class name manually in the render function.
     buttonVariants,
     linkVariants,
+    inputVariants,
     textButtonVariants,
     selectVariants,
 };

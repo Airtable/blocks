@@ -4,7 +4,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import {createEnum, EnumType, createPropTypeFromEnum} from '../private_utils';
-import {baymax} from './baymax_utils';
+import useTheme from './theme/use_theme';
 import useStyledSystem from './use_styled_system';
 import useFormFieldId from './use_form_field_id';
 import {
@@ -28,10 +28,40 @@ import {
     MarginProps,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {ControlSizeProp, controlSizePropType, ControlSize, useInputSize} from './control_sizes';
+
+/** @internal */
+type InputVariant = EnumType<typeof InputVariant>;
+const InputVariant = createEnum('default');
+
+/** @internal */
+function useInputVariant(variant: InputVariant = InputVariant.default) {
+    const {inputVariants} = useTheme();
+    return inputVariants[variant];
+}
+
+export const ValidInputType = createEnum(
+    'date',
+    'datetime-local',
+    'email',
+    'month',
+    'number',
+    'password',
+    'search',
+    'tel',
+    'text',
+    'time',
+    'url',
+    'week',
+);
+/** */
+type ValidInputType = EnumType<typeof ValidInputType>;
 
 // Shared with `Input` and `InputSynced`.
 /** */
 export interface SharedInputProps extends TooltipAnchorProps {
+    /** The size of the input. Defaults to `default`. */
+    size?: ControlSizeProp;
     /** The `type` for the input. Defaults to `text`. */
     type?: EnumType<typeof ValidInputType>;
     /** The `disabled` attribute. */
@@ -78,25 +108,9 @@ export interface SharedInputProps extends TooltipAnchorProps {
     min?: number | string;
 }
 
-export const ValidInputType = createEnum(
-    'date',
-    'datetime-local',
-    'email',
-    'month',
-    'number',
-    'password',
-    'search',
-    'tel',
-    'text',
-    'time',
-    'url',
-    'week',
-);
-/** */
-type ValidInputType = EnumType<typeof ValidInputType>;
-
 // Shared with `Input` and `InputSynced`.
 export const sharedInputPropTypes = {
+    size: controlSizePropType,
     type: createPropTypeFromEnum(ValidInputType),
     placeholder: PropTypes.string,
     disabled: PropTypes.bool,
@@ -182,6 +196,7 @@ export const inputStylePropTypes = {
  */
 function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
     const {
+        size = ControlSize.default,
         type = ValidInputType.text,
         value,
         placeholder,
@@ -212,6 +227,9 @@ function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
     } = props;
 
     const formFieldId = useFormFieldId();
+    // There is only a single default variant.
+    const classNameForInputVariant = useInputVariant();
+    const classNameForInputSize = useInputSize(size);
     const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
 
     return (
@@ -242,11 +260,8 @@ function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
             onClick={onClick}
             style={style}
             className={cx(
-                baymax('styled-input rounded p1 darken1 text-dark normal'),
-                {
-                    [baymax('quieter')]: !!disabled,
-                    [baymax('link-quiet')]: !disabled,
-                },
+                classNameForInputSize,
+                classNameForInputVariant,
                 classNameForStyleProps,
                 className,
             )}

@@ -44,3 +44,15 @@ export function useSelectSize(controlSizeProp: ControlSizeProp): string {
     }
     return useStyledSystem(styleProps, selectSizeStyleParser);
 }
+
+/** @internal */
+export function useInputSize(controlSizeProp: ControlSizeProp): string {
+    const {inputSizes} = useTheme();
+    let styleProps;
+    if (typeof controlSizeProp === 'string') {
+        styleProps = inputSizes[controlSizeProp];
+    } else {
+        styleProps = getStylePropsForResponsiveProp<ControlSize>(controlSizeProp, inputSizes);
+    }
+    return useStyledSystem(styleProps);
+}
