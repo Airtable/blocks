@@ -183,7 +183,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
      * ```
      */
-    get(key: GlobalConfigKey): GlobalConfigValue | undefined {
+    get(key: GlobalConfigKey): unknown {
         const path = this._formatKeyAsPath(key);
 
         const pathValidationResult = validatePath(path, this._kvStore);

@@ -8,7 +8,7 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 export default function useSynced(
     globalConfigKey: GlobalConfigKey,
 ): {
-    value: GlobalConfigValue | undefined;
+    value: unknown;
     canSetValue: boolean;
     setValue: (newValue: GlobalConfigValue | undefined) => void;
 } {

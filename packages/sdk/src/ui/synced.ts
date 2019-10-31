@@ -10,7 +10,7 @@ import withHooks from './with_hooks';
 interface SyncedProps {
     globalConfigKey: GlobalConfigKey;
     render: (arg1: {
-        value: GlobalConfigValue | undefined;
+        value: unknown;
         canSetValue: boolean;
         setValue: (newValue: GlobalConfigValue | undefined) => void;
     }) => React.ReactElement;
