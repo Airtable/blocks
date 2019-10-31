@@ -21,8 +21,6 @@ import * as UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {AirtableInterface, AppInterface} from './injected/airtable_interface';
-import * as privateUtils from './private_utils';
-import {spawnError, invariant} from './error_utils';
 
 if (!(React as any).PropTypes) {
     (React as any).PropTypes = PropTypes;
@@ -129,13 +127,6 @@ export default class BlockSdk {
 
     /** @hidden */
     undoRedo: UndoRedo;
-
-    /** @hidden */
-    spawnError = spawnError;
-    /** @hidden */
-    invariant = invariant;
-    /** @hidden */
-    __utils = privateUtils;
 
     // When models are updated on the frontend, we want to batch them together and have React do a
     // single render.

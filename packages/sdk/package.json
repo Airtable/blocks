@@ -10,10 +10,12 @@
         "ui.js",
         "models.js",
         "types.js",
+        "unstable_private_utils.js",
         "index.d.ts",
         "ui.d.ts",
         "models.d.ts",
-        "types.d.ts"
+        "types.d.ts",
+        "unstable_private_utils.d.ts"
     ],
     "scripts": {
         "airbuild": "yarn run build && yarn run docs && yarn run test",
