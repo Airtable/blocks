@@ -139,8 +139,7 @@ to display an error message to the user.
 
 ### get
 
-▸ **get**(`key`: [GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)):
-_[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) | undefined_
+▸ **get**(`key`: [GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)): _unknown_
 
 _Defined in
 [src/global_config.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L186)_
@@ -162,7 +161,7 @@ const nestedValue = globalConfig.get(['topLevelKey', 'nested', 'deeply']);
 | ----- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `key` | [GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey) | A string for the top-level key, or an array of strings describing the path to the value. |
 
-**Returns:** _[GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue) | undefined_
+**Returns:** _unknown_
 
 The value at the provided path, or `undefined` if no value exists at that path.
 
