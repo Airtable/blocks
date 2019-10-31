@@ -8,4 +8,4 @@ export {RecordId} from './dist/types/src/types/record';
 export {TableId} from './dist/types/src/types/table';
 export {ViewId, ViewType} from './dist/types/src/types/view';
 export {GlobalConfigValue} from './dist/types/src/global_config';
-export {ObjectValues, ObjectMap, ReactRefType, TimeoutId} from './dist/types/src/private_utils';
+export {Color} from './dist/types/src/colors';
