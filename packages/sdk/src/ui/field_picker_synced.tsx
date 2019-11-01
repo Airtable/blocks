@@ -3,12 +3,9 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
 import {GlobalConfigKey} from '../global_config';
-import {spawnInvariantViolationError} from '../error_utils';
-import {ReactRefType} from '../private_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import FieldPicker, {sharedFieldPickerPropTypes, SharedFieldPickerProps} from './field_picker';
-import Synced from './synced';
-import withHooks from './with_hooks';
+import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
 /**
@@ -70,79 +67,46 @@ interface FieldPickerSyncedProps extends SharedFieldPickerProps {
  * }
  * ```
  */
-export class FieldPickerSynced extends React.Component<FieldPickerSyncedProps> {
-    /** @hidden */
-    static propTypes = {
-        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...sharedFieldPickerPropTypes,
-    };
-    /** @internal */
-    _fieldPicker: ReactRefType<typeof FieldPicker> | null;
-    /** @hidden */
-    constructor(props: FieldPickerSyncedProps) {
-        super(props);
-        // TODO (sReactRefType React.forwardRef
-        this._fieldPicker = null;
-    }
-    /** */
-    focus() {
-        if (!this._fieldPicker) {
-            throw spawnInvariantViolationError('No field picker to focus');
-        }
-        this._fieldPicker.focus();
-    }
-    /** */
-    blur() {
-        if (!this._fieldPicker) {
-            throw spawnInvariantViolationError('No field picker to blur');
-        }
-        this._fieldPicker.blur();
-    }
-    /** */
-    click() {
-        if (!this._fieldPicker) {
-            throw spawnInvariantViolationError('No field picker to click');
-        }
-        this._fieldPicker.click();
-    }
-    /** @internal */
-    _getFieldFromGlobalConfigValue(fieldId: unknown): Field | null {
-        const {table} = this.props;
+function FieldPickerSynced(props: FieldPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+    const {globalConfigKey, onChange, disabled, table, ...restOfProps} = props;
+    const {value: fieldId, canSetValue: canSetFieldId, setValue: setFieldId} = useSynced(
+        globalConfigKey,
+    );
+
+    useWatchable(getSdk().base, ['tables']);
+    useWatchable(table, ['fields']);
+
+    function _getFieldFromGlobalConfigValue(): Field | null {
         if (!table || table.isDeleted) {
             return null;
         }
         return typeof fieldId === 'string' && table ? table.getFieldByIdIfExists(fieldId) : null;
     }
-    /** @hidden */
-    render() {
-        const {globalConfigKey, onChange, disabled, ...restOfProps} = this.props;
-        return (
-            <Synced
-                globalConfigKey={globalConfigKey}
-                render={({value, canSetValue, setValue}) => (
-                    <FieldPicker
-                        {...restOfProps}
-                        ref={el => (this._fieldPicker = el)}
-                        field={this._getFieldFromGlobalConfigValue(value)}
-                        onChange={field => {
-                            setValue(field ? field.id : null);
-                            if (onChange) {
-                                onChange(field);
-                            }
-                        }}
-                        disabled={disabled || !canSetValue}
-                    />
-                )}
-            />
-        );
-    }
+
+    return (
+        <FieldPicker
+            {...restOfProps}
+            ref={ref}
+            table={table}
+            field={_getFieldFromGlobalConfigValue()}
+            onChange={field => {
+                setFieldId(field ? field.id : null);
+                if (onChange) {
+                    onChange(field);
+                }
+            }}
+            disabled={disabled || !canSetFieldId}
+        />
+    );
 }
 
-export default withHooks<{}, FieldPickerSyncedProps, FieldPickerSynced>(
-    FieldPickerSynced,
-    props => {
-        useWatchable(getSdk().base, ['tables']);
-        useWatchable(props.table, ['fields']);
-        return {};
-    },
-);
+const ForwardedRefFieldPickerSynced = React.forwardRef(FieldPickerSynced);
+
+ForwardedRefFieldPickerSynced.displayName = 'FieldPickerSynced';
+
+ForwardedRefFieldPickerSynced.propTypes = {
+    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+    ...sharedFieldPickerPropTypes,
+};
+
+export default ForwardedRefFieldPickerSynced;

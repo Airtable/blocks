@@ -5,193 +5,16 @@
 
 ## Index
 
-### Classes
-
--   [FieldPicker](_airtable_blocks_ui__fieldpicker.md#fieldpicker)
--   [FieldPickerSynced](_airtable_blocks_ui__fieldpicker.md#fieldpickersynced)
-
 ### Interfaces
 
 -   [FieldPickerProps](_airtable_blocks_ui__fieldpicker.md#fieldpickerprops)
 -   [FieldPickerSyncedProps](_airtable_blocks_ui__fieldpicker.md#fieldpickersyncedprops)
 -   [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops)
 
-## Classes
+### Functions
 
-### FieldPicker
-
-• **FieldPicker**:
-
-_Defined in
-[src/ui/field_picker.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L106)_
-
-Dropdown menu component for selecting fields.
-
-**`example`**
-
-```js
-import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
-import {fieldTypes} from '@airtable/blocks/models';
-import React, {Fragment, useState} from 'react';
-
-function Block() {
-    useBase();
-    const [table, setTable] = useState(null);
-    const [field, setField] = useState(null);
-
-    const summaryText = field
-        ? `The field type for ${field.name} is ${field.type}.`
-        : 'No field selected.';
-    return (
-        <Fragment>
-            <p style={{marginBottom: 16}}>{summaryText}</p>
-            <label style={{display: 'block', marginBottom: 16}}>
-                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
-                <TablePicker
-                    table={table}
-                    onChange={newTable => {
-                        setTable(newTable);
-                        setField(null);
-                    }}
-                    shouldAllowPickingNone={true}
-                />
-            </label>
-            {table && (
-                <label>
-                    <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
-                    <FieldPicker
-                        table={table}
-                        field={field}
-                        onChange={newField => setField(newField)}
-                        allowedTypes={[
-                            fieldTypes.SINGLE_LINE_TEXT,
-                            fieldTypes.MULTILINE_TEXT,
-                            fieldTypes.EMAIL,
-                            fieldTypes.URL,
-                            fieldTypes.PHONE_NUMBER,
-                        ]}
-                        shouldAllowPickingNone={true}
-                    />
-                </label>
-            )}
-        </Fragment>
-    );
-}
-```
-
-### blur
-
-▸ **blur**(): _void_
-
-_Defined in
-[src/ui/field_picker.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L134)_
-
-**Returns:** _void_
-
-### click
-
-▸ **click**(): _void_
-
-_Defined in
-[src/ui/field_picker.tsx:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L141)_
-
-**Returns:** _void_
-
-### focus
-
-▸ **focus**(): _void_
-
-_Defined in
-[src/ui/field_picker.tsx:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L127)_
-
-**Returns:** _void_
-
----
-
-### FieldPickerSynced
-
-• **FieldPickerSynced**:
-
-_Defined in
-[src/ui/field_picker_synced.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L73)_
-
-Dropdown menu component for selecting fields, synced with
-[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
-
-**`example`**
-
-```js
-import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';
-import {fieldTypes} from '@airtable/blocks/models';
-import {globalConfig} from '@airtable/blocks';
-import React, {Fragment} from 'react';
-
-function Block() {
-    const base = useBase();
-    const tableId = globalConfig.get('tableId');
-    const table = base.getTableByIdIfExists(tableId);
-    const fieldId = globalConfig.get('fieldId');
-    const field = table.getFieldByIdIfExists(fieldId);
-    useWatchable(globalConfig, ['tableId', 'fieldId']);
-
-    const summaryText = field
-        ? `The field type for ${field.name} is ${field.type}.`
-        : 'No field selected.';
-    return (
-        <Fragment>
-            <p style={{marginBottom: 16}}>{summaryText}</p>
-            <label style={{display: 'block', marginBottom: 16}}>
-                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
-                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
-            </label>
-            {table && (
-                <label>
-                    <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
-                    <FieldPickerSynced
-                        table={table}
-                        globalConfigKey="fieldId"
-                        allowedTypes={[
-                            fieldTypes.SINGLE_LINE_TEXT,
-                            fieldTypes.MULTILINE_TEXT,
-                            fieldTypes.EMAIL,
-                            fieldTypes.URL,
-                            fieldTypes.PHONE_NUMBER,
-                        ]}
-                        shouldAllowPickingNone={true}
-                    />
-                </label>
-            )}
-        </Fragment>
-    );
-}
-```
-
-### blur
-
-▸ **blur**(): _void_
-
-_Defined in
-[src/ui/field_picker_synced.tsx:95](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L95)_
-
-**Returns:** _void_
-
-### click
-
-▸ **click**(): _void_
-
-_Defined in
-[src/ui/field_picker_synced.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L102)_
-
-**Returns:** _void_
-
-### focus
-
-▸ **focus**(): _void_
-
-_Defined in
-[src/ui/field_picker_synced.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L88)_
-
-**Returns:** _void_
+-   [FieldPicker](_airtable_blocks_ui__fieldpicker.md#fieldpicker)
+-   [FieldPickerSynced](_airtable_blocks_ui__fieldpicker.md#fieldpickersynced)
 
 ## Interfaces
 
@@ -200,7 +23,7 @@ _Defined in
 • **FieldPickerProps**:
 
 _Defined in
-[src/ui/field_picker.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L49)_
+[src/ui/field_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L41)_
 
 **`typedef`** {object} FieldPickerProps
 
@@ -224,7 +47,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[allowedTypes](_airtable_blocks_ui__fieldpicker.md#optional-allowedtypes)_
 
 _Defined in
-[src/ui/field_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L26)_
+[src/ui/field_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L19)_
 
 An array indicating which field types can be selected.
 
@@ -236,7 +59,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+[src/ui/select.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L77)_
 
 A space separated list of description element IDs.
 
@@ -248,7 +71,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+[src/ui/select.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L73)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -260,7 +83,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+[src/ui/select.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L75)_
 
 A space separated list of label element IDs.
 
@@ -272,7 +95,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
 
 _Defined in
-[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+[src/ui/select.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L61)_
 
 The `autoFocus` attribute.
 
@@ -297,7 +120,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+[src/ui/select.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L59)_
 
 Additional class names to apply to the select.
 
@@ -309,7 +132,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+[src/ui/select.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L69)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -318,7 +141,7 @@ If set to `true`, the user cannot interact with the select.
 • **field**? : _[Field](_airtable_blocks_models__field.md#field) | null_
 
 _Defined in
-[src/ui/field_picker.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L51)_
+[src/ui/field_picker.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L43)_
 
 The selected field model.
 
@@ -381,7 +204,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
 
 _Defined in
-[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+[src/ui/select.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L63)_
 
 The `id` attribute.
 
@@ -523,7 +346,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
 
 _Defined in
-[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+[src/ui/select.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L65)_
 
 The `name` attribute.
 
@@ -535,7 +358,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[onChange](_airtable_blocks_ui__fieldpicker.md#optional-onchange)_
 
 _Defined in
-[src/ui/field_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L32)_
+[src/ui/field_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L25)_
 
 A function to be called when the selected field changes.
 
@@ -560,7 +383,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[placeholder](_airtable_blocks_ui__fieldpicker.md#optional-placeholder)_
 
 _Defined in
-[src/ui/field_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L30)_
+[src/ui/field_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L23)_
 
 The placeholder text when no field is selected.
 
@@ -598,7 +421,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[shouldAllowPickingNone](_airtable_blocks_ui__fieldpicker.md#optional-shouldallowpickingnone)_
 
 _Defined in
-[src/ui/field_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L28)_
+[src/ui/field_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L21)_
 
 If set to `true`, the user can unset the selected field.
 
@@ -610,7 +433,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+[src/ui/select.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L71)_
 
 Additional styles to apply to the select.
 
@@ -622,7 +445,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+[src/ui/select.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L67)_
 
 The `tabindex` attribute.
 
@@ -634,7 +457,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[table](_airtable_blocks_ui__fieldpicker.md#optional-table)_
 
 _Defined in
-[src/ui/field_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L24)_
+[src/ui/field_picker.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L17)_
 
 The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
 
@@ -683,7 +506,7 @@ with larger z-indexes cover those with smaller ones.
 • **FieldPickerSyncedProps**:
 
 _Defined in
-[src/ui/field_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L17)_
+[src/ui/field_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L14)_
 
 **`typedef`** {object} FieldPickerSyncedProps
 
@@ -707,7 +530,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[allowedTypes](_airtable_blocks_ui__fieldpicker.md#optional-allowedtypes)_
 
 _Defined in
-[src/ui/field_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L26)_
+[src/ui/field_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L19)_
 
 An array indicating which field types can be selected.
 
@@ -719,7 +542,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+[src/ui/select.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L77)_
 
 A space separated list of description element IDs.
 
@@ -731,7 +554,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+[src/ui/select.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L73)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -743,7 +566,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+[src/ui/select.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L75)_
 
 A space separated list of label element IDs.
 
@@ -755,7 +578,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
 
 _Defined in
-[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+[src/ui/select.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L61)_
 
 The `autoFocus` attribute.
 
@@ -780,7 +603,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+[src/ui/select.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L59)_
 
 Additional class names to apply to the select.
 
@@ -792,7 +615,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+[src/ui/select.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L69)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -852,7 +675,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/field_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L19)_
+[src/ui/field_picker_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L16)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting
@@ -866,7 +689,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
 
 _Defined in
-[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+[src/ui/select.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L63)_
 
 The `id` attribute.
 
@@ -1008,7 +831,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
 
 _Defined in
-[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+[src/ui/select.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L65)_
 
 The `name` attribute.
 
@@ -1020,7 +843,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[onChange](_airtable_blocks_ui__fieldpicker.md#optional-onchange)_
 
 _Defined in
-[src/ui/field_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L32)_
+[src/ui/field_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L25)_
 
 A function to be called when the selected field changes.
 
@@ -1045,7 +868,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[placeholder](_airtable_blocks_ui__fieldpicker.md#optional-placeholder)_
 
 _Defined in
-[src/ui/field_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L30)_
+[src/ui/field_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L23)_
 
 The placeholder text when no field is selected.
 
@@ -1083,7 +906,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[shouldAllowPickingNone](_airtable_blocks_ui__fieldpicker.md#optional-shouldallowpickingnone)_
 
 _Defined in
-[src/ui/field_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L28)_
+[src/ui/field_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L21)_
 
 If set to `true`, the user can unset the selected field.
 
@@ -1095,7 +918,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+[src/ui/select.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L71)_
 
 Additional styles to apply to the select.
 
@@ -1107,7 +930,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+[src/ui/select.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L67)_
 
 The `tabindex` attribute.
 
@@ -1119,7 +942,7 @@ _Inherited from
 [SharedFieldPickerProps](_airtable_blocks_ui__fieldpicker.md#sharedfieldpickerprops).[table](_airtable_blocks_ui__fieldpicker.md#optional-table)_
 
 _Defined in
-[src/ui/field_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L24)_
+[src/ui/field_picker.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L17)_
 
 The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
 
@@ -1168,7 +991,7 @@ with larger z-indexes cover those with smaller ones.
 • **SharedFieldPickerProps**:
 
 _Defined in
-[src/ui/field_picker.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L22)_
+[src/ui/field_picker.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L15)_
 
 ### `Optional` alignSelf
 
@@ -1187,7 +1010,7 @@ Aligns flex items of the current flex line, overriding the `alignItems` value.
 • **allowedTypes**? : _Array‹[FieldType](_airtable_blocks_models__field.md#fieldtype)›_
 
 _Defined in
-[src/ui/field_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L26)_
+[src/ui/field_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L19)_
 
 An array indicating which field types can be selected.
 
@@ -1199,7 +1022,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+[src/ui/select.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L77)_
 
 A space separated list of description element IDs.
 
@@ -1211,7 +1034,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+[src/ui/select.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L73)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -1223,7 +1046,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+[src/ui/select.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L75)_
 
 A space separated list of label element IDs.
 
@@ -1235,7 +1058,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
 
 _Defined in
-[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+[src/ui/select.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L61)_
 
 The `autoFocus` attribute.
 
@@ -1260,7 +1083,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+[src/ui/select.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L59)_
 
 Additional class names to apply to the select.
 
@@ -1272,7 +1095,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+[src/ui/select.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L69)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -1335,7 +1158,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
 
 _Defined in
-[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+[src/ui/select.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L63)_
 
 The `id` attribute.
 
@@ -1477,7 +1300,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
 
 _Defined in
-[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+[src/ui/select.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L65)_
 
 The `name` attribute.
 
@@ -1486,7 +1309,7 @@ The `name` attribute.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/field_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L32)_
+[src/ui/field_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L25)_
 
 A function to be called when the selected field changes.
 
@@ -1508,7 +1331,7 @@ and then by their source code order.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/field_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L30)_
+[src/ui/field_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L23)_
 
 The placeholder text when no field is selected.
 
@@ -1543,7 +1366,7 @@ elements.
 • **shouldAllowPickingNone**? : _undefined | false | true_
 
 _Defined in
-[src/ui/field_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L28)_
+[src/ui/field_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L21)_
 
 If set to `true`, the user can unset the selected field.
 
@@ -1555,7 +1378,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+[src/ui/select.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L71)_
 
 Additional styles to apply to the select.
 
@@ -1567,7 +1390,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+[src/ui/select.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L67)_
 
 The `tabindex` attribute.
 
@@ -1576,7 +1399,7 @@ The `tabindex` attribute.
 • **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
 
 _Defined in
-[src/ui/field_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L24)_
+[src/ui/field_picker.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L17)_
 
 The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
 
@@ -1617,3 +1440,147 @@ _Defined in
 
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
+
+## Functions
+
+### FieldPicker
+
+▸ **FieldPicker**(`props`: [FieldPickerProps](_airtable_blocks_ui__fieldpicker.md#fieldpickerprops),
+`ref`: React.Ref‹HTMLSelectElement›): _null | Element_
+
+_Defined in
+[src/ui/field_picker.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L98)_
+
+Dropdown menu component for selecting fields.
+
+**`example`**
+
+```js
+import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
+import {fieldTypes} from '@airtable/blocks/models';
+import React, {Fragment, useState} from 'react';
+
+function Block() {
+    useBase();
+    const [table, setTable] = useState(null);
+    const [field, setField] = useState(null);
+
+    const summaryText = field
+        ? `The field type for ${field.name} is ${field.type}.`
+        : 'No field selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePicker
+                    table={table}
+                    onChange={newTable => {
+                        setTable(newTable);
+                        setField(null);
+                    }}
+                    shouldAllowPickingNone={true}
+                />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
+                    <FieldPicker
+                        table={table}
+                        field={field}
+                        onChange={newField => setField(newField)}
+                        allowedTypes={[
+                            fieldTypes.SINGLE_LINE_TEXT,
+                            fieldTypes.MULTILINE_TEXT,
+                            fieldTypes.EMAIL,
+                            fieldTypes.URL,
+                            fieldTypes.PHONE_NUMBER,
+                        ]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
+**Parameters:**
+
+| Name    | Type                                                                     |
+| ------- | ------------------------------------------------------------------------ |
+| `props` | [FieldPickerProps](_airtable_blocks_ui__fieldpicker.md#fieldpickerprops) |
+| `ref`   | React.Ref‹HTMLSelectElement›                                             |
+
+**Returns:** _null | Element_
+
+---
+
+### FieldPickerSynced
+
+▸ **FieldPickerSynced**(`props`:
+[FieldPickerSyncedProps](_airtable_blocks_ui__fieldpicker.md#fieldpickersyncedprops), `ref`:
+React.Ref‹HTMLSelectElement›): _Element_
+
+_Defined in
+[src/ui/field_picker_synced.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L70)_
+
+Dropdown menu component for selecting fields, synced with
+[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
+
+**`example`**
+
+```js
+import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';
+import {fieldTypes} from '@airtable/blocks/models';
+import {globalConfig} from '@airtable/blocks';
+import React, {Fragment} from 'react';
+
+function Block() {
+    const base = useBase();
+    const tableId = globalConfig.get('tableId');
+    const table = base.getTableByIdIfExists(tableId);
+    const fieldId = globalConfig.get('fieldId');
+    const field = table.getFieldByIdIfExists(fieldId);
+    useWatchable(globalConfig, ['tableId', 'fieldId']);
+
+    const summaryText = field
+        ? `The field type for ${field.name} is ${field.type}.`
+        : 'No field selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
+                    <FieldPickerSynced
+                        table={table}
+                        globalConfigKey="fieldId"
+                        allowedTypes={[
+                            fieldTypes.SINGLE_LINE_TEXT,
+                            fieldTypes.MULTILINE_TEXT,
+                            fieldTypes.EMAIL,
+                            fieldTypes.URL,
+                            fieldTypes.PHONE_NUMBER,
+                        ]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
+**Parameters:**
+
+| Name    | Type                                                                                 |
+| ------- | ------------------------------------------------------------------------------------ |
+| `props` | [FieldPickerSyncedProps](_airtable_blocks_ui__fieldpicker.md#fieldpickersyncedprops) |
+| `ref`   | React.Ref‹HTMLSelectElement›                                                         |
+
+**Returns:** _Element_

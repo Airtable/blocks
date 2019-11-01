@@ -1,22 +1,15 @@
 /** @module @airtable/blocks/ui: TablePicker */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {spawnInvariantViolationError} from '../error_utils';
 import getSdk from '../get_sdk';
 import Table from '../models/table';
-import {
-    sharedSelectBasePropTypes,
-    SharedSelectBaseProps,
-    selectStylePropTypes,
-    SelectStyleProps,
-} from './select';
+import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
-import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `TablePicker` and `TablePickerSynced`.
 /** */
-export interface SharedTablePickerProps extends SharedSelectBaseProps, SelectStyleProps {
+export interface SharedTablePickerProps extends SharedSelectBaseProps {
     /** If set to `true`, the user can unset the selected table. */
     shouldAllowPickingNone?: boolean;
     /** The placeholder text when no table is selected. */
@@ -31,7 +24,6 @@ export const sharedTablePickerPropTypes = {
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     ...sharedSelectBasePropTypes,
-    ...selectStylePropTypes,
 };
 
 /**
@@ -73,88 +65,48 @@ interface TablePickerProps extends SharedTablePickerProps {
  * }
  * ```
  */
-export class TablePicker extends React.Component<TablePickerProps> {
-    /** @hidden */
-    static propTypes = {
-        table: PropTypes.instanceOf(Table),
-        ...sharedTablePickerPropTypes,
-    };
-    /** @internal */
-    _select: ModelPickerSelect<Table> | null;
-    /** @hidden */
-    constructor(props: TablePickerProps) {
-        super(props);
-        // TODO (stephen): use React.forwardRef
-        this._select = null;
-        this._onChange = this._onChange.bind(this);
-    }
-    /** */
-    focus() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to focus');
-        }
-        this._select.focus();
-    }
-    /** */
-    blur() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to blur');
-        }
-        this._select.blur();
-    }
-    /** */
-    click() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to click');
-        }
-        this._select.click();
-    }
-    /** @internal */
-    _onChange(tableId: string | null) {
-        const {onChange} = this.props;
+function TablePicker(props: TablePickerProps, ref: React.Ref<HTMLSelectElement>) {
+    const {table, shouldAllowPickingNone, placeholder, onChange, ...restOfProps} = props;
+    const selectedTable = table && !table.isDeleted ? table : null;
+    useWatchable(getSdk().base, ['tables']);
+
+    function _onChange(tableId: string | null) {
         if (onChange) {
-            const table = tableId ? getSdk().base.getTableByIdIfExists(tableId) : null;
-            onChange(table);
+            const newTable = tableId ? getSdk().base.getTableByIdIfExists(tableId) : null;
+            onChange(newTable);
         }
     }
-    /** @hidden */
-    render() {
-        const {
-            table,
-            shouldAllowPickingNone,
-            placeholder,
-            // Destructure `onChange` to prevent it from being passed to `Select`.
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onChange,
-            ...restOfProps
-        } = this.props;
-        const selectedTable = table && !table.isDeleted ? table : null;
 
-        let placeholderToUse;
-        if (placeholder === undefined) {
-            // Let's set a good default value for the placeholder, depending
-            // on the shouldAllowPickingNone flag.
-            placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a table...';
-        } else {
-            placeholderToUse = placeholder;
-        }
-
-        return (
-            <ModelPickerSelect
-                {...restOfProps}
-                ref={el => (this._select = el)}
-                models={getSdk().base.tables}
-                selectedModelId={selectedTable ? selectedTable.id : null}
-                modelKeysToWatch={['name']}
-                shouldAllowPickingNone={shouldAllowPickingNone}
-                placeholder={placeholderToUse}
-                onChange={this._onChange}
-            />
-        );
+    let placeholderToUse;
+    if (placeholder === undefined) {
+        // Let's set a good default value for the placeholder, depending
+        // on the shouldAllowPickingNone flag.
+        placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a table...';
+    } else {
+        placeholderToUse = placeholder;
     }
+
+    return (
+        <ModelPickerSelect
+            {...restOfProps}
+            ref={ref}
+            models={getSdk().base.tables}
+            selectedModelId={selectedTable ? selectedTable.id : null}
+            modelKeysToWatch={['name']}
+            shouldAllowPickingNone={shouldAllowPickingNone}
+            placeholder={placeholderToUse}
+            onChange={_onChange}
+        />
+    );
 }
 
-export default withHooks<{}, TablePickerProps, TablePicker>(TablePicker, () => {
-    useWatchable(getSdk().base, ['tables']);
-    return {};
-});
+const ForwardedRefTablePicker = React.forwardRef(TablePicker);
+
+ForwardedRefTablePicker.displayName = 'TablePicker';
+
+ForwardedRefTablePicker.propTypes = {
+    table: PropTypes.instanceOf(Table),
+    ...sharedTablePickerPropTypes,
+};
+
+export default ForwardedRefTablePicker;

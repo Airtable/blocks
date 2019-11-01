@@ -1,14 +1,11 @@
 /** @module @airtable/blocks/ui: ViewPicker */ /** */
 import * as React from 'react';
-import {spawnInvariantViolationError} from '../error_utils';
 import getSdk from '../get_sdk';
 import View from '../models/view';
 import {GlobalConfigKey} from '../global_config';
-import {ReactRefType} from '../private_utils';
 import ViewPicker, {sharedViewPickerPropTypes, SharedViewPickerProps} from './view_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-import Synced from './synced';
-import withHooks from './with_hooks';
+import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
 /**
@@ -66,77 +63,46 @@ interface ViewPickerSyncedProps extends SharedViewPickerProps {
  * }
  * ```
  */
-export class ViewPickerSynced extends React.Component<ViewPickerSyncedProps> {
-    /** @hidden */
-    static propTypes = {
-        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...sharedViewPickerPropTypes,
-    };
-    /** @internal */
-    _viewPicker: ReactRefType<typeof ViewPicker> | null;
-    /** @hidden */
-    constructor(props: ViewPickerSyncedProps) {
-        super(props);
-        // TODO (stephen): Use React.forwardRef
-        this._viewPicker = null;
-    }
-    /** */
-    focus() {
-        if (!this._viewPicker) {
-            throw spawnInvariantViolationError('No view picker to focus');
-        }
-        this._viewPicker.focus();
-    }
-    /** */
-    blur() {
-        if (!this._viewPicker) {
-            throw spawnInvariantViolationError('No view picker to blur');
-        }
-        this._viewPicker.blur();
-    }
-    /** */
-    click() {
-        if (!this._viewPicker) {
-            throw spawnInvariantViolationError('No view picker to click');
-        }
-        this._viewPicker.click();
-    }
-    /** @internal */
-    _getViewFromGlobalConfigValue(viewId: unknown): View | null {
-        const {table} = this.props;
+function ViewPickerSynced(props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+    const {globalConfigKey, table, onChange, disabled, ...restOfProps} = props;
+    const {value: viewId, canSetValue: canSetViewId, setValue: setViewId} = useSynced(
+        globalConfigKey,
+    );
+
+    useWatchable(getSdk().base, ['tables']);
+    useWatchable(table, ['views']);
+
+    function _getViewFromGlobalConfigValue(): View | null {
         if (!table || table.isDeleted) {
             return null;
         }
         return typeof viewId === 'string' && table ? table.getViewByIdIfExists(viewId) : null;
     }
-    /** @hidden */
-    render() {
-        const {globalConfigKey, table, onChange, disabled, ...restOfProps} = this.props;
-        return (
-            <Synced
-                globalConfigKey={globalConfigKey}
-                render={({value, canSetValue, setValue}) => (
-                    <ViewPicker
-                        {...restOfProps}
-                        ref={el => (this._viewPicker = el)}
-                        table={table}
-                        view={this._getViewFromGlobalConfigValue(value)}
-                        onChange={view => {
-                            setValue(view ? view.id : null);
-                            if (onChange) {
-                                onChange(view);
-                            }
-                        }}
-                        disabled={disabled || !canSetValue}
-                    />
-                )}
-            />
-        );
-    }
+
+    return (
+        <ViewPicker
+            {...restOfProps}
+            ref={ref}
+            table={table}
+            view={_getViewFromGlobalConfigValue()}
+            onChange={view => {
+                setViewId(view ? view.id : null);
+                if (onChange) {
+                    onChange(view);
+                }
+            }}
+            disabled={disabled || !canSetViewId}
+        />
+    );
 }
 
-export default withHooks<{}, ViewPickerSyncedProps, ViewPickerSynced>(ViewPickerSynced, props => {
-    useWatchable(getSdk().base, ['tables']);
-    useWatchable(props.table, ['views']);
-    return {};
-});
+const ForwardedRefViewPickerSynced = React.forwardRef(ViewPickerSynced);
+
+ForwardedRefViewPickerSynced.displayName = 'ViewPickerSynced';
+
+ForwardedRefViewPickerSynced.propTypes = {
+    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+    ...sharedViewPickerPropTypes,
+};
+
+export default ForwardedRefViewPickerSynced;

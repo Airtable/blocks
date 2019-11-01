@@ -2,24 +2,17 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {values, ObjectMap, has} from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Table from '../models/table';
 import {FieldTypes, FieldType} from '../types/field';
-import {
-    SharedSelectBaseProps,
-    sharedSelectBasePropTypes,
-    selectStylePropTypes,
-    SelectStyleProps,
-} from './select';
+import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
 import ModelPickerSelect from './model_picker_select';
-import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 
 // Shared with `FieldPicker` and `FieldPickerSynced`.
 /** */
-export interface SharedFieldPickerProps extends SharedSelectBaseProps, SelectStyleProps {
+export interface SharedFieldPickerProps extends SharedSelectBaseProps {
     /** The parent table model to select fields from. If `null` or `undefined`, the picker won't render. */
     table?: Table | null;
     /** An array indicating which field types can be selected. */
@@ -35,12 +28,11 @@ export interface SharedFieldPickerProps extends SharedSelectBaseProps, SelectSty
 // Shared with `FieldPicker` and `FieldPickerSynced`.
 export const sharedFieldPickerPropTypes = {
     table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
+    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes)).isRequired),
     shouldAllowPickingNone: PropTypes.bool,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
     ...sharedSelectBasePropTypes,
-    ...selectStylePropTypes,
 };
 
 /**
@@ -103,121 +95,84 @@ interface FieldPickerProps extends SharedFieldPickerProps {
  * }
  * ```
  */
-export class FieldPicker extends React.Component<FieldPickerProps> {
-    /** @hidden */
-    static propTypes = {
-        field: PropTypes.instanceOf(Field),
-        table: PropTypes.instanceOf(Table),
-        allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes))),
-        shouldAllowPickingNone: PropTypes.bool,
-        placeholder: PropTypes.string,
-        onChange: PropTypes.func,
-        ...sharedSelectBasePropTypes,
-    };
-    /** @internal */
-    _select: ModelPickerSelect<Field> | null;
-    /** @hidden */
-    constructor(props: FieldPickerProps) {
-        super(props);
-        // TODO (stephen): Use React.forwardRef
-        this._select = null;
-        this._onChange = this._onChange.bind(this);
+function FieldPicker(props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>) {
+    const {
+        table,
+        field: selectedField,
+        shouldAllowPickingNone,
+        allowedTypes,
+        placeholder,
+        // Destructure `onChange` to prevent it from being passed to `ModelPickerSelect`.
+        onChange,
+        ...restOfProps
+    } = props;
+
+    useWatchable(getSdk().base, ['tables']);
+    useWatchable(table, ['fields']);
+
+    if (!table || table.isDeleted) {
+        return null;
     }
-    /** */
-    focus() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to focus');
-        }
-        this._select.focus();
-    }
-    /** */
-    blur() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to blur');
-        }
-        this._select.blur();
-    }
-    /** */
-    click() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to click');
-        }
-        this._select.click();
-    }
-    /** @internal */
-    _onChange(fieldId: string | null) {
-        const {onChange, table} = this.props;
+
+    function _onChange(fieldId: string | null) {
         if (onChange) {
             const field =
                 table && !table.isDeleted && fieldId ? table.getFieldByIdIfExists(fieldId) : null;
             onChange(field);
         }
     }
-    /** @hidden */
-    render() {
-        const {
-            table,
-            field: selectedField,
-            shouldAllowPickingNone,
-            allowedTypes,
-            placeholder,
-            // Destructure `onChange` to prevent it from being passed to `ModelPickerSelect`.
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onChange,
-            ...restOfProps
-        } = this.props;
-        if (!table || table.isDeleted) {
-            return null;
-        }
 
-        let placeholderToUse;
-        if (placeholder === undefined) {
-            // Let's set a good default value for the placeholder, depending
-            // on the shouldAllowPickingNone flag.
-            placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a field...';
-        } else {
-            placeholderToUse = placeholder;
-        }
-
-        const allowedTypesSet = {} as ObjectMap<FieldType, true>;
-        if (allowedTypes) {
-            for (const allowedType of allowedTypes) {
-                allowedTypesSet[allowedType] = true;
-            }
-        }
-        const shouldAllowPickingFieldFn = (field: Field) => {
-            return !allowedTypes || has(allowedTypesSet, field.type);
-        };
-
-        // Fields are only ordered within a view, and views' column orders aren't
-        // loaded by default. So we'll always list the primary field first, followed
-        // by the rest of the fields in alphabetical order.
-        const models = table.fields
-            .filter(field => field !== table.primaryField)
-            .sort((a, b) => {
-                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-            });
-        models.unshift(table.primaryField);
-
-        return (
-            <ModelPickerSelect
-                {...restOfProps}
-                ref={el => (this._select = el)}
-                models={models}
-                shouldAllowPickingModelFn={shouldAllowPickingFieldFn}
-                selectedModelId={
-                    selectedField && !selectedField.isDeleted ? selectedField.id : null
-                }
-                modelKeysToWatch={['name', 'type', 'options']}
-                placeholder={placeholderToUse}
-                onChange={this._onChange}
-            />
-        );
+    let placeholderToUse;
+    if (placeholder === undefined) {
+        // Let's set a good default value for the placeholder, depending
+        // on the shouldAllowPickingNone flag.
+        placeholderToUse = shouldAllowPickingNone ? 'None' : 'Pick a field...';
+    } else {
+        placeholderToUse = placeholder;
     }
+
+    const allowedTypesSet = {} as ObjectMap<FieldType, true>;
+    if (allowedTypes) {
+        for (const allowedType of allowedTypes) {
+            allowedTypesSet[allowedType] = true;
+        }
+    }
+    const shouldAllowPickingFieldFn = (field: Field) => {
+        return !allowedTypes || has(allowedTypesSet, field.type);
+    };
+
+    // Fields are only ordered within a view, and views' column orders aren't
+    // loaded by default. So we'll always list the primary field first, followed
+    // by the rest of the fields in alphabetical order.
+    const models = table.fields
+        .filter(field => field !== table.primaryField)
+        .sort((a, b) => {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        });
+    models.unshift(table.primaryField);
+
+    return (
+        <ModelPickerSelect
+            {...restOfProps}
+            ref={ref}
+            models={models}
+            // `shouldAllowPickingModelFn` is typed as `AnyModel`. Cast to any since we only expect `Field`.
+            shouldAllowPickingModelFn={shouldAllowPickingFieldFn as any}
+            selectedModelId={selectedField && !selectedField.isDeleted ? selectedField.id : null}
+            modelKeysToWatch={['name', 'type', 'options']}
+            placeholder={placeholderToUse}
+            onChange={_onChange}
+        />
+    );
 }
 
-export default withHooks<{}, FieldPickerProps, FieldPicker>(FieldPicker, props => {
-    useWatchable(getSdk().base, ['tables']);
-    useWatchable(props.table, ['fields']);
-    return {};
-});
+const ForwardedRefFieldPicker = React.forwardRef(FieldPicker);
+
+ForwardedRefFieldPicker.displayName = 'FieldPicker';
+
+ForwardedRefFieldPicker.propTypes = {
+    field: PropTypes.instanceOf(Field),
+    ...sharedFieldPickerPropTypes,
+};
+
+export default ForwardedRefFieldPicker;

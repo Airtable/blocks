@@ -5,191 +5,16 @@
 
 ## Index
 
-### Classes
-
--   [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpicker)
--   [ViewPickerSynced](_airtable_blocks_ui__viewpicker.md#viewpickersynced)
-
 ### Interfaces
 
 -   [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops)
 -   [ViewPickerProps](_airtable_blocks_ui__viewpicker.md#viewpickerprops)
 -   [ViewPickerSyncedProps](_airtable_blocks_ui__viewpicker.md#viewpickersyncedprops)
 
-## Classes
+### Functions
 
-### ViewPicker
-
-• **ViewPicker**:
-
-_Defined in
-[src/ui/view_picker.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L102)_
-
-Dropdown menu component for selecting views.
-
-**`example`**
-
-```js
-import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
-import {viewTypes} from '@airtable/blocks/models';
-import React, {Fragment, useState} from 'react';
-
-function Block() {
-    useBase();
-    const [table, setTable] = useState(null);
-    const [view, setView] = useState(null);
-    const queryResult = view ? view.selectRecords() : null;
-    const records = useRecords(queryResult);
-
-    const summaryText = view
-        ? `${view.name} has ${records.length} record(s).`
-        : 'No view selected.';
-    return (
-        <Fragment>
-            <p style={{marginBottom: 16}}>{summaryText}</p>
-            <label style={{display: 'block', marginBottom: 16}}>
-                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
-                <TablePicker
-                    table={table}
-                    onChange={newTable => {
-                        setTable(newTable);
-                        setView(null);
-                    }}
-                    shouldAllowPickingNone={true}
-                />
-            </label>
-            {table && (
-                <label>
-                    <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
-                    <ViewPicker
-                        table={table}
-                        view={view}
-                        onChange={newView => setView(newView)}
-                        allowedTypes={[viewTypes.GRID]}
-                        shouldAllowPickingNone={true}
-                    />
-                </label>
-            )}
-        </Fragment>
-    );
-}
-```
-
-### blur
-
-▸ **blur**(): _void_
-
-_Defined in
-[src/ui/view_picker.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L130)_
-
-**Returns:** _void_
-
-### click
-
-▸ **click**(): _void_
-
-_Defined in
-[src/ui/view_picker.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L137)_
-
-**Returns:** _void_
-
-### focus
-
-▸ **focus**(): _void_
-
-_Defined in
-[src/ui/view_picker.tsx:123](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L123)_
-
-**Returns:** _void_
-
----
-
-### ViewPickerSynced
-
-• **ViewPickerSynced**:
-
-_Defined in
-[src/ui/view_picker_synced.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L69)_
-
-Dropdown menu component for selecting views, synced with
-[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
-
-**`example`**
-
-```js
-import {
-    TablePickerSynced,
-    ViewPickerSynced,
-    useBase,
-    useRecords,
-    useWatchable,
-} from '@airtable/blocks/ui';
-import {viewTypes} from '@airtable/blocks/models';
-import {globalConfig} from '@airtable/blocks';
-import React, {Fragment} from 'react';
-
-function Block() {
-    const base = useBase();
-    const tableId = globalConfig.get('tableId');
-    const table = base.getTableByIdIfExists(tableId);
-    const viewId = globalConfig.get('viewId');
-    const view = table.getViewByIdIfExists(viewId);
-    const queryResult = view ? view.selectRecords() : null;
-    const records = useRecords(queryResult);
-    useWatchable(globalConfig, ['tableId', 'viewId']);
-
-    const summaryText = view
-        ? `${view.name} has ${records.length} record(s).`
-        : 'No view selected.';
-    return (
-        <Fragment>
-            <p style={{marginBottom: 16}}>{summaryText}</p>
-            <label style={{display: 'block', marginBottom: 16}}>
-                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
-                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
-            </label>
-            {table && (
-                <label>
-                    <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
-                    <ViewPickerSynced
-                        table={table}
-                        globalConfigKey="viewId"
-                        allowedTypes={[viewTypes.GRID]}
-                        shouldAllowPickingNone={true}
-                    />
-                </label>
-            )}
-        </Fragment>
-    );
-}
-```
-
-### blur
-
-▸ **blur**(): _void_
-
-_Defined in
-[src/ui/view_picker_synced.tsx:91](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L91)_
-
-**Returns:** _void_
-
-### click
-
-▸ **click**(): _void_
-
-_Defined in
-[src/ui/view_picker_synced.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L98)_
-
-**Returns:** _void_
-
-### focus
-
-▸ **focus**(): _void_
-
-_Defined in
-[src/ui/view_picker_synced.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L84)_
-
-**Returns:** _void_
+-   [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpicker)
+-   [ViewPickerSynced](_airtable_blocks_ui__viewpicker.md#viewpickersynced)
 
 ## Interfaces
 
@@ -198,7 +23,7 @@ _Defined in
 • **SharedViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L22)_
+[src/ui/view_picker.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L15)_
 
 ### `Optional` alignSelf
 
@@ -217,7 +42,7 @@ Aligns flex items of the current flex line, overriding the `alignItems` value.
 • **allowedTypes**? : _Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)›_
 
 _Defined in
-[src/ui/view_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L26)_
+[src/ui/view_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L19)_
 
 An array indicating which view types can be selected.
 
@@ -229,7 +54,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+[src/ui/select.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L77)_
 
 A space separated list of description element IDs.
 
@@ -241,7 +66,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+[src/ui/select.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L73)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -253,7 +78,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+[src/ui/select.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L75)_
 
 A space separated list of label element IDs.
 
@@ -265,7 +90,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
 
 _Defined in
-[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+[src/ui/select.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L61)_
 
 The `autoFocus` attribute.
 
@@ -290,7 +115,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+[src/ui/select.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L59)_
 
 Additional class names to apply to the select.
 
@@ -302,7 +127,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+[src/ui/select.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L69)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -365,7 +190,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
 
 _Defined in
-[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+[src/ui/select.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L63)_
 
 The `id` attribute.
 
@@ -507,7 +332,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
 
 _Defined in
-[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+[src/ui/select.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L65)_
 
 The `name` attribute.
 
@@ -516,7 +341,7 @@ The `name` attribute.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/view_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L32)_
+[src/ui/view_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L25)_
 
 A function to be called when the selected view changes.
 
@@ -538,7 +363,7 @@ and then by their source code order.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/view_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L30)_
+[src/ui/view_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L23)_
 
 The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 
@@ -573,7 +398,7 @@ elements.
 • **shouldAllowPickingNone**? : _undefined | false | true_
 
 _Defined in
-[src/ui/view_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L28)_
+[src/ui/view_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L21)_
 
 If set to `true`, the user can unset the selected view.
 
@@ -585,7 +410,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+[src/ui/select.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L71)_
 
 Additional styles to apply to the select.
 
@@ -597,7 +422,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+[src/ui/select.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L67)_
 
 The `tabindex` attribute.
 
@@ -606,7 +431,7 @@ The `tabindex` attribute.
 • **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
 
 _Defined in
-[src/ui/view_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L24)_
+[src/ui/view_picker.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L17)_
 
 The parent table model to select views from. If `null` or `undefined`, the picker won't render.
 
@@ -655,7 +480,7 @@ with larger z-indexes cover those with smaller ones.
 • **ViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L49)_
+[src/ui/view_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L41)_
 
 **`typedef`** {object} ViewPickerProps
 
@@ -679,7 +504,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[allowedTypes](_airtable_blocks_ui__viewpicker.md#optional-allowedtypes)_
 
 _Defined in
-[src/ui/view_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L26)_
+[src/ui/view_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L19)_
 
 An array indicating which view types can be selected.
 
@@ -691,7 +516,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+[src/ui/select.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L77)_
 
 A space separated list of description element IDs.
 
@@ -703,7 +528,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+[src/ui/select.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L73)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -715,7 +540,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+[src/ui/select.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L75)_
 
 A space separated list of label element IDs.
 
@@ -727,7 +552,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
 
 _Defined in
-[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+[src/ui/select.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L61)_
 
 The `autoFocus` attribute.
 
@@ -752,7 +577,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+[src/ui/select.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L59)_
 
 Additional class names to apply to the select.
 
@@ -764,7 +589,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+[src/ui/select.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L69)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -827,7 +652,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
 
 _Defined in
-[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+[src/ui/select.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L63)_
 
 The `id` attribute.
 
@@ -969,7 +794,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
 
 _Defined in
-[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+[src/ui/select.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L65)_
 
 The `name` attribute.
 
@@ -981,7 +806,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[onChange](_airtable_blocks_ui__viewpicker.md#optional-onchange)_
 
 _Defined in
-[src/ui/view_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L32)_
+[src/ui/view_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L25)_
 
 A function to be called when the selected view changes.
 
@@ -1006,7 +831,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[placeholder](_airtable_blocks_ui__viewpicker.md#optional-placeholder)_
 
 _Defined in
-[src/ui/view_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L30)_
+[src/ui/view_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L23)_
 
 The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 
@@ -1044,7 +869,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[shouldAllowPickingNone](_airtable_blocks_ui__viewpicker.md#optional-shouldallowpickingnone)_
 
 _Defined in
-[src/ui/view_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L28)_
+[src/ui/view_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L21)_
 
 If set to `true`, the user can unset the selected view.
 
@@ -1056,7 +881,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+[src/ui/select.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L71)_
 
 Additional styles to apply to the select.
 
@@ -1068,7 +893,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+[src/ui/select.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L67)_
 
 The `tabindex` attribute.
 
@@ -1080,7 +905,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[table](_airtable_blocks_ui__viewpicker.md#optional-table)_
 
 _Defined in
-[src/ui/view_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L24)_
+[src/ui/view_picker.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L17)_
 
 The parent table model to select views from. If `null` or `undefined`, the picker won't render.
 
@@ -1102,7 +927,7 @@ elements.
 • **view**? : _[View](_airtable_blocks_models__view.md#view) | null_
 
 _Defined in
-[src/ui/view_picker.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L51)_
+[src/ui/view_picker.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L43)_
 
 The selected view model.
 
@@ -1138,7 +963,7 @@ with larger z-indexes cover those with smaller ones.
 • **ViewPickerSyncedProps**:
 
 _Defined in
-[src/ui/view_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L17)_
+[src/ui/view_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L14)_
 
 **`typedef`** {object} ViewPickerSyncedProps
 
@@ -1162,7 +987,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[allowedTypes](_airtable_blocks_ui__viewpicker.md#optional-allowedtypes)_
 
 _Defined in
-[src/ui/view_picker.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L26)_
+[src/ui/view_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L19)_
 
 An array indicating which view types can be selected.
 
@@ -1174,7 +999,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-describedby](_airtable_blocks_ui__select.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/select.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L70)_
+[src/ui/select.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L77)_
 
 A space separated list of description element IDs.
 
@@ -1186,7 +1011,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-label](_airtable_blocks_ui__select.md#optional-aria-label)_
 
 _Defined in
-[src/ui/select.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L66)_
+[src/ui/select.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L73)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -1198,7 +1023,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[aria-labelledby](_airtable_blocks_ui__select.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/select.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L68)_
+[src/ui/select.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L75)_
 
 A space separated list of label element IDs.
 
@@ -1210,7 +1035,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[autoFocus](_airtable_blocks_ui__select.md#optional-autofocus)_
 
 _Defined in
-[src/ui/select.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L54)_
+[src/ui/select.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L61)_
 
 The `autoFocus` attribute.
 
@@ -1235,7 +1060,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[className](_airtable_blocks_ui__select.md#optional-classname)_
 
 _Defined in
-[src/ui/select.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L52)_
+[src/ui/select.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L59)_
 
 Additional class names to apply to the select.
 
@@ -1247,7 +1072,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[disabled](_airtable_blocks_ui__select.md#optional-disabled)_
 
 _Defined in
-[src/ui/select.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L62)_
+[src/ui/select.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L69)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -1307,7 +1132,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L19)_
+[src/ui/view_picker_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L16)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a
@@ -1321,7 +1146,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[id](_airtable_blocks_ui__select.md#optional-id)_
 
 _Defined in
-[src/ui/select.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L56)_
+[src/ui/select.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L63)_
 
 The `id` attribute.
 
@@ -1463,7 +1288,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[name](_airtable_blocks_ui__select.md#optional-name)_
 
 _Defined in
-[src/ui/select.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L58)_
+[src/ui/select.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L65)_
 
 The `name` attribute.
 
@@ -1475,7 +1300,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[onChange](_airtable_blocks_ui__viewpicker.md#optional-onchange)_
 
 _Defined in
-[src/ui/view_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L32)_
+[src/ui/view_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L25)_
 
 A function to be called when the selected view changes.
 
@@ -1500,7 +1325,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[placeholder](_airtable_blocks_ui__viewpicker.md#optional-placeholder)_
 
 _Defined in
-[src/ui/view_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L30)_
+[src/ui/view_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L23)_
 
 The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 
@@ -1538,7 +1363,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[shouldAllowPickingNone](_airtable_blocks_ui__viewpicker.md#optional-shouldallowpickingnone)_
 
 _Defined in
-[src/ui/view_picker.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L28)_
+[src/ui/view_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L21)_
 
 If set to `true`, the user can unset the selected view.
 
@@ -1550,7 +1375,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[style](_airtable_blocks_ui__select.md#optional-style)_
 
 _Defined in
-[src/ui/select.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L64)_
+[src/ui/select.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L71)_
 
 Additional styles to apply to the select.
 
@@ -1562,7 +1387,7 @@ _Inherited from
 [SharedSelectBaseProps](_airtable_blocks_ui__select.md#sharedselectbaseprops).[tabIndex](_airtable_blocks_ui__select.md#optional-tabindex)_
 
 _Defined in
-[src/ui/select.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L60)_
+[src/ui/select.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L67)_
 
 The `tabindex` attribute.
 
@@ -1574,7 +1399,7 @@ _Inherited from
 [SharedViewPickerProps](_airtable_blocks_ui__viewpicker.md#sharedviewpickerprops).[table](_airtable_blocks_ui__viewpicker.md#optional-table)_
 
 _Defined in
-[src/ui/view_picker.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L24)_
+[src/ui/view_picker.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L17)_
 
 The parent table model to select views from. If `null` or `undefined`, the picker won't render.
 
@@ -1615,3 +1440,145 @@ _Defined in
 
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
+
+## Functions
+
+### ViewPicker
+
+▸ **ViewPicker**(`props`: [ViewPickerProps](_airtable_blocks_ui__viewpicker.md#viewpickerprops),
+`ref`: React.Ref‹HTMLSelectElement›): _null | Element_
+
+_Defined in
+[src/ui/view_picker.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L94)_
+
+Dropdown menu component for selecting views.
+
+**`example`**
+
+```js
+import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
+import {viewTypes} from '@airtable/blocks/models';
+import React, {Fragment, useState} from 'react';
+
+function Block() {
+    useBase();
+    const [table, setTable] = useState(null);
+    const [view, setView] = useState(null);
+    const queryResult = view ? view.selectRecords() : null;
+    const records = useRecords(queryResult);
+
+    const summaryText = view
+        ? `${view.name} has ${records.length} record(s).`
+        : 'No view selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePicker
+                    table={table}
+                    onChange={newTable => {
+                        setTable(newTable);
+                        setView(null);
+                    }}
+                    shouldAllowPickingNone={true}
+                />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
+                    <ViewPicker
+                        table={table}
+                        view={view}
+                        onChange={newView => setView(newView)}
+                        allowedTypes={[viewTypes.GRID]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
+**Parameters:**
+
+| Name    | Type                                                                  |
+| ------- | --------------------------------------------------------------------- |
+| `props` | [ViewPickerProps](_airtable_blocks_ui__viewpicker.md#viewpickerprops) |
+| `ref`   | React.Ref‹HTMLSelectElement›                                          |
+
+**Returns:** _null | Element_
+
+---
+
+### ViewPickerSynced
+
+▸ **ViewPickerSynced**(`props`:
+[ViewPickerSyncedProps](_airtable_blocks_ui__viewpicker.md#viewpickersyncedprops), `ref`:
+React.Ref‹HTMLSelectElement›): _Element_
+
+_Defined in
+[src/ui/view_picker_synced.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L66)_
+
+Dropdown menu component for selecting views, synced with
+[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
+
+**`example`**
+
+```js
+import {
+    TablePickerSynced,
+    ViewPickerSynced,
+    useBase,
+    useRecords,
+    useWatchable,
+} from '@airtable/blocks/ui';
+import {viewTypes} from '@airtable/blocks/models';
+import {globalConfig} from '@airtable/blocks';
+import React, {Fragment} from 'react';
+
+function Block() {
+    const base = useBase();
+    const tableId = globalConfig.get('tableId');
+    const table = base.getTableByIdIfExists(tableId);
+    const viewId = globalConfig.get('viewId');
+    const view = table.getViewByIdIfExists(viewId);
+    const queryResult = view ? view.selectRecords() : null;
+    const records = useRecords(queryResult);
+    useWatchable(globalConfig, ['tableId', 'viewId']);
+
+    const summaryText = view
+        ? `${view.name} has ${records.length} record(s).`
+        : 'No view selected.';
+    return (
+        <Fragment>
+            <p style={{marginBottom: 16}}>{summaryText}</p>
+            <label style={{display: 'block', marginBottom: 16}}>
+                <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
+                <TablePickerSynced globalConfigKey="tableId" shouldAllowPickingNone={true} />
+            </label>
+            {table && (
+                <label>
+                    <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
+                    <ViewPickerSynced
+                        table={table}
+                        globalConfigKey="viewId"
+                        allowedTypes={[viewTypes.GRID]}
+                        shouldAllowPickingNone={true}
+                    />
+                </label>
+            )}
+        </Fragment>
+    );
+}
+```
+
+**Parameters:**
+
+| Name    | Type                                                                              |
+| ------- | --------------------------------------------------------------------------------- |
+| `props` | [ViewPickerSyncedProps](_airtable_blocks_ui__viewpicker.md#viewpickersyncedprops) |
+| `ref`   | React.Ref‹HTMLSelectElement›                                                      |
+
+**Returns:** _Element_

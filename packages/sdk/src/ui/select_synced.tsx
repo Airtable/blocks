@@ -1,21 +1,15 @@
 /** @module @airtable/blocks/ui: Select */ /** */
 import * as React from 'react';
-import {spawnInvariantViolationError, spawnError} from '../error_utils';
+import {spawnError} from '../error_utils';
 import {GlobalConfigKey} from '../global_config';
-import {ReactRefType} from '../private_utils';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
-import Select, {
-    sharedSelectPropTypes,
-    selectStylePropTypes,
-    SharedSelectProps,
-    SelectStyleProps,
-} from './select';
-import Synced from './synced';
+import Select, {sharedSelectPropTypes, SharedSelectProps} from './select';
+import useSynced from './use_synced';
 
 /**
  * @typedef {object} SelectSyncedProps
  */
-interface SelectSyncedProps extends SharedSelectProps, SelectStyleProps {
+interface SelectSyncedProps extends SharedSelectProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;
 }
@@ -46,86 +40,51 @@ interface SelectSyncedProps extends SharedSelectProps, SelectStyleProps {
  * }
  * ```
  */
-class SelectSynced extends React.Component<SelectSyncedProps> {
-    /** @hidden */
-    static propTypes = {
-        globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
-        ...sharedSelectPropTypes,
-        ...selectStylePropTypes,
-    };
-    /** @internal */
-    _select: ReactRefType<typeof Select> | null;
-    /** @hidden */
-    constructor(props: SelectSyncedProps) {
-        super(props);
-        // TOReactRefType: use React.forwardRef
-        this._select = null;
-    }
-    /** */
-    focus() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to focus');
-        }
-        this._select.focus();
-    }
-    /** */
-    blur() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to blur');
-        }
-        this._select.blur();
-    }
-    /** */
-    click() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to click');
-        }
-        this._select.click();
-    }
-    /** @hidden */
-    render() {
-        const {globalConfigKey, disabled, onChange, ...restOfProps} = this.props;
+function SelectSynced(props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+    const {globalConfigKey, disabled, onChange, ...restOfProps} = props;
+    const {value, canSetValue, setValue} = useSynced(globalConfigKey);
 
-        return (
-            <Synced
-                globalConfigKey={globalConfigKey}
-                render={({value, canSetValue, setValue}) => {
-                    let selectValue;
-                    if (value === null || value === undefined) {
-                        selectValue = null;
-                    } else if (
-                        typeof value === 'string' ||
-                        typeof value === 'number' ||
-                        typeof value === 'boolean'
-                    ) {
-                        selectValue = value;
-                    } else {
-                        throw spawnError(
-                            'SelectSynced only works with a global config value that is a string, number, boolean, null or undefined.',
-                        );
-                    }
-
-                    return (
-                        <Select
-                            {...restOfProps}
-                            ref={el => (this._select = el)}
-                            value={selectValue}
-                            onChange={newValue => {
-                                if (newValue === undefined) {
-                                    newValue = null;
-                                }
-                                setValue(newValue);
-                                if (onChange) {
-                                    onChange(newValue);
-                                }
-                            }}
-                            disabled={disabled || !canSetValue}
-                        />
-                    );
-                }}
-            />
+    let selectValue;
+    if (value === null || value === undefined) {
+        selectValue = null;
+    } else if (
+        typeof value === 'string' ||
+        typeof value === 'number' ||
+        typeof value === 'boolean'
+    ) {
+        selectValue = value;
+    } else {
+        throw spawnError(
+            'SelectSynced only works with a global config value that is a string, number, boolean, null or undefined.',
         );
     }
+
+    return (
+        <Select
+            {...restOfProps}
+            ref={ref}
+            value={selectValue}
+            onChange={newValue => {
+                if (newValue === undefined) {
+                    newValue = null;
+                }
+                setValue(newValue);
+                if (onChange) {
+                    onChange(newValue);
+                }
+            }}
+            disabled={disabled || !canSetValue}
+        />
+    );
 }
 
-export default SelectSynced;
+const ForwardedRefSelectSynced = React.forwardRef(SelectSynced);
+
+ForwardedRefSelectSynced.displayName = 'SelectSynced';
+
+ForwardedRefSelectSynced.propTypes = {
+    globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
+    ...sharedSelectPropTypes,
+};
+
+export default ForwardedRefSelectSynced;

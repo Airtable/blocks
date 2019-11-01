@@ -3,9 +3,8 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
-import {spawnInvariantViolationError, spawnError} from '../error_utils';
-import withStyledSystem from './with_styled_system';
-import {FormFieldIdContext} from './use_form_field_id';
+import {spawnError} from '../error_utils';
+import useFormFieldId from './use_form_field_id';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -26,6 +25,7 @@ import {
     marginPropTypes,
     MarginProps,
 } from './system';
+import {Prop} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {baymax} from './baymax_utils';
 import {
@@ -36,6 +36,7 @@ import {
     SelectOptionValue,
     SelectOption,
 } from './select_and_select_buttons_helpers';
+import useStyledSystem from './use_styled_system';
 
 const styleForChevron = {
     // eslint-disable-next-line quotes
@@ -45,9 +46,21 @@ const styleForChevron = {
     paddingRight: 22,
 };
 
+/** */
+interface SelectStyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {
+    /** */
+    display?: Prop<'inline-flex' | 'flex' | 'none'>;
+}
+
 // Shared with `Select`, `SelectSynced` and `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`.
 /** */
-export interface SharedSelectBaseProps extends TooltipAnchorProps {
+export interface SharedSelectBaseProps extends TooltipAnchorProps, SelectStyleProps {
     /** Additional class names to apply to the select. */
     className?: string;
     /** The `autoFocus` attribute. */
@@ -70,6 +83,15 @@ export interface SharedSelectBaseProps extends TooltipAnchorProps {
     ['aria-describedby']?: string;
 }
 
+export const selectStylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
 // Shared with `Select`, `SelectSynced`, `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`
 export const sharedSelectBasePropTypes = {
     autoFocus: PropTypes.bool,
@@ -83,6 +105,7 @@ export const sharedSelectBasePropTypes = {
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
     ...tooltipAnchorPropTypes,
+    ...selectStylePropTypes,
 };
 
 // Shared with `Select` and `SelectSynced`.
@@ -100,9 +123,9 @@ export const sharedSelectPropTypes = {
     options: PropTypes.arrayOf(
         PropTypes.shape({
             value: selectOptionValuePropType,
-            label: PropTypes.node,
+            label: PropTypes.node.isRequired,
             disabled: PropTypes.bool,
-        }),
+        }).isRequired,
     ).isRequired,
     onChange: PropTypes.func,
     ...sharedSelectBasePropTypes,
@@ -116,21 +139,6 @@ export interface SelectProps extends SharedSelectProps {
     value: SelectOptionValue;
 }
 
-// This component isn't great right now. It's just a styled <select> with a really hacky
-// way of getting the chevron arrow to show up. It also behaves weirdly when you give it
-// a margin (I think this is a limitation of <select>). We should probably replace it with
-// something like react-select, which would give us nice features like rendering custom
-// elements for options (e.g. for field type icons) and typeahead search.
-
-/** */
-export interface SelectStyleProps
-    extends MaxWidthProps,
-        MinWidthProps,
-        WidthProps,
-        FlexItemSetProps,
-        PositionSetProps,
-        MarginProps {}
-
 const styleParser = compose(
     maxWidth,
     minWidth,
@@ -139,15 +147,6 @@ const styleParser = compose(
     positionSet,
     margin,
 );
-
-export const selectStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 /**
  * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
@@ -177,158 +176,124 @@ export const selectStylePropTypes = {
  * }
  * ```
  */
-export class Select extends React.Component<SelectProps> {
-    /** @hidden */
-    static propTypes = {
-        value: selectOptionValuePropType,
-        ...sharedSelectPropTypes,
-    };
-    /** */
-    static contextType = FormFieldIdContext;
-    /** @internal */
-    _select: HTMLSelectElement | null;
-    /** @hidden */
-    constructor(props: SelectProps) {
-        super(props);
+function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
+    const {
+        value,
+        options: originalOptions = [],
+        autoFocus,
+        disabled,
+        id,
+        name,
+        tabIndex,
+        onChange,
+        // TODO (stephen): remove tooltip anchor props
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        className,
+        style,
+        'aria-label': ariaLabel,
+        'aria-describedby': ariaDescribedBy,
+        'aria-labelledby': ariaLabelledBy,
+        ...styleProps
+    } = props;
+    const formFieldId = useFormFieldId();
+    const classNameForStyleProps = useStyledSystem(
+        {
+            width: '100%',
+            ...styleProps,
+        },
+        styleParser,
+    );
 
-        this._select = null;
-        this._onChange = this._onChange.bind(this);
-    }
-    /** @internal */
-    _onChange(e: React.ChangeEvent<HTMLSelectElement>) {
-        const {onChange} = this.props;
+    function _onChange(e: React.ChangeEvent<HTMLSelectElement>) {
         if (onChange) {
-            if (!(e.target instanceof HTMLSelectElement)) {
-                throw spawnInvariantViolationError('bad input');
-            }
-            const value = stringToOptionValue(e.target.value);
-            onChange(value);
+            const newValue = stringToOptionValue(e.currentTarget.value);
+            onChange(newValue);
         }
     }
-    /** */
-    focus() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to focus');
-        }
-        this._select.focus();
+
+    // Check options here for a cleaner stack trace.
+    // Also, even though options are required, still check if it's set because
+    // the error is really ugly and covers up the prop type check.
+    const validationResult = validateOptions(originalOptions);
+    if (!validationResult.isValid) {
+        throw spawnError('<Select> %s', validationResult.reason);
     }
-    /** */
-    blur() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to blur');
+
+    let didFindOptionMatchingValue = false;
+    for (const option of originalOptions) {
+        if (option.value === value) {
+            didFindOptionMatchingValue = true;
+            break;
         }
-        this._select.blur();
     }
-    /** */
-    click() {
-        if (!this._select) {
-            throw spawnInvariantViolationError('No select to click');
-        }
-        this._select.click();
-    }
-    /** @hidden */
-    render() {
-        const {
+    const options = [];
+    if (!didFindOptionMatchingValue) {
+        // Since there's no option that matches the given value, let's add an
+        // empty option at the top and log a warning.
+        options.push({
+            label: '',
             value,
-            options: originalOptions = [],
-            autoFocus,
-            disabled,
-            id,
-            name,
-            tabIndex,
-            // TODO (stephen): remove tooltip anchor props
-            onMouseEnter,
-            onMouseLeave,
-            onClick,
-            className,
-            style,
-            'aria-label': ariaLabel,
-            'aria-describedby': ariaDescribedBy,
-            'aria-labelledby': ariaLabelledBy,
-        } = this.props;
-        const contextId = this.context;
-
-        // Check options here for a cleaner stack trace.
-        // Also, even though options are required, still check if it's set because
-        // the error is really ugly and covers up the prop type check.
-        const validationResult = validateOptions(originalOptions);
-        if (!validationResult.isValid) {
-            throw spawnError('<Select> %s', validationResult.reason);
-        }
-
-        let didFindOptionMatchingValue = false;
-        for (const option of originalOptions) {
-            if (option.value === value) {
-                didFindOptionMatchingValue = true;
-                break;
-            }
-        }
-        const options = [];
-        if (!didFindOptionMatchingValue) {
-            // Since there's no option that matches the given value, let's add an
-            // empty option at the top and log a warning.
-            options.push({
-                label: '',
-                value,
-                disabled: true,
-            });
-            // eslint-disable-next-line no-console
-            console.warn(
-                `No option for selected value in <Select>: ${String(value)}`.substr(0, 100),
-            );
-        }
-        options.push(...originalOptions);
-
-        return (
-            <select
-                ref={el => (this._select = el)}
-                value={optionValueToString(value)}
-                onChange={this._onChange}
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={onClick}
-                autoFocus={autoFocus}
-                disabled={disabled}
-                id={id || contextId}
-                name={name}
-                tabIndex={tabIndex}
-                className={cx(
-                    baymax('styled-input px1 rounded normal no-outline darken1 text-dark'),
-                    {
-                        [baymax('link-quiet pointer')]: !disabled,
-                        [baymax('quieter')]: !!disabled,
-                    },
-                    className,
-                )}
-                style={{
-                    // TODO (stephen): switch to size API
-                    height: 35,
-                    ...styleForChevron,
-                    ...style,
-                }}
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-                aria-describedby={ariaDescribedBy}
-            >
-                {options &&
-                    options.map(option => {
-                        const valueJson = optionValueToString(option.value);
-                        return (
-                            <option key={valueJson} value={valueJson} disabled={option.disabled}>
-                                {option.label}
-                            </option>
-                        );
-                    })}
-            </select>
-        );
+            disabled: true,
+        });
+        // eslint-disable-next-line no-console
+        console.warn(`No option for selected value in <Select>: ${String(value)}`.substr(0, 100));
     }
+    options.push(...originalOptions);
+
+    return (
+        <select
+            ref={ref}
+            value={optionValueToString(value)}
+            onChange={_onChange}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            autoFocus={autoFocus}
+            disabled={disabled}
+            id={id || formFieldId}
+            name={name}
+            tabIndex={tabIndex}
+            className={cx(
+                baymax('styled-input px1 rounded normal no-outline darken1 text-dark'),
+                {
+                    [baymax('link-quiet pointer')]: !disabled,
+                    [baymax('quieter')]: !!disabled,
+                },
+                classNameForStyleProps,
+                className,
+            )}
+            style={{
+                // TODO (stephen): switch to size API
+                height: 35,
+                ...styleForChevron,
+                ...style,
+            }}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+        >
+            {options &&
+                options.map(option => {
+                    const valueJson = optionValueToString(option.value);
+                    return (
+                        <option key={valueJson} value={valueJson} disabled={option.disabled}>
+                            {option.label}
+                        </option>
+                    );
+                })}
+        </select>
+    );
 }
 
-export default withStyledSystem<SelectProps, SelectStyleProps, Select, {}>(
-    Select,
-    styleParser,
-    selectStylePropTypes,
-    {
-        width: '100%',
-    },
-);
+const ForwardedRefSelect = React.forwardRef(Select);
+
+ForwardedRefSelect.displayName = 'Select';
+
+ForwardedRefSelect.propTypes = {
+    value: selectOptionValuePropType,
+    ...sharedSelectPropTypes,
+};
+
+export default ForwardedRefSelect;
