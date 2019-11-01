@@ -11,9 +11,7 @@ import ColorPalette, {
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/**
- * @typedef {object} ColorPaletteSyncedProps
- */
+/** */
 interface ColorPaletteSyncedProps extends SharedColorPaletteProps, ColorPaletteStyleProps {
     /** The key, or path to a key, in global config. */
     globalConfigKey: GlobalConfigKey;

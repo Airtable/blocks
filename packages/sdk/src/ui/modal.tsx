@@ -22,10 +22,7 @@ import {
 } from './system';
 import {Prop} from './system/utils/types';
 
-/**
- * @memberof Modal
- * @typedef {object} ModalProps
- */
+/** */
 interface ModalProps {
     /** Callback function to fire when the modal is closed. */
     onClose?: () => unknown;

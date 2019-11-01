@@ -7,7 +7,7 @@ import {ViewportSizeConstraint} from '../types/viewport';
 /** */
 type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
 
-/** @typedef */
+/** */
 interface ViewportConstraintProps {
     /** */
     minSize?: ViewportSizeConstraintProp;

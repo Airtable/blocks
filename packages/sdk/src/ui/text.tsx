@@ -44,9 +44,7 @@ export function useTextStyle(
     return useStyledSystem(styleProps);
 }
 
-/**
- * @typedef {object} TextProps
- */
+/** */
 interface TextProps extends AriaProps, AllStylesProps {
     /** The element that is rendered. Defaults to `p`. */
     as?:

@@ -6,9 +6,7 @@ import {baymax} from './baymax_utils';
 import Modal, {modalStylePropTypes, ModalStyleProps} from './modal';
 import DialogCloseButton from './dialog_close_button';
 
-/**
- * @typedef {object} DialogProps
- */
+/** */
 interface DialogProps extends ModalStyleProps {
     /** Callback function to fire when the dialog is closed. */
     onClose: () => unknown;

@@ -12,9 +12,7 @@ import Input, {
 import useSynced from './use_synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/**
- * @typedef {object} InputSyncedProps
- */
+/** */
 interface InputSyncedProps extends SharedInputProps, InputStyleProps {
     /** The key, or path to a key, in global config. */
     globalConfigKey: GlobalConfigKey;

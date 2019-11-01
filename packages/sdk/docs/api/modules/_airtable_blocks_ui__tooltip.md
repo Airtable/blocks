@@ -20,7 +20,7 @@
 • **Tooltip**:
 
 _Defined in
-[src/ui/tooltip.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L68)_
+[src/ui/tooltip.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L66)_
 
 A component that shows a tooltip. Wraps its children.
 
@@ -48,7 +48,7 @@ function MyComponent() {
 Popover.fitInWindowModes
 
 _Defined in
-[src/ui/tooltip.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L72)_
+[src/ui/tooltip.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L70)_
 
 ### `Static` placements
 
@@ -56,7 +56,7 @@ _Defined in
 Popover.placements
 
 _Defined in
-[src/ui/tooltip.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L70)_
+[src/ui/tooltip.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L68)_
 
 ## Interfaces
 
@@ -65,16 +65,14 @@ _Defined in
 • **TooltipProps**:
 
 _Defined in
-[src/ui/tooltip.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L16)_
-
-**`type`** {object}
+[src/ui/tooltip.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L14)_
 
 ### children
 
 • **children**: _ReactElement‹TooltipAnchorProps›_
 
 _Defined in
-[src/ui/tooltip.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L18)_
+[src/ui/tooltip.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L16)_
 
 Child components to render.
 
@@ -83,7 +81,7 @@ Child components to render.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/tooltip.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L36)_
+[src/ui/tooltip.tsx:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L34)_
 
 Additional class names to attach to the tooltip, separated by spaces.
 
@@ -92,7 +90,7 @@ Additional class names to attach to the tooltip, separated by spaces.
 • **content**? : _string | function_
 
 _Defined in
-[src/ui/tooltip.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L28)_
+[src/ui/tooltip.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L26)_
 
 A string representing the contents. Alternatively, you can include a function that returns a React
 node to place into the tooltip, which is useful for things like italicization in the tooltip.
@@ -102,7 +100,7 @@ node to place into the tooltip, which is useful for things like italicization in
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/tooltip.tsx:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L34)_
+[src/ui/tooltip.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L32)_
 
 If set to `true`, this tooltip will not be shown. Useful when trying to disable the tooltip
 dynamically.
@@ -112,7 +110,7 @@ dynamically.
 • **fitInWindowMode**? : _[FitInWindowMode](_airtable_blocks_ui__popover.md#fitinwindowmode)_
 
 _Defined in
-[src/ui/tooltip.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L30)_
+[src/ui/tooltip.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L28)_
 
 Dictates the behavior when the "normal" placement of the tooltip would be outside of the viewport.
 If `NONE`, this has no effect, and the tooltip may be placed off-screen. If `FLIP`, we'll switch the
@@ -125,7 +123,7 @@ Tooltip.fitInWindowModes.FLIP.
 • **placementOffsetX**? : _undefined | number_
 
 _Defined in
-[src/ui/tooltip.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L24)_
+[src/ui/tooltip.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L22)_
 
 The horizontal offset, in pixels, of the tooltip. If `placementX` is set to
 `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to the left. If `placementX` is
@@ -137,7 +135,7 @@ set to `UI.Tooltip.placements.RIGHT`, a higher number moves the tooltip to the r
 • **placementOffsetY**? : _undefined | number_
 
 _Defined in
-[src/ui/tooltip.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L26)_
+[src/ui/tooltip.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L24)_
 
 The vertical offset, in pixels, of the tooltip. If `placementY` is set to
 `UI.Tooltip.placements.TOP`, a higher number will move the tooltip upward. If `placementY` is set to
@@ -149,7 +147,7 @@ The vertical offset, in pixels, of the tooltip. If `placementY` is set to
 • **placementX**? : _[PopoverPlacementX](_airtable_blocks_ui__popover.md#popoverplacementx)_
 
 _Defined in
-[src/ui/tooltip.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L20)_
+[src/ui/tooltip.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L18)_
 
 The horizontal placement of the tooltip. Defaults to `Tooltip.placements.RIGHT`.
 
@@ -158,7 +156,7 @@ The horizontal placement of the tooltip. Defaults to `Tooltip.placements.RIGHT`.
 • **placementY**? : _[PopoverPlacementY](_airtable_blocks_ui__popover.md#popoverplacementy)_
 
 _Defined in
-[src/ui/tooltip.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L22)_
+[src/ui/tooltip.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L20)_
 
 The vertical placement of the tooltip. Defaults to `Tooltip.placements.CENTER`.
 
@@ -167,7 +165,7 @@ The vertical placement of the tooltip. Defaults to `Tooltip.placements.CENTER`.
 • **shouldHideTooltipOnClick**? : _undefined | false | true_
 
 _Defined in
-[src/ui/tooltip.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L32)_
+[src/ui/tooltip.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L30)_
 
 Should the tooltip be hidden when clicked? Defaults to `false`.
 
@@ -176,6 +174,6 @@ Should the tooltip be hidden when clicked? Defaults to `false`.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/tooltip.tsx:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L38)_
+[src/ui/tooltip.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/tooltip.tsx#L36)_
 
 Additional styles names to attach to the tooltip.

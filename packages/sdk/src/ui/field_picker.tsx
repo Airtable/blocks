@@ -35,9 +35,7 @@ export const sharedFieldPickerPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/**
- * @typedef {object} FieldPickerProps
- */
+/** */
 interface FieldPickerProps extends SharedFieldPickerProps {
     /** The selected field model. */
     field?: Field | null;

@@ -6,9 +6,7 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 import Select, {sharedSelectPropTypes, SharedSelectProps} from './select';
 import useSynced from './use_synced';
 
-/**
- * @typedef {object} SelectSyncedProps
- */
+/** */
 interface SelectSyncedProps extends SharedSelectProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;

@@ -39,9 +39,7 @@ const collaboratorTokenStylePropTypes = {
     ...marginPropTypes,
 };
 
-/**
- * @typedef {object} CollaboratorTokenProps
- */
+/** */
 interface CollaboratorTokenProps extends TooltipAnchorProps, CollaboratorTokenStyleProps {
     /** An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data. */
     collaborator: Partial<CollaboratorData>;

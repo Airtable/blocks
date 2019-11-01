@@ -82,9 +82,7 @@ function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVaria
     return useStyledSystem(styleProps);
 }
 
-/**
- * @typedef {object} HeadingProps
- */
+/** */
 interface HeadingProps extends AriaProps, AllStylesProps {
     /** The `role` attribute. */
     role?: string;

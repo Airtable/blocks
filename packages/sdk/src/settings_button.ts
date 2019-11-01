@@ -56,8 +56,6 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     /**
      * Whether the settings button is being shown.
      * Can be watched.
-     *
-     * @memberof settingsButton
      */
     get isVisible(): boolean {
         return this._refCount > 0;
@@ -65,8 +63,6 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
 
     /**
      * Show the settings button.
-     *
-     * @memberof settingsButton
      */
     show() {
         // Is now visible: trigger change watches and set it to be visible
@@ -83,8 +79,6 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
      *
      * Note: A count of calls to `show()` and `hide()` is maintained internally. The button will
      * stay visible if there are more calls to `show()` than `hide()`.
-     *
-     * @memberof settingsButton
      */
     hide() {
         // Be forgiving if hide() is called too many times, since we don't expose the count

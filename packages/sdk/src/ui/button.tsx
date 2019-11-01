@@ -80,9 +80,7 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
     return buttonVariants[variant];
 }
 
-/**
- * @typedef {object} ButtonProps
- */
+/** */
 interface ButtonProps extends TooltipAnchorProps<HTMLButtonElement>, AriaProps, ButtonStyleProps {
     /** The size of the button. Defaults to `default`. Can be a responsive prop object. */
     size?: ControlSizeProp;

@@ -502,9 +502,7 @@ with larger z-indexes cover those with smaller ones.
 • **ViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L41)_
-
-**`typedef`** {object} ViewPickerProps
+[src/ui/view_picker.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L39)_
 
 ### `Optional` alignSelf
 
@@ -971,7 +969,7 @@ elements.
 • **view**? : _[View](_airtable_blocks_models__view.md#view) | null_
 
 _Defined in
-[src/ui/view_picker.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L43)_
+[src/ui/view_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L41)_
 
 The selected view model.
 
@@ -1007,9 +1005,7 @@ with larger z-indexes cover those with smaller ones.
 • **ViewPickerSyncedProps**:
 
 _Defined in
-[src/ui/view_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L14)_
-
-**`typedef`** {object} ViewPickerSyncedProps
+[src/ui/view_picker_synced.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L12)_
 
 ### `Optional` alignSelf
 
@@ -1186,7 +1182,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L16)_
+[src/ui/view_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L14)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a
@@ -1515,7 +1511,7 @@ with larger z-indexes cover those with smaller ones.
 `ref`: React.Ref‹HTMLSelectElement›): _null | Element_
 
 _Defined in
-[src/ui/view_picker.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L94)_
+[src/ui/view_picker.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L92)_
 
 Dropdown menu component for selecting views.
 
@@ -1585,7 +1581,7 @@ function Block() {
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L66)_
+[src/ui/view_picker_synced.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L64)_
 
 Dropdown menu component for selecting views, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

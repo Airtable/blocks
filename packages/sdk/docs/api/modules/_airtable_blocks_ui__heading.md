@@ -26,9 +26,7 @@
 • **HeadingProps**:
 
 _Defined in
-[src/ui/heading.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L88)_
-
-**`typedef`** {object} HeadingProps
+[src/ui/heading.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L86)_
 
 ### `Optional` aria-controls
 
@@ -136,7 +134,7 @@ assistive technologies, and user can expect from the live region.
 • **as**? : _"h1" | "h2" | "h3" | "h4" | "h5" | "h6"_
 
 _Defined in
-[src/ui/heading.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L92)_
+[src/ui/heading.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L90)_
 
 The element that is rendered. Defaults to `h3`.
 
@@ -145,14 +143,14 @@ The element that is rendered. Defaults to `h3`.
 • **children**? : _React.ReactNode_
 
 _Defined in
-[src/ui/heading.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L96)_
+[src/ui/heading.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L94)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/heading.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L104)_
+[src/ui/heading.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L102)_
 
 Additional class names to apply, separated by spaces.
 
@@ -162,7 +160,7 @@ Additional class names to apply, separated by spaces.
 _[DataAttributesProp](_airtable_blocks_ui_system__core.md#dataattributesprop)_
 
 _Defined in
-[src/ui/heading.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L102)_
+[src/ui/heading.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L100)_
 
 Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
 
@@ -171,7 +169,7 @@ Data attributes that are spread onto the element `dataAttributes={{'data-*': '..
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/heading.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L98)_
+[src/ui/heading.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L96)_
 
 The `id` attribute.
 
@@ -180,7 +178,7 @@ The `id` attribute.
 • **role**? : _undefined | string_
 
 _Defined in
-[src/ui/heading.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L90)_
+[src/ui/heading.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L88)_
 
 The `role` attribute.
 
@@ -189,7 +187,7 @@ The `role` attribute.
 • **size**? : _[HeadingSizeProp](_airtable_blocks_ui__heading.md#headingsizeprop)_
 
 _Defined in
-[src/ui/heading.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L100)_
+[src/ui/heading.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L98)_
 
 The `size` of the heading. Defaults to `default`. Can be a responsive prop object.
 
@@ -198,7 +196,7 @@ The `size` of the heading. Defaults to `default`. Can be a responsive prop objec
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/heading.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L106)_
+[src/ui/heading.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L104)_
 
 Additional styles.
 
@@ -207,7 +205,7 @@ Additional styles.
 • **variant**? : _[HeadingVariant](_airtable_blocks_ui__heading.md#headingvariant)_
 
 _Defined in
-[src/ui/heading.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L94)_
+[src/ui/heading.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L92)_
 
 The `variant` of the heading. Defaults to `default`.
 
@@ -258,7 +256,7 @@ aria-controls={ariaControls} aria-expanded={ariaExpanded} aria-haspopup={ariaHas
 aria-hidden={ariaHidden} aria-live={ariaLive} {...dataAttributes} > {children} </Component> ); }, )
 
 _Defined in
-[src/ui/heading.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L134)_
+[src/ui/heading.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/heading.tsx#L132)_
 
 A heading component with sizes and variants.
 

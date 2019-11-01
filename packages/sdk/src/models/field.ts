@@ -190,7 +190,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         });
     }
     /**
-     * @function
      * @param aggregator The aggregator object or aggregator key.
      * @returns `true` if the given aggregator is available for this field, `false` otherwise.
      * @example

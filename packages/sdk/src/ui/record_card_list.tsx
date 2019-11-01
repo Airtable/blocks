@@ -205,9 +205,7 @@ interface RecordCardListScrollEvent {
     scrollUpdateWasRequested: boolean;
 }
 
-/**
- * @typedef {object} RecordCardListProps
- */
+/** */
 interface RecordCardListProps {
     /** Records to display in card list. */
     records: Array<Record> | Array<RecordDef>;

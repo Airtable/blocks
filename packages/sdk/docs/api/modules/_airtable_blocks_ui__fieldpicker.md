@@ -23,9 +23,7 @@
 • **FieldPickerProps**:
 
 _Defined in
-[src/ui/field_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L41)_
-
-**`typedef`** {object} FieldPickerProps
+[src/ui/field_picker.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L39)_
 
 ### `Optional` alignSelf
 
@@ -151,7 +149,7 @@ _Defined in
 • **field**? : _[Field](_airtable_blocks_models__field.md#field) | null_
 
 _Defined in
-[src/ui/field_picker.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L43)_
+[src/ui/field_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L41)_
 
 The selected field model.
 
@@ -528,9 +526,7 @@ with larger z-indexes cover those with smaller ones.
 • **FieldPickerSyncedProps**:
 
 _Defined in
-[src/ui/field_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L14)_
-
-**`typedef`** {object} FieldPickerSyncedProps
+[src/ui/field_picker_synced.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L12)_
 
 ### `Optional` alignSelf
 
@@ -707,7 +703,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/field_picker_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L16)_
+[src/ui/field_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L14)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting
@@ -1515,7 +1511,7 @@ with larger z-indexes cover those with smaller ones.
 `ref`: React.Ref‹HTMLSelectElement›): _null | Element_
 
 _Defined in
-[src/ui/field_picker.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L98)_
+[src/ui/field_picker.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L96)_
 
 Dropdown menu component for selecting fields.
 
@@ -1589,7 +1585,7 @@ function Block() {
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/field_picker_synced.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L70)_
+[src/ui/field_picker_synced.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L68)_
 
 Dropdown menu component for selecting fields, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

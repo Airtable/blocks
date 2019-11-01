@@ -20,9 +20,7 @@
 • **FieldIconProps**:
 
 _Defined in
-[src/ui/field_icon.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L17)_
-
-**`typedef`** {object} FieldIconProps
+[src/ui/field_icon.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L15)_
 
 ### `Optional` alignSelf
 
@@ -72,7 +70,7 @@ Additional class names to apply to the icon.
 • **field**: _[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/ui/field_icon.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L19)_
+[src/ui/field_icon.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L17)_
 
 The field model to display an icon for.
 
@@ -415,7 +413,7 @@ with larger z-indexes cover those with smaller ones.
 _Element_
 
 _Defined in
-[src/ui/field_icon.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L54)_
+[src/ui/field_icon.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_icon.tsx#L52)_
 
 A vector icon for a field's type.
 

@@ -28,9 +28,7 @@
 • **InputProps**:
 
 _Defined in
-[src/ui/input.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L140)_
-
-**`typedef`** {object} InputProps
+[src/ui/input.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L138)_
 
 ### `Optional` alignSelf
 
@@ -572,7 +570,7 @@ The `type` for the input. Defaults to `text`.
 • **value**: _string_
 
 _Defined in
-[src/ui/input.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L142)_
+[src/ui/input.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L140)_
 
 The input's current value.
 
@@ -608,7 +606,7 @@ with larger z-indexes cover those with smaller ones.
 • **InputStyleProps**:
 
 _Defined in
-[src/ui/input.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L146)_
+[src/ui/input.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L144)_
 
 ### `Optional` alignSelf
 
@@ -900,9 +898,7 @@ with larger z-indexes cover those with smaller ones.
 • **InputSyncedProps**:
 
 _Defined in
-[src/ui/input_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L18)_
-
-**`typedef`** {object} InputSyncedProps
+[src/ui/input_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L16)_
 
 ### `Optional` alignSelf
 
@@ -1057,7 +1053,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/input_synced.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L20)_
+[src/ui/input_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L18)_
 
 The key, or path to a key, in global config.
 
@@ -1708,7 +1704,7 @@ _Defined in
 React.Ref‹HTMLInputElement›): _Element_
 
 _Defined in
-[src/ui/input.tsx:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L197)_
+[src/ui/input.tsx:195](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L195)_
 
 An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
 
@@ -1752,7 +1748,7 @@ function HelloSomeone() {
 `ref`: React.Ref‹HTMLInputElement›): _Element_
 
 _Defined in
-[src/ui/input_synced.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L42)_
+[src/ui/input_synced.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L40)_
 
 A wrapper around the `UI.Input` component that syncs with global config.
 

@@ -26,9 +26,7 @@
 • **TextProps**:
 
 _Defined in
-[src/ui/text.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L50)_
-
-**`typedef`** {object} TextProps
+[src/ui/text.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L48)_
 
 ### `Optional` aria-controls
 
@@ -137,7 +135,7 @@ assistive technologies, and user can expect from the live region.
 | "mark" | "q" | "s" | "samp" | "small" | "sub" | "sup" | "time" | "var" | "blockquote"_
 
 _Defined in
-[src/ui/text.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L52)_
+[src/ui/text.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L50)_
 
 The element that is rendered. Defaults to `p`.
 
@@ -146,14 +144,14 @@ The element that is rendered. Defaults to `p`.
 • **children**? : _React.ReactNode_
 
 _Defined in
-[src/ui/text.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L78)_
+[src/ui/text.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L76)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/text.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L86)_
+[src/ui/text.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L84)_
 
 Additional class names to apply, separated by spaces.
 
@@ -163,7 +161,7 @@ Additional class names to apply, separated by spaces.
 _[DataAttributesProp](_airtable_blocks_ui_system__core.md#dataattributesprop)_
 
 _Defined in
-[src/ui/text.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L84)_
+[src/ui/text.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L82)_
 
 Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
 
@@ -172,7 +170,7 @@ Data attributes that are spread onto the element `dataAttributes={{'data-*': '..
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/text.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L80)_
+[src/ui/text.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L78)_
 
 The `id` attribute.
 
@@ -181,7 +179,7 @@ The `id` attribute.
 • **role**? : _undefined | string_
 
 _Defined in
-[src/ui/text.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L90)_
+[src/ui/text.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L88)_
 
 The `role` attribute.
 
@@ -190,7 +188,7 @@ The `role` attribute.
 • **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
 
 _Defined in
-[src/ui/text.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L82)_
+[src/ui/text.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L80)_
 
 The `size` of the text. Defaults to `default`. Can be a responsive prop object.
 
@@ -199,7 +197,7 @@ The `size` of the text. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/text.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L88)_
+[src/ui/text.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L86)_
 
 Additional styles.
 
@@ -208,7 +206,7 @@ Additional styles.
 • **variant**? : _[TextVariant](_airtable_blocks_ui__text.md#textvariant)_
 
 _Defined in
-[src/ui/text.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L76)_
+[src/ui/text.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L74)_
 
 The `variant` of the text. Defaults to `default`.
 
@@ -258,7 +256,7 @@ aria-haspopup={ariaHasPopup} aria-hidden={ariaHidden} aria-live={ariaLive} {...d
 {children} </Component> ); }, )
 
 _Defined in
-[src/ui/text.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L118)_
+[src/ui/text.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text.tsx#L116)_
 
 A text component with sizes and variants.
 

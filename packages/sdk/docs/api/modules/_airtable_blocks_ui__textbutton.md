@@ -25,9 +25,7 @@
 • **TextButtonProps**:
 
 _Defined in
-[src/ui/text_button.tsx:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L87)_
-
-**`typedef`** {object} TextButtonProps
+[src/ui/text_button.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L85)_
 
 ### `Optional` alignSelf
 
@@ -147,7 +145,7 @@ assistive technologies, and user can expect from the live region.
 • **aria-selected**? : _undefined | false | true_
 
 _Defined in
-[src/ui/text_button.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L117)_
+[src/ui/text_button.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L115)_
 
 The `aria-selected` attribute.
 
@@ -169,14 +167,14 @@ elements.
 • **children**: _React.ReactNode_
 
 _Defined in
-[src/ui/text_button.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L100)_
+[src/ui/text_button.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L98)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/text_button.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L111)_
+[src/ui/text_button.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L109)_
 
 Additional class names to apply, separated by spaces.
 
@@ -186,7 +184,7 @@ Additional class names to apply, separated by spaces.
 _[DataAttributesProp](_airtable_blocks_ui_system__core.md#dataattributesprop)_
 
 _Defined in
-[src/ui/text_button.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L115)_
+[src/ui/text_button.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L113)_
 
 Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
 
@@ -195,7 +193,7 @@ Data attributes that are spread onto the element `dataAttributes={{'data-*': '..
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/text_button.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L98)_
+[src/ui/text_button.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L96)_
 
 Indicates whether or not the user can interact with the button.
 
@@ -265,7 +263,7 @@ container, items shrink to fit according to `flexShrink`.
 • **icon**? : _IconName | ReactElement_
 
 _Defined in
-[src/ui/text_button.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L96)_
+[src/ui/text_button.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L94)_
 
 The name of the icon or a react node. For more details, see the
 [list of supported icons](/packages/sdk/docs/icons.md).
@@ -275,7 +273,7 @@ The name of the icon or a react node. For more details, see the
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/text_button.tsx:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L107)_
+[src/ui/text_button.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L105)_
 
 The `id` attribute.
 
@@ -416,7 +414,7 @@ becoming smaller than the value specified for `minWidth`.
 _Overrides void_
 
 _Defined in
-[src/ui/text_button.tsx:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L103)_
+[src/ui/text_button.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L101)_
 
 Click event handler. Also handles Space and Enter keypress events.
 
@@ -549,7 +547,7 @@ elements.
 • **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
 
 _Defined in
-[src/ui/text_button.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L92)_
+[src/ui/text_button.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L90)_
 
 The `size` of the text. Defaults to `default`. Can be a responsive prop object.
 
@@ -558,7 +556,7 @@ The `size` of the text. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/text_button.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L113)_
+[src/ui/text_button.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L111)_
 
 Additional styles.
 
@@ -567,7 +565,7 @@ Additional styles.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/text_button.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L109)_
+[src/ui/text_button.tsx:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L107)_
 
 The `tabIndex` attribute.
 
@@ -589,7 +587,7 @@ elements.
 • **variant**? : _[TextButtonVariant](_airtable_blocks_ui__textbutton.md#textbuttonvariant)_
 
 _Defined in
-[src/ui/text_button.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L94)_
+[src/ui/text_button.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L92)_
 
 ### `Optional` width
 
@@ -1105,7 +1103,7 @@ styleParser, );
 )
 
 _Defined in
-[src/ui/text_button.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L144)_
+[src/ui/text_button.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/text_button.tsx#L142)_
 
 A text button component with sizes and variants.
 

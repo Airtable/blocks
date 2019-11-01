@@ -21,9 +21,7 @@
 • **LoaderProps**:
 
 _Defined in
-[src/ui/loader.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L40)_
-
-**`typedef`** {object} LoaderProps
+[src/ui/loader.tsx:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L38)_
 
 ### `Optional` alignSelf
 
@@ -55,7 +53,7 @@ elements.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/loader.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L46)_
+[src/ui/loader.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L44)_
 
 Additional class names to apply to the loading spinner.
 
@@ -64,7 +62,7 @@ Additional class names to apply to the loading spinner.
 • **fillColor**: _string_
 
 _Defined in
-[src/ui/loader.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L42)_
+[src/ui/loader.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L40)_
 
 The color of the loading spinner. Defaults to `'#888'`
 
@@ -267,7 +265,7 @@ elements.
 • **scale**: _number_
 
 _Defined in
-[src/ui/loader.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L44)_
+[src/ui/loader.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L42)_
 
 A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner.
 Defaults to `0.3`.
@@ -277,7 +275,7 @@ Defaults to `0.3`.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/loader.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L48)_
+[src/ui/loader.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L46)_
 
 Additional styles to apply to the loading spinner.
 
@@ -568,7 +566,7 @@ with larger z-indexes cover those with smaller ones.
 ▸ **Loader**(`props`: [LoaderProps](_airtable_blocks_ui__loader.md#loaderprops)): _Element_
 
 _Defined in
-[src/ui/loader.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L71)_
+[src/ui/loader.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/loader.tsx#L69)_
 
 A loading spinner component.
 

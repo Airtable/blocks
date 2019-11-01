@@ -44,7 +44,7 @@ const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NU
 • **AUTO_NUMBER**: = "autoNumber"
 
 _Defined in
-[src/types/field.ts:571](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L571)_
+[src/types/field.ts:502](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L502)_
 
 Automatically incremented unique counter for each record.
 
@@ -58,16 +58,12 @@ number;
 
 None
 
-**`alias`** fieldTypes.AUTO_NUMBER
-
-**`memberof`** fieldTypes
-
 ### BARCODE
 
 • **BARCODE**: = "barcode"
 
 _Defined in
-[src/types/field.ts:591](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L591)_
+[src/types/field.ts:519](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L519)_
 
 Use the Airtable iOS or Android app to scan barcodes.
 
@@ -86,16 +82,12 @@ Use the Airtable iOS or Android app to scan barcodes.
 
 None
 
-**`alias`** fieldTypes.BARCODE
-
-**`memberof`** fieldTypes
-
 ### CHECKBOX
 
 • **CHECKBOX**: = "checkbox"
 
 _Defined in
-[src/types/field.ts:429](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L429)_
+[src/types/field.ts:378](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L378)_
 
 A checkbox.
 
@@ -118,16 +110,12 @@ This field is "true" when checked and otherwise empty.
 }
 ```
 
-**`alias`** fieldTypes.CHECKBOX
-
-**`memberof`** fieldTypes
-
 ### COUNT
 
 • **COUNT**: = "count"
 
 _Defined in
-[src/types/field.ts:543](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L543)_
+[src/types/field.ts:480](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L480)_
 
 Count the number of linked records.
 
@@ -148,16 +136,12 @@ number;
 }
 ```
 
-**`alias`** fieldTypes.COUNT
-
-**`memberof`** fieldTypes
-
 ### CREATED_TIME
 
 • **CREATED_TIME**: = "createdTime"
 
 _Defined in
-[src/types/field.ts:486](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L486)_
+[src/types/field.ts:429](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L429)_
 
 The time the record was created in UTC.
 
@@ -182,16 +166,12 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
 
 See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options.
 
-**`alias`** fieldTypes.CREATED_TIME
-
-**`memberof`** fieldTypes
-
 ### CURRENCY
 
 • **CURRENCY**: = "currency"
 
 _Defined in
-[src/types/field.ts:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L142)_
+[src/types/field.ts:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L121)_
 
 An amount of a currency.
 
@@ -210,16 +190,12 @@ number;
 }
 ```
 
-**`alias`** fieldTypes.CURRENCY
-
-**`memberof`** fieldTypes
-
 ### DATE
 
 • **DATE**: = "date"
 
 _Defined in
-[src/types/field.ts:315](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L315)_
+[src/types/field.ts:276](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L276)_
 
 A date.
 
@@ -243,16 +219,12 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
 }
 ```
 
-**`alias`** fieldTypes.DATE
-
-**`memberof`** fieldTypes
-
 ### DATE_TIME
 
 • **DATE_TIME**: = "dateTime"
 
 _Defined in
-[src/types/field.ts:346](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L346)_
+[src/types/field.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L304)_
 
 A date & time.
 
@@ -282,16 +254,12 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
 }
 ```
 
-**`alias`** fieldTypes.DATE_TIME
-
-**`memberof`** fieldTypes
-
 ### DURATION
 
 • **DURATION**: = "duration"
 
 _Defined in
-[src/types/field.ts:641](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L641)_
+[src/types/field.ts:561](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L561)_
 
 A duration of time in seconds.
 
@@ -310,16 +278,12 @@ number;
 }
 ```
 
-**`alias`** fieldTypes.DURATION
-
-**`memberof`** fieldTypes
-
 ### EMAIL
 
 • **EMAIL**: = "email"
 
 _Defined in
-[src/types/field.ts:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L51)_
+[src/types/field.ts:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L45)_
 
 A valid email address (e.g. andrew@example.com).
 
@@ -333,16 +297,12 @@ string;
 
 None
 
-**`alias`** fieldTypes.EMAIL
-
-**`memberof`** fieldTypes
-
 ### FORMULA
 
 • **FORMULA**: = "formula"
 
 _Defined in
-[src/types/field.ts:460](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L460)_
+[src/types/field.ts:406](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L406)_
 
 Compute a value in each record based on other fields in the same record.
 
@@ -372,16 +332,12 @@ Check `options.result` to know the resulting field type.
 }
 ```
 
-**`alias`** fieldTypes.FORMULA
-
-**`memberof`** fieldTypes
-
 ### LAST_MODIFIED_TIME
 
 • **LAST_MODIFIED_TIME**: = "lastModifiedTime"
 
 _Defined in
-[src/types/field.ts:673](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L673)_
+[src/types/field.ts:590](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L590)_
 
 Shows the date and time that a record was most recently modified in any editable field or just in
 specific editable fields.
@@ -412,16 +368,12 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
 
 See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options.
 
-**`alias`** fieldTypes.LAST_MODIFIED_TIME
-
-**`memberof`** fieldTypes
-
 ### MULTILINE_TEXT
 
 • **MULTILINE_TEXT**: = "multilineText"
 
 _Defined in
-[src/types/field.ts:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L84)_
+[src/types/field.ts:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L72)_
 
 A long text field that can span multiple lines.
 
@@ -438,16 +390,12 @@ Multiple lines of text, which may contain "mention tokens", e.g.
 
 None
 
-**`alias`** fieldTypes.MULTILINE_TEXT
-
-**`memberof`** fieldTypes
-
 ### MULTIPLE_ATTACHMENTS
 
 • **MULTIPLE_ATTACHMENTS**: = "multipleAttachments"
 
 _Defined in
-[src/types/field.ts:405](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L405)_
+[src/types/field.ts:357](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L357)_
 
 Attachments allow you to add images, documents, or other files which can then be viewed or
 downloaded.
@@ -491,16 +439,12 @@ Array<{
 
 None
 
-**`alias`** fieldTypes.MULTIPLE_ATTACHMENTS
-
-**`memberof`** fieldTypes
-
 ### MULTIPLE_COLLABORATORS
 
 • **MULTIPLE_COLLABORATORS**: = "multipleCollaborators"
 
 _Defined in
-[src/types/field.ts:261](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L261)_
+[src/types/field.ts:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L228)_
 
 A collaborator field lets you add collaborators to your records. Collaborators can optionally be
 notified when they're added.
@@ -530,14 +474,11 @@ Array of selected choices.
     }>,
 }
 
-@alias fieldTypes.MULTIPLE_COLLABORATORS
-@memberof fieldTypes
-
 ###  MULTIPLE_LOOKUP_VALUES
 
 • **MULTIPLE_LOOKUP_VALUES**: = "multipleLookupValues"
 
-*Defined in [src/types/field.ts:556](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L556)*
+*Defined in [src/types/field.ts:490](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L490)*
 
 Lookup a field on linked records.
 
@@ -547,15 +488,11 @@ UNSTABLE
 ##### Options
 UNSTABLE
 
-**`alias`** fieldTypes.MULTIPLE_LOOKUP_VALUES
-
-**`memberof`** fieldTypes
-
 ###  MULTIPLE_RECORD_LINKS
 
 • **MULTIPLE_RECORD_LINKS**: = "multipleRecordLinks"
 
-*Defined in [src/types/field.ts:290](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L290)*
+*Defined in [src/types/field.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L254)*
 
 Link to another record.
 
@@ -582,16 +519,12 @@ Array of selected record IDs and their primary cell values from the linked table
 }
 ```
 
-**`alias`** fieldTypes.MULTIPLE_RECORD_LINKS
-
-**`memberof`** fieldTypes
-
 ### MULTIPLE_SELECTS
 
 • **MULTIPLE_SELECTS**: = "multipleSelects"
 
 _Defined in
-[src/types/field.ts:200](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L200)_
+[src/types/field.ts:173](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L173)_
 
 Multiple select allows you to select one or more predefined options from a dropdown
 
@@ -619,16 +552,12 @@ Array of selected choices.
 }
 ```
 
-**`alias`** fieldTypes.MULTIPLE_SELECTS
-
-**`memberof`** fieldTypes
-
 ### NUMBER
 
 • **NUMBER**: = "number"
 
 _Defined in
-[src/types/field.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L103)_
+[src/types/field.ts:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L88)_
 
 A number.
 
@@ -646,16 +575,12 @@ number;
 }
 ```
 
-**`alias`** fieldTypes.NUMBER
-
-**`memberof`** fieldTypes
-
 ### PERCENT
 
 • **PERCENT**: = "percent"
 
 _Defined in
-[src/types/field.ts:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L122)_
+[src/types/field.ts:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L104)_
 
 A percentage - 0 is 0%, 1 is 100%.
 
@@ -673,16 +598,12 @@ number;
 }
 ```
 
-**`alias`** fieldTypes.PERCENT
-
-**`memberof`** fieldTypes
-
 ### PHONE_NUMBER
 
 • **PHONE_NUMBER**: = "phoneNumber"
 
 _Defined in
-[src/types/field.ts:361](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L361)_
+[src/types/field.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L316)_
 
 A telephone number (e.g. (415) 555-9876).
 
@@ -696,16 +617,12 @@ string;
 
 None
 
-**`alias`** fieldTypes.PHONE_NUMBER
-
-**`memberof`** fieldTypes
-
 ### RATING
 
 • **RATING**: = "rating"
 
 _Defined in
-[src/types/field.ts:615](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L615)_
+[src/types/field.ts:540](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L540)_
 
 A rating (e.g. stars out of 5)
 
@@ -728,16 +645,12 @@ number;
 }
 ```
 
-**`alias`** fieldTypes.RATING
-
-**`memberof`** fieldTypes
-
 ### ROLLUP
 
 • **ROLLUP**: = "rollup"
 
 _Defined in
-[src/types/field.ts:521](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L521)_
+[src/types/field.ts:461](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L461)_
 
 A rollup allows you to summarize data from records that are linked to this table.
 
@@ -771,16 +684,12 @@ Check `options.result` to know the resulting field type.
 }
 ```
 
-**`alias`** fieldTypes.ROLLUP
-
-**`memberof`** fieldTypes
-
 ### SINGLE_COLLABORATOR
 
 • **SINGLE_COLLABORATOR**: = "singleCollaborator"
 
 _Defined in
-[src/types/field.ts:231](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L231)_
+[src/types/field.ts:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L201)_
 
 A collaborator field lets you add collaborators to your records. Collaborators can optionally be
 notified when they're added.
@@ -811,16 +720,12 @@ The currently selected choice.
 }
 ```
 
-**`alias`** fieldTypes.SINGLE_COLLABORATOR
-
-**`memberof`** fieldTypes
-
 ### SINGLE_LINE_TEXT
 
 • **SINGLE_LINE_TEXT**: = "singleLineText"
 
 _Defined in
-[src/types/field.ts:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L36)_
+[src/types/field.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L33)_
 
 A single line of text.
 
@@ -834,16 +739,12 @@ string;
 
 None
 
-**`alias`** fieldTypes.SINGLE_LINE_TEXT
-
-**`memberof`** fieldTypes
-
 ### SINGLE_SELECT
 
 • **SINGLE_SELECT**: = "singleSelect"
 
 _Defined in
-[src/types/field.ts:171](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L171)_
+[src/types/field.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L147)_
 
 Single select allows you to select a single option from predefined options in a dropdown.
 
@@ -871,16 +772,12 @@ The currently selected choice.
 }
 ```
 
-**`alias`** fieldTypes.SINGLE_SELECT
-
-**`memberof`** fieldTypes
-
 ### URL
 
 • **URL**: = "url"
 
 _Defined in
-[src/types/field.ts:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L66)_
+[src/types/field.ts:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L57)_
 
 A valid URL (e.g. airtable.com or https://airtable.com/universe).
 
@@ -893,10 +790,6 @@ string;
 ###### Options
 
 None
-
-**`alias`** fieldTypes.URL
-
-**`memberof`** fieldTypes
 
 ## Classes
 
@@ -1052,7 +945,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:234](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L234)_
+[src/models/field.ts:233](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L233)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -1083,9 +976,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 [AggregatorKey](_airtable_blocks_models__aggregators.md#aggregatorkey)): _boolean_
 
 _Defined in
-[src/models/field.ts:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L210)_
-
-**`function`**
+[src/models/field.ts:209](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L209)_
 
 **`example`**
 
@@ -1225,7 +1116,7 @@ _Defined in
 [LAST_MODIFIED_TIME](_airtable_blocks_models__field.md#last_modified_time)_
 
 _Defined in
-[src/types/field.ts:677](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L677)_
+[src/types/field.ts:594](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/field.ts#L594)_
 
 ---
 

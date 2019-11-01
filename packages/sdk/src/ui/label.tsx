@@ -8,9 +8,7 @@ import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {TextSize, textSizePropType, TextSizeProp, useTextStyle} from './text';
 import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
 
-/**
- * @typedef {object} LabelProps
- */
+/** */
 interface LabelProps extends AriaProps, AllStylesProps {
     /** The `size` of the label. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;

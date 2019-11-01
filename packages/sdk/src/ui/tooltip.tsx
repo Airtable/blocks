@@ -10,9 +10,7 @@ import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
-/**
- * @type {object}
- */
+/** */
 interface TooltipProps {
     /** Child components to render. */
     children: React.ReactElement<TooltipAnchorProps>;

@@ -127,9 +127,7 @@ const styleParser = compose(
     margin,
 );
 
-/**
- * @typedef {object} SelectButtonsProps
- */
+/** */
 interface SelectButtonsProps extends SharedSelectButtonsProps {
     /** The value of the selected option. */
     value: SelectOptionValue;

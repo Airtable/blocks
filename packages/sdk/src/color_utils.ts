@@ -57,7 +57,6 @@ interface ColorUtils {
     /**
      * Given a {@link Color}, returns true or false to indicate whether that color should have light text on top of it when used as a background color.
      *
-     * @function
      * @param colorString
      * @returns boolean
      * @example

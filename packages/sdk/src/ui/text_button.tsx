@@ -81,9 +81,7 @@ function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.def
     return textButtonVariants[variant];
 }
 
-/**
- * @typedef {object} TextButtonProps
- */
+/** */
 interface TextButtonProps
     extends TooltipAnchorProps<HTMLSpanElement>,
         AriaProps,

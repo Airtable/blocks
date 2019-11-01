@@ -18,9 +18,7 @@ export function isSelectOptionValue(value: unknown): value is SelectOptionValue 
     );
 }
 
-/**
- * @typedef {object} SelectOption
- */
+/** */
 export interface SelectOption {
     /** The value for the select option. */
     value: SelectOptionValue;

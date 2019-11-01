@@ -28,7 +28,7 @@
 • **Toggle**:
 
 _Defined in
-[src/ui/toggle.tsx:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L163)_
+[src/ui/toggle.tsx:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L161)_
 
 A toggleable switch for controlling boolean values. Functionally analogous to a checkbox.
 
@@ -49,14 +49,14 @@ function Block() {
 ▪ **themes**: _Object_ = themes
 
 _Defined in
-[src/ui/toggle.tsx:165](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L165)_
+[src/ui/toggle.tsx:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L163)_
 
 ### blur
 
 ▸ **blur**(): _void_
 
 _Defined in
-[src/ui/toggle.tsx:195](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L195)_
+[src/ui/toggle.tsx:193](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L193)_
 
 **Returns:** _void_
 
@@ -65,7 +65,7 @@ _Defined in
 ▸ **click**(): _void_
 
 _Defined in
-[src/ui/toggle.tsx:202](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L202)_
+[src/ui/toggle.tsx:200](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L200)_
 
 **Returns:** _void_
 
@@ -74,7 +74,7 @@ _Defined in
 ▸ **focus**(): _void_
 
 _Defined in
-[src/ui/toggle.tsx:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L188)_
+[src/ui/toggle.tsx:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L186)_
 
 **Returns:** _void_
 
@@ -85,7 +85,7 @@ _Defined in
 • **ToggleSynced**:
 
 _Defined in
-[src/ui/toggle_synced.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L43)_
+[src/ui/toggle_synced.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L41)_
 
 A toggleable switch for controlling boolean values, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig). Functionally analogous to a
@@ -111,7 +111,7 @@ function Block() {
 ▸ **blur**(): _void_
 
 _Defined in
-[src/ui/toggle_synced.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L66)_
+[src/ui/toggle_synced.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L64)_
 
 **Returns:** _void_
 
@@ -120,7 +120,7 @@ _Defined in
 ▸ **click**(): _void_
 
 _Defined in
-[src/ui/toggle_synced.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L73)_
+[src/ui/toggle_synced.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L71)_
 
 **Returns:** _void_
 
@@ -129,7 +129,7 @@ _Defined in
 ▸ **focus**(): _void_
 
 _Defined in
-[src/ui/toggle_synced.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L59)_
+[src/ui/toggle_synced.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L57)_
 
 **Returns:** _void_
 
@@ -140,16 +140,14 @@ _Defined in
 • **SharedToggleProps**:
 
 _Defined in
-[src/ui/toggle.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L64)_
-
-**`typedef`** {object} ToggleProps
+[src/ui/toggle.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L62)_
 
 ### `Optional` aria-describedby
 
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/toggle.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L86)_
+[src/ui/toggle.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L84)_
 
 A space separated list of description element IDs.
 
@@ -158,7 +156,7 @@ A space separated list of description element IDs.
 • **aria-label**? : _undefined | string_
 
 _Defined in
-[src/ui/toggle.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L82)_
+[src/ui/toggle.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L80)_
 
 The label for the switch. Use this if the switch lacks a visible text label.
 
@@ -167,7 +165,7 @@ The label for the switch. Use this if the switch lacks a visible text label.
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/toggle.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L84)_
+[src/ui/toggle.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L82)_
 
 A space separated list of label element IDs.
 
@@ -176,7 +174,7 @@ A space separated list of label element IDs.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/toggle.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L66)_
+[src/ui/toggle.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L64)_
 
 Additional class names to apply to the switch.
 
@@ -185,7 +183,7 @@ Additional class names to apply to the switch.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/toggle.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L68)_
+[src/ui/toggle.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L66)_
 
 If set to `true`, the user cannot interact with the switch.
 
@@ -194,7 +192,7 @@ If set to `true`, the user cannot interact with the switch.
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/toggle.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L78)_
+[src/ui/toggle.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L76)_
 
 The ID of the switch element.
 
@@ -203,7 +201,7 @@ The ID of the switch element.
 • **label**? : _React.ReactNode_
 
 _Defined in
-[src/ui/toggle.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L70)_
+[src/ui/toggle.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L68)_
 
 The label node for the switch.
 
@@ -212,7 +210,7 @@ The label node for the switch.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/toggle.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L72)_
+[src/ui/toggle.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L70)_
 
 A function to be called when the switch is toggled.
 
@@ -221,7 +219,7 @@ A function to be called when the switch is toggled.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/toggle.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L80)_
+[src/ui/toggle.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L78)_
 
 Additional styles to apply to the switch.
 
@@ -230,7 +228,7 @@ Additional styles to apply to the switch.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/toggle.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L74)_
+[src/ui/toggle.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L72)_
 
 Indicates if the switch can be focused and if/where it participates in sequential keyboard
 navigation.
@@ -240,7 +238,7 @@ navigation.
 • **theme**? : _[ToggleTheme](_airtable_blocks_ui__toggle.md#toggletheme)_
 
 _Defined in
-[src/ui/toggle.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L76)_
+[src/ui/toggle.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L74)_
 
 The color theme for the switch. Defaults to Toggle.themes.GREEN.
 
@@ -251,7 +249,7 @@ The color theme for the switch. Defaults to Toggle.themes.GREEN.
 • **ToggleProps**:
 
 _Defined in
-[src/ui/toggle.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L90)_
+[src/ui/toggle.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L88)_
 
 ### `Optional` aria-describedby
 
@@ -261,7 +259,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[aria-describedby](_airtable_blocks_ui__toggle.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/toggle.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L86)_
+[src/ui/toggle.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L84)_
 
 A space separated list of description element IDs.
 
@@ -273,7 +271,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[aria-label](_airtable_blocks_ui__toggle.md#optional-aria-label)_
 
 _Defined in
-[src/ui/toggle.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L82)_
+[src/ui/toggle.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L80)_
 
 The label for the switch. Use this if the switch lacks a visible text label.
 
@@ -285,7 +283,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[aria-labelledby](_airtable_blocks_ui__toggle.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/toggle.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L84)_
+[src/ui/toggle.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L82)_
 
 A space separated list of label element IDs.
 
@@ -297,7 +295,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[className](_airtable_blocks_ui__toggle.md#optional-classname)_
 
 _Defined in
-[src/ui/toggle.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L66)_
+[src/ui/toggle.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L64)_
 
 Additional class names to apply to the switch.
 
@@ -309,7 +307,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[disabled](_airtable_blocks_ui__toggle.md#optional-disabled)_
 
 _Defined in
-[src/ui/toggle.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L68)_
+[src/ui/toggle.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L66)_
 
 If set to `true`, the user cannot interact with the switch.
 
@@ -321,7 +319,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[id](_airtable_blocks_ui__toggle.md#optional-id)_
 
 _Defined in
-[src/ui/toggle.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L78)_
+[src/ui/toggle.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L76)_
 
 The ID of the switch element.
 
@@ -333,7 +331,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[label](_airtable_blocks_ui__toggle.md#optional-label)_
 
 _Defined in
-[src/ui/toggle.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L70)_
+[src/ui/toggle.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L68)_
 
 The label node for the switch.
 
@@ -345,7 +343,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[onChange](_airtable_blocks_ui__toggle.md#optional-onchange)_
 
 _Defined in
-[src/ui/toggle.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L72)_
+[src/ui/toggle.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L70)_
 
 A function to be called when the switch is toggled.
 
@@ -357,7 +355,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[style](_airtable_blocks_ui__toggle.md#optional-style)_
 
 _Defined in
-[src/ui/toggle.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L80)_
+[src/ui/toggle.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L78)_
 
 Additional styles to apply to the switch.
 
@@ -369,7 +367,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[tabIndex](_airtable_blocks_ui__toggle.md#optional-tabindex)_
 
 _Defined in
-[src/ui/toggle.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L74)_
+[src/ui/toggle.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L72)_
 
 Indicates if the switch can be focused and if/where it participates in sequential keyboard
 navigation.
@@ -382,7 +380,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[theme](_airtable_blocks_ui__toggle.md#optional-theme)_
 
 _Defined in
-[src/ui/toggle.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L76)_
+[src/ui/toggle.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L74)_
 
 The color theme for the switch. Defaults to Toggle.themes.GREEN.
 
@@ -391,7 +389,7 @@ The color theme for the switch. Defaults to Toggle.themes.GREEN.
 • **value**: _boolean_
 
 _Defined in
-[src/ui/toggle.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L92)_
+[src/ui/toggle.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L90)_
 
 If set to `true`, the switch will be toggled on.
 
@@ -402,7 +400,7 @@ If set to `true`, the switch will be toggled on.
 • **ToggleStyleProps**:
 
 _Defined in
-[src/ui/toggle.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L111)_
+[src/ui/toggle.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L109)_
 
 ### `Optional` alignSelf
 
@@ -434,7 +432,7 @@ elements.
 • **display**? : _Prop‹"flex" | "inline-flex"›_
 
 _Defined in
-[src/ui/toggle.tsx:119](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L119)_
+[src/ui/toggle.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L117)_
 
 ### `Optional` flex
 
@@ -786,9 +784,7 @@ with larger z-indexes cover those with smaller ones.
 • **ToggleSyncedProps**:
 
 _Defined in
-[src/ui/toggle_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L18)_
-
-**`typedef`** {object} ToggleSyncedProps
+[src/ui/toggle_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L16)_
 
 ### `Optional` alignSelf
 
@@ -810,7 +806,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[aria-describedby](_airtable_blocks_ui__toggle.md#optional-aria-describedby)_
 
 _Defined in
-[src/ui/toggle.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L86)_
+[src/ui/toggle.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L84)_
 
 A space separated list of description element IDs.
 
@@ -822,7 +818,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[aria-label](_airtable_blocks_ui__toggle.md#optional-aria-label)_
 
 _Defined in
-[src/ui/toggle.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L82)_
+[src/ui/toggle.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L80)_
 
 The label for the switch. Use this if the switch lacks a visible text label.
 
@@ -834,7 +830,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[aria-labelledby](_airtable_blocks_ui__toggle.md#optional-aria-labelledby)_
 
 _Defined in
-[src/ui/toggle.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L84)_
+[src/ui/toggle.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L82)_
 
 A space separated list of label element IDs.
 
@@ -859,7 +855,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[className](_airtable_blocks_ui__toggle.md#optional-classname)_
 
 _Defined in
-[src/ui/toggle.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L66)_
+[src/ui/toggle.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L64)_
 
 Additional class names to apply to the switch.
 
@@ -871,7 +867,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[disabled](_airtable_blocks_ui__toggle.md#optional-disabled)_
 
 _Defined in
-[src/ui/toggle.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L68)_
+[src/ui/toggle.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L66)_
 
 If set to `true`, the user cannot interact with the switch.
 
@@ -883,7 +879,7 @@ _Inherited from
 [ToggleStyleProps](_airtable_blocks_ui__toggle.md#togglestyleprops).[display](_airtable_blocks_ui__toggle.md#optional-display)_
 
 _Defined in
-[src/ui/toggle.tsx:119](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L119)_
+[src/ui/toggle.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L117)_
 
 ### `Optional` flex
 
@@ -941,7 +937,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/toggle_synced.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L20)_
+[src/ui/toggle_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle_synced.tsx#L18)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The switch option will always reflect the boolean value stored in `globalConfig` for this key.
@@ -955,7 +951,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[id](_airtable_blocks_ui__toggle.md#optional-id)_
 
 _Defined in
-[src/ui/toggle.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L78)_
+[src/ui/toggle.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L76)_
 
 The ID of the switch element.
 
@@ -967,7 +963,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[label](_airtable_blocks_ui__toggle.md#optional-label)_
 
 _Defined in
-[src/ui/toggle.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L70)_
+[src/ui/toggle.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L68)_
 
 The label node for the switch.
 
@@ -1109,7 +1105,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[onChange](_airtable_blocks_ui__toggle.md#optional-onchange)_
 
 _Defined in
-[src/ui/toggle.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L72)_
+[src/ui/toggle.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L70)_
 
 A function to be called when the switch is toggled.
 
@@ -1245,7 +1241,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[style](_airtable_blocks_ui__toggle.md#optional-style)_
 
 _Defined in
-[src/ui/toggle.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L80)_
+[src/ui/toggle.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L78)_
 
 Additional styles to apply to the switch.
 
@@ -1257,7 +1253,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[tabIndex](_airtable_blocks_ui__toggle.md#optional-tabindex)_
 
 _Defined in
-[src/ui/toggle.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L74)_
+[src/ui/toggle.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L72)_
 
 Indicates if the switch can be focused and if/where it participates in sequential keyboard
 navigation.
@@ -1270,7 +1266,7 @@ _Inherited from
 [SharedToggleProps](_airtable_blocks_ui__toggle.md#sharedtoggleprops).[theme](_airtable_blocks_ui__toggle.md#optional-theme)_
 
 _Defined in
-[src/ui/toggle.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L76)_
+[src/ui/toggle.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/toggle.tsx#L74)_
 
 The color theme for the switch. Defaults to Toggle.themes.GREEN.
 

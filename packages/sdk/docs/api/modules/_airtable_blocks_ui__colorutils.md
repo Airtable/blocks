@@ -27,12 +27,10 @@ colors} enum.
 ▸ **shouldUseLightTextOnColor**(`colorString`: string): _boolean_
 
 _Defined in
-[src/color_utils.ts:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L74)_
+[src/color_utils.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/color_utils.ts#L73)_
 
 Given a [Color](_airtable_blocks_ui__colors.md#color), returns true or false to indicate whether
 that color should have light text on top of it when used as a background color.
-
-**`function`**
 
 **`example`**
 

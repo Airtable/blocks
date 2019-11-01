@@ -138,9 +138,7 @@ export const sharedSelectPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/**
- * @typedef {object} SelectProps
- */
+/** */
 export interface SelectProps extends SharedSelectProps {
     /** The value of the selected option. */
     value: SelectOptionValue;

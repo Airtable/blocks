@@ -21,9 +21,7 @@
 • **CollaboratorTokenProps**:
 
 _Defined in
-[src/ui/collaborator_token.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L45)_
-
-**`typedef`** {object} CollaboratorTokenProps
+[src/ui/collaborator_token.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L43)_
 
 ### `Optional` alignSelf
 
@@ -55,7 +53,7 @@ elements.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/collaborator_token.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L49)_
+[src/ui/collaborator_token.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L47)_
 
 Additional class names to apply to the collaborator token.
 
@@ -64,7 +62,7 @@ Additional class names to apply to the collaborator token.
 • **collaborator**: _Partial‹[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata)›_
 
 _Defined in
-[src/ui/collaborator_token.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L47)_
+[src/ui/collaborator_token.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L45)_
 
 An object representing a collaborator. You should not create these objects from scratch, but should
 instead grab them from base data.
@@ -268,7 +266,7 @@ elements.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/collaborator_token.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L51)_
+[src/ui/collaborator_token.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L49)_
 
 Additional styles to apply to the collaborator token.
 
@@ -561,7 +559,7 @@ with larger z-indexes cover those with smaller ones.
 _Element_
 
 _Defined in
-[src/ui/collaborator_token.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L75)_
+[src/ui/collaborator_token.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/collaborator_token.tsx#L73)_
 
 A component that shows a single collaborator in a small token, to be displayed inline or in a list
 of choices.

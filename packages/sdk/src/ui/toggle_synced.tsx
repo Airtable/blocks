@@ -12,9 +12,7 @@ import Toggle, {
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/**
- * @typedef {object} ToggleSyncedProps
- */
+/** */
 interface ToggleSyncedProps extends SharedToggleProps, ToggleStyleProps {
     /** A string key or array key path in {@link GlobalConfig}. The switch option will always reflect the boolean value stored in `globalConfig` for this key. Toggling the switch will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;

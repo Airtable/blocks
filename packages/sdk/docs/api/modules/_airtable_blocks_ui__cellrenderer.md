@@ -21,7 +21,7 @@
 • **CellRenderer**:
 
 _Defined in
-[src/ui/cell_renderer.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L126)_
+[src/ui/cell_renderer.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L124)_
 
 Displays the contents of a cell.
 
@@ -60,9 +60,7 @@ export default function CellRendererExample(props) {
 • **CellRendererProps**:
 
 _Defined in
-[src/ui/cell_renderer.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L75)_
-
-**`typedef`** {object} CellRendererProps
+[src/ui/cell_renderer.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L73)_
 
 ### `Optional` alignSelf
 
@@ -94,7 +92,7 @@ elements.
 • **cellClassName**? : _undefined | string_
 
 _Defined in
-[src/ui/cell_renderer.tsx:91](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L91)_
+[src/ui/cell_renderer.tsx:89](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L89)_
 
 Additional class names to apply to the cell itself, separated by spaces.
 
@@ -103,7 +101,7 @@ Additional class names to apply to the cell itself, separated by spaces.
 • **cellStyle**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/cell_renderer.tsx:93](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L93)_
+[src/ui/cell_renderer.tsx:91](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L91)_
 
 Additional styles to apply to the cell itself.
 
@@ -112,7 +110,7 @@ Additional styles to apply to the cell itself.
 • **cellValue**? : _unknown_
 
 _Defined in
-[src/ui/cell_renderer.tsx:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L79)_
+[src/ui/cell_renderer.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L77)_
 
 The cell value to render. Either `record` or `cellValue` must be provided to the CellRenderer. If
 both are provided, `record` will be used.
@@ -122,7 +120,7 @@ both are provided, `record` will be used.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/cell_renderer.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L85)_
+[src/ui/cell_renderer.tsx:83](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L83)_
 
 Additional class names to apply to the cell renderer container, separated by spaces.
 
@@ -141,7 +139,7 @@ _Defined in
 • **field**: _[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/ui/cell_renderer.tsx:81](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L81)_
+[src/ui/cell_renderer.tsx:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L79)_
 
 The [Field](_airtable_blocks_models__field.md#field) for a given
 [Record](_airtable_blocks_models__record.md#record) being rendered as a cell.
@@ -358,7 +356,7 @@ determine the final location of positioned elements.
 • **record**? : _[Record](_airtable_blocks_models__record.md#record) | null | undefined_
 
 _Defined in
-[src/ui/cell_renderer.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L77)_
+[src/ui/cell_renderer.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L75)_
 
 The [Record](_airtable_blocks_models__record.md#record) from which to render a cell. Either `record`
 or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used.
@@ -381,7 +379,7 @@ elements.
 • **shouldWrap**? : _undefined | false | true_
 
 _Defined in
-[src/ui/cell_renderer.tsx:83](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L83)_
+[src/ui/cell_renderer.tsx:81](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L81)_
 
 Whether to wrap cell contents. Defaults to true.
 
@@ -390,7 +388,7 @@ Whether to wrap cell contents. Defaults to true.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/cell_renderer.tsx:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L87)_
+[src/ui/cell_renderer.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/cell_renderer.tsx#L85)_
 
 Additional styles to apply to the cell renderer container.
 

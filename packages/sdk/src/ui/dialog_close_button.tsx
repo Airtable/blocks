@@ -31,9 +31,7 @@ import {
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Icon from './icon';
 
-/**
- * @typedef {object} DialogCloseButtonProps
- */
+/** */
 export interface DialogCloseButtonProps extends TooltipAnchorProps {
     /** `className`s to apply to the close button, separated by spaces. */
     className?: string;

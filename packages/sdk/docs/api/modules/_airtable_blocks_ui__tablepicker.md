@@ -484,9 +484,7 @@ with larger z-indexes cover those with smaller ones.
 • **TablePickerProps**:
 
 _Defined in
-[src/ui/table_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L32)_
-
-**`typedef`** {object} TablePickerProps
+[src/ui/table_picker.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L30)_
 
 ### `Optional` alignSelf
 
@@ -916,7 +914,7 @@ The `tabindex` attribute.
 • **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
 
 _Defined in
-[src/ui/table_picker.tsx:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L34)_
+[src/ui/table_picker.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L32)_
 
 The selected table model.
 
@@ -965,9 +963,7 @@ with larger z-indexes cover those with smaller ones.
 • **TablePickerSyncedProps**:
 
 _Defined in
-[src/ui/table_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L14)_
-
-**`typedef`** {object} TablePickerSyncedProps
+[src/ui/table_picker_synced.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L12)_
 
 ### `Optional` alignSelf
 
@@ -1132,7 +1128,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/table_picker_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L16)_
+[src/ui/table_picker_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L14)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected table will always reflect the table id stored in `globalConfig` for this key. Selecting
@@ -1449,7 +1445,7 @@ with larger z-indexes cover those with smaller ones.
 `ref`: React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/table_picker.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L68)_
+[src/ui/table_picker.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L66)_
 
 Dropdown menu component for selecting tables.
 
@@ -1502,7 +1498,7 @@ function Block() {
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/table_picker_synced.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L57)_
+[src/ui/table_picker_synced.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L55)_
 
 Dropdown menu component for selecting tables, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

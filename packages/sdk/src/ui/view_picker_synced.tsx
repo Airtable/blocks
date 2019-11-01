@@ -8,9 +8,7 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
-/**
- * @typedef {object} ViewPickerSyncedProps
- */
+/** */
 interface ViewPickerSyncedProps extends SharedViewPickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a new view will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;

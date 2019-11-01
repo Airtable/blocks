@@ -20,30 +20,15 @@ export type ViewId = string;
  * ```
  */
 export enum ViewTypes {
-    /**
-     * @alias viewTypes.GRID
-     * @memberof viewTypes
-     */
+    /** */
     GRID = 'grid',
-    /**
-     * @alias viewTypes.FORM
-     * @memberof viewTypes
-     */
+    /** */
     FORM = 'form',
-    /**
-     * @alias viewTypes.CALENDAR
-     * @memberof viewTypes
-     */
+    /** */
     CALENDAR = 'calendar',
-    /**
-     * @alias viewTypes.GALLERY
-     * @memberof viewTypes
-     */
+    /** */
     GALLERY = 'gallery',
-    /**
-     * @alias viewTypes.KANBAN
-     * @memberof viewTypes
-     */
+    /** */
     KANBAN = 'kanban',
 }
 

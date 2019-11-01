@@ -8,9 +8,7 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
-/**
- * @typedef {object} TablePickerSyncedProps
- */
+/** */
 interface TablePickerSyncedProps extends SharedTablePickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected table will always reflect the table id stored in `globalConfig` for this key. Selecting a new table will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;

@@ -8,9 +8,7 @@ import FieldPicker, {sharedFieldPickerPropTypes, SharedFieldPickerProps} from '.
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
-/**
- * @typedef {object} FieldPickerSyncedProps
- */
+/** */
 interface FieldPickerSyncedProps extends SharedFieldPickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting a new field will update `globalConfig`. */
     globalConfigKey: GlobalConfigKey;

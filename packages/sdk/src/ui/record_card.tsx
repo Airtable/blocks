@@ -117,9 +117,7 @@ CellValueAndFieldLabel.propTypes = {
     width: PropTypes.number.isRequired,
 };
 
-/**
- * @typedef {object} RecordCardProps
- */
+/** */
 interface RecordCardProps extends RecordCardStyleProps {
     /** Record to display in the card. */
     record: Record | RecordDef;

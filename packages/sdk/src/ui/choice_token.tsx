@@ -48,9 +48,7 @@ interface SelectOption {
     color?: Color;
 }
 
-/**
- * @typedef {object} ChoiceTokenProps
- */
+/** */
 interface ChoiceTokenProps extends TooltipAnchorProps, ChoiceTokenStyleProps {
     /** An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data. */
     choice: SelectOption;

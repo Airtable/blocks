@@ -25,9 +25,7 @@
 • **LinkProps**:
 
 _Defined in
-[src/ui/link.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L90)_
-
-**`typedef`** {object} LinkProps
+[src/ui/link.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L88)_
 
 ### `Optional` alignSelf
 
@@ -160,14 +158,14 @@ elements.
 • **children**: _React.ReactNode_
 
 _Defined in
-[src/ui/link.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L114)_
+[src/ui/link.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L112)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/link.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L108)_
+[src/ui/link.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L106)_
 
 Additional class names to apply to the link.
 
@@ -176,7 +174,7 @@ Additional class names to apply to the link.
 • **dataAttributes**? : _undefined | object_
 
 _Defined in
-[src/ui/link.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L112)_
+[src/ui/link.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L110)_
 
 Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
 
@@ -258,7 +256,7 @@ Specifies the weight (or boldness) of the font.
 • **href**: _string_
 
 _Defined in
-[src/ui/link.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L100)_
+[src/ui/link.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L98)_
 
 The target URL or URL fragment for the link.
 
@@ -267,7 +265,7 @@ The target URL or URL fragment for the link.
 • **icon**? : _IconName | ReactElement_
 
 _Defined in
-[src/ui/link.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L96)_
+[src/ui/link.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L94)_
 
 The name of the icon or a react node. For more details, see the
 [list of supported icons](/packages/sdk/docs/icons.md).
@@ -277,7 +275,7 @@ The name of the icon or a react node. For more details, see the
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/link.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L104)_
+[src/ui/link.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L102)_
 
 The `id` attribute.
 
@@ -540,7 +538,7 @@ elements.
 • **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
 
 _Defined in
-[src/ui/link.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L92)_
+[src/ui/link.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L90)_
 
 The `size` of the link. Defaults to `default`. Can be a responsive prop object.
 
@@ -549,7 +547,7 @@ The `size` of the link. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/link.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L110)_
+[src/ui/link.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L108)_
 
 Additional styles to apply to the link.
 
@@ -558,7 +556,7 @@ Additional styles to apply to the link.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/link.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L106)_
+[src/ui/link.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L104)_
 
 Indicates if the link can be focused and if/where it participates in sequential keyboard navigation.
 
@@ -567,7 +565,7 @@ Indicates if the link can be focused and if/where it participates in sequential 
 • **target**? : _undefined | string_
 
 _Defined in
-[src/ui/link.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L102)_
+[src/ui/link.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L100)_
 
 Specifies where to display the linked URL.
 
@@ -589,7 +587,7 @@ elements.
 • **underline**? : _undefined | false | true_
 
 _Defined in
-[src/ui/link.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L98)_
+[src/ui/link.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L96)_
 
 Adds an underline to the link when true.
 
@@ -598,7 +596,7 @@ Adds an underline to the link when true.
 • **variant**? : _[LinkVariant](_airtable_blocks_ui__link.md#linkvariant)_
 
 _Defined in
-[src/ui/link.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L94)_
+[src/ui/link.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L92)_
 
 The `variant` of the link which defines the color. Defaults to `default`.
 
@@ -1040,7 +1038,7 @@ _Defined in
 React.Ref‹HTMLAnchorElement›): _Element_
 
 _Defined in
-[src/ui/link.tsx:172](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L172)_
+[src/ui/link.tsx:170](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/link.tsx#L170)_
 
 A wrapper around the `<a>` tag that offers a few security benefits:
 

@@ -11,9 +11,7 @@ import Icon, {
 } from './icon';
 import {IconName} from './icon_config';
 
-/**
- * @typedef {object} FieldIconProps
- */
+/** */
 interface FieldIconProps extends SharedIconProps, IconStyleProps {
     /** The field model to display an icon for. */
     field: Field;

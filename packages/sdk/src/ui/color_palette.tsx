@@ -92,9 +92,7 @@ export const sharedColorPalettePropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-/**
- * @typedef {object} ColorPaletteProps
- */
+/** */
 interface ColorPaletteProps extends SharedColorPaletteProps {
     /** The current selected {@link Color} option. */
     color?: string | null;

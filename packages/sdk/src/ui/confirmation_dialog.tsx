@@ -7,9 +7,7 @@ import Dialog from './dialog';
 import Button from './button';
 import Box from './box';
 
-/**
- * @typedef {object} ConfirmationDialogProps
- */
+/** */
 interface ConfirmationDialogProps extends ModalStyleProps {
     /** Extra styles to apply to the dialog element. */
     style?: React.CSSProperties;

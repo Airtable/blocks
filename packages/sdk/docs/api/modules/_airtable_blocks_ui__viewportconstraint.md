@@ -57,8 +57,6 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 _Defined in
 [src/ui/viewport_constraint.tsx:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L11)_
 
-**`typedef`**
-
 ### `Optional` children
 
 • **children**? : _React.ReactNode_

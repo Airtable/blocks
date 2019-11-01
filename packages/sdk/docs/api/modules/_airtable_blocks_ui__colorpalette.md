@@ -24,7 +24,7 @@
 • **ColorPalette**:
 
 _Defined in
-[src/ui/color_palette.tsx:129](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L129)_
+[src/ui/color_palette.tsx:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L127)_
 
 A color selection component. Accepts a list of `allowedColors` to be displayed as selectable color
 squares.
@@ -49,7 +49,7 @@ function DisplayOptions() {
 • **ColorPaletteSynced**:
 
 _Defined in
-[src/ui/color_palette_synced.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L42)_
+[src/ui/color_palette_synced.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L40)_
 
 A wrapper around the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) component
 that syncs with global config.
@@ -74,9 +74,7 @@ function DisplayOptions() {
 • **ColorPaletteProps**:
 
 _Defined in
-[src/ui/color_palette.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L98)_
-
-**`typedef`** {object} ColorPaletteProps
+[src/ui/color_palette.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L96)_
 
 ### allowedColors
 
@@ -107,7 +105,7 @@ Additional class names to apply to the color palette, separated by spaces.
 • **color**? : _string | null_
 
 _Defined in
-[src/ui/color_palette.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L100)_
+[src/ui/color_palette.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette.tsx#L98)_
 
 The current selected [Color](_airtable_blocks_ui__colors.md#color) option.
 
@@ -458,9 +456,7 @@ with larger z-indexes cover those with smaller ones.
 • **ColorPaletteSyncedProps**:
 
 _Defined in
-[src/ui/color_palette_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L17)_
-
-**`typedef`** {object} ColorPaletteSyncedProps
+[src/ui/color_palette_synced.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L15)_
 
 ### `Optional` alignSelf
 
@@ -579,7 +575,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/color_palette_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L19)_
+[src/ui/color_palette_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/color_palette_synced.tsx#L17)_
 
 The key, or path to a key, in global config.
 

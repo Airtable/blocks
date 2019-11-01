@@ -34,9 +34,7 @@ const loaderStylePropTypes = {
     ...marginPropTypes,
 };
 
-/**
- * @typedef {object} LoaderProps
- */
+/** */
 interface LoaderProps extends LoaderStyleProps {
     /** The color of the loading spinner. Defaults to `'#888'` */
     fillColor: string;

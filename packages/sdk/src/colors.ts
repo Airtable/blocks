@@ -6,264 +6,114 @@ import {ObjectValues} from './private_utils';
  * @alias colors
  */
 const Colors = {
-    /**
-     * @alias colors.BLUE_BRIGHT
-     * @memberof colors
-     */
+    /** */
     BLUE_BRIGHT: 'blueBright' as const,
-    /**
-     * @alias colors.BLUE_DARK_1
-     * @memberof colors
-     */
+    /** */
     BLUE_DARK_1: 'blueDark1' as const,
-    /**
-     * @alias colors.BLUE_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     BLUE_LIGHT_1: 'blueLight1' as const,
-    /**
-     * @alias colors.BLUE_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     BLUE_LIGHT_2: 'blueLight2' as const,
-    /**
-     * @alias colors.BLUE
-     * @memberof colors
-     */
+    /** */
     BLUE: 'blue' as const,
 
-    /**
-     * @alias colors.CYAN_BRIGHT
-     * @memberof colors
-     */
+    /** */
     CYAN_BRIGHT: 'cyanBright' as const,
-    /**
-     * @alias colors.CYAN_DARK_1
-     * @memberof colors
-     */
+    /** */
     CYAN_DARK_1: 'cyanDark1' as const,
-    /**
-     * @alias colors.CYAN_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     CYAN_LIGHT_1: 'cyanLight1' as const,
-    /**
-     * @alias colors.CYAN_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     CYAN_LIGHT_2: 'cyanLight2' as const,
-    /**
-     * @alias colors.CYAN
-     * @memberof colors
-     */
+    /** */
     CYAN: 'cyan' as const,
 
-    /**
-     * @alias colors.GRAY_BRIGHT
-     * @memberof colors
-     */
+    /** */
     GRAY_BRIGHT: 'grayBright' as const,
-    /**
-     * @alias colors.GRAY_DARK_1
-     * @memberof colors
-     */
+    /** */
     GRAY_DARK_1: 'grayDark1' as const,
-    /**
-     * @alias colors.GRAY_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     GRAY_LIGHT_1: 'grayLight1' as const,
-    /**
-     * @alias colors.GRAY_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     GRAY_LIGHT_2: 'grayLight2' as const,
-    /**
-     * @alias colors.GRAY
-     * @memberof colors
-     */
+    /** */
     GRAY: 'gray' as const,
 
-    /**
-     * @alias colors.GREEN_BRIGHT
-     * @memberof colors
-     */
+    /** */
     GREEN_BRIGHT: 'greenBright' as const,
-    /**
-     * @alias colors.GREEN_DARK_1
-     * @memberof colors
-     */
+    /** */
     GREEN_DARK_1: 'greenDark1' as const,
-    /**
-     * @alias colors.GREEN_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     GREEN_LIGHT_1: 'greenLight1' as const,
-    /**
-     * @alias colors.GREEN_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     GREEN_LIGHT_2: 'greenLight2' as const,
-    /**
-     * @alias colors.GREEN
-     * @memberof colors
-     */
+    /** */
     GREEN: 'green' as const,
 
-    /**
-     * @alias colors.ORANGE_BRIGHT
-     * @memberof colors
-     */
+    /** */
     ORANGE_BRIGHT: 'orangeBright' as const,
-    /**
-     * @alias colors.ORANGE_DARK_1
-     * @memberof colors
-     */
+    /** */
     ORANGE_DARK_1: 'orangeDark1' as const,
-    /**
-     * @alias colors.ORANGE_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     ORANGE_LIGHT_1: 'orangeLight1' as const,
-    /**
-     * @alias colors.ORANGE_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     ORANGE_LIGHT_2: 'orangeLight2' as const,
-    /**
-     * @alias colors.ORANGE
-     * @memberof colors
-     */
+    /** */
     ORANGE: 'orange' as const,
 
-    /**
-     * @alias colors.PINK_BRIGHT
-     * @memberof colors
-     */
+    /** */
     PINK_BRIGHT: 'pinkBright' as const,
-    /**
-     * @alias colors.PINK_DARK_1
-     * @memberof colors
-     */
+    /** */
     PINK_DARK_1: 'pinkDark1' as const,
-    /**
-     * @alias colors.PINK_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     PINK_LIGHT_1: 'pinkLight1' as const,
-    /**
-     * @alias colors.PINK_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     PINK_LIGHT_2: 'pinkLight2' as const,
-    /**
-     * @alias colors.PINK
-     * @memberof colors
-     */
+    /** */
     PINK: 'pink' as const,
 
-    /**
-     * @alias colors.PURPLE_BRIGHT
-     * @memberof colors
-     */
+    /** */
     PURPLE_BRIGHT: 'purpleBright' as const,
-    /**
-     * @alias colors.PURPLE_DARK_1
-     * @memberof colors
-     */
+    /** */
     PURPLE_DARK_1: 'purpleDark1' as const,
-    /**
-     * @alias colors.PURPLE_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     PURPLE_LIGHT_1: 'purpleLight1' as const,
-    /**
-     * @alias colors.PURPLE_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     PURPLE_LIGHT_2: 'purpleLight2' as const,
-    /**
-     * @alias colors.PURPLE
-     * @memberof colors
-     */
+    /** */
     PURPLE: 'purple' as const,
 
-    /**
-     * @alias colors.RED_BRIGHT
-     * @memberof colors
-     */
+    /** */
     RED_BRIGHT: 'redBright' as const,
-    /**
-     * @alias colors.RED_DARK_1
-     * @memberof colors
-     */
+    /** */
     RED_DARK_1: 'redDark1' as const,
-    /**
-     * @alias colors.RED_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     RED_LIGHT_1: 'redLight1' as const,
-    /**
-     * @alias colors.RED_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     RED_LIGHT_2: 'redLight2' as const,
-    /**
-     * @alias colors.RED
-     * @memberof colors
-     */
+    /** */
     RED: 'red' as const,
 
-    /**
-     * @alias colors.TEAL_BRIGHT
-     * @memberof colors
-     */
+    /** */
     TEAL_BRIGHT: 'tealBright' as const,
-    /**
-     * @alias colors.TEAL_DARK_1
-     * @memberof colors
-     */
+    /** */
     TEAL_DARK_1: 'tealDark1' as const,
-    /**
-     * @alias colors.TEAL_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     TEAL_LIGHT_1: 'tealLight1' as const,
-    /**
-     * @alias colors.TEAL_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     TEAL_LIGHT_2: 'tealLight2' as const,
-    /**
-     * @alias colors.TEAL
-     * @memberof colors
-     */
+    /** */
     TEAL: 'teal' as const,
 
-    /**
-     * @alias colors.YELLOW_BRIGHT
-     * @memberof colors
-     */
+    /** */
     YELLOW_BRIGHT: 'yellowBright' as const,
-    /**
-     * @alias colors.YELLOW_DARK_1
-     * @memberof colors
-     */
+    /** */
     YELLOW_DARK_1: 'yellowDark1' as const,
-    /**
-     * @alias colors.YELLOW_LIGHT_1
-     * @memberof colors
-     */
+    /** */
     YELLOW_LIGHT_1: 'yellowLight1' as const,
-    /**
-     * @alias colors.YELLOW_LIGHT_2
-     * @memberof colors
-     */
+    /** */
     YELLOW_LIGHT_2: 'yellowLight2' as const,
-    /**
-     * @alias colors.YELLOW
-     * @memberof colors
-     */
+    /** */
     YELLOW: 'yellow' as const,
 };
 
@@ -271,8 +121,6 @@ export default Colors;
 
 /**
  * A value from the {@link colors} enum
- *
- * @typedef string
  */
 export type Color = ObjectValues<typeof Colors>;
 

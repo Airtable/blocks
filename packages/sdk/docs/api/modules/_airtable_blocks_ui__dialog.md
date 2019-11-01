@@ -25,7 +25,7 @@
 • **ConfirmationDialog**:
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L74)_
+[src/ui/confirmation_dialog.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L72)_
 
 A styled modal dialog component that prompts the user to confirm or cancel an action. By default,
 this component will focus the "Confirm" button on mount, so that pressing the Enter key will confirm
@@ -67,7 +67,7 @@ function Block() {
 • **Dialog**:
 
 _Defined in
-[src/ui/dialog.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L68)_
+[src/ui/dialog.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L66)_
 
 A styled modal dialog component.
 
@@ -115,7 +115,7 @@ RefAttributes‹[DialogCloseButton](_airtable_blocks_ui__dialog.md#dialogclosebu
 DialogCloseButton
 
 _Defined in
-[src/ui/dialog.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L70)_
+[src/ui/dialog.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L68)_
 
 ---
 
@@ -124,7 +124,7 @@ _Defined in
 • **DialogCloseButton**:
 
 _Defined in
-[src/ui/dialog_close_button.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L84)_
+[src/ui/dialog_close_button.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L82)_
 
 A button that closes [Dialog](_airtable_blocks_ui__dialog.md#dialog).
 
@@ -137,9 +137,7 @@ A button that closes [Dialog](_airtable_blocks_ui__dialog.md#dialog).
 • **ConfirmationDialogProps**:
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L13)_
-
-**`typedef`** {object} ConfirmationDialogProps
+[src/ui/confirmation_dialog.tsx:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L11)_
 
 ### `Optional` alignContent
 
@@ -171,7 +169,7 @@ Sets the alignment of flex items on the cross-axis of a flex container.
 • **backgroundClassName**? : _undefined | string_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L29)_
+[src/ui/confirmation_dialog.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L27)_
 
 Extra `className`s to apply to the background element, separated by spaces.
 
@@ -180,7 +178,7 @@ Extra `className`s to apply to the background element, separated by spaces.
 • **backgroundStyle**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L31)_
+[src/ui/confirmation_dialog.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L29)_
 
 Extra styles to apply to the background element.
 
@@ -189,7 +187,7 @@ Extra styles to apply to the background element.
 • **body**? : _React.ReactNode_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L27)_
+[src/ui/confirmation_dialog.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L25)_
 
 The body of the dialog.
 
@@ -198,7 +196,7 @@ The body of the dialog.
 • **cancelButtonText**? : _undefined | string_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L19)_
+[src/ui/confirmation_dialog.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L17)_
 
 The label for the cancel button. Defaults to 'Cancel'.
 
@@ -207,7 +205,7 @@ The label for the cancel button. Defaults to 'Cancel'.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L25)_
+[src/ui/confirmation_dialog.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L23)_
 
 Extra `className`s to apply to the dialog element, separated by spaces.
 
@@ -216,7 +214,7 @@ Extra `className`s to apply to the dialog element, separated by spaces.
 • **confirmButtonText**? : _undefined | string_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L21)_
+[src/ui/confirmation_dialog.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L19)_
 
 The label for the confirm button. Defaults to 'Confirm'.
 
@@ -228,7 +226,7 @@ _Inherited from
 [ModalStyleProps](_airtable_blocks_ui__modal.md#modalstyleprops).[display](_airtable_blocks_ui__modal.md#optional-display)_
 
 _Defined in
-[src/ui/modal.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L50)_
+[src/ui/modal.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L47)_
 
 ### `Optional` flexDirection
 
@@ -273,7 +271,7 @@ Specifies the height of an element.
 • **isConfirmActionDangerous**: _boolean_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L23)_
+[src/ui/confirmation_dialog.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L21)_
 
 Whether the action is dangerous (potentially destructive or not easily reversible). Defaults to
 `false`.
@@ -438,7 +436,7 @@ becoming smaller than the value specified for `minWidth`.
 • **onCancel**: _Object_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L33)_
+[src/ui/confirmation_dialog.tsx:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L31)_
 
 Cancel button event handler. Handles click events and Space/Enter keypress events.
 
@@ -447,7 +445,7 @@ Cancel button event handler. Handles click events and Space/Enter keypress event
 • **onConfirm**: _Object_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L35)_
+[src/ui/confirmation_dialog.tsx:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L33)_
 
 Confirm button event handler. Handles click events and Space/Enter keypress events.
 
@@ -541,7 +539,7 @@ Sets the height of the padding area on the top and bottom sides of an element.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L15)_
+[src/ui/confirmation_dialog.tsx:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L13)_
 
 Extra styles to apply to the dialog element.
 
@@ -550,7 +548,7 @@ Extra styles to apply to the dialog element.
 • **title**: _string_
 
 _Defined in
-[src/ui/confirmation_dialog.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L17)_
+[src/ui/confirmation_dialog.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/confirmation_dialog.tsx#L15)_
 
 The title of the dialog.
 
@@ -573,23 +571,21 @@ Specifies the width of an element.
 • **DialogCloseButtonProps**:
 
 _Defined in
-[src/ui/dialog_close_button.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L37)_
-
-**`typedef`** {object} DialogCloseButtonProps
+[src/ui/dialog_close_button.tsx:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L35)_
 
 ### `Optional` children
 
 • **children**? : _React.ReactNode_
 
 _Defined in
-[src/ui/dialog_close_button.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L45)_
+[src/ui/dialog_close_button.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L43)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/dialog_close_button.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L39)_
+[src/ui/dialog_close_button.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L37)_
 
 `className`s to apply to the close button, separated by spaces.
 
@@ -598,7 +594,7 @@ _Defined in
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/dialog_close_button.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L41)_
+[src/ui/dialog_close_button.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L39)_
 
 Styles to apply to the dialog element.
 
@@ -607,7 +603,7 @@ Styles to apply to the dialog element.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/dialog_close_button.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L43)_
+[src/ui/dialog_close_button.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L41)_
 
 Indicates if the button can be focused and if/where it participates in sequential keyboard
 navigation.
@@ -619,7 +615,7 @@ navigation.
 • **DialogCloseButtonStyleProps**:
 
 _Defined in
-[src/ui/dialog_close_button.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L49)_
+[src/ui/dialog_close_button.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog_close_button.tsx#L47)_
 
 ### `Optional` alignContent
 
@@ -1124,9 +1120,7 @@ with larger z-indexes cover those with smaller ones.
 • **DialogProps**:
 
 _Defined in
-[src/ui/dialog.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L12)_
-
-**`typedef`** {object} DialogProps
+[src/ui/dialog.tsx:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L10)_
 
 ### `Optional` alignContent
 
@@ -1158,7 +1152,7 @@ Sets the alignment of flex items on the cross-axis of a flex container.
 • **backgroundClassName**? : _undefined | string_
 
 _Defined in
-[src/ui/dialog.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L20)_
+[src/ui/dialog.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L18)_
 
 Extra `className`s to apply to the background element, separated by spaces.
 
@@ -1167,7 +1161,7 @@ Extra `className`s to apply to the background element, separated by spaces.
 • **backgroundStyle**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/dialog.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L22)_
+[src/ui/dialog.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L20)_
 
 Extra styles to apply to the background element.
 
@@ -1176,14 +1170,14 @@ Extra styles to apply to the background element.
 • **children**: _React.ReactNode_
 
 _Defined in
-[src/ui/dialog.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L24)_
+[src/ui/dialog.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L22)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/dialog.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L16)_
+[src/ui/dialog.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L14)_
 
 Extra `className`s to apply to the dialog element, separated by spaces.
 
@@ -1195,7 +1189,7 @@ _Inherited from
 [ModalStyleProps](_airtable_blocks_ui__modal.md#modalstyleprops).[display](_airtable_blocks_ui__modal.md#optional-display)_
 
 _Defined in
-[src/ui/modal.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L50)_
+[src/ui/modal.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L47)_
 
 ### `Optional` flexDirection
 
@@ -1395,7 +1389,7 @@ becoming smaller than the value specified for `minWidth`.
 • **onClose**: _Object_
 
 _Defined in
-[src/ui/dialog.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L14)_
+[src/ui/dialog.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L12)_
 
 Callback function to fire when the dialog is closed.
 
@@ -1489,7 +1483,7 @@ Sets the height of the padding area on the top and bottom sides of an element.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/dialog.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L18)_
+[src/ui/dialog.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/dialog.tsx#L16)_
 
 Extra styles to apply to the dialog element.
 

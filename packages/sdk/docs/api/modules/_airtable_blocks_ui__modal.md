@@ -17,18 +17,14 @@
 • **ModalProps**:
 
 _Defined in
-[src/ui/modal.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L29)_
-
-**`memberof`** Modal
-
-**`typedef`** {object} ModalProps
+[src/ui/modal.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L26)_
 
 ### `Optional` backgroundClassName
 
 • **backgroundClassName**? : _undefined | string_
 
 _Defined in
-[src/ui/modal.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L37)_
+[src/ui/modal.tsx:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L34)_
 
 Extra `className`s to apply to the background element, separated by spaces.
 
@@ -37,7 +33,7 @@ Extra `className`s to apply to the background element, separated by spaces.
 • **backgroundStyle**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/modal.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L39)_
+[src/ui/modal.tsx:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L36)_
 
 Extra styles to apply to the background element.
 
@@ -46,14 +42,14 @@ Extra styles to apply to the background element.
 • **children**: _React.ReactNode_
 
 _Defined in
-[src/ui/modal.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L41)_
+[src/ui/modal.tsx:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L38)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/modal.tsx:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L33)_
+[src/ui/modal.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L30)_
 
 Extra `className`s to apply to the modal element, separated by spaces.
 
@@ -62,7 +58,7 @@ Extra `className`s to apply to the modal element, separated by spaces.
 • **onClose**? : _undefined | function_
 
 _Defined in
-[src/ui/modal.tsx:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L31)_
+[src/ui/modal.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L28)_
 
 Callback function to fire when the modal is closed.
 
@@ -71,7 +67,7 @@ Callback function to fire when the modal is closed.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/modal.tsx:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L35)_
+[src/ui/modal.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L32)_
 
 Extra styles to apply to the modal element.
 
@@ -82,7 +78,7 @@ Extra styles to apply to the modal element.
 • **ModalStyleProps**:
 
 _Defined in
-[src/ui/modal.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L45)_
+[src/ui/modal.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L42)_
 
 ### `Optional` alignContent
 
@@ -114,7 +110,7 @@ Sets the alignment of flex items on the cross-axis of a flex container.
 • **display**? : _Prop‹"block" | "flex"›_
 
 _Defined in
-[src/ui/modal.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L50)_
+[src/ui/modal.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/modal.tsx#L47)_
 
 ### `Optional` flexDirection
 

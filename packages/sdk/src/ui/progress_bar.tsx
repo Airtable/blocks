@@ -78,9 +78,7 @@ export const progressBarStylePropTypes = {
     ...displayPropTypes,
 };
 
-/**
- * @typedef {object} ProgressBarProps
- */
+/** */
 interface ProgressBarProps extends TooltipAnchorProps, ProgressBarStyleProps {
     /** A CSS color, such as `#ff9900`. */
     barColor?: string;

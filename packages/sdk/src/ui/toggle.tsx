@@ -58,9 +58,7 @@ const classNamesByTheme = Object.freeze({
     [themes.GRAY]: 'gray',
 });
 
-/**
- * @typedef {object} ToggleProps
- */
+/** */
 export interface SharedToggleProps extends TooltipAnchorProps {
     /** Additional class names to apply to the switch. */
     className?: string;

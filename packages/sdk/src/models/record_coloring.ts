@@ -8,22 +8,18 @@ import View from './view';
  * An enum of the different types of {@link recordColoring.modes}
  *
  * @alias recordColoring.ModeTypes
- * @memberof recordColoring
  */
 export const ModeTypes = {
     /**
      * @alias recordColoring.ModeTypes.NONE
-     * @memberof recordColoring
      */
     NONE: 'none' as const,
     /**
      * @alias recordColoring.ModeTypes.BY_SELECT_FIELD
-     * @memberof recordColoring
      */
     BY_SELECT_FIELD: 'bySelectField' as const,
     /**
      * @alias recordColoring.ModeTypes.BY_VIEW
-     * @memberof recordColoring
      */
     BY_VIEW: 'byView' as const,
 };
@@ -63,7 +59,6 @@ export type RecordColorMode =
  * Record coloring config creators.
  *
  * @alias recordColoring.modes
- * @memberof recordColoring
  * @example
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
@@ -82,7 +77,6 @@ export type RecordColorMode =
 export const modes = {
     /**
      * @alias recordColoring.modes.none
-     * @memberof recordColoring
      * @returns a record coloring mode
      */
     none(): NoRecordColorMode {
@@ -92,7 +86,6 @@ export const modes = {
     },
     /**
      * @alias recordColoring.modes.bySelectField
-     * @memberof recordColoring
      * @param selectField
      * @returns a record coloring mode
      */
@@ -104,7 +97,6 @@ export const modes = {
     },
     /**
      * @alias recordColoring.modes.byView
-     * @memberof recordColoring
      * @param view
      * @returns a record coloring mode
      */

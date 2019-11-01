@@ -47,25 +47,21 @@ settingsButton.watch('click', () => {
 • **isVisible**:
 
 _Defined in
-[src/settings_button.ts:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L62)_
+[src/settings_button.ts:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L60)_
 
 Whether the settings button is being shown. Can be watched.
-
-**`memberof`** settingsButton
 
 ### hide
 
 ▸ **hide**(): _void_
 
 _Defined in
-[src/settings_button.ts:89](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L89)_
+[src/settings_button.ts:83](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L83)_
 
 Hide the settings button.
 
 Note: A count of calls to `show()` and `hide()` is maintained internally. The button will stay
 visible if there are more calls to `show()` than `hide()`.
-
-**`memberof`** settingsButton
 
 **Returns:** _void_
 
@@ -74,11 +70,9 @@ visible if there are more calls to `show()` than `hide()`.
 ▸ **show**(): _void_
 
 _Defined in
-[src/settings_button.ts:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L71)_
+[src/settings_button.ts:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/settings_button.ts#L67)_
 
 Show the settings button.
-
-**`memberof`** settingsButton
 
 **Returns:** _void_
 

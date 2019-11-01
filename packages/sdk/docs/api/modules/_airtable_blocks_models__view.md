@@ -46,55 +46,35 @@ const gridViews = myTable.views.filter(view => view.type === viewTypes.GRID);
 • **CALENDAR**: = "calendar"
 
 _Defined in
-[src/types/view.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L37)_
-
-**`alias`** viewTypes.CALENDAR
-
-**`memberof`** viewTypes
+[src/types/view.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L28)_
 
 ### FORM
 
 • **FORM**: = "form"
 
 _Defined in
-[src/types/view.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L32)_
-
-**`alias`** viewTypes.FORM
-
-**`memberof`** viewTypes
+[src/types/view.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L26)_
 
 ### GALLERY
 
 • **GALLERY**: = "gallery"
 
 _Defined in
-[src/types/view.ts:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L42)_
-
-**`alias`** viewTypes.GALLERY
-
-**`memberof`** viewTypes
+[src/types/view.ts:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L30)_
 
 ### GRID
 
 • **GRID**: = "grid"
 
 _Defined in
-[src/types/view.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L27)_
-
-**`alias`** viewTypes.GRID
-
-**`memberof`** viewTypes
+[src/types/view.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L24)_
 
 ### KANBAN
 
 • **KANBAN**: = "kanban"
 
 _Defined in
-[src/types/view.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L47)_
-
-**`alias`** viewTypes.KANBAN
-
-**`memberof`** viewTypes
+[src/types/view.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L32)_
 
 ## Classes
 
@@ -561,7 +541,7 @@ _Defined in
 [KANBAN](_airtable_blocks_models__view.md#kanban)_
 
 _Defined in
-[src/types/view.ts:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L51)_
+[src/types/view.ts:36](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/types/view.ts#L36)_
 
 ---
 

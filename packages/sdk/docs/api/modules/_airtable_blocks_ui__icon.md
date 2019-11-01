@@ -22,9 +22,7 @@
 • **IconProps**:
 
 _Defined in
-[src/ui/icon.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L72)_
-
-**`typedef`** {object} IconProps
+[src/ui/icon.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L70)_
 
 ### `Optional` alignSelf
 
@@ -235,7 +233,7 @@ its neighbors, while a negative value places it closer.
 • **name**: _IconName_
 
 _Defined in
-[src/ui/icon.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L74)_
+[src/ui/icon.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L72)_
 
 The name of the icon. For more details, see the
 [list of supported icons](/packages/sdk/docs/icons.md).
@@ -964,7 +962,7 @@ width: size, height: size}, styleParser, );
 )
 
 _Defined in
-[src/ui/icon.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L94)_
+[src/ui/icon.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/icon.tsx#L92)_
 
 A vector icon from the Airtable icon set.
 

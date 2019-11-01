@@ -134,9 +134,7 @@ export const sharedInputPropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-/**
- * @typedef {object} InputProps
- */
+/** */
 interface InputProps extends SharedInputProps, InputStyleProps {
     /** The input's current value. */
     value: string;

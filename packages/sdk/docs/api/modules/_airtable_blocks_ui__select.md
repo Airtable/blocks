@@ -37,9 +37,7 @@
 • **SelectButtonsProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:133](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L133)_
-
-**`typedef`** {object} SelectButtonsProps
+[src/ui/select_buttons.tsx:131](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L131)_
 
 ### `Optional` alignSelf
 
@@ -424,7 +422,7 @@ elements.
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select_buttons.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L135)_
+[src/ui/select_buttons.tsx:133](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L133)_
 
 The value of the selected option.
 
@@ -752,9 +750,7 @@ with larger z-indexes cover those with smaller ones.
 • **SelectButtonsSyncedProps**:
 
 _Defined in
-[src/ui/select_buttons_synced.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L15)_
-
-**`typedef`** {object} SelectButtonsSyncedProps
+[src/ui/select_buttons_synced.tsx:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L13)_
 
 ### `Optional` alignSelf
 
@@ -897,7 +893,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/select_buttons_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L17)_
+[src/ui/select_buttons_synced.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L15)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a
@@ -1177,16 +1173,14 @@ with larger z-indexes cover those with smaller ones.
 • **SelectOption**:
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L24)_
-
-**`typedef`** {object} SelectOption
+[src/ui/select_and_select_buttons_helpers.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L22)_
 
 ### `Optional` disabled
 
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L30)_
+[src/ui/select_and_select_buttons_helpers.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L28)_
 
 If set to `true`, this option will not be selectable.
 
@@ -1195,7 +1189,7 @@ If set to `true`, this option will not be selectable.
 • **label**: _React.ReactNode_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L28)_
+[src/ui/select_and_select_buttons_helpers.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L26)_
 
 The label for the select option.
 
@@ -1204,7 +1198,7 @@ The label for the select option.
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L26)_
+[src/ui/select_and_select_buttons_helpers.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L24)_
 
 The value for the select option.
 
@@ -1215,9 +1209,7 @@ The value for the select option.
 • **SelectProps**:
 
 _Defined in
-[src/ui/select.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L144)_
-
-**`typedef`** {object} SelectProps
+[src/ui/select.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L142)_
 
 ### `Optional` alignSelf
 
@@ -1648,7 +1640,7 @@ elements.
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L146)_
+[src/ui/select.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L144)_
 
 The value of the selected option.
 
@@ -1983,9 +1975,7 @@ with larger z-indexes cover those with smaller ones.
 • **SelectSyncedProps**:
 
 _Defined in
-[src/ui/select_synced.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L12)_
-
-**`typedef`** {object} SelectSyncedProps
+[src/ui/select_synced.tsx:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L10)_
 
 ### `Optional` alignSelf
 
@@ -2150,7 +2140,7 @@ container, items shrink to fit according to `flexShrink`.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/select_synced.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L14)_
+[src/ui/select_synced.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L12)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a
@@ -3708,7 +3698,7 @@ _Defined in
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/select.tsx:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L186)_
+[src/ui/select.tsx:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L184)_
 
 Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
 
@@ -3756,7 +3746,7 @@ function ColorPicker() {
 React.Ref‹HTMLDivElement›): _Element_
 
 _Defined in
-[src/ui/select_buttons.tsx:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L139)_
+[src/ui/select_buttons.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L137)_
 
 **Parameters:**
 
@@ -3776,7 +3766,7 @@ _Defined in
 React.Ref‹HTMLDivElement›): _Element_
 
 _Defined in
-[src/ui/select_buttons_synced.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L21)_
+[src/ui/select_buttons_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L19)_
 
 **Parameters:**
 
@@ -3795,7 +3785,7 @@ _Defined in
 `ref`: React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/select_synced.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L43)_
+[src/ui/select_synced.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L41)_
 
 Dropdown menu component synced with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 A wrapper around `<select>` that fits in with Airtable's user interface.

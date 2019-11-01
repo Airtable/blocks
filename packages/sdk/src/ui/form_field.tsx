@@ -57,9 +57,7 @@ const formFieldStylePropTypes = {
     ...spacingSetPropTypes,
 };
 
-/**
- * @typedef {object} FieldPickerProps
- */
+/** */
 interface FormFieldProps extends FormFieldStyleProps {
     /** The `id` attribute. */
     id?: string;

@@ -69,9 +69,7 @@ const cellRendererStylePropTypes = {
     ...widthPropTypes,
 };
 
-/**
- * @typedef {object} CellRendererProps
- */
+/** */
 interface CellRendererProps extends TooltipAnchorProps, CellRendererStyleProps {
     /** The {@link Record} from which to render a cell. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used. */
     record?: Record | null | undefined;

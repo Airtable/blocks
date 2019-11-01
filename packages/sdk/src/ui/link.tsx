@@ -84,9 +84,7 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
     return linkVariants[variant];
 }
 
-/**
- * @typedef {object} LinkProps
- */
+/** */
 interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, LinkStyleProps {
     /** The `size` of the link. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;

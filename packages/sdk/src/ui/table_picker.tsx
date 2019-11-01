@@ -26,9 +26,7 @@ export const sharedTablePickerPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/**
- * @typedef {object} TablePickerProps
- */
+/** */
 interface TablePickerProps extends SharedTablePickerProps {
     /** The selected table model. */
     table?: Table | null;

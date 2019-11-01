@@ -35,9 +35,7 @@ export const sharedViewPickerPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/**
- * @typedef {object} ViewPickerProps
- */
+/** */
 interface ViewPickerProps extends SharedViewPickerProps {
     /** The selected view model. */
     view?: View | null;

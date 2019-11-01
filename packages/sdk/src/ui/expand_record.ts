@@ -2,7 +2,7 @@
 import getSdk from '../get_sdk';
 import Record from '../models/record';
 
-/** @typedef */
+/** */
 export interface ExpandRecordOpts {
     /** If `records` is provided, the list will be used to page through records from the expanded record dialog. */
     records?: Array<Record>;

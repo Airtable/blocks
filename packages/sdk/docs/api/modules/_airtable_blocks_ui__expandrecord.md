@@ -22,8 +22,6 @@
 _Defined in
 [src/ui/expand_record.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L6)_
 
-**`typedef`**
-
 ### `Optional` records
 
 • **records**? : _Array‹[Record](_airtable_blocks_models__record.md#record)›_

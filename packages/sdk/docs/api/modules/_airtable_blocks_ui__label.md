@@ -20,9 +20,7 @@
 • **LabelProps**:
 
 _Defined in
-[src/ui/label.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L14)_
-
-**`typedef`** {object} LabelProps
+[src/ui/label.tsx:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L12)_
 
 ### `Optional` aria-controls
 
@@ -130,14 +128,14 @@ assistive technologies, and user can expect from the live region.
 • **children**? : _React.ReactNode_
 
 _Defined in
-[src/ui/label.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L22)_
+[src/ui/label.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L20)_
 
 ### `Optional` className
 
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/label.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L24)_
+[src/ui/label.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L22)_
 
 Additional class names to apply, separated by spaces.
 
@@ -147,7 +145,7 @@ Additional class names to apply, separated by spaces.
 _[DataAttributesProp](_airtable_blocks_ui_system__core.md#dataattributesprop)_
 
 _Defined in
-[src/ui/label.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L28)_
+[src/ui/label.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L26)_
 
 Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`.
 
@@ -156,7 +154,7 @@ Data attributes that are spread onto the element `dataAttributes={{'data-*': '..
 • **htmlFor**? : _undefined | string_
 
 _Defined in
-[src/ui/label.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L18)_
+[src/ui/label.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L16)_
 
 The `for` attribute. Should contain the `id` of the input.
 
@@ -165,7 +163,7 @@ The `for` attribute. Should contain the `id` of the input.
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/label.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L20)_
+[src/ui/label.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L18)_
 
 The `id` attribute.
 
@@ -174,7 +172,7 @@ The `id` attribute.
 • **role**? : _undefined | string_
 
 _Defined in
-[src/ui/label.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L30)_
+[src/ui/label.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L28)_
 
 The `role` attribute.
 
@@ -183,7 +181,7 @@ The `role` attribute.
 • **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
 
 _Defined in
-[src/ui/label.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L16)_
+[src/ui/label.tsx:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L14)_
 
 The `size` of the label. Defaults to `default`. Can be a responsive prop object.
 
@@ -192,7 +190,7 @@ The `size` of the label. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/label.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L26)_
+[src/ui/label.tsx:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L24)_
 
 Additional styles.
 
@@ -215,7 +213,7 @@ aria-controls={ariaControls} aria-expanded={ariaExpanded} aria-haspopup={ariaHas
 aria-hidden={ariaHidden} aria-live={ariaLive} {...dataAttributes} > {children} </label> ); }, )
 
 _Defined in
-[src/ui/label.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L50)_
+[src/ui/label.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/label.tsx#L48)_
 
 A label component.
 
