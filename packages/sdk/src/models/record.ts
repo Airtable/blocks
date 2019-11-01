@@ -163,10 +163,9 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return recordsById[this._id] || null;
     }
     /**
-     * @internal (since we may not be able to return parent model instances in the immutable models world)
-     * @function
-     * @returns The table that this record belongs to. Should never change because records aren't moved between tables.
+     * The table that this record belongs to. Should never change because records aren't moved between tables.
      *
+     * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
      * import {useRecords, withHooks} from '@airtable/blocks/ui';
@@ -374,8 +373,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
     /**
-     * @function
-     * @returns The URL for the record. You can visit this URL in the browser to be taken to the record in the Airtable UI.
+     * The URL for the record. You can visit this URL in the browser to be taken to the record in the Airtable UI.
+     *
      * @example
      * ```js
      * console.log(myRecord.url);
@@ -389,10 +388,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         );
     }
     /**
-     * Gets the primary cell value in this record.
+     * The primary cell value in this record.
      *
-     * @function
-     * @returns The primary cell value in this record.
      * @example
      * ```js
      * console.log(myRecord.primaryCellValue);
@@ -403,10 +400,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this.getCellValue(this.parentTable.primaryField);
     }
     /**
-     * Gets the primary cell value in this record, formatted as a `string`.
+     * The primary cell value in this record, formatted as a `string`.
      *
-     * @function
-     * @returns The primary cell value in this record, formatted as a `string`.
      * @example
      * ```js
      * console.log(myRecord.primaryCellValueAsString);
@@ -417,8 +412,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
     /**
-     * @function
-     * @returns The number of comments on this record.
+     * The number of comments on this record.
+     *
      * @example
      * ```js
      * const commentCount = myRecord.commentCount;
@@ -429,8 +424,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this._data.commentCount;
     }
     /**
-     * @function
-     * @returns The created time of this record.
+     * The created time of this record.
+     *
      * @example
      * ```js
      * console.log(`This record was created at ${myRecord.createdTime.toISOString()}`)

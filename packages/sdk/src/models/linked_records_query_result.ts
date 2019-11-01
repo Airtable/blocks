@@ -158,16 +158,15 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * table or a type other than MULTIPLE_RECORD_LINKS. Once `isValid` has
      * become false, it will never become true again. Many fields will throw on
      * attempting to access them, and watches will no longer fire.
-     *
-     * @returns whether the query result is valid
      */
     get isValid(): boolean {
         return this._isValid;
     }
 
     /**
+     * The table that records in this RecordQueryResult are part of
+     *
      * @internal (since we may not be able to return parent model instances in the immutable models world)
-     * @returns the table that records in this RecordQueryResult are part of
      */
     get parentTable(): Table {
         if (!this.isValid) {
@@ -177,9 +176,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /**
-     * Watchable.
-     *
-     * @returns Ordered array of all the linked record ids.
+     * Ordered array of all the linked record ids. Watchable.
      */
     get recordIds(): Array<string> {
         if (!this.isValid) {
@@ -199,9 +196,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /**
-     * Watchable.
-     *
-     * @returns Ordered array of all the linked records.
+     * Ordered array of all the linked records. Watchable.
      */
     get records(): Array<Record> {
         if (!this.isValid) {
@@ -218,7 +213,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /**
-     * @returns The fields that were used to create this LinkedRecordsQueryResult.
+     * The fields that were used to create this LinkedRecordsQueryResult.
      */
     get fields(): Array<Field> | null {
         if (!this.isValid) {

@@ -415,8 +415,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * The records in this RecordQueryResult.
      * Throws if data is not loaded yet.
      * Can be watched.
-     *
-     * @returns all of the records in this query result
      */
     get records(): Array<Record> {
         return this.recordIds.map(recordId => {

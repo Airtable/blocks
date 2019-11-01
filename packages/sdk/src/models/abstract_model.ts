@@ -35,8 +35,7 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
         this._id = modelId;
     }
     /**
-     * @function
-     * @returns The ID for this model.
+     * The ID for this model.
      */
     get id(): string {
         return this._id;
@@ -59,16 +58,13 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
         return data;
     }
     /**
-     * A boolean denoting whether the model has been deleted.
+     * `true` if the model has been deleted, and `false` otherwise.
      *
      * In general, it's best to avoid keeping a reference to an object past the
      * current event loop, since it may be deleted and trying to access any data
      * of a deleted object (other than its ID) will throw. But if you keep a
      * reference, you can use `isDeleted` to check that it's safe to access the
      * model's data.
-     *
-     * @function
-     * @returns `true` if the model has been deleted, and `false` otherwise.
      */
     get isDeleted(): boolean {
         return this._dataOrNullIfDeleted === null;

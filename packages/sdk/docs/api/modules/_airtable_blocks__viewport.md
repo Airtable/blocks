@@ -40,24 +40,18 @@ import {viewport} from '@airtable/blocks';
 • **isFullscreen**:
 
 _Defined in
-[src/viewport.ts:261](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L261)_
+[src/viewport.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L254)_
 
-Boolean to denote whether the block is currently fullscreen.
-
-Can be watched.
-
-**`returns`** `true` if the block is fullscreen, `false` otherwise.
+`true` if the block is fullscreen, `false` otherwise.
 
 ### isSmallerThanMinSize
 
 • **isSmallerThanMinSize**:
 
 _Defined in
-[src/viewport.ts:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L248)_
+[src/viewport.ts:245](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L245)_
 
-Boolean to denote whether the block frame is smaller than the `minSize`.
-
-**`returns`** `true` if the block frame is smaller than `minSize`, `false` otherwise.
+`true` if the block frame is smaller than `minSize`, `false` otherwise.
 
 ### maxFullscreenSize
 
@@ -78,26 +72,24 @@ constrained to be at least `minSize`.
 • **minSize**:
 
 _Defined in
-[src/viewport.ts:185](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L185)_
+[src/viewport.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L184)_
 
 The minimum dimensions of the block - if the viewport gets smaller than this size, an overlay will
 be shown asking the user to resize the block to be bigger.
 
-**`returns`** The largest set of dimensions added with addMinSize. If `width` or `height` is null,
-it means there is no minSize constraint on that dimension.
+The largest set of dimensions added with addMinSize. If `width` or `height` is null, it means there
+is no minSize constraint on that dimension.
 
 ### size
 
 • **size**:
 
 _Defined in
-[src/viewport.ts:271](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L271)_
+[src/viewport.ts:262](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L262)_
 
 The current size of the block frame.
 
 Can be watched.
-
-**`returns`** The current size of the block frame.
 
 ### addMaxFullscreenSize
 
@@ -128,7 +120,7 @@ Partial‹[ViewportSizeConstraint](_airtable_blocks__viewport.md#viewportsizecon
 _[UnsetFn](_airtable_blocks__viewport.md#unsetfn)_
 
 _Defined in
-[src/viewport.ts:212](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L212)_
+[src/viewport.ts:211](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L211)_
 
 Add a minimum frame size constraint. Use `.minSize`` to get the aggregate of all added constraints.
 
@@ -181,7 +173,7 @@ _Overrides
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/viewport.ts:319](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L319)_
+[src/viewport.ts:310](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L310)_
 
 Unwatch keys watched with `.watch`.
 
@@ -210,7 +202,7 @@ _Overrides
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/viewport.ts:293](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L293)_
+[src/viewport.ts:284](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/viewport.ts#L284)_
 
 Get notified of changes to the viewport.
 

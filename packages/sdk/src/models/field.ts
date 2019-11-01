@@ -134,10 +134,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return tableData.fieldsById[this._id] || null;
     }
     /**
-     * @internal (since we may not be able to return parent model instances in the immutable models world)
-     * @function
-     * @returns The table that this field belongs to. Should never change because fields aren't moved between tables.
+     * The table that this field belongs to. Should never change because fields aren't moved between tables.
      *
+     * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
      * const field = myTable.getFieldByName('Name');
@@ -149,8 +148,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return this._parentTable;
     }
     /**
-     * @function
-     * @returns The name of the field. Can be watched.
+     * The name of the field. Can be watched.
+     *
      * @example
      * ```js
      * console.log(myField.name);
@@ -161,8 +160,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return this._data.name;
     }
     /**
-     * @function
-     * @returns The type of the field. Can be watched.
+     * The type of the field. Can be watched.
+     *
      * @example
      * ```js
      * console.log(myField.type);
@@ -188,9 +187,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         }
     }
     /**
-     * @function
-     * @returns The configuration options of the field. The structure of the field's
+     * The configuration options of the field. The structure of the field's
      * options depend on the field's type. Can be watched.
+     *
+     * @see {@link FieldTypes}
      * @example
      * ```js
      * import {fieldTypes} from '@airtable/blocks/models';
@@ -215,10 +215,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return options ? cloneDeep(options) : null;
     }
     /**
-     * @function
-     * @returns `true` if this field is computed, `false` otherwise. A field is
+     * `true` if this field is computed, `false` otherwise. A field is
      * "computed" if it's value is not set by user input (e.g. autoNumber, formula,
-     * etc.). Can be watched.
+     * etc.). Can be watched
+     *
      * @example
      * ```js
      * console.log(mySingleLineTextField.isComputed);
@@ -232,16 +232,15 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return airtableInterface.fieldTypeProvider.isComputed(this._data);
     }
     /**
-     * @function
-     * @returns `true` if this field is its parent table's primary field, `false` otherwise.
+     * `true` if this field is its parent table's primary field, `false` otherwise.
      * Should never change because the primary field of a table cannot change.
      */
     get isPrimaryField(): boolean {
         return this.id === this.parentTable.primaryField.id;
     }
     /**
-     * @function
-     * @returns A list of available aggregators given this field's configuration.
+     * A list of available aggregators given this field's configuration.
+     *
      * @example
      * ```js
      * const fieldAggregators = myField.availableAggregators;

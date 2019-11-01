@@ -153,10 +153,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return this._baseData.tablesById[this._id] || null;
     }
     /**
-     * @internal (since we may not be able to return parent model instances in the immutable models world)
-     * @function
-     * @returns The base that this table belongs to.
+     * The base that this table belongs to.
      *
+     * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
      * import {base} from '@airtable/blocks';
@@ -169,8 +168,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return this._parentBase;
     }
     /**
-     * @function
-     * @returns The name of the table. Can be watched.
+     * The name of the table. Can be watched.
+     *
      * @example
      * ```js
      * console.log(myTable.name);
@@ -181,8 +180,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return this._data.name;
     }
     /**
-     * @function
-     * @returns The URL for the table. You can visit this URL in the browser to be taken to the table in the Airtable UI.
+     * The URL for the table. You can visit this URL in the browser to be taken to the table in the Airtable UI.
+     *
      * @example
      * ```js
      * console.log(myTable.url);
@@ -193,9 +192,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return this._airtableInterface.urlConstructor.getTableUrl(this.id);
     }
     /**
-     * @function
-     * @returns The table's primary field. Every table has exactly one primary
+     * The table's primary field. Every table has exactly one primary
      * field. The primary field of a table will not change.
+     *
      * @example
      * ```js
      * console.log(myTable.primaryField.name);
@@ -207,11 +206,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return primaryField;
     }
     /**
-     * @function
-     * @returns The fields in this table. The order is arbitrary, since fields are
+     * The fields in this table. The order is arbitrary, since fields are
      * only ordered in the context of a specific view.
      *
      * Can be watched to know when fields are created or deleted.
+     *
      * @example
      * ```js
      * console.log(`This table has ${myTable.fields.length} fields`);
@@ -309,9 +308,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return field;
     }
     /**
-     * @function
-     * @returns The views in this table. Can be watched to know when views are created,
+     * The views in this table. Can be watched to know when views are created,
      * deleted, or reordered.
+     *
      * @example
      * ```js
      * console.log(`This table has ${myTable.views.length} views`);

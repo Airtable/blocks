@@ -35,28 +35,23 @@ import {cursor} from '@airtable/blocks';
 • **activeTableId**:
 
 _Defined in
-[src/models/cursor.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L184)_
+[src/models/cursor.ts:180](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L180)_
 
-The currently active table ID.
+The currently active table ID. Can be null when the active table has changed and is not yet loaded.
 
 Can be watched.
-
-**`returns`** The currently active table ID. Can return null when the active table has changed and
-is not yet loaded.
 
 ### activeViewId
 
 • **activeViewId**:
 
 _Defined in
-[src/models/cursor.ts:195](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L195)_
+[src/models/cursor.ts:189](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L189)_
 
-The currently active view ID. This will always be a view belonging to `activeTableId`
+The currently active view ID. This will always be a view belonging to `activeTableId`. Can be null
+when the active view has changed and is not yet loaded.
 
 Can be watched.
-
-**`returns`** The currently active view ID. Can return null when the active view has changed and is
-not yet loaded.
 
 ### id
 
@@ -66,11 +61,9 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L41)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
 
-**`function`**
-
-**`returns`** The ID for this model.
+The ID for this model
 
 ### isDataLoaded
 
@@ -90,32 +83,25 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L73)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L69)_
 
-A boolean denoting whether the model has been deleted.
+`true` if the model has been deleted, and `false` otherwise.
 
 In general, it's best to avoid keeping a reference to an object past the current event loop, since
 it may be deleted and trying to access any data of a deleted object (other than its ID) will throw.
 But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
 data.
 
-**`function`**
-
-**`returns`** `true` if the model has been deleted, and `false` otherwise.
-
 ### selectedRecordIds
 
 • **selectedRecordIds**:
 
 _Defined in
-[src/models/cursor.ts:149](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L149)_
+[src/models/cursor.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L147)_
 
 The record IDs of all currently selected records, or an empty array if no records are selected.
 
 Can be watched.
-
-**`returns`** The record IDs of all currently selected records, or an empty array if no records are
-selected.
 
 ### isRecordSelected
 
@@ -123,7 +109,7 @@ selected.
 string): _boolean_
 
 _Defined in
-[src/models/cursor.ts:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L163)_
+[src/models/cursor.ts:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L161)_
 
 Checks whether a given record is selected.
 
@@ -162,7 +148,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L94)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 

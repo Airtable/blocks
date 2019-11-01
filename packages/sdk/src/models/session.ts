@@ -112,8 +112,8 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     }
 
     /**
-     * @function
-     * @returns The current user, or `null` if the block is running in a publicly shared base.
+     * The current user, or `null` if the block is running in a publicly shared base.
+     *
      * @example
      * ```js
      * import {session} from '@airtable/blocks';

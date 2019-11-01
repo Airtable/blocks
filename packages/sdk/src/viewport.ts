@@ -178,9 +178,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * The minimum dimensions of the block - if the viewport gets smaller than this
      * size, an overlay will be shown asking the user to resize the block to be bigger.
      *
-     * @returns The largest set of dimensions
-     * added with addMinSize. If `width` or `height` is null, it means there is no minSize
-     * constraint on that dimension.
+     * The largest set of dimensions added with addMinSize. If `width` or `height` is null, it means
+     * there is no minSize constraint on that dimension.
      */
     get minSize(): ViewportSizeConstraint {
         if (!this._cachedMinSize) {
@@ -241,9 +240,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * Boolean to denote whether the block frame is smaller than the `minSize`.
-     *
-     * @returns `true` if the block frame is smaller than `minSize`, `false` otherwise.
+     * `true` if the block frame is smaller than `minSize`, `false` otherwise.
      */
     get isSmallerThanMinSize(): boolean {
         const {width, height} = this.size;
@@ -252,11 +249,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
         return isWidthTooSmall || isHeightTooSmall;
     }
     /**
-     * Boolean to denote whether the block is currently fullscreen.
-     *
-     * Can be watched.
-     *
-     * @returns `true` if the block is fullscreen, `false` otherwise.
+     * `true` if the block is fullscreen, `false` otherwise.
      */
     get isFullscreen(): boolean {
         return this._isFullscreen;
@@ -265,8 +258,6 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * The current size of the block frame.
      *
      * Can be watched.
-     *
-     * @returns The current size of the block frame.
      */
     get size(): {width: number; height: number} {
         return {

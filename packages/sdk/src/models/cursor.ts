@@ -143,8 +143,6 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
      * The record IDs of all currently selected records, or an empty array if no records are selected.
      *
      * Can be watched.
-     *
-     * @returns The record IDs of all currently selected records, or an empty array if no records are selected.
      */
     get selectedRecordIds(): Array<RecordId> {
         const {selectedRecordIdSet} = this._data;
@@ -174,23 +172,19 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return !!selectedRecordIdSet[recordId];
     }
     /**
-     * The currently active table ID.
+     * The currently active table ID. Can be null when the active table has changed and is not yet
+     * loaded.
      *
      * Can be watched.
-     *
-     * @returns The currently active table ID. Can return null when the active
-     * table has changed and is not yet loaded.
      */
     get activeTableId(): TableId | null {
         return this._data.activeTableId;
     }
     /**
-     * The currently active view ID. This will always be a view belonging to `activeTableId`
+     * The currently active view ID. This will always be a view belonging to `activeTableId`. Can be
+     * null when the active view has changed and is not yet loaded.
      *
      * Can be watched.
-     *
-     * @returns The currently active view ID. Can return null when the active
-     * view has changed and is not yet loaded.
      */
     get activeViewId(): ViewId | null {
         return this._data.activeViewId;

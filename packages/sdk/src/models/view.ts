@@ -97,10 +97,9 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return tableData.viewsById[this._id] || null;
     }
     /**
-     * @internal (since we may not be able to return parent model instances in the immutable models world)
-     * @function
-     * @returns The table that this view belongs to. Should never change because views aren't moved between tables.
+     * The table that this view belongs to. Should never change because views aren't moved between tables.
      *
+     * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
      * const view = myTable.getViewByName('Grid View');
@@ -112,8 +111,8 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return this._parentTable;
     }
     /**
-     * @function
-     * @returns The name of the view. Can be watched.
+     * The name of the view. Can be watched.
+     *
      * @example
      * ```js
      * console.log(myView.name);
@@ -124,8 +123,8 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return this._data.name;
     }
     /**
-     * @function
-     * @returns The type of the view, such as Grid, Calendar, or Kanban. Should never change because view types cannot be modified.
+     * The type of the view, such as Grid, Calendar, or Kanban. Should never change because view types cannot be modified.
+     *
      * @example
      * ```js
      * console.log(myView.type);
@@ -136,8 +135,8 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         return this._data.type;
     }
     /**
-     * @function
-     * @returns The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
+     * The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable UI.
+     *
      * @example
      * ```js
      * console.log(myView.url);

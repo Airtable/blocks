@@ -43,9 +43,7 @@ if (session.currentUser !== null) {
 _Defined in
 [src/models/session.ts:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L127)_
 
-**`function`**
-
-**`returns`** The current user, or `null` if the block is running in a publicly shared base.
+The current user, or `null` if the block is running in a publicly shared base.
 
 **`example`**
 
@@ -66,11 +64,9 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L41)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
 
-**`function`**
-
-**`returns`** The ID for this model.
+The ID for this model
 
 ### isDeleted
 
@@ -80,18 +76,14 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L73)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L69)_
 
-A boolean denoting whether the model has been deleted.
+`true` if the model has been deleted, and `false` otherwise.
 
 In general, it's best to avoid keeping a reference to an object past the current event loop, since
 it may be deleted and trying to access any data of a deleted object (other than its ID) will throw.
 But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
 data.
-
-**`function`**
-
-**`returns`** `true` if the model has been deleted, and `false` otherwise.
 
 ### toString
 
@@ -101,7 +93,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L94)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 

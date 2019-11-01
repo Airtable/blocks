@@ -132,8 +132,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return this._baseData;
     }
     /**
-     * @function
-     * @returns The name of the base.
+     * The name of the base.
+     *
      * @example
      * ```js
      * import {base} from '@airtable/blocks';
@@ -144,8 +144,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return this._data.name;
     }
     /**
-     * @function
-     * @returns The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
+     * The tables in this base. Can be watched to know when tables are created, deleted, or reordered in the base.
+     *
      * @example
      * ```js
      * import {base} from '@airtable/blocks';
@@ -168,8 +168,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return tables;
     }
     /**
-     * @function
-     * @returns The users who have access to this base.
+     * The users who have access to this base.
+     *
      * @example
      * ```js
      * import {base} from '@airtable/blocks';

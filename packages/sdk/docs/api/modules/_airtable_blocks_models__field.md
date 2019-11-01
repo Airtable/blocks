@@ -924,11 +924,9 @@ console.log('The type of this field is', field.type);
 • **availableAggregators**:
 
 _Defined in
-[src/models/field.ts:250](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L250)_
+[src/models/field.ts:249](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L249)_
 
-**`function`**
-
-**`returns`** A list of available aggregators given this field's configuration.
+A list of available aggregators given this field's configuration.
 
 **`example`**
 
@@ -944,11 +942,9 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L41)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
 
-**`function`**
-
-**`returns`** The ID for this model.
+The ID for this model
 
 ### isComputed
 
@@ -957,10 +953,8 @@ _Defined in
 _Defined in
 [src/models/field.ts:230](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L230)_
 
-**`function`**
-
-**`returns`** `true` if this field is computed, `false` otherwise. A field is "computed" if it's
-value is not set by user input (e.g. autoNumber, formula, etc.). Can be watched.
+`true` if this field is computed, `false` otherwise. A field is "computed" if it's value is not set
+by user input (e.g. autoNumber, formula, etc.). Can be watched
 
 **`example`**
 
@@ -979,41 +973,33 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L73)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L69)_
 
-A boolean denoting whether the model has been deleted.
+`true` if the model has been deleted, and `false` otherwise.
 
 In general, it's best to avoid keeping a reference to an object past the current event loop, since
 it may be deleted and trying to access any data of a deleted object (other than its ID) will throw.
 But if you keep a reference, you can use `isDeleted` to check that it's safe to access the model's
 data.
 
-**`function`**
-
-**`returns`** `true` if the model has been deleted, and `false` otherwise.
-
 ### isPrimaryField
 
 • **isPrimaryField**:
 
 _Defined in
-[src/models/field.ts:239](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L239)_
+[src/models/field.ts:238](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L238)_
 
-**`function`**
-
-**`returns`** `true` if this field is its parent table's primary field, `false` otherwise. Should
-never change because the primary field of a table cannot change.
+`true` if this field is its parent table's primary field, `false` otherwise. Should never change
+because the primary field of a table cannot change.
 
 ### name
 
 • **name**:
 
 _Defined in
-[src/models/field.ts:160](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L160)_
+[src/models/field.ts:159](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L159)_
 
-**`function`**
-
-**`returns`** The name of the field. Can be watched.
+The name of the field. Can be watched.
 
 **`example`**
 
@@ -1029,10 +1015,10 @@ console.log(myField.name);
 _Defined in
 [src/models/field.ts:204](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L204)_
 
-**`function`**
+The configuration options of the field. The structure of the field's options depend on the field's
+type. Can be watched.
 
-**`returns`** The configuration options of the field. The structure of the field's options depend on
-the field's type. Can be watched.
+**`see`** [FieldTypes](_airtable_blocks_models__field.md#fieldtypes)
 
 **`example`**
 
@@ -1050,11 +1036,9 @@ if (myField.type === fieldTypes.CURRENCY) {
 • **type**:
 
 _Defined in
-[src/models/field.ts:172](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L172)_
+[src/models/field.ts:171](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L171)_
 
-**`function`**
-
-**`returns`** The type of the field. Can be watched.
+The type of the field. Can be watched.
 
 **`example`**
 
@@ -1068,7 +1052,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:302](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L302)_
+[src/models/field.ts:301](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L301)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -1098,7 +1082,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 [Aggregator](_airtable_blocks_models__aggregators.md#aggregator) | AggregatorKey): _boolean_
 
 _Defined in
-[src/models/field.ts:278](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L278)_
+[src/models/field.ts:277](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L277)_
 
 **`function`**
 
@@ -1135,7 +1119,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L94)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
