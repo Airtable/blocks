@@ -1079,7 +1079,8 @@ The parsed cell value, or `null` if unable to parse the given string.
 ### isAggregatorAvailable
 
 ▸ **isAggregatorAvailable**(`aggregator`:
-[Aggregator](_airtable_blocks_models__aggregators.md#aggregator) | AggregatorKey): _boolean_
+[Aggregator](_airtable_blocks_models__aggregators.md#aggregator) |
+[AggregatorKey](_airtable_blocks_models__aggregators.md#aggregatorkey)): _boolean_
 
 _Defined in
 [src/models/field.ts:277](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L277)_
@@ -1103,9 +1104,9 @@ console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
 
 **Parameters:**
 
-| Name         | Type                                                                                  | Description                              |
-| ------------ | ------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `aggregator` | [Aggregator](_airtable_blocks_models__aggregators.md#aggregator) &#124; AggregatorKey | The aggregator object or aggregator key. |
+| Name         | Type                                                                                                                                           | Description                              |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `aggregator` | [Aggregator](_airtable_blocks_models__aggregators.md#aggregator) &#124; [AggregatorKey](_airtable_blocks_models__aggregators.md#aggregatorkey) | The aggregator object or aggregator key. |
 
 **Returns:** _boolean_
 

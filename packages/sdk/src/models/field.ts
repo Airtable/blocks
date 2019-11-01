@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Field */ /** */
-import {AggregatorKey} from '../injected/airtable_interface';
+import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
 import {FieldTypes, FieldData, PrivateColumnType, FieldType} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';

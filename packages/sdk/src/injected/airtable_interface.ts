@@ -1,4 +1,5 @@
 import {FlowAnyObject, ObjectMap} from '../private_utils';
+import {AggregatorKey} from '../types/aggregators';
 import {BaseData, BasePermissionData} from '../types/base';
 import {BlockInstallationId} from '../types/block';
 import {HostToBlockMessageType} from '../types/block_frame';
@@ -43,9 +44,6 @@ interface UrlConstructor {
         attachmentUrl: string,
     ): string;
 }
-
-/** @hidden */
-export type AggregatorKey = string;
 
 /** @hidden */
 interface AggregatorConfig {

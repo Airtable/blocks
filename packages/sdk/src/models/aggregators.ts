@@ -1,6 +1,7 @@
 /** @module @airtable/blocks/models: Aggregators */ /** */
 import getSdk from '../get_sdk';
-import airtableInterface, {AggregatorKey} from '../injected/airtable_interface';
+import {AggregatorKey} from '../types/aggregators';
+import airtableInterface from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
 import Record from './record';
 import Field from './field';
