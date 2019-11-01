@@ -383,28 +383,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     /**
-     * Loads all data for the query result.
-     *
-     * Every call to `loadDataAsync` should have a matching call to `unloadData`.
-     *
-     * @async
-     * @function loadDataAsync
-     * @memberof RecordQueryResult
-     * @instance
-     * @returns A promise that will resolve once the data is loaded.
-     */
-
-    /**
-     * Unloads data for the query result.
-     *
-     * Every call to `loadDataAsync` should have a matching call to `unloadData`.
-     *
-     * @function unloadData
-     * @memberof RecordQueryResult
-     * @instance
-     */
-
-    /**
      * @internal
      */
     __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordQueryResultOpts): boolean {

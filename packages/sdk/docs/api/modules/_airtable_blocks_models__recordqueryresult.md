@@ -132,7 +132,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordById](_airtable_blocks_models__recordqueryresult.md#getrecordbyid)_
 
 _Defined in
-[src/models/record_query_result.ts:452](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L452)_
+[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L430)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -156,7 +156,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordByIdIfExists](_airtable_blocks_models__recordqueryresult.md#getrecordbyidifexists)_
 
 _Defined in
-[src/models/record_query_result.ts:436](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L436)_
+[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L414)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -181,7 +181,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
 
 _Defined in
-[src/models/record_query_result.ts:489](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L489)_
+[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L467)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
@@ -206,7 +206,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[hasRecord](_airtable_blocks_models__recordqueryresult.md#hasrecord)_
 
 _Defined in
-[src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
@@ -518,7 +518,7 @@ The record IDs in this QueryResult. Throws if data is not loaded yet. Can be wat
 • **records**:
 
 _Defined in
-[src/models/record_query_result.ts:419](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L419)_
+[src/models/record_query_result.ts:397](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L397)_
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -528,7 +528,7 @@ The records in this RecordQueryResult. Throws if data is not loaded yet. Can be 
 _[Record](_airtable_blocks_models__record.md#record)_
 
 _Defined in
-[src/models/record_query_result.ts:452](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L452)_
+[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L430)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -549,7 +549,7 @@ the record
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Defined in
-[src/models/record_query_result.ts:436](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L436)_
+[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L414)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -571,7 +571,7 @@ the record
 | null_
 
 _Defined in
-[src/models/record_query_result.ts:489](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L489)_
+[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L467)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
@@ -593,7 +593,7 @@ result.
 [Record](_airtable_blocks_models__record.md#record)): _boolean_
 
 _Defined in
-[src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
@@ -664,7 +664,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/models/record_query_result.ts:572](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L572)_
+[src/models/record_query_result.ts:550](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L550)_
 
 Unwatch keys watched with `.watch`.
 
@@ -699,7 +699,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/models/record_query_result.ts:545](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L545)_
+[src/models/record_query_result.ts:523](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L523)_
 
 Get notified of changes to the query result.
 
@@ -818,7 +818,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[records](_airtable_blocks_models__recordqueryresult.md#records)_
 
 _Defined in
-[src/models/record_query_result.ts:419](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L419)_
+[src/models/record_query_result.ts:397](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L397)_
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -831,7 +831,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordById](_airtable_blocks_models__recordqueryresult.md#getrecordbyid)_
 
 _Defined in
-[src/models/record_query_result.ts:452](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L452)_
+[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L430)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -855,7 +855,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordByIdIfExists](_airtable_blocks_models__recordqueryresult.md#getrecordbyidifexists)_
 
 _Defined in
-[src/models/record_query_result.ts:436](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L436)_
+[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L414)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -880,7 +880,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
 
 _Defined in
-[src/models/record_query_result.ts:489](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L489)_
+[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L467)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
@@ -905,7 +905,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[hasRecord](_airtable_blocks_models__recordqueryresult.md#hasrecord)_
 
 _Defined in
-[src/models/record_query_result.ts:476](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L476)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.

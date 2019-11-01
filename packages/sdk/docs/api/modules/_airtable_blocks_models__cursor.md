@@ -35,7 +35,7 @@ import {cursor} from '@airtable/blocks';
 • **activeTableId**:
 
 _Defined in
-[src/models/cursor.ts:180](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L180)_
+[src/models/cursor.ts:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L146)_
 
 The currently active table ID. Can be null when the active table has changed and is not yet loaded.
 
@@ -46,7 +46,7 @@ Can be watched.
 • **activeViewId**:
 
 _Defined in
-[src/models/cursor.ts:189](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L189)_
+[src/models/cursor.ts:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L155)_
 
 The currently active view ID. This will always be a view belonging to `activeTableId`. Can be null
 when the active view has changed and is not yet loaded.
@@ -97,7 +97,7 @@ data.
 • **selectedRecordIds**:
 
 _Defined in
-[src/models/cursor.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L147)_
+[src/models/cursor.ts:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L113)_
 
 The record IDs of all currently selected records, or an empty array if no records are selected.
 
@@ -109,7 +109,7 @@ Can be watched.
 string): _boolean_
 
 _Defined in
-[src/models/cursor.ts:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L161)_
+[src/models/cursor.ts:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/cursor.ts#L127)_
 
 Checks whether a given record is selected.
 

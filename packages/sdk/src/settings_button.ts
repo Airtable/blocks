@@ -54,38 +54,6 @@ class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     }
 
     /**
-     * Get notified of changes to the settings button.
-     *
-     * Watchable keys are:
-     * - `'isVisible'`
-     * - `'click'`
-     *
-     * Every call to `.watch` should have a matching call to `.unwatch`.
-     *
-     * @function watch
-     * @memberof settingsButton
-     * @instance
-     * @param keys the keys to watch
-     * @param callback a function to call when those keys change
-     * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
-     */
-
-    /**
-     * Unwatch keys watched with `.watch`.
-     *
-     * Should be called with the same arguments given to `.watch`.
-     *
-     * @function unwatch
-     * @memberof settingsButton
-     * @instance
-     * @param keys the keys to unwatch
-     * @param callback the function passed to `.watch` for these keys
-     * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
-     */
-
-    /**
      * Whether the settings button is being shown.
      * Can be watched.
      *

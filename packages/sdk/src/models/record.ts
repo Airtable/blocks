@@ -31,11 +31,11 @@ const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 const WatchableColorInViewKeyPrefix = 'colorInView:';
 /**
  * Any key within record that can be watched:
- * - `primaryCellValue`
- * - `commentCount`
- * - `cellValues`
- * - `cellValueInField:{FIELD_ID}`
- * - `colorInView:{VIEW_ID}`
+ * - `'primaryCellValue'`
+ * - `'commentCount'`
+ * - `'cellValues'`
+ * - `'cellValueInField:' + someFieldId`
+ * - `'colorInView:' + someViewId`
  */
 type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
 
@@ -79,74 +79,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
     }
-
-    /**
-     * @function id
-     * @memberof Record
-     * @instance
-     * @returns This record's ID.
-     * @example
-     * ```js
-     * console.log(myRecord.id);
-     * // => 'recxxxxxxxxxxxxxx'
-     * ```
-     */
-
-    /**
-     * True if this record has been deleted.
-     *
-     * In general, it's best to avoid keeping a reference to a record past the
-     * current event loop, since it may be deleted and trying to access any data
-     * of a deleted record (other than its ID) will throw. But if you do keep a
-     * reference, you can use `isDeleted` to check that it's safe to access the
-     * record's data.
-     *
-     * @function isDeleted
-     * @memberof Record
-     * @instance
-     * @returns `true` if the record has been deleted, `false` otherwise.
-     * @example
-     * ```js
-     * if (!myRecord.isDeleted) {
-     *     // Do things with myRecord
-     * }
-     * ```
-     */
-
-    /**
-     * Get notified of changes to the record.
-     *
-     * Watchable keys are:
-     * - `'primaryCellValue'`
-     * - `'commentCount'`
-     * - `'cellValues'`
-     * - `'cellValueInField:' + someFieldId`
-     * - `'colorInView:' + someViewId`
-     *
-     * Every call to `.watch` should have a matching call to `.unwatch`.
-     *
-     * @function watch
-     * @memberof Record
-     * @instance
-     * @param keys the keys to watch
-     * @param callback a function to call when those keys change
-     * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
-     */
-
-    /**
-     * Unwatch keys watched with `.watch`.
-     *
-     * Should be called with the same arguments given to `.watch`.
-     *
-     * @function unwatch
-     * @memberof Record
-     * @instance
-     * @param keys the keys to unwatch
-     * @param callback the function passed to `.watch` for these keys
-     * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
-     */
 
     /**
      * @internal

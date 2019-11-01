@@ -41,7 +41,7 @@ if (session.currentUser !== null) {
 • **currentUser**:
 
 _Defined in
-[src/models/session.ts:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L127)_
+[src/models/session.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L96)_
 
 The current user, or `null` if the block is running in a publicly shared base.
 

@@ -78,40 +78,6 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
 
     /**
-     * Get notified of changes to the cursor.
-     *
-     * Watchable keys are:
-     * - `'selectedRecordIds'`
-     * - `'activeTableId'`
-     * - `'activeViewId'`
-     * - `'isDataLoaded'`
-     *
-     * Every call to `.watch` should have a matching call to `.unwatch`.
-     *
-     * @function watch
-     * @memberof Cursor
-     * @instance
-     * @param keys the keys to watch
-     * @param callback a function to call when those keys change
-     * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
-     */
-
-    /**
-     * Unwatch keys watched with `.watch`.
-     *
-     * Should be called with the same arguments given to `.watch`.
-     *
-     * @function unwatch
-     * @memberof Cursor
-     * @instance
-     * @param keys the keys to unwatch
-     * @param callback the function passed to `.watch` for these keys
-     * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
-     */
-
-    /**
      * @internal
      */
     get _dataOrNullIfDeleted(): CursorData {

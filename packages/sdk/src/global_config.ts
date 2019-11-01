@@ -58,7 +58,9 @@ export interface PartialGlobalConfigUpdate {
     readonly value?: GlobalConfigValue | undefined;
 }
 
-/** Any top-level key within global config */
+/**
+ * You can watch any top-level key in global config. Use '*' to watch every change.
+ */
 type WatchableGlobalConfigKey = string;
 
 /** @internal */
@@ -121,36 +123,6 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         this._kvStore = initialKvValuesByKey;
         this._airtableInterface = airtableInterface;
     }
-
-    /**
-     * Get notified of changes to global config.
-     *
-     * You can watch any top-level key in global config. Use '*' to watch every change.
-     *
-     * Every call to `.watch` should have a matching call to `.unwatch`.
-     *
-     * @function watch
-     * @memberof GlobalConfig
-     * @instance
-     * @param keys the keys to watch
-     * @param callback a function to call when those keys change
-     * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
-     */
-
-    /**
-     * Unwatch keys watched with `.watch`.
-     *
-     * Should be called with the same arguments given to `.watch`.
-     *
-     * @function unwatch
-     * @memberof GlobalConfig
-     * @instance
-     * @param keys the keys to unwatch
-     * @param callback the function passed to `.watch` for these keys
-     * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
-     */
 
     /**
      * @internal

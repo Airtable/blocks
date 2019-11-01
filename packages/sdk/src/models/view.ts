@@ -54,39 +54,6 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     }
 
     /**
-     * @function id
-     * @memberof View
-     * @instance
-     * @returns This view's ID.
-     * @example
-     * ```js
-     * console.log(myView.id);
-     * // => 'viwxxxxxxxxxxxxxx'
-     * ```
-     */
-
-    /**
-     * True if this view has been deleted.
-     *
-     * In general, it's best to avoid keeping a reference to a view past the
-     * current event loop, since it may be deleted and trying to access any data
-     * of a deleted view (other than its ID) will throw. But if you do keep a
-     * reference, you can use `isDeleted` to check that it's safe to access the
-     * view's data.
-     *
-     * @function isDeleted
-     * @memberof View
-     * @instance
-     * @returns `true` if the view has been deleted, `false` otherwise.
-     * @example
-     * ```js
-     * if (!myView.isDeleted) {
-     *     // Do things with myView
-     * }
-     * ```
-     */
-
-    /**
      * @internal
      */
     get _dataOrNullIfDeleted(): ViewData | null {
@@ -220,37 +187,6 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     selectMetadata(): ViewMetadataQueryResult {
         return ViewMetadataQueryResult.__createOrReuseQueryResult(this, this._viewDataStore);
     }
-
-    /**
-     * Get notified of changes to the view.
-     *
-     * Watchable keys are:
-     * - `'name'`
-     *
-     * Every call to `.watch` should have a matching call to `.unwatch`.
-     *
-     * @function watch
-     * @memberof View
-     * @instance
-     * @param keys the keys to watch
-     * @param callback a function to call when those keys change
-     * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
-     */
-
-    /**
-     * Unwatch keys watched with `.watch`.
-     *
-     * Should be called with the same arguments given to `.watch`.
-     *
-     * @function unwatch
-     * @memberof View
-     * @instance
-     * @param keys the keys to unwatch
-     * @param callback the function passed to `.watch` for these keys
-     * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
-     */
 
     /**
      * @internal

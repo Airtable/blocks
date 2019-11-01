@@ -142,7 +142,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/view.ts:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L122)_
+[src/models/view.ts:89](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L89)_
 
 The name of the view. Can be watched.
 
@@ -158,7 +158,7 @@ console.log(myView.name);
 • **type**:
 
 _Defined in
-[src/models/view.ts:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L134)_
+[src/models/view.ts:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L101)_
 
 The type of the view, such as Grid, Calendar, or Kanban. Should never change because view types
 cannot be modified.
@@ -175,7 +175,7 @@ console.log(myView.type);
 • **url**:
 
 _Defined in
-[src/models/view.ts:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L146)_
+[src/models/view.ts:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L113)_
 
 The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable
 UI.
@@ -193,7 +193,7 @@ console.log(myView.url);
 _[ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult)_
 
 _Defined in
-[src/models/view.ts:220](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L220)_
+[src/models/view.ts:187](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L187)_
 
 Select the field order and visible fields from the view. See {@ViewMetadataQueryResult} for more.
 
@@ -227,7 +227,7 @@ a {@ViewMetadataQueryResult}
 _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorviewqueryresult)_
 
 _Defined in
-[src/models/view.ts:183](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L183)_
+[src/models/view.ts:150](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view.ts#L150)_
 
 Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
 
@@ -380,7 +380,7 @@ _Defined in
 • **allFields**:
 
 _Defined in
-[src/models/view_metadata_query_result.ts:194](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L194)_
+[src/models/view_metadata_query_result.ts:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L161)_
 
 Returns every field in the table in the order they appear in this view. Watchable.
 
@@ -428,7 +428,7 @@ data.
 • **visibleFields**:
 
 _Defined in
-[src/models/view_metadata_query_result.ts:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L205)_
+[src/models/view_metadata_query_result.ts:172](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/view_metadata_query_result.ts#L172)_
 
 Returns every field visible in this view. Watchable.
 

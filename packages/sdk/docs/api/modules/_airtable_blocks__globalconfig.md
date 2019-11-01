@@ -32,7 +32,7 @@
 • **GlobalConfig**:
 
 _Defined in
-[src/global_config.ts:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L102)_
+[src/global_config.ts:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L104)_
 
 A key-value store for persisting configuration options for a block installation.
 
@@ -57,7 +57,7 @@ import {globalConfig} from '@airtable/blocks';
 _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/global_config.ts:224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L224)_
+[src/global_config.ts:196](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L196)_
 
 Checks whether the current user has permission to set the given global config key.
 
@@ -100,7 +100,7 @@ ReadonlyArray‹[PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#pa
 _[PermissionCheckResult](_airtable_blocks__mutations.md#permissioncheckresult)_
 
 _Defined in
-[src/global_config.ts:324](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L324)_
+[src/global_config.ts:296](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L296)_
 
 Checks whether the current user has permission to perform the specified updates to global config.
 
@@ -142,7 +142,7 @@ to display an error message to the user.
 ▸ **get**(`key`: [GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)): _unknown_
 
 _Defined in
-[src/global_config.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L186)_
+[src/global_config.ts:158](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L158)_
 
 Get the value at a path. Throws an error if the path is invalid.
 
@@ -172,7 +172,7 @@ The value at the provided path, or `undefined` if no value exists at that path.
 [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)): _boolean_
 
 _Defined in
-[src/global_config.ts:259](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L259)_
+[src/global_config.ts:231](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L231)_
 
 An alias for `globalConfig.checkPermissionsForSet(key, value).hasPermission`.
 
@@ -215,7 +215,7 @@ ReadonlyArray‹[PartialGlobalConfigUpdate](_airtable_blocks__globalconfig.md#pa
 _boolean_
 
 _Defined in
-[src/global_config.ts:361](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L361)_
+[src/global_config.ts:333](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L333)_
 
 An alias for `globalConfig.checkPermissionsForSetPaths(updates).hasPermission`.
 
@@ -258,7 +258,7 @@ boolean Whether or not the user has permission to apply the specified updates to
 `value?`: [GlobalConfigValue](_airtable_blocks__globalconfig.md#globalconfigvalue)): _Promise‹void›_
 
 _Defined in
-[src/global_config.ts:295](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L295)_
+[src/global_config.ts:267](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L267)_
 
 Sets a value at a path. Throws an error if the path or value is invalid.
 
@@ -307,7 +307,7 @@ A promise that will resolve once the update is persisted to Airtable.
 Array‹[GlobalConfigUpdate](_airtable_blocks__globalconfig.md#globalconfigupdate)›): _Promise‹void›_
 
 _Defined in
-[src/global_config.ts:401](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L401)_
+[src/global_config.ts:373](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L373)_
 
 Sets multiple values. Throws if any path or value is invalid.
 
@@ -568,6 +568,6 @@ path unknown (`undefined`)
 Ƭ **WatchableGlobalConfigKey**: _string_
 
 _Defined in
-[src/global_config.ts:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L62)_
+[src/global_config.ts:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/global_config.ts#L64)_
 
-Any top-level key within global config
+You can watch any top-level key in global config. Use '\*' to watch every change.

@@ -43,7 +43,7 @@ console.log('The name of your base is', base.name);
 • **activeCollaborators**:
 
 _Defined in
-[src/models/base.ts:179](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L179)_
+[src/models/base.ts:133](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L133)_
 
 The users who have access to this base.
 
@@ -88,7 +88,7 @@ data.
 • **name**:
 
 _Defined in
-[src/models/base.ts:143](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L143)_
+[src/models/base.ts:97](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L97)_
 
 The name of the base.
 
@@ -104,7 +104,7 @@ console.log('The name of your base is', base.name);
 • **tables**:
 
 _Defined in
-[src/models/base.ts:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L155)_
+[src/models/base.ts:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L109)_
 
 The tables in this base. Can be watched to know when tables are created, deleted, or reordered in
 the base.
@@ -122,7 +122,7 @@ console.log(`You have ${base.tables.length} tables`);
 _[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata)_
 
 _Defined in
-[src/models/base.ts:199](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L199)_
+[src/models/base.ts:153](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L153)_
 
 **Parameters:**
 
@@ -144,7 +144,7 @@ if you are unsure whether a collaborator with the given ID exists and has access
 _[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata) | null_
 
 _Defined in
-[src/models/base.ts:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L188)_
+[src/models/base.ts:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L142)_
 
 **Parameters:**
 
@@ -162,7 +162,7 @@ this base.
 ▸ **getTableById**(`tableId`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L254)_
+[src/models/base.ts:208](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L208)_
 
 **Parameters:**
 
@@ -182,7 +182,7 @@ unsure whether a table exists with the given ID.
 null_
 
 _Defined in
-[src/models/base.ts:234](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L234)_
+[src/models/base.ts:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L188)_
 
 **Parameters:**
 
@@ -199,7 +199,7 @@ The table matching the given ID, or `null` if that table does not exist in this 
 ▸ **getTableByName**(`tableName`: string): _[Table](_airtable_blocks_models__table.md#table)_
 
 _Defined in
-[src/models/base.ts:277](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L277)_
+[src/models/base.ts:231](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L231)_
 
 **Parameters:**
 
@@ -219,7 +219,7 @@ unsure whether a table exists with the given name.
 | null_
 
 _Defined in
-[src/models/base.ts:265](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L265)_
+[src/models/base.ts:219](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L219)_
 
 **Parameters:**
 
