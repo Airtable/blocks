@@ -1,5 +1,5 @@
 import * as tokens from './tokens';
-import {controlSizes, buttonSizes} from './control_sizes';
+import * as controlSizes from './control_sizes';
 // Typography sizes and variants
 import textStyles from './text_styles';
 import headingStyles from './heading_styles';
@@ -7,11 +7,11 @@ import headingStyles from './heading_styles';
 import buttonVariants from './button_variants';
 import linkVariants from './link_variants';
 import textButtonVariants from './text_button_variants';
+import selectVariants from './select_variants';
 
 const theme = {
     ...tokens,
-    controlSizes,
-    buttonSizes,
+    ...controlSizes,
     textStyles,
     headingStyles,
     // We create CSS class names for variants when the UI kit gets loaded.
@@ -21,6 +21,7 @@ const theme = {
     buttonVariants,
     linkVariants,
     textButtonVariants,
+    selectVariants,
 };
 
 export default theme;

@@ -3,6 +3,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
+import {createEnum, EnumType} from '../private_utils';
 import {spawnError} from '../error_utils';
 import useFormFieldId from './use_form_field_id';
 import {
@@ -26,8 +27,8 @@ import {
     MarginProps,
 } from './system';
 import {Prop} from './system/utils/types';
+import useTheme from './theme/use_theme';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {baymax} from './baymax_utils';
 import {
     validateOptions,
     optionValueToString,
@@ -37,14 +38,17 @@ import {
     SelectOption,
 } from './select_and_select_buttons_helpers';
 import useStyledSystem from './use_styled_system';
+import {useSelectSize, ControlSize, ControlSizeProp, controlSizePropType} from './control_sizes';
 
-const styleForChevron = {
-    // eslint-disable-next-line quotes
-    backgroundImage: `url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' class='mr1' style='shape-rendering:geometricPrecision'%3E%3Cpath fill-rule='evenodd' class='animate' fill='%23777' d='M3.6011,4.00002 L8.4011,4.00002 C8.8951,4.00002 9.1771,4.56402 8.8811,4.96002 L6.4811,8.16002 C6.2411,8.48002 5.7611,8.48002 5.5211,8.16002 L3.1211,4.96002 C2.8241,4.56402 3.1071,4.00002 3.6011,4.00002'/%3E%3C/svg%3E")`,
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'calc(100% - 6px)',
-    paddingRight: 22,
-};
+/** */
+type SelectVariant = EnumType<typeof SelectVariant>;
+const SelectVariant = createEnum('default');
+
+/** @internal */
+function useSelectVariant(variant: SelectVariant = SelectVariant.default): string {
+    const {selectVariants} = useTheme();
+    return selectVariants[variant];
+}
 
 /** */
 interface SelectStyleProps
@@ -61,6 +65,8 @@ interface SelectStyleProps
 // Shared with `Select`, `SelectSynced` and `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`.
 /** */
 export interface SharedSelectBaseProps extends TooltipAnchorProps, SelectStyleProps {
+    /** The size of the select. */
+    size?: ControlSizeProp;
     /** Additional class names to apply to the select. */
     className?: string;
     /** The `autoFocus` attribute. */
@@ -120,6 +126,7 @@ export interface SharedSelectProps extends SharedSelectBaseProps {
 // Shared with `Select` and `SelectSynced`.
 export const sharedSelectPropTypes = {
     // We do more strict checks in render.
+    size: controlSizePropType,
     options: PropTypes.arrayOf(
         PropTypes.shape({
             value: selectOptionValuePropType,
@@ -178,6 +185,7 @@ const styleParser = compose(
  */
 function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
     const {
+        size = ControlSize.default,
         value,
         options: originalOptions = [],
         autoFocus,
@@ -198,6 +206,9 @@ function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
         ...styleProps
     } = props;
     const formFieldId = useFormFieldId();
+    // There is only a single default variant.
+    const classNameForSelectVariant = useSelectVariant();
+    const classNameForSelectSize = useSelectSize(size);
     const classNameForStyleProps = useStyledSystem(
         {
             width: '100%',
@@ -256,33 +267,24 @@ function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
             name={name}
             tabIndex={tabIndex}
             className={cx(
-                baymax('styled-input px1 rounded normal no-outline darken1 text-dark'),
-                {
-                    [baymax('link-quiet pointer')]: !disabled,
-                    [baymax('quieter')]: !!disabled,
-                },
+                classNameForSelectVariant,
+                classNameForSelectSize,
                 classNameForStyleProps,
                 className,
             )}
-            style={{
-                // TODO (stephen): switch to size API
-                height: 35,
-                ...styleForChevron,
-                ...style,
-            }}
+            style={style}
             aria-label={ariaLabel}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy}
         >
-            {options &&
-                options.map(option => {
-                    const valueJson = optionValueToString(option.value);
-                    return (
-                        <option key={valueJson} value={valueJson} disabled={option.disabled}>
-                            {option.label}
-                        </option>
-                    );
-                })}
+            {options.map(option => {
+                const valueJson = optionValueToString(option.value);
+                return (
+                    <option key={valueJson} value={valueJson} disabled={option.disabled}>
+                        {option.label}
+                    </option>
+                );
+            })}
         </select>
     );
 }

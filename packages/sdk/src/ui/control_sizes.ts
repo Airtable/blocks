@@ -1,12 +1,12 @@
 /** @module @airtable/blocks/ui/system: Core */ /** */
+import {compose, system} from '@styled-system/core';
 import {createEnum, createResponsivePropTypeFromEnum, EnumType} from '../private_utils';
 import useTheme from './theme/use_theme';
 import {ResponsiveProp} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useStyledSystem from './use_styled_system';
+import {allStylesParser} from './system/';
 
-// Controls are things such as `Button`, `Input`, `Select` and `SelectButtons`.
-// Currently only `Button` uses this.
 /** */
 export type ControlSize = EnumType<typeof ControlSize>;
 export const ControlSize = createEnum('small', 'default', 'large');
@@ -25,4 +25,22 @@ export function useButtonSize(controlSizeProp: ControlSizeProp): string {
         styleProps = getStylePropsForResponsiveProp<ControlSize>(controlSizeProp, buttonSizes);
     }
     return useStyledSystem(styleProps);
+}
+
+// For selects we create a custom style parser that includes `backgroundPosition`.
+const selectSizeStyleParser = compose(
+    allStylesParser,
+    system({backgroundPosition: true}),
+);
+
+/** @internal */
+export function useSelectSize(controlSizeProp: ControlSizeProp): string {
+    const {selectSizes} = useTheme();
+    let styleProps;
+    if (typeof controlSizeProp === 'string') {
+        styleProps = selectSizes[controlSizeProp];
+    } else {
+        styleProps = getStylePropsForResponsiveProp<ControlSize>(controlSizeProp, selectSizes);
+    }
+    return useStyledSystem(styleProps, selectSizeStyleParser);
 }

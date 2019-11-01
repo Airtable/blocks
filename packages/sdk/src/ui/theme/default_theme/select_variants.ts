@@ -1,6 +1,14 @@
 import {cx, css} from 'emotion';
 import {fontFamilies, colors, radii, opacities} from './tokens';
 
+const styleForChevron = {
+    // https://codepen.io/tigt/post/optimizing-svgs-in-data-uris
+    // You can use https://www.npmjs.com/package/mini-svg-data-uri to generate the `background-image` from a svg.
+    // eslint-disable-next-line quotes
+    backgroundImage: `url("data:image/svg+xml,%3csvg width='7' height='6' viewBox='0 0 7 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath fill-rule='evenodd' clip-rule='evenodd' d='M.601.8h4.8a.6.6 0 01.48.96l-2.4 3.2a.6.6 0 01-.96 0l-2.4-3.2A.6.6 0 01.601.8z' fill='rgba(0%2c 0%2c 0%2c 0.5)'/%3e%3c/svg%3e")`,
+    backgroundRepeat: 'no-repeat',
+};
+
 const baseStyles = css({
     fontFamily: fontFamilies.default,
     borderRadius: radii.default,
@@ -8,11 +16,11 @@ const baseStyles = css({
     alignItems: 'center',
     paddingTop: 0,
     paddingBottom: 0,
-    fontWeight: 500,
-    userSelect: 'none',
+    fontWeight: 400,
     outline: 'none',
     appearance: 'none',
     border: 'none',
+    ...styleForChevron,
     '&:not(:disabled)': {
         cursor: 'pointer',
         '&:hover': {
@@ -31,7 +39,7 @@ const baseStyles = css({
     },
 });
 
-const buttonVariants = {
+const selectVariants = {
     default: cx(
         baseStyles,
         css({
@@ -39,30 +47,6 @@ const buttonVariants = {
             backgroundColor: colors.lightGray2,
         }),
     ),
-    primary: cx(
-        baseStyles,
-        css({
-            color: colors.white,
-            backgroundColor: colors.blueBright,
-        }),
-    ),
-    secondary: cx(
-        baseStyles,
-        css({
-            color: colors.dark,
-            backgroundColor: 'transparent',
-            '&:hover': {
-                backgroundColor: colors.lightGray2,
-            },
-        }),
-    ),
-    danger: cx(
-        baseStyles,
-        css({
-            color: colors.white,
-            backgroundColor: colors.redBright,
-        }),
-    ),
 };
 
-export default buttonVariants;
+export default selectVariants;

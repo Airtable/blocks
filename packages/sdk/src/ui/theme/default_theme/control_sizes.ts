@@ -1,6 +1,4 @@
-// Controls are things such as `Button`, `Input`, `Select` and `SelectButtons`.
-// Currently only `Button` uses this.
-export const controlSizes = {
+const sharedControlSizes = {
     small: {
         fontSize: 2,
         height: '28px',
@@ -20,15 +18,36 @@ export const controlSizes = {
 
 export const buttonSizes = {
     small: {
-        ...controlSizes.small,
+        ...sharedControlSizes.small,
         paddingX: '10px',
     },
     default: {
-        ...controlSizes.default,
+        ...sharedControlSizes.default,
         paddingX: '12px',
     },
     large: {
-        ...controlSizes.large,
+        ...sharedControlSizes.large,
         paddingX: '14px',
+    },
+};
+
+export const selectSizes = {
+    small: {
+        ...sharedControlSizes.small,
+        paddingLeft: '8px',
+        paddingRight: '24px',
+        backgroundPosition: 'calc(100% - 8px)',
+    },
+    default: {
+        ...sharedControlSizes.default,
+        paddingLeft: '10px',
+        paddingRight: '26px',
+        backgroundPosition: 'calc(100% - 10px)',
+    },
+    large: {
+        ...sharedControlSizes.large,
+        paddingLeft: '12px',
+        paddingRight: '28px',
+        backgroundPosition: 'calc(100% - 12px)',
     },
 };
