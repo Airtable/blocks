@@ -64,7 +64,7 @@ _Inherited from
 _Defined in
 [src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
 
-The ID for this model
+The ID for this model.
 
 ### isDeleted
 
@@ -90,7 +90,7 @@ data.
 _Defined in
 [src/models/base.ts:143](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/base.ts#L143)_
 
-The name of the base
+The name of the base.
 
 **`example`**
 

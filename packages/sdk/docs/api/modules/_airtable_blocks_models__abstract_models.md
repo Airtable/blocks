@@ -29,7 +29,7 @@ Abstract superclass for all models. You won't use this class directly.
 _Defined in
 [src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
 
-The ID for this model
+The ID for this model.
 
 ### isDeleted
 
@@ -131,7 +131,7 @@ _Inherited from
 _Defined in
 [src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
 
-The ID for this model
+The ID for this model.
 
 ### isDataLoaded
 
