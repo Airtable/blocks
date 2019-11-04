@@ -75,11 +75,7 @@ class BlocksBackendEventHandler {
         return routeHandlerModule.default;
     }
 
-    async _uploadLogsToS3Async(
-        logFilePath: string,
-        logStream: fs.WriteStream,
-        presignedS3UploadUrl: string,
-    ) {
+    async _uploadLogsToS3Async(logFilePath: string, presignedS3UploadUrl: string) {
         const logs = await readFileAsync(logFilePath, 'utf8');
         return await requestAsync({
             method: 'PUT',
@@ -240,7 +236,7 @@ class BlocksBackendEventHandler {
 
         if (this._enableUploadLogsToS3) {
             logFilePath = '/tmp/' + event.blockInvocationId + '-log.txt';
-            logStream = fs.createWriteStream(logFilePath);
+            logStream = fs.createWriteStream(logFilePath, {flags: 'wx'});
             // We override the console methods so they also write to our logStream, so
             // we that can upload the logs to S3
             this._wrapConsole(console, logStream);
@@ -258,7 +254,7 @@ class BlocksBackendEventHandler {
             invariant(logStream, 'logStream');
             try {
                 await endStreamAsync(logStream);
-                await this._uploadLogsToS3Async(logFilePath, logStream, event.presignedS3UploadUrl);
+                await this._uploadLogsToS3Async(logFilePath, event.presignedS3UploadUrl);
             } catch (err) {
                 // No-op
             }
