@@ -14,7 +14,7 @@ import {
     RecordCard,
     SelectButtons,
     Select,
-    Toggle,
+    Switch,
     Tooltip,
     colors,
     colorUtils,
@@ -42,7 +42,7 @@ export default function BaymaxExample() {
     const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [selectValue, setSelectValue] = useState('foo');
-    const [isToggleEnabled, setIsToggleEnabled] = useState(false);
+    const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
 
     return (
         <div
@@ -172,12 +172,12 @@ export default function BaymaxExample() {
                         </td>
                     </tr>
                     <tr>
-                        <td>Toggle</td>
+                        <td>Switch</td>
                         <td>
-                            <Toggle
-                                value={isToggleEnabled}
-                                onChange={setIsToggleEnabled}
-                                label="Toggle"
+                            <Switch
+                                value={isSwitchEnabled}
+                                onChange={setIsSwitchEnabled}
+                                label="Switch"
                             />
                         </td>
                     </tr>

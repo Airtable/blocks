@@ -53,6 +53,7 @@
 -   [@airtable/blocks/ui: RecordCardList](modules/_airtable_blocks_ui__recordcardlist.md)
 -   [@airtable/blocks/ui: Select](modules/_airtable_blocks_ui__select.md)
 -   [@airtable/blocks/ui: SelectButtons](modules/_airtable_blocks_ui__selectbuttons.md)
+-   [@airtable/blocks/ui: Switch](modules/_airtable_blocks_ui__switch.md)
 -   [@airtable/blocks/ui: Synced](modules/_airtable_blocks_ui__synced.md)
 -   [@airtable/blocks/ui: TablePicker](modules/_airtable_blocks_ui__tablepicker.md)
 -   [@airtable/blocks/ui: Text](modules/_airtable_blocks_ui__text.md)

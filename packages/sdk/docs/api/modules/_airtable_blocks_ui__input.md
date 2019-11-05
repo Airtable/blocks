@@ -60,7 +60,7 @@ Style props shared between the [Input](_airtable_blocks_ui__input.md#input) and
 -   [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops)
 -   [MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops)
 -   [MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops)
--   [PositionProps](_airtable_blocks_ui_system__position.md#positionprops)
+-   [PositionSetProps](_airtable_blocks_ui_system__position.md#positionsetprops)
 -   [WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops)
 
 ---

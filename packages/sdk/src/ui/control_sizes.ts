@@ -75,3 +75,15 @@ export function useSelectButtonsSize(controlSizeProp: ControlSizeProp): string {
     }
     return useStyledSystem(styleProps);
 }
+
+/** @internal */
+export function useSwitchSize(controlSizeProp: ControlSizeProp): string {
+    const {switchSizes} = useTheme();
+    let styleProps;
+    if (typeof controlSizeProp === 'string') {
+        styleProps = switchSizes[controlSizeProp];
+    } else {
+        styleProps = getStylePropsForResponsiveProp<ControlSize>(controlSizeProp, switchSizes);
+    }
+    return useStyledSystem(styleProps);
+}

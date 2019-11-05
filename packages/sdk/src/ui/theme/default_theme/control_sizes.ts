@@ -88,3 +88,22 @@ export const selectButtonsSizes = {
         fontSize: 2,
     },
 };
+
+export const switchSizes = {
+    small: {
+        ...sharedControlSizes.small,
+        paddingX: '8px',
+        fontSize: 1,
+        lineHeight: '18px',
+    },
+    default: {
+        ...sharedControlSizes.default,
+        paddingX: '10px',
+        fontSize: 2,
+    },
+    large: {
+        ...sharedControlSizes.large,
+        paddingX: '12px',
+        fontSize: 3,
+    },
+};

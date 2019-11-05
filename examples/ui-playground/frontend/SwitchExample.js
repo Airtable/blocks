@@ -1,16 +1,15 @@
 // @flow
 import React, {useState} from 'react';
-import {Toggle} from '@airtable/blocks/ui';
+import {Switch} from '@airtable/blocks/ui';
 
-export default function ToggleExample(props: void) {
+export default function SwitchExample(props: void) {
     const [isEnabled, setIsEnabled] = useState(false);
     return (
-        <Toggle
+        <Switch
             value={isEnabled}
+            width="200px"
             onChange={(newValue: boolean) => setIsEnabled(newValue)}
-            label="Toggle on/off"
-            theme={Toggle.themes.RED}
-            padding={3}
+            label="Switch on/off"
         />
     );
 }

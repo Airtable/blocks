@@ -43,6 +43,7 @@ import Box from './box';
  * * {@link MarginProps}
  * * {@link MaxWidthProps}
  * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
  * * {@link WidthProps}
  *
  * @noInheritDoc

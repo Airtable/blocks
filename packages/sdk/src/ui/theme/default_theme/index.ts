@@ -7,9 +7,10 @@ import headingStyles from './heading_styles';
 import buttonVariants from './button_variants';
 import linkVariants from './link_variants';
 import inputVariants from './input_variants';
-import textButtonVariants from './text_button_variants';
+import switchVariants from './switch_variants';
 import selectVariants from './select_variants';
 import selectButtonsVariants from './select_buttons_variants';
+import textButtonVariants from './text_button_variants';
 
 const theme = {
     ...tokens,
@@ -23,9 +24,10 @@ const theme = {
     buttonVariants,
     linkVariants,
     inputVariants,
-    textButtonVariants,
     selectVariants,
     selectButtonsVariants,
+    switchVariants,
+    textButtonVariants,
 };
 
 export default theme;

@@ -2,18 +2,18 @@
 # yarn lockfile v1
 
 
-"@airtable/blocks@/var/folders/nx/56kq78px0q7gh8k1czf7wygw0000zl/T/1570234114536-airtable-blocks-0.0.34-local.1570234062982.tgz":
-  version "0.0.34-local.1570234062982"
-  resolved "/var/folders/nx/56kq78px0q7gh8k1czf7wygw0000zl/T/1570234114536-airtable-blocks-0.0.34-local.1570234062982.tgz#05ef7c14e744063c730cfd7efafc31b953f903c8"
+"@airtable/blocks@/var/folders/97/48k5sdzx5x573hs80s_nk2cm0000gq/T/1572917341825-airtable-blocks-0.0.34-local.1572917340650.tgz":
+  version "0.0.34-local.1572917340650"
+  resolved "/var/folders/97/48k5sdzx5x573hs80s_nk2cm0000gq/T/1572917341825-airtable-blocks-0.0.34-local.1572917340650.tgz#ade22ace87b81f44cbe28120b2effb3abc628a93"
   dependencies:
     "@airtable/eslint-plugin-blocks" "^1.0.2"
     "@babel/runtime" "^7.4.4"
     "@styled-system/core" "^5.1.1"
     "@types/hoist-non-react-statics" "^3.3.1"
     "@types/lodash.omit" "^4.5.6"
-    "@types/prop-types" "^15.7.2"
-    "@types/react" "^16.9.2"
-    "@types/react-dom" "^16.9.0"
+    "@types/prop-types" "^15.7.3"
+    "@types/react" "^16.9.5"
+    "@types/react-dom" "^16.9.1"
     "@types/react-window" "^1.8.1"
     "@types/styled-system" "^5.1.1"
     core-js "^3.0.1"
@@ -187,15 +187,15 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.141.tgz#d81f4d0c562abe28713406b571ffb27692a82ae6"
   integrity sha512-v5NYIi9qEbFEUpCyikmnOYe4YlP8BMUdTcNCAquAKzu+FA7rZ1onj9x80mbnDdOW/K5bFf3Tv5kJplP33+gAbQ==
 
-"@types/prop-types@*", "@types/prop-types@^15.7.2":
+"@types/prop-types@*", "@types/prop-types@^15.7.3":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/react-dom@^16.9.0":
-  version "16.9.1"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.1.tgz#79206237cba9532a9f870b1cd5428bef6b66378c"
-  integrity sha512-1S/akvkKr63qIUWVu5IKYou2P9fHLb/P2VAwyxVV85JGaGZTcUniMiTuIqM3lXFB25ej6h+CYEQ27ERVwi6eGA==
+"@types/react-dom@^16.9.1":
+  version "16.9.3"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.3.tgz#4006ff0e13958af91313869077c04cb20d9b9d04"
+  integrity sha512-FUuZKXPr9qlzUT9lhuzrZgLjH63TvNn28Ch3MvKG4B+F52zQtO8DtE0Opbncy3xaucNZM2WIPfuNTgkbKx5Brg==
   dependencies:
     "@types/react" "*"
 
@@ -206,10 +206,18 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.9.2":
+"@types/react@*":
   version "16.9.5"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.5.tgz#079dabd918b19b32118c25fd00a786bb6d0d5e51"
   integrity sha512-jQ12VMiFOWYlp+j66dghOWcmDDwhca0bnlcTxS4Qz/fh5gi6wpaZDthPEu/Gc/YlAuO87vbiUXL8qKstFvuOaA==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
+"@types/react@^16.9.5":
+  version "16.9.11"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.11.tgz#70e0b7ad79058a7842f25ccf2999807076ada120"
+  integrity sha512-UBT4GZ3PokTXSWmdgC/GeCGEJXE5ofWyibCcecRLUVN2ZBpXQGVgQGtG2foS7CrTKFKlQVVswLvf7Js6XA/CVQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"

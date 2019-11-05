@@ -29,10 +29,10 @@ import SelectButtonsExample from './SelectButtonsExample';
 import SelectButtonsSyncedExample from './SelectButtonsSyncedExample';
 import SelectExample from './SelectExample';
 import SelectSyncedExample from './SelectSyncedExample';
+import SwitchExample from './SwitchExample';
+import SwitchSyncedExample from './SwitchExample';
 import TablePickerExample from './TablePickerExample';
 import TablePickerSyncedExample from './TablePickerSyncedExample';
-import ToggleExample from './ToggleExample';
-import ToggleSyncedExample from './ToggleExample';
 import TooltipExample from './TooltipExample';
 import ViewPickerExample from './ViewPickerExample';
 import ViewPickerSyncedExample from './ViewPickerSyncedExample';
@@ -159,12 +159,12 @@ const examples: Array<Example> = [
         component: TablePickerSyncedExample,
     },
     {
-        name: 'Toggle',
-        component: ToggleExample,
+        name: 'Switch',
+        component: SwitchExample,
     },
     {
-        name: 'ToggleSynced',
-        component: ToggleSyncedExample,
+        name: 'SwitchSynced',
+        component: SwitchSyncedExample,
     },
     {
         name: 'Tooltip',

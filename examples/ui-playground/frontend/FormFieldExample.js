@@ -9,12 +9,11 @@ import {
     Input,
     SelectButtons,
     TablePicker,
-    Toggle,
     ViewPicker,
     useBase,
 } from '@airtable/blocks/ui';
 
-export default function FieldPickerExample(props: void) {
+export default function FormFieldExample(props: void) {
     const base = useBase();
     const [name, setName] = useState('');
     const [table, setTable] = useState(base.tables[0]);
@@ -22,7 +21,6 @@ export default function FieldPickerExample(props: void) {
     const [field, setField] = useState(null);
     const [coolLevel, setCoolLevel] = useState('Kinda cool');
     const [color, setColor] = useState();
-    const [toggleValue, setToggleValue] = useState(false);
 
     const coolOptions = [
         {

@@ -8,7 +8,7 @@ import {
     RecordCard,
     SelectButtons,
     TablePickerSynced,
-    Toggle,
+    Switch,
     Tooltip,
     useBase,
     useRecords,
@@ -48,13 +48,13 @@ export default function TooltipExample(props: void) {
             </Box>
             <Box marginTop={5}>
                 <Tooltip
-                    content="This toggle is disabled"
+                    content="This switch is disabled"
                     placementX={Tooltip.placements.CENTER}
                     placementY={Tooltip.placements.TOP}
                     placementOffsetX={0}
                     placementOffsetY={8}
                 >
-                    <Toggle value={false} disabled={true} label="Toggle" />
+                    <Switch value={false} disabled={true} label="Switch" />
                 </Tooltip>
             </Box>
             <Box marginTop={5}>

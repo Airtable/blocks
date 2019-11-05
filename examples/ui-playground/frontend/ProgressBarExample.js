@@ -2,7 +2,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {ProgressBar} from '@airtable/blocks/ui';
 
-export default function ToggleExample(props: void) {
+export default function ProgressBarExample(props: void) {
     const [progress, setProgress] = useState(0);
     const requestRef = useRef();
 

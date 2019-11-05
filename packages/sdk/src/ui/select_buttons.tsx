@@ -59,7 +59,7 @@ function useSelectButtonsVariant(variant: SelectButtonsVariant = SelectButtonsVa
  * * {@link MarginProps}
  * * {@link MaxWidthProps}
  * * {@link MinWidthProps}
- * * {@link PositionProps}
+ * * {@link PositionSetProps}
  * * {@link WidthProps}
  *
  * @noInheritDoc

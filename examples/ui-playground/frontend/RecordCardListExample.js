@@ -1,6 +1,6 @@
 // @flow
 import React, {useState} from 'react';
-import {Box, RecordCardList, Select, Toggle, useBase, useRecords} from '@airtable/blocks/ui';
+import {Box, RecordCardList, Select, Switch, useBase, useRecords} from '@airtable/blocks/ui';
 
 type Props = {
     shouldShowSettings: boolean,
@@ -53,7 +53,7 @@ export default function RecordCardListExample(props: Props) {
                             <label>
                                 Use default <span className="monospace">onRecordClick</span>
                             </label>
-                            <Toggle value={useDefaultOnClick} onChange={setUseDefaultOnClick} />
+                            <Switch value={useDefaultOnClick} onChange={setUseDefaultOnClick} />
                         </div>
                         {!useDefaultOnClick && (
                             <div className="border-bottom border-darken2 p1 justify-between items-center flex">
