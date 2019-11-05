@@ -34,7 +34,7 @@ An enum of Airtable's view types
 
 **`alias`** viewTypes
 
-**`example`**
+**Example:**
 
 ```js
 import {viewTypes} from '@airtable/blocks/models';
@@ -126,7 +126,7 @@ _Defined in
 
 The name of the view. Can be watched.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myView.name);
@@ -143,7 +143,7 @@ _Defined in
 The type of the view, such as Grid, Calendar, or Kanban. Should never change because view types
 cannot be modified.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myView.type);
@@ -160,7 +160,7 @@ _Defined in
 The URL for the view. You can visit this URL in the browser to be taken to the view in the Airtable
 UI.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myView.url);
@@ -177,7 +177,7 @@ _Defined in
 
 Select the field order and visible fields from the view. See {@ViewMetadataQueryResult} for more.
 
-**`example`**
+**Example:**
 
 ```js
 async function loadMetadataForViewAsync(view) {
@@ -211,7 +211,7 @@ _Defined in
 
 Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
 
-**`example`**
+**Example:**
 
 ```js
 import {UI} from '@airtable/blocks';
@@ -331,7 +331,7 @@ Contains information about a view that isn't loaded by default e.g. field order 
 
 In a React component, you might want to use {@link useViewMetadata}.
 
-**`example`**
+**Example:**
 
 ```js
 async function loadMetadataForViewAsync(view) {

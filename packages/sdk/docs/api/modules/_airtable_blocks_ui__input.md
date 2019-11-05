@@ -1708,7 +1708,7 @@ _Defined in
 
 An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
 
-**`example`**
+**Example:**
 
 ```js
 import {Input} from '@airtable/blocks/ui';
@@ -1752,7 +1752,7 @@ _Defined in
 
 A wrapper around the `UI.Input` component that syncs with global config.
 
-**`example`**
+**Example:**
 
 ```js
 import {UI} from '@airtable/blocks/ui';

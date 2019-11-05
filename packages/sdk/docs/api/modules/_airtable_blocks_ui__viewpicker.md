@@ -1515,7 +1515,7 @@ _Defined in
 
 Dropdown menu component for selecting views.
 
-**`example`**
+**Example:**
 
 ```js
 import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
@@ -1586,7 +1586,7 @@ _Defined in
 Dropdown menu component for selecting views, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 
-**`example`**
+**Example:**
 
 ```js
 import {

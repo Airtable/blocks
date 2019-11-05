@@ -25,7 +25,7 @@ _Defined in
 
 Displays the contents of a cell.
 
-**`example`**
+**Example:**
 
 ```js
 import React, {useState} from 'react';

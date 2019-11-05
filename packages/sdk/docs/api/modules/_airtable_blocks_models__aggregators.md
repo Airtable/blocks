@@ -24,7 +24,7 @@ _Defined in
 
 Aggregators can be used to compute aggregates for cell values.
 
-**`example`**
+**Example:**
 
 ```js
 import {aggregators} from '@airtable/blocks/models';

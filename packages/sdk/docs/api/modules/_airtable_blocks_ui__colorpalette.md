@@ -29,7 +29,7 @@ _Defined in
 A color selection component. Accepts a list of `allowedColors` to be displayed as selectable color
 squares.
 
-**`example`**
+**Example:**
 
 ```js
 import {ColorPalette, colors} from '@airtable/blocks/ui';
@@ -54,7 +54,7 @@ _Defined in
 A wrapper around the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) component
 that syncs with global config.
 
-**`example`**
+**Example:**
 
 ```js
 import {ColorPaletteSynced, colors} from '@airtable/blocks/ui';

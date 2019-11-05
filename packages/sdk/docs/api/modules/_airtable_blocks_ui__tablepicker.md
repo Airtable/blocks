@@ -1449,7 +1449,7 @@ _Defined in
 
 Dropdown menu component for selecting tables.
 
-**`example`**
+**Example:**
 
 ```js
 import {TablePicker, useBase, useRecords} from '@airtable/blocks/ui';
@@ -1503,7 +1503,7 @@ _Defined in
 Dropdown menu component for selecting tables, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 
-**`example`**
+**Example:**
 
 ```js
 import {TablePickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';

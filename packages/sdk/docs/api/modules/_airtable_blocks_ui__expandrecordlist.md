@@ -21,7 +21,7 @@ _Defined in
 
 Expands a list of records in the Airtable UI
 
-**`example`**
+**Example:**
 
 ```js
 import {expandRecordList} from '@airtable/blocks/ui';

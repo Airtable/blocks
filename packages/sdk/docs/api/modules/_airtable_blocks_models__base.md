@@ -30,7 +30,7 @@ _Defined in
 
 Model class representing a base.
 
-**`example`**
+**Example:**
 
 ```js
 import {base} from '@airtable/blocks';
@@ -47,7 +47,7 @@ _Defined in
 
 The users who have access to this base.
 
-**`example`**
+**Example:**
 
 ```js
 import {base} from '@airtable/blocks';
@@ -92,7 +92,7 @@ _Defined in
 
 The name of the base.
 
-**`example`**
+**Example:**
 
 ```js
 import {base} from '@airtable/blocks';
@@ -109,7 +109,7 @@ _Defined in
 The tables in this base. Can be watched to know when tables are created, deleted, or reordered in
 the base.
 
-**`example`**
+**Example:**
 
 ```js
 import {base} from '@airtable/blocks';

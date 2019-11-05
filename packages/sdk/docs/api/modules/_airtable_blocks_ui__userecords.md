@@ -42,7 +42,7 @@ the query result and updating your component when the records cell values etc. c
 Often used with {@link useRecordIds} to render a list of records where each list item only updates
 when the specific record it concerns changes.
 
-**`example`**
+**Example:**
 
 ```js
 import {useRecordById, useRecordIds, useBase} from '@airtable/blocks';

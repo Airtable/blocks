@@ -888,7 +888,7 @@ to this component and manually set the `id` attribute on your wrapped control to
 
 **`param`**
 
-**`example`**
+**Example:**
 
 ```js
 import {useBase, Box, FormField, ViewPicker, TablePicker} from '@airtable/blocks/ui';

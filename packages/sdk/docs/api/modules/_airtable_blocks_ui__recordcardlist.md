@@ -26,7 +26,7 @@ _Defined in
 
 Scrollable list of record cards.
 
-**`example`**
+**Example:**
 
 ```js
 import {RecordCardList} from '@airtable/blocks/ui';

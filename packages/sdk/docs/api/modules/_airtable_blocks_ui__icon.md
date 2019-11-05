@@ -970,7 +970,7 @@ A vector icon from the Airtable icon set.
 
 **`param`**
 
-**`example`**
+**Example:**
 
 ```js
 import {Icon} from '@airtable/blocks/ui';

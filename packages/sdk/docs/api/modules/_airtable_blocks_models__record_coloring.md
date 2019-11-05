@@ -157,7 +157,7 @@ Record coloring config creators.
 
 **`alias`** recordColoring.modes
 
-**`example`**
+**Example:**
 
 ```js
 import {recordColoring} from '@airtable/blocks/models';

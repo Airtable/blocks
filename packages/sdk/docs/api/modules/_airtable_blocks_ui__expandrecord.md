@@ -44,7 +44,7 @@ _Defined in
 
 Expands the given record in the Airtable UI.
 
-**`example`**
+**Example:**
 
 ```js
 import {expandRecord} from '@airtable/blocks/ui';

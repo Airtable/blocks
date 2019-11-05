@@ -32,7 +32,7 @@ _Defined in
 
 A toggleable switch for controlling boolean values. Functionally analogous to a checkbox.
 
-**`example`**
+**Example:**
 
 ```js
 import {Toggle} from '@airtable/blocks/ui';
@@ -91,7 +91,7 @@ A toggleable switch for controlling boolean values, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig). Functionally analogous to a
 checkbox.
 
-**`example`**
+**Example:**
 
 ```js
 import {ToggleSynced, useWatchable} from '@airtable/blocks/ui';

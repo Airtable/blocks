@@ -22,7 +22,7 @@ A hook for using the settings button that lives outside the block's viewport. It
 settings button (hidden by default) and call the provided callback whenever the settings button is
 clicked. It will also re-render your component when the settings button is clicked.
 
-**`example`**
+**Example:**
 
 ```js
 import {useSettingsButton} from '@airtable/blocks/ui';

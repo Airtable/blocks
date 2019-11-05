@@ -25,7 +25,7 @@ is returned to the block, and the modal is automatically closed.
 If the user dismisses the modal, or another one is opened before this one has been closed, it will
 return null.
 
-**`example`**
+**Example:**
 
 ```js
 import {expandRecordPickerAsync} from '@airtable/blocks/ui';

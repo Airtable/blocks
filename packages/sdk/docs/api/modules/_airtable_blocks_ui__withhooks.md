@@ -26,7 +26,7 @@ and wraps it, injecting values from hooks as additional props. `withHooks` uses
 [React.forwardRef](https://reactjs.org/docs/forwarding-refs.html) to make sure that you can use refs
 with your wrapped component in exactly the same way you would if you weren't using withHooks.
 
-**`example`**
+**Example:**
 
 ```js
 import React from 'react';

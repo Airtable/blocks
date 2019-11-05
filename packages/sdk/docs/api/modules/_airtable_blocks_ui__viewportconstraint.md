@@ -32,14 +32,14 @@ possible when `minSize` is updated.
 
 **`see`** sdk.viewport
 
-**`example`**
+**Example:**
 
 ```js
 import {ViewportConstraint} from '@airtable/blocks/ui';
 <ViewportConstraint minSize={{width: 400}} />;
 ```
 
-**`example`**
+**Example:**
 
 ```js
 import {ViewportConstraint} from '@airtable/blocks/ui';

@@ -32,7 +32,7 @@ An enum of Airtable's field types
 
 **`alias`** fieldTypes
 
-**`example`**
+**Example:**
 
 ```js
 import {fieldTypes} from '@airtable/blocks/models';
@@ -802,7 +802,7 @@ _Defined in
 
 Model class representing a field in a table.
 
-**`example`**
+**Example:**
 
 ```js
 import {base} from '@airtable/blocks';
@@ -821,7 +821,7 @@ _Defined in
 
 A list of available aggregators given this field's configuration.
 
-**`example`**
+**Example:**
 
 ```js
 const fieldAggregators = myField.availableAggregators;
@@ -849,7 +849,7 @@ _Defined in
 `true` if this field is computed, `false` otherwise. A field is "computed" if it's value is not set
 by user input (e.g. autoNumber, formula, etc.). Can be watched
 
-**`example`**
+**Example:**
 
 ```js
 console.log(mySingleLineTextField.isComputed);
@@ -894,7 +894,7 @@ _Defined in
 
 The name of the field. Can be watched.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myField.name);
@@ -913,7 +913,7 @@ type. Can be watched.
 
 **`see`** [FieldTypes](_airtable_blocks_models__field.md#fieldtypes)
 
-**`example`**
+**Example:**
 
 ```js
 import {fieldTypes} from '@airtable/blocks/models';
@@ -933,7 +933,7 @@ _Defined in
 
 The type of the field. Can be watched.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myField.type);
@@ -950,7 +950,7 @@ _Defined in
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
 
-**`example`**
+**Example:**
 
 ```js
 const inputString = '42';
@@ -978,7 +978,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 _Defined in
 [src/models/field.ts:209](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/field.ts#L209)_
 
-**`example`**
+**Example:**
 
 ```js
 import {aggregators} from '@airtable/blocks/models';

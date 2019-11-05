@@ -38,7 +38,7 @@ specific view.
 
 Can be watched to know when fields are created or deleted.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(`This table has ${myTable.fields.length} fields`);
@@ -82,7 +82,7 @@ _Defined in
 
 The name of the table. Can be watched.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myTable.name);
@@ -99,7 +99,7 @@ _Defined in
 The table's primary field. Every table has exactly one primary field. The primary field of a table
 will not change.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myTable.primaryField.name);
@@ -116,7 +116,7 @@ _Defined in
 The URL for the table. You can visit this URL in the browser to be taken to the table in the
 Airtable UI.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myTable.url);
@@ -132,7 +132,7 @@ _Defined in
 
 The views in this table. Can be watched to know when views are created, deleted, or reordered.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(`This table has ${myTable.views.length} views`);
@@ -153,7 +153,7 @@ Accepts partial input, in the same format as
 [createRecordAsync](_airtable_blocks_models__table.md#createrecordasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can create a specific record, when you already know what fields/cell values
@@ -204,7 +204,7 @@ Accepts partial input, in the same format as
 [createRecordsAsync](_airtable_blocks_models__table.md#createrecordsasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can create specific records, when you already know what fields/cell values
@@ -260,7 +260,7 @@ Accepts optional input, in the same format as
 [deleteRecordAsync](_airtable_blocks_models__table.md#deleterecordasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can delete a specific record
@@ -303,7 +303,7 @@ Accepts optional input, in the same format as
 [deleteRecordsAsync](_airtable_blocks_models__table.md#deleterecordsasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can delete specific records
@@ -348,7 +348,7 @@ Accepts partial input, in the same format as
 [updateRecordAsync](_airtable_blocks_models__table.md#updaterecordasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can update specific fields for a specific record.
@@ -414,7 +414,7 @@ Accepts partial input, in the same format as
 [updateRecordsAsync](_airtable_blocks_models__table.md#updaterecordsasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 const recordsToUpdate = [
@@ -488,7 +488,7 @@ This action is asynchronous: `await` the returned promise if you wish to wait fo
 be persisted to Airtable servers. Updates are applied optimistically locally, so your changes will
 be reflected in your block before the promise resolves.
 
-**`example`**
+**Example:**
 
 ```js
 function createNewRecord(recordFields) {
@@ -551,7 +551,7 @@ This action is asynchronous: `await` the returned promise if you wish to wait fo
 be persisted to Airtable servers. Updates are applied optimistically locally, so your changes will
 be reflected in your block before the promise resolves.
 
-**`example`**
+**Example:**
 
 ```js
 const recordDefs = [
@@ -613,7 +613,7 @@ This action is asynchronous: `await` the returned promise if you wish to wait fo
 persisted to Airtable servers. Updates are applied optimistically locally, so your changes will be
 reflected in your block before the promise resolves.
 
-**`example`**
+**Example:**
 
 ```js
 function deleteRecord(record) {
@@ -665,7 +665,7 @@ This action is asynchronous: `await` the returned promise if you wish to wait fo
 persisted to Airtable servers. Updates are applied optimistically locally, so your changes will be
 reflected in your block before the promise resolves.
 
-**`example`**
+**Example:**
 
 ```js
 function deleteRecords(records) {
@@ -704,7 +704,7 @@ _[Field](_airtable_blocks_models__field.md#field)_
 _Defined in
 [src/models/table.ts:199](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L199)_
 
-**`example`**
+**Example:**
 
 ```js
 const fieldId = 'fldxxxxxxxxxxxxxx';
@@ -733,7 +733,7 @@ _[Field](_airtable_blocks_models__field.md#field) | null_
 _Defined in
 [src/models/table.ts:178](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L178)_
 
-**`example`**
+**Example:**
 
 ```js
 const fieldId = 'fldxxxxxxxxxxxxxx';
@@ -762,7 +762,7 @@ The field matching the given ID, or `null` if that field does not exist in this 
 _Defined in
 [src/models/table.ts:237](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L237)_
 
-**`example`**
+**Example:**
 
 ```js
 const field = myTable.getFieldByName('Name');
@@ -790,7 +790,7 @@ are unsure whether a field exists with the given name.
 _Defined in
 [src/models/table.ts:219](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L219)_
 
-**`example`**
+**Example:**
 
 ```js
 const field = myTable.getFieldByNameIfExists('Name');
@@ -824,7 +824,7 @@ _Defined in
 
 Returns the first view in the table where the type is one of `allowedViewTypes`.
 
-**`example`**
+**Example:**
 
 ```js
 import {viewTypes} from '@airtable/blocks/models';
@@ -856,7 +856,7 @@ _[View](_airtable_blocks_models__view.md#view)_
 _Defined in
 [src/models/table.ts:302](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L302)_
 
-**`example`**
+**Example:**
 
 ```js
 const viewId = 'viwxxxxxxxxxxxxxx';
@@ -885,7 +885,7 @@ _[View](_airtable_blocks_models__view.md#view) | null_
 _Defined in
 [src/models/table.ts:276](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L276)_
 
-**`example`**
+**Example:**
 
 ```js
 const viewId = 'viwxxxxxxxxxxxxxx';
@@ -914,7 +914,7 @@ The view matching the given ID, or `null` if that view does not exist in this ta
 _Defined in
 [src/models/table.ts:340](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L340)_
 
-**`example`**
+**Example:**
 
 ```js
 const view = myTable.getViewByName('Name');
@@ -942,7 +942,7 @@ null_
 _Defined in
 [src/models/table.ts:322](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table.ts#L322)_
 
-**`example`**
+**Example:**
 
 ```js
 const view = myTable.getViewByNameIfExists('Name');
@@ -979,7 +979,7 @@ Accepts partial input, in the same format as
 [createRecordAsync](_airtable_blocks_models__table.md#createrecordasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can create a specific record, when you already know what fields/cell values
@@ -1029,7 +1029,7 @@ Accepts partial input, in the same format as
 [createRecordsAsync](_airtable_blocks_models__table.md#createrecordsasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can create specific records, when you already know what fields/cell values
@@ -1084,7 +1084,7 @@ Accepts optional input, in the same format as
 [deleteRecordAsync](_airtable_blocks_models__table.md#deleterecordasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can delete a specific record
@@ -1126,7 +1126,7 @@ Accepts optional input, in the same format as
 [deleteRecordsAsync](_airtable_blocks_models__table.md#deleterecordsasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can delete specific records
@@ -1170,7 +1170,7 @@ Accepts partial input, in the same format as
 [updateRecordAsync](_airtable_blocks_models__table.md#updaterecordasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can update specific fields for a specific record.
@@ -1235,7 +1235,7 @@ Accepts partial input, in the same format as
 [updateRecordsAsync](_airtable_blocks_models__table.md#updaterecordsasync). The more information
 provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 const recordsToUpdate = [
@@ -1302,7 +1302,7 @@ _Defined in
 Select records from the table. Returns a query result. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for more.
 
-**`example`**
+**Example:**
 
 ```js
 import {UI} from '@airtable/blocks';
@@ -1397,7 +1397,7 @@ This action is asynchronous: `await` the returned promise if you wish to wait fo
 values to be persisted to Airtable servers. Updates are applied optimistically locally, so your
 changes will be reflected in your block before the promise resolves.
 
-**`example`**
+**Example:**
 
 ```js
 function updateRecord(record, recordFields) {
@@ -1460,7 +1460,7 @@ This action is asynchronous: `await` the returned promise if you wish to wait fo
 persisted to Airtable servers. Updates are applied optimistically locally, so your changes will be
 reflected in your block before the promise resolves.
 
-**`example`**
+**Example:**
 
 ```js
 const recordsToUpdate = [

@@ -22,7 +22,7 @@ _Defined in
 
 Injects CSS from a string into the page.
 
-**`example`**
+**Example:**
 
 ```js
 import {loadCSSFromString} from '@airtable/blocks/ui';
@@ -50,7 +50,7 @@ _Defined in
 
 Injects CSS from a remote URL.
 
-**`example`**
+**Example:**
 
 ```js
 import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
@@ -78,7 +78,7 @@ _Defined in
 
 Injects Javascript from a remote URL.
 
-**`example`**
+**Example:**
 
 ```js
 import {loadScriptFromURLAsync} from '@airtable/blocks/ui';

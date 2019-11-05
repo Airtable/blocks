@@ -31,7 +31,7 @@ A styled modal dialog component that prompts the user to confirm or cancel an ac
 this component will focus the "Confirm" button on mount, so that pressing the Enter key will confirm
 the action.
 
-**`example`**
+**Example:**
 
 ```js
 import {Button, Dialog, ConfirmationDialog} from '@airtable/blocks/ui';
@@ -71,7 +71,7 @@ _Defined in
 
 A styled modal dialog component.
 
-**`example`**
+**Example:**
 
 ```js
 import {Button, Dialog} from '@airtable/blocks/ui';

@@ -32,7 +32,7 @@ _Defined in
 Given a [Color](_airtable_blocks_ui__colors.md#color), returns true or false to indicate whether
 that color should have light text on top of it when used as a background color.
 
-**`example`**
+**Example:**
 
 ```js
 import {colorUtils, colors} from '@airtable/blocks/ui';

@@ -45,7 +45,7 @@ convenient model-specific hooks available:
 If you're writing a class component and still want to be able to use hooks, try
 [withHooks](_airtable_blocks_ui__withhooks.md#withhooks).
 
-**`example`**
+**Example:**
 
 ```js
 import {useWatchable} from '@airtable/blocks/ui';
@@ -56,7 +56,7 @@ function TableName({table}) {
 }
 ```
 
-**`example`**
+**Example:**
 
 ```js
 import {useWatchable} from '@airtable/blocks/ui';

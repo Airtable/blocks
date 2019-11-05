@@ -1051,7 +1051,7 @@ Developers should use `Link` instead of `a` when possible.
 
 **`augments`** React.StatelessFunctionalComponent
 
-**`example`** import {Link} from '@airtable/blocks/ui';
+**Example:** import {Link} from '@airtable/blocks/ui';
 
 function MyLinkComponent() { return ( <Link href="https://example.com"> Check out my homepage!
 

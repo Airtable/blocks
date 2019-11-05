@@ -24,7 +24,7 @@ _Defined in
 
 A component that shows a tooltip. Wraps its children.
 
-**`example`**
+**Example:**
 
 ```js
 import {UI} from '@airtable/blocks';

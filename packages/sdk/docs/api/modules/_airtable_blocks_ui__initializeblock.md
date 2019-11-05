@@ -21,7 +21,7 @@ _Defined in
 `initializeBlock` takes the top-level React component in your tree and renders it. It is
 conceptually similar to `ReactDOM.render`, but takes care of some Blocks-specific things.
 
-**`example`**
+**Example:**
 
 ```js
 import {initializeBlock} from '@airtable/blocks/ui';

@@ -27,7 +27,7 @@ useBase should meet most of your needs for working with Base schema. If you need
 control of when your component updates or want to do anything other than re-render, the lower level
 [useWatchable](_airtable_blocks_ui__usewatchable.md#usewatchable) hook might help.
 
-**`example`**
+**Example:**
 
 ```js
 import {useBase} from '@airtable/blocks/ui';

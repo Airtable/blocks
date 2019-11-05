@@ -3702,7 +3702,7 @@ _Defined in
 
 Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
 
-**`example`**
+**Example:**
 
 ```js
 import {Select} from '@airtable/blocks/ui';
@@ -3790,7 +3790,7 @@ _Defined in
 Dropdown menu component synced with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 A wrapper around `<select>` that fits in with Airtable's user interface.
 
-**`example`**
+**Example:**
 
 ```js
 import {SelectSynced} from '@airtable/blocks/ui';

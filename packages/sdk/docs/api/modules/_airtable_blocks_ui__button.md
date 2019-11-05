@@ -901,7 +901,7 @@ _Defined in
 
 Clickable button component.
 
-**`example`**
+**Example:**
 
 ```js
 import {Button} from '@airtable/blocks/ui';

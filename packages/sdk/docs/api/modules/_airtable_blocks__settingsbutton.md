@@ -31,7 +31,7 @@ Watch `click` to handle click events on the button.
 
 **`alias`** settingsButton
 
-**`example`**
+**Example:**
 
 ```js
 import {settingsButton} from '@airtable/blocks';

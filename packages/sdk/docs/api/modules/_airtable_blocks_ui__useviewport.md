@@ -21,7 +21,7 @@ _Defined in
 Returns the current [Viewport](_airtable_blocks__viewport.md#viewport) object and updates whenever
 the viewport size, constraints, or fullscreen status changes.
 
-**`example`**
+**Example:**
 
 ```js
 import {useViewport} from '@airtable/blocks/ui';

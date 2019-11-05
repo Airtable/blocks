@@ -24,7 +24,7 @@ _Defined in
 
 Model class representing the current user's session.
 
-**`example`**
+**Example:**
 
 ```js
 import {session} from '@airtable/blocks';
@@ -45,7 +45,7 @@ _Defined in
 
 The current user, or `null` if the block is running in a publicly shared base.
 
-**`example`**
+**Example:**
 
 ```js
 import {session} from '@airtable/blocks';

@@ -43,7 +43,7 @@ Any key can be watched to know when the value of the key changes.
 
 You should not need to construct this object yourself.
 
-**`example`**
+**Example:**
 
 ```js
 import {globalConfig} from '@airtable/blocks';
@@ -64,7 +64,7 @@ Checks whether the current user has permission to set the given global config ke
 Accepts partial input, in the same format as [setAsync](_airtable_blocks__globalconfig.md#setasync).
 The more information provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can update a specific key and value.
@@ -108,7 +108,7 @@ Accepts partial input, in the same format as
 [setPathsAsync](_airtable_blocks__globalconfig.md#setpathsasync). The more information provided, the
 more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can update a specific keys and values.
@@ -146,7 +146,7 @@ _Defined in
 
 Get the value at a path. Throws an error if the path is invalid.
 
-**`example`**
+**Example:**
 
 ```js
 import {globalConfig} from '@airtable/blocks';
@@ -181,7 +181,7 @@ Checks whether the current user has permission to set the given global config ke
 Accepts partial input, in the same format as [setAsync](_airtable_blocks__globalconfig.md#setasync).
 The more information provided, the more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can update a specific key and value.
@@ -225,7 +225,7 @@ Accepts partial input, in the same format as
 [setPathsAsync](_airtable_blocks__globalconfig.md#setpathsasync). The more information provided, the
 more accurate the permissions check will be.
 
-**`example`**
+**Example:**
 
 ```js
 // Check if user can update a specific keys and values.
@@ -267,7 +267,7 @@ persisted to Airtable servers. Updates are applied optimistically locally, so yo
 reflected in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) before the promise
 resolves.
 
-**`example`**
+**Example:**
 
 ```js
 import {globalConfig} from '@airtable/blocks';
@@ -316,7 +316,7 @@ persisted to Airtable servers. Updates are applied optimistically locally, so yo
 reflected in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) before the promise
 resolves.
 
-**`example`**
+**Example:**
 
 ```js
 import {globalConfig} from '@airtable/blocks';

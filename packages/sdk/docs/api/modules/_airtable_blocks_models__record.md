@@ -38,7 +38,7 @@ _Defined in
 
 The number of comments on this record.
 
-**`example`**
+**Example:**
 
 ```js
 const commentCount = myRecord.commentCount;
@@ -54,7 +54,7 @@ _Defined in
 
 The created time of this record.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(`This record was created at ${myRecord.createdTime.toISOString()}`);
@@ -98,7 +98,7 @@ _Defined in
 
 The primary cell value in this record.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myRecord.primaryCellValue);
@@ -114,7 +114,7 @@ _Defined in
 
 The primary cell value in this record, formatted as a `string`.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myRecord.primaryCellValueAsString);
@@ -131,7 +131,7 @@ _Defined in
 The URL for the record. You can visit this URL in the browser to be taken to the record in the
 Airtable UI.
 
-**`example`**
+**Example:**
 
 ```js
 console.log(myRecord.url);
@@ -149,7 +149,7 @@ _Defined in
 Returns a URL that is suitable for rendering an attachment on the current client. The URL that is
 returned will only work for the current user.
 
-**`example`**
+**Example:**
 
 ```js
 import React from 'react';
@@ -195,7 +195,7 @@ _Defined in
 
 Gets a specific cell value in this record.
 
-**`example`**
+**Example:**
 
 ```js
 const cellValue = myRecord.getCellValue(mySingleLineTextField);
@@ -224,7 +224,7 @@ _Defined in
 
 Gets a specific cell value in this record, formatted as a `string`.
 
-**`example`**
+**Example:**
 
 ```js
 const cellValueAsString = myRecord.getCellValueAsString(myNumberField);

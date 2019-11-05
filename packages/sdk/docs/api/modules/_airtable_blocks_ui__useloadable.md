@@ -118,7 +118,7 @@ that case though, `useLoadable` will cause your component to re-render whenever 
 any model you passed in changes, and you should check each model's `.isDataLoaded` property before
 trying to use the data you loaded.
 
-**`example`**
+**Example:**
 
 ```js
 import {cursor} from '@airtable/blocks';
@@ -136,7 +136,7 @@ function SelectedRecordIds() {
 }
 ```
 
-**`example`**
+**Example:**
 
 ```js
 import {useLoadable} from '@airtable/blocks/ui';
@@ -150,7 +150,7 @@ function LoadTwoQueryResults({queryResultA, queryResultB}) {
 }
 ```
 
-**`example`**
+**Example:**
 
 ```js
 import {useLoadable, useBase} from '@airtable/blocks/ui';

@@ -29,7 +29,7 @@ _Defined in
 
 Information about the current viewport
 
-**`example`**
+**Example:**
 
 ```js
 import {viewport} from '@airtable/blocks';

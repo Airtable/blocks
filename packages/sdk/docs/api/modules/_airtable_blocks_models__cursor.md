@@ -24,7 +24,7 @@ _Defined in
 
 Contains information about the state of the user's current interactions in Airtable
 
-**`example`**
+**Example:**
 
 ```js
 import {cursor} from '@airtable/blocks';

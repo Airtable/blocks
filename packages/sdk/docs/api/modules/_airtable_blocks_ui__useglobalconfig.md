@@ -21,7 +21,7 @@ _Defined in
 Returns the [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) and updates whenever any
 key in GlobalConfig changes.
 
-**`example`**
+**Example:**
 
 ```js
 import {useGlobalConfig} from '@airtable/blocks/ui';

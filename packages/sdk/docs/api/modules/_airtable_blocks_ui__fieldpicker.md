@@ -1515,7 +1515,7 @@ _Defined in
 
 Dropdown menu component for selecting fields.
 
-**`example`**
+**Example:**
 
 ```js
 import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
@@ -1590,7 +1590,7 @@ _Defined in
 Dropdown menu component for selecting fields, synced with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 
-**`example`**
+**Example:**
 
 ```js
 import {TablePickerSynced, FieldPickerSynced, useBase, useWatchable} from '@airtable/blocks/ui';

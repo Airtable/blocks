@@ -1107,7 +1107,7 @@ _Defined in
 
 A text button component with sizes and variants.
 
-**`example`** import {TextButton} from '@airtable/blocks/ui'; import React, {Fragment} from 'react';
+**Example:** import {TextButton} from '@airtable/blocks/ui'; import React, {Fragment} from 'react';
 
 function TextButtonExample() { return ( <Fragment> <TextButton>Default text, for single line
 text</TextButton> <TextButton size="small">Small text button</TextButton> <TextButton size={{
