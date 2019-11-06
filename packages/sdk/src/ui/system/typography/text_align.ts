@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {TextAlignProperty} from '../utils/csstype';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface TextAlignProps {
     /** Sets the horizontal alignment of the text. */
-    textAlign?: Prop<TextAlignProperty>;
+    textAlign?: OptionalResponsiveProp<TextAlignProperty>;
 }
 
 export const config: Config = {textAlign: true};

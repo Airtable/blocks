@@ -79,12 +79,12 @@ function RecordList() {
 
 **Parameters:**
 
-| Name          | Type                                                                            | Description                                         |
-| ------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| `queryResult` | [AnyQueryResult](_airtable_blocks_ui__userecords.md#anyqueryresult) &#124; null | the query result you want a record from             |
-| `recordId`    | [RecordId](_airtable_blocks_models__record.md#recordid)                         | the ID of the record you want from the query result |
+| Name          | Type                                                                            | Description                                          |
+| ------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `queryResult` | [AnyQueryResult](_airtable_blocks_ui__userecords.md#anyqueryresult) &#124; null | The query result you want a record from.             |
+| `recordId`    | [RecordId](_airtable_blocks_models__record.md#recordid)                         | The ID of the record you want from the query result. |
 
 **Returns:** _[Record](_airtable_blocks_models__record.md#record) | null_
 
-the record, or null if no query result was passed in or no record with that ID exists in the query
-result
+The record, or null if no query result was passed in or no record with that ID exists in the query
+result.

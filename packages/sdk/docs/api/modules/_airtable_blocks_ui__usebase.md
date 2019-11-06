@@ -16,14 +16,14 @@
 ▸ **useBase**(): _[Base](_airtable_blocks_models__base.md#base)_
 
 _Defined in
-[src/ui/use_base.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_base.ts#L33)_
+[src/ui/use_base.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_base.ts#L34)_
 
-A hook for connecting a React component to your Base's schema. This returns a
+A hook for connecting a React component to your base's schema. This returns a
 [Base](_airtable_blocks_models__base.md#base) instance and will re-render your component whenever
 the base's schema changes. That means any change to your base like tables being added or removed,
 fields getting renamed, etc. It excludes any change to the actual records in the base.
 
-useBase should meet most of your needs for working with Base schema. If you need more granular
+`useBase` should meet most of your needs for working with base schema. If you need more granular
 control of when your component updates or want to do anything other than re-render, the lower level
 [useWatchable](_airtable_blocks_ui__usewatchable.md#usewatchable) hook might help.
 
@@ -46,4 +46,4 @@ function TableList() {
 
 **Returns:** _[Base](_airtable_blocks_models__base.md#base)_
 
-Base
+The current base.

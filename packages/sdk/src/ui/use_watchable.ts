@@ -14,16 +14,15 @@ import useArrayIdentity from './use_array_identity';
  * This is a low-level tool that you should only use when you specifically need it. There are more
  * convenient model-specific hooks available:
  *
- * - For {@link Base}, {@link Table}, {@link View} & {@link Field}, use {@link useBase}
- * - For {@link RecordQueryResult} & {@link Record}, use {@link useRecords}, {@link useRecordIds}, or
- *   {@link useRecordById}
- * - For {@link Viewport}, use {@link useViewport}.
+ * * For {@link Base}, {@link Table}, {@link View}, or {@link Field}, use {@link useBase}.
+ * * For {@link RecordQueryResult} or {@link Record}, use {@link useRecords}, {@link useRecordIds}, or {@link useRecordById}.
+ * * For {@link Viewport}, use {@link useViewport}.
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
- * @param models the model or models to watch
- * @param keys which keys we want to watch
- * @param callback an optional callback to call when any of the watch keys change
+ * @param models The model or models to watch.
+ * @param keys The keys to watch.
+ * @param callback An optional callback to call when any of the watch keys change.
  *
  * @example
  * ```js

@@ -1,9 +1,7 @@
 /** @module @airtable/blocks/ui: colors */ /** */
 import {ObjectValues} from './private_utils';
 /**
- * An enum of color names
- *
- * @alias colors
+ * Airtable color names.
  */
 const Colors = {
     /** */
@@ -120,7 +118,7 @@ const Colors = {
 export default Colors;
 
 /**
- * A value from the {@link colors} enum
+ * A color name.
  */
 export type Color = ObjectValues<typeof Colors>;
 

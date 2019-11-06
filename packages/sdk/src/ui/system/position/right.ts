@@ -3,12 +3,12 @@ import {system, Config} from '@styled-system/core';
 import {RightProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
-import {Prop, Length} from '../utils/types';
+import {OptionalResponsiveProp, Length} from '../utils/types';
 
 /** */
 export interface RightProps {
     /** Specifies the horizontal position of a positioned element. It has no effect on non-positioned elements. */
-    right?: Prop<RightProperty<Length>>;
+    right?: OptionalResponsiveProp<RightProperty<Length>>;
 }
 
 export const config: Config = {

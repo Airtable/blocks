@@ -2,16 +2,16 @@
 import {system, Config} from '@styled-system/core';
 import {ColorProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface TextColorProps {
     /**
      * Sets the foreground color value of an element's text and text decorations, and sets the `currentcolor` value.
      *
-     * @see [[colors]]
+     * @see {@link colors}
      */
-    textColor?: Prop<ColorProperty>;
+    textColor?: OptionalResponsiveProp<ColorProperty>;
 }
 
 export const config: Config = {

@@ -26,7 +26,7 @@ import {
     marginPropTypes,
     MarginProps,
 } from './system';
-import {Prop} from './system/utils/types';
+import {OptionalResponsiveProp} from './system/utils/types';
 import useTheme from './theme/use_theme';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {
@@ -40,7 +40,7 @@ import {
 import useStyledSystem from './use_styled_system';
 import {useSelectSize, ControlSize, ControlSizeProp, controlSizePropType} from './control_sizes';
 
-/** */
+/** @hidden */
 type SelectVariant = EnumType<typeof SelectVariant>;
 const SelectVariant = createEnum('default');
 
@@ -50,7 +50,29 @@ function useSelectVariant(variant: SelectVariant = SelectVariant.default): strin
     return selectVariants[variant];
 }
 
-/** */
+// This component isn't great right now. It's just a styled <select> with a really hacky
+// way of getting the chevron arrow to show up. It also behaves weirdly when you give it
+// a margin (I think this is a limitation of <select>). We should probably replace it with
+// something like react-select, which would give us nice features like rendering custom
+// elements for options (e.g. for field type icons) and typeahead search.
+
+/**
+ * Style props shared between the following components.
+ * * {@link Select}, {@link SelectSynced}
+ * * {@link TablePicker}, {@link TablePickerSynced}
+ * * {@link ViewPicker}, {@link ViewPickerSynced}
+ * * {@link FieldPicker}, {@link FieldPickerSynced}
+ *
+ * Also accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link MaxWidthProps}
+ *
+ * @noInheritDoc
+ */
 interface SelectStyleProps
     extends MaxWidthProps,
         MinWidthProps,
@@ -58,13 +80,26 @@ interface SelectStyleProps
         FlexItemSetProps,
         PositionSetProps,
         MarginProps {
-    /** */
-    display?: Prop<'inline-flex' | 'flex' | 'none'>;
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'inline-flex' | 'flex' | 'none'>;
 }
 
-// Shared with `Select`, `SelectSynced` and `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`.
-/** */
-export interface SharedSelectBaseProps extends TooltipAnchorProps, SelectStyleProps {
+/**
+ * Props shared between the following components:
+ * * {@link Select}, {@link SelectSynced}
+ * * {@link TablePicker}, {@link TablePickerSynced}
+ * * {@link ViewPicker}, {@link ViewPickerSynced}
+ * * {@link FieldPicker}, {@link FieldPickerSynced}
+ *
+ * Also accepts:
+ * * {@link SelectStyleProps}
+ *
+ * @noInheritDoc
+ */
+// TODO (stephen): inherit shared props without inheriting style props
+export interface SharedSelectBaseProps
+    extends TooltipAnchorProps<HTMLSelectElement>,
+        SelectStyleProps {
     /** The size of the select. */
     size?: ControlSizeProp;
     /** Additional class names to apply to the select. */
@@ -100,6 +135,7 @@ export const selectStylePropTypes = {
 
 // Shared with `Select`, `SelectSynced`, `ModelPickerSelect` and `(Table/View/Field)Picker(Synced)`
 export const sharedSelectBasePropTypes = {
+    size: controlSizePropType,
     autoFocus: PropTypes.bool,
     disabled: PropTypes.bool,
     id: PropTypes.string,
@@ -114,8 +150,12 @@ export const sharedSelectBasePropTypes = {
     ...selectStylePropTypes,
 };
 
-// Shared with `Select` and `SelectSynced`.
-/** */
+/**
+ * Props shared between the {@link Select} and {@link SelectSynced} components. Also accepts:
+ * * {@link SharedSelectBaseProps}
+ *
+ * @noInheritDoc
+ */
 export interface SharedSelectProps extends SharedSelectBaseProps {
     /** The list of select options. */
     options: Array<SelectOption>;
@@ -126,7 +166,6 @@ export interface SharedSelectProps extends SharedSelectBaseProps {
 // Shared with `Select` and `SelectSynced`.
 export const sharedSelectPropTypes = {
     // We do more strict checks in render.
-    size: controlSizePropType,
     options: PropTypes.arrayOf(
         PropTypes.shape({
             value: selectOptionValuePropType,
@@ -138,7 +177,12 @@ export const sharedSelectPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link Select} component. Also accepts:
+ * * {@link SharedSelectProps}
+ *
+ * @noInheritDoc
+ */
 export interface SelectProps extends SharedSelectProps {
     /** The value of the selected option. */
     value: SelectOptionValue;
@@ -196,6 +240,8 @@ function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
         onMouseEnter,
         onMouseLeave,
         onClick,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        hasOnClick,
         className,
         style,
         'aria-label': ariaLabel,
@@ -287,7 +333,7 @@ function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
     );
 }
 
-const ForwardedRefSelect = React.forwardRef(Select);
+const ForwardedRefSelect = React.forwardRef<HTMLSelectElement, SelectProps>(Select);
 
 ForwardedRefSelect.displayName = 'Select';
 

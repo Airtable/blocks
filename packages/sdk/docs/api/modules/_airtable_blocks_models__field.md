@@ -103,7 +103,7 @@ This field is "true" when checked and otherwise empty.
 
 ```js
 {
-    // an [Icon](_airtable_blocks_ui__icon.md#const-icon) name
+    // an [Icon](_airtable_blocks_ui__icon.md#icon) name
     icon: string,
     // the color of the check box
     color: Color,
@@ -636,7 +636,7 @@ number;
 
 ```js
 {
-    // the [Icon](_airtable_blocks_ui__icon.md#const-icon) name used to display the rating
+    // the [Icon](_airtable_blocks_ui__icon.md#icon) name used to display the rating
     icon: string,
     // the maximum value for the rating
     max: number,

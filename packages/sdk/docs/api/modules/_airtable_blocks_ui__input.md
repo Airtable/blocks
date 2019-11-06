@@ -14,6 +14,7 @@
 
 ### Type aliases
 
+-   [SupportedInputType](_airtable_blocks_ui__input.md#supportedinputtype)
 -   [ValidInputType](_airtable_blocks_ui__input.md#validinputtype)
 
 ### Functions
@@ -28,576 +29,20 @@
 • **InputProps**:
 
 _Defined in
-[src/ui/input.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L138)_
+[src/ui/input.tsx:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L205)_
 
-### `Optional` alignSelf
+Props for the [Input](_airtable_blocks_ui__input.md#input) component. Also accepts:
 
-• **alignSelf**? : _Prop‹AlignSelfProperty›_
-
-_Inherited from
-[AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
-
-_Defined in
-[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
-
-Aligns flex items of the current flex line, overriding the `alignItems` value.
-
-### `Optional` aria-describedby
-
-• **aria-describedby**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[aria-describedby](_airtable_blocks_ui__input.md#optional-aria-describedby)_
-
-_Defined in
-[src/ui/input.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L106)_
-
-A space separated list of description element IDs.
-
-### `Optional` aria-labelledby
-
-• **aria-labelledby**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[aria-labelledby](_airtable_blocks_ui__input.md#optional-aria-labelledby)_
-
-_Defined in
-[src/ui/input.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L104)_
-
-A space separated list of label element IDs.
-
-### `Optional` autoComplete
-
-• **autoComplete**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[autoComplete](_airtable_blocks_ui__input.md#optional-autocomplete)_
-
-_Defined in
-[src/ui/input.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L96)_
-
-The `autoComplete` attribute.
-
-### `Optional` autoFocus
-
-• **autoFocus**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[autoFocus](_airtable_blocks_ui__input.md#optional-autofocus)_
-
-_Defined in
-[src/ui/input.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L80)_
-
-The `autoFocus` attribute.
-
-### `Optional` bottom
-
-• **bottom**? : _Prop‹BottomProperty‹Length››_
-
-_Inherited from
-[BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
-
-_Defined in
-[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/bottom.ts#L11)_
-
-Specifies the vertical position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` className
-
-• **className**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[className](_airtable_blocks_ui__input.md#optional-classname)_
-
-_Defined in
-[src/ui/input.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L100)_
-
-Additional class names to apply to the input, separated by spaces.
-
-### `Optional` disabled
-
-• **disabled**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[disabled](_airtable_blocks_ui__input.md#optional-disabled)_
-
-_Defined in
-[src/ui/input.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L68)_
-
-The `disabled` attribute.
-
-### `Optional` flex
-
-• **flex**? : _Prop‹FlexProperty‹Length››_
-
-_Inherited from
-[FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
-
-_Defined in
-[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
-
-Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a
-shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
-
-### `Optional` flexBasis
-
-• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
-
-_Inherited from
-[FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
-
-_Defined in
-[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
-
-Sets the initial main size of a flex item.
-
-### `Optional` flexGrow
-
-• **flexGrow**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
-
-_Defined in
-[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
-
-Sets the flex grow factor of a flex item. If the size of flex items is smaller than the flex
-container, items grow to fit according to `flexGrow`.
-
-### `Optional` flexShrink
-
-• **flexShrink**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
-
-_Defined in
-[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
-
-Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
-container, items shrink to fit according to `flexShrink`.
-
-### `Optional` id
-
-• **id**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[id](_airtable_blocks_ui__input.md#optional-id)_
-
-_Defined in
-[src/ui/input.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L78)_
-
-The `id` attribute.
-
-### `Optional` left
-
-• **left**? : _Prop‹LeftProperty‹Length››_
-
-_Inherited from
-[LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
-
-_Defined in
-[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/left.ts#L11)_
-
-Specifies the horizontal position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` margin
-
-• **margin**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[margin](_airtable_blocks_ui_system__spacing.md#optional-margin)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
-
-Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`,
-`marginRight`, `marginBottom`, and `marginLeft`.
-
-### `Optional` marginBottom
-
-• **marginBottom**? : _Prop‹MarginBottomProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginBottom](_airtable_blocks_ui_system__spacing.md#optional-marginbottom)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
-
-Sets the margin area on the bottom of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginLeft
-
-• **marginLeft**? : _Prop‹MarginLeftProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginLeft](_airtable_blocks_ui_system__spacing.md#optional-marginleft)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
-
-Sets the margin area on the left of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginRight
-
-• **marginRight**? : _Prop‹MarginRightProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginRight](_airtable_blocks_ui_system__spacing.md#optional-marginright)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
-
-Sets the margin area on the right of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginTop
-
-• **marginTop**? : _Prop‹MarginTopProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginTop](_airtable_blocks_ui_system__spacing.md#optional-margintop)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
-
-Sets the margin area on the top of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginX
-
-• **marginX**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginX](_airtable_blocks_ui_system__spacing.md#optional-marginx)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
-
-Sets the margin area on the top and bottom of an element. A positive value places it farther from
-its neighbors, while a negative value places it closer.
-
-### `Optional` marginY
-
-• **marginY**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginY](_airtable_blocks_ui_system__spacing.md#optional-marginy)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
-
-Sets the margin area on the left and right of an element. A positive value places it farther from
-its neighbors, while a negative value places it closer.
-
-### `Optional` max
-
-• **max**? : _number | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[max](_airtable_blocks_ui__input.md#optional-max)_
-
-_Defined in
-[src/ui/input.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L82)_
-
-The `max` attribute.
-
-### `Optional` maxLength
-
-• **maxLength**? : _undefined | number_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[maxLength](_airtable_blocks_ui__input.md#optional-maxlength)_
-
-_Defined in
-[src/ui/input.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L84)_
-
-The `maxLength` attribute.
-
-### `Optional` maxWidth
-
-• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
-
-_Inherited from
-[MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
-
-_Defined in
-[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
-
-Sets the maximum width of an element. It prevents the used value of the `width` property from
-becoming larger than the value specified by `maxWidth`.
-
-### `Optional` min
-
-• **min**? : _number | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[min](_airtable_blocks_ui__input.md#optional-min)_
-
-_Defined in
-[src/ui/input.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L108)_
-
-The `min` attribute.
-
-### `Optional` minLength
-
-• **minLength**? : _undefined | number_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[minLength](_airtable_blocks_ui__input.md#optional-minlength)_
-
-_Defined in
-[src/ui/input.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L88)_
-
-The `minLength` attribute.
-
-### `Optional` minWidth
-
-• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
-
-_Inherited from
-[MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
-
-_Defined in
-[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
-
-Sets the minimum width of an element. It prevents the used value of the `width` property from
-becoming smaller than the value specified for `minWidth`.
-
-### `Optional` name
-
-• **name**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[name](_airtable_blocks_ui__input.md#optional-name)_
-
-_Defined in
-[src/ui/input.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L76)_
-
-The `name` attribute.
-
-### `Optional` onChange
-
-• **onChange**? : _undefined | function_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[onChange](_airtable_blocks_ui__input.md#optional-onchange)_
-
-_Defined in
-[src/ui/input.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L102)_
-
-A function to be called when the input changes.
-
-### `Optional` order
-
-• **order**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
-
-_Defined in
-[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
-
-Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
-and then by their source code order.
-
-### `Optional` pattern
-
-• **pattern**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[pattern](_airtable_blocks_ui__input.md#optional-pattern)_
-
-_Defined in
-[src/ui/input.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L92)_
-
-The `pattern` attribute.
-
-### `Optional` placeholder
-
-• **placeholder**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[placeholder](_airtable_blocks_ui__input.md#optional-placeholder)_
-
-_Defined in
-[src/ui/input.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L86)_
-
-The placeholder for the input.
-
-### `Optional` position
-
-• **position**? : _Prop‹PositionProperty›_
-
-_Inherited from
-[PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
-
-_Defined in
-[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position.ts#L10)_
-
-Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
-determine the final location of positioned elements.
-
-### `Optional` readOnly
-
-• **readOnly**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[readOnly](_airtable_blocks_ui__input.md#optional-readonly)_
-
-_Defined in
-[src/ui/input.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L94)_
-
-The `readOnly` attribute.
-
-### `Optional` required
-
-• **required**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[required](_airtable_blocks_ui__input.md#optional-required)_
-
-_Defined in
-[src/ui/input.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L70)_
-
-The `required` attribute.
-
-### `Optional` right
-
-• **right**? : _Prop‹RightProperty‹Length››_
-
-_Inherited from
-[RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
-
-_Defined in
-[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/right.ts#L11)_
-
-Specifies the horizontal position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` size
-
-• **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__core.md#controlsizeprop)_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[size](_airtable_blocks_ui__input.md#optional-size)_
-
-_Defined in
-[src/ui/input.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L64)_
-
-The size of the input. Defaults to `default`.
-
-### `Optional` spellCheck
-
-• **spellCheck**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[spellCheck](_airtable_blocks_ui__input.md#optional-spellcheck)_
-
-_Defined in
-[src/ui/input.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L72)_
-
-The `spellcheck` attribute.
-
-### `Optional` step
-
-• **step**? : _number | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[step](_airtable_blocks_ui__input.md#optional-step)_
-
-_Defined in
-[src/ui/input.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L90)_
-
-The `step` attribute.
-
-### `Optional` style
-
-• **style**? : _React.CSSProperties_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[style](_airtable_blocks_ui__input.md#optional-style)_
-
-_Defined in
-[src/ui/input.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L98)_
-
-Additional styles to apply to the input.
-
-### `Optional` tabIndex
-
-• **tabIndex**? : _undefined | number_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[tabIndex](_airtable_blocks_ui__input.md#optional-tabindex)_
-
-_Defined in
-[src/ui/input.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L74)_
-
-The `tabindex` attribute.
-
-### `Optional` top
-
-• **top**? : _Prop‹TopProperty‹Length››_
-
-_Inherited from
-[TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
-
-_Defined in
-[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/top.ts#L11)_
-
-Specifies the vertical position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` type
-
-• **type**? : _undefined | "number" | "time" | "text" | "date" | "datetime-local" | "email" |
-"month" | "password" | "search" | "tel" | "url" | "week"_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[type](_airtable_blocks_ui__input.md#optional-type)_
-
-_Defined in
-[src/ui/input.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L66)_
-
-The `type` for the input. Defaults to `text`.
+-   [SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops)
 
 ### value
 
 • **value**: _string_
 
 _Defined in
-[src/ui/input.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L140)_
+[src/ui/input.tsx:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L207)_
 
 The input's current value.
-
-### `Optional` width
-
-• **width**? : _Prop‹WidthProperty‹Length››_
-
-_Inherited from
-[WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
-
-_Defined in
-[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
-
-Specifies the width of an element.
-
-### `Optional` zIndex
-
-• **zIndex**? : _Prop‹ZIndexProperty›_
-
-_Inherited from
-[ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
-
-_Defined in
-[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/z_index.ts#L10)_
-
-Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
-with larger z-indexes cover those with smaller ones.
 
 ---
 
@@ -606,290 +51,17 @@ with larger z-indexes cover those with smaller ones.
 • **InputStyleProps**:
 
 _Defined in
-[src/ui/input.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L144)_
-
-### `Optional` alignSelf
-
-• **alignSelf**? : _Prop‹AlignSelfProperty›_
-
-_Inherited from
-[AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
-
-_Defined in
-[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
-
-Aligns flex items of the current flex line, overriding the `alignItems` value.
-
-### `Optional` bottom
-
-• **bottom**? : _Prop‹BottomProperty‹Length››_
-
-_Inherited from
-[BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
-
-_Defined in
-[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/bottom.ts#L11)_
-
-Specifies the vertical position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` flex
-
-• **flex**? : _Prop‹FlexProperty‹Length››_
-
-_Inherited from
-[FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
-
-_Defined in
-[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
-
-Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a
-shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
-
-### `Optional` flexBasis
-
-• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
-
-_Inherited from
-[FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
-
-_Defined in
-[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
-
-Sets the initial main size of a flex item.
-
-### `Optional` flexGrow
-
-• **flexGrow**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
-
-_Defined in
-[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
-
-Sets the flex grow factor of a flex item. If the size of flex items is smaller than the flex
-container, items grow to fit according to `flexGrow`.
-
-### `Optional` flexShrink
-
-• **flexShrink**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
-
-_Defined in
-[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
-
-Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
-container, items shrink to fit according to `flexShrink`.
-
-### `Optional` left
-
-• **left**? : _Prop‹LeftProperty‹Length››_
-
-_Inherited from
-[LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
-
-_Defined in
-[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/left.ts#L11)_
-
-Specifies the horizontal position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` margin
-
-• **margin**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[margin](_airtable_blocks_ui_system__spacing.md#optional-margin)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
-
-Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`,
-`marginRight`, `marginBottom`, and `marginLeft`.
-
-### `Optional` marginBottom
-
-• **marginBottom**? : _Prop‹MarginBottomProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginBottom](_airtable_blocks_ui_system__spacing.md#optional-marginbottom)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
-
-Sets the margin area on the bottom of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginLeft
-
-• **marginLeft**? : _Prop‹MarginLeftProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginLeft](_airtable_blocks_ui_system__spacing.md#optional-marginleft)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
-
-Sets the margin area on the left of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginRight
-
-• **marginRight**? : _Prop‹MarginRightProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginRight](_airtable_blocks_ui_system__spacing.md#optional-marginright)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
-
-Sets the margin area on the right of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginTop
-
-• **marginTop**? : _Prop‹MarginTopProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginTop](_airtable_blocks_ui_system__spacing.md#optional-margintop)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
-
-Sets the margin area on the top of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginX
-
-• **marginX**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginX](_airtable_blocks_ui_system__spacing.md#optional-marginx)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
-
-Sets the margin area on the top and bottom of an element. A positive value places it farther from
-its neighbors, while a negative value places it closer.
-
-### `Optional` marginY
-
-• **marginY**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginY](_airtable_blocks_ui_system__spacing.md#optional-marginy)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
-
-Sets the margin area on the left and right of an element. A positive value places it farther from
-its neighbors, while a negative value places it closer.
-
-### `Optional` maxWidth
-
-• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
-
-_Inherited from
-[MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
-
-_Defined in
-[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
-
-Sets the maximum width of an element. It prevents the used value of the `width` property from
-becoming larger than the value specified by `maxWidth`.
-
-### `Optional` minWidth
-
-• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
-
-_Inherited from
-[MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
-
-_Defined in
-[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
-
-Sets the minimum width of an element. It prevents the used value of the `width` property from
-becoming smaller than the value specified for `minWidth`.
-
-### `Optional` order
-
-• **order**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
-
-_Defined in
-[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
-
-Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
-and then by their source code order.
-
-### `Optional` position
-
-• **position**? : _Prop‹PositionProperty›_
-
-_Inherited from
-[PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
-
-_Defined in
-[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position.ts#L10)_
-
-Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
-determine the final location of positioned elements.
-
-### `Optional` right
-
-• **right**? : _Prop‹RightProperty‹Length››_
-
-_Inherited from
-[RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
-
-_Defined in
-[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/right.ts#L11)_
-
-Specifies the horizontal position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` top
-
-• **top**? : _Prop‹TopProperty‹Length››_
-
-_Inherited from
-[TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
-
-_Defined in
-[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/top.ts#L11)_
-
-Specifies the vertical position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` width
-
-• **width**? : _Prop‹WidthProperty‹Length››_
-
-_Inherited from
-[WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
-
-_Defined in
-[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
-
-Specifies the width of an element.
-
-### `Optional` zIndex
-
-• **zIndex**? : _Prop‹ZIndexProperty›_
-
-_Inherited from
-[ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
-
-_Defined in
-[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/z_index.ts#L10)_
-
-Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
-with larger z-indexes cover those with smaller ones.
+[src/ui/input.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L71)_
+
+Style props shared between the [Input](_airtable_blocks_ui__input.md#input) and
+[InputSynced](_airtable_blocks_ui__input.md#inputsynced) components. Accepts:
+
+-   [FlexItemSetProps](_airtable_blocks_ui_system__flex_item.md#flexitemsetprops)
+-   [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops)
+-   [MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops)
+-   [MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops)
+-   [PositionProps](_airtable_blocks_ui_system__position.md#positionprops)
+-   [WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops)
 
 ---
 
@@ -900,153 +72,10 @@ with larger z-indexes cover those with smaller ones.
 _Defined in
 [src/ui/input_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L16)_
 
-### `Optional` alignSelf
+Props for the [Input](_airtable_blocks_ui__input.md#input) and
+[InputSynced](_airtable_blocks_ui__input.md#inputsynced) components. Also accepts:
 
-• **alignSelf**? : _Prop‹AlignSelfProperty›_
-
-_Inherited from
-[AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
-
-_Defined in
-[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
-
-Aligns flex items of the current flex line, overriding the `alignItems` value.
-
-### `Optional` aria-describedby
-
-• **aria-describedby**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[aria-describedby](_airtable_blocks_ui__input.md#optional-aria-describedby)_
-
-_Defined in
-[src/ui/input.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L106)_
-
-A space separated list of description element IDs.
-
-### `Optional` aria-labelledby
-
-• **aria-labelledby**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[aria-labelledby](_airtable_blocks_ui__input.md#optional-aria-labelledby)_
-
-_Defined in
-[src/ui/input.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L104)_
-
-A space separated list of label element IDs.
-
-### `Optional` autoComplete
-
-• **autoComplete**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[autoComplete](_airtable_blocks_ui__input.md#optional-autocomplete)_
-
-_Defined in
-[src/ui/input.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L96)_
-
-The `autoComplete` attribute.
-
-### `Optional` autoFocus
-
-• **autoFocus**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[autoFocus](_airtable_blocks_ui__input.md#optional-autofocus)_
-
-_Defined in
-[src/ui/input.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L80)_
-
-The `autoFocus` attribute.
-
-### `Optional` bottom
-
-• **bottom**? : _Prop‹BottomProperty‹Length››_
-
-_Inherited from
-[BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
-
-_Defined in
-[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/bottom.ts#L11)_
-
-Specifies the vertical position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` className
-
-• **className**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[className](_airtable_blocks_ui__input.md#optional-classname)_
-
-_Defined in
-[src/ui/input.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L100)_
-
-Additional class names to apply to the input, separated by spaces.
-
-### `Optional` disabled
-
-• **disabled**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[disabled](_airtable_blocks_ui__input.md#optional-disabled)_
-
-_Defined in
-[src/ui/input.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L68)_
-
-The `disabled` attribute.
-
-### `Optional` flex
-
-• **flex**? : _Prop‹FlexProperty‹Length››_
-
-_Inherited from
-[FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
-
-_Defined in
-[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
-
-Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a
-shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
-
-### `Optional` flexBasis
-
-• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
-
-_Inherited from
-[FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
-
-_Defined in
-[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
-
-Sets the initial main size of a flex item.
-
-### `Optional` flexGrow
-
-• **flexGrow**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
-
-_Defined in
-[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
-
-Sets the flex grow factor of a flex item. If the size of flex items is smaller than the flex
-container, items grow to fit according to `flexGrow`.
-
-### `Optional` flexShrink
-
-• **flexShrink**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
-
-_Defined in
-[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
-
-Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
-container, items shrink to fit according to `flexShrink`.
+-   [SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops)
 
 ### globalConfigKey
 
@@ -1055,419 +84,10 @@ container, items shrink to fit according to `flexShrink`.
 _Defined in
 [src/ui/input_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L18)_
 
-The key, or path to a key, in global config.
-
-### `Optional` id
-
-• **id**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[id](_airtable_blocks_ui__input.md#optional-id)_
-
-_Defined in
-[src/ui/input.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L78)_
-
-The `id` attribute.
-
-### `Optional` left
-
-• **left**? : _Prop‹LeftProperty‹Length››_
-
-_Inherited from
-[LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
-
-_Defined in
-[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/left.ts#L11)_
-
-Specifies the horizontal position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` margin
-
-• **margin**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[margin](_airtable_blocks_ui_system__spacing.md#optional-margin)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
-
-Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`,
-`marginRight`, `marginBottom`, and `marginLeft`.
-
-### `Optional` marginBottom
-
-• **marginBottom**? : _Prop‹MarginBottomProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginBottom](_airtable_blocks_ui_system__spacing.md#optional-marginbottom)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
-
-Sets the margin area on the bottom of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginLeft
-
-• **marginLeft**? : _Prop‹MarginLeftProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginLeft](_airtable_blocks_ui_system__spacing.md#optional-marginleft)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
-
-Sets the margin area on the left of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginRight
-
-• **marginRight**? : _Prop‹MarginRightProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginRight](_airtable_blocks_ui_system__spacing.md#optional-marginright)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
-
-Sets the margin area on the right of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginTop
-
-• **marginTop**? : _Prop‹MarginTopProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginTop](_airtable_blocks_ui_system__spacing.md#optional-margintop)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
-
-Sets the margin area on the top of an element. A positive value places it farther from its
-neighbors, while a negative value places it closer.
-
-### `Optional` marginX
-
-• **marginX**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginX](_airtable_blocks_ui_system__spacing.md#optional-marginx)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
-
-Sets the margin area on the top and bottom of an element. A positive value places it farther from
-its neighbors, while a negative value places it closer.
-
-### `Optional` marginY
-
-• **marginY**? : _Prop‹MarginProperty‹Length››_
-
-_Inherited from
-[MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginY](_airtable_blocks_ui_system__spacing.md#optional-marginy)_
-
-_Defined in
-[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
-
-Sets the margin area on the left and right of an element. A positive value places it farther from
-its neighbors, while a negative value places it closer.
-
-### `Optional` max
-
-• **max**? : _number | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[max](_airtable_blocks_ui__input.md#optional-max)_
-
-_Defined in
-[src/ui/input.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L82)_
-
-The `max` attribute.
-
-### `Optional` maxLength
-
-• **maxLength**? : _undefined | number_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[maxLength](_airtable_blocks_ui__input.md#optional-maxlength)_
-
-_Defined in
-[src/ui/input.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L84)_
-
-The `maxLength` attribute.
-
-### `Optional` maxWidth
-
-• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
-
-_Inherited from
-[MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
-
-_Defined in
-[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
-
-Sets the maximum width of an element. It prevents the used value of the `width` property from
-becoming larger than the value specified by `maxWidth`.
-
-### `Optional` min
-
-• **min**? : _number | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[min](_airtable_blocks_ui__input.md#optional-min)_
-
-_Defined in
-[src/ui/input.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L108)_
-
-The `min` attribute.
-
-### `Optional` minLength
-
-• **minLength**? : _undefined | number_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[minLength](_airtable_blocks_ui__input.md#optional-minlength)_
-
-_Defined in
-[src/ui/input.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L88)_
-
-The `minLength` attribute.
-
-### `Optional` minWidth
-
-• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
-
-_Inherited from
-[MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
-
-_Defined in
-[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
-
-Sets the minimum width of an element. It prevents the used value of the `width` property from
-becoming smaller than the value specified for `minWidth`.
-
-### `Optional` name
-
-• **name**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[name](_airtable_blocks_ui__input.md#optional-name)_
-
-_Defined in
-[src/ui/input.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L76)_
-
-The `name` attribute.
-
-### `Optional` onChange
-
-• **onChange**? : _undefined | function_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[onChange](_airtable_blocks_ui__input.md#optional-onchange)_
-
-_Defined in
-[src/ui/input.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L102)_
-
-A function to be called when the input changes.
-
-### `Optional` order
-
-• **order**? : _Prop‹GlobalsNumber›_
-
-_Inherited from
-[OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
-
-_Defined in
-[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
-
-Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
-and then by their source code order.
-
-### `Optional` pattern
-
-• **pattern**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[pattern](_airtable_blocks_ui__input.md#optional-pattern)_
-
-_Defined in
-[src/ui/input.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L92)_
-
-The `pattern` attribute.
-
-### `Optional` placeholder
-
-• **placeholder**? : _undefined | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[placeholder](_airtable_blocks_ui__input.md#optional-placeholder)_
-
-_Defined in
-[src/ui/input.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L86)_
-
-The placeholder for the input.
-
-### `Optional` position
-
-• **position**? : _Prop‹PositionProperty›_
-
-_Inherited from
-[PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
-
-_Defined in
-[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position.ts#L10)_
-
-Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
-determine the final location of positioned elements.
-
-### `Optional` readOnly
-
-• **readOnly**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[readOnly](_airtable_blocks_ui__input.md#optional-readonly)_
-
-_Defined in
-[src/ui/input.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L94)_
-
-The `readOnly` attribute.
-
-### `Optional` required
-
-• **required**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[required](_airtable_blocks_ui__input.md#optional-required)_
-
-_Defined in
-[src/ui/input.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L70)_
-
-The `required` attribute.
-
-### `Optional` right
-
-• **right**? : _Prop‹RightProperty‹Length››_
-
-_Inherited from
-[RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
-
-_Defined in
-[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/right.ts#L11)_
-
-Specifies the horizontal position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` size
-
-• **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__core.md#controlsizeprop)_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[size](_airtable_blocks_ui__input.md#optional-size)_
-
-_Defined in
-[src/ui/input.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L64)_
-
-The size of the input. Defaults to `default`.
-
-### `Optional` spellCheck
-
-• **spellCheck**? : _undefined | false | true_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[spellCheck](_airtable_blocks_ui__input.md#optional-spellcheck)_
-
-_Defined in
-[src/ui/input.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L72)_
-
-The `spellcheck` attribute.
-
-### `Optional` step
-
-• **step**? : _number | string_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[step](_airtable_blocks_ui__input.md#optional-step)_
-
-_Defined in
-[src/ui/input.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L90)_
-
-The `step` attribute.
-
-### `Optional` style
-
-• **style**? : _React.CSSProperties_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[style](_airtable_blocks_ui__input.md#optional-style)_
-
-_Defined in
-[src/ui/input.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L98)_
-
-Additional styles to apply to the input.
-
-### `Optional` tabIndex
-
-• **tabIndex**? : _undefined | number_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[tabIndex](_airtable_blocks_ui__input.md#optional-tabindex)_
-
-_Defined in
-[src/ui/input.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L74)_
-
-The `tabindex` attribute.
-
-### `Optional` top
-
-• **top**? : _Prop‹TopProperty‹Length››_
-
-_Inherited from
-[TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
-
-_Defined in
-[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/top.ts#L11)_
-
-Specifies the vertical position of a positioned element. It has no effect on non-positioned
-elements.
-
-### `Optional` type
-
-• **type**? : _undefined | "number" | "time" | "text" | "date" | "datetime-local" | "email" |
-"month" | "password" | "search" | "tel" | "url" | "week"_
-
-_Inherited from
-[SharedInputProps](_airtable_blocks_ui__input.md#sharedinputprops).[type](_airtable_blocks_ui__input.md#optional-type)_
-
-_Defined in
-[src/ui/input.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L66)_
-
-The `type` for the input. Defaults to `text`.
-
-### `Optional` width
-
-• **width**? : _Prop‹WidthProperty‹Length››_
-
-_Inherited from
-[WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
-
-_Defined in
-[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
-
-Specifies the width of an element.
-
-### `Optional` zIndex
-
-• **zIndex**? : _Prop‹ZIndexProperty›_
-
-_Inherited from
-[ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
-
-_Defined in
-[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/z_index.ts#L10)_
-
-Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
-with larger z-indexes cover those with smaller ones.
+A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
+The input value will always reflect the value stored in
+[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) for this key. Changing the input
+value will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 
 ---
 
@@ -1476,14 +96,19 @@ with larger z-indexes cover those with smaller ones.
 • **SharedInputProps**:
 
 _Defined in
-[src/ui/input.tsx:62](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L62)_
+[src/ui/input.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L104)_
+
+Props shared between the [Input](_airtable_blocks_ui__input.md#input) and
+[InputSynced](_airtable_blocks_ui__input.md#inputsynced) components. Also accepts:
+
+-   [InputStyleProps](_airtable_blocks_ui__input.md#inputstyleprops)
 
 ### `Optional` aria-describedby
 
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L106)_
+[src/ui/input.tsx:148](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L148)_
 
 A space separated list of description element IDs.
 
@@ -1492,7 +117,7 @@ A space separated list of description element IDs.
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L104)_
+[src/ui/input.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L146)_
 
 A space separated list of label element IDs.
 
@@ -1501,7 +126,7 @@ A space separated list of label element IDs.
 • **autoComplete**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L96)_
+[src/ui/input.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L138)_
 
 The `autoComplete` attribute.
 
@@ -1510,7 +135,7 @@ The `autoComplete` attribute.
 • **autoFocus**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L80)_
+[src/ui/input.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L122)_
 
 The `autoFocus` attribute.
 
@@ -1519,7 +144,7 @@ The `autoFocus` attribute.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L100)_
+[src/ui/input.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L142)_
 
 Additional class names to apply to the input, separated by spaces.
 
@@ -1528,7 +153,7 @@ Additional class names to apply to the input, separated by spaces.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L68)_
+[src/ui/input.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L110)_
 
 The `disabled` attribute.
 
@@ -1537,7 +162,7 @@ The `disabled` attribute.
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L78)_
+[src/ui/input.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L120)_
 
 The `id` attribute.
 
@@ -1546,7 +171,7 @@ The `id` attribute.
 • **max**? : _number | string_
 
 _Defined in
-[src/ui/input.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L82)_
+[src/ui/input.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L124)_
 
 The `max` attribute.
 
@@ -1555,7 +180,7 @@ The `max` attribute.
 • **maxLength**? : _undefined | number_
 
 _Defined in
-[src/ui/input.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L84)_
+[src/ui/input.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L126)_
 
 The `maxLength` attribute.
 
@@ -1564,7 +189,7 @@ The `maxLength` attribute.
 • **min**? : _number | string_
 
 _Defined in
-[src/ui/input.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L108)_
+[src/ui/input.tsx:150](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L150)_
 
 The `min` attribute.
 
@@ -1573,7 +198,7 @@ The `min` attribute.
 • **minLength**? : _undefined | number_
 
 _Defined in
-[src/ui/input.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L88)_
+[src/ui/input.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L130)_
 
 The `minLength` attribute.
 
@@ -1582,7 +207,7 @@ The `minLength` attribute.
 • **name**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L76)_
+[src/ui/input.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L118)_
 
 The `name` attribute.
 
@@ -1591,7 +216,7 @@ The `name` attribute.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/input.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L102)_
+[src/ui/input.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L144)_
 
 A function to be called when the input changes.
 
@@ -1600,7 +225,7 @@ A function to be called when the input changes.
 • **pattern**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L92)_
+[src/ui/input.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L134)_
 
 The `pattern` attribute.
 
@@ -1609,7 +234,7 @@ The `pattern` attribute.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L86)_
+[src/ui/input.tsx:128](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L128)_
 
 The placeholder for the input.
 
@@ -1618,7 +243,7 @@ The placeholder for the input.
 • **readOnly**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L94)_
+[src/ui/input.tsx:136](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L136)_
 
 The `readOnly` attribute.
 
@@ -1627,16 +252,16 @@ The `readOnly` attribute.
 • **required**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L70)_
+[src/ui/input.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L112)_
 
 The `required` attribute.
 
 ### `Optional` size
 
-• **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__core.md#controlsizeprop)_
+• **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__control_sizes.md#controlsizeprop)_
 
 _Defined in
-[src/ui/input.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L64)_
+[src/ui/input.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L106)_
 
 The size of the input. Defaults to `default`.
 
@@ -1645,7 +270,7 @@ The size of the input. Defaults to `default`.
 • **spellCheck**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L72)_
+[src/ui/input.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L114)_
 
 The `spellcheck` attribute.
 
@@ -1654,7 +279,7 @@ The `spellcheck` attribute.
 • **step**? : _number | string_
 
 _Defined in
-[src/ui/input.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L90)_
+[src/ui/input.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L132)_
 
 The `step` attribute.
 
@@ -1663,7 +288,7 @@ The `step` attribute.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/input.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L98)_
+[src/ui/input.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L140)_
 
 Additional styles to apply to the input.
 
@@ -1672,7 +297,7 @@ Additional styles to apply to the input.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/input.tsx:74](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L74)_
+[src/ui/input.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L116)_
 
 The `tabindex` attribute.
 
@@ -1682,11 +307,25 @@ The `tabindex` attribute.
 "month" | "password" | "search" | "tel" | "url" | "week"_
 
 _Defined in
-[src/ui/input.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L66)_
+[src/ui/input.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L108)_
 
 The `type` for the input. Defaults to `text`.
 
 ## Type aliases
+
+### SupportedInputType
+
+Ƭ **SupportedInputType**: _"number" | "time" | "text" | "date" | "datetime-local" | "email" |
+"month" | "password" | "search" | "tel" | "url" | "week"_
+
+_Defined in
+[src/ui/input.tsx:170](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L170)_
+
+Supported types for the [Input](_airtable_blocks_ui__input.md#input) component. See
+[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#%3Cinput%3E_types) for more
+information.
+
+---
 
 ### ValidInputType
 
@@ -1704,7 +343,7 @@ _Defined in
 React.Ref‹HTMLInputElement›): _Element_
 
 _Defined in
-[src/ui/input.tsx:195](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L195)_
+[src/ui/input.tsx:235](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L235)_
 
 An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
 
@@ -1748,19 +387,19 @@ function HelloSomeone() {
 `ref`: React.Ref‹HTMLInputElement›): _Element_
 
 _Defined in
-[src/ui/input_synced.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L40)_
+[src/ui/input_synced.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L39)_
 
-A wrapper around the `UI.Input` component that syncs with global config.
+A wrapper around the [Input](_airtable_blocks_ui__input.md#input) component that syncs with
+[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 
 **Example:**
 
 ```js
-import {UI} from '@airtable/blocks/ui';
-import {globalConfig} from '@airtable/blocks';
+import {InputSynced} from '@airtable/blocks/ui';
 import React from 'react';
 
 function ApiKeyInput() {
-    return <UI.InputSynced globalConfigKey="apiKey" disabled={!canEditApiKey} />;
+    return <InputSynced globalConfigKey="apiKey" disabled={!canEditApiKey} />;
 }
 ```
 

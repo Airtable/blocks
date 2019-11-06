@@ -30,7 +30,17 @@ import {
     SpacingSetProps,
 } from './system';
 
-/** */
+/**
+ * Style props for the {@link FormField} component. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link SpacingSetProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
 interface FormFieldStyleProps
     extends MaxWidthProps,
         MinWidthProps,
@@ -57,7 +67,12 @@ const formFieldStylePropTypes = {
     ...spacingSetPropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link FormField} component. Also accepts:
+ * * {@link FormFieldStyleProps}
+ *
+ * @noInheritDoc
+ */
 interface FormFieldProps extends FormFieldStyleProps {
     /** The `id` attribute. */
     id?: string;
@@ -71,8 +86,8 @@ interface FormFieldProps extends FormFieldStyleProps {
     htmlFor?: string;
     /** The description content for the form field. Displayed beneath the label and above the wrapped control field. */
     description?: React.ReactNode | string | null;
-    /** */
-    children?: React.ReactNode | string;
+    /** The contents of the form field. */
+    children?: React.ReactNode;
 }
 
 /**
@@ -84,8 +99,6 @@ interface FormFieldProps extends FormFieldStyleProps {
  * ModelPicker, and ViewPicker. If you'd like to manually override this behavior, you can provide an
  * `htmlFor` prop to this component and manually set the `id` attribute on your wrapped control to
  * the same value.
- *
- * @param props
  *
  * @example
  * ```js
@@ -110,53 +123,51 @@ interface FormFieldProps extends FormFieldStyleProps {
  * }
  * ```
  */
-const FormField = React.forwardRef<HTMLDivElement, FormFieldProps>(
-    (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
-        const {
-            id,
-            className,
-            style,
-            label = TextSize.default,
-            htmlFor,
-            description,
-            children,
-            ...styleProps
-        } = props;
-        const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
-        const [generatedId] = useState(getLocallyUniqueId('form-field-'));
-        const controlId = htmlFor || generatedId;
+function FormField(props: FormFieldProps, ref: React.Ref<HTMLDivElement>) {
+    const {
+        id,
+        className,
+        style,
+        label = TextSize.default,
+        htmlFor,
+        description,
+        children,
+        ...styleProps
+    } = props;
+    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const [generatedId] = useState(getLocallyUniqueId('form-field-'));
+    const controlId = htmlFor || generatedId;
 
-        let optionalLabelProps;
-        if (description) {
-            optionalLabelProps = {margin: 0};
-        }
-        return (
-            <Box
-                ref={ref}
-                id={id}
-                className={cx(classNameForStyleProps, className)}
-                style={style}
-                display="flex"
-                flexDirection="column"
-                marginBottom={3}
-            >
-                <Label htmlFor={controlId} size="default" {...optionalLabelProps}>
-                    {label}
-                </Label>
-                {description && (
-                    <Text variant="paragraph" size="default" textColor="light" marginBottom="6px">
-                        {description}
-                    </Text>
-                )}
-                <FormFieldIdContext.Provider value={controlId}>
-                    {children}
-                </FormFieldIdContext.Provider>
-            </Box>
-        );
-    },
-);
+    let optionalLabelProps;
+    if (description) {
+        optionalLabelProps = {margin: 0};
+    }
+    return (
+        <Box
+            ref={ref}
+            id={id}
+            className={cx(classNameForStyleProps, className)}
+            style={style}
+            display="flex"
+            flexDirection="column"
+            marginBottom={3}
+        >
+            <Label htmlFor={controlId} size="default" {...optionalLabelProps}>
+                {label}
+            </Label>
+            {description && (
+                <Text variant="paragraph" size="default" textColor="light" marginBottom="6px">
+                    {description}
+                </Text>
+            )}
+            <FormFieldIdContext.Provider value={controlId}>{children}</FormFieldIdContext.Provider>
+        </Box>
+    );
+}
 
-FormField.propTypes = {
+const ForwardedRefFormField = React.forwardRef<HTMLDivElement, FormFieldProps>(FormField);
+
+ForwardedRefFormField.propTypes = {
     id: PropTypes.string,
     className: PropTypes.string,
     style: PropTypes.object,
@@ -167,4 +178,6 @@ FormField.propTypes = {
     ...formFieldStylePropTypes,
 };
 
-export default FormField;
+ForwardedRefFormField.displayName = 'FormField';
+
+export default ForwardedRefFormField;

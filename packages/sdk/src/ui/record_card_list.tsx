@@ -195,17 +195,24 @@ const innerRecordCardListWindow = React.forwardRef(
     },
 );
 
-/** */
+/**
+ * Scroll event for {@link RecordCardList}.
+ */
 interface RecordCardListScrollEvent {
-    /** */
+    /** The direction of the scroll event. */
     scrollDirection: 'forward' | 'backward';
-    /** */
+    /** The vertical offset of the scrollable area. */
     scrollOffset: number;
-    /** */
+    /** `true` for programmatic scrolling and `false` if the scroll was the result of a user interaction in the browser. */
     scrollUpdateWasRequested: boolean;
 }
 
-/** */
+/**
+ * Props for the {@link RecordCardList} component. Also accepts:
+ * * {@link RecordCardListStyleProps}
+ */
+// This doesn't actually extend RecordCardListStyleProps since withStyledSystem
+// expects non-style props and style props as separate generic type variables.
 interface RecordCardListProps {
     /** Records to display in card list. */
     records: Array<Record> | Array<RecordDef>;
@@ -229,7 +236,15 @@ interface RecordCardListProps {
     style?: React.CSSProperties;
 }
 
-/** */
+/**
+ * Style props for the {@link RecordCardList} component. Accepts:
+ * * {@link DimensionsSetProps}
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link PositionSetProps}
+ *
+ * @noInheritDoc
+ */
 interface RecordCardListStyleProps
     extends DimensionsSetProps,
         FlexItemSetProps,

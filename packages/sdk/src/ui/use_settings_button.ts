@@ -9,7 +9,8 @@ import useWatchable from './use_watchable';
  * the settings button (hidden by default) and call the provided callback whenever the settings
  * button is clicked. It will also re-render your component when the settings button is clicked.
  *
- * @param onClickCallback a callback to call when the button is clicked
+ * @param onClickCallback A callback to call when the button is clicked.
+ *
  * @example
  * ```js
  * import {useSettingsButton} from '@airtable/blocks/ui';

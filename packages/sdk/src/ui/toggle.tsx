@@ -29,7 +29,7 @@ import {
     display,
     displayPropTypes,
 } from './system';
-import {Prop} from './system/utils/types';
+import {OptionalResponsiveProp} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 
@@ -47,7 +47,9 @@ const themes = Object.freeze({
     GRAY: 'gray',
 });
 
-/** */
+/**
+ * Themes for the {@link Toggle} component.
+ */
 export type ToggleTheme = ObjectValues<typeof themes>;
 
 const classNamesByTheme = Object.freeze({
@@ -58,7 +60,15 @@ const classNamesByTheme = Object.freeze({
     [themes.GRAY]: 'gray',
 });
 
-/** */
+/**
+ * Props shared between the {@link Toggle} and {@link ToggleSynced} components. Also accepts:
+ * * {@link ToggleStyleProps}
+ *
+ * @noInheritDoc
+ */
+// This doesn't actually extend ToggleStyleProps since withStyledSystem
+// expects non-style props and style props as separate generic type variables.
+// TODO (stephen): inherit shared props without inheriting style props
 export interface SharedToggleProps extends TooltipAnchorProps {
     /** Additional class names to apply to the switch. */
     className?: string;
@@ -84,7 +94,12 @@ export interface SharedToggleProps extends TooltipAnchorProps {
     ['aria-describedby']?: string;
 }
 
-/** */
+/**
+ * Props for the {@link Toggle} component. Also accepts:
+ * * {@link SharedToggleProps}
+ *
+ * @noInheritDoc
+ */
 interface ToggleProps extends SharedToggleProps {
     /** If set to `true`, the switch will be toggled on. */
     value: boolean;
@@ -105,7 +120,17 @@ export const sharedTogglePropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-/** */
+/**
+ * Style props shared between the {@link Toggle} and {@link ToggleSynced} components. Also accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link SpacingSetProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
 export interface ToggleStyleProps
     extends MaxWidthProps,
         MinWidthProps,
@@ -113,8 +138,8 @@ export interface ToggleStyleProps
         FlexItemSetProps,
         PositionSetProps,
         SpacingSetProps {
-    /** */
-    display?: Prop<'flex' | 'inline-flex'>;
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'flex' | 'inline-flex'>;
 }
 
 const styleParser = compose(
@@ -159,7 +184,7 @@ export const toggleStylePropTypes = {
  * ```
  */
 export class Toggle extends React.Component<ToggleProps> {
-    /** */
+    /** @hidden */
     static themes = themes;
     /** @hidden */
     static propTypes = {
@@ -182,21 +207,21 @@ export class Toggle extends React.Component<ToggleProps> {
         this._onKeyDown = this._onKeyDown.bind(this);
         this._toggleValue = this._toggleValue.bind(this);
     }
-    /** */
+    /** @hidden */
     focus() {
         if (!this._container) {
             throw spawnInvariantViolationError('No toggle to focus');
         }
         this._container.focus();
     }
-    /** */
+    /** @hidden */
     blur() {
         if (!this._container) {
             throw spawnInvariantViolationError('No toggle to blur');
         }
         this._container.blur();
     }
-    /** */
+    /** @hidden */
     click() {
         if (!this._container) {
             throw spawnInvariantViolationError('No toggle to click');

@@ -33,10 +33,20 @@ import {
 } from './system';
 import useStyledSystem from './use_styled_system';
 import {splitStyleProps} from './with_styled_system';
-import {Prop} from './system/utils/types';
+import {OptionalResponsiveProp} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
-/** */
+/**
+ * Style props for the {@link CellRenderer} component. Also accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
 interface CellRendererStyleProps
     extends FlexItemSetProps,
         MarginProps,
@@ -44,8 +54,8 @@ interface CellRendererStyleProps
         MinWidthProps,
         PositionSetProps,
         WidthProps {
-    /** */
-    display?: Prop<'block' | 'inline' | 'inline-block'>;
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'block' | 'inline' | 'inline-block'>;
 }
 
 const styleParser = compose(
@@ -69,8 +79,13 @@ const cellRendererStylePropTypes = {
     ...widthPropTypes,
 };
 
-/** */
-interface CellRendererProps extends TooltipAnchorProps, CellRendererStyleProps {
+/**
+ * Props for the {@link CellRenderer} component. Also accepts:
+ * * {@link CellRendererStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<HTMLDivElement> {
     /** The {@link Record} from which to render a cell. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used. */
     record?: Record | null | undefined;
     /** The cell value to render. Either `record` or `cellValue` must be provided to the CellRenderer. If both are provided, `record` will be used. */

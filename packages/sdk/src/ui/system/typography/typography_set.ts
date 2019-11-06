@@ -12,7 +12,9 @@ import {config as textColorConfig, TextColorProps} from './text_color';
 import {config as textDecorationConfig, TextDecorationProps} from './text_decoration';
 import {config as textTransformConfig, TextTransformProps} from './text_transform';
 
-/** */
+/**
+ * Style props for the typography of an element.
+ */
 export interface TypographySetProps
     extends FontFamilyProps,
         FontSizeProps,

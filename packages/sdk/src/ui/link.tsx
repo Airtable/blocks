@@ -7,8 +7,9 @@ import {createEnum, EnumType, createPropTypeFromEnum} from '../private_utils';
 import useStyledSystem from './use_styled_system';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
 import createResponsivePropType from './system/utils/create_responsive_prop_type';
-import {Prop} from './system/utils/types';
+import {OptionalResponsiveProp} from './system/utils/types';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -38,7 +39,18 @@ import {useTextStyle, TextSize, TextSizeProp, textSizePropType} from './text';
 import {IconName, iconNamePropType} from './icon_config';
 import Icon from './icon';
 
-/** */
+/**
+ * Style props for the {@link Link} component. Also accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link FontWeightProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link SpacingSetProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
 export interface LinkStyleProps
     extends MaxWidthProps,
         MinWidthProps,
@@ -47,8 +59,8 @@ export interface LinkStyleProps
         PositionSetProps,
         FontWeightProps,
         SpacingSetProps {
-    /** */
-    display?: Prop<'inline-flex' | 'flex' | 'none'>;
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'inline-flex' | 'flex' | 'none'>;
 }
 
 const styleParser = compose(
@@ -73,7 +85,21 @@ export const linkStylePropTypes = {
     ...spacingSetPropTypes,
 };
 
-/** */
+/**
+ * Variants for the {@link Link} component:
+ *
+ * • **default**
+ *
+ * Blue text.
+ *
+ * • **dark**
+ *
+ * Dark gray text.
+ *
+ * • **light**
+ *
+ * Light gray text.
+ */
 type LinkVariant = EnumType<typeof LinkVariant>;
 const LinkVariant = createEnum('default', 'dark', 'light');
 const linkVariantPropType = createPropTypeFromEnum(LinkVariant);
@@ -84,11 +110,17 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
     return linkVariants[variant];
 }
 
-/** */
-interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, LinkStyleProps {
-    /** The `size` of the link. Defaults to `default`. Can be a responsive prop object. */
+/**
+ * Props for the {@link Link} component. Also supports:
+ * * {@link AriaProps}
+ * * {@link LinkStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface LinkProps extends AriaProps, LinkStyleProps, TooltipAnchorProps<HTMLAnchorElement> {
+    /** The size of the link. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
-    /** The `variant` of the link which defines the color. Defaults to `default`. */
+    /** The variant of the link, which defines the color. Defaults to `default`. */
     variant?: LinkVariant;
     /** The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
     icon?: IconName | React.ReactElement;
@@ -106,10 +138,10 @@ interface LinkProps extends TooltipAnchorProps<HTMLAnchorElement>, AriaProps, Li
     className?: string;
     /** Additional styles to apply to the link. */
     style?: React.CSSProperties;
-    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
-    dataAttributes?: {readonly [key: string]: unknown};
-    /** */
-    children: React.ReactNode;
+    /** Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`. */
+    dataAttributes?: DataAttributesProp;
+    /** The contents of the link. */
+    children: React.ReactNode | string;
 }
 
 // A "reasonable" scheme is one which does not have any escaped characters.
@@ -152,10 +184,8 @@ function _getSanitizedHref(href: string): string | undefined {
  *
  * Developers should use `Link` instead of `a` when possible.
  *
- * @augments React.StatelessFunctionalComponent
- * @param props
- *
  * @example
+ * ```js
  * import {Link} from '@airtable/blocks/ui';
  *
  * function MyLinkComponent() {
@@ -196,6 +226,7 @@ function Link(props: LinkProps, ref: React.Ref<HTMLAnchorElement>) {
         'aria-live': ariaLive,
         ...styleProps
     } = props;
+
     const classNameForTextStyle = useTextStyle(size);
     const classNameForLinkVariant = useLinkVariant(variant);
     const classNameForUnderline = useStyledSystem({
@@ -273,6 +304,9 @@ ForwardedRefLink.propTypes = {
     ...tooltipAnchorPropTypes,
     ...linkStylePropTypes,
     ...ariaPropTypes,
+    ...dataAttributesPropType,
 };
+
+ForwardedRefLink.displayName = 'Link';
 
 export default ForwardedRefLink;

@@ -57,13 +57,55 @@ export const ValidInputType = createEnum(
 /** */
 type ValidInputType = EnumType<typeof ValidInputType>;
 
-// Shared with `Input` and `InputSynced`.
-/** */
-export interface SharedInputProps extends TooltipAnchorProps {
+/**
+ * Style props shared between the {@link Input} and {@link InputSynced} components. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
+export interface InputStyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+export const inputStylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
+/**
+ * Props shared between the {@link Input} and {@link InputSynced} components. Also accepts:
+ * * {@link InputStyleProps}
+ *
+ * @noInheritDoc
+ */
+// TODO (stephen): inherit shared props without inheriting style props
+export interface SharedInputProps extends InputStyleProps, TooltipAnchorProps<HTMLInputElement> {
     /** The size of the input. Defaults to `default`. */
     size?: ControlSizeProp;
     /** The `type` for the input. Defaults to `text`. */
-    type?: EnumType<typeof ValidInputType>;
+    type?: EnumType<typeof SupportedInputType>;
     /** The `disabled` attribute. */
     disabled?: boolean;
     /** The `required` attribute. */
@@ -108,10 +150,29 @@ export interface SharedInputProps extends TooltipAnchorProps {
     min?: number | string;
 }
 
+export const SupportedInputType = createEnum(
+    'date',
+    'datetime-local',
+    'email',
+    'month',
+    'number',
+    'password',
+    'search',
+    'tel',
+    'text',
+    'time',
+    'url',
+    'week',
+);
+/**
+ * Supported types for the {@link Input} component. See {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#%3Cinput%3E_types|MDN} for more information.
+ */
+type SupportedInputType = EnumType<typeof SupportedInputType>;
+
 // Shared with `Input` and `InputSynced`.
 export const sharedInputPropTypes = {
     size: controlSizePropType,
-    type: createPropTypeFromEnum(ValidInputType),
+    type: createPropTypeFromEnum(SupportedInputType),
     placeholder: PropTypes.string,
     disabled: PropTypes.bool,
     required: PropTypes.bool,
@@ -131,41 +192,20 @@ export const sharedInputPropTypes = {
     className: PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
+    ...inputStylePropTypes,
     ...tooltipAnchorPropTypes,
 };
 
-/** */
-interface InputProps extends SharedInputProps, InputStyleProps {
+/**
+ * Props for the {@link Input} component. Also accepts:
+ * * {@link SharedInputProps}
+ *
+ * @noInheritDoc
+ */
+interface InputProps extends SharedInputProps {
     /** The input's current value. */
     value: string;
 }
-
-/** */
-export interface InputStyleProps
-    extends MaxWidthProps,
-        MinWidthProps,
-        WidthProps,
-        FlexItemSetProps,
-        PositionSetProps,
-        MarginProps {}
-
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
-
-export const inputStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
 
 /**
  * An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
@@ -195,12 +235,14 @@ export const inputStylePropTypes = {
 function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
     const {
         size = ControlSize.default,
-        type = ValidInputType.text,
+        type = SupportedInputType.text,
         value,
         placeholder,
         onMouseEnter,
         onMouseLeave,
         onClick,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        hasOnClick,
         onChange,
         style,
         className,
@@ -269,12 +311,11 @@ function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
     );
 }
 
-const ForwardedRefInput = React.forwardRef(Input);
+const ForwardedRefInput = React.forwardRef<HTMLInputElement, InputProps>(Input);
 
 ForwardedRefInput.propTypes = {
     value: PropTypes.string.isRequired,
     ...sharedInputPropTypes,
-    ...inputStylePropTypes,
 };
 
 ForwardedRefInput.displayName = 'Input';

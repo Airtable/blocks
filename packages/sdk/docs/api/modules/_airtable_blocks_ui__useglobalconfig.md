@@ -19,7 +19,7 @@ _Defined in
 [src/ui/use_global_config.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_global_config.ts#L33)_
 
 Returns the [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) and updates whenever any
-key in GlobalConfig changes.
+key in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) changes.
 
 **Example:**
 
@@ -50,4 +50,4 @@ function SyncedCounter() {
 
 **Returns:** _[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig)_
 
-the [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig)
+The block's global config.

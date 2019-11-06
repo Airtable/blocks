@@ -16,16 +16,16 @@
 ▸ **useSession**(): _[Session](_airtable_blocks_models__session.md#session)_
 
 _Defined in
-[src/ui/use_session.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_session.ts#L33)_
+[src/ui/use_session.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_session.ts#L34)_
 
-A hook for connecting a React component to the current
-[Session](_airtable_blocks_models__session.md#session). This returns a
+A hook for connecting a React component to the current session. This returns a
 [Session](_airtable_blocks_models__session.md#session) instance and will re-render your component
 whenever the session changes (e.g. when the current user's permissions change or when the current
 user's name changes).
 
-useSession should meet most of your needs for working with Session. If you need more granular
-control of when your component updates or want to do anything other than re-render, the lower level
+`useSession` should meet most of your needs for working with
+[Session](_airtable_blocks_models__session.md#session). If you need more granular control of when
+your component updates or want to do anything other than re-render, the lower level
 [useWatchable](_airtable_blocks_ui__usewatchable.md#usewatchable) hook might help.
 
 **Example:**
@@ -48,4 +48,4 @@ function CurrentUserGreeter() {
 
 **Returns:** _[Session](_airtable_blocks_models__session.md#session)_
 
-Session
+The current session.

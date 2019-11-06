@@ -25,7 +25,8 @@ _Defined in
 
 ### `Optional` alignContent
 
-• **alignContent**? : _Prop‹AlignContentProperty›_
+• **alignContent**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹AlignContentProperty›_
 
 _Defined in
 [src/ui/system/flex_container/align_content.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/align_content.ts#L10)_
@@ -44,7 +45,8 @@ _Defined in
 
 ### `Optional` alignItems
 
-• **alignItems**? : _Prop‹AlignItemsProperty›_
+• **alignItems**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹AlignItemsProperty›_
 
 _Defined in
 [src/ui/system/flex_container/align_items.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/align_items.ts#L10)_
@@ -58,11 +60,14 @@ Sets the alignment of flex items on the cross-axis of a flex container.
 • **FlexContainerSetProps**:
 
 _Defined in
-[src/ui/system/flex_container/flex_container_set.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/flex_container_set.ts#L12)_
+[src/ui/system/flex_container/flex_container_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/flex_container_set.ts#L14)_
+
+Style props for a flex container element.
 
 ### `Optional` alignContent
 
-• **alignContent**? : _Prop‹AlignContentProperty›_
+• **alignContent**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹AlignContentProperty›_
 
 _Inherited from
 [AlignContentProps](_airtable_blocks_ui_system__flex_container.md#aligncontentprops).[alignContent](_airtable_blocks_ui_system__flex_container.md#optional-aligncontent)_
@@ -75,7 +80,8 @@ property has no effect on a single-line flex container.
 
 ### `Optional` alignItems
 
-• **alignItems**? : _Prop‹AlignItemsProperty›_
+• **alignItems**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹AlignItemsProperty›_
 
 _Inherited from
 [AlignItemsProps](_airtable_blocks_ui_system__flex_container.md#alignitemsprops).[alignItems](_airtable_blocks_ui_system__flex_container.md#optional-alignitems)_
@@ -87,7 +93,8 @@ Sets the alignment of flex items on the cross-axis of a flex container.
 
 ### `Optional` flexDirection
 
-• **flexDirection**? : _Prop‹FlexDirectionProperty›_
+• **flexDirection**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexDirectionProperty›_
 
 _Inherited from
 [FlexDirectionProps](_airtable_blocks_ui_system__flex_container.md#flexdirectionprops).[flexDirection](_airtable_blocks_ui_system__flex_container.md#optional-flexdirection)_
@@ -100,7 +107,8 @@ Sets how flex items are placed in the flex container defining the main axis and 
 
 ### `Optional` flexWrap
 
-• **flexWrap**? : _Prop‹FlexWrapProperty›_
+• **flexWrap**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexWrapProperty›_
 
 _Inherited from
 [FlexWrapProps](_airtable_blocks_ui_system__flex_container.md#flexwrapprops).[flexWrap](_airtable_blocks_ui_system__flex_container.md#optional-flexwrap)_
@@ -113,7 +121,8 @@ allowed, it sets the direction that lines are stacked.
 
 ### `Optional` justifyContent
 
-• **justifyContent**? : _Prop‹JustifyContentProperty›_
+• **justifyContent**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹JustifyContentProperty›_
 
 _Inherited from
 [JustifyContentProps](_airtable_blocks_ui_system__flex_container.md#justifycontentprops).[justifyContent](_airtable_blocks_ui_system__flex_container.md#optional-justifycontent)_
@@ -134,7 +143,8 @@ _Defined in
 
 ### `Optional` flexDirection
 
-• **flexDirection**? : _Prop‹FlexDirectionProperty›_
+• **flexDirection**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexDirectionProperty›_
 
 _Defined in
 [src/ui/system/flex_container/flex_direction.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/flex_direction.ts#L10)_
@@ -153,7 +163,8 @@ _Defined in
 
 ### `Optional` flexWrap
 
-• **flexWrap**? : _Prop‹FlexWrapProperty›_
+• **flexWrap**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexWrapProperty›_
 
 _Defined in
 [src/ui/system/flex_container/flex_wrap.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/flex_wrap.ts#L10)_
@@ -172,7 +183,8 @@ _Defined in
 
 ### `Optional` justifyContent
 
-• **justifyContent**? : _Prop‹JustifyContentProperty›_
+• **justifyContent**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹JustifyContentProperty›_
 
 _Defined in
 [src/ui/system/flex_container/justify_content.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_container/justify_content.ts#L10)_

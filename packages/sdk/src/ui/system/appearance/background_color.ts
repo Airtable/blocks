@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import {BackgroundColorProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface BackgroundColorProps {
     /** Sets the background color of an element. */
-    backgroundColor?: Prop<BackgroundColorProperty>;
+    backgroundColor?: OptionalResponsiveProp<BackgroundColorProperty>;
 }
 
 export const config: Config = {

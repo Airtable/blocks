@@ -2,13 +2,13 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {FontWeightProperty} from '../utils/csstype';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface FontWeightProps {
     /** Specifies the weight (or boldness) of the font. */
     // Add `string` to support properties from theme scale.
-    fontWeight?: Prop<FontWeightProperty | string>;
+    fontWeight?: OptionalResponsiveProp<FontWeightProperty | string>;
 }
 
 export const config: Config = {

@@ -5,13 +5,18 @@ import Record from '../models/record';
 import Field from '../models/field';
 
 /**
- * Expands a list of records in the Airtable UI
+ * Options object for expanding a record list.
+ */
+interface ExpandRecordListOpts {
+    /** The fields to include in the record cards. The primary field will always be shown. Duplicate fields will be removed. */
+    fields?: Array<Field>;
+}
+
+/**
+ * Expands a list of records in the Airtable UI.
  *
- * @param records the records to expand. Duplicate records will be removed.
+ * @param records The records to expand. Duplicate records will be removed.
  * @param opts An optional options object.
- * @param opts.fields optionally include an array of fields to control
- * which fields are shown in the record cards. The primary field will always
- * be shown. Duplicate fields will be removed.
  *
  * @example
  * ```js
@@ -23,12 +28,7 @@ import Field from '../models/field';
  * });
  * ```
  */
-function expandRecordList(
-    records: Array<Record>,
-    opts?: {
-        fields?: Array<Field>;
-    },
-) {
+function expandRecordList(records: Array<Record>, opts?: ExpandRecordListOpts) {
     if (records.length === 0) {
         return;
     }

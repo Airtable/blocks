@@ -12,14 +12,19 @@ import Toggle, {
 import Synced from './synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/** */
+/**
+ * Props for the {@link ToggleSynced} component. Also accepts:
+ * * {@link SharedToggleProps}
+ *
+ * @noInheritDoc
+ */
 interface ToggleSyncedProps extends SharedToggleProps, ToggleStyleProps {
-    /** A string key or array key path in {@link GlobalConfig}. The switch option will always reflect the boolean value stored in `globalConfig` for this key. Toggling the switch will update `globalConfig`. */
+    /** A string key or array key path in {@link GlobalConfig}. The switch will always reflect the boolean stored in {@link GlobalConfig} for this key. Toggling the switch will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
 /**
- * A toggleable switch for controlling boolean values, synced with {@link GlobalConfig}. Functionally analogous to a checkbox.
+ * A wrapper around the {@link Toggle} component that syncs with {@link GlobalConfig}.
  *
  * @example
  * ```js
@@ -53,21 +58,21 @@ class ToggleSynced extends React.Component<ToggleSyncedProps> {
         // TODO (stephen): use React.forwardRef
         this._toggle = null;
     }
-    /** */
+    /** @hidden */
     focus() {
         if (!this._toggle) {
             throw spawnInvariantViolationError('No toggle to focus');
         }
         this._toggle.focus();
     }
-    /** */
+    /** @hidden */
     blur() {
         if (!this._toggle) {
             throw spawnInvariantViolationError('No toggle to blur');
         }
         this._toggle.blur();
     }
-    /** */
+    /** @hidden */
     click() {
         if (!this._toggle) {
             throw spawnInvariantViolationError('No toggle to click');

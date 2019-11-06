@@ -1,9 +1,13 @@
-/** @module @airtable/blocks/ui/system: Core */ /** */
+/** @hidden */ /** */
 import PropTypes from 'prop-types';
 
-/** */
+/**
+ * Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`.
+ *
+ * @hidden
+ */
+// TODO (stephen): switch to extend for inherited documentation
 export interface DataAttributesProp {
-    /** */
     readonly [key: string]: unknown;
 }
 

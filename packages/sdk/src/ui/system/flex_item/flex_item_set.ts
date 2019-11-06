@@ -9,7 +9,9 @@ import {config as alignSelfConfig, AlignSelfProps} from './align_self';
 import {config as justifySelfConfig, JustifySelfProps} from './justify_self';
 import {config as orderConfig, OrderProps} from './order';
 
-/** */
+/**
+ * Style props for a flex item element.
+ */
 export interface FlexItemSetProps
     extends FlexProps,
         FlexGrowProps,

@@ -7,7 +7,9 @@ import {config as borderRadiusConfig, BorderRadiusProps} from './border_radius';
 import {config as boxShadowConfig, BoxShadowProps} from './box_shadow';
 import {config as opacityConfig, OpacityProps} from './opacity';
 
-/** */
+/**
+ * Style props for the visual appearance of an element.
+ */
 export interface AppearanceSetProps
     extends BackgroundColorProps,
         BorderProps,

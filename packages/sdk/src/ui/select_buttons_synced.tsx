@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: Select */ /** */
+/** @module @airtable/blocks/ui: SelectButtons */ /** */
 import * as React from 'react';
 import {spawnError} from '../error_utils';
 import {GlobalConfigKey} from '../global_config';
@@ -9,13 +9,39 @@ import SelectButtons, {
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import useSynced from './use_synced';
 
-/** */
+/**
+ * Props for the {@link SelectButtonsSynced} component. Also accepts:
+ * * {@link SharedSelectButtonsProps}
+ *
+ * @noInheritDoc
+ */
 interface SelectButtonsSyncedProps extends SharedSelectButtonsProps {
-    /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`. */
+    /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new option will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
-/** */
+/**
+ *  A wrapper around the {@link SelectButtons} component that syncs with {@link GlobalConfig}.
+ *
+ * @example
+ * ```js
+ * import {SelectButtonsSynced} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function ChartTypePicker() {
+ *     return (
+ *         <SelectButtonsSynced
+ *             globalConfigKey="chartType"
+ *             options={[
+ *                 {value: 'bar', label: 'Bar'},
+ *                 {value: 'line', label: 'Line'},
+ *                 {value: 'scatter', label: 'Scatter'},
+ *             ]}
+ *         />
+ *     );
+ * }
+ * ```
+ */
 function SelectButtonsSynced(props: SelectButtonsSyncedProps, ref: React.Ref<HTMLDivElement>) {
     const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
     const {value, setValue, canSetValue} = useSynced(globalConfigKey);
@@ -51,7 +77,9 @@ function SelectButtonsSynced(props: SelectButtonsSyncedProps, ref: React.Ref<HTM
     );
 }
 
-const ForwardedRefSelectButtonsSynced = React.forwardRef(SelectButtonsSynced);
+const ForwardedRefSelectButtonsSynced = React.forwardRef<HTMLDivElement, SelectButtonsSyncedProps>(
+    SelectButtonsSynced,
+);
 
 ForwardedRefSelectButtonsSynced.propTypes = {
     globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,

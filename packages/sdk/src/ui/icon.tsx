@@ -22,7 +22,14 @@ import {
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import {iconNamePropType, IconName, allIconPaths, AllIconName} from './icon_config';
 
-/** */
+/**
+ * Style props shared between the {@link Icon} and {@link FieldIcon} components. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link PositionSetProps}
+ * * {@link MarginProps}
+ *
+ * @noInheritDoc
+ */
 export interface IconStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
@@ -39,8 +46,14 @@ export const iconStylePropTypes = {
     ...marginPropTypes,
 };
 
-/** */
-export interface SharedIconProps extends TooltipAnchorProps<SVGElement>, IconStyleProps {
+/**
+ * Props shared between the {@link Icon} and {@link FieldIcon} components. Also accepts:
+ * * {@link IconStyleProps}
+ *
+ * @noInheritDoc
+ */
+// TODO (stephen): inherit shared props without inheriting style props
+export interface SharedIconProps extends IconStyleProps, TooltipAnchorProps<SVGSVGElement> {
     /** The width/height of the icon. Defaults to 16. */
     size?: number | string;
     /** The color of the icon. */
@@ -66,7 +79,12 @@ export const sharedIconPropTypes = {
     ...iconStylePropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link Icon} component. Also accepts:
+ * * {@link SharedIconProps}
+ *
+ * @noInheritDoc
+ */
 interface IconProps extends SharedIconProps {
     /** The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
     name: IconName;
@@ -74,9 +92,6 @@ interface IconProps extends SharedIconProps {
 
 /**
  * A vector icon from the Airtable icon set.
- *
- * @augments React.StatelessFunctionalComponent
- * @param props
  *
  * @example
  * ```js
@@ -89,68 +104,70 @@ interface IconProps extends SharedIconProps {
  * );
  * ```
  */
-const Icon = React.forwardRef<SVGSVGElement, IconProps>(
-    (
-        {
-            name,
-            size = 16,
-            fillColor = 'currentColor',
-            onMouseEnter,
-            onMouseLeave,
-            onClick,
-            hasOnClick,
-            className,
-            style,
-            pathClassName,
-            pathStyle,
-            ...styleProps
-        }: IconProps,
-        ref: React.Ref<SVGSVGElement>,
-    ) => {
-        const classNameForStyleProps = useStyledSystem<IconStyleProps & WidthProps & HeightProps>(
-            {...styleProps, width: size, height: size},
-            styleParser,
-        );
+function Icon(props: IconProps, ref: React.Ref<SVGSVGElement>) {
+    const {
+        name,
+        size = 16,
+        fillColor = 'currentColor',
+        onMouseEnter,
+        onMouseLeave,
+        onClick,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        hasOnClick,
+        className,
+        style,
+        pathClassName,
+        pathStyle,
+        ...styleProps
+    } = props;
 
-        // TODO (jay): Figure out how we can support micro icons when the size is in relative ems.
-        const isMicro = typeof size === 'string' ? false : size <= 12;
-        const iconName = `${name}${isMicro ? 'Micro' : ''}` as AllIconName;
-        const pathData = allIconPaths[iconName];
-        if (!pathData) {
-            return null;
-        }
+    const classNameForStyleProps = useStyledSystem<IconStyleProps & WidthProps & HeightProps>(
+        {...styleProps, width: size, height: size},
+        styleParser,
+    );
 
-        const originalSize = isMicro ? 12 : 16;
+    // TODO (jay): Figure out how we can support micro icons when the size is in relative ems.
+    const isMicro = typeof size === 'string' ? false : size <= 12;
+    const iconName = `${name}${isMicro ? 'Micro' : ''}` as AllIconName;
+    const pathData = allIconPaths[iconName];
+    if (!pathData) {
+        return null;
+    }
 
-        return (
-            <svg
-                ref={ref}
-                viewBox={`0 0 ${originalSize} ${originalSize}`}
-                // TODO (stephen): remove tooltip anchor props
-                onMouseEnter={onMouseEnter}
-                onMouseLeave={onMouseLeave}
-                onClick={onClick}
-                className={cx(classNameForStyleProps, className)}
-                style={{
-                    shapeRendering: 'geometricPrecision',
-                    ...style,
-                }}
-            >
-                <path
-                    fillRule="evenodd"
-                    className={pathClassName}
-                    style={pathStyle}
-                    fill={fillColor}
-                    d={pathData}
-                />
-            </svg>
-        );
-    },
-);
+    const originalSize = isMicro ? 12 : 16;
 
-Icon.propTypes = {
+    return (
+        <svg
+            ref={ref}
+            viewBox={`0 0 ${originalSize} ${originalSize}`}
+            // TODO (stephen): remove tooltip anchor props
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            onClick={onClick}
+            className={cx(classNameForStyleProps, className)}
+            style={{
+                shapeRendering: 'geometricPrecision',
+                ...style,
+            }}
+        >
+            <path
+                fillRule="evenodd"
+                className={pathClassName}
+                style={pathStyle}
+                fill={fillColor}
+                d={pathData}
+            />
+        </svg>
+    );
+}
+
+const ForwardedRefIcon = React.forwardRef<SVGSVGElement, IconProps>(Icon);
+
+ForwardedRefIcon.propTypes = {
     name: iconNamePropType.isRequired,
     ...sharedIconPropTypes,
 };
 
-export default Icon;
+ForwardedRefIcon.displayName = 'Icon';
+
+export default ForwardedRefIcon;

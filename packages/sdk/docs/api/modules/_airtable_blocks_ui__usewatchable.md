@@ -20,7 +20,7 @@ undefined› | null | undefined, `keys`: ReadonlyArray‹Keys | null | undefined
 undefined | function): _void_
 
 _Defined in
-[src/ui/use_watchable.ts:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_watchable.ts#L51)_
+[src/ui/use_watchable.ts:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_watchable.ts#L50)_
 
 A React hook for watching data in Airtable models like
 [Table](_airtable_blocks_models__table.md#table) and
@@ -33,12 +33,12 @@ This is a low-level tool that you should only use when you specifically need it.
 convenient model-specific hooks available:
 
 -   For [Base](_airtable_blocks_models__base.md#base),
-    [Table](_airtable_blocks_models__table.md#table), [View](_airtable_blocks_models__view.md#view)
-    & [Field](_airtable_blocks_models__field.md#field), use
-    [useBase](_airtable_blocks_ui__usebase.md#usebase)
--   For [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) &
+    [Table](_airtable_blocks_models__table.md#table), [View](_airtable_blocks_models__view.md#view),
+    or [Field](_airtable_blocks_models__field.md#field), use
+    [useBase](_airtable_blocks_ui__usebase.md#usebase).
+-   For [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) or
     [Record](_airtable_blocks_models__record.md#record), use {@link useRecords}, {@link
-    useRecordIds}, or [useRecordById](_airtable_blocks_ui__userecords.md#userecordbyid)
+    useRecordIds}, or [useRecordById](_airtable_blocks_ui__userecords.md#userecordbyid).
 -   For [Viewport](_airtable_blocks__viewport.md#viewport), use
     [useViewport](_airtable_blocks_ui__useviewport.md#useviewport).
 
@@ -76,10 +76,10 @@ function ActiveView({cursor}) {
 
 **Parameters:**
 
-| Name        | Type                                                                                                                                                                                                                              | Description                                                    |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| `models`    | [Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; ReadonlyArray‹[Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; null &#124; undefined› &#124; null &#124; undefined | the model or models to watch                                   |
-| `keys`      | ReadonlyArray‹Keys &#124; null &#124; undefined›                                                                                                                                                                                  | which keys we want to watch                                    |
-| `callback?` | undefined &#124; function                                                                                                                                                                                                         | an optional callback to call when any of the watch keys change |
+| Name        | Type                                                                                                                                                                                                                              | Description                                                     |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `models`    | [Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; ReadonlyArray‹[Watchable](_airtable_blocks_models__abstract_models.md#watchable)‹Keys› &#124; null &#124; undefined› &#124; null &#124; undefined | The model or models to watch.                                   |
+| `keys`      | ReadonlyArray‹Keys &#124; null &#124; undefined›                                                                                                                                                                                  | The keys to watch.                                              |
+| `callback?` | undefined &#124; function                                                                                                                                                                                                         | An optional callback to call when any of the watch keys change. |
 
 **Returns:** _void_

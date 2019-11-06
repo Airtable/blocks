@@ -4,16 +4,16 @@ import * as React from 'react';
 import getSdk from '../get_sdk';
 import {ViewportSizeConstraint} from '../types/viewport';
 
-/** */
+/** An object specifying a width and/or height for the block's viewport. */
 type ViewportSizeConstraintProp = Partial<ViewportSizeConstraint>;
 
-/** */
+/** Props for the {@link ViewportConstraint} component. */
 interface ViewportConstraintProps {
-    /** */
+    /** The minimum viewport size of the block. */
     minSize?: ViewportSizeConstraintProp;
-    /** */
+    /** The maximum viewport size of the block when it is in fullscreen mode. */
     maxFullscreenSize?: ViewportSizeConstraintProp;
-    /** */
+    /** The contents of the viewport constraint. */
     children?: React.ReactNode;
 }
 
@@ -25,11 +25,10 @@ const didSizeChange = (
     (prev && prev.height) !== (next && next.height);
 
 /**
- * ViewportConstraint - when mounted, applies constraints to the viewport.
- * Like {@link addMinSize}, will fullscreen the block if necessary and possible when
+ * When mounted, this wrapper component applies size constraints to the {@link Viewport}.
+ * Like {@link addMinSize}, this will fullscreen the block if necessary and possible when
  * `minSize` is updated.
  *
- * @see sdk.viewport
  * @example
  * ```js
  * import {ViewportConstraint} from '@airtable/blocks/ui';

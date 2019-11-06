@@ -3,12 +3,12 @@ import {system, Config} from '@styled-system/core';
 import {TopProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
-import {Prop, Length} from '../utils/types';
+import {OptionalResponsiveProp, Length} from '../utils/types';
 
 /** */
 export interface TopProps {
     /** Specifies the vertical position of a positioned element. It has no effect on non-positioned elements. */
-    top?: Prop<TopProperty<Length>>;
+    top?: OptionalResponsiveProp<TopProperty<Length>>;
 }
 
 export const config: Config = {

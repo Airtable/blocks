@@ -14,53 +14,72 @@ import * as Geometry from './geometry/geometry';
 // contains a period (as Popover.placements does).
 
 /**
- * An enum describing popover placements.
- *
- * @alias Popover.placements
+ * Dictates how a {@link Popover} or {@link Tooltip} component should be positioned relative
+ * to the anchor element. Accessed via `Popover.placements` or `Tooltip.placements`.
  */
+// TODO (stephen): convert to createEnum
 export enum PopoverPlacements {
+    /** Positions the popover above the anchor element. */
     TOP = 'top',
-    CENTER = 'center',
+    /** Positions the popover below the anchor element. */
     BOTTOM = 'bottom',
+    /** Positions the popover so it's center aligned with the anchor element. */
+    CENTER = 'center',
+    /** Positions the popover left of the anchor element. */
     LEFT = 'left',
+    /** Positions the popover right of the anchor element. */
     RIGHT = 'right',
 }
-/** */
-export type PopoverPlacementX = 'left' | 'center' | 'right';
-/** */
-export type PopoverPlacementY = 'top' | 'center' | 'bottom';
+/**
+ * Any of the supported {@link PopoverPlacements} for horizontal positioning.
+ */
+export type PopoverPlacementX =
+    | PopoverPlacements.LEFT
+    | PopoverPlacements.CENTER
+    | PopoverPlacements.RIGHT;
+/**
+ * Any of the supported {@link PopoverPlacements} for vertical positioning.
+ */
+export type PopoverPlacementY =
+    | PopoverPlacements.TOP
+    | PopoverPlacements.CENTER
+    | PopoverPlacements.BOTTOM;
 
 /**
- * An enum describing the fit-in-window mode.
- *
- * @alias Popover.fitInWindowModes
+ * Dictates how a {@link Popover} or {@link Tooltip} component should be kept within the viewport. Accessed via `Popover.fitInWindowModes` or `Tooltip.fitInWindowModes`.
  */
+// TODO (stephen): convert to createEnum
 export enum FitInWindowModes {
+    /** Allow the popover to be placed offscreen. */
     NONE = 'none',
+    /**  If the popover would be placed offscreen, flip the placement to the other side.  */
     FLIP = 'flip',
+    /** If the popover would be placed offscreen, nudge the popover just enough so that it stays in the viewport. */
     NUDGE = 'nudge',
 }
 
-/** */
+/**
+ * Any of the supported {@link FitInWindowModes}.
+ */
 export type FitInWindowMode = ObjectValues<typeof FitInWindowModes>;
 
 /**
- * @type {object}
+ * Props for the {@link Popover} component.
  */
 interface PopoverProps {
     /** Child elements to render. */
     children: React.ReactElement;
-    /** The horizontal placement of the popover. Defaults to `"right"`. */
+    /** The horizontal placement of the popover. Defaults to {@link PopoverPlacements.RIGHT}. */
     placementX: PopoverPlacementX;
-    /** The vertical placement of the popover. Defaults to `"center"`. */
+    /** The vertical placement of the popover. Defaults to {@link PopoverPlacements.CENTER}. */
     placementY: PopoverPlacementY;
-    /** The horizontal offset, in pixels, of the popover. If `placementX` is set to `Popover.placements.LEFT`, a higher number will move the popover to the left. If `placementX` is set to `Popover.placements.RIGHT`, a higher number moves the popover to the right. If `placementX` is set to `Popover.placements.CENTER`, this value has no effect. Defaults to 0. */
+    /** The horizontal offset, in pixels, of the popover. If `placementX` is set to {@link PopoverPlacements.LEFT}, a higher number will move the popover to the left. If `placementX` is set to {@link PopoverPlacements.RIGHT}, a higher number moves the popover to the right. If `placementX` is set to {@link PopoverPlacements.CENTER}, this value has no effect. Defaults to 0. */
     placementOffsetX: number;
-    /** The vertical offset, in pixels, of the popover. If `placementY` is set to `Popover.placements.TOP`, a higher number will move the popover upward. If `placementY` is set to `Popover.placements.BOTTOM`, a higher number moves the popover downard. If `placementY` is set to `Popover.placements.CENTER`, this value has no effect. Defaults to 0. */
+    /** The vertical offset, in pixels, of the popover. If `placementY` is set to {@link PopoverPlacements.TOP}, a higher number will move the popover upward. If `placementY` is set to {@link PopoverPlacements.BOTTOM}, a higher number moves the popover downard. If `placementY` is set to {@link PopoverPlacements.CENTER}, this value has no effect. Defaults to 0. */
     placementOffsetY: number;
     /** A function that returns the contents of the popover as React elements. */
     renderContent: () => React.ReactElement;
-    /** Dictates the behavior when the "normal" placement of the popover would be outside of the viewport. If `NONE`, this has no effect, and the popover may be placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving the popover from the left to the right). If `NUDGE`, the popover will be "nudged" just enough to fit on screen. Defaults to `"flip"`. */
+    /** Dictates the behavior when the "normal" placement of the popover would be outside of the viewport. Defaults to {@link FitInWindowModes.FLIP}. */
     fitInWindowMode: FitInWindowMode;
     /** A function that will be called when the popover closes. */
     onClose?: () => void;
@@ -74,13 +93,11 @@ interface PopoverProps {
 
 /**
  * A popover component, which is used to "float" some content above some other content.
- *
- * @see {@link Tooltip}
  */
 class Popover extends React.Component<PopoverProps> {
-    /** */
+    /** @hidden */
     static placements = PopoverPlacements;
-    /** */
+    /** @hidden */
     static fitInWindowModes = FitInWindowModes;
 
     /** @hidden */

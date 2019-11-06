@@ -2,13 +2,13 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {GlobalsNumber} from '../utils/csstype';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface OpacityProps {
     /** Sets the transparency of an element or the degree to which content behind an element is visible. */
     // Add `string` to support properties from theme scale.
-    opacity?: Prop<GlobalsNumber | string>;
+    opacity?: OptionalResponsiveProp<GlobalsNumber | string>;
 }
 
 export const config: Config = {

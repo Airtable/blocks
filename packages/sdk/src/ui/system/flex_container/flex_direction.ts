@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {FlexDirectionProperty} from '../utils/csstype';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface FlexDirectionProps {
     /** Sets how flex items are placed in the flex container defining the main axis and the direction (normal or reversed). */
-    flexDirection?: Prop<FlexDirectionProperty>;
+    flexDirection?: OptionalResponsiveProp<FlexDirectionProperty>;
 }
 
 export const config: Config = {flexDirection: true};

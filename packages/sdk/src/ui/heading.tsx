@@ -18,17 +18,25 @@ import {ResponsiveProp, ResponsiveKey} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
 
-/** */
+/**
+ * Sizes for the {@link Heading} component.
+ */
 type HeadingSize = EnumType<typeof HeadingSize>;
 const HeadingSize = createEnum('xsmall', 'small', 'default', 'large', 'xlarge', 'xxlarge');
 
-/** */
+/**
+ * Size prop for the {@link Heading} component.
+ */
 type HeadingSizeProp = ResponsiveProp<HeadingSize>;
 const headingSizePropType = createResponsivePropTypeFromEnum(HeadingSize);
 
-/** */
+/**
+ * Variant prop for the {@link Heading} component.
+ * • **default** - Headings typically used for titles.
+ * • **caps** - All-caps headings typically used for field names and smaller section headings.
+ */
 type HeadingVariant = EnumType<typeof HeadingVariant>;
 const HeadingVariant = createEnum('default', 'caps');
 const headingVariantPropType = createPropTypeFromEnum(HeadingVariant);
@@ -82,21 +90,27 @@ function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVaria
     return useStyledSystem(styleProps);
 }
 
-/** */
-interface HeadingProps extends AriaProps, AllStylesProps {
+/**
+ * Props for the {@link Heading} component. Also supports:
+ * * {@link AllStylesProps}
+ * * {@link AriaProps}
+ *
+ * @noInheritDoc
+ */
+interface HeadingProps extends AllStylesProps, AriaProps {
     /** The `role` attribute. */
     role?: string;
     /** The element that is rendered. Defaults to `h3`. */
     as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-    /** The `variant` of the heading. Defaults to `default`. */
+    /** The variant of the heading. Defaults to `default`. */
     variant?: HeadingVariant;
-    /** */
-    children?: React.ReactNode;
+    /** The contents of the heading. */
+    children?: React.ReactNode | string;
     /** The `id` attribute. */
     id?: string;
-    /** The `size` of the heading. Defaults to `default`. Can be a responsive prop object. */
+    /** The size of the heading. Defaults to `default`. Can be a responsive prop object. */
     size?: HeadingSizeProp;
-    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
+    /** Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
     /** Additional class names to apply, separated by spaces. */
     className?: string;
@@ -107,6 +121,7 @@ interface HeadingProps extends AriaProps, AllStylesProps {
 /**
  * A heading component with sizes and variants.
  *
+ * @example
  * ```js
  * import {Heading} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';
@@ -129,60 +144,60 @@ interface HeadingProps extends AriaProps, AllStylesProps {
  * }
  * ```
  */
-const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
-    (
-        {
-            as: Component = 'h3',
-            size = HeadingSize.default,
-            variant = HeadingVariant.default,
-            children,
-            id,
-            role,
-            dataAttributes,
-            className,
-            style,
-            'aria-label': ariaLabel,
-            'aria-labelledby': ariaLabelledBy,
-            'aria-describedby': ariaDescribedBy,
-            'aria-controls': ariaControls,
-            'aria-expanded': ariaExpanded,
-            'aria-haspopup': ariaHasPopup,
-            'aria-hidden': ariaHidden,
-            'aria-live': ariaLive,
-            ...styleProps
-        }: HeadingProps,
-        ref: React.Ref<HTMLHeadingElement>,
-    ) => {
-        const classNameForHeadingSize = useHeadingStyle(size, variant);
-        const classNameForStyleProps = useStyledSystem({
-            fontFamily: 'default',
-            textColor: 'default',
-            ...styleProps,
-        });
-        return (
-            <Component
-                ref={ref}
-                id={id}
-                className={cx(classNameForHeadingSize, classNameForStyleProps, className)}
-                style={style}
-                role={role}
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-                aria-describedby={ariaDescribedBy}
-                aria-controls={ariaControls}
-                aria-expanded={ariaExpanded}
-                aria-haspopup={ariaHasPopup}
-                aria-hidden={ariaHidden}
-                aria-live={ariaLive}
-                {...dataAttributes}
-            >
-                {children}
-            </Component>
-        );
-    },
-);
+function Heading(props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) {
+    const {
+        as: Component = 'h3',
+        size = HeadingSize.default,
+        variant = HeadingVariant.default,
+        children,
+        id,
+        role,
+        dataAttributes,
+        className,
+        style,
+        'aria-label': ariaLabel,
+        'aria-labelledby': ariaLabelledBy,
+        'aria-describedby': ariaDescribedBy,
+        'aria-controls': ariaControls,
+        'aria-expanded': ariaExpanded,
+        'aria-haspopup': ariaHasPopup,
+        'aria-hidden': ariaHidden,
+        'aria-live': ariaLive,
+        ...styleProps
+    } = props;
 
-Heading.propTypes = {
+    const classNameForHeadingSize = useHeadingStyle(size, variant);
+    const classNameForStyleProps = useStyledSystem({
+        fontFamily: 'default',
+        textColor: 'default',
+        ...styleProps,
+    });
+
+    return (
+        <Component
+            ref={ref as any}
+            id={id}
+            className={cx(classNameForHeadingSize, classNameForStyleProps, className)}
+            style={style}
+            role={role}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            aria-controls={ariaControls}
+            aria-expanded={ariaExpanded}
+            aria-haspopup={ariaHasPopup}
+            aria-hidden={ariaHidden}
+            aria-live={ariaLive}
+            {...dataAttributes}
+        >
+            {children}
+        </Component>
+    );
+}
+
+const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(Heading);
+
+ForwardedRefHeading.propTypes = {
     as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const),
     size: headingSizePropType,
     variant: headingVariantPropType,
@@ -196,4 +211,6 @@ Heading.propTypes = {
     ...ariaPropTypes,
 };
 
-export default Heading;
+ForwardedRefHeading.displayName = 'Heading';
+
+export default ForwardedRefHeading;

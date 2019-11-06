@@ -8,7 +8,9 @@ import {config as flexWrapConfig, FlexWrapProps} from './flex_wrap';
 import {config as justifyContentConfig, JustifyContentProps} from './justify_content';
 import {config as justifyItemsConfig, JustifyItemsProps} from './justify_items';
 
-/** */
+/**
+ * Style props for a flex container element.
+ */
 export interface FlexContainerSetProps
     extends AlignContentProps,
         AlignItemsProps,

@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui/system: Core */ /** */
+/** @module @airtable/blocks/ui/system: Control sizes */ /** */
 import {compose, system} from '@styled-system/core';
 import {createEnum, createResponsivePropTypeFromEnum, EnumType} from '../private_utils';
 import useTheme from './theme/use_theme';
@@ -7,11 +7,15 @@ import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_r
 import useStyledSystem from './use_styled_system';
 import {allStylesParser} from './system/';
 
-/** */
+/**
+ * Sizes for the {@link Button}, {@link Input}, {@link Select}, and {@link SelectButtons} components.
+ */
 export type ControlSize = EnumType<typeof ControlSize>;
 export const ControlSize = createEnum('small', 'default', 'large');
 
-/** */
+/**
+ * Size prop for the {@link Button}, {@link Input}, {@link Select}, and {@link SelectButtons} components.
+ */
 export type ControlSizeProp = ResponsiveProp<ControlSize>;
 export const controlSizePropType = createResponsivePropTypeFromEnum(ControlSize);
 

@@ -24,13 +24,12 @@
 • **ViewportConstraint**:
 
 _Defined in
-[src/ui/viewport_constraint.tsx:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L47)_
+[src/ui/viewport_constraint.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L46)_
 
-ViewportConstraint - when mounted, applies constraints to the viewport. Like
-[addMinSize](_airtable_blocks__viewport.md#addminsize), will fullscreen the block if necessary and
-possible when `minSize` is updated.
-
-**`see`** sdk.viewport
+When mounted, this wrapper component applies size constraints to the
+[Viewport](_airtable_blocks__viewport.md#viewport). Like
+[addMinSize](_airtable_blocks__viewport.md#addminsize), this will fullscreen the block if necessary
+and possible when `minSize` is updated.
 
 **Example:**
 
@@ -57,12 +56,17 @@ import {ViewportConstraint} from '@airtable/blocks/ui';
 _Defined in
 [src/ui/viewport_constraint.tsx:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L11)_
 
+Props for the [ViewportConstraint](_airtable_blocks_ui__viewportconstraint.md#viewportconstraint)
+component.
+
 ### `Optional` children
 
 • **children**? : _React.ReactNode_
 
 _Defined in
 [src/ui/viewport_constraint.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L17)_
+
+The contents of the viewport constraint.
 
 ### `Optional` maxFullscreenSize
 
@@ -72,6 +76,8 @@ _[ViewportSizeConstraintProp](_airtable_blocks_ui__viewportconstraint.md#viewpor
 _Defined in
 [src/ui/viewport_constraint.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L15)_
 
+The maximum viewport size of the block when it is in fullscreen mode.
+
 ### `Optional` minSize
 
 • **minSize**? :
@@ -79,6 +85,8 @@ _[ViewportSizeConstraintProp](_airtable_blocks_ui__viewportconstraint.md#viewpor
 
 _Defined in
 [src/ui/viewport_constraint.tsx:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L13)_
+
+The minimum viewport size of the block.
 
 ## Type aliases
 
@@ -89,3 +97,5 @@ _Partial‹[ViewportSizeConstraint](_airtable_blocks__viewport.md#viewportsizeco
 
 _Defined in
 [src/ui/viewport_constraint.tsx:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/viewport_constraint.tsx#L8)_
+
+An object specifying a width and/or height for the block's viewport.

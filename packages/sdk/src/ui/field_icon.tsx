@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
-import Icon, {
-    sharedIconPropTypes,
-    SharedIconProps,
-    iconStylePropTypes,
-    IconStyleProps,
-} from './icon';
+import Icon, {sharedIconPropTypes, SharedIconProps} from './icon';
 import {IconName} from './icon_config';
 
-/** */
-interface FieldIconProps extends SharedIconProps, IconStyleProps {
+/**
+ * Props for the {@link FieldIcon} component. Also accepts:
+ * * {@link SharedIconProps}
+ *
+ * @noInheritDoc
+ */
+// TODO (stephen): inherit shared props without inheriting style props
+interface FieldIconProps extends SharedIconProps {
     /** The field model to display an icon for. */
     field: Field;
 }
 
 /**
  * A vector icon for a field's type.
- *
- * @augments React.StatelessFunctionalComponent
- * @param props
  *
  * @example
  * ```js
@@ -64,7 +62,6 @@ const FieldIcon = (props: FieldIconProps) => {
 FieldIcon.propTypes = {
     field: PropTypes.instanceOf(Field).isRequired,
     ...sharedIconPropTypes,
-    ...iconStylePropTypes,
 };
 
 export default FieldIcon;

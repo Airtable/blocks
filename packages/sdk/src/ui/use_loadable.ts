@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: useLoadable */ /** */
 import {useMemo, useEffect} from 'react';
 import {useSubscription} from 'use-subscription';
-import {compact} from '../private_utils';
+import {compact, has} from '../private_utils';
 import {spawnError} from '../error_utils';
 import useArrayIdentity from './use_array_identity';
 
@@ -12,19 +12,27 @@ import useArrayIdentity from './use_array_identity';
  * Usually a {@link Cursor}, {@link RecordQueryResult}, or a {@link ViewMetadataQueryResult}.
  */
 interface LoadableModel {
-    /** */
+    /** @hidden */
     readonly isDataLoaded: boolean;
-    /** */
+    /** @hidden */
     loadDataAsync(): Promise<void>;
-    /** */
+    /** @hidden */
     unloadData(): void;
-    /** */
+    /** @hidden */
     watch(keys: 'isDataLoaded', callback: () => unknown): ReadonlyArray<string>;
-    /** */
+    /** @hidden */
     unwatch(keys: 'isDataLoaded', callback: () => unknown): ReadonlyArray<string>;
 }
 
 const SUSPENSE_CLEAN_UP_MS = 60000;
+
+/**
+ * Options object for the {@link useLoadable} hook.
+ */
+interface UseLoadableOpts {
+    /** Whether suspense mode is enabled. If suspense is disabled, you need to manually check `model.isDataLoaded` so you don't use your model before it's ready. */
+    shouldSuspend?: boolean;
+}
 
 /**
  * When you're writing a block, not all of the data in your base is available to work with straight
@@ -37,7 +45,7 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  * don't need to worry about waiting for the data to load - the hook uses React Suspense to make
  * sure the rest of your component doesn't run until the data is loaded. Whilst the data is
  * loading, the entire block will show a loading indicator. If you want to change where that
- * indicator shows or how it looks, use {@link https://reactjs.org/docs/react-api.html#reactsuspense <React.Suspense />}
+ * indicator shows or how it looks, use {@link https://reactjs.org/docs/react-api.html#reactsuspense|`<React.Suspense />`}
  * around the component that uses the hook.
  *
  * You can pass several models to `useLoadable` in an array - it will load all of them simultaneously.
@@ -48,11 +56,8 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  * load-state of any model you passed in changes, and you should check each model's `.isDataLoaded`
  *  property before trying to use the data you loaded.
  *
- * @param models the models to load.
- * @param options Optional options to control how the hook works
- * @param options.shouldSuspend pass {shouldSuspend: false} to disable suspense
- * mode. If suspense is disabled, you need to manually check model.isDataLoaded so you don't use
- * your model before it's ready.
+ * @param models The models to load.
+ * @param opts Optional options to control how the hook works.
  *
  * @example
  * ```js
@@ -104,8 +109,9 @@ const SUSPENSE_CLEAN_UP_MS = 60000;
  */
 export default function useLoadable(
     models: ReadonlyArray<LoadableModel | null> | LoadableModel | null,
-    {shouldSuspend = true}: {shouldSuspend?: boolean} = {},
+    opts: UseLoadableOpts = {shouldSuspend: true},
 ) {
+    const shouldSuspend = opts && has(opts, 'shouldSuspend') ? opts.shouldSuspend : true;
     const constModels = useArrayIdentity(Array.isArray(models) ? models : [models]);
     const compactModels = useMemo(() => {
         const compacted = compact(constModels);

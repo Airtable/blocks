@@ -26,7 +26,8 @@ _Defined in
 
 ### `Optional` alignSelf
 
-• **alignSelf**? : _Prop‹AlignSelfProperty›_
+• **alignSelf**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹AlignSelfProperty›_
 
 _Defined in
 [src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
@@ -44,7 +45,8 @@ _Defined in
 
 ### `Optional` flexBasis
 
-• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
+• **flexBasis**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexBasisProperty‹Length››_
 
 _Defined in
 [src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
@@ -62,7 +64,8 @@ _Defined in
 
 ### `Optional` flexGrow
 
-• **flexGrow**? : _Prop‹GlobalsNumber›_
+• **flexGrow**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹GlobalsNumber›_
 
 _Defined in
 [src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
@@ -77,11 +80,14 @@ container, items grow to fit according to `flexGrow`.
 • **FlexItemSetProps**:
 
 _Defined in
-[src/ui/system/flex_item/flex_item_set.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_item_set.ts#L13)_
+[src/ui/system/flex_item/flex_item_set.ts:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_item_set.ts#L15)_
+
+Style props for a flex item element.
 
 ### `Optional` alignSelf
 
-• **alignSelf**? : _Prop‹AlignSelfProperty›_
+• **alignSelf**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹AlignSelfProperty›_
 
 _Inherited from
 [AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
@@ -93,7 +99,8 @@ Aligns flex items of the current flex line, overriding the `alignItems` value.
 
 ### `Optional` flex
 
-• **flex**? : _Prop‹FlexProperty‹Length››_
+• **flex**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexProperty‹Length››_
 
 _Inherited from
 [FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
@@ -106,7 +113,8 @@ shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
 
 ### `Optional` flexBasis
 
-• **flexBasis**? : _Prop‹FlexBasisProperty‹Length››_
+• **flexBasis**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexBasisProperty‹Length››_
 
 _Inherited from
 [FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
@@ -118,7 +126,8 @@ Sets the initial main size of a flex item.
 
 ### `Optional` flexGrow
 
-• **flexGrow**? : _Prop‹GlobalsNumber›_
+• **flexGrow**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹GlobalsNumber›_
 
 _Inherited from
 [FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
@@ -131,7 +140,8 @@ container, items grow to fit according to `flexGrow`.
 
 ### `Optional` flexShrink
 
-• **flexShrink**? : _Prop‹GlobalsNumber›_
+• **flexShrink**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹GlobalsNumber›_
 
 _Inherited from
 [FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
@@ -144,7 +154,8 @@ container, items shrink to fit according to `flexShrink`.
 
 ### `Optional` order
 
-• **order**? : _Prop‹GlobalsNumber›_
+• **order**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹GlobalsNumber›_
 
 _Inherited from
 [OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
@@ -166,7 +177,8 @@ _Defined in
 
 ### `Optional` flex
 
-• **flex**? : _Prop‹FlexProperty‹Length››_
+• **flex**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FlexProperty‹Length››_
 
 _Defined in
 [src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
@@ -185,7 +197,8 @@ _Defined in
 
 ### `Optional` flexShrink
 
-• **flexShrink**? : _Prop‹GlobalsNumber›_
+• **flexShrink**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹GlobalsNumber›_
 
 _Defined in
 [src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
@@ -204,7 +217,8 @@ _Defined in
 
 ### `Optional` order
 
-• **order**? : _Prop‹GlobalsNumber›_
+• **order**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹GlobalsNumber›_
 
 _Defined in
 [src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/flex_item/order.ts#L10)_

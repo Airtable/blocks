@@ -6,14 +6,19 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 import Select, {sharedSelectPropTypes, SharedSelectProps} from './select';
 import useSynced from './use_synced';
 
-/** */
+/**
+ * Props for the {@link SelectSynced} component. Also accepts:
+ * * {@link SharedSelectProps}
+ *
+ * @noInheritDoc
+ */
 interface SelectSyncedProps extends SharedSelectProps {
-    /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in `globalConfig` for this key. Selecting a new option will update `globalConfig`. */
+    /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new option will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
 /**
- * Dropdown menu component synced with {@link GlobalConfig}. A wrapper around `<select>` that fits in with Airtable's user interface.
+ * A wrapper around the {@link Select} component that syncs with {@link GlobalConfig}.
  *
  * @example
  * ```js
@@ -76,7 +81,9 @@ function SelectSynced(props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement
     );
 }
 
-const ForwardedRefSelectSynced = React.forwardRef(SelectSynced);
+const ForwardedRefSelectSynced = React.forwardRef<HTMLSelectElement, SelectSyncedProps>(
+    SelectSynced,
+);
 
 ForwardedRefSelectSynced.displayName = 'SelectSynced';
 

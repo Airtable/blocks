@@ -6,11 +6,12 @@ import useStyledSystem from './use_styled_system';
 import {allStylesPropTypes, AllStylesProps} from './system/index';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
 
 /**
  * Props for the Box component. Also accepts:
- * * [[AriaProps]]
- * * [[AllStylesProps]]
+ * * {@link AllStylesProps}
+ * * {@link AriaProps}
  *
  * @noInheritDoc
  */
@@ -36,7 +37,7 @@ export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps 
         | 'li'
         | 'pre';
     /** The contents of the box. */
-    children?: React.ReactNode;
+    children?: React.ReactNode | string;
     /** The `tabIndex` attribute. */
     tabIndex?: number;
     /** The `role` attribute. */
@@ -48,15 +49,16 @@ export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps 
     /** Additional styles. */
     style?: React.CSSProperties;
     /** Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`. */
-    dataAttributes?: {readonly [key: string]: unknown};
+    dataAttributes?: DataAttributesProp;
 }
 
 /**
  * A box component for creating layouts.
  *
+ * @example
  * ```js
  * import {Box} from '@airtable/blocks/ui';
- * import React, {Fragment} from 'react';
+ * import React from 'react';
  *
  * function BoxExample() {
  *     return (
@@ -150,10 +152,12 @@ const ForwardedRefBox = React.forwardRef<HTMLElement, BoxProps>(Box);
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     role: PropTypes.string,
-    dataAttributes: PropTypes.object,
+    ...dataAttributesPropType,
     ...ariaPropTypes,
     ...tooltipAnchorPropTypes,
     ...allStylesPropTypes,
 };
+
+ForwardedRefBox.displayName = 'Box';
 
 export default ForwardedRefBox;

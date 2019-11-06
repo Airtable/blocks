@@ -8,14 +8,19 @@ import FieldPicker, {sharedFieldPickerPropTypes, SharedFieldPickerProps} from '.
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
-/** */
+/**
+ * Props for the {@link FieldPickerSynced} component. Also accepts:
+ * * {@link SharedFieldPickerProps}
+ *
+ * @noInheritDoc
+ */
 interface FieldPickerSyncedProps extends SharedFieldPickerProps {
-    /** A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in `globalConfig` for this key. Selecting a new field will update `globalConfig`. */
+    /** A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in {@link GlobalConfig} for this key. Selecting a new field will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
 /**
- * Dropdown menu component for selecting fields, synced with {@link GlobalConfig}.
+ * A wrapper around the {@link FieldPicker} component that syncs with {@link GlobalConfig}.
  *
  * @example
  * ```js
@@ -98,7 +103,9 @@ function FieldPickerSynced(props: FieldPickerSyncedProps, ref: React.Ref<HTMLSel
     );
 }
 
-const ForwardedRefFieldPickerSynced = React.forwardRef(FieldPickerSynced);
+const ForwardedRefFieldPickerSynced = React.forwardRef<HTMLSelectElement, FieldPickerSyncedProps>(
+    FieldPickerSynced,
+);
 
 ForwardedRefFieldPickerSynced.displayName = 'FieldPickerSynced';
 

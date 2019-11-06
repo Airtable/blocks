@@ -7,8 +7,12 @@ import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
 
-// Shared with `TablePicker` and `TablePickerSynced`.
-/** */
+/**
+ * Props shared between the {@link TablePicker} and {@link TablePickerSynced} components. Also accepts:
+ * * {@link SharedSelectBaseProps}
+ *
+ * @noInheritDoc
+ */
 export interface SharedTablePickerProps extends SharedSelectBaseProps {
     /** If set to `true`, the user can unset the selected table. */
     shouldAllowPickingNone?: boolean;
@@ -26,7 +30,12 @@ export const sharedTablePickerPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link TablePicker} component. Also accepts:
+ * * {@link SharedTablePickerProps}
+ *
+ * @noInheritDoc
+ */
 interface TablePickerProps extends SharedTablePickerProps {
     /** The selected table model. */
     table?: Table | null;
@@ -98,7 +107,7 @@ function TablePicker(props: TablePickerProps, ref: React.Ref<HTMLSelectElement>)
     );
 }
 
-const ForwardedRefTablePicker = React.forwardRef(TablePicker);
+const ForwardedRefTablePicker = React.forwardRef<HTMLSelectElement, TablePickerProps>(TablePicker);
 
 ForwardedRefTablePicker.displayName = 'TablePicker';
 

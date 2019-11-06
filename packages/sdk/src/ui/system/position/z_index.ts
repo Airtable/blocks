@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import {ZIndexProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface ZIndexProps {
     /** Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements with larger z-indexes cover those with smaller ones. */
-    zIndex?: Prop<ZIndexProperty>;
+    zIndex?: OptionalResponsiveProp<ZIndexProperty>;
 }
 
 export const config: Config = {

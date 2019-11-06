@@ -8,14 +8,19 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
-/** */
+/**
+ * Props for the {@link ViewPickerSynced} component. Also accepts:
+ * * {@link SharedViewPickerProps}
+ *
+ * @noInheritDoc
+ */
 interface ViewPickerSyncedProps extends SharedViewPickerProps {
-    /** A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in `globalConfig` for this key. Selecting a new view will update `globalConfig`. */
+    /** A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in {@link GlobalConfig} for this key. Selecting a new view will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
 /**
- * Dropdown menu component for selecting views, synced with {@link GlobalConfig}.
+ * A wrapper around the {@link ViewPicker} component that syncs with {@link GlobalConfig}.
  *
  * @example
  * ```js
@@ -94,7 +99,9 @@ function ViewPickerSynced(props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelec
     );
 }
 
-const ForwardedRefViewPickerSynced = React.forwardRef(ViewPickerSynced);
+const ForwardedRefViewPickerSynced = React.forwardRef<HTMLSelectElement, ViewPickerSyncedProps>(
+    ViewPickerSynced,
+);
 
 ForwardedRefViewPickerSynced.displayName = 'ViewPickerSynced';
 

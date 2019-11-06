@@ -3,12 +3,12 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {JustifyItemsProperty} from '../utils/csstype';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** @hidden */
 export interface JustifyItemsProps {
     /** @hidden */
-    justifyItems?: Prop<JustifyItemsProperty>;
+    justifyItems?: OptionalResponsiveProp<JustifyItemsProperty>;
 }
 
 export const config: Config = {justifyItems: true};

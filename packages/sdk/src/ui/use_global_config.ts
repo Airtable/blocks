@@ -4,9 +4,9 @@ import GlobalConfig from '../global_config';
 import useWatchable from './use_watchable';
 
 /**
- * Returns the {@link GlobalConfig} and updates whenever any key in GlobalConfig changes.
+ * Returns the {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig} changes.
  *
- * @returns the {@link GlobalConfig}
+ * @returns The block's global config.
  *
  * @example
  * ```js

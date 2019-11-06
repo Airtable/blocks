@@ -10,8 +10,12 @@ import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
 
-// Shared with `ViewPicker` and `ViewPickerSynced`.
-/** */
+/**
+ * Props shared between the {@link ViewPicker} and {@link ViewPickerSynced} components. Also accepts:
+ * * {@link SharedSelectBaseProps}
+ *
+ * @noInheritDoc
+ */
 export interface SharedViewPickerProps extends SharedSelectBaseProps {
     /** The parent table model to select views from. If `null` or `undefined`, the picker won't render. */
     table?: Table | null;
@@ -35,7 +39,12 @@ export const sharedViewPickerPropTypes = {
     ...sharedSelectBasePropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link ViewPicker} component. Also accepts:
+ * * {@link SharedViewPickerProps}
+ *
+ * @noInheritDoc
+ */
 interface ViewPickerProps extends SharedViewPickerProps {
     /** The selected view model. */
     view?: View | null;
@@ -150,7 +159,7 @@ function ViewPicker(props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) {
     );
 }
 
-const ForwardedRefViewPicker = React.forwardRef(ViewPicker);
+const ForwardedRefViewPicker = React.forwardRef<HTMLSelectElement, ViewPickerProps>(ViewPicker);
 
 ForwardedRefViewPicker.displayName = 'ViewPicker';
 

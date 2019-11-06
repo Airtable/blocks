@@ -2,13 +2,17 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
-import {modalStylePropTypes, ModalStyleProps} from './modal';
-import Dialog from './dialog';
+import Dialog, {DialogStyleProps, dialogStylePropTypes} from './dialog';
 import Button from './button';
 import Box from './box';
 
-/** */
-interface ConfirmationDialogProps extends ModalStyleProps {
+/**
+ * Props for the {@link ConfirmationDialog} component. Also accepts:
+ * * {@link DialogStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface ConfirmationDialogProps extends DialogStyleProps {
     /** Extra styles to apply to the dialog element. */
     style?: React.CSSProperties;
     /** The title of the dialog. */
@@ -83,7 +87,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
         backgroundStyle: PropTypes.object,
         onCancel: PropTypes.func.isRequired,
         onConfirm: PropTypes.func.isRequired,
-        ...modalStylePropTypes,
+        ...dialogStylePropTypes,
     };
     /** @hidden */
     static defaultProps = {

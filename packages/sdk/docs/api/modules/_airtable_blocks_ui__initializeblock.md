@@ -16,7 +16,7 @@
 ▸ **initializeBlock**(`getEntryElement`: Object): _void_
 
 _Defined in
-[src/ui/initialize_block.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/initialize_block.tsx#L28)_
+[src/ui/initialize_block.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/initialize_block.tsx#L29)_
 
 `initializeBlock` takes the top-level React component in your tree and renders it. It is
 conceptually similar to `ReactDOM.render`, but takes care of some Blocks-specific things.

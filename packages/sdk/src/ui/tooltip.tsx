@@ -10,21 +10,23 @@ import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const FADE_IN_ANIMATION_DURATION = 150;
 
-/** */
+/**
+ * Props for the {@link Tooltip} component.
+ */
 interface TooltipProps {
     /** Child components to render. */
     children: React.ReactElement<TooltipAnchorProps>;
-    /** The horizontal placement of the tooltip. Defaults to `Tooltip.placements.RIGHT`. */
+    /** The horizontal placement of the tooltip. Defaults to {@link PopoverPlacements.RIGHT}. */
     placementX?: PopoverPlacementX;
-    /** The vertical placement of the tooltip. Defaults to `Tooltip.placements.CENTER`. */
+    /** The vertical placement of the tooltip. Defaults to {@link PopoverPlacements.CENTER}. */
     placementY?: PopoverPlacementY;
-    /** The horizontal offset, in pixels, of the tooltip. If `placementX` is set to `UI.Tooltip.placements.LEFT`, a higher number will move the tooltip to the left. If `placementX` is set to `UI.Tooltip.placements.RIGHT`, a higher number moves the tooltip to the right. If `placementX` is set to `UI.Tooltip.placements.CENTER`, this value has no effect. Defaults to 12. */
+    /** The horizontal offset, in pixels, of the tooltip. If `placementX` is set to {@link PopoverPlacements.LEFT}, a higher number will move the tooltip to the left. If `placementX` is set to {@link PopoverPlacements.RIGHT}, a higher number moves the tooltip to the right. If `placementX` is set to {@link PopoverPlacements.CENTER}, this value has no effect. Defaults to 12. */
     placementOffsetX?: number;
-    /** The vertical offset, in pixels, of the tooltip. If `placementY` is set to `UI.Tooltip.placements.TOP`, a higher number will move the tooltip upward. If `placementY` is set to `UI.Tooltip.placements.BOTTOM`, a higher number moves the tooltip downard. If `placementY` is set to `UI.Tooltip.placements.CENTER`, this value has no effect. Defaults to 0. */
+    /** The vertical offset, in pixels, of the tooltip. If `placementY` is set to {@link PopoverPlacements.TOP}, a higher number will move the tooltip upward. If `placementY` is set to {@link PopoverPlacements.BOTTOM}, a higher number moves the tooltip downard. If `placementY` is set to {@link PopoverPlacements.CENTER}, this value has no effect. Defaults to 0. */
     placementOffsetY?: number;
     /** A string representing the contents. Alternatively, you can include a function that returns a React node to place into the tooltip, which is useful for things like italicization in the tooltip. */
     content?: string | (() => React.ReactElement<any>);
-    /** Dictates the behavior when the "normal" placement of the tooltip would be outside of the viewport. If `NONE`, this has no effect, and the tooltip may be placed off-screen. If `FLIP`, we'll switch the placement to the other side (for example, moving the tooltip from the left to the right). If `NUDGE`, the tooltip will be "nudged" just enough to fit on screen. Defaults to Tooltip.fitInWindowModes.FLIP. */
+    /** Dictates the behavior when the "normal" placement of the tooltip would be outside of the viewport. Defaults to {@link FitInWindowModes.FLIP}. */
     fitInWindowMode?: FitInWindowMode;
     /** Should the tooltip be hidden when clicked? Defaults to `false`. */
     shouldHideTooltipOnClick?: boolean;
@@ -42,31 +44,31 @@ interface TooltipState {
 }
 
 /**
- * A component that shows a tooltip. Wraps its children.
+ * A component that renders a tooltip on hover. Wraps its children.
  *
  * @example
  * ```js
- * import {UI} from '@airtable/blocks';
+ * import {Button, Tooltip} from '@airtable/blocks';
  *
  * function MyComponent() {
  *     return (
- *         <UI.Tooltip
+ *         <Tooltip
  *             content="Clicking this button will be a lot of fun!"
- *             placementX={UI.Tooltip.placements.CENTER}
- *             placementY={UI.Tooltip.placements.TOP}
+ *             placementX={Tooltip.placements.CENTER}
+ *             placementY={Tooltip.placements.TOP}
  *         >
- *             <UI.Button onClick={() => alert('Clicked!')}>
+ *             <Button onClick={() => alert('Clicked!')}>
  *                 Click here!
- *             </UI.Button>
- *         </UI.Tooltip>
+ *             </Button>
+ *         </Tooltip>
  *     );
  * }
  * ```
  */
 class Tooltip extends React.Component<TooltipProps, TooltipState> {
-    /** */
+    /** @hidden */
     static placements = Popover.placements;
-    /** */
+    /** @hidden */
     static fitInWindowModes = Popover.fitInWindowModes;
 
     /** @hidden */

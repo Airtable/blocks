@@ -4,7 +4,9 @@ import * as React from 'react';
 
 // JSON stringify the value so you can use any primitive.
 // Regular <select> coerces all values to string, which is confusing.
-/**  */
+/**
+ * Supported value types for {@link SelectOption}.
+ */
 export type SelectOptionValue = string | number | boolean | null | undefined;
 
 /** @internal */
@@ -18,7 +20,9 @@ export function isSelectOptionValue(value: unknown): value is SelectOptionValue 
     );
 }
 
-/** */
+/**
+ * A select option for {@link Select}, {@link TablePicker}, {@link ViewPicker}, {@link FieldPicker}, and their `Synced` counterparts.
+ */
 export interface SelectOption {
     /** The value for the select option. */
     value: SelectOptionValue;

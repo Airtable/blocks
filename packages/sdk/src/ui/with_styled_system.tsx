@@ -7,17 +7,16 @@ import useStyledSystem from './use_styled_system';
 
 /**
  * @internal
- * A helper method for working with the useStyledSystem hook in class-based components.
+ * A higher-order component for working with the `useStyledSystem` hook in class-based components.
  * It takes a React component and converts style props into a single className prop.
  *
  * Generate boilerplate for using this hook with our scaffolding tool: https://o80pm.csb.app/
  *
- * @param Component The React component you want to use with styled system
- * @param styleParser The style parser, constructed with `compose`
- * @returns The transformed React component
+ * @param Component The React component you want to use with styled system.
+ * @param styleParser The style parser, constructed with `compose`.
+ * @returns The transformed React component.
  *
- * @description
- * <!-- TODO(alex): switch this back to example (it has lint syntax errors currently) -->
+ * @example
  * ```js
  * import * as React from 'react';
  * import {compose} from '@styled-system/core';
@@ -90,19 +89,17 @@ export default function withStyledSystem<
     styleParser: styleFn,
     stylePropTypes: {[key: string]: unknown},
     defaultStyleProps?: StyleProps,
-): React.RefForwardingComponent<
-    Instance,
-    (Omit<Props, keyof StyleProps>) & (StyleProps) & React.RefAttributes<Instance>
-> &
+): React.RefForwardingComponent<Instance, Props & StyleProps & React.RefAttributes<Instance>> &
     Statics {
     const WithStyledSystem = React.forwardRef<
         Instance,
-        (Omit<Props, keyof StyleProps>) & (StyleProps) & React.RefAttributes<Instance>
+        Props & StyleProps & React.RefAttributes<Instance>
     >((props, ref) => {
-        const {styleProps, nonStyleProps} = splitStyleProps<
-            (Omit<Props, keyof StyleProps>) & (StyleProps),
-            StyleProps
-        >(props, styleParser.propNames, defaultStyleProps);
+        const {styleProps, nonStyleProps} = splitStyleProps<Props & StyleProps, StyleProps>(
+            props,
+            styleParser.propNames,
+            defaultStyleProps,
+        );
         const classNameForStyleProps = useStyledSystem(cast<StyleProps>(styleProps), styleParser);
         return (
             <Component

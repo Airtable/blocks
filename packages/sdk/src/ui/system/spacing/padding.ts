@@ -9,24 +9,24 @@ import {
 } from '../utils/csstype';
 import ensureNumbersAreWithinScale from '../utils/ensure_numbers_are_within_scale';
 import createStylePropTypes from '../utils/create_style_prop_types';
-import {Prop, Length} from '../utils/types';
+import {OptionalResponsiveProp, Length} from '../utils/types';
 
 /** */
 export interface PaddingProps {
     /** Sets the padding area on all four sides of an element. It is a shorthand for `paddingTop`, `paddingRight`, `paddingBottom`, and `paddingLeft`. */
-    padding?: Prop<PaddingProperty<Length>>;
+    padding?: OptionalResponsiveProp<PaddingProperty<Length>>;
     /** Sets the height of the padding area on the top side of an element. */
-    paddingTop?: Prop<PaddingTopProperty<Length>>;
+    paddingTop?: OptionalResponsiveProp<PaddingTopProperty<Length>>;
     /** Sets the width of the padding area on the right side of an element. */
-    paddingRight?: Prop<PaddingRightProperty<Length>>;
+    paddingRight?: OptionalResponsiveProp<PaddingRightProperty<Length>>;
     /** Sets the height of the padding area on the bottom side of an element. */
-    paddingBottom?: Prop<PaddingBottomProperty<Length>>;
+    paddingBottom?: OptionalResponsiveProp<PaddingBottomProperty<Length>>;
     /** Sets the width of the padding area on the left side of an element. */
-    paddingLeft?: Prop<PaddingLeftProperty<Length>>;
+    paddingLeft?: OptionalResponsiveProp<PaddingLeftProperty<Length>>;
     /** Sets the width of the padding area on the left and right sides of an element. */
-    paddingX?: Prop<PaddingProperty<Length>>;
+    paddingX?: OptionalResponsiveProp<PaddingProperty<Length>>;
     /** Sets the height of the padding area on the top and bottom sides of an element. */
-    paddingY?: Prop<PaddingProperty<Length>>;
+    paddingY?: OptionalResponsiveProp<PaddingProperty<Length>>;
 }
 
 export const config: Config = {

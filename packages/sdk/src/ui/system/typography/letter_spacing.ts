@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {LetterSpacingProperty} from '../utils/csstype';
-import {Prop, Length} from '../utils/types';
+import {OptionalResponsiveProp, Length} from '../utils/types';
 
 /** */
 export interface LetterSpacingProps {
     /** Sets the spacing behavior between text characters. */
-    letterSpacing?: Prop<LetterSpacingProperty<Length> | string>;
+    letterSpacing?: OptionalResponsiveProp<LetterSpacingProperty<Length> | string>;
 }
 
 export const config: Config = {

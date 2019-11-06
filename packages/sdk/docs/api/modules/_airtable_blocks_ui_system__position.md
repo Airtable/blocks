@@ -26,7 +26,8 @@ _Defined in
 
 ### `Optional` bottom
 
-• **bottom**? : _Prop‹BottomProperty‹Length››_
+• **bottom**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹BottomProperty‹Length››_
 
 _Defined in
 [src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/bottom.ts#L11)_
@@ -45,7 +46,8 @@ _Defined in
 
 ### `Optional` left
 
-• **left**? : _Prop‹LeftProperty‹Length››_
+• **left**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LeftProperty‹Length››_
 
 _Defined in
 [src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/left.ts#L11)_
@@ -64,7 +66,8 @@ _Defined in
 
 ### `Optional` position
 
-• **position**? : _Prop‹PositionProperty›_
+• **position**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹PositionProperty›_
 
 _Defined in
 [src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position.ts#L10)_
@@ -79,11 +82,14 @@ determine the final location of positioned elements.
 • **PositionSetProps**:
 
 _Defined in
-[src/ui/system/position/position_set.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position_set.ts#L12)_
+[src/ui/system/position/position_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/position_set.ts#L14)_
+
+Style props for the position of an element.
 
 ### `Optional` bottom
 
-• **bottom**? : _Prop‹BottomProperty‹Length››_
+• **bottom**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹BottomProperty‹Length››_
 
 _Inherited from
 [BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
@@ -96,7 +102,8 @@ elements.
 
 ### `Optional` left
 
-• **left**? : _Prop‹LeftProperty‹Length››_
+• **left**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LeftProperty‹Length››_
 
 _Inherited from
 [LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
@@ -109,7 +116,8 @@ elements.
 
 ### `Optional` position
 
-• **position**? : _Prop‹PositionProperty›_
+• **position**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹PositionProperty›_
 
 _Inherited from
 [PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
@@ -122,7 +130,8 @@ determine the final location of positioned elements.
 
 ### `Optional` right
 
-• **right**? : _Prop‹RightProperty‹Length››_
+• **right**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹RightProperty‹Length››_
 
 _Inherited from
 [RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
@@ -135,7 +144,8 @@ elements.
 
 ### `Optional` top
 
-• **top**? : _Prop‹TopProperty‹Length››_
+• **top**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TopProperty‹Length››_
 
 _Inherited from
 [TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
@@ -148,7 +158,8 @@ elements.
 
 ### `Optional` zIndex
 
-• **zIndex**? : _Prop‹ZIndexProperty›_
+• **zIndex**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹ZIndexProperty›_
 
 _Inherited from
 [ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
@@ -170,7 +181,8 @@ _Defined in
 
 ### `Optional` right
 
-• **right**? : _Prop‹RightProperty‹Length››_
+• **right**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹RightProperty‹Length››_
 
 _Defined in
 [src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/right.ts#L11)_
@@ -189,7 +201,8 @@ _Defined in
 
 ### `Optional` top
 
-• **top**? : _Prop‹TopProperty‹Length››_
+• **top**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TopProperty‹Length››_
 
 _Defined in
 [src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/top.ts#L11)_
@@ -208,7 +221,8 @@ _Defined in
 
 ### `Optional` zIndex
 
-• **zIndex**? : _Prop‹ZIndexProperty›_
+• **zIndex**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹ZIndexProperty›_
 
 _Defined in
 [src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/position/z_index.ts#L10)_

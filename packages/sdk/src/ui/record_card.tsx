@@ -48,7 +48,14 @@ import {tooltipAnchorPropTypes} from './types/tooltip_anchor_props';
 // Mirrored from client_server_shared_config_settings
 const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
 
-/** */
+/**
+ * Style props for the {@link RecordCard} component. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link PositionSetProps}
+ *
+ * @noInheritDoc
+ */
 interface RecordCardStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
@@ -117,7 +124,12 @@ CellValueAndFieldLabel.propTypes = {
     width: PropTypes.number.isRequired,
 };
 
-/** */
+/**
+ * Props for the {@link RecordCard} component. Also accepts:
+ * * {@link RecordCardStyleProps}
+ *
+ * @noInheritDoc
+ */
 interface RecordCardProps extends RecordCardStyleProps {
     /** Record to display in the card. */
     record: Record | RecordDef;
@@ -139,6 +151,7 @@ interface RecordCardProps extends RecordCardStyleProps {
     /** Mouse leave event handler for the record card. */
     onMouseLeave?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
     /** Click event handler for the record card. If undefined, uses default behavior to expand record. If null, no operation is performed. */
+    // TODO (stephen): figure out how to get rid of `Overrides void`
     onClick?: ((e: React.MouseEvent<HTMLAnchorElement>) => unknown) | null;
     /** @hidden */
     hasOnClick?: boolean;
@@ -210,7 +223,31 @@ const calculateAttachmentDimensionsAndMargin = (
     return {height, width, marginTop, marginLeft};
 };
 
-/** */
+/**
+ * A card component that displays an Airtable record.
+ *
+ * @example
+ * ```js
+ * import {RecordCard} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function Block() {
+ *     const base = useBase();
+ *     const table = base.getTableByName('Table 1');
+ *     const fields = table ? table.fields : null;
+ *     const queryResult = table ? table.selectRecords() : null;
+ *     const records = useRecords(queryResult);
+ *
+ *     return (
+ *         <RecordCard
+ *             record={records[0]}
+ *             fields={fields}
+ *             expandRecordOptions={{records}}
+ *         />
+ *     );
+ * }
+ * ```
+ */
 export class RecordCard extends React.Component<RecordCardProps> {
     /** @hidden */
     static propTypes = {

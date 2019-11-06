@@ -35,11 +35,23 @@ import {
     display,
     displayPropTypes,
 } from './system';
-import {Prop} from './system/utils/types';
+import {OptionalResponsiveProp} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
 
-/** */
+/**
+ * Style props for the {@link ProgressBar} component. Also accepts:
+ * * {@link BackgroundColorProps}
+ * * {@link FlexItemSetProps}
+ * * {@link HeightProps}
+ * * {@link MarginProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
 interface ProgressBarStyleProps
     extends BackgroundColorProps,
         MaxWidthProps,
@@ -49,8 +61,8 @@ interface ProgressBarStyleProps
         FlexItemSetProps,
         PositionSetProps,
         MarginProps {
-    /** */
-    display?: Prop<'block' | 'inline' | 'inline-block'>;
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'block' | 'inline' | 'inline-block'>;
 }
 
 const styleParser = compose(
@@ -78,8 +90,13 @@ export const progressBarStylePropTypes = {
     ...displayPropTypes,
 };
 
-/** */
-interface ProgressBarProps extends TooltipAnchorProps, ProgressBarStyleProps {
+/**
+ * Props for the {@link ProgressBar} component. Also accepts:
+ * * {@link ProgressBarStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
     /** A CSS color, such as `#ff9900`. */
     barColor?: string;
     /** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include a number outside of the range, the value will be clamped to be inside of the range. */
@@ -92,9 +109,6 @@ interface ProgressBarProps extends TooltipAnchorProps, ProgressBarStyleProps {
 
 /**
  * A progress bar.
- *
- * @augments React.StatelessFunctionalComponent
- * @param props
  *
  * @example
  * ```js

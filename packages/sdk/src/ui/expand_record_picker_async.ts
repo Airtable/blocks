@@ -5,6 +5,16 @@ import Record from '../models/record';
 import Field from '../models/field';
 
 /**
+ * Options object for expanding a record picker.
+ */
+interface ExpandRecordPickerOpts {
+    /** The fields to include in the record cards. The primary field will always be shown. Duplicate fields will be removed. */
+    fields?: Array<Field>;
+    /** If set to true, the user will be able to create an empty new record from the record picker. */
+    shouldAllowCreatingRecord?: boolean;
+}
+
+/**
  * Expands a list of records in the Airtable UI, and prompts the user to pick
  * one. The selected record is returned to the block, and the modal is
  * automatically closed.
@@ -14,14 +24,7 @@ import Field from '../models/field';
  *
  * @param records the records the user can pick from. Duplicate records will be removed.
  * @param opts An optional options object.
- * @param opts.fields optionally include an array of fields to control
- * which fields are shown in the record cards. The primary field will always
- * be shown. Duplicate fields will be removed.
- * @param opts.shouldAllowCreatingRecord set to true to allow the user to create
- * an empty new record.
- *
- * @returns a Promise that resolves to the record
- * chosen by the user or null
+ * @returns A Promise that resolves to the record chosen by the user or null.
  *
  * @example
  * ```js
@@ -43,10 +46,7 @@ import Field from '../models/field';
  */
 async function expandRecordPickerAsync(
     records: Array<Record>,
-    opts?: {
-        fields?: Array<Field>;
-        shouldAllowCreatingRecord?: boolean;
-    },
+    opts?: ExpandRecordPickerOpts,
 ): Promise<Record | null> {
     if (records.length === 0) {
         return null;

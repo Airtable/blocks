@@ -8,7 +8,9 @@ import {config as bottomConfig, BottomProps} from './bottom';
 import {config as leftConfig, LeftProps} from './left';
 import {config as zIndexConfig, ZIndexProps} from './z_index';
 
-/** */
+/**
+ * Style props for the position of an element.
+ */
 export interface PositionSetProps
     extends PositionProps,
         TopProps,

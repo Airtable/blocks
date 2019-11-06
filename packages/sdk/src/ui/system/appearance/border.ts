@@ -11,30 +11,30 @@ import {
     BorderLeftProperty,
 } from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
-import {Prop, Length} from '../utils/types';
+import {OptionalResponsiveProp, Length} from '../utils/types';
 
 /** */
 export interface BorderProps {
     /** Sets an element's border. It's a shorthand for `borderWidth`, `borderStyle`, and `borderColor`. */
-    border?: Prop<BorderProperty<Length>>;
+    border?: OptionalResponsiveProp<BorderProperty<Length>>;
     /** Sets the widths of all four sides of an element's border. */
-    borderWidth?: Prop<BorderWidthProperty<Length>>;
+    borderWidth?: OptionalResponsiveProp<BorderWidthProperty<Length>>;
     /** Sets the line style for all four sides of an element's border. */
-    borderStyle?: Prop<BorderStyleProperty>;
+    borderStyle?: OptionalResponsiveProp<BorderStyleProperty>;
     /** Sets the color of all sides of an element's border. */
-    borderColor?: Prop<BorderColorProperty>;
+    borderColor?: OptionalResponsiveProp<BorderColorProperty>;
     /** Sets the width, line style, and color for an element's top border. */
-    borderTop?: Prop<BorderTopProperty<Length>>;
+    borderTop?: OptionalResponsiveProp<BorderTopProperty<Length>>;
     /** Sets the width, line style, and color for an element's right border. */
-    borderRight?: Prop<BorderRightProperty<Length>>;
+    borderRight?: OptionalResponsiveProp<BorderRightProperty<Length>>;
     /** Sets the width, line style, and color for an element's bottom border. */
-    borderBottom?: Prop<BorderBottomProperty<Length>>;
+    borderBottom?: OptionalResponsiveProp<BorderBottomProperty<Length>>;
     /** Sets the width, line style, and color for an element's left border. */
-    borderLeft?: Prop<BorderLeftProperty<Length>>;
+    borderLeft?: OptionalResponsiveProp<BorderLeftProperty<Length>>;
     /** Sets the width, line style, and color for an element's left and right borders. */
-    borderX?: Prop<BorderProperty<Length>>;
+    borderX?: OptionalResponsiveProp<BorderProperty<Length>>;
     /** Sets the width, line style, and color for an element's top and bottom borders. */
-    borderY?: Prop<BorderProperty<Length>>;
+    borderY?: OptionalResponsiveProp<BorderProperty<Length>>;
 }
 
 export const config: Config = {

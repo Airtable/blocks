@@ -30,7 +30,8 @@ _Defined in
 
 ### `Optional` fontFamily
 
-• **fontFamily**? : _Prop‹FontFamilyProperty›_
+• **fontFamily**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontFamilyProperty›_
 
 _Defined in
 [src/ui/system/typography/font_family.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/font_family.ts#L10)_
@@ -49,7 +50,8 @@ _Defined in
 
 ### `Optional` fontSize
 
-• **fontSize**? : _Prop‹FontSizeProperty‹Length››_
+• **fontSize**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontSizeProperty‹Length››_
 
 _Defined in
 [src/ui/system/typography/font_size.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/font_size.ts#L10)_
@@ -68,7 +70,8 @@ _Defined in
 
 ### `Optional` fontStyle
 
-• **fontStyle**? : _Prop‹FontStyleProperty›_
+• **fontStyle**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontStyleProperty›_
 
 _Defined in
 [src/ui/system/typography/font_style.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/font_style.ts#L10)_
@@ -86,7 +89,9 @@ _Defined in
 
 ### `Optional` fontWeight
 
-• **fontWeight**? : _Prop‹FontWeightProperty | string›_
+• **fontWeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontWeightProperty
+| string›_
 
 _Defined in
 [src/ui/system/typography/font_weight.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/font_weight.ts#L11)_
@@ -104,7 +109,9 @@ _Defined in
 
 ### `Optional` letterSpacing
 
-• **letterSpacing**? : _Prop‹LetterSpacingProperty‹Length› | string›_
+• **letterSpacing**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LetterSpacingProperty‹Length›
+| string›_
 
 _Defined in
 [src/ui/system/typography/letter_spacing.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/letter_spacing.ts#L10)_
@@ -122,7 +129,8 @@ _Defined in
 
 ### `Optional` lineHeight
 
-• **lineHeight**? : _Prop‹LineHeightProperty‹Length››_
+• **lineHeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LineHeightProperty‹Length››_
 
 _Defined in
 [src/ui/system/typography/line_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/line_height.ts#L10)_
@@ -142,7 +150,8 @@ _Defined in
 
 ### `Optional` textAlign
 
-• **textAlign**? : _Prop‹TextAlignProperty›_
+• **textAlign**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TextAlignProperty›_
 
 _Defined in
 [src/ui/system/typography/text_align.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_align.ts#L10)_
@@ -160,7 +169,8 @@ _Defined in
 
 ### `Optional` textColor
 
-• **textColor**? : _Prop‹ColorProperty›_
+• **textColor**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹ColorProperty›_
 
 _Defined in
 [src/ui/system/typography/text_color.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_color.ts#L14)_
@@ -168,7 +178,7 @@ _Defined in
 Sets the foreground color value of an element's text and text decorations, and sets the
 `currentcolor` value.
 
-**`see`** [[colors]]
+**`see`** {@link colors}
 
 ---
 
@@ -181,7 +191,8 @@ _Defined in
 
 ### `Optional` textDecoration
 
-• **textDecoration**? : _Prop‹TextDecorationProperty›_
+• **textDecoration**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TextDecorationProperty›_
 
 _Defined in
 [src/ui/system/typography/text_decoration.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_decoration.ts#L12)_
@@ -199,7 +210,8 @@ _Defined in
 
 ### `Optional` textTransform
 
-• **textTransform**? : _Prop‹TextTransformProperty›_
+• **textTransform**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TextTransformProperty›_
 
 _Defined in
 [src/ui/system/typography/text_transform.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/text_transform.ts#L10)_
@@ -214,11 +226,14 @@ or all-lowercase, or with each word capitalized.
 • **TypographySetProps**:
 
 _Defined in
-[src/ui/system/typography/typography_set.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/typography_set.ts#L16)_
+[src/ui/system/typography/typography_set.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/typography/typography_set.ts#L18)_
+
+Style props for the typography of an element.
 
 ### `Optional` fontFamily
 
-• **fontFamily**? : _Prop‹FontFamilyProperty›_
+• **fontFamily**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontFamilyProperty›_
 
 _Inherited from
 [FontFamilyProps](_airtable_blocks_ui_system__typography.md#fontfamilyprops).[fontFamily](_airtable_blocks_ui_system__typography.md#optional-fontfamily)_
@@ -231,7 +246,8 @@ selected element.
 
 ### `Optional` fontSize
 
-• **fontSize**? : _Prop‹FontSizeProperty‹Length››_
+• **fontSize**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontSizeProperty‹Length››_
 
 _Inherited from
 [FontSizeProps](_airtable_blocks_ui_system__typography.md#fontsizeprops).[fontSize](_airtable_blocks_ui_system__typography.md#optional-fontsize)_
@@ -244,7 +260,8 @@ relative length units.
 
 ### `Optional` fontStyle
 
-• **fontStyle**? : _Prop‹FontStyleProperty›_
+• **fontStyle**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontStyleProperty›_
 
 _Inherited from
 [FontStyleProps](_airtable_blocks_ui_system__typography.md#fontstyleprops).[fontStyle](_airtable_blocks_ui_system__typography.md#optional-fontstyle)_
@@ -256,7 +273,9 @@ Sets whether a font should be styled with a normal, italic, or oblique face.
 
 ### `Optional` fontWeight
 
-• **fontWeight**? : _Prop‹FontWeightProperty | string›_
+• **fontWeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹FontWeightProperty
+| string›_
 
 _Inherited from
 [FontWeightProps](_airtable_blocks_ui_system__typography.md#fontweightprops).[fontWeight](_airtable_blocks_ui_system__typography.md#optional-fontweight)_
@@ -268,7 +287,9 @@ Specifies the weight (or boldness) of the font.
 
 ### `Optional` letterSpacing
 
-• **letterSpacing**? : _Prop‹LetterSpacingProperty‹Length› | string›_
+• **letterSpacing**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LetterSpacingProperty‹Length›
+| string›_
 
 _Inherited from
 [LetterSpacingProps](_airtable_blocks_ui_system__typography.md#letterspacingprops).[letterSpacing](_airtable_blocks_ui_system__typography.md#optional-letterspacing)_
@@ -280,7 +301,8 @@ Sets the spacing behavior between text characters.
 
 ### `Optional` lineHeight
 
-• **lineHeight**? : _Prop‹LineHeightProperty‹Length››_
+• **lineHeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LineHeightProperty‹Length››_
 
 _Inherited from
 [LineHeightProps](_airtable_blocks_ui_system__typography.md#lineheightprops).[lineHeight](_airtable_blocks_ui_system__typography.md#optional-lineheight)_
@@ -294,7 +316,8 @@ height that is used to calculate line box height.
 
 ### `Optional` textAlign
 
-• **textAlign**? : _Prop‹TextAlignProperty›_
+• **textAlign**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TextAlignProperty›_
 
 _Inherited from
 [TextAlignProps](_airtable_blocks_ui_system__typography.md#textalignprops).[textAlign](_airtable_blocks_ui_system__typography.md#optional-textalign)_
@@ -306,7 +329,8 @@ Sets the horizontal alignment of the text.
 
 ### `Optional` textColor
 
-• **textColor**? : _Prop‹ColorProperty›_
+• **textColor**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹ColorProperty›_
 
 _Inherited from
 [TextColorProps](_airtable_blocks_ui_system__typography.md#textcolorprops).[textColor](_airtable_blocks_ui_system__typography.md#optional-textcolor)_
@@ -317,11 +341,12 @@ _Defined in
 Sets the foreground color value of an element's text and text decorations, and sets the
 `currentcolor` value.
 
-**`see`** [[colors]]
+**`see`** {@link colors}
 
 ### `Optional` textDecoration
 
-• **textDecoration**? : _Prop‹TextDecorationProperty›_
+• **textDecoration**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TextDecorationProperty›_
 
 _Inherited from
 [TextDecorationProps](_airtable_blocks_ui_system__typography.md#textdecorationprops).[textDecoration](_airtable_blocks_ui_system__typography.md#optional-textdecoration)_
@@ -333,7 +358,8 @@ Sets the appearance of decorative lines on text.
 
 ### `Optional` textTransform
 
-• **textTransform**? : _Prop‹TextTransformProperty›_
+• **textTransform**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TextTransformProperty›_
 
 _Inherited from
 [TextTransformProps](_airtable_blocks_ui_system__typography.md#texttransformprops).[textTransform](_airtable_blocks_ui_system__typography.md#optional-texttransform)_

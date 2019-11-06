@@ -2,7 +2,9 @@
 import getSdk from '../get_sdk';
 import Record from '../models/record';
 
-/** */
+/**
+ * Options object for expanding a record.
+ */
 export interface ExpandRecordOpts {
     /** If `records` is provided, the list will be used to page through records from the expanded record dialog. */
     records?: Array<Record>;
@@ -11,7 +13,7 @@ export interface ExpandRecordOpts {
 /**
  * Expands the given record in the Airtable UI.
  *
- * @param record the record to expand
+ * @param record The record to expand.
  * @param opts An optional options object.
  *
  * @example

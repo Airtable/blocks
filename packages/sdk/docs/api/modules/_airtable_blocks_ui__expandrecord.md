@@ -20,14 +20,16 @@
 • **ExpandRecordOpts**:
 
 _Defined in
-[src/ui/expand_record.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L6)_
+[src/ui/expand_record.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L8)_
+
+Options object for expanding a record.
 
 ### `Optional` records
 
 • **records**? : _Array‹[Record](_airtable_blocks_models__record.md#record)›_
 
 _Defined in
-[src/ui/expand_record.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L8)_
+[src/ui/expand_record.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L10)_
 
 If `records` is provided, the list will be used to page through records from the expanded record
 dialog.
@@ -40,7 +42,7 @@ dialog.
 [ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts)): _void_
 
 _Defined in
-[src/ui/expand_record.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L25)_
+[src/ui/expand_record.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/expand_record.ts#L27)_
 
 Expands the given record in the Airtable UI.
 
@@ -57,7 +59,7 @@ expandRecord(record1, {
 
 | Name     | Type                                                                      | Description                 |
 | -------- | ------------------------------------------------------------------------- | --------------------------- |
-| `record` | [Record](_airtable_blocks_models__record.md#record)                       | the record to expand        |
+| `record` | [Record](_airtable_blocks_models__record.md#record)                       | The record to expand.       |
 | `opts?`  | [ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts) | An optional options object. |
 
 **Returns:** _void_

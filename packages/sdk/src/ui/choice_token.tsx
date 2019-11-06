@@ -21,7 +21,14 @@ import {
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 
-/** */
+/**
+ * Style props for the {@link ChoiceToken} component. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link PositionSetProps}
+ *
+ * @noInheritDoc
+ */
 interface ChoiceTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
@@ -48,8 +55,13 @@ interface SelectOption {
     color?: Color;
 }
 
-/** */
-interface ChoiceTokenProps extends TooltipAnchorProps, ChoiceTokenStyleProps {
+/**
+ * Props for the {@link ChoiceToken} component. Also accepts:
+ * * {@link ChoiceTokenStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
     /** An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data. */
     choice: SelectOption;
     /** Additional styles to apply to the choice token. */
@@ -61,16 +73,14 @@ interface ChoiceTokenProps extends TooltipAnchorProps, ChoiceTokenStyleProps {
 /**
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
- * @augments React.StatelessFunctionalComponent
- * @param props
- *
  * @example
  * ```js
- * import {UI} from '@airtable/blocks';
+ * import {ChoiceToken} from '@airtable/blocks/ui';
+ * import React from 'react';
  *
  * function ChoicesForSelectField({selectField}) {
  *     const choiceNodes = selectField.options.choices.map(choice => (
- *         <UI.ChoiceToken
+ *         <ChoiceToken
  *             key={choice.id}
  *             choice={choice}
  *         />

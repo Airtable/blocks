@@ -2,15 +2,15 @@
 import * as React from 'react';
 
 /**
- * A helper method for working with react hooks in class-based components. It takes a React
+ * A higher-order component for working with React hooks in class-based components. It takes a React
  * component and wraps it, injecting values from hooks as additional props. `withHooks` uses
- * {@link https://reactjs.org/docs/forwarding-refs.html React.forwardRef} to make sure that you can
+ * {@link https://reactjs.org/docs/forwarding-refs.html|`React.forwardRef`} to make sure that you can
  * use refs with your wrapped component in exactly the same way you would if you weren't using
- * withHooks.
+ * `withHooks`.
  *
- * @param Component The React component you want to inject hooks into
- * @param getAdditionalPropsToInject a function that takes props and returns more props to be injected into the wrapped component
- * @returns the wrapped React component
+ * @param Component The React component you want to inject hooks into.
+ * @param getAdditionalPropsToInject A function that takes props and returns more props to be injected into the wrapped component.
+ * @returns The wrapped React component.
  *
  * @example
  * ```js
@@ -41,8 +41,7 @@ import * as React from 'react';
  * <WrappedRecordList queryResult={someQueryResult} />
  * ```
  *
- * @description
- * <!-- TODO(alex): switch this back to an example, currently it causes lint syntax errors -->
+ * @example
  * ```js
  * import React from 'react';
  * import {Record, QueryResult} from '@airtable/blocks/models';

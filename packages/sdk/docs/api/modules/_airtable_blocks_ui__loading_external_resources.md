@@ -31,13 +31,13 @@ loadCSSFromString('body { background: red; }');
 
 **Parameters:**
 
-| Name  | Type   |
-| ----- | ------ |
-| `css` | string |
+| Name  | Type   | Description     |
+| ----- | ------ | --------------- |
+| `css` | string | The CSS string. |
 
 **Returns:** _HTMLStyleElement_
 
-the style tag inserted into the page.
+The style tag inserted into the page.
 
 ---
 
@@ -59,13 +59,13 @@ loadCSSFromURLAsync('https://example.com/style.css');
 
 **Parameters:**
 
-| Name  | Type   |
-| ----- | ------ |
-| `url` | string |
+| Name  | Type   | Description                |
+| ----- | ------ | -------------------------- |
+| `url` | string | The URL of the stylesheet. |
 
 **Returns:** _Promise‹HTMLLinkElement›_
 
-a Promise that resolves to the style tag inserted into the page.
+A Promise that resolves to the style tag inserted into the page.
 
 ---
 
@@ -87,10 +87,10 @@ loadScriptFromURLAsync('https://example.com/script.js');
 
 **Parameters:**
 
-| Name  | Type   |
-| ----- | ------ |
-| `url` | string |
+| Name  | Type   | Description            |
+| ----- | ------ | ---------------------- |
+| `url` | string | The URL of the script. |
 
 **Returns:** _Promise‹HTMLScriptElement›_
 
-a Promise that resolves to the script tag inserted into the page.
+A Promise that resolves to the script tag inserted into the page.

@@ -8,6 +8,7 @@
 ### Interfaces
 
 -   [LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel)
+-   [UseLoadableOpts](_airtable_blocks_ui__useloadable.md#useloadableopts)
 
 ### Functions
 
@@ -26,62 +27,26 @@ A model that can be loaded. Usually a [Cursor](_airtable_blocks_models__cursor.m
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult), or a
 [ViewMetadataQueryResult](_airtable_blocks_models__view.md#viewmetadataqueryresult).
 
-### isDataLoaded
+---
 
-• **isDataLoaded**: _boolean_
+### UseLoadableOpts
 
-_Defined in
-[src/ui/use_loadable.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L16)_
-
-### loadDataAsync
-
-▸ **loadDataAsync**(): _Promise‹void›_
+• **UseLoadableOpts**:
 
 _Defined in
-[src/ui/use_loadable.ts:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L18)_
+[src/ui/use_loadable.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L32)_
 
-**Returns:** _Promise‹void›_
+Options object for the [useLoadable](_airtable_blocks_ui__useloadable.md#useloadable) hook.
 
-### unloadData
+### `Optional` shouldSuspend
 
-▸ **unloadData**(): _void_
-
-_Defined in
-[src/ui/use_loadable.ts:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L20)_
-
-**Returns:** _void_
-
-### unwatch
-
-▸ **unwatch**(`keys`: "isDataLoaded", `callback`: Object): _ReadonlyArray‹string›_
+• **shouldSuspend**? : _undefined | false | true_
 
 _Defined in
-[src/ui/use_loadable.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L24)_
+[src/ui/use_loadable.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L34)_
 
-**Parameters:**
-
-| Name       | Type           |
-| ---------- | -------------- |
-| `keys`     | "isDataLoaded" |
-| `callback` | Object         |
-
-**Returns:** _ReadonlyArray‹string›_
-
-### watch
-
-▸ **watch**(`keys`: "isDataLoaded", `callback`: Object): _ReadonlyArray‹string›_
-
-_Defined in
-[src/ui/use_loadable.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L22)_
-
-**Parameters:**
-
-| Name       | Type           |
-| ---------- | -------------- |
-| `keys`     | "isDataLoaded" |
-| `callback` | Object         |
-
-**Returns:** _ReadonlyArray‹string›_
+Whether suspense mode is enabled. If suspense is disabled, you need to manually check
+`model.isDataLoaded` so you don't use your model before it's ready.
 
 ## Functions
 
@@ -89,11 +54,11 @@ _Defined in
 
 ▸ **useLoadable**(`models`:
 ReadonlyArray‹[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) | null› |
-[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) | null, `__namedParameters`:
-Object): _void_
+[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) | null, `opts`:
+[UseLoadableOpts](_airtable_blocks_ui__useloadable.md#useloadableopts)): _void_
 
 _Defined in
-[src/ui/use_loadable.ts:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L105)_
+[src/ui/use_loadable.ts:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/use_loadable.ts#L110)_
 
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You
@@ -107,7 +72,7 @@ loaded when your component mounts, and unloaded when your component unmounts. By
 need to worry about waiting for the data to load - the hook uses React Suspense to make sure the
 rest of your component doesn't run until the data is loaded. Whilst the data is loading, the entire
 block will show a loading indicator. If you want to change where that indicator shows or how it
-looks, use [<React.Suspense />](https://reactjs.org/docs/react-api.html#reactsuspense) around the
+looks, use [`<React.Suspense />`](https://reactjs.org/docs/react-api.html#reactsuspense) around the
 component that uses the hook.
 
 You can pass several models to `useLoadable` in an array - it will load all of them simultaneously.
@@ -171,9 +136,9 @@ function LoadAllRecords() {
 
 **Parameters:**
 
-| Name                | Type                                                                                                                                                                                | Default | Description         |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------- |
-| `models`            | ReadonlyArray‹[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) &#124; null› &#124; [LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) &#124; null | -       | the models to load. |
-| `__namedParameters` | Object                                                                                                                                                                              | {}      | -                   |
+| Name     | Type                                                                                                                                                                                | Default               | Description                                     |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------------------------------------------- |
+| `models` | ReadonlyArray‹[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) &#124; null› &#124; [LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemodel) &#124; null | -                     | The models to load.                             |
+| `opts`   | [UseLoadableOpts](_airtable_blocks_ui__useloadable.md#useloadableopts)                                                                                                              | {shouldSuspend: true} | Optional options to control how the hook works. |
 
 **Returns:** _void_

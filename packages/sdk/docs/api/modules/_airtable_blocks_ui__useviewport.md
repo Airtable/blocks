@@ -48,4 +48,4 @@ function ViewportSize() {
 
 **Returns:** _[Viewport](_airtable_blocks__viewport.md#viewport)_
 
-the current [Viewport](_airtable_blocks__viewport.md#viewport)
+The current viewport.

@@ -4,8 +4,8 @@ import {spawnInvariantViolationError} from '../error_utils';
 /**
  * Injects CSS from a string into the page.
  *
- * @param css
- * @returns the style tag inserted into the page.
+ * @param css The CSS string.
+ * @returns The style tag inserted into the page.
  *
  * @example
  * ```js
@@ -26,8 +26,8 @@ export function loadCSSFromString(css: string): HTMLStyleElement {
 /**
  * Injects CSS from a remote URL.
  *
- * @param url
- * @returns a Promise that resolves to the style tag inserted into the page.
+ * @param url The URL of the stylesheet.
+ * @returns A Promise that resolves to the style tag inserted into the page.
  *
  * @example
  * ```js
@@ -58,8 +58,8 @@ export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
 /**
  * Injects Javascript from a remote URL.
  *
- * @param url
- * @returns a Promise that resolves to the script tag inserted into the page.
+ * @param url The URL of the script.
+ * @returns A Promise that resolves to the script tag inserted into the page.
  *
  * @example
  * ```js

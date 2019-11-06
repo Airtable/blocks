@@ -72,7 +72,10 @@ function ModelPickerSelect<Model extends AnyModel>(
     );
 }
 
-const ForwardedRefModelPickerSelect = React.forwardRef(ModelPickerSelect);
+const ForwardedRefModelPickerSelect = React.forwardRef<
+    HTMLSelectElement,
+    ModelPickerSelectProps<AnyModel>
+>(ModelPickerSelect);
 
 ForwardedRefModelPickerSelect.displayName = 'ModelPickerSelect';
 

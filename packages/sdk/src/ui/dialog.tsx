@@ -3,11 +3,51 @@ import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
 import {baymax} from './baymax_utils';
-import Modal, {modalStylePropTypes, ModalStyleProps} from './modal';
+import Modal from './modal';
 import DialogCloseButton from './dialog_close_button';
+import {
+    dimensionsSetPropTypes,
+    DimensionsSetProps,
+    displayPropTypes,
+    flexContainerSetPropTypes,
+    FlexContainerSetProps,
+    spacingSetPropTypes,
+    SpacingSetProps,
+} from './system';
+import {OptionalResponsiveProp} from './system/utils/types';
 
-/** */
-interface DialogProps extends ModalStyleProps {
+/**
+ * Style props shared between the {@link Dialog} and {@link ConfirmationDialog} components. Also accepts:
+ * * {@link DimensionsSetProps}
+ * * {@link FlexContainerSetProps}
+ * * {@link SpacingSetProps}
+ *
+ * @noInheritDoc
+ */
+// This is equivalent to ModalStyleProps, but we include it separately since Modal is private.
+export interface DialogStyleProps
+    extends DimensionsSetProps,
+        FlexContainerSetProps,
+        SpacingSetProps {
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'block' | 'flex'>;
+}
+
+export const dialogStylePropTypes = {
+    ...dimensionsSetPropTypes,
+    // TODO (stephen): currently, this will accept all values for display, not just block/flex
+    ...displayPropTypes,
+    ...flexContainerSetPropTypes,
+    ...spacingSetPropTypes,
+};
+
+/**
+ * Props for the {@link Dialog} component. Also accepts:
+ * * {@link DialogStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface DialogProps extends DialogStyleProps {
     /** Callback function to fire when the dialog is closed. */
     onClose: () => unknown;
     /** Extra `className`s to apply to the dialog element, separated by spaces. */
@@ -18,7 +58,7 @@ interface DialogProps extends ModalStyleProps {
     backgroundClassName?: string;
     /** Extra styles to apply to the background element. */
     backgroundStyle?: React.CSSProperties;
-    /** */
+    /** The contents of the dialog element. */
     children: React.ReactNode;
 }
 
@@ -64,7 +104,7 @@ interface DialogProps extends ModalStyleProps {
  */
 // TODO (stephen): focus trapping
 class Dialog extends React.Component<DialogProps> {
-    /** */
+    /** @hidden */
     static CloseButton = DialogCloseButton;
     /** @hidden */
     static propTypes = {
@@ -74,7 +114,7 @@ class Dialog extends React.Component<DialogProps> {
         backgroundClassName: PropTypes.string,
         backgroundStyle: PropTypes.object,
         children: PropTypes.node.isRequired,
-        ...modalStylePropTypes,
+        ...dialogStylePropTypes,
     };
     // automatically pass onClose to any descendants that are Dialog.CloseButton
     /** @hidden */

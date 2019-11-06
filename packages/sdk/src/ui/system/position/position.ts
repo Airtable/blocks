@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import {PositionProperty} from '../utils/csstype';
 import createStylePropTypes from '../utils/create_style_prop_types';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface PositionProps {
     /** Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties determine the final location of positioned elements. */
-    position?: Prop<PositionProperty>;
+    position?: OptionalResponsiveProp<PositionProperty>;
 }
 
 export const config: Config = {position: true};

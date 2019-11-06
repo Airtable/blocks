@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: globalAlert */ /** */
+/** @hidden */ /** */
 import * as React from 'react';
 import {isEnumValue, ObjectValues} from '../private_utils';
 import Watchable from '../watchable';

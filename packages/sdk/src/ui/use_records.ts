@@ -22,8 +22,8 @@ export function useRecordIds(queryResult: null): null;
  * This hook doesn't re-render when the data _inside_ the records changes - only when records are
  * added, removed, or re-ordered.
  *
- * @param queryResult the query result you want the record ids from
- * @returns the array of record IDs in the query result, or null if no
+ * @param queryResult The query result you want the record ids from.
+ * @returns The array of record IDs in the query result, or null if no
  * query result was passed in.
  *
  * @example
@@ -62,10 +62,10 @@ export function useRecords(queryResult: null): null;
  *
  * This hook re-renders when any data concerning the records changing - that's useful, but can
  * cause re-renders quite often, meaning {@link useRecordIds} or {@link useRecordById} could be
- * more appropriate depending on your use-case.
+ * more appropriate depending on your use case.
  *
- * @param queryResult the query result you want the records from
- * @returns the records in the query result, or null if no query result was
+ * @param queryResult The query result you want the records from.
+ * @returns The records in the query result, or null if no query result was
  * passed in.
  *
  * @example
@@ -106,10 +106,10 @@ export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | 
  * Often used with {@link useRecordIds} to render a list of records where each list item only
  * updates when the specific record it concerns changes.
  *
- * @param queryResult the query result you want a record from
- * @param recordId the ID of the record you want from the query result
- * @returns the record, or null if no query result was passed in or no record with
- * that ID exists in the query result
+ * @param queryResult The query result you want a record from.
+ * @param recordId The ID of the record you want from the query result.
+ * @returns The record, or null if no query result was passed in or no record with
+ * that ID exists in the query result.
  *
  * @example
  * ```js

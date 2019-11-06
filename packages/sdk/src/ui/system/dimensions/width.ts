@@ -1,13 +1,13 @@
 /** @module @airtable/blocks/ui/system: Dimensions */ /** */
 import {system, Config} from '@styled-system/core';
 import {WidthProperty} from '../utils/csstype';
-import {Prop, Length} from '../utils/types';
+import {OptionalResponsiveProp, Length} from '../utils/types';
 import createStylePropTypes from '../utils/create_style_prop_types';
 
 /** */
 export interface WidthProps {
     /** Specifies the width of an element. */
-    width?: Prop<WidthProperty<Length>>;
+    width?: OptionalResponsiveProp<WidthProperty<Length>>;
 }
 
 export const config: Config = {

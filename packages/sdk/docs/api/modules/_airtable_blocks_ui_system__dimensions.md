@@ -22,11 +22,14 @@
 • **DimensionsSetProps**:
 
 _Defined in
-[src/ui/system/dimensions/dimensions_set.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/dimensions_set.ts#L12)_
+[src/ui/system/dimensions/dimensions_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/dimensions_set.ts#L14)_
+
+Style props for the dimensions of an element.
 
 ### `Optional` height
 
-• **height**? : _Prop‹HeightProperty‹Length››_
+• **height**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹HeightProperty‹Length››_
 
 _Inherited from
 [HeightProps](_airtable_blocks_ui_system__dimensions.md#heightprops).[height](_airtable_blocks_ui_system__dimensions.md#optional-height)_
@@ -38,7 +41,8 @@ Specifies the height of an element.
 
 ### `Optional` maxHeight
 
-• **maxHeight**? : _Prop‹MaxHeightProperty‹Length››_
+• **maxHeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MaxHeightProperty‹Length››_
 
 _Inherited from
 [MaxHeightProps](_airtable_blocks_ui_system__dimensions.md#maxheightprops).[maxHeight](_airtable_blocks_ui_system__dimensions.md#optional-maxheight)_
@@ -51,7 +55,8 @@ becoming larger than the value specified for `maxHeight`.
 
 ### `Optional` maxWidth
 
-• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
+• **maxWidth**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MaxWidthProperty‹Length››_
 
 _Inherited from
 [MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
@@ -64,7 +69,8 @@ becoming larger than the value specified by `maxWidth`.
 
 ### `Optional` minHeight
 
-• **minHeight**? : _Prop‹MinHeightProperty‹Length››_
+• **minHeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MinHeightProperty‹Length››_
 
 _Inherited from
 [MinHeightProps](_airtable_blocks_ui_system__dimensions.md#minheightprops).[minHeight](_airtable_blocks_ui_system__dimensions.md#optional-minheight)_
@@ -77,7 +83,8 @@ becoming smaller than the value specified for `minHeight`.
 
 ### `Optional` minWidth
 
-• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
+• **minWidth**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MinWidthProperty‹Length››_
 
 _Inherited from
 [MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
@@ -90,7 +97,8 @@ becoming smaller than the value specified for `minWidth`.
 
 ### `Optional` width
 
-• **width**? : _Prop‹WidthProperty‹Length››_
+• **width**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹WidthProperty‹Length››_
 
 _Inherited from
 [WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
@@ -111,7 +119,8 @@ _Defined in
 
 ### `Optional` height
 
-• **height**? : _Prop‹HeightProperty‹Length››_
+• **height**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹HeightProperty‹Length››_
 
 _Defined in
 [src/ui/system/dimensions/height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/height.ts#L10)_
@@ -129,7 +138,8 @@ _Defined in
 
 ### `Optional` maxHeight
 
-• **maxHeight**? : _Prop‹MaxHeightProperty‹Length››_
+• **maxHeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MaxHeightProperty‹Length››_
 
 _Defined in
 [src/ui/system/dimensions/max_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_height.ts#L10)_
@@ -148,7 +158,8 @@ _Defined in
 
 ### `Optional` maxWidth
 
-• **maxWidth**? : _Prop‹MaxWidthProperty‹Length››_
+• **maxWidth**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MaxWidthProperty‹Length››_
 
 _Defined in
 [src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
@@ -167,7 +178,8 @@ _Defined in
 
 ### `Optional` minHeight
 
-• **minHeight**? : _Prop‹MinHeightProperty‹Length››_
+• **minHeight**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MinHeightProperty‹Length››_
 
 _Defined in
 [src/ui/system/dimensions/min_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_height.ts#L10)_
@@ -186,7 +198,8 @@ _Defined in
 
 ### `Optional` minWidth
 
-• **minWidth**? : _Prop‹MinWidthProperty‹Length››_
+• **minWidth**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MinWidthProperty‹Length››_
 
 _Defined in
 [src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
@@ -205,7 +218,8 @@ _Defined in
 
 ### `Optional` width
 
-• **width**? : _Prop‹WidthProperty‹Length››_
+• **width**? :
+_[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹WidthProperty‹Length››_
 
 _Defined in
 [src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/dimensions/width.ts#L10)_

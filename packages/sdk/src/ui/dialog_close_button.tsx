@@ -31,19 +31,35 @@ import {
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Icon from './icon';
 
-/** */
-export interface DialogCloseButtonProps extends TooltipAnchorProps {
+/**
+ * Props for the {@link DialogCloseButton} component. Also accepts:
+ * * {@link DialogCloseButtonStyleProps}
+ *
+ * @noInheritDoc
+ */
+export interface DialogCloseButtonProps extends TooltipAnchorProps<HTMLDivElement> {
     /** `className`s to apply to the close button, separated by spaces. */
     className?: string;
-    /** Styles to apply to the dialog element. */
+    /** Styles to apply to the close button. */
     style?: React.CSSProperties;
     /** Indicates if the button can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
-    /** */
-    children?: React.ReactNode;
+    /** The contents of the close button. */
+    children?: React.ReactNode | string;
 }
 
-/** */
+/**
+ * Style props for the {@link DialogCloseButton} component. Accepts:
+ * * {@link BorderRadiusProps}
+ * * {@link DimensionsSetProps}
+ * * {@link DisplayProps}
+ * * {@link FlexContainerSetProps}
+ * * {@link FlexItemSetProps}
+ * * {@link PositionSetProps}
+ * * {@link SpacingSetProps}
+ *
+ * @noInheritDoc
+ */
 export interface DialogCloseButtonStyleProps
     extends BorderRadiusProps,
         DimensionsSetProps,
@@ -74,10 +90,9 @@ const dialogCloseButtonStylePropTypes = {
 };
 
 /**
- * A button that closes {@link Dialog}.
- *
- * @alias Dialog.CloseButton
+ * A button that closes {@link Dialog}. Accessed via `Dialog.CloseButton`.
  */
+// TODO (stephen): can we alias this as Dialog.CloseButton in typedoc?
 // TODO (stephen): convert into a prop in Dialog
 export class DialogCloseButton extends React.Component<DialogCloseButtonProps> {
     /** @hidden */

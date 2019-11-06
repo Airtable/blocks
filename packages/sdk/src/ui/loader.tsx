@@ -19,7 +19,12 @@ import {
 
 const ORIGINAL_SIZE = 54;
 
-/** */
+/**
+ * Style props for the {@link Loader} component. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link PositionSetProps}
+ */
 interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
@@ -34,7 +39,12 @@ const loaderStylePropTypes = {
     ...marginPropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link Loader} component. Also accepts:
+ * * {@link LoaderStyleProps}
+ *
+ * @noInheritDoc
+ */
 interface LoaderProps extends LoaderStyleProps {
     /** The color of the loading spinner. Defaults to `'#888'` */
     fillColor: string;
@@ -49,9 +59,6 @@ interface LoaderProps extends LoaderStyleProps {
 // Override the default props and then just proxy through to our loader.
 /**
  * A loading spinner component.
- *
- * @augments React.StatelessFunctionalComponent
- * @param props
  *
  * @example
  * ```js

@@ -39,7 +39,17 @@ const MAX_COLOR_SQUARE_SIZE = 32;
 // TODO: it's confusing that this expects color names, but other components
 // expect a CSS color string.
 
-/** */
+/**
+ * Style props shared between the {@link ColorPalette} and {@link ColorPaletteSynced} components. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionSetProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
 export interface ColorPaletteStyleProps
     extends MaxWidthProps,
         MinWidthProps,
@@ -66,9 +76,18 @@ export const colorPaletteStylePropTypes = {
     ...marginPropTypes,
 };
 
-/** */
+/**
+ * Props shared between the {@link ColorPalette} and {@link ColorPaletteSynced} components.
+ * Also accepts:
+ * * {@link ColorPaletteStyleProps}
+ *
+ * @noInheritDoc
+ */
+// This doesn't actually extend ColorPaletteStyleProps since withStyledSystem
+// expects non-style props and style props as separate generic type variables.
+// TODO (stephen): inherit shared props without inheriting style props
 export interface SharedColorPaletteProps extends TooltipAnchorProps {
-    /** The list of {@link colors} to display in the color palette. */
+    /** The list of {@link Color|colors} to display in the color palette. */
     allowedColors: Array<string>;
     /** A function to be called when the selected color changes. */
     onChange?: (arg1: string) => unknown;
@@ -92,7 +111,12 @@ export const sharedColorPalettePropTypes = {
     ...tooltipAnchorPropTypes,
 };
 
-/** */
+/**
+ * Props for the {@link ColorPalette} component. Also accepts:
+ * * {@link SharedColorPaletteProps}
+ *
+ * @noInheritDoc
+ */
 interface ColorPaletteProps extends SharedColorPaletteProps {
     /** The current selected {@link Color} option. */
     color?: string | null;

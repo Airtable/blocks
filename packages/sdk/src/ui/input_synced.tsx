@@ -2,34 +2,33 @@
 import * as React from 'react';
 import {spawnError} from '../error_utils';
 import {GlobalConfigKey} from '../global_config';
-import Input, {
-    inputStylePropTypes,
-    InputStyleProps,
-    sharedInputPropTypes,
-    SharedInputProps,
-    ValidInputType,
-} from './input';
+import Input, {sharedInputPropTypes, SharedInputProps, SupportedInputType} from './input';
 import useSynced from './use_synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/** */
-interface InputSyncedProps extends SharedInputProps, InputStyleProps {
-    /** The key, or path to a key, in global config. */
+/**
+ * Props for the {@link Input} and {@link InputSynced} components. Also accepts:
+ * * {@link SharedInputProps}
+ *
+ * @noInheritDoc
+ */
+// TODO (stephen): inherit shared props without inheriting style props
+interface InputSyncedProps extends SharedInputProps {
+    /** A string key or array key path in {@link GlobalConfig}. The input value will always reflect the value stored in {@link GlobalConfig} for this key. Changing the input value will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
 /**
- * A wrapper around the `UI.Input` component that syncs with global config.
+ * A wrapper around the {@link Input} component that syncs with {@link GlobalConfig}.
  *
  * @example
  * ```js
- * import {UI} from '@airtable/blocks/ui';
- * import {globalConfig} from '@airtable/blocks';
+ * import {InputSynced} from '@airtable/blocks/ui';
  * import React from 'react';
  *
  * function ApiKeyInput() {
  *     return (
- *         <UI.InputSynced
+ *         <InputSynced
  *             globalConfigKey="apiKey"
  *             disabled={!canEditApiKey}
  *         />
@@ -38,7 +37,13 @@ interface InputSyncedProps extends SharedInputProps, InputStyleProps {
  * ```
  */
 function InputSynced(props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) {
-    const {globalConfigKey, type = ValidInputType.text, disabled, onChange, ...restOfProps} = props;
+    const {
+        globalConfigKey,
+        type = SupportedInputType.text,
+        disabled,
+        onChange,
+        ...restOfProps
+    } = props;
     const {value, setValue, canSetValue} = useSynced(globalConfigKey);
 
     let inputValue;
@@ -70,12 +75,11 @@ function InputSynced(props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) 
     );
 }
 
-const ForwardedRefInputSynced = React.forwardRef(InputSynced);
+const ForwardedRefInputSynced = React.forwardRef<HTMLInputElement, InputSyncedProps>(InputSynced);
 
 ForwardedRefInputSynced.propTypes = {
     globalConfigKey: globalConfigSyncedComponentHelpers.globalConfigKeyPropType,
     ...sharedInputPropTypes,
-    ...inputStylePropTypes,
 };
 
 ForwardedRefInputSynced.displayName = 'InputSynced';

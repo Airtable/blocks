@@ -14,14 +14,26 @@ import {ResponsiveProp} from './system/utils/types';
 import getStylePropsForResponsiveProp from './system/utils/get_style_props_for_responsive_prop';
 import useTheme from './theme/use_theme';
 import {ariaPropTypes, AriaProps} from './types/aria_props';
-import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes';
+import {dataAttributesPropType, DataAttributesProp} from './types/data_attributes_prop';
 
-/** */
+/**
+ * Variants for the {@link Text} component:
+ *
+ * • **default**
+ *
+ * Single-line text.
+ *
+ * • **paragraph**
+ *
+ * Multi-line text such as body copy.
+ */
 export type TextVariant = EnumType<typeof TextVariant>;
 export const TextVariant = createEnum('default', 'paragraph');
 export const textVariantPropType = createPropTypeFromEnum(TextVariant);
 
-/** */
+/**
+ * Sizes for the {@link Text} component.
+ */
 export type TextSize = EnumType<typeof TextSize>;
 export const TextSize = createEnum('small', 'default', 'large', 'xlarge');
 /** */
@@ -44,7 +56,13 @@ export function useTextStyle(
     return useStyledSystem(styleProps);
 }
 
-/** */
+/**
+ * Props for the {@link Text} component. Also supports:
+ * * {@link AriaProps}
+ * * {@link AllStylesProps}
+ *
+ * @noInheritDoc
+ */
 interface TextProps extends AriaProps, AllStylesProps {
     /** The element that is rendered. Defaults to `p`. */
     as?:
@@ -70,15 +88,15 @@ interface TextProps extends AriaProps, AllStylesProps {
         | 'time'
         | 'var'
         | 'blockquote';
-    /** The `variant` of the text. Defaults to `default`. */
+    /** The variant of the text. Defaults to `default`. */
     variant?: TextVariant;
-    /** */
-    children?: React.ReactNode;
+    /** The contents of the text. */
+    children?: React.ReactNode | string;
     /** The `id` attribute. */
     id?: string;
-    /** The `size` of the text. Defaults to `default`. Can be a responsive prop object. */
+    /** The size of the text. Defaults to `default`. Can be a responsive prop object. */
     size?: TextSizeProp;
-    /** Data attributes that are spread onto the element `dataAttributes={{'data-*': '...'}}`. */
+    /** Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`. */
     dataAttributes?: DataAttributesProp;
     /** Additional class names to apply, separated by spaces. */
     className?: string;
@@ -91,6 +109,7 @@ interface TextProps extends AriaProps, AllStylesProps {
 /**
  * A text component with sizes and variants.
  *
+ * @example
  * ```js
  * import {Text} from '@airtable/blocks/ui';
  * import React, {Fragment} from 'react';
@@ -113,60 +132,59 @@ interface TextProps extends AriaProps, AllStylesProps {
  * }
  * ```
  */
-const Text = React.forwardRef(
-    (
-        {
-            as: Component = 'p',
-            size = TextSize.default,
-            variant = TextVariant.default,
-            children,
-            id,
-            role,
-            dataAttributes,
-            className,
-            style,
-            'aria-label': ariaLabel,
-            'aria-labelledby': ariaLabelledBy,
-            'aria-describedby': ariaDescribedBy,
-            'aria-controls': ariaControls,
-            'aria-expanded': ariaExpanded,
-            'aria-haspopup': ariaHasPopup,
-            'aria-hidden': ariaHidden,
-            'aria-live': ariaLive,
-            ...styleProps
-        }: TextProps,
-        ref: React.Ref<HTMLElement>,
-    ) => {
-        const classNameForTextStyle = useTextStyle(size, variant);
-        const classNameForStyleProps = useStyledSystem({
-            textColor: 'default',
-            fontFamily: 'default',
-            ...styleProps,
-        });
-        return (
-            <Component
-                ref={ref as any}
-                id={id}
-                className={cx(classNameForTextStyle, classNameForStyleProps, className)}
-                style={style}
-                role={role}
-                aria-label={ariaLabel}
-                aria-labelledby={ariaLabelledBy}
-                aria-describedby={ariaDescribedBy}
-                aria-controls={ariaControls}
-                aria-expanded={ariaExpanded}
-                aria-haspopup={ariaHasPopup}
-                aria-hidden={ariaHidden}
-                aria-live={ariaLive}
-                {...dataAttributes}
-            >
-                {children}
-            </Component>
-        );
-    },
-);
+function Text(props: TextProps, ref: React.Ref<HTMLElement>) {
+    const {
+        as: Component = 'p',
+        size = TextSize.default,
+        variant = TextVariant.default,
+        children,
+        id,
+        role,
+        dataAttributes,
+        className,
+        style,
+        'aria-label': ariaLabel,
+        'aria-labelledby': ariaLabelledBy,
+        'aria-describedby': ariaDescribedBy,
+        'aria-controls': ariaControls,
+        'aria-expanded': ariaExpanded,
+        'aria-haspopup': ariaHasPopup,
+        'aria-hidden': ariaHidden,
+        'aria-live': ariaLive,
+        ...styleProps
+    } = props;
 
-Text.propTypes = {
+    const classNameForTextStyle = useTextStyle(size, variant);
+    const classNameForStyleProps = useStyledSystem({
+        textColor: 'default',
+        fontFamily: 'default',
+        ...styleProps,
+    });
+    return (
+        <Component
+            ref={ref as any}
+            id={id}
+            className={cx(classNameForTextStyle, classNameForStyleProps, className)}
+            style={style}
+            role={role}
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabelledBy}
+            aria-describedby={ariaDescribedBy}
+            aria-controls={ariaControls}
+            aria-expanded={ariaExpanded}
+            aria-haspopup={ariaHasPopup}
+            aria-hidden={ariaHidden}
+            aria-live={ariaLive}
+            {...dataAttributes}
+        >
+            {children}
+        </Component>
+    );
+}
+
+const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
+
+ForwardedRefText.propTypes = {
     as: PropTypes.oneOf([
         'p',
         'h1',
@@ -203,4 +221,6 @@ Text.propTypes = {
     ...ariaPropTypes,
 };
 
-export default Text;
+ForwardedRefText.displayName = 'Text';
+
+export default ForwardedRefText;

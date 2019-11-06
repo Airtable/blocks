@@ -8,7 +8,9 @@ import {config as minHeightConfig, MinHeightProps} from './min_height';
 import {config as minWidthConfig, MinWidthProps} from './min_width';
 import {config as widthConfig, WidthProps} from './width';
 
-/** */
+/**
+ * Style props for the dimensions of an element.
+ */
 export interface DimensionsSetProps
     extends HeightProps,
         MaxHeightProps,

@@ -2,12 +2,12 @@
 import {system, Config} from '@styled-system/core';
 import createStylePropTypes from '../utils/create_style_prop_types';
 import {AlignSelfProperty} from '../utils/csstype';
-import {Prop} from '../utils/types';
+import {OptionalResponsiveProp} from '../utils/types';
 
 /** */
 export interface AlignSelfProps {
     /** Aligns flex items of the current flex line, overriding the `alignItems` value. */
-    alignSelf?: Prop<AlignSelfProperty>;
+    alignSelf?: OptionalResponsiveProp<AlignSelfProperty>;
 }
 
 export const config: Config = {alignSelf: true};

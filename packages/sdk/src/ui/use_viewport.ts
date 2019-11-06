@@ -7,7 +7,7 @@ import useWatchable from './use_watchable';
  * Returns the current {@link Viewport} object and updates whenever the viewport size, constraints,
  * or fullscreen status changes.
  *
- * @returns the current {@link Viewport}
+ * @returns The current viewport.
  *
  * @example
  * ```js

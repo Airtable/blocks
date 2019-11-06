@@ -24,7 +24,14 @@ import useBase from './use_base';
 const UNKNOWN_PROFILE_PIC_URL =
     'https://static.airtable.com/images/userIcons/user_icon_unknown.png';
 
-/** */
+/**
+ * Style props for the {@link CollaboratorToken} component. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link PositionSetProps}
+ *
+ * @noInheritDoc
+ */
 interface CollaboratorTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
 const styleParser = compose(
@@ -39,8 +46,13 @@ const collaboratorTokenStylePropTypes = {
     ...marginPropTypes,
 };
 
-/** */
-interface CollaboratorTokenProps extends TooltipAnchorProps, CollaboratorTokenStyleProps {
+/**
+ * Props for the {@link CollaboratorToken} component. Also accepts:
+ * * {@link CollaboratorTokenStyleProps}
+ *
+ * @noInheritDoc
+ */
+interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnchorProps {
     /** An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data. */
     collaborator: Partial<CollaboratorData>;
     /** Additional class names to apply to the collaborator token. */
@@ -51,9 +63,6 @@ interface CollaboratorTokenProps extends TooltipAnchorProps, CollaboratorTokenSt
 
 /**
  * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
- *
- * @augments React.StatelessFunctionalComponent
- * @param props
  *
  * @example
  * ```js

@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: Modal */ /** */
+/** @hidden */ /** */
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
 import * as React from 'react';
@@ -20,9 +20,16 @@ import {
     spacingSetPropTypes,
     SpacingSetProps,
 } from './system';
-import {Prop} from './system/utils/types';
+import {OptionalResponsiveProp} from './system/utils/types';
 
-/** */
+/**
+ * Props for the {@link Modal} component. Also accepts:
+ * * {@link ModalStyleProps}
+ *
+ * @hidden
+ */
+// This doesn't actually extend ModalStyleProps since withStyledSystem
+// expects non-style props and style props as separate generic type variables.
 interface ModalProps {
     /** Callback function to fire when the modal is closed. */
     onClose?: () => unknown;
@@ -38,13 +45,21 @@ interface ModalProps {
     children: React.ReactNode;
 }
 
-/** */
+/**
+ * Style props shared between the {@link Modal}, {@link Dialog}, and {@link ConfirmationDialog} components. Also accepts:
+ * * {@link DimensionsSetProps}
+ * * {@link FlexContainerSetProps}
+ * * {@link SpacingSetProps}
+ *
+ * @hidden
+ * @noInheritDoc
+ */
 export interface ModalStyleProps
     extends DimensionsSetProps,
         FlexContainerSetProps,
         SpacingSetProps {
-    /** */
-    display?: Prop<'block' | 'flex'>;
+    /** Defines the display type of an element, which consists of the two basic qualities of how an element generates boxes — the outer display type defining how the box participates in flow layout, and the inner display type defining how the children of the box are laid out. */
+    display?: OptionalResponsiveProp<'block' | 'flex'>;
 }
 
 const styleParser = compose(

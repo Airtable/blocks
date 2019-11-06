@@ -8,9 +8,14 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 import useSynced from './use_synced';
 import useWatchable from './use_watchable';
 
-/** */
+/**
+ * Props for the {@link TablePickerSynced} component. Also accepts:
+ * * {@link SharedTablePickerProps}
+ *
+ * @noInheritDoc
+ */
 interface TablePickerSyncedProps extends SharedTablePickerProps {
-    /** A string key or array key path in {@link GlobalConfig}. The selected table will always reflect the table id stored in `globalConfig` for this key. Selecting a new table will update `globalConfig`. */
+    /** A string key or array key path in {@link GlobalConfig}. The selected table will always reflect the table id stored in {@link GlobalConfig} for this key. Selecting a new table will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }
 
@@ -20,7 +25,7 @@ function _getTableFromGlobalConfigValue(tableId: unknown): Table | null {
 }
 
 /**
- * Dropdown menu component for selecting tables, synced with {@link GlobalConfig}.
+ * A wrapper around the {@link TablePicker} component that syncs with {@link GlobalConfig}.
  *
  * @example
  * ```js
@@ -75,7 +80,9 @@ function TablePickerSynced(props: TablePickerSyncedProps, ref: React.Ref<HTMLSel
     );
 }
 
-const ForwardedRefTablePickerSynced = React.forwardRef(TablePickerSynced);
+const ForwardedRefTablePickerSynced = React.forwardRef<HTMLSelectElement, TablePickerSyncedProps>(
+    TablePickerSynced,
+);
 
 ForwardedRefTablePickerSynced.displayName = 'TablePickerSynced';
 

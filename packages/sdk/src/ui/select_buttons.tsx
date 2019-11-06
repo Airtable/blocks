@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: Select */ /** */
+/** @module @airtable/blocks/ui: SelectButtons */ /** */
 import {cx} from 'emotion';
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
@@ -53,9 +53,50 @@ function useSelectButtonsVariant(variant: SelectButtonsVariant = SelectButtonsVa
     return selectButtonsVariants[variant];
 }
 
-// Shared with `SelectButtons` and `SelectButtonsSynced`.
-/** */
-export interface SharedSelectButtonsProps extends TooltipAnchorProps, SelectButtonsStyleProps {
+/**
+ * Style props shared between the {@link SelectButtons} and {@link SelectButtonsSynced} components. Accepts:
+ * * {@link FlexItemSetProps}
+ * * {@link MarginProps}
+ * * {@link MaxWidthProps}
+ * * {@link MinWidthProps}
+ * * {@link PositionProps}
+ * * {@link WidthProps}
+ *
+ * @noInheritDoc
+ */
+export interface SelectButtonsStyleProps
+    extends MaxWidthProps,
+        MinWidthProps,
+        WidthProps,
+        FlexItemSetProps,
+        PositionSetProps,
+        MarginProps {}
+
+const styleParser = compose(
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
+
+export const selectButtonsStylePropTypes = {
+    ...maxWidthPropTypes,
+    ...minWidthPropTypes,
+    ...widthPropTypes,
+    ...flexItemSetPropTypes,
+    ...positionSetPropTypes,
+    ...marginPropTypes,
+};
+
+/**
+ * Props shared between the {@link SelectButtons} and {@link SelectButtonsSynced} components. Also accepts:
+ * * {@link SelectButtonsStyleProps}
+ *
+ * @noInheritDoc
+ */
+export interface SharedSelectButtonsProps extends SelectButtonsStyleProps, TooltipAnchorProps {
     /** The list of select options. */
     options: Array<SelectOption>;
     /** A function to be called when the selected option changes. */
@@ -78,15 +119,6 @@ export interface SharedSelectButtonsProps extends TooltipAnchorProps, SelectButt
     ['aria-describedby']?: string;
 }
 
-export const selectButtonsStylePropTypes = {
-    ...maxWidthPropTypes,
-    ...minWidthPropTypes,
-    ...widthPropTypes,
-    ...flexItemSetPropTypes,
-    ...positionSetPropTypes,
-    ...marginPropTypes,
-};
-
 export const sharedSelectButtonsPropTypes = {
     // We do more strict checks in render.
     options: PropTypes.arrayOf(
@@ -105,35 +137,46 @@ export const sharedSelectButtonsPropTypes = {
     'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
+    ...selectButtonsStylePropTypes,
     ...tooltipAnchorPropTypes,
     ...selectButtonsStylePropTypes,
 };
 
-/** */
-export interface SelectButtonsStyleProps
-    extends MaxWidthProps,
-        MinWidthProps,
-        WidthProps,
-        FlexItemSetProps,
-        PositionSetProps,
-        MarginProps {}
-
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
-
-/** */
+/**
+ * Props for the {@link SelectButtons} component. Also accepts:
+ * * {@link SharedSelectButtonsProps}
+ *
+ * @noInheritDoc
+ */
 interface SelectButtonsProps extends SharedSelectButtonsProps {
     /** The value of the selected option. */
     value: SelectOptionValue;
 }
 
-/** */
+/**
+ *  A segmented control for selecting one value from a set of options.
+ *
+ * @example
+ * ```js
+ * import {SelectButtons} from '@airtable/blocks/ui';
+ * import React from 'react';
+ *
+ * function ChartTypePicker() {
+ *     const [chartType, setChartType] = useState('bar');
+ *     return (
+ *         <SelectButtons
+ *             value={chartType}
+ *             options={[
+ *                 {value: 'bar', label: 'Bar'},
+ *                 {value: 'line', label: 'Line'},
+ *                 {value: 'scatter', label: 'Scatter'},
+ *             ]}
+ *             onChange={setChartType}
+ *         />
+ *     );
+ * }
+ * ```
+ */
 function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>) {
     const {
         className,
@@ -222,7 +265,9 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
     );
 }
 
-const ForwardedRefSelectButtons = React.forwardRef(SelectButtons);
+const ForwardedRefSelectButtons = React.forwardRef<HTMLDivElement, SelectButtonsProps>(
+    SelectButtons,
+);
 
 ForwardedRefSelectButtons.propTypes = {
     value: selectOptionValuePropType,
