@@ -69,7 +69,8 @@ Sets the value of this responsive prop in an extra small viewport.
 ### OptionalResponsiveProp
 
 Ƭ **OptionalResponsiveProp**:
-_[ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop)‹T› | void | null_
+_[ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop)‹T› | undefined |
+null_
 
 _Defined in
 [src/ui/system/utils/types.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/system/utils/types.ts#L32)_
