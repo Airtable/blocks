@@ -1,4 +1,4 @@
-/** @module @airtable/blocks/ui: Synced */ /** */
+/** @hidden */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
 import {GlobalConfigKey, GlobalConfigValue} from '../global_config';
