@@ -1,4 +1,4 @@
-/** @module @airtable/blocks */ /** */
+/** @hidden */ /** */
 // NOTE: The version of React running in the Block SDK is controlled by the block.
 // The SDK should not make too many assumptions about which version of React or
 // ReactDOM is running.

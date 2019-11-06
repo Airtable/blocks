@@ -6,7 +6,6 @@
 
 ### External modules
 
--   [@airtable/blocks](modules/_airtable_blocks.md)
 -   [@airtable/blocks/models: Abstract models](modules/_airtable_blocks_models__abstract_models.md)
 -   [@airtable/blocks/models: Aggregators](modules/_airtable_blocks_models__aggregators.md)
 -   [@airtable/blocks/models: Base](modules/_airtable_blocks_models__base.md)
