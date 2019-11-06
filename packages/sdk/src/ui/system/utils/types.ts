@@ -29,7 +29,7 @@ export type ResponsiveProp<T> = T | ResponsivePropObject<T>;
 /**
  * An optional {@link ResponsiveProp} that can be null or undefined.
  */
-export type OptionalResponsiveProp<T> = ResponsiveProp<T> | void | null;
+export type OptionalResponsiveProp<T> = ResponsiveProp<T> | undefined | null;
 
 /** @hidden */
 export type Length = number;
