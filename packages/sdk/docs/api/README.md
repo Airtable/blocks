@@ -9,18 +9,19 @@
 #### import {base} from '@airtable/blocks';
 
 An instance of [Base](./modules/_airtable_blocks_models__base.md#base) representing the current
-Airtable base. If you're writing a React Component, you might want to use the
-[useBase](_airtable_blocks_ui__usebase.md#usebase) hook rather than importing `base` directly.
+Airtable base. If you're writing a React component, you might want to use the
+[useBase](./modules/_airtable_blocks_ui__usebase.md#usebase) hook rather than importing `base`
+directly.
 
 #### import {globalConfig} from '@airtable/blocks';
 
-[globalConfig](./modules/_airtable_blocks.md#globalconfig) is a key-value store shared between every
-user of a particular installation of your block. Use it for storing block configuration.
+[globalConfig](./modules/_airtable_blocks__globalconfig.md) is a key-value store shared between
+every user of a particular installation of your block. Use it for storing block configuration.
 
 #### import {session} from '@airtable/blocks';
 
 An instance of [Session](./modules/_airtable_blocks_models__session.md#session), containing
-information about the current user's session. If you're writing a React Component, you might want to
+information about the current user's session. If you're writing a React component, you might want to
 use the [useSession](./modules/_airtable_blocks_ui__usesession.md#usesession) hook rather than
 importing `session` directly.
 
@@ -38,7 +39,10 @@ constraints. See [Viewport](./modules/_airtable_blocks__viewport.md#viewport).
 #### import {settingsButton} from '@airtable/blocks';
 
 Controls the block's settings button. See
-[settingsButton](./modules/_airtable_blocks.md#settingsbutton).
+[settingsButton](./modules/_airtable_blocks__settingsbutton.md#settingsbutton). If you're writing a
+React component, you might want to use the
+[useSettingsButton](./modules/_airtable_blocks_ui__usesettingsbutton.md#usesettingsbutton) hook
+rather than importing `settingsButton` directly.
 
 #### import {reload} from '@airtable/blocks';
 
