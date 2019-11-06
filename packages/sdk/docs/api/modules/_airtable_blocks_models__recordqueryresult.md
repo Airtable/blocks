@@ -231,8 +231,6 @@ _Overrides
 _Defined in
 [src/models/linked_records_query_result.ts:281](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/linked_records_query_result.ts#L281)_
 
-**`inheritdoc`**
-
 **Returns:** _Promise‹void›_
 
 ### toString
@@ -276,8 +274,6 @@ _Overrides
 _Defined in
 [src/models/linked_records_query_result.ts:255](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/linked_records_query_result.ts#L255)_
 
-**`inheritdoc`**
-
 **Parameters:**
 
 | Name       | Type                                                                                                                                                                                                                                            |
@@ -303,8 +299,6 @@ _Overrides
 
 _Defined in
 [src/models/linked_records_query_result.ts:227](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/linked_records_query_result.ts#L227)_
-
-**`inheritdoc`**
 
 **Parameters:**
 
@@ -930,8 +924,6 @@ _Overrides
 _Defined in
 [src/models/table_or_view_query_result.ts:387](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L387)_
 
-**`inheritdoc`**
-
 **Returns:** _Promise‹void›_
 
 ### toString
@@ -958,8 +950,6 @@ _Overrides
 _Defined in
 [src/models/table_or_view_query_result.ts:479](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L479)_
 
-**`inheritdoc`**
-
 **Returns:** _void_
 
 ### unwatch
@@ -976,8 +966,6 @@ _Overrides
 
 _Defined in
 [src/models/table_or_view_query_result.ts:352](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L352)_
-
-**`inheritdoc`**
 
 **Parameters:**
 
@@ -1004,8 +992,6 @@ _Overrides
 
 _Defined in
 [src/models/table_or_view_query_result.ts:305](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/table_or_view_query_result.ts#L305)_
-
-**`inheritdoc`**
 
 **Parameters:**
 

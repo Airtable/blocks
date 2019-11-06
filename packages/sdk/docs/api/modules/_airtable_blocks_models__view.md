@@ -32,7 +32,7 @@ _Defined in
 
 An enum of Airtable's view types
 
-**`alias`** viewTypes
+**Alias:** viewTypes
 
 **Example:**
 
@@ -475,8 +475,6 @@ _Defined in
 Unwatching a key that needs to load data asynchronously will automatically cause the data to be
 released. Once the data is available, the callback will be called.
 
-**`inheritdoc`**
-
 **Parameters:**
 
 | Name       | Type                                                                                                                                                                                              |
@@ -507,8 +505,6 @@ _Defined in
 
 Watching a key that needs to load data asynchronously will automatically cause the data to be
 fetched. Once the data is available, the callback will be called.
-
-**`inheritdoc`**
 
 **Parameters:**
 

@@ -178,7 +178,7 @@ _Defined in
 Sets the foreground color value of an element's text and text decorations, and sets the
 `currentcolor` value.
 
-**`see`** {@link colors}
+**See:** {@link colors}
 
 ---
 
@@ -341,7 +341,7 @@ _Defined in
 Sets the foreground color value of an element's text and text decorations, and sets the
 `currentcolor` value.
 
-**`see`** {@link colors}
+**See:** {@link colors}
 
 ### `Optional` textDecoration
 

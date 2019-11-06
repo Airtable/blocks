@@ -30,7 +30,7 @@ _Defined in
 
 An enum of Airtable's field types
 
-**`alias`** fieldTypes
+**Alias:** fieldTypes
 
 **Example:**
 
@@ -911,7 +911,7 @@ _Defined in
 The configuration options of the field. The structure of the field's options depend on the field's
 type. Can be watched.
 
-**`see`** [FieldTypes](_airtable_blocks_models__field.md#fieldtypes)
+**See:** [FieldTypes](_airtable_blocks_models__field.md#fieldtypes)
 
 **Example:**
 

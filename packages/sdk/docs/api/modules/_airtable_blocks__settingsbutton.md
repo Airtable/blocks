@@ -29,7 +29,7 @@ recommend way to watch the settings button, but you can also use it directly as 
 
 Watch `click` to handle click events on the button.
 
-**`alias`** settingsButton
+**Alias:** settingsButton
 
 **Example:**
 

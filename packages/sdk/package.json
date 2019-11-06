@@ -34,7 +34,7 @@
         "docs:clean": "rm -rf ./docs/api ./doc-generator/lib",
         "docs:generator": "tsc -b ./doc-generator/tsconfig.json",
         "docs:typedoc": "typedoc --plugin \"typedoc-plugin-markdown,typedoc-plugin-sourcefile-url,typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" .",
-        "docs:format": "node ./doc-generator/lib/scripts/replace-example-headings.js && prettier --write 'docs/**/*.md'",
+        "docs:format": "node ./doc-generator/lib/scripts/format_unsupported_tags.js && prettier --write 'docs/**/*.md'",
         "docs": "yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:format",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",

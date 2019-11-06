@@ -115,7 +115,7 @@ _Defined in
 
 An enum of the different types of {@link recordColoring.modes}
 
-**`alias`** recordColoring.ModeTypes
+**Alias:** recordColoring.ModeTypes
 
 ### BY_SELECT_FIELD
 
@@ -124,7 +124,7 @@ An enum of the different types of {@link recordColoring.modes}
 _Defined in
 [src/models/record_coloring.ts:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L20)_
 
-**`alias`** recordColoring.ModeTypes.BY_SELECT_FIELD
+**Alias:** recordColoring.ModeTypes.BY_SELECT_FIELD
 
 ### BY_VIEW
 
@@ -133,7 +133,7 @@ _Defined in
 _Defined in
 [src/models/record_coloring.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L24)_
 
-**`alias`** recordColoring.ModeTypes.BY_VIEW
+**Alias:** recordColoring.ModeTypes.BY_VIEW
 
 ### NONE
 
@@ -142,7 +142,7 @@ _Defined in
 _Defined in
 [src/models/record_coloring.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L16)_
 
-**`alias`** recordColoring.ModeTypes.NONE
+**Alias:** recordColoring.ModeTypes.NONE
 
 ---
 
@@ -155,7 +155,7 @@ _Defined in
 
 Record coloring config creators.
 
-**`alias`** recordColoring.modes
+**Alias:** recordColoring.modes
 
 **Example:**
 
@@ -181,7 +181,7 @@ _[BySelectFieldRecordColorMode](_airtable_blocks_models__record_coloring.md#byse
 _Defined in
 [src/models/record_coloring.ts:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L92)_
 
-**`alias`** recordColoring.modes.bySelectField
+**Alias:** recordColoring.modes.bySelectField
 
 **Parameters:**
 
@@ -202,7 +202,7 @@ _[ByViewRecordColorMode](_airtable_blocks_models__record_coloring.md#byviewrecor
 _Defined in
 [src/models/record_coloring.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L103)_
 
-**`alias`** recordColoring.modes.byView
+**Alias:** recordColoring.modes.byView
 
 **Parameters:**
 
@@ -222,7 +222,7 @@ a record coloring mode
 _Defined in
 [src/models/record_coloring.ts:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/record_coloring.ts#L82)_
 
-**`alias`** recordColoring.modes.none
+**Alias:** recordColoring.modes.none
 
 **Returns:** _[NoRecordColorMode](_airtable_blocks_models__record_coloring.md#norecordcolormode)_
 

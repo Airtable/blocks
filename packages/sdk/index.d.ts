@@ -10,5 +10,4 @@ export const runInfo: typeof sdk.runInfo;
 export const cursor: typeof sdk.cursor;
 export const settingsButton: typeof sdk.settingsButton;
 export const undoRedo: typeof sdk.undoRedo;
-export const spawnError: typeof sdk.spawnError;
 export const reload: typeof sdk.reload;
