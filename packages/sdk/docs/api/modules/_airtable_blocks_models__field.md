@@ -321,7 +321,7 @@ Check `options.result` to know the resulting field type.
     // false if the formula contains an error
     isValid: boolean,
     // the other fields in the record that are used in the formula
-    fieldIdsReferencedByFormulaText: Array<FieldId>,
+    referencedFieldIds: Array<FieldId>,
     // the resulting field type and options returned by the formula
     result: {
         // the field type of the formula result
@@ -357,7 +357,7 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
     // false if the formula contains an error
     isValid: boolean,
     // the fields to check the last modified time of
-    fieldIdsReferencedByFormulaText: Array<FieldId>,
+    referencedFieldIds: Array<FieldId>,
     // the cell value result type
     result: {
         type: 'date' | 'dateTime',
@@ -673,7 +673,7 @@ Check `options.result` to know the resulting field type.
     // the field id in the linked table that this field is summarizing.
     fieldIdInLinkedTable: FieldId,
     // the other fields in the record that are used in the formula
-    fieldIdsReferencedByFormulaText: Array<FieldId>,
+    referencedFieldIds: Array<FieldId>,
     // the resulting field type and options returned by the formula
     result: {
         // the field type of the formula result

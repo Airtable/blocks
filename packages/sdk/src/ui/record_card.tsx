@@ -180,13 +180,13 @@ const getFieldResultType = (field: Field): string => {
         if (!field.options) {
             throw spawnInvariantViolationError('options');
         }
-        const resultConfig = field.options.resultConfig;
-        if (typeof resultConfig === 'object' && resultConfig) {
-            const resultConfigType = (resultConfig as any).type;
-            if (!(typeof resultConfigType === 'string')) {
-                throw spawnInvariantViolationError('resultConfigType must be string');
+        const result = field.options.result;
+        if (typeof result === 'object' && result) {
+            const resultType = (result as any).type;
+            if (!(typeof resultType === 'string')) {
+                throw spawnInvariantViolationError('resultType must be string');
             }
-            return resultConfigType;
+            return resultType;
         } else {
             // Formula is misconfigured.
             return FieldTypes.SINGLE_LINE_TEXT;

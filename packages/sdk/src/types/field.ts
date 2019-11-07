@@ -392,7 +392,7 @@ export enum FieldTypes {
      *     // false if the formula contains an error
      *     isValid: boolean,
      *     // the other fields in the record that are used in the formula
-     *     fieldIdsReferencedByFormulaText: Array<FieldId>,
+     *     referencedFieldIds: Array<FieldId>,
      *     // the resulting field type and options returned by the formula
      *     result: {
      *         // the field type of the formula result
@@ -447,7 +447,7 @@ export enum FieldTypes {
      *     // the field id in the linked table that this field is summarizing.
      *     fieldIdInLinkedTable: FieldId,
      *     // the other fields in the record that are used in the formula
-     *     fieldIdsReferencedByFormulaText: Array<FieldId>,
+     *     referencedFieldIds: Array<FieldId>,
      *     // the resulting field type and options returned by the formula
      *     result: {
      *         // the field type of the formula result
@@ -576,7 +576,7 @@ export enum FieldTypes {
      *     // false if the formula contains an error
      *     isValid: boolean,
      *     // the fields to check the last modified time of
-     *     fieldIdsReferencedByFormulaText: Array<FieldId>,
+     *     referencedFieldIds: Array<FieldId>,
      *     // the cell value result type
      *     result: {
      *         type: 'date' | 'dateTime',
