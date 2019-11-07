@@ -245,11 +245,11 @@ async function populateBlockDirectoryWithTemplateContentAsync(
     // The template is downloaded with `npm install`.  When this
     // happens, `npm` doesn't include `.gitignore` in the downloaded
     // package.  To get around this, the template repo symlinks its
-    // `.gitignore` file to `__gitignore`.  The code below then copies
+    // `.gitignore` file to `__gitignore`.  The code below then moves
     // `__gitignore` to `.gitignore` in the downloaded template.  It
     // will be copied over with the rest of the template to the new
     // block directory.
-    await fs.copyFileSync(
+    await fsUtils.renameAsync(
         path.join(templatePath, '__gitignore'),
         path.join(templatePath, '.gitignore'),
     );
