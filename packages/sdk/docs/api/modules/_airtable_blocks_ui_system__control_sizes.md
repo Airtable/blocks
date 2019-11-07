@@ -20,8 +20,9 @@ _Defined in
 [src/ui/control_sizes.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/control_sizes.ts#L13)_
 
 Sizes for the [Button](_airtable_blocks_ui__button.md#button),
-[Input](_airtable_blocks_ui__input.md#input), [Select](_airtable_blocks_ui__select.md#select), and
-[SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons) components.
+[Input](_airtable_blocks_ui__input.md#input), [Select](_airtable_blocks_ui__select.md#select),
+[SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons), and
+[Switch](_airtable_blocks_ui__switch.md#switch) components.
 
 ---
 
@@ -34,5 +35,6 @@ _Defined in
 [src/ui/control_sizes.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/control_sizes.ts#L19)_
 
 Size prop for the [Button](_airtable_blocks_ui__button.md#button),
-[Input](_airtable_blocks_ui__input.md#input), [Select](_airtable_blocks_ui__select.md#select), and
-[SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons) components.
+[Input](_airtable_blocks_ui__input.md#input), [Select](_airtable_blocks_ui__select.md#select),
+[SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons), and
+[Switch](_airtable_blocks_ui__switch.md#switch) components.
