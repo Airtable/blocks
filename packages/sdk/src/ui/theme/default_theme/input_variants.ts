@@ -30,7 +30,7 @@ const inputVariants = {
         baseInputStyles,
         css({
             color: colors.dark,
-            backgroundColor: colors.darken1,
+            backgroundColor: colors.lightGray2,
         }),
     ),
 };

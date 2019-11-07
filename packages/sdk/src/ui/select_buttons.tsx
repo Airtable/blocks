@@ -1,10 +1,10 @@
 /** @module @airtable/blocks/ui: SelectButtons */ /** */
 import {cx} from 'emotion';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {spawnError} from '../error_utils';
-import {createEnum, EnumType} from '../private_utils';
+import {createEnum, EnumType, getLocallyUniqueId} from '../private_utils';
 import {
     validateOptions,
     optionValueToString,
@@ -105,8 +105,6 @@ export interface SharedSelectButtonsProps extends SelectButtonsStyleProps, Toolt
     disabled?: boolean;
     /** Additional class names to apply to the select. */
     className?: string;
-    /** The `tabindex` attribute. */
-    tabIndex?: number;
     /** The size of the select buttons. */
     size?: ControlSizeProp;
     /** Additional styles to apply to the select. */
@@ -130,11 +128,9 @@ export const sharedSelectButtonsPropTypes = {
     ).isRequired,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
-    tabIndex: PropTypes.number,
     size: controlSizePropType,
     className: PropTypes.string,
     style: PropTypes.object,
-    'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,
     'aria-describedby': PropTypes.string,
     ...selectButtonsStylePropTypes,
@@ -184,7 +180,6 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
         options,
         disabled,
         value,
-        tabIndex = 0,
         size = ControlSize.default,
         onChange,
         onMouseEnter,
@@ -192,7 +187,6 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
         onClick,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         hasOnClick,
-        'aria-label': ariaLabel,
         'aria-describedby': ariaDescribedBy,
         'aria-labelledby': ariaLabelledBy,
         ...styleProps
@@ -201,6 +195,8 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
     const {containerClassNameForVariant, optionClassNameForVariant} = useSelectButtonsVariant();
     const containerClassNameForSize = useSelectButtonsSize(size);
     const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
+    const [generatedId] = useState(getLocallyUniqueId('sb-'));
+    const [isFocused, setIsFocused] = useState(false);
 
     useEffect(() => {
         // Check options here for a cleaner stack trace.
@@ -220,12 +216,6 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
         }
     }
 
-    function _onKeyDown(e: React.KeyboardEvent<HTMLDivElement>, newValue: SelectOptionValue) {
-        if ([' ', 'Enter'].includes(e.key)) {
-            _onChange(newValue);
-        }
-    }
-
     return (
         <div
             // TODO (stephen): remove tooltip anchor props
@@ -233,6 +223,8 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={onClick}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             className={cx(
                 containerClassNameForSize,
                 containerClassNameForVariant,
@@ -240,24 +232,32 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
                 className,
             )}
             style={style}
-            aria-label={ariaLabel}
+            data-disabled={disabled}
+            data-focused={isFocused}
             aria-labelledby={ariaLabelledBy}
             aria-describedby={ariaDescribedBy}
         >
-            {options.map(option => {
+            {options.map((option, index) => {
                 const isSelected = option.value === value;
                 const isOptionDisabled = disabled || option.disabled;
+                const radioId = `${generatedId}-${index}`;
                 return (
                     <div
                         key={optionValueToString(option.value)}
-                        onClick={isOptionDisabled ? undefined : () => _onChange(option.value)}
-                        onKeyDown={isOptionDisabled ? undefined : e => _onKeyDown(e, option.value)}
-                        aria-disabled={isOptionDisabled}
-                        aria-checked={isSelected}
-                        tabIndex={isOptionDisabled ? -1 : tabIndex}
                         className={optionClassNameForVariant}
                     >
-                        <span className={cssHelpers.TRUNCATE}>{option.label}</span>
+                        <input
+                            type="radio"
+                            onChange={isOptionDisabled ? undefined : () => _onChange(option.value)}
+                            disabled={isOptionDisabled}
+                            checked={isSelected}
+                            className={cssHelpers.VISUALLY_HIDDEN}
+                            id={radioId}
+                            name={generatedId}
+                        />
+                        <label htmlFor={radioId}>
+                            <span className={cssHelpers.TRUNCATE}>{option.label}</span>
+                        </label>
                     </div>
                 );
             })}

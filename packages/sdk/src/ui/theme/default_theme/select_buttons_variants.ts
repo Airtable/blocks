@@ -3,16 +3,19 @@ import {fontFamilies, colors, radii, opacities} from './tokens';
 
 const baseContainerStyles = css({
     borderRadius: radii.default,
-    backgroundColor: colors.darken2,
+    backgroundColor: colors.lightGray2,
     boxSizing: 'border-box',
     fontFamily: fontFamilies.default,
     overflow: 'hidden',
     display: 'flex',
     userSelect: 'none',
     fontWeight: 400,
-    '&[aria-disabled="true"]': {
-        cursor: 'default',
+    '&:active, &[data-focused="true"]': {
+        boxShadow: `inset 0 0 0 2px ${colors.darken3}`,
+    },
+    '&[data-disabled="true"]': {
         opacity: opacities.quieter,
+        cursor: 'default',
     },
 });
 
@@ -20,36 +23,39 @@ const baseOptionStyles = css({
     display: 'flex',
     flex: 'auto',
     flexBasis: 0,
-    overflow: 'hidden',
-    paddingRight: '4px',
-    paddingLeft: '4px',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: radii.default,
-    outline: 0,
-    '&:not([aria-disabled="true"])': {
-        cursor: 'pointer',
-        '&:focus': {
-            outline: 0,
-            boxShadow: `inset 0 0 0 2px ${colors.darken3}`,
+    overflow: 'hidden',
+    '> label': {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        borderRadius: radii.default,
+        outline: 0,
+        paddingRight: '4px',
+        paddingLeft: '4px',
+        '&:active': {
+            opacity: 1,
         },
     },
-    '&[aria-disabled="true"]': {
+    '> input:disabled + label': {
         cursor: 'default',
         opacity: opacities.quieter,
     },
-    '&[aria-checked="true"]': {
+    '> input:not(:disabled) + label': {
+        cursor: 'pointer',
+    },
+    '> input:checked + label': {
         backgroundColor: colors.darken4,
         color: colors.white,
     },
-    '&:not([aria-checked="true"])': {
+    '> input:not(:checked) + label': {
         color: colors.dark,
     },
-    '&:not([aria-checked="true"]):not([aria-disabled="true"])': {
+    '> input:not(:checked):not(:disabled) + label:hover': {
         opacity: opacities.quiet,
-        '&:hover': {
-            opacity: 1,
-        },
     },
 });
 
