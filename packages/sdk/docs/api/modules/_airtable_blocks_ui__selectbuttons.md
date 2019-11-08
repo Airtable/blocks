@@ -24,7 +24,7 @@
 • **SelectButtonsProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L151)_
+[src/ui/select_buttons.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L147)_
 
 Props for the [SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons) component. Also
 accepts:
@@ -36,7 +36,7 @@ accepts:
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select_buttons.tsx:153](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L153)_
+[src/ui/select_buttons.tsx:149](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L149)_
 
 The value of the selected option.
 
@@ -106,7 +106,7 @@ accepts:
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:119](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L119)_
+[src/ui/select_buttons.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L117)_
 
 A space separated list of description element IDs.
 
@@ -115,7 +115,7 @@ A space separated list of description element IDs.
 • **aria-label**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L115)_
+[src/ui/select_buttons.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L113)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -124,7 +124,7 @@ The `aria-label` attribute. Use this if the select is not referenced by a label 
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L117)_
+[src/ui/select_buttons.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L115)_
 
 A space separated list of label element IDs.
 
@@ -169,7 +169,7 @@ The list of select options.
 • **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__control_sizes.md#controlsizeprop)_
 
 _Defined in
-[src/ui/select_buttons.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L111)_
+[src/ui/select_buttons.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L109)_
 
 The size of the select buttons.
 
@@ -178,18 +178,9 @@ The size of the select buttons.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/select_buttons.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L113)_
+[src/ui/select_buttons.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L111)_
 
 Additional styles to apply to the select.
-
-### `Optional` tabIndex
-
-• **tabIndex**? : _undefined | number_
-
-_Defined in
-[src/ui/select_buttons.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L109)_
-
-The `tabindex` attribute.
 
 ## Functions
 
@@ -200,7 +191,7 @@ The `tabindex` attribute.
 React.Ref‹HTMLDivElement›): _Element_
 
 _Defined in
-[src/ui/select_buttons.tsx:180](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L180)_
+[src/ui/select_buttons.tsx:176](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L176)_
 
 A segmented control for selecting one value from a set of options.
 
