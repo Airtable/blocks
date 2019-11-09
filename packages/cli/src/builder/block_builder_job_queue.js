@@ -19,10 +19,21 @@ const JobActions = Object.freeze({
 });
 
 type TranspileOrUnlinkBuildJob = {|
+    action: typeof JobActions.TRANSPILE_OR_UNLINK,
     eventType: 'add' | 'addDir' | 'change' | 'unlink',
     fileOrDirPath: string,
     fsStatsIfExists: fs.Stats | null,
 |};
+
+// NOTE(richsinn): If any item exists in the _buildJobQueue, regardless of BuildJob type,
+// a bundle will be executed. If the _buildJobQueue only has a BundleBuildJob in it's
+// queue, then it will just implicitly trigger a bundle without doing any extra work like
+// transpilation, etc.
+type BundleBuildJob = {|
+    action: typeof JobActions.BUNDLE,
+|};
+
+type BuildJob = TranspileOrUnlinkBuildJob | BundleBuildJob;
 
 type TranspileOrCopyAsyncFn = (
     fileOrDirectoryPath: string,
@@ -41,7 +52,7 @@ const QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS = 200;
 
 class BlockBuilderJobQueue extends EventEmitter {
     _buildTypeMode: BlockBuildType;
-    _transpileOrUnlinkBuildJobQueue: Array<TranspileOrUnlinkBuildJob>;
+    _buildJobQueue: Array<BuildJob>;
     _blockBuilderStateData: BlockBuilderStateData;
     _transpileErrorByFilePath: Map<string, TranspileError>;
     _bundleErrorIfExists: ErrorWithCode | null;
@@ -55,7 +66,7 @@ class BlockBuilderJobQueue extends EventEmitter {
     constructor(buildTypeMode: BlockBuildType) {
         super();
         this._buildTypeMode = buildTypeMode;
-        this._transpileOrUnlinkBuildJobQueue = [];
+        this._buildJobQueue = [];
         this._transpileErrorByFilePath = new Map();
         this._bundleErrorIfExists = null;
         this._blockBuilderStateData = {status: BlockBuilderStatuses.START};
@@ -68,8 +79,15 @@ class BlockBuilderJobQueue extends EventEmitter {
     get blockBuilderStateData(): BlockBuilderStateData {
         return this._blockBuilderStateData;
     }
-    enqueueTranspileOrUnlinkJob(job: TranspileOrUnlinkBuildJob): void {
-        this._transpileOrUnlinkBuildJobQueue.push(job);
+    enqueue(job: BuildJob): void {
+        if (job.action === JobActions.BUNDLE && this._buildJobQueue.length > 0) {
+            // We return early here for optimization purposes. If there's already items
+            // in the queue, then bundle will always run, as long as there are no
+            // transpile errors. Therefore there's no need to enqueue another bundle job.
+            return;
+        }
+
+        this._buildJobQueue.push(job);
     }
     startQueueConsumerLoop(args: QueueConsumerArgs): void {
         if (this._buildJobQueueConsumerTimerIfExists === null) {
@@ -88,7 +106,7 @@ class BlockBuilderJobQueue extends EventEmitter {
     async _queueConsumerLoopAsync(args: QueueConsumerArgs): Promise<void> {
         const {transpileOrCopyAsyncFn, unlinkAsyncFn, generateFrontendBundleAsyncFn} = args;
 
-        if (this._transpileOrUnlinkBuildJobQueue.length === 0) {
+        if (this._buildJobQueue.length === 0) {
             this._buildJobQueueConsumerTimerIfExists = setTimeout(
                 this._queueConsumerLoopAsync.bind(this, args),
                 QUEUE_CONSUMER_LOOP_TIMER_DELAY_MS,
@@ -96,10 +114,11 @@ class BlockBuilderJobQueue extends EventEmitter {
             return;
         }
         // Copy all elements of the queue for processing, and clear out the queue.
-        const transpileOrUnlinkJobs = this._transpileOrUnlinkBuildJobQueue.splice(
-            0,
-            this._transpileOrUnlinkBuildJobQueue.length,
-        );
+        const currentQueueCopy = this._buildJobQueue.splice(0, this._buildJobQueue.length);
+        const jobsByAction = groupBy(currentQueueCopy, job => job.action);
+        const transpileOrUnlinkJobs: Array<TranspileOrUnlinkBuildJob> = ((jobsByAction[
+            JobActions.TRANSPILE_OR_UNLINK
+        ]: any): Array<TranspileOrUnlinkBuildJob>); // eslint-disable-line flowtype/no-weak-types
 
         this._transitionBlockBuilderState();
 

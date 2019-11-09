@@ -4,6 +4,7 @@ const archiver = require('archiver');
 const path = require('path');
 const fs = require('fs');
 const {promisify} = require('util');
+const {debounce} = require('lodash');
 const fsUtils = require('../helpers/fs_utils');
 const envify = require('envify/custom');
 const invariant = require('invariant');
@@ -62,6 +63,8 @@ const allSupportedBrowsers: Array<string> = [
     'edge >= 13',
 ];
 
+const DEBOUNCE_DELAY_FOR_SDK_BUNDLE_ENQUEUE_MS = 1000;
+
 /**
  * BlockBuilder can be used in two ways (defined by buildTypeMode):
  * - DEVELOPMENT mode - an interactive mode, which watches for and responds to changes in the
@@ -84,6 +87,7 @@ class BlockBuilder {
     _blockBuilderJobQueue: BlockBuilderJobQueue;
     _backendSdkBaseUrl: string | null;
     _browserifyCache: {[FilePath]: mixed};
+    _debouncedEnqueueBundleJob: any; // eslint-disable-line flowtype/no-weak-types
 
     constructor(args: {
         buildTypeMode: BlockBuildType,
@@ -105,6 +109,11 @@ class BlockBuilder {
         this._setupBuildOutputDirPaths();
         this._setupBlockBuilderJobQueue();
         this._setupBrowserify();
+
+        this._debouncedEnqueueBundleJob = debounce(
+            this._enqueueBundleJob.bind(this),
+            DEBOUNCE_DELAY_FOR_SDK_BUNDLE_ENQUEUE_MS,
+        );
     }
 
     static async createDevelopmentBlockBuilderAsync(args: {
@@ -228,6 +237,11 @@ class BlockBuilder {
 
         return normalizedSourcePath.startsWith(normalizedSearchPath);
     }
+    _enqueueBundleJob(): void {
+        this._blockBuilderJobQueue.enqueue({
+            action: BlockBuilderJobQueue.JOB_ACTIONS.BUNDLE,
+        });
+    }
     /**
      * Use chokidar to do the initial walk of the user's block directory.
      *
@@ -260,7 +274,6 @@ class BlockBuilder {
                     p,
                     path.join(this._blockDirPath, blockCliConfigSettings.BUILD_DIR),
                 ),
-            p => this._doesPathStartWith(p, path.join(this._blockDirPath, 'node_modules')),
             path.join(this._blockDirPath, blockCliConfigSettings.BLOCK_CONFIG_DIR_NAME),
             path.join(this._blockDirPath, blockCliConfigSettings.CONFIG_FILE_NAME),
             '.git',
@@ -281,6 +294,16 @@ class BlockBuilder {
         const chokidarEvents = ['add', 'addDir', 'change'];
         for (const chokidarEvent of chokidarEvents) {
             chokidarInstance.on(chokidarEvent, (fileOrDirPath: string, stats?: fs.Stats) => {
+                if (
+                    this._buildTypeMode === BlockBuildTypes.DEVELOPMENT &&
+                    this._doesPathStartWith(fileOrDirPath, 'node_modules/@airtable')
+                ) {
+                    this._debouncedEnqueueBundleJob();
+                    return;
+                } else if (this._doesPathStartWith(fileOrDirPath, 'node_modules')) {
+                    return;
+                }
+
                 if (fileOrDirPath === blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME) {
                     throw new Error(
                         `${blockCliConfigSettings.CLIENT_WRAPPER_FILE_NAME} is a reserved file name!`,
@@ -306,7 +329,8 @@ class BlockBuilder {
                 }
 
                 invariant(stats, 'stats');
-                this._blockBuilderJobQueue.enqueueTranspileOrUnlinkJob({
+                this._blockBuilderJobQueue.enqueue({
+                    action: BlockBuilderJobQueue.JOB_ACTIONS.TRANSPILE_OR_UNLINK,
                     eventType: chokidarEvent,
                     fileOrDirPath,
                     fsStatsIfExists: stats,
@@ -325,7 +349,8 @@ class BlockBuilder {
                     process.exit(1);
                 }
 
-                this._blockBuilderJobQueue.enqueueTranspileOrUnlinkJob({
+                this._blockBuilderJobQueue.enqueue({
+                    action: BlockBuilderJobQueue.JOB_ACTIONS.TRANSPILE_OR_UNLINK,
                     eventType: 'unlink',
                     fileOrDirPath: filePath,
                     fsStatsIfExists: null,
@@ -376,13 +401,13 @@ class BlockBuilder {
 
                 // NOTE: The cache and packageCache properties are required by watchify
                 // src: https://github.com/browserify/watchify#watchifyb-opts
-                const browserifyWatchOptions = {
+                const browserifyOptions = {
                     cache: this._browserifyCache,
                     packageCache: {},
                     debug: true,
                     paths: [this._blockDirPath],
                 };
-                this._browserify = browserify(clientWrapperFilePath, browserifyWatchOptions);
+                this._browserify = browserify(clientWrapperFilePath, browserifyOptions);
                 this._browserify.plugin(watchify, {delay: 0});
                 break;
             }
