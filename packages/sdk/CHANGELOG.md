@@ -11,7 +11,25 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.34...HEAD)
 
-No changes.
+-   UI library
+    -   New API for styling UI components. Each component now exposes a certain set of CSS
+        properties as React props. Styling via the `className` and `style` props is still supported
+        but is no longer recommended. For more information, see the documentation for
+        [style props](https://github.com/Airtable/blocks/blob/master/packages/sdk/docs/api/modules/_airtable_blocks_ui_system__all_style_props.md#allstylesprops).
+    -   New components:
+        -   `Text` and `Heading` for typography.
+        -   `Label` and `FormField` for labeling controls form fields.
+        -   `TextButton` for buttons that can be rendered inline with text.
+    -   **BREAKING**: `Toggle` has been renamed to `Switch`.
+    -   **BREAKING**: `Button` and `Switch` no longer accept the `theme` prop. Instead, you can
+        specify the colors for these components with the `variant` prop.
+    -   `Link` also supports the `variant` prop, which determines the text color of the link.
+    -   `Button`, `Input`, `Link`, `SelectButtons`, `Select`, `Switch`, and the model picker
+        components can now be resized via the `size` prop (one of `small`, `default`, or `large`).
+    -   `Button`, `Icon`, `Input`, `Link`, `SelectButtons`, `Select`, `Switch`, and the model picker
+        components are now functional components that use the
+        [`React.forwardRef`](https://reactjs.org/docs/forwarding-refs.html) API.
+    -   `SelectButtons` is now keyboard/screenreader accessible.
 
 ## [0.0.34](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.33...@airtable/blocks@0.0.34) - 2019-10-04
 
