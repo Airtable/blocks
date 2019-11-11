@@ -30,7 +30,7 @@
 • **SelectOption**:
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L26)_
+[src/ui/select_and_select_buttons_helpers.ts:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L26)_
 
 A select option for [Select](_airtable_blocks_ui__select.md#select),
 [TablePicker](_airtable_blocks_ui__tablepicker.md#tablepicker),
@@ -42,7 +42,7 @@ A select option for [Select](_airtable_blocks_ui__select.md#select),
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L32)_
+[src/ui/select_and_select_buttons_helpers.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L32)_
 
 If set to `true`, this option will not be selectable.
 
@@ -51,7 +51,7 @@ If set to `true`, this option will not be selectable.
 • **label**: _React.ReactNode_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L30)_
+[src/ui/select_and_select_buttons_helpers.ts:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L30)_
 
 The label for the select option.
 
@@ -60,7 +60,7 @@ The label for the select option.
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L28)_
+[src/ui/select_and_select_buttons_helpers.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L28)_
 
 The value for the select option.
 
@@ -71,7 +71,7 @@ The value for the select option.
 • **SelectProps**:
 
 _Defined in
-[src/ui/select.tsx:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L186)_
+[src/ui/select.tsx:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L186)_
 
 Props for the [Select](_airtable_blocks_ui__select.md#select) component. Also accepts:
 
@@ -82,7 +82,7 @@ Props for the [Select](_airtable_blocks_ui__select.md#select) component. Also ac
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select.tsx:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L188)_
+[src/ui/select.tsx:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L188)_
 
 The value of the selected option.
 
@@ -93,7 +93,7 @@ The value of the selected option.
 • **SelectStyleProps**:
 
 _Defined in
-[src/ui/select.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L76)_
+[src/ui/select.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L76)_
 
 Style props shared between the following components.
 
@@ -122,7 +122,7 @@ _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#option
 | "flex" | "none"›_
 
 _Defined in
-[src/ui/select.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L84)_
+[src/ui/select.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L84)_
 
 Defines the display type of an element, which consists of the two basic qualities of how an element
 generates boxes — the outer display type defining how the box participates in flow layout, and the
@@ -135,7 +135,7 @@ inner display type defining how the children of the box are laid out.
 • **SelectSyncedProps**:
 
 _Defined in
-[src/ui/select_synced.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L15)_
+[src/ui/select_synced.tsx:15](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_synced.tsx#L15)_
 
 Props for the [SelectSynced](_airtable_blocks_ui__select.md#selectsynced) component. Also accepts:
 
@@ -146,7 +146,7 @@ Props for the [SelectSynced](_airtable_blocks_ui__select.md#selectsynced) compon
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/select_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L17)_
+[src/ui/select_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_synced.tsx#L17)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected option will always reflect the value stored in
@@ -160,7 +160,7 @@ will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 • **SharedSelectBaseProps**:
 
 _Defined in
-[src/ui/select.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L100)_
+[src/ui/select.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L100)_
 
 Props shared between the following components:
 
@@ -182,7 +182,7 @@ Also accepts:
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/select.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L124)_
+[src/ui/select.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L124)_
 
 A space separated list of description element IDs.
 
@@ -191,7 +191,7 @@ A space separated list of description element IDs.
 • **aria-label**? : _undefined | string_
 
 _Defined in
-[src/ui/select.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L120)_
+[src/ui/select.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L120)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -200,7 +200,7 @@ The `aria-label` attribute. Use this if the select is not referenced by a label 
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/select.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L122)_
+[src/ui/select.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L122)_
 
 A space separated list of label element IDs.
 
@@ -209,7 +209,7 @@ A space separated list of label element IDs.
 • **autoFocus**? : _undefined | false | true_
 
 _Defined in
-[src/ui/select.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L108)_
+[src/ui/select.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L108)_
 
 The `autoFocus` attribute.
 
@@ -218,7 +218,7 @@ The `autoFocus` attribute.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/select.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L106)_
+[src/ui/select.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L106)_
 
 Additional class names to apply to the select.
 
@@ -227,7 +227,7 @@ Additional class names to apply to the select.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/select.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L116)_
+[src/ui/select.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L116)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -236,7 +236,7 @@ If set to `true`, the user cannot interact with the select.
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/select.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L110)_
+[src/ui/select.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L110)_
 
 The `id` attribute.
 
@@ -245,7 +245,7 @@ The `id` attribute.
 • **name**? : _undefined | string_
 
 _Defined in
-[src/ui/select.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L112)_
+[src/ui/select.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L112)_
 
 The `name` attribute.
 
@@ -254,7 +254,7 @@ The `name` attribute.
 • **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__control_sizes.md#controlsizeprop)_
 
 _Defined in
-[src/ui/select.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L104)_
+[src/ui/select.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L104)_
 
 The size of the select.
 
@@ -263,7 +263,7 @@ The size of the select.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/select.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L118)_
+[src/ui/select.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L118)_
 
 Additional styles to apply to the select.
 
@@ -272,7 +272,7 @@ Additional styles to apply to the select.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/select.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L114)_
+[src/ui/select.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L114)_
 
 The `tabindex` attribute.
 
@@ -283,7 +283,7 @@ The `tabindex` attribute.
 • **SharedSelectProps**:
 
 _Defined in
-[src/ui/select.tsx:159](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L159)_
+[src/ui/select.tsx:159](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L159)_
 
 Props shared between the [Select](_airtable_blocks_ui__select.md#select) and
 [SelectSynced](_airtable_blocks_ui__select.md#selectsynced) components. Also accepts:
@@ -295,7 +295,7 @@ Props shared between the [Select](_airtable_blocks_ui__select.md#select) and
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/select.tsx:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L163)_
+[src/ui/select.tsx:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L163)_
 
 A function to be called when the selected option changes.
 
@@ -304,7 +304,7 @@ A function to be called when the selected option changes.
 • **options**: _Array‹[SelectOption](_airtable_blocks_ui__select.md#selectoption)›_
 
 _Defined in
-[src/ui/select.tsx:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L161)_
+[src/ui/select.tsx:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L161)_
 
 The list of select options.
 
@@ -315,7 +315,7 @@ The list of select options.
 Ƭ **SelectOptionValue**: _string | number | boolean | null | undefined_
 
 _Defined in
-[src/ui/select_and_select_buttons_helpers.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L10)_
+[src/ui/select_and_select_buttons_helpers.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_and_select_buttons_helpers.ts#L10)_
 
 Supported value types for [SelectOption](_airtable_blocks_ui__select.md#selectoption).
 
@@ -327,7 +327,7 @@ Supported value types for [SelectOption](_airtable_blocks_ui__select.md#selectop
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/select.tsx:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select.tsx#L228)_
+[src/ui/select.tsx:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select.tsx#L228)_
 
 Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
 
@@ -374,7 +374,7 @@ function ColorPicker() {
 `ref`: React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/select_synced.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_synced.tsx#L46)_
+[src/ui/select_synced.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_synced.tsx#L46)_
 
 A wrapper around the [Select](_airtable_blocks_ui__select.md#select) component that syncs with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

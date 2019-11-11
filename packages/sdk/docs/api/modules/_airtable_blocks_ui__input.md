@@ -29,7 +29,7 @@
 • **InputProps**:
 
 _Defined in
-[src/ui/input.tsx:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L205)_
+[src/ui/input.tsx:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L205)_
 
 Props for the [Input](_airtable_blocks_ui__input.md#input) component. Also accepts:
 
@@ -40,7 +40,7 @@ Props for the [Input](_airtable_blocks_ui__input.md#input) component. Also accep
 • **value**: _string_
 
 _Defined in
-[src/ui/input.tsx:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L207)_
+[src/ui/input.tsx:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L207)_
 
 The input's current value.
 
@@ -51,7 +51,7 @@ The input's current value.
 • **InputStyleProps**:
 
 _Defined in
-[src/ui/input.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L71)_
+[src/ui/input.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L71)_
 
 Style props shared between the [Input](_airtable_blocks_ui__input.md#input) and
 [InputSynced](_airtable_blocks_ui__input.md#inputsynced) components. Accepts:
@@ -70,7 +70,7 @@ Style props shared between the [Input](_airtable_blocks_ui__input.md#input) and
 • **InputSyncedProps**:
 
 _Defined in
-[src/ui/input_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L16)_
+[src/ui/input_synced.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input_synced.tsx#L16)_
 
 Props for the [Input](_airtable_blocks_ui__input.md#input) and
 [InputSynced](_airtable_blocks_ui__input.md#inputsynced) components. Also accepts:
@@ -82,7 +82,7 @@ Props for the [Input](_airtable_blocks_ui__input.md#input) and
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/input_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L18)_
+[src/ui/input_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input_synced.tsx#L18)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The input value will always reflect the value stored in
@@ -96,7 +96,7 @@ value will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig)
 • **SharedInputProps**:
 
 _Defined in
-[src/ui/input.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L104)_
+[src/ui/input.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L104)_
 
 Props shared between the [Input](_airtable_blocks_ui__input.md#input) and
 [InputSynced](_airtable_blocks_ui__input.md#inputsynced) components. Also accepts:
@@ -108,7 +108,7 @@ Props shared between the [Input](_airtable_blocks_ui__input.md#input) and
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:148](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L148)_
+[src/ui/input.tsx:148](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L148)_
 
 A space separated list of description element IDs.
 
@@ -117,7 +117,7 @@ A space separated list of description element IDs.
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L146)_
+[src/ui/input.tsx:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L146)_
 
 A space separated list of label element IDs.
 
@@ -126,7 +126,7 @@ A space separated list of label element IDs.
 • **autoComplete**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L138)_
+[src/ui/input.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L138)_
 
 The `autoComplete` attribute.
 
@@ -135,7 +135,7 @@ The `autoComplete` attribute.
 • **autoFocus**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L122)_
+[src/ui/input.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L122)_
 
 The `autoFocus` attribute.
 
@@ -144,7 +144,7 @@ The `autoFocus` attribute.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L142)_
+[src/ui/input.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L142)_
 
 Additional class names to apply to the input, separated by spaces.
 
@@ -153,7 +153,7 @@ Additional class names to apply to the input, separated by spaces.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L110)_
+[src/ui/input.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L110)_
 
 The `disabled` attribute.
 
@@ -162,7 +162,7 @@ The `disabled` attribute.
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L120)_
+[src/ui/input.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L120)_
 
 The `id` attribute.
 
@@ -171,7 +171,7 @@ The `id` attribute.
 • **max**? : _number | string_
 
 _Defined in
-[src/ui/input.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L124)_
+[src/ui/input.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L124)_
 
 The `max` attribute.
 
@@ -180,7 +180,7 @@ The `max` attribute.
 • **maxLength**? : _undefined | number_
 
 _Defined in
-[src/ui/input.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L126)_
+[src/ui/input.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L126)_
 
 The `maxLength` attribute.
 
@@ -189,7 +189,7 @@ The `maxLength` attribute.
 • **min**? : _number | string_
 
 _Defined in
-[src/ui/input.tsx:150](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L150)_
+[src/ui/input.tsx:150](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L150)_
 
 The `min` attribute.
 
@@ -198,7 +198,7 @@ The `min` attribute.
 • **minLength**? : _undefined | number_
 
 _Defined in
-[src/ui/input.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L130)_
+[src/ui/input.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L130)_
 
 The `minLength` attribute.
 
@@ -207,7 +207,7 @@ The `minLength` attribute.
 • **name**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L118)_
+[src/ui/input.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L118)_
 
 The `name` attribute.
 
@@ -216,7 +216,7 @@ The `name` attribute.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/input.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L144)_
+[src/ui/input.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L144)_
 
 A function to be called when the input changes.
 
@@ -225,7 +225,7 @@ A function to be called when the input changes.
 • **pattern**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L134)_
+[src/ui/input.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L134)_
 
 The `pattern` attribute.
 
@@ -234,7 +234,7 @@ The `pattern` attribute.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/input.tsx:128](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L128)_
+[src/ui/input.tsx:128](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L128)_
 
 The placeholder for the input.
 
@@ -243,7 +243,7 @@ The placeholder for the input.
 • **readOnly**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:136](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L136)_
+[src/ui/input.tsx:136](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L136)_
 
 The `readOnly` attribute.
 
@@ -252,7 +252,7 @@ The `readOnly` attribute.
 • **required**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L112)_
+[src/ui/input.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L112)_
 
 The `required` attribute.
 
@@ -261,7 +261,7 @@ The `required` attribute.
 • **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__control_sizes.md#controlsizeprop)_
 
 _Defined in
-[src/ui/input.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L106)_
+[src/ui/input.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L106)_
 
 The size of the input. Defaults to `default`.
 
@@ -270,7 +270,7 @@ The size of the input. Defaults to `default`.
 • **spellCheck**? : _undefined | false | true_
 
 _Defined in
-[src/ui/input.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L114)_
+[src/ui/input.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L114)_
 
 The `spellcheck` attribute.
 
@@ -279,7 +279,7 @@ The `spellcheck` attribute.
 • **step**? : _number | string_
 
 _Defined in
-[src/ui/input.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L132)_
+[src/ui/input.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L132)_
 
 The `step` attribute.
 
@@ -288,7 +288,7 @@ The `step` attribute.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/input.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L140)_
+[src/ui/input.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L140)_
 
 Additional styles to apply to the input.
 
@@ -297,7 +297,7 @@ Additional styles to apply to the input.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/input.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L116)_
+[src/ui/input.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L116)_
 
 The `tabindex` attribute.
 
@@ -307,7 +307,7 @@ The `tabindex` attribute.
 "month" | "password" | "search" | "tel" | "url" | "week"_
 
 _Defined in
-[src/ui/input.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L108)_
+[src/ui/input.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L108)_
 
 The `type` for the input. Defaults to `text`.
 
@@ -319,7 +319,7 @@ The `type` for the input. Defaults to `text`.
 "month" | "password" | "search" | "tel" | "url" | "week"_
 
 _Defined in
-[src/ui/input.tsx:170](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L170)_
+[src/ui/input.tsx:170](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L170)_
 
 Supported types for the [Input](_airtable_blocks_ui__input.md#input) component. See
 [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#%3Cinput%3E_types) for more
@@ -333,7 +333,7 @@ information.
 "password" | "search" | "tel" | "url" | "week"_
 
 _Defined in
-[src/ui/input.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L58)_
+[src/ui/input.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L58)_
 
 ## Functions
 
@@ -343,7 +343,7 @@ _Defined in
 React.Ref‹HTMLInputElement›): _Element_
 
 _Defined in
-[src/ui/input.tsx:235](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input.tsx#L235)_
+[src/ui/input.tsx:235](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input.tsx#L235)_
 
 An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
 
@@ -387,7 +387,7 @@ function HelloSomeone() {
 `ref`: React.Ref‹HTMLInputElement›): _Element_
 
 _Defined in
-[src/ui/input_synced.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/input_synced.tsx#L39)_
+[src/ui/input_synced.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/input_synced.tsx#L39)_
 
 A wrapper around the [Input](_airtable_blocks_ui__input.md#input) component that syncs with
 [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

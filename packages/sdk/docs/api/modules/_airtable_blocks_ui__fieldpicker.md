@@ -23,7 +23,7 @@
 • **FieldPickerProps**:
 
 _Defined in
-[src/ui/field_picker.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L48)_
+[src/ui/field_picker.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L48)_
 
 Props for the [FieldPicker](_airtable_blocks_ui__fieldpicker.md#fieldpicker) component. Also
 accepts:
@@ -35,7 +35,7 @@ accepts:
 • **field**? : _[Field](_airtable_blocks_models__field.md#field) | null_
 
 _Defined in
-[src/ui/field_picker.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L50)_
+[src/ui/field_picker.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L50)_
 
 The selected field model.
 
@@ -46,7 +46,7 @@ The selected field model.
 • **FieldPickerSyncedProps**:
 
 _Defined in
-[src/ui/field_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L17)_
+[src/ui/field_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker_synced.tsx#L17)_
 
 Props for the [FieldPickerSynced](_airtable_blocks_ui__fieldpicker.md#fieldpickersynced) component.
 Also accepts:
@@ -58,7 +58,7 @@ Also accepts:
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/field_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L19)_
+[src/ui/field_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker_synced.tsx#L19)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected field will always reflect the field id stored in
@@ -72,7 +72,7 @@ will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 • **SharedFieldPickerProps**:
 
 _Defined in
-[src/ui/field_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L19)_
+[src/ui/field_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L19)_
 
 Props shared between the [FieldPicker](_airtable_blocks_ui__fieldpicker.md#fieldpicker) and
 [FieldPickerSynced](_airtable_blocks_ui__fieldpicker.md#fieldpickersynced) components. Also accepts:
@@ -84,7 +84,7 @@ Props shared between the [FieldPicker](_airtable_blocks_ui__fieldpicker.md#field
 • **allowedTypes**? : _Array‹[FieldType](_airtable_blocks_models__field.md#fieldtype)›_
 
 _Defined in
-[src/ui/field_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L23)_
+[src/ui/field_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L23)_
 
 An array indicating which field types can be selected.
 
@@ -93,7 +93,7 @@ An array indicating which field types can be selected.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/field_picker.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L29)_
+[src/ui/field_picker.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L29)_
 
 A function to be called when the selected field changes.
 
@@ -102,7 +102,7 @@ A function to be called when the selected field changes.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/field_picker.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L27)_
+[src/ui/field_picker.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L27)_
 
 The placeholder text when no field is selected.
 
@@ -111,7 +111,7 @@ The placeholder text when no field is selected.
 • **shouldAllowPickingNone**? : _undefined | false | true_
 
 _Defined in
-[src/ui/field_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L25)_
+[src/ui/field_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L25)_
 
 If set to `true`, the user can unset the selected field.
 
@@ -120,7 +120,7 @@ If set to `true`, the user can unset the selected field.
 • **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
 
 _Defined in
-[src/ui/field_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L21)_
+[src/ui/field_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L21)_
 
 The parent table model to select fields from. If `null` or `undefined`, the picker won't render.
 
@@ -132,7 +132,7 @@ The parent table model to select fields from. If `null` or `undefined`, the pick
 `ref`: React.Ref‹HTMLSelectElement›): _null | Element_
 
 _Defined in
-[src/ui/field_picker.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker.tsx#L105)_
+[src/ui/field_picker.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker.tsx#L105)_
 
 Dropdown menu component for selecting fields.
 
@@ -206,7 +206,7 @@ function Block() {
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/field_picker_synced.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/field_picker_synced.tsx#L73)_
+[src/ui/field_picker_synced.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/field_picker_synced.tsx#L73)_
 
 A wrapper around the [FieldPicker](_airtable_blocks_ui__fieldpicker.md#fieldpicker) component that
 syncs with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

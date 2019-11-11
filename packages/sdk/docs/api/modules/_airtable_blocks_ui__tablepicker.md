@@ -23,7 +23,7 @@
 • **SharedTablePickerProps**:
 
 _Defined in
-[src/ui/table_picker.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L16)_
+[src/ui/table_picker.tsx:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L16)_
 
 Props shared between the [TablePicker](_airtable_blocks_ui__tablepicker.md#tablepicker) and
 [TablePickerSynced](_airtable_blocks_ui__tablepicker.md#tablepickersynced) components. Also accepts:
@@ -35,7 +35,7 @@ Props shared between the [TablePicker](_airtable_blocks_ui__tablepicker.md#table
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/table_picker.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L22)_
+[src/ui/table_picker.tsx:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L22)_
 
 A function to be called when the selected table changes.
 
@@ -44,7 +44,7 @@ A function to be called when the selected table changes.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/table_picker.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L20)_
+[src/ui/table_picker.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L20)_
 
 The placeholder text when no table is selected.
 
@@ -53,7 +53,7 @@ The placeholder text when no table is selected.
 • **shouldAllowPickingNone**? : _undefined | false | true_
 
 _Defined in
-[src/ui/table_picker.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L18)_
+[src/ui/table_picker.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L18)_
 
 If set to `true`, the user can unset the selected table.
 
@@ -64,7 +64,7 @@ If set to `true`, the user can unset the selected table.
 • **TablePickerProps**:
 
 _Defined in
-[src/ui/table_picker.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L39)_
+[src/ui/table_picker.tsx:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L39)_
 
 Props for the [TablePicker](_airtable_blocks_ui__tablepicker.md#tablepicker) component. Also
 accepts:
@@ -76,7 +76,7 @@ accepts:
 • **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
 
 _Defined in
-[src/ui/table_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L41)_
+[src/ui/table_picker.tsx:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L41)_
 
 The selected table model.
 
@@ -87,7 +87,7 @@ The selected table model.
 • **TablePickerSyncedProps**:
 
 _Defined in
-[src/ui/table_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L17)_
+[src/ui/table_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker_synced.tsx#L17)_
 
 Props for the [TablePickerSynced](_airtable_blocks_ui__tablepicker.md#tablepickersynced) component.
 Also accepts:
@@ -99,7 +99,7 @@ Also accepts:
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/table_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L19)_
+[src/ui/table_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker_synced.tsx#L19)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected table will always reflect the table id stored in
@@ -114,7 +114,7 @@ will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 `ref`: React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/table_picker.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker.tsx#L75)_
+[src/ui/table_picker.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker.tsx#L75)_
 
 Dropdown menu component for selecting tables.
 
@@ -167,7 +167,7 @@ function Block() {
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/table_picker_synced.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/table_picker_synced.tsx#L60)_
+[src/ui/table_picker_synced.tsx:60](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/table_picker_synced.tsx#L60)_
 
 A wrapper around the [TablePicker](_airtable_blocks_ui__tablepicker.md#tablepicker) component that
 syncs with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

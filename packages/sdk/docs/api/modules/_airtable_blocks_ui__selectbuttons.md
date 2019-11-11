@@ -24,7 +24,7 @@
 • **SelectButtonsProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L147)_
+[src/ui/select_buttons.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L147)_
 
 Props for the [SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons) component. Also
 accepts:
@@ -36,7 +36,7 @@ accepts:
 • **value**: _[SelectOptionValue](_airtable_blocks_ui__select.md#selectoptionvalue)_
 
 _Defined in
-[src/ui/select_buttons.tsx:149](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L149)_
+[src/ui/select_buttons.tsx:149](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L149)_
 
 The value of the selected option.
 
@@ -47,7 +47,7 @@ The value of the selected option.
 • **SelectButtonsStyleProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L67)_
+[src/ui/select_buttons.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L67)_
 
 Style props shared between the [SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons)
 and [SelectButtonsSynced](_airtable_blocks_ui__selectbuttons.md#selectbuttonssynced) components.
@@ -67,7 +67,7 @@ Accepts:
 • **SelectButtonsSyncedProps**:
 
 _Defined in
-[src/ui/select_buttons_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L18)_
+[src/ui/select_buttons_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons_synced.tsx#L18)_
 
 Props for the [SelectButtonsSynced](_airtable_blocks_ui__selectbuttons.md#selectbuttonssynced)
 component. Also accepts:
@@ -79,7 +79,7 @@ component. Also accepts:
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/select_buttons_synced.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L20)_
+[src/ui/select_buttons_synced.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons_synced.tsx#L20)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected option will always reflect the value stored in
@@ -93,7 +93,7 @@ will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 • **SharedSelectButtonsProps**:
 
 _Defined in
-[src/ui/select_buttons.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L99)_
+[src/ui/select_buttons.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L99)_
 
 Props shared between the [SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons) and
 [SelectButtonsSynced](_airtable_blocks_ui__selectbuttons.md#selectbuttonssynced) components. Also
@@ -106,7 +106,7 @@ accepts:
 • **aria-describedby**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L117)_
+[src/ui/select_buttons.tsx:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L117)_
 
 A space separated list of description element IDs.
 
@@ -115,7 +115,7 @@ A space separated list of description element IDs.
 • **aria-label**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L113)_
+[src/ui/select_buttons.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L113)_
 
 The `aria-label` attribute. Use this if the select is not referenced by a label element.
 
@@ -124,7 +124,7 @@ The `aria-label` attribute. Use this if the select is not referenced by a label 
 • **aria-labelledby**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L115)_
+[src/ui/select_buttons.tsx:115](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L115)_
 
 A space separated list of label element IDs.
 
@@ -133,7 +133,7 @@ A space separated list of label element IDs.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/select_buttons.tsx:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L107)_
+[src/ui/select_buttons.tsx:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L107)_
 
 Additional class names to apply to the select.
 
@@ -142,7 +142,7 @@ Additional class names to apply to the select.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/select_buttons.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L105)_
+[src/ui/select_buttons.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L105)_
 
 If set to `true`, the user cannot interact with the select.
 
@@ -151,7 +151,7 @@ If set to `true`, the user cannot interact with the select.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/select_buttons.tsx:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L103)_
+[src/ui/select_buttons.tsx:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L103)_
 
 A function to be called when the selected option changes.
 
@@ -160,7 +160,7 @@ A function to be called when the selected option changes.
 • **options**: _Array‹[SelectOption](_airtable_blocks_ui__select.md#selectoption)›_
 
 _Defined in
-[src/ui/select_buttons.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L101)_
+[src/ui/select_buttons.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L101)_
 
 The list of select options.
 
@@ -169,7 +169,7 @@ The list of select options.
 • **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__control_sizes.md#controlsizeprop)_
 
 _Defined in
-[src/ui/select_buttons.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L109)_
+[src/ui/select_buttons.tsx:109](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L109)_
 
 The size of the select buttons.
 
@@ -178,7 +178,7 @@ The size of the select buttons.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/select_buttons.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L111)_
+[src/ui/select_buttons.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L111)_
 
 Additional styles to apply to the select.
 
@@ -191,7 +191,7 @@ Additional styles to apply to the select.
 React.Ref‹HTMLDivElement›): _Element_
 
 _Defined in
-[src/ui/select_buttons.tsx:176](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons.tsx#L176)_
+[src/ui/select_buttons.tsx:176](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons.tsx#L176)_
 
 A segmented control for selecting one value from a set of options.
 
@@ -235,7 +235,7 @@ function ChartTypePicker() {
 React.Ref‹HTMLDivElement›): _Element_
 
 _Defined in
-[src/ui/select_buttons_synced.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/select_buttons_synced.tsx#L45)_
+[src/ui/select_buttons_synced.tsx:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/select_buttons_synced.tsx#L45)_
 
 A wrapper around the [SelectButtons](_airtable_blocks_ui__selectbuttons.md#selectbuttons) component
 that syncs with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

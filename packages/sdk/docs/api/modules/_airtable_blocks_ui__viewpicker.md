@@ -23,7 +23,7 @@
 • **SharedViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L19)_
+[src/ui/view_picker.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L19)_
 
 Props shared between the [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpicker) and
 [ViewPickerSynced](_airtable_blocks_ui__viewpicker.md#viewpickersynced) components. Also accepts:
@@ -35,7 +35,7 @@ Props shared between the [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpic
 • **allowedTypes**? : _Array‹[ViewType](_airtable_blocks_models__view.md#viewtype)›_
 
 _Defined in
-[src/ui/view_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L23)_
+[src/ui/view_picker.tsx:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L23)_
 
 An array indicating which view types can be selected.
 
@@ -44,7 +44,7 @@ An array indicating which view types can be selected.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/view_picker.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L29)_
+[src/ui/view_picker.tsx:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L29)_
 
 A function to be called when the selected view changes.
 
@@ -53,7 +53,7 @@ A function to be called when the selected view changes.
 • **placeholder**? : _undefined | string_
 
 _Defined in
-[src/ui/view_picker.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L27)_
+[src/ui/view_picker.tsx:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L27)_
 
 The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 
@@ -62,7 +62,7 @@ The placeholder text when no view is selected. Defaults to `'Pick a view...'`
 • **shouldAllowPickingNone**? : _undefined | false | true_
 
 _Defined in
-[src/ui/view_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L25)_
+[src/ui/view_picker.tsx:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L25)_
 
 If set to `true`, the user can unset the selected view.
 
@@ -71,7 +71,7 @@ If set to `true`, the user can unset the selected view.
 • **table**? : _[Table](_airtable_blocks_models__table.md#table) | null_
 
 _Defined in
-[src/ui/view_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L21)_
+[src/ui/view_picker.tsx:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L21)_
 
 The parent table model to select views from. If `null` or `undefined`, the picker won't render.
 
@@ -82,7 +82,7 @@ The parent table model to select views from. If `null` or `undefined`, the picke
 • **ViewPickerProps**:
 
 _Defined in
-[src/ui/view_picker.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L48)_
+[src/ui/view_picker.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L48)_
 
 Props for the [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpicker) component. Also accepts:
 
@@ -93,7 +93,7 @@ Props for the [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpicker) compon
 • **view**? : _[View](_airtable_blocks_models__view.md#view) | null_
 
 _Defined in
-[src/ui/view_picker.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L50)_
+[src/ui/view_picker.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L50)_
 
 The selected view model.
 
@@ -104,7 +104,7 @@ The selected view model.
 • **ViewPickerSyncedProps**:
 
 _Defined in
-[src/ui/view_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L17)_
+[src/ui/view_picker_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker_synced.tsx#L17)_
 
 Props for the [ViewPickerSynced](_airtable_blocks_ui__viewpicker.md#viewpickersynced) component.
 Also accepts:
@@ -116,7 +116,7 @@ Also accepts:
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L19)_
+[src/ui/view_picker_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker_synced.tsx#L19)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected view will always reflect the view id stored in
@@ -131,7 +131,7 @@ will update [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 `ref`: React.Ref‹HTMLSelectElement›): _null | Element_
 
 _Defined in
-[src/ui/view_picker.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker.tsx#L101)_
+[src/ui/view_picker.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker.tsx#L101)_
 
 Dropdown menu component for selecting views.
 
@@ -201,7 +201,7 @@ function Block() {
 React.Ref‹HTMLSelectElement›): _Element_
 
 _Defined in
-[src/ui/view_picker_synced.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/ui/view_picker_synced.tsx#L69)_
+[src/ui/view_picker_synced.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/view_picker_synced.tsx#L69)_
 
 A wrapper around the [ViewPicker](_airtable_blocks_ui__viewpicker.md#viewpicker) component that
 syncs with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).

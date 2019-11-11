@@ -20,7 +20,7 @@
 • **Session**:
 
 _Defined in
-[src/models/session.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L47)_
+[src/models/session.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/session.ts#L47)_
 
 Model class representing the current user's session.
 
@@ -41,7 +41,7 @@ if (session.currentUser !== null) {
 • **currentUser**:
 
 _Defined in
-[src/models/session.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L96)_
+[src/models/session.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/session.ts#L96)_
 
 The current user, or `null` if the block is running in a publicly shared base.
 
@@ -64,7 +64,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -76,7 +76,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -93,7 +93,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -110,7 +110,7 @@ _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/watchable.ts#L107)_
+[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L107)_
 
 Unwatch keys watched with `.watch`.
 
@@ -139,7 +139,7 @@ _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/watchable.ts#L61)_
+[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L61)_
 
 Get notified of changes to the model.
 
@@ -164,7 +164,7 @@ the array of keys that were watched
 Ƭ **WatchableSessionKey**: _"permissionLevel" | "currentUser"_
 
 _Defined in
-[src/models/session.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.34/packages/sdk/src/models/session.ts#L31)_
+[src/models/session.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/session.ts#L31)_
 
 Watchable keys in [Session](_airtable_blocks_models__session.md#session).
 
