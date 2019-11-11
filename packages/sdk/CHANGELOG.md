@@ -18,7 +18,7 @@ commit that affects the code in a way that consumers might care about should inc
         [style props](https://github.com/Airtable/blocks/blob/master/packages/sdk/docs/api/modules/_airtable_blocks_ui_system__all_style_props.md#allstylesprops).
     -   New components:
         -   `Text` and `Heading` for typography.
-        -   `Label` and `FormField` for labeling controls form fields.
+        -   `Label` and `FormField` for labeling controls or form fields.
         -   `TextButton` for buttons that can be rendered inline with text.
     -   **BREAKING**: `Toggle` has been renamed to `Switch`.
     -   **BREAKING**: `Button` and `Switch` no longer accept the `theme` prop. Instead, you can
