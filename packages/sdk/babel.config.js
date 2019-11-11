@@ -1,5 +1,3 @@
-// @noflow
-
 const targets = {
     node: '8.10',
     browsers: ['firefox >= 45', 'chrome >= 49', 'safari >= 10', 'edge >= 25'],
@@ -7,6 +5,7 @@ const targets = {
 
 module.exports = {
     presets: [
+        '@babel/typescript',
         [
             '@babel/env',
             {
@@ -19,8 +18,6 @@ module.exports = {
         '@babel/react',
     ],
     plugins: [
-        '@babel/syntax-flow',
-        '@babel/transform-flow-strip-types',
         '@babel/proposal-class-properties',
         '@babel/transform-runtime',
         ['transform-define', require('./global_constants')],

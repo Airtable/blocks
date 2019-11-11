@@ -693,25 +693,31 @@ documentation about each one:
 
 -   Part 1
 
-    -   [useBase](/packages/sdk/docs/api.md#usebase) hook to get the
-        [base](/packages/sdk/docs/api.md#base) object and subscribe to schema changes.
-    -   [base.getTableByName()](/packages/sdk/docs/api.md#gettablebyname) to get a
-        [table](/packages/sdk/docs/api.md#table) object.
-    -   [table.selectRecords()](/packages/sdk/docs/api.md#selectrecords),
-        [useRecords](/packages/sdk/docs/api.md#userecords) hook, and
-        [record.primaryCellValueAsString](/packages/sdk/docs/api.md#primarycellvalueasstring) to
-        read the records in a table.
-    -   [expandRecord()](/packages/sdk/docs/api.md#expandrecord) to expand records in Airtable.
+    -   [useBase](/packages/sdk/docs/api/modules/_airtable_blocks_ui__usebase.md) hook to get the
+        [base](/packages/sdk/docs/api/modules/_airtable_blocks_models__base.md) object and subscribe
+        to schema changes.
+    -   [base.getTableByName()](/packages/sdk/docs/api/modules/_airtable_blocks_models__base.md#gettablebyname)
+        to get a [table](/packages/sdk/docs/api/modules/_airtable_blocks_models__table.md) object.
+    -   [table.selectRecords()](/packages/sdk/docs/api/modules/_airtable_blocks_models__table.md#selectrecords),
+        [useRecords](/packages/sdk/docs/api/modules/_airtable_blocks_ui__userecords.md) hook, and
+        [record.primaryCellValueAsString](/packages/sdk/docs/api/modules/_airtable_blocks_models__record.md#primarycellvalueasstring)
+        to read the records in a table.
+    -   [expandRecord()](/packages/sdk/docs/api/modules/_airtable_blocks_ui__expandrecord.md) to
+        expand records in Airtable.
 
 -   Part 2
-    -   [base.getTableByNameIfExists()](/packages/sdk/docs/api.md#gettablebynameifexists) and
-        [base.getTableByIdIfExists()](/packages/sdk/docs/api.md#gettablebyidifexists)
-    -   [TablePicker](/packages/sdk/docs/api.md#tablepicker) component.
+    -   [base.getTableByNameIfExists()](/packages/sdk/docs/api/modules/_airtable_blocks_models__base.md#gettablebynameifexists)
+        and
+        [base.getTableByIdIfExists()](/packages/sdk/docs/api/modules/_airtable_blocks_models__base.md#gettablebyidifexists)
+    -   [TablePicker](/packages/sdk/docs/api/modules/_airtable_blocks_ui__tablepicker.md#tablepicker)
+        component.
 -   Part 3
-    -   [globalConfig](/packages/sdk/docs/api.md#globalconfig) to store block configuration.
-    -   [useGlobalConfig](/packages/sdk/docs/api.md#useglobalconfig) hook to watch changes to
-        globalConfig.
-    -   [TablePickerSynced](/packages/sdk/docs/api.md#tablepickersynced) component.
+    -   [globalConfig](/packages/sdk/docs/api/modules/_airtable_blocks__globalconfig.md) to store
+        block configuration.
+    -   [useGlobalConfig](/packages/sdk/docs/api/modules/_airtable_blocks_ui__useglobalconfig.md)
+        hook to watch changes to globalConfig.
+    -   [TablePickerSynced](/packages/sdk/docs/api/modules/_airtable_blocks_ui__tablepicker.md#tablepickersynced)
+        component.
 
 ## Extra credit
 

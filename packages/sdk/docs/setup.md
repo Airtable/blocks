@@ -90,8 +90,7 @@ Now it's time to give our new block a name. We'll call it “Hello Blocks”.
 Click “Create block” to continue.
 
 Next, you’ll need to follow the on-screen instructions. First, open your terminal. Next, follow
-on-screen instructions to install the Airtable Blocks command line
-tool.
+on-screen instructions to install the Airtable Blocks command line tool.
 
 > _NOTE:_ If this fails with an error like “@airtable/blocks-cli: Not found”, you likely lack
 > permissions to download the private package. Make sure that we’ve added you to the `@airtable` npm
@@ -104,15 +103,16 @@ The next screen will have you running `block init` with some additional argument
 entered your Airtable API key, the `block init` command will install dependencies and then your
 project will be ready! Run `cd hello_blocks`, then `block run` (as it says).
 
-In the terminal output, you’ll see something like “Your block is running locally at https://localhost:9000”.
+In the terminal output, you’ll see something like “Your block is running locally at
+https://localhost:9000”.
 
 Enter https://localhost:9000 as the block URL in Airtable.
 
 ![](/packages/sdk/docs/images/setup_6.png)
 
-The first time you do this, you may need to tell your browser that https://localhost:9000 is
-safe to visit.  Follow the on-screen instructions to do this. You may need to restart your browser.
-After restarting the browser, go back to the base, click your block's name, then click "Edit block".
+The first time you do this, you may need to tell your browser that https://localhost:9000 is safe to
+visit. Follow the on-screen instructions to do this. You may need to restart your browser. After
+restarting the browser, go back to the base, click your block's name, then click "Edit block".
 
 If you've done this correctly, you'll see your block appear!
 

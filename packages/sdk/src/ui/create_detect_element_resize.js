@@ -1,5 +1,8 @@
-// @noflow
+// @ts-nocheck
 
+/**
+ * @internal
+ */
 export default function createDetectElementResize(nonce) {
     var _window;
     if (typeof window !== 'undefined') {

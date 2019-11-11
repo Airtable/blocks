@@ -26,8 +26,7 @@ terms of the [developer preview agreement](/DEVELOPER_AGREEMENT.md).
 
 ### API documentation
 
-The [API reference](https://github.com/Airtable/blocks/tree/master/packages/sdk/docs/api.md)
-documents public methods and code examples.
+The [API reference](/packages/sdk/docs/api) documents public methods and code examples.
 
 ## Support
 

@@ -8,7 +8,7 @@
         ],
         "nohoist": [
             "{@airtable,@airtable-blocks-internal}/*/!(react|react-dom)",
-            "**/{@styled-system,@storybook,emotion,@emotion,csstype}/*"
+            "**/{@styled-system,@storybook,emotion,@emotion,csstype,@types}/*"
         ]
     },
     "devDependencies": {
@@ -19,9 +19,13 @@
         "react-dom": "^16.9.0",
         "release-it": "^12.3.3"
     },
+    "resolutions": {
+        "typescript": "^3.6.3"
+    },
     "scripts": {
-        "format": "prettier --write '**/*.{js,md,json,yml}'",
-        "test": "yarn workspaces run test"
+        "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",
+        "test": "yarn workspaces run test",
+        "airbuild": "yarn workspaces run airbuild"
     },
     "husky": {
         "hooks": {
