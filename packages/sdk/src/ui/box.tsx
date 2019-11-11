@@ -152,7 +152,7 @@ const ForwardedRefBox = React.forwardRef<HTMLElement, BoxProps>(Box);
     style: PropTypes.object,
     tabIndex: PropTypes.number,
     role: PropTypes.string,
-    ...dataAttributesPropType,
+    dataAttributes: dataAttributesPropType,
     ...ariaPropTypes,
     ...tooltipAnchorPropTypes,
     ...allStylesPropTypes,

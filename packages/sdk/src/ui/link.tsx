@@ -301,10 +301,10 @@ ForwardedRefLink.propTypes = {
     className: PropTypes.string,
     style: PropTypes.object,
     children: PropTypes.node,
+    dataAttributes: dataAttributesPropType,
     ...tooltipAnchorPropTypes,
     ...linkStylePropTypes,
     ...ariaPropTypes,
-    ...dataAttributesPropType,
 };
 
 ForwardedRefLink.displayName = 'Link';
