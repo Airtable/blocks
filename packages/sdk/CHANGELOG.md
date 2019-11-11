@@ -30,6 +30,9 @@ commit that affects the code in a way that consumers might care about should inc
         components are now functional components that use the
         [`React.forwardRef`](https://reactjs.org/docs/forwarding-refs.html) API.
     -   `SelectButtons` is now keyboard/screenreader accessible.
+-   Typescript
+    -   **BREAKING** The SDK has been migrated from Flow to TypeScript. We no longer provide flow
+        type definitions with the release of the SDK. TypeScript definitions are provided instead.
 
 ## [0.0.34](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.33...@airtable/blocks@0.0.34) - 2019-10-04
 
