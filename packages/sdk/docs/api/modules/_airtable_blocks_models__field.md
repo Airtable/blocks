@@ -798,7 +798,7 @@ None
 • **Field**:
 
 _Defined in
-[src/models/field.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L41)_
+[src/models/field.ts:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L43)_
 
 Model class representing a field in a table.
 
@@ -817,7 +817,7 @@ console.log('The type of this field is', field.type);
 • **availableAggregators**:
 
 _Defined in
-[src/models/field.ts:182](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L182)_
+[src/models/field.ts:336](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L336)_
 
 A list of available aggregators given this field's configuration.
 
@@ -825,6 +825,22 @@ A list of available aggregators given this field's configuration.
 
 ```js
 const fieldAggregators = myField.availableAggregators;
+```
+
+### description
+
+• **description**:
+
+_Defined in
+[src/models/field.ts:325](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L325)_
+
+The description of the field, if it has one. Can be watched.
+
+**Example:**
+
+```js
+console.log(myField.description);
+// => 'This is my field'
 ```
 
 ### id
@@ -844,7 +860,7 @@ The ID for this model.
 • **isComputed**:
 
 _Defined in
-[src/models/field.ts:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L163)_
+[src/models/field.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L304)_
 
 `true` if this field is computed, `false` otherwise. A field is "computed" if it's value is not set
 by user input (e.g. autoNumber, formula, etc.). Can be watched
@@ -880,7 +896,7 @@ data.
 • **isPrimaryField**:
 
 _Defined in
-[src/models/field.ts:171](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L171)_
+[src/models/field.ts:312](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L312)_
 
 `true` if this field is its parent table's primary field, `false` otherwise. Should never change
 because the primary field of a table cannot change.
@@ -890,7 +906,7 @@ because the primary field of a table cannot change.
 • **name**:
 
 _Defined in
-[src/models/field.ts:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L92)_
+[src/models/field.ts:233](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L233)_
 
 The name of the field. Can be watched.
 
@@ -906,7 +922,7 @@ console.log(myField.name);
 • **options**:
 
 _Defined in
-[src/models/field.ts:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L137)_
+[src/models/field.ts:278](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L278)_
 
 The configuration options of the field. The structure of the field's options depend on the field's
 type. Can be watched.
@@ -929,7 +945,7 @@ if (myField.type === fieldTypes.CURRENCY) {
 • **type**:
 
 _Defined in
-[src/models/field.ts:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L104)_
+[src/models/field.ts:245](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L245)_
 
 The type of the field. Can be watched.
 
@@ -945,7 +961,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:233](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L233)_
+[src/models/field.ts:387](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L387)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -976,7 +992,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 [AggregatorKey](_airtable_blocks_models__aggregators.md#aggregatorkey)): _boolean_
 
 _Defined in
-[src/models/field.ts:209](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L209)_
+[src/models/field.ts:363](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L363)_
 
 **Example:**
 
@@ -1122,10 +1138,10 @@ _Defined in
 
 ### WatchableFieldKey
 
-Ƭ **WatchableFieldKey**: _"name" | "type" | "options" | "isComputed"_
+Ƭ **WatchableFieldKey**: _"name" | "type" | "options" | "isComputed" | "description"_
 
 _Defined in
-[src/models/field.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L27)_
+[src/models/field.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L29)_
 
 All the watchable keys in a field.
 
@@ -1133,3 +1149,4 @@ All the watchable keys in a field.
 -   `type`
 -   `options`
 -   `isComputed`
+-   `description`

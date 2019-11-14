@@ -15,6 +15,7 @@ const WatchableFieldKeys = Object.freeze({
     type: 'type' as const,
     options: 'options' as const,
     isComputed: 'isComputed' as const,
+    description: 'description' as const,
 });
 
 /**
@@ -23,6 +24,7 @@ const WatchableFieldKeys = Object.freeze({
  * - `type`
  * - `options`
  * - `isComputed`
+ * - `description`
  */
 export type WatchableFieldKey = ObjectValues<typeof WatchableFieldKeys>;
 
@@ -171,6 +173,19 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     get isPrimaryField(): boolean {
         return this.id === this.parentTable.primaryField.id;
     }
+
+    /**
+     * The description of the field, if it has one. Can be watched.
+     *
+     * @example
+     * ```js
+     * console.log(myField.description);
+     * // => 'This is my field'
+     * ```
+     */
+    get description(): string | null {
+        return this._data.description;
+    }
     /**
      * A list of available aggregators given this field's configuration.
      *
@@ -290,6 +305,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         }
         if (dirtyPaths.typeOptions) {
             this._onChange(WatchableFieldKeys.options);
+        }
+        if (dirtyPaths.description) {
+            this._onChange(WatchableFieldKeys.description);
         }
     }
 }

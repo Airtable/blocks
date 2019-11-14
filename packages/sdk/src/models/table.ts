@@ -22,6 +22,7 @@ import RecordStore from './record_store';
 // to mirror the method/getter names on the model class.
 export const WatchableTableKeys = Object.freeze({
     name: 'name' as const,
+    description: 'description' as const,
     views: 'views' as const,
     fields: 'fields' as const,
 });
@@ -29,6 +30,7 @@ export const WatchableTableKeys = Object.freeze({
 /**
  * A key in {@link Table} that can be watched.
  * - `name`
+ * - `description`
  * - `views`
  * - `fields`
  */
@@ -112,6 +114,18 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      */
     get name(): string {
         return this._data.name;
+    }
+    /**
+     * The description of the table, if it has one. Can be watched.
+     *
+     * @example
+     * ```js
+     * console.log(myTable.description);
+     * // => 'This is my table'
+     * ```
+     */
+    get description(): string | null {
+        return this._data.description;
     }
     /**
      * The URL for the table. You can visit this URL in the browser to be taken to the table in the Airtable UI.
@@ -1420,6 +1434,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             }
         }
         if (dirtyPaths.lock) {
+            didTableSchemaChange = true;
+        }
+        if (dirtyPaths.description) {
+            this._onChange(WatchableTableKeys.description);
             didTableSchemaChange = true;
         }
         if (dirtyPaths.viewsById) {

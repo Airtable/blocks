@@ -20,6 +20,7 @@ export interface TableData {
     viewsById: ObjectMap<ViewId, ViewData>;
     // recordsById will be absent until the block explicity loads the table's data.
     recordsById?: ObjectMap<RecordId, RecordData>;
+    description: string | null;
     lock: TableLock | null;
 }
 
