@@ -95,12 +95,10 @@ export const inputStylePropTypes = {
 };
 
 /**
- * Props shared between the {@link Input} and {@link InputSynced} components. Also accepts:
- * * {@link InputStyleProps}
+ * Props shared between the {@link Input} and {@link InputSynced} components.
  *
  * @noInheritDoc
  */
-// TODO (stephen): inherit shared props without inheriting style props
 export interface SharedInputProps extends InputStyleProps, TooltipAnchorProps<HTMLInputElement> {
     /** The size of the input. Defaults to `default`. */
     size?: ControlSizeProp;
@@ -198,9 +196,7 @@ export const sharedInputPropTypes = {
 
 /**
  * Props for the {@link Input} component. Also accepts:
- * * {@link SharedInputProps}
- *
- * @noInheritDoc
+ * * {@link InputStyleProps}
  */
 interface InputProps extends SharedInputProps {
     /** The input's current value. */

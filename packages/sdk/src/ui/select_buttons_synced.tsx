@@ -11,9 +11,7 @@ import useSynced from './use_synced';
 
 /**
  * Props for the {@link SelectButtonsSynced} component. Also accepts:
- * * {@link SharedSelectButtonsProps}
- *
- * @noInheritDoc
+ * * {@link SelectButtonsStyleProps}
  */
 interface SelectButtonsSyncedProps extends SharedSelectButtonsProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new option will update {@link GlobalConfig}. */

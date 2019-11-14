@@ -8,9 +8,7 @@ import {IconName} from './icon_config';
 
 /**
  * Props for the {@link FieldIcon} component. Also accepts:
- * * {@link SharedIconProps}
- *
- * @noInheritDoc
+ * * {@link IconStyleProps}
  */
 // TODO (stephen): inherit shared props without inheriting style props
 interface FieldIconProps extends SharedIconProps {

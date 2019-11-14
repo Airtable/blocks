@@ -8,9 +8,7 @@ import useSynced from './use_synced';
 
 /**
  * Props for the {@link SelectSynced} component. Also accepts:
- * * {@link SharedSelectProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 interface SelectSyncedProps extends SharedSelectProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new option will update {@link GlobalConfig}. */
