@@ -49,7 +49,7 @@ function DisplayOptions() {
 • **ColorPaletteSynced**:
 
 _Defined in
-[src/ui/color_palette_synced.tsx:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L43)_
+[src/ui/color_palette_synced.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L42)_
 
 A wrapper around the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) component
 that syncs with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
@@ -188,7 +188,7 @@ Style props shared between the [ColorPalette](_airtable_blocks_ui__colorpalette.
 • **ColorPaletteSyncedProps**:
 
 _Defined in
-[src/ui/color_palette_synced.tsx:18](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L18)_
+[src/ui/color_palette_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L17)_
 
 Props for the [ColorPaletteSynced](_airtable_blocks_ui__colorpalette.md#colorpalettesynced)
 component. Also accepts:
@@ -236,7 +236,7 @@ If set to `true`, the color palette will not allow color selection.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/color_palette_synced.tsx:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L20)_
+[src/ui/color_palette_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L19)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected color will always reflect the value stored in
