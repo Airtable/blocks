@@ -571,7 +571,7 @@ function TodoBlock() {
                 table={table}
                 onChange={newTable => {
 -                   setTableId(newTable.id);
-+                   globalConfig.set('selectedTableId', newTable.id);
++                   globalConfig.setAsync('selectedTableId', newTable.id);
                 }}
             />
             {tasks}
@@ -620,7 +620,8 @@ the table you were using. Much better!
 
 There’s a bug in the changes we just made. Read-only and comment-only collaborators aren’t allowed
 to update globalConfig, so if they try changing the selected table our block will crash. You can try
-this out by clicking “Simulate,” then choosing “Read” or “Comment” from the dropdown:
+this out by opening the “Advanced” tab of the block developer tools, then choosing “Read” or
+“Comment” from the “Permissions” dropdown:
 
 ![](/packages/sdk/docs/images/tutorial_todo_5.gif)
 
@@ -664,7 +665,7 @@ function TodoBlock() {
 -           <TablePicker
 -               table={table}
 -               onChange={newTable => {
--                   globalConfig.set('selectedTableId', newTable.id);
+-                   globalConfig.setAsync('selectedTableId', newTable.id);
 -               }}
 -           />
 +           <TablePickerSynced globalConfigKey="selectedTableId" />
