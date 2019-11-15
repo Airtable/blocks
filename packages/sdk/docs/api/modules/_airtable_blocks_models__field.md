@@ -817,7 +817,7 @@ console.log('The type of this field is', field.type);
 • **availableAggregators**:
 
 _Defined in
-[src/models/field.ts:336](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L336)_
+[src/models/field.ts:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L197)_
 
 A list of available aggregators given this field's configuration.
 
@@ -832,7 +832,7 @@ const fieldAggregators = myField.availableAggregators;
 • **description**:
 
 _Defined in
-[src/models/field.ts:325](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L325)_
+[src/models/field.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L186)_
 
 The description of the field, if it has one. Can be watched.
 
@@ -860,7 +860,7 @@ The ID for this model.
 • **isComputed**:
 
 _Defined in
-[src/models/field.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L304)_
+[src/models/field.ts:165](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L165)_
 
 `true` if this field is computed, `false` otherwise. A field is "computed" if it's value is not set
 by user input (e.g. autoNumber, formula, etc.). Can be watched
@@ -896,7 +896,7 @@ data.
 • **isPrimaryField**:
 
 _Defined in
-[src/models/field.ts:312](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L312)_
+[src/models/field.ts:173](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L173)_
 
 `true` if this field is its parent table's primary field, `false` otherwise. Should never change
 because the primary field of a table cannot change.
@@ -906,7 +906,7 @@ because the primary field of a table cannot change.
 • **name**:
 
 _Defined in
-[src/models/field.ts:233](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L233)_
+[src/models/field.ts:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L94)_
 
 The name of the field. Can be watched.
 
@@ -922,7 +922,7 @@ console.log(myField.name);
 • **options**:
 
 _Defined in
-[src/models/field.ts:278](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L278)_
+[src/models/field.ts:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L139)_
 
 The configuration options of the field. The structure of the field's options depend on the field's
 type. Can be watched.
@@ -945,7 +945,7 @@ if (myField.type === fieldTypes.CURRENCY) {
 • **type**:
 
 _Defined in
-[src/models/field.ts:245](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L245)_
+[src/models/field.ts:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L106)_
 
 The type of the field. Can be watched.
 
@@ -961,7 +961,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:387](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L387)_
+[src/models/field.ts:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L248)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -992,7 +992,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 [AggregatorKey](_airtable_blocks_models__aggregators.md#aggregatorkey)): _boolean_
 
 _Defined in
-[src/models/field.ts:363](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L363)_
+[src/models/field.ts:224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L224)_
 
 **Example:**
 
