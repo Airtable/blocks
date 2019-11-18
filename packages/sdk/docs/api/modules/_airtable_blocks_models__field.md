@@ -1037,7 +1037,7 @@ A string representation of the model for use in debugging.
 
 ▸ **unwatch**(`keys`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
 ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›, `callback`:
-Object, `context?`: FlowAnyObject | null):
+function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
 _Inherited from
@@ -1052,11 +1052,29 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                    | Description                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) &#124; ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)› | the keys to unwatch                                         |
-| `callback` | Object                                                                                                                                                                  | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                               | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey),
+...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                     |
+| --------- | ------------------------------------------------------------------------ |
+| `model`   | this                                                                     |
+| `key`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+| `...args` | Array‹any›                                                               |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:** _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
@@ -1066,7 +1084,7 @@ the array of keys that were unwatched
 
 ▸ **watch**(`keys`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
 ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›, `callback`:
-Object, `context?`: FlowAnyObject | null):
+function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
 _Inherited from
@@ -1081,11 +1099,29 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                    | Description                                   |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `keys`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) &#124; ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)› | the keys to watch                             |
-| `callback` | Object                                                                                                                                                                  | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                               | an optional context for `this` in `callback`. |
+▪ **keys**: _[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey),
+...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                     |
+| --------- | ------------------------------------------------------------------------ |
+| `model`   | this                                                                     |
+| `key`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+| `...args` | Array‹any›                                                               |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:** _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 

@@ -199,21 +199,29 @@ Whether the action is dangerous (potentially destructive or not easily reversibl
 
 ### onCancel
 
-• **onCancel**: _Object_
+• **onCancel**: _function_
 
 _Defined in
 [src/ui/confirmation_dialog.tsx:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/confirmation_dialog.tsx#L35)_
 
 Cancel button event handler. Handles click events and Space/Enter keypress events.
 
+#### Type declaration:
+
+▸ (): _unknown_
+
 ### onConfirm
 
-• **onConfirm**: _Object_
+• **onConfirm**: _function_
 
 _Defined in
 [src/ui/confirmation_dialog.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/confirmation_dialog.tsx#L37)_
 
 Confirm button event handler. Handles click events and Space/Enter keypress events.
+
+#### Type declaration:
+
+▸ (): _unknown_
 
 ### `Optional` style
 
@@ -355,12 +363,16 @@ Extra `className`s to apply to the dialog element, separated by spaces.
 
 ### onClose
 
-• **onClose**: _Object_
+• **onClose**: _function_
 
 _Defined in
 [src/ui/dialog.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/dialog.tsx#L52)_
 
 Callback function to fire when the dialog is closed.
+
+#### Type declaration:
+
+▸ (): _unknown_
 
 ### `Optional` style
 

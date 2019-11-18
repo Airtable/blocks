@@ -252,12 +252,16 @@ The vertical placement of the popover. Defaults to
 
 ### renderContent
 
-• **renderContent**: _Object_
+• **renderContent**: _function_
 
 _Defined in
 [src/ui/popover.tsx:81](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/popover.tsx#L81)_
 
 A function that returns the contents of the popover as React elements.
+
+#### Type declaration:
+
+▸ (): _ReactElement_
 
 ## Type aliases
 

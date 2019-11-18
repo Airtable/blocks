@@ -359,7 +359,7 @@ A promise that will resolve once the update is persisted to Airtable.
 ▸ **unwatch**(`keys`:
 [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) |
 ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›,
-`callback`: Object, `context?`: FlowAnyObject | null):
+`callback`: function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
 
 _Inherited from
@@ -374,11 +374,31 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                                                | Description                                                 |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) &#124; ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)› | the keys to unwatch                                         |
-| `callback` | Object                                                                                                                                                                                              | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                                                           | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)
+|
+ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`:
+[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey), ...`args`:
+Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                                   |
+| --------- | -------------------------------------------------------------------------------------- |
+| `model`   | this                                                                                   |
+| `key`     | [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) |
+| `...args` | Array‹any›                                                                             |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:**
 _Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
@@ -390,7 +410,7 @@ the array of keys that were unwatched
 ▸ **watch**(`keys`:
 [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) |
 ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›,
-`callback`: Object, `context?`: FlowAnyObject | null):
+`callback`: function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
 
 _Inherited from
@@ -405,11 +425,31 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                                                | Description                                   |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `keys`     | [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) &#124; ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)› | the keys to watch                             |
-| `callback` | Object                                                                                                                                                                                              | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                                                           | an optional context for `this` in `callback`. |
+▪ **keys**: _[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)
+|
+ReadonlyArray‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`:
+[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey), ...`args`:
+Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                                   |
+| --------- | -------------------------------------------------------------------------------------- |
+| `model`   | this                                                                                   |
+| `key`     | [WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey) |
+| `...args` | Array‹any›                                                                             |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:**
 _Array‹[WatchableGlobalConfigKey](_airtable_blocks__globalconfig.md#watchableglobalconfigkey)›_

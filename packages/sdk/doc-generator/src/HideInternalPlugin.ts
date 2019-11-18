@@ -12,6 +12,7 @@ import {CommentPlugin} from 'typedoc/dist/lib/converter/plugins';
 import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
 
 const internalTags = ['internal', 'hidden', 'ignore'];
+const defaultReflectionNames = ['__type', '__call'];
 
 const srcDirPath = path.resolve(__dirname, '../../src');
 
@@ -131,7 +132,11 @@ class HideInternalPlugin extends ConverterComponent {
 
     private isMemberOfInternalApi(reflection: Reflection, node: ts.Node | undefined): boolean {
         const name = reflection.name || '';
-        if (name.startsWith('_')) {
+        // Anonymous declarations' names default to '__type', and their signature name defaults to
+        // '__call'. This underscore check for private methods should not catch such reflections.
+        // Example
+        // interface SomeProps { onClick?: (e?: React.MouseEvent<HTMLElement>) => unknown; }
+        if (name.startsWith('_') && !defaultReflectionNames.includes(name)) {
             return true;
         }
 

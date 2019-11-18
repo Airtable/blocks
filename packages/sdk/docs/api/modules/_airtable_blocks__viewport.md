@@ -260,10 +260,14 @@ Width constraint in pixels, or null if no constraint
 
 ### UnsetFn
 
-Ƭ **UnsetFn**: _Object_
+Ƭ **UnsetFn**: _function_
 
 _Defined in
 [src/viewport.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L24)_
+
+#### Type declaration:
+
+▸ (): _void_
 
 ---
 
