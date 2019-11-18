@@ -21,7 +21,7 @@
 • **CollaboratorTokenProps**:
 
 _Defined in
-[src/ui/collaborator_token.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/collaborator_token.tsx#L55)_
+[src/ui/collaborator_token.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/collaborator_token.tsx#L55)_
 
 Props for the [CollaboratorToken](_airtable_blocks_ui__collaboratortoken.md#const-collaboratortoken)
 component. Also accepts:
@@ -33,7 +33,7 @@ component. Also accepts:
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/collaborator_token.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/collaborator_token.tsx#L59)_
+[src/ui/collaborator_token.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/collaborator_token.tsx#L59)_
 
 Additional class names to apply to the collaborator token.
 
@@ -42,7 +42,7 @@ Additional class names to apply to the collaborator token.
 • **collaborator**: _Partial‹[CollaboratorData](_airtable_blocks_models__base.md#collaboratordata)›_
 
 _Defined in
-[src/ui/collaborator_token.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/collaborator_token.tsx#L57)_
+[src/ui/collaborator_token.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/collaborator_token.tsx#L57)_
 
 An object representing a collaborator. You should not create these objects from scratch, but should
 instead grab them from base data.
@@ -52,7 +52,7 @@ instead grab them from base data.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/collaborator_token.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/collaborator_token.tsx#L61)_
+[src/ui/collaborator_token.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/collaborator_token.tsx#L61)_
 
 Additional styles to apply to the collaborator token.
 
@@ -63,7 +63,7 @@ Additional styles to apply to the collaborator token.
 • **CollaboratorTokenStyleProps**:
 
 _Defined in
-[src/ui/collaborator_token.tsx:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/collaborator_token.tsx#L35)_
+[src/ui/collaborator_token.tsx:35](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/collaborator_token.tsx#L35)_
 
 Style props for the
 [CollaboratorToken](_airtable_blocks_ui__collaboratortoken.md#const-collaboratortoken) component.
@@ -82,7 +82,7 @@ Accepts:
 _Element_
 
 _Defined in
-[src/ui/collaborator_token.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/collaborator_token.tsx#L82)_
+[src/ui/collaborator_token.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/collaborator_token.tsx#L82)_
 
 A component that shows a single collaborator in a small token, to be displayed inline or in a list
 of choices.

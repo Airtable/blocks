@@ -25,7 +25,7 @@
 • **Viewport**:
 
 _Defined in
-[src/viewport.ts:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L50)_
+[src/viewport.ts:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L50)_
 
 Information about the current viewport
 
@@ -40,7 +40,7 @@ import {viewport} from '@airtable/blocks';
 • **isFullscreen**:
 
 _Defined in
-[src/viewport.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L254)_
+[src/viewport.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L254)_
 
 `true` if the block is fullscreen, `false` otherwise.
 
@@ -49,7 +49,7 @@ _Defined in
 • **isSmallerThanMinSize**:
 
 _Defined in
-[src/viewport.ts:245](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L245)_
+[src/viewport.ts:245](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L245)_
 
 `true` if the block frame is smaller than `minSize`, `false` otherwise.
 
@@ -58,7 +58,7 @@ _Defined in
 • **maxFullscreenSize**:
 
 _Defined in
-[src/viewport.ts:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L120)_
+[src/viewport.ts:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L120)_
 
 The maximum dimensions of the block when it is in fullscreen mode. Returns the smallest set of
 dimensions added with [addMaxFullscreenSize](_airtable_blocks__viewport.md#addmaxfullscreensize).
@@ -72,7 +72,7 @@ constrained to be at least `minSize`.
 • **minSize**:
 
 _Defined in
-[src/viewport.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L184)_
+[src/viewport.ts:184](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L184)_
 
 The minimum dimensions of the block - if the viewport gets smaller than this size, an overlay will
 be shown asking the user to resize the block to be bigger.
@@ -85,7 +85,7 @@ is no minSize constraint on that dimension.
 • **size**:
 
 _Defined in
-[src/viewport.ts:262](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L262)_
+[src/viewport.ts:262](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L262)_
 
 The current size of the block frame.
 
@@ -98,7 +98,7 @@ Partial‹[ViewportSizeConstraint](_airtable_blocks__viewport.md#viewportsizecon
 _[UnsetFn](_airtable_blocks__viewport.md#unsetfn)_
 
 _Defined in
-[src/viewport.ts:156](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L156)_
+[src/viewport.ts:156](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L156)_
 
 Add a maximum fullscreen size constraint. Use `.maxFullscreenSize`` to get the aggregate of all
 added constraints.
@@ -120,7 +120,7 @@ Partial‹[ViewportSizeConstraint](_airtable_blocks__viewport.md#viewportsizecon
 _[UnsetFn](_airtable_blocks__viewport.md#unsetfn)_
 
 _Defined in
-[src/viewport.ts:211](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L211)_
+[src/viewport.ts:211](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L211)_
 
 Add a minimum frame size constraint. Use `.minSize`` to get the aggregate of all added constraints.
 
@@ -142,7 +142,7 @@ A function that can be called to remove the size constraint that was added.
 ▸ **enterFullscreenIfPossible**(): _void_
 
 _Defined in
-[src/viewport.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L103)_
+[src/viewport.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L103)_
 
 Request to enter fullscreen mode.
 
@@ -156,7 +156,7 @@ Watch `isFullscreen` to know if the request succeeded.
 ▸ **exitFullscreen**(): _void_
 
 _Defined in
-[src/viewport.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L107)_
+[src/viewport.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L107)_
 
 Request to exit fullscreen mode
 
@@ -173,7 +173,7 @@ _Overrides
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/viewport.ts:310](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L310)_
+[src/viewport.ts:310](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L310)_
 
 Unwatch keys watched with `.watch`.
 
@@ -202,7 +202,7 @@ _Overrides
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/viewport.ts:284](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L284)_
+[src/viewport.ts:284](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L284)_
 
 Get notified of changes to the viewport.
 
@@ -234,7 +234,7 @@ the array of keys that were watched
 • **ViewportSizeConstraint**:
 
 _Defined in
-[src/types/viewport.ts:4](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/viewport.ts#L4)_
+[src/types/viewport.ts:4](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/viewport.ts#L4)_
 
 A constraint on the size of the Block's viewport
 
@@ -243,7 +243,7 @@ A constraint on the size of the Block's viewport
 • **height**: _number | null_
 
 _Defined in
-[src/types/viewport.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/viewport.ts#L8)_
+[src/types/viewport.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/viewport.ts#L8)_
 
 Height constraint in pixels, or null if no constraint
 
@@ -252,7 +252,7 @@ Height constraint in pixels, or null if no constraint
 • **width**: _number | null_
 
 _Defined in
-[src/types/viewport.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/viewport.ts#L6)_
+[src/types/viewport.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/viewport.ts#L6)_
 
 Width constraint in pixels, or null if no constraint
 
@@ -260,10 +260,14 @@ Width constraint in pixels, or null if no constraint
 
 ### UnsetFn
 
-Ƭ **UnsetFn**: _Object_
+Ƭ **UnsetFn**: _function_
 
 _Defined in
-[src/viewport.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L24)_
+[src/viewport.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L24)_
+
+#### Type declaration:
+
+▸ (): _void_
 
 ---
 
@@ -272,7 +276,7 @@ _Defined in
 Ƭ **WatchableViewportKey**: _"isFullscreen" | "size" | "minSize" | "maxFullscreenSize"_
 
 _Defined in
-[src/viewport.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/viewport.ts#L22)_
+[src/viewport.ts:22](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/viewport.ts#L22)_
 
 Watchable keys in [Viewport](_airtable_blocks__viewport.md#viewport).
 

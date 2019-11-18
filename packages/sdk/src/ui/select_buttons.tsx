@@ -91,8 +91,7 @@ export const selectButtonsStylePropTypes = {
 };
 
 /**
- * Props shared between the {@link SelectButtons} and {@link SelectButtonsSynced} components. Also accepts:
- * * {@link SelectButtonsStyleProps}
+ * Props shared between the {@link SelectButtons} and {@link SelectButtonsSynced} components.
  *
  * @noInheritDoc
  */
@@ -139,9 +138,7 @@ export const sharedSelectButtonsPropTypes = {
 
 /**
  * Props for the {@link SelectButtons} component. Also accepts:
- * * {@link SharedSelectButtonsProps}
- *
- * @noInheritDoc
+ * * {@link SelectButtonsStyleProps}
  */
 interface SelectButtonsProps extends SharedSelectButtonsProps {
     /** The value of the selected option. */

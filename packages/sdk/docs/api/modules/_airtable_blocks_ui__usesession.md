@@ -16,7 +16,7 @@
 ▸ **useSession**(): _[Session](_airtable_blocks_models__session.md#session)_
 
 _Defined in
-[src/ui/use_session.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_session.ts#L34)_
+[src/ui/use_session.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_session.ts#L34)_
 
 A hook for connecting a React component to the current session. This returns a
 [Session](_airtable_blocks_models__session.md#session) instance and will re-render your component

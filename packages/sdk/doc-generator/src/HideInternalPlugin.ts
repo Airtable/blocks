@@ -12,6 +12,7 @@ import {CommentPlugin} from 'typedoc/dist/lib/converter/plugins';
 import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
 
 const internalTags = ['internal', 'hidden', 'ignore'];
+const defaultReflectionNames = ['__type', '__call'];
 
 const srcDirPath = path.resolve(__dirname, '../../src');
 
@@ -130,7 +131,7 @@ class HideInternalPlugin extends ConverterComponent {
 
     private isMemberOfInternalApi(reflection: Reflection, node: ts.Node | undefined): boolean {
         const name = reflection.name || '';
-        if (name.startsWith('_')) {
+        if (name.startsWith('_') && !defaultReflectionNames.includes(name)) {
             return true;
         }
 

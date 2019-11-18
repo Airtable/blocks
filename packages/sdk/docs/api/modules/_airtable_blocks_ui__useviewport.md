@@ -16,7 +16,7 @@
 ▸ **useViewport**(): _[Viewport](_airtable_blocks__viewport.md#viewport)_
 
 _Defined in
-[src/ui/use_viewport.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_viewport.ts#L37)_
+[src/ui/use_viewport.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_viewport.ts#L37)_
 
 Returns the current [Viewport](_airtable_blocks__viewport.md#viewport) object and updates whenever
 the viewport size, constraints, or fullscreen status changes.

@@ -15,11 +15,11 @@
 
 ▸ **withHooks**<**InjectedProps**, **Props**, **Instance**>(`Component`: object & object |
 RefForwardingComponent‹Instance, Props› | FunctionComponent‹Props›, `getAdditionalPropsToInject`:
-Object): _RefForwardingComponent‹Instance, Omit‹Props, keyof InjectedProps› &
+function): _RefForwardingComponent‹Instance, Omit‹Props, keyof InjectedProps› &
 RefAttributes‹Instance››_
 
 _Defined in
-[src/ui/with_hooks.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/with_hooks.tsx#L85)_
+[src/ui/with_hooks.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/with_hooks.tsx#L85)_
 
 A higher-order component for working with React hooks in class-based components. It takes a React
 component and wraps it, injecting values from hooks as additional props. `withHooks` uses
@@ -108,10 +108,22 @@ const ref: React.ElementRef<typeof WrappedRecordList> = getTheRefSomehow();
 
 **Parameters:**
 
-| Name                         | Type                                                                                           | Description                                                                                   |
-| ---------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `Component`                  | object & object &#124; RefForwardingComponent‹Instance, Props› &#124; FunctionComponent‹Props› | The React component you want to inject hooks into.                                            |
-| `getAdditionalPropsToInject` | Object                                                                                         | A function that takes props and returns more props to be injected into the wrapped component. |
+▪ **Component**: _object & object | RefForwardingComponent‹Instance, Props› |
+FunctionComponent‹Props›_
+
+The React component you want to inject hooks into.
+
+▪ **getAdditionalPropsToInject**: _function_
+
+A function that takes props and returns more props to be injected into the wrapped component.
+
+▸ (`props`: Omit‹Props, keyof InjectedProps›): _InjectedProps_
+
+**Parameters:**
+
+| Name    | Type                             |
+| ------- | -------------------------------- |
+| `props` | Omit‹Props, keyof InjectedProps› |
 
 **Returns:** _RefForwardingComponent‹Instance, Omit‹Props, keyof InjectedProps› &
 RefAttributes‹Instance››_

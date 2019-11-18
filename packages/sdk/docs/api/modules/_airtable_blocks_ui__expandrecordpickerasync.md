@@ -20,7 +20,7 @@
 • **ExpandRecordPickerOpts**:
 
 _Defined in
-[src/ui/expand_record_picker_async.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_picker_async.ts#L10)_
+[src/ui/expand_record_picker_async.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_picker_async.ts#L10)_
 
 Options object for expanding a record picker.
 
@@ -29,7 +29,7 @@ Options object for expanding a record picker.
 • **fields**? : _Array‹[Field](_airtable_blocks_models__field.md#field)›_
 
 _Defined in
-[src/ui/expand_record_picker_async.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_picker_async.ts#L12)_
+[src/ui/expand_record_picker_async.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_picker_async.ts#L12)_
 
 The fields to include in the record cards. The primary field will always be shown. Duplicate fields
 will be removed.
@@ -39,7 +39,7 @@ will be removed.
 • **shouldAllowCreatingRecord**? : _undefined | false | true_
 
 _Defined in
-[src/ui/expand_record_picker_async.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_picker_async.ts#L14)_
+[src/ui/expand_record_picker_async.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_picker_async.ts#L14)_
 
 If set to true, the user will be able to create an empty new record from the record picker.
 
@@ -53,7 +53,7 @@ If set to true, the user will be able to create an empty new record from the rec
 _Promise‹[Record](_airtable_blocks_models__record.md#record) | null›_
 
 _Defined in
-[src/ui/expand_record_picker_async.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_picker_async.ts#L47)_
+[src/ui/expand_record_picker_async.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_picker_async.ts#L47)_
 
 Expands a list of records in the Airtable UI, and prompts the user to pick one. The selected record
 is returned to the block, and the modal is automatically closed.

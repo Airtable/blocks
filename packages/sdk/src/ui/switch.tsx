@@ -57,7 +57,7 @@ function useSwitchVariant(variant: SwitchVariant = SwitchVariant.default) {
 }
 
 /**
- * Props shared between the {@link Switch} and {@link SwitchSynced} components. Also accepts:
+ * Props shared between the {@link Switch} and {@link SwitchSynced} components.
  *
  * @noInheritDoc
  */
@@ -90,9 +90,7 @@ export interface SharedSwitchProps extends TooltipAnchorProps, SwitchStyleProps 
 
 /**
  * Props for the {@link Switch} component. Also accepts:
- * * {@link SharedSwitchProps}
- *
- * @noInheritDoc
+ * * {@link SwitchStyleProps}
  */
 interface SwitchProps extends SharedSwitchProps {
     /** If set to `true`, the switch will be switchd on. */

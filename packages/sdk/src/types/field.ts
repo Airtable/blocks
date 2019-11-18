@@ -601,6 +601,7 @@ export interface FieldData {
     name: string;
     type: PrivateColumnType;
     typeOptions: {[key: string]: unknown} | null | undefined;
+    description: string | null;
     lock: FieldLock | null;
 }
 

@@ -20,7 +20,7 @@ undefined› | null | undefined, `keys`: ReadonlyArray‹Keys | null | undefined
 undefined | function): _void_
 
 _Defined in
-[src/ui/use_watchable.ts:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_watchable.ts#L50)_
+[src/ui/use_watchable.ts:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_watchable.ts#L50)_
 
 A React hook for watching data in Airtable models like
 [Table](_airtable_blocks_models__table.md#table) and

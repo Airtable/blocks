@@ -16,7 +16,7 @@
 ▸ **useSettingsButton**(`onClickCallback`: FlowAnyFunction): _void_
 
 _Defined in
-[src/ui/use_settings_button.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_settings_button.ts#L32)_
+[src/ui/use_settings_button.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_settings_button.ts#L32)_
 
 A hook for using the settings button that lives outside the block's viewport. It will show the
 settings button (hidden by default) and call the provided callback whenever the settings button is

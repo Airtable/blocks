@@ -21,7 +21,7 @@
 • **ProgressBarProps**:
 
 _Defined in
-[src/ui/progress_bar.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L99)_
+[src/ui/progress_bar.tsx:99](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L99)_
 
 Props for the [ProgressBar](_airtable_blocks_ui__progressbar.md#const-progressbar) component. Also
 accepts:
@@ -33,7 +33,7 @@ accepts:
 • **barColor**? : _undefined | string_
 
 _Defined in
-[src/ui/progress_bar.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L101)_
+[src/ui/progress_bar.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L101)_
 
 A CSS color, such as `#ff9900`.
 
@@ -42,7 +42,7 @@ A CSS color, such as `#ff9900`.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/progress_bar.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L105)_
+[src/ui/progress_bar.tsx:105](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L105)_
 
 Extra `className`s to apply to the element, separated by spaces.
 
@@ -51,7 +51,7 @@ Extra `className`s to apply to the element, separated by spaces.
 • **progress**: _number_
 
 _Defined in
-[src/ui/progress_bar.tsx:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L103)_
+[src/ui/progress_bar.tsx:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L103)_
 
 A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include
 a number outside of the range, the value will be clamped to be inside of the range.
@@ -61,7 +61,7 @@ a number outside of the range, the value will be clamped to be inside of the ran
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/progress_bar.tsx:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L107)_
+[src/ui/progress_bar.tsx:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L107)_
 
 Extra styles to apply to the progress bar.
 
@@ -72,7 +72,7 @@ Extra styles to apply to the progress bar.
 • **ProgressBarStyleProps**:
 
 _Defined in
-[src/ui/progress_bar.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L55)_
+[src/ui/progress_bar.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L55)_
 
 Style props for the [ProgressBar](_airtable_blocks_ui__progressbar.md#const-progressbar) component.
 Also accepts:
@@ -93,7 +93,7 @@ _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#option
 | "inline" | "inline-block"›_
 
 _Defined in
-[src/ui/progress_bar.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L65)_
+[src/ui/progress_bar.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L65)_
 
 Defines the display type of an element, which consists of the two basic qualities of how an element
 generates boxes — the outer display type defining how the box participates in flow layout, and the
@@ -107,7 +107,7 @@ inner display type defining how the children of the box are laid out.
 [ProgressBarProps](_airtable_blocks_ui__progressbar.md#progressbarprops)): _Element_
 
 _Defined in
-[src/ui/progress_bar.tsx:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/progress_bar.tsx#L127)_
+[src/ui/progress_bar.tsx:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L127)_
 
 A progress bar.
 

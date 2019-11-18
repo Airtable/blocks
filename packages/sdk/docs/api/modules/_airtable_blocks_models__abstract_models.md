@@ -18,7 +18,7 @@
 • **AbstractModel**:
 
 _Defined in
-[src/models/abstract_model.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L9)_
+[src/models/abstract_model.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L9)_
 
 Abstract superclass for all models. You won't use this class directly.
 
@@ -27,7 +27,7 @@ Abstract superclass for all models. You won't use this class directly.
 • **id**:
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -36,7 +36,7 @@ The ID for this model.
 • **isDeleted**:
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -50,7 +50,7 @@ data.
 ▸ **toString**(): _string_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -58,14 +58,14 @@ A string representation of the model for use in debugging.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: Object, `context?`:
+▸ **unwatch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: function, `context?`:
 FlowAnyObject | null): _Array‹WatchableKey›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L107)_
+[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L107)_
 
 Unwatch keys watched with `.watch`.
 
@@ -73,11 +73,27 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                                                 |
-| ---------- | ----------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to unwatch                                         |
-| `callback` | Object                                          | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                       | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _WatchableKey | ReadonlyArray‹WatchableKey›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`: WatchableKey, ...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type         |
+| --------- | ------------ |
+| `model`   | this         |
+| `key`     | WatchableKey |
+| `...args` | Array‹any›   |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:** _Array‹WatchableKey›_
 
@@ -85,14 +101,14 @@ the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: Object, `context?`:
+▸ **watch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: function, `context?`:
 FlowAnyObject | null): _Array‹WatchableKey›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L61)_
+[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L61)_
 
 Get notified of changes to the model.
 
@@ -100,11 +116,27 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                                   |
-| ---------- | ----------------------------------------------- | --------------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to watch                             |
-| `callback` | Object                                          | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                       | an optional context for `this` in `callback`. |
+▪ **keys**: _WatchableKey | ReadonlyArray‹WatchableKey›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`: WatchableKey, ...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type         |
+| --------- | ------------ |
+| `model`   | this         |
+| `key`     | WatchableKey |
+| `...args` | Array‹any›   |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:** _Array‹WatchableKey›_
 
@@ -117,7 +149,7 @@ the array of keys that were watched
 • **AbstractModelWithAsyncData**:
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L8)_
+[src/models/abstract_model_with_async_data.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L8)_
 
 Abstract superclass for all block SDK models that need to fetch async data.
 
@@ -129,7 +161,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -138,7 +170,7 @@ The ID for this model.
 • **isDataLoaded**:
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
+[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
 
 ### isDeleted
 
@@ -148,7 +180,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -162,7 +194,7 @@ data.
 ▸ **loadDataAsync**(): _Promise‹void›_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L117)_
+[src/models/abstract_model_with_async_data.ts:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L117)_
 
 Will cause all the async data to be fetched and retained. Every call to `loadDataAsync` should have
 a matching call to `unloadData`.
@@ -179,7 +211,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -190,7 +222,7 @@ A string representation of the model for use in debugging.
 ▸ **unloadData**(): _void_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L151)_
+[src/models/abstract_model_with_async_data.ts:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L151)_
 
 **Returns:** _void_
 
@@ -203,7 +235,7 @@ _Overrides
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L69)_
+[src/models/abstract_model_with_async_data.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L69)_
 
 Unwatching a key that needs to load data asynchronously will automatically cause the data to be
 released. Once the data is available, the callback will be called.
@@ -227,7 +259,7 @@ _Overrides
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L44)_
+[src/models/abstract_model_with_async_data.ts:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L44)_
 
 Watching a key that needs to load data asynchronously will automatically cause the data to be
 fetched. Once the data is available, the callback will be called.
@@ -249,7 +281,7 @@ fetched. Once the data is available, the callback will be called.
 • **Watchable**:
 
 _Defined in
-[src/watchable.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L11)_
+[src/watchable.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L11)_
 
 Abstract superclass for watchable models. All watchable models expose `watch` and `unwatch` methods
 that allow consumers to subscribe to changes to that model.
@@ -258,11 +290,11 @@ This class should not be used directly.
 
 ### unwatch
 
-▸ **unwatch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: Object, `context?`:
+▸ **unwatch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: function, `context?`:
 FlowAnyObject | null): _Array‹WatchableKey›_
 
 _Defined in
-[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L107)_
+[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L107)_
 
 Unwatch keys watched with `.watch`.
 
@@ -270,11 +302,27 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                                                 |
-| ---------- | ----------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to unwatch                                         |
-| `callback` | Object                                          | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                       | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _WatchableKey | ReadonlyArray‹WatchableKey›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`: WatchableKey, ...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type         |
+| --------- | ------------ |
+| `model`   | this         |
+| `key`     | WatchableKey |
+| `...args` | Array‹any›   |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:** _Array‹WatchableKey›_
 
@@ -282,11 +330,11 @@ the array of keys that were unwatched
 
 ### watch
 
-▸ **watch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: Object, `context?`:
+▸ **watch**(`keys`: WatchableKey | ReadonlyArray‹WatchableKey›, `callback`: function, `context?`:
 FlowAnyObject | null): _Array‹WatchableKey›_
 
 _Defined in
-[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L61)_
+[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L61)_
 
 Get notified of changes to the model.
 
@@ -294,11 +342,27 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                            | Description                                   |
-| ---------- | ----------------------------------------------- | --------------------------------------------- |
-| `keys`     | WatchableKey &#124; ReadonlyArray‹WatchableKey› | the keys to watch                             |
-| `callback` | Object                                          | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                       | an optional context for `this` in `callback`. |
+▪ **keys**: _WatchableKey | ReadonlyArray‹WatchableKey›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`: WatchableKey, ...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type         |
+| --------- | ------------ |
+| `model`   | this         |
+| `key`     | WatchableKey |
+| `...args` | Array‹any›   |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:** _Array‹WatchableKey›_
 

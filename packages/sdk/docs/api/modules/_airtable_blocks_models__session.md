@@ -20,7 +20,7 @@
 • **Session**:
 
 _Defined in
-[src/models/session.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/session.ts#L47)_
+[src/models/session.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/session.ts#L47)_
 
 Model class representing the current user's session.
 
@@ -41,7 +41,7 @@ if (session.currentUser !== null) {
 • **currentUser**:
 
 _Defined in
-[src/models/session.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/session.ts#L96)_
+[src/models/session.ts:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/session.ts#L96)_
 
 The current user, or `null` if the block is running in a publicly shared base.
 
@@ -64,7 +64,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -76,7 +76,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -93,7 +93,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -103,14 +103,14 @@ A string representation of the model for use in debugging.
 
 ▸ **unwatch**(`keys`: [WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)
 | ReadonlyArray‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›,
-`callback`: Object, `context?`: FlowAnyObject | null):
+`callback`: function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L107)_
+[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L107)_
 
 Unwatch keys watched with `.watch`.
 
@@ -118,11 +118,30 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                                | Description                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | [WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) &#124; ReadonlyArray‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)› | the keys to unwatch                                         |
-| `callback` | Object                                                                                                                                                                              | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                                           | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) |
+ReadonlyArray‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`:
+[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey), ...`args`:
+Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                           |
+| --------- | ------------------------------------------------------------------------------ |
+| `model`   | this                                                                           |
+| `key`     | [WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) |
+| `...args` | Array‹any›                                                                     |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:** _Array‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›_
 
@@ -132,14 +151,14 @@ the array of keys that were unwatched
 
 ▸ **watch**(`keys`: [WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) |
 ReadonlyArray‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›,
-`callback`: Object, `context?`: FlowAnyObject | null):
+`callback`: function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L61)_
+[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L61)_
 
 Get notified of changes to the model.
 
@@ -147,11 +166,30 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                                | Description                                   |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `keys`     | [WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) &#124; ReadonlyArray‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)› | the keys to watch                             |
-| `callback` | Object                                                                                                                                                                              | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                                           | an optional context for `this` in `callback`. |
+▪ **keys**: _[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) |
+ReadonlyArray‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`:
+[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey), ...`args`:
+Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                           |
+| --------- | ------------------------------------------------------------------------------ |
+| `model`   | this                                                                           |
+| `key`     | [WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey) |
+| `...args` | Array‹any›                                                                     |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:** _Array‹[WatchableSessionKey](_airtable_blocks_models__session.md#watchablesessionkey)›_
 
@@ -164,7 +202,7 @@ the array of keys that were watched
 Ƭ **WatchableSessionKey**: _"permissionLevel" | "currentUser"_
 
 _Defined in
-[src/models/session.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/session.ts#L31)_
+[src/models/session.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/session.ts#L31)_
 
 Watchable keys in [Session](_airtable_blocks_models__session.md#session).
 

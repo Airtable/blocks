@@ -20,7 +20,7 @@
 • **ExpandRecordListOpts**:
 
 _Defined in
-[src/ui/expand_record_list.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_list.ts#L10)_
+[src/ui/expand_record_list.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_list.ts#L10)_
 
 Options object for expanding a record list.
 
@@ -29,7 +29,7 @@ Options object for expanding a record list.
 • **fields**? : _Array‹[Field](_airtable_blocks_models__field.md#field)›_
 
 _Defined in
-[src/ui/expand_record_list.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_list.ts#L12)_
+[src/ui/expand_record_list.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_list.ts#L12)_
 
 The fields to include in the record cards. The primary field will always be shown. Duplicate fields
 will be removed.
@@ -43,7 +43,7 @@ will be removed.
 _void_
 
 _Defined in
-[src/ui/expand_record_list.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/expand_record_list.ts#L31)_
+[src/ui/expand_record_list.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/expand_record_list.ts#L31)_
 
 Expands a list of records in the Airtable UI.
 

@@ -22,7 +22,7 @@ _[TableOrViewQueryResult](_airtable_blocks_models__recordqueryresult.md#tableorv
 [LinkedRecordsQueryResult](_airtable_blocks_models__recordqueryresult.md#linkedrecordsqueryresult)_
 
 _Defined in
-[src/ui/use_records.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_records.ts#L10)_
+[src/ui/use_records.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_records.ts#L10)_
 
 ## Functions
 
@@ -34,7 +34,7 @@ _Defined in
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Defined in
-[src/ui/use_records.ts:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_records.ts#L146)_
+[src/ui/use_records.ts:146](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_records.ts#L146)_
 
 A hook for working with a single record from a query result. Automatically handles loading data in
 the query result and updating your component when the records cell values etc. change.

@@ -3,7 +3,6 @@ import * as React from 'react';
 import {spawnError} from '../error_utils';
 import {GlobalConfigKey} from '../global_config';
 import ColorPalette, {
-    ColorPaletteStyleProps,
     colorPaletteStylePropTypes,
     sharedColorPalettePropTypes,
     SharedColorPaletteProps,
@@ -13,12 +12,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 
 /**
  * Props for the {@link ColorPaletteSynced} component. Also accepts:
- * * {@link SharedColorPaletteProps}
- *
- * @noInheritDoc
+ * * {@link ColorPaletteStyleProps}
  */
-
-interface ColorPaletteSyncedProps extends ColorPaletteStyleProps, SharedColorPaletteProps {
+interface ColorPaletteSyncedProps extends SharedColorPaletteProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected color will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new color will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;
 }

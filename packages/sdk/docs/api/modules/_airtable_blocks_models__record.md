@@ -22,7 +22,7 @@
 • **Record**:
 
 _Defined in
-[src/models/record.ts:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L48)_
+[src/models/record.ts:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L48)_
 
 Model class representing a record in a table.
 
@@ -34,7 +34,7 @@ Do not instantiate. You can get instances of this class by calling `table.select
 • **commentCount**:
 
 _Defined in
-[src/models/record.ts:355](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L355)_
+[src/models/record.ts:355](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L355)_
 
 The number of comments on this record.
 
@@ -50,7 +50,7 @@ console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 
 • **createdTime**:
 
 _Defined in
-[src/models/record.ts:366](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L366)_
+[src/models/record.ts:366](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L366)_
 
 The created time of this record.
 
@@ -68,7 +68,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -80,7 +80,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -94,7 +94,7 @@ data.
 • **primaryCellValue**:
 
 _Defined in
-[src/models/record.ts:331](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L331)_
+[src/models/record.ts:331](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L331)_
 
 The primary cell value in this record.
 
@@ -110,7 +110,7 @@ console.log(myRecord.primaryCellValue);
 • **primaryCellValueAsString**:
 
 _Defined in
-[src/models/record.ts:343](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L343)_
+[src/models/record.ts:343](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L343)_
 
 The primary cell value in this record, formatted as a `string`.
 
@@ -126,7 +126,7 @@ console.log(myRecord.primaryCellValueAsString);
 • **url**:
 
 _Defined in
-[src/models/record.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L316)_
+[src/models/record.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L316)_
 
 The URL for the record. You can visit this URL in the browser to be taken to the record in the
 Airtable UI.
@@ -144,7 +144,7 @@ console.log(myRecord.url);
 _string_
 
 _Defined in
-[src/models/record.ts:255](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L255)_
+[src/models/record.ts:255](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L255)_
 
 Returns a URL that is suitable for rendering an attachment on the current client. The URL that is
 returned will only work for the current user.
@@ -191,7 +191,7 @@ A URL that is suitable for rendering on the current client.
 [FieldId](_airtable_blocks_models__field.md#fieldid) | string): _unknown_
 
 _Defined in
-[src/models/record.ts:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L137)_
+[src/models/record.ts:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L137)_
 
 Gets a specific cell value in this record.
 
@@ -220,7 +220,7 @@ The cell value in the given field.
 [FieldId](_airtable_blocks_models__field.md#fieldid) | string): _string_
 
 _Defined in
-[src/models/record.ts:206](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L206)_
+[src/models/record.ts:206](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L206)_
 
 Gets a specific cell value in this record, formatted as a `string`.
 
@@ -248,7 +248,7 @@ The cell value in the given field, formatted as a `string`.
 string): _string | null_
 
 _Defined in
-[src/models/record.ts:285](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L285)_
+[src/models/record.ts:285](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L285)_
 
 Gets the CSS hex string for this record in a given view.
 
@@ -272,7 +272,7 @@ view.
 _[Color](_airtable_blocks_ui__colors.md#color) | null_
 
 _Defined in
-[src/models/record.ts:272](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L272)_
+[src/models/record.ts:272](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L272)_
 
 Gets the color of this record in a given view.
 
@@ -297,7 +297,7 @@ The color of this record in the given view, or null if the record has no color i
 _[LinkedRecordsQueryResult](_airtable_blocks_models__recordqueryresult.md#linkedrecordsqueryresult)_
 
 _Defined in
-[src/models/record.ts:300](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L300)_
+[src/models/record.ts:300](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L300)_
 
 Select records referenced in a `multipleRecordLinks` cell value. Returns a query result. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for more.
@@ -322,7 +322,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -332,14 +332,14 @@ A string representation of the model for use in debugging.
 
 ▸ **unwatch**(`keys`: [WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) |
 ReadonlyArray‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›,
-`callback`: Object, `context?`: FlowAnyObject | null):
+`callback`: function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L107)_
+[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L107)_
 
 Unwatch keys watched with `.watch`.
 
@@ -347,11 +347,30 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                          | Description                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | [WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) &#124; ReadonlyArray‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)› | the keys to unwatch                                         |
-| `callback` | Object                                                                                                                                                                        | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                                     | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) |
+ReadonlyArray‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`:
+[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey), ...`args`: Array‹any›):
+_unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                        |
+| --------- | --------------------------------------------------------------------------- |
+| `model`   | this                                                                        |
+| `key`     | [WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) |
+| `...args` | Array‹any›                                                                  |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:** _Array‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›_
 
@@ -361,14 +380,14 @@ the array of keys that were unwatched
 
 ▸ **watch**(`keys`: [WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) |
 ReadonlyArray‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›,
-`callback`: Object, `context?`: FlowAnyObject | null):
+`callback`: function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L61)_
+[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L61)_
 
 Get notified of changes to the model.
 
@@ -376,11 +395,30 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                          | Description                                   |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `keys`     | [WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) &#124; ReadonlyArray‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)› | the keys to watch                             |
-| `callback` | Object                                                                                                                                                                        | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                                     | an optional context for `this` in `callback`. |
+▪ **keys**: _[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) |
+ReadonlyArray‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`:
+[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey), ...`args`: Array‹any›):
+_unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                        |
+| --------- | --------------------------------------------------------------------------- |
+| `model`   | this                                                                        |
+| `key`     | [WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey) |
+| `...args` | Array‹any›                                                                  |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:** _Array‹[WatchableRecordKey](_airtable_blocks_models__record.md#watchablerecordkey)›_
 
@@ -393,7 +431,7 @@ the array of keys that were watched
 Ƭ **RecordDef**: _ObjectMap‹[FieldId](_airtable_blocks_models__field.md#fieldid), unknown›_
 
 _Defined in
-[src/types/record.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/record.ts#L9)_
+[src/types/record.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/record.ts#L9)_
 
 ---
 
@@ -402,7 +440,7 @@ _Defined in
 Ƭ **RecordId**: _string_
 
 _Defined in
-[src/types/record.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/record.ts#L6)_
+[src/types/record.ts:6](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/record.ts#L6)_
 
 ---
 
@@ -411,7 +449,7 @@ _Defined in
 Ƭ **WatchableRecordKey**: _"cellValues" | "primaryCellValue" | "commentCount" | string_
 
 _Defined in
-[src/models/record.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record.ts#L40)_
+[src/models/record.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record.ts#L40)_
 
 Any key within record that can be watched:
 

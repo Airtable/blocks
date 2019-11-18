@@ -8,10 +8,7 @@ import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
 
 /**
- * Props shared between the {@link TablePicker} and {@link TablePickerSynced} components. Also accepts:
- * * {@link SharedSelectBaseProps}
- *
- * @noInheritDoc
+ * Props shared between the {@link TablePicker} and {@link TablePickerSynced} components.
  */
 export interface SharedTablePickerProps extends SharedSelectBaseProps {
     /** If set to `true`, the user can unset the selected table. */
@@ -31,9 +28,7 @@ export const sharedTablePickerPropTypes = {
 
 /**
  * Props for the {@link TablePicker} component. Also accepts:
- * * {@link SharedTablePickerProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 interface TablePickerProps extends SharedTablePickerProps {
     /** The selected table model. */

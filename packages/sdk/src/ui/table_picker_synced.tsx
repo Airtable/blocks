@@ -10,9 +10,7 @@ import useWatchable from './use_watchable';
 
 /**
  * Props for the {@link TablePickerSynced} component. Also accepts:
- * * {@link SharedTablePickerProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 interface TablePickerSyncedProps extends SharedTablePickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected table will always reflect the table id stored in {@link GlobalConfig} for this key. Selecting a new table will update {@link GlobalConfig}. */

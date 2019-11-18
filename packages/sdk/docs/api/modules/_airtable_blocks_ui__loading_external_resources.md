@@ -18,7 +18,7 @@
 ▸ **loadCSSFromString**(`css`: string): _HTMLStyleElement_
 
 _Defined in
-[src/ui/remote_utils.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/remote_utils.ts#L16)_
+[src/ui/remote_utils.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/remote_utils.ts#L16)_
 
 Injects CSS from a string into the page.
 
@@ -46,7 +46,7 @@ The style tag inserted into the page.
 ▸ **loadCSSFromURLAsync**(`url`: string): _Promise‹HTMLLinkElement›_
 
 _Defined in
-[src/ui/remote_utils.ts:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/remote_utils.ts#L38)_
+[src/ui/remote_utils.ts:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/remote_utils.ts#L38)_
 
 Injects CSS from a remote URL.
 
@@ -74,7 +74,7 @@ A Promise that resolves to the style tag inserted into the page.
 ▸ **loadScriptFromURLAsync**(`url`: string): _Promise‹HTMLScriptElement›_
 
 _Defined in
-[src/ui/remote_utils.ts:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/remote_utils.ts#L70)_
+[src/ui/remote_utils.ts:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/remote_utils.ts#L70)_
 
 Injects Javascript from a remote URL.
 

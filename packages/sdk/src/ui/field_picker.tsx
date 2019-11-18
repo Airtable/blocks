@@ -11,10 +11,7 @@ import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
 
 /**
- * Props shared between the {@link FieldPicker} and {@link FieldPickerSynced} components. Also accepts:
- * * {@link SharedSelectBaseProps}
- *
- * @noInheritDoc
+ * Props shared between the {@link FieldPicker} and {@link FieldPickerSynced} components.
  */
 export interface SharedFieldPickerProps extends SharedSelectBaseProps {
     /** The parent table model to select fields from. If `null` or `undefined`, the picker won't render. */
@@ -40,9 +37,7 @@ export const sharedFieldPickerPropTypes = {
 
 /**
  * Props for the {@link FieldPicker} component. Also accepts:
- * * {@link SharedFieldPickerProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 interface FieldPickerProps extends SharedFieldPickerProps {
     /** The selected field model. */

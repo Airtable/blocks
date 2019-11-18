@@ -11,10 +11,7 @@ import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
 
 /**
- * Props shared between the {@link ViewPicker} and {@link ViewPickerSynced} components. Also accepts:
- * * {@link SharedSelectBaseProps}
- *
- * @noInheritDoc
+ * Props shared between the {@link ViewPicker} and {@link ViewPickerSynced} components.
  */
 export interface SharedViewPickerProps extends SharedSelectBaseProps {
     /** The parent table model to select views from. If `null` or `undefined`, the picker won't render. */
@@ -40,9 +37,7 @@ export const sharedViewPickerPropTypes = {
 
 /**
  * Props for the {@link ViewPicker} component. Also accepts:
- * * {@link SharedViewPickerProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 interface ViewPickerProps extends SharedViewPickerProps {
     /** The selected view model. */

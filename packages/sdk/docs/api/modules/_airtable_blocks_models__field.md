@@ -26,7 +26,7 @@
 • **FieldTypes**:
 
 _Defined in
-[src/types/field.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L21)_
+[src/types/field.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L21)_
 
 An enum of Airtable's field types
 
@@ -44,7 +44,7 @@ const numberFields = myTable.fields.filter(field => field.type === fieldTypes.NU
 • **AUTO_NUMBER**: = "autoNumber"
 
 _Defined in
-[src/types/field.ts:502](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L502)_
+[src/types/field.ts:502](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L502)_
 
 Automatically incremented unique counter for each record.
 
@@ -63,7 +63,7 @@ None
 • **BARCODE**: = "barcode"
 
 _Defined in
-[src/types/field.ts:519](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L519)_
+[src/types/field.ts:519](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L519)_
 
 Use the Airtable iOS or Android app to scan barcodes.
 
@@ -87,7 +87,7 @@ None
 • **CHECKBOX**: = "checkbox"
 
 _Defined in
-[src/types/field.ts:378](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L378)_
+[src/types/field.ts:378](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L378)_
 
 A checkbox.
 
@@ -115,7 +115,7 @@ This field is "true" when checked and otherwise empty.
 • **COUNT**: = "count"
 
 _Defined in
-[src/types/field.ts:480](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L480)_
+[src/types/field.ts:480](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L480)_
 
 Count the number of linked records.
 
@@ -141,7 +141,7 @@ number;
 • **CREATED_TIME**: = "createdTime"
 
 _Defined in
-[src/types/field.ts:429](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L429)_
+[src/types/field.ts:429](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L429)_
 
 The time the record was created in UTC.
 
@@ -171,7 +171,7 @@ See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` option
 • **CURRENCY**: = "currency"
 
 _Defined in
-[src/types/field.ts:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L121)_
+[src/types/field.ts:121](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L121)_
 
 An amount of a currency.
 
@@ -195,7 +195,7 @@ number;
 • **DATE**: = "date"
 
 _Defined in
-[src/types/field.ts:276](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L276)_
+[src/types/field.ts:276](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L276)_
 
 A date.
 
@@ -224,7 +224,7 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
 • **DATE_TIME**: = "dateTime"
 
 _Defined in
-[src/types/field.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L304)_
+[src/types/field.ts:304](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L304)_
 
 A date & time.
 
@@ -259,7 +259,7 @@ An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted 
 • **DURATION**: = "duration"
 
 _Defined in
-[src/types/field.ts:561](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L561)_
+[src/types/field.ts:561](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L561)_
 
 A duration of time in seconds.
 
@@ -283,7 +283,7 @@ number;
 • **EMAIL**: = "email"
 
 _Defined in
-[src/types/field.ts:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L45)_
+[src/types/field.ts:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L45)_
 
 A valid email address (e.g. andrew@example.com).
 
@@ -302,7 +302,7 @@ None
 • **FORMULA**: = "formula"
 
 _Defined in
-[src/types/field.ts:406](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L406)_
+[src/types/field.ts:406](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L406)_
 
 Compute a value in each record based on other fields in the same record.
 
@@ -337,7 +337,7 @@ Check `options.result` to know the resulting field type.
 • **LAST_MODIFIED_TIME**: = "lastModifiedTime"
 
 _Defined in
-[src/types/field.ts:590](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L590)_
+[src/types/field.ts:590](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L590)_
 
 Shows the date and time that a record was most recently modified in any editable field or just in
 specific editable fields.
@@ -373,7 +373,7 @@ See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` option
 • **MULTILINE_TEXT**: = "multilineText"
 
 _Defined in
-[src/types/field.ts:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L72)_
+[src/types/field.ts:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L72)_
 
 A long text field that can span multiple lines.
 
@@ -395,7 +395,7 @@ None
 • **MULTIPLE_ATTACHMENTS**: = "multipleAttachments"
 
 _Defined in
-[src/types/field.ts:357](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L357)_
+[src/types/field.ts:357](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L357)_
 
 Attachments allow you to add images, documents, or other files which can then be viewed or
 downloaded.
@@ -444,7 +444,7 @@ None
 • **MULTIPLE_COLLABORATORS**: = "multipleCollaborators"
 
 _Defined in
-[src/types/field.ts:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L228)_
+[src/types/field.ts:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L228)_
 
 A collaborator field lets you add collaborators to your records. Collaborators can optionally be
 notified when they're added.
@@ -478,7 +478,7 @@ Array of selected choices.
 
 • **MULTIPLE_LOOKUP_VALUES**: = "multipleLookupValues"
 
-*Defined in [src/types/field.ts:490](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L490)*
+*Defined in [src/types/field.ts:490](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L490)*
 
 Lookup a field on linked records.
 
@@ -492,7 +492,7 @@ UNSTABLE
 
 • **MULTIPLE_RECORD_LINKS**: = "multipleRecordLinks"
 
-*Defined in [src/types/field.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L254)*
+*Defined in [src/types/field.ts:254](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L254)*
 
 Link to another record.
 
@@ -524,7 +524,7 @@ Array of selected record IDs and their primary cell values from the linked table
 • **MULTIPLE_SELECTS**: = "multipleSelects"
 
 _Defined in
-[src/types/field.ts:173](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L173)_
+[src/types/field.ts:173](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L173)_
 
 Multiple select allows you to select one or more predefined options from a dropdown
 
@@ -557,7 +557,7 @@ Array of selected choices.
 • **NUMBER**: = "number"
 
 _Defined in
-[src/types/field.ts:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L88)_
+[src/types/field.ts:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L88)_
 
 A number.
 
@@ -580,7 +580,7 @@ number;
 • **PERCENT**: = "percent"
 
 _Defined in
-[src/types/field.ts:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L104)_
+[src/types/field.ts:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L104)_
 
 A percentage - 0 is 0%, 1 is 100%.
 
@@ -603,7 +603,7 @@ number;
 • **PHONE_NUMBER**: = "phoneNumber"
 
 _Defined in
-[src/types/field.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L316)_
+[src/types/field.ts:316](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L316)_
 
 A telephone number (e.g. (415) 555-9876).
 
@@ -622,7 +622,7 @@ None
 • **RATING**: = "rating"
 
 _Defined in
-[src/types/field.ts:540](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L540)_
+[src/types/field.ts:540](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L540)_
 
 A rating (e.g. stars out of 5)
 
@@ -650,7 +650,7 @@ number;
 • **ROLLUP**: = "rollup"
 
 _Defined in
-[src/types/field.ts:461](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L461)_
+[src/types/field.ts:461](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L461)_
 
 A rollup allows you to summarize data from records that are linked to this table.
 
@@ -689,7 +689,7 @@ Check `options.result` to know the resulting field type.
 • **SINGLE_COLLABORATOR**: = "singleCollaborator"
 
 _Defined in
-[src/types/field.ts:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L201)_
+[src/types/field.ts:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L201)_
 
 A collaborator field lets you add collaborators to your records. Collaborators can optionally be
 notified when they're added.
@@ -725,7 +725,7 @@ The currently selected choice.
 • **SINGLE_LINE_TEXT**: = "singleLineText"
 
 _Defined in
-[src/types/field.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L33)_
+[src/types/field.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L33)_
 
 A single line of text.
 
@@ -744,7 +744,7 @@ None
 • **SINGLE_SELECT**: = "singleSelect"
 
 _Defined in
-[src/types/field.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L147)_
+[src/types/field.ts:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L147)_
 
 Single select allows you to select a single option from predefined options in a dropdown.
 
@@ -777,7 +777,7 @@ The currently selected choice.
 • **URL**: = "url"
 
 _Defined in
-[src/types/field.ts:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L57)_
+[src/types/field.ts:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L57)_
 
 A valid URL (e.g. airtable.com or https://airtable.com/universe).
 
@@ -798,7 +798,7 @@ None
 • **Field**:
 
 _Defined in
-[src/models/field.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L41)_
+[src/models/field.ts:43](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L43)_
 
 Model class representing a field in a table.
 
@@ -817,7 +817,7 @@ console.log('The type of this field is', field.type);
 • **availableAggregators**:
 
 _Defined in
-[src/models/field.ts:182](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L182)_
+[src/models/field.ts:197](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L197)_
 
 A list of available aggregators given this field's configuration.
 
@@ -825,6 +825,22 @@ A list of available aggregators given this field's configuration.
 
 ```js
 const fieldAggregators = myField.availableAggregators;
+```
+
+### description
+
+• **description**:
+
+_Defined in
+[src/models/field.ts:186](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L186)_
+
+The description of the field, if it has one. Can be watched.
+
+**Example:**
+
+```js
+console.log(myField.description);
+// => 'This is my field'
 ```
 
 ### id
@@ -835,7 +851,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -844,7 +860,7 @@ The ID for this model.
 • **isComputed**:
 
 _Defined in
-[src/models/field.ts:163](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L163)_
+[src/models/field.ts:165](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L165)_
 
 `true` if this field is computed, `false` otherwise. A field is "computed" if it's value is not set
 by user input (e.g. autoNumber, formula, etc.). Can be watched
@@ -866,7 +882,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -880,7 +896,7 @@ data.
 • **isPrimaryField**:
 
 _Defined in
-[src/models/field.ts:171](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L171)_
+[src/models/field.ts:173](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L173)_
 
 `true` if this field is its parent table's primary field, `false` otherwise. Should never change
 because the primary field of a table cannot change.
@@ -890,7 +906,7 @@ because the primary field of a table cannot change.
 • **name**:
 
 _Defined in
-[src/models/field.ts:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L92)_
+[src/models/field.ts:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L94)_
 
 The name of the field. Can be watched.
 
@@ -906,7 +922,7 @@ console.log(myField.name);
 • **options**:
 
 _Defined in
-[src/models/field.ts:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L137)_
+[src/models/field.ts:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L139)_
 
 The configuration options of the field. The structure of the field's options depend on the field's
 type. Can be watched.
@@ -929,7 +945,7 @@ if (myField.type === fieldTypes.CURRENCY) {
 • **type**:
 
 _Defined in
-[src/models/field.ts:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L104)_
+[src/models/field.ts:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L106)_
 
 The type of the field. Can be watched.
 
@@ -945,7 +961,7 @@ console.log(myField.type);
 ▸ **convertStringToCellValue**(`string`: string): _unknown_
 
 _Defined in
-[src/models/field.ts:233](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L233)_
+[src/models/field.ts:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L248)_
 
 Given a string, will attempt to parse it and return a valid cell value for the field's current
 config.
@@ -976,7 +992,7 @@ The parsed cell value, or `null` if unable to parse the given string.
 [AggregatorKey](_airtable_blocks_models__aggregators.md#aggregatorkey)): _boolean_
 
 _Defined in
-[src/models/field.ts:209](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L209)_
+[src/models/field.ts:224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L224)_
 
 **Example:**
 
@@ -1011,7 +1027,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -1021,14 +1037,14 @@ A string representation of the model for use in debugging.
 
 ▸ **unwatch**(`keys`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
 ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›, `callback`:
-Object, `context?`: FlowAnyObject | null):
+function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L107)_
+[src/watchable.ts:107](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L107)_
 
 Unwatch keys watched with `.watch`.
 
@@ -1036,11 +1052,29 @@ Should be called with the same arguments given to `.watch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                    | Description                                                 |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `keys`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) &#124; ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)› | the keys to unwatch                                         |
-| `callback` | Object                                                                                                                                                                  | the function passed to `.watch` for these keys              |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                               | the context that was passed to `.watch` for this `callback` |
+▪ **keys**: _[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
+
+the keys to unwatch
+
+▪ **callback**: _function_
+
+the function passed to `.watch` for these keys
+
+▸ (`model`: this, `key`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey),
+...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                     |
+| --------- | ------------------------------------------------------------------------ |
+| `model`   | this                                                                     |
+| `key`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+| `...args` | Array‹any›                                                               |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+the context that was passed to `.watch` for this `callback`
 
 **Returns:** _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
@@ -1050,14 +1084,14 @@ the array of keys that were unwatched
 
 ▸ **watch**(`keys`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
 ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›, `callback`:
-Object, `context?`: FlowAnyObject | null):
+function, `context?`: FlowAnyObject | null):
 _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
 _Inherited from
 [Watchable](_airtable_blocks_models__abstract_models.md#watchable).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/watchable.ts#L61)_
+[src/watchable.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/watchable.ts#L61)_
 
 Get notified of changes to the model.
 
@@ -1065,11 +1099,29 @@ Every call to `.watch` should have a matching call to `.unwatch`.
 
 **Parameters:**
 
-| Name       | Type                                                                                                                                                                    | Description                                   |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `keys`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) &#124; ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)› | the keys to watch                             |
-| `callback` | Object                                                                                                                                                                  | a function to call when those keys change     |
-| `context?` | FlowAnyObject &#124; null                                                                                                                                               | an optional context for `this` in `callback`. |
+▪ **keys**: _[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+ReadonlyArray‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
+
+the keys to watch
+
+▪ **callback**: _function_
+
+a function to call when those keys change
+
+▸ (`model`: this, `key`: [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey),
+...`args`: Array‹any›): _unknown_
+
+**Parameters:**
+
+| Name      | Type                                                                     |
+| --------- | ------------------------------------------------------------------------ |
+| `model`   | this                                                                     |
+| `key`     | [WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey) |
+| `...args` | Array‹any›                                                               |
+
+▪`Optional` **context**: _FlowAnyObject | null_
+
+an optional context for `this` in `callback`.
 
 **Returns:** _Array‹[WatchableFieldKey](_airtable_blocks_models__field.md#watchablefieldkey)›_
 
@@ -1082,7 +1134,7 @@ the array of keys that were watched
 Ƭ **FieldId**: _string_
 
 _Defined in
-[src/types/field.ts:5](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L5)_
+[src/types/field.ts:5](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L5)_
 
 ---
 
@@ -1116,16 +1168,16 @@ _Defined in
 [LAST_MODIFIED_TIME](_airtable_blocks_models__field.md#last_modified_time)_
 
 _Defined in
-[src/types/field.ts:594](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/types/field.ts#L594)_
+[src/types/field.ts:594](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/types/field.ts#L594)_
 
 ---
 
 ### WatchableFieldKey
 
-Ƭ **WatchableFieldKey**: _"name" | "type" | "options" | "isComputed"_
+Ƭ **WatchableFieldKey**: _"name" | "type" | "options" | "isComputed" | "description"_
 
 _Defined in
-[src/models/field.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/field.ts#L27)_
+[src/models/field.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L29)_
 
 All the watchable keys in a field.
 
@@ -1133,3 +1185,4 @@ All the watchable keys in a field.
 -   `type`
 -   `options`
 -   `isComputed`
+-   `description`

@@ -86,12 +86,8 @@ interface SelectStyleProps
  * * {@link ViewPicker}, {@link ViewPickerSynced}
  * * {@link FieldPicker}, {@link FieldPickerSynced}
  *
- * Also accepts:
- * * {@link SelectStyleProps}
- *
  * @noInheritDoc
  */
-
 export interface SharedSelectBaseProps
     extends TooltipAnchorProps<HTMLSelectElement>,
         SelectStyleProps {
@@ -145,10 +141,7 @@ export const sharedSelectBasePropTypes = {
 };
 
 /**
- * Props shared between the {@link Select} and {@link SelectSynced} components. Also accepts:
- * * {@link SharedSelectBaseProps}
- *
- * @noInheritDoc
+ * Props shared between the {@link Select} and {@link SelectSynced} components.
  */
 export interface SharedSelectProps extends SharedSelectBaseProps {
     /** The list of select options. */
@@ -171,9 +164,7 @@ export const sharedSelectPropTypes = {
 
 /**
  * Props for the {@link Select} component. Also accepts:
- * * {@link SharedSelectProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 export interface SelectProps extends SharedSelectProps {
     /** The value of the selected option. */

@@ -19,6 +19,7 @@ export interface TableData {
     viewOrder: Array<ViewId>;
     viewsById: ObjectMap<ViewId, ViewData>;
     recordsById?: ObjectMap<RecordId, RecordData>;
+    description: string | null;
     lock: TableLock | null;
 }
 

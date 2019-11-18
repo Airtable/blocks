@@ -7,12 +7,9 @@ import useSynced from './use_synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
 /**
- * Props for the {@link Input} and {@link InputSynced} components. Also accepts:
- * * {@link SharedInputProps}
- *
- * @noInheritDoc
+ * Props for the {@link InputSynced} component. Also accepts:
+ * * {@link InputStyleProps}
  */
-
 interface InputSyncedProps extends SharedInputProps {
     /** A string key or array key path in {@link GlobalConfig}. The input value will always reflect the value stored in {@link GlobalConfig} for this key. Changing the input value will update {@link GlobalConfig}. */
     globalConfigKey: GlobalConfigKey;

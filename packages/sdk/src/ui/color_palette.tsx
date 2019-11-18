@@ -76,13 +76,8 @@ export const colorPaletteStylePropTypes = {
 
 /**
  * Props shared between the {@link ColorPalette} and {@link ColorPaletteSynced} components.
- * Also accepts:
- * * {@link ColorPaletteStyleProps}
- *
- * @noInheritDoc
  */
-
-export interface SharedColorPaletteProps extends TooltipAnchorProps {
+export interface SharedColorPaletteProps extends ColorPaletteStyleProps, TooltipAnchorProps {
     /** The list of {@link Color|colors} to display in the color palette. */
     allowedColors: Array<string>;
     /** A function to be called when the selected color changes. */
@@ -109,9 +104,7 @@ export const sharedColorPalettePropTypes = {
 
 /**
  * Props for the {@link ColorPalette} component. Also accepts:
- * * {@link SharedColorPaletteProps}
- *
- * @noInheritDoc
+ * * {@link ColorPaletteStyleProps}
  */
 interface ColorPaletteProps extends SharedColorPaletteProps {
     /** The current selected {@link Color} option. */
@@ -302,8 +295,9 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
     }
 }
 
-export default withStyledSystem<ColorPaletteProps, ColorPaletteStyleProps, ColorPalette, {}>(
+export default withStyledSystem<
+    Omit<ColorPaletteProps, keyof ColorPaletteStyleProps>,
+    ColorPaletteStyleProps,
     ColorPalette,
-    styleParser,
-    colorPaletteStylePropTypes,
-);
+    {}
+>(ColorPalette, styleParser, colorPaletteStylePropTypes);

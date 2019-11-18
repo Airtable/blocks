@@ -25,7 +25,7 @@
 • **ButtonProps**:
 
 _Defined in
-[src/ui/button.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L118)_
+[src/ui/button.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L118)_
 
 Props for the [Button](_airtable_blocks_ui__button.md#button) component. Also accepts:
 
@@ -37,7 +37,7 @@ Props for the [Button](_airtable_blocks_ui__button.md#button) component. Also ac
 • **aria-selected**? : _undefined | false | true_
 
 _Defined in
-[src/ui/button.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L144)_
+[src/ui/button.tsx:144](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L144)_
 
 The `aria-selected` attribute.
 
@@ -46,7 +46,7 @@ The `aria-selected` attribute.
 • **children**: _React.ReactNode | string_
 
 _Defined in
-[src/ui/button.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L134)_
+[src/ui/button.tsx:134](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L134)_
 
 The contents of the button.
 
@@ -55,7 +55,7 @@ The contents of the button.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/button.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L140)_
+[src/ui/button.tsx:140](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L140)_
 
 Extra `className`s to apply to the button, separated by spaces.
 
@@ -64,7 +64,7 @@ Extra `className`s to apply to the button, separated by spaces.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/button.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L130)_
+[src/ui/button.tsx:130](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L130)_
 
 Indicates whether or not the user can interact with the button.
 
@@ -73,7 +73,7 @@ Indicates whether or not the user can interact with the button.
 • **icon**? : _IconName | ReactElement_
 
 _Defined in
-[src/ui/button.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L124)_
+[src/ui/button.tsx:124](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L124)_
 
 The name of the icon or a React node. For more details, see the
 [list of supported icons](/packages/sdk/docs/icons.md).
@@ -83,7 +83,7 @@ The name of the icon or a React node. For more details, see the
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/button.tsx:128](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L128)_
+[src/ui/button.tsx:128](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L128)_
 
 The `id` attribute.
 
@@ -94,7 +94,7 @@ The `id` attribute.
 _Overrides void_
 
 _Defined in
-[src/ui/button.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L138)_
+[src/ui/button.tsx:138](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L138)_
 
 Click event handler. Also handles Space and Enter keypress events.
 
@@ -103,7 +103,7 @@ Click event handler. Also handles Space and Enter keypress events.
 • **size**? : _[ControlSizeProp](_airtable_blocks_ui_system__control_sizes.md#controlsizeprop)_
 
 _Defined in
-[src/ui/button.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L120)_
+[src/ui/button.tsx:120](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L120)_
 
 The size of the button. Defaults to `default`. Can be a responsive prop object.
 
@@ -112,7 +112,7 @@ The size of the button. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/button.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L142)_
+[src/ui/button.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L142)_
 
 Extra styles to apply to the button.
 
@@ -121,7 +121,7 @@ Extra styles to apply to the button.
 • **tabIndex**? : _undefined | number_
 
 _Defined in
-[src/ui/button.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L132)_
+[src/ui/button.tsx:132](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L132)_
 
 Indicates if the button can be focused and if/where it participates in sequential keyboard
 navigation.
@@ -131,7 +131,7 @@ navigation.
 • **type**? : _"button" | "submit" | "reset"_
 
 _Defined in
-[src/ui/button.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L126)_
+[src/ui/button.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L126)_
 
 The type of the button. Defaults to `button`.
 
@@ -140,7 +140,7 @@ The type of the button. Defaults to `button`.
 • **variant**? : _[ButtonVariant](_airtable_blocks_ui__button.md#buttonvariant)_
 
 _Defined in
-[src/ui/button.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L122)_
+[src/ui/button.tsx:122](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L122)_
 
 The variant of the button. Defaults to `default`.
 
@@ -151,7 +151,7 @@ The variant of the button. Defaults to `default`.
 • **ButtonStyleProps**:
 
 _Defined in
-[src/ui/button.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L51)_
+[src/ui/button.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L51)_
 
 Style props for the [Button](_airtable_blocks_ui__button.md#button) component. Also accepts:
 
@@ -169,7 +169,7 @@ _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#option
 | "flex" | "none"›_
 
 _Defined in
-[src/ui/button.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L59)_
+[src/ui/button.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L59)_
 
 Defines the display type of an element, which consists of the two basic qualities of how an element
 generates boxes — the outer display type defining how the box participates in flow layout, and the
@@ -182,7 +182,7 @@ inner display type defining how the children of the box are laid out.
 Ƭ **ButtonVariant**: _"default" | "primary" | "secondary" | "danger"_
 
 _Defined in
-[src/ui/button.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L101)_
+[src/ui/button.tsx:101](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L101)_
 
 Variants for the [Button](_airtable_blocks_ui__button.md#button) component:
 
@@ -213,7 +213,7 @@ like record deletion.
 React.Ref‹HTMLButtonElement›): _Element_
 
 _Defined in
-[src/ui/button.tsx:165](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/button.tsx#L165)_
+[src/ui/button.tsx:165](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/button.tsx#L165)_
 
 Clickable button component.
 

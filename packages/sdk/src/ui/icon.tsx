@@ -47,8 +47,7 @@ export const iconStylePropTypes = {
 };
 
 /**
- * Props shared between the {@link Icon} and {@link FieldIcon} components. Also accepts:
- * * {@link IconStyleProps}
+ * Props shared between the {@link Icon} and {@link FieldIcon} components.
  *
  * @noInheritDoc
  */
@@ -81,9 +80,7 @@ export const sharedIconPropTypes = {
 
 /**
  * Props for the {@link Icon} component. Also accepts:
- * * {@link SharedIconProps}
- *
- * @noInheritDoc
+ * * {@link IconStyleProps}
  */
 interface IconProps extends SharedIconProps {
     /** The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */

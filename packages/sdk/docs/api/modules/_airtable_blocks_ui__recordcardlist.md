@@ -22,7 +22,7 @@
 • **RecordCardList**:
 
 _Defined in
-[src/ui/record_card_list.tsx:301](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L301)_
+[src/ui/record_card_list.tsx:301](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L301)_
 
 Scrollable list of record cards.
 
@@ -59,7 +59,7 @@ function Block() {
 • **RecordCardListProps**:
 
 _Defined in
-[src/ui/record_card_list.tsx:216](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L216)_
+[src/ui/record_card_list.tsx:216](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L216)_
 
 Props for the [RecordCardList](_airtable_blocks_ui__recordcardlist.md#recordcardlist) component.
 Also accepts:
@@ -71,7 +71,7 @@ Also accepts:
 • **attachmentCoverField**? : _[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/ui/record_card_list.tsx:232](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L232)_
+[src/ui/record_card_list.tsx:232](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L232)_
 
 Attachment field to display as an image in the square preview for each record card. If omitted or
 not an attachment field, it uses for the first attachment field in `fields`. If `fields` is not
@@ -82,7 +82,7 @@ defined, it uses the first attachment field in the view.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/record_card_list.tsx:234](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L234)_
+[src/ui/record_card_list.tsx:234](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L234)_
 
 Additional class names to apply to the record card list.
 
@@ -91,7 +91,7 @@ Additional class names to apply to the record card list.
 • **fields**? : _Array‹[Field](_airtable_blocks_models__field.md#field)›_
 
 _Defined in
-[src/ui/record_card_list.tsx:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L228)_
+[src/ui/record_card_list.tsx:228](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L228)_
 
 Fields to display in each record card. The primary field is always displayed.
 
@@ -100,7 +100,7 @@ Fields to display in each record card. The primary field is always displayed.
 • **onRecordClick**? : _null | function_
 
 _Defined in
-[src/ui/record_card_list.tsx:222](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L222)_
+[src/ui/record_card_list.tsx:222](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L222)_
 
 Click event handler for an individual record card. If undefined, uses default behavior to expand
 record. If null, no operation is performed.
@@ -110,7 +110,7 @@ record. If null, no operation is performed.
 • **onRecordMouseEnter**? : _undefined | function_
 
 _Defined in
-[src/ui/record_card_list.tsx:224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L224)_
+[src/ui/record_card_list.tsx:224](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L224)_
 
 Mouse enter event handler for an individual record card.
 
@@ -119,7 +119,7 @@ Mouse enter event handler for an individual record card.
 • **onRecordMouseLeave**? : _undefined | function_
 
 _Defined in
-[src/ui/record_card_list.tsx:226](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L226)_
+[src/ui/record_card_list.tsx:226](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L226)_
 
 Mouse leave event handler for an individual record card.
 
@@ -128,7 +128,7 @@ Mouse leave event handler for an individual record card.
 • **onScroll**? : _undefined | function_
 
 _Defined in
-[src/ui/record_card_list.tsx:220](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L220)_
+[src/ui/record_card_list.tsx:220](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L220)_
 
 Scroll event handler for the list window.
 
@@ -138,7 +138,7 @@ Scroll event handler for the list window.
 Array‹[RecordDef](_airtable_blocks_models__record.md#recorddef)›_
 
 _Defined in
-[src/ui/record_card_list.tsx:218](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L218)_
+[src/ui/record_card_list.tsx:218](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L218)_
 
 Records to display in card list.
 
@@ -147,7 +147,7 @@ Records to display in card list.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/record_card_list.tsx:236](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L236)_
+[src/ui/record_card_list.tsx:236](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L236)_
 
 Additional styles to apply to the record card list.
 
@@ -156,7 +156,7 @@ Additional styles to apply to the record card list.
 • **view**? : _[View](_airtable_blocks_models__view.md#view)_
 
 _Defined in
-[src/ui/record_card_list.tsx:230](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L230)_
+[src/ui/record_card_list.tsx:230](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L230)_
 
 The view model to use for field order and record coloring.
 
@@ -167,7 +167,7 @@ The view model to use for field order and record coloring.
 • **RecordCardListScrollEvent**:
 
 _Defined in
-[src/ui/record_card_list.tsx:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L201)_
+[src/ui/record_card_list.tsx:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L201)_
 
 Scroll event for [RecordCardList](_airtable_blocks_ui__recordcardlist.md#recordcardlist).
 
@@ -176,7 +176,7 @@ Scroll event for [RecordCardList](_airtable_blocks_ui__recordcardlist.md#recordc
 • **scrollDirection**: _"forward" | "backward"_
 
 _Defined in
-[src/ui/record_card_list.tsx:203](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L203)_
+[src/ui/record_card_list.tsx:203](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L203)_
 
 The direction of the scroll event.
 
@@ -185,7 +185,7 @@ The direction of the scroll event.
 • **scrollOffset**: _number_
 
 _Defined in
-[src/ui/record_card_list.tsx:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L205)_
+[src/ui/record_card_list.tsx:205](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L205)_
 
 The vertical offset of the scrollable area.
 
@@ -194,7 +194,7 @@ The vertical offset of the scrollable area.
 • **scrollUpdateWasRequested**: _boolean_
 
 _Defined in
-[src/ui/record_card_list.tsx:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L207)_
+[src/ui/record_card_list.tsx:207](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L207)_
 
 `true` for programmatic scrolling and `false` if the scroll was the result of a user interaction in
 the browser.
@@ -206,7 +206,7 @@ the browser.
 • **RecordCardListStyleProps**:
 
 _Defined in
-[src/ui/record_card_list.tsx:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card_list.tsx#L248)_
+[src/ui/record_card_list.tsx:248](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L248)_
 
 Style props for the [RecordCardList](_airtable_blocks_ui__recordcardlist.md#recordcardlist)
 component. Accepts:

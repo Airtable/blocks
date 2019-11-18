@@ -28,21 +28,21 @@
 • **BySelectFieldRecordColorMode**:
 
 _Defined in
-[src/models/record_coloring.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L37)_
+[src/models/record_coloring.ts:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L37)_
 
 ### selectField
 
 • **selectField**: _[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/models/record_coloring.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L41)_
+[src/models/record_coloring.ts:41](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L41)_
 
 ### type
 
 • **type**: _"bySelectField"_
 
 _Defined in
-[src/models/record_coloring.ts:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L39)_
+[src/models/record_coloring.ts:39](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L39)_
 
 ---
 
@@ -51,21 +51,21 @@ _Defined in
 • **ByViewRecordColorMode**:
 
 _Defined in
-[src/models/record_coloring.ts:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L45)_
+[src/models/record_coloring.ts:45](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L45)_
 
 ### type
 
 • **type**: _"byView"_
 
 _Defined in
-[src/models/record_coloring.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L47)_
+[src/models/record_coloring.ts:47](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L47)_
 
 ### view
 
 • **view**: _[View](_airtable_blocks_models__view.md#view)_
 
 _Defined in
-[src/models/record_coloring.ts:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L49)_
+[src/models/record_coloring.ts:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L49)_
 
 ---
 
@@ -74,14 +74,14 @@ _Defined in
 • **NoRecordColorMode**:
 
 _Defined in
-[src/models/record_coloring.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L31)_
+[src/models/record_coloring.ts:31](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L31)_
 
 ### type
 
 • **type**: _"none"_
 
 _Defined in
-[src/models/record_coloring.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L33)_
+[src/models/record_coloring.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L33)_
 
 ## Type aliases
 
@@ -93,7 +93,7 @@ _[NoRecordColorMode](_airtable_blocks_models__record_coloring.md#norecordcolormo
 | [ByViewRecordColorMode](_airtable_blocks_models__record_coloring.md#byviewrecordcolormode)_
 
 _Defined in
-[src/models/record_coloring.ts:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L53)_
+[src/models/record_coloring.ts:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L53)_
 
 ---
 
@@ -102,7 +102,7 @@ _Defined in
 Ƭ **RecordColorModeType**: _"none" | "bySelectField" | "byView"_
 
 _Defined in
-[src/models/record_coloring.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L28)_
+[src/models/record_coloring.ts:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L28)_
 
 ## Object literals
 
@@ -111,7 +111,7 @@ _Defined in
 ### ▪ **ModeTypes**: _object_
 
 _Defined in
-[src/models/record_coloring.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L12)_
+[src/models/record_coloring.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L12)_
 
 An enum of the different types of {@link recordColoring.modes}
 
@@ -122,7 +122,7 @@ An enum of the different types of {@link recordColoring.modes}
 • **BY_SELECT_FIELD**: _"bySelectField"_ = 'bySelectField' as const
 
 _Defined in
-[src/models/record_coloring.ts:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L20)_
+[src/models/record_coloring.ts:20](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L20)_
 
 **Alias:** recordColoring.ModeTypes.BY_SELECT_FIELD
 
@@ -131,7 +131,7 @@ _Defined in
 • **BY_VIEW**: _"byView"_ = 'byView' as const
 
 _Defined in
-[src/models/record_coloring.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L24)_
+[src/models/record_coloring.ts:24](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L24)_
 
 **Alias:** recordColoring.ModeTypes.BY_VIEW
 
@@ -140,7 +140,7 @@ _Defined in
 • **NONE**: _"none"_ = 'none' as const
 
 _Defined in
-[src/models/record_coloring.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L16)_
+[src/models/record_coloring.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L16)_
 
 **Alias:** recordColoring.ModeTypes.NONE
 
@@ -151,7 +151,7 @@ _Defined in
 ### ▪ **modes**: _object_
 
 _Defined in
-[src/models/record_coloring.ts:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L77)_
+[src/models/record_coloring.ts:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L77)_
 
 Record coloring config creators.
 
@@ -179,7 +179,7 @@ const queryResult = table.selectRecords({recordColorMode});
 _[BySelectFieldRecordColorMode](_airtable_blocks_models__record_coloring.md#byselectfieldrecordcolormode)_
 
 _Defined in
-[src/models/record_coloring.ts:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L92)_
+[src/models/record_coloring.ts:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L92)_
 
 **Alias:** recordColoring.modes.bySelectField
 
@@ -200,7 +200,7 @@ a record coloring mode
 _[ByViewRecordColorMode](_airtable_blocks_models__record_coloring.md#byviewrecordcolormode)_
 
 _Defined in
-[src/models/record_coloring.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L103)_
+[src/models/record_coloring.ts:103](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L103)_
 
 **Alias:** recordColoring.modes.byView
 
@@ -220,7 +220,7 @@ a record coloring mode
 ▸ **none**(): _[NoRecordColorMode](_airtable_blocks_models__record_coloring.md#norecordcolormode)_
 
 _Defined in
-[src/models/record_coloring.ts:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_coloring.ts#L82)_
+[src/models/record_coloring.ts:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_coloring.ts#L82)_
 
 **Alias:** recordColoring.modes.none
 

@@ -10,9 +10,7 @@ import useWatchable from './use_watchable';
 
 /**
  * Props for the {@link ViewPickerSynced} component. Also accepts:
- * * {@link SharedViewPickerProps}
- *
- * @noInheritDoc
+ * * {@link SelectStyleProps}
  */
 interface ViewPickerSyncedProps extends SharedViewPickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in {@link GlobalConfig} for this key. Selecting a new view will update {@link GlobalConfig}. */
