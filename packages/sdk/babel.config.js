@@ -23,8 +23,6 @@ module.exports = {
                 useBuiltIns: 'usage',
                 corejs: 3,
                 targets,
-                // TODO: remove this once https://github.com/babel/babel/issues/10023 is fixed
-                include: ['transform-classes'],
             },
         ],
         '@babel/react',
