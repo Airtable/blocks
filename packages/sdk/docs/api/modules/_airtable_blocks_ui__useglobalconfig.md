@@ -16,7 +16,7 @@
 ▸ **useGlobalConfig**(): _[GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig)_
 
 _Defined in
-[src/ui/use_global_config.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_global_config.ts#L33)_
+[src/ui/use_global_config.ts:33](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_global_config.ts#L33)_
 
 Returns the [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) and updates whenever any
 key in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig) changes.

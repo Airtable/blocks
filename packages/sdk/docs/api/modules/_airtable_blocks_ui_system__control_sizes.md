@@ -17,7 +17,7 @@
 Ƭ **ControlSize**: _"small" | "default" | "large"_
 
 _Defined in
-[src/ui/control_sizes.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/control_sizes.ts#L13)_
+[src/ui/control_sizes.ts:13](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/control_sizes.ts#L13)_
 
 Sizes for the [Button](_airtable_blocks_ui__button.md#button),
 [Input](_airtable_blocks_ui__input.md#input), [Select](_airtable_blocks_ui__select.md#select),
@@ -32,7 +32,7 @@ Sizes for the [Button](_airtable_blocks_ui__button.md#button),
 _[ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop)‹[ControlSize](_airtable_blocks_ui_system__control_sizes.md#controlsize)›_
 
 _Defined in
-[src/ui/control_sizes.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/control_sizes.ts#L19)_
+[src/ui/control_sizes.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/control_sizes.ts#L19)_
 
 Size prop for the [Button](_airtable_blocks_ui__button.md#button),
 [Input](_airtable_blocks_ui__input.md#input), [Select](_airtable_blocks_ui__select.md#select),

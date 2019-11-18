@@ -26,7 +26,7 @@
 • **TextProps**:
 
 _Defined in
-[src/ui/text.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L66)_
+[src/ui/text.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L66)_
 
 Props for the [Text](_airtable_blocks_ui__text.md#text) component. Also supports:
 
@@ -39,7 +39,7 @@ Props for the [Text](_airtable_blocks_ui__text.md#text) component. Also supports
 | "mark" | "q" | "s" | "samp" | "small" | "sub" | "sup" | "time" | "var" | "blockquote"_
 
 _Defined in
-[src/ui/text.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L68)_
+[src/ui/text.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L68)_
 
 The element that is rendered. Defaults to `p`.
 
@@ -48,7 +48,7 @@ The element that is rendered. Defaults to `p`.
 • **children**? : _React.ReactNode | string_
 
 _Defined in
-[src/ui/text.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L94)_
+[src/ui/text.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L94)_
 
 The contents of the text.
 
@@ -57,7 +57,7 @@ The contents of the text.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/text.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L102)_
+[src/ui/text.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L102)_
 
 Additional class names to apply, separated by spaces.
 
@@ -66,7 +66,7 @@ Additional class names to apply, separated by spaces.
 • **dataAttributes**? : _DataAttributesProp_
 
 _Defined in
-[src/ui/text.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L100)_
+[src/ui/text.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L100)_
 
 Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`.
 
@@ -75,7 +75,7 @@ Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/text.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L96)_
+[src/ui/text.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L96)_
 
 The `id` attribute.
 
@@ -84,7 +84,7 @@ The `id` attribute.
 • **role**? : _undefined | string_
 
 _Defined in
-[src/ui/text.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L106)_
+[src/ui/text.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L106)_
 
 The `role` attribute.
 
@@ -93,7 +93,7 @@ The `role` attribute.
 • **size**? : _[TextSizeProp](_airtable_blocks_ui__text.md#textsizeprop)_
 
 _Defined in
-[src/ui/text.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L98)_
+[src/ui/text.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L98)_
 
 The size of the text. Defaults to `default`. Can be a responsive prop object.
 
@@ -102,7 +102,7 @@ The size of the text. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/text.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L104)_
+[src/ui/text.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L104)_
 
 Additional styles.
 
@@ -111,7 +111,7 @@ Additional styles.
 • **variant**? : _[TextVariant](_airtable_blocks_ui__text.md#textvariant)_
 
 _Defined in
-[src/ui/text.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L92)_
+[src/ui/text.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L92)_
 
 The variant of the text. Defaults to `default`.
 
@@ -122,7 +122,7 @@ The variant of the text. Defaults to `default`.
 Ƭ **TextSize**: _"small" | "default" | "large" | "xlarge"_
 
 _Defined in
-[src/ui/text.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L37)_
+[src/ui/text.tsx:37](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L37)_
 
 Sizes for the [Text](_airtable_blocks_ui__text.md#text) component.
 
@@ -134,7 +134,7 @@ Sizes for the [Text](_airtable_blocks_ui__text.md#text) component.
 _[ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop)‹[TextSize](_airtable_blocks_ui__text.md#textsize)›_
 
 _Defined in
-[src/ui/text.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L40)_
+[src/ui/text.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L40)_
 
 ---
 
@@ -143,7 +143,7 @@ _Defined in
 Ƭ **TextVariant**: _"default" | "paragraph"_
 
 _Defined in
-[src/ui/text.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L30)_
+[src/ui/text.tsx:30](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L30)_
 
 Variants for the [Text](_airtable_blocks_ui__text.md#text) component:
 
@@ -163,7 +163,7 @@ Multi-line text such as body copy.
 React.Ref‹HTMLElement›): _Element_
 
 _Defined in
-[src/ui/text.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/text.tsx#L135)_
+[src/ui/text.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L135)_
 
 A text component with sizes and variants.
 

@@ -21,7 +21,7 @@
 • **RecordCard**:
 
 _Defined in
-[src/ui/record_card.tsx:251](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L251)_
+[src/ui/record_card.tsx:251](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L251)_
 
 A card component that displays an Airtable record.
 
@@ -49,7 +49,7 @@ function Block() {
 • **RecordCardProps**:
 
 _Defined in
-[src/ui/record_card.tsx:133](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L133)_
+[src/ui/record_card.tsx:133](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L133)_
 
 Props for the [RecordCard](_airtable_blocks_ui__recordcard.md#recordcard) component. Also accepts:
 
@@ -60,7 +60,7 @@ Props for the [RecordCard](_airtable_blocks_ui__recordcard.md#recordcard) compon
 • **attachmentCoverField**? : _[Field](_airtable_blocks_models__field.md#field)_
 
 _Defined in
-[src/ui/record_card.tsx:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L139)_
+[src/ui/record_card.tsx:139](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L139)_
 
 Attachment field to display as an image in the square preview for the card. If omitted or not an
 attachment field, it uses for the first attachment field in `fields`. If `fields` is not defined, it
@@ -71,7 +71,7 @@ uses the first attachment field in the view.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/record_card.tsx:159](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L159)_
+[src/ui/record_card.tsx:159](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L159)_
 
 Additional class names to apply to the record card.
 
@@ -81,7 +81,7 @@ Additional class names to apply to the record card.
 _[ExpandRecordOpts](_airtable_blocks_ui__expandrecord.md#expandrecordopts) | null_
 
 _Defined in
-[src/ui/record_card.tsx:145](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L145)_
+[src/ui/record_card.tsx:145](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L145)_
 
 Options object for expanding a record.
 
@@ -90,7 +90,7 @@ Options object for expanding a record.
 • **fields**? : _Array‹[Field](_airtable_blocks_models__field.md#field)›_
 
 _Defined in
-[src/ui/record_card.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L147)_
+[src/ui/record_card.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L147)_
 
 Fields to display in the card. The primary field is always displayed.
 
@@ -99,7 +99,7 @@ Fields to display in the card. The primary field is always displayed.
 • **height**? : _undefined | number_
 
 _Defined in
-[src/ui/record_card.tsx:143](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L143)_
+[src/ui/record_card.tsx:143](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L143)_
 
 Height of the record card.
 
@@ -108,7 +108,7 @@ Height of the record card.
 • **onClick**? : _function | null_
 
 _Defined in
-[src/ui/record_card.tsx:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L155)_
+[src/ui/record_card.tsx:155](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L155)_
 
 Click event handler for the record card. If undefined, uses default behavior to expand record. If
 null, no operation is performed.
@@ -118,7 +118,7 @@ null, no operation is performed.
 • **onMouseEnter**? : _function | null_
 
 _Defined in
-[src/ui/record_card.tsx:150](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L150)_
+[src/ui/record_card.tsx:150](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L150)_
 
 Mouse enter event handler for the record card.
 
@@ -127,7 +127,7 @@ Mouse enter event handler for the record card.
 • **onMouseLeave**? : _function | null_
 
 _Defined in
-[src/ui/record_card.tsx:152](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L152)_
+[src/ui/record_card.tsx:152](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L152)_
 
 Mouse leave event handler for the record card.
 
@@ -137,7 +137,7 @@ Mouse leave event handler for the record card.
 [RecordDef](_airtable_blocks_models__record.md#recorddef)_
 
 _Defined in
-[src/ui/record_card.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L135)_
+[src/ui/record_card.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L135)_
 
 Record to display in the card.
 
@@ -146,7 +146,7 @@ Record to display in the card.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/record_card.tsx:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L161)_
+[src/ui/record_card.tsx:161](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L161)_
 
 Additional styles to apply to the record card.
 
@@ -155,7 +155,7 @@ Additional styles to apply to the record card.
 • **view**? : _[View](_airtable_blocks_models__view.md#view)_
 
 _Defined in
-[src/ui/record_card.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L137)_
+[src/ui/record_card.tsx:137](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L137)_
 
 The view model to use for field order and record coloring.
 
@@ -164,7 +164,7 @@ The view model to use for field order and record coloring.
 • **width**? : _undefined | number_
 
 _Defined in
-[src/ui/record_card.tsx:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L141)_
+[src/ui/record_card.tsx:141](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L141)_
 
 Width of the record card.
 
@@ -175,7 +175,7 @@ Width of the record card.
 • **RecordCardStyleProps**:
 
 _Defined in
-[src/ui/record_card.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/record_card.tsx#L59)_
+[src/ui/record_card.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card.tsx#L59)_
 
 Style props for the [RecordCard](_airtable_blocks_ui__recordcard.md#recordcard) component. Accepts:
 

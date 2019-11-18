@@ -16,7 +16,7 @@
 • **AllStylesProps**:
 
 _Defined in
-[src/ui/system/all_styles_set.ts:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/all_styles_set.ts#L113)_
+[src/ui/system/all_styles_set.ts:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/all_styles_set.ts#L113)_
 
 In the Blocks SDK, UI components can be styled via a set of supported style props. These style props
 (e.g. `width`, `margin`, `backgroundColor`) take a subset of supported CSS properties and expose

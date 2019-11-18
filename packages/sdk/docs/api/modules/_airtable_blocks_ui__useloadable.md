@@ -21,7 +21,7 @@
 • **LoadableModel**:
 
 _Defined in
-[src/ui/use_loadable.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_loadable.ts#L14)_
+[src/ui/use_loadable.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_loadable.ts#L14)_
 
 A model that can be loaded. Usually a [Cursor](_airtable_blocks_models__cursor.md#cursor),
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult), or a
@@ -34,7 +34,7 @@ A model that can be loaded. Usually a [Cursor](_airtable_blocks_models__cursor.m
 • **UseLoadableOpts**:
 
 _Defined in
-[src/ui/use_loadable.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_loadable.ts#L32)_
+[src/ui/use_loadable.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_loadable.ts#L32)_
 
 Options object for the [useLoadable](_airtable_blocks_ui__useloadable.md#useloadable) hook.
 
@@ -43,7 +43,7 @@ Options object for the [useLoadable](_airtable_blocks_ui__useloadable.md#useload
 • **shouldSuspend**? : _undefined | false | true_
 
 _Defined in
-[src/ui/use_loadable.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_loadable.ts#L34)_
+[src/ui/use_loadable.ts:34](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_loadable.ts#L34)_
 
 Whether suspense mode is enabled. If suspense is disabled, you need to manually check
 `model.isDataLoaded` so you don't use your model before it's ready.
@@ -58,7 +58,7 @@ ReadonlyArray‹[LoadableModel](_airtable_blocks_ui__useloadable.md#loadablemode
 [UseLoadableOpts](_airtable_blocks_ui__useloadable.md#useloadableopts)): _void_
 
 _Defined in
-[src/ui/use_loadable.ts:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/use_loadable.ts#L110)_
+[src/ui/use_loadable.ts:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/use_loadable.ts#L110)_
 
 When you're writing a block, not all of the data in your base is available to work with straight
 away. We need to load it from Airtable first. This hook is a low-level tool for managing that. You

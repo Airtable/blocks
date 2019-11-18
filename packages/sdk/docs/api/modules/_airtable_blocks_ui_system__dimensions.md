@@ -22,7 +22,7 @@
 • **DimensionsSetProps**:
 
 _Defined in
-[src/ui/system/dimensions/dimensions_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/dimensions_set.ts#L14)_
+[src/ui/system/dimensions/dimensions_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/dimensions_set.ts#L14)_
 
 Style props for the dimensions of an element.
 
@@ -35,7 +35,7 @@ _Inherited from
 [HeightProps](_airtable_blocks_ui_system__dimensions.md#heightprops).[height](_airtable_blocks_ui_system__dimensions.md#optional-height)_
 
 _Defined in
-[src/ui/system/dimensions/height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/height.ts#L10)_
+[src/ui/system/dimensions/height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/height.ts#L10)_
 
 Specifies the height of an element.
 
@@ -48,7 +48,7 @@ _Inherited from
 [MaxHeightProps](_airtable_blocks_ui_system__dimensions.md#maxheightprops).[maxHeight](_airtable_blocks_ui_system__dimensions.md#optional-maxheight)_
 
 _Defined in
-[src/ui/system/dimensions/max_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/max_height.ts#L10)_
+[src/ui/system/dimensions/max_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/max_height.ts#L10)_
 
 Sets the maximum height of an element. It prevents the used value of the `height` property from
 becoming larger than the value specified for `maxHeight`.
@@ -62,7 +62,7 @@ _Inherited from
 [MaxWidthProps](_airtable_blocks_ui_system__dimensions.md#maxwidthprops).[maxWidth](_airtable_blocks_ui_system__dimensions.md#optional-maxwidth)_
 
 _Defined in
-[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
+[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
 
 Sets the maximum width of an element. It prevents the used value of the `width` property from
 becoming larger than the value specified by `maxWidth`.
@@ -76,7 +76,7 @@ _Inherited from
 [MinHeightProps](_airtable_blocks_ui_system__dimensions.md#minheightprops).[minHeight](_airtable_blocks_ui_system__dimensions.md#optional-minheight)_
 
 _Defined in
-[src/ui/system/dimensions/min_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/min_height.ts#L10)_
+[src/ui/system/dimensions/min_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/min_height.ts#L10)_
 
 Sets the minimum height of an element. It prevents the used value of the `height` property from
 becoming smaller than the value specified for `minHeight`.
@@ -90,7 +90,7 @@ _Inherited from
 [MinWidthProps](_airtable_blocks_ui_system__dimensions.md#minwidthprops).[minWidth](_airtable_blocks_ui_system__dimensions.md#optional-minwidth)_
 
 _Defined in
-[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
+[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
 
 Sets the minimum width of an element. It prevents the used value of the `width` property from
 becoming smaller than the value specified for `minWidth`.
@@ -104,7 +104,7 @@ _Inherited from
 [WidthProps](_airtable_blocks_ui_system__dimensions.md#widthprops).[width](_airtable_blocks_ui_system__dimensions.md#optional-width)_
 
 _Defined in
-[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
+[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
 
 Specifies the width of an element.
 
@@ -115,7 +115,7 @@ Specifies the width of an element.
 • **HeightProps**:
 
 _Defined in
-[src/ui/system/dimensions/height.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/height.ts#L8)_
+[src/ui/system/dimensions/height.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/height.ts#L8)_
 
 ### `Optional` height
 
@@ -123,7 +123,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹HeightProperty‹Length››_
 
 _Defined in
-[src/ui/system/dimensions/height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/height.ts#L10)_
+[src/ui/system/dimensions/height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/height.ts#L10)_
 
 Specifies the height of an element.
 
@@ -134,7 +134,7 @@ Specifies the height of an element.
 • **MaxHeightProps**:
 
 _Defined in
-[src/ui/system/dimensions/max_height.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/max_height.ts#L8)_
+[src/ui/system/dimensions/max_height.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/max_height.ts#L8)_
 
 ### `Optional` maxHeight
 
@@ -142,7 +142,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MaxHeightProperty‹Length››_
 
 _Defined in
-[src/ui/system/dimensions/max_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/max_height.ts#L10)_
+[src/ui/system/dimensions/max_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/max_height.ts#L10)_
 
 Sets the maximum height of an element. It prevents the used value of the `height` property from
 becoming larger than the value specified for `maxHeight`.
@@ -154,7 +154,7 @@ becoming larger than the value specified for `maxHeight`.
 • **MaxWidthProps**:
 
 _Defined in
-[src/ui/system/dimensions/max_width.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/max_width.ts#L8)_
+[src/ui/system/dimensions/max_width.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/max_width.ts#L8)_
 
 ### `Optional` maxWidth
 
@@ -162,7 +162,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MaxWidthProperty‹Length››_
 
 _Defined in
-[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
+[src/ui/system/dimensions/max_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/max_width.ts#L10)_
 
 Sets the maximum width of an element. It prevents the used value of the `width` property from
 becoming larger than the value specified by `maxWidth`.
@@ -174,7 +174,7 @@ becoming larger than the value specified by `maxWidth`.
 • **MinHeightProps**:
 
 _Defined in
-[src/ui/system/dimensions/min_height.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/min_height.ts#L8)_
+[src/ui/system/dimensions/min_height.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/min_height.ts#L8)_
 
 ### `Optional` minHeight
 
@@ -182,7 +182,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MinHeightProperty‹Length››_
 
 _Defined in
-[src/ui/system/dimensions/min_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/min_height.ts#L10)_
+[src/ui/system/dimensions/min_height.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/min_height.ts#L10)_
 
 Sets the minimum height of an element. It prevents the used value of the `height` property from
 becoming smaller than the value specified for `minHeight`.
@@ -194,7 +194,7 @@ becoming smaller than the value specified for `minHeight`.
 • **MinWidthProps**:
 
 _Defined in
-[src/ui/system/dimensions/min_width.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/min_width.ts#L8)_
+[src/ui/system/dimensions/min_width.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/min_width.ts#L8)_
 
 ### `Optional` minWidth
 
@@ -202,7 +202,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹MinWidthProperty‹Length››_
 
 _Defined in
-[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
+[src/ui/system/dimensions/min_width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/min_width.ts#L10)_
 
 Sets the minimum width of an element. It prevents the used value of the `width` property from
 becoming smaller than the value specified for `minWidth`.
@@ -214,7 +214,7 @@ becoming smaller than the value specified for `minWidth`.
 • **WidthProps**:
 
 _Defined in
-[src/ui/system/dimensions/width.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/width.ts#L8)_
+[src/ui/system/dimensions/width.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/width.ts#L8)_
 
 ### `Optional` width
 
@@ -222,6 +222,6 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹WidthProperty‹Length››_
 
 _Defined in
-[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
+[src/ui/system/dimensions/width.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/dimensions/width.ts#L10)_
 
 Specifies the width of an element.

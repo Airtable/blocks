@@ -27,7 +27,7 @@
 • **LinkedRecordsQueryResult**:
 
 _Defined in
-[src/models/linked_records_query_result.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L54)_
+[src/models/linked_records_query_result.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L54)_
 
 Represents a set of records from a LinkedRecord cell value. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for main
@@ -44,7 +44,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[fields](_airtable_blocks_models__recordqueryresult.md#fields)_
 
 _Defined in
-[src/models/linked_records_query_result.ts:218](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L218)_
+[src/models/linked_records_query_result.ts:218](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L218)_
 
 The fields that were used to create this LinkedRecordsQueryResult.
 
@@ -56,7 +56,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -68,7 +68,7 @@ _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[isDataLoaded](_airtable_blocks_models__abstract_models.md#isdataloaded)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
+[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
 
 ### isDeleted
 
@@ -78,7 +78,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -92,7 +92,7 @@ data.
 • **isValid**:
 
 _Defined in
-[src/models/linked_records_query_result.ts:162](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L162)_
+[src/models/linked_records_query_result.ts:162](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L162)_
 
 Is the query result currently valid? This value always starts as 'true', but can become false if the
 field config changes to link to a different table or a type other than MULTIPLE_RECORD_LINKS. Once
@@ -107,7 +107,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[recordIds](_airtable_blocks_models__recordqueryresult.md#recordids)_
 
 _Defined in
-[src/models/linked_records_query_result.ts:181](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L181)_
+[src/models/linked_records_query_result.ts:181](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L181)_
 
 Ordered array of all the linked record ids. Watchable.
 
@@ -119,7 +119,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[records](_airtable_blocks_models__recordqueryresult.md#records)_
 
 _Defined in
-[src/models/linked_records_query_result.ts:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L201)_
+[src/models/linked_records_query_result.ts:201](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L201)_
 
 Ordered array of all the linked records. Watchable.
 
@@ -132,7 +132,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordById](_airtable_blocks_models__recordqueryresult.md#getrecordbyid)_
 
 _Defined in
-[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L430)_
+[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L430)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -156,7 +156,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordByIdIfExists](_airtable_blocks_models__recordqueryresult.md#getrecordbyidifexists)_
 
 _Defined in
-[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L414)_
+[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L414)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -181,7 +181,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
 
 _Defined in
-[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L467)_
+[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L467)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
@@ -206,7 +206,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[hasRecord](_airtable_blocks_models__recordqueryresult.md#hasrecord)_
 
 _Defined in
-[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L454)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
@@ -229,7 +229,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[loadDataAsync](_airtable_blocks_models__abstract_models.md#loaddataasync)_
 
 _Defined in
-[src/models/linked_records_query_result.ts:281](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L281)_
+[src/models/linked_records_query_result.ts:281](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L281)_
 
 **Returns:** _Promise‹void›_
 
@@ -241,7 +241,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -255,7 +255,7 @@ _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unloadData](_airtable_blocks_models__abstract_models.md#unloaddata)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L151)_
+[src/models/abstract_model_with_async_data.ts:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L151)_
 
 **Returns:** _void_
 
@@ -272,7 +272,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[unwatch](_airtable_blocks_models__recordqueryresult.md#unwatch)_
 
 _Defined in
-[src/models/linked_records_query_result.ts:255](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L255)_
+[src/models/linked_records_query_result.ts:255](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L255)_
 
 **Parameters:**
 
@@ -298,7 +298,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[watch](_airtable_blocks_models__recordqueryresult.md#watch)_
 
 _Defined in
-[src/models/linked_records_query_result.ts:227](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/linked_records_query_result.ts#L227)_
+[src/models/linked_records_query_result.ts:227](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/linked_records_query_result.ts#L227)_
 
 **Parameters:**
 
@@ -318,7 +318,7 @@ _Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryres
 • **RecordQueryResult**:
 
 _Defined in
-[src/models/record_query_result.ts:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L210)_
+[src/models/record_query_result.ts:210](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L210)_
 
 A RecordQueryResult represents a set of records. It's a little bit like a one-off View in Airtable:
 it contains a bunch of records, filtered to a useful subset of the records in the table. Those
@@ -454,7 +454,7 @@ someTable.selectRecords({
 • **fields**:
 
 _Defined in
-[src/models/record_query_result.ts:240](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L240)_
+[src/models/record_query_result.ts:240](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L240)_
 
 The fields that were used to create this QueryResult. Null if fields were not specified, which means
 the QueryResult will load all fields in the table.
@@ -467,7 +467,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -479,7 +479,7 @@ _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[isDataLoaded](_airtable_blocks_models__abstract_models.md#isdataloaded)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
+[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
 
 ### isDeleted
 
@@ -489,7 +489,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -503,7 +503,7 @@ data.
 • **recordIds**:
 
 _Defined in
-[src/models/record_query_result.ts:223](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L223)_
+[src/models/record_query_result.ts:223](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L223)_
 
 The record IDs in this QueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -512,7 +512,7 @@ The record IDs in this QueryResult. Throws if data is not loaded yet. Can be wat
 • **records**:
 
 _Defined in
-[src/models/record_query_result.ts:397](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L397)_
+[src/models/record_query_result.ts:397](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L397)_
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -522,7 +522,7 @@ The records in this RecordQueryResult. Throws if data is not loaded yet. Can be 
 _[Record](_airtable_blocks_models__record.md#record)_
 
 _Defined in
-[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L430)_
+[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L430)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -543,7 +543,7 @@ the record
 _[Record](_airtable_blocks_models__record.md#record) | null_
 
 _Defined in
-[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L414)_
+[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L414)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -565,7 +565,7 @@ the record
 | null_
 
 _Defined in
-[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L467)_
+[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L467)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
@@ -587,7 +587,7 @@ result.
 [Record](_airtable_blocks_models__record.md#record)): _boolean_
 
 _Defined in
-[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L454)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
@@ -610,7 +610,7 @@ _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[loadDataAsync](_airtable_blocks_models__abstract_models.md#loaddataasync)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L117)_
+[src/models/abstract_model_with_async_data.ts:117](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L117)_
 
 Will cause all the async data to be fetched and retained. Every call to `loadDataAsync` should have
 a matching call to `unloadData`.
@@ -627,7 +627,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -641,7 +641,7 @@ _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unloadData](_airtable_blocks_models__abstract_models.md#unloaddata)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L151)_
+[src/models/abstract_model_with_async_data.ts:151](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L151)_
 
 **Returns:** _void_
 
@@ -658,7 +658,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unwatch](_airtable_blocks_models__abstract_models.md#unwatch)_
 
 _Defined in
-[src/models/record_query_result.ts:550](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L550)_
+[src/models/record_query_result.ts:550](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L550)_
 
 Unwatch keys watched with `.watch`.
 
@@ -693,7 +693,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[watch](_airtable_blocks_models__abstract_models.md#watch)_
 
 _Defined in
-[src/models/record_query_result.ts:523](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L523)_
+[src/models/record_query_result.ts:523](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L523)_
 
 Get notified of changes to the query result.
 
@@ -731,7 +731,7 @@ the array of keys that were watched
 • **TableOrViewQueryResult**:
 
 _Defined in
-[src/models/table_or_view_query_result.ts:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L56)_
+[src/models/table_or_view_query_result.ts:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L56)_
 
 Represents a set of records directly from a view or table. See
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) for main
@@ -748,7 +748,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[fields](_airtable_blocks_models__recordqueryresult.md#fields)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:237](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L237)_
+[src/models/table_or_view_query_result.ts:237](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L237)_
 
 The fields that were used to create this RecordQueryResult. Null if fields were not specified, which
 means the RecordQueryResult will load all fields in the table.
@@ -761,7 +761,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[id](_airtable_blocks_models__abstract_models.md#id)_
 
 _Defined in
-[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L40)_
+[src/models/abstract_model.ts:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L40)_
 
 The ID for this model.
 
@@ -773,7 +773,7 @@ _Inherited from
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[isDataLoaded](_airtable_blocks_models__abstract_models.md#isdataloaded)_
 
 _Defined in
-[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
+[src/models/abstract_model_with_async_data.ts:87](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model_with_async_data.ts#L87)_
 
 ### isDeleted
 
@@ -783,7 +783,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[isDeleted](_airtable_blocks_models__abstract_models.md#isdeleted)_
 
 _Defined in
-[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L69)_
+[src/models/abstract_model.ts:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L69)_
 
 `true` if the model has been deleted, and `false` otherwise.
 
@@ -800,7 +800,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[recordIds](_airtable_blocks_models__recordqueryresult.md#recordids)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:206](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L206)_
+[src/models/table_or_view_query_result.ts:206](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L206)_
 
 The record IDs in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -812,7 +812,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[records](_airtable_blocks_models__recordqueryresult.md#records)_
 
 _Defined in
-[src/models/record_query_result.ts:397](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L397)_
+[src/models/record_query_result.ts:397](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L397)_
 
 The records in this RecordQueryResult. Throws if data is not loaded yet. Can be watched.
 
@@ -825,7 +825,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordById](_airtable_blocks_models__recordqueryresult.md#getrecordbyid)_
 
 _Defined in
-[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L430)_
+[src/models/record_query_result.ts:430](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L430)_
 
 Get a specific record in the query result, or throws if that record doesn't exist or is filtered
 out. Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -849,7 +849,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordByIdIfExists](_airtable_blocks_models__recordqueryresult.md#getrecordbyidifexists)_
 
 _Defined in
-[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L414)_
+[src/models/record_query_result.ts:414](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L414)_
 
 Get a specific record in the query result, or null if that record doesn't exist or is filtered out.
 Throws if data is not loaded yet. Watch using `'recordIds'`.
@@ -874,7 +874,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[getRecordColor](_airtable_blocks_models__recordqueryresult.md#getrecordcolor)_
 
 _Defined in
-[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L467)_
+[src/models/record_query_result.ts:467](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L467)_
 
 Get the color of a specific record in the query result. Throws if the record isn't in the
 RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
@@ -899,7 +899,7 @@ _Inherited from
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[hasRecord](_airtable_blocks_models__recordqueryresult.md#hasrecord)_
 
 _Defined in
-[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L454)_
+[src/models/record_query_result.ts:454](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L454)_
 
 Check to see if a particular record or record id is present in this query result. Returns false if
 the record has been deleted or is filtered out.
@@ -922,7 +922,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[loadDataAsync](_airtable_blocks_models__abstract_models.md#loaddataasync)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:387](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L387)_
+[src/models/table_or_view_query_result.ts:387](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L387)_
 
 **Returns:** _Promise‹void›_
 
@@ -934,7 +934,7 @@ _Inherited from
 [AbstractModel](_airtable_blocks_models__abstract_models.md#abstractmodel).[toString](_airtable_blocks_models__abstract_models.md#tostring)_
 
 _Defined in
-[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/abstract_model.ts#L90)_
+[src/models/abstract_model.ts:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/abstract_model.ts#L90)_
 
 **Returns:** _string_
 
@@ -948,7 +948,7 @@ _Overrides
 [AbstractModelWithAsyncData](_airtable_blocks_models__abstract_models.md#abstractmodelwithasyncdata).[unloadData](_airtable_blocks_models__abstract_models.md#unloaddata)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:479](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L479)_
+[src/models/table_or_view_query_result.ts:479](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L479)_
 
 **Returns:** _void_
 
@@ -965,7 +965,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[unwatch](_airtable_blocks_models__recordqueryresult.md#unwatch)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:352](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L352)_
+[src/models/table_or_view_query_result.ts:352](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L352)_
 
 **Parameters:**
 
@@ -991,7 +991,7 @@ _Overrides
 [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult).[watch](_airtable_blocks_models__recordqueryresult.md#watch)_
 
 _Defined in
-[src/models/table_or_view_query_result.ts:305](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/table_or_view_query_result.ts#L305)_
+[src/models/table_or_view_query_result.ts:305](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/table_or_view_query_result.ts#L305)_
 
 **Parameters:**
 
@@ -1011,7 +1011,7 @@ _Array‹[WatchableRecordQueryResultKey](_airtable_blocks_models__recordqueryres
 • **RecordQueryResultOpts**:
 
 _Defined in
-[src/models/record_query_result.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L73)_
+[src/models/record_query_result.ts:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L73)_
 
 ### `Optional` fields
 
@@ -1019,7 +1019,7 @@ _Defined in
 false›_
 
 _Defined in
-[src/models/record_query_result.ts:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L77)_
+[src/models/record_query_result.ts:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L77)_
 
 The fields (or field names or field ids) to load. Falsey values will be removed.
 
@@ -1029,7 +1029,7 @@ The fields (or field names or field ids) to load. Falsey values will be removed.
 [RecordColorMode](_airtable_blocks_models__record_coloring.md#recordcolormode)_
 
 _Defined in
-[src/models/record_query_result.ts:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L79)_
+[src/models/record_query_result.ts:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L79)_
 
 How records in this QueryResult should be colored.
 
@@ -1038,7 +1038,7 @@ How records in this QueryResult should be colored.
 • **sorts**? : _Array‹[SortConfig](_airtable_blocks_models__recordqueryresult.md#sortconfig)›_
 
 _Defined in
-[src/models/record_query_result.ts:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L75)_
+[src/models/record_query_result.ts:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L75)_
 
 The order in which to sort the query result
 
@@ -1049,14 +1049,14 @@ The order in which to sort the query result
 • **SortConfig**:
 
 _Defined in
-[src/models/record_query_result.ts:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L59)_
+[src/models/record_query_result.ts:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L59)_
 
 ### `Optional` direction
 
 • **direction**? : _"asc" | "desc"_
 
 _Defined in
-[src/models/record_query_result.ts:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L63)_
+[src/models/record_query_result.ts:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L63)_
 
 The order to sort in. Defaults to asc.
 
@@ -1066,7 +1066,7 @@ The order to sort in. Defaults to asc.
 [FieldId](_airtable_blocks_models__field.md#fieldid) | string_
 
 _Defined in
-[src/models/record_query_result.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L61)_
+[src/models/record_query_result.ts:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L61)_
 
 A field, field id, or field name.
 
@@ -1078,7 +1078,7 @@ A field, field id, or field name.
 "isDataLoaded" | string_
 
 _Defined in
-[src/models/record_query_result.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/models/record_query_result.ts#L54)_
+[src/models/record_query_result.ts:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/record_query_result.ts#L54)_
 
 A key in [RecordQueryResult](_airtable_blocks_models__recordqueryresult.md#recordqueryresult) that
 can be watched

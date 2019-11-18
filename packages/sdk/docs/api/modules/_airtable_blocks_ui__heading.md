@@ -26,7 +26,7 @@
 • **HeadingProps**:
 
 _Defined in
-[src/ui/heading.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L100)_
+[src/ui/heading.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L100)_
 
 Props for the [Heading](_airtable_blocks_ui__heading.md#heading) component. Also supports:
 
@@ -38,7 +38,7 @@ Props for the [Heading](_airtable_blocks_ui__heading.md#heading) component. Also
 • **as**? : _"h1" | "h2" | "h3" | "h4" | "h5" | "h6"_
 
 _Defined in
-[src/ui/heading.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L104)_
+[src/ui/heading.tsx:104](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L104)_
 
 The element that is rendered. Defaults to `h3`.
 
@@ -47,7 +47,7 @@ The element that is rendered. Defaults to `h3`.
 • **children**? : _React.ReactNode | string_
 
 _Defined in
-[src/ui/heading.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L108)_
+[src/ui/heading.tsx:108](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L108)_
 
 The contents of the heading.
 
@@ -56,7 +56,7 @@ The contents of the heading.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/heading.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L116)_
+[src/ui/heading.tsx:116](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L116)_
 
 Additional class names to apply, separated by spaces.
 
@@ -65,7 +65,7 @@ Additional class names to apply, separated by spaces.
 • **dataAttributes**? : _DataAttributesProp_
 
 _Defined in
-[src/ui/heading.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L114)_
+[src/ui/heading.tsx:114](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L114)_
 
 Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*': '...'}}`.
 
@@ -74,7 +74,7 @@ Data attributes that are spread onto the element, e.g. `dataAttributes={{'data-*
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/heading.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L110)_
+[src/ui/heading.tsx:110](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L110)_
 
 The `id` attribute.
 
@@ -83,7 +83,7 @@ The `id` attribute.
 • **role**? : _undefined | string_
 
 _Defined in
-[src/ui/heading.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L102)_
+[src/ui/heading.tsx:102](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L102)_
 
 The `role` attribute.
 
@@ -92,7 +92,7 @@ The `role` attribute.
 • **size**? : _[HeadingSizeProp](_airtable_blocks_ui__heading.md#headingsizeprop)_
 
 _Defined in
-[src/ui/heading.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L112)_
+[src/ui/heading.tsx:112](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L112)_
 
 The size of the heading. Defaults to `default`. Can be a responsive prop object.
 
@@ -101,7 +101,7 @@ The size of the heading. Defaults to `default`. Can be a responsive prop object.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/heading.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L118)_
+[src/ui/heading.tsx:118](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L118)_
 
 Additional styles.
 
@@ -110,7 +110,7 @@ Additional styles.
 • **variant**? : _[HeadingVariant](_airtable_blocks_ui__heading.md#headingvariant)_
 
 _Defined in
-[src/ui/heading.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L106)_
+[src/ui/heading.tsx:106](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L106)_
 
 The variant of the heading. Defaults to `default`.
 
@@ -121,7 +121,7 @@ The variant of the heading. Defaults to `default`.
 Ƭ **HeadingSize**: _"small" | "default" | "large" | "xsmall" | "xlarge" | "xxlarge"_
 
 _Defined in
-[src/ui/heading.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L26)_
+[src/ui/heading.tsx:26](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L26)_
 
 Sizes for the [Heading](_airtable_blocks_ui__heading.md#heading) component.
 
@@ -133,7 +133,7 @@ Sizes for the [Heading](_airtable_blocks_ui__heading.md#heading) component.
 _[ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop)‹[HeadingSize](_airtable_blocks_ui__heading.md#headingsize)›_
 
 _Defined in
-[src/ui/heading.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L32)_
+[src/ui/heading.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L32)_
 
 Size prop for the [Heading](_airtable_blocks_ui__heading.md#heading) component.
 
@@ -144,7 +144,7 @@ Size prop for the [Heading](_airtable_blocks_ui__heading.md#heading) component.
 Ƭ **HeadingVariant**: _"default" | "caps"_
 
 _Defined in
-[src/ui/heading.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L40)_
+[src/ui/heading.tsx:40](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L40)_
 
 Variant prop for the [Heading](_airtable_blocks_ui__heading.md#heading) component. • **default** -
 Headings typically used for titles. • **caps** - All-caps headings typically used for field names
@@ -158,7 +158,7 @@ and smaller section headings.
 React.Ref‹HTMLHeadingElement›): _Element_
 
 _Defined in
-[src/ui/heading.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/heading.tsx#L147)_
+[src/ui/heading.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L147)_
 
 A heading component with sizes and variants.
 

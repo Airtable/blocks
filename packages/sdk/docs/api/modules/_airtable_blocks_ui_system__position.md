@@ -22,7 +22,7 @@
 • **BottomProps**:
 
 _Defined in
-[src/ui/system/position/bottom.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/bottom.ts#L9)_
+[src/ui/system/position/bottom.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/bottom.ts#L9)_
 
 ### `Optional` bottom
 
@@ -30,7 +30,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹BottomProperty‹Length››_
 
 _Defined in
-[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/bottom.ts#L11)_
+[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/bottom.ts#L11)_
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
@@ -42,7 +42,7 @@ elements.
 • **LeftProps**:
 
 _Defined in
-[src/ui/system/position/left.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/left.ts#L9)_
+[src/ui/system/position/left.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/left.ts#L9)_
 
 ### `Optional` left
 
@@ -50,7 +50,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹LeftProperty‹Length››_
 
 _Defined in
-[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/left.ts#L11)_
+[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/left.ts#L11)_
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
@@ -62,7 +62,7 @@ elements.
 • **PositionProps**:
 
 _Defined in
-[src/ui/system/position/position.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/position.ts#L8)_
+[src/ui/system/position/position.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/position.ts#L8)_
 
 ### `Optional` position
 
@@ -70,7 +70,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹PositionProperty›_
 
 _Defined in
-[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/position.ts#L10)_
+[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/position.ts#L10)_
 
 Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
 determine the final location of positioned elements.
@@ -82,7 +82,7 @@ determine the final location of positioned elements.
 • **PositionSetProps**:
 
 _Defined in
-[src/ui/system/position/position_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/position_set.ts#L14)_
+[src/ui/system/position/position_set.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/position_set.ts#L14)_
 
 Style props for the position of an element.
 
@@ -95,7 +95,7 @@ _Inherited from
 [BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
 
 _Defined in
-[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/bottom.ts#L11)_
+[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/bottom.ts#L11)_
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
@@ -109,7 +109,7 @@ _Inherited from
 [LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
 
 _Defined in
-[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/left.ts#L11)_
+[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/left.ts#L11)_
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
@@ -123,7 +123,7 @@ _Inherited from
 [PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
 
 _Defined in
-[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/position.ts#L10)_
+[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/position.ts#L10)_
 
 Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
 determine the final location of positioned elements.
@@ -137,7 +137,7 @@ _Inherited from
 [RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
 
 _Defined in
-[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/right.ts#L11)_
+[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/right.ts#L11)_
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
@@ -151,7 +151,7 @@ _Inherited from
 [TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
 
 _Defined in
-[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/top.ts#L11)_
+[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/top.ts#L11)_
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
@@ -165,7 +165,7 @@ _Inherited from
 [ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
 
 _Defined in
-[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/z_index.ts#L10)_
+[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/z_index.ts#L10)_
 
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
@@ -177,7 +177,7 @@ with larger z-indexes cover those with smaller ones.
 • **RightProps**:
 
 _Defined in
-[src/ui/system/position/right.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/right.ts#L9)_
+[src/ui/system/position/right.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/right.ts#L9)_
 
 ### `Optional` right
 
@@ -185,7 +185,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹RightProperty‹Length››_
 
 _Defined in
-[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/right.ts#L11)_
+[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/right.ts#L11)_
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
@@ -197,7 +197,7 @@ elements.
 • **TopProps**:
 
 _Defined in
-[src/ui/system/position/top.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/top.ts#L9)_
+[src/ui/system/position/top.ts:9](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/top.ts#L9)_
 
 ### `Optional` top
 
@@ -205,7 +205,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹TopProperty‹Length››_
 
 _Defined in
-[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/top.ts#L11)_
+[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/top.ts#L11)_
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
@@ -217,7 +217,7 @@ elements.
 • **ZIndexProps**:
 
 _Defined in
-[src/ui/system/position/z_index.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/z_index.ts#L8)_
+[src/ui/system/position/z_index.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/z_index.ts#L8)_
 
 ### `Optional` zIndex
 
@@ -225,7 +225,7 @@ _Defined in
 _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#optionalresponsiveprop)‹ZIndexProperty›_
 
 _Defined in
-[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/z_index.ts#L10)_
+[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/z_index.ts#L10)_
 
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.

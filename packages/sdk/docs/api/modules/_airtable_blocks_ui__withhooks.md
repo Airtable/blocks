@@ -19,7 +19,7 @@ function): _RefForwardingComponent‹Instance, Omit‹Props, keyof InjectedProps
 RefAttributes‹Instance››_
 
 _Defined in
-[src/ui/with_hooks.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/with_hooks.tsx#L85)_
+[src/ui/with_hooks.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/with_hooks.tsx#L85)_
 
 A higher-order component for working with React hooks in class-based components. It takes a React
 component and wraps it, injecting values from hooks as additional props. `withHooks` uses

@@ -24,7 +24,7 @@
 • **ColorPalette**:
 
 _Defined in
-[src/ui/color_palette.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L142)_
+[src/ui/color_palette.tsx:142](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L142)_
 
 A color selection component. Accepts a list of `allowedColors` to be displayed as selectable color
 squares.
@@ -49,7 +49,7 @@ function DisplayOptions() {
 • **ColorPaletteSynced**:
 
 _Defined in
-[src/ui/color_palette_synced.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L42)_
+[src/ui/color_palette_synced.tsx:42](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette_synced.tsx#L42)_
 
 A wrapper around the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) component
 that syncs with [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
@@ -74,7 +74,7 @@ function DisplayOptions() {
 • **ColorPaletteProps**:
 
 _Defined in
-[src/ui/color_palette.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L111)_
+[src/ui/color_palette.tsx:111](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L111)_
 
 Props for the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) component. Also
 accepts:
@@ -89,7 +89,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[allowedColors](_airtable_blocks_ui__colorpalette.md#allowedcolors)_
 
 _Defined in
-[src/ui/color_palette.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L84)_
+[src/ui/color_palette.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L84)_
 
 The list of [colors](_airtable_blocks_ui__colors.md#color) to display in the color palette.
 
@@ -101,7 +101,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[className](_airtable_blocks_ui__colorpalette.md#optional-classname)_
 
 _Defined in
-[src/ui/color_palette.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L90)_
+[src/ui/color_palette.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L90)_
 
 Additional class names to apply to the color palette, separated by spaces.
 
@@ -110,7 +110,7 @@ Additional class names to apply to the color palette, separated by spaces.
 • **color**? : _string | null_
 
 _Defined in
-[src/ui/color_palette.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L113)_
+[src/ui/color_palette.tsx:113](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L113)_
 
 The current selected [Color](_airtable_blocks_ui__colors.md#color) option.
 
@@ -122,7 +122,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[disabled](_airtable_blocks_ui__colorpalette.md#optional-disabled)_
 
 _Defined in
-[src/ui/color_palette.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L94)_
+[src/ui/color_palette.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L94)_
 
 If set to `true`, the color palette will not allow color selection.
 
@@ -134,7 +134,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[onChange](_airtable_blocks_ui__colorpalette.md#optional-onchange)_
 
 _Defined in
-[src/ui/color_palette.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L86)_
+[src/ui/color_palette.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L86)_
 
 A function to be called when the selected color changes.
 
@@ -146,7 +146,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[squareMargin](_airtable_blocks_ui__colorpalette.md#optional-squaremargin)_
 
 _Defined in
-[src/ui/color_palette.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L88)_
+[src/ui/color_palette.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L88)_
 
 The margin between color squares in the color palette.
 
@@ -158,7 +158,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[style](_airtable_blocks_ui__colorpalette.md#optional-style)_
 
 _Defined in
-[src/ui/color_palette.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L92)_
+[src/ui/color_palette.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L92)_
 
 Additional styles to apply to the color palette.
 
@@ -169,7 +169,7 @@ Additional styles to apply to the color palette.
 • **ColorPaletteStyleProps**:
 
 _Defined in
-[src/ui/color_palette.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L53)_
+[src/ui/color_palette.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L53)_
 
 Style props shared between the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) and
 [ColorPaletteSynced](_airtable_blocks_ui__colorpalette.md#colorpalettesynced) components. Accepts:
@@ -188,7 +188,7 @@ Style props shared between the [ColorPalette](_airtable_blocks_ui__colorpalette.
 • **ColorPaletteSyncedProps**:
 
 _Defined in
-[src/ui/color_palette_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L17)_
+[src/ui/color_palette_synced.tsx:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette_synced.tsx#L17)_
 
 Props for the [ColorPaletteSynced](_airtable_blocks_ui__colorpalette.md#colorpalettesynced)
 component. Also accepts:
@@ -203,7 +203,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[allowedColors](_airtable_blocks_ui__colorpalette.md#allowedcolors)_
 
 _Defined in
-[src/ui/color_palette.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L84)_
+[src/ui/color_palette.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L84)_
 
 The list of [colors](_airtable_blocks_ui__colors.md#color) to display in the color palette.
 
@@ -215,7 +215,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[className](_airtable_blocks_ui__colorpalette.md#optional-classname)_
 
 _Defined in
-[src/ui/color_palette.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L90)_
+[src/ui/color_palette.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L90)_
 
 Additional class names to apply to the color palette, separated by spaces.
 
@@ -227,7 +227,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[disabled](_airtable_blocks_ui__colorpalette.md#optional-disabled)_
 
 _Defined in
-[src/ui/color_palette.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L94)_
+[src/ui/color_palette.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L94)_
 
 If set to `true`, the color palette will not allow color selection.
 
@@ -236,7 +236,7 @@ If set to `true`, the color palette will not allow color selection.
 • **globalConfigKey**: _[GlobalConfigKey](_airtable_blocks__globalconfig.md#globalconfigkey)_
 
 _Defined in
-[src/ui/color_palette_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette_synced.tsx#L19)_
+[src/ui/color_palette_synced.tsx:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette_synced.tsx#L19)_
 
 A string key or array key path in [GlobalConfig](_airtable_blocks__globalconfig.md#globalconfig).
 The selected color will always reflect the value stored in
@@ -251,7 +251,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[onChange](_airtable_blocks_ui__colorpalette.md#optional-onchange)_
 
 _Defined in
-[src/ui/color_palette.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L86)_
+[src/ui/color_palette.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L86)_
 
 A function to be called when the selected color changes.
 
@@ -263,7 +263,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[squareMargin](_airtable_blocks_ui__colorpalette.md#optional-squaremargin)_
 
 _Defined in
-[src/ui/color_palette.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L88)_
+[src/ui/color_palette.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L88)_
 
 The margin between color squares in the color palette.
 
@@ -275,7 +275,7 @@ _Inherited from
 [SharedColorPaletteProps](_airtable_blocks_ui__colorpalette.md#sharedcolorpaletteprops).[style](_airtable_blocks_ui__colorpalette.md#optional-style)_
 
 _Defined in
-[src/ui/color_palette.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L92)_
+[src/ui/color_palette.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L92)_
 
 Additional styles to apply to the color palette.
 
@@ -286,7 +286,7 @@ Additional styles to apply to the color palette.
 • **SharedColorPaletteProps**:
 
 _Defined in
-[src/ui/color_palette.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L82)_
+[src/ui/color_palette.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L82)_
 
 Props shared between the [ColorPalette](_airtable_blocks_ui__colorpalette.md#colorpalette) and
 [ColorPaletteSynced](_airtable_blocks_ui__colorpalette.md#colorpalettesynced) components.
@@ -296,7 +296,7 @@ Props shared between the [ColorPalette](_airtable_blocks_ui__colorpalette.md#col
 • **allowedColors**: _Array‹string›_
 
 _Defined in
-[src/ui/color_palette.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L84)_
+[src/ui/color_palette.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L84)_
 
 The list of [colors](_airtable_blocks_ui__colors.md#color) to display in the color palette.
 
@@ -305,7 +305,7 @@ The list of [colors](_airtable_blocks_ui__colors.md#color) to display in the col
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/color_palette.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L90)_
+[src/ui/color_palette.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L90)_
 
 Additional class names to apply to the color palette, separated by spaces.
 
@@ -314,7 +314,7 @@ Additional class names to apply to the color palette, separated by spaces.
 • **disabled**? : _undefined | false | true_
 
 _Defined in
-[src/ui/color_palette.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L94)_
+[src/ui/color_palette.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L94)_
 
 If set to `true`, the color palette will not allow color selection.
 
@@ -323,7 +323,7 @@ If set to `true`, the color palette will not allow color selection.
 • **onChange**? : _undefined | function_
 
 _Defined in
-[src/ui/color_palette.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L86)_
+[src/ui/color_palette.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L86)_
 
 A function to be called when the selected color changes.
 
@@ -332,7 +332,7 @@ A function to be called when the selected color changes.
 • **squareMargin**? : _undefined | number_
 
 _Defined in
-[src/ui/color_palette.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L88)_
+[src/ui/color_palette.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L88)_
 
 The margin between color squares in the color palette.
 
@@ -341,6 +341,6 @@ The margin between color squares in the color palette.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/color_palette.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/color_palette.tsx#L92)_
+[src/ui/color_palette.tsx:92](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/color_palette.tsx#L92)_
 
 Additional styles to apply to the color palette.

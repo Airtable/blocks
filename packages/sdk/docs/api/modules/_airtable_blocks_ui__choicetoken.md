@@ -22,7 +22,7 @@
 • **ChoiceTokenProps**:
 
 _Defined in
-[src/ui/choice_token.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L64)_
+[src/ui/choice_token.tsx:64](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L64)_
 
 Props for the [ChoiceToken](_airtable_blocks_ui__choicetoken.md#const-choicetoken) component. Also
 accepts:
@@ -34,7 +34,7 @@ accepts:
 • **choice**: _[SelectOption](_airtable_blocks_ui__choicetoken.md#selectoption)_
 
 _Defined in
-[src/ui/choice_token.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L66)_
+[src/ui/choice_token.tsx:66](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L66)_
 
 An object representing a select option. You should not create these objects from scratch, but should
 instead grab them from base data.
@@ -44,7 +44,7 @@ instead grab them from base data.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/choice_token.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L70)_
+[src/ui/choice_token.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L70)_
 
 Additional class names to apply to the choice token.
 
@@ -53,7 +53,7 @@ Additional class names to apply to the choice token.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/choice_token.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L68)_
+[src/ui/choice_token.tsx:68](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L68)_
 
 Additional styles to apply to the choice token.
 
@@ -64,7 +64,7 @@ Additional styles to apply to the choice token.
 • **ChoiceTokenStyleProps**:
 
 _Defined in
-[src/ui/choice_token.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L32)_
+[src/ui/choice_token.tsx:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L32)_
 
 Style props for the [ChoiceToken](_airtable_blocks_ui__choicetoken.md#const-choicetoken) component.
 Accepts:
@@ -80,7 +80,7 @@ Accepts:
 • **SelectOption**:
 
 _Defined in
-[src/ui/choice_token.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L49)_
+[src/ui/choice_token.tsx:49](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L49)_
 
 An option from a select field. You should not create these objects from scratch, but should instead
 grab them from base data.
@@ -90,7 +90,7 @@ grab them from base data.
 • **color**? : _[Color](_airtable_blocks_ui__colors.md#color)_
 
 _Defined in
-[src/ui/choice_token.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L55)_
+[src/ui/choice_token.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L55)_
 
 The color of the select option.
 
@@ -99,7 +99,7 @@ The color of the select option.
 • **id**: _string_
 
 _Defined in
-[src/ui/choice_token.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L51)_
+[src/ui/choice_token.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L51)_
 
 The ID of the select option.
 
@@ -108,7 +108,7 @@ The ID of the select option.
 • **name**: _string_
 
 _Defined in
-[src/ui/choice_token.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L53)_
+[src/ui/choice_token.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L53)_
 
 The name of the select option.
 
@@ -120,7 +120,7 @@ The name of the select option.
 [ChoiceTokenProps](_airtable_blocks_ui__choicetoken.md#choicetokenprops)): _Element_
 
 _Defined in
-[src/ui/choice_token.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/choice_token.tsx#L98)_
+[src/ui/choice_token.tsx:98](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/choice_token.tsx#L98)_
 
 A component that shows a single choice in a small token, to be displayed inline or in a list of
 choices.

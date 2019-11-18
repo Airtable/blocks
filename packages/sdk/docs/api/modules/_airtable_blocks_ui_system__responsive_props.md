@@ -21,7 +21,7 @@
 • **ResponsivePropObject**:
 
 _Defined in
-[src/ui/system/utils/types.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L8)_
+[src/ui/system/utils/types.ts:8](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L8)_
 
 An object that specifies the responsive behavior of a
 [ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop). For each viewport
@@ -33,7 +33,7 @@ media query in CSS.
 • **largeViewport**? : _[T](undefined)_
 
 _Defined in
-[src/ui/system/utils/types.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L16)_
+[src/ui/system/utils/types.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L16)_
 
 Sets the value of this responsive prop in a large viewport.
 
@@ -42,7 +42,7 @@ Sets the value of this responsive prop in a large viewport.
 • **mediumViewport**? : _[T](undefined)_
 
 _Defined in
-[src/ui/system/utils/types.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L14)_
+[src/ui/system/utils/types.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L14)_
 
 Sets the value of this responsive prop in a medium viewport.
 
@@ -51,7 +51,7 @@ Sets the value of this responsive prop in a medium viewport.
 • **smallViewport**? : _[T](undefined)_
 
 _Defined in
-[src/ui/system/utils/types.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L12)_
+[src/ui/system/utils/types.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L12)_
 
 Sets the value of this responsive prop in a small viewport.
 
@@ -60,7 +60,7 @@ Sets the value of this responsive prop in a small viewport.
 • **xsmallViewport**? : _[T](undefined)_
 
 _Defined in
-[src/ui/system/utils/types.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L10)_
+[src/ui/system/utils/types.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L10)_
 
 Sets the value of this responsive prop in an extra small viewport.
 
@@ -73,7 +73,7 @@ _[ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop
 null_
 
 _Defined in
-[src/ui/system/utils/types.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L32)_
+[src/ui/system/utils/types.ts:32](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L32)_
 
 An optional [ResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#responsiveprop) that
 can be null or undefined.
@@ -86,7 +86,7 @@ can be null or undefined.
 [ResponsivePropObject](_airtable_blocks_ui_system__responsive_props.md#responsivepropobject)‹T›_
 
 _Defined in
-[src/ui/system/utils/types.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/utils/types.ts#L27)_
+[src/ui/system/utils/types.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L27)_
 
 A React component prop that may vary based on the viewport width. You can either pass in a single
 value that applies to all viewports or a

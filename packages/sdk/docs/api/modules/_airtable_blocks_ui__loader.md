@@ -21,7 +21,7 @@
 • **LoaderProps**:
 
 _Defined in
-[src/ui/loader.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L48)_
+[src/ui/loader.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L48)_
 
 Props for the [Loader](_airtable_blocks_ui__loader.md#const-loader) component. Also accepts:
 
@@ -32,7 +32,7 @@ Props for the [Loader](_airtable_blocks_ui__loader.md#const-loader) component. A
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/loader.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L54)_
+[src/ui/loader.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L54)_
 
 Additional class names to apply to the loading spinner.
 
@@ -41,7 +41,7 @@ Additional class names to apply to the loading spinner.
 • **fillColor**: _string_
 
 _Defined in
-[src/ui/loader.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L50)_
+[src/ui/loader.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L50)_
 
 The color of the loading spinner. Defaults to `'#888'`
 
@@ -50,7 +50,7 @@ The color of the loading spinner. Defaults to `'#888'`
 • **scale**: _number_
 
 _Defined in
-[src/ui/loader.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L52)_
+[src/ui/loader.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L52)_
 
 A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner.
 Defaults to `0.3`.
@@ -60,7 +60,7 @@ Defaults to `0.3`.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/loader.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L56)_
+[src/ui/loader.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L56)_
 
 Additional styles to apply to the loading spinner.
 
@@ -71,7 +71,7 @@ Additional styles to apply to the loading spinner.
 • **LoaderStyleProps**:
 
 _Defined in
-[src/ui/loader.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L28)_
+[src/ui/loader.tsx:28](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L28)_
 
 Style props for the [Loader](_airtable_blocks_ui__loader.md#const-loader) component. Accepts:
 
@@ -88,7 +88,7 @@ _Inherited from
 [AlignSelfProps](_airtable_blocks_ui_system__flex_item.md#alignselfprops).[alignSelf](_airtable_blocks_ui_system__flex_item.md#optional-alignself)_
 
 _Defined in
-[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
+[src/ui/system/flex_item/align_self.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/flex_item/align_self.ts#L10)_
 
 Aligns flex items of the current flex line, overriding the `alignItems` value.
 
@@ -101,7 +101,7 @@ _Inherited from
 [BottomProps](_airtable_blocks_ui_system__position.md#bottomprops).[bottom](_airtable_blocks_ui_system__position.md#optional-bottom)_
 
 _Defined in
-[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/bottom.ts#L11)_
+[src/ui/system/position/bottom.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/bottom.ts#L11)_
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
@@ -115,7 +115,7 @@ _Inherited from
 [FlexProps](_airtable_blocks_ui_system__flex_item.md#flexprops).[flex](_airtable_blocks_ui_system__flex_item.md#optional-flex)_
 
 _Defined in
-[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
+[src/ui/system/flex_item/flex.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/flex_item/flex.ts#L10)_
 
 Sets how a flex item will grow or shrink to fit the space available in its flex container. It is a
 shorthand for `flexGrow`, `flexShrink`, and `flexBasis`.
@@ -129,7 +129,7 @@ _Inherited from
 [FlexBasisProps](_airtable_blocks_ui_system__flex_item.md#flexbasisprops).[flexBasis](_airtable_blocks_ui_system__flex_item.md#optional-flexbasis)_
 
 _Defined in
-[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
+[src/ui/system/flex_item/flex_basis.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/flex_item/flex_basis.ts#L10)_
 
 Sets the initial main size of a flex item.
 
@@ -142,7 +142,7 @@ _Inherited from
 [FlexGrowProps](_airtable_blocks_ui_system__flex_item.md#flexgrowprops).[flexGrow](_airtable_blocks_ui_system__flex_item.md#optional-flexgrow)_
 
 _Defined in
-[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
+[src/ui/system/flex_item/flex_grow.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/flex_item/flex_grow.ts#L10)_
 
 Sets the flex grow factor of a flex item. If the size of flex items is smaller than the flex
 container, items grow to fit according to `flexGrow`.
@@ -156,7 +156,7 @@ _Inherited from
 [FlexShrinkProps](_airtable_blocks_ui_system__flex_item.md#flexshrinkprops).[flexShrink](_airtable_blocks_ui_system__flex_item.md#optional-flexshrink)_
 
 _Defined in
-[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
+[src/ui/system/flex_item/flex_shrink.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/flex_item/flex_shrink.ts#L10)_
 
 Sets the flex shrink factor of a flex item. If the size of flex items is larger than the flex
 container, items shrink to fit according to `flexShrink`.
@@ -170,7 +170,7 @@ _Inherited from
 [LeftProps](_airtable_blocks_ui_system__position.md#leftprops).[left](_airtable_blocks_ui_system__position.md#optional-left)_
 
 _Defined in
-[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/left.ts#L11)_
+[src/ui/system/position/left.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/left.ts#L11)_
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
@@ -184,7 +184,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[margin](_airtable_blocks_ui_system__spacing.md#optional-margin)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
+[src/ui/system/spacing/margin.ts:17](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L17)_
 
 Sets the margin area on all four sides of an element. It is a shorthand for `marginTop`,
 `marginRight`, `marginBottom`, and `marginLeft`.
@@ -198,7 +198,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginBottom](_airtable_blocks_ui_system__spacing.md#optional-marginbottom)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
+[src/ui/system/spacing/margin.ts:23](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L23)_
 
 Sets the margin area on the bottom of an element. A positive value places it farther from its
 neighbors, while a negative value places it closer.
@@ -212,7 +212,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginLeft](_airtable_blocks_ui_system__spacing.md#optional-marginleft)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
+[src/ui/system/spacing/margin.ts:25](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L25)_
 
 Sets the margin area on the left of an element. A positive value places it farther from its
 neighbors, while a negative value places it closer.
@@ -226,7 +226,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginRight](_airtable_blocks_ui_system__spacing.md#optional-marginright)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
+[src/ui/system/spacing/margin.ts:21](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L21)_
 
 Sets the margin area on the right of an element. A positive value places it farther from its
 neighbors, while a negative value places it closer.
@@ -240,7 +240,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginTop](_airtable_blocks_ui_system__spacing.md#optional-margintop)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
+[src/ui/system/spacing/margin.ts:19](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L19)_
 
 Sets the margin area on the top of an element. A positive value places it farther from its
 neighbors, while a negative value places it closer.
@@ -254,7 +254,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginX](_airtable_blocks_ui_system__spacing.md#optional-marginx)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
+[src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
 
 Sets the margin area on the top and bottom of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
@@ -268,7 +268,7 @@ _Inherited from
 [MarginProps](_airtable_blocks_ui_system__spacing.md#marginprops).[marginY](_airtable_blocks_ui_system__spacing.md#optional-marginy)_
 
 _Defined in
-[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
+[src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
 
 Sets the margin area on the left and right of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
@@ -282,7 +282,7 @@ _Inherited from
 [OrderProps](_airtable_blocks_ui_system__flex_item.md#orderprops).[order](_airtable_blocks_ui_system__flex_item.md#optional-order)_
 
 _Defined in
-[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
+[src/ui/system/flex_item/order.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/flex_item/order.ts#L10)_
 
 Sets the order to lay out an item in a flex container. Items are sorted by ascending `order` value
 and then by their source code order.
@@ -296,7 +296,7 @@ _Inherited from
 [PositionProps](_airtable_blocks_ui_system__position.md#positionprops).[position](_airtable_blocks_ui_system__position.md#optional-position)_
 
 _Defined in
-[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/position.ts#L10)_
+[src/ui/system/position/position.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/position.ts#L10)_
 
 Sets how an element is positioned in a document. The `top`, `right`, `bottom`, and `left` properties
 determine the final location of positioned elements.
@@ -310,7 +310,7 @@ _Inherited from
 [RightProps](_airtable_blocks_ui_system__position.md#rightprops).[right](_airtable_blocks_ui_system__position.md#optional-right)_
 
 _Defined in
-[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/right.ts#L11)_
+[src/ui/system/position/right.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/right.ts#L11)_
 
 Specifies the horizontal position of a positioned element. It has no effect on non-positioned
 elements.
@@ -324,7 +324,7 @@ _Inherited from
 [TopProps](_airtable_blocks_ui_system__position.md#topprops).[top](_airtable_blocks_ui_system__position.md#optional-top)_
 
 _Defined in
-[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/top.ts#L11)_
+[src/ui/system/position/top.ts:11](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/top.ts#L11)_
 
 Specifies the vertical position of a positioned element. It has no effect on non-positioned
 elements.
@@ -338,7 +338,7 @@ _Inherited from
 [ZIndexProps](_airtable_blocks_ui_system__position.md#zindexprops).[zIndex](_airtable_blocks_ui_system__position.md#optional-zindex)_
 
 _Defined in
-[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/system/position/z_index.ts#L10)_
+[src/ui/system/position/z_index.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/position/z_index.ts#L10)_
 
 Sets the z-order of a positioned element and its descendants or flex items. Overlapping elements
 with larger z-indexes cover those with smaller ones.
@@ -350,7 +350,7 @@ with larger z-indexes cover those with smaller ones.
 ▸ **Loader**(`props`: [LoaderProps](_airtable_blocks_ui__loader.md#loaderprops)): _Element_
 
 _Defined in
-[src/ui/loader.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.35/packages/sdk/src/ui/loader.tsx#L76)_
+[src/ui/loader.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L76)_
 
 A loading spinner component.
 
