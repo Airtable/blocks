@@ -11,7 +11,9 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.37...HEAD)
 
-No changes.
+- Supports TypeScript 3.7.
+- Notifies when a new version of `@airtable/blocks-cli` is available.
+- Security and bug fixes.
 
 ## [0.0.37](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.36...@airtable/blocks-cli@0.0.37) - 2019-09-30
 
