@@ -55,6 +55,8 @@ practices for blocks development. And you can use it as a jumping off point for 
     to your base.
 -   [Update records](https://github.com/Airtable/blocks/tree/master/examples/update-records-block) -
     Updates the cell values of the selected records in your base.
+-   [Table structure](https://github.com/Airtable/blocks/tree/master/examples/table-structure-block) -
+    Shows information about the selected table and its fields
 
 ##### Simple chart
 
@@ -83,3 +85,7 @@ practices for blocks development. And you can use it as a jumping off point for 
 ##### Update records
 
 [![Block with a button that adds 1 to 'In Stock' for each selected record](examples/update-records-block/media/block.gif?raw=true)](examples/update-records-block)
+
+##### Table structure
+
+[![Block that shows information about the selected table and its fields](examples/table-structure-block/media/block.gif?raw=true)](examples/table-structure-block)
