@@ -1174,7 +1174,7 @@ _Defined in
 
 ### WatchableFieldKey
 
-Ƭ **WatchableFieldKey**: _"name" | "type" | "options" | "isComputed" | "description"_
+Ƭ **WatchableFieldKey**: _"name" | "description" | "type" | "options" | "isComputed"_
 
 _Defined in
 [src/models/field.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/models/field.ts#L29)_
