@@ -106,14 +106,16 @@ class ApiClient {
                             errObj.message,
                         );
                     } else {
-                        throw new Error(`API failed with ${JSON.stringify(errors, null, 4)}`);
+                        throw new Error(
+                            `Request to Airtable failed with ${JSON.stringify(errors, null, 4)}`,
+                        );
                     }
                 })
                 .join('\n');
         } else if (error && typeof error.message === 'string') {
             return this._processErrorMessageForApiKeyIfUnauthorized(statusCode, error.message);
         } else {
-            throw new Error(`API failed with statusCode ${statusCode}`);
+            throw new Error(`Request to Airtable failed with status code ${statusCode}`);
         }
     }
 
