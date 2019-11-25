@@ -83,7 +83,7 @@ _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#option
 _Defined in
 [src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
 
-Sets the margin area on the top and bottom of an element. A positive value places it farther from
+Sets the margin area on the left and right of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
 
 ### `Optional` marginY
@@ -94,7 +94,7 @@ _[OptionalResponsiveProp](_airtable_blocks_ui_system__responsive_props.md#option
 _Defined in
 [src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
 
-Sets the margin area on the left and right of an element. A positive value places it farther from
+Sets the margin area on the top and bottom of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
 
 ---
@@ -269,7 +269,7 @@ _Inherited from
 _Defined in
 [src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
 
-Sets the margin area on the top and bottom of an element. A positive value places it farther from
+Sets the margin area on the left and right of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
 
 ### `Optional` marginY
@@ -283,7 +283,7 @@ _Inherited from
 _Defined in
 [src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
 
-Sets the margin area on the left and right of an element. A positive value places it farther from
+Sets the margin area on the top and bottom of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
 
 ### `Optional` padding
