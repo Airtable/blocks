@@ -7,6 +7,8 @@ import {
     Box,
     CellRenderer,
     Heading,
+    Icon,
+    Text,
     ViewPickerSynced,
 } from '@airtable/blocks/ui';
 import React from 'react';
@@ -34,7 +36,7 @@ function PrintRecordsBlock() {
     return (
         <div>
             <Toolbar table={table} />
-            <Box padding={3}>
+            <Box margin={3}>
                 <Report view={view} />
             </Box>
         </div>
@@ -95,22 +97,60 @@ function Record({record}) {
     );
 
     return (
-        <Box paddingBottom={3}>
+        <Box marginY={3}>
             <Heading>{record.primaryCellValueAsString}</Heading>
             <table style={{borderCollapse: 'collapse', width: '100%'}}>
+                <thead>
+                    <tr>
+                        <td
+                            style={{
+                                whiteSpace: 'nowrap',
+                                verticalAlign: 'bottom',
+                            }}
+                        >
+                            <Heading variant="caps" size="xsmall" marginRight={3} marginBottom={0}>
+                                On display?
+                            </Heading>
+                        </td>
+                        <td style={{width: '50%', verticalAlign: 'bottom'}}>
+                            <Heading variant="caps" size="xsmall" marginRight={3} marginBottom={0}>
+                                Artist name
+                            </Heading>
+                        </td>
+                        <td style={{width: '50%', verticalAlign: 'bottom'}}>
+                            <Heading variant="caps" size="xsmall" marginBottom={0}>
+                                Artworks
+                            </Heading>
+                        </td>
+                    </tr>
+                </thead>
                 <tbody>
                     {linkedRecords.map(linkedRecord => {
-                        // Distinguish artists on display by putting
-                        // their names in green.  An example of
-                        // dynamic styling based on cell content
+                        // Render a check or an x depending on if the artist is on display or not.
                         const isArtistOnDisplay = linkedRecord.getCellValue('On Display?');
-                        const artistNameColor = isArtistOnDisplay ? 'green' : 'black';
                         return (
-                            <tr key={linkedRecord.id} style={{borderBottom: '1px solid #ddd'}}>
-                                <td style={{width: '40%', color: artistNameColor}}>
-                                    {linkedRecord.primaryCellValueAsString}
+                            <tr key={linkedRecord.id} style={{borderTop: '2px solid #ddd'}}>
+                                <td style={{textAlign: 'center', whiteSpace: 'nowrap'}}>
+                                    <Box
+                                        display="inline-flex"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        width="16px"
+                                        height="16px"
+                                        marginRight={3}
+                                        borderRadius="100%"
+                                        backgroundColor={isArtistOnDisplay ? 'green' : 'red'}
+                                        textColor="white"
+                                    >
+                                        <Icon name={isArtistOnDisplay ? 'check' : 'x'} size={12} />
+                                    </Box>
                                 </td>
-                                <td>
+                                <td style={{width: '50%'}}>
+                                    <Text marginRight={3}>
+                                        {linkedRecord.primaryCellValueAsString}
+                                    </Text>
+                                </td>
+                                <td style={{width: '50%'}}>
                                     <CellRenderer
                                         record={linkedRecord}
                                         field={linkedTable.getFieldByName('Attachments')}
