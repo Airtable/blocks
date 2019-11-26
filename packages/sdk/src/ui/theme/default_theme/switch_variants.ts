@@ -39,7 +39,7 @@ const baseStyles = css({
     boxSizing: 'border-box',
     outline: 'none',
     fontFamily: fontFamilies.default,
-    backgroundColor: colors.grayLight2,
+    backgroundColor: colors.lightGray2,
     '&[aria-disabled="true"]': {
         opacity: opacities.quieter,
     },
