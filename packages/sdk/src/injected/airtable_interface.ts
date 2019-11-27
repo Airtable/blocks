@@ -1,8 +1,7 @@
-import {FlowAnyObject, ObjectMap} from '../private_utils';
+import {ObjectMap} from '../private_utils';
 import {AggregatorKey} from '../types/aggregators';
-import {BaseData, BasePermissionData} from '../types/base';
+import {BaseData, BasePermissionData, ModelChange} from '../types/base';
 import {BlockInstallationId} from '../types/block';
-import {HostToBlockMessageType} from '../types/block_frame';
 import {FieldData, FieldId, FieldType} from '../types/field';
 import {GlobalConfigUpdate, GlobalConfigData} from '../global_config';
 import {RecordData, RecordDef, RecordId} from '../types/record';
@@ -188,7 +187,14 @@ export interface AirtableInterface {
     ): PermissionCheckResult;
 
     // frontend only:
-    registerHandler(type: HostToBlockMessageType, handlerFn: (data: FlowAnyObject) => void): void;
+    subscribeToModelUpdates(callback: (data: {changes: ReadonlyArray<ModelChange>}) => void): void;
+    subscribeToGlobalConfigUpdates(
+        callback: (data: {updates: ReadonlyArray<GlobalConfigUpdate>}) => void,
+    ): void;
+    subscribeToSettingsButtonClick(callback: () => void): void;
+    subscribeToEnterFullScreen(callback: () => void): void;
+    subscribeToExitFullScreen(callback: () => void): void;
+    subscribeToFocus(callback: () => void): void;
     fetchAndSubscribeToCursorDataAsync(): Promise<any>;
     unsubscribeFromCursorData(): void;
     expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null): void;

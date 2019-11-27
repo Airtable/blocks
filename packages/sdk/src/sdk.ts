@@ -26,10 +26,6 @@ if (!(React as any).PropTypes) {
     (React as any).PropTypes = PropTypes;
 }
 
-const BlockMessageTypes = window.__requirePrivateModuleFromAirtable(
-    'client/blocks/block_message_types',
-);
-
 /**
  * @hidden
  * @example
@@ -203,53 +199,39 @@ export default class BlockSdk {
     /** @internal */
     _registerHandlers() {
         // base
-        this.__airtableInterface.registerHandler(
-            BlockMessageTypes.HostToBlock.UPDATE_MODELS,
-            data => {
-                this.__applyModelChanges(data.changes);
-            },
-        );
+
+        this.__airtableInterface.subscribeToModelUpdates(({changes}) => {
+            this.__applyModelChanges(changes);
+        });
 
         // global config
-        this.__airtableInterface.registerHandler(
-            BlockMessageTypes.HostToBlock.SET_MULTIPLE_KV_PATHS,
-            data => {
-                this.__applyGlobalConfigUpdates(data.updates);
-            },
-        );
+        this.__airtableInterface.subscribeToGlobalConfigUpdates(({updates}) => {
+            this.__applyGlobalConfigUpdates(updates);
+        });
 
         // settings button
-        this.__airtableInterface.registerHandler(
-            BlockMessageTypes.HostToBlock.DID_CLICK_SETTINGS_BUTTON,
-            () => {
-                if (this.settingsButton.isVisible) {
-                    this._runWithUpdateBatching(() => {
-                        // Since there's an async gap when communicating with liveapp,
-                        // no-op if the button has been hidden since it was clicked.
-                        this.settingsButton.__onClick();
-                    });
-                }
-            },
-        );
+        this.__airtableInterface.subscribeToSettingsButtonClick(() => {
+            if (this.settingsButton.isVisible) {
+                this._runWithUpdateBatching(() => {
+                    // Since there's an async gap when communicating with liveapp,
+                    // no-op if the button has been hidden since it was clicked.
+                    this.settingsButton.__onClick();
+                });
+            }
+        });
 
         // viewport
-        this.__airtableInterface.registerHandler(
-            BlockMessageTypes.HostToBlock.DID_ENTER_FULLSCREEN,
-            () => {
-                this._runWithUpdateBatching(() => {
-                    this.viewport.__onEnterFullscreen();
-                });
-            },
-        );
-        this.__airtableInterface.registerHandler(
-            BlockMessageTypes.HostToBlock.DID_EXIT_FULLSCREEN,
-            () => {
-                this._runWithUpdateBatching(() => {
-                    this.viewport.__onExitFullscreen();
-                });
-            },
-        );
-        this.__airtableInterface.registerHandler(BlockMessageTypes.HostToBlock.FOCUS, () => {
+        this.__airtableInterface.subscribeToEnterFullScreen(() => {
+            this._runWithUpdateBatching(() => {
+                this.viewport.__onEnterFullscreen();
+            });
+        });
+        this.__airtableInterface.subscribeToExitFullScreen(() => {
+            this._runWithUpdateBatching(() => {
+                this.viewport.__onExitFullscreen();
+            });
+        });
+        this.__airtableInterface.subscribeToFocus(() => {
             this._runWithUpdateBatching(() => {
                 this.viewport.__focus();
             });
