@@ -279,15 +279,20 @@ export class CellRenderer extends React.Component<CellRendererProps> {
     }
 }
 
-export default withHooks<{}, CellRendererProps, CellRenderer>(CellRenderer, props => {
-    const {styleProps, nonStyleProps} = splitStyleProps<CellRendererProps, CellRendererStyleProps>(
-        props,
-        styleParser.propNames,
-        {display: 'block'},
-    );
-    const {className} = nonStyleProps;
-    const classNameForStyleProps = useStyledSystem<CellRendererStyleProps>(styleProps, styleParser);
-    useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
-    useWatchable(props.field, ['type', 'options']);
-    return {className: cx(classNameForStyleProps, className)};
-});
+export default withHooks<{className?: string}, CellRendererProps, CellRenderer>(
+    CellRenderer,
+    props => {
+        const {styleProps, nonStyleProps} = splitStyleProps<
+            CellRendererProps,
+            CellRendererStyleProps
+        >(props, styleParser.propNames, {display: 'block'});
+        const {className} = nonStyleProps;
+        const classNameForStyleProps = useStyledSystem<CellRendererStyleProps>(
+            styleProps,
+            styleParser,
+        );
+        useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
+        useWatchable(props.field, ['type', 'options']);
+        return {className: cx(classNameForStyleProps, className)};
+    },
+);
