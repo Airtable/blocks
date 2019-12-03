@@ -90,6 +90,22 @@ describe('useWatchable', () => {
             expect(wrapper.find('span').text()).toEqual('bar');
         });
 
+        it('supports non-array watch keys', () => {
+            const Component = ({thing}: {thing: Thing}) => {
+                useWatchable(thing, 'name');
+                return <span>{thing.name}</span>;
+            };
+
+            const thing = new Thing('foo');
+            const wrapper = mount(<Component thing={thing} />);
+            expect(wrapper.find('span').text()).toEqual('foo');
+
+            act(() => {
+                thing.setName('bar');
+            });
+            expect(wrapper.find('span').text()).toEqual('bar');
+        });
+
         it('only renders once on initial mount', () => {
             let renderCount = 0;
             const Component = ({thing}: {thing: Thing}) => {
