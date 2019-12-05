@@ -14,6 +14,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   Changed the font sizes for the `size` variants of `Select` and `Button`.
 -   `useWatchable` now supports single string watch keys being passed in (as well as the existing
     array support)
+-   Fixed bug where `shouldAllowPickingNone` didn't work in `FieldPicker` and `FieldPickerSynced`.
 
 ## [0.0.36](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.35...@airtable/blocks@0.0.36) - 2019-11-18
 

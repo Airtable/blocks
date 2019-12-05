@@ -162,6 +162,7 @@ function FieldPicker(props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>)
             shouldAllowPickingModelFn={shouldAllowPickingFieldFn as any}
             selectedModelId={selectedField && !selectedField.isDeleted ? selectedField.id : null}
             modelKeysToWatch={['name', 'type', 'options']}
+            shouldAllowPickingNone={shouldAllowPickingNone}
             placeholder={placeholderToUse}
             onChange={_onChange}
         />
