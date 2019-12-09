@@ -59,15 +59,7 @@ interface ButtonStyleProps
     display?: OptionalResponsiveProp<'inline-flex' | 'flex' | 'none'>;
 }
 
-const styleParser = compose(
-    display,
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(display, maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 const buttonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),

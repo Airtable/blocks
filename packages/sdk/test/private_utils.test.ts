@@ -184,7 +184,10 @@ describe('uniqBy', () => {
                 ],
                 o => o.group,
             ),
-        ).toEqual([{id: 1, group: 'a'}, {id: 2, group: 'b'}]);
+        ).toEqual([
+            {id: 1, group: 'a'},
+            {id: 2, group: 'b'},
+        ]);
         expect(uniqBy([2.1, 1.2, 2.3], Math.floor)).toEqual([2.1, 1.2]);
     });
 });
@@ -195,7 +198,10 @@ describe('getValueAtOwnPath', () => {
         b: {c: 'foo', notThere: null},
         bool: true,
         array: [1, {x: 4}],
-        nonPlain: new Map([['a', 1], ['b', 2]]),
+        nonPlain: new Map([
+            ['a', 1],
+            ['b', 2],
+        ]),
     };
 
     it('returns the value at that path', () => {

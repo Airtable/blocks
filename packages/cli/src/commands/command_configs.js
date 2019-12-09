@@ -32,9 +32,7 @@ function commandRunner(name: string): RunCommandFn {
 
 async function runUnsupportedCommandAsync(argv: Argv) {
     throw new Error(
-        `The ${
-            argv._[0]
-        } command is no longer supported. If you are working on a block that is not yet migrated to the new block.json format, you may need to use an old version of blocks-cli`,
+        `The ${argv._[0]} command is no longer supported. If you are working on a block that is not yet migrated to the new block.json format, you may need to use an old version of blocks-cli`,
     );
 }
 

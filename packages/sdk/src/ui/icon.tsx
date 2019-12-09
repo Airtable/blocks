@@ -32,13 +32,7 @@ import {iconNamePropType, IconName, allIconPaths, AllIconName} from './icon_conf
  */
 export interface IconStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-    width,
-    height,
-);
+const styleParser = compose(flexItemSet, positionSet, margin, width, height);
 
 export const iconStylePropTypes = {
     ...flexItemSetPropTypes,

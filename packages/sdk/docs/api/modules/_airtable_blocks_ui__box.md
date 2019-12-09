@@ -105,7 +105,7 @@ The `tabIndex` attribute.
 ### Box
 
 ▸ **Box**(`props`: [BoxProps](_airtable_blocks_ui__box.md#boxprops), `ref`: React.Ref‹HTMLElement›):
-_Element_
+_Element‹›_
 
 _Defined in
 [src/ui/box.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/box.tsx#L72)_
@@ -134,4 +134,4 @@ function BoxExample() {
 | `props` | [BoxProps](_airtable_blocks_ui__box.md#boxprops) |
 | `ref`   | React.Ref‹HTMLElement›                           |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

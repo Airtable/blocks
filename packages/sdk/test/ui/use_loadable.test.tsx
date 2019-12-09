@@ -298,8 +298,19 @@ describe('useLoadable', () => {
             // enzyme doesn't support <Suspense /> yet, so use ReactDOM manually:
             const el = document.createElement('div');
             let wrapper: any;
-            act(() => {
-                wrapper = ReactDOM.render(<Wrapper initialThings={[thing1, thing2]} />, el);
+            await act(() => {
+                return new Promise<undefined>(resolve => {
+                    ReactDOM.render(
+                        <Wrapper
+                            initialThings={[thing1, thing2]}
+                            ref={wrapperRef => {
+                                wrapper = wrapperRef;
+                                resolve();
+                            }}
+                        />,
+                        el,
+                    );
+                });
             });
 
             expect(el.innerHTML).toMatchInlineSnapshot('"<span>suspended</span>"');

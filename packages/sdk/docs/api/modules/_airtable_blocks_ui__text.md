@@ -160,7 +160,7 @@ Multi-line text such as body copy.
 ### Text
 
 ▸ **Text**(`props`: [TextProps](_airtable_blocks_ui__text.md#textprops), `ref`:
-React.Ref‹HTMLElement›): _Element_
+React.Ref‹HTMLElement›): _Element‹›_
 
 _Defined in
 [src/ui/text.tsx:135](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text.tsx#L135)_
@@ -202,4 +202,4 @@ function TextExample() {
 | `props` | [TextProps](_airtable_blocks_ui__text.md#textprops) |
 | `ref`   | React.Ref‹HTMLElement›                              |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

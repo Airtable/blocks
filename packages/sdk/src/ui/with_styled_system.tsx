@@ -83,7 +83,7 @@ export default function withStyledSystem<
     Statics extends {}
 >(
     Component:
-        | (new (props: Props) => React.Component) & {displayName?: string}
+        | ((new (props: Props) => React.Component) & {displayName?: string})
         | React.RefForwardingComponent<Instance, Props>
         | React.FunctionComponent<Props>,
     styleParser: styleFn,

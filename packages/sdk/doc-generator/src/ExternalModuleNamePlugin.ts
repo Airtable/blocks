@@ -106,13 +106,10 @@ export default class ExternalModuleNamePlugin extends ConverterComponent {
      */
     private onBeginResolve(context: Context) {
         let projRefs = context.project.reflections;
-        let refsArray: Reflection[] = Object.keys(projRefs).reduce(
-            (m, k) => {
-                m.push(projRefs[Number(k)]);
-                return m;
-            },
-            [] as Array<Reflection>,
-        );
+        let refsArray: Reflection[] = Object.keys(projRefs).reduce((m, k) => {
+            m.push(projRefs[Number(k)]);
+            return m;
+        }, [] as Array<Reflection>);
 
         // Process each rename
         this.moduleRenames.forEach(item => {

@@ -58,15 +58,7 @@ interface CellRendererStyleProps
     display?: OptionalResponsiveProp<'block' | 'inline' | 'inline-block'>;
 }
 
-const styleParser = compose(
-    display,
-    flexItemSet,
-    margin,
-    maxWidth,
-    minWidth,
-    positionSet,
-    width,
-);
+const styleParser = compose(display, flexItemSet, margin, maxWidth, minWidth, positionSet, width);
 
 const cellRendererStylePropTypes = {
     // TODO (billy): currently, this will accept all values for display, not just block/inline/inline-block

@@ -32,10 +32,7 @@ export function useButtonSize(controlSizeProp: ControlSizeProp): string {
 }
 
 // For selects we create a custom style parser that includes `backgroundPosition`.
-const selectSizeStyleParser = compose(
-    allStylesParser,
-    system({backgroundPosition: true}),
-);
+const selectSizeStyleParser = compose(allStylesParser, system({backgroundPosition: true}));
 
 /** @internal */
 export function useSelectSize(controlSizeProp: ControlSizeProp): string {

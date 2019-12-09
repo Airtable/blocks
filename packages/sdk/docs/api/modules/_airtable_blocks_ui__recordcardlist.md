@@ -22,7 +22,7 @@
 • **RecordCardList**:
 
 _Defined in
-[src/ui/record_card_list.tsx:301](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L301)_
+[src/ui/record_card_list.tsx:296](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/record_card_list.tsx#L296)_
 
 Scrollable list of record cards.
 

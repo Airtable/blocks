@@ -203,7 +203,7 @@ Light gray text.
 ### TextButton
 
 ▸ **TextButton**(`props`: [TextButtonProps](_airtable_blocks_ui__textbutton.md#textbuttonprops),
-`ref`: React.Ref‹HTMLSpanElement›): _Element_
+`ref`: React.Ref‹HTMLSpanElement›): _Element‹›_
 
 _Defined in
 [src/ui/text_button.tsx:174](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/text_button.tsx#L174)_
@@ -243,4 +243,4 @@ function TextButtonExample() {
 | `props` | [TextButtonProps](_airtable_blocks_ui__textbutton.md#textbuttonprops) |
 | `ref`   | React.Ref‹HTMLSpanElement›                                            |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

@@ -27,11 +27,7 @@ const ORIGINAL_SIZE = 54;
  */
 interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const loaderStylePropTypes = {
     ...flexItemSetPropTypes,

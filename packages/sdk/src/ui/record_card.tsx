@@ -58,11 +58,7 @@ const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
  */
 interface RecordCardStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const recordCardStylePropTypes = {
     ...flexItemSetPropTypes,

@@ -31,15 +31,15 @@ export type TimeoutId = ReturnType<typeof setTimeout>;
  */
 export type ReactRefType<C> = C extends React.Component
     ? C
-    : C extends (new (props: any) => React.Component)
+    : C extends new (props: any) => React.Component
     ? C
     : C extends React.RefForwardingComponent<infer T, any>
     ? T
     : (C extends React.JSXElementConstructor<{ref?: infer R}>
-          ? R
-          : C extends keyof JSX.IntrinsicElements
-          ? JSX.IntrinsicElements[C]['ref']
-          : unknown) extends React.Ref<infer T> | string | undefined
+        ? R
+        : C extends keyof JSX.IntrinsicElements
+        ? JSX.IntrinsicElements[C]['ref']
+        : unknown) extends React.Ref<infer T> | string | undefined
     ? T
     : unknown;
 

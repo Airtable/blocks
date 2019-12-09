@@ -76,14 +76,7 @@ export interface InputStyleProps
         PositionSetProps,
         MarginProps {}
 
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 export const inputStylePropTypes = {
     ...maxWidthPropTypes,

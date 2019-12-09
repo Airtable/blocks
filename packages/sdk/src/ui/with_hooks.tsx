@@ -93,7 +93,7 @@ import * as React from 'react';
  */
 export default function withHooks<InjectedProps, Props extends InjectedProps, Instance>(
     Component:
-        | (new (props: Props) => React.Component) & {displayName?: string}
+        | ((new (props: Props) => React.Component) & {displayName?: string})
         | React.RefForwardingComponent<Instance, Props>
         | React.FunctionComponent<Props>,
     getAdditionalPropsToInject: (

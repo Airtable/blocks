@@ -762,10 +762,10 @@ Supported value types for [SelectOption](_airtable_blocks_ui__select.md#selectop
 ### Select
 
 ▸ **Select**(`props`: [SelectProps](_airtable_blocks_ui__select.md#selectprops), `ref`:
-React.Ref‹HTMLSelectElement›): _Element_
+React.Ref‹HTMLSelectElement›): _Element‹›_
 
 _Defined in
-[src/ui/select.tsx:219](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/select.tsx#L219)_
+[src/ui/select.tsx:212](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/select.tsx#L212)_
 
 Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
 
@@ -802,14 +802,14 @@ function ColorPicker() {
 | `props` | [SelectProps](_airtable_blocks_ui__select.md#selectprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                              |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_
 
 ---
 
 ### SelectSynced
 
 ▸ **SelectSynced**(`props`: [SelectSyncedProps](_airtable_blocks_ui__select.md#selectsyncedprops),
-`ref`: React.Ref‹HTMLSelectElement›): _Element_
+`ref`: React.Ref‹HTMLSelectElement›): _Element‹›_
 
 _Defined in
 [src/ui/select_synced.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/select_synced.tsx#L44)_
@@ -848,4 +848,4 @@ function ColorPickerSynced() {
 | `props` | [SelectSyncedProps](_airtable_blocks_ui__select.md#selectsyncedprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                          |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

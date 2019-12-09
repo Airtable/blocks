@@ -35,7 +35,7 @@ _Inherited from
 [SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[className](_airtable_blocks_ui__icon.md#optional-classname)_
 
 _Defined in
-[src/ui/icon.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L61)_
+[src/ui/icon.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L55)_
 
 Additional class names to apply to the icon.
 
@@ -56,7 +56,7 @@ _Inherited from
 [SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[fillColor](_airtable_blocks_ui__icon.md#optional-fillcolor)_
 
 _Defined in
-[src/ui/icon.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L59)_
+[src/ui/icon.tsx:53](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L53)_
 
 The color of the icon.
 
@@ -68,7 +68,7 @@ _Inherited from
 [SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[pathClassName](_airtable_blocks_ui__icon.md#optional-pathclassname)_
 
 _Defined in
-[src/ui/icon.tsx:65](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L65)_
+[src/ui/icon.tsx:59](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L59)_
 
 Additional class names to apply to the icon path.
 
@@ -80,7 +80,7 @@ _Inherited from
 [SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[pathStyle](_airtable_blocks_ui__icon.md#optional-pathstyle)_
 
 _Defined in
-[src/ui/icon.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L67)_
+[src/ui/icon.tsx:61](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L61)_
 
 Additional styles to apply to the icon path.
 
@@ -92,7 +92,7 @@ _Inherited from
 [SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[size](_airtable_blocks_ui__icon.md#optional-size)_
 
 _Defined in
-[src/ui/icon.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L57)_
+[src/ui/icon.tsx:51](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L51)_
 
 The width/height of the icon. Defaults to 16.
 
@@ -104,7 +104,7 @@ _Inherited from
 [SharedIconProps](_airtable_blocks_ui__icon.md#sharediconprops).[style](_airtable_blocks_ui__icon.md#optional-style)_
 
 _Defined in
-[src/ui/icon.tsx:63](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L63)_
+[src/ui/icon.tsx:57](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/icon.tsx#L57)_
 
 Additional styles to apply to the icon.
 
@@ -113,7 +113,7 @@ Additional styles to apply to the icon.
 ### `Const` FieldIcon
 
 ▸ **FieldIcon**(`props`: [FieldIconProps](_airtable_blocks_ui__fieldicon.md#fieldiconprops)):
-_Element_
+_Element‹›_
 
 _Defined in
 [src/ui/field_icon.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/field_icon.tsx#L48)_
@@ -126,4 +126,4 @@ A vector icon for a field's type.
 | ------- | ------------------------------------------------------------------ |
 | `props` | [FieldIconProps](_airtable_blocks_ui__fieldicon.md#fieldiconprops) |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

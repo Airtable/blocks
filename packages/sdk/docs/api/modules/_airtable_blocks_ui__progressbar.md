@@ -104,7 +104,7 @@ inner display type defining how the children of the box are laid out.
 ### `Const` ProgressBar
 
 ▸ **ProgressBar**(`props`:
-[ProgressBarProps](_airtable_blocks_ui__progressbar.md#progressbarprops)): _Element_
+[ProgressBarProps](_airtable_blocks_ui__progressbar.md#progressbarprops)): _Element‹›_
 
 _Defined in
 [src/ui/progress_bar.tsx:127](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/progress_bar.tsx#L127)_
@@ -117,4 +117,4 @@ A progress bar.
 | ------- | ------------------------------------------------------------------------ |
 | `props` | [ProgressBarProps](_airtable_blocks_ui__progressbar.md#progressbarprops) |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

@@ -34,11 +34,7 @@ const UNKNOWN_PROFILE_PIC_URL =
  */
 interface CollaboratorTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const collaboratorTokenStylePropTypes = {
     ...flexItemSetPropTypes,

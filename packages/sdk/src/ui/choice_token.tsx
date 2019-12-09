@@ -31,11 +31,7 @@ import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor
  */
 interface ChoiceTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const choiceTokenStylePropTypes = {
     ...flexItemSetPropTypes,

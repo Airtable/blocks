@@ -58,14 +58,7 @@ export interface ColorPaletteStyleProps
         PositionSetProps,
         MarginProps {}
 
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 export const colorPaletteStylePropTypes = {
     ...maxWidthPropTypes,

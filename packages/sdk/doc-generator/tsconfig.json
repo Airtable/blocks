@@ -4,7 +4,8 @@
         "target": "es2017",
         "module": "commonjs",
         "esModuleInterop": true,
-        "noImplicitAny": true,
+        // Typedoc has some implicit anys in it's declaration files, so we can't turn this on :(
+        "noImplicitAny": false,
         "strictNullChecks": true,
         "strictFunctionTypes": true,
         "strictBindCallApply": true,

@@ -30,7 +30,7 @@ media query in CSS.
 
 ### `Optional` largeViewport
 
-• **largeViewport**? : _[T](undefined)_
+• **largeViewport**? : _T_
 
 _Defined in
 [src/ui/system/utils/types.ts:16](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L16)_
@@ -39,7 +39,7 @@ Sets the value of this responsive prop in a large viewport.
 
 ### `Optional` mediumViewport
 
-• **mediumViewport**? : _[T](undefined)_
+• **mediumViewport**? : _T_
 
 _Defined in
 [src/ui/system/utils/types.ts:14](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L14)_
@@ -48,7 +48,7 @@ Sets the value of this responsive prop in a medium viewport.
 
 ### `Optional` smallViewport
 
-• **smallViewport**? : _[T](undefined)_
+• **smallViewport**? : _T_
 
 _Defined in
 [src/ui/system/utils/types.ts:12](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L12)_
@@ -57,7 +57,7 @@ Sets the value of this responsive prop in a small viewport.
 
 ### `Optional` xsmallViewport
 
-• **xsmallViewport**? : _[T](undefined)_
+• **xsmallViewport**? : _T_
 
 _Defined in
 [src/ui/system/utils/types.ts:10](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/utils/types.ts#L10)_

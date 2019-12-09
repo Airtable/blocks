@@ -251,12 +251,7 @@ interface RecordCardListStyleProps
         PositionSetProps,
         MarginProps {}
 
-const styleParser = compose(
-    dimensionsSet,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(dimensionsSet, flexItemSet, positionSet, margin);
 
 const recordCardListStylePropTypes = {
     ...dimensionsSetPropTypes,

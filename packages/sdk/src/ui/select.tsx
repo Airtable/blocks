@@ -179,14 +179,7 @@ export interface SelectProps extends SharedSelectProps {
     value: SelectOptionValue;
 }
 
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 /**
  * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.

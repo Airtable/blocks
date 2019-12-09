@@ -72,14 +72,7 @@ export interface SelectButtonsStyleProps
         PositionSetProps,
         MarginProps {}
 
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 export const selectButtonsStylePropTypes = {
     ...maxWidthPropTypes,

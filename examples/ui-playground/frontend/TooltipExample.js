@@ -92,7 +92,10 @@ export default function TooltipExample(props: void) {
                     <SelectButtons
                         value={selectValue}
                         onChange={setSelectValue}
-                        options={[{value: 'foo', label: 'foo'}, {value: 'bar', label: 'bar'}]}
+                        options={[
+                            {value: 'foo', label: 'foo'},
+                            {value: 'bar', label: 'bar'},
+                        ]}
                     />
                 </Tooltip>
             </Box>
