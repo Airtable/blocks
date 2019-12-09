@@ -59,7 +59,15 @@ interface ButtonStyleProps
     display?: OptionalResponsiveProp<'inline-flex' | 'flex' | 'none'>;
 }
 
-const styleParser = compose(display, maxWidth, minWidth, width, flexItemSet, positionSet, margin);
+const styleParser = compose(
+    display,
+    maxWidth,
+    minWidth,
+    width,
+    flexItemSet,
+    positionSet,
+    margin,
+);
 
 const buttonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
@@ -123,7 +131,9 @@ interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HT
     /** Indicates if the button can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
     /** The contents of the button. */
-    children: React.ReactNode | string;
+    // TODO: This is optional in order to support buttons with only icons.
+    // In the future, if we add IconButton or similar, it can be made non-optional.
+    children?: React.ReactNode | string;
     // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again.
     // TODO (stephen): figure out how to get rid of `Overrides void`
     /** Click event handler. Also handles Space and Enter keypress events. */
@@ -183,6 +193,12 @@ function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
         styleParser,
     );
     const hasIcon = icon !== undefined;
+    const hasChildren = !!children;
+
+    if (!hasChildren && !ariaLabel) {
+        // eslint-disable-next-line no-console
+        console.error('<Button> without a text label should include an explicit aria-label prop.');
+    }
 
     return (
         <button
@@ -211,15 +227,17 @@ function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
                 icon
             )}
 
-            <Box
-                as="span"
-                // The margin is on the span, and not on the icon because it would mean that when using a custom icon
-                // the consumer would manually need to figure out what the margin is supposed to be.
-                marginLeft={hasIcon ? '0.5em' : undefined}
-                className={cssHelpers.TRUNCATE}
-            >
-                {children}
-            </Box>
+            {hasChildren && (
+                <Box
+                    as="span"
+                    // The margin is on the span, and not on the icon because it would mean that when using a custom icon
+                    // the consumer would manually need to figure out what the margin is supposed to be.
+                    marginLeft={hasIcon ? '0.5em' : undefined}
+                    className={cssHelpers.TRUNCATE}
+                >
+                    {children}
+                </Box>
+            )}
         </button>
     );
 }
@@ -238,7 +256,9 @@ ForwardedRefButton.propTypes = {
     type: PropTypes.oneOf(['button', 'submit', 'reset'] as const),
     disabled: PropTypes.bool,
     tabIndex: PropTypes.number,
-    children: PropTypes.node.isRequired,
+    // TODO: This is optional in order to support buttons with only icons.
+    // In the future, if we add IconButton or similar, it can be made non-optional.
+    children: PropTypes.node,
     ...buttonStylePropTypes,
     ...tooltipAnchorPropTypes,
     ...ariaPropTypes,
