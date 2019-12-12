@@ -15,10 +15,6 @@ No changes.
 
 ## [0.0.38](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.37...@airtable/blocks@0.0.38) - 2019-12-12
 
-No changes.
-
-## [0.0.37](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.36...@airtable/blocks@0.0.37) - 2019-12-11
-
 -   Changed the font sizes for the `size` variants of `Select` and `Button`.
 -   `useWatchable` now supports single string watch keys being passed in (as well as the existing
     array support)
