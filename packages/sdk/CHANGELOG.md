@@ -9,15 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.38...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...HEAD)
 
 No changes.
 
-## [0.0.38](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.37...@airtable/blocks@0.0.38) - 2019-12-12
-
-No changes.
-
-## [0.0.37](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.36...@airtable/blocks@0.0.37) - 2019-12-11
+## [0.0.39](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.38...@airtable/blocks@0.0.39) - 2019-12-12
 
 -   Changed the font sizes for the `size` variants of `Select` and `Button`.
 -   `useWatchable` now supports single string watch keys being passed in (as well as the existing

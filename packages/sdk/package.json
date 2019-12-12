@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.38",
+    "version": "0.0.39",
     "description": "Airtable Blocks SDK",
     "main": "dist/cjs/index.js",
     "types": "index.d.ts",
@@ -118,7 +118,7 @@
             "commitMessage": "Release @airtable/blocks@${version}"
         },
         "hooks": {
-            "before:init": "../../bin/check-repo-for-release && yarn test",
+            "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
             "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
         },
         "npm": {
