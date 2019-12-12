@@ -27,6 +27,7 @@ interface ExpandRecordListOpts {
  *     fields: [field1, field2],
  * });
  * ```
+ * @docsPath UI/utils/expandRecordList
  */
 function expandRecordList(records: Array<Record>, opts?: ExpandRecordListOpts) {
     if (records.length === 0) {

@@ -51,6 +51,8 @@ import useArrayIdentity from './use_array_identity';
  *     return <span>Active view id: {cursor.activeViewId}</span>;
  * }
  * ```
+ * @docsPath UI/hooks/useWatchable
+ * @hook
  */
 export default function useWatchable<Keys extends string>(
     models: Watchable<Keys> | ReadonlyArray<Watchable<Keys> | null | undefined> | null | undefined,

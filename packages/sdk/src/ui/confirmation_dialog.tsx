@@ -11,6 +11,7 @@ import Box from './box';
  * * {@link DialogStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/ConfirmationDialog
  */
 interface ConfirmationDialogProps extends DialogStyleProps {
     /** Extra styles to apply to the dialog element. */

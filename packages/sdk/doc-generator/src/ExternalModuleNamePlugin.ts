@@ -1,5 +1,12 @@
 /**
  * This entire file is copy-pasted & modified from https://github.com/christopherthielen/typedoc-plugin-external-module-name
+ *
+ * NOTE(billy): Typedoc made a breaking change, requiring a second empty comment
+ * after the `@module` comment in order to work correctly. There's a workaround that landed in
+ * the base plugin that this was copied from (https://github.com/christopherthielen/typedoc-plugin-external-module-name/pull/9)
+ * If we want to continue using this, may be worthwhile to copy this fix over and remove the
+ * empty comments on modules. Although, in the new docs world using JSON output, modules
+ * don't really give us a whole lot, so we may strip this out entirely.
  */
 
 import * as ts from 'typescript';

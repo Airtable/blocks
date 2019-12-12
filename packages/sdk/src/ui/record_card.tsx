@@ -125,6 +125,7 @@ CellValueAndFieldLabel.propTypes = {
  * * {@link RecordCardStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/RecordCard
  */
 interface RecordCardProps extends RecordCardStyleProps {
     /** Record to display in the card. */
@@ -243,6 +244,8 @@ const calculateAttachmentDimensionsAndMargin = (
  *     );
  * }
  * ```
+ * @docsPath UI/components/RecordCard
+ * @component
  */
 export class RecordCard extends React.Component<RecordCardProps> {
     /** @hidden */

@@ -24,6 +24,8 @@ export type WatchableViewKey = ObjectValues<typeof WatchableViewKeys>;
 
 /**
  * A class that represents an Airtable view. Every {@link Table} has one or more views.
+ *
+ * @docsPath models/View
  */
 class View extends AbstractModel<ViewData, WatchableViewKey> {
     /** @internal */

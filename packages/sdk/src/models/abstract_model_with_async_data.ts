@@ -4,7 +4,12 @@ import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '.
 import {spawnInvariantViolationError, spawnAbstractMethodError} from '../error_utils';
 import AbstractModel from './abstract_model';
 
-/** Abstract superclass for all block SDK models that need to fetch async data. */
+/**
+ * Abstract superclass for all block SDK models that need to fetch async data.
+ *
+ * @docsPath models/advanced/AbstractModelWithAsyncData
+ * @groupPath models/advanced/AbstractModel
+ */
 class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends AbstractModel<
     DataType,
     WatchableKey

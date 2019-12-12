@@ -4,13 +4,13 @@ import View from '../models/view';
 import useLoadable from './use_loadable';
 import useWatchable from './use_watchable';
 
-/** @hidden */
+/** */
 function useViewMetadata(
     viewOrViewMetadataQueryResult: View | ViewMetadataQueryResult,
 ): ViewMetadataQueryResult;
-/** @hidden */
+/** */
 function useViewMetadata(viewOrViewMetadataQueryResult?: null | undefined): null;
-/** @hidden */
+/** */
 function useViewMetadata(
     viewOrViewMetadataQueryResult?: View | ViewMetadataQueryResult | null | undefined,
 ): ViewMetadataQueryResult | null;
@@ -38,6 +38,8 @@ function useViewMetadata(
  *     );
  * }
  * ```
+ * @docsPath UI/hooks/useViewMetadata
+ * @hook
  */
 function useViewMetadata(
     viewOrViewMetadataQueryResult?: View | ViewMetadataQueryResult | null | undefined,

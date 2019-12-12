@@ -75,6 +75,7 @@ const cellRendererStylePropTypes = {
  * Props for the {@link CellRenderer} component. Also accepts:
  * * {@link CellRendererStyleProps}
  *
+ * @docsPath UI/components/CellRenderer
  * @noInheritDoc
  */
 interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<HTMLDivElement> {
@@ -127,6 +128,8 @@ interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<H
  *    );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/CellRenderer
  */
 export class CellRenderer extends React.Component<CellRendererProps> {
     /** @hidden */

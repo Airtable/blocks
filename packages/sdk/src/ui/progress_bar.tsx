@@ -94,6 +94,7 @@ export const progressBarStylePropTypes = {
  * Props for the {@link ProgressBar} component. Also accepts:
  * * {@link ProgressBarStyleProps}
  *
+ * @docsPath UI/components/ProgressBar
  * @noInheritDoc
  */
 interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
@@ -123,6 +124,8 @@ interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/ProgressBar
+ * @component
  */
 const ProgressBar = (props: ProgressBarProps) => {
     const {

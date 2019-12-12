@@ -43,7 +43,9 @@ type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
  * Model class representing a record in a table.
  *
  * Do not instantiate. You can get instances of this class by calling `table.selectRecords`
- * or `view.selectRecords` and using the resulting {@RecordQueryResult}.
+ * or `view.selectRecords` and using the resulting {@link RecordQueryResult}.
+ *
+ * @docsPath models/Record
  */
 class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     // Once all blocks set this flag to true, remove this flag.

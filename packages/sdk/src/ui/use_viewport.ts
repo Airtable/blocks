@@ -33,6 +33,8 @@ import useWatchable from './use_watchable';
  *      );
  * }
  * ```
+ * @docsPath UI/hooks/useViewport
+ * @hook
  */
 export default function useViewport(): Viewport {
     const viewport = getSdk().viewport;

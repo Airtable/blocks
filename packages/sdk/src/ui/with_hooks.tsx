@@ -90,6 +90,7 @@ import * as React from 'react';
  * // class component. Instead, you need to wrap it in React.ElementRef:
  * const ref: React.ElementRef<typeof WrappedRecordList> = getTheRefSomehow();
  * ```
+ * @internal
  */
 export default function withHooks<InjectedProps, Props extends InjectedProps, Instance>(
     Component:

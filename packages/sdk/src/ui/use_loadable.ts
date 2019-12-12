@@ -106,6 +106,8 @@ interface UseLoadableOpts {
  *      return <SomeFancyComponent queryResults={queryResults} />;
  *  }
  * ```
+ * @docsPath UI/hooks/useLoadable
+ * @hook
  */
 export default function useLoadable(
     models: ReadonlyArray<LoadableModel | null> | LoadableModel | null,

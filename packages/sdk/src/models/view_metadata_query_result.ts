@@ -58,6 +58,7 @@ const viewMetadataQueryResultPool: ObjectPool<
  *     viewMetadata.unloadData();
  * }
  * ```
+ * @docsPath models/Query results/ViewMetadataQueryResult
  */
 class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     ViewMetadata,

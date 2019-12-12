@@ -46,6 +46,7 @@ export const dialogStylePropTypes = {
  * * {@link DialogStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/Dialog
  */
 interface DialogProps extends DialogStyleProps {
     /** Callback function to fire when the dialog is closed. */
@@ -101,6 +102,8 @@ interface DialogProps extends DialogStyleProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Dialog
+ * @component
  */
 // TODO (stephen): focus trapping
 class Dialog extends React.Component<DialogProps> {

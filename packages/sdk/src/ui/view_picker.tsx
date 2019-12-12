@@ -39,6 +39,8 @@ export const sharedViewPickerPropTypes = {
 /**
  * Props for the {@link ViewPicker} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/ViewPicker
  */
 interface ViewPickerProps extends SharedViewPickerProps {
     /** The selected view model. */
@@ -92,8 +94,10 @@ interface ViewPickerProps extends SharedViewPickerProps {
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/ViewPicker
  */
-function ViewPicker(props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) {
+const ViewPicker = (props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) => {
     const {
         table,
         view: selectedView,
@@ -152,7 +156,7 @@ function ViewPicker(props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) {
             onChange={_onChange}
         />
     );
-}
+};
 
 const ForwardedRefViewPicker = React.forwardRef<HTMLSelectElement, ViewPickerProps>(ViewPicker);
 

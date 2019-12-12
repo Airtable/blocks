@@ -59,15 +59,7 @@ interface ButtonStyleProps
     display?: OptionalResponsiveProp<'inline-flex' | 'flex' | 'none'>;
 }
 
-const styleParser = compose(
-    display,
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(display, maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 const buttonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
@@ -114,6 +106,7 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
  * * {@link ButtonStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/Button
  */
 interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HTMLButtonElement> {
     /** The size of the button. Defaults to `default`. Can be a responsive prop object. */
@@ -163,8 +156,10 @@ interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HT
  *     </Button>
  * );
  * ```
+ * @component
+ * @docsPath UI/components/Button
  */
-function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
+const Button = (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
     const {
         size = ControlSize.default,
         variant = ButtonVariant.default,
@@ -240,7 +235,7 @@ function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
             )}
         </button>
     );
-}
+};
 
 const ForwardedRefButton = React.forwardRef<HTMLButtonElement, ButtonProps>(Button);
 

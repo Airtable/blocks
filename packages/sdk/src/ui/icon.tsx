@@ -94,8 +94,10 @@ interface IconProps extends SharedIconProps {
  *     />
  * );
  * ```
+ * @component
+ * @docsPath UI/components/Icon
  */
-function Icon(props: IconProps, ref: React.Ref<SVGSVGElement>) {
+const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
     const {
         name,
         size = 16,
@@ -150,7 +152,7 @@ function Icon(props: IconProps, ref: React.Ref<SVGSVGElement>) {
             />
         </svg>
     );
-}
+};
 
 const ForwardedRefIcon = React.forwardRef<SVGSVGElement, IconProps>(Icon);
 

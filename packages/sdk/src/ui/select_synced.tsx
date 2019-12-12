@@ -9,6 +9,9 @@ import useSynced from './use_synced';
 /**
  * Props for the {@link SelectSynced} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/SelectSynced
+ * @groupPath UI/components/Select
  */
 interface SelectSyncedProps extends SharedSelectProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new option will update {@link GlobalConfig}. */
@@ -40,8 +43,11 @@ interface SelectSyncedProps extends SharedSelectProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/SelectSynced
+ * @groupPath UI/components/Select
+ * @component
  */
-function SelectSynced(props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+const SelectSynced = (props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, disabled, onChange, ...restOfProps} = props;
     const {value, canSetValue, setValue} = useSynced(globalConfigKey);
 
@@ -77,7 +83,7 @@ function SelectSynced(props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement
             disabled={disabled || !canSetValue}
         />
     );
-}
+};
 
 const ForwardedRefSelectSynced = React.forwardRef<HTMLSelectElement, SelectSyncedProps>(
     SelectSynced,

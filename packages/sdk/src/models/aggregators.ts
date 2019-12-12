@@ -21,6 +21,7 @@ import Field from './field';
  * const value = aggregator.aggregate(myRecords, myAttachmentField);
  * const valueAsString = aggregate.aggregateToString(myRecords, myAttachmentField);
  * ```
+ * @docsPath models/advanced/Aggregator
  */
 export interface Aggregator {
     /** A unique key for this aggregator that can be used to identify it in code. */

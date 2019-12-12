@@ -95,6 +95,7 @@ function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVaria
  * * {@link AllStylesProps}
  * * {@link AriaProps}
  *
+ * @docsPath UI/components/Heading
  * @noInheritDoc
  */
 interface HeadingProps extends AllStylesProps, AriaProps {
@@ -143,8 +144,10 @@ interface HeadingProps extends AllStylesProps, AriaProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Heading
+ * @component
  */
-function Heading(props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) {
+const Heading = (props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) => {
     const {
         as: Component = 'h3',
         size = HeadingSize.default,
@@ -193,7 +196,7 @@ function Heading(props: HeadingProps, ref: React.Ref<HTMLHeadingElement>) {
             {children}
         </Component>
     );
-}
+};
 
 const ForwardedRefHeading = React.forwardRef<HTMLHeadingElement, HeadingProps>(Heading);
 

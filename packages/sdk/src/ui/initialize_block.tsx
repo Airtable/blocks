@@ -25,6 +25,7 @@ let hasBeenInitialized = false;
  *
  * initializeBlock(() => <App />);
  * ```
+ * @docsPath UI/utils/initializeBlock
  */
 function initializeBlock(getEntryElement: () => React.ReactNode) {
     const body = typeof document !== 'undefined' ? document.body : null;

@@ -65,6 +65,7 @@ const formFieldStylePropTypes = {
  * * {@link FormFieldStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/FormField
  */
 interface FormFieldProps extends FormFieldStyleProps {
     /** The `id` attribute. */
@@ -115,8 +116,10 @@ interface FormFieldProps extends FormFieldStyleProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/FormField
+ * @component
  */
-function FormField(props: FormFieldProps, ref: React.Ref<HTMLDivElement>) {
+const FormField = (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
     const {
         id,
         className,
@@ -156,7 +159,7 @@ function FormField(props: FormFieldProps, ref: React.Ref<HTMLDivElement>) {
             <FormFieldIdContext.Provider value={controlId}>{children}</FormFieldIdContext.Provider>
         </Box>
     );
-}
+};
 
 const ForwardedRefFormField = React.forwardRef<HTMLDivElement, FormFieldProps>(FormField);
 

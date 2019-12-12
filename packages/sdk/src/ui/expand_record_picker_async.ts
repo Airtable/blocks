@@ -43,6 +43,7 @@ interface ExpandRecordPickerOpts {
  *     });
  * }
  * ```
+ * @docsPath UI/utils/expandRecordPickerAsync
  */
 async function expandRecordPickerAsync(
     records: Array<Record>,

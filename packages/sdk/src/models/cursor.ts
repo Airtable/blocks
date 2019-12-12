@@ -40,6 +40,7 @@ interface CursorData {
  * ```js
  * import {cursor} from '@airtable/blocks';
  * ```
+ * @docsPath models/Cursor
  */
 class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
     /** @internal */

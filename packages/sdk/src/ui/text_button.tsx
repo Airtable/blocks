@@ -111,6 +111,7 @@ function useTextButtonVariant(variant: TextButtonVariant = TextButtonVariant.def
  * * {@link TextButtonStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/TextButton
  */
 interface TextButtonProps
     extends TooltipAnchorProps<HTMLSpanElement>,
@@ -170,8 +171,10 @@ interface TextButtonProps
  *     );
  * }
  * ```
+ * @docsPath UI/components/TextButton
+ * @component
  */
-function TextButton(props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) {
+const TextButton = (props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) => {
     const {
         size = TextSize.default,
         variant = TextButtonVariant.default,
@@ -287,7 +290,7 @@ function TextButton(props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) {
             </Box>
         </span>
     );
-}
+};
 
 const ForwardedRefTextButton = React.forwardRef<HTMLSpanElement, TextButtonProps>(TextButton);
 

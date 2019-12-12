@@ -30,11 +30,15 @@ import useWatchable from './use_watchable';
  *     );
  * }
  * ```
+ * @docsPath UI/hooks/useSession
+ * @hook
  */
-export default function useSession(): Session {
+const useSession = (): Session => {
     const {session, base} = getSdk();
     useWatchable(session, ['permissionLevel', 'currentUser']);
     // permission checks depend on the base schema, so we need to track that too:
     useWatchable(base, ['schema']);
     return session;
-}
+};
+
+export default useSession;

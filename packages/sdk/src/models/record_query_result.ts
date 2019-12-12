@@ -132,7 +132,7 @@ export interface NormalizedRecordQueryResultOpts {
  *
  * When calling a `.select*` method, you can pass in a number of options:
  *
- * ##### sorts
+ * ## sorts
  * Pass an array of sorts to control the order of records within the query result. The first sort
  * in the array has the highest priority. If you don't specify sorts, the query result will use the
  * inherent order of the source model: the same order you'd see in the main UI for views and linked
@@ -149,7 +149,7 @@ export interface NormalizedRecordQueryResultOpts {
  * });
  * ```
  *
- * ##### fields
+ * ## fields
  * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
  * can get pretty big, and we have to keep all that information in memory and up to date if you ask
  * for it. The fields option lets you make sure that only data relevant to you is loaded.
@@ -168,7 +168,7 @@ export interface NormalizedRecordQueryResultOpts {
  * });
  * ```
  *
- * ##### recordColorMode
+ * ## recordColorMode
  * Just like a view in Airtable, you can control the colors of records in a field. There are three
  * supported record color modes:
  *
@@ -206,6 +206,8 @@ export interface NormalizedRecordQueryResultOpts {
  *     recordColorMode: recordColoring.modes.none(),
  * });
  * ```
+ * 
+ * @docsPath models/Query results/RecordQueryResult
  */
 class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,

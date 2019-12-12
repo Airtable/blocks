@@ -12,6 +12,8 @@ const FADE_IN_ANIMATION_DURATION = 150;
 
 /**
  * Props for the {@link Tooltip} component.
+ *
+ * @docsPath UI/components/Tooltip
  */
 interface TooltipProps {
     /** Child components to render. */
@@ -64,6 +66,8 @@ interface TooltipState {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Tooltip
+ * @component
  */
 class Tooltip extends React.Component<TooltipProps, TooltipState> {
     /** @hidden */

@@ -11,6 +11,9 @@ import useWatchable from './use_watchable';
 /**
  * Props for the {@link ViewPickerSynced} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/ViewPickerSynced
+ * @groupPath UI/components/ViewPicker
  */
 interface ViewPickerSyncedProps extends SharedViewPickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected view will always reflect the view id stored in {@link GlobalConfig} for this key. Selecting a new view will update {@link GlobalConfig}. */
@@ -63,8 +66,11 @@ interface ViewPickerSyncedProps extends SharedViewPickerProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/ViewPickerSynced
+ * @groupPath UI/components/ViewPicker
+ * @component
  */
-function ViewPickerSynced(props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+const ViewPickerSynced = (props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, table, onChange, disabled, ...restOfProps} = props;
     const {value: viewId, canSetValue: canSetViewId, setValue: setViewId} = useSynced(
         globalConfigKey,
@@ -95,7 +101,7 @@ function ViewPickerSynced(props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelec
             disabled={disabled || !canSetViewId}
         />
     );
-}
+};
 
 const ForwardedRefViewPickerSynced = React.forwardRef<HTMLSelectElement, ViewPickerSyncedProps>(
     ViewPickerSynced,

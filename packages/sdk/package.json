@@ -20,7 +20,7 @@
     "scripts": {
         "airbuild": "yarn run build && yarn run docs && yarn run test",
         "pretest": "yarn run lint && yarn run types",
-        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run docs && git add CHANGELOG.md docs/api",
+        "version": "changelog-publish --github-repo-url='https://github.com/airtable/blocks' --git-tag-prefix='@airtable/blocks@' && yarn run docs && git add CHANGELOG.md docs/docs-$npm_package_version.json",
         "release": "npm_config_registry=https://registry.npmjs.org/ release-it",
         "types": "tsc",
         "lint": "eslint --report-unused-disable-directives --ext .js,.ts,.tsx src test",
@@ -33,11 +33,10 @@
         "watch:babel": "yarn run build:babel --watch",
         "build:types": "tsc --outDir dist/types --declaration --declarationMap --noEmit false --allowJs false --checkJs false --emitDeclarationOnly --stripInternal",
         "watch:types": "yarn run build:types --watch",
-        "docs:clean": "rm -rf ./docs/api ./doc-generator/lib",
+        "docs:clean": "rm -rf ./doc-generator/lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",
         "docs:generator": "tsc -b ./doc-generator/tsconfig.json",
-        "docs:typedoc": "typedoc --plugin \"typedoc-plugin-markdown,typedoc-plugin-sourcefile-url,typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" .",
-        "docs:format": "node ./doc-generator/lib/scripts/format_unsupported_tags.js && prettier --write 'docs/**/*.md'",
-        "docs": "yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:format",
+        "docs:typedoc": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" --json docs/docs-$npm_package_version.json .",
+        "docs": "yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
         "storybook": "start-storybook -p 6006",
@@ -81,9 +80,7 @@
         "jest": "^24.9.0",
         "prettier": "^1.19.1",
         "typedoc": "^0.15.4",
-        "typedoc-plugin-markdown": "^2.2.14",
         "typedoc-plugin-no-inherit": "^1.1.10",
-        "typedoc-plugin-sourcefile-url": "^1.0.4",
         "typescript": "^3.7.3"
     },
     "dependencies": {

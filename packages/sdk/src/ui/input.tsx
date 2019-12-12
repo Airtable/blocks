@@ -132,7 +132,7 @@ export interface SharedInputProps extends InputStyleProps, TooltipAnchorProps<HT
     /** Additional class names to apply to the input, separated by spaces. */
     className?: string;
     /** A function to be called when the input changes. */
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => unknown;
+    onChange?(e: React.ChangeEvent<HTMLInputElement>): unknown;
     /** A space separated list of label element IDs. */
     ['aria-labelledby']?: string;
     /** A space separated list of description element IDs. */
@@ -190,6 +190,8 @@ export const sharedInputPropTypes = {
 /**
  * Props for the {@link Input} component. Also accepts:
  * * {@link InputStyleProps}
+ *
+ * @docsPath UI/components/Input
  */
 interface InputProps extends SharedInputProps {
     /** The input's current value. */
@@ -220,8 +222,10 @@ interface InputProps extends SharedInputProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Input
+ * @component
  */
-function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
+const Input = (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
     const {
         size = ControlSize.default,
         type = SupportedInputType.text,
@@ -298,7 +302,7 @@ function Input(props: InputProps, ref: React.Ref<HTMLInputElement>) {
             aria-describedby={ariaDescribedBy}
         />
     );
-}
+};
 
 const ForwardedRefInput = React.forwardRef<HTMLInputElement, InputProps>(Input);
 

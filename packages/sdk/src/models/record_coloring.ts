@@ -7,6 +7,7 @@ import View from './view';
 /**
  * An enum of the different types of {@link recordColoring.modes}
  *
+ * @hidden
  * @alias recordColoring.ModeTypes
  */
 export const ModeTypes = {
@@ -24,7 +25,9 @@ export const ModeTypes = {
     BY_VIEW: 'byView' as const,
 };
 
-/** */
+/**
+ * @hidden
+ */
 export type RecordColorModeType = ObjectValues<typeof ModeTypes>;
 
 /** */

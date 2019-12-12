@@ -12,6 +12,9 @@ import useSynced from './use_synced';
 /**
  * Props for the {@link SelectButtonsSynced} component. Also accepts:
  * * {@link SelectButtonsStyleProps}
+ *
+ * @docsPath UI/components/SelectButtonsSynced
+ * @groupPath UI/components/SelectButtons
  */
 interface SelectButtonsSyncedProps extends SharedSelectButtonsProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected option will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new option will update {@link GlobalConfig}. */
@@ -39,8 +42,11 @@ interface SelectButtonsSyncedProps extends SharedSelectButtonsProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/SelectButtonsSynced
+ * @groupPath UI/components/SelectButtons
+ * @component
  */
-function SelectButtonsSynced(props: SelectButtonsSyncedProps, ref: React.Ref<HTMLDivElement>) {
+const SelectButtonsSynced = (props: SelectButtonsSyncedProps, ref: React.Ref<HTMLDivElement>) => {
     const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
     const {value, setValue, canSetValue} = useSynced(globalConfigKey);
 
@@ -73,7 +79,7 @@ function SelectButtonsSynced(props: SelectButtonsSyncedProps, ref: React.Ref<HTM
             disabled={disabled || !canSetValue}
         />
     );
-}
+};
 
 const ForwardedRefSelectButtonsSynced = React.forwardRef<HTMLDivElement, SelectButtonsSyncedProps>(
     SelectButtonsSynced,

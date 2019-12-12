@@ -133,6 +133,8 @@ export const sharedSelectButtonsPropTypes = {
 /**
  * Props for the {@link SelectButtons} component. Also accepts:
  * * {@link SelectButtonsStyleProps}
+ *
+ * @docsPath UI/components/SelectButtons
  */
 interface SelectButtonsProps extends SharedSelectButtonsProps {
     /** The value of the selected option. */
@@ -162,8 +164,10 @@ interface SelectButtonsProps extends SharedSelectButtonsProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/SelectButtons
+ * @component
  */
-function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>) {
+const SelectButtons = (props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>) => {
     const {
         className,
         style,
@@ -253,7 +257,7 @@ function SelectButtons(props: SelectButtonsProps, ref: React.Ref<HTMLDivElement>
             })}
         </div>
     );
-}
+};
 
 const ForwardedRefSelectButtons = React.forwardRef<HTMLDivElement, SelectButtonsProps>(
     SelectButtons,

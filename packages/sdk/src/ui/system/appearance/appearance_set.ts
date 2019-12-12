@@ -9,6 +9,8 @@ import {config as opacityConfig, OpacityProps} from './opacity';
 
 /**
  * Style props for the visual appearance of an element.
+ *
+ * @docsPath UI/system/Appearance
  */
 export interface AppearanceSetProps
     extends BackgroundColorProps,

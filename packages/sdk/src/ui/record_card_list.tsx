@@ -210,6 +210,8 @@ interface RecordCardListScrollEvent {
 /**
  * Props for the {@link RecordCardList} component. Also accepts:
  * * {@link RecordCardListStyleProps}
+ *
+ * @docsPath UI/components/RecordCardList
  */
 // This doesn't actually extend RecordCardListStyleProps since withStyledSystem
 // expects non-style props and style props as separate generic type variables.
@@ -292,6 +294,8 @@ interface RecordCardListState {
  *     );
  * }
  * ```
+ * @docsPath UI/components/RecordCardList
+ * @component
  */
 export class RecordCardList extends React.Component<RecordCardListProps, RecordCardListState> {
     /** @hidden */

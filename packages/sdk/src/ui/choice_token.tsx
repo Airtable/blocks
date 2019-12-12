@@ -55,6 +55,7 @@ interface SelectOption {
  * Props for the {@link ChoiceToken} component. Also accepts:
  * * {@link ChoiceTokenStyleProps}
  *
+ * @docsPath UI/components/ChoiceToken
  * @noInheritDoc
  */
 interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
@@ -90,6 +91,8 @@ interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/ChoiceToken
  */
 const ChoiceToken = (props: ChoiceTokenProps) => {
     const {
