@@ -57,11 +57,7 @@ const FALLBACK_RECORD_NAME_FOR_DISPLAY = 'Unnamed record';
  */
 interface RecordCardStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const recordCardStylePropTypes = {
     ...flexItemSetPropTypes,
@@ -124,6 +120,7 @@ CellValueAndFieldLabel.propTypes = {
  * * {@link RecordCardStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/RecordCard
  */
 interface RecordCardProps extends RecordCardStyleProps {
     /** Record to display in the card. */
@@ -238,6 +235,8 @@ const calculateAttachmentDimensionsAndMargin = (
  *     );
  * }
  * ```
+ * @docsPath UI/components/RecordCard
+ * @component
  */
 export class RecordCard extends React.Component<RecordCardProps> {
     /** @hidden */

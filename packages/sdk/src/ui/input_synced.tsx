@@ -9,6 +9,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 /**
  * Props for the {@link InputSynced} component. Also accepts:
  * * {@link InputStyleProps}
+ *
+ * @docsPath UI/components/InputSynced
+ * @groupPath UI/components/Input
  */
 interface InputSyncedProps extends SharedInputProps {
     /** A string key or array key path in {@link GlobalConfig}. The input value will always reflect the value stored in {@link GlobalConfig} for this key. Changing the input value will update {@link GlobalConfig}. */
@@ -32,8 +35,11 @@ interface InputSyncedProps extends SharedInputProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/InputSynced
+ * @groupPath UI/components/Input
+ * @component
  */
-function InputSynced(props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) {
+const InputSynced = (props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) => {
     const {
         globalConfigKey,
         type = SupportedInputType.text,
@@ -68,7 +74,7 @@ function InputSynced(props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) 
             type={type}
         />
     );
-}
+};
 
 const ForwardedRefInputSynced = React.forwardRef<HTMLInputElement, InputSyncedProps>(InputSynced);
 

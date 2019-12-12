@@ -2,123 +2,125 @@
 import {ObjectValues} from './private_utils';
 /**
  * Airtable color names.
+ *
+ * @docsPath UI/utils/Colors
  */
 const Colors = {
-    /** */
+    /** @docsPath UI/utils/Colors */
     BLUE_BRIGHT: 'blueBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     BLUE_DARK_1: 'blueDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     BLUE_LIGHT_1: 'blueLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     BLUE_LIGHT_2: 'blueLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     BLUE: 'blue' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     CYAN_BRIGHT: 'cyanBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     CYAN_DARK_1: 'cyanDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     CYAN_LIGHT_1: 'cyanLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     CYAN_LIGHT_2: 'cyanLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     CYAN: 'cyan' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     GRAY_BRIGHT: 'grayBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GRAY_DARK_1: 'grayDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GRAY_LIGHT_1: 'grayLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GRAY_LIGHT_2: 'grayLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GRAY: 'gray' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     GREEN_BRIGHT: 'greenBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GREEN_DARK_1: 'greenDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GREEN_LIGHT_1: 'greenLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GREEN_LIGHT_2: 'greenLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     GREEN: 'green' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     ORANGE_BRIGHT: 'orangeBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     ORANGE_DARK_1: 'orangeDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     ORANGE_LIGHT_1: 'orangeLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     ORANGE_LIGHT_2: 'orangeLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     ORANGE: 'orange' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     PINK_BRIGHT: 'pinkBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PINK_DARK_1: 'pinkDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PINK_LIGHT_1: 'pinkLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PINK_LIGHT_2: 'pinkLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PINK: 'pink' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     PURPLE_BRIGHT: 'purpleBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PURPLE_DARK_1: 'purpleDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PURPLE_LIGHT_1: 'purpleLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PURPLE_LIGHT_2: 'purpleLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     PURPLE: 'purple' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     RED_BRIGHT: 'redBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     RED_DARK_1: 'redDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     RED_LIGHT_1: 'redLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     RED_LIGHT_2: 'redLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     RED: 'red' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     TEAL_BRIGHT: 'tealBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     TEAL_DARK_1: 'tealDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     TEAL_LIGHT_1: 'tealLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     TEAL_LIGHT_2: 'tealLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     TEAL: 'teal' as const,
 
-    /** */
+    /** @docsPath UI/utils/Colors */
     YELLOW_BRIGHT: 'yellowBright' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     YELLOW_DARK_1: 'yellowDark1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     YELLOW_LIGHT_1: 'yellowLight1' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     YELLOW_LIGHT_2: 'yellowLight2' as const,
-    /** */
+    /** @docsPath UI/utils/Colors */
     YELLOW: 'yellow' as const,
 };
 
 export default Colors;
 
 /**
- * A color name.
+ * A color name from the list of {@link Colors}.
  */
 export type Color = ObjectValues<typeof Colors>;
 

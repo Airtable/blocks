@@ -9,9 +9,9 @@ import useWatchable from './use_watchable';
 /** */
 type AnyQueryResult = TableOrViewQueryResult | LinkedRecordsQueryResult;
 
-/** @hidden */
+/** */
 export function useRecordIds(queryResult: AnyQueryResult): Array<RecordId>;
-/** @hidden */
+/** */
 export function useRecordIds(queryResult: null): null;
 
 /**
@@ -43,6 +43,8 @@ export function useRecordIds(queryResult: null): null;
  *      return <span>record count in {table.name}: {recordIds.length}</span>;
  *  }
  * ```
+ * @docsPath UI/hooks/useRecordIds
+ * @hook
  */
 export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId> | null {
     useLoadable(queryResult);
@@ -50,9 +52,9 @@ export function useRecordIds(queryResult: AnyQueryResult | null): Array<RecordId
     return queryResult ? queryResult.recordIds : null;
 }
 
-/** @hidden */
+/** */
 export function useRecords(queryResult: AnyQueryResult): Array<Record>;
-/** @hidden */
+/** */
 export function useRecords(queryResult: null): null;
 
 /**
@@ -91,6 +93,8 @@ export function useRecords(queryResult: null): null;
  *      );
  *  }
  * ```
+ * @docsPath UI/hooks/useRecords
+ * @hook
  */
 export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | null {
     useLoadable(queryResult);
@@ -142,6 +146,8 @@ export function useRecords(queryResult: AnyQueryResult | null): Array<Record> | 
  *      );
  *  }
  * ```
+ * @docsPath UI/hooks/useRecordById
+ * @hook
  */
 export function useRecordById(
     queryResult: AnyQueryResult | null,

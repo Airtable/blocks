@@ -155,7 +155,7 @@ and smaller section headings.
 ### Heading
 
 ▸ **Heading**(`props`: [HeadingProps](_airtable_blocks_ui__heading.md#headingprops), `ref`:
-React.Ref‹HTMLHeadingElement›): _Element_
+React.Ref‹HTMLHeadingElement›): _Element‹›_
 
 _Defined in
 [src/ui/heading.tsx:147](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/heading.tsx#L147)_
@@ -197,4 +197,4 @@ function HeadingExample() {
 | `props` | [HeadingProps](_airtable_blocks_ui__heading.md#headingprops) |
 | `ref`   | React.Ref‹HTMLHeadingElement›                                |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

@@ -62,6 +62,8 @@ export type FitInWindowMode = ObjectValues<typeof FitInWindowModes>;
 
 /**
  * Props for the {@link Popover} component.
+ *
+ * @docsPath UI/components/Popover
  */
 interface PopoverProps {
     /** Child elements to render. */
@@ -90,6 +92,9 @@ interface PopoverProps {
 
 /**
  * A popover component, which is used to "float" some content above some other content.
+ *
+ * @docsPath UI/components/Popover
+ * @component
  */
 class Popover extends React.Component<PopoverProps> {
     /** @hidden */

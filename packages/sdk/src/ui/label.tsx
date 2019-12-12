@@ -14,6 +14,7 @@ import {dataAttributesPropType, DataAttributesProp} from './types/data_attribute
  * * {@link AriaProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/Label
  */
 interface LabelProps extends AllStylesProps, AriaProps {
     /** The size of the label. Defaults to `default`. Can be a responsive prop object. */
@@ -51,8 +52,10 @@ interface LabelProps extends AllStylesProps, AriaProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Label
+ * @component
  */
-function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
+const Label = (props: LabelProps, ref: React.Ref<HTMLLabelElement>) => {
     const {
         size = TextSize.default,
         htmlFor,
@@ -103,7 +106,7 @@ function Label(props: LabelProps, ref: React.Ref<HTMLLabelElement>) {
             {children}
         </label>
     );
-}
+};
 
 const ForwardedRefLabel = React.forwardRef<HTMLLabelElement, LabelProps>(Label);
 

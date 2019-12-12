@@ -21,7 +21,7 @@
 • **LoaderProps**:
 
 _Defined in
-[src/ui/loader.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L48)_
+[src/ui/loader.tsx:44](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L44)_
 
 Props for the [Loader](_airtable_blocks_ui__loader.md#const-loader) component. Also accepts:
 
@@ -32,7 +32,7 @@ Props for the [Loader](_airtable_blocks_ui__loader.md#const-loader) component. A
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/loader.tsx:54](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L54)_
+[src/ui/loader.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L50)_
 
 Additional class names to apply to the loading spinner.
 
@@ -41,7 +41,7 @@ Additional class names to apply to the loading spinner.
 • **fillColor**: _string_
 
 _Defined in
-[src/ui/loader.tsx:50](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L50)_
+[src/ui/loader.tsx:46](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L46)_
 
 The color of the loading spinner. Defaults to `'#888'`
 
@@ -50,7 +50,7 @@ The color of the loading spinner. Defaults to `'#888'`
 • **scale**: _number_
 
 _Defined in
-[src/ui/loader.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L52)_
+[src/ui/loader.tsx:48](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L48)_
 
 A scalar for the loading spinner. Increasing the scale increases the size of the loading spinner.
 Defaults to `0.3`.
@@ -60,7 +60,7 @@ Defaults to `0.3`.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/loader.tsx:56](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L56)_
+[src/ui/loader.tsx:52](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L52)_
 
 Additional styles to apply to the loading spinner.
 
@@ -256,7 +256,7 @@ _Inherited from
 _Defined in
 [src/ui/system/spacing/margin.ts:27](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L27)_
 
-Sets the margin area on the top and bottom of an element. A positive value places it farther from
+Sets the margin area on the left and right of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
 
 ### `Optional` marginY
@@ -270,7 +270,7 @@ _Inherited from
 _Defined in
 [src/ui/system/spacing/margin.ts:29](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/system/spacing/margin.ts#L29)_
 
-Sets the margin area on the left and right of an element. A positive value places it farther from
+Sets the margin area on the top and bottom of an element. A positive value places it farther from
 its neighbors, while a negative value places it closer.
 
 ### `Optional` order
@@ -347,10 +347,10 @@ with larger z-indexes cover those with smaller ones.
 
 ### `Const` Loader
 
-▸ **Loader**(`props`: [LoaderProps](_airtable_blocks_ui__loader.md#loaderprops)): _Element_
+▸ **Loader**(`props`: [LoaderProps](_airtable_blocks_ui__loader.md#loaderprops)): _Element‹›_
 
 _Defined in
-[src/ui/loader.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L76)_
+[src/ui/loader.tsx:72](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/loader.tsx#L72)_
 
 A loading spinner component.
 
@@ -360,4 +360,4 @@ A loading spinner component.
 | ------- | --------------------------------------------------------- |
 | `props` | [LoaderProps](_airtable_blocks_ui__loader.md#loaderprops) |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

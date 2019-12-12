@@ -13,6 +13,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 /**
  * Props for the {@link ColorPaletteSynced} component. Also accepts:
  * * {@link ColorPaletteStyleProps}
+ *
+ * @docsPath UI/components/ColorPaletteSynced
+ * @groupPath UI/components/ColorPalette
  */
 interface ColorPaletteSyncedProps extends SharedColorPaletteProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected color will always reflect the value stored in {@link GlobalConfig} for this key. Selecting a new color will update {@link GlobalConfig}. */
@@ -38,6 +41,9 @@ interface ColorPaletteSyncedProps extends SharedColorPaletteProps {
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/ColorPaletteSynced
+ * @groupPath UI/components/ColorPalette
  */
 class ColorPaletteSynced extends React.Component<ColorPaletteSyncedProps> {
     /** @hidden */

@@ -46,6 +46,7 @@ const compareWithNulls = (
  * ```js
  * import {viewport} from '@airtable/blocks';
  * ```
+ * @docsPath models/advanced/Viewport
  */
 class Viewport extends Watchable<WatchableViewportKey> {
     /** @internal */

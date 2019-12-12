@@ -108,7 +108,7 @@ import {
  * * {@link DisplayProps|Display}
  * * {@link OverflowProps|Overflow}
  *
- * @noInheritDoc
+ * @docsPath UI/system/All styles
  */
 export interface AllStylesProps
     extends AppearanceSetProps,

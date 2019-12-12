@@ -530,7 +530,7 @@ Red switch for toggling a dangerous or infrequently-used setting.
 ### Switch
 
 ▸ **Switch**(`props`: [SwitchProps](_airtable_blocks_ui__switch.md#switchprops), `ref`:
-React.Ref‹HTMLDivElement›): _Element_
+React.Ref‹HTMLDivElement›): _Element‹›_
 
 _Defined in
 [src/ui/switch.tsx:188](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/switch.tsx#L188)_
@@ -561,14 +561,14 @@ function Block() {
 | `props` | [SwitchProps](_airtable_blocks_ui__switch.md#switchprops) |
 | `ref`   | React.Ref‹HTMLDivElement›                                 |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_
 
 ---
 
 ### SwitchSynced
 
 ▸ **SwitchSynced**(`props`: [SwitchSyncedProps](_airtable_blocks_ui__switch.md#switchsyncedprops),
-`ref`: React.Ref‹HTMLDivElement›): _Element_
+`ref`: React.Ref‹HTMLDivElement›): _Element‹›_
 
 _Defined in
 [src/ui/switch_synced.tsx:38](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/switch_synced.tsx#L38)_
@@ -600,4 +600,4 @@ function Block() {
 | `props` | [SwitchSyncedProps](_airtable_blocks_ui__switch.md#switchsyncedprops) |
 | `ref`   | React.Ref‹HTMLDivElement›                                             |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

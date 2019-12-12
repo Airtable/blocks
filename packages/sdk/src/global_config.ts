@@ -93,6 +93,7 @@ function validatePath(
  * ```js
  * import {globalConfig} from '@airtable/blocks';
  * ```
+ * @docsPath models/GlobalConfig
  */
 class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /** @internal */

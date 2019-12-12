@@ -59,15 +59,7 @@ interface ButtonStyleProps
     display?: OptionalResponsiveProp<'inline-flex' | 'flex' | 'none'>;
 }
 
-const styleParser = compose(
-    display,
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(display, maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 const buttonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
@@ -114,6 +106,7 @@ function useButtonVariant(variant: ButtonVariant = ButtonVariant.default): strin
  * * {@link ButtonStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/Button
  */
 interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HTMLButtonElement> {
     /** The size of the button. Defaults to `default`. Can be a responsive prop object. */
@@ -131,7 +124,7 @@ interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HT
     /** Indicates if the button can be focused and if/where it participates in sequential keyboard navigation. */
     tabIndex?: number;
     /** The contents of the button. */
-    children: React.ReactNode | string;
+    children?: React.ReactNode | string;
     /** Click event handler. Also handles Space and Enter keypress events. */
     onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => unknown;
     /** Extra `className`s to apply to the button, separated by spaces. */
@@ -159,8 +152,10 @@ interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HT
  *     </Button>
  * );
  * ```
+ * @component
+ * @docsPath UI/components/Button
  */
-function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
+const Button = (props: ButtonProps, ref: React.Ref<HTMLButtonElement>) => {
     const {
         size = ControlSize.default,
         variant = ButtonVariant.default,
@@ -189,6 +184,12 @@ function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
         styleParser,
     );
     const hasIcon = icon !== undefined;
+    const hasChildren = !!children;
+
+    if (!hasChildren && !ariaLabel) {
+        // eslint-disable-next-line no-console
+        console.error('<Button> without a text label should include an explicit aria-label prop.');
+    }
 
     return (
         <button
@@ -216,16 +217,18 @@ function Button(props: ButtonProps, ref: React.Ref<HTMLButtonElement>) {
                 icon
             )}
 
-            <Box
-                as="span"
-                marginLeft={hasIcon ? '0.5em' : undefined}
-                className={cssHelpers.TRUNCATE}
-            >
-                {children}
-            </Box>
+            {hasChildren && (
+                <Box
+                    as="span"
+                    marginLeft={hasIcon ? '0.5em' : undefined}
+                    className={cssHelpers.TRUNCATE}
+                >
+                    {children}
+                </Box>
+            )}
         </button>
     );
-}
+};
 
 const ForwardedRefButton = React.forwardRef<HTMLButtonElement, ButtonProps>(Button);
 
@@ -240,7 +243,7 @@ ForwardedRefButton.propTypes = {
     type: PropTypes.oneOf(['button', 'submit', 'reset'] as const),
     disabled: PropTypes.bool,
     tabIndex: PropTypes.number,
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
     ...buttonStylePropTypes,
     ...tooltipAnchorPropTypes,
     ...ariaPropTypes,

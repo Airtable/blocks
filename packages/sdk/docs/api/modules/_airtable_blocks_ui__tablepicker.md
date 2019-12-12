@@ -577,7 +577,7 @@ The `tabindex` attribute.
 ### TablePicker
 
 ▸ **TablePicker**(`props`: [TablePickerProps](_airtable_blocks_ui__tablepicker.md#tablepickerprops),
-`ref`: React.Ref‹HTMLSelectElement›): _Element_
+`ref`: React.Ref‹HTMLSelectElement›): _Element‹›_
 
 _Defined in
 [src/ui/table_picker.tsx:70](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/table_picker.tsx#L70)_
@@ -622,7 +622,7 @@ function Block() {
 | `props` | [TablePickerProps](_airtable_blocks_ui__tablepicker.md#tablepickerprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                             |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_
 
 ---
 
@@ -630,7 +630,7 @@ function Block() {
 
 ▸ **TablePickerSynced**(`props`:
 [TablePickerSyncedProps](_airtable_blocks_ui__tablepicker.md#tablepickersyncedprops), `ref`:
-React.Ref‹HTMLSelectElement›): _Element_
+React.Ref‹HTMLSelectElement›): _Element‹›_
 
 _Defined in
 [src/ui/table_picker_synced.tsx:58](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/table_picker_synced.tsx#L58)_
@@ -675,4 +675,4 @@ function Block() {
 | `props` | [TablePickerSyncedProps](_airtable_blocks_ui__tablepicker.md#tablepickersyncedprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                                         |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

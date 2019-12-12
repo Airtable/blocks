@@ -271,10 +271,9 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
                 if (this.parentRecordStore.isRecordMetadataLoaded) {
                     for (const recordId of changedRecordIds) {
                         const record = this.parentRecordStore.getRecordByIdIfExists(recordId);
-                        if (!record) {
-                            throw spawnInvariantViolationError('record must exist');
+                        if (record) {
+                            record.__triggerOnChangeForRecordColorInViewId(this.viewId);
                         }
-                        record.__triggerOnChangeForRecordColorInViewId(this.viewId);
                     }
                 }
             }

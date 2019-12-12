@@ -4,7 +4,7 @@
         "target": "es2017",
         "module": "commonjs",
         "esModuleInterop": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "strictNullChecks": true,
         "strictFunctionTypes": true,
         "strictBindCallApply": true,

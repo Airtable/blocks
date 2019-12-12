@@ -31,11 +31,7 @@ import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor
  */
 interface ChoiceTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const choiceTokenStylePropTypes = {
     ...flexItemSetPropTypes,
@@ -59,6 +55,7 @@ interface SelectOption {
  * Props for the {@link ChoiceToken} component. Also accepts:
  * * {@link ChoiceTokenStyleProps}
  *
+ * @docsPath UI/components/ChoiceToken
  * @noInheritDoc
  */
 interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
@@ -94,6 +91,8 @@ interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/ChoiceToken
  */
 const ChoiceToken = (props: ChoiceTokenProps) => {
     const {

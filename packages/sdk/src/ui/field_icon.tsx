@@ -9,6 +9,8 @@ import {IconName} from './icon_config';
 /**
  * Props for the {@link FieldIcon} component. Also accepts:
  * * {@link IconStyleProps}
+ *
+ * @docsPath UI/components/FieldIcon
  */
 
 interface FieldIconProps extends SharedIconProps {
@@ -44,6 +46,8 @@ interface FieldIconProps extends SharedIconProps {
  *     </div>
  * );
  * ```
+ * @docsPath UI/components/FieldIcon
+ * @component
  */
 const FieldIcon = (props: FieldIconProps) => {
     const {field, ...restOfProps} = props;

@@ -12,7 +12,12 @@ interface RGB {
     b: number;
 }
 
-/** Utilities for working with {@link Color} names from the {@link colors} enum. */
+/**
+ * Utilities for working with {@link Color} names from the {@link colors} enum.
+ *
+ * @docsPath UI/utils/ColorUtils
+ * @groupPath UI/utils/Colors
+ */
 interface ColorUtils {
     /**
      * Given a {@link Color}, return the hex color value for that color, or null if the value isn't a {@link Color}
@@ -31,7 +36,7 @@ interface ColorUtils {
      * ```
      */
     getHexForColor(colorString: string): null | string;
-    /** @hidden */
+    /** */
     getHexForColor(colorString: Color): string;
 
     /**
@@ -51,7 +56,7 @@ interface ColorUtils {
      * ```
      */
     getRgbForColor(colorString: string): RGB | null;
-    /** @hidden */
+    /** */
     getRgbForColor(colorString: Color): RGB;
 
     /**

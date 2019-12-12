@@ -643,7 +643,7 @@ The parent table model to select fields from. If `null` or `undefined`, the pick
 ### FieldPicker
 
 ▸ **FieldPicker**(`props`: [FieldPickerProps](_airtable_blocks_ui__fieldpicker.md#fieldpickerprops),
-`ref`: React.Ref‹HTMLSelectElement›): _null | Element_
+`ref`: React.Ref‹HTMLSelectElement›): _null | Element‹›_
 
 _Defined in
 [src/ui/field_picker.tsx:100](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/field_picker.tsx#L100)_
@@ -709,7 +709,7 @@ function Block() {
 | `props` | [FieldPickerProps](_airtable_blocks_ui__fieldpicker.md#fieldpickerprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                             |
 
-**Returns:** _null | Element_
+**Returns:** _null | Element‹›_
 
 ---
 
@@ -717,7 +717,7 @@ function Block() {
 
 ▸ **FieldPickerSynced**(`props`:
 [FieldPickerSyncedProps](_airtable_blocks_ui__fieldpicker.md#fieldpickersyncedprops), `ref`:
-React.Ref‹HTMLSelectElement›): _Element_
+React.Ref‹HTMLSelectElement›): _Element‹›_
 
 _Defined in
 [src/ui/field_picker_synced.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/field_picker_synced.tsx#L71)_
@@ -780,4 +780,4 @@ function Block() {
 | `props` | [FieldPickerSyncedProps](_airtable_blocks_ui__fieldpicker.md#fieldpickersyncedprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                                         |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

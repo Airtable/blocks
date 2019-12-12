@@ -30,10 +30,14 @@ import useWatchable from './use_watchable';
  *      return <ul>{tables}</ul>;
  * }
  * ```
+ * @docsPath UI/hooks/useBase
+ * @hook
  */
-export default function useBase(): Base {
+const useBase = (): Base => {
     const {base, session} = getSdk();
     useWatchable(base, ['schema']);
     useWatchable(session, ['permissionLevel']);
     return base;
-}
+};
+
+export default useBase;

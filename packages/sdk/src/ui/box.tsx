@@ -13,6 +13,7 @@ import {dataAttributesPropType, DataAttributesProp} from './types/data_attribute
  * * {@link AllStylesProps}
  * * {@link AriaProps}
  *
+ * @docsPath UI/components/Box
  * @noInheritDoc
  */
 export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps {
@@ -68,8 +69,10 @@ export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps 
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/Box
  */
-function Box(props: BoxProps, ref: React.Ref<HTMLElement>) {
+const Box = (props: BoxProps, ref: React.Ref<HTMLElement>) => {
     const {
         as: Component = 'div',
         id,
@@ -120,7 +123,7 @@ function Box(props: BoxProps, ref: React.Ref<HTMLElement>) {
             {children}
         </Component>
     );
-}
+};
 
 const ForwardedRefBox = React.forwardRef<HTMLElement, BoxProps>(Box);
 

@@ -642,7 +642,7 @@ The parent table model to select views from. If `null` or `undefined`, the picke
 ### ViewPicker
 
 ▸ **ViewPicker**(`props`: [ViewPickerProps](_airtable_blocks_ui__viewpicker.md#viewpickerprops),
-`ref`: React.Ref‹HTMLSelectElement›): _null | Element_
+`ref`: React.Ref‹HTMLSelectElement›): _null | Element‹›_
 
 _Defined in
 [src/ui/view_picker.tsx:96](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/view_picker.tsx#L96)_
@@ -704,7 +704,7 @@ function Block() {
 | `props` | [ViewPickerProps](_airtable_blocks_ui__viewpicker.md#viewpickerprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                          |
 
-**Returns:** _null | Element_
+**Returns:** _null | Element‹›_
 
 ---
 
@@ -712,7 +712,7 @@ function Block() {
 
 ▸ **ViewPickerSynced**(`props`:
 [ViewPickerSyncedProps](_airtable_blocks_ui__viewpicker.md#viewpickersyncedprops), `ref`:
-React.Ref‹HTMLSelectElement›): _Element_
+React.Ref‹HTMLSelectElement›): _Element‹›_
 
 _Defined in
 [src/ui/view_picker_synced.tsx:67](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/view_picker_synced.tsx#L67)_
@@ -777,4 +777,4 @@ function Block() {
 | `props` | [ViewPickerSyncedProps](_airtable_blocks_ui__viewpicker.md#viewpickersyncedprops) |
 | `ref`   | React.Ref‹HTMLSelectElement›                                                      |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

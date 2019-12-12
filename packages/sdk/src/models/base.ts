@@ -42,6 +42,7 @@ export type ChangedPathsForType<T> = T extends {} ? ChangedPathsForObject<T> : {
  *
  * console.log('The name of your base is', base.name);
  * ```
+ * @docsPath models/Base
  */
 class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     /** @internal */

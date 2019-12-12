@@ -104,7 +104,7 @@ Additional styles.
 ### Label
 
 ▸ **Label**(`props`: [LabelProps](_airtable_blocks_ui__label.md#labelprops), `ref`:
-React.Ref‹HTMLLabelElement›): _Element_
+React.Ref‹HTMLLabelElement›): _Element‹›_
 
 _Defined in
 [src/ui/label.tsx:55](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/label.tsx#L55)_
@@ -134,4 +134,4 @@ function LabelExample() {
 | `props` | [LabelProps](_airtable_blocks_ui__label.md#labelprops) |
 | `ref`   | React.Ref‹HTMLLabelElement›                            |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

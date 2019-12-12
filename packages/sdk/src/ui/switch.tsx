@@ -91,6 +91,8 @@ export interface SharedSwitchProps extends TooltipAnchorProps, SwitchStyleProps 
 /**
  * Props for the {@link Switch} component. Also accepts:
  * * {@link SwitchStyleProps}
+ *
+ * @docsPath UI/components/Switch
  */
 interface SwitchProps extends SharedSwitchProps {
     /** If set to `true`, the switch will be switchd on. */
@@ -183,8 +185,10 @@ const styleParser = compose(
  *     );
  * }
  * ```
+ * @docsPath UI/components/Switch
+ * @component
  */
-function Switch(props: SwitchProps, ref: React.Ref<HTMLDivElement>) {
+const Switch = (props: SwitchProps, ref: React.Ref<HTMLDivElement>) => {
     const {
         disabled,
         id,
@@ -270,7 +274,7 @@ function Switch(props: SwitchProps, ref: React.Ref<HTMLDivElement>) {
             {label && <label className={switchLabelClassName}>{label}</label>}
         </div>
     );
-}
+};
 
 const ForwardedRefSwitch = React.forwardRef(Switch);
 

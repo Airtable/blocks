@@ -12,6 +12,7 @@ import {spawnInvariantViolationError} from '../error_utils';
  * import {loadCSSFromString} from '@airtable/blocks/ui';
  * loadCSSFromString('body { background: red; }');
  * ```
+ * @docsPath UI/utils/loadCSSFromString
  */
 export function loadCSSFromString(css: string): HTMLStyleElement {
     const styleTag = document.createElement('style');
@@ -34,6 +35,7 @@ export function loadCSSFromString(css: string): HTMLStyleElement {
  * import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
  * loadCSSFromURLAsync('https://example.com/style.css');
  * ```
+ * @docsPath UI/utils/loadCSSFromURLAsync
  */
 export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
     const loadError = new Error('Failed to load remote CSS: ' + url);
@@ -65,6 +67,7 @@ export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
  * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';
  * loadScriptFromURLAsync('https://example.com/script.js');
  * ```
+ * @docsPath UI/utils/loadScriptFromURLAsync
  */
 export function loadScriptFromURLAsync(url: string): Promise<HTMLScriptElement> {
     const loadError = new Error('Failed to load remote script: ' + url);

@@ -36,6 +36,8 @@ export type WatchableTableKey = ObjectValues<typeof WatchableTableKeys>;
 
 /**
  * Model class representing a table. Every {@link Base} has one or more tables.
+ *
+ * @docsPath models/Table
  */
 class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @internal */

@@ -5,6 +5,8 @@ import Watchable from '../watchable';
 
 /**
  * Abstract superclass for all models. You won't use this class directly.
+ *
+ * @docsPath models/advanced/AbstractModel
  */
 class AbstractModel<DataType, WatchableKey extends string> extends Watchable<WatchableKey> {
     /** @internal */

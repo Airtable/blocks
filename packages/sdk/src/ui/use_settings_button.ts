@@ -28,6 +28,8 @@ import useWatchable from './use_watchable';
  *      return <MainComponent />
  * }
  * ```
+ * @docsPath UI/hooks/useSettingsButton
+ * @hook
  */
 export default function useSettingsButton(onClickCallback: FlowAnyFunction) {
     useEffect(() => {

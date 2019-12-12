@@ -19,12 +19,14 @@ function): _RefForwardingComponent‹Instance, Omit‹Props, keyof InjectedProps
 RefAttributes‹Instance››_
 
 _Defined in
-[src/ui/with_hooks.tsx:85](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/with_hooks.tsx#L85)_
+[src/ui/with_hooks.tsx:94](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/with_hooks.tsx#L94)_
 
 A higher-order component for working with React hooks in class-based components. It takes a React
 component and wraps it, injecting values from hooks as additional props. `withHooks` uses
 [`React.forwardRef`](https://reactjs.org/docs/forwarding-refs.html) to make sure that you can use
 refs with your wrapped component in exactly the same way you would if you weren't using `withHooks`.
+
+If you need an reference to the actual component instance, you can return a `ref` prop.
 
 **Example:**
 
@@ -47,8 +49,15 @@ class RecordList extends React.Component {
 // prop from useRecords
 const WrappedRecordList = withHooks(RecordList, ({queryResult}) => {
     const records = useRecords(queryResult);
+
+    const instanceRef = React.useRef();
+    useEffect(() => {
+        console.log('RecordList instance:', instanceRef.current);
+    });
+
     return {
         records: records,
+        ref: instanceRef,
     };
 });
 
@@ -100,7 +109,7 @@ const ref: React.ElementRef<typeof WrappedRecordList> = getTheRefSomehow();
 
 **Type parameters:**
 
-▪ **InjectedProps**: _\_\_type_
+▪ **InjectedProps**
 
 ▪ **Props**: _InjectedProps_
 
@@ -117,7 +126,7 @@ The React component you want to inject hooks into.
 
 A function that takes props and returns more props to be injected into the wrapped component.
 
-▸ (`props`: Omit‹Props, keyof InjectedProps›): _InjectedProps_
+▸ (`props`: Omit‹Props, keyof InjectedProps›): _InjectedProps & object_
 
 **Parameters:**
 

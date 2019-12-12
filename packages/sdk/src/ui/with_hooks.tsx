@@ -8,6 +8,8 @@ import * as React from 'react';
  * use refs with your wrapped component in exactly the same way you would if you weren't using
  * `withHooks`.
  *
+ * If you need an reference to the actual component instance, you can return a `ref` prop.
+ *
  * @param Component The React component you want to inject hooks into.
  * @param getAdditionalPropsToInject A function that takes props and returns more props to be injected into the wrapped component.
  * @returns The wrapped React component.
@@ -32,8 +34,15 @@ import * as React from 'react';
  * // prop from useRecords
  * const WrappedRecordList = withHooks(RecordList, ({queryResult}) => {
  *      const records = useRecords(queryResult);
+ *
+ *      const instanceRef = React.useRef();
+ *      useEffect(() => {
+ *          console.log('RecordList instance:', instanceRef.current);
+ *      });
+ *
  *      return {
  *          records: records,
+ *          ref: instanceRef,
  *      };
  * });
  *
@@ -81,13 +90,16 @@ import * as React from 'react';
  * // class component. Instead, you need to wrap it in React.ElementRef:
  * const ref: React.ElementRef<typeof WrappedRecordList> = getTheRefSomehow();
  * ```
+ * @internal
  */
-export default function withHooks<InjectedProps extends {}, Props extends InjectedProps, Instance>(
+export default function withHooks<InjectedProps, Props extends InjectedProps, Instance>(
     Component:
-        | (new (props: Props) => React.Component) & {displayName?: string}
+        | ((new (props: Props) => React.Component) & {displayName?: string})
         | React.RefForwardingComponent<Instance, Props>
         | React.FunctionComponent<Props>,
-    getAdditionalPropsToInject: (props: Omit<Props, keyof InjectedProps>) => InjectedProps,
+    getAdditionalPropsToInject: (
+        props: Omit<Props, keyof InjectedProps>,
+    ) => InjectedProps & {ref?: React.Ref<Instance>},
 ): React.RefForwardingComponent<
     Instance,
     Omit<Props, keyof InjectedProps> & React.RefAttributes<Instance>
@@ -95,8 +107,31 @@ export default function withHooks<InjectedProps extends {}, Props extends Inject
     return React.forwardRef<
         Instance,
         Omit<Props, keyof InjectedProps> & React.RefAttributes<Instance>
-    >((props, ref) => {
+    >((props, forwardedRef) => {
         const propsToInject = getAdditionalPropsToInject(props);
-        return <Component ref={ref} {...(props as any)} {...propsToInject} />;
+
+        const injectedRef = propsToInject.ref;
+
+        const mergedRef = React.useMemo(() => {
+            if (!injectedRef && !forwardedRef) {
+                return undefined;
+            }
+
+            return (instance: Instance | null): void => {
+                if (injectedRef && typeof injectedRef === 'object') {
+                    (injectedRef as React.MutableRefObject<Instance | null>).current = instance;
+                } else if (typeof injectedRef === 'function') {
+                    injectedRef(instance);
+                }
+
+                if (forwardedRef && typeof forwardedRef === 'object') {
+                    (forwardedRef as React.MutableRefObject<Instance | null>).current = instance;
+                } else if (typeof forwardedRef === 'function') {
+                    forwardedRef(instance);
+                }
+            };
+        }, [injectedRef, forwardedRef]);
+
+        return <Component ref={mergedRef} {...(props as any)} {...propsToInject} />;
     }) as any;
 }

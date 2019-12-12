@@ -29,6 +29,8 @@ import useWatchable from './use_watchable';
  *     );
  * }
  * ```
+ * @docsPath UI/hooks/useGlobalConfig
+ * @hook
  */
 export default function useGlobalConfig(): GlobalConfig {
     const {globalConfig, session} = getSdk();

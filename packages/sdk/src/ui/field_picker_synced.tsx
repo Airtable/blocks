@@ -11,6 +11,9 @@ import useWatchable from './use_watchable';
 /**
  * Props for the {@link FieldPickerSynced} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/FieldPickerSynced
+ * @groupPath UI/components/FieldPicker
  */
 interface FieldPickerSyncedProps extends SharedFieldPickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected field will always reflect the field id stored in {@link GlobalConfig} for this key. Selecting a new field will update {@link GlobalConfig}. */
@@ -67,8 +70,11 @@ interface FieldPickerSyncedProps extends SharedFieldPickerProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/FieldPickerSynced
+ * @groupPath UI/components/FieldPicker
+ * @component
  */
-function FieldPickerSynced(props: FieldPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+const FieldPickerSynced = (props: FieldPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, onChange, disabled, table, ...restOfProps} = props;
     const {value: fieldId, canSetValue: canSetFieldId, setValue: setFieldId} = useSynced(
         globalConfigKey,
@@ -99,7 +105,7 @@ function FieldPickerSynced(props: FieldPickerSyncedProps, ref: React.Ref<HTMLSel
             disabled={disabled || !canSetFieldId}
         />
     );
-}
+};
 
 const ForwardedRefFieldPickerSynced = React.forwardRef<HTMLSelectElement, FieldPickerSyncedProps>(
     FieldPickerSynced,

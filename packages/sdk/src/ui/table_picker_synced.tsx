@@ -11,6 +11,9 @@ import useWatchable from './use_watchable';
 /**
  * Props for the {@link TablePickerSynced} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/TablePickerSynced
+ * @groupPath UI/components/TablePicker
  */
 interface TablePickerSyncedProps extends SharedTablePickerProps {
     /** A string key or array key path in {@link GlobalConfig}. The selected table will always reflect the table id stored in {@link GlobalConfig} for this key. Selecting a new table will update {@link GlobalConfig}. */
@@ -54,8 +57,11 @@ function _getTableFromGlobalConfigValue(tableId: unknown): Table | null {
  *     );
  * }
  * ```
+ * @docsPath UI/components/TablePickerSynced
+ * @groupPath UI/components/TablePicker
+ * @component
  */
-function TablePickerSynced(props: TablePickerSyncedProps, ref: React.Ref<HTMLSelectElement>) {
+const TablePickerSynced = (props: TablePickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
     const {value: tableId, canSetValue: canSetTableId, setValue: setTableId} = useSynced(
         globalConfigKey,
@@ -76,7 +82,7 @@ function TablePickerSynced(props: TablePickerSyncedProps, ref: React.Ref<HTMLSel
             disabled={disabled || !canSetTableId}
         />
     );
-}
+};
 
 const ForwardedRefTablePickerSynced = React.forwardRef<HTMLSelectElement, TablePickerSyncedProps>(
     TablePickerSynced,

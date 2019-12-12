@@ -34,11 +34,7 @@ const UNKNOWN_PROFILE_PIC_URL =
  */
 interface CollaboratorTokenStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const collaboratorTokenStylePropTypes = {
     ...flexItemSetPropTypes,
@@ -51,6 +47,7 @@ const collaboratorTokenStylePropTypes = {
  * * {@link CollaboratorTokenStyleProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/CollaboratorToken
  */
 interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnchorProps {
     /** An object representing a collaborator. You should not create these objects from scratch, but should instead grab them from base data. */
@@ -78,6 +75,8 @@ interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnc
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/CollaboratorToken
  */
 const CollaboratorToken = (props: CollaboratorTokenProps) => {
     const {

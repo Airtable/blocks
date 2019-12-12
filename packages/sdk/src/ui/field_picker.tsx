@@ -38,6 +38,8 @@ export const sharedFieldPickerPropTypes = {
 /**
  * Props for the {@link FieldPicker} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/FieldPicker
  */
 interface FieldPickerProps extends SharedFieldPickerProps {
     /** The selected field model. */
@@ -95,8 +97,10 @@ interface FieldPickerProps extends SharedFieldPickerProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/FieldPicker
+ * @component
  */
-function FieldPicker(props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>) {
+const FieldPicker = (props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>) => {
     const {
         table,
         field: selectedField,
@@ -154,11 +158,12 @@ function FieldPicker(props: FieldPickerProps, ref: React.Ref<HTMLSelectElement>)
             shouldAllowPickingModelFn={shouldAllowPickingFieldFn as any}
             selectedModelId={selectedField && !selectedField.isDeleted ? selectedField.id : null}
             modelKeysToWatch={['name', 'type', 'options']}
+            shouldAllowPickingNone={shouldAllowPickingNone}
             placeholder={placeholderToUse}
             onChange={_onChange}
         />
     );
-}
+};
 
 const ForwardedRefFieldPicker = React.forwardRef<HTMLSelectElement, FieldPickerProps>(FieldPicker);
 

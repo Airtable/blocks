@@ -201,6 +201,8 @@ interface RecordCardListScrollEvent {
 /**
  * Props for the {@link RecordCardList} component. Also accepts:
  * * {@link RecordCardListStyleProps}
+ *
+ * @docsPath UI/components/RecordCardList
  */
 
 interface RecordCardListProps {
@@ -241,12 +243,7 @@ interface RecordCardListStyleProps
         PositionSetProps,
         MarginProps {}
 
-const styleParser = compose(
-    dimensionsSet,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(dimensionsSet, flexItemSet, positionSet, margin);
 
 const recordCardListStylePropTypes = {
     ...dimensionsSetPropTypes,
@@ -287,6 +284,8 @@ interface RecordCardListState {
  *     );
  * }
  * ```
+ * @docsPath UI/components/RecordCardList
+ * @component
  */
 export class RecordCardList extends React.Component<RecordCardListProps, RecordCardListState> {
     /** @hidden */

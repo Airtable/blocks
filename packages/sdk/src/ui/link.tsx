@@ -115,6 +115,7 @@ function useLinkVariant(variant: LinkVariant = LinkVariant.default): string {
  * * {@link AriaProps}
  * * {@link LinkStyleProps}
  *
+ * @docsPath UI/components/Link
  * @noInheritDoc
  */
 interface LinkProps extends AriaProps, LinkStyleProps, TooltipAnchorProps<HTMLAnchorElement> {
@@ -185,8 +186,10 @@ function _getSanitizedHref(href: string): string | undefined {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Link
+ * @component
  */
-function Link(props: LinkProps, ref: React.Ref<HTMLAnchorElement>) {
+const Link = (props: LinkProps, ref: React.Ref<HTMLAnchorElement>) => {
     const {
         size = TextSize.default,
         variant = LinkVariant.default,
@@ -272,7 +275,7 @@ function Link(props: LinkProps, ref: React.Ref<HTMLAnchorElement>) {
             {children}
         </a>
     );
-}
+};
 
 const ForwardedRefLink = React.forwardRef<HTMLAnchorElement, LinkProps>(Link);
 

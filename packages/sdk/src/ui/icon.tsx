@@ -32,13 +32,7 @@ import {iconNamePropType, IconName, allIconPaths, AllIconName} from './icon_conf
  */
 export interface IconStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-    width,
-    height,
-);
+const styleParser = compose(flexItemSet, positionSet, margin, width, height);
 
 export const iconStylePropTypes = {
     ...flexItemSetPropTypes,
@@ -100,8 +94,10 @@ interface IconProps extends SharedIconProps {
  *     />
  * );
  * ```
+ * @component
+ * @docsPath UI/components/Icon
  */
-function Icon(props: IconProps, ref: React.Ref<SVGSVGElement>) {
+const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
     const {
         name,
         size = 16,
@@ -154,7 +150,7 @@ function Icon(props: IconProps, ref: React.Ref<SVGSVGElement>) {
             />
         </svg>
     );
-}
+};
 
 const ForwardedRefIcon = React.forwardRef<SVGSVGElement, IconProps>(Icon);
 

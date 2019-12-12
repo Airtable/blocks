@@ -29,6 +29,8 @@ export const sharedTablePickerPropTypes = {
 /**
  * Props for the {@link TablePicker} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/TablePicker
  */
 interface TablePickerProps extends SharedTablePickerProps {
     /** The selected table model. */
@@ -65,8 +67,10 @@ interface TablePickerProps extends SharedTablePickerProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/TablePicker
+ * @component
  */
-function TablePicker(props: TablePickerProps, ref: React.Ref<HTMLSelectElement>) {
+const TablePicker = (props: TablePickerProps, ref: React.Ref<HTMLSelectElement>) => {
     const {table, shouldAllowPickingNone, placeholder, onChange, ...restOfProps} = props;
     const selectedTable = table && !table.isDeleted ? table : null;
     useWatchable(getSdk().base, ['tables']);
@@ -97,7 +101,7 @@ function TablePicker(props: TablePickerProps, ref: React.Ref<HTMLSelectElement>)
             onChange={_onChange}
         />
     );
-}
+};
 
 const ForwardedRefTablePicker = React.forwardRef<HTMLSelectElement, TablePickerProps>(TablePicker);
 

@@ -127,7 +127,17 @@ module.exports = {
 
         'jsdoc/check-tag-names': [
             'error',
-            {definedTags: ['hidden', 'reactComponent', 'noInheritDoc']},
+            {
+                definedTags: [
+                    'hidden',
+                    'reactComponent',
+                    'noInheritDoc',
+                    'docsPath',
+                    'groupPath',
+                    'component',
+                    'hook',
+                ],
+            },
         ],
         'jsdoc/newline-after-description': 'error',
         'jsdoc/no-types': 'error',

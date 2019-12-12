@@ -22,6 +22,7 @@ export interface AriaProps {
     ['aria-live']?: AriaAttributes['aria-live'];
 }
 
+/** @internal */
 export const ariaPropTypes = {
     'aria-label': PropTypes.string,
     'aria-labelledby': PropTypes.string,

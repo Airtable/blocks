@@ -14,6 +14,8 @@ import {config as textTransformConfig, TextTransformProps} from './text_transfor
 
 /**
  * Style props for the typography of an element.
+ *
+ * @docsPath UI/system/Typography
  */
 export interface TypographySetProps
     extends FontFamilyProps,

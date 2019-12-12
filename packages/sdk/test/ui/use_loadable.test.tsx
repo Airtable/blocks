@@ -266,36 +266,47 @@ describe('useLoadable', () => {
             expect(thing2.isDataLoaded).toBe(false);
         });
 
+        class Wrapper extends React.Component<
+            {initialThings: Array<Thing>},
+            {things: Array<Thing>}
+        > {
+            state = {
+                things: this.props.initialThings,
+            };
+
+            setThings(things: Array<Thing>) {
+                this.setState({things});
+            }
+
+            render() {
+                return (
+                    <Suspense fallback={<span>suspended</span>}>
+                        <Component things={this.state.things} />
+                    </Suspense>
+                );
+            }
+        }
+
         it('with suspense, suspend until loaded then render, handle new models getting added, unload when unmounted', async () => {
             const thing1 = new Thing();
             const thing2 = new Thing();
             const thing3 = new Thing();
 
-            class Wrapper extends React.Component<
-                {initialThings: Array<Thing>},
-                {things: Array<Thing>}
-            > {
-                state = {
-                    things: this.props.initialThings,
-                };
-
-                setThings(things: Array<Thing>) {
-                    this.setState({things});
-                }
-
-                render() {
-                    return (
-                        <Suspense fallback={<span>suspended</span>}>
-                            <Component things={this.state.things} />
-                        </Suspense>
-                    );
-                }
-            }
-
             const el = document.createElement('div');
             let wrapper: any;
-            act(() => {
-                wrapper = ReactDOM.render(<Wrapper initialThings={[thing1, thing2]} />, el);
+            await act(() => {
+                return new Promise<undefined>(resolve => {
+                    ReactDOM.render(
+                        <Wrapper
+                            initialThings={[thing1, thing2]}
+                            ref={wrapperRef => {
+                                wrapper = wrapperRef;
+                                resolve();
+                            }}
+                        />,
+                        el,
+                    );
+                });
             });
 
             expect(el.innerHTML).toMatchInlineSnapshot('"<span>suspended</span>"');

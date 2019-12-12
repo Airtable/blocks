@@ -12,7 +12,7 @@ import {CommentPlugin} from 'typedoc/dist/lib/converter/plugins';
 import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
 
 const internalTags = ['internal', 'hidden', 'ignore'];
-const defaultReflectionNames = ['__type', '__call'];
+const defaultReflectionNames = ['__type', '__call', '__get', '__set'];
 
 const srcDirPath = path.resolve(__dirname, '../../src');
 
@@ -91,13 +91,12 @@ class HideInternalPlugin extends ConverterComponent {
             this.isFromExternalLibrary(reflection)
         ) {
             this.exclude(reflection);
-        } else if (this.isModuleLevel(reflection.kind)) {
+        } else if (this.isModuleLevel(reflection)) {
             if (this.hasDocComment(reflection, node)) {
                 const moduleReflection = this.findExternalModule(reflection);
                 this.modulesWithoutDocumentation.delete(moduleReflection);
             } else {
                 this.exclude(reflection);
-
                 if (this.doesRequireExplicitAnnotation(reflection.kind)) {
                     this.reflectionsMissingExplicitAnnotations.add(reflection);
                 }
@@ -179,13 +178,12 @@ class HideInternalPlugin extends ConverterComponent {
         throw new Error('Cannot find external module');
     }
 
-    private isModuleLevel(kind: ReflectionKind): boolean {
-        switch (kind) {
+    private isModuleLevel(reflection: Reflection): boolean {
+        switch (reflection.kind) {
             case ReflectionKind.Event:
             case ReflectionKind.Function:
             case ReflectionKind.Method:
             case ReflectionKind.Enum:
-            case ReflectionKind.Variable:
             case ReflectionKind.Class:
             case ReflectionKind.Interface:
             case ReflectionKind.Constructor:
@@ -193,6 +191,12 @@ class HideInternalPlugin extends ConverterComponent {
             case ReflectionKind.Accessor:
             case ReflectionKind.TypeAlias:
                 return true;
+            case ReflectionKind.Variable:
+                if (reflection.parent) {
+                    return reflection.parent.kind === ReflectionKind.ExternalModule;
+                } else {
+                    return true;
+                }
             default:
                 return false;
         }

@@ -58,15 +58,7 @@ interface CellRendererStyleProps
     display?: OptionalResponsiveProp<'block' | 'inline' | 'inline-block'>;
 }
 
-const styleParser = compose(
-    display,
-    flexItemSet,
-    margin,
-    maxWidth,
-    minWidth,
-    positionSet,
-    width,
-);
+const styleParser = compose(display, flexItemSet, margin, maxWidth, minWidth, positionSet, width);
 
 const cellRendererStylePropTypes = {
     ...displayPropTypes,
@@ -82,6 +74,7 @@ const cellRendererStylePropTypes = {
  * Props for the {@link CellRenderer} component. Also accepts:
  * * {@link CellRendererStyleProps}
  *
+ * @docsPath UI/components/CellRenderer
  * @noInheritDoc
  */
 interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<HTMLDivElement> {
@@ -132,6 +125,8 @@ interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<H
  *    );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/CellRenderer
  */
 export class CellRenderer extends React.Component<CellRendererProps> {
     /** @hidden */
@@ -262,15 +257,20 @@ export class CellRenderer extends React.Component<CellRendererProps> {
     }
 }
 
-export default withHooks<{}, CellRendererProps, CellRenderer>(CellRenderer, props => {
-    const {styleProps, nonStyleProps} = splitStyleProps<CellRendererProps, CellRendererStyleProps>(
-        props,
-        styleParser.propNames,
-        {display: 'block'},
-    );
-    const {className} = nonStyleProps;
-    const classNameForStyleProps = useStyledSystem<CellRendererStyleProps>(styleProps, styleParser);
-    useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
-    useWatchable(props.field, ['type', 'options']);
-    return {className: cx(classNameForStyleProps, className)};
-});
+export default withHooks<{className?: string}, CellRendererProps, CellRenderer>(
+    CellRenderer,
+    props => {
+        const {styleProps, nonStyleProps} = splitStyleProps<
+            CellRendererProps,
+            CellRendererStyleProps
+        >(props, styleParser.propNames, {display: 'block'});
+        const {className} = nonStyleProps;
+        const classNameForStyleProps = useStyledSystem<CellRendererStyleProps>(
+            styleProps,
+            styleParser,
+        );
+        useWatchable(props.record, [`cellValueInField:${props.field.id}`]);
+        useWatchable(props.field, ['type', 'options']);
+        return {className: cx(classNameForStyleProps, className)};
+    },
+);

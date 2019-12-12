@@ -165,20 +165,15 @@ export const sharedSelectPropTypes = {
 /**
  * Props for the {@link Select} component. Also accepts:
  * * {@link SelectStyleProps}
+ *
+ * @docsPath UI/components/Select
  */
 export interface SelectProps extends SharedSelectProps {
     /** The value of the selected option. */
     value: SelectOptionValue;
 }
 
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 /**
  * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
@@ -207,8 +202,10 @@ const styleParser = compose(
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/Select
  */
-function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
+const Select = (props: SelectProps, ref: React.Ref<HTMLSelectElement>) => {
     const {
         size = ControlSize.default,
         value,
@@ -307,7 +304,7 @@ function Select(props: SelectProps, ref: React.Ref<HTMLSelectElement>) {
             })}
         </select>
     );
-}
+};
 
 const ForwardedRefSelect = React.forwardRef<HTMLSelectElement, SelectProps>(Select);
 

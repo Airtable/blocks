@@ -1,3 +1,3 @@
 # API reference
 
-# The API reference has moved [here](/packages/sdk/docs/api).
+# The API reference has moved [here](https://airtable.com/developers/blocks/api).

@@ -90,6 +90,10 @@ stories.add('with icon', () => (
     </Button>
 ));
 
+stories.add('with icon, no children', () => (
+    <Button icon="upload" aria-label="upload" onClick={action('clicked')} />
+));
+
 stories.add('responsive size', () => (
     <Button
         size={{xsmallViewport: 'small', mediumViewport: 'default', largeViewport: 'large'}}

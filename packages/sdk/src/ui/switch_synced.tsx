@@ -8,6 +8,9 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
 /**
  * Props for the {@link SwitchSynced} component. Also accepts:
  * * {@link SwitchStyleProps}
+ *
+ * @docsPath UI/components/SwitchSynced
+ * @groupPath UI/components/Switch
  */
 interface SwitchSyncedProps extends SharedSwitchProps {
     /** A string key or array key path in {@link GlobalConfig}. The switch option will always reflect the boolean value stored in `globalConfig` for this key. Toggling the switch will update `globalConfig`. */
@@ -34,8 +37,11 @@ interface SwitchSyncedProps extends SharedSwitchProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/SwitchSynced
+ * @groupPath UI/components/Switch
+ * @component
  */
-function SwitchSynced(props: SwitchSyncedProps, ref: React.Ref<HTMLDivElement>) {
+const SwitchSynced = (props: SwitchSyncedProps, ref: React.Ref<HTMLDivElement>) => {
     const {disabled, globalConfigKey, onChange, ...restOfProps} = props;
     const {value, setValue, canSetValue} = useSynced(globalConfigKey);
 
@@ -53,7 +59,7 @@ function SwitchSynced(props: SwitchSyncedProps, ref: React.Ref<HTMLDivElement>) 
             disabled={disabled || !canSetValue}
         />
     );
-}
+};
 
 const ForwardedRefSwitchSynced = React.forwardRef(SwitchSynced);
 

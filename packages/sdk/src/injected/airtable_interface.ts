@@ -147,12 +147,12 @@ export interface AirtableInterface {
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 
-    /*
+    /**
      * globalConfig
      */
     setMultipleKvPathsAsync(updates: Array<GlobalConfigUpdate>): Promise<void>;
 
-    /*
+    /**
      * table
      */
     fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any>;
@@ -169,7 +169,7 @@ export interface AirtableInterface {
     deleteRecordsAsync(tableId: string, recordIds: Array<string>): Promise<void>;
     createRecordsAsync(tableId: string, recordDefs: Array<RecordData>): Promise<void>;
 
-    /*
+    /**
      * view
      */
     fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any>;
@@ -212,6 +212,11 @@ export interface AirtableInterface {
         fieldDatas: Array<FieldData>,
         sorts: Array<NormalizedSortConfig>,
     ): VisList;
+
+    /**
+     * internal utils
+     */
+    trackEvent(eventSchemaName: string, eventData: {[key: string]: unknown}): void;
 }
 
 const getAirtableInterfaceAtVersion: ((arg1: number) => AirtableInterface) | void = (window as any)

@@ -21,7 +21,7 @@
 • **FormFieldProps**:
 
 _Defined in
-[src/ui/form_field.tsx:76](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L76)_
+[src/ui/form_field.tsx:69](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L69)_
 
 Props for the [FormField](_airtable_blocks_ui__formfield.md#formfield) component. Also accepts:
 
@@ -32,7 +32,7 @@ Props for the [FormField](_airtable_blocks_ui__formfield.md#formfield) component
 • **children**? : _React.ReactNode_
 
 _Defined in
-[src/ui/form_field.tsx:90](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L90)_
+[src/ui/form_field.tsx:83](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L83)_
 
 The contents of the form field.
 
@@ -41,7 +41,7 @@ The contents of the form field.
 • **className**? : _undefined | string_
 
 _Defined in
-[src/ui/form_field.tsx:80](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L80)_
+[src/ui/form_field.tsx:73](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L73)_
 
 Additional class names to apply to the form field.
 
@@ -50,7 +50,7 @@ Additional class names to apply to the form field.
 • **description**? : _React.ReactNode | string | null_
 
 _Defined in
-[src/ui/form_field.tsx:88](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L88)_
+[src/ui/form_field.tsx:81](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L81)_
 
 The description content for the form field. Displayed beneath the label and above the wrapped
 control field.
@@ -60,7 +60,7 @@ control field.
 • **htmlFor**? : _undefined | string_
 
 _Defined in
-[src/ui/form_field.tsx:86](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L86)_
+[src/ui/form_field.tsx:79](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L79)_
 
 The `for` attribute to be applied to the inner label. By default, the form field will automatically
 generate a random ID and set it on both the label and the wrapped input/select. Only use this
@@ -71,7 +71,7 @@ property if you want to override the generated ID with your own custom ID.
 • **id**? : _undefined | string_
 
 _Defined in
-[src/ui/form_field.tsx:78](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L78)_
+[src/ui/form_field.tsx:71](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L71)_
 
 The `id` attribute.
 
@@ -80,7 +80,7 @@ The `id` attribute.
 • **label**? : _React.ReactNode_
 
 _Defined in
-[src/ui/form_field.tsx:84](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L84)_
+[src/ui/form_field.tsx:77](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L77)_
 
 The label content for the form field.
 
@@ -89,7 +89,7 @@ The label content for the form field.
 • **style**? : _React.CSSProperties_
 
 _Defined in
-[src/ui/form_field.tsx:82](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L82)_
+[src/ui/form_field.tsx:75](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L75)_
 
 Additional styles to apply to the form field.
 
@@ -116,10 +116,10 @@ Style props for the [FormField](_airtable_blocks_ui__formfield.md#formfield) com
 ### FormField
 
 ▸ **FormField**(`props`: [FormFieldProps](_airtable_blocks_ui__formfield.md#formfieldprops), `ref`:
-React.Ref‹HTMLDivElement›): _Element_
+React.Ref‹HTMLDivElement›): _Element‹›_
 
 _Defined in
-[src/ui/form_field.tsx:126](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L126)_
+[src/ui/form_field.tsx:119](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/form_field.tsx#L119)_
 
 A form field component that wraps any control field, supplying a provided label and optional
 description.
@@ -160,4 +160,4 @@ function SettingsForm() {
 | `props` | [FormFieldProps](_airtable_blocks_ui__formfield.md#formfieldprops) |
 | `ref`   | React.Ref‹HTMLDivElement›                                          |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

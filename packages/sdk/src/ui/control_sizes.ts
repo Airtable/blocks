@@ -31,10 +31,7 @@ export function useButtonSize(controlSizeProp: ControlSizeProp): string {
     return useStyledSystem(styleProps);
 }
 
-const selectSizeStyleParser = compose(
-    allStylesParser,
-    system({backgroundPosition: true}),
-);
+const selectSizeStyleParser = compose(allStylesParser, system({backgroundPosition: true}));
 
 /** @internal */
 export function useSelectSize(controlSizeProp: ControlSizeProp): string {

@@ -61,12 +61,7 @@ export interface ModalStyleProps
     display?: OptionalResponsiveProp<'block' | 'flex'>;
 }
 
-const styleParser = compose(
-    dimensionsSet,
-    display,
-    flexContainerSet,
-    spacingSet,
-);
+const styleParser = compose(dimensionsSet, display, flexContainerSet, spacingSet);
 
 export const modalStylePropTypes = {
     ...dimensionsSetPropTypes,

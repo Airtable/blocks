@@ -56,14 +56,7 @@ export interface ColorPaletteStyleProps
         PositionSetProps,
         MarginProps {}
 
-const styleParser = compose(
-    maxWidth,
-    minWidth,
-    width,
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
 export const colorPaletteStylePropTypes = {
     ...maxWidthPropTypes,
@@ -105,6 +98,8 @@ export const sharedColorPalettePropTypes = {
 /**
  * Props for the {@link ColorPalette} component. Also accepts:
  * * {@link ColorPaletteStyleProps}
+ *
+ * @docsPath UI/components/ColorPalette
  */
 interface ColorPaletteProps extends SharedColorPaletteProps {
     /** The current selected {@link Color} option. */
@@ -136,6 +131,8 @@ interface ColorPaletteState {
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/ColorPalette
  */
 export class ColorPalette extends React.Component<ColorPaletteProps, ColorPaletteState> {
     /** @hidden */

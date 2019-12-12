@@ -27,11 +27,7 @@ const ORIGINAL_SIZE = 54;
  */
 interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginProps {}
 
-const styleParser = compose(
-    flexItemSet,
-    positionSet,
-    margin,
-);
+const styleParser = compose(flexItemSet, positionSet, margin);
 
 const loaderStylePropTypes = {
     ...flexItemSetPropTypes,
@@ -43,6 +39,7 @@ const loaderStylePropTypes = {
  * Props for the {@link Loader} component. Also accepts:
  * * {@link LoaderStyleProps}
  *
+ * @docsPath UI/components/Loader
  * @noInheritDoc
  */
 interface LoaderProps extends LoaderStyleProps {
@@ -71,6 +68,8 @@ interface LoaderProps extends LoaderStyleProps {
  *     }
  * }
  * ```
+ * @docsPath UI/components/Loader
+ * @component
  */
 const Loader = (props: LoaderProps) => {
     const {fillColor, scale, className, style, ...styleProps} = props;

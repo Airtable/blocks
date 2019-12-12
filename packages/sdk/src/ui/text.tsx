@@ -62,6 +62,7 @@ export function useTextStyle(
  * * {@link AllStylesProps}
  *
  * @noInheritDoc
+ * @docsPath UI/components/Text
  */
 interface TextProps extends AriaProps, AllStylesProps {
     /** The element that is rendered. Defaults to `p`. */
@@ -131,8 +132,10 @@ interface TextProps extends AriaProps, AllStylesProps {
  *     );
  * }
  * ```
+ * @docsPath UI/components/Text
+ * @component
  */
-function Text(props: TextProps, ref: React.Ref<HTMLElement>) {
+const Text = (props: TextProps, ref: React.Ref<HTMLElement>) => {
     const {
         as: Component = 'p',
         size = TextSize.default,
@@ -180,7 +183,7 @@ function Text(props: TextProps, ref: React.Ref<HTMLElement>) {
             {children}
         </Component>
     );
-}
+};
 
 const ForwardedRefText = React.forwardRef<HTMLElement, TextProps>(Text);
 

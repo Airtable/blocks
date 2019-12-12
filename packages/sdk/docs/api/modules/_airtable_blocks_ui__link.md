@@ -201,7 +201,7 @@ Light gray text.
 ### Link
 
 ▸ **Link**(`props`: [LinkProps](_airtable_blocks_ui__link.md#linkprops), `ref`:
-React.Ref‹HTMLAnchorElement›): _Element_
+React.Ref‹HTMLAnchorElement›): _Element‹›_
 
 _Defined in
 [src/ui/link.tsx:200](https://github.com/airtable/blocks/blob/@airtable/blocks@0.0.36/packages/sdk/src/ui/link.tsx#L200)_
@@ -232,4 +232,4 @@ function MyLinkComponent() {
 | `props` | [LinkProps](_airtable_blocks_ui__link.md#linkprops) |
 | `ref`   | React.Ref‹HTMLAnchorElement›                        |
 
-**Returns:** _Element_
+**Returns:** _Element‹›_

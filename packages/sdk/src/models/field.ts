@@ -37,6 +37,7 @@ export type WatchableFieldKey = ObjectValues<typeof WatchableFieldKeys>;
  * const field = table.getFieldByName('Name');
  * console.log('The type of this field is', field.type);
  * ```
+ * @docsPath models/Field
  */
 class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     /** @internal */

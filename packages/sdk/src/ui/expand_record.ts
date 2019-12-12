@@ -23,6 +23,7 @@ export interface ExpandRecordOpts {
  *     records: [record1, record2, record3],
  * });
  * ```
+ * @docsPath UI/utils/expandRecord
  */
 function expandRecord(record: Record, opts?: ExpandRecordOpts) {
 

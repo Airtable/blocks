@@ -23,9 +23,9 @@ export interface MarginProps {
     marginBottom?: OptionalResponsiveProp<MarginBottomProperty<Length>>;
     /** Sets the margin area on the left of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginLeft?: OptionalResponsiveProp<MarginLeftProperty<Length>>;
-    /** Sets the margin area on the top and bottom of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
-    marginX?: OptionalResponsiveProp<MarginProperty<Length>>;
     /** Sets the margin area on the left and right of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
+    marginX?: OptionalResponsiveProp<MarginProperty<Length>>;
+    /** Sets the margin area on the top and bottom of an element. A positive value places it farther from its neighbors, while a negative value places it closer. */
     marginY?: OptionalResponsiveProp<MarginProperty<Length>>;
 }
 

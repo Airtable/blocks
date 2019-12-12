@@ -21,7 +21,7 @@ import useArrayIdentity from './use_array_identity';
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
  * @param models The model or models to watch.
- * @param keys The keys to watch.
+ * @param keys The key or keys to watch.
  * @param callback An optional callback to call when any of the watch keys change.
  *
  * @example
@@ -29,8 +29,13 @@ import useArrayIdentity from './use_array_identity';
  * import {useWatchable} from '@airtable/blocks/ui';
  *
  * function TableName({table}) {
- *     useWatchable(table, ['name']);
+ *     useWatchable(table, 'name');
  *     return <span>The table name is {table.name}</span>;
+ * }
+ *
+ * function ViewNameAndType({view}) {
+ *     useWatchable(view, ['name', 'type']);
+ *     return <span>The view name is {view.name} and the type is {view.type}</span>;
  * }
  * ```
  *
@@ -39,21 +44,27 @@ import useArrayIdentity from './use_array_identity';
  * import {useWatchable} from '@airtable/blocks/ui';
  *
  * function ActiveView({cursor}) {
- *     useWatchable(cursor, ['activeViewId'], () => {
+ *     useWatchable(cursor, 'activeViewId', () => {
  *          alert('active view changed!!!')
  *     });
  *
  *     return <span>Active view id: {cursor.activeViewId}</span>;
  * }
  * ```
+ * @docsPath UI/hooks/useWatchable
+ * @hook
  */
 export default function useWatchable<Keys extends string>(
     models: Watchable<Keys> | ReadonlyArray<Watchable<Keys> | null | undefined> | null | undefined,
-    keys: ReadonlyArray<Keys | null | undefined>,
+    keys: Keys | ReadonlyArray<Keys | null | undefined> | null | undefined,
     callback?: (model: Watchable<Keys>, keys: string, ...args: Array<any>) => unknown,
 ) {
-    const compactModels = useArrayIdentity(compact(Array.isArray(models) ? models : [models]));
-    const compactKeys = useArrayIdentity(compact(keys));
+    const compactModels: ReadonlyArray<Watchable<Keys>> = useArrayIdentity(
+        compact(Array.isArray(models) ? models : [models]),
+    );
+    const compactKeys: ReadonlyArray<Keys> = useArrayIdentity(
+        compact(Array.isArray(keys) ? keys : [keys]),
+    );
 
     const callbackRef = useRef(callback);
     callbackRef.current = callback;

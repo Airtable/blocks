@@ -7,6 +7,8 @@ import {spawnError} from './error_utils';
  * and `unwatch` methods that allow consumers to subscribe to changes to that model.
  *
  * This class should not be used directly.
+ *
+ * @docsPath models/advanced/Watchable
  */
 class Watchable<WatchableKey extends string> {
     /** @internal */
