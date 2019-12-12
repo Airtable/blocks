@@ -15,6 +15,10 @@ commit that affects the code in a way that consumers might care about should inc
 -   `useWatchable` now supports single string watch keys being passed in (as well as the existing
     array support)
 -   Fixed bug where `shouldAllowPickingNone` didn't work in `FieldPicker` and `FieldPickerSynced`.
+-   Updated `fullscreen` and `fullscreenMicro` icons.
+-   Updated UI.Button component to better support icon buttons containing no text. An error is now
+    logged to the console if you attempt to use a UI.Button component with no text/children and no
+    aria-label.
 
 ## [0.0.36](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.35...@airtable/blocks@0.0.36) - 2019-11-18
 
