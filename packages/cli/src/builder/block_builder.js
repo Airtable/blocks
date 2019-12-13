@@ -246,24 +246,22 @@ class BlockBuilder {
      * Use chokidar to do the initial walk of the user's block directory.
      *
      * In DEVELOPMENT mode:
-     *   - chokidar watches for changes in the blocks code by setting `persistent` option to true.
+     *   - chokidar continuously watches for changes in the user's block directory.
      *
      * In RELEASE mode:
      *   - chokidar is only needed for the initial walk of the user's block directory. We don't
-     *     need to watch for code changes, so we set the `persistent` option to false.
+     *     need to watch for code changes after that.
      *
      * As chokidar detects files/changes, it will enqueue 'transpile' or 'unlink' jobs to the
      * BlockBuilderJobQueue. Chokidar is also responsible for starting the BlockBuilderJobQueue's
      * queue consumer after it finishes the initial walk through of the block directory.
-     *
-     * see: https://github.com/paulmillr/chokidar#persistence
      */
     _startChokidarWatchAndStartBuildJobQueueConsumer(
-        chokidarOpts: {
-            persistent?: boolean,
+        opts: {
+            shouldContinueWatchingAfterReady: boolean,
         } = {},
     ): void {
-        const {persistent = true} = chokidarOpts;
+        const {shouldContinueWatchingAfterReady = true} = opts;
 
         const ignored = [
             // HACK: For some reason, we need to use a function here to ignore the 'build' and
@@ -285,7 +283,17 @@ class BlockBuilder {
 
         const chokidarInstance = chokidar.watch(this._blockDirPath, {
             ignored,
-            persistent,
+            // HACK: We always use `persistent: true` here, and will invoke chokidarInstance.close()
+            // after the initial walk if shouldContinueWatchingAfterReady is false. This is to work
+            // around a weird bug that only seems to occur in Node 10.x and 12.x, and we've filed an
+            // issue with Chokidar:
+            //    https://github.com/paulmillr/chokidar/issues/957
+            // For some reason, if we set `persistent: false` here, the `ready` event would never
+            // fire, and since the build queue consumer loop would not have been started either, the
+            // Node process exits due to an empty event queue. The result is that `block release`
+            // would exit right after printing the message "transpiling and building frontend
+            // bundle".
+            persistent: true,
             cwd: this._blockDirPath,
             alwaysStat: true,
             awaitWriteFinish: true,
@@ -356,14 +364,17 @@ class BlockBuilder {
                     fsStatsIfExists: null,
                 });
             })
-            .on('ready', () =>
+            .on('ready', () => {
                 this._blockBuilderJobQueue.startQueueConsumerLoop({
                     outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
                     transpileOrCopyAsyncFn: this._transpileOrCopyAsync.bind(this),
                     unlinkAsyncFn: this._unlinkAsync.bind(this),
                     generateFrontendBundleAsyncFn: this._generateFrontendBundleAsync.bind(this),
-                }),
-            )
+                });
+                if (!shouldContinueWatchingAfterReady) {
+                    chokidarInstance.close();
+                }
+            })
             .on('error', err => {
                 throw err;
             });
@@ -775,7 +786,9 @@ class BlockBuilder {
         }
         await this._cleanAndPrepareBuildAsync();
 
-        this._startChokidarWatchAndStartBuildJobQueueConsumer({persistent: true});
+        this._startChokidarWatchAndStartBuildJobQueueConsumer({
+            shouldContinueWatchingAfterReady: true,
+        });
         await this._waitForInitialBuildAsync();
     }
     async buildForReleaseAsync(): Promise<Result<BuildPackagePaths, ErrorWithCode>> {
@@ -809,7 +822,9 @@ class BlockBuilder {
         // 3. Starting chokidar will recursively scan the entire user's block directory and queue
         //    the files for transpilation and bundling.
         console.log('transpiling and building frontend bundle');
-        this._startChokidarWatchAndStartBuildJobQueueConsumer({persistent: false});
+        this._startChokidarWatchAndStartBuildJobQueueConsumer({
+            shouldContinueWatchingAfterReady: false,
+        });
         await this._waitForInitialBuildAsync();
         this._blockBuilderJobQueue.stopQueueConsumerLoop();
 

@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.38...HEAD)
 
-No changes.
+-   Fix Node 10.x / 12.x compatibility issue in `block release`.
 
 ## [0.0.38](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.37...@airtable/blocks-cli@0.0.38) - 2019-11-18
 
