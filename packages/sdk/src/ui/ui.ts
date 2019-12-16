@@ -43,6 +43,7 @@ export {default as ViewportConstraint} from './viewport_constraint';
 export {default as Link} from './link';
 export {default as Box} from './box';
 export {default as Text} from './text';
+export {default as TextButton} from './text_button';
 export {default as Heading} from './heading';
 export {default as Label} from './label';
 export {default as FormField} from './form_field';
