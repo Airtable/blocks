@@ -8,8 +8,10 @@ import {
     TablePickerSynced,
     ViewPickerSynced,
     FieldPickerSynced,
+    FormField,
     Input,
     Button,
+    Box,
     Icon,
 } from '@airtable/blocks/ui';
 import {fieldTypes} from '@airtable/blocks/models';
@@ -39,14 +41,22 @@ function TodoBlock() {
 
     return (
         <div>
-            <TablePickerSynced globalConfigKey="selectedTableId" />
-            <ViewPickerSynced table={table} globalConfigKey="selectedViewId" />
-            <FieldPickerSynced
-                table={table}
-                globalConfigKey="selectedDoneFieldId"
-                placeholder="Pick a 'done' field..."
-                allowedTypes={[fieldTypes.CHECKBOX]}
-            />
+            <Box padding={3} borderBottom="thick">
+                <FormField label="Table">
+                    <TablePickerSynced globalConfigKey="selectedTableId" />
+                </FormField>
+                <FormField label="View">
+                    <ViewPickerSynced table={table} globalConfigKey="selectedViewId" />
+                </FormField>
+                <FormField label="Field" marginBottom={0}>
+                    <FieldPickerSynced
+                        table={table}
+                        globalConfigKey="selectedDoneFieldId"
+                        placeholder="Pick a 'done' field..."
+                        allowedTypes={[fieldTypes.CHECKBOX]}
+                    />
+                </FormField>
+            </Box>
             {tasks}
             {table && doneField && <AddTaskForm table={table} />}
         </div>
@@ -55,14 +65,14 @@ function TodoBlock() {
 
 function Task({record, table, doneField}) {
     return (
-        <div
-            style={{
-                fontSize: 18,
-                padding: 8,
-                borderBottom: '1px solid #ddd',
-                display: 'flex',
-                alignItems: 'center',
-            }}
+        <Box
+            fontSize={4}
+            paddingX={3}
+            paddingY={2}
+            marginRight={-2}
+            borderBottom="default"
+            display="flex"
+            alignItems="center"
         >
             <TaskDoneCheckbox table={table} record={record} doneField={doneField} />
             <a
@@ -74,7 +84,7 @@ function Task({record, table, doneField}) {
                 {record.primaryCellValueAsString || 'Unnamed record'}
             </a>
             <TaskDeleteButton table={table} record={record} />
-        </div>
+        </Box>
     );
 }
 
@@ -108,11 +118,11 @@ function TaskDeleteButton({table, record}) {
     return (
         <Button
             variant="secondary"
-            style={{marginLeft: 8}}
+            marginLeft={1}
             onClick={onClick}
             disabled={!table.hasPermissionToDeleteRecord(record)}
         >
-            <Icon name="x" />
+            <Icon name="x" style={{display: 'flex'}} />
         </Button>
     );
 }
@@ -138,16 +148,19 @@ function AddTaskForm({table}) {
         [table.primaryField.id]: undefined,
     });
     return (
-        <form style={{margin: 8, display: 'flex'}} onSubmit={onSubmit}>
-            <Input
-                style={{flex: 'auto'}}
-                value={taskName}
-                onChange={onInputChange}
-                disabled={!isFormEnabled}
-            />
-            <Button style={{marginLeft: 8}} type="submit" disabled={!isFormEnabled}>
-                Add
-            </Button>
+        <form onSubmit={onSubmit}>
+            <Box display="flex" padding={3}>
+                <Input
+                    flex="auto"
+                    value={taskName}
+                    placeholder="New task"
+                    onChange={onInputChange}
+                    disabled={!isFormEnabled}
+                />
+                <Button variant="primary" marginLeft={2} type="submit" disabled={!isFormEnabled}>
+                    Add
+                </Button>
+            </Box>
         </form>
     );
 }
