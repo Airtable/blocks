@@ -1,6 +1,6 @@
 {
     "name": "@airtable/youtube-preview-block",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "When a user selects a record in grid view that has a YouTube URL, this block plays the corresponding video.",
     "author": "",
     "license": "UNLICENSED",
@@ -8,13 +8,13 @@
         "lint": "eslint frontend"
     },
     "dependencies": {
-        "@airtable/blocks": "^0.0.33",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6"
+        "@airtable/blocks": "^0.0.39",
+        "react": "^16.9.0",
+        "react-dom": "^16.9.0"
     },
     "devDependencies": {
-        "eslint": "^6.2.2",
+        "eslint": "^6.3.0",
         "eslint-plugin-react": "^7.14.3",
-        "eslint-plugin-react-hooks": "^1.6.1"
+        "eslint-plugin-react-hooks": "^2.0.1"
     }
 }
