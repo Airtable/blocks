@@ -1,5 +1,6 @@
 import {
     Box,
+    Text,
     Button,
     initializeBlock,
     useBase,
@@ -38,7 +39,7 @@ function UpdateRecordsBlock() {
     if (cursor.activeTableId !== tableToUpdate.id) {
         return (
             <Container>
-                {`Switch to the '${tableToUpdate.name}' table to use this block.`}
+                <Text>Switch to the “{tableToUpdate.name}” table to use this block.</Text>
             </Container>
         );
     }
