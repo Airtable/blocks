@@ -6,6 +6,8 @@ import {
     TablePickerSynced,
     ViewPickerSynced,
     FieldPickerSynced,
+    Box,
+    FormField,
 } from '@airtable/blocks/ui';
 import React from 'react';
 
@@ -38,22 +40,18 @@ function SimpleChartBlock() {
     const data = records && xField ? getChartData({records, xField}) : null;
 
     return (
-        <div
-            style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'flex',
-                flexDirection: 'column',
-            }}
+        <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            display="flex"
+            flexDirection="column"
         >
-            <div style={{display: 'flex'}}>
-                <Settings table={table} />
-            </div>
+            <Settings table={table} />
             {data && (
-                <div style={{position: 'relative', flexGrow: 1}}>
+                <Box position="relative" flex="auto" padding={3}>
                     <Bar
                         data={data}
                         options={{
@@ -72,9 +70,9 @@ function SimpleChartBlock() {
                             },
                         }}
                     />
-                </div>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 }
 
@@ -113,42 +111,24 @@ function getChartData({records, xField}) {
 
 function Settings({table}) {
     return (
-        <React.Fragment>
-            <Label text="Table">
+        <Box display="flex" padding={3} borderBottom="thick">
+            <FormField label="Table" width="33.33%" paddingRight={1} marginBottom={0}>
                 <TablePickerSynced globalConfigKey={GlobalConfigKeys.TABLE_ID} />
-            </Label>
+            </FormField>
             {table && (
-                <Label text="View">
+                <FormField label="View" width="33.33%" paddingX={1} marginBottom={0}>
                     <ViewPickerSynced table={table} globalConfigKey={GlobalConfigKeys.VIEW_ID} />
-                </Label>
+                </FormField>
             )}
             {table && (
-                <Label text="X-axis field">
+                <FormField label="X-axis field" width="33.33%" paddingLeft={1} marginBottom={0}>
                     <FieldPickerSynced
                         table={table}
                         globalConfigKey={GlobalConfigKeys.X_FIELD_ID}
                     />
-                </Label>
+                </FormField>
             )}
-        </React.Fragment>
-    );
-}
-
-// Wrapper component for labeled model pickers.
-function Label({text, children}) {
-    return (
-        <label
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                padding: 8,
-                flexGrow: 1,
-                flexShrink: 0,
-            }}
-        >
-            <p style={{fontWeight: 500, marginBottom: 8}}>{text}</p>
-            {children}
-        </label>
+        </Box>
     );
 }
 
