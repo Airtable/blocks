@@ -460,6 +460,8 @@ class BlockBuilder {
         const plugins = [
             '@babel/plugin-transform-flow-strip-types',
             '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-proposal-nullish-coalescing-operator',
+            '@babel/plugin-proposal-optional-chaining',
         ];
 
         // Use the blocks-cli dir as the cwd so babel can properly find presets/plugins.
