@@ -67,6 +67,7 @@ function WikipediaEnrichmentBlock() {
             ) : (
                 <Fragment>
                     <Button
+                        variant="primary"
                         onClick={onButtonClick}
                         disabled={!permissionCheck.hasPermission}
                         marginBottom={3}
