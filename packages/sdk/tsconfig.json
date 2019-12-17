@@ -16,7 +16,13 @@
         "allowJs": true,
         "checkJs": true,
         "jsx": "react",
-        "typeRoots": ["./types", "./node_modules/@types"]
+        "typeRoots": ["./types", "./node_modules/@types"],
+
+        // TypeScript emits class fields using [[Set]] semantics (`this.p = x`), but Babel emits class
+        // fields using [[Define]] semantics to match the specification
+        // (`Object.defineProperty(this, 'p')`). This flag tells TypeScript that we want to use
+        // [[Define]] semantics in type checking for compatibility.
+        "useDefineForClassFields": true
     },
     "include": ["types/**/*", "src/**/*", "test/**/*", "stories/**/*"]
 }

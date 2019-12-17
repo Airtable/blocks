@@ -88,7 +88,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @internal
      */
     get _dataOrNullIfDeleted(): TableData | null {
-        return this._baseData.tablesById[this._id] || null;
+        return this._baseData.tablesById[this._id] ?? null;
     }
     /**
      * The base that this table belongs to.
@@ -437,7 +437,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return (
             this.views.find(view => {
                 return allowedViewTypes.includes(view.type);
-            }) || null
+            }) ?? null
         );
     }
     // Experimental, do not document yet. Allows fetching default cell values for

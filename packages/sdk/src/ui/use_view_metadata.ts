@@ -49,10 +49,10 @@ function useViewMetadata(
             ? viewOrViewMetadataQueryResult.selectMetadata()
             : viewOrViewMetadataQueryResult;
 
-    useLoadable(queryResult || null);
+    useLoadable(queryResult ?? null);
     useWatchable(queryResult, ['allFields', 'visibleFields']);
 
-    return queryResult || null;
+    return queryResult ?? null;
 }
 
 export default useViewMetadata;
