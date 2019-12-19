@@ -11,7 +11,13 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...HEAD)
 
-No changes.
+-   Added permission checks that don't require specifying a table to `session`:
+    -   `session.checkPermissionsForUpdateRecords()`
+    -   `session.hasPermissionToUpdateRecords()`
+    -   `session.checkPermissionsForCreateRecords()`
+    -   `session.hasPermissionToCreateRecords()`
+    -   `session.checkPermissionsForDeleteRecords()`
+    -   `session.hasPermissionToDeleteRecords()`
 
 ## [0.0.39](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.38...@airtable/blocks@0.0.39) - 2019-12-12
 
