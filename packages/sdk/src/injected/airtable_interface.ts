@@ -239,6 +239,7 @@ export interface AirtableInterface {
         fieldDatas: Array<FieldData>,
         sorts: Array<NormalizedSortConfig>,
     ): VisList;
+    setActiveViewOrTable(tableId: TableId, viewId?: ViewId): void;
 
     /**
      * internal utils
