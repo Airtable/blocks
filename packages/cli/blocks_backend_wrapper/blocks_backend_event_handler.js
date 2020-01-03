@@ -91,16 +91,35 @@ class BlocksBackendEventHandler {
         });
     }
 
-    _wrapConsole(originalConsole: typeof console, logStream: fs.WriteStream) {
-        const methods = ['log', 'error', 'warn', 'info'];
-        for (const method of methods) {
-            const originalMethod = originalConsole[method];
-
+    // We patch the global `console` object in order to capture logs
+    // from the user's code to a tmp file, which we upload to S3 at
+    // the end of the invocation. We need to do this carefully:
+    // the `console` object is re-used across separate invocations if
+    // the Lambda container happens to be re-used, so after each
+    // invocation, we unpatch it to get it back to its original state.
+    static originalConsoleMethods = {
+        log: console.log, // eslint-disable-line no-console
+        error: console.error, // eslint-disable-line no-console
+        warn: console.warn, // eslint-disable-line no-console
+        info: console.info, // eslint-disable-line no-console
+    };
+    _patchConsoleToCaptureLogs(logStream: fs.WriteStream) {
+        for (const method of Object.keys(BlocksBackendEventHandler.originalConsoleMethods)) {
+            const originalMethod = BlocksBackendEventHandler.originalConsoleMethods[method];
             // flow-disable-next-line since it doesn't like this, but it's valid.
-            originalConsole[method] = function() {
-                originalMethod.apply(originalConsole, arguments);
+            console[method] = function() {
+                // eslint-disable-line no-console
+                // eslint-disable-line no-console
+                originalMethod.apply(console, arguments);
                 logStream.write(util.format(...arguments) + '\n');
             };
+        }
+    }
+    _unpatchConsole() {
+        for (const method of Object.keys(BlocksBackendEventHandler.originalConsoleMethods)) {
+            const originalMethod = BlocksBackendEventHandler.originalConsoleMethods[method];
+            // flow-disable-next-line since it doesn't like this, but it's valid.
+            console[method] = originalMethod; // eslint-disable-line no-console
         }
     }
 
@@ -232,17 +251,26 @@ class BlocksBackendEventHandler {
 
     async handleEventAsync(event: LambdaEvent): Promise<NormalizedBackendRouteResponse> {
         let logFilePath: string;
-        let logStream: fs.WriteStream;
+        let logStream: fs.WriteStream | null;
 
         if (this._enableUploadLogsToS3) {
             logFilePath = '/tmp/' + event.blockInvocationId + '-log.txt';
             logStream = fs.createWriteStream(logFilePath, {flags: 'wx'});
             // We override the console methods so they also write to our logStream, so
-            // we that can upload the logs to S3
-            this._wrapConsole(console, logStream);
+            // we that can upload the logs to S3.
+            this._patchConsoleToCaptureLogs(logStream);
+        } else {
+            logStream = null;
         }
 
         const normalizedResponse = await this._callUserCodeForEventAsync(event);
+
+        // Unpatch console before ending the logStream. Otherwise, any subsequent
+        // console.logs will crash since they will attempt to write to a closed stream.
+        this._unpatchConsole();
+        if (logStream !== null) {
+            await endStreamAsync(logStream);
+        }
 
         if (this._enableUploadLogsToS3) {
             // Before returning, let's upload the logs to S3, but ignore any
@@ -251,9 +279,7 @@ class BlocksBackendEventHandler {
             // TODO(jb): figure out a better way to handle log upload errors.
             // Suppress "possibly uninitialized variable" error in Flow.
             invariant(logFilePath, 'logFilePath');
-            invariant(logStream, 'logStream');
             try {
-                await endStreamAsync(logStream);
                 await this._uploadLogsToS3Async(logFilePath, event.presignedS3UploadUrl);
             } catch (err) {
                 // No-op
