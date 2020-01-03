@@ -106,10 +106,9 @@ class BlocksBackendEventHandler {
     _patchConsoleToCaptureLogs(logStream: fs.WriteStream) {
         for (const method of Object.keys(BlocksBackendEventHandler.originalConsoleMethods)) {
             const originalMethod = BlocksBackendEventHandler.originalConsoleMethods[method];
+            // prettier-ignore
             // flow-disable-next-line since it doesn't like this, but it's valid.
-            console[method] = function() {
-                // eslint-disable-line no-console
-                // eslint-disable-line no-console
+            console[method] = function() { // eslint-disable-line no-console
                 originalMethod.apply(console, arguments);
                 logStream.write(util.format(...arguments) + '\n');
             };
