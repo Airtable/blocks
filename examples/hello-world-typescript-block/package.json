@@ -8,7 +8,7 @@
         "lint": "eslint frontend"
     },
     "dependencies": {
-        "@airtable/blocks": "0.0.39",
+        "@airtable/blocks": "latest",
         "react": "^16.9.0",
         "react-dom": "^16.9.0"
     },

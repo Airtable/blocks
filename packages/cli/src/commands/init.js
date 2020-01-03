@@ -261,6 +261,31 @@ async function populateBlockDirectoryWithTemplateContentAsync(
     await initCommandHelpers.cleanUpDownloadedTemplateAsync(blockDirPath);
 }
 
+async function rewriteBlockSdkVersionFromLatestToCurrentVersionAsync(
+    blockDirPath: string,
+): Promise<void> {
+    const packageJsonPath = path.join(blockDirPath, 'package.json');
+    // flow-disable-next-line
+    const packageJson = await fsUtils.readJsonIfExistsAsync(packageJsonPath);
+    if (
+        packageJson &&
+        packageJson.dependencies &&
+        packageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME] === 'latest'
+    ) {
+        const sdkPackageJsonPath = path.join(
+            blockDirPath,
+            'node_modules',
+            '@airtable',
+            'blocks',
+            'package.json',
+        );
+        // flow-disable-next-line
+        const sdkPackageJson = await fsUtils.readJsonIfExistsAsync(sdkPackageJsonPath);
+        packageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME] = sdkPackageJson.version;
+        await fsUtils.outputJsonAsync(packageJsonPath, packageJson);
+    }
+}
+
 async function createRemoteJsonFileAsync(
     blockDirPath: string,
     blockId: string,
@@ -383,6 +408,9 @@ async function setupNpmTemplateBlockAsync(
 
     // Install the dependencies in the new block's package.json
     await initCommandHelpers.installBlockDependenciesAsync(blockDirPath);
+
+    // Rewrite the blocks sdk version to the installed version if it was set to latest
+    await rewriteBlockSdkVersionFromLatestToCurrentVersionAsync(blockDirPath);
 
     // Create the .block/remote.json file
     await createRemoteJsonFileAsync(blockDirPath, blockId, baseId);

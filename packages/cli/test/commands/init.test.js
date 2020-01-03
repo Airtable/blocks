@@ -1,5 +1,6 @@
 // @flow
 const init = require('../../src/commands/init');
+const blockCliConfigSettings = require('../../src/config/block_cli_config_settings');
 const path = require('path');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
@@ -144,7 +145,7 @@ describe('init', function() {
             });
         });
 
-        // These tests have to run the code in `runBlockClicAsync` so
+        // These tests have to run the code in `runBlockCliAsync` so
         // that the yargs processing behaviour is run.  That is where
         // the default template is set to hello world if `--template`
         // is not passed.
@@ -212,11 +213,46 @@ describe('init', function() {
 
             await fsUtils.mkdirPathAsync(path.join(npmInstallPath, 'frontend'));
             fs.writeFileSync(path.join(npmInstallPath, 'frontend', 'index.js'), 'index.js');
-            fs.writeFileSync(path.join(npmInstallPath, 'package.json'), 'package.json');
+            fsExtra.outputJsonSync(path.join(npmInstallPath, 'package.json'), {});
+            fsExtra.outputJsonSync(
+                path.join(npmInstallPath, 'node_modules', '@airtable', 'blocks', 'package.json'),
+                {},
+            );
             fs.writeFileSync(path.join(npmInstallPath, 'block.json'), 'block.json');
             fs.writeFileSync(path.join(npmInstallPath, '.eslintrc.js'), '.eslintrc.js');
             fs.writeFileSync(path.join(npmInstallPath, '__gitignore'), '__gitignore');
             return npmInstallPath;
+        }
+
+        function createCustomTemplate(packageJson, sdkPackageJson) {
+            return async function createCustomTemplateAsync() {
+                const npmInstallPath = path.join(
+                    blockDirPath,
+                    'tmp',
+                    'node_modules',
+                    YOUTUBE_PREVIEW_TEMPLATE,
+                );
+
+                await fsUtils.mkdirPathAsync(npmInstallPath);
+
+                await fsUtils.mkdirPathAsync(path.join(npmInstallPath, 'frontend'));
+                fs.writeFileSync(path.join(npmInstallPath, 'frontend', 'index.js'), 'index.js');
+                fsExtra.outputJsonSync(path.join(npmInstallPath, 'package.json'), packageJson);
+                fsExtra.outputJsonSync(
+                    path.join(
+                        npmInstallPath,
+                        'node_modules',
+                        '@airtable',
+                        'blocks',
+                        'package.json',
+                    ),
+                    sdkPackageJson,
+                );
+                fs.writeFileSync(path.join(npmInstallPath, 'block.json'), 'block.json');
+                fs.writeFileSync(path.join(npmInstallPath, '.eslintrc.js'), '.eslintrc.js');
+                fs.writeFileSync(path.join(npmInstallPath, '__gitignore'), '__gitignore');
+                return npmInstallPath;
+            };
         }
 
         function stubTemplateDownloadHandlers(createTemplateAsync) {
@@ -263,6 +299,11 @@ describe('init', function() {
             assert.strictEqual(remoteJson.blockId, 'blkABC');
 
             assert(fs.existsSync(path.join(blockDirPath, 'package.json')));
+            assert(
+                fs.existsSync(
+                    path.join(blockDirPath, 'node_modules', '@airtable', 'blocks', 'package.json'),
+                ),
+            );
         });
 
         it('installs dependencies', async function() {
@@ -270,6 +311,52 @@ describe('init', function() {
             await runInitAsync(getArgv());
 
             assert(installBlockDependenciesAsyncStub.calledWith(sinon.match(blockDirPath)));
+        });
+
+        it('rewrites sdk version if latest to current version', async function() {
+            const packageJson = {
+                dependencies: {
+                    [blockCliConfigSettings.SDK_PACKAGE_NAME]: 'latest',
+                    other_package: 'latest',
+                },
+            };
+            const sdkPackageJson = {
+                version: '0.0.1',
+            };
+            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await runInitAsync(getArgv());
+
+            const finalPackageJson = await fsExtra.readJson(
+                path.join(blockDirPath, 'package.json'),
+            );
+            assert.strictEqual(
+                finalPackageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME],
+                '0.0.1',
+            );
+            assert.strictEqual(finalPackageJson.dependencies.other_package, 'latest');
+        });
+
+        it('keeps sdk version if not latest', async function() {
+            const packageJson = {
+                dependencies: {
+                    [blockCliConfigSettings.SDK_PACKAGE_NAME]: '^0.0.1',
+                    other_package: 'latest',
+                },
+            };
+            const sdkPackageJson = {
+                version: '0.0.1',
+            };
+            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await runInitAsync(getArgv());
+
+            const finalPackageJson = await fsExtra.readJson(
+                path.join(blockDirPath, 'package.json'),
+            );
+            assert.strictEqual(
+                finalPackageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME],
+                '^0.0.1',
+            );
+            assert.strictEqual(finalPackageJson.dependencies.other_package, 'latest');
         });
 
         it('prompts for API key if the user does not have it set already', async function() {
