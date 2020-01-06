@@ -13,6 +13,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Add support for [nullish coalescing](https://github.com/tc39/proposal-nullish-coalescing) and
     [optional chaining](https://github.com/tc39/proposal-optional-chaining) in blocks.
+-   Rewrite "@airtable/blocks": "latest" dependency to the specific latest version in block init
 
 ## [0.0.39](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.38...@airtable/blocks-cli@0.0.39) - 2019-12-13
 
