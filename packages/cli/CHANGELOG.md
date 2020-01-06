@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.39...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.40...HEAD)
+
+No changes.
+
+## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.39...@airtable/blocks-cli@0.0.40) - 2020-01-06
 
 -   Add support for [nullish coalescing](https://github.com/tc39/proposal-nullish-coalescing) and
     [optional chaining](https://github.com/tc39/proposal-optional-chaining) in blocks.
