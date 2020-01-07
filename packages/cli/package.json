@@ -42,6 +42,8 @@
         "@babel/cli": "^7.7.0",
         "@babel/core": "^7.7.0",
         "@babel/plugin-proposal-class-properties": "^7.7.0",
+        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
+        "@babel/plugin-proposal-optional-chaining": "^7.7.5",
         "@babel/plugin-transform-flow-strip-types": "^7.6.3",
         "@babel/polyfill": "^7.7.0",
         "@babel/preset-env": "^7.7.1",
@@ -81,8 +83,6 @@
     },
     "devDependencies": {
         "@airtable-blocks-internal/changelog-publish": "^1.0.2",
-        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
-        "@babel/plugin-proposal-optional-chaining": "^7.7.5",
         "@babel/register": "^7.7.0",
         "@oclif/test": "^1.2.5",
         "airtable-blocks-backend-wrapper": "file:./blocks_backend_wrapper",
