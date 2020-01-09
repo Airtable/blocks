@@ -4,7 +4,7 @@ import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
-import {GlobalConfigUpdate} from '../global_config';
+import {GlobalConfigUpdate} from '../types/global_config';
 import {FieldId} from '../types/field';
 import Session from './session';
 import Base from './base';

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import FieldPicker, {sharedFieldPickerPropTypes, SharedFieldPickerProps} from './field_picker';
 import useSynced from './use_synced';

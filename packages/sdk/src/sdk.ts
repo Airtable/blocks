@@ -10,7 +10,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {ModelChange} from './types/base';
-import GlobalConfig, {GlobalConfigUpdate} from './global_config';
+import GlobalConfig from './global_config';
+import {GlobalConfigUpdate} from './types/global_config';
 import Base from './models/base';
 import * as models from './models/models';
 import Session from './models/session';

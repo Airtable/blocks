@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: Switch */ /** */
 import * as React from 'react';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import Switch, {sharedSwitchPropTypes, SharedSwitchProps} from './switch';
 import useSynced from './use_synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';

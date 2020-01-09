@@ -1,6 +1,6 @@
 /** @module @airtable/blocks: mutations */ /** */
 import {ObjectValues, ObjectMap} from '../private_utils';
-import {GlobalConfigUpdate, GlobalConfigValue} from '../global_config';
+import {GlobalConfigUpdate, GlobalConfigValue} from './global_config';
 import {TableId} from './table';
 import {FieldId} from './field';
 import {RecordId} from './record';

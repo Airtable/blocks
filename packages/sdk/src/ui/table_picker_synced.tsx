@@ -2,7 +2,7 @@
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import Table from '../models/table';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import TablePicker, {sharedTablePickerPropTypes, SharedTablePickerProps} from './table_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import useSynced from './use_synced';

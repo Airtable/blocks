@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: Input */ /** */
 import * as React from 'react';
 import {spawnError} from '../error_utils';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import Input, {sharedInputPropTypes, SharedInputProps, SupportedInputType} from './input';
 import useSynced from './use_synced';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
