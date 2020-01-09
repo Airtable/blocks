@@ -9,9 +9,19 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...HEAD)
 
 No changes.
+
+## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
+
+-   Added permission checks that don't require specifying a table to `session`:
+    -   `session.checkPermissionsForUpdateRecords()`
+    -   `session.hasPermissionToUpdateRecords()`
+    -   `session.checkPermissionsForCreateRecords()`
+    -   `session.hasPermissionToCreateRecords()`
+    -   `session.checkPermissionsForDeleteRecords()`
+    -   `session.hasPermissionToDeleteRecords()`
 
 ## [0.0.39](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.38...@airtable/blocks@0.0.39) - 2019-12-12
 

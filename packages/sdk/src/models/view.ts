@@ -58,10 +58,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      */
     get _dataOrNullIfDeleted(): ViewData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
-        if (!tableData) {
-            return null;
-        }
-        return tableData.viewsById[this._id] || null;
+        return tableData?.viewsById[this._id] ?? null;
     }
     /**
      * The table that this view belongs to. Should never change because views aren't moved between tables.

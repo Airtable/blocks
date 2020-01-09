@@ -3,80 +3,23 @@ import Watchable from './watchable';
 import getSdk from './get_sdk';
 import {AirtableInterface} from './injected/airtable_interface';
 import {spawnError} from './error_utils';
+import {
+    GlobalConfigPath,
+    GlobalConfigKey,
+    PartialGlobalConfigKey,
+    GlobalConfigValue,
+    GlobalConfigData,
+    GlobalConfigUpdate,
+    PartialGlobalConfigUpdate,
+    GlobalConfigPathValidationResult,
+} from './types/global_config';
 import {MutationTypes, PermissionCheckResult} from './types/mutations';
-import {getValueAtOwnPath, ObjectMap} from './private_utils';
-
-const blockKvHelpers = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/blocks/block_kv_helpers',
-);
-const forkObjectPathForWriteByReference = window.__requirePrivateModuleFromAirtable(
-    'client_server_shared/fork_object_path_for_write_by_reference',
-);
-
-/** A path of keys indexing into the global config object */
-export type GlobalConfigPath = ReadonlyArray<string>;
-/** A single top level key or a path into the global config object */
-export type GlobalConfigKey = GlobalConfigPath | string;
-/** A {@link GlobalConfigPath}, with some parts of the path unknown (`undefined`) */
-export type PartialGlobalConfigPath = ReadonlyArray<string | undefined>;
-/** A {@link GlobalConfigKey} with some parts of the path/key unknown (`undefined`) */
-export type PartialGlobalConfigKey = PartialGlobalConfigPath | string | undefined;
-/** An array of {@link GlobalConfigValue}s */
-export interface GlobalConfigArray extends ReadonlyArray<GlobalConfigValue> {}
-/** An object containing {@GlobalConfigValue}s */
-export interface GlobalConfigObject {
-    readonly [key: string]: GlobalConfigValue | undefined;
-}
-
-/** The types of value that can be stored in globalConfig. */
-export type GlobalConfigValue =
-    | null
-    | boolean
-    | number
-    | string
-    | GlobalConfigArray
-    | GlobalConfigObject;
-
-/** @hidden */
-export interface GlobalConfigData {
-    [key: string]: GlobalConfigValue | undefined;
-}
-
-/** An instruction to set `path` within globalConfig to `value`. */
-export interface GlobalConfigUpdate {
-    /** The path to update. */
-    readonly path: GlobalConfigPath;
-    /** The value at `path` after updating. */
-    readonly value: GlobalConfigValue | undefined;
-}
-
-/** A version of {@link GlobalConfigUpdate} where not all values are yet known. */
-export interface PartialGlobalConfigUpdate {
-    /** The path to update. */
-    readonly path?: PartialGlobalConfigPath | undefined;
-    /** The value at `path` after updating. */
-    readonly value?: GlobalConfigValue | undefined;
-}
+import {getValueAtOwnPath} from './private_utils';
 
 /**
  * You can watch any top-level key in global config. Use '*' to watch every change.
  */
 type WatchableGlobalConfigKey = string;
-
-/** @internal */
-function validatePath(
-    path: GlobalConfigPath,
-    store: GlobalConfigData,
-): {isValid: true} | {isValid: false; reason: string} {
-    const validation = blockKvHelpers.validateKvKeyPath(path, store);
-    if (!validation.isValid) {
-        return validation;
-    }
-    if (path[0] === '*') {
-        return {isValid: false, reason: "cannot use '*' as a top-level key"};
-    }
-    return {isValid: true};
-}
 
 /**
  * A key-value store for persisting configuration options for a block installation.
@@ -134,6 +77,23 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         }
         return key;
     }
+
+    /**
+     * @internal
+     */
+    _validatePath(
+        path: GlobalConfigPath,
+        store: GlobalConfigData,
+    ): GlobalConfigPathValidationResult {
+        const validation = this._airtableInterface.globalConfigHelpers.validatePath(path, store);
+        if (!validation.isValid) {
+            return validation;
+        }
+        if (path[0] === '*') {
+            return {isValid: false, reason: "cannot use '*' as a top-level key"};
+        }
+        return {isValid: true};
+    }
     /**
      * Get the value at a path. Throws an error if the path is invalid.
      *
@@ -150,7 +110,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     get(key: GlobalConfigKey): unknown {
         const path = this._formatKeyAsPath(key);
 
-        const pathValidationResult = validatePath(path, this._kvStore);
+        const pathValidationResult = this._validatePath(path, this._kvStore);
         if (!pathValidationResult.isValid) {
             throw spawnError('Invalid globalConfig path: %s', pathValidationResult.reason);
         }
@@ -367,7 +327,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
         }
 
         for (const update of updates) {
-            const pathValidation = validatePath(update.path, this._kvStore);
+            const pathValidation = this._validatePath(update.path, this._kvStore);
             if (!pathValidation.isValid) {
                 throw spawnError('Invalid globalConfig path: %s', pathValidation.reason);
             }
@@ -383,49 +343,15 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * this shouldn't be called directly - instead, use getSdk().__applyGlobalConfigUpdates()
      */
     __setMultipleKvPaths(updates: ReadonlyArray<GlobalConfigUpdate>) {
-        if (!Array.isArray(updates)) {
-            throw spawnError(
-                'globalConfig updates must be an array. Provided type: %s',
-                typeof updates,
-            );
-        }
-
-        const topLevelKeySet: ObjectMap<string, true> = {};
-
-        const clonedObjectsSet = new Set();
-        const workingKvStore = {...this._kvStore};
-
-        for (const update of updates) {
-            const updateValidationResult = blockKvHelpers.validateKvStoreUpdate(
-                update,
-                this._kvStore,
-            );
-            if (!updateValidationResult.isValid) {
-                throw spawnError('Invalid globalConfig update: %s', updateValidationResult.reason);
-            }
-
-            forkObjectPathForWriteByReference(
-                workingKvStore,
-                this._kvStore,
-                update.path,
-                clonedObjectsSet,
-            );
-            blockKvHelpers.applyValidatedUpdateToKvStoreByReference(workingKvStore, update);
-
-            const topLevelKey = update.path[0];
-            topLevelKeySet[topLevelKey] = true;
-        }
-
-        const changedTopLevelKeys = Object.keys(topLevelKeySet);
-        const limitCheckResult = blockKvHelpers.limitCheckKvStore(
-            workingKvStore,
+        const {
+            newKvStore,
             changedTopLevelKeys,
+        } = this._airtableInterface.globalConfigHelpers.validateAndApplyUpdates(
+            updates,
+            this._kvStore,
         );
-        if (!limitCheckResult.isValid) {
-            throw spawnError('globalConfig over limits: %s', limitCheckResult.reason);
-        }
 
-        this._kvStore = workingKvStore;
+        this._kvStore = newKvStore;
 
         for (const key of changedTopLevelKeys) {
             this._onChange(key);

@@ -405,8 +405,8 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
                 (this.state.isScrollbarVisible ? this._scrollbarWidth : 0),
             attachmentCoverField,
             onClick: this.props.onRecordClick,
-            onMouseEnter: this.props.onRecordMouseEnter || null,
-            onMouseLeave: this.props.onRecordMouseLeave || null,
+            onMouseEnter: this.props.onRecordMouseEnter ?? null,
+            onMouseLeave: this.props.onRecordMouseLeave ?? null,
             style: {},
             className: '',
         };

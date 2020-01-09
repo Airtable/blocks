@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import getSdk from '../get_sdk';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import useWatchable from './use_watchable';
 
 /** @hidden */

@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: SelectButtons */ /** */
 import * as React from 'react';
 import {spawnError} from '../error_utils';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import SelectButtons, {
     sharedSelectButtonsPropTypes,
     SharedSelectButtonsProps,

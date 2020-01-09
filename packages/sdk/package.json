@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.39",
+    "version": "0.0.40",
     "description": "Airtable Blocks SDK",
     "main": "dist/cjs/index.js",
     "types": "index.d.ts",
@@ -40,7 +40,8 @@
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
         "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook"
+        "build-storybook": "build-storybook",
+        "deploy-storybook": "storybook-to-ghpages"
     },
     "author": "",
     "license": "UNLICENSED",
@@ -49,6 +50,8 @@
         "@babel/cli": "^7.7.5",
         "@babel/core": "^7.7.5",
         "@babel/plugin-proposal-class-properties": "^7.7.4",
+        "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
+        "@babel/plugin-proposal-optional-chaining": "^7.7.5",
         "@babel/plugin-transform-runtime": "^7.7.6",
         "@babel/preset-env": "^7.7.6",
         "@babel/preset-react": "^7.7.4",
@@ -57,6 +60,7 @@
         "@storybook/addon-links": "^5.2.8",
         "@storybook/addons": "^5.2.8",
         "@storybook/react": "^5.2.8",
+        "@storybook/storybook-deployer": "^2.8.1",
         "@types/enzyme": "^3.10.4",
         "@types/enzyme-adapter-react-16": "^1.0.5",
         "@types/fs-extra": "^8.0.1",
@@ -79,6 +83,7 @@
         "glob": "^7.1.6",
         "jest": "^24.9.0",
         "prettier": "^1.19.1",
+        "prism-react-renderer": "^1.0.2",
         "typedoc": "^0.15.4",
         "typedoc-plugin-no-inherit": "^1.1.10",
         "typescript": "^3.7.3"
@@ -89,6 +94,7 @@
         "@styled-system/core": "^5.1.2",
         "@types/hoist-non-react-statics": "^3.3.1",
         "@types/lodash.omit": "^4.5.6",
+        "@types/prettier": "^1.19.0",
         "@types/prop-types": "^15.7.3",
         "@types/react": "^16.9.5",
         "@types/react-dom": "^16.9.1",

@@ -2,7 +2,7 @@
 import * as React from 'react';
 import getSdk from '../get_sdk';
 import View from '../models/view';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import ViewPicker, {sharedViewPickerPropTypes, SharedViewPickerProps} from './view_picker';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import useSynced from './use_synced';

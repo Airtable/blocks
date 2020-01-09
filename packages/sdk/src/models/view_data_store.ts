@@ -58,10 +58,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
 
     get _dataOrNullIfDeleted(): ViewData | null {
         const tableData = this._baseData.tablesById[this.parentRecordStore.tableId];
-        if (!tableData) {
-            return null;
-        }
-        return tableData.viewsById[this.viewId] || null;
+        return tableData?.viewsById[this.viewId] ?? null;
     }
 
     _onChangeIsDataLoaded() {
@@ -225,15 +222,11 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         if (!this.isDataLoaded) {
             throw spawnInvariantViolationError('View data is not loaded');
         }
-        const colorsByRecordId = this._data.colorsByRecordId;
-        if (!colorsByRecordId) {
-            return null;
-        }
 
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
-        const color = colorsByRecordId[recordId];
-        return color || null;
+
+        return this._data.colorsByRecordId?.[recordId] ?? null;
     }
 
     get allFieldIds(): Array<FieldId> {

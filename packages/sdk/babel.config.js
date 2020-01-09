@@ -18,6 +18,8 @@ module.exports = {
     ],
     plugins: [
         '@babel/proposal-class-properties',
+        '@babel/proposal-nullish-coalescing-operator',
+        '@babel/proposal-optional-chaining',
         '@babel/transform-runtime',
         ['transform-define', require('./global_constants')],
     ],

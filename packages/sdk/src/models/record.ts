@@ -87,7 +87,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         if (!recordsById) {
             throw spawnInvariantViolationError('Record data is not loaded');
         }
-        return recordsById[this._id] || null;
+        return recordsById[this._id] ?? null;
     }
     /**
      * The table that this record belongs to. Should never change because records aren't moved between tables.

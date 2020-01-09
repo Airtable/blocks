@@ -1,5 +1,6 @@
 /** @module @airtable/blocks/ui: withHooks */ /** */
 import * as React from 'react';
+import {spawnError} from '../error_utils';
 
 /**
  * A higher-order component for working with React hooks in class-based components. It takes a React
@@ -104,11 +105,18 @@ export default function withHooks<InjectedProps, Props extends InjectedProps, In
     Instance,
     Omit<Props, keyof InjectedProps> & React.RefAttributes<Instance>
 > {
+    if (!getAdditionalPropsToInject) {
+        throw spawnError('withHooks: getAdditionalPropsToInject is required');
+    }
+
     return React.forwardRef<
         Instance,
         Omit<Props, keyof InjectedProps> & React.RefAttributes<Instance>
     >((props, forwardedRef) => {
         const propsToInject = getAdditionalPropsToInject(props);
+        if (propsToInject === null || typeof propsToInject !== 'object') {
+            throw spawnError('withHooks: getAdditionalPropsToInject must return an object');
+        }
 
         const injectedRef = propsToInject.ref;
 

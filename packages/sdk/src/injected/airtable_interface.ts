@@ -1,10 +1,14 @@
-import {FlowAnyObject, ObjectMap} from '../private_utils';
+import {ObjectMap} from '../private_utils';
 import {AggregatorKey} from '../types/aggregators';
-import {BaseData, BasePermissionData} from '../types/base';
+import {BaseData, BasePermissionData, ModelChange} from '../types/base';
 import {BlockInstallationId} from '../types/block';
-import {HostToBlockMessageType} from '../types/block_frame';
 import {FieldData, FieldId, FieldType} from '../types/field';
-import {GlobalConfigUpdate, GlobalConfigData} from '../global_config';
+import {
+    GlobalConfigUpdate,
+    GlobalConfigData,
+    GlobalConfigPath,
+    GlobalConfigPathValidationResult,
+} from '../types/global_config';
 import {RecordData, RecordDef, RecordId} from '../types/record';
 import {UndoRedoMode} from '../types/undo_redo';
 import {ViewportSizeConstraint} from '../types/viewport';
@@ -116,6 +120,18 @@ interface FieldTypeProvider {
     getUiConfig: (appInterface: AppInterface, fieldData: FieldData) => FieldUiConfig;
 }
 
+/** @hidden */
+interface GlobalConfigHelpers /**/ {
+    validatePath(path: GlobalConfigPath, store: GlobalConfigData): GlobalConfigPathValidationResult;
+    validateAndApplyUpdates(
+        updates: ReadonlyArray<GlobalConfigUpdate>,
+        store: GlobalConfigData,
+    ): {
+        newKvStore: GlobalConfigData;
+        changedTopLevelKeys: Array<string>;
+    };
+}
+
 /**
  * AppInterface should never be used directly by the SDK, so we don't describe the type.
  *
@@ -144,6 +160,7 @@ export interface AirtableInterface {
     urlConstructor: UrlConstructor;
     aggregators: Aggregators;
     fieldTypeProvider: FieldTypeProvider;
+    globalConfigHelpers: GlobalConfigHelpers;
 
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 
@@ -185,7 +202,15 @@ export interface AirtableInterface {
         basePermissionData: BasePermissionData,
     ): PermissionCheckResult;
 
-    registerHandler(type: HostToBlockMessageType, handlerFn: (data: FlowAnyObject) => void): void;
+    // frontend only:
+    subscribeToModelUpdates(callback: (data: {changes: ReadonlyArray<ModelChange>}) => void): void;
+    subscribeToGlobalConfigUpdates(
+        callback: (data: {updates: ReadonlyArray<GlobalConfigUpdate>}) => void,
+    ): void;
+    subscribeToSettingsButtonClick(callback: () => void): void;
+    subscribeToEnterFullScreen(callback: () => void): void;
+    subscribeToExitFullScreen(callback: () => void): void;
+    subscribeToFocus(callback: () => void): void;
     fetchAndSubscribeToCursorDataAsync(): Promise<any>;
     unsubscribeFromCursorData(): void;
     expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null): void;

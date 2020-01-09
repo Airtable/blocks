@@ -62,10 +62,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      */
     get _dataOrNullIfDeleted(): FieldData | null {
         const tableData = this._baseData.tablesById[this.parentTable.id];
-        if (!tableData) {
-            return null;
-        }
-        return tableData.fieldsById[this._id] || null;
+        return tableData?.fieldsById[this._id] ?? null;
     }
     /**
      * The table that this field belongs to. Should never change because fields aren't moved between tables.

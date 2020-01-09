@@ -141,7 +141,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     get _dataOrNullIfDeleted(): TableData | null {
-        return this._baseData.tablesById[this.tableId] || null;
+        return this._baseData.tablesById[this.tableId] ?? null;
     }
 
     _onChangeIsDataLoaded() {

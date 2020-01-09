@@ -130,7 +130,7 @@ const FormField = (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
         children,
         ...styleProps
     } = props;
-    const classNameForStyleProps = useStyledSystem(styleProps, styleParser);
+    const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
     const [generatedId] = useState(getLocallyUniqueId('form-field-'));
     const controlId = htmlFor || generatedId;
 

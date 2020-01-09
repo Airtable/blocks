@@ -6,6 +6,7 @@ import {BaseData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {PermissionLevel} from '../types/permission_levels';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
+import {PermissionCheckResult, MutationTypes} from '../types/mutations';
 import AbstractModel from './abstract_model';
 
 /** @hidden */
@@ -100,6 +101,90 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
             const {base} = getSdk();
             return base.getCollaboratorByIdIfExists(userId);
         }
+    }
+    /**
+     * Checks whether the current user has permission to update any records in the current base. For
+     * more granular permission checks, see {@link Table.checkPermissionsForUpdateRecords}.
+     *
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * ```js
+     * import {session} from '@airtable/blocks';
+     *
+     * const updateRecordsCheckResult = session.checkPermissionsForUpdateRecords();
+     * if (!updateRecordsCheckResult.hasPermission) {
+     *     alert(updateRecordsCheckResult.reasonDisplayString);
+     * }
+     */
+    checkPermissionsForUpdateRecords(): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+            tableId: undefined,
+            records: undefined,
+        });
+    }
+    /**
+     * An alias for `session.checkPermissionsForUpdateRecords().hasPermission`. For more granular
+     * permission checks, see {@link Table.hasPermissionToUpdateRecords}.
+     */
+    hasPermissionToUpdateRecords(): boolean {
+        return this.checkPermissionsForUpdateRecords().hasPermission;
+    }
+    /**
+     * Checks whether the current user has permission to create any records in the current base. For
+     * more granular permission checks, see {@link Table.checkPermissionsForCreateRecords}.
+     *
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * ```js
+     * import {session} from '@airtable/blocks';
+     *
+     * const createRecordsCheckResult = session.checkPermissionsForCreateRecords();
+     * if (!createRecordsCheckResult.hasPermission) {
+     *     alert(createRecordsCheckResult.reasonDisplayString);
+     * }
+     */
+    checkPermissionsForCreateRecords(): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+            tableId: undefined,
+            records: undefined,
+        });
+    }
+    /**
+     * An alias for `session.checkPermissionsForCreateRecords().hasPermission`. For more granular
+     * permission checks, see {@link Table.hasPermissionToCreateRecords}.
+     */
+    hasPermissionToCreateRecords(): boolean {
+        return this.checkPermissionsForCreateRecords().hasPermission;
+    }
+    /**
+     * Checks whether the current user has permission to delete any records in the current base. For
+     * more granular permission checks, see {@link Table.checkPermissionsForDeleteRecords}.
+     *
+     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * @example
+     * ```js
+     * import {session} from '@airtable/blocks';
+     *
+     * const deleteRecordsCheckResult = session.checkPermissionsForDeleteRecords();
+     * if (!deleteRecordsCheckResult.hasPermission) {
+     *     alert(deleteRecordsCheckResult.reasonDisplayString);
+     * }
+     */
+    checkPermissionsForDeleteRecords(): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+            tableId: undefined,
+            recordIds: undefined,
+        });
+    }
+    /**
+     * An alias for `session.checkPermissionsForDeleteRecords().hasPermission`. For more granular
+     * permission checks, see {@link Table.hasPermissionToDeleteRecords}.
+     */
+    hasPermissionToDeleteRecords(): boolean {
+        return this.checkPermissionsForDeleteRecords().hasPermission;
     }
     /**
      * @internal

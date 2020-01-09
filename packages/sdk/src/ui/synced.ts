@@ -1,7 +1,7 @@
 /** @hidden */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {GlobalConfigKey, GlobalConfigValue} from '../global_config';
+import {GlobalConfigKey, GlobalConfigValue} from '../types/global_config';
 import getSdk from '../get_sdk';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import withHooks from './with_hooks';

@@ -4,7 +4,7 @@ import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';
 import {spawnError, spawnUnknownSwitchCaseError} from '../error_utils';
-import {GlobalConfigUpdate} from '../global_config';
+import {GlobalConfigUpdate} from '../types/global_config';
 import {FieldId} from '../types/field';
 import Session from './session';
 import Base from './base';
@@ -46,8 +46,8 @@ class Mutations {
 
     /** @hidden */
     async applyMutationAsync(mutation: Mutation): Promise<void> {
-        this._assertMutationUnderLimits(mutation);
         this._assertMutationIsValid(mutation);
+        this._assertMutationUnderLimits(mutation);
 
         const permissionCheck = this.checkPermissionsForMutation(mutation);
         if (!permissionCheck.hasPermission) {
@@ -119,7 +119,10 @@ class Mutations {
     /** @internal */
     _assertFieldIsValidForMutation(field: Field) {
         if (field.isComputed) {
-            throw spawnError('Field %s is computed and cannot be set', field.id);
+            throw spawnError(
+                "Can't set cell values: Field %s is computed and cannot be set",
+                field.id,
+            );
         }
     }
 
@@ -134,7 +137,7 @@ class Mutations {
                 const {tableId, records} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
-                    throw spawnError('No table with id %s exists', tableId);
+                    throw spawnError("Can't set cell values: No table with id %s exists", tableId);
                 }
 
                 const recordStore = this._base.__getRecordStore(tableId);
@@ -146,7 +149,10 @@ class Mutations {
                     if (recordStore.isRecordMetadataLoaded) {
                         existingRecord = recordStore.getRecordByIdIfExists(record.id);
                         if (!existingRecord) {
-                            throw spawnError('No record with id %s exists', record.id);
+                            throw spawnError(
+                                "Can't set cell values: No record with id %s exists",
+                                record.id,
+                            );
                         }
                     }
 
@@ -154,7 +160,7 @@ class Mutations {
                         const field = table.getFieldByIdIfExists(fieldId);
                         if (!field) {
                             throw spawnError(
-                                'No field with id %s exists in table %s',
+                                "Can't set cell values: No field with id %s exists in table %s",
                                 fieldId,
                                 tableId,
                             );
@@ -173,7 +179,11 @@ class Mutations {
                                 field._data,
                             );
                             if (!validationResult.isValid) {
-                                throw spawnError(validationResult.reason);
+                                throw spawnError(
+                                    "Can't set cell values: invalid cell value for field '%s'.\n%s",
+                                    field.name,
+                                    validationResult.reason,
+                                );
                             }
                         }
                     }
@@ -185,7 +195,7 @@ class Mutations {
                 const {tableId, recordIds} = mutation;
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
-                    throw spawnError('No table with id %s exists', tableId);
+                    throw spawnError("Can't delete records: No table with id %s exists", tableId);
                 }
 
                 const recordStore = this._base.__getRecordStore(tableId);
@@ -194,7 +204,7 @@ class Mutations {
                         const record = recordStore.getRecordByIdIfExists(recordId);
                         if (!record) {
                             throw spawnError(
-                                'No record with id %s exists in table %s',
+                                "Can't delete records: No record with id %s exists in table %s",
                                 recordId,
                                 tableId,
                             );
@@ -210,7 +220,7 @@ class Mutations {
 
                 const table = this._base.getTableByIdIfExists(tableId);
                 if (!table) {
-                    throw spawnError('No table with id %s exists', tableId);
+                    throw spawnError("Can't create records: No table with id %s exists", tableId);
                 }
 
                 for (const record of records) {
@@ -218,7 +228,7 @@ class Mutations {
                         const field = table.getFieldByIdIfExists(fieldId);
                         if (!field) {
                             throw spawnError(
-                                'No field with id %s exists in table %s',
+                                "Can't create records: No field with id %s exists in table %s",
                                 fieldId,
                                 tableId,
                             );
@@ -236,7 +246,11 @@ class Mutations {
                             field._data,
                         );
                         if (!validationResult.isValid) {
-                            throw spawnError(validationResult.reason);
+                            throw spawnError(
+                                "Can't create records: invalid cell value for field '%s'.\n%s",
+                                field.name,
+                                validationResult.reason,
+                            );
                         }
                     }
                 }

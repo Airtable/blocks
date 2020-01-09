@@ -5,6 +5,7 @@ import {values} from '../src/private_utils';
 import colors from '../src/colors';
 import ColorPalette from '../src/ui/color_palette';
 import FormField from '../src/ui/form_field';
+import Box from '../src/ui/box';
 import Input from '../src/ui/input';
 import Select from '../src/ui/select';
 import SelectButtons from '../src/ui/select_buttons';
@@ -155,6 +156,19 @@ stories.add('multiple formfields', () =>
                     />
                 </FormField>
             </div>
+        );
+    }),
+);
+
+stories.add('width 100% inside container', () =>
+    React.createElement(() => {
+        const [value, setValue] = useState('');
+        return (
+            <Box border="thick" width="500px" display="flex">
+                <FormField label="Sample formfield" description="Width should fill container">
+                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                </FormField>
+            </Box>
         );
     }),
 );

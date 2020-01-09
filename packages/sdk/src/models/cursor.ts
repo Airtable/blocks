@@ -62,9 +62,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         super(baseData, 'cursor');
         this._airtableInterface = airtableInterface;
 
-        const selectedRecordIdSet = baseData.cursorData
-            ? baseData.cursorData.selectedRecordIdSet || null
-            : null;
+        const selectedRecordIdSet = baseData.cursorData?.selectedRecordIdSet ?? null;
         const activeTableId = baseData.activeTableId;
         const activeViewId = activeTableId ? baseData.tablesById[activeTableId].activeViewId : null;
 

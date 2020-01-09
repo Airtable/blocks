@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/ui: Select */ /** */
 import * as React from 'react';
 import {spawnError} from '../error_utils';
-import {GlobalConfigKey} from '../global_config';
+import {GlobalConfigKey} from '../types/global_config';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 import Select, {sharedSelectPropTypes, SharedSelectProps} from './select';
 import useSynced from './use_synced';
