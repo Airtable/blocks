@@ -61,7 +61,7 @@ interface ButtonStyleProps
 
 const styleParser = compose(display, maxWidth, minWidth, width, flexItemSet, positionSet, margin);
 
-const buttonStylePropTypes = {
+export const buttonStylePropTypes = {
     display: createResponsivePropType(PropTypes.oneOf(['inline-flex', 'flex', 'none'])),
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
