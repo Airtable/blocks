@@ -66,7 +66,7 @@ const categories = {
 };
 
 // Using the categories above, create a map with key = style prop name, value = category name
-let categoriesByStyleProp: {[styleProp: string]: string};
+let categoriesByStyleProp: {[styleProp: string]: string} = {};
 for (const [category, styleProps] of entries(categories)) {
     styleProps.forEach(styleProp => (categoriesByStyleProp[styleProp] = category));
 }
