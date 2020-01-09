@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.41...HEAD)
 
-No changes.
+-   Add support for initializing a block from a Github repository
 
 ## [0.0.41](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.40...@airtable/blocks-cli@0.0.41) - 2020-01-07
 

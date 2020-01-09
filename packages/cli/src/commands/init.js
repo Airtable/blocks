@@ -165,10 +165,13 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         );
     }
 
-    // Require that block template is hosted in the `@airtable` org on NPM
-    if (!VALID_TEMPLATE_NAME_REGEX.test(template)) {
+    // Require that block template is hosted in the `@airtable` org on NPM or is a github repo
+    if (
+        !VALID_TEMPLATE_NAME_REGEX.test(template) &&
+        !initCommandHelpers.isValidGithubTemplate(template)
+    ) {
         throw new Error(
-            'Block templates must be official Airtable example blocks. The template location should be in this form: @airtable/name_of_template',
+            "Block templates must be official Airtable example blocks (@airtable/name_of_template) or links to  valid Github repositories (ending in '.git')",
         );
     }
 
@@ -188,7 +191,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
             // delete the programmatic hello world code path.
             await setupHelloWorldBlockAsync(blockDirPath, blockId, baseId);
         } else {
-            await setupNpmTemplateBlockAsync(blockDirPath, blockId, baseId, template);
+            await setupRemoteTemplateBlockAsync(blockDirPath, blockId, baseId, template);
         }
     } catch (err) {
         const doesDirExist = await fsUtils.statIfExistsAsync(blockDirPath);
@@ -397,7 +400,7 @@ async function setupHelloWorldBlockAsync(
     ]);
 }
 
-async function setupNpmTemplateBlockAsync(
+async function setupRemoteTemplateBlockAsync(
     blockDirPath: string,
     blockId: string,
     baseId: string,

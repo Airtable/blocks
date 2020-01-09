@@ -1,19 +1,31 @@
 // @flow
 const path = require('path');
 const fsUtils = require('./fs_utils');
-const {npmAsync} = require('./node_modules_command_helpers');
+const {npmAsync, gitAsync} = require('./node_modules_command_helpers');
 
 const TMP_DIRECTORY_NAME = 'tmp';
 
+function isValidGithubTemplate(template: string): boolean {
+    return (
+        (template.startsWith('https://github.com/') || template.startsWith('git@github.com:')) &&
+        template.endsWith('.git')
+    );
+}
+
 async function downloadTemplateAsync(blockDirPath: string, template: string): Promise<string> {
-    await npmAsync(blockDirPath, [
-        'install',
-        '--loglevel=error',
-        `--prefix=${TMP_DIRECTORY_NAME}`,
-        template,
-    ]);
-    const templatePath = path.join(blockDirPath, TMP_DIRECTORY_NAME, 'node_modules', template);
-    return templatePath;
+    if (isValidGithubTemplate(template)) {
+        await gitAsync(blockDirPath, ['clone', template, TMP_DIRECTORY_NAME]);
+        // Maybe add a flag to handle blocks that aren't at the top level of the repo?
+        return path.join(blockDirPath, TMP_DIRECTORY_NAME);
+    } else {
+        await npmAsync(blockDirPath, [
+            'install',
+            '--loglevel=error',
+            `--prefix=${TMP_DIRECTORY_NAME}`,
+            template,
+        ]);
+        return path.join(blockDirPath, TMP_DIRECTORY_NAME, 'node_modules', template);
+    }
 }
 
 async function cleanUpDownloadedTemplateAsync(blockDirPath: string): Promise<void> {
@@ -25,6 +37,7 @@ async function installBlockDependenciesAsync(blockDirPath: string): Promise<void
 }
 
 const initCommandHelpers = {
+    isValidGithubTemplate,
     downloadTemplateAsync,
     cleanUpDownloadedTemplateAsync,
     installBlockDependenciesAsync,

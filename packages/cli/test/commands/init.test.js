@@ -201,6 +201,16 @@ describe('init', function() {
             };
         }
 
+        function getGithubArgv() {
+            return {
+                _: [],
+                $0: 'block',
+                blockIdentifier: 'app123/blkABC',
+                template: 'git@github.com:Airtable/blocks.git',
+                blockDirPath,
+            };
+        }
+
         async function createValidTemplateAsync() {
             const npmInstallPath = path.join(
                 blockDirPath,
@@ -283,6 +293,32 @@ describe('init', function() {
         it('writes a directory of files', async function() {
             stubTemplateDownloadHandlers(createValidTemplateAsync);
             await runInitAsync(getArgv());
+
+            assert(fs.existsSync(path.join(blockDirPath, '.gitignore')));
+
+            assert(fs.existsSync(path.join(blockDirPath, 'frontend', 'index.js')));
+
+            assert(fs.existsSync(path.join(blockDirPath, '.eslintrc.js')));
+
+            assert(fs.existsSync(path.join(blockDirPath, 'block.json')));
+
+            const remoteJson = await fsExtra.readJson(
+                path.join(blockDirPath, '.block', 'remote.json'),
+            );
+            assert.strictEqual(remoteJson.baseId, 'app123');
+            assert.strictEqual(remoteJson.blockId, 'blkABC');
+
+            assert(fs.existsSync(path.join(blockDirPath, 'package.json')));
+            assert(
+                fs.existsSync(
+                    path.join(blockDirPath, 'node_modules', '@airtable', 'blocks', 'package.json'),
+                ),
+            );
+        });
+
+        it('handles github template', async function() {
+            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await runInitAsync(getGithubArgv());
 
             assert(fs.existsSync(path.join(blockDirPath, '.gitignore')));
 
