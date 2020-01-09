@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import prettier from 'prettier/standalone';
 import parserBabel from 'prettier/parser-babylon';
 import Box from '../../src/ui/box';

@@ -22,7 +22,7 @@
  * ) => `icon="edit"`
  * ```
  */
-export default function valuesAsJsxProps(
+export function createJsxPropsStringFromValuesMap(
     values: {[key: string]: unknown},
     mappingConfig?: {[key: string]: (value: unknown) => string | boolean | null},
 ): string {
@@ -59,4 +59,17 @@ export default function valuesAsJsxProps(
     }
 
     return output.join(' ');
+}
+
+// This helper makes it easier to do self closing components based on children
+export function createJsxComponentString(
+    name: string,
+    props: Array<string>,
+    children?: string | null,
+): string {
+    const propsAsString = props.join(' ');
+    if (children) {
+        return `<${name} ${propsAsString}>${children}</${name}>`;
+    }
+    return `<${name} ${propsAsString} />`;
 }

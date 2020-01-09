@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import capitalize from 'lodash/capitalize';
 import Select from '../../src/ui/select';
 import SelectButtons from '../../src/ui/select_buttons';
