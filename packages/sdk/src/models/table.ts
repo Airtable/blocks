@@ -497,6 +497,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     [postTitleField.id]: 'Cake decorating tips & tricks',
      *     [publicationDateField.id]: '2020-02-02',
      * });
+     *
+     * // Cell values should generally have format matching the output of record.getCellValue() for
+     * // the field being updated
+     * updateRecord(record1, {
+     *     'Category (single select)': {name: 'Recipe'},
+     *     'Tags (multiple select)': [{name: 'Desserts'}, {id: 'someChoiceId'}],
+     *     'Images (attachment)': [{url: 'http://mywebsite.com/cake.png'}],
+     *     'Related posts (linked records)': [{id: 'someRecordId'}],
+     * });
      * ```
      */
     async updateRecordAsync(
@@ -672,6 +681,17 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *         fields: {
      *             [postTitleField.id]: 'Cake decorating tips & tricks',
      *             [publicationDateField.id]: '2020-02-02',
+     *         },
+     *     },
+     *     // Cell values should generally have format matching the output of record.getCellValue()
+     *     // for the field being updated
+     *     {
+     *         id: record4.id,
+     *         fields: {
+     *             'Category (single select)': {name: 'Recipe'},
+     *             'Tags (multiple select)': [{name: 'Desserts'}, {id: 'someChoiceId'}],
+     *             'Images (attachment)': [{url: 'http://mywebsite.com/cake.png'}],
+     *             'Related posts (linked records)': [{id: 'someRecordId'}],
      *         },
      *     },
      * ];
@@ -1088,6 +1108,16 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     [projectNameField.id]: 'Cat video',
      *     [budgetField.id]: 200,
      * });
+     *
+     * // Cell values should generally have format matching the output of record.getCellValue() for
+     * // the field being updated
+     * createNewRecord({
+     *     'Project Name': 'Cat video 2'
+     *     'Category (single select)': {name: 'Video'},
+     *     'Tags (multiple select)': [{name: 'Cats'}, {id: 'someChoiceId'}],
+     *     'Assets (attachment)': [{url: 'http://mywebsite.com/cats.mp4'}],
+     *     'Related projects (linked records)': [{id: 'someRecordId'}],
+     * });
      * ```
      */
     async createRecordAsync(fields: ObjectMap<FieldId | string, unknown> = {}): Promise<RecordId> {
@@ -1204,6 +1234,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     },
      *     // Specifying no fields will create a new record with no cell values set
      *     {},
+     *     // Cell values should generally have format matching the output of record.getCellValue()
+     *     // for the field being updated
+     *     {
+     *         'Project Name': 'Cat video 2'
+     *         'Category (single select)': {name: 'Video'},
+     *         'Tags (multiple select)': [{name: 'Cats'}, {id: 'someChoiceId'}],
+     *         'Assets (attachment)': [{url: 'http://mywebsite.com/cats.mp4'}],
+     *         'Related projects (linked records)': [{id: 'someRecordId'}],
+     *     },
      * ];
      *
      * function createNewRecords() {
