@@ -7,8 +7,86 @@ import {iconNames} from '../src/ui/icon_config';
 import TextButton from '../src/ui/text_button';
 import Text from '../src/ui/text';
 import Tooltip from '../src/ui/tooltip';
+import useTheme from '../src/ui/theme/use_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
 
 const stories = storiesOf('TextButton', module);
+
+function TextButtonExample() {
+    const {textButtonVariants, textStyles} = useTheme();
+    return (
+        <Example
+            options={{
+                variant: {
+                    type: 'select',
+                    label: 'Variant',
+                    options: textButtonVariants,
+                },
+                size: {
+                    type: 'select',
+                    label: 'Size',
+                    options: textStyles.default,
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+                icon: {
+                    type: 'switch',
+                    label: 'Show icon',
+                    defaultValue: true,
+                },
+                hasLabel: {
+                    type: 'switch',
+                    label: 'Show label',
+                    defaultValue: true,
+                },
+            }}
+            renderCodeFn={({hasLabel, ...values}) => {
+                const props = createJsxPropsStringFromValuesMap(values as any, {
+                    icon: value => (value ? 'edit' : null),
+                });
+
+                const ariaLabel = hasLabel ? '' : 'aria-label="Edit"';
+                const ariaLabelComment = hasLabel
+                    ? ''
+                    : '// Make sure to add an "aria-label" prop when only using an icon.';
+
+                const children = hasLabel ? 'Text button' : null;
+
+                const buttonComponentString = createJsxComponentString(
+                    'TextButton',
+                    ["onClick={() => console.log('Button clicked')}", props, ariaLabel],
+                    children,
+                );
+
+                return `
+                    import {TextButton} from '@airtable/blocks/ui';
+                    
+                    ${ariaLabelComment}
+                    const buttonExample = (
+                        ${buttonComponentString}
+                    );
+                `;
+            }}
+        >
+            {({icon, hasLabel, ...values}) => (
+                <TextButton
+                    onClick={() => console.log('Button clicked')}
+                    {...values}
+                    icon={icon ? 'edit' : undefined}
+                    aria-label={hasLabel ? 'Edit' : undefined}
+                >
+                    {hasLabel ? 'Text button' : null}
+                </TextButton>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <TextButtonExample />);
 
 stories.add('variants', () => (
     <>
