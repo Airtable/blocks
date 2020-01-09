@@ -7,6 +7,8 @@ import Box from '../../src/ui/box';
 import Heading from '../../src/ui/heading';
 import FormField from '../../src/ui/form_field';
 import ExampleCodePanel from './example_code_panel';
+import categorizeStyleProps from './categorize_style_props';
+import StylePropList from './style_prop_list';
 
 type SelectOption = {
     type: 'select';
@@ -42,6 +44,7 @@ type OptionMapType<T extends OptionMap> = {[K in keyof T]: OptionType<T[K]>};
 
 type Props<T extends OptionMap> = {
     options: T;
+    styleProps: Array<string>;
     children: (values: OptionMapType<T>) => React.ReactNode;
     renderCodeFn?: (values: OptionMapType<T>) => string;
 };
@@ -89,7 +92,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                 {props.renderCodeFn && <ExampleCodePanel code={props.renderCodeFn(values)} />}
             </Box>
 
-            <Box width="200px" borderLeft="thick" padding={3}>
+            <Box width="200px" borderLeft="thick" padding={3} overflow="auto">
                 <Heading size="xsmall" marginBottom={3}>
                     Props
                 </Heading>
@@ -137,6 +140,8 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                             );
                     }
                 })}
+
+                <StylePropList stylePropsByCategory={categorizeStyleProps(props.styleProps)} />
             </Box>
         </Box>
     );
