@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
-import {action} from '@storybook/addon-actions';
 import Box from '../src/ui/box';
-import Select from '../src/ui/select';
+import Select, {selectStylePropTypes} from '../src/ui/select';
 import Tooltip from '../src/ui/tooltip';
 import FormField from '../src/ui/form_field';
+import useTheme from '../src/ui/theme/use_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Select', module);
 
@@ -14,6 +16,59 @@ const longOptions = [
     'Awesome cats from internet',
     'Business ideas I will build one day',
 ].map(value => ({value, label: value}));
+
+function SelectExample() {
+    const {selectSizes} = useTheme();
+    return (
+        <Example
+            options={{
+                size: {
+                    type: 'selectButtons',
+                    label: 'Size',
+                    options: selectSizes,
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+            }}
+            styleProps={Object.keys(selectStylePropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {Select} from '@airtable/blocks/ui';
+                    
+                    const options = ${JSON.stringify(options)};
+
+                    const SelectExample = () => {                    
+                        const [value, setValue] = useState(options[0].value);
+
+                        return <Select options={options} value={value} onChange={newValue => setValue(newValue)} ${props} width="${CONTROL_WIDTH}"/>
+                    };
+                `;
+            }}
+        >
+            {values => {
+                const [value, setValue] = useState(options[0].value);
+
+                return (
+                    <Select
+                        width={CONTROL_WIDTH}
+                        options={options}
+                        value={value}
+                        onChange={newValue => setValue(newValue as string)}
+                        {...values}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example', () => <SelectExample />);
 
 stories.add('sizes', () => (
     <React.Fragment>

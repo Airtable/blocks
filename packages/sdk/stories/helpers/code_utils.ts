@@ -73,3 +73,5 @@ export function createJsxComponentString(
     }
     return `<${name} ${propsAsString} />`;
 }
+
+export const CONTROL_WIDTH = '320px';
