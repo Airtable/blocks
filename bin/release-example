@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+if [[ $# -eq 0 ]] ; then
+    echo 'No example specified'
+    echo 'Usage: yarn release-example print-records-block'
+    exit 1
+fi
+
+cd $(dirname $0)
+cd "../examples/$1"
+npm_config_registry=https://registry.npmjs.org/ release-it --config ../release-it-config.js
