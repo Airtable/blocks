@@ -61,10 +61,10 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
             case 'selectButtons':
                 if (option.defaultValue) {
                     defaultValues[optionKey] = option.defaultValue;
-                } else if (option.options.hasOwnProperty('default')) {
+                } else if (option.options.includes('default')) {
                     defaultValues[optionKey] = 'default';
                 } else {
-                    defaultValues[optionKey] = Object.keys(option.options)[0];
+                    defaultValues[optionKey] = option.options[0];
                 }
                 break;
             case 'switch':
@@ -107,7 +107,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                                     <Select
                                         size="small"
                                         value={values[optionKey]}
-                                        options={Object.keys(option.options).map(value => ({
+                                        options={option.options.map(value => ({
                                             label: capitalize(value),
                                             value,
                                         }))}
@@ -121,7 +121,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                                     <SelectButtons
                                         size="small"
                                         value={values[optionKey]}
-                                        options={Object.keys(option.options).map(value => ({
+                                        options={option.options.map(value => ({
                                             label: capitalize(value),
                                             value,
                                         }))}
