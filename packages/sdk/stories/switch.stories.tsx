@@ -127,7 +127,7 @@ function SwitchSyncedExample() {
     );
 }
 
-stories.add('exampleSynced', () => <SwitchSyncedExample />);
+stories.add('example synced', () => <SwitchSyncedExample />);
 
 stories.add('sizes', () =>
     React.createElement(() => {

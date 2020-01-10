@@ -3,30 +3,34 @@ import {storiesOf} from '@storybook/react';
 import FormField from '../src/ui/form_field';
 import Input, {inputStylePropTypes} from '../src/ui/input';
 import Box from '../src/ui/text';
-import useTheme from '../src/ui/theme/use_theme';
+import theme from '../src/ui/theme/default_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Input', module);
 
+const sharedExampleProps = {
+    options: {
+        size: {
+            type: 'selectButtons',
+            label: 'Size',
+            options: keys(theme.inputSizes),
+        },
+        disabled: {
+            type: 'switch',
+            label: 'Disabled',
+            defaultValue: false,
+        },
+    },
+    styleProps: Object.keys(inputStylePropTypes),
+} as const;
+
 function InputExample() {
-    const {inputSizes} = useTheme();
+    const [value, setValue] = useState('');
     return (
         <Example
-            options={{
-                size: {
-                    type: 'selectButtons',
-                    label: 'Size',
-                    options: keys(inputSizes),
-                },
-                disabled: {
-                    type: 'switch',
-                    label: 'Disabled',
-                    defaultValue: false,
-                },
-            }}
-            styleProps={Object.keys(inputStylePropTypes)}
+            {...sharedExampleProps}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
 
@@ -51,8 +55,6 @@ function InputExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState('');
-
                 return (
                     <Input
                         value={value}
@@ -68,6 +70,48 @@ function InputExample() {
 }
 
 stories.add('example', () => <InputExample />);
+
+function InputSyncedExample() {
+    const [value, setValue] = useState('');
+    return (
+        <Example
+            {...sharedExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {InputSynced} from '@airtable/blocks/ui';
+
+                    const InputSyncedExample = () => {
+                        return (
+                            <InputSynced
+                                globalConfigKey="apiKey"
+                                placeholder="Placeholder"
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        );
+                    };
+                `;
+            }}
+        >
+            {values => {
+                return (
+                    <Input
+                        value={value}
+                        onChange={e => setValue(e.target.value)}
+                        placeholder="Placeholder"
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example synced', () => <InputSyncedExample />);
 
 stories.add('sizes', () =>
     React.createElement(() => {
