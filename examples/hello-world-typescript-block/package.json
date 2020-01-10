@@ -5,7 +5,7 @@
     "author": "",
     "license": "UNLICENSED",
     "scripts": {
-        "lint": "eslint frontend"
+        "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend"
     },
     "dependencies": {
         "@airtable/blocks": "latest",
@@ -13,6 +13,7 @@
         "react-dom": "^16.9.0"
     },
     "devDependencies": {
+        "@typescript-eslint/parser": "^2.15.0",
         "eslint": "^6.3.0",
         "eslint-plugin-react": "^7.14.3",
         "eslint-plugin-react-hooks": "^2.0.1"
