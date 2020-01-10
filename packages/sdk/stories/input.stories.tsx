@@ -1,10 +1,72 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import FormField from '../src/ui/form_field';
-import Input from '../src/ui/input';
+import Input, {inputStylePropTypes} from '../src/ui/input';
 import Box from '../src/ui/text';
+import useTheme from '../src/ui/theme/use_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Input', module);
+
+function InputExample() {
+    const {inputSizes} = useTheme();
+    return (
+        <Example
+            options={{
+                size: {
+                    type: 'selectButtons',
+                    label: 'Size',
+                    options: inputSizes,
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+            }}
+            styleProps={Object.keys(inputStylePropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {Input} from '@airtable/blocks/ui';
+
+                    const InputExample = () => {
+                        const [value, setValue] = useState('');
+
+                        return (
+                            <Input
+                                value={value}
+                                onChange={e => setValue(e.target.value)}
+                                placeholder="Placeholder"
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        );
+                    };
+                `;
+            }}
+        >
+            {values => {
+                const [value, setValue] = useState('');
+
+                return (
+                    <Input
+                        value={value}
+                        onChange={e => setValue(e.target.value)}
+                        placeholder="Placeholder"
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example', () => <InputExample />);
 
 stories.add('sizes', () =>
     React.createElement(() => {
