@@ -7,6 +7,7 @@ import Tooltip from '../src/ui/tooltip';
 import useTheme from '../src/ui/theme/use_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
+import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Button', module);
 
@@ -18,12 +19,12 @@ function ButtonExample() {
                 variant: {
                     type: 'select',
                     label: 'Variant',
-                    options: buttonVariants,
+                    options: keys(buttonVariants),
                 },
                 size: {
                     type: 'selectButtons',
                     label: 'Size',
-                    options: buttonSizes,
+                    options: keys(buttonSizes),
                 },
                 disabled: {
                     type: 'switch',

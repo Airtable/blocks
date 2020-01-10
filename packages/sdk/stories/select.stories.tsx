@@ -7,6 +7,7 @@ import FormField from '../src/ui/form_field';
 import useTheme from '../src/ui/theme/use_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
+import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Select', module);
 
@@ -25,7 +26,7 @@ function SelectExample() {
                 size: {
                     type: 'selectButtons',
                     label: 'Size',
-                    options: selectSizes,
+                    options: keys(selectSizes),
                 },
                 disabled: {
                     type: 'switch',
@@ -43,7 +44,7 @@ function SelectExample() {
                     
                     const options = ${JSON.stringify(options)};
 
-                    const SelectExample = () => {                    
+                    const SelectExample = () => {
                         const [value, setValue] = useState(options[0].value);
 
                         return <Select options={options} value={value} onChange={newValue => setValue(newValue)} ${props} width="${CONTROL_WIDTH}"/>
@@ -56,11 +57,11 @@ function SelectExample() {
 
                 return (
                     <Select
-                        width={CONTROL_WIDTH}
                         options={options}
                         value={value}
                         onChange={newValue => setValue(newValue as string)}
                         {...values}
+                        width={CONTROL_WIDTH}
                     />
                 );
             }}

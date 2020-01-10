@@ -6,6 +6,7 @@ import Box from '../src/ui/text';
 import useTheme from '../src/ui/theme/use_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
+import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Input', module);
 
@@ -17,7 +18,7 @@ function InputExample() {
                 size: {
                     type: 'selectButtons',
                     label: 'Size',
-                    options: inputSizes,
+                    options: keys(inputSizes),
                 },
                 disabled: {
                     type: 'switch',

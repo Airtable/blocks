@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import {values} from '../src/private_utils';
+import {values, keys} from '../src/private_utils';
 import Box from '../src/ui/box';
 import {iconNames} from '../src/ui/icon_config';
 import Link, {linkStylePropTypes} from '../src/ui/link';
@@ -20,12 +20,12 @@ function LinkExample() {
                 variant: {
                     type: 'select',
                     label: 'Variant',
-                    options: linkVariants,
+                    options: keys(linkVariants),
                 },
                 size: {
                     type: 'select',
                     label: 'Size',
-                    options: textStyles.default,
+                    options: keys(textStyles.default),
                 },
                 disabled: {
                     type: 'switch',

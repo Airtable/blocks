@@ -8,11 +8,8 @@ import Select from '../src/ui/select';
 import SelectButtons, {selectButtonsStylePropTypes} from '../src/ui/select_buttons';
 import useTheme from '../src/ui/theme/use_theme';
 import Example from './helpers/example';
-import {
-    createJsxPropsStringFromValuesMap,
-    createJsxComponentString,
-    CONTROL_WIDTH,
-} from './helpers/code_utils';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
+import {keys} from '../src/private_utils';
 
 const stories = storiesOf('SelectButtons', module);
 
@@ -30,7 +27,7 @@ function SelectButtonsExample() {
                 size: {
                     type: 'selectButtons',
                     label: 'Size',
-                    options: selectButtonsSizes,
+                    options: keys(selectButtonsSizes),
                 },
                 disabled: {
                     type: 'switch',

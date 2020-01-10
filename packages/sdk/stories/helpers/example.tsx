@@ -13,14 +13,14 @@ import StylePropList from './style_prop_list';
 type SelectOption = {
     type: 'select';
     label: string;
-    options: {[key: string]: unknown};
+    options: Array<string>;
     defaultValue?: string;
 };
 
 type SelectButtonsOption = {
     type: 'selectButtons';
     label: string;
-    options: {[key: string]: unknown};
+    options: Array<string>;
     defaultValue?: string;
 };
 
@@ -30,12 +30,14 @@ type SwitchOption = {
     defaultValue?: boolean;
 };
 
+type ArrayType<T extends Array<any>> = T extends Array<infer U> ? U : never;
+
 type OptionType<T extends Option> = T extends SelectOption
-    ? keyof T['options']
+    ? ArrayType<T['options']>
     : T extends SwitchOption
     ? boolean
     : T extends SelectButtonsOption
-    ? keyof T['options']
+    ? ArrayType<T['options']>
     : never;
 
 type Option = SelectOption | SwitchOption | SelectButtonsOption;

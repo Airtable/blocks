@@ -1,7 +1,7 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
-import {values} from '../src/private_utils';
+import {values, keys} from '../src/private_utils';
 import Box from '../src/ui/box';
 import {iconNames} from '../src/ui/icon_config';
 import TextButton, {textButtonStylePropTypes} from '../src/ui/text_button';
@@ -21,12 +21,12 @@ function TextButtonExample() {
                 variant: {
                     type: 'select',
                     label: 'Variant',
-                    options: textButtonVariants,
+                    options: keys(textButtonVariants),
                 },
                 size: {
                     type: 'select',
                     label: 'Size',
-                    options: textStyles.default,
+                    options: keys(textStyles.default),
                 },
                 disabled: {
                     type: 'switch',
