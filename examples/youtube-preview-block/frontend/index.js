@@ -1,4 +1,4 @@
-import UI, {
+import {
     initializeBlock,
     useBase,
     useRecords,
