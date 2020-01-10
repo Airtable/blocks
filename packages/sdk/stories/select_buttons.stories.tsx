@@ -1,13 +1,83 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
 import Input from '../src/ui/input';
 import FormField from '../src/ui/form_field';
 import Heading from '../src/ui/heading';
 import Select from '../src/ui/select';
-import SelectButtons from '../src/ui/select_buttons';
+import SelectButtons, {selectButtonsStylePropTypes} from '../src/ui/select_buttons';
+import useTheme from '../src/ui/theme/use_theme';
+import Example from './helpers/example';
+import {
+    createJsxPropsStringFromValuesMap,
+    createJsxComponentString,
+    CONTROL_WIDTH,
+} from './helpers/code_utils';
 
 const stories = storiesOf('SelectButtons', module);
+
+function SelectButtonsExample() {
+    const {selectButtonsSizes} = useTheme();
+    const options = ['Banana', 'Apple', 'Orange'].map(value => ({
+        value: value.toLowerCase(),
+        label: value,
+    }));
+    const [value, setValue] = useState(options[0].value);
+
+    return (
+        <Example
+            options={{
+                size: {
+                    type: 'selectButtons',
+                    label: 'Size',
+                    options: selectButtonsSizes,
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+            }}
+            styleProps={Object.keys(selectButtonsStylePropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {SelectButtons} from '@airtable/blocks/ui';
+
+                    const options = ${JSON.stringify(options)};
+                    
+                    const SelectButtonsExample = () => {
+                        const [value, setValue] = useState(options[0].value);
+
+                        return (
+                            <SelectButtons
+                                value={value}
+                                onChange={newValue => setValue(newValue)}
+                                options={options}
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        )
+                    }
+                `;
+            }}
+        >
+            {values => (
+                <SelectButtons
+                    value={value}
+                    onChange={newValue => setValue(newValue as string)}
+                    options={options}
+                    {...values}
+                    width={CONTROL_WIDTH}
+                />
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <SelectButtonsExample />);
 
 stories.add('sizes', () =>
     React.createElement(() => {
