@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import Select, {selectStylePropTypes} from '../src/ui/select';
-import useTheme from '../src/ui/theme/use_theme';
 import {keys} from '../src/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
@@ -14,6 +13,10 @@ const viewOptions = ['All tasks', 'Grouped by status', 'Incomplete tasks'].map(v
     label: value,
 }));
 const tableOptions = ['Tasks', 'Projects', 'Teams'].map(value => ({
+    value,
+    label: value,
+}));
+const fieldOptions = ['Name', 'Notes', 'Attachments'].map(value => ({
     value,
     label: value,
 }));
@@ -68,7 +71,6 @@ function ViewPickerExample() {
 
                 return (
                     <Select
-                        width={CONTROL_WIDTH}
                         options={[
                             {
                                 value: null,
@@ -80,6 +82,7 @@ function ViewPickerExample() {
                         value={value}
                         onChange={newValue => setValue(newValue as string)}
                         {...values}
+                        width={CONTROL_WIDTH}
                     />
                 );
             }}
@@ -116,7 +119,6 @@ function ViewPickerSyncedExample() {
 
                 return (
                     <Select
-                        width={CONTROL_WIDTH}
                         options={[
                             {
                                 value: null,
@@ -128,6 +130,7 @@ function ViewPickerSyncedExample() {
                         value={value}
                         onChange={newValue => setValue(newValue as string)}
                         {...values}
+                        width={CONTROL_WIDTH}
                     />
                 );
             }}
@@ -162,7 +165,6 @@ function TablePickerExample() {
 
                 return (
                     <Select
-                        width={CONTROL_WIDTH}
                         options={[
                             {
                                 value: null,
@@ -174,6 +176,7 @@ function TablePickerExample() {
                         value={value}
                         onChange={newValue => setValue(newValue as string)}
                         {...values}
+                        width={CONTROL_WIDTH}
                     />
                 );
             }}
@@ -191,9 +194,10 @@ function TablePickerSyncedExample() {
                 const props = createJsxPropsStringFromValuesMap(values);
 
                 return `
+                    import React from 'react';
                     import {TablePickerSynced} from '@airtable/blocks/ui';
 
-                    const tablePickerSyncedExample = (
+                    const TablePickerSyncedExample = () => (
                         <TablePickerSynced globalConfigKey="tableId" ${props} width="${CONTROL_WIDTH}"/>
                     );
                 `;
@@ -205,7 +209,6 @@ function TablePickerSyncedExample() {
 
                 return (
                     <Select
-                        width={CONTROL_WIDTH}
                         options={[
                             {
                                 value: null,
@@ -217,6 +220,7 @@ function TablePickerSyncedExample() {
                         value={value}
                         onChange={newValue => setValue(newValue as string)}
                         {...values}
+                        width={CONTROL_WIDTH}
                     />
                 );
             }}
@@ -225,3 +229,100 @@ function TablePickerSyncedExample() {
 }
 
 stories.add('TablePickerSynced example', () => <TablePickerSyncedExample />);
+
+function FieldPickerExample() {
+    return (
+        <Example
+            {...sharedModelPickerExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {FieldPicker, useBase} from '@airtable/blocks/ui';
+
+                    const FieldPickerExample = () => {
+                        const [field, setField] = useState(null);
+                        const base = useBase();
+                        const table = table.getTableByNameIfExists("Tasks");
+                        // If table is null or undefined, the FieldPicker will not render.
+
+                        return <FieldPicker table={table} onChange={newField => setField(newField)} ${props} width="${CONTROL_WIDTH}"/>
+                    };
+                `;
+            }}
+        >
+            {values => {
+                const [value, setValue] = useState<null | string>(null);
+                const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a field...';
+
+                return (
+                    <Select
+                        options={[
+                            {
+                                value: null,
+                                label: placeholder,
+                                disabled: !values.shouldAllowPickingNone,
+                            },
+                            ...fieldOptions,
+                        ]}
+                        value={value}
+                        onChange={newValue => setValue(newValue as string)}
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('FieldPicker example', () => <FieldPickerExample />);
+
+function FieldPickerSyncedExample() {
+    return (
+        <Example
+            {...sharedModelPickerExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React from 'react';
+                    import {FieldPickerSynced, useBase} from '@airtable/blocks/ui';
+
+                    const FieldPickerSyncedExample = () => {
+                        const base = useBase();
+                        const table = table.getTableByNameIfExists("Tasks");
+                        // If table is null or undefined, the FieldPickerSynced will not render.
+
+                        return <FieldPickerSynced table={table} globalConfigKey="fieldId" ${props} width="${CONTROL_WIDTH}"/>
+                    };
+                `;
+            }}
+        >
+            {values => {
+                const [value, setValue] = useState<null | string>(null);
+                const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a field...';
+
+                return (
+                    <Select
+                        options={[
+                            {
+                                value: null,
+                                label: placeholder,
+                                disabled: !values.shouldAllowPickingNone,
+                            },
+                            ...fieldOptions,
+                        ]}
+                        value={value}
+                        onChange={newValue => setValue(newValue as string)}
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('FieldPickerSynced example', () => <FieldPickerSyncedExample />);
