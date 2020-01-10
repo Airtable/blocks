@@ -23,8 +23,10 @@
  * ```
  */
 export function createJsxPropsStringFromValuesMap(
-    values: {[key: string]: unknown},
-    mappingConfig?: {[key: string]: (value: unknown) => string | boolean | null},
+    values: {[key: string]: string | boolean | null},
+    mappingConfig?: {
+        [key: string]: (value: string | boolean | null) => string | boolean | null | number;
+    },
 ): string {
     const output = [];
     for (const valueKey of Object.keys(values)) {
@@ -44,6 +46,10 @@ export function createJsxPropsStringFromValuesMap(
                 if (value !== 'default') {
                     output.push(`${valueKey}="${value}"`);
                 }
+                break;
+            }
+            case 'number': {
+                output.push(`${valueKey}={${value}}`);
                 break;
             }
             case 'boolean': {

@@ -195,8 +195,8 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
     /** @internal */
     _setColorSquareSize() {
         const {squareMargin} = this.props;
-        if (!squareMargin) {
-            throw spawnInvariantViolationError('colorPalette.squareMargin');
+        if (squareMargin === null || squareMargin === undefined) {
+            throw spawnInvariantViolationError('colorPalette.squareMargin must be a number');
         }
         if (!this._colorPaletteContainerRef.current) {
             throw spawnInvariantViolationError('No container to set color square size');
@@ -245,8 +245,8 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
             disabled,
         } = this.props;
         const {squareSize} = this.state;
-        if (!squareMargin) {
-            throw spawnInvariantViolationError('colorPalette.squareMargin');
+        if (squareMargin === null || squareMargin === undefined) {
+            throw spawnInvariantViolationError('colorPalette.squareMargin must be a number');
         }
         return (
             <Box
