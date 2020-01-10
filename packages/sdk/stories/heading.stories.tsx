@@ -3,9 +3,10 @@ import {storiesOf} from '@storybook/react';
 import Heading from '../src/ui/heading';
 import theme from '../src/ui/theme/default_theme';
 import Example from './helpers/example';
-import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
+import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import {keys} from '../src/private_utils';
 import {allStylesPropTypes} from '../src/ui/system';
+
 const stories = storiesOf('Heading', module);
 
 function HeadingExample() {

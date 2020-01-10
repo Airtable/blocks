@@ -1,8 +1,66 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Text from '../src/ui/text';
+import theme from '../src/ui/theme/default_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
+import {keys} from '../src/private_utils';
+import {allStylesPropTypes} from '../src/ui/system';
 
 const stories = storiesOf('Text', module);
+
+const childrenForVariant = {
+    default: 'The brown fox jumped over the lazy dog',
+    paragraph:
+        'Consectetur accusamus accusamus repudiandae est eveniet. Doloribus eligendi et recusandae voluptatem recusandae. Nostrum vitae minus atque blanditiis aliquid voluptate sint.',
+} as const;
+
+function TextExample() {
+    return (
+        <Example
+            options={{
+                variant: {
+                    type: 'selectButtons',
+                    label: 'Variant',
+                    options: keys(theme.textStyles),
+                },
+                size: {
+                    type: 'select',
+                    label: 'Size',
+                    options: keys(theme.textStyles.default),
+                },
+                textColor: {
+                    type: 'selectButtons',
+                    label: 'Text color',
+                    options: ['default', 'light'],
+                },
+            }}
+            styleProps={Object.keys(allStylesPropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap({
+                    ...values,
+                    maxWidth: values.variant === 'paragraph' ? '30em' : null,
+                });
+
+                return `
+                    import {Text} from '@airtable/blocks/ui';
+
+                    const textExample = (
+                        <Text ${props}>${childrenForVariant[values.variant]}</Text>
+                    );
+                `;
+            }}
+        >
+            {values => (
+                <Text {...values} maxWidth={values.variant === 'paragraph' ? '30em' : null}>
+                    {childrenForVariant[values.variant]}
+                </Text>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <TextExample />);
 
 stories.add('as', () => (
     <>
