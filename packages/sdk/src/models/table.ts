@@ -1458,7 +1458,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      */
     __triggerOnChangeForDirtyPaths(dirtyPaths: ChangedPathsForType<TableData>): boolean {
         let didTableSchemaChange = false;
-        this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
         if (dirtyPaths.name) {
             this._onChange(WatchableTableKeys.name);
             didTableSchemaChange = true;
@@ -1540,6 +1539,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             // Clear out cached field names in case a field was added/removed/renamed.
             this._cachedFieldNamesById = null;
         }
+        // NOTE: Record store onChange triggers must be performed AFTER field onChange triggers to
+        // ensure the column type providers are not stale.
+        this._recordStore.triggerOnChangeForDirtyPaths(dirtyPaths);
         return didTableSchemaChange;
     }
     /**
