@@ -15,6 +15,10 @@ commit that affects the code in a way that consumers might care about should inc
     `undefined`. Previously, this would no-op.
 -   Added support for `setActiveTable` and `setActiveView` to the `cursor` API. These can be used to
     manipulate the current table and/or view on the main Airtable page from inside a block.
+-   Table.createRecordsAsync now accepts an array of objects containing a `fields` object of field
+    -> cell value mappings, rather an accepting field -> cell value mappings directly. This brings
+    its API in line with `updateRecordsAsync` and other Airtable APIs. The old behavior is still
+    supported but has been deprecated and will be removed in a future version.
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 

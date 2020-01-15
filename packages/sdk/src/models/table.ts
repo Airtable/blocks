@@ -5,10 +5,11 @@ import {ViewType, ViewId} from '../types/view';
 import {FieldId} from '../types/field';
 import {RecordId} from '../types/record';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
-import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap} from '../private_utils';
+import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
 import {spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
 import {AirtableInterface} from '../injected/airtable_interface';
+import warning from '../warning';
 import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
@@ -1121,7 +1122,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * ```
      */
     async createRecordAsync(fields: ObjectMap<FieldId | string, unknown> = {}): Promise<RecordId> {
-        const recordIds = await this.createRecordsAsync([fields]);
+        const recordIds = await this.createRecordsAsync([{fields}]);
         return recordIds[0];
     }
 
@@ -1218,30 +1219,38 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
-     * @param records Array of objects mapping `FieldId` or field name to value for that field.
+     * @param records Array of objects with a `fields` key mapping `FieldId` or field name to value for that field.
      * @returns A promise that will resolve to array of RecordIds of the new records, once the new records are persisted to Airtable.
      * @example
      * ```js
      * const recordDefs = [
      *     // Fields can be specified by name or ID
      *     {
-     *         'Project Name': 'Advertising campaign',
-     *         'Budget': 100,
+     *          fields: {
+     *              'Project Name': 'Advertising campaign',
+     *              'Budget': 100,
+     *          },
      *     },
      *     {
-     *         [projectNameField.id]: 'Cat video',
-     *         [budgetField.id]: 200,
+     *          fields: {
+     *              [projectNameField.id]: 'Cat video',
+     *              [budgetField.id]: 200,
+     *          },
      *     },
      *     // Specifying no fields will create a new record with no cell values set
-     *     {},
+     *     {
+     *          fields: {},
+     *     },
      *     // Cell values should generally have format matching the output of record.getCellValue()
      *     // for the field being updated
      *     {
-     *         'Project Name': 'Cat video 2'
-     *         'Category (single select)': {name: 'Video'},
-     *         'Tags (multiple select)': [{name: 'Cats'}, {id: 'someChoiceId'}],
-     *         'Assets (attachment)': [{url: 'http://mywebsite.com/cats.mp4'}],
-     *         'Related projects (linked records)': [{id: 'someRecordId'}],
+     *          fields: {
+     *              'Project Name': 'Cat video 2'
+     *              'Category (single select)': {name: 'Video'},
+     *              'Tags (multiple select)': [{name: 'Cats'}, {id: 'someChoiceId'}],
+     *              'Assets (attachment)': [{url: 'http://mywebsite.com/cats.mp4'}],
+     *              'Related projects (linked records)': [{id: 'someRecordId'}],
+     *          },
      *     },
      * ];
      *
@@ -1264,12 +1273,33 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * ```
      */
     async createRecordsAsync(
-        records: ReadonlyArray<ObjectMap<FieldId | string, unknown>>,
+        records: ReadonlyArray<{fields: ObjectMap<FieldId | string, unknown>}>,
     ): Promise<Array<RecordId>> {
-        const recordsToCreate = records.map(recordDef => ({
-            id: this._airtableInterface.idGenerator.generateRecordId(),
-            cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(recordDef),
-        }));
+        const recordsToCreate = records.map(recordDef => {
+            const recordDefKeys = keys(recordDef);
+            let fields: ObjectMap<FieldId | string, unknown>;
+            if (recordDefKeys.length === 1 && recordDefKeys[0] === 'fields') {
+                fields = recordDef.fields;
+            } else {
+                warning([
+                    'Table.createRecordsAsync(): passing objects with field ids/names directly is deprecated and will be removed in a future version.',
+                    'Pass field ids/names & values under the `fields` key instead:',
+                    '',
+                    'myTable.createRecordsAsync([{',
+                    '    fields: {',
+                    "        myField: 'A cell value',",
+                    '    },',
+                    '}]);',
+                    '',
+                    'See: https://airtable.com/developers/blocks/api/models/Table#createRecordsAsync',
+                ]);
+                fields = recordDef as ObjectMap<FieldId | string, unknown>;
+            }
+            return {
+                id: this._airtableInterface.idGenerator.generateRecordId(),
+                cellValuesByFieldId: this._cellValuesByFieldIdOrNameToCellValuesByFieldId(fields),
+            };
+        });
 
         await getSdk().__mutations.applyMutationAsync({
             type: MutationTypes.CREATE_MULTIPLE_RECORDS,
@@ -1294,12 +1324,16 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * const createRecordsCheckResult = table.checkPermissionsForCreateRecords([
      *     // Like createRecordsAsync, fields can be specified by name or ID
      *     {
-     *         'Project Name': 'Advertising campaign',
-     *         'Budget': 100,
+     *          fields: {
+     *              'Project Name': 'Advertising campaign',
+     *              'Budget': 100,
+     *          },
      *     },
      *     {
-     *         [projectNameField.id]: 'Cat video',
-     *         [budgetField.id]: 200,
+     *          fields: {
+     *              [projectNameField.id]: 'Cat video',
+     *              [budgetField.id]: 200,
+     *          },
      *     },
      *     {},
      * ]);
@@ -1349,12 +1383,16 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * const canCreateRecords = table.hasPermissionToCreateRecords([
      *     // Like createRecordsAsync, fields can be specified by name or ID
      *     {
-     *         'Project Name': 'Advertising campaign',
-     *         'Budget': 100,
+     *          fields: {
+     *              'Project Name': 'Advertising campaign',
+     *              'Budget': 100,
+     *          }
      *     },
      *     {
-     *         [projectNameField.id]: 'Cat video',
-     *         [budgetField.id]: 200,
+     *          fields: {
+     *              [projectNameField.id]: 'Cat video',
+     *              [budgetField.id]: 200,
+     *          }
      *     },
      *     {},
      * ]);
