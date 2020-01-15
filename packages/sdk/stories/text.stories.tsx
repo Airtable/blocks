@@ -63,7 +63,7 @@ function TextExample() {
 stories.add('example', () => <TextExample />);
 
 stories.add('as', () => (
-    <>
+    <React.Fragment>
         {[
             'p' as const,
             'h1' as const,
@@ -92,18 +92,18 @@ stories.add('as', () => (
                 {as}
             </Text>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('textColor', () => (
-    <>
+    <React.Fragment>
         <Text textColor="light">(light) The brown fox jumped over the lazy dog</Text>
         <Text>(default = dark) The brown fox jumped over the lazy dog</Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('ref', () => (
-    <>
+    <React.Fragment>
         <Text
             ref={node => {
                 // eslint-disable-next-line no-console
@@ -112,23 +112,23 @@ stories.add('ref', () => (
         >
             Look into your console to see the ref
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom className', () => (
-    <>
+    <React.Fragment>
         <Text className="user-provided-class">Inspect element to see class name</Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('id attribute', () => (
-    <>
+    <React.Fragment>
         <Text id="my-id">Inspect element to see id</Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('style attribute', () => (
-    <>
+    <React.Fragment>
         <Text
             style={{
                 transform: 'scale(0.95)',
@@ -136,11 +136,11 @@ stories.add('style attribute', () => (
         >
             Inspect element to see style attribute
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('data attributes', () => (
-    <>
+    <React.Fragment>
         <Text
             dataAttributes={{
                 'data-something': true,
@@ -149,17 +149,17 @@ stories.add('data attributes', () => (
         >
             Inspect element to see data attributes
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('role attribute', () => (
-    <>
+    <React.Fragment>
         <Text role="nav">Inspect element to see role attribute</Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('aria attributes', () => (
-    <>
+    <React.Fragment>
         <Text
             aria-label="__label__"
             aria-labelledby="__id__"
@@ -172,5 +172,5 @@ stories.add('aria attributes', () => (
         >
             Inspect element to see aria attributes
         </Text>
-    </>
+    </React.Fragment>
 ));

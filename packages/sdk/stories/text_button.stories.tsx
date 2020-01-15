@@ -90,7 +90,7 @@ function TextButtonExample() {
 stories.add('example', () => <TextButtonExample />);
 
 stories.add('variants', () => (
-    <>
+    <React.Fragment>
         <TextButton onClick={action('Clicked')} margin={3}>
             Default
         </TextButton>
@@ -100,11 +100,11 @@ stories.add('variants', () => (
         <TextButton variant="light" onClick={action('Clicked')} margin={3}>
             Light
         </TextButton>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('sizes', () => (
-    <>
+    <React.Fragment>
         <TextButton icon="edit" size="small" onClick={action('Clicked')} margin={3}>
             Small
         </TextButton>
@@ -117,18 +117,18 @@ stories.add('sizes', () => (
         <TextButton icon="edit" size="xlarge" onClick={action('Clicked')} margin={3}>
             Xlarge
         </TextButton>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('inside of text', () => (
-    <>
+    <React.Fragment>
         <Text size="large" margin={5}>
             Some text with a{' '}
             <TextButton size="large" onClick={action('Clicked')}>
                 text button
             </TextButton>
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('with icon', () => (
@@ -178,17 +178,17 @@ stories.add('responsive size with icon', () => (
 ));
 
 stories.add('flex', () => (
-    <>
+    <React.Fragment>
         <Text size="large" margin={5}>
             <TextButton display="flex" icon="upload" size="large" paddingX={1} marginX={-1}>
                 Text button
             </TextButton>
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom icon', () => (
-    <>
+    <React.Fragment>
         <Text size="large" margin={5}>
             <TextButton
                 icon={
@@ -210,7 +210,7 @@ stories.add('custom icon', () => (
                 Custom icon
             </TextButton>
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('with tooltip', () => (

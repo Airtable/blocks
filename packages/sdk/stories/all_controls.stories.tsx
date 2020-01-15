@@ -24,7 +24,7 @@ stories.add('sizes', () => {
     const [isChecked, setIsChecked] = useState(true);
     const [selectValue, setSelectValue] = useState<string | null>(null);
     return (
-        <>
+        <React.Fragment>
             {sizes.map(size => (
                 <Box display="flex" flexDirection="column" width="300px" marginBottom={5}>
                     <Input
@@ -64,6 +64,6 @@ stories.add('sizes', () => {
                     </Button>
                 </Box>
             ))}
-        </>
+        </React.Fragment>
     );
 });

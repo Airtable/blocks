@@ -95,7 +95,7 @@ function LinkExample() {
 stories.add('example', () => <LinkExample />);
 
 stories.add('variants', () => (
-    <>
+    <React.Fragment>
         <Link href="#" margin={3}>
             Default
         </Link>
@@ -105,7 +105,7 @@ stories.add('variants', () => (
         <Link href="#" variant="light" margin={3}>
             Light
         </Link>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('inside of text', () => (

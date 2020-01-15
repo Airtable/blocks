@@ -29,7 +29,7 @@ function DialogExample() {
                         const [isDialogOpen, setIsDialogOpen] = useState(false);
 
                         return (
-                            <>
+                            <React.Fragment>
                                 <Button onClick={() => setIsDialogOpen(true)}>Open dialog</Button>
                               
                                 {isDialogOpen && (
@@ -45,7 +45,7 @@ function DialogExample() {
                                         <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
                                     </Dialog>
                                 )}
-                            </>
+                            </React.Fragment>
                         );
                     }
                 `;

@@ -88,7 +88,7 @@ function ButtonExample() {
 stories.add('example', () => <ButtonExample />);
 
 stories.add('variants & sizes', () => (
-    <>
+    <React.Fragment>
         <Box margin={5}>
             <Button icon="edit" size="small" onClick={action('clicked')} marginRight={2}>
                 Default
@@ -161,7 +161,7 @@ stories.add('variants & sizes', () => (
                 Danger
             </Button>
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('with icon', () => (
@@ -228,7 +228,7 @@ stories.add('display', () => (
 ));
 
 stories.add('ref', () => (
-    <>
+    <React.Fragment>
         <Button
             ref={node => {
                 // eslint-disable-next-line no-console
@@ -237,7 +237,7 @@ stories.add('ref', () => (
         >
             Look into your console to see the ref
         </Button>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom icon', () => (

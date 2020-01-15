@@ -8,7 +8,7 @@ import {keys} from '../src/private_utils';
 const stories = storiesOf('Heading/size', module);
 
 stories.add('default sizes', () => (
-    <>
+    <React.Fragment>
         {keys(theme.headingStyles.default).map(size => (
             <React.Fragment key={size}>
                 <Heading key={size} size={size} marginTop="1em">
@@ -26,29 +26,29 @@ stories.add('default sizes', () => (
                 </Text>
             </React.Fragment>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('caps sizes', () => (
-    <>
+    <React.Fragment>
         {keys(theme.headingStyles.caps).map(size => (
             <Heading key={size} size={size} variant="caps">
                 The brown fox jumped over the lazy dog
             </Heading>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('caps size out of range default fallback and warning', () => (
-    <>
+    <React.Fragment>
         <Heading size="large" variant="caps">
             The brown fox jumped over the lazy dog
         </Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('responsive size', () => (
-    <>
+    <React.Fragment>
         Breakpoints: <pre>{JSON.stringify(theme.breakpoints, null, 4)}</pre>
         <Heading
             size={{
@@ -62,5 +62,5 @@ stories.add('responsive size', () => (
         >
             Resize to see size change
         </Heading>
-    </>
+    </React.Fragment>
 ));

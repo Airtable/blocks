@@ -91,7 +91,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
         }
 
         return (
-            <>
+            <React.Fragment>
                 <React.Suspense
                     fallback={
                         <div className={baymax('absolute all-0 flex items-center justify-center')}>
@@ -136,7 +136,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
                         </span>
                     </div>
                 )}
-            </>
+            </React.Fragment>
         );
     }
 }

@@ -12,7 +12,7 @@ stories.add('standalone', () => <Icon name="blocks" />);
 stories.add('small size will render micro icon', () => <Icon name="blocks" size={12} />);
 
 stories.add('all icons', () => (
-    <>
+    <React.Fragment>
         {values(iconNames).map(iconName => {
             return (
                 <Box key={iconName} display="flex">
@@ -27,5 +27,5 @@ stories.add('all icons', () => (
                 </Box>
             );
         })}
-    </>
+    </React.Fragment>
 ));

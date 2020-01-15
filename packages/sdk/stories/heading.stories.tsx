@@ -61,7 +61,7 @@ function HeadingExample() {
 stories.add('example', () => <HeadingExample />);
 
 stories.add('as', () => (
-    <>
+    <React.Fragment>
         {[
             'h1' as const,
             'h2' as const,
@@ -74,11 +74,11 @@ stories.add('as', () => (
                 {as}
             </Heading>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('ref', () => (
-    <>
+    <React.Fragment>
         <Heading
             ref={node => {
                 // eslint-disable-next-line no-console
@@ -87,23 +87,23 @@ stories.add('ref', () => (
         >
             Look into your console to see the ref
         </Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom className', () => (
-    <>
+    <React.Fragment>
         <Heading className="user-provided-class">Inspect element to see class name</Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('id attribute', () => (
-    <>
+    <React.Fragment>
         <Heading id="my-id">Inspect element to see id</Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('style attribute', () => (
-    <>
+    <React.Fragment>
         <Heading
             style={{
                 transform: 'scale(0.95)',
@@ -111,11 +111,11 @@ stories.add('style attribute', () => (
         >
             Inspect element to see style attribute
         </Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('data attributes', () => (
-    <>
+    <React.Fragment>
         <Heading
             dataAttributes={{
                 'data-something': true,
@@ -124,17 +124,17 @@ stories.add('data attributes', () => (
         >
             Inspect element to see data attributes
         </Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('role attribute', () => (
-    <>
+    <React.Fragment>
         <Heading role="nav">Inspect element to see role attribute</Heading>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('aria attributes', () => (
-    <>
+    <React.Fragment>
         <Heading
             aria-label="__label__"
             aria-labelledby="__id__"
@@ -147,5 +147,5 @@ stories.add('aria attributes', () => (
         >
             Inspect element to see aria attributes
         </Heading>
-    </>
+    </React.Fragment>
 ));

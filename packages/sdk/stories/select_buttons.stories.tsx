@@ -84,7 +84,7 @@ stories.add('sizes', () =>
             label: value,
         }));
         return (
-            <>
+            <React.Fragment>
                 <Box width={400} margin="auto">
                     <SelectButtons
                         size="small"
@@ -108,7 +108,7 @@ stories.add('sizes', () =>
                         marginBottom={2}
                     />
                 </Box>
-            </>
+            </React.Fragment>
         );
     }),
 );
@@ -236,7 +236,7 @@ stories.add('tab behavior for many inputs', () =>
             label: value,
         }));
         return (
-            <>
+            <React.Fragment>
                 <Box width={400} margin="auto">
                     <FormField label="Enter a food">
                         <Input value={food} onChange={e => setFood(e.target.value)} />
@@ -261,7 +261,7 @@ stories.add('tab behavior for many inputs', () =>
                         marginBottom={2}
                     />
                 </Box>
-            </>
+            </React.Fragment>
         );
     }),
 );

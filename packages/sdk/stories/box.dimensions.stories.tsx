@@ -5,7 +5,7 @@ import Box from '../src/ui/box';
 const stories = storiesOf('Box/dimensions', module);
 
 stories.add('width', () => (
-    <>
+    <React.Fragment>
         <Box border="default" padding={2} width={200}>
             {'width={200}'}
         </Box>
@@ -18,11 +18,11 @@ stories.add('width', () => (
         <Box border="default" padding={2} width="50%">
             width="50%"
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('minWidth', () => (
-    <>
+    <React.Fragment>
         <Box border="default" padding={2} minWidth={200}>
             {'minWidth={200}'}
         </Box>
@@ -35,11 +35,11 @@ stories.add('minWidth', () => (
         <Box border="default" padding={2} minWidth="50%">
             minWidth="50%"
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('maxWidth', () => (
-    <>
+    <React.Fragment>
         <Box border="default" padding={2} maxWidth={200}>
             {'maxWidth={200}'}
         </Box>
@@ -52,11 +52,11 @@ stories.add('maxWidth', () => (
         <Box border="default" padding={2} maxWidth="50%">
             maxWidth="50%"
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('height', () => (
-    <>
+    <React.Fragment>
         <Box border="default" padding={2} height={200}>
             {'height={200}'}
         </Box>
@@ -69,11 +69,11 @@ stories.add('height', () => (
         <Box border="default" padding={2} height="50%">
             height="50%"
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('minHeight', () => (
-    <>
+    <React.Fragment>
         <Box border="default" padding={2} minHeight={200}>
             {'minHeight={200}'}
         </Box>
@@ -86,11 +86,11 @@ stories.add('minHeight', () => (
         <Box border="default" padding={2} minHeight="50%">
             minHeight="50%"
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('maxHeight', () => (
-    <>
+    <React.Fragment>
         <Box border="default" padding={2} maxHeight={200}>
             {'maxHeight={200}'}
         </Box>
@@ -103,5 +103,5 @@ stories.add('maxHeight', () => (
         <Box border="default" padding={2} maxHeight="50%">
             maxHeight="50%"
         </Box>
-    </>
+    </React.Fragment>
 ));
