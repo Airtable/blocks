@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...HEAD)
 
-No changes.
+-   **BREAKING**: `useWatchable` will now throw an error if the second argument `keys` is
+    `undefined`. Previously, this would no-op.
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 
