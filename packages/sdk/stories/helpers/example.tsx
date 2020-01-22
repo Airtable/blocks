@@ -63,12 +63,6 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
     const {options} = props;
     const defaultValues: any = {};
 
-    const [values, setValues] = useState(defaultValues);
-
-    function _setValue(key: string, value: any) {
-        setValues({...values, [key]: value});
-    }
-
     if (options) {
         for (const optionKey of Object.keys(options)) {
             const option = options[optionKey];
@@ -92,24 +86,22 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
         }
     }
 
+    const [values, setValues] = useState(defaultValues);
+
+    const children = props.children(values);
+
+    function _setValue(key: string, value: any) {
+        console.log();
+        setValues({...values, [key]: value});
+    }
+
     return (
         <Box display="flex" position="absolute" top="0" left="0" right="0" bottom="0">
-            <Box flex="auto" display="flex" flexDirection="column">
-                <Box
-                    flex="auto"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    padding={props.containerPadding || 2}
-                    overflow="auto"
-                    position="relative"
-                >
-                    {props.children(values)}
-                </Box>
-                {props.renderCodeFn && <ExampleCodePanel code={props.renderCodeFn(values)} />}
-            </Box>
+            <ExampleMain code={props.renderCodeFn ? props.renderCodeFn(values) : null}>
+                {children}
+            </ExampleMain>
 
-            <Box width="220px" borderLeft="thick" padding={3} overflow="auto">
+            <Box width="220px" flex="none" borderLeft="thick" padding={3} overflow="auto">
                 <Heading size="xsmall" marginBottom={3}>
                     Props
                 </Heading>
@@ -179,6 +171,33 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                     <StylePropList stylePropsByCategory={categorizeStyleProps(props.styleProps)} />
                 )}
             </Box>
+        </Box>
+    );
+}
+
+// Split this up to improve performance of resizing.
+function ExampleMain({code, children}: {code: string | null; children: React.ReactNode}) {
+    const [codePanelHeight, setCodePanelHeight] = useState(0);
+    return (
+        <Box
+            flex="auto"
+            display="flex"
+            flexDirection="column"
+            position="relative"
+            style={{paddingBottom: codePanelHeight}}
+        >
+            <Box
+                flex="auto"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                padding={2}
+                overflowX="auto"
+                position="relative"
+            >
+                {children}
+            </Box>
+            {code && <ExampleCodePanel onHeightChange={setCodePanelHeight} code={code} />}
         </Box>
     );
 }

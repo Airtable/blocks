@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useMemo} from 'react';
 import prettier from 'prettier/standalone';
 import parserBabel from 'prettier/parser-babylon';
 import Box from '../../src/ui/box';
@@ -10,6 +10,7 @@ const CODE_PANEL_MIN_HEIGHT = 24;
 
 interface Props {
     code: string;
+    onHeightChange: (height: number) => unknown;
 }
 
 const handlebars = (
@@ -25,24 +26,33 @@ const handlebars = (
     </React.Fragment>
 );
 
-export default function ExampleCodePanel({code}: Props) {
-    const {isExpanded, containerProps, handleProps, overlayNode} = useResizablePanel({
+export default function ExampleCodePanel({code, onHeightChange}: Props) {
+    const {height, isExpanded, containerProps, handleProps, overlayNode} = useResizablePanel({
         minHeight: CODE_PANEL_MIN_HEIGHT,
         initialHeight: CODE_PANEL_INITIAL_HEIGHT,
     });
 
-    // TODO: Consider useMemo.
-    const formattedCode = prettier.format(code, {
-        parser: 'babel',
-        plugins: [parserBabel],
-    });
+    useEffect(() => {
+        onHeightChange(height);
+    }, [height]);
+
+    const formattedCode = useMemo(
+        () =>
+            prettier.format(code, {
+                parser: 'babel',
+                plugins: [parserBabel],
+            }),
+        [code],
+    );
 
     return (
         <React.Fragment>
             <Box
                 {...containerProps}
                 display="flex"
-                position="relative"
+                position="absolute"
+                bottom={0}
+                width="100%"
                 flexDirection="column"
                 backgroundColor="lightGray1"
                 borderTop="thick"
@@ -63,7 +73,7 @@ export default function ExampleCodePanel({code}: Props) {
                     </Box>
                 </div>
                 {isExpanded && (
-                    <Box overflowY="auto" flex="auto" paddingX={3} paddingY={4}>
+                    <Box overflowY="auto" flex="auto" padding={3}>
                         <CodeBlock code={formattedCode} />
                     </Box>
                 )}

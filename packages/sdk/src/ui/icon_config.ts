@@ -4,7 +4,7 @@ import {createEnum, EnumType, createPropTypeFromEnum, ObjectMap} from '../privat
 // In the UI kit we need more specific types to allow proper autocomplete and prop types.
 // To achieve this we run the original `iconConfig` object from Hyperbase through an utility.
 // You can find the utility here: https://codesandbox.io/s/winter-sound-f4p2l?fontsize=14
-const iconNamesArray = [
+export const iconNamesArray = [
     'android',
     'apple',
     'ascending',
