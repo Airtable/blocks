@@ -1,16 +1,66 @@
 // @flow
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
-import {values} from '../src/private_utils';
+import {values as objectValues} from '../src/private_utils';
 import colors from '../src/colors';
 import ColorPalette from '../src/ui/color_palette';
-import FormField from '../src/ui/form_field';
+import FormField, {formFieldStylePropTypes} from '../src/ui/form_field';
 import Box from '../src/ui/box';
 import Input from '../src/ui/input';
 import Select from '../src/ui/select';
 import SelectButtons from '../src/ui/select_buttons';
+import Example from './helpers/example';
+import {CONTROL_WIDTH, createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
 const stories = storiesOf('FormField', module);
+
+function FormFieldExample() {
+    const [value, setValue] = useState('');
+    return (
+        <Example
+            options={{
+                description: {
+                    type: 'switch',
+                    label: 'Show description',
+                    defaultValue: false,
+                },
+            }}
+            styleProps={Object.keys(formFieldStylePropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values, {
+                    description: _value =>
+                        _value ? 'This is a description for this field.' : null,
+                });
+                return `
+                    import {FormField, Input} from '@airtable/blocks/ui';
+
+                    const FormFieldExample = () => {
+                        const [value, setValue] = useState('');
+                        return (
+                            <FormField label="Text field" ${props}>
+                                <Input value={value} onChange={e => setValue(e.target.value)} />
+                            </FormField>
+                        );
+                    };
+                `;
+            }}
+        >
+            {values => (
+                <FormField
+                    label="Text field"
+                    description={
+                        values.description ? 'This is a description for this field.' : null
+                    }
+                    width={CONTROL_WIDTH}
+                >
+                    <Input value={value} onChange={e => setValue(e.target.value)} />
+                </FormField>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <FormFieldExample />);
 
 stories.add('text input field', () =>
     React.createElement(() => {
@@ -110,7 +160,7 @@ stories.add('multiple formfields', () =>
             {value: 'Option 2', label: 'Option 2'},
             {value: 'Option 3', label: 'Option 3'},
         ];
-        const allowedColors = values(colors).slice(0, 12);
+        const allowedColors = objectValues(colors).slice(0, 12);
         const selectButtonsOptions = [
             {
                 value: 'Kinda cool',

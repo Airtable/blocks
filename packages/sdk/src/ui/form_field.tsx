@@ -51,7 +51,7 @@ interface FormFieldStyleProps
 
 const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, spacingSet);
 
-const formFieldStylePropTypes = {
+export const formFieldStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
