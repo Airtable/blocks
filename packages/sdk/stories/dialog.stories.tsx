@@ -1,21 +1,22 @@
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
-import Example from './helpers/example';
 import Dialog, {dialogStylePropTypes} from '../src/ui/dialog';
 import Button from '../src/ui/button';
 import Text from '../src/ui/text';
 import Heading from '../src/ui/heading';
+import Example from './helpers/example';
 import {CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Dialog', module);
 
 function DialogExample() {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     return (
         <Example
             options={{
                 showCloseButton: {
                     type: 'switch',
-                    label: "Show 'X' button",
+                    label: 'Show close button',
                     defaultValue: true,
                 },
             }}
@@ -52,8 +53,6 @@ function DialogExample() {
             }}
         >
             {values => {
-                const [isDialogOpen, setIsDialogOpen] = useState(false);
-
                 return (
                     <React.Fragment>
                         <Button onClick={() => setIsDialogOpen(true)}>Open dialog</Button>
@@ -75,4 +74,4 @@ function DialogExample() {
     );
 }
 
-stories.add('Dialog example', () => <DialogExample />);
+stories.add('example', () => <DialogExample />);

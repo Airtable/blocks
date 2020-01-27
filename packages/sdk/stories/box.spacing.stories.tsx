@@ -8,7 +8,7 @@ const stories = storiesOf('Box/spacing', module);
 stories.add('padding spacing scale', () => (
     <React.Fragment>
         {theme.space.map((spaceOption, i) => (
-            <React.Fragment>
+            <React.Fragment key={spaceOption}>
                 <Box paddingY={4}>
                     <Box>space: {i}</Box>
                     <Box
@@ -48,7 +48,7 @@ stories.add('padding spacing scale', () => (
 stories.add('margin spacing scale', () => (
     <React.Fragment>
         {theme.space.map((spaceOption, i) => (
-            <React.Fragment>
+            <React.Fragment key={spaceOption}>
                 <Box marginY={4}>
                     <Box>space: {i}</Box>
                     <Box margin={i}>{`<Box margin={${i}}>margin: ${spaceOption}px</Box>`}</Box>

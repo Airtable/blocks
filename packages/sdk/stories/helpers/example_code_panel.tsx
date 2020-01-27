@@ -8,9 +8,9 @@ import useResizablePanel from './use_resizable_panel';
 const CODE_PANEL_INITIAL_HEIGHT = 140;
 const CODE_PANEL_MIN_HEIGHT = 24;
 
-type Props = {
+interface Props {
     code: string;
-};
+}
 
 const handlebars = (
     <React.Fragment>

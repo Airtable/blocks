@@ -5,9 +5,9 @@ import Select, {selectStylePropTypes} from '../src/ui/select';
 import Tooltip from '../src/ui/tooltip';
 import FormField from '../src/ui/form_field';
 import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
-import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Select', module);
 
@@ -35,6 +35,7 @@ const sharedSelectExampleProps = {
 } as const;
 
 function SelectExample() {
+    const [value, setValue] = useState(options[0].value);
     return (
         <Example
             {...sharedSelectExampleProps}
@@ -56,8 +57,6 @@ function SelectExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState(options[0].value);
-
                 return (
                     <Select
                         options={options}
@@ -75,6 +74,7 @@ function SelectExample() {
 stories.add('example', () => <SelectExample />);
 
 function SelectSyncedExample() {
+    const [value, setValue] = useState(options[0].value);
     return (
         <Example
             {...sharedSelectExampleProps}
@@ -93,8 +93,6 @@ function SelectSyncedExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState(options[0].value);
-
                 return (
                     <Select
                         options={options}

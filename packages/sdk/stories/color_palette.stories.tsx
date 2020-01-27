@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import ColorPalette, {colorPaletteStylePropTypes} from '../src/ui/color_palette';
-import Example from './helpers/example';
 import colors from '../src/colors';
-import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
 const stories = storiesOf('ColorPalette', module);
 
@@ -27,14 +27,26 @@ const sharedColorPaletteExampleProps = {
 } as const;
 
 function ColorPaletteExample() {
+    const allowedColors = [
+        colors.BLUE,
+        colors.BLUE_BRIGHT,
+        colors.BLUE_DARK_1,
+        colors.BLUE_LIGHT_1,
+        colors.BLUE_LIGHT_2,
+    ];
+    const [color, setColor] = useState<string>(allowedColors[0]);
+
     return (
         <Example
             {...sharedColorPaletteExampleProps}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values, {
                     squareMargin: margin => {
-                        if (margin === '4px') return null; // default value
-                        return typeof margin === 'string' ? parseInt(margin) : null;
+                        if (margin === '4px') {
+                            // default value
+                            return null;
+                        }
+                        return typeof margin === 'string' ? parseInt(margin, 10) : null;
                     },
                 });
 
@@ -53,22 +65,13 @@ function ColorPaletteExample() {
             }}
         >
             {({squareMargin, ...values}) => {
-                const allowedColors = [
-                    colors.BLUE,
-                    colors.BLUE_BRIGHT,
-                    colors.BLUE_DARK_1,
-                    colors.BLUE_LIGHT_1,
-                    colors.BLUE_LIGHT_2,
-                ];
-                const [color, setColor] = useState<string>(allowedColors[0]);
                 const squareMarginNumericValue =
-                    typeof squareMargin === 'string' ? parseInt(squareMargin) : undefined;
-
+                    typeof squareMargin === 'string' ? parseInt(squareMargin, 10) : undefined;
                 return (
                     <ColorPalette
                         color={color}
                         allowedColors={allowedColors}
-                        onChange={color => setColor(color as string)}
+                        onChange={newColor => setColor(newColor as string)}
                         squareMargin={squareMarginNumericValue}
                         {...values}
                         width="150px"
@@ -82,14 +85,25 @@ function ColorPaletteExample() {
 stories.add('example', () => <ColorPaletteExample />);
 
 function ColorPaletteSyncedExample() {
+    const allowedColors = [
+        colors.BLUE,
+        colors.BLUE_BRIGHT,
+        colors.BLUE_DARK_1,
+        colors.BLUE_LIGHT_1,
+        colors.BLUE_LIGHT_2,
+    ];
+    const [color, setColor] = useState<string>(allowedColors[0]);
     return (
         <Example
             {...sharedColorPaletteExampleProps}
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values, {
                     squareMargin: margin => {
-                        if (margin === '4px') return null; // default value
-                        return typeof margin === 'string' ? parseInt(margin) : null;
+                        if (margin === '4px') {
+                            // default value
+                            return null;
+                        }
+                        return typeof margin === 'string' ? parseInt(margin, 10) : null;
                     },
                 });
 
@@ -106,22 +120,14 @@ function ColorPaletteSyncedExample() {
             }}
         >
             {({squareMargin, ...values}) => {
-                const allowedColors = [
-                    colors.BLUE,
-                    colors.BLUE_BRIGHT,
-                    colors.BLUE_DARK_1,
-                    colors.BLUE_LIGHT_1,
-                    colors.BLUE_LIGHT_2,
-                ];
-                const [color, setColor] = useState<string>(allowedColors[0]);
                 const squareMarginNumericValue =
-                    typeof squareMargin === 'string' ? parseInt(squareMargin) : undefined;
+                    typeof squareMargin === 'string' ? parseInt(squareMargin, 10) : undefined;
 
                 return (
                     <ColorPalette
                         color={color}
                         allowedColors={allowedColors}
-                        onChange={color => setColor(color as string)}
+                        onChange={newColor => setColor(newColor as string)}
                         squareMargin={squareMarginNumericValue}
                         {...values}
                         width="150px"

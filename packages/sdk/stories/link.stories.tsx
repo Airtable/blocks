@@ -44,8 +44,8 @@ function LinkExample() {
                 },
             }}
             styleProps={Object.keys(linkStylePropTypes)}
-            renderCodeFn={({hasLabel, ...values}) => {
-                const props = createJsxPropsStringFromValuesMap(values as any, {
+            renderCodeFn={({hasLabel, ...restOfValues}) => {
+                const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
                     icon: value => (value ? 'home' : null),
                 });
 
@@ -77,11 +77,11 @@ function LinkExample() {
                 `;
             }}
         >
-            {({icon, hasLabel, ...values}) => (
+            {({icon, hasLabel, ...restOfValues}) => (
                 <Link
                     href="https://airtable.com/developers/blocks"
                     target="_blank"
-                    {...values}
+                    {...restOfValues}
                     icon={icon ? 'home' : undefined}
                     aria-label={hasLabel ? 'Go to homepage' : undefined}
                 >

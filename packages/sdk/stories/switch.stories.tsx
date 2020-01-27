@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 // @flow
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
 import Switch, {switchStylePropTypes} from '../src/ui/switch';
 import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
-import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Switch', module);
 
@@ -186,7 +187,12 @@ stories.add('disabled', () =>
         const [isChecked, setIsChecked] = useState(true);
         return (
             <Box maxWidth="300px" margin="auto">
-                <Switch value={isChecked} onChange={setIsChecked} label="Inspect me" disabled />
+                <Switch
+                    value={isChecked}
+                    onChange={setIsChecked}
+                    label="Inspect me"
+                    disabled={true}
+                />
             </Box>
         );
     }),

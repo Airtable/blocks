@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
@@ -45,8 +46,8 @@ function TextButtonExample() {
                 },
             }}
             styleProps={Object.keys(textButtonStylePropTypes)}
-            renderCodeFn={({hasLabel, ...values}) => {
-                const props = createJsxPropsStringFromValuesMap(values as any, {
+            renderCodeFn={({hasLabel, ...restOfValues}) => {
+                const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
                     icon: value => (value ? 'edit' : null),
                 });
 
@@ -73,10 +74,10 @@ function TextButtonExample() {
                 `;
             }}
         >
-            {({icon, hasLabel, ...values}) => (
+            {({icon, hasLabel, ...restOfValues}) => (
                 <TextButton
                     onClick={() => console.log('Button clicked')}
-                    {...values}
+                    {...restOfValues}
                     icon={icon ? 'edit' : undefined}
                     aria-label={hasLabel ? 'Edit' : undefined}
                 >

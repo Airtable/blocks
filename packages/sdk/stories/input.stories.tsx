@@ -1,12 +1,13 @@
+/* eslint-disable no-console */
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import FormField from '../src/ui/form_field';
 import Input, {inputStylePropTypes} from '../src/ui/input';
 import Box from '../src/ui/text';
 import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
-import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Input', module);
 
@@ -198,7 +199,7 @@ stories.add('disabled', () =>
                 <Input
                     ref={node => console.log(node)}
                     value={value}
-                    disabled
+                    disabled={true}
                     onChange={e => setValue(e.target.value)}
                 />
             </Box>

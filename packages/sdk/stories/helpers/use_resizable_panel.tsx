@@ -4,7 +4,7 @@ import React, {useState, useRef, useEffect, useCallback} from 'react';
 import clamp from 'lodash/clamp';
 import rafThrottle from './raf_throttle';
 
-type UseResizablePanelReturnType = {
+interface UseResizablePanelReturnType {
     height: number;
     containerProps: {
         ref: React.Ref<HTMLDivElement>;
@@ -18,7 +18,7 @@ type UseResizablePanelReturnType = {
     isExpanded: boolean;
     overlayNode: React.ReactNode;
     toggle: (shouldOpen: boolean) => unknown;
-};
+}
 
 /**
  * Clickable elements within the draggable handle should prevent dragging,
@@ -77,7 +77,7 @@ export default function useResizablePanel({
         return () => {
             window.removeEventListener('resize', _updateMaxHeight, true);
         };
-    }, [minHeight]);
+    }, [minHeight, topOffset]);
 
     const toggle = useCallback(
         (shouldOpen: boolean) => {
@@ -116,6 +116,7 @@ export default function useResizablePanel({
 
     const onMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if (!handleRef.current) {
+            // eslint-disable-next-line @airtable/blocks/no-throw-new
             throw new Error('handleRef.current invariant');
         }
         if (_shouldIgnoreDrag(e.target, handleRef.current)) {

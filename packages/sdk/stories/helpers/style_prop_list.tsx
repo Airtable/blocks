@@ -4,9 +4,9 @@ import TextButton from '../../src/ui/text_button';
 import Box from '../../src/ui/box';
 import Heading from '../../src/ui/heading';
 
-type StylePropListProps = {
+interface StylePropListProps {
     stylePropsByCategory: {[category: string]: Array<string>};
-};
+}
 
 export default function StylePropList({stylePropsByCategory}: StylePropListProps) {
     const [areStylePropsExpanded, setAreStylePropsExpanded] = useState(false);
@@ -21,6 +21,7 @@ export default function StylePropList({stylePropsByCategory}: StylePropListProps
                 {Object.keys(stylePropsByCategory).map(category => {
                     return (
                         <StylePropCategory
+                            key={category}
                             category={category}
                             styleProps={stylePropsByCategory[category]}
                         />
@@ -39,10 +40,10 @@ export default function StylePropList({stylePropsByCategory}: StylePropListProps
     );
 }
 
-type StylePropCategoryProps = {
+interface StylePropCategoryProps {
     category: string;
     styleProps: Array<string>;
-};
+}
 
 function StylePropCategory({category, styleProps}: StylePropCategoryProps) {
     return (
@@ -57,7 +58,13 @@ function StylePropCategory({category, styleProps}: StylePropCategoryProps) {
                 {category}
             </Heading>
             {styleProps.map(stylePropName => (
-                <Text size="small" fontFamily="monospace" textColor="light" lineHeight="16px">
+                <Text
+                    key={stylePropName}
+                    size="small"
+                    fontFamily="monospace"
+                    textColor="light"
+                    lineHeight="16px"
+                >
                     {stylePropName}
                 </Text>
             ))}

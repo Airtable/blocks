@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import Select, {selectStylePropTypes} from '../src/ui/select';
 import {keys} from '../src/private_utils';
+import theme from '../src/ui/theme/default_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
-import theme from '../src/ui/theme/default_theme';
 
 const stories = storiesOf('ModelPickers', module);
 
@@ -44,6 +44,7 @@ const sharedModelPickerExampleProps = {
 } as const;
 
 function ViewPickerExample() {
+    const [value, setValue] = useState<null | string>(null);
     return (
         <Example
             {...sharedModelPickerExampleProps}
@@ -66,7 +67,6 @@ function ViewPickerExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState<null | string>(null);
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a view...';
 
                 return (
@@ -93,6 +93,7 @@ function ViewPickerExample() {
 stories.add('ViewPicker example', () => <ViewPickerExample />);
 
 function ViewPickerSyncedExample() {
+    const [value, setValue] = useState<null | string>(null);
     return (
         <Example
             {...sharedModelPickerExampleProps}
@@ -114,7 +115,6 @@ function ViewPickerSyncedExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState<null | string>(null);
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a view...';
 
                 return (
@@ -141,6 +141,7 @@ function ViewPickerSyncedExample() {
 stories.add('ViewPickerSynced example', () => <ViewPickerSyncedExample />);
 
 function TablePickerExample() {
+    const [value, setValue] = useState<null | string>(null);
     return (
         <Example
             {...sharedModelPickerExampleProps}
@@ -160,7 +161,6 @@ function TablePickerExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState<null | string>(null);
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a table...';
 
                 return (
@@ -187,6 +187,7 @@ function TablePickerExample() {
 stories.add('TablePicker example', () => <TablePickerExample />);
 
 function TablePickerSyncedExample() {
+    const [value, setValue] = useState<null | string>(null);
     return (
         <Example
             {...sharedModelPickerExampleProps}
@@ -204,7 +205,6 @@ function TablePickerSyncedExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState<null | string>(null);
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a table...';
 
                 return (
@@ -231,6 +231,7 @@ function TablePickerSyncedExample() {
 stories.add('TablePickerSynced example', () => <TablePickerSyncedExample />);
 
 function FieldPickerExample() {
+    const [value, setValue] = useState<null | string>(null);
     return (
         <Example
             {...sharedModelPickerExampleProps}
@@ -253,7 +254,6 @@ function FieldPickerExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState<null | string>(null);
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a field...';
 
                 return (
@@ -280,6 +280,7 @@ function FieldPickerExample() {
 stories.add('FieldPicker example', () => <FieldPickerExample />);
 
 function FieldPickerSyncedExample() {
+    const [value, setValue] = useState<null | string>(null);
     return (
         <Example
             {...sharedModelPickerExampleProps}
@@ -301,7 +302,6 @@ function FieldPickerSyncedExample() {
             }}
         >
             {values => {
-                const [value, setValue] = useState<null | string>(null);
                 const placeholder = values.shouldAllowPickingNone ? 'None' : 'Pick a field...';
 
                 return (

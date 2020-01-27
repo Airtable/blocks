@@ -5,9 +5,9 @@ import Box from '../src/ui/box';
 import Button, {buttonStylePropTypes} from '../src/ui/button';
 import Tooltip from '../src/ui/tooltip';
 import useTheme from '../src/ui/theme/use_theme';
+import {keys} from '../src/private_utils';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
-import {keys} from '../src/private_utils';
 
 const stories = storiesOf('Button', module);
 
@@ -73,6 +73,7 @@ function ButtonExample() {
         >
             {({icon, hasLabel, ...values}) => (
                 <Button
+                    // eslint-disable-next-line no-console
                     onClick={() => console.log('Button clicked')}
                     {...values}
                     icon={icon ? 'edit' : undefined}

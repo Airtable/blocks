@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
@@ -5,11 +6,11 @@ import Input from '../src/ui/input';
 import FormField from '../src/ui/form_field';
 import Heading from '../src/ui/heading';
 import Select from '../src/ui/select';
+import {keys} from '../src/private_utils';
 import SelectButtons, {selectButtonsStylePropTypes} from '../src/ui/select_buttons';
 import useTheme from '../src/ui/theme/use_theme';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
-import {keys} from '../src/private_utils';
 
 const stories = storiesOf('SelectButtons', module);
 
@@ -79,9 +80,9 @@ stories.add('example', () => <SelectButtonsExample />);
 stories.add('sizes', () =>
     React.createElement(() => {
         const [value, setValue] = React.useState('Banana');
-        const options = ['Banana', 'Apple', 'Orange'].map(value => ({
-            value,
-            label: value,
+        const options = ['Banana', 'Apple', 'Orange'].map(_value => ({
+            value: _value,
+            label: _value,
         }));
         return (
             <React.Fragment>
@@ -117,20 +118,20 @@ stories.add('disabled', () =>
     React.createElement(() => {
         const [value, setValue] = React.useState('Banana');
         const [value2, setValue2] = React.useState('Boston');
-        const options = ['Banana', 'Apple', 'Orange'].map(value => ({
-            value,
-            label: value,
+        const options = ['Banana', 'Apple', 'Orange'].map(_value => ({
+            value: _value,
+            label: _value,
         }));
-        const options2 = ['Boston', 'Chicago', 'New York'].map((value, index) => ({
-            value,
-            label: value,
+        const options2 = ['Boston', 'Chicago', 'New York'].map((_value, index) => ({
+            value: _value,
+            label: _value,
             disabled: index === 2,
         }));
         return (
             <Box width={400} margin="auto">
                 <Heading size="xsmall">Entire component disabled</Heading>
                 <SelectButtons
-                    disabled
+                    disabled={true}
                     value={value}
                     onChange={val => setValue(val as string)}
                     options={options}
@@ -150,9 +151,9 @@ stories.add('disabled', () =>
 stories.add('forwarded ref', () =>
     React.createElement(() => {
         const [value, setValue] = React.useState('Check');
-        const options = ['Check', 'The', 'Console'].map(value => ({
-            value,
-            label: value,
+        const options = ['Check', 'The', 'Console'].map(_value => ({
+            value: _value,
+            label: _value,
         }));
         return (
             <Box width={400} margin="auto">
@@ -173,9 +174,9 @@ stories.add('forwarded ref', () =>
 stories.add('responsive size', () =>
     React.createElement(() => {
         const [value, setValue] = React.useState('Resize');
-        const options = ['Resize', 'The', 'Window'].map(value => ({
-            value,
-            label: value,
+        const options = ['Resize', 'The', 'Window'].map(_value => ({
+            value: _value,
+            label: _value,
         }));
         return (
             <Box>
@@ -199,9 +200,9 @@ stories.add('truncated text', () =>
     React.createElement(() => {
         const [value, setValue] = React.useState('neat');
         const options = ['Some really long text that just keeps going', 'neat', 'cool'].map(
-            value => ({
-                value,
-                label: value,
+            _value => ({
+                value: _value,
+                label: _value,
             }),
         );
         return (

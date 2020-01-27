@@ -1,8 +1,6 @@
 // @flow
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
-import {values} from '../src/private_utils';
-import colors from '../src/colors';
 import {ControlSize} from '../src/ui/control_sizes';
 import Box from '../src/ui/box';
 import Button from '../src/ui/button';
@@ -26,7 +24,13 @@ stories.add('sizes', () => {
     return (
         <React.Fragment>
             {sizes.map(size => (
-                <Box display="flex" flexDirection="column" width="300px" marginBottom={5}>
+                <Box
+                    key={size}
+                    display="flex"
+                    flexDirection="column"
+                    width="300px"
+                    marginBottom={5}
+                >
                     <Input
                         marginBottom={2}
                         size={size}
@@ -39,8 +43,8 @@ stories.add('sizes', () => {
                         size={size}
                         options={[{value: null, label: `${capitalize(size)} select`}, ...options]}
                         value={selectValue}
-                        onChange={selectValue =>
-                            setSelectValue(selectValue ? (selectValue as string) : null)
+                        onChange={newSelectValue =>
+                            setSelectValue(newSelectValue ? (newSelectValue as string) : null)
                         }
                     />
                     <SelectButtons
@@ -48,8 +52,8 @@ stories.add('sizes', () => {
                         size={size}
                         options={options}
                         value={selectValue}
-                        onChange={selectValue =>
-                            setSelectValue(selectValue ? (selectValue as string) : null)
+                        onChange={newSelectValue =>
+                            setSelectValue(newSelectValue ? (newSelectValue as string) : null)
                         }
                     />
                     <Switch

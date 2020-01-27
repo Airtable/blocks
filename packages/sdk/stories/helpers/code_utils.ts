@@ -1,3 +1,5 @@
+import {has} from '../../src/private_utils';
+
 /**
  * Helper function to turn an object keyed by prop name into JSX properties.
  *
@@ -31,7 +33,7 @@ export function createJsxPropsStringFromValuesMap(
     const output = [];
     for (const valueKey of Object.keys(values)) {
         let value;
-        if (mappingConfig && mappingConfig.hasOwnProperty(valueKey)) {
+        if (mappingConfig && has(mappingConfig, valueKey)) {
             value = mappingConfig[valueKey](values[valueKey]);
         } else {
             value = values[valueKey];
@@ -60,6 +62,7 @@ export function createJsxPropsStringFromValuesMap(
             }
 
             default:
+                // eslint-disable-next-line @airtable/blocks/no-throw-new
                 throw new Error('Unsupported value type');
         }
     }

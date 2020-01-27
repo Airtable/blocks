@@ -2,10 +2,10 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Heading from '../src/ui/heading';
 import theme from '../src/ui/theme/default_theme';
+import {keys, has} from '../src/private_utils';
+import {allStylesPropTypes} from '../src/ui/system';
 import Example from './helpers/example';
 import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
-import {keys} from '../src/private_utils';
-import {allStylesPropTypes} from '../src/ui/system';
 
 const stories = storiesOf('Heading', module);
 
@@ -33,10 +33,7 @@ function HeadingExample() {
             renderCodeFn={values => {
                 const props = createJsxPropsStringFromValuesMap(values);
                 let sizeOutOfBoundsComment;
-                if (
-                    values.variant === 'caps' &&
-                    !theme.headingStyles.caps.hasOwnProperty(values.size)
-                ) {
+                if (values.variant === 'caps' && !has(theme.headingStyles.caps, values.size)) {
                     sizeOutOfBoundsComment = `// The caps variant only supports ${keys(
                         theme.headingStyles.caps,
                     ).join(', ')}. It will use the default size otherwise.`;

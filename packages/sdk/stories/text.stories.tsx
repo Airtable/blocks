@@ -2,10 +2,10 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Text from '../src/ui/text';
 import theme from '../src/ui/theme/default_theme';
-import Example from './helpers/example';
-import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 import {keys} from '../src/private_utils';
 import {allStylesPropTypes} from '../src/ui/system';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
 const stories = storiesOf('Text', module);
 

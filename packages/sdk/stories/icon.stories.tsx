@@ -4,7 +4,7 @@ import {values} from '../src/private_utils';
 import {iconNames} from '../src/ui/icon_config';
 import Icon from '../src/ui/icon';
 import Text from '../src/ui/text';
-import Box from '../src/ui/text';
+import Box from '../src/ui/box';
 
 const stories = storiesOf('Icon', module);
 

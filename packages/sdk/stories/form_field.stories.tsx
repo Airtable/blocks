@@ -110,7 +110,6 @@ stories.add('multiple formfields', () =>
             {value: 'Option 2', label: 'Option 2'},
             {value: 'Option 3', label: 'Option 3'},
         ];
-        // eslint-disable-next-line flowtype/no-weak-types
         const allowedColors = values(colors).slice(0, 12);
         const selectButtonsOptions = [
             {
