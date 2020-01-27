@@ -1,11 +1,66 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
+import {keys} from '../src/private_utils';
 import Box from '../src/ui/box';
 import Input from '../src/ui/input';
 import Select from '../src/ui/select';
 import Label from '../src/ui/label';
+import {allStylesPropTypes} from '../src/ui/system';
+import theme from '../src/ui/theme/default_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Label', module);
+
+function LabelExample() {
+    const [value, setValue] = React.useState('');
+    return (
+        <Example
+            options={{
+                size: {
+                    type: 'select',
+                    label: 'Size',
+                    options: keys(theme.textStyles.default),
+                },
+                textColor: {
+                    type: 'selectButtons',
+                    label: 'Text color',
+                    options: ['default', 'light'],
+                },
+            }}
+            styleProps={Object.keys(allStylesPropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+                return `
+                    import {Label, Box, Input} from '@airtable/blocks/ui';
+
+                    // You might want to consider using \`FormField\` instead.
+                    const LabelExample = () => {
+                        const [value, setValue] = React.useState('');
+
+                        return (
+                            <Box>
+                                <Label htmlFor="my-input" ${props}>Label</Label>
+                                <Input id="my-input" value={value} onChange={e => setValue(e.target.value)} />
+                            </Box>
+                        );
+                    };
+                `;
+            }}
+        >
+            {values => (
+                <Box width={CONTROL_WIDTH}>
+                    <Label htmlFor="my-input" {...values}>
+                        Label
+                    </Label>
+                    <Input id="my-input" value={value} onChange={e => setValue(e.target.value)} />
+                </Box>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <LabelExample />);
 
 stories.add('with input', () => (
     <React.Fragment>
