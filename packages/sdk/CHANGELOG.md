@@ -16,14 +16,16 @@ No changes.
 ## [0.0.41](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...@airtable/blocks@0.0.41) - 2020-01-27
 
 -   **BREAKING**: `useWatchable` will now throw an error if the second argument `keys` is
-    `undefined`. Previously, this would no-op.
+    `undefined`. Previously, this would no-op. <<<<<<< HEAD
 -   Added support for `setActiveTable` and `setActiveView` to the `cursor` API. These can be used to
     manipulate the current table and/or view on the main Airtable page from inside a block.
 -   Table.createRecordsAsync now accepts an array of objects containing a `fields` object of field
     \-> cell value mappings, rather an accepting field -> cell value mappings directly. This brings
     its API in line with `updateRecordsAsync` and other Airtable APIs. The old behavior is still
     supported but has been deprecated and will be removed in a future version.
--   Fixed issue where blocks would crash in MS Edge due to a browser bug with `super` method calls.
+-   # Fixed issue where blocks would crash in MS Edge due to a browser bug with `super` method calls.
+-   Changed default Tooltip `placementOffsetX` and `placementOffsetY` to `8` pixels.
+    > > > > > > > tooltip example
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 
