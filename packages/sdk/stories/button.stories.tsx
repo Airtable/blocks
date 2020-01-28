@@ -2,13 +2,94 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
 import Box from '../src/ui/box';
-import Button from '../src/ui/button';
+import Button, {buttonStylePropTypes} from '../src/ui/button';
 import Tooltip from '../src/ui/tooltip';
+import useTheme from '../src/ui/theme/use_theme';
+import {keys} from '../src/private_utils';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
 
 const stories = storiesOf('Button', module);
 
+function ButtonExample() {
+    const {buttonVariants, buttonSizes} = useTheme();
+    return (
+        <Example
+            options={{
+                variant: {
+                    type: 'select',
+                    label: 'Variant',
+                    options: keys(buttonVariants),
+                },
+                size: {
+                    type: 'selectButtons',
+                    label: 'Size',
+                    options: keys(buttonSizes),
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+                icon: {
+                    type: 'switch',
+                    label: 'Show icon',
+                    defaultValue: true,
+                },
+                hasLabel: {
+                    type: 'switch',
+                    label: 'Show label',
+                    defaultValue: true,
+                },
+            }}
+            styleProps={Object.keys(buttonStylePropTypes)}
+            renderCodeFn={({hasLabel, ...values}) => {
+                const props = createJsxPropsStringFromValuesMap(values as any, {
+                    icon: value => (value ? 'edit' : null),
+                });
+
+                const ariaLabel = hasLabel ? '' : 'aria-label="Edit"';
+                const ariaLabelComment = hasLabel
+                    ? ''
+                    : '// Make sure to add an "aria-label" prop when only using an icon.';
+
+                const children = hasLabel ? 'Button' : null;
+
+                const buttonComponentString = createJsxComponentString(
+                    'Button',
+                    ["onClick={() => console.log('Button clicked')}", props, ariaLabel],
+                    children,
+                );
+
+                return `
+                    import {Button} from '@airtable/blocks/ui';
+                    
+                    ${ariaLabelComment}
+                    const buttonExample = (
+                        ${buttonComponentString}
+                    );
+                `;
+            }}
+        >
+            {({icon, hasLabel, ...values}) => (
+                <Button
+                    // eslint-disable-next-line no-console
+                    onClick={() => console.log('Button clicked')}
+                    {...values}
+                    icon={icon ? 'edit' : undefined}
+                    aria-label={hasLabel ? 'Edit' : undefined}
+                >
+                    {hasLabel ? 'Button' : null}
+                </Button>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <ButtonExample />);
+
 stories.add('variants & sizes', () => (
-    <>
+    <React.Fragment>
         <Box margin={5}>
             <Button icon="edit" size="small" onClick={action('clicked')} marginRight={2}>
                 Default
@@ -81,7 +162,7 @@ stories.add('variants & sizes', () => (
                 Danger
             </Button>
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('with icon', () => (
@@ -148,7 +229,7 @@ stories.add('display', () => (
 ));
 
 stories.add('ref', () => (
-    <>
+    <React.Fragment>
         <Button
             ref={node => {
                 // eslint-disable-next-line no-console
@@ -157,7 +238,7 @@ stories.add('ref', () => (
         >
             Look into your console to see the ref
         </Button>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom icon', () => (

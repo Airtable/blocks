@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import prettier from 'prettier/standalone';
 import parserBabel from 'prettier/parser-babylon';
 import Box from '../../src/ui/box';
@@ -8,9 +8,9 @@ import useResizablePanel from './use_resizable_panel';
 const CODE_PANEL_INITIAL_HEIGHT = 140;
 const CODE_PANEL_MIN_HEIGHT = 24;
 
-type Props = {
+interface Props {
     code: string;
-};
+}
 
 const handlebars = (
     <React.Fragment>

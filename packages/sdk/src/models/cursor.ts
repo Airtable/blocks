@@ -7,6 +7,8 @@ import {AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
+import Table from './table';
+import View from './view';
 import Record from './record';
 
 const WatchableCursorKeys = Object.freeze({
@@ -153,6 +155,31 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     get activeViewId(): ViewId | null {
         return this._data.activeViewId;
     }
+    /**
+     * Sets the specified table to active in the Airtable UI. If the blocks pane is fullscreen, the
+     * table will still be set as active, but the blocks pane will continue to be displayed
+     * fullscreen.
+     *
+     * @param tableOrTableId The target table or table ID to set as active in the Airtable main page.
+     */
+    setActiveTable(tableOrTableId: Table | TableId): void {
+        const tableId = tableOrTableId instanceof Table ? tableOrTableId.id : tableOrTableId;
+        this._airtableInterface.setActiveViewOrTable(tableId);
+    }
+    /**
+     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the blocks
+     * pane is fullscreen, the view will still be set as active, but the blocks pane will continue
+     * to be displayed fullscreen.
+     *
+     * @param tableOrTableId The table or table ID that the target view belongs to.
+     * @param viewOrViewId The target view or view ID to set as active in the Airtable main page.
+     */
+    setActiveView(tableOrTableId: Table | TableId, viewOrViewId: View | ViewId): void {
+        const tableId = tableOrTableId instanceof Table ? tableOrTableId.id : tableOrTableId;
+        const viewId = viewOrViewId instanceof View ? viewOrViewId.id : viewOrViewId;
+        this._airtableInterface.setActiveViewOrTable(tableId, viewId);
+    }
+
     /**
      * @internal
      */

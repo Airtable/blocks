@@ -12,6 +12,7 @@ module.exports = {
                 useBuiltIns: 'usage',
                 corejs: 3,
                 targets,
+                include: ['transform-classes'],
             },
         ],
         '@babel/react',

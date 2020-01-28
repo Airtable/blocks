@@ -1,10 +1,118 @@
-import React from 'react';
+/* eslint-disable no-console */
+import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import FormField from '../src/ui/form_field';
-import Input from '../src/ui/input';
+import Input, {inputStylePropTypes} from '../src/ui/input';
 import Box from '../src/ui/text';
+import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/private_utils';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Input', module);
+
+const sharedExampleProps = {
+    options: {
+        size: {
+            type: 'selectButtons',
+            label: 'Size',
+            options: keys(theme.inputSizes),
+        },
+        disabled: {
+            type: 'switch',
+            label: 'Disabled',
+            defaultValue: false,
+        },
+    },
+    styleProps: Object.keys(inputStylePropTypes),
+} as const;
+
+function InputExample() {
+    const [value, setValue] = useState('');
+    return (
+        <Example
+            {...sharedExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {Input} from '@airtable/blocks/ui';
+
+                    const InputExample = () => {
+                        const [value, setValue] = useState('');
+
+                        return (
+                            <Input
+                                value={value}
+                                onChange={e => setValue(e.target.value)}
+                                placeholder="Placeholder"
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        );
+                    };
+                `;
+            }}
+        >
+            {values => {
+                return (
+                    <Input
+                        value={value}
+                        onChange={e => setValue(e.target.value)}
+                        placeholder="Placeholder"
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example', () => <InputExample />);
+
+function InputSyncedExample() {
+    const [value, setValue] = useState('');
+    return (
+        <Example
+            {...sharedExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {InputSynced} from '@airtable/blocks/ui';
+
+                    const InputSyncedExample = () => {
+                        return (
+                            <InputSynced
+                                globalConfigKey="apiKey"
+                                placeholder="Placeholder"
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        );
+                    };
+                `;
+            }}
+        >
+            {values => {
+                return (
+                    <Input
+                        value={value}
+                        onChange={e => setValue(e.target.value)}
+                        placeholder="Placeholder"
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example synced', () => <InputSyncedExample />);
 
 stories.add('sizes', () =>
     React.createElement(() => {
@@ -91,7 +199,7 @@ stories.add('disabled', () =>
                 <Input
                     ref={node => console.log(node)}
                     value={value}
-                    disabled
+                    disabled={true}
                     onChange={e => setValue(e.target.value)}
                 />
             </Box>

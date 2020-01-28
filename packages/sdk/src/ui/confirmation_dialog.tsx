@@ -1,8 +1,9 @@
 /** @module @airtable/blocks/ui: Dialog */ /** */
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {baymax} from './baymax_utils';
 import Dialog, {DialogStyleProps, dialogStylePropTypes} from './dialog';
+import Heading from './heading';
+import Text from './text';
 import Button from './button';
 import Box from './box';
 
@@ -26,8 +27,8 @@ interface ConfirmationDialogProps extends DialogStyleProps {
     isConfirmActionDangerous: boolean;
     /** Extra `className`s to apply to the dialog element, separated by spaces. */
     className?: string;
-    /** The body of the dialog. */
-    body?: React.ReactNode;
+    /** The body of the dialog. When it’s a string it will automatically be wrapped in a Text component. */
+    body?: React.ReactNode | string;
     /** Extra `className`s to apply to the background element, separated by spaces. */
     backgroundClassName?: string;
     /** Extra styles to apply to the background element. */
@@ -132,10 +133,8 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                 {...restOfProps}
             >
                 <Dialog.CloseButton />
-                <h1 className={baymax('mt0 mb1 strong')} style={{fontSize: 20}}>
-                    {title}
-                </h1>
-                {body}
+                <Heading size="small">{title}</Heading>
+                {typeof body === 'string' ? <Text variant="paragraph">{body}</Text> : body}
                 <Box
                     display="flex"
                     flexDirection="row-reverse"
@@ -151,13 +150,7 @@ class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
                     >
                         {confirmButtonText}
                     </Button>
-                    <Button
-                        onClick={onCancel}
-                        variant="secondary"
-                        alignSelf="end"
-                        marginRight={2}
-                        className={baymax('quiet link-unquiet-focusable text-blue-focus')}
-                    >
+                    <Button onClick={onCancel} variant="secondary" alignSelf="end" marginRight={2}>
                         {cancelButtonText}
                     </Button>
                 </Box>

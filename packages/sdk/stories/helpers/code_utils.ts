@@ -1,3 +1,5 @@
+import {has} from '../../src/private_utils';
+
 /**
  * Helper function to turn an object keyed by prop name into JSX properties.
  *
@@ -22,14 +24,16 @@
  * ) => `icon="edit"`
  * ```
  */
-export default function valuesAsJsxProps(
-    values: {[key: string]: unknown},
-    mappingConfig?: {[key: string]: (value: unknown) => string | boolean | null},
+export function createJsxPropsStringFromValuesMap(
+    values: {[key: string]: string | boolean | null},
+    mappingConfig?: {
+        [key: string]: (value: string | boolean | null) => string | boolean | null | number;
+    },
 ): string {
     const output = [];
     for (const valueKey of Object.keys(values)) {
         let value;
-        if (mappingConfig && mappingConfig.hasOwnProperty(valueKey)) {
+        if (mappingConfig && has(mappingConfig, valueKey)) {
             value = mappingConfig[valueKey](values[valueKey]);
         } else {
             value = values[valueKey];
@@ -46,6 +50,10 @@ export default function valuesAsJsxProps(
                 }
                 break;
             }
+            case 'number': {
+                output.push(`${valueKey}={${value}}`);
+                break;
+            }
             case 'boolean': {
                 if (value === true) {
                     output.push(`${valueKey}={${value}}`);
@@ -54,9 +62,24 @@ export default function valuesAsJsxProps(
             }
 
             default:
+                // eslint-disable-next-line @airtable/blocks/no-throw-new
                 throw new Error('Unsupported value type');
         }
     }
 
     return output.join(' ');
 }
+
+export function createJsxComponentString(
+    name: string,
+    props: Array<string>,
+    children?: string | null,
+): string {
+    const propsAsString = props.join(' ');
+    if (children) {
+        return `<${name} ${propsAsString}>${children}</${name}>`;
+    }
+    return `<${name} ${propsAsString} />`;
+}
+
+export const CONTROL_WIDTH = '320px';

@@ -1,6 +1,7 @@
 /** @module @airtable/blocks/ui: useWatchable */ /** */
 import {useMemo, useRef} from 'react';
 import {useSubscription} from 'use-subscription';
+import {spawnError} from '../error_utils';
 import {compact} from '../private_utils';
 import Watchable from '../watchable';
 import useArrayIdentity from './use_array_identity';
@@ -21,7 +22,7 @@ import useArrayIdentity from './use_array_identity';
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
  * @param models The model or models to watch.
- * @param keys The key or keys to watch.
+ * @param keys The key or keys to watch. Non-optional, but may be null.
  * @param callback An optional callback to call when any of the watch keys change.
  *
  * @example
@@ -36,6 +37,14 @@ import useArrayIdentity from './use_array_identity';
  * function ViewNameAndType({view}) {
  *     useWatchable(view, ['name', 'type']);
  *     return <span>The view name is {view.name} and the type is {view.type}</span>;
+ * }
+ *
+ * function RecordValuesAndColorInViewIfExists({record, field, view}) {
+ *     useWatchable(record, ['cellValues', view ? `colorInView:${view.id}` : null]);
+ *     return <span>
+ *         The record has cell value {record.getCellValue(field)} in {field.name}.
+ *         {view ? `The record has color ${record.getColorInView(view)} in ${view.name}.` : null}
+ *     </span>
  * }
  * ```
  *
@@ -56,9 +65,17 @@ import useArrayIdentity from './use_array_identity';
  */
 export default function useWatchable<Keys extends string>(
     models: Watchable<Keys> | ReadonlyArray<Watchable<Keys> | null | undefined> | null | undefined,
-    keys: Keys | ReadonlyArray<Keys | null | undefined> | null | undefined,
+    keys: Keys | ReadonlyArray<Keys | null> | null,
     callback?: (model: Watchable<Keys>, keys: string, ...args: Array<any>) => unknown,
 ) {
+    if (keys === undefined) {
+        throw spawnError(
+            'Invalid call to useWatchable: keys cannot be undefined. ' +
+                'Pass a key or array of keys corresponding to the model being watched as the second ' +
+                'argument.',
+        );
+    }
+
     const compactModels: ReadonlyArray<Watchable<Keys>> = useArrayIdentity(
         compact(Array.isArray(models) ? models : [models]),
     );

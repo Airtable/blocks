@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
-import {action} from '@storybook/addon-actions';
 import Box from '../src/ui/box';
-import Select from '../src/ui/select';
+import Select, {selectStylePropTypes} from '../src/ui/select';
 import Tooltip from '../src/ui/tooltip';
 import FormField from '../src/ui/form_field';
+import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/private_utils';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Select', module);
 
@@ -14,6 +17,97 @@ const longOptions = [
     'Awesome cats from internet',
     'Business ideas I will build one day',
 ].map(value => ({value, label: value}));
+
+const sharedSelectExampleProps = {
+    options: {
+        size: {
+            type: 'selectButtons',
+            label: 'Size',
+            options: keys(theme.selectSizes),
+        },
+        disabled: {
+            type: 'switch',
+            label: 'Disabled',
+            defaultValue: false,
+        },
+    },
+    styleProps: Object.keys(selectStylePropTypes),
+} as const;
+
+function SelectExample() {
+    const [value, setValue] = useState(options[0].value);
+    return (
+        <Example
+            {...sharedSelectExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React, {useState} from 'react';
+                    import {Select} from '@airtable/blocks/ui';
+                    
+                    const options = ${JSON.stringify(options)};
+
+                    const SelectExample = () => {
+                        const [value, setValue] = useState(options[0].value);
+
+                        return <Select options={options} value={value} onChange={newValue => setValue(newValue)} ${props} width="${CONTROL_WIDTH}"/>
+                    };
+                `;
+            }}
+        >
+            {values => {
+                return (
+                    <Select
+                        options={options}
+                        value={value}
+                        onChange={newValue => setValue(newValue as string)}
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example', () => <SelectExample />);
+
+function SelectSyncedExample() {
+    const [value, setValue] = useState(options[0].value);
+    return (
+        <Example
+            {...sharedSelectExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import {SelectSynced} from '@airtable/blocks/ui';
+
+                    const options = ${JSON.stringify(options)};
+
+                    const selectSyncedExample = (
+                        <SelectSynced options={options} globalConfigKey="selectedOption" ${props} width="${CONTROL_WIDTH}"/>
+                    );
+                `;
+            }}
+        >
+            {values => {
+                return (
+                    <Select
+                        options={options}
+                        value={value}
+                        onChange={newValue => setValue(newValue as string)}
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('synced example', () => <SelectSyncedExample />);
 
 stories.add('sizes', () => (
     <React.Fragment>

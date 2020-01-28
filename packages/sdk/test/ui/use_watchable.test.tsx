@@ -162,6 +162,22 @@ describe('useWatchable', () => {
 
             mount(<Component />);
         });
+
+        it('will not accept undefined as the keys', () => {
+            jest.spyOn(console, 'error').mockImplementation(() => {});
+
+            const Component = () => {
+                // @ts-ignore
+                useWatchable(null, undefined);
+                return null;
+            };
+
+            expect(() => mount(<Component />)).toThrowError(
+                'Invalid call to useWatchable: keys cannot be undefined. ' +
+                    'Pass a key or array of keys corresponding to the model being watched as the ' +
+                    'second argument.',
+            );
+        });
     });
 
     describe('with several models', () => {

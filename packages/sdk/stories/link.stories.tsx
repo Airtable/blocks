@@ -1,16 +1,101 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
-import {values} from '../src/private_utils';
+import {values, keys} from '../src/private_utils';
 import Box from '../src/ui/box';
 import {iconNames} from '../src/ui/icon_config';
-import Link from '../src/ui/link';
+import Link, {linkStylePropTypes} from '../src/ui/link';
 import Text from '../src/ui/text';
 import Tooltip from '../src/ui/tooltip';
+import useTheme from '../src/ui/theme/use_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
 
 const stories = storiesOf('Link', module);
 
+function LinkExample() {
+    const {linkVariants, textStyles} = useTheme();
+    return (
+        <Example
+            options={{
+                variant: {
+                    type: 'select',
+                    label: 'Variant',
+                    options: keys(linkVariants),
+                },
+                size: {
+                    type: 'select',
+                    label: 'Size',
+                    options: keys(textStyles.default),
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+                icon: {
+                    type: 'switch',
+                    label: 'Show icon',
+                    defaultValue: true,
+                },
+                hasLabel: {
+                    type: 'switch',
+                    label: 'Show label',
+                    defaultValue: true,
+                },
+            }}
+            styleProps={Object.keys(linkStylePropTypes)}
+            renderCodeFn={({hasLabel, ...restOfValues}) => {
+                const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
+                    icon: value => (value ? 'home' : null),
+                });
+
+                const ariaLabel = hasLabel ? '' : 'aria-label="Go to homepage"';
+                const ariaLabelComment = hasLabel
+                    ? ''
+                    : '// Make sure to add an "aria-label" prop when only using an icon.';
+
+                const children = hasLabel ? 'Link' : null;
+
+                const buttonComponentString = createJsxComponentString(
+                    'Link',
+                    [
+                        'href="https://airtable.com/developers/blocks"',
+                        'target="_blank"',
+                        props,
+                        ariaLabel,
+                    ],
+                    children,
+                );
+
+                return `
+                    import {Link} from '@airtable/blocks/ui';
+                    
+                    ${ariaLabelComment}
+                    const linkExample = (
+                        ${buttonComponentString}
+                    );
+                `;
+            }}
+        >
+            {({icon, hasLabel, ...restOfValues}) => (
+                <Link
+                    href="https://airtable.com/developers/blocks"
+                    target="_blank"
+                    {...restOfValues}
+                    icon={icon ? 'home' : undefined}
+                    aria-label={hasLabel ? 'Go to homepage' : undefined}
+                >
+                    {hasLabel ? 'Link' : null}
+                </Link>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <LinkExample />);
+
 stories.add('variants', () => (
-    <>
+    <React.Fragment>
         <Link href="#" margin={3}>
             Default
         </Link>
@@ -20,7 +105,7 @@ stories.add('variants', () => (
         <Link href="#" variant="light" margin={3}>
             Light
         </Link>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('inside of text', () => (

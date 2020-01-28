@@ -6,9 +6,9 @@ import theme from '../src/ui/theme/default_theme/';
 const stories = storiesOf('Box/spacing', module);
 
 stories.add('padding spacing scale', () => (
-    <>
+    <React.Fragment>
         {theme.space.map((spaceOption, i) => (
-            <>
+            <React.Fragment key={spaceOption}>
                 <Box paddingY={4}>
                     <Box>space: {i}</Box>
                     <Box
@@ -40,15 +40,15 @@ stories.add('padding spacing scale', () => (
                         paddingY={i}
                     >{`<Box paddingY={${i}}>paddingY: ${spaceOption}px</Box>`}</Box>
                 </Box>
-            </>
+            </React.Fragment>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('margin spacing scale', () => (
-    <>
+    <React.Fragment>
         {theme.space.map((spaceOption, i) => (
-            <>
+            <React.Fragment key={spaceOption}>
                 <Box marginY={4}>
                     <Box>space: {i}</Box>
                     <Box margin={i}>{`<Box margin={${i}}>margin: ${spaceOption}px</Box>`}</Box>
@@ -67,13 +67,13 @@ stories.add('margin spacing scale', () => (
                     <Box marginX={i}>{`<Box marginX={${i}}>marginX: ${spaceOption}px</Box>`}</Box>
                     <Box marginY={i}>{`<Box marginY={${i}}>marginY: ${spaceOption}px</Box>`}</Box>
                 </Box>
-            </>
+            </React.Fragment>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('negative margins', () => (
-    <>
+    <React.Fragment>
         <Box marginRight={-5}>Negative margins work on the scale:</Box>
         <Box position="relative">
             {theme.space.map((spaceOption, index) => (
@@ -88,11 +88,11 @@ stories.add('negative margins', () => (
                 </Box>
             ))}
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('margin px', () => (
-    <>
+    <React.Fragment>
         <Box margin="10px">{'<Box margin="10px" />'}</Box>
         <Box marginTop="10px">{'<Box marginTop="10px" />'}</Box>
         <Box marginRight="10px">{'<Box marginRight="10px" />'}</Box>
@@ -100,19 +100,19 @@ stories.add('margin px', () => (
         <Box marginLeft="10px">{'<Box marginLeft="10px" />'}</Box>
         <Box marginX="10px">{'<Box marginX="10px" />'}</Box>
         <Box marginY="10px">{'<Box marginY="10px" />'}</Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('margin unit types', () => (
-    <>
+    <React.Fragment>
         Non-exhaustive list of unit types
         <Box margin="10em">{'<Box margin="10em" />'}</Box>
         <Box marginTop="10vh">{'<Box marginTop="10vh" />'}</Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('margin combination behavior', () => (
-    <>
+    <React.Fragment>
         <Box
             margin="1px"
             marginTop="2px"
@@ -136,35 +136,35 @@ stories.add('margin combination behavior', () => (
         <Box margin="1px" marginTop="10px" marginY="5px">
             margin: 1px + marginTop: 10px + marginY: 5px = `margin: 5px 1px 1px;`
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('padding error when exceeding scale', () => (
-    <>
+    <React.Fragment>
         <Box padding={20} />
-    </>
+    </React.Fragment>
 ));
 
 stories.add('padding error when negative number', () => (
-    <>
+    <React.Fragment>
         <Box padding={-2} />
-    </>
+    </React.Fragment>
 ));
 
 stories.add('padding error with non-integer', () => (
-    <>
+    <React.Fragment>
         <Box padding={0.5} />
-    </>
+    </React.Fragment>
 ));
 
 stories.add('margin error when exceeding scale', () => (
-    <>
+    <React.Fragment>
         <Box margin={20} />
-    </>
+    </React.Fragment>
 ));
 
 stories.add('margin error with non-integer', () => (
-    <>
+    <React.Fragment>
         <Box margin={0.5} />
-    </>
+    </React.Fragment>
 ));

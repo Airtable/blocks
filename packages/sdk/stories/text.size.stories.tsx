@@ -8,17 +8,17 @@ import {keys} from '../src/private_utils';
 const stories = storiesOf('Text/size', module);
 
 stories.add('default sizes', () => (
-    <>
+    <React.Fragment>
         {keys(theme.textStyles.default).map(textSize => (
             <Text key={textSize} size={textSize}>
                 The brown fox jumped over the lazy dog
             </Text>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('paragraph sizes', () => (
-    <>
+    <React.Fragment>
         {keys(theme.textStyles.paragraph).map(textSize => (
             <Box key={textSize} marginBottom="40px">
                 <Text variant="paragraph" size={textSize} maxWidth="40em">
@@ -33,11 +33,11 @@ stories.add('paragraph sizes', () => (
                 </Text>
             </Box>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('responsive size', () => (
-    <>
+    <React.Fragment>
         Breakpoints: <pre>{JSON.stringify(theme.breakpoints, null, 4)}</pre>
         <Text
             size={{
@@ -51,5 +51,5 @@ stories.add('responsive size', () => (
         >
             Resize to see size change
         </Text>
-    </>
+    </React.Fragment>
 ));

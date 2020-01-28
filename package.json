@@ -25,7 +25,8 @@
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",
         "test": "yarn workspaces run test",
-        "airbuild": "yarn workspaces run airbuild"
+        "airbuild": "yarn workspaces run airbuild",
+        "release-example": "./bin/release-example"
     },
     "husky": {
         "hooks": {

@@ -1,17 +1,97 @@
+/* eslint-disable no-console */
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
-import {values} from '../src/private_utils';
+import {values, keys} from '../src/private_utils';
 import Box from '../src/ui/box';
 import {iconNames} from '../src/ui/icon_config';
-import TextButton from '../src/ui/text_button';
+import TextButton, {textButtonStylePropTypes} from '../src/ui/text_button';
 import Text from '../src/ui/text';
 import Tooltip from '../src/ui/tooltip';
+import useTheme from '../src/ui/theme/use_theme';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, createJsxComponentString} from './helpers/code_utils';
 
 const stories = storiesOf('TextButton', module);
 
+function TextButtonExample() {
+    const {textButtonVariants, textStyles} = useTheme();
+    return (
+        <Example
+            options={{
+                variant: {
+                    type: 'select',
+                    label: 'Variant',
+                    options: keys(textButtonVariants),
+                },
+                size: {
+                    type: 'select',
+                    label: 'Size',
+                    options: keys(textStyles.default),
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+                icon: {
+                    type: 'switch',
+                    label: 'Show icon',
+                    defaultValue: true,
+                },
+                hasLabel: {
+                    type: 'switch',
+                    label: 'Show label',
+                    defaultValue: true,
+                },
+            }}
+            styleProps={Object.keys(textButtonStylePropTypes)}
+            renderCodeFn={({hasLabel, ...restOfValues}) => {
+                const props = createJsxPropsStringFromValuesMap(restOfValues as any, {
+                    icon: value => (value ? 'edit' : null),
+                });
+
+                const ariaLabel = hasLabel ? '' : 'aria-label="Edit"';
+                const ariaLabelComment = hasLabel
+                    ? ''
+                    : '// Make sure to add an "aria-label" prop when only using an icon.';
+
+                const children = hasLabel ? 'Text button' : null;
+
+                const buttonComponentString = createJsxComponentString(
+                    'TextButton',
+                    ["onClick={() => console.log('Button clicked')}", props, ariaLabel],
+                    children,
+                );
+
+                return `
+                    import {TextButton} from '@airtable/blocks/ui';
+                    
+                    ${ariaLabelComment}
+                    const buttonExample = (
+                        ${buttonComponentString}
+                    );
+                `;
+            }}
+        >
+            {({icon, hasLabel, ...restOfValues}) => (
+                <TextButton
+                    onClick={() => console.log('Button clicked')}
+                    {...restOfValues}
+                    icon={icon ? 'edit' : undefined}
+                    aria-label={hasLabel ? 'Edit' : undefined}
+                >
+                    {hasLabel ? 'Text button' : null}
+                </TextButton>
+            )}
+        </Example>
+    );
+}
+
+stories.add('example', () => <TextButtonExample />);
+
 stories.add('variants', () => (
-    <>
+    <React.Fragment>
         <TextButton onClick={action('Clicked')} margin={3}>
             Default
         </TextButton>
@@ -21,11 +101,11 @@ stories.add('variants', () => (
         <TextButton variant="light" onClick={action('Clicked')} margin={3}>
             Light
         </TextButton>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('sizes', () => (
-    <>
+    <React.Fragment>
         <TextButton icon="edit" size="small" onClick={action('Clicked')} margin={3}>
             Small
         </TextButton>
@@ -38,18 +118,18 @@ stories.add('sizes', () => (
         <TextButton icon="edit" size="xlarge" onClick={action('Clicked')} margin={3}>
             Xlarge
         </TextButton>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('inside of text', () => (
-    <>
+    <React.Fragment>
         <Text size="large" margin={5}>
             Some text with a{' '}
             <TextButton size="large" onClick={action('Clicked')}>
                 text button
             </TextButton>
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('with icon', () => (
@@ -99,17 +179,17 @@ stories.add('responsive size with icon', () => (
 ));
 
 stories.add('flex', () => (
-    <>
+    <React.Fragment>
         <Text size="large" margin={5}>
             <TextButton display="flex" icon="upload" size="large" paddingX={1} marginX={-1}>
                 Text button
             </TextButton>
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom icon', () => (
-    <>
+    <React.Fragment>
         <Text size="large" margin={5}>
             <TextButton
                 icon={
@@ -131,7 +211,7 @@ stories.add('custom icon', () => (
                 Custom icon
             </TextButton>
         </Text>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('with tooltip', () => (

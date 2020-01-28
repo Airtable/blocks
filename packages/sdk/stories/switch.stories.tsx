@@ -1,10 +1,134 @@
+/* eslint-disable no-console */
 // @flow
 import React, {useState} from 'react';
 import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
-import Switch from '../src/ui/switch';
+import Switch, {switchStylePropTypes} from '../src/ui/switch';
+import theme from '../src/ui/theme/default_theme';
+import {keys} from '../src/private_utils';
+import Example from './helpers/example';
+import {createJsxPropsStringFromValuesMap, CONTROL_WIDTH} from './helpers/code_utils';
 
 const stories = storiesOf('Switch', module);
+
+const sharedExampleProps = {
+    options: {
+        variant: {
+            type: 'selectButtons',
+            label: 'Variant',
+            options: keys(theme.switchVariants),
+        },
+        size: {
+            type: 'selectButtons',
+            label: 'Size',
+            options: keys(theme.switchSizes),
+        },
+        disabled: {
+            type: 'switch',
+            label: 'Disabled',
+            defaultValue: false,
+        },
+        backgroundColor: {
+            type: 'switch',
+            label: 'Hide background',
+            defaultValue: false,
+        },
+    },
+    styleProps: Object.keys(switchStylePropTypes),
+} as const;
+
+function SwitchExample() {
+    const [isEnabled, setIsEnabled] = useState(true);
+    return (
+        <Example
+            {...sharedExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values, {
+                    backgroundColor: value => (value ? 'transparent' : null),
+                });
+
+                return `
+                    import React, {useState} from 'react';
+                    import {Switch} from '@airtable/blocks/ui';
+
+                    const SwitchExample = () => {
+                        const [isEnabled, setIsEnabled] = useState(true);
+
+                        return (
+                            <Switch
+                                value={isEnabled}
+                                onChange={newValue => setIsEnabled(newValue)}
+                                label="Is switch enabled"
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        );
+                    };
+                `;
+            }}
+        >
+            {({backgroundColor, ...values}) => {
+                return (
+                    <Switch
+                        value={isEnabled}
+                        onChange={newValue => setIsEnabled(newValue)}
+                        label="Is switch enabled"
+                        {...values}
+                        backgroundColor={backgroundColor ? 'transparent' : undefined}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example', () => <SwitchExample />);
+
+function SwitchSyncedExample() {
+    const [isEnabled, setIsEnabled] = useState(true);
+    return (
+        <Example
+            {...sharedExampleProps}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values, {
+                    backgroundColor: value => (value ? 'transparent' : null),
+                });
+
+                return `
+                    import React, {useState} from 'react';
+                    import {SwitchSynced} from '@airtable/blocks/ui';
+
+                    const SwitchSyncedExample = () => {
+                        return (
+                            <SwitchSynced
+                                globalConfigKey="keyName"
+                                label="Is switch enabled"
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        );
+                    };
+                `;
+            }}
+        >
+            {({backgroundColor, ...values}) => {
+                return (
+                    <Switch
+                        value={isEnabled}
+                        onChange={newValue => setIsEnabled(newValue)}
+                        label="Is switch enabled"
+                        backgroundColor={backgroundColor ? 'transparent' : undefined}
+                        {...values}
+                        width={CONTROL_WIDTH}
+                    />
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example synced', () => <SwitchSyncedExample />);
 
 stories.add('sizes', () =>
     React.createElement(() => {
@@ -63,7 +187,12 @@ stories.add('disabled', () =>
         const [isChecked, setIsChecked] = useState(true);
         return (
             <Box maxWidth="300px" margin="auto">
-                <Switch value={isChecked} onChange={setIsChecked} label="Inspect me" disabled />
+                <Switch
+                    value={isChecked}
+                    onChange={setIsChecked}
+                    label="Inspect me"
+                    disabled={true}
+                />
             </Box>
         );
     }),
@@ -80,19 +209,6 @@ stories.add('override backgroundColor', () =>
                     onChange={setIsChecked}
                     label="Transparent"
                     marginBottom={2}
-                />
-                <Switch
-                    backgroundColor="black"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="Black ?"
-                    marginBottom={2}
-                />
-                <Switch
-                    backgroundColor="red"
-                    value={isChecked}
-                    onChange={setIsChecked}
-                    label="This bg-color may be a criminal offense"
                 />
             </Box>
         );

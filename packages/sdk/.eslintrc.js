@@ -149,6 +149,7 @@ module.exports = {
         'react-hooks/rules-of-hooks': 'error',
         'react/display-name': 'off',
         'react/jsx-boolean-value': ['error', 'always'],
+        'react/jsx-fragments': ['error', 'element'],
         'react/no-unescaped-entities': 'off',
         'react/prop-types': ['error'],
         'react/react-in-jsx-scope': 'error',

@@ -9,9 +9,21 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...HEAD)
 
 No changes.
+
+## [0.0.41](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...@airtable/blocks@0.0.41) - 2020-01-27
+
+-   **BREAKING**: `useWatchable` will now throw an error if the second argument `keys` is
+    `undefined`. Previously, this would no-op.
+-   Added support for `setActiveTable` and `setActiveView` to the `cursor` API. These can be used to
+    manipulate the current table and/or view on the main Airtable page from inside a block.
+-   Table.createRecordsAsync now accepts an array of objects containing a `fields` object of field
+    \-> cell value mappings, rather an accepting field -> cell value mappings directly. This brings
+    its API in line with `updateRecordsAsync` and other Airtable APIs. The old behavior is still
+    supported but has been deprecated and will be removed in a future version.
+-   Fixed issue where blocks would crash in MS Edge due to a browser bug with `super` method calls.
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 

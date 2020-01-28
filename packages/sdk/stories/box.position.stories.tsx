@@ -19,57 +19,57 @@ function px(n: number): string {
 }
 
 stories.add('top scale', () => (
-    <>
+    <React.Fragment>
         <Frame>
             {theme.space.map((spaceOption, i) => (
                 <RedCube key={spaceOption} left={i} top={px(100 * i)} />
             ))}
         </Frame>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('bottom scale', () => (
-    <>
+    <React.Fragment>
         <Frame>
             {theme.space.map((spaceOption, i) => (
                 <RedCube key={spaceOption} bottom={i} left={px(100 * i)} />
             ))}
         </Frame>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('left scale', () => (
-    <>
+    <React.Fragment>
         <Frame>
             {theme.space.map((spaceOption, i) => (
                 <RedCube key={spaceOption} left={i} bottom={px(100 * i)} />
             ))}
         </Frame>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('right scale', () => (
-    <>
+    <React.Fragment>
         <Frame>
             {theme.space.map((spaceOption, i) => (
                 <RedCube key={spaceOption} right={i} bottom={px(100 * i)} />
             ))}
         </Frame>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('position', () => (
-    <>
+    <React.Fragment>
         <Box position="fixed" border="default" top={5} left={5}>
             fixed
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('zIndex', () => (
-    <>
+    <React.Fragment>
         <Box position="fixed" border="default" zIndex={1}>
             zIndex
         </Box>
-    </>
+    </React.Fragment>
 ));

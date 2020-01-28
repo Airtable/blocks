@@ -6,7 +6,7 @@ import theme from '../src/ui/theme/default_theme/';
 const stories = storiesOf('Box', module);
 
 stories.add('display', () => (
-    <>
+    <React.Fragment>
         Non-exhaustive list of display options
         {[
             'inherit' as const,
@@ -23,11 +23,11 @@ stories.add('display', () => (
                 {display}
             </Box>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('overflow', () => (
-    <>
+    <React.Fragment>
         Non-exhaustive options
         <Box backgroundColor="blueLight2" overflow="hidden" padding={2} margin={3}>
             overflow="hidden"
@@ -38,11 +38,11 @@ stories.add('overflow', () => (
         <Box backgroundColor="blueLight2" overflowX="scroll" padding={2} margin={3}>
             overflowX="scroll"
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('as', () => (
-    <>
+    <React.Fragment>
         {[
             'div' as const,
             'span' as const,
@@ -67,11 +67,11 @@ stories.add('as', () => (
                 {as}
             </Box>
         ))}
-    </>
+    </React.Fragment>
 ));
 
 stories.add('ref', () => (
-    <>
+    <React.Fragment>
         <Box
             ref={(node: HTMLElement | null) => {
                 // eslint-disable-next-line no-console
@@ -80,11 +80,11 @@ stories.add('ref', () => (
         >
             Look into your console to see the ref
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('breakpoints / responsive properties', () => (
-    <>
+    <React.Fragment>
         Breakpoints: <pre>{JSON.stringify(theme.breakpoints, null, 4)}</pre>
         <Box
             backgroundColor={{
@@ -98,29 +98,29 @@ stories.add('breakpoints / responsive properties', () => (
         >
             Resize to see color change
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('custom className', () => (
-    <>
+    <React.Fragment>
         <Box className="user-provided-class">Inspect element to see class name</Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('id attribute', () => (
-    <>
+    <React.Fragment>
         <Box id="my-id">Inspect element to see class name</Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('tabindex attribute', () => (
-    <>
+    <React.Fragment>
         <Box tabIndex={-1}>Inspect element to see tabindex</Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('style attribute', () => (
-    <>
+    <React.Fragment>
         <Box
             style={{
                 transform: 'scale(0.95)',
@@ -128,11 +128,11 @@ stories.add('style attribute', () => (
         >
             Inspect element to see style attribute
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('data attributes', () => (
-    <>
+    <React.Fragment>
         <Box
             dataAttributes={{
                 'data-something': true,
@@ -141,17 +141,17 @@ stories.add('data attributes', () => (
         >
             Inspect element to see data attributes
         </Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('role attribute', () => (
-    <>
+    <React.Fragment>
         <Box role="nav">Inspect element to see rol attribute</Box>
-    </>
+    </React.Fragment>
 ));
 
 stories.add('aria attributes', () => (
-    <>
+    <React.Fragment>
         <Box
             aria-label="__label__"
             aria-labelledby="__id__"
@@ -164,5 +164,5 @@ stories.add('aria attributes', () => (
         >
             Inspect element to see aria attributes
         </Box>
-    </>
+    </React.Fragment>
 ));
