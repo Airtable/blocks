@@ -4,6 +4,7 @@ import Select from '../../src/ui/select';
 import SelectButtons from '../../src/ui/select_buttons';
 import Switch from '../../src/ui/switch';
 import Box from '../../src/ui/box';
+import Text from '../../src/ui/text';
 import Heading from '../../src/ui/heading';
 import FormField from '../../src/ui/form_field';
 import {spawnUnknownSwitchCaseError} from '../../src/error_utils';
@@ -49,7 +50,7 @@ interface OptionMap {
 type OptionMapType<T extends OptionMap> = {[K in keyof T]: OptionType<T[K]>};
 
 interface Props<T extends OptionMap> {
-    options: T;
+    options?: T;
     styleProps?: Array<string>;
     children: (values: OptionMapType<T>) => React.ReactNode;
     renderCodeFn?: (values: OptionMapType<T>) => string;
@@ -57,6 +58,7 @@ interface Props<T extends OptionMap> {
 }
 
 export default function Example<T extends OptionMap>(props: Props<T>) {
+    const {options} = props;
     const defaultValues: any = {};
 
     const [values, setValues] = useState(defaultValues);
@@ -65,24 +67,26 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
         setValues({...values, [key]: value});
     }
 
-    for (const optionKey of Object.keys(props.options)) {
-        const option = props.options[optionKey];
-        switch (option.type) {
-            case 'select':
-            case 'selectButtons':
-                if (option.defaultValue) {
-                    defaultValues[optionKey] = option.defaultValue;
-                } else if (option.options.includes('default')) {
-                    defaultValues[optionKey] = 'default';
-                } else {
-                    defaultValues[optionKey] = option.options[0];
-                }
-                break;
-            case 'switch':
-                defaultValues[optionKey] = option.defaultValue ?? true;
-                break;
-            default:
-                throw spawnUnknownSwitchCaseError('option.type', option, 'type');
+    if (options) {
+        for (const optionKey of Object.keys(options)) {
+            const option = options[optionKey];
+            switch (option.type) {
+                case 'select':
+                case 'selectButtons':
+                    if (option.defaultValue) {
+                        defaultValues[optionKey] = option.defaultValue;
+                    } else if (option.options.includes('default')) {
+                        defaultValues[optionKey] = 'default';
+                    } else {
+                        defaultValues[optionKey] = option.options[0];
+                    }
+                    break;
+                case 'switch':
+                    defaultValues[optionKey] = option.defaultValue ?? true;
+                    break;
+                default:
+                    throw spawnUnknownSwitchCaseError('option.type', option, 'type');
+            }
         }
     }
 
@@ -107,60 +111,66 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                 <Heading size="xsmall" marginBottom={3}>
                     Props
                 </Heading>
-                {Object.keys(props.options).map(optionKey => {
-                    const option = props.options[optionKey];
-                    switch (option.type) {
-                        case 'select':
-                        case 'selectButtons': {
-                            const optionsType = typeof option.options[0];
-                            const sharedProps = {
-                                size: 'small' as const,
-                                value: String(values[optionKey]),
-                                options: option.options.map(String).map(value => ({
-                                    label: capitalize(value),
-                                    value,
-                                })),
-                                onChange: (newValue: SelectOptionValue) => {
-                                    switch (optionsType) {
-                                        case 'number':
-                                            _setValue(optionKey, Number(newValue));
-                                            break;
-                                        case 'string':
-                                            _setValue(optionKey, newValue);
-                                            break;
-                                    }
-                                },
-                            };
-                            switch (option.type) {
-                                case 'select':
-                                    return (
-                                        <FormField key={optionKey} label={option.label}>
-                                            <Select {...sharedProps} />
-                                        </FormField>
-                                    );
-                                case 'selectButtons':
-                                    return (
-                                        <FormField key={optionKey} label={option.label}>
-                                            <SelectButtons {...sharedProps} />
-                                        </FormField>
-                                    );
+                {options ? (
+                    Object.keys(options).map(optionKey => {
+                        const option = options[optionKey];
+                        switch (option.type) {
+                            case 'select':
+                            case 'selectButtons': {
+                                const optionsType = typeof option.options[0];
+                                const sharedProps = {
+                                    size: 'small' as const,
+                                    value: String(values[optionKey]),
+                                    options: option.options.map(String).map(value => ({
+                                        label: capitalize(value),
+                                        value,
+                                    })),
+                                    onChange: (newValue: SelectOptionValue) => {
+                                        switch (optionsType) {
+                                            case 'number':
+                                                _setValue(optionKey, Number(newValue));
+                                                break;
+                                            case 'string':
+                                                _setValue(optionKey, newValue);
+                                                break;
+                                        }
+                                    },
+                                };
+                                switch (option.type) {
+                                    case 'select':
+                                        return (
+                                            <FormField key={optionKey} label={option.label}>
+                                                <Select {...sharedProps} />
+                                            </FormField>
+                                        );
+                                    case 'selectButtons':
+                                        return (
+                                            <FormField key={optionKey} label={option.label}>
+                                                <SelectButtons {...sharedProps} />
+                                            </FormField>
+                                        );
+                                }
                             }
+                            case 'switch':
+                                return (
+                                    <Switch
+                                        size="small"
+                                        key={optionKey}
+                                        label={option.label}
+                                        value={values[optionKey]}
+                                        onChange={newValue => _setValue(optionKey, newValue)}
+                                        marginBottom={2}
+                                    />
+                                );
+                            default:
+                                throw spawnUnknownSwitchCaseError('option.type', option, 'type');
                         }
-                        case 'switch':
-                            return (
-                                <Switch
-                                    size="small"
-                                    key={optionKey}
-                                    label={option.label}
-                                    value={values[optionKey]}
-                                    onChange={newValue => _setValue(optionKey, newValue)}
-                                    marginBottom={2}
-                                />
-                            );
-                        default:
-                            throw spawnUnknownSwitchCaseError('option.type', option, 'type');
-                    }
-                })}
+                    })
+                ) : (
+                    <Text textColor="light" fontStyle="italic">
+                        This example has no options.
+                    </Text>
+                )}
 
                 {props.styleProps && (
                     <StylePropList stylePropsByCategory={categorizeStyleProps(props.styleProps)} />
