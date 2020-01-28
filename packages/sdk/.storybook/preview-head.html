@@ -1,0 +1,58 @@
+<script>
+    // Partially stub the AirtableInterface.
+    window.__getAirtableInterfaceAtVersion = () => {
+        return {
+            sdkInitData: {
+                initialKvValuesByKey: {},
+                isDevelopmentMode: true,
+                baseData: {
+                    id: '',
+                    name: '',
+                    tableOrder: [],
+                    activeTableId: null,
+                    tablesById: {},
+                    appInterface: {},
+                    collaboratorsById: {
+                        a: {
+                            id: 'a',
+                            name: 'Jess Patel',
+                        },
+                        b: {
+                            id: 'b',
+                            name: 'Casey Park',
+                        },
+                        d: {
+                            id: 'd',
+                            name: 'Sandy Hagen',
+                        },
+                        e: {
+                            id: 'e',
+                            name: 'Logan Grandmont',
+                        },
+                    },
+                    activeCollaboratorIds: ['a', 'b', 'd', 'e'],
+                    currentUserId: null,
+                    permissionLevel: '',
+                    enabledFeatureNames: [],
+                    cursorData: null,
+                },
+                blockInstallationId: '',
+                isFullscreen: false,
+                isFirstRun: false,
+            },
+            subscribeToModelUpdates: () => {},
+            subscribeToGlobalConfigUpdates: () => {},
+            subscribeToSettingsButtonClick: () => {},
+            subscribeToEnterFullScreen: () => {},
+            subscribeToExitFullScreen: () => {},
+            subscribeToFocus: () => {},
+            assertAllowedSdkPackageVersion: () => {},
+            subscribeToModelUpdates: () => {},
+            aggregators: {
+                getAllAvailableAggregatorKeys: () => {
+                    return [];
+                },
+            },
+        };
+    };
+</script>
