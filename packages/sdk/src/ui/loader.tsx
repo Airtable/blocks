@@ -29,7 +29,7 @@ interface LoaderStyleProps extends FlexItemSetProps, PositionSetProps, MarginPro
 
 const styleParser = compose(flexItemSet, positionSet, margin);
 
-const loaderStylePropTypes = {
+export const loaderStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,

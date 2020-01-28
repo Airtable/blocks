@@ -10,19 +10,20 @@ import {spawnUnknownSwitchCaseError} from '../../src/error_utils';
 import ExampleCodePanel from './example_code_panel';
 import categorizeStyleProps from './categorize_style_props';
 import StylePropList from './style_prop_list';
+import {SelectOptionValue} from '../../src/ui/select_and_select_buttons_helpers';
 
 interface SelectOption {
     type: 'select';
     label: string;
-    options: Array<string>;
-    defaultValue?: string;
+    options: Array<string | number>;
+    defaultValue?: string | number;
 }
 
 interface SelectButtonsOption {
     type: 'selectButtons';
     label: string;
-    options: Array<string>;
-    defaultValue?: string;
+    options: Array<string | number>;
+    defaultValue?: string | number;
 }
 
 interface SwitchOption {
@@ -110,33 +111,41 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                     const option = props.options[optionKey];
                     switch (option.type) {
                         case 'select':
-                            return (
-                                <FormField key={optionKey} label={option.label}>
-                                    <Select
-                                        size="small"
-                                        value={values[optionKey]}
-                                        options={option.options.map(value => ({
-                                            label: capitalize(value),
-                                            value,
-                                        }))}
-                                        onChange={newValue => _setValue(optionKey, newValue)}
-                                    />
-                                </FormField>
-                            );
-                        case 'selectButtons':
-                            return (
-                                <FormField key={optionKey} label={option.label}>
-                                    <SelectButtons
-                                        size="small"
-                                        value={values[optionKey]}
-                                        options={option.options.map(value => ({
-                                            label: capitalize(value),
-                                            value,
-                                        }))}
-                                        onChange={newValue => _setValue(optionKey, newValue)}
-                                    />
-                                </FormField>
-                            );
+                        case 'selectButtons': {
+                            const optionsType = typeof option.options[0];
+                            const sharedProps = {
+                                size: 'small' as const,
+                                value: String(values[optionKey]),
+                                options: option.options.map(String).map(value => ({
+                                    label: capitalize(value),
+                                    value,
+                                })),
+                                onChange: (newValue: SelectOptionValue) => {
+                                    switch (optionsType) {
+                                        case 'number':
+                                            _setValue(optionKey, Number(newValue));
+                                            break;
+                                        case 'string':
+                                            _setValue(optionKey, newValue);
+                                            break;
+                                    }
+                                },
+                            };
+                            switch (option.type) {
+                                case 'select':
+                                    return (
+                                        <FormField key={optionKey} label={option.label}>
+                                            <Select {...sharedProps} />
+                                        </FormField>
+                                    );
+                                case 'selectButtons':
+                                    return (
+                                        <FormField key={optionKey} label={option.label}>
+                                            <SelectButtons {...sharedProps} />
+                                        </FormField>
+                                    );
+                            }
+                        }
                         case 'switch':
                             return (
                                 <Switch
