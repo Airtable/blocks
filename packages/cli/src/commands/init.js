@@ -166,12 +166,9 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     }
 
     // Require that block template is hosted in the `@airtable` org on NPM or is a github repo
-    if (
-        !VALID_TEMPLATE_NAME_REGEX.test(template) &&
-        !initCommandHelpers.isValidGithubTemplate(template)
-    ) {
+    if (!VALID_TEMPLATE_NAME_REGEX.test(template) && !initCommandHelpers.isGitTemplate(template)) {
         throw new Error(
-            "Block templates must be official Airtable example blocks (@airtable/name_of_template) or links to  valid Github repositories (ending in '.git')",
+            'Block templates must be official Airtable example blocks (@airtable/name_of_template) or links to valid git repositories',
         );
     }
 
@@ -252,10 +249,14 @@ async function populateBlockDirectoryWithTemplateContentAsync(
     // `__gitignore` to `.gitignore` in the downloaded template.  It
     // will be copied over with the rest of the template to the new
     // block directory.
-    await fsUtils.renameAsync(
-        path.join(templatePath, '__gitignore'),
-        path.join(templatePath, '.gitignore'),
-    );
+    try {
+        await fsUtils.renameAsync(
+            path.join(templatePath, '__gitignore'),
+            path.join(templatePath, '.gitignore'),
+        );
+    } catch {
+        // Do nothing since not having a gitignore isn't a big deal and some repo's may not have one
+    }
 
     // Put the contents of the template into the new block directory
     await fsUtils.copyAsync(templatePath, blockDirPath);
