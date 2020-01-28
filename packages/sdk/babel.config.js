@@ -23,6 +23,8 @@ module.exports = {
                 useBuiltIns: 'usage',
                 corejs: 3,
                 targets,
+                // TODO: remove when edge fixes bug described in https://github.com/Microsoft/TypeScript/issues/29325
+                include: ['transform-classes'],
             },
         ],
         '@babel/react',

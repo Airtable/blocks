@@ -19,6 +19,7 @@ commit that affects the code in a way that consumers might care about should inc
     -> cell value mappings, rather an accepting field -> cell value mappings directly. This brings
     its API in line with `updateRecordsAsync` and other Airtable APIs. The old behavior is still
     supported but has been deprecated and will be removed in a future version.
+-   Fixed issue where blocks would crash in MS Edge due to a browser bug with `super` method calls.
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 
