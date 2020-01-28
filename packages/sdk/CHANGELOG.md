@@ -13,6 +13,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   **BREAKING**: `useWatchable` will now throw an error if the second argument `keys` is
     `undefined`. Previously, this would no-op.
+-   Added support for `setActiveTable` and `setActiveView` to the `cursor` API. These can be used to
+    manipulate the current table and/or view on the main Airtable page from inside a block.
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 
