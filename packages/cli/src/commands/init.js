@@ -14,7 +14,7 @@ const fs = require('fs');
 const fsUtils = require('../helpers/fs_utils');
 const path = require('path');
 const invariant = require('invariant');
-const {camelCase, upperFirst} = require('lodash');
+const {camelCase, pick, upperFirst} = require('lodash');
 const initCommandHelpers = require('../helpers/init_command_helpers');
 
 import type {Argv} from 'yargs';
@@ -265,17 +265,11 @@ async function populateBlockDirectoryWithTemplateContentAsync(
     await initCommandHelpers.cleanUpDownloadedTemplateAsync(blockDirPath);
 }
 
-async function rewriteBlockSdkVersionFromLatestToCurrentVersionAsync(
+async function dereferenceBlockSdkVersionVersionAsync(
     blockDirPath: string,
-): Promise<void> {
-    const packageJsonPath = path.join(blockDirPath, 'package.json');
-    // flow-disable-next-line
-    const packageJson = await fsUtils.readJsonIfExistsAsync(packageJsonPath);
-    if (
-        packageJson &&
-        packageJson.dependencies &&
-        packageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME] === 'latest'
-    ) {
+    rawVersion: string,
+): Promise<string> {
+    if (rawVersion === 'latest') {
         const sdkPackageJsonPath = path.join(
             blockDirPath,
             'node_modules',
@@ -283,10 +277,41 @@ async function rewriteBlockSdkVersionFromLatestToCurrentVersionAsync(
             'blocks',
             'package.json',
         );
-        // flow-disable-next-line
-        const sdkPackageJson = await fsUtils.readJsonIfExistsAsync(sdkPackageJsonPath);
-        packageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME] = sdkPackageJson.version;
-        await fsUtils.outputJsonAsync(packageJsonPath, packageJson);
+        const sdkPackageJson: {[string]: mixed} = await fsUtils.readJsonIfExistsAsync(
+            sdkPackageJsonPath,
+        );
+        // The deserialised json will use primitive strings.
+        if (!sdkPackageJson.version || typeof sdkPackageJson.version !== 'string') {
+            throw new Error('Installed @airtable/blocks dependency has no version.');
+        }
+        return sdkPackageJson.version;
+    }
+    return rawVersion;
+}
+
+function whitelistKeysInPackageJson(packageJson: {[string]: mixed}): {[string]: mixed} {
+    // We explicitly only retain a small subset of keys in the package.json that are
+    // directly relevant to the block author. The author is expected to fill in the
+    // rest of the fields like `name` and `version` to suit their needs.
+    // The set of fields here reflects what is specified in the hand-crafted
+    // hello-world template.
+    const whitelist = ['dependencies', 'devDependencies', 'private', 'scripts'];
+    return pick(packageJson, whitelist);
+}
+
+async function rewritePackageJsonAsync(blockDirPath: string, template: string): Promise<void> {
+    const packageJsonPath = path.join(blockDirPath, 'package.json');
+    const packageJson = await fsUtils.readJsonIfExistsAsync(packageJsonPath);
+    // We consider it acceptable for a template to lack a package.json.
+    if (packageJson instanceof Object) {
+        if (packageJson.dependencies instanceof Object) {
+            const rawVersion = packageJson.dependencies[blockCliConfigSettings.SDK_PACKAGE_NAME];
+            packageJson.dependencies[
+                blockCliConfigSettings.SDK_PACKAGE_NAME
+            ] = await dereferenceBlockSdkVersionVersionAsync(blockDirPath, rawVersion);
+        }
+        const rewrittenPackageJson = whitelistKeysInPackageJson(packageJson);
+        await fsUtils.outputJsonAsync(packageJsonPath, rewrittenPackageJson);
     }
 }
 
@@ -413,8 +438,8 @@ async function setupRemoteTemplateBlockAsync(
     // Install the dependencies in the new block's package.json
     await initCommandHelpers.installBlockDependenciesAsync(blockDirPath);
 
-    // Rewrite the blocks sdk version to the installed version if it was set to latest
-    await rewriteBlockSdkVersionFromLatestToCurrentVersionAsync(blockDirPath);
+    // Rewrite the package.json from the verbatim original in npm
+    await rewritePackageJsonAsync(blockDirPath, template);
 
     // Create the .block/remote.json file
     await createRemoteJsonFileAsync(blockDirPath, blockId, baseId);

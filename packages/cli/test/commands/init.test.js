@@ -349,6 +349,57 @@ describe('init', function() {
             assert(installBlockDependenciesAsyncStub.calledWith(sinon.match(blockDirPath)));
         });
 
+        it('only propagates whitelisted package.json entries', async function() {
+            const packageJson = {
+                name: 'foobar',
+                version: '1.0.0',
+                author: 'baz',
+                description: 'A very important block',
+                dependencies: {
+                    a: '1.0.0',
+                    b: 'latest',
+                },
+                devDependencies: {
+                    x: '0.5',
+                    y: '2.0',
+                },
+                scripts: {
+                    frobnicate: 'frobnicate --confusingly',
+                },
+                private: true,
+                _customA: 1,
+                _customB: 'a string',
+            };
+
+            const sdkPackageJson = {
+                version: '0.0.1',
+            };
+
+            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await runInitAsync(getArgv());
+
+            const finalPackageJson = await fsExtra.readJson(
+                path.join(blockDirPath, 'package.json'),
+            );
+
+            const expectedJson = {
+                dependencies: {
+                    a: '1.0.0',
+                    b: 'latest',
+                },
+                devDependencies: {
+                    x: '0.5',
+                    y: '2.0',
+                },
+                scripts: {
+                    frobnicate: 'frobnicate --confusingly',
+                },
+                private: true,
+            };
+
+            assert.deepEqual(finalPackageJson, expectedJson);
+        });
+
         it('rewrites sdk version if latest to current version', async function() {
             const packageJson = {
                 dependencies: {
