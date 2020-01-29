@@ -12,7 +12,7 @@ import {CommentPlugin} from 'typedoc/dist/lib/converter/plugins';
 import {getRawComment} from 'typedoc/dist/lib/converter/factories/comment';
 
 const internalTags = ['internal', 'hidden', 'ignore'];
-const defaultReflectionNames = ['__type', '__call', '__get', '__set'];
+const defaultReflectionNames = ['__type', '__call', '__get', '__set', '__index'];
 
 const srcDirPath = path.resolve(__dirname, '../../src');
 

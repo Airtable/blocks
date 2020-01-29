@@ -121,7 +121,7 @@ const progressBarClassName = css({
  *
  * @example
  * ```js
- * import {UI} from '@airtable/blocks/ui';
+ * import {ProgressBar} from '@airtable/blocks/ui';
  *
  * function MyComponent() {
  *     return (

@@ -11,7 +11,7 @@ import {config as widthConfig, WidthProps} from './width';
 /**
  * Style props for the dimensions of an element.
  *
- * @docsPath UI/system/Dimensions
+ * @docsPath UI/Style System/Dimensions
  */
 export interface DimensionsSetProps
     extends HeightProps,

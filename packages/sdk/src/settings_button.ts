@@ -33,7 +33,7 @@ type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKey
  *     alert('Clicked!');
  * })
  * ```
- * @docsPath models/advanced/SettingsButton
+ * @docsPath models/SettingsButton
  */
 class SettingsButton extends Watchable<WatchableSettingsButtonKey> {
     /** @internal */

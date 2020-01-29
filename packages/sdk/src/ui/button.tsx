@@ -113,7 +113,7 @@ interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HT
     size?: ControlSizeProp;
     /** The variant of the button. Defaults to `default`. */
     variant?: ButtonVariant;
-    /** The name of the icon or a React node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
+    /** The name of the icon or a React node. For more details, see the {@link IconName|list of supported icons}. */
     icon?: IconName | React.ReactElement;
     /** The type of the button. Defaults to `button`. */
     type?: 'button' | 'submit' | 'reset';

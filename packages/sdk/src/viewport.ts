@@ -42,11 +42,14 @@ const compareWithNulls = (
 /**
  * Information about the current viewport
  *
+ * The {@link useViewport} hook is the recommend way to watch for viewport changes
+ * button, but you can also use it directly.
+ *
  * @example
  * ```js
  * import {viewport} from '@airtable/blocks';
  * ```
- * @docsPath models/advanced/Viewport
+ * @docsPath models/Viewport
  */
 class Viewport extends Watchable<WatchableViewportKey> {
     /** @internal */

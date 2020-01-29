@@ -207,7 +207,7 @@ export interface NormalizedRecordQueryResultOpts {
  * });
  * ```
  * 
- * @docsPath models/Query results/RecordQueryResult
+ * @docsPath models/query results/RecordQueryResult
  */
 class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,

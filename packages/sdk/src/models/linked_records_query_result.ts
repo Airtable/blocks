@@ -51,7 +51,7 @@ const pool: ObjectPool<
  * Do not instantiate. You can get instances of this class by calling
  * `record.getLinkedRecordsFromCell`.
  *
- * @docsPath models/Query results/LinkedRecordsQueryResult
+ * @docsPath models/query results/LinkedRecordsQueryResult
  */
 class LinkedRecordsQueryResult extends RecordQueryResult {
     /** @internal */

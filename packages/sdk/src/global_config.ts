@@ -35,9 +35,13 @@ type WatchableGlobalConfigKey = string;
  * Contents will not be updated in real-time when the installation is running in
  * a publicly shared base.
  *
- * Any key can be watched to know when the value of the key changes.
+ * Any key can be watched to know when the value of the key changes. If you want your
+ * component to automatically re-render whenever any key on GlobalConfig changes, try using the
+ * {@link useGlobalConfig} hook.
  *
  * You should not need to construct this object yourself.
+ *
+ * The maximum allowed size of the GlobalConfig object is 100kB.
  *
  * @example
  * ```js

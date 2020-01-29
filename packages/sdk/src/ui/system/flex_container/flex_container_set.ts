@@ -11,7 +11,7 @@ import {config as justifyItemsConfig, JustifyItemsProps} from './justify_items';
 /**
  * Style props for a flex container element.
  *
- * @docsPath UI/system/FlexContainer
+ * @docsPath UI/Style System/FlexContainer
  */
 export interface FlexContainerSetProps
     extends AlignContentProps,

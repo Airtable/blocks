@@ -8,7 +8,6 @@ import AbstractModel from './abstract_model';
  * Abstract superclass for all block SDK models that need to fetch async data.
  *
  * @docsPath models/advanced/AbstractModelWithAsyncData
- * @groupPath models/advanced/AbstractModel
  */
 class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends AbstractModel<
     DataType,

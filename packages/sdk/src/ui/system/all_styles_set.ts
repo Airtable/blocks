@@ -52,7 +52,7 @@ import {
  * This is equivalent to the following:
  *
  * ```
- * <Box style={{
+ * <div style={{
  *     display: 'flex',
  *     alignItems: 'center',
  *     justifyContent: 'center',
@@ -60,7 +60,7 @@ import {
  *     height: '200px',
  * }}>
  *     Hello world
- * </Box>
+ * </div>
  * ```
  *
  * Style props also provide access to Airtable's design tokens, including our color
@@ -108,7 +108,7 @@ import {
  * * {@link DisplayProps|Display}
  * * {@link OverflowProps|Overflow}
  *
- * @docsPath UI/system/All styles
+ * @docsPath UI/Style System/All styles
  */
 export interface AllStylesProps
     extends AppearanceSetProps,

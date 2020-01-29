@@ -10,7 +10,7 @@ export type PartialGlobalConfigPath = ReadonlyArray<string | undefined>;
 export type PartialGlobalConfigKey = PartialGlobalConfigPath | string | undefined;
 /** An array of {@link GlobalConfigValue}s */
 export interface GlobalConfigArray extends ReadonlyArray<GlobalConfigValue> {}
-/** An object containing {@GlobalConfigValue}s */
+/** An object containing {@link GlobalConfigValue|GlobalConfigValues} */
 export interface GlobalConfigObject {
     readonly [key: string]: GlobalConfigValue | undefined;
 }

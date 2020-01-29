@@ -44,7 +44,7 @@ type WatchableSessionKey = ObjectValues<typeof WatchableSessionKeys>;
  *     console.log('This block is being viewed in a public share');
  * }
  * ```
- * @docsPath models/advanced/Session
+ * @docsPath models/Session
  */
 class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /** @internal */

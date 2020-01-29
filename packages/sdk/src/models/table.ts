@@ -648,7 +648,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * the records, or if invalid input is provided (eg. invalid cell values).
      *
      * You may only update up to 50 records in one call to `updateRecordsAsync`.
-     * See [Writing changes to records](/packages/sdk/docs/guide_writes.md) for more information
+     * See [Write back to Airtable](/guides/write-back-to-airtable) for more information
      * about write limits.
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the

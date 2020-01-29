@@ -77,7 +77,7 @@ export const sharedIconPropTypes = {
  * * {@link IconStyleProps}
  */
 interface IconProps extends SharedIconProps {
-    /** The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
+    /** The name of the icon. For more details, see the {@link IconName|list of supported icons}. */
     name: IconName;
 }
 

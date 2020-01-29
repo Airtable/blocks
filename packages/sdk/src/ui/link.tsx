@@ -123,7 +123,7 @@ interface LinkProps extends AriaProps, LinkStyleProps, TooltipAnchorProps<HTMLAn
     size?: TextSizeProp;
     /** The variant of the link, which defines the color. Defaults to `default`. */
     variant?: LinkVariant;
-    /** The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
+    /** The name of the icon or a react node. For more details, see the {@link IconName|list of supported icons}. */
     icon?: IconName | React.ReactElement;
     /** Adds an underline to the link when true. */
     underline?: boolean;

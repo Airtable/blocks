@@ -74,6 +74,8 @@ interface ConfirmationDialogProps extends DialogStyleProps {
  *     );
  * }
  * ```
+ * @component
+ * @docsPath UI/components/ConfirmationDialog
  */
 class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
     /** @hidden */

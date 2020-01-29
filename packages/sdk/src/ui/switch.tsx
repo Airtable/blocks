@@ -165,6 +165,11 @@ const styleParser = compose(
 /**
  * A toggle switch for controlling boolean values. Similar to a checkbox.
  *
+ * By default, the Switch component is styled to be full-width (`width="100%"`) with a gray
+ * background to match other controls like Select, SelectButtons, Input, etc. This behavior can be
+ * overridden using style props. For example, you can set `backgroundColor="transparent"` on the
+ * Switch for a transparent background.
+ *
  * @example
  * ```js
  * import React, {useState} from 'react';
