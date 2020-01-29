@@ -18,6 +18,7 @@ interface SelectOption {
     label: string;
     options: Array<string | number>;
     defaultValue?: string | number;
+    renderLabel?: (label: string) => string;
 }
 
 interface SelectButtonsOption {
@@ -25,6 +26,7 @@ interface SelectButtonsOption {
     label: string;
     options: Array<string | number>;
     defaultValue?: string | number;
+    renderLabel?: (label: string) => string;
 }
 
 interface SwitchOption {
@@ -118,11 +120,12 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                             case 'select':
                             case 'selectButtons': {
                                 const optionsType = typeof option.options[0];
+                                const renderLabel = option.renderLabel ?? capitalize;
                                 const sharedProps = {
                                     size: 'small' as const,
                                     value: String(values[optionKey]),
                                     options: option.options.map(String).map(value => ({
-                                        label: capitalize(value),
+                                        label: renderLabel(value),
                                         value,
                                     })),
                                     onChange: (newValue: SelectOptionValue) => {

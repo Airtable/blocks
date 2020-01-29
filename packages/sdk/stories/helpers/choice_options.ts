@@ -20,7 +20,7 @@ export default [
         color: 'redBright',
     },
     {
-        id: 'd',
+        id: 'e',
         name: 'C++',
         color: 'blue',
     },
