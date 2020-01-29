@@ -1,9 +1,96 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Box from '../src/ui/box';
+import Text from '../src/ui/text';
 import theme from '../src/ui/theme/default_theme/';
+import Example from './helpers/example';
+import {allStylesPropTypes} from '../src/ui/system';
+import {keys} from '../src/private_utils';
+import {createJsxPropsStringFromValuesMap} from './helpers/code_utils';
 
 const stories = storiesOf('Box', module);
+
+function BoxExample() {
+    const flexCenterProps = {
+        display: 'flex' as const,
+        alignItems: 'center',
+        justifyContent: 'center',
+    };
+    return (
+        <Example
+            options={{
+                backgroundColor: {
+                    type: 'select',
+                    label: 'Background color',
+                    options: ['white', 'lightGray1', 'lightGray2', 'lightGray3', 'lightGray4'],
+                    renderLabel: v => v,
+                },
+                border: {
+                    type: 'selectButtons',
+                    label: 'Border',
+                    options: ['none', ...keys(theme.borders)],
+                },
+                borderRadius: {
+                    type: 'select',
+                    label: 'Border radius',
+                    options: ['none', ...keys(theme.radii)],
+                },
+                padding: {
+                    type: 'select',
+                    label: 'Padding',
+                    options: theme.space.map((value, index) => index),
+                    renderLabel: option => `${option} (${theme.space[option as any]}px)`,
+                },
+                isFlexCentered: {
+                    type: 'switch',
+                    label: 'Center content',
+                    defaultValue: false,
+                },
+            }}
+            styleProps={Object.keys(allStylesPropTypes)}
+            renderCodeFn={({isFlexCentered, border, ...restOfValues}) => {
+                const props = createJsxPropsStringFromValuesMap(restOfValues as any);
+                const flexProps = isFlexCentered
+                    ? createJsxPropsStringFromValuesMap(flexCenterProps)
+                    : '';
+                const borderProp = border !== 'none' ? `border="${border}"` : '';
+                return `
+                    import {Box, Text} from '@airtable/blocks/ui';
+
+                    const boxExample = (
+                        <Box
+                            ${flexProps}
+                            ${borderProp}
+                            ${props}
+                            width={200}
+                            height={200}
+                            overflow="hidden"
+                        >
+                            <Text>Content</Text>
+                        </Box>
+                    );
+                `;
+            }}
+        >
+            {({isFlexCentered, ...restOfValues}) => {
+                return (
+                    <Box
+                        {...(isFlexCentered ? flexCenterProps : null)}
+                        width={200}
+                        height={200}
+                        overflow="hidden"
+                        {...restOfValues}
+                        style={{boxSizing: 'border-box'}}
+                    >
+                        <Text>Content</Text>
+                    </Box>
+                );
+            }}
+        </Example>
+    );
+}
+
+stories.add('example', () => <BoxExample />);
 
 stories.add('display', () => (
     <React.Fragment>
