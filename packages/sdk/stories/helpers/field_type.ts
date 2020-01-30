@@ -1,4 +1,5 @@
 import {ObjectMap} from '../../src/private_utils';
+import {IconName} from '../../src/ui/icon_config';
 
 export enum FieldType {
     SINGLE_LINE_TEXT = 'singleLineText',
@@ -60,4 +61,35 @@ export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.RICH_TEXT]: 'Rich text',
     [FieldType.DURATION]: 'Duration',
     [FieldType.LAST_MODIFIED_TIME]: 'Last modified time',
+};
+
+export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
+    [FieldType.SINGLE_LINE_TEXT]: 'text',
+    [FieldType.EMAIL]: 'envelope',
+    [FieldType.URL]: 'hyperlink',
+    [FieldType.MULTILINE_TEXT]: 'paragraph',
+    [FieldType.NUMBER]: 'number',
+    [FieldType.PERCENT]: 'percent',
+    [FieldType.CURRENCY]: 'dollar',
+    [FieldType.SINGLE_SELECT]: 'select',
+    [FieldType.MULTIPLE_SELECTS]: 'multiselect',
+    [FieldType.SINGLE_COLLABORATOR]: 'personal',
+    [FieldType.MULTIPLE_COLLABORATORS]: 'multicollaborator',
+    [FieldType.MULTIPLE_RECORD_LINKS]: 'link1',
+    [FieldType.DATE]: 'day',
+    [FieldType.DATE_TIME]: 'day',
+    [FieldType.PHONE_NUMBER]: 'phone',
+    [FieldType.MULTIPLE_ATTACHMENTS]: 'file',
+    [FieldType.CHECKBOX]: 'checkbox',
+    [FieldType.FORMULA]: 'formula',
+    [FieldType.CREATED_TIME]: 'dayAuto',
+    [FieldType.ROLLUP]: 'rollup1',
+    [FieldType.COUNT]: 'count1',
+    [FieldType.LOOKUP]: 'lookup',
+    [FieldType.AUTO_NUMBER]: 'autonumber',
+    [FieldType.BARCODE]: 'barcode',
+    [FieldType.RATING]: 'star',
+    [FieldType.RICH_TEXT]: 'richText',
+    [FieldType.DURATION]: 'time',
+    [FieldType.LAST_MODIFIED_TIME]: 'dayAuto',
 };

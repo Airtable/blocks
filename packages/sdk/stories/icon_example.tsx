@@ -145,7 +145,7 @@ export default function IconExample() {
                 if (checkedIconName) {
                     exampleCode = `
                         const IconExample = () => {
-                            return (<Icon name="${checkedIconName}" size="${values.size}" />)
+                            return (<Icon name="${checkedIconName}" size={${values.size}} />)
                         }
                     `;
                 } else {
