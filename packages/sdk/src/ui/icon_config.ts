@@ -163,7 +163,9 @@ export const iconNamesArray = [
 ] as const;
 export const iconNames = createEnum(...iconNamesArray);
 /**
- * List of all icon names.
+ * List of all icon names. If you need to render an icon use the {@link Icon|Icon component}.
+ *
+ * [[ Story id="icon--example" title="Icon example" height="576px"]]
  */
 export type IconName = EnumType<typeof iconNames>;
 export const iconNamePropType = createPropTypeFromEnum(iconNames);

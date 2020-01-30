@@ -56,19 +56,8 @@ export interface BoxProps extends AllStylesProps, AriaProps, TooltipAnchorProps 
 /**
  * A box component for creating layouts.
  *
- * @example
- * ```js
- * import {Box} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="box--example" title="Box example" ]]
  *
- * function BoxExample() {
- *     return (
- *         <Box display='flex' alignItems='center' justifyContent='center' padding={3} margin={3}>
- *             Hello world
- *         </Box>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/Box
  */

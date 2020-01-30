@@ -21,20 +21,8 @@ interface InputSyncedProps extends SharedInputProps {
 /**
  * A wrapper around the {@link Input} component that syncs with {@link GlobalConfig}.
  *
- * @example
- * ```js
- * import {InputSynced} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="input--example-synced" title="Synced input example" ]]
  *
- * function ApiKeyInput() {
- *     return (
- *         <InputSynced
- *             globalConfigKey="apiKey"
- *             disabled={!canEditApiKey}
- *         />
- *     );
- * }
- * ```
  * @docsPath UI/components/InputSynced
  * @groupPath UI/components/Input
  * @component

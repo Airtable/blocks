@@ -50,50 +50,8 @@ interface ViewPickerProps extends SharedViewPickerProps {
 /**
  * Dropdown menu component for selecting views.
  *
- * @example
- * ```js
- * import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
- * import {viewTypes} from '@airtable/blocks/models';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="modelpickers--viewpicker-example" title="View picker example" ]]
  *
- * function Block() {
- *     useBase();
- *     const [table, setTable] = useState(null);
- *     const [view, setView] = useState(null);
- *     const queryResult = view ? view.selectRecords() : null;
- *     const records = useRecords(queryResult);
- *
- *     const summaryText = view ? `${view.name} has ${records.length} record(s).` : 'No view selected.';
- *     return (
- *         <Fragment>
- *             <p style={{marginBottom: 16}}>{summaryText}</p>
- *             <label style={{display: 'block', marginBottom: 16}}>
- *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePicker
- *                     table={table}
- *                     onChange={newTable => {
- *                         setTable(newTable);
- *                         setView(null);
- *                     }}
- *                     shouldAllowPickingNone={true}
- *                 />
- *             </label>
- *             {table && (
- *                 <label>
- *                     <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
- *                     <ViewPicker
- *                         table={table}
- *                         view={view}
- *                         onChange={newView => setView(newView)}
- *                         allowedTypes={[viewTypes.GRID]}
- *                         shouldAllowPickingNone={true}
- *                     />
- *                 </label>
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/ViewPicker
  */

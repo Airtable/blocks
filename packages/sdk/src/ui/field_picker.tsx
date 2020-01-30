@@ -50,54 +50,8 @@ interface FieldPickerProps extends SharedFieldPickerProps {
 /**
  * Dropdown menu component for selecting fields.
  *
- * @example
- * ```js
- * import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
- * import {fieldTypes} from '@airtable/blocks/models';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="modelpickers--fieldpicker-example" title="Field picker example" ]]
  *
- * function Block() {
- *     useBase();
- *     const [table, setTable] = useState(null);
- *     const [field, setField] = useState(null);
- *
- *     const summaryText = field ? `The field type for ${field.name} is ${field.type}.` : 'No field selected.';
- *     return (
- *         <Fragment>
- *             <p style={{marginBottom: 16}}>{summaryText}</p>
- *             <label style={{display: 'block', marginBottom: 16}}>
- *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePicker
- *                     table={table}
- *                     onChange={newTable => {
- *                         setTable(newTable);
- *                         setField(null);
- *                     }}
- *                     shouldAllowPickingNone={true}
- *                 />
- *             </label>
- *             {table && (
- *                 <label>
- *                     <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
- *                     <FieldPicker
- *                         table={table}
- *                         field={field}
- *                         onChange={newField => setField(newField)}
- *                         allowedTypes={[
- *                             fieldTypes.SINGLE_LINE_TEXT,
- *                             fieldTypes.MULTILINE_TEXT,
- *                             fieldTypes.EMAIL,
- *                             fieldTypes.URL,
- *                             fieldTypes.PHONE_NUMBER,
- *                         ]}
- *                         shouldAllowPickingNone={true}
- *                     />
- *                 </label>
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/FieldPicker
  * @component
  */

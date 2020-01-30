@@ -20,23 +20,8 @@ interface SwitchSyncedProps extends SharedSwitchProps {
 /**
  * A toggleable switch for controlling boolean values, synced with {@link GlobalConfig}. Similar to a checkbox.
  *
- * @example
- * ```js
- * import React from 'react';
- * import {SwitchSynced, useGlobalConfig} from '@airtable/blocks/ui';
+ * [[ Story id="switch--example-synced" title="Synced switch example" ]]
  *
- * function Block() {
- *     const globalConfig = useGlobalConfig();
- *     return (
- *         <div>
- *             <SwitchSynced globalConfigKey="isShowingImage" label="Show image" />
- *             {globalConfig.get("isShowingImage") && (
- *                 <img src="cat.png" />
- *             )}
- *         </div>
- *     );
- * }
- * ```
  * @docsPath UI/components/SwitchSynced
  * @groupPath UI/components/Switch
  * @component

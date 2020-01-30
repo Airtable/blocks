@@ -142,20 +142,8 @@ interface ButtonProps extends AriaProps, ButtonStyleProps, TooltipAnchorProps<HT
 /**
  * Clickable button component.
  *
- * @example
- * ```js
- * import {Button} from '@airtable/blocks/ui';
+ * [[ Story id="button--example" title="Box example" ]]
  *
- * const button = (
- *     <Button
- *         onClick={() => alert('Clicked!')}
- *         disabled={false}
- *         variant="primary"
- *     >
- *         Click here!
- *     </Button>
- * );
- * ```
  * @component
  * @docsPath UI/components/Button
  */

@@ -5,12 +5,11 @@ import Box from '../../src/ui/box';
 import CodeBlock from './code_block';
 import useResizablePanel from './use_resizable_panel';
 
-const CODE_PANEL_INITIAL_HEIGHT = 140;
-const CODE_PANEL_MIN_HEIGHT = 24;
-
 interface Props {
     code: string;
     onHeightChange: (height: number) => unknown;
+    minHeight: number;
+    initialHeight: number;
 }
 
 const handlebars = (
@@ -26,10 +25,10 @@ const handlebars = (
     </React.Fragment>
 );
 
-export default function ExampleCodePanel({code, onHeightChange}: Props) {
+export default function ExampleCodePanel({code, onHeightChange, minHeight, initialHeight}: Props) {
     const {height, isExpanded, containerProps, handleProps, overlayNode} = useResizablePanel({
-        minHeight: CODE_PANEL_MIN_HEIGHT,
-        initialHeight: CODE_PANEL_INITIAL_HEIGHT,
+        minHeight,
+        initialHeight,
     });
 
     useEffect(() => {
@@ -57,13 +56,14 @@ export default function ExampleCodePanel({code, onHeightChange}: Props) {
                 backgroundColor="lightGray1"
                 borderTop="thick"
                 overflow="hidden"
+                zIndex={999}
             >
                 <div
                     {...handleProps}
                     style={{...handleProps.style, position: 'absolute', width: '100%'}}
                 >
                     <Box
-                        height={CODE_PANEL_MIN_HEIGHT}
+                        height="20px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
@@ -73,7 +73,7 @@ export default function ExampleCodePanel({code, onHeightChange}: Props) {
                     </Box>
                 </div>
                 {isExpanded && (
-                    <Box overflowY="auto" flex="auto" padding={3}>
+                    <Box overflowY="auto" flex="auto" padding={3} paddingY="20px">
                         <CodeBlock code={formattedCode} />
                     </Box>
                 )}

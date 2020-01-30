@@ -19,7 +19,7 @@ interface FieldIconProps extends SharedIconProps {
 }
 
 /**
- * A vector icon for a field's type.
+ * A vector icon for a field’s type.
  *
  * [[ Story id="fieldicon--example" title="FieldIcon example" ]]
  *

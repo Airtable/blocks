@@ -21,28 +21,8 @@ interface SelectSyncedProps extends SharedSelectProps {
 /**
  * A wrapper around the {@link Select} component that syncs with {@link GlobalConfig}.
  *
- * @example
- * ```js
- * import {SelectSynced} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="select--synced-example" title="Synced select example" ]]
  *
- * function ColorPickerSynced() {
- *     return (
- *         <label>
- *             <div style={{marginBottom: 8, fontWeight: 500}}>Color</div>
- *             <SelectSynced
- *                 globalConfigKey='color'
- *                 options={[
- *                     {value: null, label: 'Pick a color...', disabled: true},
- *                     {value: 'red', label: 'red'},
- *                     {value: 'green', label: 'green'},
- *                     {value: 'blue', label: 'blue'},
- *                 ]}
- *             />
- *         </label>
- *     );
- * }
- * ```
  * @docsPath UI/components/SelectSynced
  * @groupPath UI/components/Select
  * @component

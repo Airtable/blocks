@@ -23,49 +23,8 @@ interface ViewPickerSyncedProps extends SharedViewPickerProps {
 /**
  * A wrapper around the {@link ViewPicker} component that syncs with {@link GlobalConfig}.
  *
- * @example
- * ```js
- * import {TablePickerSynced, ViewPickerSynced, useBase, useRecords, useWatchable} from '@airtable/blocks/ui';
- * import {viewTypes} from '@airtable/blocks/models';
- * import {globalConfig} from '@airtable/blocks';
- * import React, {Fragment} from 'react';
+ * [[ Story id="modelpickers--viewpickersynced-example" title="Synced view picker example" ]]
  *
- * function Block() {
- *     const base = useBase();
- *     const tableId = globalConfig.get('tableId');
- *     const table = base.getTableByIdIfExists(tableId);
- *     const viewId = globalConfig.get('viewId');
- *     const view = table.getViewByIdIfExists(viewId);
- *     const queryResult = view ? view.selectRecords() : null;
- *     const records = useRecords(queryResult);
- *     useWatchable(globalConfig, ['tableId', 'viewId']);
- *
- *     const summaryText = view ? `${view.name} has ${records.length} record(s).` : 'No view selected.';
- *     return (
- *         <Fragment>
- *             <p style={{marginBottom: 16}}>{summaryText}</p>
- *             <label style={{display: 'block', marginBottom: 16}}>
- *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePickerSynced
- *                     globalConfigKey='tableId'
- *                     shouldAllowPickingNone={true}
- *                 />
- *             </label>
- *             {table && (
- *                 <label>
- *                     <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
- *                     <ViewPickerSynced
- *                         table={table}
- *                         globalConfigKey='viewId'
- *                         allowedTypes={[viewTypes.GRID]}
- *                         shouldAllowPickingNone={true}
- *                     />
- *                 </label>
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/ViewPickerSynced
  * @groupPath UI/components/ViewPicker
  * @component

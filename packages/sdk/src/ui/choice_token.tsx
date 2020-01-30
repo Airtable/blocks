@@ -71,27 +71,8 @@ interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
 /**
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
- * @example
- * ```js
- * import {ChoiceToken} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="choicetoken--example" title="Choice token example" ]]
  *
- * function ChoicesForSelectField({selectField}) {
- *     const choiceNodes = selectField.options.choices.map(choice => (
- *         <ChoiceToken
- *             key={choice.id}
- *             choice={choice}
- *         />
- *     ));
- *
- *     return (
- *         <React.Fragment>
- *             Here are all of your choices:
- *             {choiceNodes}
- *         </React.Fragment>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/ChoiceToken
  */

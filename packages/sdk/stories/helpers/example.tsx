@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {injectGlobal} from 'emotion';
 import capitalize from 'lodash/capitalize';
 import Select from '../../src/ui/select';
 import SelectButtons from '../../src/ui/select_buttons';
@@ -12,6 +13,15 @@ import ExampleCodePanel from './example_code_panel';
 import categorizeStyleProps from './categorize_style_props';
 import StylePropList from './style_prop_list';
 import {SelectOptionValue} from '../../src/ui/select_and_select_buttons_helpers';
+
+injectGlobal(`
+    html {
+        box-sizing: border-box;
+    }
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+`);
 
 interface SelectOption {
     type: 'select';
@@ -101,7 +111,7 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
                 {children}
             </ExampleMain>
 
-            <Box width="220px" flex="none" borderLeft="thick" padding={3} overflow="auto">
+            <Box width="264px" flex="none" borderLeft="thick" padding={3} overflow="auto">
                 <Heading size="xsmall" marginBottom={3}>
                     Props
                 </Heading>
@@ -175,9 +185,12 @@ export default function Example<T extends OptionMap>(props: Props<T>) {
     );
 }
 
+const CODE_PANEL_INITIAL_HEIGHT = 140;
+const CODE_PANEL_MIN_HEIGHT = 24;
+
 // Split this up to improve performance of resizing.
 function ExampleMain({code, children}: {code: string | null; children: React.ReactNode}) {
-    const [codePanelHeight, setCodePanelHeight] = useState(0);
+    const [codePanelHeight, setCodePanelHeight] = useState(CODE_PANEL_INITIAL_HEIGHT);
     return (
         <Box
             flex="auto"
@@ -197,7 +210,14 @@ function ExampleMain({code, children}: {code: string | null; children: React.Rea
             >
                 {children}
             </Box>
-            {code && <ExampleCodePanel onHeightChange={setCodePanelHeight} code={code} />}
+            {code && (
+                <ExampleCodePanel
+                    onHeightChange={setCodePanelHeight}
+                    code={code}
+                    initialHeight={CODE_PANEL_INITIAL_HEIGHT}
+                    minHeight={CODE_PANEL_MIN_HEIGHT}
+                />
+            )}
         </Box>
     );
 }

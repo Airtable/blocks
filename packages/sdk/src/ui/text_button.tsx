@@ -149,28 +149,8 @@ interface TextButtonProps
 /**
  * A text button component with sizes and variants.
  *
- * @example
- * ```js
- * import {TextButton} from '@airtable/blocks/ui';
- * import React, {Fragment} from 'react';
+ * [[ Story id="textbutton--example" title="Text button example" ]]
  *
- * function TextButtonExample() {
- *     return (
- *         <Fragment>
- *             <TextButton>Default text, for single line text</TextButton>
- *             <TextButton size="small">Small text button</TextButton>
- *             <TextButton
- *                  size={{
- *                      xsmallViewport: 'small',
- *                      smallViewport: 'small',
- *                      mediumViewport: 'default',
- *                      largeViewport: 'large'
- *                  }}
- *              >Responsive text button</TextButton>
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/TextButton
  * @component
  */

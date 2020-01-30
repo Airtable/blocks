@@ -48,24 +48,8 @@ interface TooltipState {
 /**
  * A component that renders a tooltip on hover. Wraps its children.
  *
- * @example
- * ```js
- * import {Button, Tooltip} from '@airtable/blocks';
+ * [[ Story id="tooltip--example" title="Tooltip example" ]]
  *
- * function MyComponent() {
- *     return (
- *         <Tooltip
- *             content="Clicking this button will be a lot of fun!"
- *             placementX={Tooltip.placements.CENTER}
- *             placementY={Tooltip.placements.TOP}
- *         >
- *             <Button onClick={() => alert('Clicked!')}>
- *                 Click here!
- *             </Button>
- *         </Tooltip>
- *     );
- * }
- * ```
  * @docsPath UI/components/Tooltip
  * @component
  */

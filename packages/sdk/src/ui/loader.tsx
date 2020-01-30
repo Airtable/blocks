@@ -57,18 +57,8 @@ interface LoaderProps extends LoaderStyleProps {
 /**
  * A loading spinner component.
  *
- * @example
- * ```js
- * import {Loader} from '@airtable/blocks/ui';
+ * [[ Story id="loader--example" title="Loader example" ]]
  *
- * function MyDataComponent() {
- *     if (myDataHasLoaded) {
- *         return <div>Here's your data!</div>;
- *     } else {
- *         return <Loader />
- *     }
- * }
- * ```
  * @docsPath UI/components/Loader
  * @component
  */

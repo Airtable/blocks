@@ -84,16 +84,8 @@ interface IconProps extends SharedIconProps {
 /**
  * A vector icon from the Airtable icon set.
  *
- * @example
- * ```js
- * import {Icon} from '@airtable/blocks/ui';
+ * [[ Story id="icon--example" title="Icon example" height="576px"]]
  *
- * const MyIcon = (
- *     <Icon
- *         name="heart"
- *     />
- * );
- * ```
  * @component
  * @docsPath UI/components/Icon
  */
