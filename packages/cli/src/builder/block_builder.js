@@ -772,7 +772,6 @@ class BlockBuilder {
         await this._cleanupLegacyBuildDirectoryAsync();
         await this._wipeOutputDirectoriesAsync();
         await this._writeFrontendClientWrapperFileAsync();
-        await this._writeLegacyAirtableBlockModuleAsync();
     }
     async _waitForInitialBuildAsync(): Promise<void> {
         // This promise will be resolved outside of this function when the initial bundle triggered
@@ -787,6 +786,7 @@ class BlockBuilder {
             throw new Error('Watch mode is only available for DEVELOPMENT mode');
         }
         await this._cleanAndPrepareBuildAsync();
+        await this._writeLegacyAirtableBlockModuleAsync();
 
         this._startChokidarWatchAndStartBuildJobQueueConsumer({
             shouldContinueWatchingAfterReady: true,
@@ -820,6 +820,9 @@ class BlockBuilder {
         if (npmInstallResult.err) {
             return npmInstallResult;
         }
+        // Write fake stub module for legacy imports after npm install so that it isn't deleted
+        // because it isn't included in package.json
+        await this._writeLegacyAirtableBlockModuleAsync();
 
         // 3. Starting chokidar will recursively scan the entire user's block directory and queue
         //    the files for transpilation and bundling.

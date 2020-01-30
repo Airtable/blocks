@@ -4,18 +4,20 @@ const invariant = require('invariant');
 export default function(request) {
     const backendBlockSdkWrapperInstance = global['_airtableBlockSdk'];
     invariant(backendBlockSdkWrapperInstance, 'backendBlockSdkWrapperInstance');
-    let airtableBlockModule;
     try {
-        airtableBlockModule = require('airtable-block');
+        const airtableBlockModule = require('airtable-block');
+        return {
+            statusCode: 200,
+            body: [
+                backendBlockSdkWrapperInstance.constructor.name,
+                airtableBlockModule.constructor.name,
+            ],
+        };
     } catch (err) {
         console.error(err);
-        airtableBlockModule = new Error('');
+        return {
+            statusCode: 500,
+            body: [backendBlockSdkWrapperInstance.constructor.name],
+        };
     }
-    return {
-        statusCode: 200,
-        body: [
-            backendBlockSdkWrapperInstance.constructor.name,
-            airtableBlockModule.constructor.name,
-        ],
-    };
 }

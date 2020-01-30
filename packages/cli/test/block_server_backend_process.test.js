@@ -189,28 +189,4 @@ describe('Block server backend process', function() {
         assert.strictEqual(resp.requestId, req.requestId);
         assert.strictEqual(resp.statusCode, 500);
     });
-
-    it('injects backend SDK', async function() {
-        // Skip initial ready message.
-        await nextResponse();
-
-        const req: BackendProcessRequest = {
-            ...BACKEND_PROCESS_REQUEST_TEMPLATE,
-            method: 'POST',
-            path: '/check-backend-sdk',
-            body: 'foo bar baz',
-        };
-        backendProcess.send(req);
-        // eslint-disable-next-line flowtype/no-weak-types
-        const resp: BackendProcessEventResponse = (await nextResponse(): any);
-        assert.strictEqual(resp.messageType, BackendProcessResponseTypes.EVENT_RESPONSE);
-        assert.strictEqual(resp.requestId, req.requestId);
-        assert.strictEqual(resp.statusCode, 200);
-        assert.strictEqual(
-            resp.body,
-            // airtable-block module is injected by the build process, so not
-            // available in this unit test.
-            Buffer.from('["DummyBackendBlockSdkWrapper","Error"]').toString('base64'),
-        );
-    });
 });
