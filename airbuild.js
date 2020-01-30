@@ -1,8 +1,8 @@
 // @flow
 
 const airbuild = {
-    nodejsVersion: '8.15.0',
-    yarnVersion: '1.17.3',
+    nodejsVersion: '12.14.1',
+    yarnVersion: '1.21.1',
     mysqlVersion: 'n/a',
     testCommand: 'yarn airbuild && echo "RUN_ALL_TESTS PASSED"',
     environmentVariables: {
