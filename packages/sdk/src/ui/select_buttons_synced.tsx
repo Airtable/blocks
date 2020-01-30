@@ -24,24 +24,8 @@ interface SelectButtonsSyncedProps extends SharedSelectButtonsProps {
 /**
  *  A wrapper around the {@link SelectButtons} component that syncs with {@link GlobalConfig}.
  *
- * @example
- * ```js
- * import {SelectButtonsSynced} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="selectbuttons--synced-example" title="SelectButtonsSynced example" ]]
  *
- * function ChartTypePicker() {
- *     return (
- *         <SelectButtonsSynced
- *             globalConfigKey="chartType"
- *             options={[
- *                 {value: 'bar', label: 'Bar'},
- *                 {value: 'line', label: 'Line'},
- *                 {value: 'scatter', label: 'Scatter'},
- *             ]}
- *         />
- *     );
- * }
- * ```
  * @docsPath UI/components/SelectButtonsSynced
  * @groupPath UI/components/SelectButtons
  * @component

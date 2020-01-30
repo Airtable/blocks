@@ -77,6 +77,66 @@ function SelectButtonsExample() {
 
 stories.add('example', () => <SelectButtonsExample />);
 
+function SelectButtonsSyncedExample() {
+    const {selectButtonsSizes} = useTheme();
+    const options = ['Banana', 'Apple', 'Orange'].map(value => ({
+        value: value.toLowerCase(),
+        label: value,
+    }));
+    const [value, setValue] = useState(options[0].value);
+
+    return (
+        <Example
+            options={{
+                size: {
+                    type: 'selectButtons',
+                    label: 'Size',
+                    options: keys(selectButtonsSizes),
+                },
+                disabled: {
+                    type: 'switch',
+                    label: 'Disabled',
+                    defaultValue: false,
+                },
+            }}
+            styleProps={Object.keys(selectButtonsStylePropTypes)}
+            renderCodeFn={values => {
+                const props = createJsxPropsStringFromValuesMap(values);
+
+                return `
+                    import React from 'react';
+                    import {SelectButtonsSynced} from '@airtable/blocks/ui';
+
+                    const options = ${JSON.stringify(options)};
+
+                    const SelectButtonsSyncedExample = () => {
+                        return (
+                            <SelectButtonsSynced
+                                globalConfigKey="selectedOption"
+                                options={options}
+                                ${props}
+                                width="${CONTROL_WIDTH}"
+                            />
+                        )
+                    }
+                `;
+            }}
+        >
+            {values => (
+                <SelectButtons
+                    value={value}
+                    onChange={newValue => setValue(newValue as string)}
+                    options={options}
+                    {...values}
+                    width={CONTROL_WIDTH}
+                />
+            )}
+        </Example>
+    );
+}
+
+stories.add('synced example', () => <SelectButtonsSyncedExample />);
+
 stories.add('sizes', () =>
     React.createElement(() => {
         const [value, setValue] = React.useState('Banana');
