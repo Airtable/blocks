@@ -43,7 +43,7 @@ export const choiceTokenStylePropTypes = {
 const DEFAULT_CHOICE_COLOR = 'gray';
 
 /** An option from a select field. You should not create these objects from scratch, but should instead grab them from base data. */
-interface SelectOption {
+interface ChoiceOption {
     /** The ID of the select option. */
     id: string;
     /** The name of the select option. */
@@ -61,7 +61,7 @@ interface SelectOption {
  */
 interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
     /** An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data. */
-    choice: SelectOption;
+    choice: ChoiceOption;
     /** Additional styles to apply to the choice token. */
     style?: React.CSSProperties;
     /** Additional class names to apply to the choice token. */
