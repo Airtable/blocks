@@ -103,8 +103,13 @@ export interface NormalizedRecordQueryResultOpts {
  *   {@link https://support.airtable.com/hc/en-us/articles/206452848-Linked-record-fields linked record cell}.
  *   You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
  *
- * Once you've got a query result, you need to load it before you can start working with it. When
- * you're finished, unload it:
+ * Once you've got a query result, you need to load it before you can start working with it -
+ * blocks don't load record data by default. We recommend using {@link useRecords},
+ * {@link useRecordIds}, {@link useRecordById} or {@link useLoadable} to handle this.
+ *
+ * If you're not using a query result in a React component, you can manually load the data and
+ * unload it when you're finished:
+ *
  * ```js
  * async function fetchRecordsAndDoSomethingAsync(myTable) {
  *     // query for all the records in "myTable"
@@ -120,10 +125,6 @@ export interface NormalizedRecordQueryResultOpts {
  *     queryResult.unloadData();
  * }
  * ```
- *
- * If you're using a query result in a React component, you don't need to worry about this. Just
- * use {@link useRecords}, {@link useRecordIds}, {@link useRecordById} or {@link useLoadable},
- * which will handle all that for you.
  *
  * Whilst loaded, a query result will automatically keep up to date with what's in Airtable:
  * records will get added or removed, the order will change, cell values will be updated, etc.
