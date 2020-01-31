@@ -109,6 +109,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     /**
      * The record IDs of all currently selected records, or an empty array if no records are selected.
      *
+     * Not loaded by default: you must load cursor data with `useLoadable(cursor)` (recommended) or `cursor.loadDataAsync()` before use.
+     *
      * Can be watched.
      */
     get selectedRecordIds(): Array<RecordId> {
@@ -121,6 +123,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
     /**
      * Checks whether a given record is selected.
+     *
+     * Not loaded by default: you must load cursor data with `useLoadable(cursor)` (recommended) or `cursor.loadDataAsync()` before use.
      *
      * @param recordOrRecordId The record or record ID to check for.
      * @returns `true` if the given record is selected, `false` otherwise.
