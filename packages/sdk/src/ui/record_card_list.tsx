@@ -255,7 +255,7 @@ interface RecordCardListStyleProps
 
 const styleParser = compose(dimensionsSet, flexItemSet, positionSet, margin);
 
-const recordCardListStylePropTypes = {
+export const recordCardListStylePropTypes = {
     ...dimensionsSetPropTypes,
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,

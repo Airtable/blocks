@@ -60,7 +60,7 @@ interface RecordCardStyleProps extends FlexItemSetProps, PositionSetProps, Margi
 
 const styleParser = compose(flexItemSet, positionSet, margin);
 
-const recordCardStylePropTypes = {
+export const recordCardStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,

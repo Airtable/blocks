@@ -11,10 +11,10 @@ import {FieldType} from './field_type';
 import attachments from './attachments';
 import FakeForeignRecord from './fake_foreign_record';
 
-export default function FakeCellRenderer({fieldType}: {fieldType: FieldType}) {
+export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldType; value?: any}) {
     switch (fieldType) {
         case FieldType.SINGLE_LINE_TEXT:
-            return <Text>Lorem ipsum</Text>;
+            return <Text>{value || 'Lorem ipsum'}</Text>;
         case FieldType.EMAIL:
             return <Text>john.doe@example.com</Text>;
         case FieldType.URL:
@@ -34,7 +34,7 @@ export default function FakeCellRenderer({fieldType}: {fieldType: FieldType}) {
         case FieldType.CURRENCY:
             return <Text>$1,049.00</Text>;
         case FieldType.SINGLE_SELECT:
-            return <ChoiceToken choice={choiceOptions[0] as any} />;
+            return <ChoiceToken choice={value || (choiceOptions[0] as any)} />;
         case FieldType.MULTIPLE_SELECTS:
             return (
                 <React.Fragment>
@@ -60,8 +60,16 @@ export default function FakeCellRenderer({fieldType}: {fieldType: FieldType}) {
         case FieldType.MULTIPLE_RECORD_LINKS:
             return (
                 <Box>
-                    <FakeForeignRecord>Robinetworks</FakeForeignRecord>
-                    <FakeForeignRecord>Bear Paw Solutions</FakeForeignRecord>
+                    {value ? (
+                        value.map((item: string, index: number) => (
+                            <FakeForeignRecord key={index}>{item}</FakeForeignRecord>
+                        ))
+                    ) : (
+                        <React.Fragment>
+                            <FakeForeignRecord>Robinetworks</FakeForeignRecord>
+                            <FakeForeignRecord>Bear Paw Solutions</FakeForeignRecord>
+                        </React.Fragment>
+                    )}
                 </Box>
             );
         case FieldType.DATE:

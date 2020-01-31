@@ -2,7 +2,7 @@
 import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Example from './helpers/example';
-import {cellRendererStylePropTypes} from '../src/ui/cell_renderer';
+import {recordCardStylePropTypes} from '../src/ui/record_card';
 import FakeRecordCard from './helpers/fake_record_card';
 
 const stories = storiesOf('RecordCard', module);
@@ -10,7 +10,7 @@ const stories = storiesOf('RecordCard', module);
 function RecordCardExample() {
     return (
         <Example
-            styleProps={Object.keys(cellRendererStylePropTypes)}
+            styleProps={Object.keys(recordCardStylePropTypes)}
             renderCodeFn={() => {
                 return `
                 import {RecordCard, useBase, useRecords} from '@airtable/blocks/ui';
