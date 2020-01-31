@@ -8,7 +8,6 @@ const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_re
 const getApiKeyWithWarningsAsync = require('./helpers/get_api_key_with_warnings');
 const CommandNames = require('./commands/command_names');
 request.getAsync = promisify(request.get);
-request.putAsync = promisify(request.put);
 request.postAsync = promisify(request.post);
 
 import type {Result} from './types/result';
@@ -20,14 +19,6 @@ type BlockId = string;
 type BuildId = string;
 type DeployId = string;
 type ReleaseId = string;
-
-// TODO(jb): realistically, all of these endpoints should be using `bases` and not `meta`.
-// If/when we update the endpoints, we should get rid of support for `meta` here.
-const ApiTypes = Object.freeze({
-    BASES: ('bases': 'bases'),
-    META: ('meta': 'meta'),
-});
-type ApiType = $Values<typeof ApiTypes>;
 
 const INVALID_API_KEY_MESSAGE = `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
 
@@ -71,15 +62,16 @@ class ApiClient {
         this._apiKey = opts.apiKey;
     }
 
-    _getBlockBaseUrl(apiType: ApiType): string {
+    _getBlockBaseUrl(): string {
         invariant(this._blockId, 'this._blockId');
-        return this._getUrl(`/v2/${apiType}/${this._applicationId}/blocks/${this._blockId}`);
+        return this._getUrl(`/v2/bases/${this._applicationId}/blocks/${this._blockId}`);
     }
 
+    // TODO(jb): realistically, this endpoint should be using `bases` and not `meta`.
     _getAccessPolicyUrl(): string {
         invariant(this._blockInstallationId, '_blockInstallationId');
         return this._getUrl(
-            `/v2/${ApiTypes.META}/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`,
+            `/v2/meta/${this._applicationId}/blockInstallations/${this._blockInstallationId}/accessPolicy`,
         );
     }
 
@@ -129,9 +121,10 @@ class ApiClient {
         backendDeploymentPackageS3UploadInfo: S3UploadInfo | null,
     }> {
         const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/start`,
+            url: `${this._getBlockBaseUrl()}/builds/start`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: {hasBackend},
             json: true,
@@ -147,9 +140,10 @@ class ApiClient {
 
     async succeedBuildAsync(buildId: BuildId): Promise<void> {
         const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/${buildId}/succeed`,
+            url: `${this._getBlockBaseUrl()}/builds/${buildId}/succeed`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             json: true,
         };
@@ -163,9 +157,10 @@ class ApiClient {
 
     async failBuildAsync(buildId: BuildId): Promise<void> {
         const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/builds/${buildId}/fail`,
+            url: `${this._getBlockBaseUrl()}/builds/${buildId}/fail`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             json: true,
         };
@@ -179,9 +174,10 @@ class ApiClient {
 
     async createDeployAsync(buildId: BuildId): Promise<{deployId: DeployId}> {
         const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/deploys/create`,
+            url: `${this._getBlockBaseUrl()}/deploys/create`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: {buildId},
             json: true,
@@ -197,9 +193,10 @@ class ApiClient {
 
     async getDeployStatusAsync(deployId: DeployId): Promise<{status: string}> {
         const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/deploys/${deployId}/status`,
+            url: `${this._getBlockBaseUrl()}/deploys/${deployId}/status`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             json: true,
         };
@@ -217,9 +214,10 @@ class ApiClient {
         deployId: DeployId | null,
     ): Promise<{releaseId: ReleaseId}> {
         const options = {
-            url: `${this._getBlockBaseUrl(ApiTypes.BASES)}/releases/create`,
+            url: `${this._getBlockBaseUrl()}/releases/create`,
             headers: {
                 Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
             },
             body: {
                 buildId,
