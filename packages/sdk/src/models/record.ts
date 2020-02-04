@@ -102,7 +102,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      * @example
      * ```js
-     * import {useRecords, withHooks} from '@airtable/blocks/ui';
+     * import {useRecords} from '@airtable/blocks/ui';
      * const queryResult = myTable.selectRecords();
      * const records = useRecords(queryResult);
      * console.log(records[0].parentTable.id === myTable.id);
@@ -125,10 +125,9 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
     /**
-     * Gets a specific cell value in this record.
+     * Gets the cell value of the given field for this record.
      *
      * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
-     * @returns The cell value in the given field.
      * @example
      * ```js
      * const cellValue = myRecord.getCellValue(mySingleLineTextField);
@@ -194,14 +193,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         }
     }
     /**
-     * Gets a specific cell value in this record, formatted as a `string`.
+     * Gets the cell value of the given field for this record, formatted as a `string`.
      *
      * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
-     * @returns The cell value in the given field, formatted as a `string`.
      * @example
      * ```js
-     * const cellValueAsString = myRecord.getCellValueAsString(myNumberField);
-     * console.log(cellValueAsString);
+     * const stringValue = myRecord.getCellValueAsString(myNumberField);
+     * console.log(stringValue);
      * // => '42'
      * ```
      */
@@ -230,7 +228,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      *
      * @param attachmentId The ID of the attachment.
      * @param attachmentUrl The attachment's URL (which is not suitable for rendering on the client).
-     * @returns A URL that is suitable for rendering on the current client.
      * @example
      * ```js
      * import React from 'react';
@@ -244,7 +241,11 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      *     return (
      *         <div>
      *             {attachmentCellValue.map(attachmentObj => {
-     *                 const clientUrl = record.getAttachmentClientUrlFromCellValueUrl(attachmentObj.id, attachmentObj.url);
+     *                 const clientUrl =
+     *                     record.getAttachmentClientUrlFromCellValueUrl(
+     *                         attachmentObj.id,
+     *                         attachmentObj.url
+     *                     );
      *                 return (
      *                     <img key={attachmentObj.id} src={clientUrl} width={200} />
      *                 );
@@ -264,12 +265,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         );
     }
     /**
-     * Gets the color of this record in a given view.
+     * Gets the color of this record in a given view, or null if the record has no color in that
+     * view.
      *
      * Can be watched with the 'colorInView:${ViewId}' key.
      *
      * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
-     * @returns The color of this record in the given view, or null if the record has no color in that view.
      */
     getColorInView(viewOrViewIdOrViewName: View | ViewId | string): Color | null {
         const view = this._getViewMatching(viewOrViewIdOrViewName);
@@ -277,12 +278,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return this._parentRecordStore.getViewDataStore(view.id).getRecordColor(this);
     }
     /**
-     * Gets the CSS hex string for this record in a given view.
+     * Gets the CSS hex string for this record in a given view, or null if the record has no color
+     * in that view.
      *
      * Can be watched with the 'colorInView:${ViewId}' key.
      *
      * @param viewOrViewIdOrViewName The view (or view ID or view name) to use for record coloring.
-     * @returns The CSS hex color for this record in the given view, or null if the record has no color in that view.
      */
     getColorHexInView(viewOrViewIdOrViewName: View | string): string | null {
         const color = this.getColorInView(viewOrViewIdOrViewName);
@@ -292,12 +293,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return colorUtils.getHexForColor(color);
     }
     /**
-     * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result.
+     * Select records referenced in a `multipleRecordLinks` cell value. Returns a query result
+     * containing the records in the given `multipleRecordLinks` field.
      * See {@link RecordQueryResult} for more.
      *
      * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
      * @param opts Options for the query, such as sorts and fields.
-     * @returns A query result containing the records in the given `multipleRecordLinks` field.
      */
     selectLinkedRecordsFromCell(
         fieldOrFieldIdOrFieldName: Field | FieldId | string,
@@ -351,7 +352,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @example
      * ```js
      * const commentCount = myRecord.commentCount;
-     * console.log(`This record has ${commentCount} ${commentCount === 1 ? 'comment' : 'comments'}`);
+     * const isSingular = commentCount === 1;
+     * console.log(
+     *     `This record has ${commentCount} comment${isSingular ? '' : 's'}`
+     * );
      * ```
      */
     get commentCount(): number {
@@ -362,7 +366,9 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      *
      * @example
      * ```js
-     * console.log(`This record was created at ${myRecord.createdTime.toISOString()}`)
+     * console.log(`
+     *     This record was created at ${myRecord.createdTime.toISOString()}
+     * `);
      * ```
      */
     get createdTime(): Date {

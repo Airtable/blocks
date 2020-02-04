@@ -22,10 +22,10 @@ interface ExpandRecordPickerOpts {
  * If the user dismisses the modal, or another one is opened before this one
  * has been closed, it will return null.
  *
+ * Returns a promise that resolves to the record chosen by the user, or null.
+ *
  * @param records the records the user can pick from. Duplicate records will be removed.
  * @param opts An optional options object.
- * @returns A Promise that resolves to the record chosen by the user or null.
- *
  * @example
  * ```js
  * import {expandRecordPickerAsync} from '@airtable/blocks/ui';

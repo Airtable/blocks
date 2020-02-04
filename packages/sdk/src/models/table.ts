@@ -179,8 +179,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return fields;
     }
     /**
+     * Gets the field matching the given ID, or `null` if that field does not exist in this table.
+
      * @param fieldId The ID of the field.
-     * @returns The field matching the given ID, or `null` if that field does not exist in this table.
      * @example
      * ```js
      * const fieldId = 'fldxxxxxxxxxxxxxx';
@@ -203,8 +204,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
     }
     /**
+     * Gets the field matching the given ID. Throws if that field does not exist in this table. Use
+     * {@link getFieldByIdIfExists} instead if you are unsure whether a field exists with the given
+     * ID.
+     *
      * @param fieldId The ID of the field.
-     * @returns The field matching the given ID. Throws if that field does not exist in this table. Use {@link getFieldByIdIfExists} instead if you are unsure whether a field exists with the given ID.
      * @example
      * ```js
      * const fieldId = 'fldxxxxxxxxxxxxxx';
@@ -221,8 +225,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return field;
     }
     /**
+     * Gets the field matching the given name, or `null` if no field exists with that name in this
+     * table.
+     *
      * @param fieldName The name of the field you're looking for.
-     * @returns The field matching the given name, or `null` if no field exists with that name in this table.
      * @example
      * ```js
      * const field = myTable.getFieldByNameIfExists('Name');
@@ -242,8 +248,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return null;
     }
     /**
+     * Gets the field matching the given name. Throws if no field exists with that name in this
+     * table. Use {@link getFieldByNameIfExists} instead if you are unsure whether a field exists
+     * with the given name.
+     *
      * @param fieldName The name of the field you're looking for.
-     * @returns The field matching the given name. Throws if no field exists with that name in this table. Use {@link getFieldByNameIfExists} instead if you are unsure whether a field exists with the given name.
      * @example
      * ```js
      * const field = myTable.getFieldByName('Name');
@@ -277,8 +286,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return views;
     }
     /**
+     * Gets the view matching the given ID, or `null` if that view does not exist in this table.
+     *
      * @param viewId The ID of the view.
-     * @returns The view matching the given ID, or `null` if that view does not exist in this table.
      * @example
      * ```js
      * const viewId = 'viwxxxxxxxxxxxxxx';
@@ -306,8 +316,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         }
     }
     /**
+     * Gets the view matching the given ID. Throws if that view does not exist in this table. Use
+     * {@link getViewByIdIfExists} instead if you are unsure whether a view exists with the given
+     * ID.
+     *
      * @param viewId The ID of the view.
-     * @returns The view matching the given ID. Throws if that view does not exist in this table. Use {@link getViewByIdIfExists} instead if you are unsure whether a view exists with the given ID.
      * @example
      * ```js
      * const viewId = 'viwxxxxxxxxxxxxxx';
@@ -324,8 +337,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return view;
     }
     /**
+     * Gets the view matching the given name, or `null` if no view exists with that name in this
+     * table.
+     *
      * @param viewName The name of the view you're looking for.
-     * @returns The view matching the given name, or `null` if no view exists with that name in this table.
      * @example
      * ```js
      * const view = myTable.getViewByNameIfExists('Name');
@@ -345,8 +360,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return null;
     }
     /**
+     * Gets the view matching the given name. Throws if no view exists with that name in this table.
+     * Use {@link getViewByNameIfExists} instead if you are unsure whether a view exists with the
+     * given name.
+     *
      * @param viewName The name of the view you're looking for.
-     * @returns The view matching the given name. Throws if no view exists with that name in this table. Use {@link getViewByNameIfExists} instead if you are unsure whether a view exists with the given name.
      * @example
      * ```js
      * const view = myTable.getViewByName('Name');
@@ -365,7 +383,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Select records from the table. Returns a query result. See {@link RecordQueryResult} for more.
      *
      * @param opts Options for the query, such as sorts and fields.
-     * @returns A query result.
      * @example
      * ```js
      * import {UI} from '@airtable/blocks';
@@ -399,12 +416,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     }
 
     /**
-     * Returns the first view in the table where the type is one of `allowedViewTypes`.
+     * Returns the first view in the table where the type is one of `allowedViewTypes`, or `null` if
+     * no such view exists in the table.
      *
      * @param allowedViewTypes An array of view types or a single view type to match against.
-     * @param preferredViewOrViewId If a view or view ID is supplied and that view exists & has the correct type, that view
-     * will be returned before checking the other views in the table.
-     * @returns The first view where the type is one of `allowedViewTypes` or `null` if no such view exists in the table.
+     * @param preferredViewOrViewId If a view or view ID is supplied and that view exists & has the
+     * correct type, that view will be returned before checking the other views in the table.
      * @example
      * ```js
      * import {viewTypes} from '@airtable/blocks/models';
@@ -469,16 +486,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * @param recordOrRecordId the record to update
      * @param fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
-     * @returns A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
      * @example
      * ```js
      * function updateRecord(record, recordFields) {
      *     if (table.hasPermissionToUpdateRecord(record, recordFields)) {
      *         table.updateRecordAsync(record, recordFields);
      *     }
-     *     // The updated values will now show in your block (eg in `table.selectRecords()` result)
-     *     // but are still being saved to Airtable servers (eg. other users may not be able to see
-     *     // them yet.)
+     *     // The updated values will now show in your block (eg in
+     *     // `table.selectRecords()` result) but are still being saved to Airtable
+     *     // servers (e.g. other users may not be able to see them yet).
      * }
      *
      * async function updateRecordAsync(record, recordFields) {
@@ -499,8 +515,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     [publicationDateField.id]: '2020-02-02',
      * });
      *
-     * // Cell values should generally have format matching the output of record.getCellValue() for
-     * // the field being updated
+     * // Cell values should generally have format matching the output of
+     * // record.getCellValue() for the field being updated
      * updateRecord(record1, {
      *     'Category (single select)': {name: 'Recipe'},
      *     'Tags (multiple select)': [{name: 'Desserts'}, {id: 'someChoiceId'}],
@@ -529,45 +545,53 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link updateRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can update the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @param recordOrRecordId the record to update
      * @param fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
      * // Check if user can update specific fields for a specific record.
-     * const updateRecordCheckResult = table.checkPermissionsForUpdateRecord(record, {
-     *     'Post Title': 'How to make: orange-mango pound cake',
-     *     'Publication Date': '2020-01-01',
-     * });
+     * const updateRecordCheckResult =
+     *     table.checkPermissionsForUpdateRecord(record, {
+     *         'Post Title': 'How to make: orange-mango pound cake',
+     *         'Publication Date': '2020-01-01',
+     *     });
      * if (!updateRecordCheckResult.hasPermission) {
      *     alert(updateRecordCheckResult.reasonDisplayString);
      * }
      *
      * // Like updateRecordAsync, you can use either field names or field IDs.
-     * const updateRecordCheckResultWithFieldIds = table.checkPermissionsForUpdateRecord(record, {
-     *     [postTitleField.id]: 'Cake decorating tips & tricks',
-     *     [publicationDateField.id]: '2020-02-02',
-     * });
+     * const updateRecordCheckResultWithFieldIds =
+     *     table.checkPermissionsForUpdateRecord(record, {
+     *         [postTitleField.id]: 'Cake decorating tips & tricks',
+     *         [publicationDateField.id]: '2020-02-02',
+     *     });
      *
-     * // Check if user could update a given record, when you don't know the specific fields that
-     * // will be updated yet. (for example, to check whether you should allow a user to select
-     * // a certain record to update)
-     * const updateUnknownFieldsCheckResult = table.checkPermissionsForUpdateRecord(record);
+     * // Check if user could update a given record, when you don't know the
+     * // specific fields that will be updated yet (e.g. to check whether you should
+     * // allow a user to select a certain record to update).
+     * const updateUnknownFieldsCheckResult =
+     *     table.checkPermissionsForUpdateRecord(record);
      *
-     * // Check if user could update specific fields, when you don't know the specific record that
-     * // will be updated yet. (for example, if the field is selected by the user and you want to
-     * // check if your block can write to it)
-     * const updateUnknownRecordCheckResult = table.checkPermissionsForUpdateRecord(undefined, {
-     *     'My field name': 'updated value',
-     *     // You can use undefined if you know you're going to update a field, but don't know
-     *     // the new cell value yet.
-     *     'Another field name': undefined,
-     * });
+     * // Check if user could update specific fields, when you don't know the
+     * // specific record that will be updated yet. (for example, if the field is
+     * // selected by the user and you want to check if your block can write to it).
+     * const updateUnknownRecordCheckResult =
+     *     table.checkPermissionsForUpdateRecord(undefined, {
+     *         'My field name': 'updated value',
+     *         // You can use undefined if you know you're going to update a field,
+     *         // but don't know the new cell value yet.
+     *         'Another field name': undefined,
+     *     });
      *
-     * // Check if user could perform updates within the table, without knowing the specific record
-     * // or fields that will be updated yet. (for example, to render your block in "read only"
-     * // mode)
-     * const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateRecord();
+     * // Check if user could perform updates within the table, without knowing the
+     * // specific record or fields that will be updated yet (e.g., to render your
+     * // block in "read only" mode).
+     * const updateUnknownRecordAndFieldsCheckResult =
+     *     table.checkPermissionsForUpdateRecord();
      * ```
      */
     checkPermissionsForUpdateRecord(
@@ -596,7 +620,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * @param recordOrRecordId the record to update
      * @param fields cell values to update in that record, specified as object mapping `FieldId` or field name to value for that field.
-     * @returns boolean Whether the user can update the specified record.
      * @example
      * ```js
      * // Check if user can update specific fields for a specific record.
@@ -609,29 +632,31 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * }
      *
      * // Like updateRecordAsync, you can use either field names or field IDs.
-     * const canUpdateRecordWithFieldIds = table.hasPermissionToUpdateRecord(record, {
-     *     [postTitleField.id]: 'Cake decorating tips & tricks',
-     *     [publicationDateField.id]: '2020-02-02',
-     * });
+     * const canUpdateRecordWithFieldIds =
+     *     table.hasPermissionToUpdateRecord(record, {
+     *         [postTitleField.id]: 'Cake decorating tips & tricks',
+     *         [publicationDateField.id]: '2020-02-02',
+     *     });
      *
-     * // Check if user could update a given record, when you don't know the specific fields that
-     * // will be updated yet. (for example, to check whether you should allow a user to select
-     * // a certain record to update)
+     * // Check if user could update a given record, when you don't know the
+     * // specific fields that will be updated yet (e.g. to check whether you should
+     * // allow a user to select a certain record to update).
      * const canUpdateUnknownFields = table.hasPermissionToUpdateRecord(record);
      *
-     * // Check if user could update specific fields, when you don't know the specific record that
-     * // will be updated yet. (for example, if the field is selected by the user and you want to
-     * // check if your block can write to it)
-     * const canUpdateUnknownRecord = table.hasPermissionToUpdateRecord(undefined, {
-     *     'My field name': 'updated value',
-     *     // You can use undefined if you know you're going to update a field, but don't know
-     *     // the new cell value yet.
-     *     'Another field name': undefined,
-     * });
+     * // Check if user could update specific fields, when you don't know the
+     * // specific record that will be updated yet (e.g. if the field is selected
+     * // by the user and you want to check if your block can write to it).
+     * const canUpdateUnknownRecord =
+     *     table.hasPermissionToUpdateRecord(undefined, {
+     *         'My field name': 'updated value',
+     *         // You can use undefined if you know you're going to update a field,
+     *         // but don't know the new cell value yet.
+     *         'Another field name': undefined,
+     *     });
      *
-     * // Check if user could perform updates within the table, without knowing the specific record
-     * // or fields that will be updated yet. (for example, to render your block in "read only"
-     * // mode)
+     * // Check if user could perform updates within the table, without knowing the
+     * // specific record or fields that will be updated yet. (for example, to
+     * // render your block in "read only" mode)
      * const canUpdateUnknownRecordAndFields = table.hasPermissionToUpdateRecord();
      * ```
      */
@@ -657,7 +682,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * before the promise resolves.
      *
      * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
-     * @returns A promise that will resolve once the updates are persisted to Airtable.
      * @example
      * ```js
      * const recordsToUpdate = [
@@ -684,13 +708,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *             [publicationDateField.id]: '2020-02-02',
      *         },
      *     },
-     *     // Cell values should generally have format matching the output of record.getCellValue()
-     *     // for the field being updated
+     *     // Cell values should generally have format matching the output of
+     *     // record.getCellValue() for the field being updated
      *     {
      *         id: record4.id,
      *         fields: {
      *             'Category (single select)': {name: 'Recipe'},
-     *             'Tags (multiple select)': [{name: 'Desserts'}, {id: 'someChoiceId'}],
+     *             'Tags (multiple select)': [{name: 'Desserts'}, {id: 'choiceId'}],
      *             'Images (attachment)': [{url: 'http://mywebsite.com/cake.png'}],
      *             'Related posts (linked records)': [{id: 'someRecordId'}],
      *         },
@@ -702,8 +726,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *         table.updateRecordsAsync(recordsToUpdate);
      *     }
      *     // The records are now updated within your block (eg will be reflected in
-     *     // `table.selectRecords()`) but are still being saved to Airtable servers (eg. they
-     *     // may not be updated for other users yet)
+     *     // `table.selectRecords()`) but are still being saved to Airtable servers
+     *     // (e.g. they may not be updated for other users yet).
      * }
      *
      * async function updateRecordsAsync() {
@@ -740,8 +764,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link updateRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can update the specified records,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
      * const recordsToUpdate = [
@@ -762,28 +789,32 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *         },
      *     },
      *     {
-     *         // Validating an update to a specific record, not knowing what fields will be updated
+     *         // Validating an update to a specific record, not knowing what
+     *         // fields will be updated
      *         id: record3.id,
      *     },
      *     {
-     *         // Validating an update to specific cell values, not knowing what record will be updated
+     *         // Validating an update to specific cell values, not knowing what
+     *         // record will be updated
      *         fields: {
      *             'My field name': 'updated value for unknown record',
-     *             // You can use undefined if you know you're going to update a field, but don't know
-     *             // the new cell value yet.
+     *             // You can use undefined if you know you're going to update a
+     *             // field, but don't know the new cell value yet.
      *             'Another field name': undefined,
      *         },
      *     },
      * ];
      *
-     * const updateRecordsCheckResult = table.checkPermissionsForUpdateRecords(recordsToUpdate);
+     * const updateRecordsCheckResult =
+     *     table.checkPermissionsForUpdateRecords(recordsToUpdate);
      * if (!updateRecordsCheckResult.hasPermission) {
      *     alert(updateRecordsCheckResult.reasonDisplayString);
      * }
      *
      * // Check if user could potentially update records.
      * // Equivalent to table.checkPermissionsForUpdateRecord()
-     * const updateUnknownRecordAndFieldsCheckResult = table.checkPermissionsForUpdateRecords();
+     * const updateUnknownRecordAndFieldsCheckResult =
+     *     table.checkPermissionsForUpdateRecords();
      * ```
      */
     checkPermissionsForUpdateRecords(
@@ -814,7 +845,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The more information provided, the more accurate the permissions check will be.
      *
      * @param records Array of objects containing recordId and fields/cellValues to update for that record (specified as an object mapping `FieldId` or field name to cell value)
-     * @returns boolean Whether the current user can update the specified records.
      * @example
      * ```js
      * const recordsToUpdate = [
@@ -835,15 +865,17 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *         },
      *     },
      *     {
-     *         // Validating an update to a specific record, not knowing what fields will be updated
+     *         // Validating an update to a specific record, not knowing what
+     *         // fields will be updated
      *         id: record3.id,
      *     },
      *     {
-     *         // Validating an update to specific cell values, not knowing what record will be updated
+     *         // Validating an update to specific cell values, not knowing what
+     *         // record will be updated
      *         fields: {
      *             'My field name': 'updated value for unknown record',
-     *             // You can use undefined if you know you're going to update a field, but don't know
-     *             // the new cell value yet.
+     *             // You can use undefined if you know you're going to update a
+     *             // field, but don't know the new cell value yet.
      *             'Another field name': undefined,
      *         },
      *     },
@@ -856,7 +888,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * // Check if user could potentially update records.
      * // Equivalent to table.hasPermissionToUpdateRecord()
-     * const canUpdateUnknownRecordsAndFields = table.hasPermissionToUpdateRecords();
+     * const canUpdateUnknownRecordsAndFields =
+     *     table.hasPermissionToUpdateRecords();
      * ```
      */
     hasPermissionToUpdateRecords(
@@ -878,16 +911,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * before the promise resolves.
      *
      * @param recordOrRecordId the record to be deleted
-     * @returns A promise that will resolve once the delete is persisted to Airtable.
      * @example
      * ```js
      * function deleteRecord(record) {
      *     if (table.hasPermissionToDeleteRecord(record)) {
      *         table.deleteRecordAsync(record);
      *     }
-     *     // The record is now deleted within your block (eg will not be returned in
-     *     // `table.selectRecords`) but it is still being saved to Airtable servers (eg. it may
-     *     // not look deleted to other users yet)
+     *     // The record is now deleted within your block (eg will not be returned
+     *     // in `table.selectRecords`) but it is still being saved to Airtable
+     *     // servers (e.g. it may not look deleted to other users yet).
      * }
      *
      * async function deleteRecordAsync(record) {
@@ -908,20 +940,25 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts optional input, in the same format as {@link deleteRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can delete the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @param recordOrRecordId the record to be deleted
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
      * // Check if user can delete a specific record
-     * const deleteRecordCheckResult = table.checkPermissionsForDeleteRecord(record);
+     * const deleteRecordCheckResult =
+     *     table.checkPermissionsForDeleteRecord(record);
      * if (!deleteRecordCheckResult.hasPermission) {
      *     alert(deleteRecordCheckResult.reasonDisplayString);
      * }
      *
      * // Check if user could potentially delete a record.
-     * // Use when you don't know the specific record you want to delete yet (for example, to show
-     * // or hide UI controls that let you select a record to delete.)
-     * const deleteUnknownRecordCheckResult = table.checkPermissionsForDeleteRecord();
+     * // Use when you don't know the specific record you want to delete yet (for
+     * // example, to show/hide UI controls that let you select a record to delete).
+     * const deleteUnknownRecordCheckResult =
+     *     table.checkPermissionsForDeleteRecord();
      * ```
      */
     checkPermissionsForDeleteRecord(recordOrRecordId?: Record | RecordId): PermissionCheckResult {
@@ -938,7 +975,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The more information provided, the more accurate the permissions check will be.
      *
      * @param recordOrRecordId the record to be deleted
-     * @returns boolean Whether the current user can delete the specified record.
      * @example
      * ```js
      * // Check if user can delete a specific record
@@ -948,8 +984,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * }
      *
      * // Check if user could potentially delete a record.
-     * // Use when you don't know the specific record you want to delete yet (for example, to show
-     * // or hide UI controls that let you select a record to delete.)
+     * // Use when you don't know the specific record you want to delete yet (for
+     * // example, to show/hide UI controls that let you select a record to delete).
      * const canDeleteUnknownRecord = table.hasPermissionToDeleteRecord();
      * ```
      */
@@ -971,7 +1007,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * before the promise resolves.
      *
      * @param recordsOrRecordIds Array of Records and RecordIds
-     * @returns A promise that will resolve once the deletes are persisted to Airtable.
      * @example
      * ```js
      *
@@ -979,9 +1014,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToDeleteRecords(records)) {
      *         table.deleteRecordsAsync(records);
      *     }
-     *     // The records are now deleted within your block (eg will not be returned in
-     *     // `table.selectRecords()`) but are still being saved to Airtable servers (eg. they
-     *     // may not look deleted to other users yet)
+     *     // The records are now deleted within your block (eg will not be
+     *     // returned in `table.selectRecords()`) but are still being saved to
+     *     // Airtable servers (e.g. they may not look deleted to other users yet).
      * }
      *
      * async function deleteRecordsAsync(records) {
@@ -1010,21 +1045,26 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts optional input, in the same format as {@link deleteRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can delete the specified records,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @param recordsOrRecordIds the records to be deleted
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
      * // Check if user can delete specific records
-     * const deleteRecordsCheckResult = table.checkPermissionsForDeleteRecords([record1, record2]);
+     * const deleteRecordsCheckResult =
+     *     table.checkPermissionsForDeleteRecords([record1, record2]);
      * if (!deleteRecordsCheckResult.hasPermission) {
      *     alert(deleteRecordsCheckResult.reasonDisplayString);
      * }
      *
      * // Check if user could potentially delete records.
-     * // Use when you don't know the specific records you want to delete yet (for example, to show
-     * // or hide UI controls that let you select records to delete.)
+     * // Use when you don't know the specific records you want to delete yet (for
+     * // example, to show/hide UI controls that let you select records to delete).
      * // Equivalent to table.hasPermissionToDeleteRecord()
-     * const deleteUnknownRecordsCheckResult = table.checkPermissionsForDeleteRecords();
+     * const deleteUnknownRecordsCheckResult =
+     *     table.checkPermissionsForDeleteRecords();
      * ```
      */
     checkPermissionsForDeleteRecords(
@@ -1049,18 +1089,18 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The more information provided, the more accurate the permissions check will be.
      *
      * @param recordsOrRecordIds the records to be deleted
-     * @returns boolean Whether the current user can delete the specified records.
      * @example
      * ```js
      * // Check if user can delete specific records
-     * const canDeleteRecords = table.hasPermissionToDeleteRecords([record1, record2]);
+     * const canDeleteRecords =
+     *     table.hasPermissionToDeleteRecords([record1, record2]);
      * if (!canDeleteRecords) {
      *     alert('not allowed!');
      * }
      *
      * // Check if user could potentially delete records.
-     * // Use when you don't know the specific records you want to delete yet (for example, to show
-     * // or hide UI controls that let you select records to delete.)
+     * // Use when you don't know the specific records you want to delete yet (for
+     * // example, to show/hide UI controls that let you select records to delete).
      * // Equivalent to table.hasPermissionToDeleteRecord()
      * const canDeleteUnknownRecords = table.hasPermissionToDeleteRecords();
      * ```
@@ -1080,16 +1120,18 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
+     * The returned promise will resolve to the RecordId of the new record once it is persisted.
+     *
      * @param fields object mapping `FieldId` or field name to value for that field.
-     * @returns A promise that will resolve to the RecordId of the new record, once the new record is persisted to Airtable.
      * @example
      * ```js
      * function createNewRecord(recordFields) {
      *     if (table.hasPermissionToCreateRecord(recordFields)) {
      *         table.createRecordAsync(recordFields);
      *     }
-     *     // You can now access the new record in your block (eg `table.selectRecords()`) but it is
-     *     // still being saved to Airtable servers (eg. other users may not be able to see it yet.)
+     *     // You can now access the new record in your block (eg
+     *     // `table.selectRecords()`) but it is still being saved to Airtable
+     *     // servers (e.g. other users may not be able to see it yet).
      * }
      *
      * async function createNewRecordAsync(recordFields) {
@@ -1110,8 +1152,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     [budgetField.id]: 200,
      * });
      *
-     * // Cell values should generally have format matching the output of record.getCellValue() for
-     * // the field being updated
+     * // Cell values should generally have format matching the output of
+     * // record.getCellValue() for the field being updated
      * createNewRecord({
      *     'Project Name': 'Cat video 2'
      *     'Category (single select)': {name: 'Video'},
@@ -1132,12 +1174,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link createRecordAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can create the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @param fields object mapping `FieldId` or field name to value for that field.
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create the specified record, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
-     * // Check if user can create a specific record, when you already know what fields/cell values
-     * // will be set for the record.
+     * // Check if user can create a specific record, when you already know what
+     * // fields/cell values will be set for the record.
      * const createRecordCheckResult = table.checkPermissionsForCreateRecord({
      *     'Project Name': 'Advertising campaign',
      *     'Budget': 100,
@@ -1147,15 +1192,16 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * }
      *
      * // Like createRecordAsync, you can use either field names or field IDs.
-     * const createRecordCheckResultWithFieldIds = table.checkPermissionsForCreateRecord({
+     * const checkResultWithFieldIds = table.checkPermissionsForCreateRecord({
      *     [projectNameField.id]: 'Cat video',
      *     [budgetField.id]: 200,
      * });
      *
      * // Check if user could potentially create a record.
-     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
-     * // UI controls that let you start creating a record.)
-     * const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecord();
+     * // Use when you don't know the specific fields/cell values yet (for example,
+     * // to show or hide UI controls that let you start creating a record.)
+     * const createUnknownRecordCheckResult =
+     *     table.checkPermissionsForCreateRecord();
      * ```
      */
     checkPermissionsForCreateRecord(
@@ -1176,11 +1222,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The more information provided, the more accurate the permissions check will be.
      *
      * @param fields object mapping `FieldId` or field name to value for that field.
-     * @returns boolean Whether the current user can create the specified record.
      * @example
      * ```js
-     * // Check if user can create a specific record, when you already know what fields/cell values
-     * // will be set for the record.
+     * // Check if user can create a specific record, when you already know what
+     * // fields/cell values will be set for the record.
      * const canCreateRecord = table.hasPermissionToCreateRecord({
      *     'Project Name': 'Advertising campaign',
      *     'Budget': 100,
@@ -1196,8 +1241,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * });
      *
      * // Check if user could potentially create a record.
-     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
-     * // UI controls that let you start creating a record.)
+     * // Use when you don't know the specific fields/cell values yet (for example,
+     * // to show or hide UI controls that let you start creating a record.)
      * const canCreateUnknownRecord = table.hasPermissionToCreateRecord();
      * ```
      */
@@ -1219,8 +1264,10 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Updates are applied optimistically locally, so your changes will be reflected in your block
      * before the promise resolves.
      *
+     * The returned promise will resolve to an array of RecordIds of the new records once the new
+     * records are persisted.
+     *
      * @param records Array of objects with a `fields` key mapping `FieldId` or field name to value for that field.
-     * @returns A promise that will resolve to array of RecordIds of the new records, once the new records are persisted to Airtable.
      * @example
      * ```js
      * const recordDefs = [
@@ -1241,13 +1288,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     {
      *          fields: {},
      *     },
-     *     // Cell values should generally have format matching the output of record.getCellValue()
-     *     // for the field being updated
+     *     // Cell values should generally have format matching the output of
+     *     // record.getCellValue() for the field being updated
      *     {
      *          fields: {
      *              'Project Name': 'Cat video 2'
      *              'Category (single select)': {name: 'Video'},
-     *              'Tags (multiple select)': [{name: 'Cats'}, {id: 'someChoiceId'}],
+     *              'Tags (multiple select)': [{name: 'Cats'}, {id: 'choiceId'}],
      *              'Assets (attachment)': [{url: 'http://mywebsite.com/cats.mp4'}],
      *              'Related projects (linked records)': [{id: 'someRecordId'}],
      *          },
@@ -1258,9 +1305,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *     if (table.hasPermissionToCreateRecords(recordDefs)) {
      *         table.createRecordsAsync(recordDefs);
      *     }
-     *     // You can now access the new records in your block (eg `table.selectRecords()`) but they
-     *     // are still being saved to Airtable servers (eg. other users may not be able to see them
-     *     // yet.)
+     *     // You can now access the new records in your block (e.g.
+     *     // `table.selectRecords()`) but they are still being saved to Airtable
+     *     // servers (e.g. other users may not be able to see them yet.)
      * }
      *
      * async function createNewRecordsAsync() {
@@ -1315,12 +1362,15 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Accepts partial input, in the same format as {@link createRecordsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can create the specified records,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @param records Array of objects mapping `FieldId` or field name to value for that field.
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create the specified records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      * @example
      * ```js
-     * // Check if user can create specific records, when you already know what fields/cell values
-     * // will be set for the records.
+     * // Check if user can create specific records, when you already know what
+     * // fields/cell values will be set for the records.
      * const createRecordsCheckResult = table.checkPermissionsForCreateRecords([
      *     // Like createRecordsAsync, fields can be specified by name or ID
      *     {
@@ -1342,10 +1392,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * }
      *
      * // Check if user could potentially create records.
-     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
-     * // UI controls that let you start creating records.)
+     * // Use when you don't know the specific fields/cell values yet (for example,
+     * // to show or hide UI controls that let you start creating records.)
      * // Equivalent to table.checkPermissionsForCreateRecord()
-     * const createUnknownRecordCheckResult = table.checkPermissionsForCreateRecords();
+     * const createUnknownRecordCheckResult =
+     *     table.checkPermissionsForCreateRecords();
      * ```
      */
     checkPermissionsForCreateRecords(
@@ -1375,7 +1426,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * The more information provided, the more accurate the permissions check will be.
      *
      * @param records Array of objects mapping `FieldId` or field name to value for that field.
-     * @returns boolean Whether the current user can create the specified records.
      * @example
      * ```js
      * // Check if user can create specific records, when you already know what fields/cell values
@@ -1401,8 +1451,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * }
      *
      * // Check if user could potentially create records.
-     * // Use when you don't know the specific fields/cell values yet (for example, to show or hide
-     * // UI controls that let you start creating records.)
+     * // Use when you don't know the specific fields/cell values yet (for example,
+     * // to show or hide UI controls that let you start creating records).
      * // Equivalent to table.hasPermissionToCreateRecord()
      * const canCreateUnknownRecords = table.hasPermissionToCreateRecords();
      * ```

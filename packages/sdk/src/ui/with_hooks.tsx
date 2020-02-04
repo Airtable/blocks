@@ -3,6 +3,7 @@ import * as React from 'react';
 import {spawnError} from '../error_utils';
 
 /**
+ * @internal
  * A higher-order component for working with React hooks in class-based components. It takes a React
  * component and wraps it, injecting values from hooks as additional props. `withHooks` uses
  * {@link https://reactjs.org/docs/forwarding-refs.html|`React.forwardRef`} to make sure that you can
@@ -13,8 +14,6 @@ import {spawnError} from '../error_utils';
  *
  * @param Component The React component you want to inject hooks into.
  * @param getAdditionalPropsToInject A function that takes props and returns more props to be injected into the wrapped component.
- * @returns The wrapped React component.
- *
  * @example
  * ```js
  * import React from 'react';
@@ -91,7 +90,6 @@ import {spawnError} from '../error_utils';
  * // class component. Instead, you need to wrap it in React.ElementRef:
  * const ref: React.ElementRef<typeof WrappedRecordList> = getTheRefSomehow();
  * ```
- * @internal
  */
 export default function withHooks<InjectedProps, Props extends InjectedProps, Instance>(
     Component:

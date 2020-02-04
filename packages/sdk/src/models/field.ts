@@ -203,8 +203,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         });
     }
     /**
+     * Checks if the given aggregator is available for this field.
+     *
      * @param aggregator The aggregator object or aggregator key.
-     * @returns `true` if the given aggregator is available for this field, `false` otherwise.
      * @example
      * ```js
      * import {aggregators} from '@airtable/blocks/models';
@@ -215,7 +216,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * // => true
      *
      * // Using an aggregator key
-     * console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
+     * console.log(myTextField.isAggregatorAvailable('totalAttachmentSize'));
      * // => false
      * ```
      */
@@ -230,11 +231,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return availableAggregatorKeys.some(key => key === aggregatorKey);
     }
     /**
-     * Given a string, will attempt to parse it and return a valid cell value for
-     * the field's current config.
+     * Attempt to parse a given string and return a valid cell value for the field's current config.
+     * Returns `null` if unable to parse the given string.
      *
      * @param string The string to parse.
-     * @returns The parsed cell value, or `null` if unable to parse the given string.
      * @example
      * ```js
      * const inputString = '42';

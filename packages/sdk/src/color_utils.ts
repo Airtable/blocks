@@ -23,7 +23,6 @@ interface ColorUtils {
      * Given a {@link Color}, return the hex color value for that color, or null if the value isn't a {@link Color}
      *
      * @param colorString
-     * @returns the color hex string or null
      * @example
      * ```js
      * import {colorUtils, colors} from '@airtable/blocks/ui';
@@ -43,7 +42,6 @@ interface ColorUtils {
      * Given a {@link Color}, return an {@link RGB} object representing it, or null if the value isn't a {@link Color}
      *
      * @param colorString
-     * @returns the color object or null
      * @example
      * ```js
      * import {colorUtils, colors} from '@airtable/blocks/ui';
@@ -63,7 +61,6 @@ interface ColorUtils {
      * Given a {@link Color}, returns true or false to indicate whether that color should have light text on top of it when used as a background color.
      *
      * @param colorString
-     * @returns boolean
      * @example
      * ```js
      * import {colorUtils, colors} from '@airtable/blocks/ui';

@@ -108,7 +108,10 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * Checks whether the current user has permission to update any records in the current base. For
      * more granular permission checks, see {@link Table.checkPermissionsForUpdateRecords}.
      *
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can update records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * Returns `{hasPermission: true}` if the current user can update records,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may
+     * be used to display an error message to the user.
+     *
      * @example
      * ```js
      * import {session} from '@airtable/blocks';
@@ -136,7 +139,10 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * Checks whether the current user has permission to create any records in the current base. For
      * more granular permission checks, see {@link Table.checkPermissionsForCreateRecords}.
      *
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can create records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * Returns `{hasPermission: true}` if the current user can create records,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @example
      * ```js
      * import {session} from '@airtable/blocks';
@@ -164,7 +170,10 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
      * Checks whether the current user has permission to delete any records in the current base. For
      * more granular permission checks, see {@link Table.checkPermissionsForDeleteRecords}.
      *
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can delete records, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * Returns `{hasPermission: true}` if the current user can delete records,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
      * @example
      * ```js
      * import {session} from '@airtable/blocks';

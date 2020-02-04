@@ -412,7 +412,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * filtered out. Throws if data is not loaded yet. Watch using `'recordIds'`.
      *
      * @param recordId the ID of the {@link Record} you want
-     * @returns the record
      */
     getRecordByIdIfExists(recordId: RecordId): Record | null {
         const record = this._recordStore.getRecordByIdIfExists(recordId);
@@ -428,7 +427,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * filtered out. Throws if data is not loaded yet. Watch using `'recordIds'`.
      *
      * @param recordId the ID of the {@link Record} you want
-     * @returns the record
      */
     getRecordById(recordId: RecordId): Record {
         const record = this.getRecordByIdIfExists(recordId);
@@ -452,7 +450,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * false if the record has been deleted or is filtered out.
      *
      * @param recordOrRecordId the record or record id to check the presence of
-     * @returns whether the record exists in this query result
      */
     hasRecord(recordOrRecordId: RecordId | Record): boolean {
         const recordId =
@@ -461,11 +458,11 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     /**
-     * Get the color of a specific record in the query result. Throws if the record isn't in the
-     * RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
+     * Get the {@link Color} of a specific record in the query result. Returns null if the record
+     * has no color in this query result. Throws if the record isn't in the RecordQueryResult. Watch
+     * with the `'recordColors'` and `'recordIds` keys.
      *
      * @param recordOrRecordId the record or record ID you want the color of.
-     * @returns a {@link Color}, or null if the record has no color in this query result.
      */
     getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
         const record = this._getRecord(recordOrRecordId);
@@ -518,10 +515,11 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * cause the data to be fetched. Once the data is available, the `callback`
      * will be called.
      *
+     * Returns the array of keys that were watched.
+     *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
      * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
      */
     watch(
         keys: WatchableRecordQueryResultKey | ReadonlyArray<WatchableRecordQueryResultKey>,
@@ -545,10 +543,11 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Unwatching a key that needs to load data asynchronously will automatically
      * cause the data to be unloaded.
      *
+     * Returns the array of keys that were unwatched
+     *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
      * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
      */
     unwatch(
         keys: WatchableRecordQueryResultKey | ReadonlyArray<WatchableRecordQueryResultKey>,

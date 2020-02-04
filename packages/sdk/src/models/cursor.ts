@@ -36,7 +36,7 @@ interface CursorData {
 
 // NOTE: cursor is an AbstractModel because it includes loadable data.
 /**
- * Contains information about the state of the user's current interactions in Airtable
+ * Model class containing information about the state of the user's current interactions in Airtable.
  *
  * @example
  * ```js
@@ -109,7 +109,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     /**
      * The record IDs of all currently selected records, or an empty array if no records are selected.
      *
-     * Not loaded by default: you must load cursor data with `useLoadable(cursor)` (recommended) or `cursor.loadDataAsync()` before use.
+     * Not loaded by default. You must load cursor data with `useLoadable(cursor)` (recommended) or
+     * `cursor.loadDataAsync()` before use.
      *
      * Can be watched.
      */
@@ -124,10 +125,10 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     /**
      * Checks whether a given record is selected.
      *
-     * Not loaded by default: you must load cursor data with `useLoadable(cursor)` (recommended) or `cursor.loadDataAsync()` before use.
+     * Selected records are not loaded by default. You must load cursor data with
+     * `useLoadable(cursor)` (recommended) or `cursor.loadDataAsync()` before use.
      *
      * @param recordOrRecordId The record or record ID to check for.
-     * @returns `true` if the given record is selected, `false` otherwise.
      */
     isRecordSelected(recordOrRecordId: Record | string): boolean {
         const {selectedRecordIdSet} = this._data;

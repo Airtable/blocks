@@ -151,11 +151,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * Add a maximum fullscreen size constraint. Use `.maxFullscreenSize`` to get
      * the aggregate of all added constraints.
      *
+     * Returns a function that can be called to remove the fullscreen size constraint that was added.
+     *
      * @param sizeConstraint The width and height constraints to add. Both
      * `width` and `height` are optional - if either is set to null, that means
      * there is no max size in that dimension.
-     * @returns A function that can be called to remove the fullscreen
-     * size constraint that was added.
      */
     addMaxFullscreenSize(sizeConstraint: Partial<ViewportSizeConstraint>): UnsetFn {
         const {width, height} = sizeConstraint;
@@ -206,11 +206,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * Upon adding a constraint, if the block is focused and the frame is smaller than the
      * minimum size, the block will enter fullscreen mode.
      *
+     * Returns a function that can be called to remove the  size constraint that was added.
+     *
      * @param sizeConstraint The width and height constraints to add. Both `width`
      * and `height` are optional - if either is set to null, that means there is
      * no min size in that dimension.
-     * @returns A function that can be called to remove the  size constraint
-     * that was added.
      */
     addMinSize(sizeConstraint: Partial<ViewportSizeConstraint>): UnsetFn {
         const {width, height} = sizeConstraint;
@@ -280,10 +280,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
      *
      * Every call to `.watch` should have a matching call to `.unwatch`.
      *
+     * Returns the array of keys that were watched.
+     *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
      * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
      */
     watch(
         keys: WatchableViewportKey | ReadonlyArray<WatchableViewportKey>,
@@ -306,10 +307,11 @@ class Viewport extends Watchable<WatchableViewportKey> {
      *
      * Should be called with the same arguments given to `.watch`.
      *
+     * Returns the array of keys that were unwatched
+     *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
      * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
      */
     unwatch(
         keys: WatchableViewportKey | ReadonlyArray<WatchableViewportKey>,
