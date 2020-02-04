@@ -40,12 +40,50 @@ interface CursorData {
 
 // NOTE: cursor is an AbstractModel because it includes loadable data.
 /**
- * Model class containing information about the state of the user's current interactions in Airtable.
+ * Model class containing information about the state of the user's current interactions in
+ * Airtable - specifically, their active table, active view, selected records and selected fields.
+ * Also allows you to set the active table and active view.
  *
- * @example
+ * Selected records and fields are not loaded by default and the cursor must be loaded with
+ * {@link useLoadable} to access them.
+ *
  * ```js
  * import {cursor} from '@airtable/blocks';
+ * import {useWatchable} from '@airtable/blocks/ui';
+ *
+ *  function ActiveTableAndView() {
+ *      // re-render whenever the active table or view changes
+ *      useWatchable(cursor, ['activeTableId', 'activeViewId']);
+ *
+ *      return (
+ *          <div>
+ *              Active table: {cursor.activeTableId)}
+ *              Active view: {cursor.activeViewId}
+ *          </div>
+ *      );
+ *  }
  * ```
+ *
+ * ```js
+ * import {cursor} from '@airtable/blocks';
+ * import {useLoadable, useWatchable} from '@airtable/blocks/ui';
+ *
+ *  function SelectedRecordAndFieldIds() {
+ *      // load selected records and fields
+ *      useLoadable(cursor);
+ *
+ *      // re-render whenever the list of selected records or fields changes
+ *      useWatchable(cursor, ['selectedRecordIds', 'selectedFieldIds']);
+ *
+ *      return (
+ *          <div>
+ *              Selected records: {cursor.selectedRecordIds.join(', ')}
+ *              Selected fields: {cursor.selectedFieldIds.join(', ')}
+ *          </div>
+ *      );
+ *  }
+ * ```
+ *
  * @docsPath models/Cursor
  */
 class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
@@ -132,6 +170,9 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
     /**
      * The field IDs of all currently selected fields, or an empty array if no fields are selected.
+     *
+     * Not loaded by default: you must load cursor data with `useLoadable(cursor)` (recommended) or
+     * `cursor.loadDataAsync()` before use.
      *
      * Can be watched.
      */
