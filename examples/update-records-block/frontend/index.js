@@ -130,6 +130,7 @@ function UpdateSelectedRecordsButton({tableToUpdate, fieldToUpdate, selectedReco
 
     return (
         <Button
+            variant="primary"
             onClick={async function() {
                 // Mark the update as started.
                 setNumRecordsBeingUpdated(updates.length);
