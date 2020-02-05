@@ -30,10 +30,10 @@ import {spawnError} from '../error_utils';
  *      }
  * }
  *
- * // using withHooks, we wrap up RecordList. It takes a queryResult prop, and injects a records
+ * // using withHooks, we wrap up RecordList. It takes a table prop, and injects a records
  * // prop from useRecords
- * const WrappedRecordList = withHooks(RecordList, ({queryResult}) => {
- *      const records = useRecords(queryResult);
+ * const WrappedRecordList = withHooks(RecordList, ({table}) => {
+ *      const records = useRecords(table);
  *
  *      const instanceRef = React.useRef();
  *      useEffect(() => {
@@ -46,20 +46,20 @@ import {spawnError} from '../error_utils';
  *      };
  * });
  *
- * // when we use WrappedRecordList, we only need to pass in queryResult:
- * <WrappedRecordList queryResult={someQueryResult} />
+ * // when we use WrappedRecordList, we only need to pass in table:
+ * <WrappedRecordList table={someTable} />
  * ```
  *
  * @example
  * ```js
  * import React from 'react';
- * import {Record, QueryResult} from '@airtable/blocks/models';
+ * import {Record, Table} from '@airtable/blocks/models';
  * import {withHooks, useRecords} from '@airtable/blocks/ui';
  * // with typescript, things are a little more complex: we need to provide some type annotations to
  * // indicate which props are injected:
  *
  * type RequiredProps = {
- *      queryResult: QueryResult,
+ *      table: Table,
  * };
  *
  * type InjectedProps = {
@@ -78,8 +78,8 @@ import {spawnError} from '../error_utils';
  * //   - the instance type (what you get out of a ref) of the resulting component
  * const WrappedRecordList = withHooks<InjectedProps, RecordListProps, RecordList>(
  *      RecordList,
- *      ({queryResult}) => {
- *          const records = useRecords(queryResult);
+ *      ({table}) => {
+ *          const records = useRecords(table);
  *          return {
  *              records
  *          };

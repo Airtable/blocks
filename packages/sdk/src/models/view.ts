@@ -118,6 +118,9 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     /**
      * Select records from the view. Returns a {@link RecordQueryResult}.
      *
+     * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
+     * features of a QueryResult (e.g. `queryResult.getRecordById`)
+     *
      * @param opts Options for the query, such as sorts, fields, and record coloring. By
      * default, records will be coloured according to the view.
      * @example

@@ -380,20 +380,23 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return view;
     }
     /**
-     * Select records from the table. Returns a query result. See {@link RecordQueryResult} for more.
+     * Select records from the table. Returns a {@link RecordQueryResult}.
+     *
+     * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
+     * features of a QueryResult (e.g. `queryResult.getRecordById`)
      *
      * @param opts Options for the query, such as sorts and fields.
      * @example
      * ```js
-     * import {UI} from '@airtable/blocks';
+     * import {useBase, useRecords} from '@airtable/blocks';
      * import React from 'react';
      *
      * function TodoList() {
-     *     const base = UI.useBase();
+     *     const base = useBase();
      *     const table = base.getTableByName('Tasks');
      *
      *     const queryResult = table.selectRecords();
-     *     const records = UI.useRecords(queryResult);
+     *     const records = useRecords(queryResult);
      *
      *     return (
      *         <ul>

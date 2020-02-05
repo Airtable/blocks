@@ -103,8 +103,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * @example
      * ```js
      * import {useRecords} from '@airtable/blocks/ui';
-     * const queryResult = myTable.selectRecords();
-     * const records = useRecords(queryResult);
+     * const records = useRecords(myTable);
      * console.log(records[0].parentTable.id === myTable.id);
      * // => true
      * ```

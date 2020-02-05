@@ -232,8 +232,7 @@ const calculateAttachmentDimensionsAndMargin = (
  *     const base = useBase();
  *     const table = base.getTableByName('Table 1');
  *     const fields = table ? table.fields : null;
- *     const queryResult = table ? table.selectRecords() : null;
- *     const records = useRecords(queryResult);
+ *     const records = useRecords(table);
  *
  *     return (
  *         <RecordCard
