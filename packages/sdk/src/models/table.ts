@@ -424,8 +424,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * correct type, that view will be returned before checking the other views in the table.
      * @example
      * ```js
-     * import {viewTypes} from '@airtable/blocks/models';
-     * const firstCalendarView = myTable.getFirstViewOfType(viewTypes.CALENDAR);
+     * import {ViewType} from '@airtable/blocks/models';
+     * const firstCalendarView = myTable.getFirstViewOfType(ViewType.CALENDAR);
      * if (firstCalendarView !== null) {
      *     console.log(firstCalendarView.name);
      * } else {

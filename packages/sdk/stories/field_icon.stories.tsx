@@ -2,7 +2,8 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 import {values as objectValues} from '../src/private_utils';
 import Icon, {iconStylePropTypes} from '../src/ui/icon';
-import {ReadableFieldTypes, FieldType, IconNamesByFieldType} from './helpers/field_type';
+import {FieldType} from '../src/types/field';
+import {ReadableFieldTypes, IconNamesByFieldType} from './helpers/field_type';
 import Example from './helpers/example';
 
 const stories = storiesOf('FieldIcon', module);

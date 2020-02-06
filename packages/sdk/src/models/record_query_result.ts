@@ -2,7 +2,7 @@
 import Colors, {Color} from '../colors';
 import {BaseData} from '../types/base';
 import {RecordId} from '../types/record';
-import {FieldTypes, FieldId} from '../types/field';
+import {FieldType, FieldId} from '../types/field';
 import {
     isEnumValue,
     assertEnumValue,
@@ -329,10 +329,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 break;
             case RecordColorModeTypes.BY_SELECT_FIELD:
-                if (!(recordColorMode.selectField.type === FieldTypes.SINGLE_SELECT)) {
+                if (!(recordColorMode.selectField.type === FieldType.SINGLE_SELECT)) {
                     throw spawnInvariantViolationError(
                         'Invalid field for coloring records by select field: expected a %s, but got a %s',
-                        FieldTypes.SINGLE_SELECT,
+                        FieldType.SINGLE_SELECT,
                         recordColorMode.selectField.type,
                     );
                 }
@@ -472,7 +472,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 return null;
             case RecordColorModeTypes.BY_SELECT_FIELD: {
-                if (recordColorMode.selectField.type !== FieldTypes.SINGLE_SELECT) {
+                if (recordColorMode.selectField.type !== FieldType.SINGLE_SELECT) {
                     return null;
                 }
                 const value = record.getCellValue(recordColorMode.selectField);

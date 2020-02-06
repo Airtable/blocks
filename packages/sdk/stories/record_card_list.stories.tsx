@@ -4,9 +4,8 @@ import {storiesOf} from '@storybook/react';
 import Example from './helpers/example';
 import {recordCardListStylePropTypes} from '../src/ui/record_card_list';
 import Box from '../src/ui/box';
+import {FieldType} from '../src/types/field';
 import FakeRecordCard from './helpers/fake_record_card';
-import FakeCellRenderer from './helpers/fake_cell_renderer';
-import {FieldType} from './helpers/field_type';
 
 const stories = storiesOf('RecordCardList', module);
 

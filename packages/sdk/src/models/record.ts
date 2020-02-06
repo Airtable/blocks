@@ -3,7 +3,7 @@ import getSdk from '../get_sdk';
 import {Color} from '../colors';
 import {BaseData} from '../types/base';
 import {RecordData} from '../types/record';
-import {FieldTypes, FieldId} from '../types/field';
+import {FieldType, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
@@ -153,7 +153,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             // backwards compatibility.
             if (
                 !Record.shouldUseNewLookupFormat &&
-                field.type === FieldTypes.MULTIPLE_LOOKUP_VALUES
+                field.type === FieldType.MULTIPLE_LOOKUP_VALUES
             ) {
                 const cellValueForMigration: any = [];
                 cellValueForMigration.linkedRecordIds = cloneDeep(

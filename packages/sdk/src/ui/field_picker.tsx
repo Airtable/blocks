@@ -5,7 +5,7 @@ import {values, ObjectMap, has} from '../private_utils';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Table from '../models/table';
-import {FieldTypes, FieldType} from '../types/field';
+import {FieldType} from '../types/field';
 import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
@@ -29,7 +29,7 @@ export interface SharedFieldPickerProps extends SharedSelectBaseProps {
 // Shared with `FieldPicker` and `FieldPickerSynced`.
 export const sharedFieldPickerPropTypes = {
     table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes)).isRequired),
+    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldType)).isRequired),
     shouldAllowPickingNone: PropTypes.bool,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,

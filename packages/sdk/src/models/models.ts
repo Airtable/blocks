@@ -1,7 +1,7 @@
 /** @ignore */ /** */
 import * as recordColoring from './record_coloring';
-export {FieldTypes as fieldTypes} from '../types/field';
-export {ViewTypes as viewTypes} from '../types/view';
+export {FieldType} from '../types/field';
+export {ViewType} from '../types/view';
 export {default as Base} from './base';
 export {default as Table} from './table';
 export {default as Field} from './field';

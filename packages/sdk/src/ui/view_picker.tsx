@@ -5,7 +5,7 @@ import {values, ObjectMap} from '../private_utils';
 import getSdk from '../get_sdk';
 import View from '../models/view';
 import Table from '../models/table';
-import {ViewTypes, ViewType} from '../types/view';
+import {ViewType} from '../types/view';
 import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
@@ -29,7 +29,7 @@ export interface SharedViewPickerProps extends SharedSelectBaseProps {
 // Shared with `ViewPicker` and `ViewPickerSynced`.
 export const sharedViewPickerPropTypes = {
     table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewTypes)).isRequired),
+    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewType)).isRequired),
     shouldAllowPickingNone: PropTypes.bool,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
@@ -60,8 +60,8 @@ const ViewPicker = (props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) =
         table,
         view: selectedView,
         shouldAllowPickingNone,
-        // Exclude ViewTypes.FORM
-        allowedTypes = [ViewTypes.GRID, ViewTypes.CALENDAR, ViewTypes.GALLERY, ViewTypes.KANBAN],
+        // Exclude ViewType.FORM
+        allowedTypes = [ViewType.GRID, ViewType.CALENDAR, ViewType.GALLERY, ViewType.KANBAN],
         placeholder,
         // Destructure `onChange` to prevent it from being passed to `Select`.
         onChange,

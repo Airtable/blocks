@@ -3,9 +3,10 @@ import React from 'react';
 import {storiesOf} from '@storybook/react';
 import Example from './helpers/example';
 import {cellRendererStylePropTypes} from '../src/ui/cell_renderer';
-import {values, keys} from '../src/private_utils';
+import {values} from '../src/private_utils';
 import FakeCellRenderer from './helpers/fake_cell_renderer';
-import {ReadableFieldTypes, FieldType} from './helpers/field_type';
+import {FieldType} from '../src/types/field';
+import {ReadableFieldTypes} from './helpers/field_type';
 
 const stories = storiesOf('CellRenderer', module);
 

@@ -1,6 +1,4 @@
 /** @module @airtable/blocks/models: Field */ /** */
-import {ObjectValues} from '../private_utils';
-
 /** */
 export type FieldId = string;
 /** @hidden */
@@ -9,120 +7,169 @@ export type PrivateColumnType = string;
 /**
  * An enum of Airtable's field types
  *
- * @alias fieldTypes
  * @example
  * ```js
- * import {fieldTypes} from '@airtable/blocks/models';
+ * import {FieldType} from '@airtable/blocks/models';
  * const numberFields = myTable.fields.filter(field => (
- *     field.type === fieldTypes.NUMBER
+ *     field.type === FieldType.NUMBER
  * ));
  * ```
  */
-export enum FieldTypes {
+export enum FieldType {
     /**
      * A single line of text.
      *
-     * ##### Cell value format
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * string
      * ```
      *
-     * ##### Options
-     * None
+     * **Cell write format**
+     * ```js
+     * string
+     * ```
      */
     SINGLE_LINE_TEXT = 'singleLineText',
     /**
      * A valid email address (e.g. andrew@example.com).
      *
-     * ##### Cell value format
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * string
      * ```
      *
-     * ##### Options
-     * None
+     * **Cell write format**
+     * ```js
+     * string
+     * ```
      */
     EMAIL = 'email',
     /**
      * A valid URL (e.g. airtable.com or https://airtable.com/universe).
      *
-     * ###### Cell value format
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * string
      * ```
      *
-     * ###### Options
-     * None
+     * **Cell write format**
+     * ```js
+     * string
+     * ```
      */
     URL = 'url',
     /**
-     * A long text field that can span multiple lines.
+     * A long text field that can span multiple lines. May contain "mention tokens",
+     * e.g. `<airtable:mention id="menE1i9oBaGX3DseR">@Alex</airtable:mention>`
      *
-     * ###### Cell value format
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * string
      * ```
      *
-     * Multiple lines of text, which may contain "mention tokens", e.g.
-     * `<airtable:mention id="menE1i9oBaGX3DseR">@Alex</airtable:mention>`
-     *
-     * ###### Options
-     * None
+     * **Cell write format**
+     * ```js
+     * string
+     * ```
      */
     MULTILINE_TEXT = 'multilineText',
     /**
      * A number.
      *
-     * ##### Cell value format
+     * The `precision` option indicates the number of digits shown to the right of
+     * the decimal point for this field.
+     *
+     * **Field options**
+     * ```js
+     * { precision: number }
+     * ```
+     *
+     * **Cell read format**
      * ```js
      * number
      * ```
      *
-     * ##### Options
+     * **Cell write format**
      * ```js
-     * {
-     *     precision: number,
-     * }
+     * number
      * ```
      */
     NUMBER = 'number',
     /**
-     * A percentage - 0 is 0%, 1 is 100%.
+     * A percentage.
      *
-     * ##### Cell value format
+     * When reading from and writing to a "Percent" field, the cell value is a decimal.
+     * For example, 0 is 0%, 0.5 is 50%, and 1 is 100%.
+     *
+     * **Field options**
+     * ```js
+     * { precision: number }
+     * ```
+     *
+     * **Cell read format**
      * ```js
      * number
      * ```
      *
-     * ##### Options
+     * **Cell write format**
      * ```js
-     * {
-     *     precision: number,
-     * }
+     * number
      * ```
      */
     PERCENT = 'percent',
     /**
      * An amount of a currency.
      *
-     * ##### Cell value format
-     * ```js
-     * number
-     * ```
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
      *     precision: number,
      *     symbol: string,
      * }
      * ```
+     *
+     * **Cell read format**
+     * ```js
+     * number
+     * ```
+     *
+     * **Cell write format**
+     * ```js
+     * number
+     * ```
      */
     CURRENCY = 'currency',
     /**
      * Single select allows you to select a single option from predefined options in a dropdown.
      *
-     * ##### Cell value format
+     * **Field options**
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         name: string,
+     *         color?: Color,
+     *     }>,
+     * }
+     * ```
+     *
+     * **Cell read format**
      * ```js
      * {
      *     id: string,
@@ -131,9 +178,20 @@ export enum FieldTypes {
      * }
      * ```
      *
-     * The currently selected choice.
+     * **Cell write format**
+     * ```js
+     * { id: string } | { name: string }
+     * ```
+     */
+    SINGLE_SELECT = 'singleSelect',
+    /**
+     * Multiple select allows you to select one or more predefined options from a dropdown
      *
-     * ##### Options
+     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
+     * will override the current cell value when being updated. Be sure to spread the current
+     * cell value if you want to keep the currently selected choices.
+     *
+     * **Field Options**
      * ```js
      * {
      *     choices: Array<{
@@ -143,12 +201,8 @@ export enum FieldTypes {
      *     }>,
      * }
      * ```
-     */
-    SINGLE_SELECT = 'singleSelect',
-    /**
-     * Multiple select allows you to select one or more predefined options from a dropdown
      *
-     * ##### Cell value format
+     * **Cell read format**
      * ```js
      * Array<{
      *     id: string,
@@ -156,37 +210,20 @@ export enum FieldTypes {
      *     color?: Color,
      * }>
      * ```
+     * The currently selected choices.
      *
-     * Array of selected choices.
-     *
-     * ##### Options
+     * **Cell write format**
      * ```js
-     * {
-     *     choices: Array<{
-     *         id: string,
-     *         name: string,
-     *         color?: Color,
-     *     }>,
-     * }
+     * Array<{id: string} | {name: string}>
      * ```
      */
     MULTIPLE_SELECTS = 'multipleSelects',
     /**
-     * A collaborator field lets you add collaborators to your records. Collaborators can optionally be notified when they're added.
+     * A collaborator field lets you add collaborators to your records. Collaborators can optionally
+     * be notified when they're added. A single collaborator field has been configured to only
+     * reference one collaborator.
      *
-     * ##### Cell value format
-     * ```js
-     * {
-     *     id: string,
-     *     email: string,
-     *     name?: string,
-     *     profilePicUrl?: string,
-     * }
-     * ```
-     *
-     * The currently selected choice.
-     *
-     * ##### Options
+     * **Field Options**
      * ```js
      * {
      *     choices: Array<{
@@ -197,12 +234,47 @@ export enum FieldTypes {
      *     }>,
      * }
      * ```
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     email: string,
+     *     name?: string,
+     *     profilePicUrl?: string,
+     * }
+     * ```
+     * The currently selected collaborator.
+     *
+     * **Cell write format**
+     * ```js
+     * { id: string }
+     * ```
+     *
      */
     SINGLE_COLLABORATOR = 'singleCollaborator',
     /**
-     * A collaborator field lets you add collaborators to your records. Collaborators can optionally be notified when they're added.
+     * A collaborator field lets you add collaborators to your records. Collaborators can optionally
+     * be notified when they're added. A multiple collaborator field has been configured to
+     * reference any number of collaborators.
      *
-     * ##### Cell value format
+     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
+     * will override the current cell value when being updated. Be sure to spread the current
+     * cell value if you want to keep the currently selected collaborators.
+     *
+     * **Field Options**
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         email: string,
+     *         name?: string,
+     *         profilePicUrl?: string,
+     *     }>,
+     * }
+     * ```
+     *
+     * **Cell read format**
      * ```js
      * Array<{
      *     id: string,
@@ -211,113 +283,171 @@ export enum FieldTypes {
      *     profilePicUrl?: string,
      * }>
      * ```
+     * The currently selected collaborators.
      *
-     * Array of selected choices.
-     *
-     * ##### Options
+     * **Cell write format**
      * ```js
-     * {
-     *     choices: Array<{
-     *         id: string,
-     *         email: string,
-     *         name?: string,
-     *         profilePicUrl?: string,
-     *     }>,
-     * }
+     * Array<{ id: string }>
+     * ```
      */
     MULTIPLE_COLLABORATORS = 'multipleCollaborators',
     /**
      * Link to another record.
      *
-     * ##### Cell value format
+     * When updating an existing linked record cell value, the specified array will
+     * overwrite the current cell value. If you want to add a new linked record without
+     * deleting the current linked records, you can spread the current cell value like so:
+     * ```js
+     * const newForeginRecordIdToLink = 'recXXXXXXXXXXXXXX';
+     * myTable.updateRecordAsync(myRecord, {
+     *     'myLinkedRecordField': [
+     *         ...myRecord.getCellValue('myLinkedRecordField'),
+     *         { id: newForeignRecordIdToLink }
+     *     ]
+     * })
+     * ```
+     *
+     * Similarly, you can clear the current cell value by passing an empty array, or
+     * remove specific linked records by passing a filtered array of the current cell
+     * value.
+     *
+     * **Field options**
+     * ```js
+     * {
+     *     // The ID of the table this field links to
+     *     linkedTableId: TableId,
+     *     // The ID of the field in the linked table that links back
+     *     // to this one
+     *     inverseLinkFieldId?: FieldId,
+     *     // The ID of the view in the linked table to use when showing
+     *     // a list of records to select from
+     *     viewIdForRecordSelection?: ViewId,
+     * }
+     * ```
+     *
+     * **Cell read format**
      * ```js
      * Array<{
      *     id: RecordId,
      *     name: string,
      * }>
      * ```
+     * The currently linked record IDs and their primary cell values from the linked table.
      *
-     * Array of selected record IDs and their primary cell values from the linked table.
-     *
-     * ##### Options
+     * **Cell write format**
      * ```js
-     * {
-     *     // The ID of the table this field links to
-     *     linkedTableId: TableId,
-     *     // The ID of the field in the linked table that links back to this one
-     *     inverseLinkFieldId?: FieldId,
-     *     // The ID of the view in the linked table to use when showing a list of records to select from
-     *     viewIdForRecordSelection?: ViewId,
-     * }
+     * Array<{ id: RecordId }>
      * ```
+     *
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
      * A date.
      *
-     * ##### Cell value format
-     * ```js
-     * string
-     * ```
+     * When reading from and writing to a date field, the cell value will always be an
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date.
      *
-     * An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date.
+     * The date format string follows the moment.js structure documented
+     * [here](https://momentjs.com/docs/#/parsing/string-format/)
      *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
      *     dateFormat: {
      *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // a date format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
      *         format: string,
      *     }
      * }
      * ```
-     */
-    DATE = 'date',
-    /**
-     * A date & time.
      *
-     * ##### Cell value format
+     * **Cell read format**
      * ```js
      * string
      * ```
      *
-     * An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+     * **Cell write format**
+     * ```js
+     * Date | string
+     * ```
      *
-     * ##### Options
+     */
+    DATE = 'date',
+    /**
+     * A date field configured to also include a time.
+     *
+     * When reading from and writing to a date time field, the cell value will always be an
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+     *
+     * The date and time format strings follow the moment.js structure documented
+     * [here](https://momentjs.com/docs/#/parsing/string-format/)
+     *
+     * **Field options**
      * ```js
      * {
      *     dateFormat: {
      *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         // a date format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
      *         format: string,
      *     },
      *     timeFormat: {
      *         name: '12hour' | '24hour',
-     *         // a time format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
      *         format: string,
      *     },
      *     timeZone: 'utc' | 'client',
      * }
      * ```
+     *
+     * **Cell read format**
+     * ```js
+     * string
+     * ```
+     *
+     * **Cell write format**
+     * ```js
+     * Date | string
+     * ```
+     *
      */
     DATE_TIME = 'dateTime',
     /**
      * A telephone number (e.g. (415) 555-9876).
      *
-     * ##### Cell value format
+     * **Cell read format**
      * ```js
      * string
      * ```
      *
-     * ##### Options
+     * **Field options**
      * None
      */
     PHONE_NUMBER = 'phoneNumber',
     /**
      * Attachments allow you to add images, documents, or other files which can then be viewed or downloaded.
      *
-     * ##### Cell value format
+     * When updating an existing attachment cell value, the specified array will
+     * overwrite the current cell value. If you want to add a new attachment without
+     * deleting the current attachments, you can spread the current cell value like so:
+     * ```js
+     * const newAttachmentUrl = 'example.com/cute-cats.jpeg';
+     * myTable.updateRecordAsync(myRecord, {
+     *     'myAttachmentField': [
+     *         ...myRecord.getCellValue('myAttachmentField'),
+     *         { url: newAttachmentUrl }
+     *     ]
+     * })
+     * ```
+     *
+     * Similarly, you can clear the current cell value by passing an empty array, or
+     * remove specific attachments by passing a filtered array of the current cell
+     * value.
+     *
+     * Note: when you pass an existing attachment, you must pass the full attachment
+     * object. New attachments only require the `url` property.
+     *
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * Array<{
      *     // unique attachment id
@@ -351,42 +481,45 @@ export enum FieldTypes {
      * }>
      * ```
      *
-     * ##### Options
-     * None
+     * **Cell write format**
+     * ```js
+     * Array<{ url: string }>
+     * ```
      */
     MULTIPLE_ATTACHMENTS = 'multipleAttachments',
     /**
      * A checkbox.
      *
-     * ##### Cell value format
-     * ```js
-     * boolean
-     * ```
-     *
      * This field is "true" when checked and otherwise empty.
      *
-     * ##### Options
+     *
+     * **Field options**
+     *
      * ```js
      * {
-     *     // an {@link Icon} name
+     *     // an icon name
      *     icon: string,
      *     // the color of the check box
      *     color: Color,
      * }
      * ```
+     *
+     * **Cell read format**
+     * ```js
+     * boolean
+     * ```
+     *
+     * **Cell write format**
+     * ```js
+     * boolean
+     * ```
+     *
      */
     CHECKBOX = 'checkbox',
     /**
      * Compute a value in each record based on other fields in the same record.
      *
-     * ##### Cell value format
-     * ```js
-     * any
-     * ```
-     *
-     * Check `options.result` to know the resulting field type.
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
      *     // false if the formula contains an error
@@ -402,47 +535,57 @@ export enum FieldTypes {
      *     },
      * }
      * ```
+     *
+     * **Cell read format**
+     *
+     * Check `options.result` to know the resulting field type.
+     * ```js
+     * any
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
      */
     FORMULA = 'formula',
     /**
      * The time the record was created in UTC.
      *
-     * ##### Cell value format
-     * ```js
-     * string
-     * ```
+     * When reading from a "Created time" field, the cell value will always be an
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time
      *
-     * An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
      *     result: {
      *         type: 'date' | 'dateTime',
+     *         // See DATE and DATE_TIME for detailed field options
      *         options: DateOrDateTimeFieldOptions,
      *     },
      * }
      * ```
      *
-     * See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options.
+     * **Cell read format**
+     * ```js
+     * string
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
      */
     CREATED_TIME = 'createdTime',
     /**
      * A rollup allows you to summarize data from records that are linked to this table.
      *
-     * ##### Cell value format
-     * ```js
-     * any
-     * ```
-     *
-     * Check `options.result` to know the resulting field type.
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
      *     // false if the formula contains an error
      *     isValid: boolean,
-     *     // the linked record field in this table that this field is summarizing.
+     *     // the linked record field in this table that this field is
+     *     // summarizing.
      *     recordLinkFieldId: FieldId,
      *     // the field id in the linked table that this field is summarizing.
      *     fieldIdInLinkedTable: FieldId,
@@ -457,53 +600,84 @@ export enum FieldTypes {
      *     },
      * }
      * ```
+     *
+     * **Cell read format**
+     * Check `options.result` to know the resulting field type.
+     * ```js
+     * any
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
      */
     ROLLUP = 'rollup',
     /**
      * Count the number of linked records.
      *
-     * ##### Cell value format
-     * ```js
-     * number
-     * ```
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
-     *    // is the field currently valid (false if e.g. the linked record field is switched to a different type)
+     *    // is the field currently valid (e.g. false if the linked record
+     *    // field has been changed to a different field type)
      *    isValid: boolean,
      *    // the linked record field in this table that we're counting
      *    recordLinkFieldId: FieldId,
      * }
      * ```
+     *
+     * **Cell read format**
+     * ```js
+     * number
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
      */
     COUNT = 'count',
     /**
      * Lookup a field on linked records.
      *
-     * ##### Cell value format
+     * **Field options**
+     * 
+     * UNSTABLE
+
+     * **Cell read format**
+     * 
      * UNSTABLE
      *
-     * ##### Options
-     * UNSTABLE
+     * **Cell write format**
+     * 
+     * n/a
      */
     MULTIPLE_LOOKUP_VALUES = 'multipleLookupValues',
     /**
      * Automatically incremented unique counter for each record.
      *
-     * ##### Cell value format
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * number
      * ```
      *
-     * ##### Options
-     * None
+     * **Cell write format**
+     *
+     * n/a
      */
     AUTO_NUMBER = 'autoNumber',
     /**
      * Use the Airtable iOS or Android app to scan barcodes.
      *
-     * ##### Cell value format
+     * **Field options**
+     *
+     * n/a
+     *
+     * **Cell read format**
      * ```js
      * {
      *     // the text value of the barcode
@@ -513,22 +687,18 @@ export enum FieldTypes {
      * }
      * ```
      *
-     * ##### Options
-     * None
+     * **Cell write format**
+     *
+     * n/a
      */
     BARCODE = 'barcode',
     /**
      * A rating (e.g. stars out of 5)
      *
-     * ##### Cell value format
-     * ```js
-     * number
-     * ```
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
-     *     // the {@link Icon} name used to display the rating
+     *     // the icon name used to display the rating
      *     icon: string,
      *     // the maximum value for the rating
      *     max: number,
@@ -536,6 +706,15 @@ export enum FieldTypes {
      *     color: Color,
      * }
      * ```
+     *
+     * **Cell read format**
+     * ```js
+     * number
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
      */
     RATING = 'rating',
     /**
@@ -545,17 +724,25 @@ export enum FieldTypes {
     /**
      * A duration of time in seconds.
      *
-     * ##### Cell value format
+     *
+     * The `durationFormat` string follows the moment.js structure documented
+     * [here](https://momentjs.com/docs/#/parsing/string-format/).
+     *
+     * **Field options**
+     * ```js
+     * {
+     *     durationFormat: string,
+     * }
+     * ```
+     *
+     * **Cell read format**
      * ```js
      * number
      * ```
      *
-     * ##### Options
+     * **Cell write format**
      * ```js
-     * {
-     *     // a time format string as documented here: https://momentjs.com/docs/#/parsing/string-format/
-     *     durationFormat: string,
-     * }
+     * number
      * ```
      */
     DURATION = 'duration',
@@ -563,14 +750,10 @@ export enum FieldTypes {
      * Shows the date and time that a record was most recently modified in any editable field or
      * just in specific editable fields.
      *
-     * ##### Cell value format
-     * ```js
-     * string
-     * ```
+     * When reading from a "Last modified time" field, the cell value will always be an
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time
      *
-     * An [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
-     *
-     * ##### Options
+     * **Field options**
      * ```js
      * {
      *     // false if the formula contains an error
@@ -580,18 +763,24 @@ export enum FieldTypes {
      *     // the cell value result type
      *     result: {
      *         type: 'date' | 'dateTime',
+     *         // See DATE and DATE_TIME for detailed field options
      *         options: DateOrDateTimeFieldOptions,
      *     },
      * }
      * ```
      *
-     * See {@link fieldTypes.DATE} and {@link fieldTypes.DATE_TIME} for `result` options.
+     * **Cell read format**
+     * ```js
+     * string
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
      */
     LAST_MODIFIED_TIME = 'lastModifiedTime',
 }
-
-/** */
-export type FieldType = ObjectValues<typeof FieldTypes>;
 
 /** @hidden */
 export type FieldLock = unknown;

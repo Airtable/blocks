@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: View */ /** */
-import {ObjectValues, ObjectMap} from '../private_utils';
+import {ObjectMap} from '../private_utils';
 import {Color} from '../colors';
 import {FieldId} from './field';
 import {RecordId} from './record';
@@ -10,16 +10,15 @@ export type ViewId = string;
 /**
  * An enum of Airtable's view types
  *
- * @alias viewTypes
  * @example
  * ```js
- * import {viewTypes} from '@airtable/blocks/models';
+ * import {ViewType} from '@airtable/blocks/models';
  * const gridViews = myTable.views.filter(view => (
- *     view.type === viewTypes.GRID
+ *     view.type === ViewType.GRID
  * ));
  * ```
  */
-export enum ViewTypes {
+export enum ViewType {
     /** */
     GRID = 'grid',
     /** */
@@ -31,9 +30,6 @@ export enum ViewTypes {
     /** */
     KANBAN = 'kanban',
 }
-
-/** */
-export type ViewType = ObjectValues<typeof ViewTypes>;
 
 /** @hidden */
 export interface ViewFieldOrderData {

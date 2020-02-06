@@ -7,7 +7,7 @@ import Icon from '../../src/ui/icon';
 import {CONTROL_WIDTH} from './code_utils';
 import choiceOptions from './choice_options';
 import collaboratorOptions from './collaborator_options';
-import {FieldType} from './field_type';
+import {FieldType} from '../../src/types/field';
 import attachments from './attachments';
 import FakeForeignRecord from './fake_foreign_record';
 
@@ -110,7 +110,7 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
             return <Text>91</Text>;
         case FieldType.COUNT:
             return <Text>5</Text>;
-        case FieldType.LOOKUP:
+        case FieldType.MULTIPLE_LOOKUP_VALUES:
             return <Text>120</Text>;
         case FieldType.AUTO_NUMBER:
             return <Text>129</Text>;

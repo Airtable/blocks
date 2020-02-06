@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
-import {FieldTypes, FieldData, PrivateColumnType, FieldType} from '../types/field';
+import {FieldData, PrivateColumnType, FieldType} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -114,7 +114,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         // until the transition is complete. See <https://airtable.quip.com/VxaMAmAfUscs> for more.
         // @ts-ignore
         if (type === 'lookup') {
-            return FieldTypes.MULTIPLE_LOOKUP_VALUES;
+            return FieldType.MULTIPLE_LOOKUP_VALUES;
         } else {
             return type;
         }
@@ -123,12 +123,12 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * The configuration options of the field. The structure of the field's
      * options depend on the field's type. Can be watched.
      *
-     * @see {@link FieldTypes}
+     * @see {@link FieldType}
      * @example
      * ```js
-     * import {fieldTypes} from '@airtable/blocks/models';
+     * import {FieldType} from '@airtable/blocks/models';
      *
-     * if (myField.type === fieldTypes.CURRENCY) {
+     * if (myField.type === FieldType.CURRENCY) {
      *     console.log(myField.options.symbol);
      *     // => '$'
      * }

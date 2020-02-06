@@ -15,7 +15,7 @@ import {
 } from '../private_utils';
 import {spawnInvariantViolationError, spawnError} from '../error_utils';
 import {AttachmentData} from '../types/attachment';
-import {FieldTypes} from '../types/field';
+import {FieldType} from '../types/field';
 import {RecordDef} from '../types/record';
 import Field from '../models/field';
 import Record from '../models/record';
@@ -162,16 +162,16 @@ interface RecordCardProps extends RecordCardStyleProps {
 
 // TODO(jb): move this stuff into the field model when we decide on an api for it.
 const FormulaicFieldTypes = {
-    [FieldTypes.FORMULA]: true,
-    [FieldTypes.ROLLUP]: true,
-    [FieldTypes.MULTIPLE_LOOKUP_VALUES]: true,
+    [FieldType.FORMULA]: true,
+    [FieldType.ROLLUP]: true,
+    [FieldType.MULTIPLE_LOOKUP_VALUES]: true,
 };
 const isFieldFormulaic = (field: Field): boolean => {
     return has(FormulaicFieldTypes, field.type);
 };
 const getFieldResultType = (field: Field): string => {
-    if (field.type === FieldTypes.COUNT) {
-        return FieldTypes.NUMBER;
+    if (field.type === FieldType.COUNT) {
+        return FieldType.NUMBER;
     }
     if (isFieldFormulaic(field)) {
         if (!field.options) {
@@ -186,7 +186,7 @@ const getFieldResultType = (field: Field): string => {
             return resultType;
         } else {
             // Formula is misconfigured.
-            return FieldTypes.SINGLE_LINE_TEXT;
+            return FieldType.SINGLE_LINE_TEXT;
         }
     } else {
         return field.type;
@@ -399,7 +399,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
     }
     /** @internal */
     _isAttachment(field: Field): boolean {
-        return getFieldResultType(field) === FieldTypes.MULTIPLE_ATTACHMENTS;
+        return getFieldResultType(field) === FieldType.MULTIPLE_ATTACHMENTS;
     }
     /** @internal */
     _getCellValue(field: Field): unknown {
@@ -434,7 +434,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
     /** @internal */
     _getFirstAttachmentInField(attachmentField: Field): AttachmentData | null {
         let attachmentsInField;
-        if (attachmentField.type === FieldTypes.MULTIPLE_LOOKUP_VALUES) {
+        if (attachmentField.type === FieldType.MULTIPLE_LOOKUP_VALUES) {
             const cellValue = this._getCellValue(attachmentField) as FlowAnyObject;
             attachmentsInField = flattenDeep(
                 values(cellValue ? cellValue.valuesByLinkedRecordId : {}),

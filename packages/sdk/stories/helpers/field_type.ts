@@ -1,36 +1,6 @@
 import {ObjectMap} from '../../src/private_utils';
 import {IconName} from '../../src/ui/icon_config';
-
-export enum FieldType {
-    SINGLE_LINE_TEXT = 'singleLineText',
-    EMAIL = 'email',
-    URL = 'url',
-    MULTILINE_TEXT = 'multilineText',
-    NUMBER = 'number',
-    PERCENT = 'percent',
-    CURRENCY = 'currency',
-    SINGLE_SELECT = 'singleSelect',
-    MULTIPLE_SELECTS = 'multipleSelects',
-    SINGLE_COLLABORATOR = 'singleCollaborator',
-    MULTIPLE_COLLABORATORS = 'multipleCollaborators',
-    MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
-    DATE = 'date',
-    DATE_TIME = 'dateTime',
-    PHONE_NUMBER = 'phoneNumber',
-    MULTIPLE_ATTACHMENTS = 'multipleAttachments',
-    CHECKBOX = 'checkbox',
-    FORMULA = 'formula',
-    CREATED_TIME = 'createdTime',
-    ROLLUP = 'rollup',
-    COUNT = 'count',
-    LOOKUP = 'lookup',
-    AUTO_NUMBER = 'autoNumber',
-    BARCODE = 'barcode',
-    RATING = 'rating',
-    RICH_TEXT = 'richText',
-    DURATION = 'duration',
-    LAST_MODIFIED_TIME = 'lastModifiedTime',
-}
+import {FieldType} from '../../src/types/field';
 
 export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.SINGLE_LINE_TEXT]: 'Single line text',
@@ -54,7 +24,7 @@ export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.CREATED_TIME]: 'Created time',
     [FieldType.ROLLUP]: 'Rollup',
     [FieldType.COUNT]: 'Count',
-    [FieldType.LOOKUP]: 'Lookup',
+    [FieldType.MULTIPLE_LOOKUP_VALUES]: 'Lookup',
     [FieldType.AUTO_NUMBER]: 'Autonumber',
     [FieldType.BARCODE]: 'Barcode',
     [FieldType.RATING]: 'Rating',
@@ -85,7 +55,7 @@ export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
     [FieldType.CREATED_TIME]: 'dayAuto',
     [FieldType.ROLLUP]: 'rollup1',
     [FieldType.COUNT]: 'count1',
-    [FieldType.LOOKUP]: 'lookup',
+    [FieldType.MULTIPLE_LOOKUP_VALUES]: 'lookup',
     [FieldType.AUTO_NUMBER]: 'autonumber',
     [FieldType.BARCODE]: 'barcode',
     [FieldType.RATING]: 'star',

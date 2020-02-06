@@ -11,7 +11,10 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...HEAD)
 
-No changes.
+-   **BREAKING**: Field type and view type enums are now exported from '@airtable/blocks/models' as
+    `FieldType` and `ViewType` (previously `fieldTypes` and `viewTypes`). Relatedly, these types are
+    no longer exported from '@airtable/blocks/types', as they can now be referenced from the model
+    exports.
 
 ## [0.0.41](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...@airtable/blocks@0.0.41) - 2020-01-27
 
