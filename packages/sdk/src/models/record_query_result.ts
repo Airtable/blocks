@@ -74,10 +74,18 @@ export interface RecordQueryResultOpts {
     /** The order in which to sort the query result */
     sorts?: Array<SortConfig>;
     /** The fields (or field names or field ids) to load. Falsey values will be removed. */
-    fields?: Array<Field | string | void | null | false>;
+    fields?: Array<Field | FieldId | string | void | null | false>;
     /** How records in this QueryResult should be colored. */
     recordColorMode?: null | RecordColorMode;
 }
+
+// TODO: add comments in D14756
+/** */
+export type SingleRecordQueryResultOpts = Pick<RecordQueryResultOpts, 'fields' | 'recordColorMode'>;
+
+// TODO: add comments in D14756
+/** */
+export type RecordIdQueryResultOpts = Pick<RecordQueryResultOpts, 'sorts'>;
 
 /** @hidden */
 export interface NormalizedRecordQueryResultOpts {
