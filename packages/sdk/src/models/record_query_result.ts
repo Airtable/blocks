@@ -69,7 +69,95 @@ export interface NormalizedSortConfig {
     direction: 'asc' | 'desc';
 }
 
-/** */
+/**
+ * Used to control what data is loaded in a {@link RecordQueryResult}. Used when creating a
+ * query result using `table/view.selectRecords()` and in convenience hooks {@link useRecords}.
+ *
+ * ## sorts
+ * Pass an array of sorts to control the order of records. The first sort in the array has the
+ * highest priority. If you don't specify sorts, the result will use the inherent order of the
+ * source model: the same order you'd see in the main UI for views and linked record fields, and
+ * an arbitrary (but stable) order for tables.
+ *
+ * Record creation time is used as a tiebreaker: pass an empty array to sort by creation time.
+ *
+ * ```js
+ * const opts = {
+ *     sorts: [
+ *         // sort by someField in ascending order...
+ *         {field: someField},
+ *         // then by someOtherField in descending order
+ *         {field: someOtherField, direction: 'desc'},
+ *     ]
+ * };
+ * const records = useRecords(table, opts);
+ * const queryResult = table.selectRecords(opts);
+ * ```
+ *
+ * ## fields
+ * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
+ * can get pretty big, and we have to keep all that information in memory and up to date if you ask
+ * for it. The fields option lets you make sure that only data relevant to you is loaded.
+ *
+ * You can specify fields with a {@link Field}, by ID, or by name:
+ * ```js
+ * const opts = {
+ *     fields: [
+ *         // we want to only load fieldA:
+ *         fieldA,
+ *         // the field with this id:
+ *         'fldXXXXXXXXXXXXXX',
+ *         // and the field named 'Rating':
+ *         'Rating',
+ *     ],
+ * };
+ * const records = useRecords(table, opts);
+ * const queryResult = table.selectRecords(opts);
+ * ```
+ *
+ * ## recordColorMode
+ * Just like a view in Airtable, you can control the colors of records in a field. There are three
+ * supported record color modes: none, by a view, and by a select field:
+ *
+ * ```js
+ * import {recordColoring} from '@airtable/blocks/models';
+ * // No record coloring:
+ * const opts = {
+ *     recordColorMode: recordColoring.modes.none(),
+ * };
+ *
+ * // Color according to the rules of a view:
+ * const opts = {
+ *     recordColorMode: recordColoring.modes.byView(someView),
+ * };
+ *
+ * // Color by a single select field:
+ * const opts = {
+ *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
+ * });
+ *
+ * const records = useRecords(table, opts);
+ * const queryResult = table.selectRecords(opts);
+ * ```
+ *
+ * By default, views will have whichever coloring is set up in Airtable and tables won't have any
+ * record coloring:
+ *
+ * ```js
+ * // these two are the same:
+ * someView.selectRecords();
+ * someView.selectRecords({
+ *     recordColorMode: recordColoring.modes.byView(someView),
+ * });
+ *
+ * // as are these two:
+ * someTable.selectRecords();
+ * someTable.selectRecords({
+ *     recordColorMode: recordColoring.modes.none(),
+ * });
+ * ```
+ *
+ * */
 export interface RecordQueryResultOpts {
     /** The order in which to sort the query result */
     sorts?: Array<SortConfig>;
@@ -79,12 +167,38 @@ export interface RecordQueryResultOpts {
     recordColorMode?: null | RecordColorMode;
 }
 
-// TODO: add comments in D14756
-/** */
+/**
+ * A subset of {@link RecordQueryResultOpts} used in {@link useRecordById} that omits sorts, as
+ * there is only a single record.
+ *
+ * See RecordQueryResultOpts for full details and examples.
+ *
+ * ```js
+ * const opts = {
+ *     fields: ['My field'],
+ *     recordColorMode: recordColoring.modes.byView(view),
+ * };
+ * const record = useRecordById(table, recordId, opts);
+ * */
 export type SingleRecordQueryResultOpts = Pick<RecordQueryResultOpts, 'fields' | 'recordColorMode'>;
 
-// TODO: add comments in D14756
-/** */
+/**
+ * A subset of {@link RecordQueryResultOpts} used in {@link useRecordIds} that omits fields and
+ * recordColorMode, as record cell values and color are not accessible via this hook.
+ *
+ * See RecordQueryResultOpts for full details and examples.
+ *
+ * ```js
+ * const opts = {
+ *     sorts: [
+ *         // sort by someField in ascending order...
+ *         {field: someField},
+ *         // then by someOtherField in descending order
+ *         {field: someOtherField, direction: 'desc'},
+ *     ]
+ * };
+ * const recordIds = useRecordIds(table, opts);
+ * */
 export type RecordIdQueryResultOpts = Pick<RecordQueryResultOpts, 'sorts'>;
 
 /** @hidden */
@@ -139,83 +253,9 @@ export interface NormalizedRecordQueryResultOpts {
  * Again, if you're writing a React component then our hooks will look after that for you. If not,
  * you can get notified of these changes with `.watch()`.
  *
- * When calling a `.select*` method, you can pass in a number of options:
+ * When calling a `.select*` method, you can pass in a number of options to control the sort order,
+ * fields loaded and coloring mode of records: see {@link RecordQueryResultOpts} for examples.
  *
- * ## sorts
- * Pass an array of sorts to control the order of records within the query result. The first sort
- * in the array has the highest priority. If you don't specify sorts, the query result will use the
- * inherent order of the source model: the same order you'd see in the main UI for views and linked
- * record fields, and an arbitrary (but stable) order for tables.
- *
- * ```js
- * view.selectRecords({
- *     sorts: [
- *         // sort by someField in ascending order...
- *         {field: someField},
- *         // then by someOtherField in descending order
- *         {field: someOtherField, direction: 'desc'},
- *     ]
- * });
- * ```
- *
- * ## fields
- * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
- * can get pretty big, and we have to keep all that information in memory and up to date if you ask
- * for it. The fields option lets you make sure that only data relevant to you is loaded.
- *
- * You can specify fields with a {@link Field}, by ID, or by name:
- * ```js
- * view.selectRecords({
- *     fields: [
- *         // we want to only load fieldA:
- *         fieldA,
- *         // the field with this id:
- *         'fldXXXXXXXXXXXXXX',
- *         // and the field named 'Rating':
- *         'Rating',
- *     ],
- * });
- * ```
- *
- * ## recordColorMode
- * Just like a view in Airtable, you can control the colors of records in a field. There are three
- * supported record color modes:
- *
- * By taking the colors the records have according to the rules of a specific view:
- * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- 
- * someTable.selectRecords({
- *     recordColorMode: recordColoring.modes.byView(someView),
- * });
- * ```
- *
- * Based on the color of a single select field in the table:
- * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- *
- * someView.selectRecords({
- *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
- * });
- * ```
- * 
- * By default, views will have whichever coloring is set up in Airtable and tables won't have any
- * record coloring:
- * 
- * ```js
- * // these two are the same:
- * someView.selectRecords();
- * someView.selectRecords({
- *     recordColorMode: recordColoring.modes.byView(someView),
- * });
- * 
- * // as are these two:
- * someTable.selectRecords();
- * someTable.selectRecords({
- *     recordColorMode: recordColoring.modes.none(),
- * });
- * ```
- * 
  * @docsPath models/query results/RecordQueryResult
  */
 class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
