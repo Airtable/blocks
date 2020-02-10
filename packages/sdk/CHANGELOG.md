@@ -22,6 +22,7 @@ commit that affects the code in a way that consumers might care about should inc
         Passing a `RecordQueryResult` is still supported.
     -   `useRecordById` now accepts a `Table` or `View` and optional `SingleRecordQueryResultOpts`.
         Passing a `RecordQueryResult` is still supported.
+-   Added `cursor.selectedFieldIds` which returns the field IDs that are selected in grid view
 
 ## [0.0.41](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...@airtable/blocks@0.0.41) - 2020-01-27
 

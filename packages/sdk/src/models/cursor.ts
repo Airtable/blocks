@@ -3,6 +3,7 @@ import {BaseData, ModelChange} from '../types/base';
 import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
+import {FieldId} from '../types/field';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
@@ -13,6 +14,7 @@ import Record from './record';
 
 const WatchableCursorKeys = Object.freeze({
     selectedRecordIds: 'selectedRecordIds' as const,
+    selectedFieldIds: 'selectedFieldIds' as const,
     activeTableId: 'activeTableId' as const,
     activeViewId: 'activeViewId' as const,
     isDataLoaded: 'isDataLoaded' as const,
@@ -21,6 +23,7 @@ const WatchableCursorKeys = Object.freeze({
 /**
  * Watchable keys in {@link Cursor}.
  * - `selectedRecordIds`
+ * - `selectedFieldIds`
  * - `activeTableId`
  * - `activeViewId`
  * - `isDataLoaded`
@@ -30,6 +33,7 @@ type WatchableCursorKey = ObjectValues<typeof WatchableCursorKeys>;
 /** @hidden */
 interface CursorData {
     selectedRecordIdSet: ObjectMap<RecordId, boolean> | null;
+    selectedFieldIdSet: ObjectMap<FieldId, boolean> | null;
     activeTableId: TableId | null;
     activeViewId: ViewId | null;
 }
@@ -66,11 +70,13 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         this._airtableInterface = airtableInterface;
 
         const selectedRecordIdSet = baseData.cursorData?.selectedRecordIdSet ?? null;
+        const selectedFieldIdSet = baseData.cursorData?.selectedFieldIdSet ?? null;
         const activeTableId = baseData.activeTableId;
         const activeViewId = activeTableId ? baseData.tablesById[activeTableId].activeViewId : null;
 
         this._cursorData = {
             selectedRecordIdSet,
+            selectedFieldIdSet,
             activeTableId,
             activeViewId,
         };
@@ -96,8 +102,9 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {
         const cursorData = await this._airtableInterface.fetchAndSubscribeToCursorDataAsync();
         this._cursorData.selectedRecordIdSet = cursorData.selectedRecordIdSet;
+        this._cursorData.selectedFieldIdSet = cursorData.selectedFieldIdSet;
 
-        return [WatchableCursorKeys.selectedRecordIds];
+        return [WatchableCursorKeys.selectedRecordIds, WatchableCursorKeys.selectedFieldIds];
     }
     /**
      * @internal
@@ -105,6 +112,7 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     _unloadData() {
         this._airtableInterface.unsubscribeFromCursorData();
         this._cursorData.selectedRecordIdSet = null;
+        this._cursorData.selectedFieldIdSet = null;
     }
     /**
      * The record IDs of all currently selected records, or an empty array if no records are selected.
@@ -120,6 +128,19 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
             throw spawnInvariantViolationError('Cursor data is not loaded');
         }
         const selectedRecordIds = Object.keys(selectedRecordIdSet);
+        return selectedRecordIds;
+    }
+    /**
+     * The field IDs of all currently selected fields, or an empty array if no fields are selected.
+     *
+     * Can be watched.
+     */
+    get selectedFieldIds(): Array<RecordId> {
+        const {selectedFieldIdSet} = this._data;
+        if (!selectedFieldIdSet) {
+            throw spawnInvariantViolationError('Cursor data is not loaded');
+        }
+        const selectedRecordIds = Object.keys(selectedFieldIdSet);
         return selectedRecordIds;
     }
     /**
@@ -198,12 +219,31 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
             [WatchableCursorKeys.activeViewId]: false,
         } as ObjectMap<WatchableCursorKey, boolean>;
         for (const {path, value} of changes) {
-            if (path[0] === 'cursorData' && path[1] === 'selectedRecordIdSet') {
-                if (!(path.length === 2)) {
-                    throw spawnInvariantViolationError('cannot set within selectedRecordIdSet');
+            if (path[0] === 'cursorData') {
+                switch (path[1]) {
+                    case 'selectedRecordIdSet': {
+                        if (path.length !== 2) {
+                            throw spawnInvariantViolationError(
+                                'cannot set within selectedRecordIdSet',
+                            );
+                        }
+                        this._cursorData.selectedRecordIdSet = value as any;
+                        changedKeys[WatchableCursorKeys.selectedRecordIds] = true;
+                        break;
+                    }
+                    case 'selectedFieldIdSet': {
+                        if (path.length !== 2) {
+                            throw spawnInvariantViolationError(
+                                'cannot set within selectedFieldIdSet',
+                            );
+                        }
+                        this._cursorData.selectedFieldIdSet = value as any;
+                        changedKeys[WatchableCursorKeys.selectedFieldIds] = true;
+                        break;
+                    }
+                    default:
+                    // No-op for future unknown paths.
                 }
-                this._cursorData.selectedRecordIdSet = value as any;
-                changedKeys[WatchableCursorKeys.selectedRecordIds] = true;
             }
 
             if (path[0] === 'activeTableId') {
