@@ -38,8 +38,7 @@ const APP_ID = 'appQOxbW7k6mK0Eqd';
 const BLOCK_ID = 'blkDOYCZmdADueASi';
 const BLOCK_INSTALLATION_ID = 'bipHcxcRpB0ObTAGo';
 const DEFAULT_BLOCK_RUN_WAIT_MS = 10 * 1000;
-const BLOCK_RUN_PORT = 9000;
-const BLOCK_RUN_URL = `https://localhost:${BLOCK_RUN_PORT}/`;
+const DEFAULT_BLOCK_RUN_PORT = 9000;
 const BLOCK_RELEASE_URL = 'https://block---q-oxb-w7k6m-k0-eqd--suk0375.airtableblocks.com/';
 const BLOCKS_CLI_PACKAGE = '@airtable/blocks-cli';
 const BLOCK_DIR_NAME = 'smoke_test';
@@ -61,9 +60,14 @@ function kill(pid: number) {
 }
 
 class SmokeTest {
-    constructor(blocksCliCommand: string, blocksCliRunWaitMs: number) {
+    constructor(blocksCliCommand: string, blocksCliRunWaitMs: number, blockRunPort: number) {
         this._blocksCliCommand = blocksCliCommand;
         this._blocksCliRunWaitMs = blocksCliRunWaitMs;
+        this._blockRunPort = blockRunPort;
+    }
+
+    getBlockRunUrl(): string {
+        return `https://localhost:${this._blockRunPort}/`;
     }
 
     async _requestBlockServerRouteAsync(urlBase, urlPath, options) {
@@ -157,12 +161,12 @@ class SmokeTest {
         log(`Starting smoke test using blocks-cli at '${this._blocksCliPath}'`);
 
         // Check if there is a blocks-cli process running elsewhere.
-        if ((await detectPort(BLOCK_RUN_PORT)) !== BLOCK_RUN_PORT) {
+        if ((await detectPort(this._blockRunPort)) !== this._blockRunPort) {
             log(
-                `Port ${BLOCK_RUN_PORT} is currently in use. ` +
+                `Port ${this._blockRunPort} is currently in use. ` +
                     'Please kill or wait for termination before running this test.',
             );
-            throw new Error(`Port ${BLOCK_RUN_PORT} is busy`);
+            throw new Error(`Port ${this._blockRunPort} is busy`);
         }
 
         // Check block --version.
@@ -183,7 +187,10 @@ class SmokeTest {
         const {
             commandProcess: runProcess,
             commandResultPromise: runResultPromise,
-        } = this._runBlocksCli(['run'], this._blockDirPath);
+        } = this._runBlocksCli(
+            ['run', '--default-port', `${this._blockRunPort}`],
+            this._blockDirPath,
+        );
         log(`Started blocks-cli with PID ${runProcess.pid}`);
 
         await delay(this._blocksCliRunWaitMs);
@@ -200,7 +207,9 @@ class SmokeTest {
                 `https://airtable.com/${APP_ID}?blocks=${BLOCK_INSTALLATION_ID}`,
             )}\n` +
                 '-> Click on block dropdown menu and select "Edit block"\n' +
-                `-> Enter ${chalk.bold.underline(BLOCK_RUN_URL)} and click "Start editing block"`,
+                `-> Enter ${chalk.bold.underline(
+                    this.getBlockRunUrl(),
+                )} and click "Start editing block"`,
         );
         await inquirer.prompt([
             {
@@ -212,13 +221,13 @@ class SmokeTest {
 
         log('Checking blocks-cli server is up');
         for (const requestFn of [
-            () => this._requestBlockServerRouteAsync(BLOCK_RUN_URL, '/', {method: 'GET'}),
+            () => this._requestBlockServerRouteAsync(this.getBlockRunUrl(), '/', {method: 'GET'}),
             () =>
-                this._requestBlockServerRouteAsync(BLOCK_RUN_URL, '/__runFrame/ping', {
+                this._requestBlockServerRouteAsync(this.getBlockRunUrl(), '/__runFrame/ping', {
                     method: 'HEAD',
                 }),
             () =>
-                this._requestBlockServerRouteAsync(BLOCK_RUN_URL, '/__runFrame/bundle.js', {
+                this._requestBlockServerRouteAsync(this.getBlockRunUrl(), '/__runFrame/bundle.js', {
                     method: 'GET',
                 }),
         ]) {
@@ -343,7 +352,7 @@ class SmokeTest {
         const runState = await this._startBlocksCliRunAsync();
 
         // Check backend routes on local server.
-        await this._checkBackendRoutesAsync(BLOCK_RUN_URL);
+        await this._checkBackendRoutesAsync(this.getBlockRunUrl());
 
         await this._stopBlocksCliRunAsync(runState);
 
@@ -455,6 +464,7 @@ class SmokeTest {
 
     _blocksCliCommand: string;
     _blocksCliRunWaitMs: number;
+    _blockRunPort: number;
     _blocksCliPath: string;
     _tempDirPath: string;
     _blockDirPath: string;
@@ -483,12 +493,19 @@ if (require.main === module) {
                 type: 'number',
                 describe: 'Time in ms to wait for blocks-cli "run" command',
                 default: DEFAULT_BLOCK_RUN_WAIT_MS,
+            })
+            .option('block_run_port', {
+                type: 'number',
+                describe: 'The port to use for block run',
+                default: DEFAULT_BLOCK_RUN_PORT,
             }).argv;
         const smokeTest = new SmokeTest(
             // eslint-disable-next-line flowtype/no-weak-types
             ((argv.blocks_cli_command: any): string),
             // eslint-disable-next-line flowtype/no-weak-types
             ((argv.blocks_cli_run_wait_ms: any): number),
+            // eslint-disable-next-line flowtype/no-weak-types
+            ((argv.block_run_port: any): number),
         );
         if (argv.reinstall_from_npm) {
             await smokeTest.installAsync();

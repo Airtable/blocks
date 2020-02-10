@@ -79,6 +79,11 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 type: 'string',
                 hidden: true,
             },
+            'default-port': {
+                description: 'Configure the default port to use',
+                type: 'number',
+                default: 9000,
+            },
             remote: {
                 description: 'Configure which remote to use',
                 type: 'string',

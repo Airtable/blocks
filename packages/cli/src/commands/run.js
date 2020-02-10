@@ -10,10 +10,8 @@ const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_r
 
 import type {Argv} from 'yargs';
 
-const DEFAULT_PORT = 9000;
-
 async function runCommandAsync(argv: Argv): Promise<void> {
-    const {transpileAll, sdkRepo} = argv;
+    const {transpileAll, sdkRepo, defaultPort} = argv;
     invariant(typeof transpileAll === 'boolean', 'expects transpileAll to be a boolean');
     const remoteName = argv.remote || null;
     invariant(
@@ -68,7 +66,8 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         backendSdkBaseUrl,
     });
 
-    let port = DEFAULT_PORT;
+    let port = defaultPort;
+    invariant(typeof port === 'number', 'port should be a number');
     // eslint-disable-next-line no-constant-condition
     while (true) {
         try {
