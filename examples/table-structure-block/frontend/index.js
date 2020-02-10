@@ -9,7 +9,7 @@ import {
     FieldIcon,
 } from '@airtable/blocks/ui';
 import {cursor} from '@airtable/blocks';
-import {fieldTypes} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/models';
 import React from 'react';
 
 const FIELD_CELL_WIDTH_PERCENTAGE = '35%';
@@ -103,17 +103,17 @@ function FieldRow({field}) {
 function getHumanReadableFieldType(field) {
     // Format the field types to more closely match those in Airtable's UI
     switch (field.type) {
-        case fieldTypes.DATE_TIME:
+        case FieldType.DATE_TIME:
             return 'Date with time';
-        case fieldTypes.MULTILINE_TEXT:
+        case FieldType.MULTILINE_TEXT:
             return 'Long text';
-        case fieldTypes.MULTIPLE_ATTACHMENTS:
+        case FieldType.MULTIPLE_ATTACHMENTS:
             return 'Attachments';
-        case fieldTypes.MULTIPLE_RECORD_LINKS:
+        case FieldType.MULTIPLE_RECORD_LINKS:
             return 'Linked records';
-        case fieldTypes.MULTIPLE_SELECTS:
+        case FieldType.MULTIPLE_SELECTS:
             return 'Multiple select';
-        case fieldTypes.URL:
+        case FieldType.URL:
             return 'URL';
         default:
             // For everything else, just convert it from camel case

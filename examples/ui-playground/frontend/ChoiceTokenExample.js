@@ -1,7 +1,7 @@
 // @flow
 import React, {useState} from 'react';
 import {ChoiceToken, useBase, Box, FieldPicker} from '@airtable/blocks/ui';
-import {fieldTypes} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/models';
 
 export default function ChoiceTokenExample(props: void) {
     const [field, setField] = useState(null);
@@ -14,7 +14,7 @@ export default function ChoiceTokenExample(props: void) {
                 table={table}
                 field={field}
                 onChange={val => setField((val: any))}
-                allowedTypes={[fieldTypes.SINGLE_SELECT, fieldTypes.MULTIPLE_SELECTS]}
+                allowedTypes={[FieldType.SINGLE_SELECT, FieldType.MULTIPLE_SELECTS]}
                 marginTop="100px"
                 width="200px"
             />

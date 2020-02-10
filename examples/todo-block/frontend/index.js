@@ -14,7 +14,7 @@ import {
     Box,
     Icon,
 } from '@airtable/blocks/ui';
-import {fieldTypes} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/models';
 
 function TodoBlock() {
     const base = useBase();
@@ -53,7 +53,7 @@ function TodoBlock() {
                         table={table}
                         globalConfigKey="selectedDoneFieldId"
                         placeholder="Pick a 'done' field..."
-                        allowedTypes={[fieldTypes.CHECKBOX]}
+                        allowedTypes={[FieldType.CHECKBOX]}
                     />
                 </FormField>
             </Box>
