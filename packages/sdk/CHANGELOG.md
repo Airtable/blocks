@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.42...HEAD)
+
+No changes.
+
+## [0.0.42](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...@airtable/blocks@0.0.42) - 2020-02-10
 
 -   **BREAKING**: Field type and view type enums are now exported from '@airtable/blocks/models' as
     `FieldType` and `ViewType` (previously `fieldTypes` and `viewTypes`). Relatedly, these types are
