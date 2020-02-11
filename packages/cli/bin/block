@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-require('@babel/polyfill');
+require("core-js/stable");
+require("regenerator-runtime/runtime");
 
 const runBlockCliAsync = require('../transpiled/src/run_block_cli_async');
 runBlockCliAsync();

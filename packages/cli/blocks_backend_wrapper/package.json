@@ -3,10 +3,11 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "@babel/polyfill": "^7.4.4",
         "@hapi/joi": "15.1.1",
+        "core-js": "^3.6.4",
         "invariant": "2.2.2",
         "path-to-regexp": "2.0.0",
+        "regenerator-runtime": "^0.13.3",
         "request": "2.87.0",
         "strip-ansi": "5.2.0"
     },

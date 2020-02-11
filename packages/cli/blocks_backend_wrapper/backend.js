@@ -14,7 +14,8 @@
  * since regenerator runtime will not be defined.
  */
 
-require('@babel/polyfill');
+require('core-js/stable');
+require('regenerator-runtime/runtime');
 
 // This is sketchy: some runtime checks for "am I running in Node" check that
 // typeof self === 'undefined', so this breaks that...
