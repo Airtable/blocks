@@ -31,8 +31,7 @@ export default function BaymaxExample() {
     const session = useSession();
     const table = base.tables[0];
     const view = table.views[0];
-    const queryResult = table.selectRecords();
-    const records = useRecords(queryResult);
+    const records = useRecords(table);
     // Map to string to appease flow.
     const allowedColors = Object.values(colors)
         .slice(0, 8)

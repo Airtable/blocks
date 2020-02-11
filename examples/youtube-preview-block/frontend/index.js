@@ -9,7 +9,7 @@ import {
 } from '@airtable/blocks/ui';
 import {cursor} from '@airtable/blocks';
 import React, {useState} from 'react';
-import {viewTypes} from '@airtable/blocks/models';
+import {ViewType} from '@airtable/blocks/models';
 
 // How this block chooses a video to show:
 //
@@ -80,6 +80,11 @@ function RecordPreview({selectedRecordId}) {
 
     const urlField = table.getFieldByName(FIELD_NAME);
 
+    // We use a queryResult instead of the table with useRecords since
+    // we want to rely on some features of queryResult later on
+    // (queryResult.hasRecord and queryResult.getRecordById)
+    // To avoid loading unnecessary data, we pass options to only load
+    // cell values for the url field.
     const queryResult = table.selectRecords({fields: [urlField]});
 
     // Triggers a re-render if records change. Video URL cell value
@@ -111,7 +116,7 @@ function RecordPreview({selectedRecordId}) {
 
     if (
         cursor.activeViewId === null || // activeViewId is briefly null when switching views
-        table.getViewById(cursor.activeViewId).type !== viewTypes.GRID
+        table.getViewById(cursor.activeViewId).type !== ViewType.GRID
     ) {
         return (
             <Container>

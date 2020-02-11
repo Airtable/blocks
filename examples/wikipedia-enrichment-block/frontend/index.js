@@ -21,13 +21,9 @@ function WikipediaEnrichmentBlock() {
     const table = base.getTableByName(TABLE_NAME);
     const titleField = table.getFieldByName(TITLE_FIELD_NAME);
 
+    // load the records ready to be updated
     // we only need to load the word field - the others don't get read, only written to.
-    const queryResult = table.selectRecords({
-        fields: [titleField],
-    });
-
-    // load the records ready to be updated:
-    const records = useRecords(queryResult);
+    const records = useRecords(table, {fields: [titleField]});
 
     // keep track of whether we have up update currently in progress - if there is, we want to hide
     // the update button so you can't have two updates running at once.

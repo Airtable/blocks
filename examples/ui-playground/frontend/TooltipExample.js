@@ -18,7 +18,7 @@ export default function TooltipExample(props: void) {
     const base = useBase();
     const table = base.getTableByIdIfExists(base.tables[0].id);
     const view = table ? table.getViewByIdIfExists(table.views[0].id) : null;
-    const records = useRecords(view ? view.selectRecords() : null);
+    const records = useRecords(view);
     const [selectValue, setSelectValue] = useState('foo');
     const [inputValue, setInputValue] = useState('');
 

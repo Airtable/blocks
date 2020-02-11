@@ -29,9 +29,8 @@ function TodoBlock() {
     const view = table ? table.getViewByIdIfExists(viewId) : null;
     const doneField = table ? table.getFieldByIdIfExists(doneFieldId) : null;
 
-    const queryResult =
-        view && doneField ? view.selectRecords({fields: [table.primaryField, doneField]}) : null;
-    const records = useRecords(queryResult);
+    // Don't need to fetch records if doneField doesn't exist
+    const records = useRecords(doneField ? view : null, {fields: [table.primaryField, doneField]});
 
     const tasks = records
         ? records.map(record => {

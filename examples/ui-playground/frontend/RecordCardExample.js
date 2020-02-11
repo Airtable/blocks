@@ -6,7 +6,7 @@ export default function RecordCardExample() {
     const base = useBase();
     const table = base.getTableByIdIfExists(base.tables[0].id);
     const view = table ? table.getViewByIdIfExists(table.views[0].id) : null;
-    const records = useRecords(view ? view.selectRecords() : null);
+    const records = useRecords(view);
 
     return (
         records &&

@@ -35,7 +35,7 @@ function SimpleChartBlock() {
     const xFieldId = globalConfig.get(GlobalConfigKeys.X_FIELD_ID);
     const xField = table ? table.getFieldByIdIfExists(xFieldId) : null;
 
-    const records = useRecords(view ? view.selectRecords() : null);
+    const records = useRecords(view);
 
     const data = records && xField ? getChartData({records, xField}) : null;
 

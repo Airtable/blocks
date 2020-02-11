@@ -17,7 +17,7 @@ export default function RecordCardListExample(props: Props) {
 
     const table = base.getTableByIdIfExists(base.tables[0].id);
     const view = table ? table.getViewByIdIfExists(table.views[0].id) : null;
-    const records = useRecords(view ? view.selectRecords() : null);
+    const records = useRecords(view);
     const numAdditionalFieldsToShowOptions = table
         ? Array(table.fields.length)
               .fill(null)

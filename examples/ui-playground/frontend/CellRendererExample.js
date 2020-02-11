@@ -6,8 +6,7 @@ export default function CellRendererExample(props: void) {
     const [field, setField] = useState(null);
     const base = useBase();
     const table = base.tables[0];
-    const queryResult = table.selectRecords();
-    const records = useRecords(queryResult);
+    const records = useRecords(table);
     return (
         <Box display="flex" flexDirection="column">
             <FieldPicker table={table} field={field} onChange={setField} />

@@ -12,7 +12,9 @@ function SummaryBlock() {
 
     const field = table.getFieldByName(FIELD_NAME);
 
-    const records = useRecords(table.selectRecords({fields: [field]}));
+    // To avoid loading unnecessary data, we pass options to useRecords to only load cell values
+    // for the field we are summarizing.
+    const records = useRecords(table, {fields: [field]});
 
     // `Field` objects have an `availableAggregators` property that
     // returns a list of aggregation functions that are valid for this

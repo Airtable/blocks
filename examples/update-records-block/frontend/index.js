@@ -74,12 +74,9 @@ function Container({children}) {
 }
 
 function UpdateSelectedRecordsButton({tableToUpdate, fieldToUpdate, selectedRecordIds}) {
-    const queryResult = tableToUpdate.selectRecords({fields: [fieldToUpdate]});
-
-    // Triggers a re-render if records values change. We'll be using queryResult
-    // to calculate what the new cell values should be, so this makes sure
-    // the record values in queryResult are up to date.
-    useRecords(queryResult);
+    // Triggers a re-render if records values change. This makes sure the record values are
+    // up to date when calculating their new values.
+    const records = useRecords(tableToUpdate, {fields: [fieldToUpdate]});
 
     // Track whether we're currently in the middle of performing an update.
     // We use this to disable the button during an update.
@@ -104,9 +101,7 @@ function UpdateSelectedRecordsButton({tableToUpdate, fieldToUpdate, selectedReco
     // .filter narrows the list of all records down to just the records with id
     // in selectedRecordIdSet.
     const selectedRecordIdsSet = new Set(selectedRecordIds);
-    const recordsToUpdate = queryResult.records.filter(record =>
-        selectedRecordIdsSet.has(record.id),
-    );
+    const recordsToUpdate = records.filter(record => selectedRecordIdsSet.has(record.id));
 
     const updates = recordsToUpdate.map(record => ({
         id: record.id,

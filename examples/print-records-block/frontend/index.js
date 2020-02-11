@@ -65,7 +65,7 @@ function Toolbar({table}) {
 
 // Renders a <Record> for each of the records in the specified view.
 function Report({view}) {
-    const records = useRecords(view ? view.selectRecords() : null);
+    const records = useRecords(view);
 
     if (!view) {
         return <div>Pick a view</div>;
