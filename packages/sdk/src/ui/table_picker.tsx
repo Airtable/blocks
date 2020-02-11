@@ -40,33 +40,8 @@ interface TablePickerProps extends SharedTablePickerProps {
 /**
  * Dropdown menu component for selecting tables.
  *
- * @example
- * ```js
- * import {TablePicker, useBase, useRecords} from '@airtable/blocks/ui';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="modelpickers--tablepicker-example" title="Table picker example" ]]
  *
- * function Block() {
- *     useBase();
- *     const [table, setTable] = useState(null);
- *     const queryResult = table ? table.selectRecords() : null;
- *     const records = useRecords(queryResult);
- *
- *     const summaryText = table ? `${table.name} has ${records.length} record(s).` : 'No table selected.';
- *     return (
- *         <Fragment>
- *             <p style={{marginBottom: 16}}>{summaryText}</p>
- *             <label>
- *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePicker
- *                     table={table}
- *                     onChange={newTable => setTable(newTable)}
- *                     shouldAllowPickingNone={true}
- *                 />
- *             </label>
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/TablePicker
  * @component
  */

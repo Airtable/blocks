@@ -63,7 +63,7 @@ export type FitInWindowMode = ObjectValues<typeof FitInWindowModes>;
 /**
  * Props for the {@link Popover} component.
  *
- * @docsPath UI/components/Popover
+ * @hidden
  */
 interface PopoverProps {
     /** Child elements to render. */

@@ -25,22 +25,8 @@ interface ColorPaletteSyncedProps extends SharedColorPaletteProps {
 /**
  * A wrapper around the {@link ColorPalette} component that syncs with {@link GlobalConfig}.
  *
- * @example
- * ```js
- * import {ColorPaletteSynced, colors} from '@airtable/blocks/ui';
- * import {globalConfig} from '@airtable/blocks';
- * import React from 'react';
+ * [[ Story id="colorpalette--synced-example" title="Synced color palette example" ]]
  *
- * function DisplayOptions() {
- *     const allowedColors = [colors.GREEN, colors.BLUE, colors.RED]
- *     return (
- *         <ColorPaletteSynced
- *             allowedColors={allowedColors}
- *             globalConfigKey="displayColor"
- *         />
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/ColorPaletteSynced
  * @groupPath UI/components/ColorPalette

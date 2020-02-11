@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
-import {FieldTypes, FieldData, PrivateColumnType, FieldType} from '../types/field';
+import {FieldData, PrivateColumnType, FieldType} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -110,7 +110,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         );
         // @ts-ignore
         if (type === 'lookup') {
-            return FieldTypes.MULTIPLE_LOOKUP_VALUES;
+            return FieldType.MULTIPLE_LOOKUP_VALUES;
         } else {
             return type;
         }
@@ -119,12 +119,12 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * The configuration options of the field. The structure of the field's
      * options depend on the field's type. Can be watched.
      *
-     * @see {@link FieldTypes}
+     * @see {@link FieldType}
      * @example
      * ```js
-     * import {fieldTypes} from '@airtable/blocks/models';
+     * import {FieldType} from '@airtable/blocks/models';
      *
-     * if (myField.type === fieldTypes.CURRENCY) {
+     * if (myField.type === FieldType.CURRENCY) {
      *     console.log(myField.options.symbol);
      *     // => '$'
      * }
@@ -198,8 +198,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         });
     }
     /**
+     * Checks if the given aggregator is available for this field.
+     *
      * @param aggregator The aggregator object or aggregator key.
-     * @returns `true` if the given aggregator is available for this field, `false` otherwise.
      * @example
      * ```js
      * import {aggregators} from '@airtable/blocks/models';
@@ -210,7 +211,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * // => true
      *
      * // Using an aggregator key
-     * console.log(mySingleLineTextField.isAggregatorAvailable('totalAttachmentSize'));
+     * console.log(myTextField.isAggregatorAvailable('totalAttachmentSize'));
      * // => false
      * ```
      */
@@ -225,11 +226,10 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return availableAggregatorKeys.some(key => key === aggregatorKey);
     }
     /**
-     * Given a string, will attempt to parse it and return a valid cell value for
-     * the field's current config.
+     * Attempt to parse a given string and return a valid cell value for the field's current config.
+     * Returns `null` if unable to parse the given string.
      *
      * @param string The string to parse.
-     * @returns The parsed cell value, or `null` if unable to parse the given string.
      * @example
      * ```js
      * const inputString = '42';

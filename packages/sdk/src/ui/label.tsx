@@ -38,20 +38,8 @@ interface LabelProps extends AllStylesProps, AriaProps {
 /**
  * A label component.
  *
- * @example
- * ```js
- * import {Label, Input} from '@airtable/blocks/ui';
- * import React, {Fragment} from 'react';
+ * [[ Story id="label--example" title="Label example" ]]
  *
- * function LabelExample() {
- *     return (
- *       <Fragment>
- *           <Label htmlFor="my-input">Label</Label>
- *           <Input id="my-input" onChange={() => {}} value="" />
- *       </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/Label
  * @component
  */

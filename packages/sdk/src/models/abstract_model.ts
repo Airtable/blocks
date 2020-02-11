@@ -85,7 +85,7 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
         );
     }
     /**
-     * @returns A string representation of the model for use in debugging.
+     * A string representation of the model for use in debugging.
      */
     toString(): string {
         return `[${(this.constructor as typeof AbstractModel)._className} ${this.id}]`;

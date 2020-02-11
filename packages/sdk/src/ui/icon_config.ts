@@ -1,7 +1,6 @@
-/** @hidden */ /** */
 import {createEnum, EnumType, createPropTypeFromEnum, ObjectMap} from '../private_utils';
 
-const iconNamesArray = [
+export const iconNamesArray = [
     'android',
     'apple',
     'ascending',
@@ -159,6 +158,11 @@ const iconNamesArray = [
     'x',
 ] as const;
 export const iconNames = createEnum(...iconNamesArray);
+/**
+ * List of all icon names. If you need to render an icon use the {@link Icon|Icon component}.
+ *
+ * [[ Story id="icon--example" title="Icon example" height="576px"]]
+ */
 export type IconName = EnumType<typeof iconNames>;
 export const iconNamePropType = createPropTypeFromEnum(iconNames);
 
@@ -320,6 +324,7 @@ const microIconNamesArray = [
     'xMicro',
 ] as const;
 export const microIconNames = createEnum(...microIconNamesArray);
+/** @hidden */
 export type MicroIconName = EnumType<typeof microIconNames>;
 export const microIconNamePropType = createPropTypeFromEnum(microIconNames);
 
@@ -949,6 +954,7 @@ const microIconPaths: ObjectMap<MicroIconName, string> = Object.freeze({
         'M7.41421356,6 L9.88226406,3.5319495 C10.0816659,3.33254771 10.0828664,3.01179862 9.88577489,2.81470708 L9.18529292,2.11422511 C8.97977275,1.90870494 8.66708101,1.91870543 8.4680505,2.11773594 L6,4.58578644 L3.5319495,2.11773594 C3.33254771,1.91833414 3.01179862,1.91713357 2.81470708,2.11422511 L2.11422511,2.81470708 C1.90870494,3.02022725 1.91870543,3.33291899 2.11773594,3.5319495 L4.58578644,6 L2.11773594,8.4680505 C1.91833414,8.66745229 1.91713357,8.98820138 2.11422511,9.18529292 L2.81470708,9.88577489 C3.02022725,10.0912951 3.33291899,10.0812946 3.5319495,9.88226406 L6,7.41421356 L8.4680505,9.88226406 C8.66745229,10.0816659 8.98820138,10.0828664 9.18529292,9.88577489 L9.88577489,9.18529292 C10.0912951,8.97977275 10.0812946,8.66708101 9.88226406,8.4680505 L7.41421356,6 L7.41421356,6 Z',
 } as const);
 
+/** @hidden */
 export type AllIconName = IconName & MicroIconName;
 export const allIconPaths: ObjectMap<AllIconName, string> = Object.freeze({
     ...iconPaths,

@@ -5,6 +5,7 @@ import * as React from 'react';
 import {compose} from '@styled-system/core';
 import {CollaboratorData} from '../types/collaborator';
 import Box from './box';
+import Text from './text';
 import {baymax} from './baymax_utils';
 import useStyledSystem from './use_styled_system';
 import {
@@ -36,7 +37,7 @@ interface CollaboratorTokenStyleProps extends FlexItemSetProps, PositionSetProps
 
 const styleParser = compose(flexItemSet, positionSet, margin);
 
-const collaboratorTokenStylePropTypes = {
+export const collaboratorTokenStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
@@ -61,20 +62,8 @@ interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnc
 /**
  * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
  *
- * @example
- * ```js
- * import {CollaboratorToken, useSession} from '@airtable/blocks/ui';
+ * [[ Story id="collaboratortoken--example" title="Collaborator token example" ]]
  *
- * function CurrentUserGreeter() {
- *     const session = useSession();
- *     return (
- *         <React.Fragment>
- *             Hello,
- *             <CollaboratorToken collaborator={session.currentUser} />!
- *         </React.Fragment>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/CollaboratorToken
  */
@@ -129,7 +118,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
                     backgroundColor="grayLight2"
                 />
             )}
-            <Box
+            <Text
                 className={baymax('truncate')}
                 paddingRight={2}
                 paddingLeft={3}
@@ -143,7 +132,7 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
                 lineHeight={1.4}
             >
                 {userName}
-            </Box>
+            </Text>
         </Box>
     );
 };

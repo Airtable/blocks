@@ -200,27 +200,8 @@ interface InputProps extends SharedInputProps {
 /**
  * An input component. A wrapper around `<input>` that fits in with Airtable's user interface.
  *
- * @example
- * ```js
- * import {Input} from '@airtable/blocks/ui';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="input--example" title="Input example" ]]
  *
- * function HelloSomeone() {
- *     const [value, setValue] = useState('world');
- *
- *     return (
- *         <Fragment>
- *             <div>Hello, {value}!</div>
- *
- *             <Input
- *                 value={value}
- *                 onChange={(event) => setValue(event.target.value)}
- *                 placeholder="world"
- *             />
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/Input
  * @component
  */

@@ -11,7 +11,7 @@ import {config as zIndexConfig, ZIndexProps} from './z_index';
 /**
  * Style props for the position of an element.
  *
- * @docsPath UI/system/Position
+ * @docsPath UI/Style System/Position
  */
 export interface PositionSetProps
     extends PositionProps,

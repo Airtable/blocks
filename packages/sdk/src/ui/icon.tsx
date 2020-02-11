@@ -77,23 +77,15 @@ export const sharedIconPropTypes = {
  * * {@link IconStyleProps}
  */
 interface IconProps extends SharedIconProps {
-    /** The name of the icon. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
+    /** The name of the icon. For more details, see the {@link IconName|list of supported icons}. */
     name: IconName;
 }
 
 /**
  * A vector icon from the Airtable icon set.
  *
- * @example
- * ```js
- * import {Icon} from '@airtable/blocks/ui';
+ * [[ Story id="icon--example" title="Icon example" height="576px"]]
  *
- * const MyIcon = (
- *     <Icon
- *         name="heart"
- *     />
- * );
- * ```
  * @component
  * @docsPath UI/components/Icon
  */

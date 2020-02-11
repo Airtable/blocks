@@ -41,7 +41,7 @@ const viewMetadataQueryResultPool: ObjectPool<
 /**
  * Contains information about a view that isn't loaded by default e.g. field order and visible fields.
  *
- * In a React component, you might want to use {@link useViewMetadata}.
+ * In a React component, we recommend using {@link useViewMetadata} instead.
  *
  * @example
  * ```js
@@ -58,7 +58,7 @@ const viewMetadataQueryResultPool: ObjectPool<
  *     viewMetadata.unloadData();
  * }
  * ```
- * @docsPath models/Query results/ViewMetadataQueryResult
+ * @docsPath models/query results/ViewMetadataQueryResult
  */
 class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     ViewMetadata,

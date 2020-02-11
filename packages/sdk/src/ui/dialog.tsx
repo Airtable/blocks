@@ -65,42 +65,8 @@ interface DialogProps extends DialogStyleProps {
 /**
  * A styled modal dialog component.
  *
- * @example
- * ```js
- * import {Button, Dialog} from '@airtable/blocks/ui';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="dialog--example" title="Dialog example" ]]
  *
- * function Block() {
- *     const [isDialogOpen, setIsDialogOpen] = useState(false);
- *     return (
- *         <Fragment>
- *             <Button
- *                 variant="primary"
- *                 onClick={() => setIsDialogOpen(true)}
- *             >
- *                 Open dialog
- *             </Button>
- *             {isDialogOpen && (
- *                 <Dialog onClose={() => setIsDialogOpen(false)}>
- *                     <Fragment>
- *                         <Dialog.CloseButton />
- *                         <h1
- *                             style={{
- *                                 marginBottom: 8,
- *                                 fontSize: 20,
- *                                 fontWeight: 500,
- *                             }}
- *                         >
- *                             Dialog
- *                         </h1>
- *                         <p>This is the dialog content.</p>
- *                     </Fragment>
- *                 </Dialog>
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/Dialog
  * @component
  */

@@ -5,7 +5,7 @@ import {values, ObjectMap, has} from '../private_utils';
 import getSdk from '../get_sdk';
 import Field from '../models/field';
 import Table from '../models/table';
-import {FieldTypes, FieldType} from '../types/field';
+import {FieldType} from '../types/field';
 import {SharedSelectBaseProps, sharedSelectBasePropTypes} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
@@ -28,7 +28,7 @@ export interface SharedFieldPickerProps extends SharedSelectBaseProps {
 
 export const sharedFieldPickerPropTypes = {
     table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldTypes)).isRequired),
+    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(FieldType)).isRequired),
     shouldAllowPickingNone: PropTypes.bool,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
@@ -49,54 +49,8 @@ interface FieldPickerProps extends SharedFieldPickerProps {
 /**
  * Dropdown menu component for selecting fields.
  *
- * @example
- * ```js
- * import {TablePicker, FieldPicker, useBase} from '@airtable/blocks/ui';
- * import {fieldTypes} from '@airtable/blocks/models';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="modelpickers--fieldpicker-example" title="Field picker example" ]]
  *
- * function Block() {
- *     useBase();
- *     const [table, setTable] = useState(null);
- *     const [field, setField] = useState(null);
- *
- *     const summaryText = field ? `The field type for ${field.name} is ${field.type}.` : 'No field selected.';
- *     return (
- *         <Fragment>
- *             <p style={{marginBottom: 16}}>{summaryText}</p>
- *             <label style={{display: 'block', marginBottom: 16}}>
- *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePicker
- *                     table={table}
- *                     onChange={newTable => {
- *                         setTable(newTable);
- *                         setField(null);
- *                     }}
- *                     shouldAllowPickingNone={true}
- *                 />
- *             </label>
- *             {table && (
- *                 <label>
- *                     <div style={{marginBottom: 8, fontWeight: 500}}>Field</div>
- *                     <FieldPicker
- *                         table={table}
- *                         field={field}
- *                         onChange={newField => setField(newField)}
- *                         allowedTypes={[
- *                             fieldTypes.SINGLE_LINE_TEXT,
- *                             fieldTypes.MULTILINE_TEXT,
- *                             fieldTypes.EMAIL,
- *                             fieldTypes.URL,
- *                             fieldTypes.PHONE_NUMBER,
- *                         ]}
- *                         shouldAllowPickingNone={true}
- *                     />
- *                 </label>
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/FieldPicker
  * @component
  */

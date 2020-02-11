@@ -120,28 +120,8 @@ interface HeadingProps extends AllStylesProps, AriaProps {
 /**
  * A heading component with sizes and variants.
  *
- * @example
- * ```js
- * import {Heading} from '@airtable/blocks/ui';
- * import React, {Fragment} from 'react';
+ * [[ Story id="heading--example" title="Heading example" ]]
  *
- * function HeadingExample() {
- *     return (
- *         <Fragment>
- *             <Heading>Default heading</Heading>
- *             <Heading size="small" variant="caps">Small all caps heading</Heading>
- *             <Heading
- *                  size={{
- *                      xsmallViewport: 'xsmall',
- *                      smallViewport: 'xsmall',
- *                      mediumViewport: 'small',
- *                      largeViewport: 'default'
- *                  }}
- *              >Responsive heading</Heading>
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/Heading
  * @component
  */

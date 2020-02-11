@@ -4,13 +4,12 @@ import GlobalConfig from '../global_config';
 import useWatchable from './use_watchable';
 
 /**
- * Returns the {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig} changes.
- *
- * @returns The block's global config.
+ * Returns the block's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
+ * changes.
  *
  * @example
  * ```js
- * import {useGlobalConfig} from '@airtable/blocks/ui';
+ * import {Button, useGlobalConfig} from '@airtable/blocks/ui';
  *
  * function SyncedCounter() {
  *     const globalConfig = useGlobalConfig();
@@ -22,9 +21,9 @@ import useWatchable from './use_watchable';
  *
  *     return (
  *         <React.Fragment>
- *             <button onClick={decrement} disabled={!isEnabled}>-</button>
+ *             <Button icon="minus" onClick={decrement} disabled={!isEnabled} ariaLabel="decrease"/>
  *             {count}
- *             <button onClick={increment} disabled={!isEnabled}>+</button>
+ *             <Button icon="plus" onClick={increment} disabled={!isEnabled} airaLabel="increase"/>
  *         </React.Fragment>
  *     );
  * }

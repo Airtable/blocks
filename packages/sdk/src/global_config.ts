@@ -28,9 +28,13 @@ type WatchableGlobalConfigKey = string;
  * Contents will not be updated in real-time when the installation is running in
  * a publicly shared base.
  *
- * Any key can be watched to know when the value of the key changes.
+ * Any key can be watched to know when the value of the key changes. If you want your
+ * component to automatically re-render whenever any key on GlobalConfig changes, try using the
+ * {@link useGlobalConfig} hook.
  *
  * You should not need to construct this object yourself.
+ *
+ * The maximum allowed size of each URL-encoded write to GlobalConfig is 100kB.
  *
  * @example
  * ```js
@@ -97,8 +101,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * Get the value at a path. Throws an error if the path is invalid.
      *
+     * Returns undefined if no value exists at that path.
+     *
      * @param key A string for the top-level key, or an array of strings describing the path to the value.
-     * @returns The value at the provided path, or `undefined` if no value exists at that path.
      * @example
      * ```js
      * import {globalConfig} from '@airtable/blocks';
@@ -125,22 +130,27 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Accepts partial input, in the same format as {@link setAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
+     * Returns `{hasPermission: true}` if the current user can set the specified key,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise.  `reasonDisplayString` may
+     * be used to display an error message to the user.
+     *
      * @param key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
      *
      * @example
      * ```js
      * // Check if user can update a specific key and value.
-     * const setCheckResult = globalConfig.checkPermissionsForSet('favoriteColor', 'purple');
+     * const setCheckResult =
+     *     globalConfig.checkPermissionsForSet('favoriteColor', 'purple');
      * if (!setCheckResult.hasPermission) {
      *     alert(setCheckResult.reasonDisplayString);
      * }
      *
-     * // Check if user can update a specific key, when you don't know the value yet.
-     * const setKeyCheckResult = globalConfig.checkPermissionsForSet('favoriteColor');
+     * // Check if user can update a specific key without knowing the value
+     * const setKeyCheckResult =
+     *     globalConfig.checkPermissionsForSet('favoriteColor');
      *
-     * // Check if user could set globalConfig values, without knowing the specific key/value yet
+     * // Check if user can update globalConfig without knowing key or value
      * const setUnknownKeyCheckResult = globalConfig.checkPermissionsForSet();
      * ```
      */
@@ -162,20 +172,20 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *
      * @param key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
-     * @returns boolean Whether or not the user can set the specified key.
      *
      * @example
      * ```js
      * // Check if user can update a specific key and value.
-     * const canSetFavoriteColorToPurple = globalConfig.hasPermissionToSet('favoriteColor', 'purple');
+     * const canSetFavoriteColorToPurple =
+     *     globalConfig.hasPermissionToSet('favoriteColor', 'purple');
      * if (!canSetFavoriteColorToPurple) {
      *     alert('Not allowed!');
      * }
      *
-     * // Check if user can update a specific key, when you don't know the value yet.
+     * // Check if user can update a specific key without knowing the value
      * const canSetFavoriteColor = globalConfig.hasPermissionToSet('favoriteColor');
      *
-     * // Check if user could set globalConfig values, without knowing the specific key/value yet
+     * // Check if user can update globalConfig without knowing key or value
      * const canSetGlobalConfig = globalConfig.hasPermissionToSet();
      * ```
      */
@@ -187,12 +197,12 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * update to be persisted to Airtable servers.
+     *
      * Updates are applied optimistically locally, so your change will be reflected in
      * {@link GlobalConfig} before the promise resolves.
      *
      * @param key A string for the top-level key, or an array of strings describing the path to set.
      * @param value The value to set at the specified path. Use `undefined` to delete the value at the given path.
-     * @returns A promise that will resolve once the update is persisted to Airtable.
      * @example
      * ```js
      * import {globalConfig} from '@airtable/blocks';
@@ -201,9 +211,9 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
      *         globalConfig.setPathsAsync('favoriteColor', color);
      *     }
-     *     // The update is now applied within your block (eg will be reflected in
-     *     // globalConfig) but are still being saved to Airtable servers (eg.
-     *     // may not be updated for other users yet)
+     *     // The update is now applied within your block (eg will be
+     *     // reflected in globalConfig) but are still being saved to
+     *     // Airtable servers (e.g. may not be updated for other users yet)
      * }
      *
      * async function updateFavoriteColorIfPossibleAsync(color) {
@@ -225,9 +235,11 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * Accepts partial input, in the same format as {@link setPathsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
-     * @param updates The paths and values to set.
-     * @returns PermissionCheckResult `{hasPermission: true}` if the current user can set the specified key, `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be used to display an error message to the user.
+     * Returns `{hasPermission: true}` if the current user can set the specified key,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
      *
+     * @param updates The paths and values to set.
      * @example
      * ```js
      * // Check if user can update a specific keys and values.
@@ -241,7 +253,8 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *
      * // Check if user could potentially set globalConfig values.
      * // Equivalent to globalConfig.checkPermissionsForSet()
-     * const setUnknownPathsCheckResult = globalConfig.checkPermissionsForSetPaths();
+     * const setUnknownPathsCheckResult =
+     *     globalConfig.checkPermissionsForSetPaths();
      * ```
      */
     checkPermissionsForSetPaths(
@@ -257,13 +270,13 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
     /**
      * An alias for `globalConfig.checkPermissionsForSetPaths(updates).hasPermission`.
      *
-     * Checks whether the current user has permission to perform the specified updates to global config.
+     * Checks whether the current user has permission to perform the specified updates to global
+     * config.
      *
      * Accepts partial input, in the same format as {@link setPathsAsync}.
      * The more information provided, the more accurate the permissions check will be.
      *
      * @param updates The paths and values to set.
-     * @returns boolean Whether or not the user has permission to apply the specified updates to globalConfig.
      *
      * @example
      * ```js
@@ -293,7 +306,6 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      * {@link GlobalConfig} before the promise resolves.
      *
      * @param updates The paths and values to set.
-     * @returns A promise that will resolve once the update is persisted to Airtable.
      * @example
      * ```js
      * import {globalConfig} from '@airtable/blocks';
@@ -308,7 +320,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *         globalConfig.setPathsAsync(updates);
      *     }
      *     // The updates are now applied within your block (eg will be reflected in
-     *     // globalConfig) but are still being saved to Airtable servers (eg. they
+     *     // globalConfig) but are still being saved to Airtable servers (e.g. they
      *     // may not be updated for other users yet)
      * }
      *

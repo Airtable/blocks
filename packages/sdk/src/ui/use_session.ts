@@ -12,8 +12,6 @@ import useWatchable from './use_watchable';
  * control of when your component updates or want to do anything other than re-render, the lower
  * level {@link useWatchable} hook might help.
  *
- * @returns The current session.
- *
  * @example
  * ```js
  * import {CollaboratorToken, useSession} from '@airtable/blocks/ui';

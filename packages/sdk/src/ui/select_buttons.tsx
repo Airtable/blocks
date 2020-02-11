@@ -141,28 +141,10 @@ interface SelectButtonsProps extends SharedSelectButtonsProps {
 }
 
 /**
- *  A segmented control for selecting one value from a set of options.
+ * A segmented control for selecting one value from a set of options.
  *
- * @example
- * ```js
- * import {SelectButtons} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="selectbuttons--example" title="Select buttons example" ]]
  *
- * function ChartTypePicker() {
- *     const [chartType, setChartType] = useState('bar');
- *     return (
- *         <SelectButtons
- *             value={chartType}
- *             options={[
- *                 {value: 'bar', label: 'Bar'},
- *                 {value: 'line', label: 'Line'},
- *                 {value: 'scatter', label: 'Scatter'},
- *             ]}
- *             onChange={setChartType}
- *         />
- *     );
- * }
- * ```
  * @docsPath UI/components/SelectButtons
  * @component
  */

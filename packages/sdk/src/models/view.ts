@@ -114,23 +114,25 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         );
     }
     /**
-     * Select records from the view. Returns a query result. See {@RecordQueryResult} for more.
+     * Select records from the view. Returns a {@link RecordQueryResult}.
+     *
+     * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
+     * features of a QueryResult (e.g. `queryResult.getRecordById`)
      *
      * @param opts Options for the query, such as sorts, fields, and record coloring. By
      * default, records will be coloured according to the view.
-     * @returns A record query result.
      * @example
      * ```js
-     * import {UI} from '@airtable/blocks';
+     * import {useBase, useRecords} from '@airtable/blocks/UI';
      * import React from 'react';
      *
      * function TodoList() {
-     *     const base = UI.useBase();
+     *     const base = useBase();
      *     const table = base.getTableByName('Tasks');
      *     const view = table.getViewByName('Grid view');
      *
      *     const queryResult = view.selectRecords();
-     *     const records = UI.useRecords(queryResult);
+     *     const records = useRecords(queryResult);
      *
      *     return (
      *         <ul>
@@ -160,9 +162,9 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         );
     }
     /**
-     * Select the field order and visible fields from the view. See {@ViewMetadataQueryResult} for more.
+     * Select the field order and visible fields from the view. Returns a
+     * {@link ViewMetadataQueryResult}.
      *
-     * @returns a {@ViewMetadataQueryResult}
      * @example
      * ```js
      * async function loadMetadataForViewAsync(view) {

@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: ProgressBar */ /** */
 import PropTypes from 'prop-types';
-import {cx} from 'emotion';
+import {cx, css} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import colors from '../colors';
@@ -38,6 +38,7 @@ import {
 import {OptionalResponsiveProp} from './system/utils/types';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
 import Box from './box';
+import theme from './theme/default_theme';
 
 /**
  * Style props for the {@link ProgressBar} component. Also accepts:
@@ -97,7 +98,7 @@ export const progressBarStylePropTypes = {
  * @noInheritDoc
  */
 interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
-    /** A CSS color, such as `#ff9900`. */
+    /** A CSS color, such as `#ff9900`. Defaults to a blue color. */
     barColor?: string;
     /** A number between 0 and 1. 0 is 0% complete, 0.5 is 50% complete, 1 is 100% complete. If you include a number outside of the range, the value will be clamped to be inside of the range. */
     progress: number;
@@ -107,12 +108,18 @@ interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
     style?: React.CSSProperties;
 }
 
+const progressBarClassName = css({
+    position: 'relative',
+    borderRadius: theme.radii.circle,
+    overflow: 'hidden',
+});
+
 /**
  * A progress bar.
  *
  * @example
  * ```js
- * import {UI} from '@airtable/blocks/ui';
+ * import {ProgressBar} from '@airtable/blocks/ui';
  *
  * function MyComponent() {
  *     return (
@@ -128,7 +135,7 @@ interface ProgressBarProps extends ProgressBarStyleProps, TooltipAnchorProps {
  */
 const ProgressBar = (props: ProgressBarProps) => {
     const {
-        barColor,
+        barColor = theme.colors.blueBright,
         progress,
         onMouseEnter,
         onMouseLeave,
@@ -140,27 +147,26 @@ const ProgressBar = (props: ProgressBarProps) => {
         ...styleProps
     } = props;
 
-    const clampedProgress = clamp(progress, 0, 1);
+    const clampedProgressValue = clamp(progress, 0, 1) * 100;
     const classNameForStyleProps = useStyledSystem<ProgressBarStyleProps>(styleProps, styleParser);
 
     return (
-        <Box
+        <div
+            role="progressbar"
+            aria-valuenow={clampedProgressValue}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={onClick}
-            className={cx(classNameForStyleProps, className)}
+            className={cx(progressBarClassName, classNameForStyleProps, className)}
             style={style}
-            position="relative"
-            borderRadius="circle"
-            overflow="hidden"
         >
             <Box
                 className={baymax('animate')}
-                width={`${clampedProgress * 100}%`}
+                width={`${clampedProgressValue}%`}
                 height="100%"
                 backgroundColor={barColor}
             />
-        </Box>
+        </div>
     );
 };
 

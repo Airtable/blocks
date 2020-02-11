@@ -41,39 +41,14 @@ interface ConfirmationDialogProps extends DialogStyleProps {
 
 /**
  * A styled modal dialog component that prompts the user to confirm or cancel an action.
+ *
+ * [[ Story id="confirmationdialog--example" title="Confirmation dialog example" ]]
+ *
  * By default, this component will focus the "Confirm" button on mount, so that pressing
  * the Enter key will confirm the action.
  *
- * @example
- * ```js
- * import {Button, Dialog, ConfirmationDialog} from '@airtable/blocks/ui';
- * import React, {Fragment, useState} from 'react';
- *
- * function Block() {
- *     const [isDialogOpen, setIsDialogOpen] = useState(false);
- *     return (
- *         <Fragment>
- *             <Button
- *                 variant="primary"
- *                 onClick={() => setIsDialogOpen(true)}
- *             >
- *                 Open dialog
- *             </Button>
- *             {isDialogOpen && (
- *                 <ConfirmationDialog
- *                     title="Are you sure?"
- *                     body="This action can't be undone."
- *                     onConfirm={() => {
- *                         alert('Confirmed.');
- *                         setIsDialogOpen(false);
- *                     }}
- *                     onCancel={() => setIsDialogOpen(false)}
- *                 />
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
+ * @component
+ * @docsPath UI/components/ConfirmationDialog
  */
 class ConfirmationDialog extends React.Component<ConfirmationDialogProps> {
     /** @hidden */

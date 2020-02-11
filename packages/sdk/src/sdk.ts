@@ -215,11 +215,12 @@ export default class BlockSdk {
      * @example
      * ```js
      * import React from 'react';
-     * import {UI, reload} from '@airtable/blocks';
+     * import {reload} from '@airtable/blocks';
+     * import {Button, initializeBlock} from '@airtable/blocks/ui';
      * function MyBlock() {
-     *     return <UI.Button onClick={() => reload()}>Reload</UI.Button>;
+     *     return <Button onClick={() => reload()}>Reload</Button>;
      * }
-     * UI.initializeBlock(() => <MyBlock />);
+     * initializeBlock(() => <MyBlock />);
      * ```
      */
     reload() {

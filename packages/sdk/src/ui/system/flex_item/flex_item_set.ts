@@ -12,7 +12,7 @@ import {config as orderConfig, OrderProps} from './order';
 /**
  * Style props for a flex item element.
  *
- * @docsPath UI/system/FlexItem
+ * @docsPath UI/Style System/FlexItem
  */
 export interface FlexItemSetProps
     extends FlexProps,

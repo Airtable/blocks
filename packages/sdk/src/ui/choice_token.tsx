@@ -6,6 +6,7 @@ import {compose} from '@styled-system/core';
 import {Color} from '../colors';
 import {baymax} from './baymax_utils';
 import Box from './box';
+import Text from './text';
 import useStyledSystem from './use_styled_system';
 import useTextColorForBackgroundColor from './use_text_color_for_background_color';
 import {
@@ -33,7 +34,7 @@ interface ChoiceTokenStyleProps extends FlexItemSetProps, PositionSetProps, Marg
 
 const styleParser = compose(flexItemSet, positionSet, margin);
 
-const choiceTokenStylePropTypes = {
+export const choiceTokenStylePropTypes = {
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
     ...marginPropTypes,
@@ -42,7 +43,7 @@ const choiceTokenStylePropTypes = {
 const DEFAULT_CHOICE_COLOR = 'gray';
 
 /** An option from a select field. You should not create these objects from scratch, but should instead grab them from base data. */
-interface SelectOption {
+interface ChoiceOption {
     /** The ID of the select option. */
     id: string;
     /** The name of the select option. */
@@ -60,7 +61,7 @@ interface SelectOption {
  */
 interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
     /** An object representing a select option. You should not create these objects from scratch, but should instead grab them from base data. */
-    choice: SelectOption;
+    choice: ChoiceOption;
     /** Additional styles to apply to the choice token. */
     style?: React.CSSProperties;
     /** Additional class names to apply to the choice token. */
@@ -70,27 +71,8 @@ interface ChoiceTokenProps extends ChoiceTokenStyleProps, TooltipAnchorProps {
 /**
  * A component that shows a single choice in a small token, to be displayed inline or in a list of choices.
  *
- * @example
- * ```js
- * import {ChoiceToken} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="choicetoken--example" title="Choice token example" ]]
  *
- * function ChoicesForSelectField({selectField}) {
- *     const choiceNodes = selectField.options.choices.map(choice => (
- *         <ChoiceToken
- *             key={choice.id}
- *             choice={choice}
- *         />
- *     ));
- *
- *     return (
- *         <React.Fragment>
- *             Here are all of your choices:
- *             {choiceNodes}
- *         </React.Fragment>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/ChoiceToken
  */
@@ -123,8 +105,7 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
                 borderRadius="circle"
                 paddingX={2}
             >
-                {/* TODO: Replace with <Text> component once it is available */}
-                <Box
+                <Text
                     className={baymax('truncate')}
                     textColor={textColor}
                     fontSize="13px"
@@ -132,7 +113,7 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
                     lineHeight={1.5}
                 >
                     {choice.name}
-                </Box>
+                </Text>
             </Box>
         </Box>
     );

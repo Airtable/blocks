@@ -123,7 +123,7 @@ interface LinkProps extends AriaProps, LinkStyleProps, TooltipAnchorProps<HTMLAn
     size?: TextSizeProp;
     /** The variant of the link, which defines the color. Defaults to `default`. */
     variant?: LinkVariant;
-    /** The name of the icon or a react node. For more details, see the [list of supported icons](/packages/sdk/docs/icons.md). */
+    /** The name of the icon or a react node. For more details, see the {@link IconName|list of supported icons}. */
     icon?: IconName | React.ReactElement;
     /** Adds an underline to the link when true. */
     underline?: boolean;
@@ -167,25 +167,19 @@ function _getSanitizedHref(href: string): string | undefined {
 }
 
 /**
- * A wrapper around the `<a>` tag that offers a few security benefits:
+ * A styled link component with security benefits.
+ *
+ * [[ Story id="input--example-synced" title="Synced input example" ]]
+ *
+ * ## Security benefits
+ *
+ * This component is a styled wrapper around the `<a>` tag that offers a few security benefits:
  *
  * - Limited XSS protection. If the `href` starts with `javascript:` or `data:`, `http://` will be prepended.
  * - There is [reverse tabnabbing prevention](https://www.owasp.org/index.php/Reverse_Tabnabbing). If `target` is set, the `rel` attribute will be set to `noopener noreferrer`.
  *
  * Developers should use `Link` instead of `a` when possible.
  *
- * @example
- * ```js
- * import {Link} from '@airtable/blocks/ui';
- *
- * function MyLinkComponent() {
- *     return (
- *         <Link href="https://example.com">
- *             Check out my homepage!
- *         </Link>
- *     );
- * }
- * ```
  * @docsPath UI/components/Link
  * @component
  */

@@ -178,30 +178,8 @@ const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet,
 /**
  * Dropdown menu component. A wrapper around `<select>` that fits in with Airtable's user interface.
  *
- * @example
- * ```js
- * import {Select} from '@airtable/blocks/ui';
- * import React, {useState} from 'react';
+ * [[ Story id="select--example" title="Select example" ]]
  *
- * function ColorPicker() {
- *     const [value, setValue] = useState(null);
- *     return (
- *         <label>
- *             <div style={{marginBottom: 8, fontWeight: 500}}>Color</div>
- *             <Select
- *                 onChange={newValue => setValue(newValue)}
- *                 value={value}
- *                 options={[
- *                     {value: null, label: 'Pick a color...', disabled: true},
- *                     {value: 'red', label: 'red'},
- *                     {value: 'green', label: 'green'},
- *                     {value: 'blue', label: 'blue'},
- *                 ]}
- *             />
- *         </label>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/Select
  */

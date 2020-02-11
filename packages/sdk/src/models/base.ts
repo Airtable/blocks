@@ -36,6 +36,10 @@ export type ChangedPathsForType<T> = T extends {} ? ChangedPathsForObject<T> : {
 /**
  * Model class representing a base.
  *
+ * If you want the base model to automatically recalculate whenever the base schema changes, try the
+ * {@link useBase} hook. Alternatively, you can manually subscribe to changes with
+ * {@link useWatchable} (recommended) or [Base#watch](/developers/blocks/api/models/Base#watch).
+ *
  * @example
  * ```js
  * import {base} from '@airtable/blocks';
@@ -119,19 +123,22 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         );
     }
     /**
+     * The user matching the given ID, or `null` if that user does not exist or does not have access
+     * to this base.
+     *
      * @param collaboratorId The ID of the user.
-     * @returns The user matching the given ID, or `null` if that user does not exist or does not have access to this base.
      */
     getCollaboratorByIdIfExists(collaboratorId: UserId): CollaboratorData | null {
         const collaboratorsById = this._data.collaboratorsById;
         return has(collaboratorsById, collaboratorId) ? collaboratorsById[collaboratorId] : null;
     }
     /**
-     * @param collaboratorId The ID of the user.
-     * @returns The user matching the given ID. Throws if that user does not exist
+     * The user matching the given ID. Throws if that user does not exist
      * or does not have access to this base. Use {@link getCollaboratorByIdIfExists}
      * instead if you are unsure whether a collaborator with the given ID exists
      * and has access to this base.
+     *
+     * @param collaboratorId The ID of the user.
      */
     getCollaboratorById(collaboratorId: UserId): CollaboratorData {
         const collaborator = this.getCollaboratorByIdIfExists(collaboratorId);
@@ -165,8 +172,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return this._data;
     }
     /**
+     * The table matching the given ID, or `null` if that table does not exist in this base.
+     *
      * @param tableId The ID of the table.
-     * @returns The table matching the given ID, or `null` if that table does not exist in this base.
      */
     getTableByIdIfExists(tableId: string): Table | null {
         if (!this._data.tablesById[tableId]) {
@@ -185,8 +193,11 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
     }
     /**
+     * The table matching the given ID. Throws if that table does not exist in this base. Use
+     * {@link getTableByIdIfExists} instead if you are unsure whether a table exists with the given
+     * ID.
+     *
      * @param tableId The ID of the table.
-     * @returns The table matching the given ID. Throws if that table does not exist in this base. Use {@link getTableByIdIfExists} instead if you are unsure whether a table exists with the given ID.
      */
     getTableById(tableId: string): Table {
         const table = this.getTableByIdIfExists(tableId);
@@ -196,8 +207,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return table;
     }
     /**
+     * The table matching the given name, or `null` if no table exists with that name in this base.
+     *
      * @param tableName The name of the table you're looking for.
-     * @returns The table matching the given name, or `null` if no table exists with that name in this base.
      */
     getTableByNameIfExists(tableName: string): Table | null {
         for (const [tableId, tableData] of entries(this._data.tablesById)) {
@@ -208,8 +220,11 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return null;
     }
     /**
+     * The table matching the given name. Throws if no table exists with that name in this base. Use
+     * {@link getTableByNameIfExists} instead if you are unsure whether a table exists with the
+     * given name.
+     *
      * @param tableName The name of the table you're looking for.
-     * @returns The table matching the given name. Throws if no table exists with that name in this base. Use {@link getTableByNameIfExists} instead if you are unsure whether a table exists with the given name.
      */
     getTableByName(tableName: string): Table {
         const table = this.getTableByNameIfExists(tableName);

@@ -9,9 +9,24 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.42...HEAD)
 
 No changes.
+
+## [0.0.42](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...@airtable/blocks@0.0.42) - 2020-02-10
+
+-   **BREAKING**: Field type and view type enums are now exported from '@airtable/blocks/models' as
+    `FieldType` and `ViewType` (previously `fieldTypes` and `viewTypes`). Relatedly, these types are
+    no longer exported from '@airtable/blocks/types', as they can now be referenced from the model
+    exports.
+-   Updates to record convenience hooks
+    -   `useRecords` now accepts a `Table` or `View` and optional `RecordQueryResultOpts`. Passing a
+        `RecordQueryResult` is still supported.
+    -   `useRecordIds` now accepts a `Table` or `View` and optional `RecordIdQueryResultOpts`.
+        Passing a `RecordQueryResult` is still supported.
+    -   `useRecordById` now accepts a `Table` or `View` and optional `SingleRecordQueryResultOpts`.
+        Passing a `RecordQueryResult` is still supported.
+-   Added `cursor.selectedFieldIds` which returns the field IDs that are selected in grid view
 
 ## [0.0.41](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.40...@airtable/blocks@0.0.41) - 2020-01-27
 
@@ -24,6 +39,9 @@ No changes.
     its API in line with `updateRecordsAsync` and other Airtable APIs. The old behavior is still
     supported but has been deprecated and will be removed in a future version.
 -   Fixed issue where blocks would crash in MS Edge due to a browser bug with `super` method calls.
+-   Changed default Tooltip `placementOffsetX` and `placementOffsetY` to `8` pixels. `undefined`.
+    Previously, this would no-op.
+-   Added default blue `barColor` to `ProgressBar`.
 
 ## [0.0.40](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.39...@airtable/blocks@0.0.40) - 2020-01-09
 

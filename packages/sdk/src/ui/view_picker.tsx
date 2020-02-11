@@ -5,7 +5,7 @@ import {values, ObjectMap} from '../private_utils';
 import getSdk from '../get_sdk';
 import View from '../models/view';
 import Table from '../models/table';
-import {ViewTypes, ViewType} from '../types/view';
+import {ViewType} from '../types/view';
 import {sharedSelectBasePropTypes, SharedSelectBaseProps} from './select';
 import ModelPickerSelect from './model_picker_select';
 import useWatchable from './use_watchable';
@@ -28,7 +28,7 @@ export interface SharedViewPickerProps extends SharedSelectBaseProps {
 
 export const sharedViewPickerPropTypes = {
     table: PropTypes.instanceOf(Table),
-    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewTypes)).isRequired),
+    allowedTypes: PropTypes.arrayOf(PropTypes.oneOf(values(ViewType)).isRequired),
     shouldAllowPickingNone: PropTypes.bool,
     placeholder: PropTypes.string,
     onChange: PropTypes.func,
@@ -49,50 +49,8 @@ interface ViewPickerProps extends SharedViewPickerProps {
 /**
  * Dropdown menu component for selecting views.
  *
- * @example
- * ```js
- * import {TablePicker, ViewPicker, useBase, useRecords} from '@airtable/blocks/ui';
- * import {viewTypes} from '@airtable/blocks/models';
- * import React, {Fragment, useState} from 'react';
+ * [[ Story id="modelpickers--viewpicker-example" title="View picker example" ]]
  *
- * function Block() {
- *     useBase();
- *     const [table, setTable] = useState(null);
- *     const [view, setView] = useState(null);
- *     const queryResult = view ? view.selectRecords() : null;
- *     const records = useRecords(queryResult);
- *
- *     const summaryText = view ? `${view.name} has ${records.length} record(s).` : 'No view selected.';
- *     return (
- *         <Fragment>
- *             <p style={{marginBottom: 16}}>{summaryText}</p>
- *             <label style={{display: 'block', marginBottom: 16}}>
- *                 <div style={{marginBottom: 8, fontWeight: 500}}>Table</div>
- *                 <TablePicker
- *                     table={table}
- *                     onChange={newTable => {
- *                         setTable(newTable);
- *                         setView(null);
- *                     }}
- *                     shouldAllowPickingNone={true}
- *                 />
- *             </label>
- *             {table && (
- *                 <label>
- *                     <div style={{marginBottom: 8, fontWeight: 500}}>View</div>
- *                     <ViewPicker
- *                         table={table}
- *                         view={view}
- *                         onChange={newView => setView(newView)}
- *                         allowedTypes={[viewTypes.GRID]}
- *                         shouldAllowPickingNone={true}
- *                     />
- *                 </label>
- *             )}
- *         </Fragment>
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/ViewPicker
  */
@@ -101,7 +59,7 @@ const ViewPicker = (props: ViewPickerProps, ref: React.Ref<HTMLSelectElement>) =
         table,
         view: selectedView,
         shouldAllowPickingNone,
-        allowedTypes = [ViewTypes.GRID, ViewTypes.CALENDAR, ViewTypes.GALLERY, ViewTypes.KANBAN],
+        allowedTypes = [ViewType.GRID, ViewType.CALENDAR, ViewType.GALLERY, ViewType.KANBAN],
         placeholder,
         onChange,
         ...restOfProps

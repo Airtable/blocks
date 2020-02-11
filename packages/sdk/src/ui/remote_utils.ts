@@ -2,11 +2,9 @@
 import {spawnInvariantViolationError} from '../error_utils';
 
 /**
- * Injects CSS from a string into the page.
+ * Injects CSS from a string into the page. Returns the HTML style element inserted into the page.
  *
  * @param css The CSS string.
- * @returns The style tag inserted into the page.
- *
  * @example
  * ```js
  * import {loadCSSFromString} from '@airtable/blocks/ui';
@@ -27,9 +25,9 @@ export function loadCSSFromString(css: string): HTMLStyleElement {
 /**
  * Injects CSS from a remote URL.
  *
- * @param url The URL of the stylesheet.
- * @returns A Promise that resolves to the style tag inserted into the page.
+ * Returns a promise that resolves to the HTML style element inserted into the page.
  *
+ * @param url The URL of the stylesheet.
  * @example
  * ```js
  * import {loadCSSFromURLAsync} from '@airtable/blocks/ui';
@@ -59,9 +57,9 @@ export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
 /**
  * Injects Javascript from a remote URL.
  *
- * @param url The URL of the script.
- * @returns A Promise that resolves to the script tag inserted into the page.
+ * Returns a promise that resolves to the HTML script element inserted into the page.
  *
+ * @param url The URL of the script.
  * @example
  * ```js
  * import {loadScriptFromURLAsync} from '@airtable/blocks/ui';

@@ -110,28 +110,8 @@ interface TextProps extends AriaProps, AllStylesProps {
 /**
  * A text component with sizes and variants.
  *
- * @example
- * ```js
- * import {Text} from '@airtable/blocks/ui';
- * import React, {Fragment} from 'react';
+ * [[ Story id="text--example" title="Text example" ]]
  *
- * function TextExample() {
- *     return (
- *         <Fragment>
- *             <Text>Default text, for single line text</Text>
- *             <Text size="small" variant="paragraph">Small paragraph, for multiline paragraphs</Text>
- *             <Text
- *                  size={{
- *                      xsmallViewport: 'small',
- *                      smallViewport: 'small',
- *                      mediumViewport: 'default',
- *                      largeViewport: 'large'
- *                  }}
- *              >Responsive text</Text>
- *         </Fragment>
- *     );
- * }
- * ```
  * @docsPath UI/components/Text
  * @component
  */

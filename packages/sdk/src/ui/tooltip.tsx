@@ -5,7 +5,7 @@ import * as React from 'react';
 import {values} from '../private_utils';
 import {baymax} from './baymax_utils';
 import Popover, {PopoverPlacementX, PopoverPlacementY, FitInWindowMode} from './popover';
-import Box from './box';
+import Text from './text';
 import {TooltipAnchorProps} from './types/tooltip_anchor_props';
 
 const FADE_IN_ANIMATION_DURATION = 150;
@@ -48,24 +48,8 @@ interface TooltipState {
 /**
  * A component that renders a tooltip on hover. Wraps its children.
  *
- * @example
- * ```js
- * import {Button, Tooltip} from '@airtable/blocks';
+ * [[ Story id="tooltip--example" title="Tooltip example" ]]
  *
- * function MyComponent() {
- *     return (
- *         <Tooltip
- *             content="Clicking this button will be a lot of fun!"
- *             placementX={Tooltip.placements.CENTER}
- *             placementY={Tooltip.placements.TOP}
- *         >
- *             <Button onClick={() => alert('Clicked!')}>
- *                 Click here!
- *             </Button>
- *         </Tooltip>
- *     );
- * }
- * ```
  * @docsPath UI/components/Tooltip
  * @component
  */
@@ -101,8 +85,8 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
     static defaultProps = {
         placementX: Popover.placements.RIGHT,
         placementY: Popover.placements.CENTER,
-        placementOffsetX: 12,
-        placementOffsetY: 0,
+        placementOffsetX: 8,
+        placementOffsetY: 8,
         fitInWindowMode: Popover.fitInWindowModes.FLIP,
     };
     /** @hidden */
@@ -168,7 +152,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
             isContentAFunction = false;
         }
         return (
-            <Box
+            <Text
                 className={cx(baymax('nowrap'), className)}
                 style={style}
                 position="relative"
@@ -179,7 +163,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipState> {
                 overflow="hidden"
             >
                 {renderedContent}
-            </Box>
+            </Text>
         );
     }
     /** @hidden */

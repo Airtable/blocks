@@ -22,10 +22,11 @@ class EnumFormattingPlugin extends ConverterTypeComponent
     /**
      * Test whether the given node and type definitions represent an EnumType<> type alias.
      *
+     * Returns true when the given node and type look like an EnumType<>, otherwise false.
+     *
      * @param context The context object describing the current state the converter is in.
      * @param node The node that should be tested.
      * @param type The type of the node that should be tested.
-     * @returns true when the given node and type look like an EnumType<>, otherwise false.
      */
     supportsNode(context: Context, node: ts.TypeReferenceNode, type: ts.UnionType): boolean {
         return (
@@ -42,9 +43,10 @@ class EnumFormattingPlugin extends ConverterTypeComponent
      * Use [[isTypeAlias]] beforehand to test whether a given type/node combination is
      * pointing to a type alias.
      *
+     * Returns a typedoc type to be included in the documentation.
+     *
      * @param node The typescript node whose type should be reflected.
      * @param type The typescript type whose type should be reflected.
-     * @returns A typedoc type to be included in the documentation.
      */
     convertNode(context: Context, node: ts.TypeReferenceNode, type: ts.UnionType): UnionType {
         const types = this.owner.convertTypes(context, undefined, type.types);

@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
-import {FieldTypes, FieldId} from '../types/field';
+import {FieldType, FieldId} from '../types/field';
 import getSdk from '../get_sdk';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
@@ -51,7 +51,7 @@ const pool: ObjectPool<
  * Do not instantiate. You can get instances of this class by calling
  * `record.getLinkedRecordsFromCell`.
  *
- * @docsPath models/Query results/LinkedRecordsQueryResult
+ * @docsPath models/query results/LinkedRecordsQueryResult
  */
 class LinkedRecordsQueryResult extends RecordQueryResult {
     /** @internal */
@@ -66,7 +66,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         if (!(record.parentTable === field.parentTable)) {
             throw spawnInvariantViolationError('record and field must belong to the same table');
         }
-        if (!(field.type === FieldTypes.MULTIPLE_RECORD_LINKS)) {
+        if (!(field.type === FieldType.MULTIPLE_RECORD_LINKS)) {
             throw spawnInvariantViolationError('field must be MULTIPLE_RECORD_LINKS');
         }
         const linkedTableId = field.options && field.options.linkedTableId;
@@ -515,7 +515,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
         const type = this._field.type;
 
-        if (type !== FieldTypes.MULTIPLE_RECORD_LINKS) {
+        if (type !== FieldType.MULTIPLE_RECORD_LINKS) {
             this._invalidateQueryResult();
             return;
         }

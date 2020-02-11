@@ -164,27 +164,13 @@ const styleParser = compose(
 /**
  * A toggle switch for controlling boolean values. Similar to a checkbox.
  *
- * @example
- * ```js
- * import React, {useState} from 'react';
- * import {Switch} from '@airtable/blocks/ui';
+ * [[ Story id="switch--example" title="Switch example" ]]
  *
- * function Block() {
- *     const [isShowingImage, setIsShowingImage] = useState(false);
- *     return (
- *         <div>
- *             <Switch
- *                 value={isShowingImage}
- *                 onChange={setIsShowingImage}
- *                 label="Show image"
- *             />
- *             {isShowingImage && (
- *                 <img src="cat.png" />
- *             )}
- *         </div>
- *     );
- * }
- * ```
+ * By default, the Switch component is styled to be full-width (`width="100%"`) with a gray
+ * background to match other controls like Select, SelectButtons, Input, etc. This behavior can be
+ * overridden using style props. For example, you can set `backgroundColor="transparent"` on the
+ * Switch for a transparent background.
+ *
  * @docsPath UI/components/Switch
  * @component
  */

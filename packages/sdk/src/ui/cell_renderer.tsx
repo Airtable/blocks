@@ -60,7 +60,7 @@ interface CellRendererStyleProps
 
 const styleParser = compose(display, flexItemSet, margin, maxWidth, minWidth, positionSet, width);
 
-const cellRendererStylePropTypes = {
+export const cellRendererStylePropTypes = {
     ...displayPropTypes,
     ...flexItemSetPropTypes,
     ...marginPropTypes,
@@ -97,34 +97,10 @@ interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<H
 }
 
 /**
- * Displays the contents of a cell.
+ * Displays the contents of a cell given a field and record.
  *
- * @example
- * ```js
- * import React, {useState} from 'react';
- * import {Box, CellRenderer, FieldPicker, useBase, useRecords} from '@airtable/blocks/ui';
+ * [[ Story id="cellrenderer--example" title="Cell renderer example" ]]
  *
- * export default function CellRendererExample(props) {
- *    const [field, setField] = useState(null);
- *    const base = useBase();
- *    const table = base.tables[0];
- *    const queryResult = table.selectRecords();
- *    const records = useRecords(queryResult);
- *    return (
- *        <Box display="flex" flexDirection="column">
- *            <FieldPicker table={table} field={field} onChange={setField} />
- *            {field && (
- *                <CellRenderer
- *                    className="user-defined-class"
- *                    field={field}
- *                    record={records[0]}
- *                    margin={3}
- *                />
- *            )}
- *        </Box>
- *    );
- * }
- * ```
  * @component
  * @docsPath UI/components/CellRenderer
  */

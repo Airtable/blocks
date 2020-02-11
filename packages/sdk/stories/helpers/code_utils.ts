@@ -25,9 +25,11 @@ import {has} from '../../src/private_utils';
  * ```
  */
 export function createJsxPropsStringFromValuesMap(
-    values: {[key: string]: string | boolean | null},
+    values: {[key: string]: string | boolean | number | null},
     mappingConfig?: {
-        [key: string]: (value: string | boolean | null) => string | boolean | null | number;
+        [key: string]: (
+            value: string | boolean | number | null,
+        ) => string | boolean | null | number;
     },
 ): string {
     const output = [];

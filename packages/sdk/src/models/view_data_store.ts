@@ -216,7 +216,6 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      * color is available. Watch with 'recordColors'
      *
      * @param recordOrRecordId the record/record id to get the color for
-     * @returns the color name for that record, or null if the record isn't colored.
      */
     getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
         if (!this.isDataLoaded) {

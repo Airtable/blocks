@@ -13,7 +13,7 @@ import useWatchable from './use_watchable';
  * control of when your component updates or want to do anything other than re-render, the lower
  * level {@link useWatchable} hook might help.
  *
- * @returns The current base.
+ * Returns the current base.
  *
  * @example
  * ```js

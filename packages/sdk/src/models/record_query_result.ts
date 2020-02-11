@@ -2,7 +2,7 @@
 import Colors, {Color} from '../colors';
 import {BaseData} from '../types/base';
 import {RecordId} from '../types/record';
-import {FieldTypes, FieldId} from '../types/field';
+import {FieldType, FieldId} from '../types/field';
 import {
     isEnumValue,
     assertEnumValue,
@@ -68,15 +68,137 @@ export interface NormalizedSortConfig {
     direction: 'asc' | 'desc';
 }
 
-/** */
+/**
+ * Used to control what data is loaded in a {@link RecordQueryResult}. Used when creating a
+ * query result using `table/view.selectRecords()` and in convenience hooks {@link useRecords}.
+ *
+ * ## sorts
+ * Pass an array of sorts to control the order of records. The first sort in the array has the
+ * highest priority. If you don't specify sorts, the result will use the inherent order of the
+ * source model: the same order you'd see in the main UI for views and linked record fields, and
+ * an arbitrary (but stable) order for tables.
+ *
+ * Record creation time is used as a tiebreaker: pass an empty array to sort by creation time.
+ *
+ * ```js
+ * const opts = {
+ *     sorts: [
+ *         // sort by someField in ascending order...
+ *         {field: someField},
+ *         // then by someOtherField in descending order
+ *         {field: someOtherField, direction: 'desc'},
+ *     ]
+ * };
+ * const records = useRecords(table, opts);
+ * const queryResult = table.selectRecords(opts);
+ * ```
+ *
+ * ## fields
+ * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
+ * can get pretty big, and we have to keep all that information in memory and up to date if you ask
+ * for it. The fields option lets you make sure that only data relevant to you is loaded.
+ *
+ * You can specify fields with a {@link Field}, by ID, or by name:
+ * ```js
+ * const opts = {
+ *     fields: [
+ *         // we want to only load fieldA:
+ *         fieldA,
+ *         // the field with this id:
+ *         'fldXXXXXXXXXXXXXX',
+ *         // and the field named 'Rating':
+ *         'Rating',
+ *     ],
+ * };
+ * const records = useRecords(table, opts);
+ * const queryResult = table.selectRecords(opts);
+ * ```
+ *
+ * ## recordColorMode
+ * Just like a view in Airtable, you can control the colors of records in a field. There are three
+ * supported record color modes: none, by a view, and by a select field:
+ *
+ * ```js
+ * import {recordColoring} from '@airtable/blocks/models';
+ * // No record coloring:
+ * const opts = {
+ *     recordColorMode: recordColoring.modes.none(),
+ * };
+ *
+ * // Color according to the rules of a view:
+ * const opts = {
+ *     recordColorMode: recordColoring.modes.byView(someView),
+ * };
+ *
+ * // Color by a single select field:
+ * const opts = {
+ *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
+ * });
+ *
+ * const records = useRecords(table, opts);
+ * const queryResult = table.selectRecords(opts);
+ * ```
+ *
+ * By default, views will have whichever coloring is set up in Airtable and tables won't have any
+ * record coloring:
+ *
+ * ```js
+ * // these two are the same:
+ * someView.selectRecords();
+ * someView.selectRecords({
+ *     recordColorMode: recordColoring.modes.byView(someView),
+ * });
+ *
+ * // as are these two:
+ * someTable.selectRecords();
+ * someTable.selectRecords({
+ *     recordColorMode: recordColoring.modes.none(),
+ * });
+ * ```
+ *
+ * */
 export interface RecordQueryResultOpts {
     /** The order in which to sort the query result */
     sorts?: Array<SortConfig>;
     /** The fields (or field names or field ids) to load. Falsey values will be removed. */
-    fields?: Array<Field | string | void | null | false>;
+    fields?: Array<Field | FieldId | string | void | null | false>;
     /** How records in this QueryResult should be colored. */
     recordColorMode?: null | RecordColorMode;
 }
+
+/**
+ * A subset of {@link RecordQueryResultOpts} used in {@link useRecordById} that omits sorts, as
+ * there is only a single record.
+ *
+ * See RecordQueryResultOpts for full details and examples.
+ *
+ * ```js
+ * const opts = {
+ *     fields: ['My field'],
+ *     recordColorMode: recordColoring.modes.byView(view),
+ * };
+ * const record = useRecordById(table, recordId, opts);
+ * */
+export type SingleRecordQueryResultOpts = Pick<RecordQueryResultOpts, 'fields' | 'recordColorMode'>;
+
+/**
+ * A subset of {@link RecordQueryResultOpts} used in {@link useRecordIds} that omits fields and
+ * recordColorMode, as record cell values and color are not accessible via this hook.
+ *
+ * See RecordQueryResultOpts for full details and examples.
+ *
+ * ```js
+ * const opts = {
+ *     sorts: [
+ *         // sort by someField in ascending order...
+ *         {field: someField},
+ *         // then by someOtherField in descending order
+ *         {field: someOtherField, direction: 'desc'},
+ *     ]
+ * };
+ * const recordIds = useRecordIds(table, opts);
+ * */
+export type RecordIdQueryResultOpts = Pick<RecordQueryResultOpts, 'sorts'>;
 
 /** @hidden */
 export interface NormalizedRecordQueryResultOpts {
@@ -102,8 +224,13 @@ export interface NormalizedRecordQueryResultOpts {
  *   {@link https://support.airtable.com/hc/en-us/articles/206452848-Linked-record-fields linked record cell}.
  *   You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
  *
- * Once you've got a query result, you need to load it before you can start working with it. When
- * you're finished, unload it:
+ * Once you've got a query result, you need to load it before you can start working with it -
+ * blocks don't load record data by default. We recommend using {@link useRecords},
+ * {@link useRecordIds}, {@link useRecordById} or {@link useLoadable} to handle this.
+ *
+ * If you're not using a query result in a React component, you can manually load the data and
+ * unload it when you're finished:
+ *
  * ```js
  * async function fetchRecordsAndDoSomethingAsync(myTable) {
  *     // query for all the records in "myTable"
@@ -120,93 +247,15 @@ export interface NormalizedRecordQueryResultOpts {
  * }
  * ```
  *
- * If you're using a query result in a React component, you don't need to worry about this. Just
- * use {@link useRecords}, {@link useRecordIds}, {@link useRecordById} or {@link useLoadable},
- * which will handle all that for you.
- *
  * Whilst loaded, a query result will automatically keep up to date with what's in Airtable:
  * records will get added or removed, the order will change, cell values will be updated, etc.
  * Again, if you're writing a React component then our hooks will look after that for you. If not,
  * you can get notified of these changes with `.watch()`.
  *
- * When calling a `.select*` method, you can pass in a number of options:
+ * When calling a `.select*` method, you can pass in a number of options to control the sort order,
+ * fields loaded and coloring mode of records: see {@link RecordQueryResultOpts} for examples.
  *
- * ## sorts
- * Pass an array of sorts to control the order of records within the query result. The first sort
- * in the array has the highest priority. If you don't specify sorts, the query result will use the
- * inherent order of the source model: the same order you'd see in the main UI for views and linked
- * record fields, and an arbitrary (but stable) order for tables.
- *
- * ```js
- * view.selectRecords({
- *     sorts: [
- *         // sort by someField in ascending order...
- *         {field: someField},
- *         // then by someOtherField in descending order
- *         {field: someOtherField, direction: 'desc'},
- *     ]
- * });
- * ```
- *
- * ## fields
- * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
- * can get pretty big, and we have to keep all that information in memory and up to date if you ask
- * for it. The fields option lets you make sure that only data relevant to you is loaded.
- *
- * You can specify fields with a {@link Field}, by ID, or by name:
- * ```js
- * view.selectRecords({
- *     fields: [
- *         // we want to only load fieldA:
- *         fieldA,
- *         // the field with this id:
- *         'fldXXXXXXXXXXXXXX',
- *         // and the field named 'Rating':
- *         'Rating',
- *     ],
- * });
- * ```
- *
- * ## recordColorMode
- * Just like a view in Airtable, you can control the colors of records in a field. There are three
- * supported record color modes:
- *
- * By taking the colors the records have according to the rules of a specific view:
- * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- 
- * someTable.selectRecords({
- *     recordColorMode: recordColoring.modes.byView(someView),
- * });
- * ```
- *
- * Based on the color of a single select field in the table:
- * ```js
- * import {recordColoring} from '@airtable/blocks/models';
- *
- * someView.selectRecords({
- *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
- * });
- * ```
- * 
- * By default, views will have whichever coloring is set up in Airtable and tables won't have any
- * record coloring:
- * 
- * ```js
- * // these two are the same:
- * someView.selectRecords();
- * someView.selectRecords({
- *     recordColorMode: recordColoring.modes.byView(someView),
- * });
- * 
- * // as are these two:
- * someTable.selectRecords();
- * someTable.selectRecords({
- *     recordColorMode: recordColoring.modes.none(),
- * });
- * ```
- * 
- * @docsPath models/Query results/RecordQueryResult
+ * @docsPath models/query results/RecordQueryResult
  */
 class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     DataType,
@@ -323,10 +372,10 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 break;
             case RecordColorModeTypes.BY_SELECT_FIELD:
-                if (!(recordColorMode.selectField.type === FieldTypes.SINGLE_SELECT)) {
+                if (!(recordColorMode.selectField.type === FieldType.SINGLE_SELECT)) {
                     throw spawnInvariantViolationError(
                         'Invalid field for coloring records by select field: expected a %s, but got a %s',
-                        FieldTypes.SINGLE_SELECT,
+                        FieldType.SINGLE_SELECT,
                         recordColorMode.selectField.type,
                     );
                 }
@@ -406,7 +455,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * filtered out. Throws if data is not loaded yet. Watch using `'recordIds'`.
      *
      * @param recordId the ID of the {@link Record} you want
-     * @returns the record
      */
     getRecordByIdIfExists(recordId: RecordId): Record | null {
         const record = this._recordStore.getRecordByIdIfExists(recordId);
@@ -422,7 +470,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * filtered out. Throws if data is not loaded yet. Watch using `'recordIds'`.
      *
      * @param recordId the ID of the {@link Record} you want
-     * @returns the record
      */
     getRecordById(recordId: RecordId): Record {
         const record = this.getRecordByIdIfExists(recordId);
@@ -446,7 +493,6 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * false if the record has been deleted or is filtered out.
      *
      * @param recordOrRecordId the record or record id to check the presence of
-     * @returns whether the record exists in this query result
      */
     hasRecord(recordOrRecordId: RecordId | Record): boolean {
         const recordId =
@@ -455,11 +501,11 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     }
 
     /**
-     * Get the color of a specific record in the query result. Throws if the record isn't in the
-     * RecordQueryResult. Watch with the `'recordColors'` and `'recordIds` keys.
+     * Get the {@link Color} of a specific record in the query result. Returns null if the record
+     * has no color in this query result. Throws if the record isn't in the RecordQueryResult. Watch
+     * with the `'recordColors'` and `'recordIds` keys.
      *
      * @param recordOrRecordId the record or record ID you want the color of.
-     * @returns a {@link Color}, or null if the record has no color in this query result.
      */
     getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
         const record = this._getRecord(recordOrRecordId);
@@ -469,7 +515,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 return null;
             case RecordColorModeTypes.BY_SELECT_FIELD: {
-                if (recordColorMode.selectField.type !== FieldTypes.SINGLE_SELECT) {
+                if (recordColorMode.selectField.type !== FieldType.SINGLE_SELECT) {
                     return null;
                 }
                 const value = record.getCellValue(recordColorMode.selectField);
@@ -512,10 +558,11 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * cause the data to be fetched. Once the data is available, the `callback`
      * will be called.
      *
+     * Returns the array of keys that were watched.
+     *
      * @param keys the keys to watch
      * @param callback a function to call when those keys change
      * @param context an optional context for `this` in `callback`.
-     * @returns the array of keys that were watched
      */
     watch(
         keys: WatchableRecordQueryResultKey | ReadonlyArray<WatchableRecordQueryResultKey>,
@@ -539,10 +586,11 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
      * Unwatching a key that needs to load data asynchronously will automatically
      * cause the data to be unloaded.
      *
+     * Returns the array of keys that were unwatched
+     *
      * @param keys the keys to unwatch
      * @param callback the function passed to `.watch` for these keys
      * @param context the context that was passed to `.watch` for this `callback`
-     * @returns the array of keys that were unwatched
      */
     unwatch(
         keys: WatchableRecordQueryResultKey | ReadonlyArray<WatchableRecordQueryResultKey>,

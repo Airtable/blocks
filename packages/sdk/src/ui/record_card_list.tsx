@@ -245,7 +245,7 @@ interface RecordCardListStyleProps
 
 const styleParser = compose(dimensionsSet, flexItemSet, positionSet, margin);
 
-const recordCardListStylePropTypes = {
+export const recordCardListStylePropTypes = {
     ...dimensionsSetPropTypes,
     ...flexItemSetPropTypes,
     ...positionSetPropTypes,
@@ -272,8 +272,7 @@ interface RecordCardListState {
  *     const [selectedRecord, setSelectedRecord] = useState(null);
  *     const table = base.getTableByName('Table 1');
  *     const view = table ? table.getViewByName('View 1') : null;
- *     const queryResult = table ? table.selectRecords() : null;
- *     const records = useRecords(queryResult);
+ *     const records = useRecords(table);
  *
  *     return (
  *         <RecordCardList

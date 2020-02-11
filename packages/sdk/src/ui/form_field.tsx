@@ -51,7 +51,7 @@ interface FormFieldStyleProps
 
 const styleParser = compose(maxWidth, minWidth, width, flexItemSet, positionSet, spacingSet);
 
-const formFieldStylePropTypes = {
+export const formFieldStylePropTypes = {
     ...maxWidthPropTypes,
     ...minWidthPropTypes,
     ...widthPropTypes,
@@ -88,34 +88,14 @@ interface FormFieldProps extends FormFieldStyleProps {
  * A form field component that wraps any control field, supplying a provided label and optional
  * description.
  *
- * This will automatically set up the `for` attribute on the outputted label with the `id` attribute
+ * [[ Story id="formfield--example" title="Form field example" ]]
+ *
+ * This component will automatically set up the `for` attribute on the outputted label with the `id` attribute
  * on the wrapped control field for the following UI components: Label, Select, FieldPicker,
  * ModelPicker, and ViewPicker. If you'd like to manually override this behavior, you can provide an
  * `htmlFor` prop to this component and manually set the `id` attribute on your wrapped control to
  * the same value.
  *
- * @example
- * ```js
- * import {useBase, Box, FormField, ViewPicker, TablePicker} from '@airtable/blocks/ui';
- * import React, {useState} from 'react';
- *
- * function SettingsForm() {
- *     const base = useBase();
- *     const [name, setName] = useState('');
- *     const [table, setTable] = useState(base.tables[0]);
- *     const [view, setView] = useState(null);
- *     return (
- *         <Box display="flex" flexDirection="column" justifyContent="center" width="400px">
- *             <FormField label="Table" description="Select a table from your base">
- *                 <TablePicker table={table} onChange={setTable} />
- *             </FormField>
- *             <FormField label="View" description="Select a view from your table">
- *                  <ViewPicker table={table} view={view} onChange={setView} />
- *             </FormField>
- *         </Box>
- *     );
- * }
- * ```
  * @docsPath UI/components/FormField
  * @component
  */

@@ -3,6 +3,7 @@ import * as React from 'react';
 import {spawnError} from '../error_utils';
 
 /**
+ * @internal
  * A higher-order component for working with React hooks in class-based components. It takes a React
  * component and wraps it, injecting values from hooks as additional props. `withHooks` uses
  * {@link https://reactjs.org/docs/forwarding-refs.html|`React.forwardRef`} to make sure that you can
@@ -13,8 +14,6 @@ import {spawnError} from '../error_utils';
  *
  * @param Component The React component you want to inject hooks into.
  * @param getAdditionalPropsToInject A function that takes props and returns more props to be injected into the wrapped component.
- * @returns The wrapped React component.
- *
  * @example
  * ```js
  * import React from 'react';
@@ -31,10 +30,10 @@ import {spawnError} from '../error_utils';
  *      }
  * }
  *
- * // using withHooks, we wrap up RecordList. It takes a queryResult prop, and injects a records
+ * // using withHooks, we wrap up RecordList. It takes a table prop, and injects a records
  * // prop from useRecords
- * const WrappedRecordList = withHooks(RecordList, ({queryResult}) => {
- *      const records = useRecords(queryResult);
+ * const WrappedRecordList = withHooks(RecordList, ({table}) => {
+ *      const records = useRecords(table);
  *
  *      const instanceRef = React.useRef();
  *      useEffect(() => {
@@ -47,20 +46,20 @@ import {spawnError} from '../error_utils';
  *      };
  * });
  *
- * // when we use WrappedRecordList, we only need to pass in queryResult:
- * <WrappedRecordList queryResult={someQueryResult} />
+ * // when we use WrappedRecordList, we only need to pass in table:
+ * <WrappedRecordList table={someTable} />
  * ```
  *
  * @example
  * ```js
  * import React from 'react';
- * import {Record, QueryResult} from '@airtable/blocks/models';
+ * import {Record, Table} from '@airtable/blocks/models';
  * import {withHooks, useRecords} from '@airtable/blocks/ui';
  * // with typescript, things are a little more complex: we need to provide some type annotations to
  * // indicate which props are injected:
  *
  * type RequiredProps = {
- *      queryResult: QueryResult,
+ *      table: Table,
  * };
  *
  * type InjectedProps = {
@@ -79,8 +78,8 @@ import {spawnError} from '../error_utils';
  * //   - the instance type (what you get out of a ref) of the resulting component
  * const WrappedRecordList = withHooks<InjectedProps, RecordListProps, RecordList>(
  *      RecordList,
- *      ({queryResult}) => {
- *          const records = useRecords(queryResult);
+ *      ({table}) => {
+ *          const records = useRecords(table);
  *          return {
  *              records
  *          };
@@ -91,7 +90,6 @@ import {spawnError} from '../error_utils';
  * // class component. Instead, you need to wrap it in React.ElementRef:
  * const ref: React.ElementRef<typeof WrappedRecordList> = getTheRefSomehow();
  * ```
- * @internal
  */
 export default function withHooks<InjectedProps, Props extends InjectedProps, Instance>(
     Component:

@@ -19,33 +19,10 @@ interface FieldIconProps extends SharedIconProps {
 }
 
 /**
- * A vector icon for a field's type.
+ * A vector icon for a field’s type.
  *
- * @example
- * ```js
- * import {FieldIcon, useBase} from '@airtable/blocks/ui';
+ * [[ Story id="fieldicon--example" title="FieldIcon example" ]]
  *
- * const base = useBase();
- * const table = base.tables[0];
- * const {primaryField} = table;
- *
- * const FieldToken = (
- *     <div style={{
- *         display: 'inline-flex',
- *         alignItems: 'center',
- *         padding: 8,
- *         fontWeight: 500,
- *         backgroundColor: '#eee',
- *         borderRadius: 3,
- *     }}>
- *         <FieldIcon
- *             field={primaryField}
- *             marginRight={2}
- *         />
- *         {primaryField.name}
- *     </div>
- * );
- * ```
  * @docsPath UI/components/FieldIcon
  * @component
  */

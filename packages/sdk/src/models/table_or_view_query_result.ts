@@ -53,7 +53,7 @@ const tableOrViewQueryResultPool: ObjectPool<
  * Do not instantiate. You can get instances of this class by calling
  * `table.selectRecords` or `view.selectRecords`.
  *
- * @docsPath models/Query results/TableOrViewQueryResult
+ * @docsPath models/query results/TableOrViewQueryResult
  */
 class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultData> {
     /** @internal */

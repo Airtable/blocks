@@ -7,7 +7,7 @@ import createStylePropTypes from './utils/create_style_prop_types';
 /**
  * Style props for the overflow behavior of an element.
  *
- * @docsPath UI/system/Overflow
+ * @docsPath UI/Style System/Overflow
  */
 export interface OverflowProps {
     /** Sets what to do when an element's content is too big to fit in its block formatting context. It is a shorthand for `overflowX` and `overflowY`. */

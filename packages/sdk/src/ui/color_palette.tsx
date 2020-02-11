@@ -115,22 +115,8 @@ interface ColorPaletteState {
  * A color selection component. Accepts a list of `allowedColors` to be displayed
  * as selectable color squares.
  *
- * @example
- * ```js
- * import {ColorPalette, colors} from '@airtable/blocks/ui';
- * import React, {useState} from 'react';
+ * [[ Story id="colorpalette--example" title="Color palette example" ]]
  *
- * function DisplayOptions() {
- *     const allowedColors = [colors.GREEN, colors.BLUE, colors.RED];
- *     const [selectedColor, setSelectedColor] = useState(colors.GREEN);
- *     return (
- *         <ColorPalette
- *             allowedColors={allowedColors}
- *             onChange={setSelectedColor}
- *         />
- *     );
- * }
- * ```
  * @component
  * @docsPath UI/components/ColorPalette
  */

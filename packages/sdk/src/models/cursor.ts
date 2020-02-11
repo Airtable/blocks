@@ -3,6 +3,7 @@ import {BaseData, ModelChange} from '../types/base';
 import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
+import {FieldId} from '../types/field';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {spawnInvariantViolationError} from '../error_utils';
@@ -13,6 +14,7 @@ import Record from './record';
 
 const WatchableCursorKeys = Object.freeze({
     selectedRecordIds: 'selectedRecordIds' as const,
+    selectedFieldIds: 'selectedFieldIds' as const,
     activeTableId: 'activeTableId' as const,
     activeViewId: 'activeViewId' as const,
     isDataLoaded: 'isDataLoaded' as const,
@@ -21,6 +23,7 @@ const WatchableCursorKeys = Object.freeze({
 /**
  * Watchable keys in {@link Cursor}.
  * - `selectedRecordIds`
+ * - `selectedFieldIds`
  * - `activeTableId`
  * - `activeViewId`
  * - `isDataLoaded`
@@ -30,17 +33,56 @@ type WatchableCursorKey = ObjectValues<typeof WatchableCursorKeys>;
 /** @hidden */
 interface CursorData {
     selectedRecordIdSet: ObjectMap<RecordId, boolean> | null;
+    selectedFieldIdSet: ObjectMap<FieldId, boolean> | null;
     activeTableId: TableId | null;
     activeViewId: ViewId | null;
 }
 
 /**
- * Contains information about the state of the user's current interactions in Airtable
+ * Model class containing information about the state of the user's current interactions in
+ * Airtable - specifically, their active table, active view, selected records and selected fields.
+ * Also allows you to set the active table and active view.
  *
- * @example
+ * Selected records and fields are not loaded by default and the cursor must be loaded with
+ * {@link useLoadable} to access them.
+ *
  * ```js
  * import {cursor} from '@airtable/blocks';
+ * import {useWatchable} from '@airtable/blocks/ui';
+ *
+ *  function ActiveTableAndView() {
+ *      // re-render whenever the active table or view changes
+ *      useWatchable(cursor, ['activeTableId', 'activeViewId']);
+ *
+ *      return (
+ *          <div>
+ *              Active table: {cursor.activeTableId)}
+ *              Active view: {cursor.activeViewId}
+ *          </div>
+ *      );
+ *  }
  * ```
+ *
+ * ```js
+ * import {cursor} from '@airtable/blocks';
+ * import {useLoadable, useWatchable} from '@airtable/blocks/ui';
+ *
+ *  function SelectedRecordAndFieldIds() {
+ *      // load selected records and fields
+ *      useLoadable(cursor);
+ *
+ *      // re-render whenever the list of selected records or fields changes
+ *      useWatchable(cursor, ['selectedRecordIds', 'selectedFieldIds']);
+ *
+ *      return (
+ *          <div>
+ *              Selected records: {cursor.selectedRecordIds.join(', ')}
+ *              Selected fields: {cursor.selectedFieldIds.join(', ')}
+ *          </div>
+ *      );
+ *  }
+ * ```
+ *
  * @docsPath models/Cursor
  */
 class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> {
@@ -65,11 +107,13 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         this._airtableInterface = airtableInterface;
 
         const selectedRecordIdSet = baseData.cursorData?.selectedRecordIdSet ?? null;
+        const selectedFieldIdSet = baseData.cursorData?.selectedFieldIdSet ?? null;
         const activeTableId = baseData.activeTableId;
         const activeViewId = activeTableId ? baseData.tablesById[activeTableId].activeViewId : null;
 
         this._cursorData = {
             selectedRecordIdSet,
+            selectedFieldIdSet,
             activeTableId,
             activeViewId,
         };
@@ -95,8 +139,9 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     async _loadDataAsync(): Promise<Array<WatchableCursorKey>> {
         const cursorData = await this._airtableInterface.fetchAndSubscribeToCursorDataAsync();
         this._cursorData.selectedRecordIdSet = cursorData.selectedRecordIdSet;
+        this._cursorData.selectedFieldIdSet = cursorData.selectedFieldIdSet;
 
-        return [WatchableCursorKeys.selectedRecordIds];
+        return [WatchableCursorKeys.selectedRecordIds, WatchableCursorKeys.selectedFieldIds];
     }
     /**
      * @internal
@@ -104,9 +149,13 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     _unloadData() {
         this._airtableInterface.unsubscribeFromCursorData();
         this._cursorData.selectedRecordIdSet = null;
+        this._cursorData.selectedFieldIdSet = null;
     }
     /**
      * The record IDs of all currently selected records, or an empty array if no records are selected.
+     *
+     * Not loaded by default. You must load cursor data with `useLoadable(cursor)` (recommended) or
+     * `cursor.loadDataAsync()` before use.
      *
      * Can be watched.
      */
@@ -119,10 +168,28 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return selectedRecordIds;
     }
     /**
+     * The field IDs of all currently selected fields, or an empty array if no fields are selected.
+     *
+     * Not loaded by default: you must load cursor data with `useLoadable(cursor)` (recommended) or
+     * `cursor.loadDataAsync()` before use.
+     *
+     * Can be watched.
+     */
+    get selectedFieldIds(): Array<RecordId> {
+        const {selectedFieldIdSet} = this._data;
+        if (!selectedFieldIdSet) {
+            throw spawnInvariantViolationError('Cursor data is not loaded');
+        }
+        const selectedRecordIds = Object.keys(selectedFieldIdSet);
+        return selectedRecordIds;
+    }
+    /**
      * Checks whether a given record is selected.
      *
+     * Selected records are not loaded by default. You must load cursor data with
+     * `useLoadable(cursor)` (recommended) or `cursor.loadDataAsync()` before use.
+     *
      * @param recordOrRecordId The record or record ID to check for.
-     * @returns `true` if the given record is selected, `false` otherwise.
      */
     isRecordSelected(recordOrRecordId: Record | string): boolean {
         const {selectedRecordIdSet} = this._data;
@@ -192,12 +259,30 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
             [WatchableCursorKeys.activeViewId]: false,
         } as ObjectMap<WatchableCursorKey, boolean>;
         for (const {path, value} of changes) {
-            if (path[0] === 'cursorData' && path[1] === 'selectedRecordIdSet') {
-                if (!(path.length === 2)) {
-                    throw spawnInvariantViolationError('cannot set within selectedRecordIdSet');
+            if (path[0] === 'cursorData') {
+                switch (path[1]) {
+                    case 'selectedRecordIdSet': {
+                        if (path.length !== 2) {
+                            throw spawnInvariantViolationError(
+                                'cannot set within selectedRecordIdSet',
+                            );
+                        }
+                        this._cursorData.selectedRecordIdSet = value as any;
+                        changedKeys[WatchableCursorKeys.selectedRecordIds] = true;
+                        break;
+                    }
+                    case 'selectedFieldIdSet': {
+                        if (path.length !== 2) {
+                            throw spawnInvariantViolationError(
+                                'cannot set within selectedFieldIdSet',
+                            );
+                        }
+                        this._cursorData.selectedFieldIdSet = value as any;
+                        changedKeys[WatchableCursorKeys.selectedFieldIds] = true;
+                        break;
+                    }
+                    default:
                 }
-                this._cursorData.selectedRecordIdSet = value as any;
-                changedKeys[WatchableCursorKeys.selectedRecordIds] = true;
             }
 
             if (path[0] === 'activeTableId') {
