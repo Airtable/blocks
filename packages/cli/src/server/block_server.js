@@ -256,7 +256,7 @@ class BlockServer {
                         blockInstallationId: req.body.blockInstallationId,
                         apiKey: this._apiKey,
                     });
-                    res.sendStatus(200);
+                    res.status(200).send({userAgent: blockCliConfigSettings.USER_AGENT});
                 }
             },
         );
