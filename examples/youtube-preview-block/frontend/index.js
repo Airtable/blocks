@@ -13,79 +13,87 @@ import {ViewType} from '@airtable/blocks/models';
 
 // How this block chooses a video to show:
 //
-// - The user opens the table indicated by TABLE_NAME (below).
 // - The user selects a row in grid view.
-// - The block looks in the field indicated by FIELD_NAME.
-//   This field contains a YouTube video URL
+// - The block looks in the selected field for a YouTube video URL
 //   (e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc)
-// - The block extracts a video ID from the this field of the selected
-//   record.
+// - The block extracts a video ID from the this cell value.
 // - The block constructs an embed URL from this video ID and inserts
 //   this URL into the YouTube embed code.
 
-// These values match the recommended template for this example block.
-// You can also change them to match your own base.
-const TABLE_NAME = 'Movies';
-const FIELD_NAME = 'Trailer';
-
 function YouTubePreviewBlock() {
-    // Caches the currently selected record in state.  If the user
-    // selects a record and a video appears, and then the user
-    // de-selects the record (but does not select another), the video
-    // will remain. This is useful when, for example, the user resizes
-    // the blocks pane.
+    // Caches the currently selected record and field in state. If the user
+    // selects a record and a video appears, and then the user de-selects the
+    // record (but does not select another), the video will remain. This is
+    // useful when, for example, the user resizes the blocks pane.
     const [selectedRecordId, setSelectedRecordId] = useState(null);
+    const [selectedFieldId, setSelectedFieldId] = useState(null);
 
-    // cursor.selectedRecordIds isn't loaded by default, so we need to
-    // load it explicitly with the useLoadable hook.  The rest of the
-    // code in the component will not run until
-    // cursor.selectedRecordIds has loaded.
-    useLoadable(cursor, ['selectedRecordIds']);
+    // cursor.selectedRecordIds and selectedFieldIds aren't loaded by default,
+    // so we need to load them explicitly with the useLoadable hook. The rest of
+    // the code in the component will not run until they are loaded.
+    useLoadable(cursor, ['selectedRecordIds', 'selectedFieldIds']);
 
-    // Update the selectedRecordId state when the selected record
-    // changes.
-    useWatchable(cursor, ['selectedRecordIds'], () => {
+    // Update the selectedRecordId and selectedFieldId state when the selected
+    // record or field change.
+    useWatchable(cursor, ['selectedRecordIds', 'selectedFieldIds'], () => {
         // If the update was triggered by a record being de-selected,
         // the current selectedRecordId will be retained.  This is
         // what enables the caching described above.
-        if (cursor.selectedRecordIds.length === 0) {
-            return;
+        if (cursor.selectedRecordIds.length > 0) {
+            // There might be multiple selected records. We'll use the first
+            // one.
+            setSelectedRecordId(cursor.selectedRecordIds[0]);
         }
-
-        // There might be multiple selected records. We'll use the
-        // first one.
-        setSelectedRecordId(cursor.selectedRecordIds[0]);
+        if (cursor.selectedFieldIds.length > 0) {
+            // There might be multiple selected fields. We'll use the first
+            // one.
+            setSelectedFieldId(cursor.selectedFieldIds[0]);
+        }
     });
 
-    // This watch deletes the cached selectedRecordId when the user
-    // moves to a new table or view.  This prevents the following
-    // scenario: User selects a record that contains a video. The
-    // video appears. User switches to a different table. The video
-    // disappears. The user switches back to the original table.
-    // Weirdly, the previously viewed video reappears, even though no
-    // record is selected.
+    // This watch deletes the cached selectedRecordId and selectedFieldId when
+    // the user moves to a new table or view. This prevents the following
+    // scenario: User selects a record that contains a video. The video appears.
+    // User switches to a different table. The video disappears. The user
+    // switches back to the original table. Weirdly, the previously viewed video
+    // reappears, even though no record is selected.
     useWatchable(cursor, ['activeTableId', 'activeViewId'], () => {
         setSelectedRecordId(null);
+        setSelectedFieldId(null);
     });
 
-    return <RecordPreview selectedRecordId={selectedRecordId} />;
+    // cursor.activeTableId is briefly null when the user switches between tables.
+    if (!cursor.activeTableId) {
+        return null;
+    }
+
+    return (
+        <RecordPreview
+            tableId={cursor.activeTableId}
+            selectedRecordId={selectedRecordId}
+            selectedFieldId={selectedFieldId}
+        />
+    );
 }
 
 // Shows a video, or a message about what the user should do to see a
 // video.
-function RecordPreview({selectedRecordId}) {
+function RecordPreview({tableId, selectedRecordId, selectedFieldId}) {
     const base = useBase();
 
-    const table = base.getTableByName(TABLE_NAME);
+    const table = base.getTableById(tableId);
 
-    const urlField = table.getFieldByName(FIELD_NAME);
+    // We use getFieldByIdIfExists because the field might be deleted.
+    const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
 
     // We use a queryResult instead of the table with useRecords since
     // we want to rely on some features of queryResult later on
     // (queryResult.hasRecord and queryResult.getRecordById)
-    // To avoid loading unnecessary data, we pass options to only load
-    // cell values for the url field.
-    const queryResult = table.selectRecords({fields: [urlField]});
+    const queryResult = table.selectRecords({
+        // To avoid loading unnecessary data, we pass options to only load
+        // cell values for the selected field.
+        fields: selectedField ? [selectedField] : [],
+    });
 
     // Triggers a re-render if records change. Video URL cell value
     // might have changed, or record might have been deleted.
@@ -95,24 +103,6 @@ function RecordPreview({selectedRecordId}) {
     // RecordPreview may now need to render a video, or render no
     // video at all.
     useWatchable(cursor, ['activeTableId', 'activeViewId']);
-
-    // selectedRecordId will be null on block initialization and after
-    // the user switches table or view.
-    if (selectedRecordId === null) {
-        return (
-            <Container>
-                <Text>Select a record to see a preview.</Text>
-            </Container>
-        );
-    }
-
-    if (cursor.activeTableId !== table.id) {
-        return (
-            <Container>
-                <Text>Switch to the &quot;{table.name}&quot; table to see previews.</Text>
-            </Container>
-        );
-    }
 
     if (
         cursor.activeViewId === null || // activeViewId is briefly null when switching views
@@ -125,9 +115,16 @@ function RecordPreview({selectedRecordId}) {
         );
     }
 
-    // If the selectedRecordId is not in queryResult, the record
-    // corresponding to selectedRecordId must have been deleted.
-    if (!queryResult.hasRecord(selectedRecordId)) {
+    if (
+        // selectedRecordId will be null on block initialization and after
+        // the user switches table or view.
+        selectedRecordId === null ||
+        // The selected field may have been deleted.
+        selectedField === null ||
+        // If the selectedRecordId is not in queryResult, the record
+        // corresponding to selectedRecordId must have been deleted.
+        !queryResult.hasRecord(selectedRecordId)
+    ) {
         return (
             <Container>
                 <Text>Select a record to see a preview.</Text>
@@ -137,7 +134,7 @@ function RecordPreview({selectedRecordId}) {
 
     const previewUrl = getPreviewUrlForRecord(
         queryResult.getRecordById(selectedRecordId),
-        urlField,
+        selectedField,
     );
 
     // In this case, the FIELD_NAME field of the currently selected
