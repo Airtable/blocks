@@ -6,7 +6,7 @@ module.exports = function(api) {
         // We use the '@babel/transform-flow-strip-types' plugin instead of the
         // '@babel/preset-flow' preset due to a Babel bug:
         // https://github.com/babel/babel/issues/8593#issuecomment-419862386
-        presets: ['@babel/preset-env', '@babel/preset-react'],
+        presets: ['@babel/preset-env', 'minify', '@babel/preset-react'],
         plugins: [
             '@babel/plugin-transform-flow-strip-types',
             '@babel/plugin-proposal-class-properties',
