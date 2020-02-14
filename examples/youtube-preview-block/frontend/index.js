@@ -1,7 +1,7 @@
 import {
     initializeBlock,
     useBase,
-    useRecords,
+    useRecordById,
     useLoadable,
     useWatchable,
     Box,
@@ -86,18 +86,11 @@ function RecordPreview({tableId, selectedRecordId, selectedFieldId}) {
     // We use getFieldByIdIfExists because the field might be deleted.
     const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
 
-    // We use a queryResult instead of the table with useRecords since
-    // we want to rely on some features of queryResult later on
-    // (queryResult.hasRecord and queryResult.getRecordById)
-    const queryResult = table.selectRecords({
-        // To avoid loading unnecessary data, we pass options to only load
-        // cell values for the selected field.
-        fields: selectedField ? [selectedField] : [],
-    });
-
-    // Triggers a re-render if records change. Video URL cell value
+    // Triggers a re-render if the record changes. Video URL cell value
     // might have changed, or record might have been deleted.
-    useRecords(queryResult);
+    const selectedRecord = useRecordById(table, selectedRecordId ? selectedRecordId : '', {
+        fields: [selectedField],
+    });
 
     // Triggers a re-render if the user switches table or view.
     // RecordPreview may now need to render a video, or render no
@@ -116,14 +109,11 @@ function RecordPreview({tableId, selectedRecordId, selectedFieldId}) {
     }
 
     if (
-        // selectedRecordId will be null on block initialization and after
-        // the user switches table or view.
-        selectedRecordId === null ||
+        // selectedRecord will be null on block initialization, after
+        // the user switches table or view, or if it was deleted.
+        selectedRecord === null ||
         // The selected field may have been deleted.
-        selectedField === null ||
-        // If the selectedRecordId is not in queryResult, the record
-        // corresponding to selectedRecordId must have been deleted.
-        !queryResult.hasRecord(selectedRecordId)
+        selectedField === null
     ) {
         return (
             <Container>
@@ -132,10 +122,7 @@ function RecordPreview({tableId, selectedRecordId, selectedFieldId}) {
         );
     }
 
-    const previewUrl = getPreviewUrlForRecord(
-        queryResult.getRecordById(selectedRecordId),
-        selectedField,
-    );
+    const previewUrl = getPreviewUrlForRecord(selectedRecord, selectedField);
 
     // In this case, the FIELD_NAME field of the currently selected
     // record either contains no URL, or contains a URL that cannot be
