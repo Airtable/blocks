@@ -62,14 +62,17 @@ function YouTubePreviewBlock() {
         setSelectedFieldId(null);
     });
 
-    // cursor.activeTableId is briefly null when the user switches between tables.
-    if (!cursor.activeTableId) {
+    const base = useBase();
+    const table = base.getTableByIdIfExists(cursor.activeTableId);
+
+    // table is briefly null when switching to a newly created table.
+    if (!table) {
         return null;
     }
 
     return (
         <RecordPreview
-            tableId={cursor.activeTableId}
+            table={table}
             selectedRecordId={selectedRecordId}
             selectedFieldId={selectedFieldId}
         />
@@ -78,11 +81,7 @@ function YouTubePreviewBlock() {
 
 // Shows a video, or a message about what the user should do to see a
 // video.
-function RecordPreview({tableId, selectedRecordId, selectedFieldId}) {
-    const base = useBase();
-
-    const table = base.getTableById(tableId);
-
+function RecordPreview({table, selectedRecordId, selectedFieldId}) {
     // We use getFieldByIdIfExists because the field might be deleted.
     const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
 

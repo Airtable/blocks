@@ -24,10 +24,10 @@ function TableStructureBlock() {
     // useWatchable is used to re-render the block whenever the active table or view changes.
     useWatchable(cursor, ['activeTableId', 'activeViewId']);
 
-    // activeViewId can be null while the table is loading, so we use "ifExists" to allow for
-    // this situation.
+    // table can be null if it's a new table being created and activeViewId can be null while the
+    // table is loading, so we use "ifExists" to allow for these situations.
     const table = base.getTableByIdIfExists(cursor.activeTableId);
-    const view = table.getViewByIdIfExists(cursor.activeViewId);
+    const view = table && table.getViewByIdIfExists(cursor.activeViewId);
 
     if (table && view) {
         return <TableSchema base={base} table={table} view={view} />;
