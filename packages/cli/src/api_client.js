@@ -21,6 +21,8 @@ type DeployId = string;
 type ReleaseId = string;
 
 const INVALID_API_KEY_MESSAGE = `❌ Your Airtable API key is invalid. Please use 'block ${CommandNames.SET_API_KEY}' to update it.`;
+const NOT_FOUND_MESSAGE =
+    '❌ The base could not be found. Make sure you have access to the base in which this block was created.';
 
 class ApiClient {
     _apiBaseUrl: string;
@@ -79,9 +81,15 @@ class ApiClient {
         return new URL(path, this._apiBaseUrl).href;
     }
 
-    _processErrorMessageForApiKeyIfUnauthorized(statusCode: number, errMessage: string): string {
+    _processErrorMessageForApiKeyIfUnauthorized(
+        statusCode: number,
+        errMessage: string,
+        errCode: string | null = null,
+    ): string {
         if (statusCode === 401) {
             return INVALID_API_KEY_MESSAGE;
+        } else if (statusCode === 422 && errCode === 'RESOURCE_NOT_FOUND') {
+            return NOT_FOUND_MESSAGE;
         } else {
             return errMessage;
         }
@@ -92,10 +100,21 @@ class ApiClient {
         if (Array.isArray(errors)) {
             return errors
                 .map(errObj => {
-                    if (errObj && typeof errObj.message === 'string') {
+                    if (
+                        errObj &&
+                        typeof errObj.message === 'string' &&
+                        typeof errObj.code === 'string'
+                    ) {
                         return this._processErrorMessageForApiKeyIfUnauthorized(
                             statusCode,
                             errObj.message,
+                            errObj.code,
+                        );
+                    } else if (errObj && typeof errObj.message === 'string') {
+                        return this._processErrorMessageForApiKeyIfUnauthorized(
+                            statusCode,
+                            errObj.message,
+                            null,
                         );
                     } else {
                         throw new Error(
