@@ -338,7 +338,6 @@ export enum FieldType {
      * ```js
      * Array<{ id: RecordId }>
      * ```
-     *
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
@@ -483,8 +482,15 @@ export enum FieldType {
      *
      * **Cell write format**
      * ```js
-     * Array<{ url: string }>
+     * Array<
+     *     // New attachment format
+     *     { url: string, filename?: string} ||
+     *     // Pre-existing attachments use cell read format specified above
+     *     { ... }
+     * >
      * ```
+     * For pre-existing attachments, pass the object read from the cell value.
+     * You cannot change any properties of pre-existing attachments.
      */
     MULTIPLE_ATTACHMENTS = 'multipleAttachments',
     /**
