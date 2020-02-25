@@ -50,7 +50,7 @@ const defaults = Object.freeze({
  */
 function getRawSettingsWithDefaults(globalConfig) {
     const rawSettings = {};
-    for (const globalConfigKey of Object.keys(ConfigKeys).map(key => ConfigKeys[key])) {
+    for (const globalConfigKey of Object.values(ConfigKeys)) {
         const storedValue = globalConfig.get(globalConfigKey);
         if (
             storedValue === undefined &&

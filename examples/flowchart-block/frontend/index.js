@@ -79,7 +79,7 @@ function FlowchartBuilderBlock() {
                         svgElement.removeAttribute('width');
                     }
                     graph.current.innerHTML = '';
-                    graph.current.append(svgElement);
+                    graph.current.appendChild(svgElement);
                 }
             });
         }
