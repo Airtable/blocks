@@ -78,7 +78,6 @@ function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
                                     {label: 'Pick a style...', value: null, disabled: true},
                                     {label: 'Right angles', value: LinkStyle.RIGHT_ANGLES},
                                     {label: 'Straight lines', value: LinkStyle.STRAIGHT_LINES},
-                                    {label: 'Curved lines', value: LinkStyle.CURVED_LINES},
                                 ]}
                                 globalConfigKey={ConfigKeys.LINK_STYLE}
                             />
@@ -132,9 +131,12 @@ SettingsForm.propTypes = {
         view: PropTypes.instanceOf(View),
         field: PropTypes.instanceOf(Field),
         queryResult: PropTypes.instanceOf(RecordQueryResult),
-        chartOrientation: PropTypes.oneOf(Object.values(ChartOrientation)).isRequired,
-        linkStyle: PropTypes.oneOf(Object.values(LinkStyle)).isRequired,
-        recordShape: PropTypes.oneOf(Object.values(RecordShape)).isRequired,
+        chartOrientation: PropTypes.oneOf(
+            Object.keys(ChartOrientation).map(key => ChartOrientation[key]),
+        ).isRequired,
+        linkStyle: PropTypes.oneOf(Object.keys(LinkStyle).map(key => LinkStyle[key])).isRequired,
+        recordShape: PropTypes.oneOf(Object.keys(RecordShape).map(key => RecordShape[key]))
+            .isRequired,
     }),
 };
 

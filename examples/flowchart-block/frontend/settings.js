@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {fieldTypes} from '@airtable/blocks/models';
 import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
 
@@ -24,7 +23,6 @@ export const RecordShape = Object.freeze({
 export const LinkStyle = Object.freeze({
     RIGHT_ANGLES: 'rightAngles',
     STRAIGHT_LINES: 'straightLines',
-    CURVED_LINES: 'curvedLines',
 });
 
 export const ChartOrientation = Object.freeze({
@@ -52,9 +50,12 @@ const defaults = Object.freeze({
  */
 function getRawSettingsWithDefaults(globalConfig) {
     const rawSettings = {};
-    for (const globalConfigKey of _.values(ConfigKeys)) {
+    for (const globalConfigKey of Object.keys(ConfigKeys).map(key => ConfigKeys[key])) {
         const storedValue = globalConfig.get(globalConfigKey);
-        if (storedValue === undefined && _.has(defaults, globalConfigKey)) {
+        if (
+            storedValue === undefined &&
+            Object.prototype.hasOwnProperty.call(defaults, globalConfigKey)
+        ) {
             rawSettings[globalConfigKey] = defaults[globalConfigKey];
         } else {
             rawSettings[globalConfigKey] = storedValue;

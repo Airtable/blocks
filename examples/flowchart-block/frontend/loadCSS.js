@@ -15,25 +15,6 @@ const cssString = `
         cursor: pointer;
         user-select: none;
     }
-
-    g.node,
-    g.edge {
-        transition: opacity 0.15s linear;
-    }
-
-    g.edge > polygon {
-        cursor: no-drop;
-    }
-
-    #graph:hover g.node,
-    #graph:hover g.edge {
-        opacity: 0.5;
-    }
-
-    #graph g.node:hover,
-    #graph g.edge:hover {
-        opacity: 1;
-    }
 `;
 
 function loadCSS() {

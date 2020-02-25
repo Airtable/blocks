@@ -115,7 +115,7 @@ function FlowchartBuilderBlock() {
                     });
                 } else if (exportType === ExportType.SVG) {
                     // Convert the SVG to a data URI and download it via an anchor link.
-                    svgAsDataUri(svgElement, {}, (uri: string) => {
+                    svgAsDataUri(svgElement, {}, uri => {
                         const downloadLink = document.createElement('a');
                         downloadLink.download = `${view.name}.svg`;
                         downloadLink.href = uri;
