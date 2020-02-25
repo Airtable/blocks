@@ -11,19 +11,17 @@ import {cursor} from '@airtable/blocks';
 import React, {useState} from 'react';
 import {ViewType} from '@airtable/blocks/models';
 
-// How this block chooses a video to show:
+// How this block chooses a preview to show:
 //
 // - The user selects a row in grid view.
-// - The block looks in the selected field for a YouTube video URL
+// - The block looks in the selected field for a supported URL
 //   (e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc)
-// - The block extracts a video ID from the this cell value.
-// - The block constructs an embed URL from this video ID and inserts
-//   this URL into the YouTube embed code.
+// - The block uses this URL to construct an embed URL and inserts this URL into an iframe.
 
-function YouTubePreviewBlock() {
+function UrlPreviewBlock() {
     // Caches the currently selected record and field in state. If the user
-    // selects a record and a video appears, and then the user de-selects the
-    // record (but does not select another), the video will remain. This is
+    // selects a record and a preview appears, and then the user de-selects the
+    // record (but does not select another), the preview will remain. This is
     // useful when, for example, the user resizes the blocks pane.
     const [selectedRecordId, setSelectedRecordId] = useState(null);
     const [selectedFieldId, setSelectedFieldId] = useState(null);
@@ -53,9 +51,9 @@ function YouTubePreviewBlock() {
 
     // This watch deletes the cached selectedRecordId and selectedFieldId when
     // the user moves to a new table or view. This prevents the following
-    // scenario: User selects a record that contains a video. The video appears.
-    // User switches to a different table. The video disappears. The user
-    // switches back to the original table. Weirdly, the previously viewed video
+    // scenario: User selects a record that contains a preview url. The preview appears.
+    // User switches to a different table. The preview disappears. The user
+    // switches back to the original table. Weirdly, the previously viewed preview
     // reappears, even though no record is selected.
     useWatchable(cursor, ['activeTableId', 'activeViewId'], () => {
         setSelectedRecordId(null);
@@ -79,21 +77,19 @@ function YouTubePreviewBlock() {
     );
 }
 
-// Shows a video, or a message about what the user should do to see a
-// video.
+// Shows a preview, or a message about what the user should do to see a preview.
 function RecordPreview({table, selectedRecordId, selectedFieldId}) {
     // We use getFieldByIdIfExists because the field might be deleted.
     const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
 
-    // Triggers a re-render if the record changes. Video URL cell value
+    // Triggers a re-render if the record changes. Preview URL cell value
     // might have changed, or record might have been deleted.
     const selectedRecord = useRecordById(table, selectedRecordId ? selectedRecordId : '', {
         fields: [selectedField],
     });
 
     // Triggers a re-render if the user switches table or view.
-    // RecordPreview may now need to render a video, or render no
-    // video at all.
+    // RecordPreview may now need to render a preview, or render nothing at all.
     useWatchable(cursor, ['activeTableId', 'activeViewId']);
 
     if (
@@ -125,11 +121,11 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
 
     // In this case, the FIELD_NAME field of the currently selected
     // record either contains no URL, or contains a URL that cannot be
-    // resolved to a YouTube video.
+    // resolved to a supported preview.
     if (!previewUrl) {
         return (
             <Container>
-                <Text>No video</Text>
+                <Text>No preview</Text>
             </Container>
         );
     }
@@ -139,8 +135,8 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
             <iframe
                 // Using `key=previewUrl` will immediately unmount the
                 // old iframe when we're switching to a new
-                // video. Otherwise, the old iframe would be reused,
-                // and the old video would stay onscreen while the new
+                // preview. Otherwise, the old iframe would be reused,
+                // and the old preview would stay onscreen while the new
                 // one was loading, which would be a confusing user
                 // experience.
                 key={previewUrl}
@@ -154,8 +150,7 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
     );
 }
 
-// Container element which takes up the full viewport and centers its
-// children.
+// Container element which takes up the full viewport and centers its children.
 function Container({children}) {
     return (
         <Box
@@ -184,16 +179,111 @@ function getPreviewUrlForRecord(record, field) {
         return null;
     }
 
-    // Try to extract the video ID from the URL using a regular
-    // expression.
-    const match = url.match(/v=([\w-]+)(&|$)/);
-
-    if (!match) {
-        return null;
+    // Try to extract the video ID from the URL using regular expression based helper functions
+    // for each service we support.
+    const youtubePreviewUrl = getYoutubePreviewUrl(url);
+    if (youtubePreviewUrl) {
+        return youtubePreviewUrl;
     }
 
-    const previewUrl = `https://www.youtube.com/embed/${match[1]}`;
-    return previewUrl;
+    const vimeoPreviewUrl = getVimeoPreviewUrl(url);
+    if (vimeoPreviewUrl) {
+        return vimeoPreviewUrl;
+    }
+
+    const spotifyPreviewUrl = getSpotifyPreviewUrl(url);
+    if (spotifyPreviewUrl) {
+        return spotifyPreviewUrl;
+    }
+
+    const soundcloudPreviewUrl = getSoundcloudPreviewUrl(url);
+    if (soundcloudPreviewUrl) {
+        return soundcloudPreviewUrl;
+    }
+
+    const figmaPreviewUrl = getFigmaPreviewUrl(url);
+    if (figmaPreviewUrl) {
+        return figmaPreviewUrl;
+    }
+
+    // URL didn't match any supported services, so return null
+    return null;
 }
 
-initializeBlock(() => <YouTubePreviewBlock />);
+function getYoutubePreviewUrl(url) {
+    // Standard youtube urls, e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc
+    let match = url.match(/youtube\.com\/.*v=([\w-]+)(&|$)/);
+
+    if (match) {
+        return `https://www.youtube.com/embed/${match[1]}`;
+    }
+
+    // Shortened youtube urls, e.g. https://youtu.be/KYz2wyBy3kc
+    match = url.match(/youtu\.be\/([\w-]+)(\?|$)/);
+    if (match) {
+        return `https://www.youtube.com/embed/${match[1]}`;
+    }
+
+    // Youtube playlist urls, e.g. youtube.com/playlist?list=KYz2wyBy3kc
+    match = url.match(/youtube\.com\/playlist\?.*list=([\w-]+)(&|$)/);
+    if (match) {
+        return `https://www.youtube.com/embed/videoseries?list=${match[1]}`;
+    }
+
+    // URL isn't for a youtube video
+    return null;
+}
+
+function getVimeoPreviewUrl(url) {
+    const match = url.match(/vimeo\.com\/([\w-]+)(\?|$)/);
+    if (match) {
+        return `https://player.vimeo.com/video/${match[1]}`;
+    }
+
+    // URL isn't for a Vimeo video
+    return null;
+}
+
+function getSpotifyPreviewUrl(url) {
+    // Spotify URLs for song, album, artist, playlist all have similar formats
+    let match = url.match(/spotify\.com\/(track|album|artist|playlist)\/([\w-]+)(\?|$)/);
+    if (match) {
+        return `https://open.spotify.com/embed/${match[1]}/${match[2]}`;
+    }
+
+    // Spotify URLs for podcasts and episodes have a different format
+    match = url.match(/spotify\.com\/(show|episode)\/([\w-]+)(\?|$)/);
+    if (match) {
+        return `https://open.spotify.com/embed-podcast/${match[1]}/${match[2]}`;
+    }
+
+    // URL isn't for Spotify
+    return null;
+}
+
+function getSoundcloudPreviewUrl(url) {
+    // Soundcloud url's don't have a clear format, so just check if they are from soundcloud and try
+    // to embed them.
+    if (url.match(/soundcloud\.com/)) {
+        return `https://w.soundcloud.com/player/?url=${url}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`;
+    }
+
+    // URL isn't for Soundcloud
+    return null;
+}
+
+function getFigmaPreviewUrl(url) {
+    // Figma has a regex they recommend matching against
+    if (
+        url.match(
+            /(https:\/\/([\w\.-]+\.)?)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/,
+        )
+    ) {
+        return `https://www.figma.com/embed?embed_host=astra&url=${url}`;
+    }
+
+    // URL isn't for Figma
+    return null;
+}
+
+initializeBlock(() => <UrlPreviewBlock />);

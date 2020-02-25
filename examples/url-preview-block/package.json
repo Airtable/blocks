@@ -1,9 +1,5 @@
 {
-    "name": "@airtable/youtube-preview-block",
-    "version": "1.0.11",
-    "description": "When a user selects a record in grid view that has a YouTube URL, this block plays the corresponding video.",
-    "author": "",
-    "license": "UNLICENSED",
+    "description": "When a user selects a record in grid view that has a supported URL, this block shows the corresponding preview.",
     "scripts": {
         "lint": "eslint frontend"
     },
