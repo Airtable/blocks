@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {Fragment} from 'react';
-import {FieldType, Table} from '@airtable/blocks/models';
+import {Table} from '@airtable/blocks/models';
 import {
     Box,
     Button,
@@ -8,19 +8,21 @@ import {
     FormField,
     Heading,
     TablePickerSynced,
+    ViewPickerSynced,
 } from '@airtable/blocks/ui';
 
 import {ConfigKeys} from './settings';
 
-function SettingsForm({setIsSettingsVisible, settings}) {
+export default function SettingsForm({setIsSettingsVisible, settings}) {
     return (
         <Box
-            flex="1 0 auto"
+            flex="none"
             display="flex"
             flexDirection="column"
             width="300px"
             backgroundColor="white"
             maxHeight="100vh"
+            borderLeft="thick"
         >
             <Box
                 flex="auto"
@@ -37,43 +39,28 @@ function SettingsForm({setIsSettingsVisible, settings}) {
                 {settings.table && (
                     <Fragment>
                         <FormField
-                            label="Attachment field"
-                            description="Must have field type: Attachment"
+                            label="View"
+                            description="Only records in this view will be used"
                         >
+                            <ViewPickerSynced
+                                table={settings.table}
+                                globalConfigKey={ConfigKeys.VIEW_ID}
+                            />
+                        </FormField>
+                        <FormField label="Title field" description="Front side of flashcard">
                             <FieldPickerSynced
                                 table={settings.table}
-                                globalConfigKey={ConfigKeys.ATTACHMENT_FIELD_ID}
-                                allowedTypes={[FieldType.MULTIPLE_ATTACHMENTS]}
+                                globalConfigKey={ConfigKeys.TITLE_FIELD_ID}
                             />
                         </FormField>
                         <FormField
-                            label="Start Time field"
-                            description="Must have field type: Duration"
+                            label="Details field"
+                            description="(Optional) Back side of flashcard"
                         >
                             <FieldPickerSynced
                                 table={settings.table}
-                                globalConfigKey={ConfigKeys.START_TIME_FIELD_ID}
-                                allowedTypes={[FieldType.DURATION]}
-                            />
-                        </FormField>
-                        <FormField
-                            label="End Time field"
-                            description="Must have field type: Duration"
-                        >
-                            <FieldPickerSynced
-                                table={settings.table}
-                                globalConfigKey={ConfigKeys.END_TIME_FIELD_ID}
-                                allowedTypes={[FieldType.DURATION]}
-                            />
-                        </FormField>
-                        <FormField
-                            label="Caption field"
-                            description="Must have field type: Single line text"
-                        >
-                            <FieldPickerSynced
-                                table={settings.table}
-                                globalConfigKey={ConfigKeys.CAPTION_FIELD_ID}
-                                allowedTypes={[FieldType.SINGLE_LINE_TEXT]}
+                                shouldAllowPickingNone={true}
+                                globalConfigKey={ConfigKeys.DETAILS_FIELD_ID}
                             />
                         </FormField>
                     </Fragment>
@@ -87,7 +74,7 @@ function SettingsForm({setIsSettingsVisible, settings}) {
                 marginX={3}
                 borderTop="thick"
             >
-                <Button variant="primary" onClick={() => setIsSettingsVisible(false)}>
+                <Button variant="primary" size="large" onClick={() => setIsSettingsVisible(false)}>
                     Done
                 </Button>
             </Box>
@@ -101,5 +88,3 @@ SettingsForm.propTypes = {
         table: PropTypes.instanceOf(Table),
     }).isRequired,
 };
-
-export default SettingsForm;
