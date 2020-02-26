@@ -22,7 +22,8 @@ The code shows:
    (You can also use an existing base or a different template: this block doesn't depend on any
    specific attributes from that template.)
 
-2. Create a new block in your new base (see the [setup guide](/packages/sdk/docs/setup.md)),
+2. Create a new block in your new base (see
+   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block),
    selecting "Table structure" as your template.
 
 3. From the root of your new block, run `block run`.
