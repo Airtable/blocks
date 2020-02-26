@@ -1,3 +1,6 @@
+import React, {useState} from 'react';
+import {cursor} from '@airtable/blocks';
+import {ViewType} from '@airtable/blocks/models';
 import {
     initializeBlock,
     useBase,
@@ -6,10 +9,11 @@ import {
     useWatchable,
     Box,
     Text,
+    TextButton,
+    Dialog,
+    Link,
+    Icon,
 } from '@airtable/blocks/ui';
-import {cursor} from '@airtable/blocks';
-import React, {useState} from 'react';
-import {ViewType} from '@airtable/blocks/models';
 
 // How this block chooses a preview to show:
 //
@@ -79,6 +83,7 @@ function UrlPreviewBlock() {
 
 // Shows a preview, or a message about what the user should do to see a preview.
 function RecordPreview({table, selectedRecordId, selectedFieldId}) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     // We use getFieldByIdIfExists because the field might be deleted.
     const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
 
@@ -126,6 +131,25 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
         return (
             <Container>
                 <Text>No preview</Text>
+                <TextButton marginTop={3} onClick={() => setIsDialogOpen(true)}>
+                    View supported URLs
+                </TextButton>
+                {isDialogOpen && (
+                    <Dialog onClose={() => setIsDialogOpen(false)}>
+                        <Dialog.CloseButton />
+                        <Text>The following services are supported:</Text>
+                        <Text fontWeight={500} marginTop={2}>
+                            YouTube, Vimeo, Spotify, Soundcloud, and Figma
+                        </Text>
+                        <Link
+                            marginTop={2}
+                            href="https://airtable.com/shrQSwIety6rqfJZX"
+                            target="_blank"
+                        >
+                            Request a new service
+                        </Link>
+                    </Dialog>
+                )}
             </Container>
         );
     }
