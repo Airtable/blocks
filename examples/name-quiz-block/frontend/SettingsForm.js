@@ -9,6 +9,7 @@ import {
     ViewPickerSynced,
     FieldPickerSynced,
     TablePickerSynced,
+    useSettingsButton,
 } from '@airtable/blocks/ui';
 import {FieldType} from '@airtable/blocks/models';
 
@@ -21,6 +22,7 @@ import FullScreenBox from './FullScreenBox';
 export default function SettingsForm({onDone}) {
     // Use the `useSettings` hook to access the settings, and re-render whenever something changes.
     const {isValid, settings, message} = useSettings();
+    useSettingsButton(onDone);
     return (
         <FullScreenBox display="flex" flexDirection="column">
             <Box flex="auto" padding={4} paddingBottom={2}>

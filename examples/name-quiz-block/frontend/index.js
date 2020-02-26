@@ -55,7 +55,7 @@ const GameStates = Object.freeze({
  *
  * This component handles all of the game lifecycle and renders a component based on the state of the game.
  */
-function NameTrainerBlock() {
+function NameQuizBlock() {
     const [gameData, setGameData] = useState({
         // On first run of the block show the settings screen.
         gameState: runInfo.isFirstRun ? GameStates.CONFIGURING_SETTINGS : GameStates.HOME_SCREEN,
@@ -131,4 +131,4 @@ function NameTrainerBlock() {
     }
 }
 
-initializeBlock(() => <NameTrainerBlock />);
+initializeBlock(() => <NameQuizBlock />);

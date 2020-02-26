@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Text, Heading, TextButton, useRecords} from '@airtable/blocks/ui';
+import {
+    Button,
+    Text,
+    Heading,
+    TextButton,
+    useRecords,
+    useSettingsButton,
+} from '@airtable/blocks/ui';
 
 import {useSettings, MIN_AMOUNT_OF_PICTURES} from './settings';
 import FullScreenBox from './FullScreenBox';
@@ -22,6 +29,7 @@ export default function IdleGameScreen({
     // If the settings are not valid we will ask the user to update the settings before playing a new game.
     // This could be because someone else changed the settings or because something in the schema changed.
     const {isValid, settings} = useSettings();
+    useSettingsButton(onShowSettings);
 
     // Get the records, and also re-render when changes happen to the records.
     const records = useRecords(settings.queryResult);
