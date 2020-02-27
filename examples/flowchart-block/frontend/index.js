@@ -25,7 +25,7 @@ loadCSS();
 
 const domParser = new DOMParser();
 
-function FlowchartBuilderBlock() {
+function FlowchartBlock() {
     const viewport = useViewport();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     useSettingsButton(() => {
@@ -37,14 +37,13 @@ function FlowchartBuilderBlock() {
     const settingsValidationResult = useSettings();
     const {queryResult} = settingsValidationResult.settings;
     useLoadable(queryResult);
-    useWatchable(queryResult, ['records', 'cellValues', 'recordColors'], draw);
+    useWatchable(queryResult, ['records', 'cellValues', 'recordColors']);
 
     useEffect(() => {
         if (!settingsValidationResult.isValid) {
             setIsSettingsVisible(true);
         }
     }, [settingsValidationResult.isValid]);
-    useEffect(draw, [settingsValidationResult]);
 
     const graph = useRef(null);
 
@@ -130,6 +129,7 @@ function FlowchartBuilderBlock() {
         }
     }
 
+    draw();
     return (
         <Box
             position="absolute"
@@ -167,4 +167,4 @@ function FlowchartBuilderBlock() {
     );
 }
 
-initializeBlock(() => <FlowchartBuilderBlock />);
+initializeBlock(() => <FlowchartBlock />);
