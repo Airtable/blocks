@@ -18,6 +18,7 @@ import useArrayIdentity from './use_array_identity';
  * * For {@link Base}, {@link Table}, {@link View}, or {@link Field}, use {@link useBase}.
  * * For {@link RecordQueryResult} or {@link Record}, use {@link useRecords}, {@link useRecordIds}, or {@link useRecordById}.
  * * For {@link Viewport}, use {@link useViewport}.
+ * * For {@link SettingsButton}, use {@link useSettingsButton}.
  *
  * If you're writing a class component and still want to be able to use hooks, try {@link withHooks}.
  *
