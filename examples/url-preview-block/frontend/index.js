@@ -13,6 +13,7 @@ import {
     Dialog,
     Link,
     Icon,
+    Heading,
 } from '@airtable/blocks/ui';
 
 // How this block chooses a preview to show:
@@ -103,7 +104,7 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
     ) {
         return (
             <Container>
-                <Text>Switch to a grid view to see previews.</Text>
+                <Text>Switch to a grid view to see previews</Text>
             </Container>
         );
     }
@@ -117,7 +118,7 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
     ) {
         return (
             <Container>
-                <Text>Select a record to see a preview.</Text>
+                <Text>Select a record to see a preview</Text>
             </Container>
         );
     }
@@ -135,11 +136,12 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
                     View supported URLs
                 </TextButton>
                 {isDialogOpen && (
-                    <Dialog onClose={() => setIsDialogOpen(false)}>
+                    <Dialog onClose={() => setIsDialogOpen(false)} maxWidth={400}>
                         <Dialog.CloseButton />
-                        <Text>The following services are supported:</Text>
-                        <Text fontWeight={500} marginTop={2}>
-                            YouTube, Vimeo, Spotify, Soundcloud, and Figma
+                        <Heading size="small">Supported services</Heading>
+                        <Text marginTop={2}>Previews are supported for these services:</Text>
+                        <Text marginTop={2}>
+                            Airtable, Figma, SoundCloud, Spotify, Vimeo, YouTube
                         </Text>
                         <Link
                             marginTop={2}
@@ -203,8 +205,13 @@ function getPreviewUrlForRecord(record, field) {
         return null;
     }
 
-    // Try to extract the video ID from the URL using regular expression based helper functions
-    // for each service we support.
+    // Try to extract the preview URL from the URL using regular expression
+    // based helper functions for each service we support.
+    const airtablePreviewUrl = getAirtablePreviewUrl(url);
+    if (airtablePreviewUrl) {
+        return airtablePreviewUrl;
+    }
+
     const youtubePreviewUrl = getYoutubePreviewUrl(url);
     if (youtubePreviewUrl) {
         return youtubePreviewUrl;
@@ -231,6 +238,16 @@ function getPreviewUrlForRecord(record, field) {
     }
 
     // URL didn't match any supported services, so return null
+    return null;
+}
+
+function getAirtablePreviewUrl(url) {
+    const match = url.match(/airtable\.com(\/embed)?\/(shr[A-Za-z0-9]{14}.*)/);
+    if (match) {
+        return `https://airtable.com/embed/${match[2]}`;
+    }
+
+    // URL isn't for an Airtable share
     return null;
 }
 
