@@ -3,7 +3,7 @@
     "version": "1.0.6",
     "description": "A button that updates the currently selected records when clicked",
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
         "lint": "eslint frontend"
     },

@@ -3,7 +3,7 @@
     "version": "1.0.4",
     "description": "Enrich records in your base with extracts and images from wikipedia",
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
         "lint": "eslint frontend"
     },

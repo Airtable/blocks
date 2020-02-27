@@ -20,5 +20,6 @@
         "eslint-plugin-react-hooks": "^2.0.1",
         "flow-bin": "0.106.3",
         "flow-typed": "^2.5.2"
-    }
+    },
+    "license": "MIT"
 }

@@ -3,7 +3,7 @@
     "version": "1.0.2",
     "description": "A typescript version of a hello world block",
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
         "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend"
     },

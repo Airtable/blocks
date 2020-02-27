@@ -3,7 +3,7 @@
     "version": "1.1.4",
     "description": "A to-do list based on records in a table",
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
         "lint": "eslint frontend"
     },

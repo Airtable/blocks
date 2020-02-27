@@ -3,7 +3,7 @@
     "version": "1.0.7",
     "description": "A printable layout of artists and their artworks, grouped by collection",
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
         "lint": "eslint frontend"
     },

@@ -3,7 +3,7 @@
     "version": "1.0.8",
     "description": "A bar chart of data from a table",
     "author": "",
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
         "lint": "eslint frontend"
     },
