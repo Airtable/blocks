@@ -162,29 +162,26 @@ export default function HighlightWrapper({children, dependentLinksByNodeId, link
      *
      * Clears the highlighted links & nodes when no longer hovering on anything.
      */
-    const onNodeOrLinkMouseOut = useCallback(
-        e => {
-            if (svgPanZoom && !svgPanZoom.isPanEnabled()) {
-                return;
-            }
-            const hoveredNode = event.currentTarget.querySelector('svg.TableRow:hover');
-            const hoveredLink = event.currentTarget.querySelector('path.Link:hover');
+    const onNodeOrLinkMouseOut = useCallback(() => {
+        if (svgPanZoom && !svgPanZoom.isPanEnabled()) {
+            return;
+        }
+        const hoveredNode = event.currentTarget.querySelector('svg.TableRow:hover');
+        const hoveredLink = event.currentTarget.querySelector('path.Link:hover');
 
-            // Mouseout triggers when hovering over descendents within a node (ie, the text node).
-            // In this case, we don't want to clear highlighting.
-            if (hoveredNode || hoveredLink) {
-                return;
-            }
+        // Mouseout triggers when hovering over descendents within a node (ie, the text node).
+        // In this case, we don't want to clear highlighting.
+        if (hoveredNode || hoveredLink) {
+            return;
+        }
 
-            hoveredNodeOrLinkRef.current = null;
-            configureTooltip(null);
+        hoveredNodeOrLinkRef.current = null;
+        configureTooltip(null);
 
-            // Remove highlighted from previously highlighted links & fields
-            toggleClassFromElements('highlighted', 'TableRow highlighted');
-            toggleClassFromElements('highlighted', 'Link highlighted');
-        },
-        [svgPanZoom, configureTooltip],
-    );
+        // Remove highlighted from previously highlighted links & fields
+        toggleClassFromElements('highlighted', 'TableRow highlighted');
+        toggleClassFromElements('highlighted', 'Link highlighted');
+    }, [svgPanZoom, configureTooltip]);
 
     useEffect(() => {
         setHighlightContext(currentHighlightContext => ({

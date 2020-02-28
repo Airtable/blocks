@@ -20,7 +20,6 @@ function pushToOrInitializeArray(obj, key, value) {
 
 function createLinkId(source, target) {
     return `${source}_${target}`;
-    inverseLinkId;
 }
 
 /**
