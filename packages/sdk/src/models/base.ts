@@ -74,6 +74,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     _tableRecordStoresByTableId: ObjectMap<TableId, RecordStore> = {};
     /** @internal */
     _airtableInterface: AirtableInterface;
+    /** @internal */
+    __billingPlanGrouping: string;
     /**
      * @internal
      */
@@ -82,6 +84,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
 
         this._tableModelsById = {}; // Table instances are lazily created by getTableById.
         this._airtableInterface = airtableInterface;
+        this.__billingPlanGrouping = baseData.billingPlanGrouping;
     }
 
     /**

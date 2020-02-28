@@ -39,6 +39,8 @@ export interface BaseData {
     // Exposed through Cursor model
     // cursorData will be null if it has not been subscribed to.
     cursorData: CursorData | null;
+
+    billingPlanGrouping: string;
 }
 
 /** @hidden */
