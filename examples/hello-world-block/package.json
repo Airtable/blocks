@@ -5,16 +5,13 @@
     },
     "dependencies": {
         "@airtable/blocks": "latest",
-        "prop-types": "^15.7.2",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0",
-        "save-svg-as-png": "^1.4.14",
-        "workerize": "^0.1.7"
+        "react": "^16.13.0",
+        "react-dom": "^16.13.0"
     },
     "devDependencies": {
         "eslint": "^6.8.0",
         "eslint-plugin-react": "^7.18.3",
-        "eslint-plugin-react-hooks": "^2.4.0"
+        "eslint-plugin-react-hooks": "^2.5.0"
     },
     "license": "MIT"
 }
