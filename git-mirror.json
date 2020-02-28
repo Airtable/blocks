@@ -2,6 +2,7 @@
     "authorName": "Airtable",
     "authorEmail": "blocks@airtable.com",
     "remote": "git@github.com:Airtable/blocks.git",
+    "shouldStripLineComments": true,
     "global": [
         ".gitignore",
         ".prettierignore",

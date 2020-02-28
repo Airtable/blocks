@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const os = require('os');
 const minimatch = require('minimatch');
+const strip = require('@airtable-blocks-internal/strip-comments');
 const git = require('./git');
 
 function createShouldSyncFilePath(config) {
@@ -20,7 +21,28 @@ function createShouldSyncFilePath(config) {
     };
 }
 
-async function copyFilesBetweenReposAsync(sourcePath, destinationPath, shouldSyncFilePath) {
+async function stripLineCommentsAsync(destinationPath) {
+    // Only apply this transformation to javascript and JSON files
+    if (!['.tsx', '.ts', '.jsx', '.js', '.json'].includes(path.extname(destinationPath))) {
+        return;
+    }
+    // Strip only line comments (keep block comments). Line comments can also be kept if
+    // they are marked as protected (eg: //! this is a protected comment).
+    const fileContents = await fs.readFile(destinationPath, {encoding: 'utf-8'});
+    const fileContentsWithoutLineComments = strip(fileContents, {
+        line: true,
+        block: false,
+        keepProtected: true,
+    });
+    await fs.writeFile(destinationPath, fileContentsWithoutLineComments);
+}
+
+async function copyFilesBetweenReposAsync(
+    sourcePath,
+    destinationPath,
+    shouldSyncFilePath,
+    shouldStripLineComments,
+) {
     const allFilePathsInSource = await git.lsFilesAsync(sourcePath);
     const allFilePathsInDest = await git.lsFilesAsync(destinationPath);
 
@@ -35,6 +57,9 @@ async function copyFilesBetweenReposAsync(sourcePath, destinationPath, shouldSyn
                 path.join(sourcePath, filePath),
                 path.join(destinationPath, filePath),
             );
+            if (shouldStripLineComments) {
+                await stripLineCommentsAsync(path.join(destinationPath, filePath));
+            }
         }
     }
 
@@ -72,6 +97,7 @@ async function createMirrorRepoAsync(config, sourcePath, destinationPath) {
             path.join(tmpSourcePath, config.subdirectory || ''), // only copy subdirectory files
             destinationPath,
             shouldSyncFilePath,
+            config.shouldStripLineComments,
         );
         await git.commitAndTagAsync(
             destinationPath,
@@ -101,6 +127,7 @@ async function syncScopedTagBetweenReposAsync(config, sourcePath, destinationPat
         path.join(tmpSourcePath, config.subdirectory || ''), // only sync subdirectory files
         tmpDestinationPath,
         shouldSyncFilePath,
+        config.shouldStripLineComments,
     );
 
     await git.commitAndTagAsync(

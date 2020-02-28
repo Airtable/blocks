@@ -3,6 +3,7 @@
     "authorEmail": "blocks@airtable.com",
     "remote": "git@github.com:Airtable/blocks-print-records.git",
     "subdirectory": "examples/print-records-block",
+    "shouldStripLineComments": false,
     "global": [
         ".block/**/*",
         "frontend/**/*",

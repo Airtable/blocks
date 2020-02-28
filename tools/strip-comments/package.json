@@ -1,0 +1,15 @@
+{
+    "name": "@airtable-blocks-internal/strip-comments",
+    "description": "Forked from https://github.com/jonschlinkert/strip-comments and adapted to remove line comments during publish flow from the private `hyperbase/blocks-sdk` repo to public `Airtable/blocks`",
+    "version": "2.0.1",
+    "main": "index.js",
+    "private": true,
+    "scripts": {
+        "airbuild": "echo 'no airbuild configured'"
+    },
+    "devDependencies": {
+        "gulp-format-md": "^2.0.0",
+        "mocha": "^6.2.2",
+        "nyc": "^14.1.1"
+    }
+}

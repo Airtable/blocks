@@ -3,6 +3,7 @@
     "authorEmail": "blocks@airtable.com",
     "remote": "git@github.com:Airtable/blocks-simple-chart.git",
     "subdirectory": "examples/simple-chart-block",
+    "shouldStripLineComments": false,
     "global": [
         ".block/**/*",
         "frontend/**/*",

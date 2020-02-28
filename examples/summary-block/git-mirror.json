@@ -3,6 +3,7 @@
     "authorEmail": "blocks@airtable.com",
     "remote": "git@github.com:Airtable/blocks-summary.git",
     "subdirectory": "examples/summary-block",
+    "shouldStripLineComments": false,
     "global": [
         ".block/**/*",
         "frontend/**/*",

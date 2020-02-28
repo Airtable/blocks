@@ -11,6 +11,7 @@
         "airbuild": "echo 'no airbuild configured'"
     },
     "dependencies": {
-        "minimatch": "^3.0.4"
+        "minimatch": "^3.0.4",
+        "@airtable-blocks-internal/strip-comments": "^2.0.1"
     }
 }

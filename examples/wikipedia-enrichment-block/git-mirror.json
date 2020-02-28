@@ -3,6 +3,7 @@
     "authorEmail": "blocks@airtable.com",
     "remote": "git@github.com:Airtable/blocks-wikipedia-enrichment.git",
     "subdirectory": "examples/wikipedia-enrichment-block",
+    "shouldStripLineComments": false,
     "global": [
         ".block/**/*",
         "frontend/**/*",

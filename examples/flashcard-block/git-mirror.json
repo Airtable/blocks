@@ -3,6 +3,7 @@
     "authorEmail": "blocks@airtable.com",
     "remote": "git@github.com:Airtable/blocks-flashcard.git",
     "subdirectory": "examples/flashcard-block",
+    "shouldStripLineComments": false,
     "global": [
         ".block/**/*",
         "frontend/**/*",
