@@ -16,7 +16,7 @@ const config = {
         'after:release': `../../tools/git-mirror/bin/git-mirror sync ${packageName}@\${version}`,
     },
     npm: {
-        publish: 'false',
+        publish: false,
     },
 };
 
