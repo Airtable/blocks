@@ -13,7 +13,7 @@ const config = {
     },
     hooks: {
         'before:init': '../../bin/check-repo-for-release && yarn lint',
-        'after:release': "../../tools/git-mirror/bin/git-mirror sync '${packageName}@${version}'",
+        'after:release': `../../tools/git-mirror/bin/git-mirror sync ${packageName}@\${version}`,
     },
     npm: {
         publish: 'false',
