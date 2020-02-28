@@ -1,0 +1,160 @@
+const fs = require('fs').promises;
+const path = require('path');
+const os = require('os');
+const minimatch = require('minimatch');
+const git = require('./git');
+
+function createShouldSyncFilePath(config) {
+    const matchers = [];
+    for (const pattern of config.global) {
+        matchers.push(new minimatch.Minimatch(pattern, {dot: true}));
+    }
+
+    return filePath => {
+        for (const matcher of matchers) {
+            if (matcher.match(filePath)) {
+                return true;
+            }
+        }
+        return false;
+    };
+}
+
+async function copyFilesBetweenReposAsync(sourcePath, destinationPath, shouldSyncFilePath) {
+    const allFilePathsInSource = await git.lsFilesAsync(sourcePath);
+    const allFilePathsInDest = await git.lsFilesAsync(destinationPath);
+
+    // copy over files
+    for (const filePath of allFilePathsInSource) {
+        if (shouldSyncFilePath(filePath)) {
+            console.log(`  COPY ${filePath}`);
+            await fs.mkdir(path.join(destinationPath, path.dirname(filePath)), {
+                recursive: true,
+            });
+            await fs.copyFile(
+                path.join(sourcePath, filePath),
+                path.join(destinationPath, filePath),
+            );
+        }
+    }
+
+    // delete old files
+    for (const filePath of allFilePathsInDest) {
+        const stat = await fs.stat(path.join(destinationPath, filePath));
+        if (
+            stat.isFile() &&
+            shouldSyncFilePath(filePath) &&
+            !allFilePathsInSource.includes(filePath)
+        ) {
+            console.log(`  DELETE ${filePath}`);
+            await fs.unlink(path.join(destinationPath, filePath));
+        }
+    }
+}
+
+async function createMirrorRepoAsync(config, sourcePath, destinationPath) {
+    await fs.mkdir(destinationPath);
+    await git.initAsync(destinationPath);
+    const tmpSourcePath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
+    await git.cloneAsync(sourcePath, tmpSourcePath);
+
+    const allTags = [];
+    for (const tagName of await git.listTagsAsync(tmpSourcePath)) {
+        allTags.push(await git.getTagInfoAsync(tmpSourcePath, tagName));
+    }
+    allTags.sort((a, b) => a.date - b.date);
+
+    const shouldSyncFilePath = createShouldSyncFilePath(config, true);
+    for (const tag of allTags) {
+        console.log(`Copying ${tag.name}`);
+        await git.checkoutHardAsync(tmpSourcePath, tag.hash);
+        await copyFilesBetweenReposAsync(
+            path.join(tmpSourcePath, config.subdirectory || ''), // only copy subdirectory files
+            destinationPath,
+            shouldSyncFilePath,
+        );
+        await git.commitAndTagAsync(
+            destinationPath,
+            tag.name,
+            config.authorName,
+            config.authorEmail,
+            tag.date,
+        );
+    }
+}
+
+async function syncScopedTagBetweenReposAsync(config, sourcePath, destinationPath, tagName) {
+    console.log('Creating working source copy...');
+    const tmpSourcePath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
+    await git.cloneAsync(sourcePath, tmpSourcePath);
+
+    console.log('Creating working destination copy...');
+    const tmpDestinationPath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
+    await git.cloneAsync(destinationPath, tmpDestinationPath);
+
+    const tag = await git.getTagInfoAsync(tmpSourcePath, tagName);
+    await git.checkoutAsync(tmpSourcePath, tag.hash);
+
+    const shouldSyncFilePath = createShouldSyncFilePath(config, false);
+    console.log('Copying files...');
+    await copyFilesBetweenReposAsync(
+        path.join(tmpSourcePath, config.subdirectory || ''), // only sync subdirectory files
+        tmpDestinationPath,
+        shouldSyncFilePath,
+    );
+
+    await git.commitAndTagAsync(
+        tmpDestinationPath,
+        tag.name,
+        config.authorName,
+        config.authorEmail,
+        tag.date,
+    );
+
+    console.log('Pushing changes...');
+    await git.pushAsync(tmpDestinationPath);
+
+    console.log('Done!');
+}
+
+async function runAsync() {
+    const args = process.argv.slice(2);
+    const command = args[0];
+
+    const sourcePath = await git.getTopLevelAsync(process.cwd());
+    let config;
+    try {
+        config = JSON.parse(await fs.readFile(path.join(process.cwd(), 'git-mirror.json')));
+    } catch {
+        throw new Error('Could not find git-mirror.json config file in the current directory');
+    }
+
+    if (command === 'create') {
+        const destinationPath = args[1];
+        if (!destinationPath) {
+            throw new Error(
+                'Must provide 2nd arg for destination: git-mirror create /path/to/dest',
+            );
+        }
+
+        await createMirrorRepoAsync(config, sourcePath, destinationPath);
+    } else if (command === 'sync') {
+        const tag = args[1];
+        if (!tag) {
+            throw new Error('Must provide tag arg to sync: git-mirror sync <tag>');
+        }
+
+        await syncScopedTagBetweenReposAsync(config, sourcePath, config.remote, tag);
+    } else {
+        throw new Error('Must provide 1st arg: git-mirror create|sync');
+    }
+}
+
+runAsync()
+    .then(() => {
+        process.exit(0);
+    })
+    .catch(err => {
+        console.log(err);
+        process.exit(1);
+    });

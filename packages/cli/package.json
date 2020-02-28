@@ -111,8 +111,7 @@
             "commitMessage": "Release @airtable/blocks-cli@${version}"
         },
         "hooks": {
-            "before:init": "../../bin/check-repo-for-release && yarn run test",
-            "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+            "before:init": "../../bin/check-repo-for-release && yarn run test"
         },
         "npm": {
             "access": "restricted"

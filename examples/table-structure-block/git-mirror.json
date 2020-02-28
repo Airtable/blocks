@@ -1,0 +1,18 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "blocks@airtable.com",
+    "remote": "git@github.com:Airtable/blocks-table-structure.git",
+    "subdirectory": "examples/table-structure-block",
+    "global": [
+        ".block/**/*",
+        "frontend/**/*",
+        "media/**/*",
+        ".eslintrc.js",
+        ".gitignore",
+        "block.json",
+        "LICENSE.md",
+        "package-lock.json",
+        "package.json",
+        "README.md"
+    ]
+}

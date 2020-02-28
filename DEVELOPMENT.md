@@ -48,7 +48,7 @@ To publish a package, `cd` into its folder, run `yarn release`, and follow the o
 instructions - you should only need to choose a new version then hit "Yes" a bunch of times.
 
 This will release to npm, create tags in git, and push them to our development repo and to
-https://github.com/airtable/blocks. This will push _all_ changes to the public repo - not just the
+https://github.com/Airtable/blocks. This will push _all_ changes to the public repo - not just the
 ones for the package you're releasing - so be careful.
 
 > _BE CAREFUL:_ If a package has any local dependencies, make sure you
@@ -59,8 +59,7 @@ ones for the package you're releasing - so be careful.
 ## Publishing to the public repo
 
 When you run `yarn release`, your changes will automatically be pushed to the public repo at
-https://github.com/airtable/blocks. If you'd like to push to this repo without publishing to npm,
-use `git push git@github.com:Airtable/blocks.git master`.
+https://github.com/Airtable/blocks.
 
 ## Useful commands
 

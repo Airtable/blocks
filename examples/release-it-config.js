@@ -13,12 +13,10 @@ const config = {
     },
     hooks: {
         'before:init': '../../bin/check-repo-for-release && yarn lint',
-        'after:release': 'git push --tags git@github.com:Airtable/blocks.git master',
-        'before:npm:release': 'cp .gitignore __gitignore',
-        'after:npm:release': 'rm __gitignore',
+        'after:release': "../../tools/git-mirror/bin/git-mirror sync '${packageName}@${version}'",
     },
     npm: {
-        access: 'restricted',
+        publish: 'false',
     },
 };
 

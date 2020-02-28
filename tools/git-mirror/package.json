@@ -1,0 +1,16 @@
+{
+    "name": "@airtable-blocks-internal/git-mirror",
+    "version": "1.0.2",
+    "description": "Mirror the repo to an external clone",
+    "main": "index.js",
+    "private": true,
+    "bin": {
+        "git-mirror": "./bin/git-mirror"
+    },
+    "scripts": {
+        "airbuild": "echo 'no airbuild configured'"
+    },
+    "dependencies": {
+        "minimatch": "^3.0.4"
+    }
+}

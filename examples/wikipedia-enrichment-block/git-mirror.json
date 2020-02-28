@@ -1,0 +1,18 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "blocks@airtable.com",
+    "remote": "git@github.com:Airtable/blocks-wikipedia-enrichment.git",
+    "subdirectory": "examples/wikipedia-enrichment-block",
+    "global": [
+        ".block/**/*",
+        "frontend/**/*",
+        "media/**/*",
+        ".eslintrc.js",
+        ".gitignore",
+        "block.json",
+        "LICENSE.md",
+        "package-lock.json",
+        "package.json",
+        "README.md"
+    ]
+}
