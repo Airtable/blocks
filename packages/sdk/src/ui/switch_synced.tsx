@@ -28,7 +28,7 @@ interface SwitchSyncedProps extends SharedSwitchProps {
  */
 const SwitchSynced = (props: SwitchSyncedProps, ref: React.Ref<HTMLDivElement>) => {
     const {disabled, globalConfigKey, onChange, ...restOfProps} = props;
-    const {value, setValue, canSetValue} = useSynced(globalConfigKey);
+    const [value, setValue, canSetValue] = useSynced(globalConfigKey);
 
     return (
         <Switch

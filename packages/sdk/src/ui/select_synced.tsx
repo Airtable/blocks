@@ -29,7 +29,7 @@ interface SelectSyncedProps extends SharedSelectProps {
  */
 const SelectSynced = (props: SelectSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, disabled, onChange, ...restOfProps} = props;
-    const {value, canSetValue, setValue} = useSynced(globalConfigKey);
+    const [value, setValue, canSetValue] = useSynced(globalConfigKey);
 
     let selectValue;
     if (value === null || value === undefined) {

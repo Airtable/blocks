@@ -36,9 +36,7 @@ function _getTableFromGlobalConfigValue(tableId: unknown): Table | null {
  */
 const TablePickerSynced = (props: TablePickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
-    const {value: tableId, canSetValue: canSetTableId, setValue: setTableId} = useSynced(
-        globalConfigKey,
-    );
+    const [tableId, setTableId, canSetTableId] = useSynced(globalConfigKey);
     useWatchable(getSdk().base, ['tables']);
 
     return (

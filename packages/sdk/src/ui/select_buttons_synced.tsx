@@ -32,7 +32,7 @@ interface SelectButtonsSyncedProps extends SharedSelectButtonsProps {
  */
 const SelectButtonsSynced = (props: SelectButtonsSyncedProps, ref: React.Ref<HTMLDivElement>) => {
     const {globalConfigKey, onChange, disabled, ...restOfProps} = props;
-    const {value, setValue, canSetValue} = useSynced(globalConfigKey);
+    const [value, setValue, canSetValue] = useSynced(globalConfigKey);
 
     let selectValue;
     if (value === null || value === undefined) {

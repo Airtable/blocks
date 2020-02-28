@@ -31,9 +31,7 @@ interface ViewPickerSyncedProps extends SharedViewPickerProps {
  */
 const ViewPickerSynced = (props: ViewPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, table, onChange, disabled, ...restOfProps} = props;
-    const {value: viewId, canSetValue: canSetViewId, setValue: setViewId} = useSynced(
-        globalConfigKey,
-    );
+    const [viewId, setViewId, canSetViewId] = useSynced(globalConfigKey);
 
     useWatchable(getSdk().base, ['tables']);
     useWatchable(table, ['views']);

@@ -6,3 +6,4 @@
 /docs/.cache/
 /docs/public/
 /examples/*/build
+/packages/sdk/docs/*

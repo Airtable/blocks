@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.42...HEAD)
 
-No changes.
+-   Export the `useSynced` hook for syncing a component to `GlobalConfig`.
 
 ## [0.0.42](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.41...@airtable/blocks@0.0.42) - 2020-02-10
 
