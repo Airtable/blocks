@@ -1,5 +1,6 @@
 {
-    "private": true,
+    "name": "@airtable/flowchart-block",
+    "version": "0.0.1",
     "scripts": {
         "lint": "eslint frontend"
     },

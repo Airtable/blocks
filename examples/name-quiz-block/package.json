@@ -1,6 +1,6 @@
 {
-    "name": "name-trainer-block",
-    "version": "1.0.0",
+    "name": "@airtable/name-quiz-block",
+    "version": "0.0.1",
     "scripts": {
         "lint": "eslint frontend"
     },
