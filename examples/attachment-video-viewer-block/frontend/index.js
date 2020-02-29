@@ -45,7 +45,7 @@ function AttachmentVideoViewerBlock() {
     // load it explicitly with the useLoadable hook.  The rest of the
     // code in the component will not run until
     // cursor.selectedRecordIds has loaded.
-    useLoadable(cursor, ['selectedRecordIds']);
+    useLoadable(cursor);
 
     // Update the selectedRecordId state when the selected record changes.
     useWatchable(cursor, ['selectedRecordIds'], () => {

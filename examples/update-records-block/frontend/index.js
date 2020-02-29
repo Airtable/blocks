@@ -30,8 +30,8 @@ function UpdateRecordsBlock() {
 
     // cursor.selectedRecordIds isn't loaded by default, so we need to load it
     // explicitly with the useLoadable hook. The rest of the code in the
-    // component will not run until cursor.selectedRecordIds has loaded.
-    useLoadable(cursor, ['selectedRecordIds']);
+    // component will not run until it has loaded.
+    useLoadable(cursor);
 
     // Re-render the block whenever the active table or selected records change.
     useWatchable(cursor, ['activeTableId', 'selectedRecordIds']);

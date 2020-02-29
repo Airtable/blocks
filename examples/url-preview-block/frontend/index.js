@@ -33,7 +33,7 @@ function UrlPreviewBlock() {
     // cursor.selectedRecordIds and selectedFieldIds aren't loaded by default,
     // so we need to load them explicitly with the useLoadable hook. The rest of
     // the code in the component will not run until they are loaded.
-    useLoadable(cursor, ['selectedRecordIds', 'selectedFieldIds']);
+    useLoadable(cursor);
 
     // Update the selectedRecordId and selectedFieldId state when the selected
     // record or field change.
