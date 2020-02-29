@@ -116,7 +116,7 @@ export interface NormalizedSortConfig {
  *
  * ## recordColorMode
  * Just like a view in Airtable, you can control the colors of records in a field. There are three
- * supported record color modes: none, by a view, and by a select field:
+ * supported record color modes: none, by a view, and by a select field.
  *
  * ```js
  * import {recordColoring} from '@airtable/blocks/models';
@@ -134,10 +134,25 @@ export interface NormalizedSortConfig {
  * const opts = {
  *     recordColorMode: recordColoring.modes.bySelectField(someSelectField),
  * });
- *
- * const records = useRecords(table, opts);
- * const queryResult = table.selectRecords(opts);
  * ```
+ *
+ * You can access view coloring information directly from a {@link RecordQueryResult} or a
+ * {@link Record}, but you can only directly access single select coloring from a RecordQueryResult:
+ *
+ * ```
+ * const queryResult = table.selectRecords(opts);
+ * const records = useRecords(table, opts);
+ *
+ * // Returns based on opts coloring mode
+ * queryResult.getRecordColor(recordId);
+ *
+ * // Returns based on view
+ * // Will throw if you did not pass recordColoring.modes.byView(view) in opts
+ * records[0].getColorInView(view);
+ * ```
+ *
+ * Use `record.getCellValue(singleSelectField).color` to access the color of a single select field
+ * for a record.
  *
  * By default, views will have whichever coloring is set up in Airtable and tables won't have any
  * record coloring:

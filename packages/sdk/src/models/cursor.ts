@@ -206,7 +206,10 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
     /**
      * The currently active table ID. Can be null when the active table has changed and is not yet
-     * loaded.
+     * loaded, and can also refer to a table that is not yet loaded.
+     *
+     * When fetching the {@link Table}, use `base.getTableByIdIfExists(cursor.activeTableId)` and
+     * check the return value is not `null` to be resilient to those cases.
      *
      * Can be watched.
      */
@@ -215,7 +218,11 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
     }
     /**
      * The currently active view ID. This will always be a view belonging to `activeTableId`. Can be
-     * null when the active view has changed and is not yet loaded.
+     * null when the active view has changed and is not yet loaded, and can also refer to a view
+     * that is not yet loaded.
+     *
+     * When fetching the {@link View}, use `table.getViewByIdIfExists(cursor.activeViewId)` and
+     * check the return value is not `null` to be resilient to those cases.
      *
      * Can be watched.
      */

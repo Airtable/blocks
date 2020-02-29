@@ -262,27 +262,8 @@ interface RecordCardListState {
 /**
  * Scrollable list of record cards.
  *
- * @example
- * ```js
- * import {RecordCardList} from '@airtable/blocks/ui';
- * import React, {useState} from 'react';
+ * [[ Story id="recordcardlist--example" title="RecordCardList example" height="560px" ]]
  *
- * function Block() {
- *     const base = useBase();
- *     const [selectedRecord, setSelectedRecord] = useState(null);
- *     const table = base.getTableByName('Table 1');
- *     const view = table ? table.getViewByName('View 1') : null;
- *     const records = useRecords(table);
- *
- *     return (
- *         <RecordCardList
- *             records={records}
- *             view={view}
- *             onRecordClick={record => {setSelectedRecord(record)}}
- *         />
- *     );
- * }
- * ```
  * @docsPath UI/components/RecordCardList
  * @component
  */

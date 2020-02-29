@@ -169,7 +169,7 @@ function _getSanitizedHref(href: string): string | undefined {
 /**
  * A styled link component with security benefits.
  *
- * [[ Story id="input--example-synced" title="Synced input example" ]]
+ * [[ Story id="link--example" title="Link example" ]]
  *
  * ## Security benefits
  *

@@ -214,26 +214,8 @@ const calculateAttachmentDimensionsAndMargin = (
 /**
  * A card component that displays an Airtable record.
  *
- * @example
- * ```js
- * import {RecordCard} from '@airtable/blocks/ui';
- * import React from 'react';
+ * [[ Story id="recordcard--example" title="RecordCard example" ]]
  *
- * function Block() {
- *     const base = useBase();
- *     const table = base.getTableByName('Table 1');
- *     const fields = table ? table.fields : null;
- *     const records = useRecords(table);
- *
- *     return (
- *         <RecordCard
- *             record={records[0]}
- *             fields={fields}
- *             expandRecordOptions={{records}}
- *         />
- *     );
- * }
- * ```
  * @docsPath UI/components/RecordCard
  * @component
  */

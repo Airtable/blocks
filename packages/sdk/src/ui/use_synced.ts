@@ -1,16 +1,36 @@
-/** @hidden */ /** */
 import {GlobalConfigKey, GlobalConfigValue} from '../types/global_config';
 import getSdk from '../get_sdk';
 import globalConfigSyncedComponentHelpers from './global_config_synced_component_helpers';
 
-/** @hidden */
+/**
+ * A hook for syncing a component to {@link GlobalConfig}.
+ * Useful if you are dealing with a custom input component and can‘t use one of our `Synced` components.
+ *
+ * @param globalConfigKey
+ * @example
+ * ```js
+ * import {useBase, useSynced} from '@airtable/blocks/ui';
+ *
+ * function CustomInputSynced() {
+ *    const [value, setValue, canSetValue] = useSynced('myGlobalConfigKey');
+ *
+ *     return (
+ *         <input
+ *              type="text"
+ *              value={value}
+ *              onChange={e => setValue(e.target.value)}
+ *              disabled={!canSetValue}
+ *          />
+ *     );
+ * }
+ * ```
+ * @docsPath UI/hooks/useSynced
+ * @hook
+ * @hidden
+ */
 export default function useSynced(
     globalConfigKey: GlobalConfigKey,
-): {
-    value: unknown;
-    canSetValue: boolean;
-    setValue: (newValue: GlobalConfigValue | undefined) => void;
-} {
+): [unknown, (newValue: GlobalConfigValue | undefined) => void, boolean] {
     globalConfigSyncedComponentHelpers.useDefaultWatchesForSyncedComponent(globalConfigKey);
     const {globalConfig} = getSdk();
     const value = globalConfig.get(globalConfigKey);
@@ -20,9 +40,5 @@ export default function useSynced(
         getSdk().globalConfig.setAsync(globalConfigKey, newValue);
     }
 
-    return {
-        value,
-        canSetValue,
-        setValue,
-    };
+    return [value, setValue, canSetValue];
 }

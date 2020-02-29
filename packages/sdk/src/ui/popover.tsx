@@ -11,8 +11,8 @@ import * as Geometry from './geometry/geometry';
 
 
 /**
- * Dictates how a {@link Popover} or {@link Tooltip} component should be positioned relative
- * to the anchor element. Accessed via `Popover.placements` or `Tooltip.placements`.
+ * Dictates how a {@link Tooltip} component should be positioned relative
+ * to the anchor element. Accessed via `Tooltip.placements`.
  */
 
 export enum PopoverPlacements {
@@ -93,6 +93,7 @@ interface PopoverProps {
 /**
  * A popover component, which is used to "float" some content above some other content.
  *
+ * @hidden
  * @docsPath UI/components/Popover
  * @component
  */

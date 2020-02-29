@@ -142,7 +142,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * Add a maximum fullscreen size constraint. Use `.maxFullscreenSize`` to get
+     * Add a maximum fullscreen size constraint. Use `.maxFullscreenSize` to get
      * the aggregate of all added constraints.
      *
      * Returns a function that can be called to remove the fullscreen size constraint that was added.

@@ -1,4 +1,5 @@
 import {ObjectMap} from '../private_utils';
+import {Stat} from '../types/stat';
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData, BasePermissionData, ModelChange} from '../types/base';
 import {BlockInstallationId} from '../types/block';
@@ -243,6 +244,7 @@ export interface AirtableInterface {
      * internal utils
      */
     trackEvent(eventSchemaName: string, eventData: {[key: string]: unknown}): void;
+    sendStat(stat: Stat): void;
 }
 
 const getAirtableInterfaceAtVersion: ((arg1: number) => AirtableInterface) | void = (window as any)

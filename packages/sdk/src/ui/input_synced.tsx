@@ -35,7 +35,7 @@ const InputSynced = (props: InputSyncedProps, ref: React.Ref<HTMLInputElement>) 
         onChange,
         ...restOfProps
     } = props;
-    const {value, setValue, canSetValue} = useSynced(globalConfigKey);
+    const [value, setValue, canSetValue] = useSynced(globalConfigKey);
 
     let inputValue;
     if (value === null || value === undefined) {

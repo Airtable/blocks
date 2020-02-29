@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.42",
+    "version": "0.0.43",
     "description": "Airtable Blocks SDK",
     "main": "dist/cjs/index.js",
     "types": "index.d.ts",
@@ -35,8 +35,9 @@
         "watch:types": "yarn run build:types --watch",
         "docs:clean": "rm -rf ./doc-generator/lib $(find . -regex '.*docs-[0-9]*\\.[0-9]*\\.[0-9]*\\.json')",
         "docs:generator": "tsc -b ./doc-generator/tsconfig.json",
-        "docs:typedoc": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" --json docs/docs-$npm_package_version.json .",
-        "docs": "yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc",
+        "docs:typedoc": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" --json ./docs/docs-$npm_package_version.json .",
+        "docs:minify-docs-json": "node ./doc-generator/minify-docs-json.js ./docs/docs-$npm_package_version.json",
+        "docs": "yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:minify-docs-json",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
         "storybook": "start-storybook -p 6006",
@@ -125,7 +126,7 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
-            "after:release": "git push --tags git@github.com:Airtable/blocks.git master"
+            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version}"
         },
         "npm": {
             "access": "restricted"

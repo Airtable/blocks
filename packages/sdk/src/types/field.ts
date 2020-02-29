@@ -322,6 +322,10 @@ export enum FieldType {
      *     // The ID of the view in the linked table to use when showing
      *     // a list of records to select from
      *     viewIdForRecordSelection?: ViewId,
+     *     // Whether linked records are rendered in the reverse order from the cell value in the
+     *     // Airtable UI (i.e. most recent first)
+     *     // You generally do not need to rely on this option.
+     *     isReversed: boolean,
      * }
      * ```
      *
@@ -338,7 +342,6 @@ export enum FieldType {
      * ```js
      * Array<{ id: RecordId }>
      * ```
-     *
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
@@ -411,13 +414,13 @@ export enum FieldType {
     /**
      * A telephone number (e.g. (415) 555-9876).
      *
+     * **Field options**
+     * None
+     *
      * **Cell read format**
      * ```js
      * string
      * ```
-     *
-     * **Field options**
-     * None
      */
     PHONE_NUMBER = 'phoneNumber',
     /**
@@ -445,7 +448,12 @@ export enum FieldType {
      *
      * **Field options**
      *
-     * n/a
+     * {
+     *     // Whether attachments are rendered in the reverse order from the cell value in the
+     *     // Airtable UI (i.e. most recent first)
+     *     // You generally do not need to rely on this option.
+     *     isReversed: boolean,
+     * }
      *
      * **Cell read format**
      * ```js
@@ -483,8 +491,15 @@ export enum FieldType {
      *
      * **Cell write format**
      * ```js
-     * Array<{ url: string }>
+     * Array<
+     *     // New attachment format
+     *     { url: string, filename?: string} ||
+     *     // Pre-existing attachments use cell read format specified above
+     *     { ... }
+     * >
      * ```
+     * For pre-existing attachments, pass the object read from the cell value.
+     * You cannot change any properties of pre-existing attachments.
      */
     MULTIPLE_ATTACHMENTS = 'multipleAttachments',
     /**

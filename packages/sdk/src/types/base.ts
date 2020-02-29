@@ -33,6 +33,8 @@ export interface BaseData {
     permissionLevel: PermissionLevel;
     enabledFeatureNames: Array<string>;
     cursorData: CursorData | null;
+
+    billingPlanGrouping: string;
 }
 
 /** @hidden */

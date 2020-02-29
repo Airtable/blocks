@@ -18,20 +18,33 @@ type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKey
 /**
  * Interface to the settings button that lives outside the block's viewport.
  *
- * The {@link useSettingsButton} hook is the recommend way to watch the settings
- * button, but you can also use it directly as per below example.
- *
- * Watch `click` to handle click events on the button.
+ * The {@link useSettingsButton} hook is the recommended way to use the settings button, but you can
+ * also use it with {@link useWatchable} if you want more granular control (for example, to only
+ * show the button conditionally).
  *
  * @alias settingsButton
  * @example
  * ```js
  * import {settingsButton} from '@airtable/blocks';
- * // Button is not visible by default
- * settingsButton.show();
- * settingsButton.watch('click', () => {
- *     alert('Clicked!');
- * })
+ * import {useWatchable} from '@airtable/blocks/ui';
+ *
+ * function BlockWithSettings({shouldShowSettingsButton}) {
+ *     useEffect(() => {
+ *         // A count of calls to `show()` and `hide()` is maintained internally. The button will
+ *         // stay visible if there are more calls to `show()` than `hide()` - so here, we check
+ *         // `isVisible` so we only we only call them when necessary.
+ *         // The button is not visible by default.
+ *         if (shouldShowSettingsButton && !settingsButton.isVisible) {
+ *             settingsButton.show();
+ *         } else if (!shouldShowSettingsButton && settingsButton.isVisible) {
+ *             settingsButton.hide();
+ *         }
+ *     });
+ *
+ *     useWatchable(settingsButton, 'click', function() {
+ *         alert('Clicked!');
+ *     });
+ * }
  * ```
  * @docsPath models/SettingsButton
  */

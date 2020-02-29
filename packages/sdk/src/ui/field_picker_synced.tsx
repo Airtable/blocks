@@ -31,9 +31,7 @@ interface FieldPickerSyncedProps extends SharedFieldPickerProps {
  */
 const FieldPickerSynced = (props: FieldPickerSyncedProps, ref: React.Ref<HTMLSelectElement>) => {
     const {globalConfigKey, onChange, disabled, table, ...restOfProps} = props;
-    const {value: fieldId, canSetValue: canSetFieldId, setValue: setFieldId} = useSynced(
-        globalConfigKey,
-    );
+    const [fieldId, setFieldId, canSetFieldId] = useSynced(globalConfigKey);
 
     useWatchable(getSdk().base, ['tables']);
     useWatchable(table, ['fields']);
