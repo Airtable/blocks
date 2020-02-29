@@ -3,11 +3,19 @@
 const {Node, Block} = require('./Node');
 const languages = require('./languages');
 
-const WHITE_LISTED_TOKENS = ['eslint-disable', '@flow', '@noflow'];
+const WHITE_LISTED_TOKENS = [
+    'eslint-disable',
+    '@flow',
+    '@noflow',
+    '@ts-ignore',
+    '@ts-nocheck',
+    'flow-expect-error',
+];
 const constants = {
     ESCAPED_CHAR_REGEX: /^\\./,
     QUOTED_STRING_REGEX: /^(['"`])((?:\\.|[^\1])*?)(\1)/,
     NEWLINE_REGEX: /^\r*\n/,
+    URL_DOUBLE_SLASH: /^:\/\//,
 };
 
 const parse = (input, options = {}) => {
@@ -118,6 +126,14 @@ const parse = (input, options = {}) => {
                 token.newline = token.match[1] || '';
                 push(new Node(token));
                 pop();
+                continue;
+            }
+        }
+
+        if (constants.URL_DOUBLE_SLASH && block.type !== 'block') {
+            // ignore double slashes after colons to not strip links
+            if ((token = scan(constants.URL_DOUBLE_SLASH, 'text'))) {
+                push(new Node(token));
                 continue;
             }
         }

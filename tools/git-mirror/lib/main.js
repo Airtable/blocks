@@ -77,14 +77,18 @@ async function copyFilesBetweenReposAsync(
     }
 }
 
-async function createMirrorRepoAsync(config, sourcePath, destinationPath) {
+async function createMirrorRepoAsync(config, sourcePath, destinationPath, tagFilter) {
     await fs.mkdir(destinationPath);
     await git.initAsync(destinationPath);
     const tmpSourcePath = await fs.mkdtemp(path.join(os.tmpdir(), 'git-mirror'));
     await git.cloneAsync(sourcePath, tmpSourcePath);
 
     const allTags = [];
+    const allowedTags = (tagFilter || '').split(',');
     for (const tagName of await git.listTagsAsync(tmpSourcePath)) {
+        if (tagFilter && !allowedTags.some(allowedTag => tagName.includes(allowedTag))) {
+            continue;
+        }
         allTags.push(await git.getTagInfoAsync(tmpSourcePath, tagName));
     }
     allTags.sort((a, b) => a.date - b.date);
@@ -158,13 +162,14 @@ async function runAsync() {
 
     if (command === 'create') {
         const destinationPath = args[1];
+        const tagFilter = args[2];
         if (!destinationPath) {
             throw new Error(
                 'Must provide 2nd arg for destination: git-mirror create /path/to/dest',
             );
         }
 
-        await createMirrorRepoAsync(config, sourcePath, destinationPath);
+        await createMirrorRepoAsync(config, sourcePath, destinationPath, tagFilter);
     } else if (command === 'sync') {
         const tag = args[1];
         if (!tag) {
