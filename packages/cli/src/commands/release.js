@@ -53,7 +53,17 @@ async function _uploadViaSignedPostAsync(
     // (Accepted), so treat all of those as successes even though we usually
     // explicitly request 201 through the success_action_status field.
     if (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 202) {
-        throw new Error('Failed to upload ' + filePath);
+        // The 'EntityTooLarge' error code indicates the proposed upload will
+        // exceed the maximum allowed object size.
+        // See https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ErrorCodeList
+        let errorMessage;
+        if (response.statusCode === 400 && response.body.includes('EntityTooLarge')) {
+            errorMessage = 'Bundle size is too big:';
+        } else {
+            errorMessage = 'Failed to upload';
+        }
+
+        throw new Error(`${errorMessage} ${filePath}`);
     }
 }
 
