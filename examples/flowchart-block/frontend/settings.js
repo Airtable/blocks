@@ -1,4 +1,4 @@
-import {fieldTypes} from '@airtable/blocks/models';
+import {FieldType} from '@airtable/blocks/models';
 import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
 
 export const ConfigKeys = {
@@ -10,7 +10,7 @@ export const ConfigKeys = {
     RECORD_SHAPE: 'recordShape',
 };
 
-export const allowedFieldTypes = [fieldTypes.MULTIPLE_RECORD_LINKS];
+export const allowedFieldTypes = [FieldType.MULTIPLE_RECORD_LINKS];
 
 export const RecordShape = Object.freeze({
     ROUNDED: 'rounded',
