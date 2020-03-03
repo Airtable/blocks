@@ -126,7 +126,7 @@ interface TextButtonProps
     /** Indicates whether or not the user can interact with the button. */
     disabled?: boolean;
     /** The contents of the button. */
-    children: React.ReactNode | string;
+    children?: React.ReactNode | string;
     // `onClick` is already defined in `TooltipAnchorProps`, for clarity we list it again and refine it to include `KeyboardEvent`.
     /** Click event handler. Also handles Space and Enter keypress events. */
     onClick?: (
@@ -196,6 +196,15 @@ const TextButton = (props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) => 
         },
         styleParser,
     );
+    const hasIcon = icon !== undefined;
+    const hasChildren = !!children;
+
+    if (!hasChildren && !ariaLabel) {
+        // eslint-disable-next-line no-console
+        console.error(
+            '<TextButton> without a text label should include an explicit aria-label prop.',
+        );
+    }
 
     /** @internal */
     function _onKeyDown(e: React.KeyboardEvent<HTMLSpanElement>) {
@@ -259,15 +268,17 @@ const TextButton = (props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) => 
             ) : (
                 icon
             )}
-            <Box
-                as="span"
-                // The margin is on the span, and not on the icon because it would mean that when using a custom icon
-                // the consumer would manually need to figure out what the margin is supposed to be.
-                marginLeft={icon !== undefined ? '0.5em' : undefined}
-                className={cssHelpers.TRUNCATE}
-            >
-                {children}
-            </Box>
+            {hasChildren && (
+                <Box
+                    as="span"
+                    // The margin is on the span, and not on the icon because it would mean that when using a custom icon
+                    // the consumer would manually need to figure out what the margin is supposed to be.
+                    marginLeft={hasIcon ? '0.5em' : undefined}
+                    className={cssHelpers.TRUNCATE}
+                >
+                    {children}
+                </Box>
+            )}
         </span>
     );
 };

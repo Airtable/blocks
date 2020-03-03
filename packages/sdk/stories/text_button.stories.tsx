@@ -66,7 +66,7 @@ function TextButtonExample() {
 
                 return `
                     import {TextButton} from '@airtable/blocks/ui';
-                    
+
                     ${ariaLabelComment}
                     const buttonExample = (
                         ${buttonComponentString}
@@ -155,6 +155,8 @@ stories.add('with all icons', () => (
         ))}
     </Box>
 ));
+
+stories.add('with icon, no children', () => <TextButton icon="x" aria-label="Close" />);
 
 stories.add('disabled', () => <TextButton disabled={true}>Disabled</TextButton>);
 
