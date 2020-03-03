@@ -8,7 +8,7 @@
         "invariant": "2.2.2",
         "path-to-regexp": "2.0.0",
         "regenerator-runtime": "^0.13.3",
-        "request": "2.87.0",
+        "postman-request": "^2.88.1-postman.19",
         "strip-ansi": "5.2.0"
     },
     "devDependencies": {

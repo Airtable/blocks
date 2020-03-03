@@ -1,6 +1,6 @@
 // @flow
 const invariant = require('invariant');
-const request = require('request');
+const request = require('postman-request');
 const {promisify} = require('util');
 const {URL} = require('url');
 const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');

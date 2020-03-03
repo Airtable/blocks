@@ -1,13 +1,13 @@
 // @flow
 
 const path = require('path');
-const request = require('request');
+const request = require('postman-request');
 const util = require('util');
 const url = require('url');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const fsUtils = require('./fs_utils');
 
-import type {Response} from 'request';
+import type {Response} from 'postman-request';
 
 const requestAsync = util.promisify(request);
 
