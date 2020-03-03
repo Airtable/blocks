@@ -103,10 +103,14 @@ export function createLayout(settings) {
             continue;
         }
         const recordColor = queryResult.getRecordColor(record);
+        const shouldUseLightText = record
+            ? colorUtils.shouldUseLightTextOnColor(recordColor)
+            : false;
         nodes.push(
-            `${record.id} [id="${record.id}" label="${record.primaryCellValueAsString}" tooltip="${
-                record.primaryCellValueAsString
-            }" fillcolor="${recordColor ? colorUtils.getHexForColor(recordColor) : '#ffffff'}"]`,
+            `${record.id} [id="${record.id}" label="${record.primaryCellValueAsString}" 
+            tooltip="${record.primaryCellValueAsString}" 
+            fontcolor="${shouldUseLightText ? 'white' : 'black'}" 
+            fillcolor="${recordColor ? colorUtils.getHexForColor(recordColor) : 'white'}"]`,
         );
 
         const linkedRecordCellValues = record.getCellValue(field.id) || [];
