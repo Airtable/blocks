@@ -26,28 +26,33 @@ const cssString = `
     .PictureGrid {
         width: 100%;
         flex: auto;
-        display: grid;
+        display: flex;
+        flex-wrap: wrap;
         margin: 24px auto 0;
-        max-width: 480px;
-        align-items: center;
+        max-width: 512px;
     }
 
     .PictureGrid-2-options {
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 20px;
         padding-bottom: 20vh;
+        align-items: center;
+    }
+
+    .PictureGrid-2-options .Picture {
+        width: calc(50% - 16px);
+        height: calc(100% - 16px);
     }
 
     .PictureGrid-4-options {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        grid-gap: 20px;
         padding-bottom: 8vh;
     }
 
+    .PictureGrid-4-options .Picture {
+        width: calc(50% - 16px);
+        height: calc(50% - 16px);
+    }
+
     .Picture {
-        width: 100%;
-        height: 100%;
+        margin: 8px;
         max-height: 240px;
         transition: all 0.12s;
         overflow: hidden;
