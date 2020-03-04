@@ -55,6 +55,8 @@ export default function useSettings() {
     const [baseSchema, setBaseSchema] = useState(() => parseSchema(base));
     const {nodesById, linksById, tableConfigsByTableId, dependentLinksByNodeId} = baseSchema;
     const globalConfig = useGlobalConfig();
+    let tableCoordsByTableId = globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID);
+
     if (!globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID)) {
         // First time run, determine initial table coords
         globalConfig.setPathsAsync([
@@ -81,16 +83,15 @@ export default function useSettings() {
                 Object.keys(globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID)),
             ).length > 0
         ) {
-            globalConfig.setAsync(
-                ConfigKeys.TABLE_COORDS_BY_TABLE_ID,
-                getUpdatedTableCoords(
-                    tableConfigsByTableId,
-                    globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID),
-                ),
+            tableCoordsByTableId = getUpdatedTableCoords(
+                tableConfigsByTableId,
+                globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID),
             );
+            if (globalConfig.hasPermissionToSet()) {
+                globalConfig.setAsync(ConfigKeys.TABLE_COORDS_BY_TABLE_ID, tableCoordsByTableId);
+            }
         }
     }
-    const tableCoordsByTableId = globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID);
     const [linkPathsByLinkId, setLinkPathsByLinkId] = useState(() =>
         calculateLinkPaths(linksById, tableConfigsByTableId, tableCoordsByTableId),
     );
@@ -109,7 +110,9 @@ export default function useSettings() {
             newTableCoords,
         );
 
-        globalConfig.setAsync(ConfigKeys.TABLE_COORDS_BY_TABLE_ID, newTableCoords);
+        if (globalConfig.hasPermissionToSet()) {
+            globalConfig.setAsync(ConfigKeys.TABLE_COORDS_BY_TABLE_ID, newTableCoords);
+        }
         setBaseSchema(newSchema);
         setLinkPathsByLinkId(newLinkPaths);
     });

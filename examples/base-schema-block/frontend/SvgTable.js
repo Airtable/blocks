@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import {globalConfig} from '@airtable/blocks';
 import {colors, colorUtils} from '@airtable/blocks/ui';
 
 import {DragContext} from './DragWrapper';
@@ -42,6 +43,7 @@ export default function SvgTable({coords, tableConfig}) {
     const {tableId} = tableConfig.tableNode;
     const {x, y} = coords;
     const {handleTableDrag} = useContext(DragContext);
+    const canDrag = globalConfig.hasPermissionToSet();
 
     const tableHeight = ROW_HEIGHT * (tableConfig.fieldNodes.length + 1) + 2 * TABLE_BORDER_WIDTH;
     return (
@@ -58,6 +60,7 @@ export default function SvgTable({coords, tableConfig}) {
                 rowIndex={0}
                 node={tableConfig.tableNode}
                 onTableRowDrag={e => handleTableDrag(e, tableId)}
+                canDrag={canDrag}
             />
             {tableConfig.fieldNodes.map((fieldNode, index) => {
                 return (
@@ -67,6 +70,7 @@ export default function SvgTable({coords, tableConfig}) {
                         rowIndex={index + 1}
                         node={fieldNode}
                         onTableRowDrag={() => {}}
+                        canDrag={false}
                     />
                 );
             })}
@@ -111,8 +115,9 @@ function truncateTextForWidth(text, isHeader, width = ROW_WIDTH - 2 * TEXT_PADDI
  * @param {Object} node Node object containing name and relevant ids
  * @param {boolean} isHeader Whether this table row is a the table header
  * @param {onTableRowDrag} function mousedown event handler to control table dragging
+ * @param {boolean} canDrag should be true when onTableRowDrag is not a no-op
  */
-function TableRow({rowIndex, node, isHeader, onTableRowDrag}) {
+function TableRow({rowIndex, node, isHeader, onTableRowDrag, canDrag}) {
     const truncatedRowName = truncateTextForWidth(node.name, isHeader);
     // Give each table header a random, determinsitic color based off the tableId
     let headerColorString;
@@ -124,6 +129,7 @@ function TableRow({rowIndex, node, isHeader, onTableRowDrag}) {
         <svg
             className={classnames('TableRow', {
                 TableHeader: isHeader,
+                draggable: canDrag,
             })}
             id={node.id}
             x={TABLE_BORDER_WIDTH} // give room for filter box-shadow

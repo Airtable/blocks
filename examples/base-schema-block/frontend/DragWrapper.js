@@ -42,6 +42,11 @@ export default function DragWrapper({
      */
     const handleTableDrag = useCallback(
         (event, tableId) => {
+            if (!globalConfig.hasPermissionToSet()) {
+                // Disable dragging for comment/read-only users
+                return;
+            }
+
             svgPanZoom.disablePan();
             const tableElement = event.currentTarget.parentElement;
             const activeItemContainerElement = document.getElementById('active-container');

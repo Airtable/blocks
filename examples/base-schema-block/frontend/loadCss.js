@@ -38,13 +38,16 @@ const css = `
     }
 
     .TableRow.TableHeader {
-        cursor: grab;
         stroke-width: 0;
         font-weight: 600;
     }
 
     .TableRow.TableHeader text {
         fill: #ffffff;
+    }
+    
+    .TableRow.draggable {
+        cursor: grab;
     }
 
     .Link {
