@@ -112,9 +112,9 @@ export default function parseSchema(base) {
                     referencedFieldIds.forEach(dependentFieldId => {
                         const link = {
                             id: createLinkId(field.id, dependentFieldId),
-                            sourceId: dependentFieldId,
+                            sourceId: field.id,
                             sourceTableId: table.id,
-                            targetId: field.id,
+                            targetId: dependentFieldId,
                             targetTableId: table.id,
                             type: field.type,
                             tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
@@ -131,9 +131,9 @@ export default function parseSchema(base) {
                     const {recordLinkFieldId} = field.options;
                     const link = {
                         id: createLinkId(field.id, recordLinkFieldId),
-                        sourceId: recordLinkFieldId,
+                        sourceId: field.id,
                         sourceTableId: table.id,
-                        targetId: field.id,
+                        targetId: recordLinkFieldId,
                         targetTableId: table.id,
                         type: field.type,
                         tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
@@ -149,9 +149,9 @@ export default function parseSchema(base) {
                     const {recordLinkFieldId, fieldIdInLinkedTable} = field.options;
                     const link = {
                         id: createLinkId(field.id, recordLinkFieldId),
-                        sourceId: recordLinkFieldId,
+                        sourceId: field.id,
                         sourceTableId: table.id,
-                        targetId: field.id,
+                        targetId: recordLinkFieldId,
                         targetTableId: table.id,
                         type: field.type,
                         tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
@@ -160,22 +160,25 @@ export default function parseSchema(base) {
                     pushToOrInitializeArray(dependentLinksByNodeId, field.id, link);
                     pushToOrInitializeArray(dependentLinksByNodeId, recordLinkFieldId, link);
 
-                    const foreignLink = {
-                        id: createLinkId(field.id, fieldIdInLinkedTable),
-                        sourceId: fieldIdInLinkedTable,
-                        sourceTableId: table.getFieldById(recordLinkFieldId).options.linkedTableId,
-                        targetId: field.id,
-                        targetTableId: table.id,
-                        type: field.type,
-                        tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
-                    };
-                    linksById[foreignLink.id] = foreignLink;
-                    pushToOrInitializeArray(dependentLinksByNodeId, field.id, foreignLink);
-                    pushToOrInitializeArray(
-                        dependentLinksByNodeId,
-                        fieldIdInLinkedTable,
-                        foreignLink,
-                    );
+                    const recordLinkField = table.getFieldByIdIfExists(recordLinkFieldId);
+                    if (recordLinkField !== null) {
+                        const foreignLink = {
+                            id: createLinkId(field.id, fieldIdInLinkedTable),
+                            sourceId: field.id,
+                            sourceTableId: table.id,
+                            targetId: fieldIdInLinkedTable,
+                            targetTableId: recordLinkField.options.linkedTableId,
+                            type: field.type,
+                            tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
+                        };
+                        linksById[foreignLink.id] = foreignLink;
+                        pushToOrInitializeArray(dependentLinksByNodeId, field.id, foreignLink);
+                        pushToOrInitializeArray(
+                            dependentLinksByNodeId,
+                            fieldIdInLinkedTable,
+                            foreignLink,
+                        );
+                    }
 
                     break;
                 }
@@ -187,9 +190,9 @@ export default function parseSchema(base) {
                     for (const referencedFieldId of field.options.referencedFieldIds) {
                         const link = {
                             id: createLinkId(field.id, referencedFieldId),
-                            sourceId: referencedFieldId,
+                            sourceId: field.id,
                             sourceTableId: table.id,
-                            targetId: field.id,
+                            targetId: referencedFieldId,
                             targetTableId: table.id,
                             type: field.type,
                             tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
@@ -202,9 +205,9 @@ export default function parseSchema(base) {
                     const {recordLinkFieldId, fieldIdInLinkedTable} = field.options;
                     const link = {
                         id: createLinkId(field.id, recordLinkFieldId),
-                        sourceId: recordLinkFieldId,
+                        sourceId: field.id,
                         sourceTableId: table.id,
-                        targetId: field.id,
+                        targetId: recordLinkFieldId,
                         targetTableId: table.id,
                         type: field.type,
                         tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
@@ -213,22 +216,25 @@ export default function parseSchema(base) {
                     pushToOrInitializeArray(dependentLinksByNodeId, field.id, link);
                     pushToOrInitializeArray(dependentLinksByNodeId, recordLinkFieldId, link);
 
-                    const foreignLink = {
-                        id: createLinkId(field.id, fieldIdInLinkedTable),
-                        sourceId: fieldIdInLinkedTable,
-                        sourceTableId: table.getFieldById(recordLinkFieldId).options.linkedTableId,
-                        targetId: field.id,
-                        targetTableId: table.id,
-                        type: field.type,
-                        tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
-                    };
-                    linksById[foreignLink.id] = foreignLink;
-                    pushToOrInitializeArray(dependentLinksByNodeId, field.id, foreignLink);
-                    pushToOrInitializeArray(
-                        dependentLinksByNodeId,
-                        fieldIdInLinkedTable,
-                        foreignLink,
-                    );
+                    const recordLinkField = table.getFieldByIdIfExists(recordLinkFieldId);
+                    if (recordLinkField !== null) {
+                        const foreignLink = {
+                            id: createLinkId(field.id, fieldIdInLinkedTable),
+                            sourceId: field.id,
+                            sourceTableId: table.id,
+                            targetId: fieldIdInLinkedTable,
+                            targetTableId: recordLinkField.options.linkedTableId,
+                            type: field.type,
+                            tooltipLabel: LINK_LABELS_BY_TYPE[field.type],
+                        };
+                        linksById[foreignLink.id] = foreignLink;
+                        pushToOrInitializeArray(dependentLinksByNodeId, field.id, foreignLink);
+                        pushToOrInitializeArray(
+                            dependentLinksByNodeId,
+                            fieldIdInLinkedTable,
+                            foreignLink,
+                        );
+                    }
                     break;
                 }
                 default:
@@ -251,14 +257,19 @@ export default function parseSchema(base) {
         };
     });
 
-    // When a table is deleted, we can get schema updates where fields still refer to that table,
-    // so we filter out links defensively.
+    // When a table is deleted, we can get schema updates where fields still refer to that table.
+    // Similarly, when a field is deleted, it might still have references.
+    // So we filter out links defensively.
     const newLinksById = {};
     for (const [linkId, link] of Object.entries(linksById)) {
-        const {targetTableId} = link;
-        if (Object.prototype.hasOwnProperty.call(tableConfigsByTableId, targetTableId)) {
-            newLinksById[linkId] = link;
+        const {targetTableId, targetId} = link;
+        if (!Object.prototype.hasOwnProperty.call(nodesById, targetTableId)) {
+            continue;
         }
+        if (!Object.prototype.hasOwnProperty.call(nodesById, targetId)) {
+            continue;
+        }
+        newLinksById[linkId] = link;
     }
     linksById = newLinksById;
 
