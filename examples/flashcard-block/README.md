@@ -1,7 +1,7 @@
 # Flashcard block
 
 Use this virtual flashcard block to improve your memory or study for a test. Specify one field for your “front of
-flashcard” title, and another for the hidden “black of flashcard” details. Perfect for quizzing yourself on information
+flashcard” question, and another for the hidden “black of flashcard” answer. Perfect for quizzing yourself on information
 in your base, whether you’re cramming for a midterm or staying sharp!
 
 ## How to remix this block

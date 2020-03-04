@@ -47,20 +47,17 @@ export default function SettingsForm({setIsSettingsVisible, settings}) {
                                 globalConfigKey={ConfigKeys.VIEW_ID}
                             />
                         </FormField>
-                        <FormField label="Title field" description="Front side of flashcard">
+                        <FormField label="Question field">
                             <FieldPickerSynced
                                 table={settings.table}
-                                globalConfigKey={ConfigKeys.TITLE_FIELD_ID}
+                                globalConfigKey={ConfigKeys.QUESTION_FIELD_ID}
                             />
                         </FormField>
-                        <FormField
-                            label="Details field"
-                            description="(Optional) Back side of flashcard"
-                        >
+                        <FormField label="Answer field (optional)">
                             <FieldPickerSynced
                                 table={settings.table}
                                 shouldAllowPickingNone={true}
-                                globalConfigKey={ConfigKeys.DETAILS_FIELD_ID}
+                                globalConfigKey={ConfigKeys.ANSWER_FIELD_ID}
                             />
                         </FormField>
                     </Fragment>

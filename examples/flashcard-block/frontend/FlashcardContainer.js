@@ -2,7 +2,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, {Fragment, useEffect, useState} from 'react';
 import {Field, Record} from '@airtable/blocks/models';
-import {Box, Button} from '@airtable/blocks/ui';
+import {Box, Button, expandRecord} from '@airtable/blocks/ui';
 
 import Flashcard from './Flashcard';
 
@@ -13,10 +13,12 @@ import Flashcard from './Flashcard';
 export default function FlashcardContainer({records, settings}) {
     const [record, setRecord] = useState(_.sample(records));
     const [removedRecordsSet, setRemovedRecordsSet] = useState(new Set());
+    const [shouldShowAnswer, setShouldShowAnswer] = useState(false);
 
     function handleRemoveRecord() {
         const newRemovedRecordsSet = new Set(removedRecordsSet);
         setRemovedRecordsSet(newRemovedRecordsSet.add(record));
+        setShouldShowAnswer(false);
         handleNewRecord();
     }
 
@@ -50,40 +52,57 @@ export default function FlashcardContainer({records, settings}) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [records]);
 
+    let primaryButton;
+    if (record) {
+        if (shouldShowAnswer || !settings.answerField) {
+            // Either already showing the answer, or there's no answer
+            // field. So show the "Next" button to go to the next question.
+            primaryButton = (
+                <Button marginLeft={3} variant="primary" size="large" onClick={handleRemoveRecord}>
+                    Next question
+                </Button>
+            );
+        } else {
+            primaryButton = (
+                <Button
+                    marginLeft={3}
+                    variant="primary"
+                    size="large"
+                    onClick={() => setShouldShowAnswer(true)}
+                >
+                    Show answer
+                </Button>
+            );
+        }
+    } else {
+        // No records left.
+        primaryButton = (
+            <Button marginLeft={3} variant="primary" size="large" icon="redo" onClick={reset}>
+                Start over
+            </Button>
+        );
+    }
+
     return (
         <Fragment>
-            <Flashcard record={record} settings={settings} />
-            <Box
-                flex="none"
-                borderTop="thick"
-                display="flex"
-                justifyContent="flex-end"
-                marginX={3}
-                paddingY={3}
-            >
-                {record ? (
-                    <Button
-                        marginLeft={3}
-                        variant="primary"
-                        size="large"
-                        onClick={handleRemoveRecord}
-                    >
-                        Next
-                    </Button>
-                ) : (
-                    <Button marginLeft={3} variant="primary" size="large" onClick={reset}>
-                        Go again
+            <Flashcard record={record} settings={settings} shouldShowAnswer={shouldShowAnswer} />
+            <Box flex="none" borderTop="thick" display="flex" marginX={3} paddingY={3}>
+                {record && (
+                    <Button icon="expand" variant="secondary" onClick={() => expandRecord(record)}>
+                        Expand record
                     </Button>
                 )}
+                <Box flexGrow={1} />
+                {primaryButton}
             </Box>
         </Fragment>
     );
 }
 
 FlashcardContainer.propTypes = {
-    records: PropTypes.arrayOf(Record).isRequired,
+    records: PropTypes.arrayOf(PropTypes.instanceOf(Record)).isRequired,
     settings: PropTypes.shape({
-        titleField: PropTypes.instanceOf(Field).isRequired,
-        detailsField: PropTypes.instanceOf(Field),
+        questionField: PropTypes.instanceOf(Field).isRequired,
+        answerField: PropTypes.instanceOf(Field),
     }).isRequired,
 };

@@ -10,18 +10,8 @@ import {CellRenderer, Text} from '@airtable/blocks/ui';
  */
 export default function CustomCellRenderer({record, field}) {
     switch (field.type) {
-        case FieldType.SINGLE_LINE_TEXT:
-        // falls through
-
-        case FieldType.MULTILINE_TEXT:
-        // falls through
-
         case FieldType.RICH_TEXT: {
-            return (
-                <Text width="100%" size="xlarge">
-                    {record.getCellValueAsString(field)}
-                </Text>
-            );
+            return <CellRenderer record={record} field={field} />;
         }
         case FieldType.MULTIPLE_ATTACHMENTS: {
             const attachmentCellValue = record.getCellValue(field);
@@ -33,13 +23,17 @@ export default function CustomCellRenderer({record, field}) {
             }
 
             if (!attachmentObj || !attachmentObj.thumbnails || !attachmentObj.thumbnails.large) {
-                // If there are no attachment present, use the default cell renderer
+                // If there are no attachments present, use the default cell renderer
                 return <CellRenderer record={record} field={field} />;
             }
             return <img src={attachmentObj.thumbnails.large.url} height="150px" />;
         }
         default: {
-            return <CellRenderer record={record} field={field} />;
+            return (
+                <Text width="100%" size="xlarge">
+                    {record.getCellValueAsString(field)}
+                </Text>
+            );
         }
     }
 }

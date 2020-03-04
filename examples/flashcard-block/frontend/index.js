@@ -19,7 +19,7 @@ viewport.addMinSize({
 
 /**
  * A simple flashcard block that displays records from a chosen view.
- * Supports choosing a title field which is displayed by default and an optional details field that
+ * Supports choosing a question field which is displayed by default and an optional answer field that
  * is hidden until shown by the user.
  */
 function FlashcardBlock() {
