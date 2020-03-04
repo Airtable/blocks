@@ -25,6 +25,7 @@ const cssString = `
 
     .PictureGrid {
         width: 100%;
+        height: 100%;
         flex: auto;
         display: flex;
         flex-wrap: wrap;
