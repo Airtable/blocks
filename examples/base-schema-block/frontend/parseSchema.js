@@ -34,10 +34,10 @@ function createLinkId(source, target) {
  * }}
  */
 export default function parseSchema(base) {
-    const linksById = {};
+    let linksById = {};
     const nodesById = {};
     const tableConfigsByTableId = {};
-    let dependentLinksByNodeId = {};
+    const dependentLinksByNodeId = {};
 
     base.tables.forEach(table => {
         const fieldNodes = [];
@@ -250,6 +250,17 @@ export default function parseSchema(base) {
             fieldNodes,
         };
     });
+
+    // When a table is deleted, we can get schema updates where fields still refer to that table,
+    // so we filter out links defensively.
+    const newLinksById = {};
+    for (const [linkId, link] of Object.entries(linksById)) {
+        const {targetTableId} = link;
+        if (Object.prototype.hasOwnProperty.call(tableConfigsByTableId, targetTableId)) {
+            newLinksById[linkId] = link;
+        }
+    }
+    linksById = newLinksById;
 
     // We can't process dependentLinksByNodeId until we've gone through all fields in
     // all tables because of cross-table links (at least 2 passes required).
