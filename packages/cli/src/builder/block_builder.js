@@ -527,7 +527,7 @@ class BlockBuilder {
         await fsUtils.removeAsync(targetFilePath);
         delete this._browserifyCache[targetFilePath];
     }
-    _getErrorFromNpmInstallStderr(stderr: string): Error | null {
+    _getErrorFromNpmCIStderr(stderr: string): Error | null {
         const errorMessageLines = stderr.split('\n').filter(message => {
             return (
                 message.trim().length > 0 &&
@@ -540,13 +540,13 @@ class BlockBuilder {
         }
         return null;
     }
-    async _npmInstallAsync(dirPath: DirectoryPath): Promise<Result<void, Error>> {
+    async _npmCIAsync(dirPath: DirectoryPath): Promise<Result<void, Error>> {
         try {
-            const {stderr} = await npmAsync(dirPath, ['install', '--production', '--quiet']);
+            const {stderr} = await npmAsync(dirPath, ['ci', '--production', '--quiet']);
 
-            const npmInstallError = this._getErrorFromNpmInstallStderr(stderr.toString());
-            if (npmInstallError) {
-                return {err: npmInstallError};
+            const npmCIError = this._getErrorFromNpmCIStderr(stderr.toString());
+            if (npmCIError) {
+                return {err: npmCIError};
             }
         } catch (err) {
             return {err};
@@ -661,10 +661,24 @@ class BlockBuilder {
                 blocksBackendWrapperPackageJsonPath,
                 path.join(outputDirPath, 'package.json'),
             );
+            const blocksBackendWrapperPackageLockJsonPath = path.join(
+                projectRootPath,
+                'blocks_backend_wrapper',
+                'package-lock.json',
+            );
+            if (!(await fsUtils.existsAsync(blocksBackendWrapperPackageLockJsonPath))) {
+                throw new Error(
+                    `missing blocks backend wrapper package-lock.json at ${blocksBackendWrapperPackageLockJsonPath}`,
+                );
+            }
+            await fsUtils.copyFileAsync(
+                blocksBackendWrapperPackageLockJsonPath,
+                path.join(outputDirPath, 'package-lock.json'),
+            );
         } catch (err) {
             return {err};
         }
-        return await this._npmInstallAsync(outputDirPath);
+        return await this._npmCIAsync(outputDirPath);
     }
     async _writeBackendSdkAsync(): Promise<Result<void, Error>> {
         try {
@@ -781,6 +795,19 @@ class BlockBuilder {
             this._initialBuildResolveIfExists = resolve;
         });
     }
+    async _copyFileAsync(filename: string): Promise<boolean> {
+        console.log(`copying ${filename} file`);
+        const filePath = path.join(this._blockDirPath, filename);
+        const doesFileExist = await fsUtils.existsAsync(filePath);
+        if (!doesFileExist) {
+            return false;
+        }
+        await fsUtils.copyFileAsync(
+            filePath,
+            path.join(this._outputUserTranspiledDirPath, filename),
+        );
+        return true;
+    }
     async buildAndWatchAsync(): Promise<void> {
         if (this._buildTypeMode !== BlockBuildTypes.DEVELOPMENT) {
             throw new Error('Watch mode is only available for DEVELOPMENT mode');
@@ -803,22 +830,21 @@ class BlockBuilder {
         //    over during the initial scanning and bundling of the directory. This is because we
         //    need to install the node_modules folder before transpiling, and the BlockBuilderJobQueue
         //    does not handle installing node_modules.
-        console.log('copying package.json files');
-        const packageJsonPath = path.join(this._blockDirPath, 'package.json');
-        const doesPackageJsonExist = await fsUtils.existsAsync(packageJsonPath);
-        if (!doesPackageJsonExist) {
+        if (!(await this._copyFileAsync('package.json'))) {
             return {err: new Error('package.json does not exist!')};
         }
-        await fsUtils.copyFileAsync(
-            packageJsonPath,
-            path.join(this._outputUserTranspiledDirPath, 'package.json'),
-        );
+
+        // 1b. Copy the package-lock.json file so that we can use npm ci and avoid upgrading
+        // dependencies between block run and block release
+        if (!(await this._copyFileAsync('package-lock.json'))) {
+            return {err: new Error('package-lock.json does not exist!')};
+        }
 
         // 2. Install node modules in the output transpiled directory
         console.log('installing node modules');
-        const npmInstallResult = await this._npmInstallAsync(this._outputUserTranspiledDirPath);
-        if (npmInstallResult.err) {
-            return npmInstallResult;
+        const npmCIResult = await this._npmCIAsync(this._outputUserTranspiledDirPath);
+        if (npmCIResult.err) {
+            return npmCIResult;
         }
         // Write fake stub module for legacy imports after npm install so that it isn't deleted
         // because it isn't included in package.json
