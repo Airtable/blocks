@@ -8,9 +8,11 @@ import {
     FormField,
     Heading,
     Label,
+    Link,
     SelectButtonsSynced,
     SelectSynced,
     TablePickerSynced,
+    Text,
     ViewPickerSynced,
 } from '@airtable/blocks/ui';
 
@@ -73,16 +75,15 @@ function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
                             />
                         </FormField>
                         <FormField label="Link style">
-                            <SelectSynced
+                            <SelectButtonsSynced
                                 options={[
-                                    {label: 'Pick a style...', value: null, disabled: true},
                                     {label: 'Right angles', value: LinkStyle.RIGHT_ANGLES},
                                     {label: 'Straight lines', value: LinkStyle.STRAIGHT_LINES},
                                 ]}
                                 globalConfigKey={ConfigKeys.LINK_STYLE}
                             />
                         </FormField>
-                        <FormField label="Record shape" marginBottom={1}>
+                        <FormField label="Record shape">
                             <SelectSynced
                                 options={[
                                     {label: 'Pick a shape...', value: null, disabled: true},
@@ -95,6 +96,21 @@ function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
                                 globalConfigKey={ConfigKeys.RECORD_SHAPE}
                             />
                         </FormField>
+                        <Box marginBottom={1}>
+                            <Text fontWeight="strong" textColor="light">
+                                Record color
+                            </Text>
+                            <Text variant="paragraph" textColor="light">
+                                Record coloring is{' '}
+                                <Link
+                                    href="https://support.airtable.com/hc/en-us/articles/115013883908-Record-coloring-overview"
+                                    target="_blank"
+                                    display="inline"
+                                >
+                                    based on the view
+                                </Link>
+                            </Text>
+                        </Box>
                     </Fragment>
                 )}
             </Box>
