@@ -55,14 +55,15 @@ export default function useSettings() {
     const [baseSchema, setBaseSchema] = useState(() => parseSchema(base));
     const {nodesById, linksById, tableConfigsByTableId, dependentLinksByNodeId} = baseSchema;
     const globalConfig = useGlobalConfig();
-    let tableCoordsByTableId = globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID);
+    let tableCoordsByTableId;
 
     if (!globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID)) {
         // First time run, determine initial table coords
+        tableCoordsByTableId = getInitialTableCoords(tableConfigsByTableId);
         globalConfig.setPathsAsync([
             {
                 path: [ConfigKeys.TABLE_COORDS_BY_TABLE_ID],
-                value: getInitialTableCoords(tableConfigsByTableId),
+                value: tableCoordsByTableId,
             },
             {
                 path: [ConfigKeys.ENABLED_LINKS_BY_TYPE],
@@ -77,15 +78,14 @@ export default function useSettings() {
         ]);
     } else {
         // Non-first time run, check for any new tables missing from the old saved coords
+        tableCoordsByTableId = globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID);
         if (
-            _.difference(
-                Object.keys(tableConfigsByTableId),
-                Object.keys(globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID)),
-            ).length > 0
+            _.difference(Object.keys(tableConfigsByTableId), Object.keys(tableCoordsByTableId))
+                .length > 0
         ) {
             tableCoordsByTableId = getUpdatedTableCoords(
                 tableConfigsByTableId,
-                globalConfig.get(ConfigKeys.TABLE_COORDS_BY_TABLE_ID),
+                tableCoordsByTableId,
             );
             if (globalConfig.hasPermissionToSet()) {
                 globalConfig.setAsync(ConfigKeys.TABLE_COORDS_BY_TABLE_ID, tableCoordsByTableId);
