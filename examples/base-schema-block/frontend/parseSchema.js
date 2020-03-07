@@ -1,5 +1,7 @@
-import {FIELD_LABELS_BY_TYPE, LINK_LABELS_BY_TYPE} from './constants';
+import _ from 'lodash';
 import {FieldType} from '@airtable/blocks/models';
+
+import {FIELD_LABELS_BY_TYPE, LINK_LABELS_BY_TYPE} from './constants';
 
 /**
  * Utility helper to push an item into an array at given object key, or initialize that array
@@ -263,10 +265,10 @@ export default function parseSchema(base) {
     const newLinksById = {};
     for (const [linkId, link] of Object.entries(linksById)) {
         const {targetTableId, targetId} = link;
-        if (!Object.prototype.hasOwnProperty.call(nodesById, targetTableId)) {
+        if (!_.has(nodesById, targetTableId)) {
             continue;
         }
-        if (!Object.prototype.hasOwnProperty.call(nodesById, targetId)) {
+        if (!_.has(nodesById, targetId)) {
             continue;
         }
         newLinksById[linkId] = link;

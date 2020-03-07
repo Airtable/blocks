@@ -70,6 +70,9 @@ export function getInitialTableCoords(tableConfigsByTableId) {
  * @param {Object} oldTableCoords x,y coordinates for each table, by table id
  */
 export function getUpdatedTableCoords(newTableConfigs, oldTableCoords) {
+    // Prune tables that no longer exist
+    oldTableCoords = _.pick(oldTableCoords, Object.keys(newTableConfigs));
+
     const newTableIds = _.difference(Object.keys(newTableConfigs), Object.keys(oldTableCoords));
     if (newTableIds.length === 0) {
         return oldTableCoords;

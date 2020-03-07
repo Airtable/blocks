@@ -119,7 +119,7 @@ function truncateTextForWidth(text, isHeader, width = ROW_WIDTH - 2 * TEXT_PADDI
  */
 function TableRow({rowIndex, node, isHeader, onTableRowDrag, canDrag}) {
     const truncatedRowName = truncateTextForWidth(node.name, isHeader);
-    // Give each table header a random, determinsitic color based off the tableId
+    // Give each table header a random, deterministic color based off the tableId
     let headerColorString;
     if (isHeader) {
         const colorIndex = node.tableId.charCodeAt(node.tableId.length - 1) % ALLOWED_COLORS.length;
