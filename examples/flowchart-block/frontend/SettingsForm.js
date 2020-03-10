@@ -19,7 +19,8 @@ import {
 import {ExportType} from './index';
 import {allowedFieldTypes, ConfigKeys, LinkStyle, ChartOrientation, RecordShape} from './settings';
 
-function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
+function SettingsForm({setIsSettingsVisible, settingsValidationResult, onExportGraph}) {
+    const {settings, isValid} = settingsValidationResult;
     return (
         <Box
             flex="none"
@@ -105,7 +106,6 @@ function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
                                 <Link
                                     href="https://support.airtable.com/hc/en-us/articles/115013883908-Record-coloring-overview"
                                     target="_blank"
-                                    display="inline"
                                 >
                                     based on the view
                                 </Link>
@@ -126,10 +126,16 @@ function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
                     <Label marginRight={2} marginBottom={0}>
                         Export
                     </Label>
-                    <Button onClick={() => onExportGraph(ExportType.SVG)} marginRight={2}>
+                    <Button
+                        disabled={!isValid}
+                        onClick={() => onExportGraph(ExportType.SVG)}
+                        marginRight={2}
+                    >
                         SVG
                     </Button>
-                    <Button onClick={() => onExportGraph(ExportType.PNG)}>PNG</Button>
+                    <Button disabled={!isValid} onClick={() => onExportGraph(ExportType.PNG)}>
+                        PNG
+                    </Button>
                 </Box>
                 <Button variant="primary" onClick={() => setIsSettingsVisible(false)}>
                     Done
@@ -142,14 +148,17 @@ function SettingsForm({setIsSettingsVisible, settings, onExportGraph}) {
 SettingsForm.propTypes = {
     setIsSettingsVisible: PropTypes.func.isRequired,
     onExportGraph: PropTypes.func.isRequired,
-    settings: PropTypes.shape({
-        table: PropTypes.instanceOf(Table),
-        view: PropTypes.instanceOf(View),
-        field: PropTypes.instanceOf(Field),
-        queryResult: PropTypes.instanceOf(RecordQueryResult),
-        chartOrientation: PropTypes.oneOf(Object.values(ChartOrientation)).isRequired,
-        linkStyle: PropTypes.oneOf(Object.values(LinkStyle)).isRequired,
-        recordShape: PropTypes.oneOf(Object.values(RecordShape)).isRequired,
+    settingsValidationResult: PropTypes.shape({
+        settings: PropTypes.shape({
+            table: PropTypes.instanceOf(Table),
+            view: PropTypes.instanceOf(View),
+            field: PropTypes.instanceOf(Field),
+            queryResult: PropTypes.instanceOf(RecordQueryResult),
+            chartOrientation: PropTypes.oneOf(Object.values(ChartOrientation)).isRequired,
+            linkStyle: PropTypes.oneOf(Object.values(LinkStyle)).isRequired,
+            recordShape: PropTypes.oneOf(Object.values(RecordShape)).isRequired,
+        }).isRequired,
+        isValid: PropTypes.bool.isRequired,
     }),
 };
 

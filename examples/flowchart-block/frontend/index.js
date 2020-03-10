@@ -160,7 +160,7 @@ function FlowchartBlock() {
                 <SettingsForm
                     setIsSettingsVisible={setIsSettingsVisible}
                     onExportGraph={_onExportGraph}
-                    settings={settingsValidationResult.settings}
+                    settingsValidationResult={settingsValidationResult}
                 />
             )}
         </Box>
