@@ -2,6 +2,11 @@
     "name": "@airtable/blocks",
     "version": "0.0.43",
     "description": "Airtable Blocks SDK",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Airtable/blocks.git"
+    },
+    "homepage": "https://airtable.com/developers/blocks",
     "main": "dist/cjs/index.js",
     "types": "index.d.ts",
     "files": [

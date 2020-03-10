@@ -1001,8 +1001,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Throws an error if the user does not have permission to delete the given records.
      *
      * You may only delete up to 50 records in one call to `deleteRecordsAsync`.
-     * See [Writing changes to records](/packages/sdk/docs/guide_writes.md) for more information
-     * about write limits.
+     * See [Write back to Airtable](/guides/write-back-to-airtable#size-limits-rate-limits) for
+     * more information about write limits.
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the
      * delete to be persisted to Airtable servers.
@@ -1259,8 +1259,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * if invalid input is provided (eg. invalid cell values).
      *
      * You may only create up to 50 records in one call to `createRecordsAsync`.
-     * See [Writing changes to records](/packages/sdk/docs/guide_writes.md) for more information
-     * about write limits.
+     * See [Write back to Airtable](/guides/write-back-to-airtable#size-limits-rate-limits) for
+     * more information about write limits.
      *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the new
      * record to be persisted to Airtable servers.
