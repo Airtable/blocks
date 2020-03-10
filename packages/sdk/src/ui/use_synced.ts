@@ -26,7 +26,6 @@ import globalConfigSyncedComponentHelpers from './global_config_synced_component
  * ```
  * @docsPath UI/hooks/useSynced
  * @hook
- * @hidden
  */
 export default function useSynced(
     globalConfigKey: GlobalConfigKey,
