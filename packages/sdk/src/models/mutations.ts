@@ -139,8 +139,8 @@ class Mutations {
     _assertFieldIsValidForMutation(field: Field) {
         if (field.isComputed) {
             throw spawnError(
-                "Can't set cell values: Field %s is computed and cannot be set",
-                field.id,
+                "Can't set cell values: Field '%s' is computed and cannot be set",
+                field.name,
             );
         }
     }
@@ -190,9 +190,9 @@ class Mutations {
                         const field = table.getFieldByIdIfExists(fieldId);
                         if (!field) {
                             throw spawnError(
-                                "Can't set cell values: No field with id %s exists in table %s",
+                                "Can't set cell values: No field with id %s exists in table '%s'",
                                 fieldId,
-                                tableId,
+                                table.name,
                             );
                         }
 
@@ -234,9 +234,9 @@ class Mutations {
                         const record = recordStore.getRecordByIdIfExists(recordId);
                         if (!record) {
                             throw spawnError(
-                                "Can't delete records: No record with id %s exists in table %s",
+                                "Can't delete records: No record with id %s exists in table '%s'",
                                 recordId,
-                                tableId,
+                                table.name,
                             );
                         }
                     }
@@ -258,9 +258,9 @@ class Mutations {
                         const field = table.getFieldByIdIfExists(fieldId);
                         if (!field) {
                             throw spawnError(
-                                "Can't create records: No field with id %s exists in table %s",
+                                "Can't create records: No field with id %s exists in table '%s'",
                                 fieldId,
-                                tableId,
+                                table.name,
                             );
                         }
 

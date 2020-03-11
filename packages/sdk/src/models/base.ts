@@ -165,9 +165,9 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         const collaborator = this.getCollaboratorByIdIfExists(collaboratorId);
         if (!collaborator) {
             throw spawnError(
-                'No collaborator with ID %s has access to base %s',
+                "No collaborator with ID %s has access to base '%s'",
                 collaboratorId,
-                this.id,
+                this.name,
             );
         }
         return collaborator;
@@ -223,7 +223,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     getTableById(tableId: string): Table {
         const table = this.getTableByIdIfExists(tableId);
         if (!table) {
-            throw spawnError('No table with ID %s in base %s', tableId, this.id);
+            throw spawnError("No table with ID %s in base '%s'", tableId, this.name);
         }
         return table;
     }
@@ -250,7 +250,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     getTableByName(tableName: string): Table {
         const table = this.getTableByNameIfExists(tableName);
         if (!table) {
-            throw spawnError('No table named %s in base %s', tableName, this.id);
+            throw spawnError("No table named '%s' in base '%s'", tableName, this.name);
         }
         return table;
     }

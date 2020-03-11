@@ -220,7 +220,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getFieldById(fieldId: FieldId): Field {
         const field = this.getFieldByIdIfExists(fieldId);
         if (!field) {
-            throw spawnError('No field with ID %s in table %s', fieldId, this.id);
+            throw spawnError("No field with ID %s in table '%s'", fieldId, this.name);
         }
         return field;
     }
@@ -263,7 +263,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getFieldByName(fieldName: string): Field {
         const field = this.getFieldByNameIfExists(fieldName);
         if (!field) {
-            throw spawnError('No field named %s in table %s', fieldName, this.id);
+            throw spawnError("No field named '%s' in table '%s'", fieldName, this.name);
         }
         return field;
     }
@@ -332,7 +332,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getViewById(viewId: ViewId): View {
         const view = this.getViewByIdIfExists(viewId);
         if (!view) {
-            throw spawnError('No view with ID %s in table %s', viewId, this.id);
+            throw spawnError("No view with ID %s in table '%s'", viewId, this.name);
         }
         return view;
     }
@@ -375,7 +375,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     getViewByName(viewName: string): View {
         const view = this.getViewByNameIfExists(viewName);
         if (!view) {
-            throw spawnError('No view named %s in table %', viewName, this.id);
+            throw spawnError("No view named '%s' in table '%s'", viewName, this.name);
         }
         return view;
     }
@@ -1487,8 +1487,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             if (fieldOrFieldIdOrFieldName.parentTable.id !== this.id) {
                 throw spawnError(
                     "Field '%s' is from a different table than table '%s'",
-                    fieldOrFieldIdOrFieldName.id,
-                    this.id,
+                    fieldOrFieldIdOrFieldName.name,
+                    this.name,
                 );
             }
             field = fieldOrFieldIdOrFieldName;
@@ -1501,13 +1501,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 throw spawnError(
                     "Field '%s' does not exist in table '%s'",
                     fieldOrFieldIdOrFieldName,
-                    this.id,
+                    this.name,
                 );
             }
         }
 
         if (field.isDeleted) {
-            throw spawnError("Field '%s' was deleted from table '%s'", field.id, this.id);
+            throw spawnError("Field '%s' was deleted from table '%s'", field.name, this.name);
         }
         return field;
     }
@@ -1520,8 +1520,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             if (viewOrViewIdOrViewName.parentTable.id !== this.id) {
                 throw spawnError(
                     "View '%s' is from a different table than table '%s'",
-                    viewOrViewIdOrViewName.id,
-                    this.id,
+                    viewOrViewIdOrViewName.name,
+                    this.name,
                 );
             }
             view = viewOrViewIdOrViewName;
@@ -1534,13 +1534,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 throw spawnError(
                     "View '%s' does not exist in table '%s'",
                     viewOrViewIdOrViewName,
-                    this.id,
+                    this.name,
                 );
             }
         }
 
         if (view.isDeleted) {
-            throw spawnError("View '%s' was deleted from table '%s'", view.id, this.id);
+            throw spawnError("View '%s' was deleted from table '%s'", view.name, this.name);
         }
         return view;
     }
