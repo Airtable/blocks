@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...HEAD)
 
 -   `TextButton` now supports including an icon without a label.
+-   Properly export the `useSynced` hook.
 
 ## [0.0.43](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.42...@airtable/blocks@0.0.43) - 2020-02-28
 
