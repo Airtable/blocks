@@ -110,6 +110,12 @@ function getSettingsValidationResult(settings) {
             message: 'Pick a table, view, and linked record field',
             settings: settings,
         };
+    } else if (field.type !== FieldType.MULTIPLE_RECORD_LINKS) {
+        return {
+            isValid: false,
+            message: 'Select a linked record field',
+            settings: settings,
+        };
     } else if (field.options.linkedTableId !== table.id) {
         return {
             isValid: false,
