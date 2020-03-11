@@ -11,10 +11,11 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...HEAD)
 
--   `TextButton` now supports including an icon without a label. <<<<<<< HEAD
--   # Properly export the `useSynced` hook.
+-   `TextButton` now supports including an icon without a label.
+-   Properly export the `useSynced` hook.
 -   Errors now output model names instead of IDs when available.
-    > > > > > > > update changelog
+-   Fix a positioning bug with `SelectButtons` where unwanted empty space could appear when the
+    component is used in a scrollable list.
 
 ## [0.0.43](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.42...@airtable/blocks@0.0.43) - 2020-02-28
 

@@ -20,6 +20,7 @@ const baseContainerStyles = css({
 });
 
 const baseOptionStyles = css({
+    position: 'relative',
     display: 'flex',
     flex: 'auto',
     flexBasis: 0,
