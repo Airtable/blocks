@@ -72,6 +72,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
         blockJson,
         backendBlockSdkWrapperInstance,
         enableUploadLogsToS3: false,
+        developerCredentialByNameIfExists: null, // TODO(richsinn): fill this in for supporting dev creds on block run
         resolveBackendRouteHandler: BlocksBackendEventHandler.resolveBackendRouteHandlerWithRequirePrefix.bind(
             null,
             backendRouteHandlerModulePrefix,

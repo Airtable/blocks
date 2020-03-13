@@ -23,7 +23,8 @@ require('regenerator-runtime/runtime');
 // load. TODO(kasra): look into removing the dependency on whatwg-fetch.
 global.self = global;
 
-const BlocksBackendEventHandler = require('./blocks_backend_event_handler.js');
+const BlocksDevCredentialsManager = require('./blocks_dev_credentials_manager');
+const BlocksBackendEventHandler = require('./blocks_backend_event_handler');
 
 // Keep the module name require'd below in sync with
 // blockCliConfigSettings.BACKEND_SDK_MODULE. We can't import blocksConfigSettings
@@ -38,11 +39,18 @@ import type {LambdaEvent} from './types/lambda_event_type';
 type LambdaContext = Object;
 type LambdaCallback = (error: Error | null, response: mixed) => void;
 
+// Lambda layers are available in /opt
+const DEV_CREDENTIALS_JSON_FILE_PATH_IN_LAMBDA_LAYER = '/opt/developerCredentials.json';
+const blocksDevCredentialsManager = new BlocksDevCredentialsManager(
+    DEV_CREDENTIALS_JSON_FILE_PATH_IN_LAMBDA_LAYER,
+);
+
 const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();
 const blocksBackendEventHandler = new BlocksBackendEventHandler({
     blockJson,
     backendBlockSdkWrapperInstance,
     enableUploadLogsToS3: true,
+    developerCredentialByNameIfExists: blocksDevCredentialsManager.getDeveloperCredentialByNameIfExists(),
     resolveBackendRouteHandler: BlocksBackendEventHandler.resolveBackendRouteHandlerWithRequirePrefix.bind(
         null,
         '../user/',

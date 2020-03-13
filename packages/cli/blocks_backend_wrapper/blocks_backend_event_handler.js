@@ -38,17 +38,20 @@ class BlocksBackendEventHandler {
     _backendBlockSdkWrapperInstance: BackendBlockSdkWrapper;
     _enableUploadLogsToS3: boolean;
     _resolveBackendRouteHandler: BackendRouteHandlerResolver;
+    _developerCredentialByName: {[string]: string};
 
     constructor(options: {|
         blockJson: BlockJson,
         backendBlockSdkWrapperInstance: BackendBlockSdkWrapper,
         enableUploadLogsToS3: boolean,
+        developerCredentialByNameIfExists: {[string]: string} | null,
         resolveBackendRouteHandler: BackendRouteHandlerResolver,
     |}) {
         this._blockJson = options.blockJson;
         this._backendBlockSdkWrapperInstance = options.backendBlockSdkWrapperInstance;
         this._enableUploadLogsToS3 = options.enableUploadLogsToS3;
         this._resolveBackendRouteHandler = options.resolveBackendRouteHandler;
+        this._developerCredentialByName = options.developerCredentialByNameIfExists || {};
     }
 
     /** Utility function to resolve backend route handler using require() and a prefix. */
@@ -186,7 +189,10 @@ class BlocksBackendEventHandler {
                 global[GLOBAL_SDK_VARIABLE_NAME] = this._backendBlockSdkWrapperInstance;
             }
 
-            await this._backendBlockSdkWrapperInstance.__initializeSdkForEventAsync(event);
+            await this._backendBlockSdkWrapperInstance.__initializeSdkForEventAsync(
+                event,
+                this._developerCredentialByName,
+            );
         } catch (err) {
             return this._createResponseForExecutionError(
                 err,
