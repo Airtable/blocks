@@ -140,7 +140,13 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
                         <Heading size="small">Supported services</Heading>
                         <Text marginTop={2}>Previews are supported for these services:</Text>
                         <Text marginTop={2}>
-                            Airtable, Figma, SoundCloud, Spotify, Vimeo, YouTube
+                            <Link
+                                href="https://support.airtable.com/hc/en-us/articles/205752117-Creating-a-base-share-link-or-a-view-share-link"
+                                target="_blank"
+                            >
+                                Airtable share links
+                            </Link>
+                            , Figma, SoundCloud, Spotify, Vimeo, YouTube
                         </Text>
                         <Link
                             marginTop={2}
