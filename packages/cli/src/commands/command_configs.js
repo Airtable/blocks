@@ -100,6 +100,11 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: false,
                 hidden: true, // hide from --help output
             },
+            'block-dev-credentials-path': {
+                description: 'Path to local block dev credentials object',
+                type: 'string',
+                hidden: true,
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),
     },

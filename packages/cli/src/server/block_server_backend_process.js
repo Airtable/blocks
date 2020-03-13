@@ -5,6 +5,7 @@ require('regenerator-runtime/runtime');
 const invariant = require('invariant');
 const path = require('path');
 const BlocksBackendEventHandler = require('../../blocks_backend_wrapper/blocks_backend_event_handler');
+const BlockServerBackendDevCredentialsManager = require('./block_server_backend_dev_credentials_manager');
 const downloadBackendSdkAsync = require('../helpers/download_backend_sdk_async');
 const {BackendProcessResponseTypes} = require('../types/block_server_backend_process_types');
 
@@ -54,6 +55,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
         outputUserTranspiledDirPath,
         blockJson,
         backendSdkBaseUrl,
+        blockDevCredentialsPath,
         canUseCachedBackendSdk,
     } = options;
 
@@ -64,6 +66,11 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
     );
     const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();
 
+    // Set up the local developer credentials if local path is provided
+    const blocksDevCredentialsManager = new BlockServerBackendDevCredentialsManager(
+        blockDevCredentialsPath,
+    );
+
     // Set up backend event handler.
     const backendRouteHandlerModulePrefix = outputUserTranspiledDirPath.endsWith(path.sep)
         ? outputUserTranspiledDirPath
@@ -72,7 +79,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
         blockJson,
         backendBlockSdkWrapperInstance,
         enableUploadLogsToS3: false,
-        developerCredentialByNameIfExists: null, // TODO(richsinn): fill this in for supporting dev creds on block run
+        developerCredentialByNameIfExists: blocksDevCredentialsManager.getDeveloperCredentialByNameIfExists(),
         resolveBackendRouteHandler: BlocksBackendEventHandler.resolveBackendRouteHandlerWithRequirePrefix.bind(
             null,
             backendRouteHandlerModulePrefix,

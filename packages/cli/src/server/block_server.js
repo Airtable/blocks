@@ -45,6 +45,7 @@ class BlockServer {
     _apiKey: string;
     _blockJson: BlockJson;
     _remoteJson: RemoteJson;
+    _blockDevCredentialsPath: string | null;
     _blockDirPath: string;
     _blockServerUrlIfExists: string | null;
     _apiClient: ApiClient;
@@ -55,15 +56,17 @@ class BlockServer {
         blockBuilder: BlockBuilder,
         apiKey: string,
         remoteJson: RemoteJson,
+        blockDevCredentialsPath: string | null,
         backendSdkBaseUrl?: string | null,
     }) {
-        const {blockBuilder, apiKey, remoteJson, backendSdkBaseUrl} = args;
+        const {blockBuilder, apiKey, remoteJson, blockDevCredentialsPath, backendSdkBaseUrl} = args;
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
         this._blockBuilder = blockBuilder;
         this._apiKey = apiKey;
         this._remoteJson = remoteJson;
+        this._blockDevCredentialsPath = blockDevCredentialsPath;
         this._blockJson = this._blockBuilder.blockJson;
         this._blockDirPath = this._blockBuilder.blockDirPath;
         this._blockServerUrlIfExists = null;
@@ -71,6 +74,7 @@ class BlockServer {
             blockJson: this._blockJson,
             outputUserTranspiledDirPath: this._blockBuilder.outputUserTranspiledDirPath,
             backendSdkBaseUrl: backendSdkBaseUrl || null,
+            blockDevCredentialsPath: this._blockDevCredentialsPath,
             getApiClient: () => this._apiClient,
         });
 

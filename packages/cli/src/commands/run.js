@@ -28,6 +28,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         typeof enableDeprecatedAbsolutePathImport === 'boolean',
         'expects enableDeprecatedAbsolutePathImport to be a boolean',
     );
+    const blockDevCredentialsPath = argv.blockDevCredentialsPath || null;
+    invariant(
+        blockDevCredentialsPath === null || typeof blockDevCredentialsPath === 'string',
+        'expect blockDevCredentialsPath to be null or a string',
+    );
 
     const blockJsonValidationResult = await parseAndValidateBlockJsonAsync();
     if (blockJsonValidationResult.err) {
@@ -64,6 +69,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         remoteJson,
         blockBuilder,
         backendSdkBaseUrl,
+        blockDevCredentialsPath,
     });
 
     let port = defaultPort;

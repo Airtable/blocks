@@ -33,6 +33,7 @@ class BlockServerBackendProcessManager {
     _blockJson: BlockJson;
     _outputUserTranspiledDirPath: string;
     _backendSdkBaseUrlIfExists: string | null;
+    _blockDevCredentialsPath: string | null;
     _getApiClient: () => ApiClient;
     _backendProcess: childProcess.ChildProcess | null;
     _isReady: boolean;
@@ -49,11 +50,13 @@ class BlockServerBackendProcessManager {
         blockJson: BlockJson,
         outputUserTranspiledDirPath: string,
         backendSdkBaseUrl: string | null,
+        blockDevCredentialsPath: string | null,
         getApiClient: () => ApiClient,
     }) {
         this._blockJson = args.blockJson;
         this._outputUserTranspiledDirPath = args.outputUserTranspiledDirPath;
         this._backendSdkBaseUrlIfExists = args.backendSdkBaseUrl;
+        this._blockDevCredentialsPath = args.blockDevCredentialsPath;
         this._getApiClient = args.getApiClient;
         this._backendProcess = null;
         this._isReady = false;
@@ -72,6 +75,7 @@ class BlockServerBackendProcessManager {
             blockJson: this._blockJson,
             outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
             backendSdkBaseUrl: this._backendSdkBaseUrlIfExists,
+            blockDevCredentialsPath: this._blockDevCredentialsPath,
             canUseCachedBackendSdk: true,
         };
         this._backendProcess = childProcessHelpers.fork(

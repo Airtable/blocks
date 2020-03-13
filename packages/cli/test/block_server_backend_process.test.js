@@ -63,6 +63,7 @@ function createBackendProcessForTesting(backendSdkServerPort: number) {
             'block_with_backend_routes',
         ),
         backendSdkBaseUrl: `http://localhost:${backendSdkServerPort}`,
+        blockDevCredentialsPath: null,
         canUseCachedBackendSdk: false,
     };
     const backendProcess = childProcessHelpers.fork(backendProcessModulePath, [

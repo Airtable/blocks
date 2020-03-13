@@ -68,6 +68,7 @@ describe('BlockServer', function() {
                     blockId: 'blk123',
                     baseId: 'app123',
                 },
+                blockDevCredentialsPath: null,
             });
 
             sinon
