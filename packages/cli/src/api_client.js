@@ -5,6 +5,7 @@ const {promisify} = require('util');
 const {URL} = require('url');
 const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');
 const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_remote_json_async');
+const parseBlockPackageJsonAsync = require('./helpers/parse_block_package_json_async');
 const getApiKeyWithWarningsAsync = require('./helpers/get_api_key_with_warnings');
 const CommandNames = require('./commands/command_names');
 request.getAsync = promisify(request.get);
@@ -29,6 +30,7 @@ class ApiClient {
     _applicationId: ApplicationId;
     _blockInstallationId: BlockInstallationId | null;
     _blockId: BlockId | null;
+    _blockName: string | null;
     _apiKey: string;
 
     static async constructApiClientForRemoteAsync(
@@ -41,9 +43,17 @@ class ApiClient {
         const remoteJson = parseResult.value;
         const apiKeyName = remoteJson.apiKeyName || null;
         const apiKey = await getApiKeyWithWarningsAsync(apiKeyName);
+
+        const blockPackageJsonResult = await parseBlockPackageJsonAsync();
+        if (blockPackageJsonResult.err) {
+            return blockPackageJsonResult;
+        }
+        const blockPackageJson = blockPackageJsonResult.value;
+
         const apiClient = new ApiClient({
             applicationId: remoteJson.baseId,
             blockId: remoteJson.blockId,
+            blockName: blockPackageJson.name,
             apiBaseUrl: remoteJson.server,
             apiKey,
         });
@@ -55,12 +65,14 @@ class ApiClient {
         applicationId: ApplicationId,
         blockInstallationId?: BlockInstallationId,
         blockId?: BlockId,
+        blockName?: string,
         apiKey: string,
     |}) {
         this._apiBaseUrl = opts.apiBaseUrl || AIRTABLE_API_URL;
         this._applicationId = opts.applicationId;
         this._blockInstallationId = opts.blockInstallationId || null;
         this._blockId = opts.blockId || null;
+        this._blockName = opts.blockName || null;
         this._apiKey = opts.apiKey;
     }
 
@@ -198,7 +210,10 @@ class ApiClient {
                 Authorization: `Bearer ${this._apiKey}`,
                 'User-Agent': USER_AGENT,
             },
-            body: {buildId},
+            body: {
+                buildId,
+                blockName: this._blockName,
+            },
             json: true,
         };
         const response = await request.postAsync(options);
