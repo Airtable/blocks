@@ -29,7 +29,7 @@
             "before:init": "../../bin/check-repo-for-release && yarn test"
         },
         "npm": {
-            "access": "restricted"
+            "access": "public"
         }
     }
 }

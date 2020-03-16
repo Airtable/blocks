@@ -134,7 +134,7 @@
             "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version})"
         },
         "npm": {
-            "access": "restricted"
+            "access": "public"
         }
     }
 }

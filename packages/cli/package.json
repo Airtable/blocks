@@ -116,7 +116,7 @@
             "before:init": "../../bin/check-repo-for-release && yarn run test"
         },
         "npm": {
-            "access": "restricted"
+            "access": "public"
         }
     }
 }
