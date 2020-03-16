@@ -97,87 +97,103 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
     // RecordPreview may now need to render a preview, or render nothing at all.
     useWatchable(cursor, ['activeTableId', 'activeViewId']);
 
+    // This button is re-used in two states so it's pulled out in a constant here.
+    const viewSupportedURLsButton = (
+        <TextButton size="small" marginTop={3} onClick={() => setIsDialogOpen(true)}>
+            View supported URLs
+        </TextButton>
+    );
+
+    let content;
     if (
         cursor.activeViewId === null || // activeViewId is briefly null when switching views
         table.getViewById(cursor.activeViewId).type !== ViewType.GRID
     ) {
-        return (
+        content = (
             <Container>
                 <Text>Switch to a grid view to see previews</Text>
             </Container>
         );
-    }
-
-    if (
+    } else if (
         // selectedRecord will be null on block initialization, after
         // the user switches table or view, or if it was deleted.
         selectedRecord === null ||
         // The selected field may have been deleted.
         selectedField === null
     ) {
-        return (
+        content = (
             <Container>
-                <Text>Select a record to see a preview</Text>
+                <Text>Select a cell to see a preview</Text>
+                {viewSupportedURLsButton}
             </Container>
         );
-    }
-
-    const previewUrl = getPreviewUrlForRecord(selectedRecord, selectedField);
-
-    // In this case, the FIELD_NAME field of the currently selected
-    // record either contains no URL, or contains a URL that cannot be
-    // resolved to a supported preview.
-    if (!previewUrl) {
-        return (
-            <Container>
-                <Text>No preview</Text>
-                <TextButton marginTop={3} onClick={() => setIsDialogOpen(true)}>
-                    View supported URLs
-                </TextButton>
-                {isDialogOpen && (
-                    <Dialog onClose={() => setIsDialogOpen(false)} maxWidth={400}>
-                        <Dialog.CloseButton />
-                        <Heading size="small">Supported services</Heading>
-                        <Text marginTop={2}>Previews are supported for these services:</Text>
-                        <Text marginTop={2}>
-                            <Link
-                                href="https://support.airtable.com/hc/en-us/articles/205752117-Creating-a-base-share-link-or-a-view-share-link"
-                                target="_blank"
-                            >
-                                Airtable share links
-                            </Link>
-                            , Figma, SoundCloud, Spotify, Vimeo, YouTube
-                        </Text>
-                        <Link
-                            marginTop={2}
-                            href="https://airtable.com/shrQSwIety6rqfJZX"
-                            target="_blank"
-                        >
-                            Request a new service
-                        </Link>
-                    </Dialog>
-                )}
-            </Container>
+    } else {
+        // Using getCellValueAsString guarantees we get a string back.  If
+        // we use getCellValue, we might get back numbers, booleans, or
+        // arrays depending on the field type.
+        const previewUrl = getPreviewUrlForCellValue(
+            selectedRecord.getCellValueAsString(selectedField),
         );
+
+        // In this case, the FIELD_NAME field of the currently selected
+        // record either contains no URL, or contains a URL that cannot be
+        // resolved to a supported preview.
+        if (!previewUrl) {
+            content = (
+                <Container>
+                    <Text>No preview</Text>
+                    {viewSupportedURLsButton}
+                </Container>
+            );
+        } else {
+            content = (
+                <Container>
+                    <iframe
+                        // Using `key=previewUrl` will immediately unmount the
+                        // old iframe when we're switching to a new
+                        // preview. Otherwise, the old iframe would be reused,
+                        // and the old preview would stay onscreen while the new
+                        // one was loading, which would be a confusing user
+                        // experience.
+                        key={previewUrl}
+                        style={{flex: 'auto', width: '100%'}}
+                        src={previewUrl}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                </Container>
+            );
+        }
     }
 
     return (
-        <Container>
-            <iframe
-                // Using `key=previewUrl` will immediately unmount the
-                // old iframe when we're switching to a new
-                // preview. Otherwise, the old iframe would be reused,
-                // and the old preview would stay onscreen while the new
-                // one was loading, which would be a confusing user
-                // experience.
-                key={previewUrl}
-                style={{flex: 'auto', width: '100%'}}
-                src={previewUrl}
-                frameBorder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-            />
-        </Container>
+        <React.Fragment>
+            {content}
+            {isDialogOpen && (
+                <Dialog onClose={() => setIsDialogOpen(false)} maxWidth={400}>
+                    <Dialog.CloseButton />
+                    <Heading size="small">Supported services</Heading>
+                    <Text marginTop={2}>Previews are supported for these services:</Text>
+                    <Text marginTop={2}>
+                        <Link
+                            href="https://support.airtable.com/hc/en-us/articles/205752117-Creating-a-base-share-link-or-a-view-share-link"
+                            target="_blank"
+                        >
+                            Airtable share links
+                        </Link>
+                        , Figma, SoundCloud, Spotify, Vimeo, YouTube
+                    </Text>
+                    <Link
+                        marginTop={2}
+                        href="https://airtable.com/shrQSwIety6rqfJZX"
+                        target="_blank"
+                    >
+                        Request a new service
+                    </Link>
+                </Dialog>
+            )}
+        </React.Fragment>
     );
 }
 
@@ -200,12 +216,7 @@ function Container({children}) {
     );
 }
 
-function getPreviewUrlForRecord(record, field) {
-    // Using getCellValueAsString guarantees we get a string back.  If
-    // we use getCellValue, we might get back numbers, booleans, or
-    // arrays depending on the field type.
-    const url = record.getCellValueAsString(field);
-
+function getPreviewUrlForCellValue(url) {
     if (!url) {
         return null;
     }
