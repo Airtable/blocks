@@ -33,7 +33,8 @@
         "/bin/block",
         "/keys/",
         "/transpiled/",
-        "/blocks_backend_wrapper/package.json"
+        "/blocks_backend_wrapper/package.json",
+        "/blocks_backend_wrapper/package-lock.json"
     ],
     "bundledDependencies": [
         "airtable-blocks-backend-wrapper"
