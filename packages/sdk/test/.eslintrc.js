@@ -6,9 +6,6 @@ module.exports = {
         // this rule makes writing flow-type tests hard
         'no-unused-expressions': 'off',
 
-        // this doesn't play nice with inline snapshot testing:
-        quotes: 'off',
-
         'jsdoc/check-alignment': 'off',
         'jsdoc/check-examples': 'off',
         'jsdoc/check-indentation': 'off',
