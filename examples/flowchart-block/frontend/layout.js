@@ -107,8 +107,11 @@ export function createLayout(settings) {
             ? colorUtils.shouldUseLightTextOnColor(recordColor)
             : false;
         nodes.push(
-            `${record.id} [id="${record.id}" label="${record.primaryCellValueAsString}" 
-            tooltip="${record.primaryCellValueAsString}" 
+            `${record.id} [id="${record.id}" label="${record.primaryCellValueAsString.replace(
+                '"',
+                '\\"',
+            )}"
+            tooltip="${record.primaryCellValueAsString.replace('"', '\\"')}"
             fontcolor="${shouldUseLightText ? 'white' : 'black'}" 
             fillcolor="${recordColor ? colorUtils.getHexForColor(recordColor) : 'white'}"]`,
         );
