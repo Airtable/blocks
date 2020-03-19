@@ -16,6 +16,8 @@ import loadCSS from './loadCSS';
 import {useSettings} from './settings';
 import SettingsForm from './SettingsForm';
 
+// viz.js has a stack overflow when there are too many records. So add a limit to be safe.
+const MAX_RECORDS = 200;
 export const ExportType = Object.freeze({
     PNG: 'png',
     SVG: 'svg',
@@ -61,6 +63,11 @@ function FlowchartBlock() {
             graph.current.innerHTML = '<span class="prompt">Loading...</span>';
         } else if (queryResult.records.length === 0) {
             graph.current.innerHTML = '<span class="prompt">Add some records to get started</span>';
+        } else if (queryResult.records.length > MAX_RECORDS) {
+            graph.current.innerHTML = `<span class="prompt">
+                    The flowchart block can only visualize up to ${MAX_RECORDS} records. Try deleting some records or 
+                    filtering them out of the view.
+                </span>`;
         } else {
             createLayout(settingsValidationResult.settings).then(svg => {
                 const svgDocument = domParser.parseFromString(svg, 'image/svg+xml');
