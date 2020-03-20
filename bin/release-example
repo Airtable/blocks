@@ -7,6 +7,7 @@ if [[ $# -eq 0 ]] ; then
     exit 1
 fi
 
+yarn install
 cd $(dirname $0)
 cd "../examples/$1"
 npm_config_registry=https://registry.npmjs.org/ release-it --config ../release-it-config.js
