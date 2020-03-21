@@ -106,12 +106,16 @@ export function createLayout(settings) {
         const shouldUseLightText = record
             ? colorUtils.shouldUseLightTextOnColor(recordColor)
             : false;
+        let displayText = record.primaryCellValueAsString
+            .substring(0, 50)
+            .trim()
+            .replace(/"/g, '\\"');
+        if (record.primaryCellValueAsString.length > 50) {
+            displayText += '...';
+        }
         nodes.push(
-            `${record.id} [id="${record.id}" label="${record.primaryCellValueAsString.replace(
-                '"',
-                '\\"',
-            )}"
-            tooltip="${record.primaryCellValueAsString.replace('"', '\\"')}"
+            `${record.id} [id="${record.id}" label="${displayText}"
+            tooltip="${displayText}"
             fontcolor="${shouldUseLightText ? 'white' : 'black'}" 
             fillcolor="${recordColor ? colorUtils.getHexForColor(recordColor) : 'white'}"]`,
         );
