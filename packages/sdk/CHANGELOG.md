@@ -26,6 +26,8 @@ commit that affects the code in a way that consumers might care about should inc
     -   **Async `select` queries.** For creating UIs from a query, the best practice is still to use
         `useRecords` etc. Directly querying data is useful for one-off data processing though.
         -   `table.selectRecordsAsync`
+        -   `view.selectRecordsAsync`
+        -   `view.selectMetadataAsync`
 
 ## [0.0.44](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...@airtable/blocks@0.0.44) - 2020-03-27
 
