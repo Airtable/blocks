@@ -4,7 +4,7 @@ import {CollaboratorData, UserId} from '../types/collaborator';
 import {TableId} from '../types/table';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
-import {spawnError, spawnInvariantViolationError} from '../error_utils';
+import {spawnError, invariant} from '../error_utils';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
@@ -179,9 +179,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         if (has(this._tableRecordStoresByTableId, tableId)) {
             return this._tableRecordStoresByTableId[tableId];
         }
-        if (!this._data.tablesById[tableId]) {
-            throw spawnInvariantViolationError('table must exist');
-        }
+        invariant(this._data.tablesById[tableId], 'table must exist');
         const newRecordStore = new RecordStore(this._baseData, this._airtableInterface, tableId);
         this._tableRecordStoresByTableId[tableId] = newRecordStore;
         return newRecordStore;
@@ -342,9 +340,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             if (!dirtySubtree[part]) {
                 dirtySubtree[part] = {};
             }
-            if (!dirtySubtree[part]) {
-                throw spawnInvariantViolationError('dirtySubtree');
-            }
+            invariant(dirtySubtree[part], 'dirtySubtree');
             dirtySubtree = dirtySubtree[part];
         }
         const lastPathPart = path[path.length - 1];
@@ -359,9 +355,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             if (!dirtySubtree[lastPathPart]) {
                 dirtySubtree[lastPathPart] = {};
             }
-            if (!dirtySubtree[lastPathPart]) {
-                throw spawnInvariantViolationError('dirtySubtree');
-            }
+            invariant(dirtySubtree[lastPathPart], 'dirtySubtree');
             dirtySubtree[lastPathPart]._isDirty = true;
         }
     }

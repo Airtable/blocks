@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: View */ /** */
 import {BaseData} from '../types/base';
 import {FieldId} from '../types/field';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {isEnumValue, getLocallyUniqueId, ObjectValues} from '../private_utils';
 import ObjectPool from './object_pool';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -161,9 +161,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
      */
     get allFields(): Array<Field> {
         const allFieldIds = this._data.allFieldIds;
-        if (!allFieldIds) {
-            throw spawnInvariantViolationError('view meta data is not loaded');
-        }
+        invariant(allFieldIds, 'view meta data is not loaded');
         return allFieldIds.map(fieldId => this.parentView.parentTable.getFieldById(fieldId));
     }
 
@@ -172,9 +170,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
      */
     get visibleFields(): Array<Field> {
         const visibleFieldIds = this._data.visibleFieldIds;
-        if (!visibleFieldIds) {
-            throw spawnInvariantViolationError('view meta data is not loaded');
-        }
+        invariant(visibleFieldIds, 'view meta data is not loaded');
         return visibleFieldIds.map(fieldId => this.parentView.parentTable.getFieldById(fieldId));
     }
 }

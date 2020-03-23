@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: Loading external resources */ /** */
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 
 /**
  * Injects CSS from a string into the page. Returns the HTML style element inserted into the page.
@@ -15,9 +15,7 @@ import {spawnInvariantViolationError} from '../error_utils';
 export function loadCSSFromString(css: string): HTMLStyleElement {
     const styleTag = document.createElement('style');
     styleTag.innerHTML = css;
-    if (!document.head) {
-        throw spawnInvariantViolationError('no document head');
-    }
+    invariant(document.head, 'no document head');
     document.head.appendChild(styleTag);
     return styleTag;
 }
@@ -48,9 +46,7 @@ export function loadCSSFromURLAsync(url: string): Promise<HTMLLinkElement> {
         linkTag.addEventListener('error', () => {
             reject(loadError);
         });
-        if (!document.head) {
-            throw spawnInvariantViolationError('no document head');
-        }
+        invariant(document.head, 'no document head');
         document.head.appendChild(linkTag);
     });
 }
@@ -80,9 +76,7 @@ export function loadScriptFromURLAsync(url: string): Promise<HTMLScriptElement> 
             reject(loadError);
         });
         scriptTag.setAttribute('src', url);
-        if (!document.head) {
-            throw spawnInvariantViolationError('no document head');
-        }
+        invariant(document.head, 'no document head');
         document.head.appendChild(scriptTag);
     });
 }

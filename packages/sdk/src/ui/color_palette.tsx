@@ -4,7 +4,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import colorUtils from '../color_utils';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
 import Box from './box';
 import Icon from './icon';
@@ -181,12 +181,14 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
     /** @internal */
     _setColorSquareSize() {
         const {squareMargin} = this.props;
-        if (squareMargin === null || squareMargin === undefined) {
-            throw spawnInvariantViolationError('colorPalette.squareMargin must be a number');
-        }
-        if (!this._colorPaletteContainerRef.current) {
-            throw spawnInvariantViolationError('No container to set color square size');
-        }
+
+        invariant(
+            squareMargin !== null && squareMargin !== undefined,
+            'colorPalette.squareMargin must be a number',
+        );
+
+        invariant(this._colorPaletteContainerRef.current, 'No container to set color square size');
+
         // Calculates the size of each square required to fit `numSquares` squares on one line.
         const calculateSquareSize = (numSquares: number) => {
             return (containerWidth - squareMargin * 2 * numSquares) / numSquares;
@@ -231,9 +233,12 @@ export class ColorPalette extends React.Component<ColorPaletteProps, ColorPalett
             disabled,
         } = this.props;
         const {squareSize} = this.state;
-        if (squareMargin === null || squareMargin === undefined) {
-            throw spawnInvariantViolationError('colorPalette.squareMargin must be a number');
-        }
+
+        invariant(
+            squareMargin !== null && squareMargin !== undefined,
+            'colorPalette.squareMargin must be a number',
+        );
+
         return (
             <Box
                 // TODO (stephen): remove tooltip anchor props

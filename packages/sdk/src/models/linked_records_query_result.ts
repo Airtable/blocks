@@ -2,7 +2,7 @@
 import {FieldType, FieldId} from '../types/field';
 import getSdk from '../get_sdk';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
 import ObjectPool from './object_pool';
 import RecordQueryResult, {
@@ -20,9 +20,7 @@ import RecordStore from './record_store';
 const getLinkedTableId = (field: Field): string => {
     const options = field.options;
     const linkedTableId = options && options.linkedTableId;
-    if (!(typeof linkedTableId === 'string')) {
-        throw spawnInvariantViolationError('linkedTableId must exist');
-    }
+    invariant(typeof linkedTableId === 'string', 'linkedTableId must exist');
 
     return linkedTableId;
 };
@@ -63,16 +61,18 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         field: Field,
         opts: RecordQueryResultOpts,
     ): LinkedRecordsQueryResult {
-        if (!(record.parentTable === field.parentTable)) {
-            throw spawnInvariantViolationError('record and field must belong to the same table');
-        }
-        if (!(field.type === FieldType.MULTIPLE_RECORD_LINKS)) {
-            throw spawnInvariantViolationError('field must be MULTIPLE_RECORD_LINKS');
-        }
+        invariant(
+            record.parentTable === field.parentTable,
+            'record and field must belong to the same table',
+        );
+
+        invariant(
+            field.type === FieldType.MULTIPLE_RECORD_LINKS,
+            'field must be MULTIPLE_RECORD_LINKS',
+        );
+
         const linkedTableId = field.options && field.options.linkedTableId;
-        if (!(typeof linkedTableId === 'string')) {
-            throw spawnInvariantViolationError('linkedTableId must be set');
-        }
+        invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
 
         const linkedTable = getSdk().base.getTableById(linkedTableId);
         const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
@@ -130,9 +130,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     constructor(record: Record, field: Field, normalizedOpts: NormalizedRecordQueryResultOpts) {
         super(normalizedOpts, record.parentTable.__baseData);
 
-        if (!(record.parentTable === field.parentTable)) {
-            throw spawnInvariantViolationError('record and field must belong to the same table');
-        }
+        invariant(
+            record.parentTable === field.parentTable,
+            'record and field must belong to the same table',
+        );
+
         this._record = record;
         this._field = field;
         this._linkedTable = normalizedOpts.table;
@@ -171,9 +173,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      */
     get parentTable(): Table {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('LinkedRecordQueryResult is no longer valid');
-        }
+        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
         return this._linkedTable;
     }
 
@@ -181,19 +181,13 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * Ordered array of all the linked record ids. Watchable.
      */
     get recordIds(): Array<string> {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('LinkedRecordQueryResult is no longer valid');
-        }
-        if (!this.isDataLoaded) {
-            throw spawnInvariantViolationError('LinkedRecordsQueryResult data is not loaded');
-        }
+        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isDataLoaded, 'LinkedRecordsQueryResult data is not loaded');
 
         // record ids are lazily generated
         this._generateComputedDataIfNeeded();
 
-        if (!this._computedFilteredSortedRecordIds) {
-            throw spawnInvariantViolationError('no recordIds');
-        }
+        invariant(this._computedFilteredSortedRecordIds, 'no recordIds');
         return this._computedFilteredSortedRecordIds;
     }
 
@@ -201,15 +195,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * Ordered array of all the linked records. Watchable.
      */
     get records(): Array<Record> {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('LinkedRecordQueryResult is no longer valid');
-        }
+        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
 
         return this.recordIds.map(recordId => {
             const record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
-            if (!record) {
-                throw spawnInvariantViolationError('No record for id: %s', recordId);
-            }
+            invariant(record, 'No record for id: %s', recordId);
             return record;
         });
     }
@@ -218,9 +208,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * The fields that were used to create this LinkedRecordsQueryResult.
      */
     get fields(): Array<Field> | null {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('LinkedRecordQueryResult is no longer valid');
-        }
+        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
 
         return this._linkedQueryResult.fields;
     }
@@ -231,9 +219,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordQueryResultKey> {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('cannot watch an invalid LinkedRecordQueryResult');
-        }
+        invariant(this.isValid, 'cannot watch an invalid LinkedRecordQueryResult');
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
@@ -373,14 +359,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     _unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch(fieldId: string) {
-        if (
-            !(
-                this._cellValueWatchCountByFieldId[fieldId] &&
-                this._cellValueWatchCountByFieldId[fieldId] > 0
-            )
-        ) {
-            throw spawnInvariantViolationError("cellValuesInField:%s over-free'd", fieldId);
-        }
+        invariant(
+            this._cellValueWatchCountByFieldId[fieldId] &&
+                this._cellValueWatchCountByFieldId[fieldId] > 0,
+            "cellValuesInField:%s over-free'd",
+            fieldId,
+        );
 
         if (this._cellValueWatchCountByFieldId[fieldId] === 0 && this.isValid) {
             this._unwatchLinkedQueryCellValuesInField(fieldId);
@@ -457,9 +441,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     _onLinkedRecordIdsChange() {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('watch key change event whilst invalid');
-        }
+        invariant(this.isValid, 'watch key change event whilst invalid');
         if (!this.isDataLoaded) {
             return;
         }
@@ -478,9 +460,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         key: string,
         changes?: {fieldIds?: Array<FieldId>; recordIds?: Array<RecordId>},
     ) {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('watch key change event whilst invalid');
-        }
+        invariant(this.isValid, 'watch key change event whilst invalid');
 
         if (changes && changes.fieldIds && changes.recordIds) {
             const recordIdsSet = this._getOrGenerateRecordIdsSet();
@@ -503,9 +483,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
                 key: string,
                 recordIds: unknown,
             ) => {
-                if (!this.isValid) {
-                    throw spawnInvariantViolationError('watch key change event whilst invalid');
-                }
+                invariant(this.isValid, 'watch key change event whilst invalid');
 
                 if (Array.isArray(recordIds)) {
                     const recordIdsSet = this._getOrGenerateRecordIdsSet();
@@ -529,9 +507,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     _onOriginCellValueChange() {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('watch key change event whilst invalid');
-        }
+        invariant(this.isValid, 'watch key change event whilst invalid');
 
         if (!this.isDataLoaded) {
             return;
@@ -548,9 +524,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     _onOriginFieldConfigChange() {
-        if (!this.isValid) {
-            throw spawnInvariantViolationError('watch key change event whilst invalid');
-        }
+        invariant(this.isValid, 'watch key change event whilst invalid');
 
         const type = this._field.type;
 
@@ -603,18 +577,16 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         const recordIdsSet: ObjectMap<RecordId, true> = {};
         const rawCellValue = this._record.getCellValue(this._field);
         const cellValue = rawCellValue === null ? [] : rawCellValue;
-        if (!Array.isArray(cellValue)) {
-            throw spawnInvariantViolationError('cellValue should be array');
-        }
+        invariant(Array.isArray(cellValue), 'cellValue should be array');
 
         for (const linkedRecord of cellValue) {
-            if (!(linkedRecord && typeof linkedRecord === 'object')) {
-                throw spawnInvariantViolationError('linked record should be object');
-            }
+            invariant(
+                linkedRecord && typeof linkedRecord === 'object',
+                'linked record should be object',
+            );
+
             const recordId = linkedRecord.id;
-            if (!(typeof recordId === 'string')) {
-                throw spawnInvariantViolationError('id should be present');
-            }
+            invariant(typeof recordId === 'string', 'id should be present');
 
             // We need to use the query result as the source of truth for
             // recordIds, since when the client deletes a record from the linked
@@ -645,9 +617,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     _getOrGenerateRecordIdsSet() {
         this._generateComputedDataIfNeeded();
         const recordIdsSet = this._computedRecordIdsSet;
-        if (!recordIdsSet) {
-            throw spawnInvariantViolationError('recordIdsSet must exist');
-        }
+        invariant(recordIdsSet, 'recordIdsSet must exist');
         return recordIdsSet;
     }
 }

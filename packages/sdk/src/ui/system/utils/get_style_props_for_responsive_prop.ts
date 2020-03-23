@@ -1,4 +1,4 @@
-import {spawnInvariantViolationError} from '../../../error_utils';
+import {invariant} from '../../../error_utils';
 import {values, has, ObjectMap, keys} from '../../../private_utils';
 import {AllStylesProps} from '../';
 import {ResponsivePropObject} from './types';
@@ -17,14 +17,11 @@ export default function getStylePropsForResponsiveProp<T extends PropertyKey>(
 
     for (const viewportKey of keys(responsivePropObject)) {
         const scaleValueForViewport = responsivePropObject[viewportKey];
-        if (!scaleValueForViewport) {
-            throw spawnInvariantViolationError('scaleValueForViewport');
-        }
+        invariant(scaleValueForViewport, 'scaleValueForViewport');
         const propsForViewport: {[styleProp: string]: unknown} | null | undefined =
             scale[scaleValueForViewport];
-        if (propsForViewport === undefined || propsForViewport === null) {
-            throw spawnInvariantViolationError('propsForViewport');
-        }
+
+        invariant(propsForViewport !== undefined && propsForViewport !== null, 'propsForViewport');
 
         for (const propForViewportKey of keys(propsForViewport)) {
             if (!has(responsiveStyleProps, propForViewportKey)) {

@@ -9,7 +9,7 @@ import {
     FlowAnyFunction,
     ObjectMap,
 } from '../private_utils';
-import {spawnInvariantViolationError, spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {VisList} from '../injected/airtable_interface';
 import {RecordId} from '../types/record';
 import Table, {WatchableTableKeys} from './table';
@@ -206,12 +206,8 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
      * Can be watched.
      */
     get recordIds(): Array<string> {
-        if (!this.isDataLoaded) {
-            throw spawnInvariantViolationError('RecordQueryResult data is not loaded');
-        }
-        if (!this._data.recordIds) {
-            throw spawnInvariantViolationError('No recordIds');
-        }
+        invariant(this.isDataLoaded, 'RecordQueryResult data is not loaded');
+        invariant(this._data.recordIds, 'No recordIds');
         return this._data.recordIds;
     }
     /**
@@ -425,9 +421,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
         tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
 
-        if (!this._mostRecentSourceModelLoadPromise) {
-            throw spawnInvariantViolationError('No source model load promises');
-        }
+        invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
         await this._mostRecentSourceModelLoadPromise;
 
         if (this._sorts) {
@@ -543,14 +537,10 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     _addRecordIdsToVisList(recordIds: Array<string>) {
         const visList = this._visList;
-        if (!visList) {
-            throw spawnInvariantViolationError('No vis list');
-        }
+        invariant(visList, 'No vis list');
         for (const recordId of recordIds) {
             const record = this._recordStore.getRecordByIdIfExists(recordId);
-            if (!record) {
-                throw spawnInvariantViolationError('Record missing in table');
-            }
+            invariant(record, 'Record missing in table');
             visList.addRecordData(record._data);
         }
     }
@@ -592,9 +582,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
         if (this._sorts) {
             const visList = this._visList;
-            if (!visList) {
-                throw spawnInvariantViolationError('No vis list');
-            }
+            invariant(visList, 'No vis list');
 
             if (removedRecordIds.length > 0) {
                 visList.removeRecordIds(removedRecordIds);
@@ -637,9 +625,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         // NOTE: this will only ever be called if we have sorts, so it's safe to assert that we have
         // a vis list here.
         const visList = this._visList;
-        if (!visList) {
-            throw spawnInvariantViolationError('No vis list');
-        }
+        invariant(visList, 'No vis list');
 
         if (recordIds.length === 0) {
             // Nothing actually changed, so just break out early.
@@ -697,9 +683,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             if (has(fieldIdsSet, fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldByIdIfExists(fieldId);
-                if (!field) {
-                    throw spawnInvariantViolationError('Created field does not exist');
-                }
+                invariant(field, 'Created field does not exist');
                 field.watch('type', this._onFieldConfigChanged, this);
                 field.watch('options', this._onFieldConfigChanged, this);
             }
@@ -751,9 +735,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     _generateOrderedRecordIds(): Array<string> {
         if (this._sorts) {
-            if (!this._visList) {
-                throw spawnInvariantViolationError('Cannot generate record ids without a vis list');
-            }
+            invariant(this._visList, 'Cannot generate record ids without a vis list');
             return this._visList.getOrderedRecordIds();
         } else {
             return this._sourceModelRecordIds;
@@ -777,9 +759,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     _getSortsWithDeletedFieldsFiltered(): Array<NormalizedSortConfig> {
-        if (!this._sorts) {
-            throw spawnInvariantViolationError('No sorts');
-        }
+        invariant(this._sorts, 'No sorts');
 
         // Filter out any sorts levels that rely on deleted fields.
         // NOTE: we keep deleted fields around (rather than filtering them out

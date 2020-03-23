@@ -59,7 +59,7 @@ export function invariant(
     condition: unknown,
     errorMessageFormat: string,
     ...errorMessageArgs: Array<unknown>
-) {
+): asserts condition {
     if (!condition) {
         throw spawnErrorWithOriginOmittedFromStackTrace(
             errorMessageFormat,
@@ -97,5 +97,3 @@ export function spawnAbstractMethodError(): Error {
         spawnAbstractMethodError,
     );
 }
-
-export const spawnInvariantViolationError = spawnError;

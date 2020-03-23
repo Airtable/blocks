@@ -4,7 +4,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {compose} from '@styled-system/core';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
 import withStyledSystem from './with_styled_system';
 import {
@@ -117,9 +117,7 @@ export class Modal extends React.Component<ModalProps> {
         // of elements that are in theory underneath this element will cover
         // up the modal.
         container.style.position = 'fixed';
-        if (!document.body) {
-            throw spawnInvariantViolationError('no document body');
-        }
+        invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
         // If the frame is focused, move focus to the modal's container.
@@ -133,9 +131,7 @@ export class Modal extends React.Component<ModalProps> {
     }
     /** @hidden */
     componentWillUnmount() {
-        if (!document.body) {
-            throw spawnInvariantViolationError('no document body');
-        }
+        invariant(document.body, 'no document body');
         document.body.removeChild(this._container);
         if (this._originalActiveElement !== null) {
             (this._originalActiveElement as HTMLElement).focus();
