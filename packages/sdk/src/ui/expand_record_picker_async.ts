@@ -33,7 +33,7 @@ interface ExpandRecordPickerOpts {
  * async function pickRecordsAsync() {
  *     const recordA = await expandRecordPickerAsync([record1, record2, record3]);
  *     if (recordA !== null) {
- *         alert(recordA.primaryCellValueAsString);
+ *         alert(recordA.name);
  *     } else {
  *         alert('no record picked');
  *     }

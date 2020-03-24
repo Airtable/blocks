@@ -8,6 +8,7 @@ import {ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
 import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
+import warning from '../warning';
 import AbstractModel from './abstract_model';
 import Field from './field';
 import Table from './table';
@@ -17,6 +18,8 @@ import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
 
 const WatchableRecordKeys = Object.freeze({
+    name: 'name' as const,
+    // deprecated in favor of name:
     primaryCellValue: 'primaryCellValue' as const,
     commentCount: 'commentCount' as const,
     // TODO(kasra): these keys don't have matching getters (not that they should
@@ -31,7 +34,7 @@ const WatchableCellValueInFieldKeyPrefix = 'cellValueInField:';
 const WatchableColorInViewKeyPrefix = 'colorInView:';
 /**
  * Any key within record that can be watched:
- * - `'primaryCellValue'`
+ * - `'name'`
  * - `'commentCount'`
  * - `'cellValues'`
  * - `'cellValueInField:' + someFieldId`
@@ -312,6 +315,24 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
     }
     /**
+     * Select and load records referenced in a `multipleRecordLinks` cell value. Returns a query result
+     * promise containing the records in the given `multipleRecordLinks` field.
+     * See {@link RecordQueryResult} for more.
+     *
+     * Remember to call `queryResult.unloadData` once you're finished with the query.
+     *
+     * @param fieldOrFieldIdOrFieldName The `multipleRecordLinks` field (or field ID or field name) to use.
+     * @param opts Options for the query, such as sorts and fields.
+     */
+    async selectLinkedRecordsFromCellAsync(
+        fieldOrFieldIdOrFieldName: Field | FieldId | string,
+        opts: RecordQueryResultOpts = {},
+    ): Promise<LinkedRecordsQueryResult> {
+        const queryResult = this.selectLinkedRecordsFromCell(fieldOrFieldIdOrFieldName, opts);
+        await queryResult.loadDataAsync();
+        return queryResult;
+    }
+    /**
      * The URL for the record. You can visit this URL in the browser to be taken to the record in the Airtable UI.
      *
      * @example
@@ -326,28 +347,28 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             this.parentTable.id,
         );
     }
-    /**
-     * The primary cell value in this record.
-     *
-     * @example
-     * ```js
-     * console.log(myRecord.primaryCellValue);
-     * // => 'primary cell value'
-     * ```
-     */
+    /** @hidden */
     get primaryCellValue(): unknown {
+        warning(
+            'record.primaryCellValue is deprecated. Use record.getCellValue(table.primaryField) instead.',
+        );
         return this.getCellValue(this.parentTable.primaryField);
+    }
+    /** @hidden */
+    get primaryCellValueAsString(): string {
+        warning('record.primaryCellValueAsString is deprecated. Use record.name instead.');
+        return this.name;
     }
     /**
      * The primary cell value in this record, formatted as a `string`.
      *
      * @example
      * ```js
-     * console.log(myRecord.primaryCellValueAsString);
+     * console.log(myRecord.name);
      * // => '42'
      * ```
      */
-    get primaryCellValueAsString(): string {
+    get name(): string {
         return this.getCellValueAsString(this.parentTable.primaryField);
     }
     /**
@@ -392,6 +413,8 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             this._onChange(WatchableRecordKeys.cellValues, Object.keys(cellValuesByFieldId));
 
             if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
+                this._onChange(WatchableRecordKeys.name);
+                // deprecated in favor of name:
                 this._onChange(WatchableRecordKeys.primaryCellValue);
             }
 

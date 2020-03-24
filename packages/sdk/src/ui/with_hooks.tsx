@@ -23,7 +23,7 @@ import {spawnError} from '../error_utils';
  * class RecordList extends React.Component {
  *      render() {
  *          const records = this.props.records.map(record => {
- *              return <li key={record.id}>{record.primaryCellValueAsString}</li>
+ *              return <li key={record.id}>{record.name}</li>
  *          });
  *
  *          return <ul>{records}</ul>;

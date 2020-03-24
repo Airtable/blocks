@@ -11,6 +11,9 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...HEAD)
 
+-   **DEPRECATED:** `record.primaryCellValue` and `record.primaryCellValueAsString`.
+    -   The `primaryCellValue` watch key on `record` is also deprecated - use the `name` watch key
+        instead.
 -   Add the following APIs to match the new scripting block:
     -   **Convenience model getters.** These are useful when you're working on a block for a
         specific base, but best-practice for more generic blocks is to prefer the existing
@@ -28,6 +31,8 @@ commit that affects the code in a way that consumers might care about should inc
         -   `table.selectRecordsAsync`
         -   `view.selectRecordsAsync`
         -   `view.selectMetadataAsync`
+        -   `record.selectLinkedRecordsFromCellAsync`
+    -   **`record.name`** replaces `record.primaryCellValueAsString`.
 
 ## [0.0.44](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...@airtable/blocks@0.0.44) - 2020-03-27
 

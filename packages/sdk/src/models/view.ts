@@ -142,7 +142,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *         <ul>
      *             {records.map(record => (
      *                 <li key={record.id}>
-     *                     {record.primaryCellValueAsString || 'Unnamed record'}
+     *                     {record.name || 'Unnamed record'}
      *                 </li>
      *             ))}
      *         </ul>
