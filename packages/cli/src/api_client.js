@@ -212,7 +212,8 @@ class ApiClient {
             },
             body: {
                 buildId,
-                blockName: this._blockName,
+                // 'blockName' is an optional param that expects a string. It will NOT accept null.
+                ...(this._blockName !== null ? {blockName: this._blockName} : {}),
             },
             json: true,
         };
