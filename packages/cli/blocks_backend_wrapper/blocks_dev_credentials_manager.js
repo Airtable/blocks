@@ -7,6 +7,7 @@ type DeveloperCredentialsObject = {developerCredentialsEncrypted: string};
 
 const _IV_NUM_BYTES = 16;
 const _MAC_NUM_BYTES = 32;
+const _ENVELOPE_MIN_NUM_BYTES = _IV_NUM_BYTES + _MAC_NUM_BYTES;
 const _ENCRYPTION_KEY_NUM_BYTES = 32;
 const _MAC_KEY_NUM_BYTES = 32;
 
@@ -83,6 +84,12 @@ class BlocksDevCredentialsManager implements BlocksDevCredentialsInterface {
     }
 
     _splitEnvelope(envelope: Buffer): {iv: Buffer, cipherText: Buffer, mac: Buffer} {
+        if (envelope.length < _ENVELOPE_MIN_NUM_BYTES) {
+            throw new Error(
+                'Failed to get Block Developer Credentials Data: encrypted data is too short',
+            );
+        }
+
         const cipherTextStart = _IV_NUM_BYTES;
         const macStart = envelope.length - _MAC_NUM_BYTES;
 
