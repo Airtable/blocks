@@ -42,7 +42,7 @@ window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function ru
     var BlockWrapperComponent = window['${
         blockCliConfigSettings.GLOBAL_SDK_VARIABLE_NAME
     }'].__BlockWrapperComponent;
-    var EntryComponent = require('${frontendEntryModulePath}').default;
+    var EntryComponent = require(${JSON.stringify(frontendEntryModulePath)}).default;
 
     var isEntryReactComponent = EntryComponent && (
         EntryComponent.prototype instanceof React.Component ||
