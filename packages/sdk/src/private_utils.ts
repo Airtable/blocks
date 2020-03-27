@@ -185,7 +185,7 @@ const invertedEnumCache: WeakMap<object, object> = new WeakMap();
 /**
  * @hidden
  */
-function getInvertedEnumMemoized<K extends PropertyKey, V extends PropertyKey>(
+function getInvertedEnumMemoized<K extends string, V extends string>(
     enumObj: ObjectMap<K, V>,
 ): ObjectMap<V, K> {
     const existingInvertedEnum = invertedEnumCache.get(enumObj);
@@ -206,7 +206,7 @@ function getInvertedEnumMemoized<K extends PropertyKey, V extends PropertyKey>(
 /**
  * @hidden
  */
-export function getEnumValueIfExists<K extends PropertyKey, V extends PropertyKey>(
+export function getEnumValueIfExists<K extends string, V extends string>(
     enumObj: ObjectMap<K, V>,
     valueToCheck: string,
 ): V | null {
@@ -221,7 +221,7 @@ export function getEnumValueIfExists<K extends PropertyKey, V extends PropertyKe
 /**
  * @hidden
  */
-export function assertEnumValue<K extends PropertyKey, V extends PropertyKey>(
+export function assertEnumValue<K extends string, V extends string>(
     enumObj: ObjectMap<K, V>,
     valueToCheck: string,
 ): V {
@@ -305,7 +305,7 @@ export function flattenDeep<T>(array: ReadonlyDeepArray<T>): Array<T> {
 /**
  * @hidden
  */
-export function keyBy<Item, Key extends PropertyKey>(
+export function keyBy<Item, Key extends string>(
     array: ReadonlyArray<Item>,
     getKey: (arg1: Item) => Key,
 ): ObjectMap<Key, Item> {

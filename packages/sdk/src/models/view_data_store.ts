@@ -287,4 +287,5 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
     }
 }
 
+/** @internal */
 export default ViewDataStore;

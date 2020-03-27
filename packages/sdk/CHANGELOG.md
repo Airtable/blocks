@@ -33,6 +33,7 @@ commit that affects the code in a way that consumers might care about should inc
         -   `view.selectMetadataAsync`
         -   `record.selectLinkedRecordsFromCellAsync`
     -   **`record.name`** replaces `record.primaryCellValueAsString`.
+-   Fix some incorrectly redacted internal typescript types
 
 ## [0.0.44](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...@airtable/blocks@0.0.44) - 2020-03-27
 
