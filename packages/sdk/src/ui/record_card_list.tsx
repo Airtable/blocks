@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import {FixedSizeList} from 'react-window';
 import {compose} from '@styled-system/core';
-import {spawnInvariantViolationError, spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {RecordDef} from '../types/record';
 import Record from '../models/record';
 import Field from '../models/field';
@@ -141,9 +141,7 @@ function getScrollbarWidth() {
     scrollDiv.style.overflow = 'scroll';
 
     const body = document.body;
-    if (!body) {
-        throw spawnInvariantViolationError('no document body to measure scrollbar');
-    }
+    invariant(body, 'no document body to measure scrollbar');
     body.appendChild(scrollDiv);
     const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
     body.removeChild(scrollDiv);
@@ -315,9 +313,7 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
     }
     /** @hidden */
     componentDidMount() {
-        if (!this._container.current) {
-            throw spawnInvariantViolationError('No container to detect resize on');
-        }
+        invariant(this._container.current, 'No container to detect resize on');
         this._detectElementResize.addResizeListener(
             this._container.current,
             this._updateCardListSizeIfNeeded,
@@ -341,27 +337,23 @@ export class RecordCardList extends React.Component<RecordCardListProps, RecordC
     }
     /** @hidden */
     scrollToRecordAtIndex(recordIndex: number) {
-        if (!this._cardList.current) {
-            throw spawnInvariantViolationError('No card list to scroll');
-        }
+        invariant(this._cardList.current, 'No card list to scroll');
         this._cardList.current.scrollToItem(recordIndex);
     }
     /** @internal */
     _updateCardListSizeIfNeeded = () => {
-        if (!this._container.current) {
-            throw spawnInvariantViolationError('No container to update card list size');
-        }
+        invariant(this._container.current, 'No container to update card list size');
 
         const {
             width: cardListWidth,
             height: cardListHeight,
         } = this._container.current.getBoundingClientRect();
 
-        if (!this._cardListInnerWindow.current) {
-            throw spawnInvariantViolationError(
-                'No card list inner window to measure scroll height',
-            );
-        }
+        invariant(
+            this._cardListInnerWindow.current,
+            'No card list inner window to measure scroll height',
+        );
+
         const isScrollbarVisible = this._cardListInnerWindow.current.scrollHeight > cardListHeight;
 
         if (

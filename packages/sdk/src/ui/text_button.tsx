@@ -126,7 +126,7 @@ interface TextButtonProps
     /** Indicates whether or not the user can interact with the button. */
     disabled?: boolean;
     /** The contents of the button. */
-    children: React.ReactNode | string;
+    children?: React.ReactNode | string;
     /** Click event handler. Also handles Space and Enter keypress events. */
     onClick?: (
         e: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>,
@@ -194,6 +194,15 @@ const TextButton = (props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) => 
         },
         styleParser,
     );
+    const hasIcon = icon !== undefined;
+    const hasChildren = !!children;
+
+    if (!hasChildren && !ariaLabel) {
+        // eslint-disable-next-line no-console
+        console.error(
+            '<TextButton> without a text label should include an explicit aria-label prop.',
+        );
+    }
 
     /** @internal */
     function _onKeyDown(e: React.KeyboardEvent<HTMLSpanElement>) {
@@ -243,13 +252,15 @@ const TextButton = (props: TextButtonProps, ref: React.Ref<HTMLSpanElement>) => 
             ) : (
                 icon
             )}
-            <Box
-                as="span"
-                marginLeft={icon !== undefined ? '0.5em' : undefined}
-                className={cssHelpers.TRUNCATE}
-            >
-                {children}
-            </Box>
+            {hasChildren && (
+                <Box
+                    as="span"
+                    marginLeft={hasIcon ? '0.5em' : undefined}
+                    className={cssHelpers.TRUNCATE}
+                >
+                    {children}
+                </Box>
+            )}
         </span>
     );
 };

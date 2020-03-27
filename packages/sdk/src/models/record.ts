@@ -6,7 +6,7 @@ import {RecordData} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';
 import Field from './field';
@@ -84,9 +84,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             return null;
         }
         const recordsById = tableData.recordsById;
-        if (!recordsById) {
-            throw spawnInvariantViolationError('Record data is not loaded');
-        }
+        invariant(recordsById, 'Record data is not loaded');
         return recordsById[this._id] ?? null;
     }
     /**
@@ -129,9 +127,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): unknown {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        if (!this._parentRecordStore.areCellValuesLoadedForFieldId(field.id)) {
-            throw spawnInvariantViolationError('Cell values for field %s are not loaded', field.id);
-        }
+
+        invariant(
+            this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
+            'Cell values for field %s are not loaded',
+            field.id,
+        );
+
         const {cellValuesByFieldId} = this._data;
         if (!cellValuesByFieldId) {
             return null;
@@ -151,17 +153,16 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
                 cellValueForMigration.valuesByLinkedRecordId = cloneDeep(
                     (cellValue as any).valuesByLinkedRecordId,
                 );
-                if (!Array.isArray((cellValue as any).linkedRecordIds)) {
-                    throw spawnInvariantViolationError('linkedRecordIds');
-                }
+                invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
                 for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
-                    if (!(typeof linkedRecordId === 'string')) {
-                        throw spawnInvariantViolationError('linkedRecordId');
-                    }
+                    invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
                     const {valuesByLinkedRecordId} = cellValue as any;
-                    if (!(valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object')) {
-                        throw spawnInvariantViolationError('valuesByLinkedRecordId');
-                    }
+
+                    invariant(
+                        valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
+                        'valuesByLinkedRecordId',
+                    );
+
                     const value = valuesByLinkedRecordId[linkedRecordId];
                     if (Array.isArray(value)) {
                         for (const v of value) {
@@ -192,9 +193,13 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      */
     getCellValueAsString(fieldOrFieldIdOrFieldName: Field | FieldId | string): string {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        if (!this._parentRecordStore.areCellValuesLoadedForFieldId(field.id)) {
-            throw spawnInvariantViolationError('Cell values for field %s are not loaded', field.id);
-        }
+
+        invariant(
+            this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
+            'Cell values for field %s are not loaded',
+            field.id,
+        );
+
         const cellValue = this.getCellValue(field.id);
 
         if (cellValue === null || cellValue === undefined) {

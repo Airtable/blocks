@@ -1,7 +1,7 @@
 /** @hidden */ /** */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import Table from '../models/table';
 import View from '../models/view';
 import Field from '../models/field';
@@ -39,11 +39,8 @@ function ModelPickerSelect<Model extends AnyModel>(
     useWatchable(models as any, modelKeysToWatch);
 
     function _onChange(value: SelectOptionValue) {
-        if (value === null || typeof value === 'string') {
-            onChange(value);
-        } else {
-            throw spawnInvariantViolationError('value must be null or model id');
-        }
+        invariant(value === null || typeof value === 'string', 'value must be null or model id');
+        onChange(value);
     }
 
     const options = [

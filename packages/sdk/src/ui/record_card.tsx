@@ -13,7 +13,7 @@ import {
     FlowAnyObject,
     has,
 } from '../private_utils';
-import {spawnInvariantViolationError, spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {AttachmentData} from '../types/attachment';
 import {FieldType} from '../types/field';
 import {RecordDef} from '../types/record';
@@ -166,15 +166,11 @@ const getFieldResultType = (field: Field): string => {
         return FieldType.NUMBER;
     }
     if (isFieldFormulaic(field)) {
-        if (!field.options) {
-            throw spawnInvariantViolationError('options');
-        }
+        invariant(field.options, 'options');
         const result = field.options.result;
         if (typeof result === 'object' && result) {
             const resultType = (result as any).type;
-            if (!(typeof resultType === 'string')) {
-                throw spawnInvariantViolationError('resultType must be string');
-            }
+            invariant(typeof resultType === 'string', 'resultType must be string');
             return resultType;
         } else {
             return FieldType.SINGLE_LINE_TEXT;
@@ -475,9 +471,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         fieldsToUse: Array<Field>,
     ): Array<React.ReactElement<React.ComponentProps<typeof CellValueAndFieldLabel>>> {
         const {record, width} = this.props;
-        if (!(typeof width === 'number')) {
-            throw spawnInvariantViolationError('width in defaultProps');
-        }
+        invariant(typeof width === 'number', 'width in defaultProps');
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
         const widthAndFieldIdArray = this._getWidthAndFieldIdArray(cellContainerWidth, fieldsToUse);
@@ -529,9 +523,8 @@ export class RecordCard extends React.Component<RecordCardProps> {
             className,
         );
 
-        if (!(typeof height === 'number')) {
-            throw spawnInvariantViolationError('height in defaultProps');
-        }
+        invariant(typeof height === 'number', 'height in defaultProps');
+
         const attachmentSize = hasAttachment ? height : 0;
 
         let primaryValue;

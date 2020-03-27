@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: expandRecordPickerAsync */ /** */
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
 import Record from '../models/record';
 import Field from '../models/field';
@@ -56,20 +56,19 @@ async function expandRecordPickerAsync(
     const tableId = records[0].parentTable.id;
 
     const recordIds = records.map(record => {
-        if (!(record.parentTable.id === tableId)) {
-            throw spawnInvariantViolationError('all records must belong to the same table');
-        }
+        invariant(record.parentTable.id === tableId, 'all records must belong to the same table');
+
         return record.id;
     });
 
     const fieldIds =
         opts && opts.fields
             ? opts.fields.map(field => {
-                  if (!(field.parentTable.id === tableId)) {
-                      throw spawnInvariantViolationError(
-                          'all fields must belong to the same table',
-                      );
-                  }
+                  invariant(
+                      field.parentTable.id === tableId,
+                      'all fields must belong to the same table',
+                  );
+
                   return field.id;
               })
             : null;

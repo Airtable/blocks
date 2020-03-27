@@ -1,7 +1,12 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.43",
+    "version": "0.0.44",
     "description": "Airtable Blocks SDK",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Airtable/blocks.git"
+    },
+    "homepage": "https://airtable.com/developers/blocks",
     "main": "dist/cjs/index.js",
     "types": "index.d.ts",
     "files": [
@@ -126,10 +131,10 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
-            "after:release": "../../tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version}"
+            "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version})"
         },
         "npm": {
-            "access": "restricted"
+            "access": "public"
         }
     }
 }

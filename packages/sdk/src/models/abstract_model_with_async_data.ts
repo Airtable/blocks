@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {BaseData} from '../types/base';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';
-import {spawnInvariantViolationError, spawnAbstractMethodError} from '../error_utils';
+import {invariant, spawnAbstractMethodError} from '../error_utils';
 import AbstractModel from './abstract_model';
 
 /**
@@ -137,11 +137,11 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
         }
         if (this._dataRetainCount === 0) {
             this._unloadDataTimeoutId = setTimeout(() => {
-                if (!(this._dataRetainCount === 0)) {
-                    throw spawnInvariantViolationError(
-                        'Unload data timeout fired with non-zero retain count',
-                    );
-                }
+                invariant(
+                    this._dataRetainCount === 0,
+                    'Unload data timeout fired with non-zero retain count',
+                );
+
                 this._isDataLoaded = false;
                 this._unloadData();
                 this._onChangeIsDataLoaded();

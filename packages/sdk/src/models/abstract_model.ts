@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Abstract models */ /** */
-import {spawnInvariantViolationError, spawnAbstractMethodError, spawnError} from '../error_utils';
+import {invariant, spawnAbstractMethodError, spawnError} from '../error_utils';
 import {BaseData} from '../types/base';
 import Watchable from '../watchable';
 
@@ -25,12 +25,11 @@ class AbstractModel<DataType, WatchableKey extends string> extends Watchable<Wat
     constructor(baseData: BaseData, modelId: string) {
         super();
 
-        if (!(typeof modelId === 'string')) {
-            throw spawnInvariantViolationError(
-                '%s id should be a string',
-                (this.constructor as typeof AbstractModel)._className,
-            );
-        }
+        invariant(
+            typeof modelId === 'string',
+            '%s id should be a string',
+            (this.constructor as typeof AbstractModel)._className,
+        );
 
         this._baseData = baseData;
         this._id = modelId;

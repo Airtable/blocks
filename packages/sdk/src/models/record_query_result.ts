@@ -18,7 +18,7 @@ import {
     spawnAbstractMethodError,
     spawnUnknownSwitchCaseError,
     spawnError,
-    spawnInvariantViolationError,
+    invariant,
 } from '../error_utils';
 import Watchable from '../watchable';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
@@ -360,9 +360,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
 
         let fieldIdsOrNullIfAllFields = null;
         if (opts.fields) {
-            if (!Array.isArray(opts.fields)) {
-                throw spawnInvariantViolationError('Must specify an array of fields');
-            }
+            invariant(Array.isArray(opts.fields), 'Must specify an array of fields');
             fieldIdsOrNullIfAllFields = [];
             for (const fieldOrFieldIdOrFieldName of opts.fields) {
                 if (!fieldOrFieldIdOrFieldName) {
@@ -387,36 +385,34 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
             case RecordColorModeTypes.NONE:
                 break;
             case RecordColorModeTypes.BY_SELECT_FIELD:
-                if (!(recordColorMode.selectField.type === FieldType.SINGLE_SELECT)) {
-                    throw spawnInvariantViolationError(
-                        'Invalid field for coloring records by select field: expected a %s, but got a %s',
-                        FieldType.SINGLE_SELECT,
-                        recordColorMode.selectField.type,
-                    );
-                }
-                if (!(recordColorMode.selectField.parentTable === table)) {
-                    throw spawnInvariantViolationError(
-                        'Invalid field for coloring records by select field: the single select field is not in the same table as the records',
-                    );
-                }
+                invariant(
+                    recordColorMode.selectField.type === FieldType.SINGLE_SELECT,
+                    'Invalid field for coloring records by select field: expected a %s, but got a %s',
+                    FieldType.SINGLE_SELECT,
+                    recordColorMode.selectField.type,
+                );
+
+                invariant(
+                    recordColorMode.selectField.parentTable === table,
+                    'Invalid field for coloring records by select field: the single select field is not in the same table as the records',
+                );
+
                 if (fieldIdsOrNullIfAllFields) {
                     fieldIdsOrNullIfAllFields.push(recordColorMode.selectField.id);
                 }
                 break;
             case RecordColorModeTypes.BY_VIEW:
-                if (!(recordColorMode.view.parentTable === table)) {
-                    throw spawnInvariantViolationError(
-                        'Invalid view for coloring records from view: the view is not in the same table as the records',
-                    );
-                }
+                invariant(
+                    recordColorMode.view.parentTable === table,
+                    'Invalid view for coloring records from view: the view is not in the same table as the records',
+                );
+
                 break;
             default:
                 throw spawnError('Unknown record coloring mode: %s', cast<never>(recordColorMode));
         }
 
-        if (!(table.id === recordStore.tableId)) {
-            throw spawnInvariantViolationError('record store and table must match');
-        }
+        invariant(table.id === recordStore.tableId, 'record store and table must match');
 
         return {
             sorts,
@@ -458,9 +454,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     get records(): Array<Record> {
         return this.recordIds.map(recordId => {
             const record = this._recordStore.getRecordByIdIfExists(recordId);
-            if (!record) {
-                throw spawnInvariantViolationError('Record missing in table');
-            }
+            invariant(record, 'Record missing in table');
             return record;
         });
     }
@@ -687,9 +681,7 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     _unwatchRecordColors() {
         const recordColorMode = this._normalizedOpts.recordColorMode;
         const handler = this._recordColorChangeHandler;
-        if (!handler) {
-            throw spawnInvariantViolationError('record color change handler must exist');
-        }
+        invariant(handler, 'record color change handler must exist');
 
         switch (recordColorMode.type) {
             case RecordColorModeTypes.NONE:

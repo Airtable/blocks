@@ -2,7 +2,7 @@
 import {ViewportSizeConstraint} from './types/viewport';
 import Watchable from './watchable';
 import {isEnumValue, debounce, ObjectValues, FlowAnyFunction, FlowAnyObject} from './private_utils';
-import {spawnInvariantViolationError} from './error_utils';
+import {invariant} from './error_utils';
 import {AirtableInterface} from './injected/airtable_interface';
 
 const WatchableViewportKeys = Object.freeze({
@@ -163,9 +163,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
         this._onChange(WatchableViewportKeys.maxFullscreenSize);
 
         return () => {
-            if (!this._maxFullscreenSizes.has(size)) {
-                throw spawnInvariantViolationError('UnsetFn can only be called once');
-            }
+            invariant(this._maxFullscreenSizes.has(size), 'UnsetFn can only be called once');
             this._cachedMaxFullscreenSize = null;
             this._maxFullscreenSizes.delete(size);
             this._onChange(WatchableViewportKeys.maxFullscreenSize);
@@ -224,9 +222,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
         }
 
         return () => {
-            if (!this._minSizes.has(size)) {
-                throw spawnInvariantViolationError('UnsetFn can only be called once');
-            }
+            invariant(this._minSizes.has(size), 'UnsetFn can only be called once');
             this._cachedMinSize = null;
             this._cachedMaxFullscreenSize = null;
             this._minSizes.delete(size);

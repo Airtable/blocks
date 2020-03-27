@@ -1,5 +1,5 @@
 /** @hidden */ /** */
-import {spawnInvariantViolationError, spawnError} from '../error_utils';
+import {invariant, spawnError} from '../error_utils';
 import {TimeoutId} from '../private_utils';
 
 interface ObjectPoolOptions<T, Opts> {
@@ -44,13 +44,9 @@ class ObjectPool<T, Opts> {
     unregisterObjectForReuseStrong(object: T) {
         const objectKey = this._getKeyFromObject(object);
         const pooledObjects = this._objectsByKey[objectKey];
-        if (!pooledObjects) {
-            throw spawnInvariantViolationError('pooledObjects');
-        }
+        invariant(pooledObjects, 'pooledObjects');
         const index = pooledObjects.indexOf(object);
-        if (!(index !== -1)) {
-            throw spawnInvariantViolationError('object not registered');
-        }
+        invariant(index !== -1, 'object not registered');
         pooledObjects.splice(index, 1);
         if (pooledObjects.length === 0) {
             this._objectsByKey[objectKey] = undefined;

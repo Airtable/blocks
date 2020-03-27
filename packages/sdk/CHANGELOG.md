@@ -9,9 +9,17 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...HEAD)
 
 No changes.
+
+## [0.0.44](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...@airtable/blocks@0.0.44) - 2020-03-27
+
+-   `TextButton` now supports including an icon without a label.
+-   Properly export the `useSynced` hook.
+-   Errors now output model names instead of IDs when available.
+-   Fix a positioning bug with `SelectButtons` where unwanted empty space could appear when the
+    component is used in a scrollable list.
 
 ## [0.0.43](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.42...@airtable/blocks@0.0.43) - 2020-02-28
 

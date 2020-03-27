@@ -1,6 +1,6 @@
 /** @hidden */ /** */
 import * as React from 'react';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
 import {globalAlert} from './ui';
 import {baymax} from './baymax_utils';
@@ -45,9 +45,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
     /** @internal */
     _checkMinSizeConstraintUnchangedAfterRender() {
         const prevMinSize = this._minSizeBeforeRender;
-        if (!prevMinSize) {
-            throw spawnInvariantViolationError('prevMinSize must be set');
-        }
+        invariant(prevMinSize, 'prevMinSize must be set');
         const currentMinSize = getSdk().viewport.minSize;
         if (
             currentMinSize.width !== prevMinSize.width ||

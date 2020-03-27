@@ -4,7 +4,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import {compose} from '@styled-system/core';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
 import withStyledSystem from './with_styled_system';
 import {
@@ -112,9 +112,7 @@ export class Modal extends React.Component<ModalProps> {
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';
         container.style.position = 'fixed';
-        if (!document.body) {
-            throw spawnInvariantViolationError('no document body');
-        }
+        invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
         if (document.hasFocus()) {
@@ -124,9 +122,7 @@ export class Modal extends React.Component<ModalProps> {
     }
     /** @hidden */
     componentWillUnmount() {
-        if (!document.body) {
-            throw spawnInvariantViolationError('no document body');
-        }
+        invariant(document.body, 'no document body');
         document.body.removeChild(this._container);
         if (this._originalActiveElement !== null) {
             (this._originalActiveElement as HTMLElement).focus();

@@ -11,7 +11,7 @@ import {
     cast,
     keys as objectKeys,
 } from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {BaseData} from '../types/base';
 import {TableId, TableData} from '../types/table';
 import {FieldId} from '../types/field';
@@ -85,9 +85,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         if (this._viewDataStoresByViewId[viewId]) {
             return this._viewDataStoresByViewId[viewId];
         }
-        if (!this._data.viewsById[viewId]) {
-            throw spawnInvariantViolationError('view must exist');
-        }
+        invariant(this._data.viewsById[viewId], 'view must exist');
         const viewDataStore = new ViewDataStore(
             this._baseData,
             this,
@@ -153,14 +151,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
      */
     get records(): Array<Record> {
         const recordsById = this._data.recordsById;
-        if (!recordsById) {
-            throw spawnInvariantViolationError('Record metadata is not loaded');
-        }
+        invariant(recordsById, 'Record metadata is not loaded');
         const records = Object.keys(recordsById).map(recordId => {
             const record = this.getRecordByIdIfExists(recordId);
-            if (!record) {
-                throw spawnInvariantViolationError('record');
-            }
+            invariant(record, 'record');
             return record;
         });
         return records;
@@ -172,20 +166,14 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
      */
     get recordIds(): Array<string> {
         const recordsById = this._data.recordsById;
-        if (!recordsById) {
-            throw spawnInvariantViolationError('Record metadata is not loaded');
-        }
+        invariant(recordsById, 'Record metadata is not loaded');
         return Object.keys(recordsById);
     }
 
     getRecordByIdIfExists(recordId: string): Record | null {
         const recordsById = this._data.recordsById;
-        if (!recordsById) {
-            throw spawnInvariantViolationError('Record metadata is not loaded');
-        }
-        if (!(typeof recordId === 'string')) {
-            throw spawnInvariantViolationError('getRecordById expects a string');
-        }
+        invariant(recordsById, 'Record metadata is not loaded');
+        invariant(typeof recordId === 'string', 'getRecordById expects a string');
 
         if (!recordsById[recordId]) {
             return null;
@@ -294,12 +282,17 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 existingRecordsById[recordId] = newRecordObj;
             } else {
                 const existingRecordObj = existingRecordsById[recordId];
-                if (!(existingRecordObj.commentCount === newRecordObj.commentCount)) {
-                    throw spawnInvariantViolationError('comment count out of sync');
-                }
-                if (!(existingRecordObj.createdTime === newRecordObj.createdTime)) {
-                    throw spawnInvariantViolationError('created time out of sync');
-                }
+
+                invariant(
+                    existingRecordObj.commentCount === newRecordObj.commentCount,
+                    'comment count out of sync',
+                );
+
+                invariant(
+                    existingRecordObj.createdTime === newRecordObj.createdTime,
+                    'created time out of sync',
+                );
+
                 if (!existingRecordObj.cellValuesByFieldId) {
                     existingRecordObj.cellValuesByFieldId = {};
                 }
@@ -422,10 +415,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                 [RecordId, ChangedPathsForType<RecordData>]
             >) {
                 if (dirtyRecordPaths && dirtyRecordPaths._isDirty) {
+                    invariant(this._data.recordsById, 'No recordsById');
 
-                    if (!this._data.recordsById) {
-                        throw spawnInvariantViolationError('No recordsById');
-                    }
                     if (has(this._data.recordsById, recordId)) {
                         addedRecordIds.push(recordId);
                     } else {

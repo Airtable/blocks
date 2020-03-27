@@ -6,7 +6,7 @@ import {
     has,
     ObjectMap,
 } from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {BaseData, ModelChange} from '../types/base';
 import {FieldId} from '../types/field';
 import {ViewData, ViewId} from '../types/view';
@@ -76,9 +76,8 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
     }
 
     async _loadDataAsync(): Promise<Array<WatchableViewDataStoreKey>> {
-        if (!this._mostRecentTableLoadPromise) {
-            throw spawnInvariantViolationError('No table load promise');
-        }
+        invariant(this._mostRecentTableLoadPromise, 'No table load promise');
+
         const tableLoadPromise = this._mostRecentTableLoadPromise;
 
         const [viewData] = await Promise.all([
@@ -176,9 +175,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      */
     get visibleRecordIds(): Array<RecordId> {
         const visibleRecordIds = this._data.visibleRecordIds;
-        if (!visibleRecordIds) {
-            throw spawnInvariantViolationError('View data is not loaded');
-        }
+        invariant(visibleRecordIds, 'View data is not loaded');
 
         if (!Object.isFrozen(visibleRecordIds)) {
             Object.freeze(visibleRecordIds);
@@ -193,20 +190,14 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      * filtered in and out of this view.
      */
     get visibleRecords(): Array<Record> {
-        if (!this.parentRecordStore.isRecordMetadataLoaded) {
-            throw spawnInvariantViolationError('Table data is not loaded');
-        }
+        invariant(this.parentRecordStore.isRecordMetadataLoaded, 'Table data is not loaded');
 
         const visibleRecordIds = this._data.visibleRecordIds;
-        if (!visibleRecordIds) {
-            throw spawnInvariantViolationError('View data is not loaded');
-        }
+        invariant(visibleRecordIds, 'View data is not loaded');
 
         return visibleRecordIds.map(recordId => {
             const record = this.parentRecordStore.getRecordByIdIfExists(recordId);
-            if (!record) {
-                throw spawnInvariantViolationError('Record in view does not exist');
-            }
+            invariant(record, 'Record in view does not exist');
             return record;
         });
     }
@@ -218,9 +209,7 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
      * @param recordOrRecordId the record/record id to get the color for
      */
     getRecordColor(recordOrRecordId: RecordId | Record): Color | null {
-        if (!this.isDataLoaded) {
-            throw spawnInvariantViolationError('View data is not loaded');
-        }
+        invariant(this.isDataLoaded, 'View data is not loaded');
 
         const recordId =
             typeof recordOrRecordId === 'string' ? recordOrRecordId : recordOrRecordId.id;
@@ -230,17 +219,13 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
 
     get allFieldIds(): Array<FieldId> {
         const fieldOrder = this._data.fieldOrder;
-        if (!fieldOrder) {
-            throw spawnInvariantViolationError('View data is not loaded');
-        }
+        invariant(fieldOrder, 'View data is not loaded');
         return fieldOrder.fieldIds;
     }
 
     get visibleFieldIds(): Array<FieldId> {
         const fieldOrder = this._data.fieldOrder;
-        if (!fieldOrder) {
-            throw spawnInvariantViolationError('View data is not loaded');
-        }
+        invariant(fieldOrder, 'View data is not loaded');
         const {fieldIds} = fieldOrder;
         return fieldIds.slice(0, fieldOrder.visibleFieldCount);
     }

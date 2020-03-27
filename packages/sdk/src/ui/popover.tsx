@@ -4,7 +4,7 @@ import {cx} from 'emotion';
 import ReactDOM from 'react-dom';
 import * as React from 'react';
 import {values, ObjectValues, FlowAnyObject, FlowAnyFunction} from '../private_utils';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {baymax} from './baymax_utils';
 import createDetectElementResize from './create_detect_element_resize';
 import * as Geometry from './geometry/geometry';
@@ -196,9 +196,7 @@ class Popover extends React.Component<PopoverProps> {
         container.setAttribute('tabIndex', '0');
         container.style.zIndex = '99999';
         container.style.position = 'relative';
-        if (!document.body) {
-            throw spawnInvariantViolationError('no document body');
-        }
+        invariant(document.body, 'no document body');
         document.body.appendChild(container);
 
         window.addEventListener('scroll', this._refreshContainerAsync);
@@ -239,9 +237,7 @@ class Popover extends React.Component<PopoverProps> {
         }
 
         const anchor = this._anchor;
-        if (!(anchor instanceof Element)) {
-            throw spawnInvariantViolationError('No anchor');
-        }
+        invariant(anchor instanceof Element, 'No anchor');
         const anchorBoundingClientRect = anchor.getBoundingClientRect();
         const anchorRect = new Geometry.Rect(
             anchorBoundingClientRect.left,
@@ -394,9 +390,7 @@ class Popover extends React.Component<PopoverProps> {
 
         return new Promise(resolve => {
             const container = this._container;
-            if (!container) {
-                throw spawnInvariantViolationError('container must exist');
-            }
+            invariant(container, 'container must exist');
             ReactDOM.unstable_renderSubtreeIntoContainer(
                 this,
                 (

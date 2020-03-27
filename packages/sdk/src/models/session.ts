@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/models: Session */ /** */
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {BaseData, ModelChange} from '../types/base';
@@ -226,13 +226,10 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
         };
         for (const {path, value} of changes) {
             if (path[0] === 'permissionLevel') {
-                if (!(path.length === 1)) {
-                    throw spawnInvariantViolationError('cannot set within permissionLevel');
-                }
+                invariant(path.length === 1, 'cannot set within permissionLevel');
 
-                if (!(typeof value === 'string')) {
-                    throw spawnInvariantViolationError('permissionLevel must be a string');
-                }
+                invariant(typeof value === 'string', 'permissionLevel must be a string');
+
                 this._sessionData.permissionLevel = value as any;
                 changedKeys[WatchableSessionKeys.permissionLevel] = true;
             }

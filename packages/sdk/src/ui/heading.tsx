@@ -2,7 +2,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {cx} from 'emotion';
-import {spawnInvariantViolationError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {
     has,
     createEnum,
@@ -71,9 +71,7 @@ function useHeadingStyle(headingSizeProp: HeadingSizeProp, variant: HeadingVaria
         const responsiveSizePropObject = {} as ObjectMap<ResponsiveKey, HeadingSize>;
         for (const sizeKey of keys(headingSizeProp)) {
             const sizeProp = headingSizeProp[sizeKey];
-            if (!sizeProp) {
-                throw spawnInvariantViolationError('sizeProp');
-            }
+            invariant(sizeProp, 'sizeProp');
 
             warnIfHeadingSizeOutOfRangeForVariant(sizeProp, variant, headingSizesForVariant);
             responsiveSizePropObject[sizeKey] = sizeProp || HeadingSize.default;
