@@ -11,7 +11,14 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...HEAD)
 
-No changes.
+-   Add the following APIs to match the new scripting block:
+    -   **Convenience model getters.** These are useful when you're working on a block for a
+        specific base, but best-practice for more generic blocks is to prefer the existing
+        `ById`/`ByName` methods.
+        -   `base.getCollaboratorIfExists`
+        -   `base.getCollaborator`
+        -   `base.getTableIfExists`
+        -   `base.getTable`
 
 ## [0.0.44](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...@airtable/blocks@0.0.44) - 2020-03-27
 
