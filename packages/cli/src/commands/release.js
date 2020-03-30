@@ -158,6 +158,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         typeof enableDeprecatedAbsolutePathImport === 'boolean',
         'expects enableDeprecatedAbsolutePathImport to be a boolean',
     );
+    const enableIsolatedBuild = !(argv.disableIsolatedBuild || false);
     const apiClientResult = await ApiClient.constructApiClientForRemoteAsync(remoteName);
     if (apiClientResult.err) {
         throw apiClientResult.err;
@@ -173,6 +174,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
     const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
         blockJson,
         enableDeprecatedAbsolutePathImport,
+        enableIsolatedBuild,
         backendSdkBaseUrl,
     });
 

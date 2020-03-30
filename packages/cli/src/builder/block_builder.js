@@ -76,6 +76,7 @@ class BlockBuilder {
     _buildTypeMode: BlockBuildType;
     _blockJson: BlockJson;
     _enableDeprecatedAbsolutePathImport: boolean;
+    _enableIsolatedBuild: boolean;
     _shouldTranspileForAllBrowsers: boolean;
     _blockDirPath: DirectoryPath;
     _baseOutputBuildDirPath: string;
@@ -93,18 +94,27 @@ class BlockBuilder {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
         enableDeprecatedAbsolutePathImport: boolean,
+        enableIsolatedBuild: boolean,
         transpileForAllBrowsers?: boolean,
         backendSdkBaseUrl?: string | null,
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
+        this._enableIsolatedBuild = args.enableIsolatedBuild;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._blockDirPath = getBlockDirPath();
 
         this._initialBuildResolveIfExists = null;
         this._browserifyCache = {};
+
+        if (this._enableIsolatedBuild) {
+            invariant(
+                this._buildTypeMode === BlockBuildTypes.RELEASE,
+                'isolated builds are only supported in release',
+            );
+        }
 
         this._setupBuildOutputDirPaths();
         this._setupBlockBuilderJobQueue();
@@ -125,6 +135,8 @@ class BlockBuilder {
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.DEVELOPMENT,
             enableDeprecatedAbsolutePathImport,
+            // development builds are never isolated:
+            enableIsolatedBuild: false,
             blockJson,
             transpileForAllBrowsers,
         });
@@ -132,15 +144,21 @@ class BlockBuilder {
     static async createReleaseBlockBuilderAsync(args: {
         blockJson: BlockJson,
         enableDeprecatedAbsolutePathImport: boolean,
+        enableIsolatedBuild: boolean,
         backendSdkBaseUrl: string | null,
     }): Promise<BlockBuilder> {
-        const {blockJson, enableDeprecatedAbsolutePathImport, backendSdkBaseUrl} = args;
+        const {
+            blockJson,
+            enableDeprecatedAbsolutePathImport,
+            enableIsolatedBuild,
+            backendSdkBaseUrl,
+        } = args;
 
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
             blockJson,
             enableDeprecatedAbsolutePathImport,
-            transpileForAllBrowsers: true,
+            enableIsolatedBuild,
             backendSdkBaseUrl,
         });
     }
@@ -188,33 +206,22 @@ class BlockBuilder {
     }
     get outputNodeModulesDirPath(): DirectoryPath {
         return path.join(
-            this._buildTypeMode === BlockBuildTypes.DEVELOPMENT
-                ? this._blockDirPath
-                : this._outputUserTranspiledDirPath,
+            this._enableIsolatedBuild ? this._outputUserTranspiledDirPath : this._blockDirPath,
             'node_modules',
         );
     }
     _setupBuildOutputDirPaths(): void {
-        switch (this._buildTypeMode) {
-            case BlockBuildTypes.DEVELOPMENT:
-                this._baseOutputBuildDirPath = path.join(
-                    this._blockDirPath,
-                    blockCliConfigSettings.BUILD_DIR,
-                    this._buildTypeMode.toLowerCase(),
-                );
-                break;
-
-            case BlockBuildTypes.RELEASE:
-                this._baseOutputBuildDirPath = path.join(
-                    blockCliConfigSettings.TEMP_DIR_PATH,
-                    blockCliConfigSettings.BUILD_DIR,
-                    new Date().getTime().toString(),
-                );
-                break;
-
-            default:
-                throw new Error(`unrecognized buildTypeMode: ${this._buildTypeMode}`);
-        }
+        this._baseOutputBuildDirPath = this._enableIsolatedBuild
+            ? path.join(
+                  blockCliConfigSettings.TEMP_DIR_PATH,
+                  blockCliConfigSettings.BUILD_DIR,
+                  new Date().getTime().toString(),
+              )
+            : path.join(
+                  this._blockDirPath,
+                  blockCliConfigSettings.BUILD_DIR,
+                  this._buildTypeMode.toLowerCase(),
+              );
 
         this._outputTranspiledDirPath = path.join(this._baseOutputBuildDirPath, 'transpiled');
         this._outputUserTranspiledDirPath = path.join(this._outputTranspiledDirPath, 'user');
@@ -826,29 +833,31 @@ class BlockBuilder {
         }
         await this._cleanAndPrepareBuildAsync();
 
-        // 1. Manually copy the package.json file even though BlockBuilderJobQueue will also copy it
-        //    over during the initial scanning and bundling of the directory. This is because we
-        //    need to install the node_modules folder before transpiling, and the BlockBuilderJobQueue
-        //    does not handle installing node_modules.
-        if (!(await this._copyFileAsync('package.json'))) {
-            return {err: new Error('package.json does not exist!')};
-        }
+        if (this._enableIsolatedBuild) {
+            // 1. Manually copy the package.json file even though BlockBuilderJobQueue will also copy it
+            //    over during the initial scanning and bundling of the directory. This is because we
+            //    need to install the node_modules folder before transpiling, and the BlockBuilderJobQueue
+            //    does not handle installing node_modules.
+            if (!(await this._copyFileAsync('package.json'))) {
+                return {err: new Error('package.json does not exist!')};
+            }
 
-        // 1b. Copy the package-lock.json file so that we can use npm ci and avoid upgrading
-        // dependencies between block run and block release
-        if (!(await this._copyFileAsync('package-lock.json'))) {
-            return {err: new Error('package-lock.json does not exist!')};
-        }
+            // 1b. Copy the package-lock.json file so that we can use npm ci and avoid upgrading
+            // dependencies between block run and block release
+            if (!(await this._copyFileAsync('package-lock.json'))) {
+                return {err: new Error('package-lock.json does not exist!')};
+            }
 
-        // 2. Install node modules in the output transpiled directory
-        console.log('installing node modules');
-        const npmCIResult = await this._npmCIAsync(this._outputUserTranspiledDirPath);
-        if (npmCIResult.err) {
-            return npmCIResult;
+            // 2. Install node modules in the output transpiled directory
+            console.log('installing node modules');
+            const npmCIResult = await this._npmCIAsync(this._outputUserTranspiledDirPath);
+            if (npmCIResult.err) {
+                return npmCIResult;
+            }
+            // Write fake stub module for legacy imports after npm install so that it isn't deleted
+            // because it isn't included in package.json
+            await this._writeLegacyAirtableBlockModuleAsync();
         }
-        // Write fake stub module for legacy imports after npm install so that it isn't deleted
-        // because it isn't included in package.json
-        await this._writeLegacyAirtableBlockModuleAsync();
 
         // 3. Starting chokidar will recursively scan the entire user's block directory and queue
         //    the files for transpilation and bundling.

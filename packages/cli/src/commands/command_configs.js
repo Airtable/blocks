@@ -130,6 +130,13 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: false,
                 hidden: true, // hide from --help output
             },
+            'disable-isolated-build': {
+                description:
+                    'Rather than creating a tmp folder and running the build (including a fresh npm install there), instead build directly from the current directory like block run does',
+                type: 'boolean',
+                default: false,
+                hidden: true, // hide from --help output
+            },
         },
         runCommandAsync: commandRunner(CommandNames.RELEASE),
     },
