@@ -110,7 +110,7 @@ module.exports = {
         'no-with': 'error',
         'one-var-declaration-per-line': 'error',
         'prefer-spread': 'error',
-        quotes: ['error', 'single', 'avoid-escape'],
+        quotes: 'off',
         radix: 'error',
         'require-yield': 'off',
         yoda: 'error',

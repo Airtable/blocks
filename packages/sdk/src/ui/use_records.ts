@@ -158,7 +158,7 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  *      return (
  *          <ul>
  *              {records.map(record => {
- *                  return <li key={record.id}>{record.primaryCellValueAsString}</li>
+ *                  return <li key={record.id}>{record.name}</li>
  *              })}
  *          </ul>
  *      );
@@ -219,7 +219,7 @@ export function useRecordById(queryResult: AnyQueryResult, recordId: RecordId): 
  *  // this component concerns a single record - it only updates when that specific record updates
  *  function RecordListItem({table, recordId}) {
  *      const record = useRecordById(table, recordId);
- *      return <li>{record.primaryCellValueAsString}</li>;
+ *      return <li>{record.name}</li>;
  *  }
  *
  *  // this component renders a list of records, but doesn't update when their cell values change -

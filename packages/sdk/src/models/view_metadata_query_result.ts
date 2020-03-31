@@ -98,7 +98,7 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
     /** @internal */
     readonly _viewDataStore: ViewDataStore;
 
-    /** @hidden */
+    /** @internal */
     constructor(baseData: BaseData, parentView: View, viewDataStore: ViewDataStore) {
         super(baseData, getLocallyUniqueId('ViewMetadataQueryResult'));
         this.parentView = parentView;

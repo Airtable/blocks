@@ -9,7 +9,7 @@ import {ResponsivePropObject} from './types';
  *
  * @internal
  */
-export default function getStylePropsForResponsiveProp<T extends PropertyKey>(
+export default function getStylePropsForResponsiveProp<T extends string>(
     responsivePropObject: ResponsivePropObject<T>,
     scale: ObjectMap<T, {[styleProp: string]: unknown} | null | undefined>,
 ): Partial<AllStylesProps> {

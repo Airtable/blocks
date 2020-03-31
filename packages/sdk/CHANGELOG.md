@@ -9,9 +9,35 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.45...HEAD)
 
 No changes.
+
+## [0.0.45](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...@airtable/blocks@0.0.45) - 2020-03-31
+
+-   **DEPRECATED:** `record.primaryCellValue` and `record.primaryCellValueAsString`.
+    -   The `primaryCellValue` watch key on `record` is also deprecated - use the `name` watch key
+        instead.
+-   Add the following APIs to match the new scripting block:
+    -   **Convenience model getters.** These are useful when you're working on a block for a
+        specific base, but best-practice for more generic blocks is to prefer the existing
+        `ById`/`ByName` methods.
+        -   `base.getCollaboratorIfExists`
+        -   `base.getCollaborator`
+        -   `base.getTableIfExists`
+        -   `base.getTable`
+        -   `table.getFieldIdExists`
+        -   `table.getField`
+        -   `table.getViewIfExists`
+        -   `table.getView`
+    -   **Async `select` queries.** For creating UIs from a query, the best practice is still to use
+        `useRecords` etc. Directly querying data is useful for one-off data processing though.
+        -   `table.selectRecordsAsync`
+        -   `view.selectRecordsAsync`
+        -   `view.selectMetadataAsync`
+        -   `record.selectLinkedRecordsFromCellAsync`
+    -   **`record.name`** replaces `record.primaryCellValueAsString`.
+-   Fix some incorrectly redacted internal typescript types
 
 ## [0.0.44](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.43...@airtable/blocks@0.0.44) - 2020-03-27
 

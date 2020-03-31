@@ -69,7 +69,7 @@ export function invariant(
 export function spawnUnknownSwitchCaseError(
     valueDescription: string,
     providedValue: never,
-    key: PropertyKey,
+    key: string,
 ): Error {
     const providedValueKey = providedValue[key];
     const providedValueKeyString =

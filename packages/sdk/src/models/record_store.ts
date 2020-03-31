@@ -469,4 +469,5 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 }
 
+/** @internal */
 export default RecordStore;

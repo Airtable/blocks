@@ -117,7 +117,9 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      * Select records from the view. Returns a {@link RecordQueryResult}.
      *
      * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
-     * features of a QueryResult (e.g. `queryResult.getRecordById`)
+     * features of a QueryResult (e.g. `queryResult.getRecordById`). Record hooks handle
+     * loading/unloading and updating your UI automatically, but manually `select`ing records is
+     * useful for one-off data processing.
      *
      * @param opts Options for the query, such as sorts, fields, and record coloring. By
      * default, records will be coloured according to the view.
@@ -138,7 +140,7 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      *         <ul>
      *             {records.map(record => (
      *                 <li key={record.id}>
-     *                     {record.primaryCellValueAsString || 'Unnamed record'}
+     *                     {record.name || 'Unnamed record'}
      *                 </li>
      *             ))}
      *         </ul>
@@ -162,8 +164,40 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
         );
     }
     /**
+     * Select and load records from the view. Returns a {@link RecordQueryResult} promise where
+     * record data has been loaded.
+     *
+     * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
+     * features of a QueryResult (e.g. `queryResult.getRecordById`). Record hooks handle
+     * loading/unloading and updating your UI automatically, but manually `select`ing records is
+     * useful for one-off data processing.
+     *
+     * Once you've finished with your query, remember to call `queryResult.unloadData()`.
+     *
+     * @param opts Options for the query, such as sorts, fields, and record coloring. By
+     * default, records will be coloured according to the view.
+     * @example
+     * ```js
+     * async function getRecordCountAsync(view) {
+     *     const query = await view.selectRecordsAsync();
+     *     const recordCount = query.recordIds.length;
+     *     query.unloadData();
+     *     return recordCount;
+     * }
+     * ```
+     */
+    async selectRecordsAsync(opts: RecordQueryResultOpts = {}): Promise<TableOrViewQueryResult> {
+        const queryResult = this.selectRecords(opts);
+        await queryResult.loadDataAsync();
+        return queryResult;
+    }
+    /**
      * Select the field order and visible fields from the view. Returns a
      * {@link ViewMetadataQueryResult}.
+     *
+     * Consider using {@link useViewMetadata} instead if you're creating a React UI. The
+     * {@link useViewMetadata} hook handles loading/unloading and updating your UI automatically,
+     * but manually `select`ing data is useful for one-off data processing.
      *
      * @example
      * ```js
@@ -185,6 +219,36 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
      */
     selectMetadata(): ViewMetadataQueryResult {
         return ViewMetadataQueryResult.__createOrReuseQueryResult(this, this._viewDataStore);
+    }
+    /**
+     * Select and load the field order and visible fields from the view. Returns a
+     * {@link ViewMetadataQueryResult} promise where the metadata has already been loaded.
+     *
+     * Consider using {@link useViewMetadata} instead if you're creating a React UI. The
+     * {@link useViewMetadata} hook handles loading/unloading and updating your UI automatically,
+     * but manually `select`ing data is useful for one-off data processing.
+     *
+     * @example
+     * ```js
+     * async function loadMetadataForViewAsync(view) {
+     *     const viewMetadata = await view.selectMetadata();
+     *
+     *     console.log('Visible fields:');
+     *     console.log(viewMetadata.visibleFields.map(field => field.name));
+     *     // => ['Field 1', 'Field 2', 'Field 3']
+     *
+     *     console.log('All fields:');
+     *     console.log(viewMetadata.allFields.map(field => field.name));
+     *     // => ['Field 1', 'Field 2', 'Field 3', 'Hidden field 4']
+     *
+     *     viewMetadata.unloadData();
+     * }
+     * ```
+     */
+    async selectMetadataAsync(): Promise<ViewMetadataQueryResult> {
+        const queryResult = this.selectMetadata();
+        await queryResult.loadDataAsync();
+        return queryResult;
     }
 
     /**

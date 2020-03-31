@@ -1,194 +1,127 @@
+import mockProjectTrackerAirtableInterface from '../airtable_interface_mocks/project_tracker';
+import Base from '../../src/models/base';
 import Table from '../../src/models/table';
-import airtableInterface from '../../src/injected/airtable_interface';
-import {MutationTypes} from '../../src/types/mutations';
-import warning from '../../src/warning';
+import Field from '../../src/models/field';
+import View from '../../src/models/view';
 
-jest.mock('../../src/injected/airtable_interface', () => ({
-    aggregators: {
-        getAllAvailableAggregatorKeys() {
-            return [];
-        },
-    },
-    idGenerator: {
-        generateRecordId: () => 'recGeneratedMockId',
-    },
-}));
+jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
 
-let mockMutations: any;
-jest.mock('../../src/get_sdk', () => () => ({
-    __mutations: mockMutations,
-    runInfo: {
-        isDevelopment: true,
-    },
-}));
+describe('Base', () => {
+    let base: Base;
+    let table: Table;
+    beforeEach(() => {
+        base = new Base(
+            mockProjectTrackerAirtableInterface.sdkInitData.baseData as any,
+            mockProjectTrackerAirtableInterface as any,
+        );
+        table = base.getTableByName('Design projects');
+    });
 
-jest.mock('../../src/warning', () => jest.fn());
-
-describe('Table', () => {
-    describe('createRecordsAsync', () => {
-        const makeTable = () => {
-            const baseData = {
-                tablesById: {
-                    tblTest: {
-                        fieldsById: {
-                            fldTest1: {
-                                name: 'Field 1',
-                            },
-                            fldTest2: {
-                                name: 'Field 2',
-                            },
-                        },
-                    },
-                },
-            } as any;
-            const parentBase = {} as any;
-            const recordStore = {} as any;
-            const tableId = 'tblTest';
-
-            return new Table(baseData, parentBase, recordStore, tableId, airtableInterface);
-        };
-
-        beforeEach(() => {
-            (warning as jest.Mock).mockClear();
-            mockMutations = {
-                applyMutationAsync: jest.fn(),
-            };
+    describe('getFieldIfExists', () => {
+        it('returns field by id', () => {
+            const field1 = table.getFieldIfExists('fldXaTPfxIVhAUYde') as Field;
+            const field2 = table.getFieldIfExists('fld3DvZllJtyaNYpm') as Field;
+            expect(field1).toBeInstanceOf(Field);
+            expect(field1.id).toBe('fldXaTPfxIVhAUYde');
+            expect(field2).toBeInstanceOf(Field);
+            expect(field2.id).toBe('fld3DvZllJtyaNYpm');
         });
 
-        it('performs a mutation with no warning when passed an object with a `fields` key containing field names', async () => {
-            const table = makeTable();
-            await table.createRecordsAsync([
-                {
-                    fields: {
-                        'Field 1': 1,
-                        'Field 2': 2,
-                    },
-                },
-            ]);
-
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
-                    {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 1,
-                            fldTest2: 2,
-                        },
-                    },
-                ],
-            });
-
-            expect(warning).not.toHaveBeenCalled();
+        it('returns field by name', () => {
+            const field1 = table.getFieldIfExists('Category') as Field;
+            const field2 = table.getFieldIfExists('Complete') as Field;
+            expect(field1).toBeInstanceOf(Field);
+            expect(field1.id).toBe('fldRljtoVpOt1IDYH');
+            expect(field2).toBeInstanceOf(Field);
+            expect(field2.id).toBe('fldHOlUIpjmlYj549');
         });
 
-        it('performs a mutation with no warning when passed an object with a `fields` key containing field ids', async () => {
-            const table = makeTable();
-            await table.createRecordsAsync([
-                {
-                    fields: {
-                        fldTest1: 3,
-                        fldTest2: 4,
-                    },
-                },
-            ]);
+        it('returns null when field not found', () => {
+            expect(table.getFieldIfExists('fldHOlUIpjmlyFAKE')).toBe(null);
+            expect(table.getFieldIfExists('A made up field')).toBe(null);
+        });
+    });
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
-                    {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 3,
-                            fldTest2: 4,
-                        },
-                    },
-                ],
-            });
-
-            expect(warning).not.toHaveBeenCalled();
+    describe('getField', () => {
+        it('returns field by id', () => {
+            const field1 = table.getField('fldXaTPfxIVhAUYde');
+            const field2 = table.getField('fld3DvZllJtyaNYpm');
+            expect(field1).toBeInstanceOf(Field);
+            expect(field1.id).toBe('fldXaTPfxIVhAUYde');
+            expect(field2).toBeInstanceOf(Field);
+            expect(field2.id).toBe('fld3DvZllJtyaNYpm');
         });
 
-        it('performs a mutation with warning when passed an object of field names', async () => {
-            const table = makeTable();
-            await table.createRecordsAsync([
-                {
-                    'Field 1': 5,
-                    'Field 2': 6,
-                } as any, 
-            ]);
-
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
-                    {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 5,
-                            fldTest2: 6,
-                        },
-                    },
-                ],
-            });
-
-            expect(warning).toBeCalledTimes(1);
-            expect(warning).toHaveBeenCalledWith([
-                'Table.createRecordsAsync(): passing objects with field ids/names directly is deprecated and will be removed in a future version.',
-                'Pass field ids/names & values under the `fields` key instead:',
-                '',
-                'myTable.createRecordsAsync([{',
-                '    fields: {',
-                "        myField: 'A cell value',",
-                '    },',
-                '}]);',
-                '',
-                'See: https://airtable.com/developers/blocks/api/models/Table#createRecordsAsync',
-            ]);
+        it('returns field by name', () => {
+            const field1 = table.getField('Category');
+            const field2 = table.getField('Complete');
+            expect(field1).toBeInstanceOf(Field);
+            expect(field1.id).toBe('fldRljtoVpOt1IDYH');
+            expect(field2).toBeInstanceOf(Field);
+            expect(field2.id).toBe('fldHOlUIpjmlYj549');
         });
 
-        it('performs a mutation with warning when passed an object of field ids', async () => {
-            const table = makeTable();
-            await table.createRecordsAsync([
-                {
-                    fldTest1: 7,
-                    fldTest2: 8,
-                } as any, 
-            ]);
+        it('throws when field not found', () => {
+            expect(() => table.getField('fldHOlUIpjmlyFAKE')).toThrowErrorMatchingInlineSnapshot(
+                `"No field with ID or name 'fldHOlUIpjmlyFAKE' in table 'Design projects'"`,
+            );
+            expect(() => table.getField('A made up field')).toThrowErrorMatchingInlineSnapshot(
+                `"No field with ID or name 'A made up field' in table 'Design projects'"`,
+            );
+        });
+    });
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
-                    {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 7,
-                            fldTest2: 8,
-                        },
-                    },
-                ],
-            });
+    describe('getViewIfExists', () => {
+        it('returns view by id', () => {
+            const view1 = table.getViewIfExists('viwkNnS94RQAQQTMn') as View;
+            const view2 = table.getViewIfExists('viwqo8mFAqy2HYSCL') as View;
+            expect(view1).toBeInstanceOf(View);
+            expect(view1.id).toBe('viwkNnS94RQAQQTMn');
+            expect(view2).toBeInstanceOf(View);
+            expect(view2.id).toBe('viwqo8mFAqy2HYSCL');
+        });
 
-            expect(warning).toBeCalledTimes(1);
-            expect(warning).toHaveBeenCalledWith([
-                'Table.createRecordsAsync(): passing objects with field ids/names directly is deprecated and will be removed in a future version.',
-                'Pass field ids/names & values under the `fields` key instead:',
-                '',
-                'myTable.createRecordsAsync([{',
-                '    fields: {',
-                "        myField: 'A cell value',",
-                '    },',
-                '}]);',
-                '',
-                'See: https://airtable.com/developers/blocks/api/models/Table#createRecordsAsync',
-            ]);
+        it('returns view by name', () => {
+            const view1 = table.getViewIfExists('Completed projects') as View;
+            const view2 = table.getViewIfExists('Project calendar') as View;
+            expect(view1).toBeInstanceOf(View);
+            expect(view1.id).toBe('viw8v5XkLudbiCJfD');
+            expect(view2).toBeInstanceOf(View);
+            expect(view2.id).toBe('viwhz3PjFATSxaV5X');
+        });
+
+        it('returns null when view not found', () => {
+            expect(table.getViewIfExists('viwA4Tzw8IJchFAKE')).toBe(null);
+            expect(table.getViewIfExists('A made up view')).toBe(null);
+        });
+    });
+
+    describe('getView', () => {
+        it('returns view by id', () => {
+            const view1 = table.getView('viwA4Tzw8IJcHHgul');
+            const view2 = table.getView('viwkNnS94RQAQQTMn');
+            expect(view1).toBeInstanceOf(View);
+            expect(view1.id).toBe('viwA4Tzw8IJcHHgul');
+            expect(view2).toBeInstanceOf(View);
+            expect(view2.id).toBe('viwkNnS94RQAQQTMn');
+        });
+
+        it('returns view by name', () => {
+            const view1 = table.getView('Incomplete projects by leader');
+            const view2 = table.getView('Completed projects');
+            expect(view1).toBeInstanceOf(View);
+            expect(view1.id).toBe('viwqo8mFAqy2HYSCL');
+            expect(view2).toBeInstanceOf(View);
+            expect(view2.id).toBe('viw8v5XkLudbiCJfD');
+        });
+
+        it('throws when view not found', () => {
+            expect(() => table.getView('viwhz3PjFATSxFAKE')).toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'viwhz3PjFATSxFAKE' in table 'Design projects'"`,
+            );
+            expect(() => table.getView('A made up view')).toThrowErrorMatchingInlineSnapshot(
+                `"No view with ID or name 'A made up view' in table 'Design projects'"`,
+            );
         });
     });
 });

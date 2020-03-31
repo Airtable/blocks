@@ -263,6 +263,43 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return field;
     }
     /**
+     * The field matching the given ID or name. Returns `null` if no matching field exists within
+     * this table.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getFieldByIdIfExists} or
+     * {@link getFieldByNameIfExists} methods instead.
+     *
+     * @param fieldIdOrName The ID or name of the field you're looking for.
+     */
+    getFieldIfExists(fieldIdOrName: FieldId | string): Field | null {
+        return (
+            this.getFieldByIdIfExists(fieldIdOrName) ?? this.getFieldByNameIfExists(fieldIdOrName)
+        );
+    }
+    /**
+     * The field matching the given ID or name. Throws if no matching field exists within this table.
+     * Use {@link getFieldIfExists} instead if you are unsure whether a field exists with the given
+     * name/ID.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getFieldById} or {@link getFieldByName} methods
+     * instead.
+     *
+     * @param fieldIdOrName The ID or name of the field you're looking for.
+     */
+    getField(fieldIdOrName: FieldId | string): Field {
+        const field = this.getFieldIfExists(fieldIdOrName);
+        if (!field) {
+            throw spawnError(
+                "No field with ID or name '%s' in table '%s'",
+                fieldIdOrName,
+                this.name,
+            );
+        }
+        return field;
+    }
+    /**
      * The views in this table. Can be watched to know when views are created,
      * deleted, or reordered.
      *
@@ -374,10 +411,43 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         return view;
     }
     /**
+     * The view matching the given ID or name. Returns `null` if no matching view exists within
+     * this table.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getViewByIdIfExists} or
+     * {@link getViewByNameIfExists} methods instead.
+     *
+     * @param viewIdOrName The ID or name of the view you're looking for.
+     */
+    getViewIfExists(viewIdOrName: ViewId | string): View | null {
+        return this.getViewByIdIfExists(viewIdOrName) ?? this.getViewByNameIfExists(viewIdOrName);
+    }
+    /**
+     * The view matching the given ID or name. Throws if no matching view exists within this table.
+     * Use {@link getViewIfExists} instead if you are unsure whether a view exists with the given
+     * name/ID.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getViewById} or {@link getViewByName} methods
+     * instead.
+     *
+     * @param viewIdOrName The ID or name of the view you're looking for.
+     */
+    getView(viewIdOrName: ViewId | string): View {
+        const view = this.getViewIfExists(viewIdOrName);
+        if (!view) {
+            throw spawnError("No view with ID or name '%s' in table '%s'", viewIdOrName, this.name);
+        }
+        return view;
+    }
+    /**
      * Select records from the table. Returns a {@link RecordQueryResult}.
      *
      * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
-     * features of a QueryResult (e.g. `queryResult.getRecordById`)
+     * features of a QueryResult (e.g. `queryResult.getRecordById`). Record hooks handle
+     * loading/unloading and updating your UI automatically, but manually `select`ing records is
+     * useful for one-off data processing.
      *
      * @param opts Options for the query, such as sorts and fields.
      * @example
@@ -396,7 +466,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *         <ul>
      *             {records.map(record => (
      *                 <li key={record.id}>
-     *                     {record.primaryCellValueAsString || 'Unnamed record'}
+     *                     {record.name || 'Unnamed record'}
      *                 </li>
      *             ))}
      *         </ul>
@@ -411,7 +481,32 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             opts || {},
         );
     }
-
+    /**
+     * Select and load records from the table. Returns a {@link RecordQueryResult} promise where
+     * record data has been loaded.
+     *
+     * Consider using {@link useRecords} or {@link useRecordIds} instead, unless you need the
+     * features of a QueryResult (e.g. `queryResult.getRecordById`). Record hooks handle
+     * loading/unloading and updating your UI automatically, but manually `select`ing records is
+     * useful for one-off data processing.
+     *
+     * Once you've finished with your query, remember to call `queryResult.unloadData()`.
+     *
+     * @param opts Options for the query, such as sorts and fields.
+     * @example
+     * ```js
+     * async function logRecordCountAsync(table) {
+     *     const query = await table.selectRecordsAsync();
+     *     console.log(query.recordIds.length);
+     *     query.unloadData();
+     * }
+     * ```
+     */
+    async selectRecordsAsync(opts?: RecordQueryResultOpts): Promise<TableOrViewQueryResult> {
+        const queryResult = this.selectRecords(opts);
+        await queryResult.loadDataAsync();
+        return queryResult;
+    }
     /**
      * Returns the first view in the table where the type is one of `allowedViewTypes`, or `null` if
      * no such view exists in the table.

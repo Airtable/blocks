@@ -63,6 +63,8 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
     _airtableInterface: AirtableInterface;
     /** @internal */
     __billingPlanGrouping: string;
+    /** @internal */
+    _collaboratorIdsByNameAndEmail: Map<string, string> | null = null;
     /**
      * @internal
      */
@@ -155,6 +157,59 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         return collaborator;
     }
     /**
+     * The user matching the given ID, name, or email address. Returns null if that user does not
+     * exist or does not have access to this base.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getCollaboratorByIdIfExists} method instead.
+     *
+     * @param collaboratorIdOrNameOrEmail The ID of the user.
+     */
+    getCollaboratorIfExists(idOrNameOrEmail: UserId | string): CollaboratorData | null {
+        const collaboratorById = this.getCollaboratorByIdIfExists(idOrNameOrEmail);
+        if (collaboratorById) {
+            return collaboratorById;
+        }
+
+        if (!this._collaboratorIdsByNameAndEmail) {
+            this._collaboratorIdsByNameAndEmail = new Map<string, string>();
+            for (const [id, {email, name}] of entries(this._data.collaboratorsById)) {
+                this._collaboratorIdsByNameAndEmail.set(email, id);
+                if (name && !this._collaboratorIdsByNameAndEmail.has(name)) {
+                    this._collaboratorIdsByNameAndEmail.set(name, id);
+                }
+            }
+        }
+
+        const idForNameOrEmail = this._collaboratorIdsByNameAndEmail.get(idOrNameOrEmail);
+        if (idForNameOrEmail !== undefined) {
+            return this.getCollaboratorById(idForNameOrEmail);
+        }
+
+        return null;
+    }
+    /**
+     * The user matching the given ID, name, or email address. Throws if that user does not exist
+     * or does not have access to this base. Use {@link getCollaboratorIfExists} instead if you are
+     * unsure whether a collaborator with the given ID exists and has access to this base.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getCollaboratorById} method instead.
+     *
+     * @param collaboratorIdOrNameOrEmail The ID of the user.
+     */
+    getCollaborator(idOrNameOrEmail: UserId | string): CollaboratorData | null {
+        const collaborator = this.getCollaboratorIfExists(idOrNameOrEmail);
+        if (!collaborator) {
+            throw spawnError(
+                "No collaborator with ID, name, or email of '%s' is in base '%s'",
+                idOrNameOrEmail,
+                this.name,
+            );
+        }
+        return collaborator;
+    }
+    /**
      * @internal
      */
     __getRecordStore(tableId: TableId): RecordStore {
@@ -231,6 +286,43 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         const table = this.getTableByNameIfExists(tableName);
         if (!table) {
             throw spawnError("No table named '%s' in base '%s'", tableName, this.name);
+        }
+        return table;
+    }
+    /**
+     * The table matching the given ID or name. Returns `null` if no matching table exists within
+     * this base.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getTableByIdIfExists} or
+     * {@link getTableByNameIfExists} methods instead.
+     *
+     * @param tableIdOrName The ID or name of the table you're looking for.
+     */
+    getTableIfExists(tableIdOrName: TableId | string): Table | null {
+        return (
+            this.getTableByIdIfExists(tableIdOrName) ?? this.getTableByNameIfExists(tableIdOrName)
+        );
+    }
+    /**
+     * The table matching the given ID or name. Throws if no matching table exists within this base.
+     * Use {@link getTableIfExists} instead if you are unsure whether a table exists with the given
+     * name/ID.
+     *
+     * This method is convenient when building a block for a specific base, but for more generic
+     * blocks the best practice is to use the {@link getTableById} or {@link getTableByName} methods
+     * instead.
+     *
+     * @param tableIdOrName The ID or name of the table you're looking for.
+     */
+    getTable(tableIdOrName: TableId | string): Table {
+        const table = this.getTableIfExists(tableIdOrName);
+        if (!table) {
+            throw spawnError(
+                "No table with ID or name '%s' in base '%s'",
+                tableIdOrName,
+                this.name,
+            );
         }
         return table;
     }

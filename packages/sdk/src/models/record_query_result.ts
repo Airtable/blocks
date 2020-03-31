@@ -215,7 +215,7 @@ export type SingleRecordQueryResultOpts = Pick<RecordQueryResultOpts, 'fields' |
  * */
 export type RecordIdQueryResultOpts = Pick<RecordQueryResultOpts, 'sorts'>;
 
-/** @hidden */
+/** @internal */
 export interface NormalizedRecordQueryResultOpts {
     sorts: Array<NormalizedSortConfig> | null;
     fieldIdsOrNullIfAllFields: Array<string> | null;

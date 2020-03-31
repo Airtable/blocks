@@ -530,12 +530,12 @@ export class RecordCard extends React.Component<RecordCardProps> {
         let primaryValue;
         let isUnnamed;
 
-        let primaryCellValueAsString;
+        let recordName;
         let recordUrl;
         let recordColor;
         if (record instanceof Record) {
             recordUrl = record.url;
-            primaryCellValueAsString = record.primaryCellValueAsString;
+            recordName = record.name;
             if (view) {
                 recordColor = record.getColorInView(view);
             }
@@ -543,16 +543,16 @@ export class RecordCard extends React.Component<RecordCardProps> {
             const primaryField =
                 allFields.length > 0 ? allFields[0].parentTable.primaryField : null;
             const primaryCellValue = primaryField ? record[primaryField.id] : null;
-            primaryCellValueAsString =
+            recordName =
                 primaryCellValue === null || primaryCellValue === undefined
                     ? null
                     : String(primaryCellValue);
         }
-        if (isNullOrUndefinedOrEmpty(primaryCellValueAsString)) {
+        if (isNullOrUndefinedOrEmpty(recordName)) {
             primaryValue = FALLBACK_RECORD_NAME_FOR_DISPLAY;
             isUnnamed = true;
         } else {
-            primaryValue = primaryCellValueAsString;
+            primaryValue = recordName;
             isUnnamed = false;
         }
 
@@ -663,7 +663,7 @@ export default withHooks<
         parentTable = view.parentTable;
     }
 
-    useWatchable(recordModel, ['primaryCellValue', view ? `colorInView:${view.id}` : null]);
+    useWatchable(recordModel, ['name', view ? `colorInView:${view.id}` : null]);
     useWatchable(parentTable, ['fields']);
 
     const viewMetadata = useViewMetadata(view);

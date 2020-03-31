@@ -113,7 +113,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         [key: string]: (arg1: TableOrViewQueryResult, arg2: string, arg3: unknown) => void;
     } = {};
 
-    /** @hidden */
+    /** @internal */
     constructor(record: Record, field: Field, normalizedOpts: NormalizedRecordQueryResultOpts) {
         super(normalizedOpts, record.parentTable.__baseData);
 

@@ -107,7 +107,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
 
     /** @internal */
     _cellValueKeyWatchCounts: {[key: string]: number};
-    /** @hidden */
+    /** @internal */
     constructor(sourceModel: Table | View, normalizedOpts: NormalizedRecordQueryResultOpts) {
         super(normalizedOpts, sourceModel.__baseData);
 
