@@ -11,7 +11,9 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.45...HEAD)
 
-No changes.
+-   `FieldType.RICH_TEXT` has been added, which encompasses long text fields with the new rich text
+    formatting option enabled. (See Airtable's announcement regarding
+    [rich text formatting in long text fields](https://blog.airtable.com/4-workflows-for-rich-text-formatting/))
 
 ## [0.0.45](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...@airtable/blocks@0.0.45) - 2020-03-31
 

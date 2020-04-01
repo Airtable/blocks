@@ -415,6 +415,7 @@ export enum FieldType {
      * A telephone number (e.g. (415) 555-9876).
      *
      * **Field options**
+     *
      * None
      *
      * **Cell read format**
@@ -656,15 +657,29 @@ export enum FieldType {
      * Lookup a field on linked records.
      *
      * **Field options**
-     * 
-     * UNSTABLE
-
+     * ```js
+     * {
+     *     // whether the lookup field is correctly configured
+     *     isValid: boolean,
+     *     // the linked record field in this table that this field is
+     *     // looking up
+     *     recordLinkFieldId: FieldId,
+     *     // the field in the foreign table that will be looked up on
+     *     // each linked record
+     *     fieldIdInLinkedTable: FieldId | null,
+     *     // the local field configuration for the foreign field being
+     *     // looked up
+     *     result?: undefined | {type: FieldType, options: unknown}
+     * }
+     * ```
+     *
      * **Cell read format**
-     * 
-     * UNSTABLE
+     * ```js
+     * unknown // depends on the field type being looked up
+     * ```
      *
      * **Cell write format**
-     * 
+     *
      * n/a
      */
     MULTIPLE_LOOKUP_VALUES = 'multipleLookupValues',
@@ -733,7 +748,23 @@ export enum FieldType {
      */
     RATING = 'rating',
     /**
-     * @internal - not yet generally avail
+     * A long text field with rich formatting enabled.
+     *
+     * Returned string is formatted with [markdown syntax for Airtable rich text formatting](https://support.airtable.com/hc/en-us/articles/360044741993-Markdown-syntax-for-Airtable-rich-text-formatting).
+     *
+     * **Field options**
+     *
+     * None
+     *
+     * **Cell read format**
+     * ```js
+     * string
+     * ```
+     *
+     * **Cell write format**
+     * ```js
+     * string // use Airtable's markdown syntax for rich text
+     * ```
      */
     RICH_TEXT = 'richText',
     /**
