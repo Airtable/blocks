@@ -1,4 +1,5 @@
 import {cx, css} from 'emotion';
+import cssHelpers from '../../css_helpers';
 import {space, colors, radii, opacities, fontFamilies} from './tokens';
 
 const SWITCH_WIDTH = 20;
@@ -60,7 +61,7 @@ const baseStyles = css({
 const subcomponentClassNames = {
     switchClassName,
     switchContainerClassName,
-    switchLabelClassName,
+    switchLabelClassName: cx(switchLabelClassName, cssHelpers.TRUNCATE),
 };
 
 const switchVariants = {

@@ -14,6 +14,7 @@ commit that affects the code in a way that consumers might care about should inc
 -   `FieldType.RICH_TEXT` has been added, which encompasses long text fields with the new rich text
     formatting option enabled. (See Airtable's announcement regarding
     [rich text formatting in long text fields](https://blog.airtable.com/4-workflows-for-rich-text-formatting/))
+-   `Switch` and `SwitchSynced` now truncate the label.
 
 ## [0.0.45](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...@airtable/blocks@0.0.45) - 2020-03-31
 
