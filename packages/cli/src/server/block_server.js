@@ -369,16 +369,6 @@ class BlockServer {
     _validateBlockDirectory() {
         const blockDirPath = this._blockDirPath;
 
-        // Check if react and react-dom are listed in package.json.
-        const packageJson = fs.readFileSync(path.join(blockDirPath, 'package.json'), 'utf8');
-        const dependencies = JSON.parse(packageJson).dependencies;
-        if (!dependencies.hasOwnProperty('react') || !dependencies.hasOwnProperty('react-dom')) {
-            console.log(
-                'Please ensure that react and react-dom packages are installed and listed in package.json',
-            );
-            process.exit(1);
-        }
-
         // Check if the node_modules directory exists.
         const nodeModulesDirPath = path.join(blockDirPath, 'node_modules');
         const nodeModulesDirExists = fs.existsSync(nodeModulesDirPath);
