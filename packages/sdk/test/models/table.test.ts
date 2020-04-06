@@ -3,8 +3,18 @@ import Base from '../../src/models/base';
 import Table from '../../src/models/table';
 import Field from '../../src/models/field';
 import View from '../../src/models/view';
+import {FieldType} from '../../src/types/field';
+import {MutationTypes} from '../../src/types/mutations';
 
 jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
+
+let mockMutations: any;
+jest.mock('../../src/get_sdk', () => () => ({
+    __mutations: mockMutations,
+    runInfo: {
+        isDevelopment: true,
+    },
+}));
 
 describe('Base', () => {
     let base: Base;
@@ -122,6 +132,62 @@ describe('Base', () => {
             expect(() => table.getView('A made up view')).toThrowErrorMatchingInlineSnapshot(
                 `"No view with ID or name 'A made up view' in table 'Design projects'"`,
             );
+        });
+    });
+
+    describe('createFieldAsync', () => {
+        let mockGetFieldById: any;
+        beforeEach(() => {
+            mockMutations = {
+                applyMutationAsync: jest.fn(),
+            };
+
+            // spy on table.getFieldById since we try to return the field after creation, but
+            // we're not actually creating anything so it'll throw
+            mockGetFieldById = jest
+                .spyOn(table, 'getFieldById')
+                .mockImplementation(fieldId => new Field(base.__baseData, table, fieldId));
+        });
+
+        it('accepts null field options and omits them from config', async () => {
+            await table.unstable_createFieldAsync('name', FieldType.SINGLE_LINE_TEXT, null);
+
+            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
+                type: MutationTypes.CREATE_SINGLE_FIELD,
+                tableId: table.id,
+                id: 'fldGeneratedMockId',
+                name: 'name',
+                config: {
+                    type: FieldType.SINGLE_LINE_TEXT,
+                },
+            });
+
+            expect(mockGetFieldById).toHaveBeenCalledTimes(1);
+            expect(mockGetFieldById).toHaveBeenLastCalledWith('fldGeneratedMockId');
+        });
+
+        it('accepts non-null field options', async () => {
+            await table.unstable_createFieldAsync('name', FieldType.SINGLE_SELECT, {
+                choices: [{name: 'pick me'}],
+            });
+
+            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
+                type: MutationTypes.CREATE_SINGLE_FIELD,
+                tableId: table.id,
+                id: 'fldGeneratedMockId',
+                name: 'name',
+                config: {
+                    type: FieldType.SINGLE_SELECT,
+                    options: {
+                        choices: [{name: 'pick me'}],
+                    },
+                },
+            });
+
+            expect(mockGetFieldById).toHaveBeenCalledTimes(1);
+            expect(mockGetFieldById).toHaveBeenLastCalledWith('fldGeneratedMockId');
         });
     });
 });

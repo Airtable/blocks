@@ -2,7 +2,7 @@
 import {BaseData} from '../types/base';
 import {TableData} from '../types/table';
 import {ViewType, ViewId} from '../types/view';
-import {FieldId} from '../types/field';
+import {FieldId, FieldType, FieldOptions} from '../types/field';
 import {RecordId} from '../types/record';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
@@ -81,8 +81,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         this._cachedFieldNamesById = null;
 
         this._airtableInterface = airtableInterface;
-
-        Object.seal(this);
     }
 
     /**
@@ -1572,6 +1570,72 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 return [field.id, cellValue];
             }),
         );
+    }
+    /**
+     * @hidden
+     * TODO(emma): add docstrings
+     */
+    unstable_checkPermissionsForCreateField(
+        name?: string,
+        type?: FieldType,
+        options?: FieldOptions | null,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_SINGLE_FIELD,
+            tableId: this.id,
+            id: undefined, // Generated in createFieldAsync.
+            name,
+            config: type
+                ? {
+                      type: type,
+                      // In field.options we translate options to null when it's undefined (no options),
+                      // but the mutation expects config to match the PublicApiConfig, where it's
+                      // not present at all (options: undefined will fail validation).
+                      ...(options ? {options} : null),
+                  }
+                : undefined,
+        });
+    }
+
+    /**
+     * @hidden
+     * TODO(emma): add docstrings
+     */
+    unstable_hasPermissionToCreateField(
+        name?: string,
+        type?: FieldType,
+        options?: FieldOptions | null,
+    ): boolean {
+        return this.unstable_checkPermissionsForCreateField(name, type, options).hasPermission;
+    }
+
+    /**
+     * @hidden
+     * TODO(emma): add docstrings. remember to mention that it may not be visible in the current
+     * view depending on view type / other hidden fields / public share status
+     */
+    async unstable_createFieldAsync(
+        name: string,
+        type: FieldType,
+        options: FieldOptions | null,
+    ): Promise<Field> {
+        const fieldId = this._airtableInterface.idGenerator.generateFieldId();
+
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.CREATE_SINGLE_FIELD,
+            tableId: this.id,
+            id: fieldId,
+            name,
+            config: {
+                type: type,
+                // In field.options we translate options to null when it's undefined (no options),
+                // but the mutation expects config to match the PublicApiConfig, where it's
+                // not present at all (options: undefined will fail validation).
+                ...(options ? {options} : null),
+            },
+        });
+
+        return this.getFieldById(fieldId);
     }
     /**
      * @internal

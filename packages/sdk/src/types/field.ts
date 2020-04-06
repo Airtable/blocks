@@ -847,3 +847,9 @@ export interface FieldPermissionData {
     readonly type: PrivateColumnType;
     readonly lock: FieldLock | null;
 }
+
+/** @hidden */
+// TODO(emma); should probably document this better
+export interface FieldOptions {
+    [key: string]: unknown;
+}

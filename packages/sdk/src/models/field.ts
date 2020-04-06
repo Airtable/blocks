@@ -1,7 +1,8 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
-import {FieldData, PrivateColumnType, FieldType} from '../types/field';
+import {MutationTypes, PermissionCheckResult} from '../types/mutations';
+import {FieldData, PrivateColumnType, FieldType, FieldOptions} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -121,7 +122,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
     /**
      * The configuration options of the field. The structure of the field's
-     * options depend on the field's type. Can be watched.
+     * options depend on the field's type. `null` if the field has no options.
+     * Can be watched.
      *
      * @see {@link FieldType}
      * @example
@@ -134,7 +136,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * }
      * ```
      */
-    get options(): {[key: string]: unknown} | null {
+    get options(): FieldOptions | null {
         const airtableInterface = getSdk().__airtableInterface;
         const appInterface = getSdk().__appInterface;
 
@@ -146,6 +148,53 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
 
         // TODO(emma): can we remove this cloneDeep?
         return options ? cloneDeep(options) : null;
+    }
+    /**
+     * @internal
+     * TODO(emma): add docstrings
+     */
+    unstable_checkPermissionsForUpdateOptions(
+        options?: FieldOptions | null,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
+            tableId: this.parentTable.id,
+            id: this.id,
+            config: {
+                type: this.type,
+                // In field.options we translate options to null when it's undefined (no options),
+                // but the mutation expects config to match the PublicApiConfig, where it's
+                // not present at all (options: undefined will fail validation).
+                ...(options ? {options} : null),
+            },
+        });
+    }
+
+    /**
+     * @internal
+     * TODO(emma): add docstrings
+     */
+    unstable_hasPermissionToUpdateOptions(options?: FieldOptions | null): boolean {
+        return this.unstable_checkPermissionsForUpdateOptions(options).hasPermission;
+    }
+
+    /**
+     * @internal
+     * TODO(emma): add docstrings
+     */
+    async unstable_updateOptionsAsync(options: FieldOptions | null): Promise<void> {
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
+            tableId: this.parentTable.id,
+            id: this.id,
+            config: {
+                type: this.type,
+                // In field.options we translate options to null when it's undefined (no options),
+                // but the mutation expects config to match the PublicApiConfig, where it's
+                // not present at all (options: undefined will fail validation).
+                ...(options ? {options} : null),
+            },
+        });
     }
     /**
      * `true` if this field is computed, `false` otherwise. A field is

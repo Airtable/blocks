@@ -36,6 +36,7 @@ export interface SdkInitData {
 /** @hidden */
 interface IdGenerator {
     generateRecordId(): string;
+    generateFieldId(): string;
 }
 
 /** @hidden */
@@ -79,7 +80,9 @@ interface Aggregators {
 /** @hidden */
 type CellValueValidationResult = {isValid: true} | {isValid: false; reason: string};
 /** @hidden */
-interface FieldTypeConfig {
+type FieldConfigValidationResult = {isValid: true} | {isValid: false; reason: string};
+/** @hidden */
+export interface FieldTypeConfig {
     type: FieldType;
     options?: {[key: string]: unknown};
 }
@@ -104,6 +107,12 @@ interface FieldTypeProvider {
         fieldData: FieldData,
         fieldNamesById: ObjectMap<FieldId, string>,
     ): FieldTypeConfig;
+    validateConfigForUpdate(
+        appInterface: AppInterface,
+        newConfig: FieldTypeConfig,
+        currentConfig: FieldTypeConfig | null,
+        fieldData: FieldData | null,
+    ): FieldConfigValidationResult;
     convertStringToCellValue(
         appInterface: AppInterface,
         string: string,

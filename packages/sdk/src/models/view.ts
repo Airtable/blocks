@@ -51,8 +51,6 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
 
         this._parentTable = parentTable;
         this._viewDataStore = viewDataStore;
-
-        Object.seal(this);
     }
 
     /**

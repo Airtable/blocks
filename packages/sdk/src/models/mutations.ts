@@ -22,6 +22,9 @@ const MUTATIONS_MAX_BODY_SIZE = 1.9 * 1024 * 1024;
 
 const MUTATION_HOLD_FOR_MS = 100;
 
+// Mirrored from clientServerSharedConfigSettings
+const MAX_FIELD_NAME_LENGTH = 255;
+
 /** @internal */
 class Mutations {
     /** @internal */
@@ -295,6 +298,89 @@ class Mutations {
                 return;
             }
 
+            case MutationTypes.CREATE_SINGLE_FIELD: {
+                const {tableId, name, config} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't create field: No table with id %s exists", tableId);
+                }
+
+                if (!name) {
+                    throw spawnError("Can't create field: must provide non-empty name");
+                }
+
+                if (name.length > MAX_FIELD_NAME_LENGTH) {
+                    throw spawnError(
+                        "Can't create field: name '%s' exceeds maximum length of %s characters",
+                        name,
+                        MAX_FIELD_NAME_LENGTH,
+                    );
+                }
+
+                const existingLowercaseFieldNames = table.fields.map(field =>
+                    field.name.toLowerCase(),
+                );
+
+                if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
+                    throw spawnError(
+                        "Can't create field: field with name '%s' already exists",
+                        name,
+                    );
+                }
+
+                // Current config / field data is null since the field doesn't exist.
+                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                    appInterface,
+                    config,
+                    null,
+                    null,
+                );
+
+                if (!validationResult.isValid) {
+                    throw spawnError(
+                        "Can't create field: invalid field config.\n%s",
+                        validationResult.reason,
+                    );
+                }
+                return;
+            }
+
+            case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG: {
+                const {tableId, id, config} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                // we get the config directly instead of using field.type/field.options to get it
+                // in one call and because field.options returns null instead of undefined when
+                // a field does not have options, whilst we need to pass undefined
+                const currentConfig = airtableInterface.fieldTypeProvider.getConfig(
+                    appInterface,
+                    field._data,
+                    field.parentTable.__getFieldNamesById(),
+                );
+                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                    appInterface,
+                    config,
+                    currentConfig,
+                    field._data,
+                );
+
+                if (!validationResult.isValid) {
+                    throw spawnError(
+                        "Can't update field: invalid field config.\n%s",
+                        validationResult.reason,
+                    );
+                }
+                return;
+            }
+
             default:
                 throw spawnUnknownSwitchCaseError('mutation type', mutation, 'type');
         }
@@ -412,6 +498,12 @@ class Mutations {
                 throw spawnError(
                     'attempting to generate model updates for SET_MULTIPLE_GLOBAL_CONFIG_PATH',
                 );
+            }
+
+            case MutationTypes.CREATE_SINGLE_FIELD:
+            case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG: {
+                // No optimistic updates for field mutations.
+                return [];
             }
 
             default:

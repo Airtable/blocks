@@ -1,5 +1,6 @@
 /** @module @airtable/blocks: mutations */ /** */
 import {ObjectValues, ObjectMap} from '../private_utils';
+import {FieldTypeConfig} from '../injected/airtable_interface';
 import {GlobalConfigUpdate, GlobalConfigValue} from './global_config';
 import {TableId} from './table';
 import {FieldId} from './field';
@@ -11,6 +12,8 @@ export const MutationTypes = Object.freeze({
     DELETE_MULTIPLE_RECORDS: 'deleteMultipleRecords' as const,
     CREATE_MULTIPLE_RECORDS: 'createMultipleRecords' as const,
     SET_MULTIPLE_GLOBAL_CONFIG_PATHS: 'setMultipleGlobalConfigPaths' as const,
+    CREATE_SINGLE_FIELD: 'createSingleField' as const,
+    UPDATE_SINGLE_FIELD_CONFIG: 'updateSingleFieldConfig' as const,
 });
 
 /** @hidden */
@@ -86,18 +89,58 @@ export interface PartialSetMultipleGlobalConfigPathsMutation {
 }
 
 /** @hidden */
+export interface CreateSingleFieldMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_FIELD;
+    readonly tableId: TableId;
+    readonly id: FieldId;
+    readonly name: string;
+    readonly config: FieldTypeConfig;
+}
+
+/** @hidden */
+export interface PartialCreateSingleFieldMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_FIELD;
+    readonly tableId: TableId | void;
+    readonly id: FieldId | void;
+    readonly name: string | void;
+    readonly config: FieldTypeConfig | void;
+}
+
+/** @hidden */
+// note: while this accepts both type and options in config, we enforce liveapp-side that type
+// is not changed.
+export interface UpdateSingleFieldConfigMutation {
+    readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_CONFIG;
+    readonly tableId: TableId;
+    readonly id: FieldId;
+    readonly config: FieldTypeConfig;
+}
+
+/** @hidden */
+export interface PartialUpdateSingleFieldConfigMutation {
+    readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_CONFIG;
+    readonly tableId: TableId | void;
+    readonly id: FieldId | void;
+    readonly config: FieldTypeConfig | void;
+}
+
+/** @hidden */
 export type Mutation =
     | SetMultipleRecordsCellValuesMutation
     | DeleteMultipleRecordsMutation
     | CreateMultipleRecordsMutation
-    | SetMultipleGlobalConfigPathsMutation;
+    | SetMultipleGlobalConfigPathsMutation
+    | CreateSingleFieldMutation
+    | UpdateSingleFieldConfigMutation;
 
 /** @hidden */
 export type PartialMutation =
     | PartialSetMultipleRecordsCellValuesMutation
     | PartialDeleteMultipleRecordsMutation
     | PartialCreateMultipleRecordsMutation
-    | PartialSetMultipleGlobalConfigPathsMutation;
+    | PartialSetMultipleGlobalConfigPathsMutation
+    | PartialCreateSingleFieldMutation
+    | PartialUpdateSingleFieldConfigMutation;
 
 /** */
 export interface SuccessfulPermissionCheckResult {
