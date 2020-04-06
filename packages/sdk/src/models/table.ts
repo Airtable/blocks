@@ -1617,7 +1617,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     async unstable_createFieldAsync(
         name: string,
         type: FieldType,
-        options: FieldOptions | null,
+        options?: FieldOptions | null,
     ): Promise<Field> {
         const fieldId = this._airtableInterface.idGenerator.generateFieldId();
 

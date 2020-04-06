@@ -167,6 +167,24 @@ describe('Base', () => {
             expect(mockGetFieldById).toHaveBeenLastCalledWith('fldGeneratedMockId');
         });
 
+        it('accepts undefined field options and omits them from config', async () => {
+            await table.unstable_createFieldAsync('name', FieldType.SINGLE_LINE_TEXT);
+
+            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
+                type: MutationTypes.CREATE_SINGLE_FIELD,
+                tableId: table.id,
+                id: 'fldGeneratedMockId',
+                name: 'name',
+                config: {
+                    type: FieldType.SINGLE_LINE_TEXT,
+                },
+            });
+
+            expect(mockGetFieldById).toHaveBeenCalledTimes(1);
+            expect(mockGetFieldById).toHaveBeenLastCalledWith('fldGeneratedMockId');
+        });
+
         it('accepts non-null field options', async () => {
             await table.unstable_createFieldAsync('name', FieldType.SINGLE_SELECT, {
                 choices: [{name: 'pick me'}],

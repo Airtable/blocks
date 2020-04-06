@@ -47,22 +47,6 @@ describe('Field', () => {
             };
         });
 
-        it('accepts null field options and omits them from config', async () => {
-            const field = makeField(FieldType.SINGLE_LINE_TEXT);
-
-            await field.unstable_updateOptionsAsync(null);
-
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
-                tableId: 'tblTest',
-                id: 'fldTest',
-                config: {
-                    type: FieldType.SINGLE_LINE_TEXT,
-                },
-            });
-        });
-
         it('accepts non-null field options', async () => {
             const field = makeField(FieldType.SINGLE_SELECT);
 

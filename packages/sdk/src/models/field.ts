@@ -150,49 +150,41 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return options ? cloneDeep(options) : null;
     }
     /**
-     * @internal
+     * @hidden
      * TODO(emma): add docstrings
      */
-    unstable_checkPermissionsForUpdateOptions(
-        options?: FieldOptions | null,
-    ): PermissionCheckResult {
+    unstable_checkPermissionsForUpdateOptions(options?: FieldOptions): PermissionCheckResult {
         return getSdk().__mutations.checkPermissionsForMutation({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,
             id: this.id,
             config: {
                 type: this.type,
-                // In field.options we translate options to null when it's undefined (no options),
-                // but the mutation expects config to match the PublicApiConfig, where it's
-                // not present at all (options: undefined will fail validation).
-                ...(options ? {options} : null),
+                options: options,
             },
         });
     }
 
     /**
-     * @internal
+     * @hidden
      * TODO(emma): add docstrings
      */
-    unstable_hasPermissionToUpdateOptions(options?: FieldOptions | null): boolean {
+    unstable_hasPermissionToUpdateOptions(options?: FieldOptions): boolean {
         return this.unstable_checkPermissionsForUpdateOptions(options).hasPermission;
     }
 
     /**
-     * @internal
+     * @hidden
      * TODO(emma): add docstrings
      */
-    async unstable_updateOptionsAsync(options: FieldOptions | null): Promise<void> {
+    async unstable_updateOptionsAsync(options: FieldOptions): Promise<void> {
         await getSdk().__mutations.applyMutationAsync({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,
             id: this.id,
             config: {
                 type: this.type,
-                // In field.options we translate options to null when it's undefined (no options),
-                // but the mutation expects config to match the PublicApiConfig, where it's
-                // not present at all (options: undefined will fail validation).
-                ...(options ? {options} : null),
+                options: options,
             },
         });
     }
