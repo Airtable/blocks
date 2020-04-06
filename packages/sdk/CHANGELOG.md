@@ -15,6 +15,9 @@ commit that affects the code in a way that consumers might care about should inc
     formatting option enabled. (See Airtable's announcement regarding
     [rich text formatting in long text fields](https://blog.airtable.com/4-workflows-for-rich-text-formatting/))
 -   `Switch` and `SwitchSynced` now truncate the label.
+-   Fix a bug where `RecordCard` performs the default expand record behavior, even if an `onClick`
+    override is supplied. It now properly handles overrides as described in the documentation. This
+    fix also applies to `onRecordClick` in `RecordCardList`.
 
 ## [0.0.45](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...@airtable/blocks@0.0.45) - 2020-03-31
 

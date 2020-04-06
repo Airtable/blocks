@@ -323,9 +323,13 @@ export class RecordCard extends React.Component<RecordCardProps> {
         if (this.props.onClick) {
             this.props.onClick(e);
         }
+        // Explicitly check if `hasOnClick` is false, which is only set by the Tooltip wrapper.
+        // When wrapped in Tooltip, `onClick` will always exist because Tooltip supplies it. We use
+        // `hasOnClick`, to account for whether the user defined their own `onClick`. We only want
+        // to run this default expandRecord behavior if the user did not supply their own `onClick`.
         if (
             this.props.onClick === undefined ||
-            !this.props.hasOnClick // TODO (stephen): remove tooltip anchor props
+            this.props.hasOnClick === false // TODO (stephen): remove tooltip anchor props
         ) {
             // NOTE: `null` disables the default click behavior.
 

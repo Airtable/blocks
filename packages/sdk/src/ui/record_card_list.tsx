@@ -87,14 +87,25 @@ function RecordCardItemRenderer(props: RecordCardItemRendererProps) {
             "RecordCardList's props.records should not contain a mix of Record and RecordDef",
         );
     }
+
+    // RecordCard handles null and undefined differently for `onClick`. Treat other
+    // falsey values (e.g. "", false) like null.
+    let _onClick;
+    if (onClick) {
+        _onClick = () => onClick(record, itemIndex);
+    } else if (onClick === undefined) {
+        _onClick = undefined;
+    } else {
+        _onClick = null;
+    }
+
     return (
         <RecordCard
             record={record}
             fields={fields}
             view={view}
             attachmentCoverField={attachmentCoverField}
-            // Explicitly pass `onClick` if it is falsey because RecordCard handles null & undefined differently
-            onClick={onClick ? () => onClick(record, itemIndex) : undefined}
+            onClick={_onClick}
             expandRecordOptions={filteredRecords.length > 0 ? {records: filteredRecords} : null}
             onMouseEnter={onMouseEnter ? () => onMouseEnter(record, itemIndex) : undefined}
             onMouseLeave={onMouseLeave ? () => onMouseLeave(record, itemIndex) : undefined}
