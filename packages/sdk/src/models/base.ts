@@ -1,10 +1,13 @@
 /** @module @airtable/blocks/models: Base */ /** */
 import {BaseData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
+import {FieldType} from '../types/field';
+import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
+import getSdk from '../get_sdk';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
@@ -348,6 +351,90 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return table;
     }
+
+    /**
+     * @hidden
+     * TODO(emma): add docstrings
+     */
+    unstable_checkPermissionsForCreateTable(
+        name?: string,
+        fields?: Array<{
+            name?: string;
+            type?: FieldType;
+            options?: {[key: string]: unknown} | null;
+        }>,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_SINGLE_TABLE,
+            id: undefined, // Generated in createTableAsync.
+            name: name,
+            fields: fields?.map(field => {
+                return {
+                    name: field.name,
+                    config: field.type
+                        ? {
+                              type: field.type,
+                              // In field.options we translate options to null when it's undefined (no options),
+                              // but the mutation expects config to match the PublicApiConfig, where it's
+                              // not present at all (options: undefined will fail validation).
+                              ...(field.options ? {options: field.options} : null),
+                          }
+                        : undefined,
+                };
+            }),
+        });
+    }
+
+    /**
+     * @hidden
+     * TODO(emma): add docstrings
+     */
+    unstable_hasPermissionToCreateTable(
+        name?: string,
+        fields?: Array<{
+            name?: string;
+            type?: FieldType;
+            options?: {[key: string]: unknown} | null;
+        }>,
+    ): boolean {
+        return this.unstable_checkPermissionsForCreateTable(name, fields).hasPermission;
+    }
+
+    /**
+     * @hidden
+     * TODO(emma): add docstrings
+     */
+    async unstable_createTableAsync(
+        name: string,
+        fields: Array<{
+            name: string;
+            type: FieldType;
+            options?: {[key: string]: unknown} | null;
+        }>,
+    ): Promise<Table> {
+        const tableId = this._airtableInterface.idGenerator.generateTableId();
+
+        await getSdk().__mutations.applyMutationAsync({
+            id: tableId,
+            type: MutationTypes.CREATE_SINGLE_TABLE,
+            name,
+            fields: fields.map(field => {
+                return {
+                    name: field.name,
+                    config: {
+                        type: field.type,
+                        // In field.options we translate options to null when it's undefined (no options),
+                        // but the mutation expects config to match the PublicApiConfig, where it's
+                        // not present at all (options: undefined will fail validation).
+                        ...(field.options ? {options: field.options} : null),
+                    },
+                };
+            }),
+        });
+
+        return this.getTableById(tableId);
+    }
+
     /**
      * @internal
      */

@@ -16,7 +16,7 @@ jest.mock('../../src/get_sdk', () => () => ({
     },
 }));
 
-describe('Base', () => {
+describe('Table', () => {
     let base: Base;
     let table: Table;
     beforeEach(() => {

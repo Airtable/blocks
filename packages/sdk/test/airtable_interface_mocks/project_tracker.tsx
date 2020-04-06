@@ -413,6 +413,7 @@ const mockAirtableInterface = {
     idGenerator: {
         generateRecordId: () => 'recGeneratedMockId',
         generateFieldId: () => 'fldGeneratedMockId',
+        generateTableId: () => 'tblGeneratedMockId',
     },
     sdkInitData,
 };

@@ -14,6 +14,7 @@ export const MutationTypes = Object.freeze({
     SET_MULTIPLE_GLOBAL_CONFIG_PATHS: 'setMultipleGlobalConfigPaths' as const,
     CREATE_SINGLE_FIELD: 'createSingleField' as const,
     UPDATE_SINGLE_FIELD_CONFIG: 'updateSingleFieldConfig' as const,
+    CREATE_SINGLE_TABLE: 'createSingleTable' as const,
 });
 
 /** @hidden */
@@ -125,13 +126,36 @@ export interface PartialUpdateSingleFieldConfigMutation {
 }
 
 /** @hidden */
+export interface CreateSingleTableMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_TABLE;
+    readonly id: TableId;
+    readonly name: string;
+    readonly fields: ReadonlyArray<{
+        name: string;
+        config: FieldTypeConfig;
+    }>;
+}
+
+/** @hidden */
+export interface PartialCreateSingleTableMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_TABLE;
+    readonly id: TableId | void;
+    readonly name: string | void;
+    readonly fields: ReadonlyArray<{
+        name: string | void;
+        config: FieldTypeConfig | void;
+    }> | void;
+}
+
+/** @hidden */
 export type Mutation =
     | SetMultipleRecordsCellValuesMutation
     | DeleteMultipleRecordsMutation
     | CreateMultipleRecordsMutation
     | SetMultipleGlobalConfigPathsMutation
     | CreateSingleFieldMutation
-    | UpdateSingleFieldConfigMutation;
+    | UpdateSingleFieldConfigMutation
+    | CreateSingleTableMutation;
 
 /** @hidden */
 export type PartialMutation =
@@ -140,7 +164,8 @@ export type PartialMutation =
     | PartialCreateMultipleRecordsMutation
     | PartialSetMultipleGlobalConfigPathsMutation
     | PartialCreateSingleFieldMutation
-    | PartialUpdateSingleFieldConfigMutation;
+    | PartialUpdateSingleFieldConfigMutation
+    | PartialCreateSingleTableMutation;
 
 /** */
 export interface SuccessfulPermissionCheckResult {

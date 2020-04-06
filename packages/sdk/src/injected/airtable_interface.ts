@@ -37,6 +37,7 @@ export interface SdkInitData {
 interface IdGenerator {
     generateRecordId(): string;
     generateFieldId(): string;
+    generateTableId(): string;
 }
 
 /** @hidden */
@@ -113,6 +114,7 @@ interface FieldTypeProvider {
         currentConfig: FieldTypeConfig | null,
         fieldData: FieldData | null,
     ): FieldConfigValidationResult;
+    canBePrimary(appInterface: AppInterface, config: FieldTypeConfig): boolean;
     convertStringToCellValue(
         appInterface: AppInterface,
         string: string,

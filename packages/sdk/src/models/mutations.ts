@@ -24,6 +24,8 @@ const MUTATION_HOLD_FOR_MS = 100;
 
 // Mirrored from clientServerSharedConfigSettings
 const MAX_FIELD_NAME_LENGTH = 255;
+const MAX_TABLE_NAME_LENGTH = 255;
+const MAX_NUM_FIELDS_PER_TABLE = 500;
 
 /** @internal */
 class Mutations {
@@ -305,6 +307,13 @@ class Mutations {
                     throw spawnError("Can't create field: No table with id %s exists", tableId);
                 }
 
+                if (table.fields.length >= MAX_NUM_FIELDS_PER_TABLE) {
+                    throw spawnError(
+                        "Can't create field: table already has maximum number of fields",
+                        MAX_NUM_FIELDS_PER_TABLE,
+                    );
+                }
+
                 if (!name) {
                     throw spawnError("Can't create field: must provide non-empty name");
                 }
@@ -378,6 +387,102 @@ class Mutations {
                         validationResult.reason,
                     );
                 }
+                return;
+            }
+
+            case MutationTypes.CREATE_SINGLE_TABLE: {
+                const {name, fields} = mutation;
+
+                if (!name) {
+                    throw spawnError("Can't create table: must provide non-empty name");
+                }
+
+                if (name.length > MAX_TABLE_NAME_LENGTH) {
+                    throw spawnError(
+                        "Can't create table: name '%s' exceeds maximum length of %s characters",
+                        name,
+                        MAX_TABLE_NAME_LENGTH,
+                    );
+                }
+
+                const existingLowercaseTableNames = this._base.tables.map(table =>
+                    table.name.toLowerCase(),
+                );
+
+                if (existingLowercaseTableNames.includes(name.toLowerCase())) {
+                    throw spawnError(
+                        "Can't create table: table with name '%s' already exists",
+                        name,
+                    );
+                }
+
+                if (fields.length === 0) {
+                    throw spawnError("Can't create table: must specify at least one field");
+                }
+
+                if (fields.length > MAX_NUM_FIELDS_PER_TABLE) {
+                    throw spawnError(
+                        "Can't create table: number of fields exceeds maximum of %s",
+                        MAX_NUM_FIELDS_PER_TABLE,
+                    );
+                }
+
+                const lowercaseFieldNames = new Set();
+                for (const field of fields) {
+                    if (!field.name) {
+                        throw spawnError(
+                            "Can't create table: must provide non-empty name for every field",
+                        );
+                    }
+
+                    if (field.name.length > MAX_FIELD_NAME_LENGTH) {
+                        throw spawnError(
+                            "Can't create table: field name '%s' exceeds maximum length of %s characters",
+                            name,
+                            MAX_FIELD_NAME_LENGTH,
+                        );
+                    }
+
+                    const lowercaseFieldName = field.name.toLowerCase();
+                    if (lowercaseFieldNames.has(lowercaseFieldName)) {
+                        throw spawnError(
+                            "Can't create table: duplicate field name '%s'",
+                            field.name,
+                        );
+                    }
+                    lowercaseFieldNames.add(lowercaseFieldName);
+
+                    // Current config / field data is null since the field doesn't exist.
+                    const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                        appInterface,
+                        field.config,
+                        null,
+                        null,
+                    );
+
+                    if (!validationResult.isValid) {
+                        throw spawnError(
+                            "Can't create table: invalid field config for field %s.\n%s",
+                            field.name,
+                            validationResult.reason,
+                        );
+                    }
+                }
+
+                const primaryField = fields[0];
+                if (
+                    !airtableInterface.fieldTypeProvider.canBePrimary(
+                        appInterface,
+                        primaryField.config,
+                    )
+                ) {
+                    throw spawnError(
+                        "Can't create table: first field '%s' has type '%s' which cannot be a primary field",
+                        primaryField.name,
+                        primaryField.config.type,
+                    );
+                }
+
                 return;
             }
 
@@ -501,8 +606,9 @@ class Mutations {
             }
 
             case MutationTypes.CREATE_SINGLE_FIELD:
-            case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG: {
-                // No optimistic updates for field mutations.
+            case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
+            case MutationTypes.CREATE_SINGLE_TABLE: {
+                // No optimistic updates for field or table mutations.
                 return [];
             }
 
