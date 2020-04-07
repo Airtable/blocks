@@ -20,4 +20,7 @@ export type BlockJson = {|
     version?: '1.0',
     frontendEntry: string,
     routes?: Array<BackendRoute>,
+    __hyperbase?: {
+        absoluteImportRoot?: string,
+    },
 |};

@@ -753,11 +753,30 @@ class BlockBuilder {
 
         return {value: outputPath};
     }
-    async _wipeOutputDirectoriesAsync(): Promise<void> {
+    async _cleanAndPrepareOutputDirectoriesAsync(): Promise<void> {
         await Promise.all([
             fsUtils.emptyDirAsync(this._outputUserTranspiledDirPath),
             fsUtils.emptyDirAsync(this._outputBuildArtifactsDirPath),
         ]);
+
+        // It's possible for some blocks (e.g. scripting) to live in hyperbase, which by convention
+        // uses absolute instead of relative imports. This absoluteImportRoot option specifies the
+        // prefix for files in this block dir to use for absolute imports.
+        const absoluteImportRoot =
+            this._blockJson.__hyperbase && this._blockJson.__hyperbase.absoluteImportRoot;
+        if (absoluteImportRoot) {
+            if (this._enableDeprecatedAbsolutePathImport) {
+                throw new Error(
+                    'cannot use hyperbase absolute imports and legacy absolute imports at the same time',
+                );
+            }
+
+            await fsUtils.mkdirAsync(path.join(this._outputUserTranspiledDirPath, 'node_modules'));
+            await fsUtils.symlinkAsync(
+                this._outputUserTranspiledDirPath,
+                path.join(this._outputUserTranspiledDirPath, 'node_modules', absoluteImportRoot),
+            );
+        }
     }
     /**
      * For @airtable/blocks-cli up to version 0.0.34, the 'build' directory saved the bundle.js
@@ -791,7 +810,7 @@ class BlockBuilder {
     }
     async _cleanAndPrepareBuildAsync(): Promise<void> {
         await this._cleanupLegacyBuildDirectoryAsync();
-        await this._wipeOutputDirectoriesAsync();
+        await this._cleanAndPrepareOutputDirectoriesAsync();
         await this._writeFrontendClientWrapperFileAsync();
     }
     async _waitForInitialBuildAsync(): Promise<void> {
