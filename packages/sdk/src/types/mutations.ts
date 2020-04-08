@@ -33,11 +33,13 @@ export interface SetMultipleRecordsCellValuesMutation {
 /** @hidden */
 export interface PartialSetMultipleRecordsCellValuesMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
-    readonly tableId: TableId | void;
-    readonly records: ReadonlyArray<{
-        readonly id: RecordId | void;
-        readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | void> | void;
-    }> | void;
+    readonly tableId: TableId | undefined;
+    readonly records:
+        | ReadonlyArray<{
+              readonly id: RecordId | undefined;
+              readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
@@ -50,8 +52,8 @@ export interface DeleteMultipleRecordsMutation {
 /** @hidden */
 export interface PartialDeleteMultipleRecordsMutation {
     readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
-    readonly tableId: TableId | void;
-    readonly recordIds: ReadonlyArray<RecordId> | void;
+    readonly tableId: TableId | undefined;
+    readonly recordIds: ReadonlyArray<RecordId> | undefined;
 }
 
 /** @hidden */
@@ -67,11 +69,13 @@ export interface CreateMultipleRecordsMutation {
 /** @hidden */
 export interface PartialCreateMultipleRecordsMutation {
     readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
-    readonly tableId: TableId | void;
-    readonly records: ReadonlyArray<{
-        readonly id: RecordId | void;
-        readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | void> | void;
-    }> | void;
+    readonly tableId: TableId | undefined;
+    readonly records:
+        | ReadonlyArray<{
+              readonly id: RecordId | undefined;
+              readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
@@ -83,10 +87,12 @@ export interface SetMultipleGlobalConfigPathsMutation {
 /** @hidden */
 export interface PartialSetMultipleGlobalConfigPathsMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS;
-    readonly updates: ReadonlyArray<{
-        readonly path: ReadonlyArray<string | void> | void;
-        readonly value: GlobalConfigValue | void | void;
-    }> | void;
+    readonly updates:
+        | ReadonlyArray<{
+              readonly path: ReadonlyArray<string | undefined> | undefined;
+              readonly value: GlobalConfigValue | undefined | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
@@ -101,10 +107,10 @@ export interface CreateSingleFieldMutation {
 /** @hidden */
 export interface PartialCreateSingleFieldMutation {
     readonly type: typeof MutationTypes.CREATE_SINGLE_FIELD;
-    readonly tableId: TableId | void;
-    readonly id: FieldId | void;
-    readonly name: string | void;
-    readonly config: FieldTypeConfig | void;
+    readonly tableId: TableId | undefined;
+    readonly id: FieldId | undefined;
+    readonly name: string | undefined;
+    readonly config: FieldTypeConfig | undefined;
 }
 
 /** @hidden */
@@ -120,9 +126,9 @@ export interface UpdateSingleFieldConfigMutation {
 /** @hidden */
 export interface PartialUpdateSingleFieldConfigMutation {
     readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_CONFIG;
-    readonly tableId: TableId | void;
-    readonly id: FieldId | void;
-    readonly config: FieldTypeConfig | void;
+    readonly tableId: TableId | undefined;
+    readonly id: FieldId | undefined;
+    readonly config: FieldTypeConfig | undefined;
 }
 
 /** @hidden */
@@ -139,12 +145,14 @@ export interface CreateSingleTableMutation {
 /** @hidden */
 export interface PartialCreateSingleTableMutation {
     readonly type: typeof MutationTypes.CREATE_SINGLE_TABLE;
-    readonly id: TableId | void;
-    readonly name: string | void;
-    readonly fields: ReadonlyArray<{
-        name: string | void;
-        config: FieldTypeConfig | void;
-    }> | void;
+    readonly id: TableId | undefined;
+    readonly name: string | undefined;
+    readonly fields:
+        | ReadonlyArray<{
+              name: string | undefined;
+              config: FieldTypeConfig | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
