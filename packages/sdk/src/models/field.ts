@@ -150,8 +150,25 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         return options ? cloneDeep(options) : null;
     }
     /**
-     * @hidden
-     * TODO(emma): add docstrings
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Checks whether the current user has permission to perform the given options update.
+     *
+     * Accepts partial input, in the same format as {@link unstable_updateOptionsAsync}.
+     *
+     * Returns `{hasPermission: true}` if the current user can update the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
+     * @param options new options for the field
+     *
+     * ```js
+     * const updateFieldCheckResult = field.unstable_checkPermissionsForUpdateOptions();
+     *
+     * if (!updateFieldCheckResult.hasPermission) {
+     *     alert(updateFieldCheckResult.reasonDisplayString);
+     * }
+     * ```
      */
     unstable_checkPermissionsForUpdateOptions(options?: FieldOptions): PermissionCheckResult {
         return getSdk().__mutations.checkPermissionsForMutation({
@@ -166,16 +183,60 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
 
     /**
-     * @hidden
-     * TODO(emma): add docstrings
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * An alias for `checkPermissionsForUpdateOptions(options).hasPermission`.
+     *
+     * Checks whether the current user has permission to perform the options update.
+     *
+     * Accepts partial input, in the same format as {@link unstable_updateOptionsAsync}.
+     *
+     * @param options new options for the field
+     *
+     * ```js
+     * const canUpdateField = field.unstable_hasPermissionToUpdateField();
+     *
+     * if (!canUpdateField) {
+     *     alert('not allowed!');
+     * }
+     * ```
      */
     unstable_hasPermissionToUpdateOptions(options?: FieldOptions): boolean {
         return this.unstable_checkPermissionsForUpdateOptions(options).hasPermission;
     }
 
     /**
-     * @hidden
-     * TODO(emma): add docstrings
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Updates the options for this field.
+     *
+     * Throws an error if the user does not have permission to update the field, if invalid
+     * options are provided, if this field has no writable options, or if updates to this field
+     * type is not supported.
+     *
+     * Refer to {@link FieldType} for supported field types, the write format for options, and
+     * other specifics for certain field types.
+     *
+     * This action is asynchronous. Unlike updates to cell values, updates to field options are
+     * **not** applied optimistically locally. You must `await` the returned promise before
+     * relying on the change in your block.
+     *
+     * @param options new options for the field
+     *
+     * ```js
+     * async function addChoiceToSelectField(selectField, nameForNewOption) {
+     *     const updatedOptions = {
+     *         choices: [
+     *             ...selectField.choices,
+     *             {name: nameForNewOption},
+     *         ]
+     *     };
+     *
+     *     if (selectField.unstable_hasPermissionToUpdateOptions(updatedOptions)) {
+     *         await selectField.unstable_updateOptionsAsync(updatedOptions);
+     *     }
+     * }
+     * ```
      */
     async unstable_updateOptionsAsync(options: FieldOptions): Promise<void> {
         await getSdk().__mutations.applyMutationAsync({

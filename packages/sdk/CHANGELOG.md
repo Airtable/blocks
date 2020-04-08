@@ -18,6 +18,14 @@ commit that affects the code in a way that consumers might care about should inc
 -   Fix a bug where `RecordCard` performs the default expand record behavior, even if an `onClick`
     override is supplied. It now properly handles overrides as described in the documentation. This
     fix also applies to `onRecordClick` in `RecordCardList`.
+-   Beta: New field and table writes API! You can now create tables and fields and update field
+    options.
+    -   `base.unstable_createTableAsync`
+    -   `table.unstable_createFieldAsync`
+    -   `field.unstable_updateOptionsAsync`
+    -   These APIs are unstable and may have breaking changes in the future.
+    -   Not all field types are supported at this time. Refer to `FieldType` documentation for
+        details.
 
 ## [0.0.45](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...@airtable/blocks@0.0.45) - 2020-03-31
 
