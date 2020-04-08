@@ -6,7 +6,7 @@ import {spawnError} from '../error_utils';
  * @internal
  * A higher-order component for working with React hooks in class-based components. It takes a React
  * component and wraps it, injecting values from hooks as additional props. `withHooks` uses
- * {@link https://reactjs.org/docs/forwarding-refs.html|`React.forwardRef`} to make sure that you can
+ * [`React.forwardRef`](https://reactjs.org/docs/forwarding-refs.html) to make sure that you can
  * use refs with your wrapped component in exactly the same way you would if you weren't using
  * `withHooks`.
  *
