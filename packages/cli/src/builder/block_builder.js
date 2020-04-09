@@ -383,7 +383,8 @@ class BlockBuilder {
                 }
             })
             .on('error', err => {
-                throw err;
+                console.error(err);
+                process.exit(1);
             });
     }
     /**
