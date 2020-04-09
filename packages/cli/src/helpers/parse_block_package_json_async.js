@@ -4,14 +4,7 @@ const fsUtils = require('./fs_utils');
 const path = require('path');
 
 import type {Result} from '../types/result';
-
-// An incomplete flow type for the shape of a package.json file.
-// see https://docs.npmjs.com/files/package.json
-type PackageJson = {
-    name?: string, // technically required if you want to publish to the registry
-    version?: string, // technically required if you want to publish to the registry
-    description?: string,
-};
+import type {PackageJson} from '../types/package_json_type';
 
 async function parseBlockPackageJsonAsync(): Promise<Result<PackageJson>> {
     const blockDirPath = getBlockDirPath();

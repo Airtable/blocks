@@ -2,11 +2,13 @@
 
 import type {NormalizedBackendRouteResponse} from './backend_route_types';
 import type {BlockJson} from './block_json_type';
+import type {RemoteJson} from './remote_json_type';
 import type {LambdaEvent} from './lambda_event_type';
 
 /** Init options passed to block server backend process. */
 export type BackendProcessOptions = {|
     blockJson: BlockJson,
+    remoteJson: RemoteJson,
     outputUserTranspiledDirPath: string,
     backendSdkBaseUrl: string | null,
     blockDevCredentialsPath: string | null,

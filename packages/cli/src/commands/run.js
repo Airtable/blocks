@@ -23,6 +23,11 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         backendSdkBaseUrl === null || typeof backendSdkBaseUrl === 'string',
         'expects backendSdkBaseUrl to be null or a string',
     );
+    const shouldBackendSdkBypassCache = argv.backendSdkBypassCache || false;
+    invariant(
+        typeof shouldBackendSdkBypassCache === 'boolean',
+        'expects shouldBackendSdkBypassCache to be a boolean',
+    );
     const enableDeprecatedAbsolutePathImport = argv.enableDeprecatedAbsolutePathImport || false;
     invariant(
         typeof enableDeprecatedAbsolutePathImport === 'boolean',
@@ -60,15 +65,16 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const blockBuilder = await BlockBuilder.createDevelopmentBlockBuilderAsync({
         blockJson,
+        remoteJson,
         enableDeprecatedAbsolutePathImport,
         transpileForAllBrowsers: transpileAll,
     });
     const blockServer = new BlockServer({
         apiKey,
         transpileAll,
-        remoteJson,
         blockBuilder,
         backendSdkBaseUrl,
+        shouldBackendSdkBypassCache,
         blockDevCredentialsPath,
     });
 

@@ -14,6 +14,7 @@ import type {
     BackendProcessRequest,
     BackendProcessResponse,
 } from '../types/block_server_backend_process_types';
+import type {RemoteJson} from '../types/remote_json_type.js';
 
 // Copied from https://stackoverflow.com/questions/17581830/load-node-js-module-from-string-in-memory
 function requireFromString(src) {
@@ -25,9 +26,14 @@ function requireFromString(src) {
 
 async function requireBackendSdkAsync(
     backendSdkBaseUrl: string | null,
+    remoteJson: RemoteJson,
     canUseCachedBackendSdk: boolean,
 ) {
-    const backendSdkJs = await downloadBackendSdkAsync(backendSdkBaseUrl, canUseCachedBackendSdk);
+    const backendSdkJs = await downloadBackendSdkAsync({
+        backendSdkBaseUrlIfExists: backendSdkBaseUrl,
+        remoteJson,
+        canUseCachedBackendSdk,
+    });
 
     // This is sketchy: some runtime checks for "am I running in Node" check that
     // typeof self === 'undefined', so this breaks that...
@@ -54,6 +60,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
     const {
         outputUserTranspiledDirPath,
         blockJson,
+        remoteJson,
         backendSdkBaseUrl,
         blockDevCredentialsPath,
         canUseCachedBackendSdk,
@@ -62,6 +69,7 @@ async function setUpBackendProcessAsync(options: BackendProcessOptions) {
     // Download the backend sdk.
     const BackendBlockSdkWrapper = await requireBackendSdkAsync(
         backendSdkBaseUrl,
+        remoteJson,
         canUseCachedBackendSdk,
     );
     const backendBlockSdkWrapperInstance = new BackendBlockSdkWrapper();

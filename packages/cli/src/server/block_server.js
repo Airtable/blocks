@@ -55,25 +55,33 @@ class BlockServer {
     constructor(args: {
         blockBuilder: BlockBuilder,
         apiKey: string,
-        remoteJson: RemoteJson,
         blockDevCredentialsPath: string | null,
+        shouldBackendSdkBypassCache: boolean,
         backendSdkBaseUrl?: string | null,
     }) {
-        const {blockBuilder, apiKey, remoteJson, blockDevCredentialsPath, backendSdkBaseUrl} = args;
+        const {
+            blockBuilder,
+            apiKey,
+            blockDevCredentialsPath,
+            backendSdkBaseUrl,
+            shouldBackendSdkBypassCache,
+        } = args;
 
         this._pendingLongPollResolveRejectByRequestId = new Map();
         this._expressApp = express();
         this._blockBuilder = blockBuilder;
         this._apiKey = apiKey;
-        this._remoteJson = remoteJson;
+        this._remoteJson = this._blockBuilder.remoteJson;
         this._blockDevCredentialsPath = blockDevCredentialsPath;
         this._blockJson = this._blockBuilder.blockJson;
         this._blockDirPath = this._blockBuilder.blockDirPath;
         this._blockServerUrlIfExists = null;
         this._backenedProcessManager = new BlockServerBackendProcessManager({
             blockJson: this._blockJson,
+            remoteJson: this._remoteJson,
             outputUserTranspiledDirPath: this._blockBuilder.outputUserTranspiledDirPath,
             backendSdkBaseUrl: backendSdkBaseUrl || null,
+            shouldBackendSdkBypassCache,
             blockDevCredentialsPath: this._blockDevCredentialsPath,
             getApiClient: () => this._apiClient,
         });

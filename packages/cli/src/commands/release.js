@@ -4,6 +4,8 @@ const _ = require('lodash');
 const BlockBuilder = require('../builder/block_builder');
 const ApiClient = require('../api_client');
 const parseAndValidateBlockJsonAsync = require('../helpers/parse_and_validate_block_json_async');
+const parseBlockPackageJsonAsync = require('../helpers/parse_block_package_json_async');
+const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 const fsUtils = require('../helpers/fs_utils');
 const invariant = require('invariant');
 const request = require('postman-request');
@@ -159,11 +161,23 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects enableDeprecatedAbsolutePathImport to be a boolean',
     );
     const enableIsolatedBuild = !(argv.disableIsolatedBuild || false);
-    const apiClientResult = await ApiClient.constructApiClientForRemoteAsync(remoteName);
-    if (apiClientResult.err) {
-        throw apiClientResult.err;
+
+    const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remoteName);
+    if (parseRemoteResult.err) {
+        throw parseRemoteResult.err;
     }
-    const apiClient = apiClientResult.value;
+    const remoteJson = parseRemoteResult.value;
+
+    const parseBlockPackageJsonResult = await parseBlockPackageJsonAsync();
+    if (parseBlockPackageJsonResult.err) {
+        throw parseBlockPackageJsonResult.err;
+    }
+    const blockPackageJson = parseBlockPackageJsonResult.value;
+
+    const apiClient = await ApiClient.constructApiClientForRemoteAsync(
+        remoteJson,
+        blockPackageJson,
+    );
 
     const backendSdkBaseUrl = argv.backendSdkBaseUrl || null;
     invariant(
@@ -173,6 +187,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
 
     const blockBuilder = await BlockBuilder.createReleaseBlockBuilderAsync({
         blockJson,
+        remoteJson,
         enableDeprecatedAbsolutePathImport,
         enableIsolatedBuild,
         backendSdkBaseUrl,

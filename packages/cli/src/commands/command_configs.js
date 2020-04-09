@@ -77,7 +77,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 description:
                     'Path to a local copy of @airtable/blocks to use instead of the npm one',
                 type: 'string',
-                hidden: true,
+                hidden: true, // hide from --help output
             },
             'default-port': {
                 description: 'Configure the default port to use',
@@ -93,6 +93,12 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 type: 'string',
                 hidden: true, // hide from --help output
             },
+            'backend-sdk-bypass-cache': {
+                description: 'Bypass the local caching mechanism for the backend SDK',
+                type: 'boolean',
+                default: false,
+                hidden: true, // hide from --help output
+            },
             'enable-deprecated-absolute-path-import': {
                 description:
                     'Supports using absolute paths for modules import/require via symlinking into node_modules',
@@ -103,7 +109,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             'block-dev-credentials-path': {
                 description: 'Path to local block dev credentials object',
                 type: 'string',
-                hidden: true,
+                hidden: true, // hide from --help output
             },
         },
         runCommandAsync: commandRunner(CommandNames.RUN),

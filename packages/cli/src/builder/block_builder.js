@@ -31,6 +31,7 @@ const hasBackendRoutes = require('../helpers/has_backend_routes');
 import type {BlockBuildType} from '../types/block_build_types';
 import type {BlockBuilderStateData} from '../types/block_builder_state_data_types';
 import type {BlockJson} from '../types/block_json_type';
+import type {RemoteJson} from '../types/remote_json_type';
 import type {Result} from '../types/result';
 import type {PromiseResolveFunction} from '../types/promise_types';
 import type {ErrorWithCode, TranspileError} from '../types/error_codes';
@@ -75,6 +76,7 @@ const DEBOUNCE_DELAY_FOR_SDK_BUNDLE_ENQUEUE_MS = 1000;
 class BlockBuilder {
     _buildTypeMode: BlockBuildType;
     _blockJson: BlockJson;
+    _remoteJson: RemoteJson;
     _enableDeprecatedAbsolutePathImport: boolean;
     _enableIsolatedBuild: boolean;
     _shouldTranspileForAllBrowsers: boolean;
@@ -93,6 +95,7 @@ class BlockBuilder {
     constructor(args: {
         buildTypeMode: BlockBuildType,
         blockJson: BlockJson,
+        remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
         transpileForAllBrowsers?: boolean,
@@ -100,6 +103,7 @@ class BlockBuilder {
     }) {
         this._buildTypeMode = args.buildTypeMode;
         this._blockJson = args.blockJson;
+        this._remoteJson = args.remoteJson;
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
@@ -128,27 +132,36 @@ class BlockBuilder {
 
     static async createDevelopmentBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         transpileForAllBrowsers?: boolean,
     }): Promise<BlockBuilder> {
-        const {blockJson, enableDeprecatedAbsolutePathImport, transpileForAllBrowsers} = args;
+        const {
+            blockJson,
+            remoteJson,
+            enableDeprecatedAbsolutePathImport,
+            transpileForAllBrowsers,
+        } = args;
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.DEVELOPMENT,
             enableDeprecatedAbsolutePathImport,
             // development builds are never isolated:
             enableIsolatedBuild: false,
             blockJson,
+            remoteJson,
             transpileForAllBrowsers,
         });
     }
     static async createReleaseBlockBuilderAsync(args: {
         blockJson: BlockJson,
+        remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
         backendSdkBaseUrl: string | null,
     }): Promise<BlockBuilder> {
         const {
             blockJson,
+            remoteJson,
             enableDeprecatedAbsolutePathImport,
             enableIsolatedBuild,
             backendSdkBaseUrl,
@@ -157,6 +170,7 @@ class BlockBuilder {
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
             blockJson,
+            remoteJson,
             enableDeprecatedAbsolutePathImport,
             enableIsolatedBuild,
             backendSdkBaseUrl,
@@ -185,6 +199,9 @@ class BlockBuilder {
 
     get blockJson(): BlockJson {
         return this._blockJson;
+    }
+    get remoteJson(): RemoteJson {
+        return this._remoteJson;
     }
     get blockDirPath(): DirectoryPath {
         return this._blockDirPath;
@@ -688,12 +705,17 @@ class BlockBuilder {
         }
         return await this._npmCIAsync(outputDirPath);
     }
-    async _writeBackendSdkAsync(): Promise<Result<void, Error>> {
+    async _writeBackendSdkForReleaseAsync(): Promise<Result<void, Error>> {
+        if (this._buildTypeMode !== BlockBuildTypes.RELEASE) {
+            throw new Error('Downloading backend SDK for build is only available for RELEASE mode');
+        }
+
         try {
-            const backendSdkJs = await downloadBackendSdkAsync(
-                this._backendSdkBaseUrl,
-                false /* canUseCachedBackendSdk */,
-            );
+            const backendSdkJs = await downloadBackendSdkAsync({
+                backendSdkBaseUrlIfExists: this._backendSdkBaseUrl,
+                remoteJson: this._remoteJson,
+                canUseCachedBackendSdk: false,
+            });
             await fsUtils.writeFileAsync(
                 path.join(
                     this._outputTranspiledDirPath,
@@ -734,7 +756,7 @@ class BlockBuilder {
         }
 
         // Set up backend SDK.
-        const backendSdkResult = await this._writeBackendSdkAsync();
+        const backendSdkResult = await this._writeBackendSdkForReleaseAsync();
         if (backendSdkResult.err) {
             return backendSdkResult;
         }

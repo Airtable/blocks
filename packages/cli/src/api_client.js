@@ -4,15 +4,14 @@ const request = require('postman-request');
 const {promisify} = require('util');
 const {URL} = require('url');
 const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');
-const parseAndValidateRemoteJsonAsync = require('./helpers/parse_and_validate_remote_json_async');
-const parseBlockPackageJsonAsync = require('./helpers/parse_block_package_json_async');
 const getApiKeyWithWarningsAsync = require('./helpers/get_api_key_with_warnings');
 const CommandNames = require('./commands/command_names');
 request.getAsync = promisify(request.get);
 request.postAsync = promisify(request.post);
 
-import type {Result} from './types/result';
 import type {S3UploadInfo} from './types/s3_upload_info';
+import type {PackageJson} from './types/package_json_type';
+import type {RemoteJson} from './types/remote_json_type';
 
 type ApplicationId = string;
 type BlockInstallationId = string;
@@ -34,30 +33,19 @@ class ApiClient {
     _apiKey: string;
 
     static async constructApiClientForRemoteAsync(
-        remoteName: string | null,
-    ): Promise<Result<ApiClient>> {
-        const parseResult = await parseAndValidateRemoteJsonAsync(remoteName);
-        if (parseResult.err) {
-            return parseResult;
-        }
-        const remoteJson = parseResult.value;
+        remoteJson: RemoteJson,
+        blockPackageJson: PackageJson,
+    ): Promise<ApiClient> {
         const apiKeyName = remoteJson.apiKeyName || null;
         const apiKey = await getApiKeyWithWarningsAsync(apiKeyName);
 
-        const blockPackageJsonResult = await parseBlockPackageJsonAsync();
-        if (blockPackageJsonResult.err) {
-            return blockPackageJsonResult;
-        }
-        const blockPackageJson = blockPackageJsonResult.value;
-
-        const apiClient = new ApiClient({
+        return new ApiClient({
             applicationId: remoteJson.baseId,
             blockId: remoteJson.blockId,
             blockName: blockPackageJson.name,
             apiBaseUrl: remoteJson.server,
             apiKey,
         });
-        return {value: apiClient};
     }
 
     constructor(opts: {|

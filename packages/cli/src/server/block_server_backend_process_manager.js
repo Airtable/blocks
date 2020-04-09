@@ -18,6 +18,7 @@ const {
 
 import type {Middleware, $Response, NextFunction} from 'express';
 import type {BlockJson} from '../types/block_json_type';
+import type {RemoteJson} from '../types/remote_json_type';
 import type {
     BackendProcessOptions,
     BackendProcessRequest,
@@ -31,8 +32,10 @@ const LAMBDA_SIMULATION_DELAY_MS = 300;
 
 class BlockServerBackendProcessManager {
     _blockJson: BlockJson;
+    _remoteJson: RemoteJson;
     _outputUserTranspiledDirPath: string;
     _backendSdkBaseUrlIfExists: string | null;
+    _shouldBackendSdkBypassCache: boolean;
     _blockDevCredentialsPath: string | null;
     _getApiClient: () => ApiClient;
     _backendProcess: childProcess.ChildProcess | null;
@@ -48,14 +51,18 @@ class BlockServerBackendProcessManager {
 
     constructor(args: {
         blockJson: BlockJson,
+        remoteJson: RemoteJson,
         outputUserTranspiledDirPath: string,
         backendSdkBaseUrl: string | null,
+        shouldBackendSdkBypassCache: boolean,
         blockDevCredentialsPath: string | null,
         getApiClient: () => ApiClient,
     }) {
         this._blockJson = args.blockJson;
+        this._remoteJson = args.remoteJson;
         this._outputUserTranspiledDirPath = args.outputUserTranspiledDirPath;
         this._backendSdkBaseUrlIfExists = args.backendSdkBaseUrl;
+        this._shouldBackendSdkBypassCache = args.shouldBackendSdkBypassCache;
         this._blockDevCredentialsPath = args.blockDevCredentialsPath;
         this._getApiClient = args.getApiClient;
         this._backendProcess = null;
@@ -73,10 +80,11 @@ class BlockServerBackendProcessManager {
         }
         const backendProcessOptions: BackendProcessOptions = {
             blockJson: this._blockJson,
+            remoteJson: this._remoteJson,
             outputUserTranspiledDirPath: this._outputUserTranspiledDirPath,
             backendSdkBaseUrl: this._backendSdkBaseUrlIfExists,
             blockDevCredentialsPath: this._blockDevCredentialsPath,
-            canUseCachedBackendSdk: true,
+            canUseCachedBackendSdk: !this._shouldBackendSdkBypassCache,
         };
         this._backendProcess = childProcessHelpers.fork(
             path.join(__dirname, 'block_server_backend_process'),

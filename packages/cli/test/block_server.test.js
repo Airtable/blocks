@@ -52,11 +52,16 @@ describe('BlockServer', function() {
                 version: '1.0',
                 frontendEntry: './frontend/index.js',
             };
+            const remoteJson = {
+                blockId: 'blk123',
+                baseId: 'app123',
+            };
             sinon.stub(BlockBuilder.prototype, 'blockJson').returns(blockJson);
             sinon.stub(BlockBuilder.prototype, 'buildAndWatchAsync').resolves();
             blockBuilder = new BlockBuilder({
                 buildTypeMode: BlockBuildTypes.DEVELOPMENT,
                 blockJson,
+                remoteJson,
                 enableIsolatedBuild: false,
                 enableDeprecatedAbsolutePathImport: false,
                 transpileForAllBrowsers: true,
@@ -65,10 +70,7 @@ describe('BlockServer', function() {
             blockServer = new BlockServer({
                 blockBuilder: blockBuilder,
                 apiKey: 'key123',
-                remoteJson: {
-                    blockId: 'blk123',
-                    baseId: 'app123',
-                },
+                shouldBackendSdkBypassCache: false,
                 blockDevCredentialsPath: null,
             });
 

@@ -55,6 +55,10 @@ function createBackendProcessForTesting(backendSdkServerPort: number) {
                 {urlPath: '/check-backend-sdk', handler: 'check_backend_sdk', methods: ['post']},
             ],
         },
+        remoteJson: {
+            blockId: 'blk123',
+            baseId: 'app123',
+        },
         outputUserTranspiledDirPath: path.join(
             __dirname,
             '..',
