@@ -49,11 +49,15 @@ window['${blockCliConfigSettings.GLOBAL_RUN_BLOCK_FUNCTION_NAME}'] = function ru
         EntryComponent instanceof Function
     );
     if (isEntryReactComponent) {
-        console.log(\`
+    ${
+        isDevelopment
+            ? `console.log(\`
 ************************************************
 ** DEPRECATION WARNING: USING OLD ENTRY POINT **
 ************************************************
-\`);
+\`)`
+            : ''
+    }
         var container = document.createElement('div');
         document.body.appendChild(container);
         ReactDOM.render(React.createElement(BlockWrapperComponent, {
