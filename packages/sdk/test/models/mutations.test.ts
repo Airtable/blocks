@@ -155,7 +155,7 @@ describe('Mutations', () => {
                 }).toThrow("Can't create field: invalid field config.\nMock reason");
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
-                expect(mockValidate).toHaveBeenCalledWith(undefined, config, null, null);
+                expect(mockValidate).toHaveBeenCalledWith(undefined, config, null, null, 'pro');
             });
 
             it('successfully returns when all criteria pass', () => {
@@ -183,7 +183,7 @@ describe('Mutations', () => {
 
                 // check we still called validate
                 expect(mockValidate).toHaveBeenCalledTimes(1);
-                expect(mockValidate).toHaveBeenCalledWith(undefined, config, null, null);
+                expect(mockValidate).toHaveBeenCalledWith(undefined, config, null, null, 'pro');
             });
         });
 
@@ -259,6 +259,7 @@ describe('Mutations', () => {
                     newConfig,
                     oldConfig,
                     field._data,
+                    'pro',
                 );
                 // Restore so we can spy on the default mock which returns {isValid: true}
                 mockValidate.mockRestore();
@@ -281,6 +282,7 @@ describe('Mutations', () => {
                     newConfig,
                     oldConfig,
                     field._data,
+                    'pro',
                 );
             });
         });
@@ -397,6 +399,7 @@ describe('Mutations', () => {
                     {type: FieldType.SINGLE_LINE_TEXT},
                     null,
                     null,
+                    'pro',
                 );
             });
 
@@ -434,7 +437,11 @@ describe('Mutations', () => {
                 );
 
                 expect(mockCanBePrimary).toHaveBeenCalledTimes(1);
-                expect(mockCanBePrimary).toHaveBeenCalledWith(undefined, {type: FieldType.FORMULA});
+                expect(mockCanBePrimary).toHaveBeenCalledWith(
+                    undefined,
+                    {type: FieldType.FORMULA},
+                    'pro',
+                );
             });
 
             it('successfully returns when all criteria pass', () => {
@@ -462,12 +469,17 @@ describe('Mutations', () => {
                     {type: FieldType.SINGLE_LINE_TEXT},
                     null,
                     null,
+                    'pro',
                 );
 
                 expect(mockCanBePrimary).toHaveBeenCalledTimes(1);
-                expect(mockCanBePrimary).toHaveBeenCalledWith(undefined, {
-                    type: FieldType.SINGLE_LINE_TEXT,
-                });
+                expect(mockCanBePrimary).toHaveBeenCalledWith(
+                    undefined,
+                    {
+                        type: FieldType.SINGLE_LINE_TEXT,
+                    },
+                    'pro',
+                );
             });
         });
     });

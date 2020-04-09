@@ -113,8 +113,13 @@ interface FieldTypeProvider {
         newConfig: FieldTypeConfig,
         currentConfig: FieldTypeConfig | null,
         fieldData: FieldData | null,
+        billingPlanGrouping: string,
     ): FieldConfigValidationResult;
-    canBePrimary(appInterface: AppInterface, config: FieldTypeConfig): boolean;
+    canBePrimary(
+        appInterface: AppInterface,
+        config: FieldTypeConfig,
+        billingPlanGrouping: string,
+    ): boolean;
     convertStringToCellValue(
         appInterface: AppInterface,
         string: string,

@@ -163,6 +163,7 @@ class Mutations {
 
         const airtableInterface = getSdk().__airtableInterface;
         const appInterface = getSdk().__appInterface;
+        const billingPlanGrouping = this._base.__billingPlanGrouping;
 
         switch (mutation.type) {
             case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
@@ -343,6 +344,7 @@ class Mutations {
                     config,
                     null,
                     null,
+                    billingPlanGrouping,
                 );
 
                 if (!validationResult.isValid) {
@@ -379,6 +381,7 @@ class Mutations {
                     config,
                     currentConfig,
                     field._data,
+                    billingPlanGrouping,
                 );
 
                 if (!validationResult.isValid) {
@@ -458,6 +461,7 @@ class Mutations {
                         field.config,
                         null,
                         null,
+                        billingPlanGrouping,
                     );
 
                     if (!validationResult.isValid) {
@@ -474,6 +478,7 @@ class Mutations {
                     !airtableInterface.fieldTypeProvider.canBePrimary(
                         appInterface,
                         primaryField.config,
+                        billingPlanGrouping,
                     )
                 ) {
                     throw spawnError(
