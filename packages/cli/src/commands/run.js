@@ -67,6 +67,7 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         blockJson,
         remoteJson,
         enableDeprecatedAbsolutePathImport,
+        sdkPathIfExists: sdkPath,
         transpileForAllBrowsers: transpileAll,
     });
     const blockServer = new BlockServer({

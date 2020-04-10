@@ -20,6 +20,8 @@ export type BlockJson = {|
     version?: '1.0',
     frontendEntry: string,
     routes?: Array<BackendRoute>,
+    // Array of glob patterns for files/directories to ignore when building the block
+    ignored?: Array<string>,
     __hyperbase?: {
         absoluteImportRoot?: string,
     },

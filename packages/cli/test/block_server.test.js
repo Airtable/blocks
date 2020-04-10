@@ -64,6 +64,7 @@ describe('BlockServer', function() {
                 remoteJson,
                 enableIsolatedBuild: false,
                 enableDeprecatedAbsolutePathImport: false,
+                enableLiveSdkReload: false,
                 transpileForAllBrowsers: true,
             });
 

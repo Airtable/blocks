@@ -79,6 +79,7 @@ class BlockBuilder {
     _remoteJson: RemoteJson;
     _enableDeprecatedAbsolutePathImport: boolean;
     _enableIsolatedBuild: boolean;
+    _enableLiveSdkReload: boolean;
     _shouldTranspileForAllBrowsers: boolean;
     _blockDirPath: DirectoryPath;
     _baseOutputBuildDirPath: string;
@@ -91,6 +92,7 @@ class BlockBuilder {
     _backendSdkBaseUrl: string | null;
     _browserifyCache: {[FilePath]: mixed};
     _debouncedEnqueueBundleJob: any; // eslint-disable-line flowtype/no-weak-types
+    _ignoredGlobPatternsFromBlockJson: Array<string>;
 
     constructor(args: {
         buildTypeMode: BlockBuildType,
@@ -98,6 +100,7 @@ class BlockBuilder {
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
         enableIsolatedBuild: boolean,
+        enableLiveSdkReload: boolean,
         transpileForAllBrowsers?: boolean,
         backendSdkBaseUrl?: string | null,
     }) {
@@ -106,18 +109,20 @@ class BlockBuilder {
         this._remoteJson = args.remoteJson;
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
+        this._enableLiveSdkReload = args.enableLiveSdkReload;
         this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._blockDirPath = getBlockDirPath();
 
         this._initialBuildResolveIfExists = null;
         this._browserifyCache = {};
+        this._ignoredGlobPatternsFromBlockJson = this._blockJson.ignored || [];
 
-        if (this._enableIsolatedBuild) {
-            invariant(
-                this._buildTypeMode === BlockBuildTypes.RELEASE,
-                'isolated builds are only supported in release',
-            );
+        if (this._enableIsolatedBuild && this._buildTypeMode !== BlockBuildTypes.RELEASE) {
+            throw new Error('isolated builds are only supported in release');
+        }
+        if (this._enableLiveSdkReload && this._buildTypeMode !== BlockBuildTypes.DEVELOPMENT) {
+            throw new Error('live SDK reloading is only supported in development');
         }
 
         this._setupBuildOutputDirPaths();
@@ -134,22 +139,18 @@ class BlockBuilder {
         blockJson: BlockJson,
         remoteJson: RemoteJson,
         enableDeprecatedAbsolutePathImport: boolean,
+        sdkPathIfExists: string | null,
         transpileForAllBrowsers?: boolean,
     }): Promise<BlockBuilder> {
-        const {
-            blockJson,
-            remoteJson,
-            enableDeprecatedAbsolutePathImport,
-            transpileForAllBrowsers,
-        } = args;
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.DEVELOPMENT,
-            enableDeprecatedAbsolutePathImport,
+            enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
             // development builds are never isolated:
             enableIsolatedBuild: false,
-            blockJson,
-            remoteJson,
-            transpileForAllBrowsers,
+            enableLiveSdkReload: !!args.sdkPathIfExists,
+            blockJson: args.blockJson,
+            remoteJson: args.remoteJson,
+            transpileForAllBrowsers: args.transpileForAllBrowsers,
         });
     }
     static async createReleaseBlockBuilderAsync(args: {
@@ -159,21 +160,15 @@ class BlockBuilder {
         enableIsolatedBuild: boolean,
         backendSdkBaseUrl: string | null,
     }): Promise<BlockBuilder> {
-        const {
-            blockJson,
-            remoteJson,
-            enableDeprecatedAbsolutePathImport,
-            enableIsolatedBuild,
-            backendSdkBaseUrl,
-        } = args;
-
         return new BlockBuilder({
             buildTypeMode: BlockBuildTypes.RELEASE,
-            blockJson,
-            remoteJson,
-            enableDeprecatedAbsolutePathImport,
-            enableIsolatedBuild,
-            backendSdkBaseUrl,
+            blockJson: args.blockJson,
+            remoteJson: args.remoteJson,
+            enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
+            enableIsolatedBuild: args.enableIsolatedBuild,
+            // RELEASE builds never use live SDK reloading
+            enableLiveSdkReload: false,
+            backendSdkBaseUrl: args.backendSdkBaseUrl,
         });
     }
     static getBlockBuilderError(
@@ -287,10 +282,14 @@ class BlockBuilder {
     ): void {
         const {shouldContinueWatchingAfterReady = true} = opts;
 
+        // To support live SDK reloading, we don't want to ignore any dependencies
+        // under 'node_modules/@airtable'.
+        const ignoredNodeModules = this._enableLiveSdkReload
+            ? '**/node_modules/!(@airtable)/**'
+            : '**/node_modules/**';
+
         const ignored = [
-            // HACK: For some reason, we need to use a function here to ignore the 'build' and
-            // the 'node_modules' directories. Using glob patterns is not properly ignored and
-            // it copies things over in an endless recursion.
+            // HACK: We only want to ignore the 'build' directory at the root of this._blockDirPath
             p =>
                 this._doesPathStartWith(
                     p,
@@ -303,6 +302,9 @@ class BlockBuilder {
 
             // This is here for legacy purposes. API Keys are now in blockCliConfigSettings.CONFIG_FILE_NAME)
             '**/.airtableAPIKey',
+
+            ignoredNodeModules,
+            ...this._ignoredGlobPatternsFromBlockJson,
         ];
 
         const chokidarInstance = chokidar.watch(this._blockDirPath, {
@@ -327,12 +329,10 @@ class BlockBuilder {
         for (const chokidarEvent of chokidarEvents) {
             chokidarInstance.on(chokidarEvent, (fileOrDirPath: string, stats?: fs.Stats) => {
                 if (
-                    this._buildTypeMode === BlockBuildTypes.DEVELOPMENT &&
+                    this._enableLiveSdkReload &&
                     this._doesPathStartWith(fileOrDirPath, 'node_modules/@airtable')
                 ) {
                     this._debouncedEnqueueBundleJob();
-                    return;
-                } else if (this._doesPathStartWith(fileOrDirPath, 'node_modules')) {
                     return;
                 }
 
