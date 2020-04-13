@@ -416,6 +416,17 @@ const mockAirtableInterface = {
         generateTableId: () => 'tblGeneratedMockId',
     },
     sdkInitData,
+    fieldTypeProvider: {
+        validateConfigForUpdate: () => {
+            return {isValid: true};
+        },
+        getConfig: () => {
+            return {};
+        },
+        canBePrimary: () => {
+            return true;
+        },
+    },
 };
 
 export default mockAirtableInterface;

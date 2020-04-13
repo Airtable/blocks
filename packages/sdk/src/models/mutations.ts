@@ -9,6 +9,11 @@ import {FieldId} from '../types/field';
 import Session from './session';
 import Base from './base';
 import Field from './field';
+import {
+    MAX_FIELD_NAME_LENGTH,
+    MAX_TABLE_NAME_LENGTH,
+    MAX_NUM_FIELDS_PER_TABLE,
+} from './mutation_constants';
 
 // Limit for how many items can be updated from a single batch mutation.
 // This is number of records for MULTIPLE_RECORDS type mutations, and number of global config paths
@@ -21,11 +26,6 @@ const MUTATIONS_MAX_BATCH_SIZE = 50;
 const MUTATIONS_MAX_BODY_SIZE = 1.9 * 1024 * 1024;
 
 const MUTATION_HOLD_FOR_MS = 100;
-
-// Mirrored from clientServerSharedConfigSettings
-const MAX_FIELD_NAME_LENGTH = 255;
-const MAX_TABLE_NAME_LENGTH = 255;
-const MAX_NUM_FIELDS_PER_TABLE = 500;
 
 /** @internal */
 class Mutations {
@@ -309,7 +309,7 @@ class Mutations {
 
                 if (table.fields.length >= MAX_NUM_FIELDS_PER_TABLE) {
                     throw spawnError(
-                        "Can't create field: table already has maximum number of fields",
+                        "Can't create field: table already has the maximum of %s fields",
                         MAX_NUM_FIELDS_PER_TABLE,
                     );
                 }
@@ -438,7 +438,7 @@ class Mutations {
                     if (field.name.length > MAX_FIELD_NAME_LENGTH) {
                         throw spawnError(
                             "Can't create table: field name '%s' exceeds maximum length of %s characters",
-                            name,
+                            field.name,
                             MAX_FIELD_NAME_LENGTH,
                         );
                     }
@@ -462,7 +462,7 @@ class Mutations {
 
                     if (!validationResult.isValid) {
                         throw spawnError(
-                            "Can't create table: invalid field config for field %s.\n%s",
+                            "Can't create table: invalid field config for field '%s'.\n%s",
                             field.name,
                             validationResult.reason,
                         );
