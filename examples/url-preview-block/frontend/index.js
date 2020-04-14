@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {cursor} from '@airtable/blocks';
 import {ViewType} from '@airtable/blocks/models';
 import {
@@ -6,23 +6,49 @@ import {
     useBase,
     useRecordById,
     useLoadable,
+    useSettingsButton,
     useWatchable,
     Box,
+    Dialog,
+    Heading,
+    Link,
     Text,
     TextButton,
-    Dialog,
-    Link,
-    Heading,
 } from '@airtable/blocks/ui';
+
+import {useSettings} from './settings';
+import SettingsForm from './SettingsForm';
 
 // How this block chooses a preview to show:
 //
-// - The user selects a row in grid view.
-// - The block looks in the selected field for a supported URL
-//   (e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc)
-// - The block uses this URL to construct an embed URL and inserts this URL into an iframe.
-
+// Without a specified Table & Field:
+//
+//  - When the user selects a cell in grid view and the field's content is
+//    a supported preview URL, the block uses this URL to construct an embed
+//    URL and inserts this URL into an iframe.
+//
+// To Specify a Table & Field:
+//
+//  - The user may use "Settings" to toggle a specified table and specified
+//    field constraint. If the constraint switch is set to "Yes",he user must
+//    set a specified table and specified field for URL previews.
+//
+// With a specified table & specified field:
+//
+//  - When the user selects a cell in grid view and the active table matches
+//    the specified table, the block looks in the selected record for the
+//    specified field containing a supported URL (e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc),
+//    and uses this URL to construct an embed URL and inserts this URL into
+//    an iframe.
+//
 function UrlPreviewBlock() {
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
+
+    const {
+        settings: {isEnforced, urlField, urlTable},
+    } = useSettings();
+
     // Caches the currently selected record and field in state. If the user
     // selects a record and a preview appears, and then the user de-selects the
     // record (but does not select another), the preview will remain. This is
@@ -65,111 +91,68 @@ function UrlPreviewBlock() {
     });
 
     const base = useBase();
-    const table = base.getTableByIdIfExists(cursor.activeTableId);
+    const activeTable = base.getTableByIdIfExists(cursor.activeTableId);
 
-    // table is briefly null when switching to a newly created table.
-    if (!table) {
+    useEffect(() => {
+        // If the user is enforcing a specified table and field for previews,
+        // but the table has been deleted, then display the settings form.
+        if (isEnforced && !isSettingsOpen && (!urlTable || !urlField)) {
+            setIsSettingsOpen(true);
+        }
+    }, [isEnforced, isSettingsOpen, urlTable, urlField]);
+
+    // activeTable is briefly null when switching to a newly created table.
+    if (!activeTable) {
         return null;
     }
 
     return (
-        <RecordPreview
-            table={table}
-            selectedRecordId={selectedRecordId}
-            selectedFieldId={selectedFieldId}
-        />
+        <Box>
+            {isSettingsOpen ? (
+                <SettingsForm setIsSettingsOpen={setIsSettingsOpen} />
+            ) : (
+                <RecordPreviewWithDialog
+                    activeTable={activeTable}
+                    selectedRecordId={selectedRecordId}
+                    selectedFieldId={selectedFieldId}
+                    setIsSettingsOpen={setIsSettingsOpen}
+                />
+            )}
+        </Box>
     );
 }
 
-// Shows a preview, or a message about what the user should do to see a preview.
-function RecordPreview({table, selectedRecordId, selectedFieldId}) {
+// Shows a preview, or a dialog that displays information about what
+// kind of services (URLs) are supported by this block.
+function RecordPreviewWithDialog({
+    activeTable,
+    selectedRecordId,
+    selectedFieldId,
+    setIsSettingsOpen,
+}) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    // We use getFieldByIdIfExists because the field might be deleted.
-    const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
-
-    // Triggers a re-render if the record changes. Preview URL cell value
-    // might have changed, or record might have been deleted.
-    const selectedRecord = useRecordById(table, selectedRecordId ? selectedRecordId : '', {
-        fields: [selectedField],
-    });
-
-    // Triggers a re-render if the user switches table or view.
-    // RecordPreview may now need to render a preview, or render nothing at all.
-    useWatchable(cursor, ['activeTableId', 'activeViewId']);
-
-    // This button is re-used in two states so it's pulled out in a constant here.
-    const viewSupportedURLsButton = (
-        <TextButton size="small" marginTop={3} onClick={() => setIsDialogOpen(true)}>
-            View supported URLs
-        </TextButton>
-    );
-
-    let content;
-    if (
-        cursor.activeViewId === null || // activeViewId is briefly null when switching views
-        table.getViewById(cursor.activeViewId).type !== ViewType.GRID
-    ) {
-        content = (
-            <Container>
-                <Text>Switch to a grid view to see previews</Text>
-            </Container>
-        );
-    } else if (
-        // selectedRecord will be null on block initialization, after
-        // the user switches table or view, or if it was deleted.
-        selectedRecord === null ||
-        // The selected field may have been deleted.
-        selectedField === null
-    ) {
-        content = (
-            <Container>
-                <Text>Select a cell to see a preview</Text>
-                {viewSupportedURLsButton}
-            </Container>
-        );
-    } else {
-        // Using getCellValueAsString guarantees we get a string back.  If
-        // we use getCellValue, we might get back numbers, booleans, or
-        // arrays depending on the field type.
-        const previewUrl = getPreviewUrlForCellValue(
-            selectedRecord.getCellValueAsString(selectedField),
-        );
-
-        // In this case, the FIELD_NAME field of the currently selected
-        // record either contains no URL, or contains a URL that cannot be
-        // resolved to a supported preview.
-        if (!previewUrl) {
-            content = (
-                <Container>
-                    <Text>No preview</Text>
-                    {viewSupportedURLsButton}
-                </Container>
-            );
-        } else {
-            content = (
-                <Container>
-                    <iframe
-                        // Using `key=previewUrl` will immediately unmount the
-                        // old iframe when we're switching to a new
-                        // preview. Otherwise, the old iframe would be reused,
-                        // and the old preview would stay onscreen while the new
-                        // one was loading, which would be a confusing user
-                        // experience.
-                        key={previewUrl}
-                        style={{flex: 'auto', width: '100%'}}
-                        src={previewUrl}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                    />
-                </Container>
-            );
-        }
-    }
 
     return (
-        <React.Fragment>
-            {content}
+        <Fragment>
+            <Box
+                position="absolute"
+                top={0}
+                left={0}
+                right={0}
+                bottom={0}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+            >
+                <RecordPreview
+                    activeTable={activeTable}
+                    selectedRecordId={selectedRecordId}
+                    selectedFieldId={selectedFieldId}
+                    setIsDialogOpen={setIsDialogOpen}
+                    setIsSettingsOpen={setIsSettingsOpen}
+                />
+            </Box>
             {isDialogOpen && (
                 <Dialog onClose={() => setIsDialogOpen(false)} maxWidth={400}>
                     <Dialog.CloseButton />
@@ -193,27 +176,125 @@ function RecordPreview({table, selectedRecordId, selectedFieldId}) {
                     </Link>
                 </Dialog>
             )}
-        </React.Fragment>
+        </Fragment>
     );
 }
 
-// Container element which takes up the full viewport and centers its children.
-function Container({children}) {
-    return (
-        <Box
-            position="absolute"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-        >
-            {children}
-        </Box>
+// Shows a preview, or a message about what the user should do to see a preview.
+function RecordPreview({
+    activeTable,
+    selectedRecordId,
+    selectedFieldId,
+    setIsDialogOpen,
+    setIsSettingsOpen,
+}) {
+    const {
+        settings: {isEnforced, urlField, urlTable},
+    } = useSettings();
+
+    const table = (isEnforced && urlTable) || activeTable;
+
+    // We use getFieldByIdIfExists because the field might be deleted.
+    const selectedField = selectedFieldId ? table.getFieldByIdIfExists(selectedFieldId) : null;
+    // When using a specific field for previews is enabled and that field exists,
+    // use the selectedField
+    const previewField = (isEnforced && urlField) || selectedField;
+    // Triggers a re-render if the record changes. Preview URL cell value
+    // might have changed, or record might have been deleted.
+    const selectedRecord = useRecordById(table, selectedRecordId ? selectedRecordId : '', {
+        fields: [previewField],
+    });
+
+    // Triggers a re-render if the user switches table or view.
+    // RecordPreview may now need to render a preview, or render nothing at all.
+    useWatchable(cursor, ['activeTableId', 'activeViewId']);
+
+    // This button is re-used in two states so it's pulled out in a constant here.
+    const viewSupportedURLsButton = (
+        <TextButton size="small" marginTop={3} onClick={() => setIsDialogOpen(true)}>
+            View supported URLs
+        </TextButton>
     );
+
+    if (
+        // If there is/was a specified table enforced, but the cursor
+        // is not presently in the specified table, display a message to the user.
+        isEnforced &&
+        cursor.activeTableId !== table.id
+    ) {
+        return (
+            <Fragment>
+                <Text paddingX={3}>Switch to the “{table.name}” table to see previews.</Text>
+                <TextButton size="small" marginTop={3} onClick={() => setIsSettingsOpen(true)}>
+                    Settings
+                </TextButton>
+            </Fragment>
+        );
+    } else if (
+        // activeViewId is briefly null when switching views
+        cursor.activeViewId === null ||
+        table.getViewById(cursor.activeViewId).type !== ViewType.GRID
+    ) {
+        return <Text>Switch to a grid view to see previews</Text>;
+    } else if (
+        // selectedRecord will be null on block initialization, after
+        // the user switches table or view, or if it was deleted.
+        selectedRecord === null ||
+        // The selected field may have been deleted.
+        selectedField === null
+    ) {
+        return (
+            <Fragment>
+                <Text>Select a cell to see a preview</Text>
+                {viewSupportedURLsButton}
+            </Fragment>
+        );
+    } else {
+        // Using getCellValueAsString guarantees we get a string back. If
+        // we use getCellValue, we might get back numbers, booleans, or
+        // arrays depending on the field type.
+        const cellValue = selectedRecord.getCellValueAsString(previewField);
+
+        if (!cellValue) {
+            return (
+                <Fragment>
+                    <Text>The “{previewField.name}” field is empty</Text>
+                    {viewSupportedURLsButton}
+                </Fragment>
+            );
+        } else {
+            const previewUrl = getPreviewUrlForCellValue(cellValue);
+
+            // In this case, the FIELD_NAME field of the currently selected
+            // record either contains no URL, or contains a that cannot be
+            // resolved to a supported preview.
+            if (!previewUrl) {
+                return (
+                    <Fragment>
+                        <Text>No preview</Text>
+                        {viewSupportedURLsButton}
+                    </Fragment>
+                );
+            } else {
+                return (
+                    <iframe
+                        // Using `key=previewUrl` will immediately unmount the
+                        // old iframe when we're switching to a new
+                        // preview. Otherwise, the old iframe would be reused,
+                        // and the old preview would stay onscreen while the new
+                        // one was loading, which would be a confusing user
+                        // experience.
+                        key={previewUrl}
+                        style={{flex: 'auto', width: '100%'}}
+                        src={previewUrl}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    />
+                );
+            }
+        }
+    }
 }
 
 function getPreviewUrlForCellValue(url) {
@@ -223,124 +304,98 @@ function getPreviewUrlForCellValue(url) {
 
     // Try to extract the preview URL from the URL using regular expression
     // based helper functions for each service we support.
-    const airtablePreviewUrl = getAirtablePreviewUrl(url);
-    if (airtablePreviewUrl) {
-        return airtablePreviewUrl;
+    //
+    for (const converter of converters) {
+        const previewUrl = converter(url);
+        if (previewUrl) {
+            return previewUrl;
+        }
     }
-
-    const youtubePreviewUrl = getYoutubePreviewUrl(url);
-    if (youtubePreviewUrl) {
-        return youtubePreviewUrl;
-    }
-
-    const vimeoPreviewUrl = getVimeoPreviewUrl(url);
-    if (vimeoPreviewUrl) {
-        return vimeoPreviewUrl;
-    }
-
-    const spotifyPreviewUrl = getSpotifyPreviewUrl(url);
-    if (spotifyPreviewUrl) {
-        return spotifyPreviewUrl;
-    }
-
-    const soundcloudPreviewUrl = getSoundcloudPreviewUrl(url);
-    if (soundcloudPreviewUrl) {
-        return soundcloudPreviewUrl;
-    }
-
-    const figmaPreviewUrl = getFigmaPreviewUrl(url);
-    if (figmaPreviewUrl) {
-        return figmaPreviewUrl;
-    }
-
-    // URL didn't match any supported services, so return null
+    // If no converter is found, return null.
     return null;
 }
 
-function getAirtablePreviewUrl(url) {
-    const match = url.match(/airtable\.com(\/embed)?\/(shr[A-Za-z0-9]{14}.*)/);
-    if (match) {
-        return `https://airtable.com/embed/${match[2]}`;
-    }
+const converters = [
+    function getAirtablePreviewUrl(url) {
+        const match = url.match(/airtable\.com(\/embed)?\/(shr[A-Za-z0-9]{14}.*)/);
+        if (match) {
+            return `https://airtable.com/embed/${match[2]}`;
+        }
 
-    // URL isn't for an Airtable share
-    return null;
-}
+        // URL isn't for an Airtable share
+        return null;
+    },
+    function getYoutubePreviewUrl(url) {
+        // Standard youtube urls, e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc
+        let match = url.match(/youtube\.com\/.*v=([\w-]+)(&|$)/);
 
-function getYoutubePreviewUrl(url) {
-    // Standard youtube urls, e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc
-    let match = url.match(/youtube\.com\/.*v=([\w-]+)(&|$)/);
+        if (match) {
+            return `https://www.youtube.com/embed/${match[1]}`;
+        }
 
-    if (match) {
-        return `https://www.youtube.com/embed/${match[1]}`;
-    }
+        // Shortened youtube urls, e.g. https://youtu.be/KYz2wyBy3kc
+        match = url.match(/youtu\.be\/([\w-]+)(\?|$)/);
+        if (match) {
+            return `https://www.youtube.com/embed/${match[1]}`;
+        }
 
-    // Shortened youtube urls, e.g. https://youtu.be/KYz2wyBy3kc
-    match = url.match(/youtu\.be\/([\w-]+)(\?|$)/);
-    if (match) {
-        return `https://www.youtube.com/embed/${match[1]}`;
-    }
+        // Youtube playlist urls, e.g. youtube.com/playlist?list=KYz2wyBy3kc
+        match = url.match(/youtube\.com\/playlist\?.*list=([\w-]+)(&|$)/);
+        if (match) {
+            return `https://www.youtube.com/embed/videoseries?list=${match[1]}`;
+        }
 
-    // Youtube playlist urls, e.g. youtube.com/playlist?list=KYz2wyBy3kc
-    match = url.match(/youtube\.com\/playlist\?.*list=([\w-]+)(&|$)/);
-    if (match) {
-        return `https://www.youtube.com/embed/videoseries?list=${match[1]}`;
-    }
+        // URL isn't for a youtube video
+        return null;
+    },
+    function getVimeoPreviewUrl(url) {
+        const match = url.match(/vimeo\.com\/([\w-]+)(\?|$)/);
+        if (match) {
+            return `https://player.vimeo.com/video/${match[1]}`;
+        }
 
-    // URL isn't for a youtube video
-    return null;
-}
+        // URL isn't for a Vimeo video
+        return null;
+    },
+    function getSpotifyPreviewUrl(url) {
+        // Spotify URLs for song, album, artist, playlist all have similar formats
+        let match = url.match(/spotify\.com\/(track|album|artist|playlist)\/([\w-]+)(\?|$)/);
+        if (match) {
+            return `https://open.spotify.com/embed/${match[1]}/${match[2]}`;
+        }
 
-function getVimeoPreviewUrl(url) {
-    const match = url.match(/vimeo\.com\/([\w-]+)(\?|$)/);
-    if (match) {
-        return `https://player.vimeo.com/video/${match[1]}`;
-    }
+        // Spotify URLs for podcasts and episodes have a different format
+        match = url.match(/spotify\.com\/(show|episode)\/([\w-]+)(\?|$)/);
+        if (match) {
+            return `https://open.spotify.com/embed-podcast/${match[1]}/${match[2]}`;
+        }
 
-    // URL isn't for a Vimeo video
-    return null;
-}
+        // URL isn't for Spotify
+        return null;
+    },
+    function getSoundcloudPreviewUrl(url) {
+        // Soundcloud url's don't have a clear format, so just check if they are from soundcloud and try
+        // to embed them.
+        if (url.match(/soundcloud\.com/)) {
+            return `https://w.soundcloud.com/player/?url=${url}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`;
+        }
 
-function getSpotifyPreviewUrl(url) {
-    // Spotify URLs for song, album, artist, playlist all have similar formats
-    let match = url.match(/spotify\.com\/(track|album|artist|playlist)\/([\w-]+)(\?|$)/);
-    if (match) {
-        return `https://open.spotify.com/embed/${match[1]}/${match[2]}`;
-    }
+        // URL isn't for Soundcloud
+        return null;
+    },
+    function getFigmaPreviewUrl(url) {
+        // Figma has a regex they recommend matching against
+        if (
+            url.match(
+                /(https:\/\/([\w.-]+\.)?)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/,
+            )
+        ) {
+            return `https://www.figma.com/embed?embed_host=astra&url=${url}`;
+        }
 
-    // Spotify URLs for podcasts and episodes have a different format
-    match = url.match(/spotify\.com\/(show|episode)\/([\w-]+)(\?|$)/);
-    if (match) {
-        return `https://open.spotify.com/embed-podcast/${match[1]}/${match[2]}`;
-    }
-
-    // URL isn't for Spotify
-    return null;
-}
-
-function getSoundcloudPreviewUrl(url) {
-    // Soundcloud url's don't have a clear format, so just check if they are from soundcloud and try
-    // to embed them.
-    if (url.match(/soundcloud\.com/)) {
-        return `https://w.soundcloud.com/player/?url=${url}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true`;
-    }
-
-    // URL isn't for Soundcloud
-    return null;
-}
-
-function getFigmaPreviewUrl(url) {
-    // Figma has a regex they recommend matching against
-    if (
-        url.match(
-            /(https:\/\/([\w.-]+\.)?)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/,
-        )
-    ) {
-        return `https://www.figma.com/embed?embed_host=astra&url=${url}`;
-    }
-
-    // URL isn't for Figma
-    return null;
-}
+        // URL isn't for Figma
+        return null;
+    },
+];
 
 initializeBlock(() => <UrlPreviewBlock />);
