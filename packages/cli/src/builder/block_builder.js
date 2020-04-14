@@ -110,7 +110,7 @@ class BlockBuilder {
         this._enableDeprecatedAbsolutePathImport = args.enableDeprecatedAbsolutePathImport;
         this._enableIsolatedBuild = args.enableIsolatedBuild;
         this._enableLiveSdkReload = args.enableLiveSdkReload;
-        this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || false;
+        this._shouldTranspileForAllBrowsers = args.transpileForAllBrowsers || true;
         this._backendSdkBaseUrl = args.backendSdkBaseUrl || null;
         this._blockDirPath = getBlockDirPath();
 
@@ -166,6 +166,7 @@ class BlockBuilder {
             remoteJson: args.remoteJson,
             enableDeprecatedAbsolutePathImport: args.enableDeprecatedAbsolutePathImport,
             enableIsolatedBuild: args.enableIsolatedBuild,
+            transpileForAllBrowsers: true,
             // RELEASE builds never use live SDK reloading
             enableLiveSdkReload: false,
             backendSdkBaseUrl: args.backendSdkBaseUrl,
