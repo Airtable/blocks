@@ -15,7 +15,7 @@ No changes.
 
 ## [0.0.49](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.48...@airtable/blocks-cli@0.0.49) - 2020-04-14
 
-No changes.
+* Correctly quit on file system "watch" errors. Some operating systems (particularly on a *nix OS), it is easy to run into `ENOSPC` errors due to file watching limitations. We now correctly exit if met with this error.
 
 ## [0.0.48](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.47...@airtable/blocks-cli@0.0.48) - 2020-04-07
 
