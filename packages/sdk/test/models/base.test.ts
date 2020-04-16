@@ -1,8 +1,18 @@
 import mockProjectTrackerAirtableInterface from '../airtable_interface_mocks/project_tracker';
+import {FieldType} from '../../src/types/field';
+import {MutationTypes} from '../../src/types/mutations';
 import Base from '../../src/models/base';
 import Table from '../../src/models/table';
 
 jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
+
+let mockMutations: any;
+jest.mock('../../src/get_sdk', () => () => ({
+    __mutations: mockMutations,
+    runInfo: {
+        isDevelopment: true,
+    },
+}));
 
 describe('Base', () => {
     let base: Base;
@@ -223,6 +233,54 @@ describe('Base', () => {
             expect(() => base.getTable('Injustices')).toThrowErrorMatchingInlineSnapshot(
                 `"No table with ID or name 'Injustices' in base 'Project tracker'"`,
             );
+        });
+    });
+
+    describe('createTableAsync', () => {
+        let mockGetTableById: any;
+        beforeEach(() => {
+            mockMutations = {
+                applyMutationAsync: jest.fn(),
+            };
+
+            mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation(tableId => {
+                const airtableInterface = mockProjectTrackerAirtableInterface as any;
+                const recordStore = undefined as any;
+                return new Table(base.__baseData, base, recordStore, tableId, airtableInterface);
+            });
+        });
+
+        it('accepts null, undefined and non-null field options', async () => {
+            await base.unstable_createTableAsync('new table', [
+                {name: 'field 1', type: FieldType.SINGLE_LINE_TEXT},
+                {name: 'field 2', type: FieldType.SINGLE_LINE_TEXT, options: null},
+                {
+                    name: 'field 3',
+                    type: FieldType.SINGLE_SELECT,
+                    options: {choices: [{name: 'pick me'}]},
+                },
+            ]);
+
+            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
+                type: MutationTypes.CREATE_SINGLE_TABLE,
+                id: 'tblGeneratedMockId',
+                name: 'new table',
+                fields: [
+                    {name: 'field 1', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                    {name: 'field 2', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                    {
+                        name: 'field 3',
+                        config: {
+                            type: FieldType.SINGLE_SELECT,
+                            options: {choices: [{name: 'pick me'}]},
+                        },
+                    },
+                ],
+            });
+
+            expect(mockGetTableById).toHaveBeenCalledTimes(1);
+            expect(mockGetTableById).toHaveBeenLastCalledWith('tblGeneratedMockId');
         });
     });
 });

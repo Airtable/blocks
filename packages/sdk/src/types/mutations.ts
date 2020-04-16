@@ -1,5 +1,6 @@
 /** @module @airtable/blocks: mutations */ /** */
 import {ObjectValues, ObjectMap} from '../private_utils';
+import {FieldTypeConfig} from '../injected/airtable_interface';
 import {GlobalConfigUpdate, GlobalConfigValue} from './global_config';
 import {TableId} from './table';
 import {FieldId} from './field';
@@ -11,6 +12,9 @@ export const MutationTypes = Object.freeze({
     DELETE_MULTIPLE_RECORDS: 'deleteMultipleRecords' as const,
     CREATE_MULTIPLE_RECORDS: 'createMultipleRecords' as const,
     SET_MULTIPLE_GLOBAL_CONFIG_PATHS: 'setMultipleGlobalConfigPaths' as const,
+    CREATE_SINGLE_FIELD: 'createSingleField' as const,
+    UPDATE_SINGLE_FIELD_CONFIG: 'updateSingleFieldConfig' as const,
+    CREATE_SINGLE_TABLE: 'createSingleTable' as const,
 });
 
 /** @hidden */
@@ -29,11 +33,13 @@ export interface SetMultipleRecordsCellValuesMutation {
 /** @hidden */
 export interface PartialSetMultipleRecordsCellValuesMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES;
-    readonly tableId: TableId | void;
-    readonly records: ReadonlyArray<{
-        readonly id: RecordId | void;
-        readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | void> | void;
-    }> | void;
+    readonly tableId: TableId | undefined;
+    readonly records:
+        | ReadonlyArray<{
+              readonly id: RecordId | undefined;
+              readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
@@ -46,8 +52,8 @@ export interface DeleteMultipleRecordsMutation {
 /** @hidden */
 export interface PartialDeleteMultipleRecordsMutation {
     readonly type: typeof MutationTypes.DELETE_MULTIPLE_RECORDS;
-    readonly tableId: TableId | void;
-    readonly recordIds: ReadonlyArray<RecordId> | void;
+    readonly tableId: TableId | undefined;
+    readonly recordIds: ReadonlyArray<RecordId> | undefined;
 }
 
 /** @hidden */
@@ -63,11 +69,13 @@ export interface CreateMultipleRecordsMutation {
 /** @hidden */
 export interface PartialCreateMultipleRecordsMutation {
     readonly type: typeof MutationTypes.CREATE_MULTIPLE_RECORDS;
-    readonly tableId: TableId | void;
-    readonly records: ReadonlyArray<{
-        readonly id: RecordId | void;
-        readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | void> | void;
-    }> | void;
+    readonly tableId: TableId | undefined;
+    readonly records:
+        | ReadonlyArray<{
+              readonly id: RecordId | undefined;
+              readonly cellValuesByFieldId: ObjectMap<FieldId, unknown | undefined> | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
@@ -79,10 +87,71 @@ export interface SetMultipleGlobalConfigPathsMutation {
 /** @hidden */
 export interface PartialSetMultipleGlobalConfigPathsMutation {
     readonly type: typeof MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS;
-    readonly updates: ReadonlyArray<{
-        readonly path: ReadonlyArray<string | void> | void;
-        readonly value: GlobalConfigValue | void | void;
-    }> | void;
+    readonly updates:
+        | ReadonlyArray<{
+              readonly path: ReadonlyArray<string | undefined> | undefined;
+              readonly value: GlobalConfigValue | undefined | undefined;
+          }>
+        | undefined;
+}
+
+/** @hidden */
+export interface CreateSingleFieldMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_FIELD;
+    readonly tableId: TableId;
+    readonly id: FieldId;
+    readonly name: string;
+    readonly config: FieldTypeConfig;
+}
+
+/** @hidden */
+export interface PartialCreateSingleFieldMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_FIELD;
+    readonly tableId: TableId | undefined;
+    readonly id: FieldId | undefined;
+    readonly name: string | undefined;
+    readonly config: FieldTypeConfig | undefined;
+}
+
+/** @hidden */
+
+export interface UpdateSingleFieldConfigMutation {
+    readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_CONFIG;
+    readonly tableId: TableId;
+    readonly id: FieldId;
+    readonly config: FieldTypeConfig;
+}
+
+/** @hidden */
+export interface PartialUpdateSingleFieldConfigMutation {
+    readonly type: typeof MutationTypes.UPDATE_SINGLE_FIELD_CONFIG;
+    readonly tableId: TableId | undefined;
+    readonly id: FieldId | undefined;
+    readonly config: FieldTypeConfig | undefined;
+}
+
+/** @hidden */
+export interface CreateSingleTableMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_TABLE;
+    readonly id: TableId;
+    readonly name: string;
+    readonly fields: ReadonlyArray<{
+        name: string;
+        config: FieldTypeConfig;
+    }>;
+}
+
+/** @hidden */
+export interface PartialCreateSingleTableMutation {
+    readonly type: typeof MutationTypes.CREATE_SINGLE_TABLE;
+    readonly id: TableId | undefined;
+    readonly name: string | undefined;
+    readonly fields:
+        | ReadonlyArray<{
+              name: string | undefined;
+              config: FieldTypeConfig | undefined;
+          }>
+        | undefined;
 }
 
 /** @hidden */
@@ -90,14 +159,20 @@ export type Mutation =
     | SetMultipleRecordsCellValuesMutation
     | DeleteMultipleRecordsMutation
     | CreateMultipleRecordsMutation
-    | SetMultipleGlobalConfigPathsMutation;
+    | SetMultipleGlobalConfigPathsMutation
+    | CreateSingleFieldMutation
+    | UpdateSingleFieldConfigMutation
+    | CreateSingleTableMutation;
 
 /** @hidden */
 export type PartialMutation =
     | PartialSetMultipleRecordsCellValuesMutation
     | PartialDeleteMultipleRecordsMutation
     | PartialCreateMultipleRecordsMutation
-    | PartialSetMultipleGlobalConfigPathsMutation;
+    | PartialSetMultipleGlobalConfigPathsMutation
+    | PartialCreateSingleFieldMutation
+    | PartialUpdateSingleFieldConfigMutation
+    | PartialCreateSingleTableMutation;
 
 /** */
 export interface SuccessfulPermissionCheckResult {

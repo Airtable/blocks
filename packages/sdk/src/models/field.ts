@@ -1,7 +1,8 @@
 /** @module @airtable/blocks/models: Field */ /** */
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
-import {FieldData, PrivateColumnType, FieldType} from '../types/field';
+import {MutationTypes, PermissionCheckResult} from '../types/mutations';
+import {FieldData, PrivateColumnType, FieldType, FieldOptions} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -117,7 +118,8 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     }
     /**
      * The configuration options of the field. The structure of the field's
-     * options depend on the field's type. Can be watched.
+     * options depend on the field's type. `null` if the field has no options.
+     * Can be watched.
      *
      * @see {@link FieldType}
      * @example
@@ -130,7 +132,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * }
      * ```
      */
-    get options(): {[key: string]: unknown} | null {
+    get options(): FieldOptions | null {
         const airtableInterface = getSdk().__airtableInterface;
         const appInterface = getSdk().__appInterface;
 
@@ -141,6 +143,106 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         );
 
         return options ? cloneDeep(options) : null;
+    }
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Checks whether the current user has permission to perform the given options update.
+     *
+     * Accepts partial input, in the same format as {@link unstable_updateOptionsAsync}.
+     *
+     * Returns `{hasPermission: true}` if the current user can update the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
+     * @param options new options for the field
+     *
+     * ```js
+     * const updateFieldCheckResult = field.unstable_checkPermissionsForUpdateOptions();
+     *
+     * if (!updateFieldCheckResult.hasPermission) {
+     *     alert(updateFieldCheckResult.reasonDisplayString);
+     * }
+     * ```
+     */
+    unstable_checkPermissionsForUpdateOptions(options?: FieldOptions): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
+            tableId: this.parentTable.id,
+            id: this.id,
+            config: {
+                type: this.type,
+                options: options,
+            },
+        });
+    }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * An alias for `checkPermissionsForUpdateOptions(options).hasPermission`.
+     *
+     * Checks whether the current user has permission to perform the options update.
+     *
+     * Accepts partial input, in the same format as {@link unstable_updateOptionsAsync}.
+     *
+     * @param options new options for the field
+     *
+     * ```js
+     * const canUpdateField = field.unstable_hasPermissionToUpdateOptions();
+     *
+     * if (!canUpdateField) {
+     *     alert('not allowed!');
+     * }
+     * ```
+     */
+    unstable_hasPermissionToUpdateOptions(options?: FieldOptions): boolean {
+        return this.unstable_checkPermissionsForUpdateOptions(options).hasPermission;
+    }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Updates the options for this field.
+     *
+     * Throws an error if the user does not have permission to update the field, if invalid
+     * options are provided, if this field has no writable options, or if updates to this field
+     * type is not supported.
+     *
+     * Refer to {@link FieldType} for supported field types, the write format for options, and
+     * other specifics for certain field types.
+     *
+     * This action is asynchronous. Unlike updates to cell values, updates to field options are
+     * **not** applied optimistically locally. You must `await` the returned promise before
+     * relying on the change in your block.
+     *
+     * @param options new options for the field
+     *
+     * ```js
+     * async function addChoiceToSelectField(selectField, nameForNewOption) {
+     *     const updatedOptions = {
+     *         choices: [
+     *             ...selectField.options.choices,
+     *             {name: nameForNewOption},
+     *         ]
+     *     };
+     *
+     *     if (selectField.unstable_hasPermissionToUpdateOptions(updatedOptions)) {
+     *         await selectField.unstable_updateOptionsAsync(updatedOptions);
+     *     }
+     * }
+     * ```
+     */
+    async unstable_updateOptionsAsync(options: FieldOptions): Promise<void> {
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
+            tableId: this.parentTable.id,
+            id: this.id,
+            config: {
+                type: this.type,
+                options: options,
+            },
+        });
     }
     /**
      * `true` if this field is computed, `false` otherwise. A field is

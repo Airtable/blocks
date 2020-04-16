@@ -1,10 +1,13 @@
 /** @module @airtable/blocks/models: Base */ /** */
 import {BaseData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
+import {FieldType} from '../types/field';
+import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
 import {AirtableInterface} from '../injected/airtable_interface';
 import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
+import getSdk from '../get_sdk';
 import Table from './table';
 import RecordStore from './record_store';
 import AbstractModel from './abstract_model';
@@ -326,6 +329,164 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         }
         return table;
     }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Checks whether the current user has permission to create a table.
+     *
+     * Accepts partial input, in the same format as {@link unstable_createTableAsync}.
+     *
+     * Returns `{hasPermission: true}` if the current user can update the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
+     * @param name name for the table. must be case-insensitive unique
+     * @param fields array of fields to create in the table
+     *
+     * ```js
+     * const createTableCheckResult = base.unstable_checkPermissionsForCreateTable();
+     *
+     * if (!createTableCheckResult.hasPermission) {
+     *     alert(createTableCheckResult.reasonDisplayString);
+     * }
+     * ```
+     */
+    unstable_checkPermissionsForCreateTable(
+        name?: string,
+        fields?: Array<{
+            name?: string;
+            type?: FieldType;
+            options?: {[key: string]: unknown} | null;
+        }>,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_SINGLE_TABLE,
+            id: undefined, 
+            name: name,
+            fields: fields?.map(field => {
+                return {
+                    name: field.name,
+                    config: field.type
+                        ? {
+                              type: field.type,
+                              ...(field.options ? {options: field.options} : null),
+                          }
+                        : undefined,
+                };
+            }),
+        });
+    }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * An alias for `checkPermissionsForCreateTable(name, fields).hasPermission`.
+     *
+     * Checks whether the current user has permission to create a table.
+     *
+     * Accepts partial input, in the same format as {@link unstable_createTableAsync}.
+     *
+     * @param name name for the table. must be case-insensitive unique
+     * @param fields array of fields to create in the table
+     *
+     * ```js
+     * const canCreateTable = table.unstable_hasPermissionToCreateTable();
+     *
+     * if (!canCreateTable) {
+     *     alert('not allowed!');
+     * }
+     * ```
+     */
+    unstable_hasPermissionToCreateTable(
+        name?: string,
+        fields?: Array<{
+            name?: string;
+            type?: FieldType;
+            options?: {[key: string]: unknown} | null;
+        }>,
+    ): boolean {
+        return this.unstable_checkPermissionsForCreateTable(name, fields).hasPermission;
+    }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Creates a new table.
+     *
+     * Throws an error if the user does not have permission to create a table, if an invalid
+     * table name is provided, or if invalid fields are provided (invalid name, type or options).
+     *
+     * Refer to {@link FieldType} for supported field types, the write format for field options, and
+     * other specifics for certain field types.
+     *
+     * At least one field must be specified. The first field in the `fields` array will be used as
+     * the table's [primary field](https://support.airtable.com/hc/en-us/articles/202624179-The-Name-Field primary field)
+     * and must be a supported primary field type. Fields must have case-insensitive unique names
+     * within the table.
+     *
+     * A default grid view will be created with all fields visible.
+     *
+     * This action is asynchronous. Unlike new records, new tables are **not** created
+     * optimistically locally. You must `await` the returned promise before using the new
+     * table in your block.
+     *
+     * @param name name for the table. must be case-insensitive unique
+     * @param fields array of fields to create in the table: see above for details.
+     *
+     * ```js
+     * async function createNewTable() {
+     *     const name = 'My new table';
+     *     const fields = [
+     *         // Name will be the primary field of the table.
+     *         {name: 'Name', type: FieldType.SINGLE_LINE_TEXT},
+     *         {name: 'Notes', type: FieldType.RICH_TEXT},
+     *         {name: 'Attachments', type: FieldType.MULTIPLE_ATTACHMENTS},
+     *         {name: 'Number', type: FieldType.NUMBER, options: {
+     *             precision: 8,
+     *         }},
+     *         {name: 'Select', type: FieldType.SINGLE_SELECT, options: {
+     *             choices: [
+     *                 {name: 'A'},
+     *                 {name: 'B'},
+     *             ],
+     *         }},
+     *     ];
+     *
+     *     if (base.unstable_hasPermissionToCreateTable(name, fields)) {
+     *         await base.unstable_createTableAsync(name, fields);
+     *     }
+     * }
+     * ```
+     */
+    async unstable_createTableAsync(
+        name: string,
+        fields: Array<{
+            name: string;
+            type: FieldType;
+            options?: {[key: string]: unknown} | null;
+        }>,
+    ): Promise<Table> {
+        const tableId = this._airtableInterface.idGenerator.generateTableId();
+
+        await getSdk().__mutations.applyMutationAsync({
+            id: tableId,
+            type: MutationTypes.CREATE_SINGLE_TABLE,
+            name,
+            fields: fields.map(field => {
+                return {
+                    name: field.name,
+                    config: {
+                        type: field.type,
+                        ...(field.options ? {options: field.options} : null),
+                    },
+                };
+            }),
+        });
+
+        return this.getTableById(tableId);
+    }
+
     /**
      * @internal
      */

@@ -35,7 +35,7 @@ function FieldIconExample() {
                 const FieldIconExample = (props) => {
                    const base = useBase();
                    const table = base.getTableByName('All field types');
-                   const field = base.getFieldByName('${fieldName} field');
+                   const field = table.getFieldByName('${fieldName} field');
  
                    return (
                         <FieldIcon field={field} size={${size}} />

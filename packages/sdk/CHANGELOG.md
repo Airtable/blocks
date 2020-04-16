@@ -9,9 +9,27 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.45...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.46...HEAD)
 
 No changes.
+
+## [0.0.46](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.45...@airtable/blocks@0.0.46) - 2020-04-16
+
+-   `FieldType.RICH_TEXT` has been added, which encompasses long text fields with the new rich text
+    formatting option enabled. (See Airtable's announcement regarding
+    [rich text formatting in long text fields](https://blog.airtable.com/4-workflows-for-rich-text-formatting/))
+-   `Switch` and `SwitchSynced` now truncate the label.
+-   Fix a bug where `RecordCard` performs the default expand record behavior, even if an `onClick`
+    override is supplied. It now properly handles overrides as described in the documentation. This
+    fix also applies to `onRecordClick` in `RecordCardList`.
+-   Beta: New field and table writes API! You can now create tables and fields and update field
+    options.
+    -   `base.unstable_createTableAsync`
+    -   `table.unstable_createFieldAsync`
+    -   `field.unstable_updateOptionsAsync`
+    -   These APIs are unstable and may have breaking changes in the future.
+    -   Not all field types are supported at this time. Refer to `FieldType` documentation for
+        details.
 
 ## [0.0.45](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.44...@airtable/blocks@0.0.45) - 2020-03-31
 

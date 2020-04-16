@@ -2,7 +2,7 @@
 import {BaseData} from '../types/base';
 import {TableData} from '../types/table';
 import {ViewType, ViewId} from '../types/view';
-import {FieldId} from '../types/field';
+import {FieldId, FieldType, FieldOptions} from '../types/field';
 import {RecordId} from '../types/record';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
@@ -79,8 +79,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         this._cachedFieldNamesById = null;
 
         this._airtableInterface = airtableInterface;
-
-        Object.seal(this);
     }
 
     /**
@@ -569,6 +567,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Throws an error if the user does not have permission to update the given cell values in
      * the record, or if invalid input is provided (eg. invalid cell values).
      *
+     * Refer to {@link FieldType} for cell value write formats.
+     *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the updated
      * cell values to be persisted to Airtable servers.
      * Updates are applied optimistically locally, so your changes will be reflected in your block
@@ -761,6 +761,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * Throws an error if the user does not have permission to update the given cell values in
      * the records, or if invalid input is provided (eg. invalid cell values).
+     *
+     * Refer to {@link FieldType} for cell value write formats.
      *
      * You may only update up to 50 records in one call to `updateRecordsAsync`.
      * See [Write back to Airtable](/guides/write-back-to-airtable) for more information
@@ -1205,6 +1207,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * Throws an error if the user does not have permission to create the given records, or
      * if invalid input is provided (eg. invalid cell values).
      *
+     * Refer to {@link FieldType} for cell value write formats.
+     *
      * This action is asynchronous: `await` the returned promise if you wish to wait for the new
      * record to be persisted to Airtable servers.
      * Updates are applied optimistically locally, so your changes will be reflected in your block
@@ -1344,6 +1348,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * Throws an error if the user does not have permission to create the given records, or
      * if invalid input is provided (eg. invalid cell values).
+     *
+     * Refer to {@link FieldType} for cell value write formats.
      *
      * You may only create up to 50 records in one call to `createRecordsAsync`.
      * See [Write back to Airtable](/guides/write-back-to-airtable#size-limits-rate-limits) for
@@ -1564,6 +1570,148 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
                 return [field.id, cellValue];
             }),
         );
+    }
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Checks whether the current user has permission to create a field in this table.
+     *
+     * Accepts partial input, in the same format as {@link unstable_createFieldAsync}.
+     *
+     * Returns `{hasPermission: true}` if the current user can update the specified record,
+     * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
+     * used to display an error message to the user.
+     *
+     * @param name name for the field. must be case-insensitive unique for the table
+     * @param type type for the field
+     * @param options options for the field. omit for fields without writable options
+     *
+     * ```js
+     * const createFieldCheckResult = table.unstable_checkPermissionsForCreateField();
+     *
+     * if (!createFieldCheckResult.hasPermission) {
+     *     alert(createFieldCheckResult.reasonDisplayString);
+     * }
+     * ```
+     */
+    unstable_checkPermissionsForCreateField(
+        name?: string,
+        type?: FieldType,
+        options?: FieldOptions | null,
+    ): PermissionCheckResult {
+        return getSdk().__mutations.checkPermissionsForMutation({
+            type: MutationTypes.CREATE_SINGLE_FIELD,
+            tableId: this.id,
+            id: undefined, 
+            name,
+            config: type
+                ? {
+                      type: type,
+                      ...(options ? {options} : null),
+                  }
+                : undefined,
+        });
+    }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * An alias for `unstable_checkPermissionsForCreateField(name, type, options).hasPermission`.
+     *
+     * Checks whether the current user has permission to create a field in this table.
+     *
+     * Accepts partial input, in the same format as {@link unstable_createFieldAsync}.
+     *
+     * @param name name for the field. must be case-insensitive unique for the table
+     * @param type type for the field
+     * @param options options for the field. omit for fields without writable options
+     *
+     * ```js
+     * const canCreateField = table.unstable_hasPermissionToCreateField();
+     *
+     * if (!canCreateField) {
+     *     alert('not allowed!');
+     * }
+     * ```
+     */
+    unstable_hasPermissionToCreateField(
+        name?: string,
+        type?: FieldType,
+        options?: FieldOptions | null,
+    ): boolean {
+        return this.unstable_checkPermissionsForCreateField(name, type, options).hasPermission;
+    }
+
+    /**
+     * _Beta feature with unstable API. May have breaking changes before release._
+     *
+     * Creates a new field.
+     *
+     * Similar to creating a field from the Airtable UI, the new field will not be visible
+     * in views that have other hidden fields and views that are publicly shared.
+     *
+     * Throws an error if the user does not have permission to create a field, if invalid
+     * name, type or options are provided, or if creating fields of this type is not supported.
+     *
+     * Refer to {@link FieldType} for supported field types, the write format for options, and
+     * other specifics for certain field types.
+     *
+     * This action is asynchronous. Unlike new records, new fields are **not** created
+     * optimistically locally. You must `await` the returned promise before using the new
+     * field in your block.
+     *
+     * @param name name for the field. must be case-insensitive unique
+     * @param type type for the field
+     * @param options options for the field. omit for fields without writable options
+     * @example
+     * ```js
+     * async function createNewSingleLineTextField(table, name) {
+     *     if (table.unstable_hasPermissionToCreateField(name, FieldType.SINGLE_LINE_TEXT)) {
+     *         await table.unstable_createFieldAsync(name, FieldType.SINGLE_LINE_TEXT);
+     *     }
+     * }
+     *
+     * async function createNewCheckboxField(table, name) {
+     *     const options = {
+     *         icon: 'check',
+     *         color: 'greenBright',
+     *     };
+     *     if (table.unstable_hasPermissionToCreateField(name, FieldType.CHECKBOX, options)) {
+     *         await table.unstable_createFieldAsync(name, FieldType.CHECKBOX, options);
+     *     }
+     * }
+     *
+     * async function createNewDateField(table, name) {
+     *     const options = {
+     *         dateFormat: {
+     *             name: 'iso',
+     *         },
+     *     };
+     *     if (table.unstable_hasPermissionToCreateField(name, FieldType.DATE, options)) {
+     *         await table.unstable_createFieldAsync(name, FieldType.DATE, options);
+     *     }
+     * }
+     * ```
+     */
+    async unstable_createFieldAsync(
+        name: string,
+        type: FieldType,
+        options?: FieldOptions | null,
+    ): Promise<Field> {
+        const fieldId = this._airtableInterface.idGenerator.generateFieldId();
+
+        await getSdk().__mutations.applyMutationAsync({
+            type: MutationTypes.CREATE_SINGLE_FIELD,
+            tableId: this.id,
+            id: fieldId,
+            name,
+            config: {
+                type: type,
+                ...(options ? {options} : null),
+            },
+        });
+
+        return this.getFieldById(fieldId);
     }
     /**
      * @internal

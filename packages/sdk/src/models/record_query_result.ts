@@ -236,7 +236,7 @@ export interface NormalizedRecordQueryResultOpts {
  *   records in a specific {@link Table} or {@link View}. You can get one of these with
  *   `table.selectRecords()` or `view.selectRecords()`.
  * - {@link LinkedRecordsQueryResult} is a query result of all the records in a particular
- *   {@link https://support.airtable.com/hc/en-us/articles/206452848-Linked-record-fields linked record cell}.
+ *   [linked record cell](https://support.airtable.com/hc/en-us/articles/206452848-Linked-record-fields).
  *   You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
  *
  * Once you've got a query result, you need to load it before you can start working with it -

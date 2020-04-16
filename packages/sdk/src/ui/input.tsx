@@ -156,7 +156,7 @@ export const SupportedInputType = createEnum(
     'week',
 );
 /**
- * Supported types for the {@link Input} component. See {@link https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#%3Cinput%3E_types|MDN} for more information.
+ * Supported types for the {@link Input} component. See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#%3Cinput%3E_types) for more information.
  */
 type SupportedInputType = EnumType<typeof SupportedInputType>;
 

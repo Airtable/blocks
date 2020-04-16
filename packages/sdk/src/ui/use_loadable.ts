@@ -43,7 +43,7 @@ interface UseLoadableOpts {
  * don't need to worry about waiting for the data to load - the hook uses React Suspense to make
  * sure the rest of your component doesn't run until the data is loaded. Whilst the data is
  * loading, the entire block will show a loading indicator. If you want to change where that
- * indicator shows or how it looks, use {@link https://reactjs.org/docs/react-api.html#reactsuspense|`<React.Suspense />`}
+ * indicator shows or how it looks, use [`<React.Suspense />`](https://reactjs.org/docs/react-api.html#reactsuspense|)
  * around the component that uses the hook.
  *
  * You can pass several models to `useLoadable` in an array - it will load all of them simultaneously.

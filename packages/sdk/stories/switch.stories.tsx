@@ -336,3 +336,19 @@ stories.add('errors with no label', () =>
         );
     }),
 );
+
+stories.add('truncate', () =>
+    React.createElement(() => {
+        const [isChecked, setIsChecked] = useState(true);
+        return (
+            <Box maxWidth="300px" margin="auto">
+                <Switch
+                    value={isChecked}
+                    onChange={setIsChecked}
+                    label="string_that_is_really_long_and_should_be_truncated"
+                    marginBottom={2}
+                />
+            </Box>
+        );
+    }),
+);

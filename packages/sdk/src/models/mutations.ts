@@ -9,6 +9,11 @@ import {FieldId} from '../types/field';
 import Session from './session';
 import Base from './base';
 import Field from './field';
+import {
+    MAX_FIELD_NAME_LENGTH,
+    MAX_TABLE_NAME_LENGTH,
+    MAX_NUM_FIELDS_PER_TABLE,
+} from './mutation_constants';
 
 const MUTATIONS_MAX_BATCH_SIZE = 50;
 
@@ -131,6 +136,7 @@ class Mutations {
 
         const airtableInterface = getSdk().__airtableInterface;
         const appInterface = getSdk().__appInterface;
+        const billingPlanGrouping = this._base.__billingPlanGrouping;
 
         switch (mutation.type) {
             case MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES: {
@@ -261,6 +267,191 @@ class Mutations {
                 return;
             }
 
+            case MutationTypes.CREATE_SINGLE_FIELD: {
+                const {tableId, name, config} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't create field: No table with id %s exists", tableId);
+                }
+
+                if (table.fields.length >= MAX_NUM_FIELDS_PER_TABLE) {
+                    throw spawnError(
+                        "Can't create field: table already has the maximum of %s fields",
+                        MAX_NUM_FIELDS_PER_TABLE,
+                    );
+                }
+
+                if (!name) {
+                    throw spawnError("Can't create field: must provide non-empty name");
+                }
+
+                if (name.length > MAX_FIELD_NAME_LENGTH) {
+                    throw spawnError(
+                        "Can't create field: name '%s' exceeds maximum length of %s characters",
+                        name,
+                        MAX_FIELD_NAME_LENGTH,
+                    );
+                }
+
+                const existingLowercaseFieldNames = table.fields.map(field =>
+                    field.name.toLowerCase(),
+                );
+
+                if (existingLowercaseFieldNames.includes(name.toLowerCase())) {
+                    throw spawnError(
+                        "Can't create field: field with name '%s' already exists",
+                        name,
+                    );
+                }
+
+                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                    appInterface,
+                    config,
+                    null,
+                    null,
+                    billingPlanGrouping,
+                );
+
+                if (!validationResult.isValid) {
+                    throw spawnError(
+                        "Can't create field: invalid field config.\n%s",
+                        validationResult.reason,
+                    );
+                }
+                return;
+            }
+
+            case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG: {
+                const {tableId, id, config} = mutation;
+                const table = this._base.getTableByIdIfExists(tableId);
+                if (!table) {
+                    throw spawnError("Can't update field: No table with id %s exists", tableId);
+                }
+
+                const field = table.getFieldByIdIfExists(id);
+                if (!field) {
+                    throw spawnError("Can't update field: No field with id %s exists", id);
+                }
+
+                const currentConfig = airtableInterface.fieldTypeProvider.getConfig(
+                    appInterface,
+                    field._data,
+                    field.parentTable.__getFieldNamesById(),
+                );
+                const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                    appInterface,
+                    config,
+                    currentConfig,
+                    field._data,
+                    billingPlanGrouping,
+                );
+
+                if (!validationResult.isValid) {
+                    throw spawnError(
+                        "Can't update field: invalid field config.\n%s",
+                        validationResult.reason,
+                    );
+                }
+                return;
+            }
+
+            case MutationTypes.CREATE_SINGLE_TABLE: {
+                const {name, fields} = mutation;
+
+                if (!name) {
+                    throw spawnError("Can't create table: must provide non-empty name");
+                }
+
+                if (name.length > MAX_TABLE_NAME_LENGTH) {
+                    throw spawnError(
+                        "Can't create table: name '%s' exceeds maximum length of %s characters",
+                        name,
+                        MAX_TABLE_NAME_LENGTH,
+                    );
+                }
+
+                const existingLowercaseTableNames = this._base.tables.map(table =>
+                    table.name.toLowerCase(),
+                );
+
+                if (existingLowercaseTableNames.includes(name.toLowerCase())) {
+                    throw spawnError(
+                        "Can't create table: table with name '%s' already exists",
+                        name,
+                    );
+                }
+
+                if (fields.length === 0) {
+                    throw spawnError("Can't create table: must specify at least one field");
+                }
+
+                if (fields.length > MAX_NUM_FIELDS_PER_TABLE) {
+                    throw spawnError(
+                        "Can't create table: number of fields exceeds maximum of %s",
+                        MAX_NUM_FIELDS_PER_TABLE,
+                    );
+                }
+
+                const lowercaseFieldNames = new Set();
+                for (const field of fields) {
+                    if (!field.name) {
+                        throw spawnError(
+                            "Can't create table: must provide non-empty name for every field",
+                        );
+                    }
+
+                    if (field.name.length > MAX_FIELD_NAME_LENGTH) {
+                        throw spawnError(
+                            "Can't create table: field name '%s' exceeds maximum length of %s characters",
+                            field.name,
+                            MAX_FIELD_NAME_LENGTH,
+                        );
+                    }
+
+                    const lowercaseFieldName = field.name.toLowerCase();
+                    if (lowercaseFieldNames.has(lowercaseFieldName)) {
+                        throw spawnError(
+                            "Can't create table: duplicate field name '%s'",
+                            field.name,
+                        );
+                    }
+                    lowercaseFieldNames.add(lowercaseFieldName);
+
+                    const validationResult = airtableInterface.fieldTypeProvider.validateConfigForUpdate(
+                        appInterface,
+                        field.config,
+                        null,
+                        null,
+                        billingPlanGrouping,
+                    );
+
+                    if (!validationResult.isValid) {
+                        throw spawnError(
+                            "Can't create table: invalid field config for field '%s'.\n%s",
+                            field.name,
+                            validationResult.reason,
+                        );
+                    }
+                }
+
+                const primaryField = fields[0];
+                if (
+                    !airtableInterface.fieldTypeProvider.canBePrimary(
+                        appInterface,
+                        primaryField.config,
+                        billingPlanGrouping,
+                    )
+                ) {
+                    throw spawnError(
+                        "Can't create table: first field '%s' has type '%s' which cannot be a primary field",
+                        primaryField.name,
+                        primaryField.config.type,
+                    );
+                }
+
+                return;
+            }
+
             default:
                 throw spawnUnknownSwitchCaseError('mutation type', mutation, 'type');
         }
@@ -374,6 +565,12 @@ class Mutations {
                 throw spawnError(
                     'attempting to generate model updates for SET_MULTIPLE_GLOBAL_CONFIG_PATH',
                 );
+            }
+
+            case MutationTypes.CREATE_SINGLE_FIELD:
+            case MutationTypes.UPDATE_SINGLE_FIELD_CONFIG:
+            case MutationTypes.CREATE_SINGLE_TABLE: {
+                return [];
             }
 
             default:

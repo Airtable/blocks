@@ -19,74 +19,54 @@ export enum FieldType {
     /**
      * A single line of text.
      *
+     * **Cell format**
+     * ```js
+     * string
+     * ```
+     *
      * **Field options**
      *
      * n/a
-     *
-     * **Cell read format**
-     * ```js
-     * string
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * string
-     * ```
      */
     SINGLE_LINE_TEXT = 'singleLineText',
     /**
      * A valid email address (e.g. andrew@example.com).
      *
+     * **Cell format**
+     * ```js
+     * string
+     * ```
+     *
      * **Field options**
      *
      * n/a
-     *
-     * **Cell read format**
-     * ```js
-     * string
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * string
-     * ```
      */
     EMAIL = 'email',
     /**
      * A valid URL (e.g. airtable.com or https://airtable.com/universe).
      *
+     * **Cell format**
+     * ```js
+     * string
+     * ```
+     *
      * **Field options**
      *
      * n/a
-     *
-     * **Cell read format**
-     * ```js
-     * string
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * string
-     * ```
      */
     URL = 'url',
     /**
      * A long text field that can span multiple lines. May contain "mention tokens",
      * e.g. `<airtable:mention id="menE1i9oBaGX3DseR">@Alex</airtable:mention>`
      *
+     * **Cell format**
+     * ```js
+     * string
+     * ```
+     *
      * **Field options**
      *
      * n/a
-     *
-     * **Cell read format**
-     * ```js
-     * string
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * string
-     * ```
      */
     MULTILINE_TEXT = 'multilineText',
     /**
@@ -95,19 +75,16 @@ export enum FieldType {
      * The `precision` option indicates the number of digits shown to the right of
      * the decimal point for this field.
      *
+     * **Cell format**
+     * ```js
+     * number
+     * ```
+     *
      * **Field options**
      * ```js
-     * { precision: number }
-     * ```
-     *
-     * **Cell read format**
-     * ```js
-     * number
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * number
+     * {
+     *     precision: number, // from 0 to 8 inclusive
+     * }
      * ```
      */
     NUMBER = 'number',
@@ -117,57 +94,38 @@ export enum FieldType {
      * When reading from and writing to a "Percent" field, the cell value is a decimal.
      * For example, 0 is 0%, 0.5 is 50%, and 1 is 100%.
      *
+     * **Cell format**
+     * ```js
+     * number
+     * ```
+     *
      * **Field options**
      * ```js
-     * { precision: number }
-     * ```
-     *
-     * **Cell read format**
-     * ```js
-     * number
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * number
+     * {
+     *     precision: number, // from 0 to 8 inclusive
+     * }
      * ```
      */
     PERCENT = 'percent',
     /**
      * An amount of a currency.
      *
+     * **Cell format**
+     * ```js
+     * number
+     * ```
+     *
      * **Field options**
      * ```js
      * {
-     *     precision: number,
+     *     precision: number, // from 0 to 7 inclusive
      *     symbol: string,
      * }
-     * ```
-     *
-     * **Cell read format**
-     * ```js
-     * number
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * number
      * ```
      */
     CURRENCY = 'currency',
     /**
-     * Single select allows you to select a single option from predefined options in a dropdown.
-     *
-     * **Field options**
-     * ```js
-     * {
-     *     choices: Array<{
-     *         id: string,
-     *         name: string,
-     *         color?: Color,
-     *     }>,
-     * }
-     * ```
+     * Single select allows you to select a single choice from predefined choices in a dropdown.
      *
      * **Cell read format**
      * ```js
@@ -177,30 +135,59 @@ export enum FieldType {
      *     color?: Color
      * }
      * ```
+     * The currently selected choices.
      *
      * **Cell write format**
      * ```js
      * { id: string } | { name: string }
      * ```
-     */
-    SINGLE_SELECT = 'singleSelect',
-    /**
-     * Multiple select allows you to select one or more predefined options from a dropdown
      *
-     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
-     * will override the current cell value when being updated. Be sure to spread the current
-     * cell value if you want to keep the currently selected choices.
-     *
-     * **Field Options**
+     * **Field options read format**
      * ```js
      * {
      *     choices: Array<{
      *         id: string,
      *         name: string,
-     *         color?: Color,
+     *         color?: {@link Color}, // Color is not provided when field coloring is disabled.
      *     }>,
      * }
      * ```
+     *
+     * All colors except base colors from {@link Color} can be used as choice colors (e.g.
+     * "blueBright", "blueDark1", "blueLight1", "blueLight2" are supported, "blue" is not)
+     * Bases on a free or plus plan are limited to colors ending in "Light2".
+     *
+     * **Field options write format**
+     * ```js
+     * {
+     *     choices: Array<
+     *         // New choice format
+     *         {name: string, color?: {@link Color}} |
+     *         // Pre-existing choices use read format specified above
+     *     >,
+     * }
+     * ```
+     * You must pass all pre-existing choices in `choices` when updating a `SINGLE_SELECT` field
+     * (similar to updating a `MULTIPLE` field type cell value). You can do this by spreading
+     * the current choices:
+     * ```js
+     * const selectField = table.getFieldByName('My select field');
+     * await selectField.unstable_updateOptionsAsync({
+     *     choices: [
+     *         ...selectField.options.choices,
+     *         {name: 'My new choice'},
+     *     ],
+     * })
+     *
+     * ```
+     */
+    SINGLE_SELECT = 'singleSelect',
+    /**
+     * Multiple select allows you to select one or more predefined choices from a dropdown
+     *
+     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
+     * will override the current cell value when being updated. Be sure to spread the current
+     * cell value if you want to keep the currently selected choices.
      *
      * **Cell read format**
      * ```js
@@ -216,24 +203,47 @@ export enum FieldType {
      * ```js
      * Array<{id: string} | {name: string}>
      * ```
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         name: string,
+     *         color?: Color,
+     *     }>,
+     * }
+     * ```
+     *
+     * **Field options write format**
+     * ```js
+     * {
+     *     choices: Array<
+     *         // New choice format
+     *         {name: string, color?: Color} |
+     *         // Pre-existing choices use read format specified above
+     *     >,
+     * }
+     * ```
+     * You must pass all pre-existing choices in `choices` when updating a `MULTIPLE_SELECT` field
+     * (similar to updating a `MULTIPLE` field type cell value). You can do this by spreading
+     * the current choices:
+     * ```js
+     * const multipleSelectField = table.getFieldByName('My multiple select field');
+     * await multipleSelectField.unstable_updateOptionsAsync({
+     *     choices: [
+     *         ...multipleSelectField.options.choices,
+     *         {name: 'My new choice'},
+     *     ],
+     * })
+     *
+     * ```
      */
     MULTIPLE_SELECTS = 'multipleSelects',
     /**
      * A collaborator field lets you add collaborators to your records. Collaborators can optionally
      * be notified when they're added. A single collaborator field has been configured to only
      * reference one collaborator.
-     *
-     * **Field Options**
-     * ```js
-     * {
-     *     choices: Array<{
-     *         id: string,
-     *         email: string,
-     *         name?: string,
-     *         profilePicUrl?: string,
-     *     }>,
-     * }
-     * ```
      *
      * **Cell read format**
      * ```js
@@ -251,18 +261,7 @@ export enum FieldType {
      * { id: string }
      * ```
      *
-     */
-    SINGLE_COLLABORATOR = 'singleCollaborator',
-    /**
-     * A collaborator field lets you add collaborators to your records. Collaborators can optionally
-     * be notified when they're added. A multiple collaborator field has been configured to
-     * reference any number of collaborators.
-     *
-     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
-     * will override the current cell value when being updated. Be sure to spread the current
-     * cell value if you want to keep the currently selected collaborators.
-     *
-     * **Field Options**
+     * **Field options read format**
      * ```js
      * {
      *     choices: Array<{
@@ -273,6 +272,24 @@ export enum FieldType {
      *     }>,
      * }
      * ```
+     *
+     * **Field options write format**
+     *
+     * N/A
+     *
+     * Options are not required when creating a `SINGLE_COLLABORATOR` field, and updating options is
+     * not supported.
+     *
+     */
+    SINGLE_COLLABORATOR = 'singleCollaborator',
+    /**
+     * A collaborator field lets you add collaborators to your records. Collaborators can optionally
+     * be notified when they're added. A multiple collaborator field has been configured to
+     * reference any number of collaborators.
+     *
+     * Similar to MULTIPLE_ATTACHMENTS and MULTIPLE_COLLABORATORS, this array-type field
+     * will override the current cell value when being updated. Be sure to spread the current
+     * cell value if you want to keep the currently selected collaborators.
      *
      * **Cell read format**
      * ```js
@@ -289,6 +306,25 @@ export enum FieldType {
      * ```js
      * Array<{ id: string }>
      * ```
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         email: string,
+     *         name?: string,
+     *         profilePicUrl?: string,
+     *     }>,
+     * }
+     * ```
+     *
+     * **Field options write format**
+     *
+     * N/A
+     *
+     * Options are not required when creating a `MULTIPLE_COLLABORATORS` field, and updating options
+     * is not supported.
      */
     MULTIPLE_COLLABORATORS = 'multipleCollaborators',
     /**
@@ -298,7 +334,7 @@ export enum FieldType {
      * overwrite the current cell value. If you want to add a new linked record without
      * deleting the current linked records, you can spread the current cell value like so:
      * ```js
-     * const newForeginRecordIdToLink = 'recXXXXXXXXXXXXXX';
+     * const newForeignRecordIdToLink = 'recXXXXXXXXXXXXXX';
      * myTable.updateRecordAsync(myRecord, {
      *     'myLinkedRecordField': [
      *         ...myRecord.getCellValue('myLinkedRecordField'),
@@ -311,7 +347,21 @@ export enum FieldType {
      * remove specific linked records by passing a filtered array of the current cell
      * value.
      *
-     * **Field options**
+     * **Cell read format**
+     * ```js
+     * Array<{
+     *     id: RecordId,
+     *     name: string,
+     * }>
+     * ```
+     * The currently linked record IDs and their primary cell values from the linked table.
+     *
+     * **Cell write format**
+     * ```js
+     * Array<{ id: RecordId }>
+     * ```
+     *
+     * **Field options read format**
      * ```js
      * {
      *     // The ID of the table this field links to
@@ -329,39 +379,21 @@ export enum FieldType {
      * }
      * ```
      *
-     * **Cell read format**
-     * ```js
-     * Array<{
-     *     id: RecordId,
-     *     name: string,
-     * }>
-     * ```
-     * The currently linked record IDs and their primary cell values from the linked table.
+     * **Field options write format**
      *
-     * **Cell write format**
-     * ```js
-     * Array<{ id: RecordId }>
-     * ```
+     * Creating or updating `MULTIPLE_RECORD_LINKS` fields is not supported.
      */
     MULTIPLE_RECORD_LINKS = 'multipleRecordLinks',
     /**
      * A date.
      *
      * When reading from and writing to a date field, the cell value will always be an
-     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date.
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date. (Field
+     * options specify how it's formatted in the main Airtable UI - `format` can be used with
+     * [`moment.js`](https://momentjs.com/) to match that.)
      *
      * The date format string follows the moment.js structure documented
      * [here](https://momentjs.com/docs/#/parsing/string-format/)
-     *
-     * **Field options**
-     * ```js
-     * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         format: string,
-     *     }
-     * }
-     * ```
      *
      * **Cell read format**
      * ```js
@@ -373,31 +405,39 @@ export enum FieldType {
      * Date | string
      * ```
      *
+     * **Field options read format**
+     * ```js
+     * {
+     *     dateFormat: {
+     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
+     *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
+     *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
+     *     }
+     * }
+     * ```
+     *
+     * * Field options write format**
+     * ```js
+     * {
+     *     dateFormat: {
+     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
+     *         // Format is optional, but must match name if provided.
+     *         format?: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
+     *     }
+     * }
+     * ```
      */
     DATE = 'date',
     /**
      * A date field configured to also include a time.
      *
-     * When reading from and writing to a date time field, the cell value will always be an
-     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+     * When reading from and writing to a date field, the cell value will always be an
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date. (Field
+     * options specify how it's formatted in the main Airtable UI - `format` can be used with
+     * [`moment.js`](https://momentjs.com/) to match that.)
      *
      * The date and time format strings follow the moment.js structure documented
      * [here](https://momentjs.com/docs/#/parsing/string-format/)
-     *
-     * **Field options**
-     * ```js
-     * {
-     *     dateFormat: {
-     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
-     *         format: string,
-     *     },
-     *     timeFormat: {
-     *         name: '12hour' | '24hour',
-     *         format: string,
-     *     },
-     *     timeZone: 'utc' | 'client',
-     * }
-     * ```
      *
      * **Cell read format**
      * ```js
@@ -409,18 +449,52 @@ export enum FieldType {
      * Date | string
      * ```
      *
+     * **Field options read format**
+     * ```js
+     * {
+     *     dateFormat: {
+     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
+     *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
+     *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
+     *     },
+     *     timeFormat: {
+     *         name: '12hour' | '24hour',
+     *         // Will correspond to name
+     *         format: 'h:mma' | 'HH:mm',
+     *     },
+     *     timeZone: 'utc' | 'client',
+     * }
+     * ```
+     *
+     * * Field options write format**
+     * ```js
+     * {
+     *     dateFormat: {
+     *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
+     *         // Format is optional, but must match name if provided.
+     *         format?: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
+     *     },
+     *     timeFormat: {
+     *         name: '12hour' | '24hour',
+     *         // Format is optional, but must match name if provided.
+     *         format?: 'h:mma' | 'HH:mm',
+     *     },
+     *     timeZone: 'utc' | 'client',
+     * }
+     * ```
      */
     DATE_TIME = 'dateTime',
     /**
      * A telephone number (e.g. (415) 555-9876).
      *
-     * **Field options**
-     * None
-     *
-     * **Cell read format**
+     * **Cell format**
      * ```js
      * string
      * ```
+     *
+     * **Field options**
+     *
+     * None
      */
     PHONE_NUMBER = 'phoneNumber',
     /**
@@ -446,7 +520,7 @@ export enum FieldType {
      * Note: when you pass an existing attachment, you must pass the full attachment
      * object. New attachments only require the `url` property.
      *
-     * **Field options**
+     * **Field options read format**
      *
      * {
      *     // Whether attachments are rendered in the reverse order from the cell value in the
@@ -500,6 +574,13 @@ export enum FieldType {
      * ```
      * For pre-existing attachments, pass the object read from the cell value.
      * You cannot change any properties of pre-existing attachments.
+     *
+     * **Field options write format**
+     *
+     * N/A
+     *
+     * Options are not required when creating a `MULTIPLE_ATTACHMENTS` field, and updating options
+     * is not supported.
      */
     MULTIPLE_ATTACHMENTS = 'multipleAttachments',
     /**
@@ -507,34 +588,40 @@ export enum FieldType {
      *
      * This field is "true" when checked and otherwise empty.
      *
+     * **Cell format**
+     * ```js
+     * boolean
+     * ```
      *
      * **Field options**
      *
      * ```js
      * {
      *     // an icon name
-     *     icon: string,
+     *     icon: 'check' | 'star' | 'heart' | 'thumbsUp' | 'flag',
      *     // the color of the check box
-     *     color: Color,
+     *     color: 'yellowBright' | 'orangeBright' | 'redBright' | 'pinkBright' | 'purpleBright' | 'blueBright' | 'cyanBright' | 'tealBright' | 'greenBright' | 'grayBright' ,
      * }
      * ```
      *
-     * **Cell read format**
-     * ```js
-     * boolean
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * boolean
-     * ```
-     *
+     * Bases on a free or plus plan are limited to using the 'check' icon and 'greenBright' color.
      */
     CHECKBOX = 'checkbox',
     /**
      * Compute a value in each record based on other fields in the same record.
      *
-     * **Field options**
+     * **Cell read format**
+     *
+     * Check `options.result` to know the resulting field type.
+     * ```js
+     * any
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
      * ```js
      * {
      *     // false if the formula contains an error
@@ -551,26 +638,28 @@ export enum FieldType {
      * }
      * ```
      *
-     * **Cell read format**
+     * **Field options write format**
      *
-     * Check `options.result` to know the resulting field type.
-     * ```js
-     * any
-     * ```
-     *
-     * **Cell write format**
-     *
-     * n/a
-     *
+     * Creating or updating `FORMULA` fields is not supported.
      */
     FORMULA = 'formula',
     /**
      * The time the record was created in UTC.
      *
      * When reading from a "Created time" field, the cell value will always be an
-     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+     * (Field options specify how it's displayed in the UI.)
      *
-     * **Field options**
+     * **Cell read format**
+     * ```js
+     * string
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
      * ```js
      * {
      *     result: {
@@ -581,20 +670,25 @@ export enum FieldType {
      * }
      * ```
      *
-     * **Cell read format**
-     * ```js
-     * string
-     * ```
+     * **Field options write format**
      *
-     * **Cell write format**
-     *
-     * n/a
+     * Creating or updating `CREATED_TIME` fields is not supported.
      */
     CREATED_TIME = 'createdTime',
     /**
      * A rollup allows you to summarize data from records that are linked to this table.
      *
-     * **Field options**
+     * **Cell read format**
+     * Check `options.result` to know the resulting field type.
+     * ```js
+     * any
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
      * ```js
      * {
      *     // false if the formula contains an error
@@ -616,22 +710,24 @@ export enum FieldType {
      * }
      * ```
      *
+     * **Field options write format**
+     *
+     * Creating or updating `ROLLUP` fields is not supported.
+     */
+    ROLLUP = 'rollup',
+    /**
+     * Count the number of linked records.
+     *
      * **Cell read format**
-     * Check `options.result` to know the resulting field type.
      * ```js
-     * any
+     * number
      * ```
      *
      * **Cell write format**
      *
      * n/a
      *
-     */
-    ROLLUP = 'rollup',
-    /**
-     * Count the number of linked records.
-     *
-     * **Field options**
+     * **Field options read format**
      * ```js
      * {
      *    // is the field currently valid (e.g. false if the linked record
@@ -642,38 +738,47 @@ export enum FieldType {
      * }
      * ```
      *
-     * **Cell read format**
-     * ```js
-     * number
-     * ```
+     * **Field options write format**
      *
-     * **Cell write format**
-     *
-     * n/a
+     * Creating or updating `COUNT` fields is not supported.
      */
     COUNT = 'count',
     /**
      * Lookup a field on linked records.
      *
-     * **Field options**
-     * 
-     * UNSTABLE
-
      * **Cell read format**
-     * 
-     * UNSTABLE
+     * ```js
+     * unknown // depends on the field type being looked up
+     * ```
      *
      * **Cell write format**
-     * 
+     *
      * n/a
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     // whether the lookup field is correctly configured
+     *     isValid: boolean,
+     *     // the linked record field in this table that this field is
+     *     // looking up
+     *     recordLinkFieldId: FieldId,
+     *     // the field in the foreign table that will be looked up on
+     *     // each linked record
+     *     fieldIdInLinkedTable: FieldId | null,
+     *     // the local field configuration for the foreign field being
+     *     // looked up
+     *     result?: undefined | {type: FieldType, options: unknown}
+     * }
+     * ```
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `MULTIPLE_LOOKUP_VALUES` fields is not supported.
      */
     MULTIPLE_LOOKUP_VALUES = 'multipleLookupValues',
     /**
      * Automatically incremented unique counter for each record.
-     *
-     * **Field options**
-     *
-     * n/a
      *
      * **Cell read format**
      * ```js
@@ -683,14 +788,18 @@ export enum FieldType {
      * **Cell write format**
      *
      * n/a
+     *
+     * **Field options read format**
+     *
+     * n/a
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `AUTO_NUMBER` fields is not supported.
      */
     AUTO_NUMBER = 'autoNumber',
     /**
      * Use the Airtable iOS or Android app to scan barcodes.
-     *
-     * **Field options**
-     *
-     * n/a
      *
      * **Cell read format**
      * ```js
@@ -705,59 +814,67 @@ export enum FieldType {
      * **Cell write format**
      *
      * n/a
+     *
+     * **Field options**
+     *
+     * n/a
      */
     BARCODE = 'barcode',
     /**
      * A rating (e.g. stars out of 5)
      *
-     * **Field options**
-     * ```js
-     * {
-     *     // the icon name used to display the rating
-     *     icon: string,
-     *     // the maximum value for the rating
-     *     max: number,
-     *     // the color of selected icons
-     *     color: Color,
-     * }
-     * ```
-     *
-     * **Cell read format**
+     * **Cell format**
      * ```js
      * number
      * ```
      *
-     * **Cell write format**
+     * **Field options**
+     * ```js
+     * {
+     *     // the icon name used to display the rating
+     *     icon: 'star' | 'heart' | 'thumbsUp' | 'flag',
+     *     // the maximum value for the rating, from 1 to 10 inclusive
+     *     max: number,
+     *     // the color of selected icons
+     *     color: 'yellowBright' | 'orangeBright' | 'redBright' | 'pinkBright' | 'purpleBright' | 'blueBright' | 'cyanBright' | 'tealBright' | 'greenBright' | 'grayBright' ,
+     * }
      *
-     * n/a
+     * Bases on a free or plus plan are limited to using the 'star' icon and 'yellowBright' color.
+     * ```
      */
     RATING = 'rating',
     /**
-     * @internal - not yet generally avail
+     * A long text field with rich formatting enabled.
+     *
+     * Returned string is formatted with [markdown syntax for Airtable rich text formatting](https://support.airtable.com/hc/en-us/articles/360044741993-Markdown-syntax-for-Airtable-rich-text-formatting).
+     * Use this formatting when updating cell values.
+     *
+     * **Cell format**
+     * ```js
+     * string
+     * ```
+     * **Field options**
+     *
+     * n/a
+     *
      */
     RICH_TEXT = 'richText',
     /**
      * A duration of time in seconds.
      *
-     *
      * The `durationFormat` string follows the moment.js structure documented
      * [here](https://momentjs.com/docs/#/parsing/string-format/).
+     *
+     * **Cell format**
+     * ```js
+     * number
+     * ```
      *
      * **Field options**
      * ```js
      * {
-     *     durationFormat: string,
+     *     durationFormat: 'h:mm' | 'h:mm:ss' | 'h:mm:ss.S' | 'h:mm:ss.SS' | 'h.mm.ss.SSS',
      * }
-     * ```
-     *
-     * **Cell read format**
-     * ```js
-     * number
-     * ```
-     *
-     * **Cell write format**
-     * ```js
-     * number
      * ```
      */
     DURATION = 'duration',
@@ -766,9 +883,19 @@ export enum FieldType {
      * just in specific editable fields.
      *
      * When reading from a "Last modified time" field, the cell value will always be an
-     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time
+     * [ISO 8601](https://www.iso.org/iso-8601-date-and-time-format.html) formatted date time.
+     * (Field options specify how it's displayed in the UI.)
      *
-     * **Field options**
+     * **Cell read format**
+     * ```js
+     * string
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
      * ```js
      * {
      *     // false if the formula contains an error
@@ -783,16 +910,9 @@ export enum FieldType {
      *     },
      * }
      * ```
+     * **Field options write format**
      *
-     * **Cell read format**
-     * ```js
-     * string
-     * ```
-     *
-     * **Cell write format**
-     *
-     * n/a
-     *
+     * Creating or updating `LAST_MODIFIED_TIME` fields is not supported.
      */
     LAST_MODIFIED_TIME = 'lastModifiedTime',
 }
@@ -815,4 +935,10 @@ export interface FieldPermissionData {
     readonly name: string;
     readonly type: PrivateColumnType;
     readonly lock: FieldLock | null;
+}
+
+/** @hidden */
+
+export interface FieldOptions {
+    [key: string]: unknown;
 }

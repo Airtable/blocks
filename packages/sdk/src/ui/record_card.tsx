@@ -309,7 +309,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         }
         if (
             this.props.onClick === undefined ||
-            !this.props.hasOnClick 
+            this.props.hasOnClick === false 
         ) {
 
             const {record} = this.props;
