@@ -366,6 +366,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @param name name for the table. must be case-insensitive unique
      * @param fields array of fields to create in the table
      *
+     * @example
      * ```js
      * const createTableCheckResult = base.unstable_checkPermissionsForCreateTable();
      *
@@ -415,6 +416,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @param name name for the table. must be case-insensitive unique
      * @param fields array of fields to create in the table
      *
+     * @example
      * ```js
      * const canCreateTable = table.unstable_hasPermissionToCreateTable();
      *
@@ -446,7 +448,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * other specifics for certain field types.
      *
      * At least one field must be specified. The first field in the `fields` array will be used as
-     * the table's [primary field](https://support.airtable.com/hc/en-us/articles/202624179-The-Name-Field primary field)
+     * the table's [primary field](https://support.airtable.com/hc/en-us/articles/202624179-The-Name-Field)
      * and must be a supported primary field type. Fields must have case-insensitive unique names
      * within the table.
      *
@@ -459,6 +461,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * @param name name for the table. must be case-insensitive unique
      * @param fields array of fields to create in the table: see above for details.
      *
+     * @example
      * ```js
      * async function createNewTable() {
      *     const name = 'My new table';

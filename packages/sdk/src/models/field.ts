@@ -162,6 +162,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @param options new options for the field
      *
+     * @example
      * ```js
      * const updateFieldCheckResult = field.unstable_checkPermissionsForUpdateOptions();
      *
@@ -193,6 +194,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @param options new options for the field
      *
+     * @example
      * ```js
      * const canUpdateField = field.unstable_hasPermissionToUpdateOptions();
      *
@@ -223,6 +225,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @param options new options for the field
      *
+     * @example
      * ```js
      * async function addChoiceToSelectField(selectField, nameForNewOption) {
      *     const updatedOptions = {
