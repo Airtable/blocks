@@ -1694,7 +1694,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * async function createNewDateField(table, name) {
      *     const options = {
-     *         dateFormat: 'iso',
+     *         dateFormat: {
+     *             name: 'iso',
+     *         },
      *     };
      *     if (table.unstable_hasPermissionToCreateField(name, FieldType.DATE, options)) {
      *         await table.unstable_createFieldAsync(name, FieldType.DATE, options);

@@ -482,7 +482,6 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *         await base.unstable_createTableAsync(name, fields);
      *     }
      * }
-     *
      * ```
      */
     async unstable_createTableAsync(

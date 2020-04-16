@@ -172,7 +172,7 @@ export enum FieldType {
      * the current choices:
      * ```js
      * const selectField = table.getFieldByName('My select field');
-     * await selectField.updateOptionsAsync({
+     * await selectField.unstable_updateOptionsAsync({
      *     choices: [
      *         ...selectField.options.choices,
      *         {name: 'My new choice'},
@@ -230,7 +230,7 @@ export enum FieldType {
      * the current choices:
      * ```js
      * const multipleSelectField = table.getFieldByName('My multiple select field');
-     * await multipleSelectField.updateOptionsAsync({
+     * await multipleSelectField.unstable_updateOptionsAsync({
      *     choices: [
      *         ...multipleSelectField.options.choices,
      *         {name: 'My new choice'},
@@ -452,6 +452,7 @@ export enum FieldType {
      * **Field options read format**
      * ```js
      * {
+     *     dateFormat: {
      *         name: 'local' | 'friendly' | 'us' | 'european' | 'iso',
      *         // Will correspond to name (e.g. {name: 'friendly', format: 'LL'}
      *         format: 'l' | 'LL' | 'M/D/YYYY' | 'D/M/YYYY' | 'YYYY-MM-DD',
