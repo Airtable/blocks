@@ -459,7 +459,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      * table in your block.
      *
      * @param name name for the table. must be case-insensitive unique
-     * @param fields array of fields to create in the table: see above for details.
+     * @param fields array of fields to create in the table: see below for details.
      *
      * @example
      * ```js
