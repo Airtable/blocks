@@ -1,6 +1,7 @@
 // @flow
 const invariant = require('invariant');
 const request = require('postman-request');
+const chalk = require('chalk');
 const {promisify} = require('util');
 const {URL} = require('url');
 const {USER_AGENT, AIRTABLE_API_URL} = require('./config/block_cli_config_settings');
@@ -123,6 +124,15 @@ class ApiClient {
                     }
                 })
                 .join('\n');
+        } else if (
+            error &&
+            error.code === 'UNSUPPORTED_BLOCKS_CLI_VERSION' &&
+            typeof error.message === 'string'
+        ) {
+            throw new Error(`❌ ${error.message}
+
+Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
+`);
         } else if (error && typeof error.message === 'string') {
             return this._processErrorMessageForApiKeyIfUnauthorized(statusCode, error.message);
         } else {
