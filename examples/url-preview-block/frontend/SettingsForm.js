@@ -61,6 +61,7 @@ function SettingsForm({setIsSettingsOpen}) {
                             table={urlTable}
                             globalConfigKey={ConfigKeys.URL_FIELD_ID}
                             allowedTypes={[
+                                FieldType.FORMULA,
                                 FieldType.SINGLE_LINE_TEXT,
                                 FieldType.TEXT,
                                 FieldType.URL,
