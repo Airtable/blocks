@@ -49,6 +49,14 @@ class BlockStats {
             tags,
         });
     }
+    distribution(stat: string, value: number, tags?: {[key: string]: string}) {
+        this._airtableInterface.sendStat({
+            metricType: 'distribution',
+            stat,
+            value,
+            tags,
+        });
+    }
     timing(stat: string, time: number, tags?: {[key: string]: string}) {
         this._airtableInterface.sendStat({
             metricType: 'timing',
