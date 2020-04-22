@@ -1,6 +1,6 @@
 {
     "name": "@airtable/url-preview-block",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "When a user selects a record in grid view that has a supported URL, this block shows the corresponding preview.",
     "scripts": {
         "lint": "eslint frontend"
