@@ -1,2 +1,1 @@
-const sdk = require('./dist/cjs/index');
-module.exports = sdk.UI;
+module.exports = require('./dist/cjs/ui/ui');

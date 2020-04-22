@@ -6,7 +6,7 @@ import {FieldData, PrivateColumnType, FieldType, FieldOptions} from '../types/fi
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
-import Aggregators, {Aggregator} from './aggregators';
+import {Aggregator} from './create_aggregators';
 import Table from './table';
 
 // This doesn't follow our enum naming conventions because we want the keys
@@ -303,7 +303,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data),
         );
 
-        return values(Aggregators).filter(aggregator => {
+        return values(getSdk().models.aggregators).filter(aggregator => {
             return availableAggregatorKeysSet.has(aggregator.key);
         });
     }

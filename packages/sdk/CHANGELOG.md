@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.46...HEAD)
 
-No changes.
+-   UI components that don't depend on base data can now be used outside of the blocks environment.
 
 ## [0.0.46](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.45...@airtable/blocks@0.0.46) - 2020-04-16
 

@@ -1,6 +1,5 @@
-import airtableInterface from './injected/airtable_interface';
-
+import getSdk from './get_sdk';
 /** @hidden */
 export function trackEvent(eventSchemaName: string, eventData: {[key: string]: unknown} = {}) {
-    airtableInterface.trackEvent(eventSchemaName, eventData);
+    getSdk().__airtableInterface.trackEvent(eventSchemaName, eventData);
 }
