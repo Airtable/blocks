@@ -47,7 +47,7 @@ const pool: ObjectPool<
  * documentation.
  *
  * Do not instantiate. You can get instances of this class by calling
- * `record.getLinkedRecordsFromCell`.
+ * `record.selectLinkedRecordsFromCell`.
  *
  * @docsPath models/query results/LinkedRecordsQueryResult
  */

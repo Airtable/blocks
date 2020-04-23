@@ -1,7 +1,6 @@
 /** @module @airtable/blocks/models: Aggregators */ /** */
 import getSdk from '../get_sdk';
 import {AggregatorKey} from '../types/aggregators';
-import airtableInterface from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
 import Record from './record';
 import Field from './field';
@@ -37,6 +36,10 @@ export interface Aggregator {
     aggregateToString(records: Array<Record>, field: Field): string;
 }
 
+export interface Aggregators {
+    [key: string]: Aggregator;
+}
+
 const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: Field) => {
     if (!field.isAggregatorAvailable(aggregatorKey)) {
         throw spawnError(
@@ -46,7 +49,7 @@ const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: 
         );
     }
 
-    const appInterface = getSdk().__appInterface;
+    const {__appInterface: appInterface, __airtableInterface: airtableInterface} = getSdk();
     const cellValues = records.map(record => record.getCellValue(field));
     return airtableInterface.aggregators.aggregate(
         appInterface,
@@ -65,7 +68,7 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
         );
     }
 
-    const appInterface = getSdk().__appInterface;
+    const {__appInterface: appInterface, __airtableInterface: airtableInterface} = getSdk();
     const cellValues = records.map(record => record.getCellValue(field));
     return airtableInterface.aggregators.aggregateToString(
         appInterface,
@@ -75,20 +78,23 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
     );
 };
 
-const aggregators: {[key: string]: Aggregator} = {};
-const aggregatorKeys = airtableInterface.aggregators.getAllAvailableAggregatorKeys();
+export default function createAggregators() {
+    const {__airtableInterface: airtableInterface} = getSdk();
+    const aggregators: Aggregators = {};
+    const aggregatorKeys = airtableInterface.aggregators.getAllAvailableAggregatorKeys();
 
-for (const key of aggregatorKeys) {
-    const config = airtableInterface.aggregators.getAggregatorConfig(key);
-    aggregators[key] = Object.freeze({
-        key,
-        displayName: config.displayName,
-        shortDisplayName: config.shortDisplayName,
-        aggregate: aggregate.bind(null, key),
-        aggregateToString: aggregateToString.bind(null, key),
-    });
+    for (const key of aggregatorKeys) {
+        const config = airtableInterface.aggregators.getAggregatorConfig(key);
+        aggregators[key] = Object.freeze({
+            key,
+            displayName: config.displayName,
+            shortDisplayName: config.shortDisplayName,
+            aggregate: aggregate.bind(null, key),
+            aggregateToString: aggregateToString.bind(null, key),
+        });
+    }
+
+    Object.freeze(aggregators);
+
+    return aggregators;
 }
-
-Object.freeze(aggregators);
-
-export default aggregators;

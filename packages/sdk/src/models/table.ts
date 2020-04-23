@@ -1586,6 +1586,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
      *
+     * @example
      * ```js
      * const createFieldCheckResult = table.unstable_checkPermissionsForCreateField();
      *
@@ -1626,6 +1627,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
      *
+     * @example
      * ```js
      * const canCreateField = table.unstable_hasPermissionToCreateField();
      *
@@ -1663,6 +1665,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @param name name for the field. must be case-insensitive unique
      * @param type type for the field
      * @param options options for the field. omit for fields without writable options
+     *
      * @example
      * ```js
      * async function createNewSingleLineTextField(table, name) {

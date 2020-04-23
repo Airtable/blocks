@@ -155,6 +155,7 @@ export enum FieldType {
      *
      * All colors except base colors from {@link Color} can be used as choice colors (e.g.
      * "blueBright", "blueDark1", "blueLight1", "blueLight2" are supported, "blue" is not)
+     *
      * Bases on a free or plus plan are limited to colors ending in "Light2".
      *
      * **Field options write format**
@@ -416,7 +417,7 @@ export enum FieldType {
      * }
      * ```
      *
-     * * Field options write format**
+     * **Field options write format**
      * ```js
      * {
      *     dateFormat: {
@@ -466,7 +467,7 @@ export enum FieldType {
      * }
      * ```
      *
-     * * Field options write format**
+     * **Field options write format**
      * ```js
      * {
      *     dateFormat: {
@@ -520,15 +521,6 @@ export enum FieldType {
      * Note: when you pass an existing attachment, you must pass the full attachment
      * object. New attachments only require the `url` property.
      *
-     * **Field options read format**
-     *
-     * {
-     *     // Whether attachments are rendered in the reverse order from the cell value in the
-     *     // Airtable UI (i.e. most recent first)
-     *     // You generally do not need to rely on this option.
-     *     isReversed: boolean,
-     * }
-     *
      * **Cell read format**
      * ```js
      * Array<{
@@ -574,6 +566,16 @@ export enum FieldType {
      * ```
      * For pre-existing attachments, pass the object read from the cell value.
      * You cannot change any properties of pre-existing attachments.
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     // Whether attachments are rendered in the reverse order from the cell value in the
+     *     // Airtable UI (i.e. most recent first)
+     *     // You generally do not need to rely on this option.
+     *     isReversed: boolean,
+     * }
+     * ```
      *
      * **Field options write format**
      *
@@ -838,9 +840,9 @@ export enum FieldType {
      *     // the color of selected icons
      *     color: 'yellowBright' | 'orangeBright' | 'redBright' | 'pinkBright' | 'purpleBright' | 'blueBright' | 'cyanBright' | 'tealBright' | 'greenBright' | 'grayBright' ,
      * }
+     * ```
      *
      * Bases on a free or plus plan are limited to using the 'star' icon and 'yellowBright' color.
-     * ```
      */
     RATING = 'rating',
     /**

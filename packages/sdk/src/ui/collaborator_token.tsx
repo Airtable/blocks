@@ -60,16 +60,14 @@ interface CollaboratorTokenProps extends CollaboratorTokenStyleProps, TooltipAnc
 }
 
 /**
- * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
+ * A version of `Collaborator` that doesn't connect to base. Not part of the public API.
  *
- * [[ Story id="collaboratortoken--example" title="Collaborator token example" ]]
- *
- * @component
- * @docsPath UI/components/CollaboratorToken
+ * @hidden
  */
-const CollaboratorToken = (props: CollaboratorTokenProps) => {
+const StaticCollaboratorToken = (props: CollaboratorTokenProps & {isActive?: boolean}) => {
     const {
         collaborator,
+        isActive = true,
         onMouseEnter,
         onMouseLeave,
         onClick,
@@ -79,8 +77,6 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
         style,
         ...styleProps
     } = props;
-    const base = useBase();
-
     const classNameForStyledProps = useStyledSystem<CollaboratorTokenStyleProps>(
         styleProps,
         styleParser,
@@ -88,11 +84,6 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
 
     const userName = collaborator.name || collaborator.email || 'Unknown';
     const profilePicUrl = collaborator.profilePicUrl || UNKNOWN_PROFILE_PIC_URL;
-
-    const activeCollaborators = base.activeCollaborators;
-    const isActive = activeCollaborators.some(activeCollaborator => {
-        return activeCollaborator.id === collaborator.id;
-    });
 
     return (
         <Box
@@ -137,6 +128,25 @@ const CollaboratorToken = (props: CollaboratorTokenProps) => {
     );
 };
 
+/**
+ * A component that shows a single collaborator in a small token, to be displayed inline or in a list of choices.
+ *
+ * [[ Story id="collaboratortoken--example" title="Collaborator token example" ]]
+ *
+ * @component
+ * @docsPath UI/components/CollaboratorToken
+ */
+const CollaboratorToken = (props: CollaboratorTokenProps) => {
+    const base = useBase();
+
+    const activeCollaborators = base.activeCollaborators;
+    const isActive = activeCollaborators.some(activeCollaborator => {
+        return activeCollaborator.id === props.collaborator.id;
+    });
+
+    return <StaticCollaboratorToken {...props} isActive={isActive} />;
+};
+
 CollaboratorToken.propTypes = {
     collaborator: PropTypes.shape({
         id: PropTypes.string,
@@ -150,5 +160,7 @@ CollaboratorToken.propTypes = {
     ...tooltipAnchorPropTypes,
     ...collaboratorTokenStylePropTypes,
 };
+
+CollaboratorToken.Static = StaticCollaboratorToken;
 
 export default CollaboratorToken;

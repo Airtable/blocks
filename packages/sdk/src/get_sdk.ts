@@ -1,10 +1,12 @@
-import Sdk from './sdk';
-import airtableInterface from './injected/airtable_interface';
+import SdkType from './sdk';
 
-let sdk: Sdk;
+let sdk: SdkType;
+
 /** @hidden */
-export default function getSdk(): Sdk {
+export default function getSdk(): SdkType {
     if (!sdk) {
+        const airtableInterface = require('./injected/airtable_interface').default;
+        const Sdk = require('./sdk').default;
         sdk = new Sdk(airtableInterface);
     }
 

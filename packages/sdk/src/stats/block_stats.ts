@@ -1,19 +1,13 @@
-import airtableInterface, {AirtableInterface} from '../injected/airtable_interface';
+import getSdk from '../get_sdk';
 
 
 /** @hidden */
 class BlockStats {
-    private _airtableInterface: AirtableInterface;
-
-    constructor(injectedAirtableInterface: AirtableInterface) {
-        this._airtableInterface = injectedAirtableInterface;
-    }
-
     increment(stat: string, tags?: {[key: string]: string}) {
         this.incrementBy(stat, 1, tags);
     }
     incrementBy(stat: string, value: number, tags?: {[key: string]: string}) {
-        this._airtableInterface.sendStat({
+        getSdk().__airtableInterface.sendStat({
             metricType: 'incrementBy',
             stat,
             value,
@@ -24,7 +18,7 @@ class BlockStats {
         this.decrementBy(stat, 1, tags);
     }
     decrementBy(stat: string, value: number, tags?: {[key: string]: string}) {
-        this._airtableInterface.sendStat({
+        getSdk().__airtableInterface.sendStat({
             metricType: 'decrementBy',
             stat,
             value,
@@ -32,7 +26,7 @@ class BlockStats {
         });
     }
     gauge(stat: string, value: number, tags?: {[key: string]: string}) {
-        this._airtableInterface.sendStat({
+        getSdk().__airtableInterface.sendStat({
             metricType: 'gauge',
             stat,
             value,
@@ -40,15 +34,23 @@ class BlockStats {
         });
     }
     histogram(stat: string, value: number, tags?: {[key: string]: string}) {
-        this._airtableInterface.sendStat({
+        getSdk().__airtableInterface.sendStat({
             metricType: 'histogram',
             stat,
             value,
             tags,
         });
     }
+    distribution(stat: string, value: number, tags?: {[key: string]: string}) {
+        getSdk().__airtableInterface.sendStat({
+            metricType: 'distribution',
+            stat,
+            value,
+            tags,
+        });
+    }
     timing(stat: string, time: number, tags?: {[key: string]: string}) {
-        this._airtableInterface.sendStat({
+        getSdk().__airtableInterface.sendStat({
             metricType: 'timing',
             stat,
             value: time,
@@ -61,4 +63,4 @@ class BlockStats {
     }
 }
 
-export const blockStats = new BlockStats(airtableInterface);
+export const blockStats = new BlockStats();

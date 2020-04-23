@@ -6,7 +6,7 @@ import {FieldData, PrivateColumnType, FieldType, FieldOptions} from '../types/fi
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
-import Aggregators, {Aggregator} from './aggregators';
+import {Aggregator} from './create_aggregators';
 import Table from './table';
 
 const WatchableFieldKeys = Object.freeze({
@@ -157,6 +157,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @param options new options for the field
      *
+     * @example
      * ```js
      * const updateFieldCheckResult = field.unstable_checkPermissionsForUpdateOptions();
      *
@@ -188,6 +189,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @param options new options for the field
      *
+     * @example
      * ```js
      * const canUpdateField = field.unstable_hasPermissionToUpdateOptions();
      *
@@ -218,6 +220,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @param options new options for the field
      *
+     * @example
      * ```js
      * async function addChoiceToSelectField(selectField, nameForNewOption) {
      *     const updatedOptions = {
@@ -295,7 +298,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             airtableInterface.aggregators.getAvailableAggregatorKeysForField(this._data),
         );
 
-        return values(Aggregators).filter(aggregator => {
+        return values(getSdk().models.aggregators).filter(aggregator => {
             return availableAggregatorKeysSet.has(aggregator.key);
         });
     }
