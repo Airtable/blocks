@@ -30,12 +30,6 @@ function commandRunner(name: string): RunCommandFn {
     };
 }
 
-async function runUnsupportedCommandAsync(argv: Argv) {
-    throw new Error(
-        `The ${argv._[0]} command is no longer supported. If you are working on a block that is not yet migrated to the new block.json format, you may need to use an old version of blocks-cli`,
-    );
-}
-
 const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.INIT]: {
         name: CommandNames.INIT,
@@ -205,65 +199,6 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         description: false, // Not documented, since this is for internal use.
         example: `block ${CommandNames.MIGRATE_OLD_BLOCK}`,
         runCommandAsync: commandRunner(CommandNames.MIGRATE_OLD_BLOCK),
-    },
-
-    // THE FOLLOWING COMMANDS ARE NO LONGER SUPPORTED.
-    // TODO(jb): remove them once all blocks are migrated to the standalone CLI world.
-    [CommandNames.CLONE]: {
-        name: CommandNames.CLONE,
-        command: `${CommandNames.CLONE}`, // Doesn't specify the positionals here so that even doing `block clone` will show the unsupported command error.
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.CLONE} app123/blk456 my-block`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.PUSH]: {
-        name: CommandNames.PUSH,
-        command: `${CommandNames.PUSH}`,
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.PUSH}`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.PULL]: {
-        name: CommandNames.PULL,
-        command: `${CommandNames.PULL}`,
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.PULL}`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.RENAME_ENTRY]: {
-        name: CommandNames.RENAME_ENTRY,
-        command: `${CommandNames.RENAME_ENTRY}`, // Doesn't specify the positionals here so that even doing `block rename-entry` will show the unsupported command error.
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.RENAME_ENTRY} newModuleName`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.SET_CREDENTIAL]: {
-        name: CommandNames.SET_CREDENTIAL,
-        command: `${CommandNames.SET_CREDENTIAL}`,
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.SET_CREDENTIAL}`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.DELETE_CREDENTIAL]: {
-        name: CommandNames.DELETE_CREDENTIAL,
-        command: `${CommandNames.DELETE_CREDENTIAL}`, // Doesn't specify the positionals here so that even doing `block rename-entry` will show the unsupported command error.
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.DELETE_CREDENTIAL} CREDENTIAL_NAME`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.RENAME_CREDENTIAL]: {
-        name: CommandNames.RENAME_CREDENTIAL,
-        command: `${CommandNames.RENAME_CREDENTIAL}`, // Doesn't specify the positionals here so that even doing `block rename-entry` will show the unsupported command error.
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.RENAME_CREDENTIAL} CURRENT_NAME NEW_NAME`,
-        runCommandAsync: runUnsupportedCommandAsync,
-    },
-    [CommandNames.LIST_CREDENTIALS]: {
-        name: CommandNames.LIST_CREDENTIALS,
-        command: `${CommandNames.LIST_CREDENTIALS}`,
-        description: false, // UNSUPPORTED, so hide this from help output.
-        example: `block ${CommandNames.LIST_CREDENTIALS}`,
-        runCommandAsync: runUnsupportedCommandAsync,
     },
 };
 
