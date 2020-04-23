@@ -44,7 +44,7 @@ class BlockStats {
         });
     }
     distribution(stat: string, value: number, tags?: {[key: string]: string}) {
-        this._airtableInterface.sendStat({
+        getSdk().__airtableInterface.sendStat({
             metricType: 'distribution',
             stat,
             value,
