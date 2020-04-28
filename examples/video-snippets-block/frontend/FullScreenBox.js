@@ -11,7 +11,7 @@ export default function FullScreenBox({children}) {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            backgroundColor="black"
+            backgroundColor="#222"
         >
             {children}
         </Box>

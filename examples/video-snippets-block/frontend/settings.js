@@ -1,4 +1,5 @@
 import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
+import {FieldType} from '@airtable/blocks/models';
 
 export const ConfigKeys = Object.freeze({
     TABLE_ID: 'tableId',
@@ -43,6 +44,23 @@ function getSettings(globalConfig, base) {
     };
 }
 
+function isValidAttachmentField(field) {
+    switch (field.type) {
+        case FieldType.MULTIPLE_ATTACHMENTS:
+            return true;
+        case FieldType.MULTIPLE_LOOKUP_VALUES:
+            if (!field.options.isValid) {
+                return false;
+            }
+            if (field.options.result.type !== FieldType.MULTIPLE_ATTACHMENTS) {
+                return false;
+            }
+            return true;
+        default:
+            return false;
+    }
+}
+
 /**
  * Wraps the settings with validation information
  * @param {object} settings - The object returned by getSettings
@@ -50,10 +68,17 @@ function getSettings(globalConfig, base) {
  */
 function getSettingsValidationResult(settings) {
     const {table, attachmentField} = settings;
-    if (!table || !attachmentField) {
+    if (!table) {
         return {
             isValid: false,
-            message: 'Pick a table and video attachment field',
+            message: 'Pick a table',
+            settings: settings,
+        };
+    }
+    if (!attachmentField || !isValidAttachmentField(attachmentField)) {
+        return {
+            isValid: false,
+            message: 'Pick an attachment field',
             settings: settings,
         };
     }

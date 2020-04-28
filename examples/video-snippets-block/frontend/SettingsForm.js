@@ -38,42 +38,44 @@ function SettingsForm({setIsSettingsVisible, settings}) {
                     <Fragment>
                         <FormField
                             label="Attachment field"
-                            description="Must have field type: Attachment"
+                            description="Must be an attachment or lookup of attachment field"
                         >
                             <FieldPickerSynced
                                 table={settings.table}
                                 globalConfigKey={ConfigKeys.ATTACHMENT_FIELD_ID}
-                                allowedTypes={[FieldType.MULTIPLE_ATTACHMENTS]}
+                                allowedTypes={[
+                                    FieldType.MULTIPLE_ATTACHMENTS,
+                                    FieldType.MULTIPLE_LOOKUP_VALUES,
+                                ]}
                             />
                         </FormField>
                         <FormField
-                            label="Start Time field"
-                            description="Must have field type: Duration"
+                            label="Start time field (optional)"
+                            description="Must be a duration field"
                         >
                             <FieldPickerSynced
                                 table={settings.table}
                                 globalConfigKey={ConfigKeys.START_TIME_FIELD_ID}
                                 allowedTypes={[FieldType.DURATION]}
+                                shouldAllowPickingNone={true}
                             />
                         </FormField>
                         <FormField
-                            label="End Time field"
-                            description="Must have field type: Duration"
+                            label="End time field (optional)"
+                            description="Must be a duration field"
                         >
                             <FieldPickerSynced
                                 table={settings.table}
                                 globalConfigKey={ConfigKeys.END_TIME_FIELD_ID}
                                 allowedTypes={[FieldType.DURATION]}
+                                shouldAllowPickingNone={true}
                             />
                         </FormField>
-                        <FormField
-                            label="Caption field"
-                            description="Must have field type: Single line text"
-                        >
+                        <FormField label="Caption field (optional)">
                             <FieldPickerSynced
                                 table={settings.table}
                                 globalConfigKey={ConfigKeys.CAPTION_FIELD_ID}
-                                allowedTypes={[FieldType.SINGLE_LINE_TEXT]}
+                                shouldAllowPickingNone={true}
                             />
                         </FormField>
                     </Fragment>

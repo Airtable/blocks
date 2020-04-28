@@ -17,7 +17,9 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (!isValid) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white">{message}</Text>
+                <Text textColor="white" textAlign="center" padding={1}>
+                    {message}
+                </Text>
             </FullScreenBox>
         );
     }
@@ -25,7 +27,9 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (cursor.activeTableId !== table.id) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white">Switch to the “{table.name}” table to see previews.</Text>
+                <Text textColor="white" textAlign="center" padding={1}>
+                    Switch to the “{table.name}” table to see previews
+                </Text>
             </FullScreenBox>
         );
     }
@@ -38,7 +42,9 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     ) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white">Switch to a grid view to see previews.</Text>
+                <Text textColor="white" textAlign="center" padding={1}>
+                    Switch to a grid view to see previews
+                </Text>
             </FullScreenBox>
         );
     }
@@ -48,7 +54,9 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (selectedRecord === null) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white">Click on a record to see a clip.</Text>
+                <Text textColor="white" textAlign="center" padding={1}>
+                    Select a record in grid view to see a preview
+                </Text>
             </FullScreenBox>
         );
     }
@@ -58,14 +66,16 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (!attachmentUrl) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white">No video</Text>
+                <Text textColor="white" textAlign="center" padding={1}>
+                    No video in the “{attachmentField.name}” field
+                </Text>
             </FullScreenBox>
         );
     }
 
     const startTime = startTimeField ? selectedRecord.getCellValue(startTimeField) : null;
     const endTime = endTimeField ? selectedRecord.getCellValue(endTimeField) : null;
-    const caption = captionField ? selectedRecord.getCellValue(captionField) : null;
+    const caption = captionField ? selectedRecord.getCellValueAsString(captionField) : null;
 
     return (
         <FullScreenBox>
@@ -76,8 +86,25 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
                 src={attachmentUrl}
             />
             {caption && (
-                <Box height="48px" display="flex" alignItems="center" justifyContent="center">
-                    <Text textColor="white">{caption}</Text>
+                <Box
+                    height="48px"
+                    width="100%"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    padding={2}
+                >
+                    <Text
+                        textColor="white"
+                        maxWidth="100%"
+                        overflow="hidden"
+                        style={{
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                        }}
+                    >
+                        {caption}
+                    </Text>
                 </Box>
             )}
         </FullScreenBox>
