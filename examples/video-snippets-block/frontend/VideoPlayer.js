@@ -36,7 +36,7 @@ function VideoPlayer({startTime, endTime, src}) {
                 }}
             >
                 <source src={src} />
-                Your browser does not support the video tag.
+                Your browser does not support video playback.
             </video>
         </Box>
     );
