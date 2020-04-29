@@ -7,7 +7,7 @@ import {getLocallyUniqueId} from '../private_utils';
 import Box from './box';
 import Text, {TextSize} from './text';
 import Label from './label';
-import {FormFieldIdContext} from './use_form_field_id';
+import {FormFieldContext} from './use_form_field';
 import useStyledSystem from './use_styled_system';
 import {
     maxWidth,
@@ -113,6 +113,8 @@ const FormField = (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
     const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
     const [generatedId] = useState(getLocallyUniqueId('form-field-'));
     const controlId = htmlFor || generatedId;
+    const [generatedDescriptionId] = useState(getLocallyUniqueId('input-description-'));
+    const descriptionId = description ? generatedDescriptionId : '';
 
     let optionalLabelProps;
     if (description) {
@@ -132,11 +134,19 @@ const FormField = (props: FormFieldProps, ref: React.Ref<HTMLDivElement>) => {
                 {label}
             </Label>
             {description && (
-                <Text variant="paragraph" size="default" textColor="light" marginBottom="6px">
+                <Text
+                    variant="paragraph"
+                    id={descriptionId}
+                    size="default"
+                    textColor="light"
+                    marginBottom="6px"
+                >
                     {description}
                 </Text>
             )}
-            <FormFieldIdContext.Provider value={controlId}>{children}</FormFieldIdContext.Provider>
+            <FormFieldContext.Provider value={{controlId, descriptionId}}>
+                {children}
+            </FormFieldContext.Provider>
         </Box>
     );
 };
