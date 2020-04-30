@@ -36,6 +36,7 @@ export interface Aggregator {
     aggregateToString(records: Array<Record>, field: Field): string;
 }
 
+/** @internal */
 export interface Aggregators {
     [key: string]: Aggregator;
 }
@@ -78,6 +79,7 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
     );
 };
 
+/** @internal */
 export default function createAggregators() {
     const {__airtableInterface: airtableInterface} = getSdk();
     const aggregators: Aggregators = {};
