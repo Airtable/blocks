@@ -114,7 +114,7 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  * @param opts? If passing a Table or View, optional {@link RecordQueryResultOpts} to control the results.
  * @example
  * ```js
- *  import {useRecords, useBase} from '@airtable/blocks';
+ *  import {useRecords, useBase} from '@airtable/blocks/ui';
  *
  *  function GetRecords() {
  *      const base = useBase();
@@ -147,7 +147,7 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  *
  * @example
  * ```js
- *  import {useRecords, useBase} from '@airtable/blocks';
+ *  import {useRecords, useBase} from '@airtable/blocks/ui';
  *
  *  function RecordList() {
  *      const base = useBase();
@@ -216,7 +216,7 @@ export function useRecordById(queryResult: AnyQueryResult, recordId: RecordId): 
  * @param opts? If passing a Table or View, optional {@link SingleRecordQueryResultOpts} to control the results.
  * @example
  * ```js
- *  import {useRecordById, useRecordIds, useBase} from '@airtable/blocks';
+ *  import {useRecordById, useRecordIds, useBase} from '@airtable/blocks/ui';
  *
  *  // this component concerns a single record - it only updates when that specific record updates
  *  function RecordListItem({table, recordId}) {

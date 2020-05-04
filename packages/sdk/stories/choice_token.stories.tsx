@@ -18,7 +18,7 @@ function ChoiceTokenExample() {
                     const ChoiceTokenExample = () => {
                         const base = useBase();
                         const table = base.getTableByName('Software engineers');
-                        const field = base.getFieldByName('Favorite language');
+                        const field = table.getFieldByName('Favorite language');
 
                         return (
                             <React.Fragment>
