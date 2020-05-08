@@ -12,7 +12,6 @@ const request = require('postman-request');
 const FormData = require('form-data');
 const {promisify} = require('util');
 request.postAsync = promisify(request.post);
-request.putAsync = promisify(request.put);
 
 import type {Argv} from 'yargs';
 import type {S3UploadInfo} from '../types/s3_upload_info';
@@ -103,7 +102,8 @@ async function _buildAndDeployAsync(
 ): Promise<{|buildId: BuildId, deployId: DeployId | null|}> {
     const buildResult = await blockBuilder.buildForReleaseAsync();
     if (buildResult.err) {
-        throw new Error('Failed to build the block code!');
+        throw new Error(`${buildResult.err.message}
+Failed to build the block code!`);
     }
     const {frontendBundlePath, backendDeploymentPackagePath} = buildResult.value;
 
