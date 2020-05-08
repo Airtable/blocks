@@ -9,14 +9,20 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.49...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.50...HEAD)
 
-* More descriptive error message if CLI is below the minimum supported version
-* Output some more error messages when building fails on `block release`
+No changes.
+
+## [0.0.50](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.49...@airtable/blocks-cli@0.0.50) - 2020-05-08
+
+-   More descriptive error message if CLI is below the minimum supported version
+-   Output some more error messages when building fails on `block release`
 
 ## [0.0.49](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.48...@airtable/blocks-cli@0.0.49) - 2020-04-14
 
-* Correctly quit on file system "watch" errors. Some operating systems (particularly on a *nix OS), it is easy to run into `ENOSPC` errors due to file watching limitations. We now correctly exit if met with this error.
+-   Correctly quit on file system "watch" errors. Some operating systems (particularly on a \*nix
+    OS), it is easy to run into `ENOSPC` errors due to file watching limitations. We now correctly
+    exit if met with this error.
 
 ## [0.0.48](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.47...@airtable/blocks-cli@0.0.48) - 2020-04-07
 
