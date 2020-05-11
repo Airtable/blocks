@@ -133,7 +133,7 @@ As an example, see the link to `bar` below:
 ```js
 /**
  * Example docs for Foo class.
- * Includes the [bar](/developers/blocks/api/models/Foo#bar) method.
+ * Includes the [bar](/api/models/Foo#bar) method.
  */
 class Foo
     /**
