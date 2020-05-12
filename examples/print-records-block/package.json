@@ -1,6 +1,6 @@
 {
     "name": "@airtable/print-records-block",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "A printable layout of artists and their artworks, grouped by collection",
     "author": "",
     "license": "MIT",
