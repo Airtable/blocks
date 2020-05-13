@@ -1,10 +1,18 @@
 import {useBase, useGlobalConfig} from '@airtable/blocks/ui';
+import {FieldType} from '@airtable/blocks/models';
 
 export const ConfigKeys = {
     IS_ENFORCED: 'isEnforced',
     URL_TABLE_ID: 'urlTableId',
     URL_FIELD_ID: 'urlFieldId',
 };
+
+export const allowedUrlFieldTypes = [
+    FieldType.FORMULA,
+    FieldType.SINGLE_LINE_TEXT,
+    FieldType.MULTILINE_TEXT,
+    FieldType.URL,
+];
 
 /**
  * Return settings from GlobalConfig with defaults, and converts them to Airtable objects.
@@ -41,15 +49,17 @@ function getSettingsValidationResult(settings) {
     let message = null;
     // If the enforcement switch is set to "Yes"...
     if (isEnforced) {
-        // If table has not yet been selected...
         if (!urlTable) {
+            // If table has not yet been selected...
             isValid = false;
             message = 'Please select a table for previews';
-        }
-        // If a table has been selected, but no field...
-        if (urlTable && !urlField) {
+        } else if (!urlField) {
+            // If a table has been selected, but no field...
             isValid = false;
             message = 'Please select a field for previews';
+        } else if (!allowedUrlFieldTypes.includes(urlField.type)) {
+            isValid = false;
+            message = 'Please select a supported field for previews';
         }
     }
 

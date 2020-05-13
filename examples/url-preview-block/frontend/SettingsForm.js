@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {FieldType} from '@airtable/blocks/models';
 import {
     useGlobalConfig,
     Box,
@@ -13,7 +12,7 @@ import {
     Text,
 } from '@airtable/blocks/ui';
 
-import {useSettings, ConfigKeys} from './settings';
+import {useSettings, ConfigKeys, allowedUrlFieldTypes} from './settings';
 
 function SettingsForm({setIsSettingsOpen}) {
     const globalConfig = useGlobalConfig();
@@ -60,12 +59,7 @@ function SettingsForm({setIsSettingsOpen}) {
                         <FieldPickerSynced
                             table={urlTable}
                             globalConfigKey={ConfigKeys.URL_FIELD_ID}
-                            allowedTypes={[
-                                FieldType.FORMULA,
-                                FieldType.SINGLE_LINE_TEXT,
-                                FieldType.TEXT,
-                                FieldType.URL,
-                            ]}
+                            allowedTypes={allowedUrlFieldTypes}
                         />
                     </FormField>
                 )}

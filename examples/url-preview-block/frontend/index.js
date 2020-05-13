@@ -46,6 +46,7 @@ function UrlPreviewBlock() {
     useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
     const {
+        isValid,
         settings: {isEnforced, urlField, urlTable},
     } = useSettings();
 
@@ -94,12 +95,11 @@ function UrlPreviewBlock() {
     const activeTable = base.getTableByIdIfExists(cursor.activeTableId);
 
     useEffect(() => {
-        // If the user is enforcing a specified table and field for previews,
-        // but the table has been deleted, then display the settings form.
-        if (isEnforced && !isSettingsOpen && (!urlTable || !urlField)) {
+        // Display the settings form if the settings aren't valid.
+        if (!isValid && !isSettingsOpen) {
             setIsSettingsOpen(true);
         }
-    }, [isEnforced, isSettingsOpen, urlTable, urlField]);
+    }, [isValid, isSettingsOpen]);
 
     // activeTable is briefly null when switching to a newly created table.
     if (!activeTable) {
