@@ -52,7 +52,7 @@ import useRenderSignal from './useRenderSignal';
  * being pressed, the editor's value is expected to temporarily describe
  * invalid JSON which is not appropriate to save to the base.
  */
-const changeDelay = 1000;
+const changeDelay = 500;
 const supportedFields = [FieldType.MULTILINE_TEXT, FieldType.SINGLE_LINE_TEXT];
 const isFieldSupported = field => supportedFields.includes(field.type);
 
