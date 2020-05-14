@@ -45,10 +45,7 @@ function UrlPreviewBlock() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
-    const {
-        isValid,
-        settings: {isEnforced, urlField, urlTable},
-    } = useSettings();
+    const {isValid} = useSettings();
 
     // Caches the currently selected record and field in state. If the user
     // selects a record and a preview appears, and then the user de-selects the
