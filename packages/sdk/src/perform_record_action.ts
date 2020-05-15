@@ -2,15 +2,16 @@ import {spawnError} from './error_utils';
 import getSdk from './get_sdk';
 import {
     AirtableInterface,
-    OpenWithRecordCallback,
-    OpenWithRecordData,
+    RecordActionData,
+    RecordActionDataCallback,
 } from './injected/airtable_interface';
 
 /** hidden */
 type UnsubscribeFunction = () => void;
 
 /**
- * This class exists to manage registering a callback to receive "Open with record" messages.
+ * This class exists to manage registering a callback to receive "Open block" / "Perform record
+ * action" messages.
  * This is different to other message handlers (_registerHandlers) since the callback is specified
  * by the block: it registers it during first render (vs the SDK registering during initialisation).
  *
@@ -33,17 +34,17 @@ type UnsubscribeFunction = () => void;
  *   and unregistering different callbacks
  * - simplifies unsubscription - don't need to add an unregister function to AirtableInterface
  *
- * This class is internal: users should use registerOpenWithRecordCallback or useOpenWithRecord.
+ * This class is internal: users should use registerRecordActionDataCallback or useRecordActionData.
  *
  * @internal
  * */
-export class OpenWithRecord {
+export class PerformRecordAction {
     /** @internal */
     _airtableInterface: AirtableInterface;
     /** @internal */
     _hasRegisteredHandler: boolean;
     /** @internal */
-    _callback: OpenWithRecordCallback | null;
+    _callback: RecordActionDataCallback | null;
 
     /** @hidden */
     constructor(airtableInterface: AirtableInterface) {
@@ -51,18 +52,18 @@ export class OpenWithRecord {
         this._hasRegisteredHandler = false;
         this._callback = null;
 
-        this._handleOpenWithRecord = this._handleOpenWithRecord.bind(this);
+        this._handlePerformRecordAction = this._handlePerformRecordAction.bind(this);
     }
 
     /** @hidden */
-    _handleOpenWithRecord(data: OpenWithRecordData) {
+    _handlePerformRecordAction(data: RecordActionData) {
         if (this._callback) {
             this._callback(data);
         }
     }
 
     /** @hidden */
-    registerCallback(callback: OpenWithRecordCallback): UnsubscribeFunction {
+    registerCallback(callback: RecordActionDataCallback): UnsubscribeFunction {
         if (this._callback) {
             throw spawnError('Cannot call registerCallback with a callback already registered');
         }
@@ -74,7 +75,9 @@ export class OpenWithRecord {
             // a handler with airtableInterface to let liveapp know we can receive openWithRecord
             // messages and to handle those messages.
             // TODO(emma); dunno if register needs to be async / registerCallback should be async
-            this._airtableInterface.registerOpenWithRecordHandlerAsync(this._handleOpenWithRecord);
+            this._airtableInterface.registerOpenWithRecordHandlerAsync(
+                this._handlePerformRecordAction,
+            );
             this._hasRegisteredHandler = true;
         }
 
@@ -88,9 +91,9 @@ export class OpenWithRecord {
 }
 
 /**
- * Registers a callback to handle "open with record" events (from button field).
+ * Registers a callback to handle "open block" / "perform record action" events (from button field).
  *
- * Your block will not receive "open with record" events until a callback is registered.
+ * Your block will not receive "perform record action" events until a callback is registered.
  *
  * Returns a unsubscribe function that can be used to unregister the callback (e.g. on
  * component unmount for cleanup, or if you wish to register a different function.)
@@ -100,9 +103,9 @@ export class OpenWithRecord {
  *
  * @hidden
  */
-export function registerOpenWithRecordCallback(
-    callback: OpenWithRecordCallback,
+export function registerRecordActionDataCallback(
+    callback: RecordActionDataCallback,
 ): UnsubscribeFunction {
-    const {openWithRecord} = getSdk();
-    return openWithRecord.registerCallback(callback);
+    const {performRecordAction} = getSdk();
+    return performRecordAction.registerCallback(callback);
 }

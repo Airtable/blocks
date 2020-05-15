@@ -166,7 +166,7 @@ export interface VisList {
 }
 
 /** @hidden */
-export interface OpenWithRecordData {
+export interface RecordActionData {
     /** @hidden */
     recordId: RecordId;
     /** @hidden */
@@ -175,7 +175,7 @@ export interface OpenWithRecordData {
     tableId: TableId;
 }
 /** @hidden */
-export type OpenWithRecordCallback = (data: OpenWithRecordData) => void;
+export type RecordActionDataCallback = (data: RecordActionData) => void;
 
 /**
  * AirtableInterface is designed as the communication interface between the
@@ -269,7 +269,8 @@ export interface AirtableInterface {
         sorts: Array<NormalizedSortConfig>,
     ): VisList;
     setActiveViewOrTable(tableId: TableId, viewId?: ViewId): void;
-    registerOpenWithRecordHandlerAsync(callback: OpenWithRecordCallback): Promise<void>;
+    // TODO(emma): remove this when fetchAndSubscribeToPerformRecordActionAsync is implemented
+    registerOpenWithRecordHandlerAsync(callback: RecordActionDataCallback): Promise<void>;
 
     /**
      * internal utils

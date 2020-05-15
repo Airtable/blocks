@@ -21,7 +21,7 @@ import Viewport from './viewport';
 import * as UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
-import {OpenWithRecord} from './open_with_record';
+import {PerformRecordAction} from './perform_record_action';
 import {AirtableInterface, AppInterface} from './injected/airtable_interface';
 
 if (!(React as any).PropTypes) {
@@ -127,7 +127,7 @@ export default class BlockSdk {
     undoRedo: UndoRedo;
 
     /** @internal */
-    openWithRecord: OpenWithRecord;
+    performRecordAction: PerformRecordAction;
 
     // When models are updated on the frontend, we want to batch them together and have React do a
     // single render.
@@ -173,7 +173,7 @@ export default class BlockSdk {
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
         this.undoRedo = new UndoRedo(airtableInterface);
-        this.openWithRecord = new OpenWithRecord(airtableInterface);
+        this.performRecordAction = new PerformRecordAction(airtableInterface);
 
         this.runInfo = Object.freeze({
             isFirstRun: sdkInitData.isFirstRun,
