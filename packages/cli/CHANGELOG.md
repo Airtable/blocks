@@ -9,9 +9,13 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.50...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.51...HEAD)
 
-* Regenerate self-signed certificated used by localhost in `block run`
+No changes.
+
+## [0.0.51](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.50...@airtable/blocks-cli@0.0.51) - 2020-05-18
+
+-   Regenerate self-signed certificated used by localhost in `block run`
 
 ## [0.0.50](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.49...@airtable/blocks-cli@0.0.50) - 2020-05-08
 
