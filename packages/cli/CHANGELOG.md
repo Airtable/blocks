@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.50...HEAD)
 
-No changes.
+* Regenerate self-signed certificated used by localhost in `block run`
 
 ## [0.0.50](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.49...@airtable/blocks-cli@0.0.50) - 2020-05-08
 
