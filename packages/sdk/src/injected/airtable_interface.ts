@@ -4,6 +4,7 @@ import {AggregatorKey} from '../types/aggregators';
 import {BaseData, BasePermissionData, ModelChange} from '../types/base';
 import {BlockInstallationId} from '../types/block';
 import {FieldData, FieldId, FieldType} from '../types/field';
+import {RecordActionData, RecordActionDataCallback} from '../types/record_action_data';
 import {
     GlobalConfigUpdate,
     GlobalConfigData,
@@ -164,18 +165,6 @@ export interface VisList {
     addRecordData(recordData: RecordData): void;
     getOrderedRecordIds(): Array<RecordId>;
 }
-
-/** @hidden */
-export interface RecordActionData {
-    /** @hidden */
-    recordId: RecordId;
-    /** @hidden */
-    viewId: ViewId;
-    /** @hidden */
-    tableId: TableId;
-}
-/** @hidden */
-export type RecordActionDataCallback = (data: RecordActionData) => void;
 
 /**
  * AirtableInterface is designed as the communication interface between the

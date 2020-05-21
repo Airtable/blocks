@@ -1,5 +1,5 @@
 import getSdk from '../get_sdk';
-import {RecordActionData} from '../injected/airtable_interface';
+import {RecordActionData} from '../types/record_action_data';
 import {WatchablePerformRecordActionKeys} from '../perform_record_action';
 import {useLoadable, useWatchable} from './ui';
 
