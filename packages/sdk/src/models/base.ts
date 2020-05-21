@@ -41,7 +41,7 @@ export type ChangedPathsForType<T> = T extends {} ? ChangedPathsForObject<T> : {
  *
  * If you want the base model to automatically recalculate whenever the base schema changes, try the
  * {@link useBase} hook. Alternatively, you can manually subscribe to changes with
- * {@link useWatchable} (recommended) or [Base#watch](/developers/blocks/api/models/Base#watch).
+ * {@link useWatchable} (recommended) or [Base#watch](/api/models/Base#watch).
  *
  * @example
  * ```js

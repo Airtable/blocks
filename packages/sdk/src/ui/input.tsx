@@ -6,7 +6,7 @@ import {compose} from '@styled-system/core';
 import {createEnum, EnumType, createPropTypeFromEnum} from '../private_utils';
 import useTheme from './theme/use_theme';
 import useStyledSystem from './use_styled_system';
-import useFormFieldId from './use_form_field_id';
+import useFormField from './use_form_field';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -235,11 +235,15 @@ const Input = (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
         readOnly,
         autoComplete,
         'aria-labelledby': ariaLabelledBy,
-        'aria-describedby': ariaDescribedBy,
+        'aria-describedby': ariaDescribedByProp,
         ...styleProps
     } = props;
 
-    const formFieldId = useFormFieldId();
+    const formFieldContextValue = useFormField();
+    const controlId = formFieldContextValue ? formFieldContextValue.controlId : undefined;
+    const descriptionId = formFieldContextValue ? formFieldContextValue.descriptionId : undefined;
+    const ariaDescribedBy =
+        [ariaDescribedByProp, descriptionId].filter(Boolean).join(' ') || undefined;
     const classNameForInputVariant = useInputVariant();
     const classNameForInputSize = useInputSize(size);
     const classNameForStyleProps = useStyledSystem({width: '100%', ...styleProps}, styleParser);
@@ -254,7 +258,7 @@ const Input = (props: InputProps, ref: React.Ref<HTMLInputElement>) => {
             required={required}
             spellCheck={spellCheck}
             tabIndex={tabIndex}
-            id={id || formFieldId}
+            id={id || controlId}
             name={name}
             autoFocus={autoFocus}
             max={max}

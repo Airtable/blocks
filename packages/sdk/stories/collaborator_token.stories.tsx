@@ -33,7 +33,7 @@ function CollaboratorTokenExample() {
                 return (
                     <React.Fragment>
                         {collaboratorOptions.map(collaborator => (
-                            <CollaboratorToken
+                            <CollaboratorToken.Static
                                 key={collaborator.id}
                                 collaborator={collaborator}
                                 marginRight={1}

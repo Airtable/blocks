@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {createEnum, EnumType} from '../private_utils';
 import {spawnError} from '../error_utils';
-import useFormFieldId from './use_form_field_id';
+import useFormField from './use_form_field';
 import {
     maxWidth,
     maxWidthPropTypes,
@@ -202,11 +202,15 @@ const Select = (props: SelectProps, ref: React.Ref<HTMLSelectElement>) => {
         className,
         style,
         'aria-label': ariaLabel,
-        'aria-describedby': ariaDescribedBy,
+        'aria-describedby': ariaDescribedByProp,
         'aria-labelledby': ariaLabelledBy,
         ...styleProps
     } = props;
-    const formFieldId = useFormFieldId();
+    const formFieldContextValue = useFormField();
+    const controlId = formFieldContextValue ? formFieldContextValue.controlId : undefined;
+    const descriptionId = formFieldContextValue ? formFieldContextValue.descriptionId : undefined;
+    const ariaDescribedBy =
+        [ariaDescribedByProp, descriptionId].filter(Boolean).join(' ') || undefined;
     const classNameForSelectVariant = useSelectVariant();
     const classNameForSelectSize = useSelectSize(size);
     const classNameForStyleProps = useStyledSystem(
@@ -258,7 +262,7 @@ const Select = (props: SelectProps, ref: React.Ref<HTMLSelectElement>) => {
             onClick={onClick}
             autoFocus={autoFocus}
             disabled={disabled}
-            id={id || formFieldId}
+            id={id || controlId}
             name={name}
             tabIndex={tabIndex}
             className={cx(

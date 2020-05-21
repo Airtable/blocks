@@ -1,6 +1,6 @@
 {
     "name": "@airtable/blocks",
-    "version": "0.0.48",
+    "version": "0.0.49",
     "description": "Airtable Blocks SDK",
     "repository": {
         "type": "git",
@@ -42,7 +42,7 @@
         "docs:generator": "tsc -b ./doc-generator/tsconfig.json",
         "docs:typedoc": "typedoc --plugin \"typedoc-plugin-no-inherit,$(pwd)/doc-generator/typedoc-plugin.js\" --json ./docs/docs-$npm_package_version.json .",
         "docs:minify-docs-json": "node ./doc-generator/minify-docs-json.js ./docs/docs-$npm_package_version.json",
-        "docs": "yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:minify-docs-json",
+        "docs": "yarn build && yarn run docs:clean && yarn run docs:generator && yarn run docs:typedoc && yarn run docs:minify-docs-json",
         "build": "yarn run build:clean && concurrently yarn:build:babel yarn:build:types",
         "watch": "yarn run build:clean && concurrently yarn:watch:babel yarn:watch:types",
         "storybook": "start-storybook -p 6006",

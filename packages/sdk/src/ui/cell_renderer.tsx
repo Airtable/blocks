@@ -94,6 +94,8 @@ interface CellRendererProps extends CellRendererStyleProps, TooltipAnchorProps<H
     cellClassName?: string;
     /** Additional styles to apply to the cell itself. */
     cellStyle?: React.CSSProperties;
+    /** Render function if provided and validation fails. */
+    renderInvalidCellValue?: (cellValue: unknown, field: Field) => React.ReactElement;
 }
 
 /**
@@ -115,6 +117,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
         style: PropTypes.object,
         cellClassName: PropTypes.string,
         cellStyle: PropTypes.object,
+        renderInvalidCellValue: PropTypes.func,
         ...tooltipAnchorPropTypes,
         ...cellRendererStylePropTypes,
     };
@@ -162,6 +165,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             style,
             cellClassName,
             cellStyle,
+            renderInvalidCellValue,
         } = this.props;
 
         if (field.isDeleted) {
@@ -194,11 +198,25 @@ export class CellRenderer extends React.Component<CellRendererProps> {
                     field._data,
                 );
                 if (!validationResult.isValid) {
-                    throw spawnError(
-                        'Cannot render invalid cell value %s: %s',
-                        cellValue,
-                        validationResult.reason,
-                    );
+                    if (renderInvalidCellValue) {
+                        return (
+                            <div
+                                onMouseEnter={onMouseEnter}
+                                onMouseLeave={onMouseLeave}
+                                onClick={onClick}
+                                className={className}
+                                style={style}
+                            >
+                                {renderInvalidCellValue(cellValue, field)}
+                            </div>
+                        );
+                    } else {
+                        throw spawnError(
+                            'Cannot render invalid cell value %s: %s',
+                            cellValue,
+                            validationResult.reason,
+                        );
+                    }
                 }
             }
 

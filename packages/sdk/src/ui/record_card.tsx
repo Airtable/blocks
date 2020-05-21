@@ -73,9 +73,16 @@ interface CellValueAndFieldLabelProps {
     cellValue?: unknown;
     field: Field;
     width: number;
+    renderInvalidCellValue?: (cellValue: unknown, field: Field) => React.ReactElement;
 }
 
-const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndFieldLabelProps) => {
+const CellValueAndFieldLabel = ({
+    record,
+    cellValue,
+    field,
+    width,
+    renderInvalidCellValue,
+}: CellValueAndFieldLabelProps) => {
     useWatchable(field, ['name', 'type', 'options']);
 
     return (
@@ -102,6 +109,7 @@ const CellValueAndFieldLabel = ({record, cellValue, field, width}: CellValueAndF
                 shouldWrap={false}
                 cellClassName="recordCardCellValue truncate"
                 cellStyle={{lineHeight: '16px', fontSize: '12px'}}
+                renderInvalidCellValue={renderInvalidCellValue}
             />
         </Box>
     );
@@ -113,6 +121,7 @@ CellValueAndFieldLabel.propTypes = {
     cellValue: PropTypes.any,
     field: PropTypes.instanceOf(Field).isRequired,
     width: PropTypes.number.isRequired,
+    renderInvalidCellValue: PropTypes.func,
 };
 
 /**
@@ -151,6 +160,8 @@ interface RecordCardProps extends RecordCardStyleProps {
     style?: React.CSSProperties;
     /** @internal injected by withHooks */
     viewMetadata: ViewMetadataQueryResult | null;
+    /** Render function if provided and validation fails. */
+    renderInvalidCellValue?: (cellValue: unknown, field: Field) => React.ReactElement;
 }
 
 const FormulaicFieldTypes = {
@@ -233,6 +244,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         className: PropTypes.string,
         style: PropTypes.object,
         expandRecordOptions: PropTypes.object,
+        renderInvalidCellValue: PropTypes.func,
         ...tooltipAnchorPropTypes,
         ...recordCardStylePropTypes,
     };
@@ -470,7 +482,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
         attachmentSize: number,
         fieldsToUse: Array<Field>,
     ): Array<React.ReactElement<React.ComponentProps<typeof CellValueAndFieldLabel>>> {
-        const {record, width} = this.props;
+        const {record, width, renderInvalidCellValue} = this.props;
         invariant(typeof width === 'number', 'width in defaultProps');
 
         const cellContainerWidth = width - CARD_PADDING - attachmentSize;
@@ -484,6 +496,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
                     key={field.id}
                     field={field}
                     width={widthAndFieldId.width}
+                    renderInvalidCellValue={renderInvalidCellValue}
                     {...(record instanceof Record ? {record} : {cellValue: record[field.id]})}
                 />
             );

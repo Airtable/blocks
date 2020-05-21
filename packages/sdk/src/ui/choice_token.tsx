@@ -45,7 +45,7 @@ const DEFAULT_CHOICE_COLOR = 'gray';
 /** An option from a select field. You should not create these objects from scratch, but should instead grab them from base data. */
 interface ChoiceOption {
     /** The ID of the select option. */
-    id: string;
+    id?: string;
     /** The name of the select option. */
     name: string;
     /** The color of the select option. */
@@ -121,7 +121,7 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
 
 ChoiceToken.propTypes = {
     choice: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string,
         name: PropTypes.string.isRequired,
         color: PropTypes.string,
     }).isRequired,
