@@ -269,8 +269,9 @@ export interface AirtableInterface {
         sorts: Array<NormalizedSortConfig>,
     ): VisList;
     setActiveViewOrTable(tableId: TableId, viewId?: ViewId): void;
-    // TODO(emma): remove this when fetchAndSubscribeToPerformRecordActionAsync is implemented
-    registerOpenWithRecordHandlerAsync(callback: RecordActionDataCallback): Promise<void>;
+    fetchAndSubscribeToPerformRecordActionAsync(
+        callback: RecordActionDataCallback,
+    ): Promise<RecordActionData | null>;
 
     /**
      * internal utils

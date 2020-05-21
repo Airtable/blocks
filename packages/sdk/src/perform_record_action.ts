@@ -1,10 +1,22 @@
-import {spawnError} from './error_utils';
 import getSdk from './get_sdk';
 import {
     AirtableInterface,
     RecordActionData,
     RecordActionDataCallback,
 } from './injected/airtable_interface';
+import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
+import {BaseData} from './types/base';
+import {isEnumValue, ObjectValues} from './private_utils';
+
+/** @hidden */
+export const WatchablePerformRecordActionKeys = Object.freeze({
+    // isDataLoaded must be a watchable key for a LoadableModel.
+    isDataLoaded: 'isDataLoaded' as const,
+    recordActionData: 'recordActionData' as const,
+});
+
+/** @hidden */
+type WatchablePerformRecordActionKey = ObjectValues<typeof WatchablePerformRecordActionKeys>;
 
 /** hidden */
 type UnsubscribeFunction = () => void;
@@ -16,90 +28,124 @@ type UnsubscribeFunction = () => void;
  * by the block: it registers it during first render (vs the SDK registering during initialisation).
  *
  * On the liveapp side, we ensure that pending messages are held until the block registers the
- * callback (or another message is sent).
+ * callback (or another message is sent). If there's a pending message, it is returned at
+ * registration.
  *
- * In the SDK, we only allow one callback to be registered at a time. This is both for
- * simplicity (only your highest level component should handle it) as well as to avoid race
- * conditions where you have multiple handlers, and the message is sent while not all of them
- * have finished registering. We throw if multiple callbacks are registered.
+ * This class implements AbstractModelWithAsyncData in order to take advantage of useLoadable's
+ * suspense handling. "Loading" the model means registering the handler with liveapp. This allows us
+ * to suspend the block and return the initial pending message on first render.
  *
- * However, we do support unregistering the callback. This is to support cleaning up the callback
- * if the component is unmounted for some reason (otherwise we'd throw when the component is
- * mounted again).
- *
- * We handle unregistration at this layer (rather than the AirtableInterface layer): this adds
- * a level of indirection (the handler we register with airtableInterface calls the callback
- * stored in this class, rather than registering the callback as the handler) for a few reasons:
- * - simplifies subscription - we only register a handler with liveapp once, rather than registering
- *   and unregistering different callbacks
- * - simplifies unsubscription - don't need to add an unregister function to AirtableInterface
+ * One difference is that _unloadData will not unregister the airtableInterface handler. We don't
+ * support unregistering it at this time for simplicity.
  *
  * This class is internal: users should use registerRecordActionDataCallback or useRecordActionData.
  *
  * @internal
  * */
-export class PerformRecordAction {
+export class PerformRecordAction extends AbstractModelWithAsyncData<
+    RecordActionData | null,
+    WatchablePerformRecordActionKey
+> {
     /** @internal */
     _airtableInterface: AirtableInterface;
     /** @internal */
     _hasRegisteredHandler: boolean;
     /** @internal */
-    _callback: RecordActionDataCallback | null;
+    _hasCompletedInitialDataLoad: boolean;
+    /**
+     * The data from the latest record action, or null if none have occurred yet.
+     *
+     * @internal */
+    recordActionData: RecordActionData | null;
 
     /** @hidden */
-    constructor(airtableInterface: AirtableInterface) {
+    constructor(baseData: BaseData, airtableInterface: AirtableInterface) {
+        super(baseData, 'performRecordAction');
+
         this._airtableInterface = airtableInterface;
         this._hasRegisteredHandler = false;
-        this._callback = null;
+        this._hasCompletedInitialDataLoad = false;
+        this.recordActionData = null;
 
         this._handlePerformRecordAction = this._handlePerformRecordAction.bind(this);
     }
 
-    /** @hidden */
-    _handlePerformRecordAction(data: RecordActionData) {
-        if (this._callback) {
-            this._callback(data);
-        }
+    /** @internal */
+    static _isWatchableKey(key: string): boolean {
+        return isEnumValue(WatchablePerformRecordActionKeys, key);
     }
 
     /** @hidden */
-    registerCallback(callback: RecordActionDataCallback): UnsubscribeFunction {
-        if (this._callback) {
-            throw spawnError('Cannot call registerCallback with a callback already registered');
+    _handlePerformRecordAction(data: RecordActionData) {
+        this.recordActionData = data;
+        this._onChange(WatchablePerformRecordActionKeys.recordActionData, data);
+    }
+
+    /**
+     * AbstractModelWithAsyncData implementation
+     */
+
+    /** @internal */
+    _onChangeIsDataLoaded() {
+        this._onChange(WatchablePerformRecordActionKeys.isDataLoaded);
+
+        // Handle the case where there was a pending action whilst we were registering the handler.
+        // We only want to do this on the very initial load when we're actually registering the
+        // handler: avoid triggering this when the data is "unloaded" and "loaded".
+        if (!this._hasCompletedInitialDataLoad) {
+            this._hasCompletedInitialDataLoad = true;
+            if (this.recordActionData) {
+                this._handlePerformRecordAction(this.recordActionData);
+            }
         }
+    }
 
-        this._callback = callback;
-
+    /** @internal */
+    async _loadDataAsync(): Promise<[]> {
+        // Note: Liveapp will throw if a handler has already been registered, so we only register
+        // it once.
         if (!this._hasRegisteredHandler) {
-            // If this is the first time a callback has been registered, we also need to register
-            // a handler with airtableInterface to let liveapp know we can receive openWithRecord
-            // messages and to handle those messages.
-            // TODO(emma); dunno if register needs to be async / registerCallback should be async
-            this._airtableInterface.registerOpenWithRecordHandlerAsync(
+            this._hasRegisteredHandler = true;
+            this.recordActionData = await this._airtableInterface.fetchAndSubscribeToPerformRecordActionAsync(
                 this._handlePerformRecordAction,
             );
-            this._hasRegisteredHandler = true;
         }
 
-        return () => {
-            // Note: we don't unregister the handler for simplicity.
-            // Since there's only one callback registered at a time, the unsubscribe function
-            // simply clears it..
-            this._callback = null;
-        };
+        return [];
+    }
+
+    /** @internal */
+    _unloadData() {
+        // Hack: Don't do anything, since "loading" means registering a handler, and we don't need
+        // to unregister it.
+    }
+
+    /** @internal */
+    static _shouldLoadDataForKey(key: WatchablePerformRecordActionKey): boolean {
+        // Watching recordActionData will load data (aka register handler with liveapp) and trigger
+        // callback when done.
+        return key === WatchablePerformRecordActionKeys.recordActionData;
     }
 }
 
 /**
  * Registers a callback to handle "open block" / "perform record action" events (from button field).
  *
- * Your block will not receive "perform record action" events until a callback is registered.
+ * Returns a unsubscribe function that should be used to unregister the callback for cleanup on
+ * component unmount, or if you wish to register a different function.
  *
- * Returns a unsubscribe function that can be used to unregister the callback (e.g. on
- * component unmount for cleanup, or if you wish to register a different function.)
+ * Also see {@link useRecordActionData}, which subscribes to the same events in a synchronous way.
  *
- * Only one callback can be registered at a time. It should ideally be registered from the top-level
- * component of your block.
+ * Your block will not receive "perform record action" events until a callback is registered -
+ * they're held until registration to ensure the block is ready to handle the event (e.g. has
+ * finished loading).
+ *
+ * Because of this, we recommend only registering a callback once, in your top level component -
+ * otherwise, messages could be received while not all callbacks have been successfully registered.
+ * Similarly, using both `registerRecordActionDataCallback` and `useRecordActionData` is not
+ * supported.
+ *
+ * TODO(emma): improve documentation, examples, mention dev tools, recommend the hook
  *
  * @hidden
  */
@@ -107,5 +153,19 @@ export function registerRecordActionDataCallback(
     callback: RecordActionDataCallback,
 ): UnsubscribeFunction {
     const {performRecordAction} = getSdk();
-    return performRecordAction.registerCallback(callback);
+
+    const wrappedCallback = (
+        model: PerformRecordAction,
+        key: WatchablePerformRecordActionKey,
+        data: RecordActionData,
+    ) => {
+        callback(data);
+    };
+
+    performRecordAction.watch(WatchablePerformRecordActionKeys.recordActionData, wrappedCallback);
+    return () =>
+        performRecordAction.unwatch(
+            WatchablePerformRecordActionKeys.recordActionData,
+            wrappedCallback,
+        );
 }

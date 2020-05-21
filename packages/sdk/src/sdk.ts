@@ -173,7 +173,7 @@ export default class BlockSdk {
         this.UI = UI;
         this.settingsButton = new SettingsButton(airtableInterface);
         this.undoRedo = new UndoRedo(airtableInterface);
-        this.performRecordAction = new PerformRecordAction(airtableInterface);
+        this.performRecordAction = new PerformRecordAction(sdkInitData.baseData, airtableInterface);
 
         this.runInfo = Object.freeze({
             isFirstRun: sdkInitData.isFirstRun,
