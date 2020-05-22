@@ -1,4 +1,7 @@
 {
+    "name": "@airtable/json-editor-block",
+    "version": "1.0.0",
+    "license": "MIT",
     "dependencies": {
         "@airtable/blocks": "0.0.43",
         "lodash.debounce": "^4.0.8",
