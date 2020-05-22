@@ -1,0 +1,19 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "blocks@airtable.com",
+    "remote": "git@github.com:Airtable/blocks-json-editor.git",
+    "subdirectory": "examples/json-editor-block",
+    "shouldStripLineComments": false,
+    "global": [
+        ".block/**/*",
+        "frontend/**/*",
+        "media/**/*",
+        ".eslintrc.js",
+        ".gitignore",
+        "block.json",
+        "LICENSE.md",
+        "package-lock.json",
+        "package.json",
+        "README.md"
+    ]
+}
