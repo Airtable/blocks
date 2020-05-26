@@ -3,7 +3,19 @@ import {ObjectValues} from './private_utils';
 /**
  * Airtable color names.
  *
- * @docsPath UI/utils/Colors
+ * To get the corresponding RGB or HEX values, use
+ * {@link getRgbForColor} or {@link getHexForColor}.
+ *
+ * You can also pass these values into the color props for components:
+ *
+ * @example
+ * ```js
+ * import {Box, colors} from '@airtable/blocks/ui';
+ *
+ * <Box backgroundColor={colors.BLUE} />
+ * ```
+ *
+ * @docsPath UI/utils/colors
  */
 const Colors = {
     /** @docsPath UI/utils/Colors */
