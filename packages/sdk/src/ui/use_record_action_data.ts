@@ -25,7 +25,7 @@ import {useLoadable, useWatchable} from './ui';
  * @hidden
  */
 
-export const useRecordActionData = (): RecordActionData | null => {
+export default function useRecordActionData(): RecordActionData | null {
     const {performRecordAction} = getSdk();
 
     // Puts the block in suspense until the liveapp handler has been registered.
@@ -40,6 +40,4 @@ export const useRecordActionData = (): RecordActionData | null => {
     useWatchable(performRecordAction, WatchablePerformRecordActionKeys.recordActionData);
 
     return performRecordAction.recordActionData;
-};
-
-// TODO(emma): switch to default export when exposing outside of private utils
+}
