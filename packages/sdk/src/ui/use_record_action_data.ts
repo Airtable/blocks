@@ -13,14 +13,46 @@ import {useLoadable, useWatchable} from './ui';
  * fetching the initial data.
  *
  * Also see {@link registerRecordActionDataCallback}, which subscribes to the same events in an
- * asynchronous (callback based) way.
+ * asynchronous (callback based) way. An advantage of using this hook over the callback is that you
+ * immediately can handle any pending events when your block opens - with a callback, your block
+ * will finish it's initial render before handling the event.
  *
  * Like {@link registerRecordActionDataCallback}, your block won't receive events until this hook is
  * used for the first time. Because of that, we recommend only using this hook once, in the top
  * level component of your block. Similarly, using both `registerRecordActionDataCallback` and
  * `useRecordActionData` is not supported.
  *
- * TODO(emma): improve documentation, examples, mention dev tools
+ * You can test your block in development by sending "perform record action" events to your block
+ * in the "Advanced" panel of the block developer tools.
+ *
+ * TODO(emma): update this with instructions on using button field with a custom block when custom
+ * blocks are supported in button field config.
+ *
+ * TODO(emma): This doesn't cover the useLayoutEffect & usePrevious workaround for immediately
+ * rendering callback results with this hook (used in scripting) but is probably too advanced.
+ * Include it in a guide instead?
+ *
+ * @example
+ * ```js
+ * import React from 'react';
+ * import {useRecordActionData} from '@airtable/blocks/ui';
+ *
+ * function LatestRecordAction() {
+ *     const recordActionData = useRecordActionData();
+ *
+ *     if (recordActionData === null) {
+ *         return <span>No events yet</div>;
+ *     }
+ *
+ *     return (
+ *         <ul>
+ *             <li>Record id: {recordActionData.recordId}</li>
+ *             <li>View id: {recordActionData.viewId}</li>
+ *             <li>Table id: {recordActionData.tableId}</li>
+ *         </ul>
+ *     );
+ * }
+ * ```
  *
  * @hidden
  */

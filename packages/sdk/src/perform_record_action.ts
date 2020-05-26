@@ -142,7 +142,43 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
  * Similarly, using both `registerRecordActionDataCallback` and `useRecordActionData` is not
  * supported.
  *
- * TODO(emma): improve documentation, examples, mention dev tools, recommend the hook
+ * You can test your block in development by sending "perform record action" events to your block
+ * in the "Advanced" panel of the block developer tools.
+ *
+ * TODO(emma): update this with instructions on using button field with a custom block when custom
+ * blocks are supported in button field config.
+ *
+ * @example
+ * ```js
+ * import React, {useEffect, useState} from 'react';
+ * import {registerRecordActionDataCallback} from '@airtable/blocks/ui';
+ *
+ * function LatestRecordAction() {
+ *     const [recordActionData, setRecordActionData] = useState(null);
+ *
+ *     const callback = (data) => {
+ *         console.log('Record action received', data);
+ *         setRecordActionData(data);
+ *     }
+ *
+ *     useEffect(() => {
+ *         // Return the unsubscribe function so it's run on cleanup.
+ *         return registerRecordActionDataCallback(callback);
+ *     }, [callback]);
+ *
+ *     if (recordActionData === null) {
+ *         return <span>No events yet</div>;
+ *     }
+ *
+ *     return (
+ *         <ul>
+ *             <li>Record id: {recordActionData.recordId}</li>
+ *             <li>View id: {recordActionData.viewId}</li>
+ *             <li>Table id: {recordActionData.tableId}</li>
+ *         </ul>
+ *     );
+ * }
+ * ```
  *
  * @hidden
  */
