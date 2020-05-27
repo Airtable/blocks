@@ -23,7 +23,7 @@ The code shows:
    specific attributes from that template.)
 
 2. Create a new block in your new base (see
-   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block),
+   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block)),
    selecting "Table structure" as your template.
 
 3. From the root of your new block, run `block run`.

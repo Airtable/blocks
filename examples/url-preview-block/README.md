@@ -16,7 +16,7 @@ The code shows:
 1. Copy [this base](https://airtable.com/shrg3CySSks0nRw5w).
 
 2. Create a new block in your new base (see
-   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block),
+   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block)),
    selecting "URL preview" as your template.
 
 3. From the root of your new block, run `block run`.

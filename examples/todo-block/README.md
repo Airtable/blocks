@@ -22,7 +22,7 @@ The code shows:
    [this base](https://airtable.com/shrKs6a2cQPEK5yzr/tbl1O3LqNL0wSBjfw/viwiJOsjivcJFXAAB?blocks=hide).
 
 2. Create a new block in your new base (see
-   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block),
+   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block)),
    selecting "To-do list" as your template.
 
 3. From the root of your new block, run `block run`.
