@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.50...HEAD)
 
-No changes.
+-   Fix a bug introduced in 0.0.48 that caused typechecking errors for blocks using TypeScript.
 
 ## [0.0.50](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.49...@airtable/blocks@0.0.50) - 2020-05-28
 
