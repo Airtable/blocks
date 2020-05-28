@@ -9,3 +9,4 @@ export {TableId} from './dist/types/src/types/table';
 export {ViewId} from './dist/types/src/types/view';
 export {GlobalConfigValue} from './dist/types/src/types/global_config';
 export {Color} from './dist/types/src/colors';
+export {RecordActionData} from './dist/types/src/types/record_action_data';

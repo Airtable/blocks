@@ -60,5 +60,7 @@ export {default as useWatchable} from './use_watchable';
 export {default as useViewport} from './use_viewport';
 export {default as useGlobalConfig} from './use_global_config';
 export {default as useViewMetadata} from './use_view_metadata';
+export {default as useRecordActionData} from './use_record_action_data';
+export {registerRecordActionDataCallback} from '../perform_record_action';
 
 export const globalAlert = new GlobalAlert();

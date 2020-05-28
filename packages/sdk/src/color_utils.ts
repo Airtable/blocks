@@ -15,8 +15,7 @@ interface RGB {
 /**
  * Utilities for working with {@link Color} names from the {@link colors} enum.
  *
- * @docsPath UI/utils/ColorUtils
- * @groupPath UI/utils/Colors
+ * @docsPath UI/utils/colorUtils
  */
 interface ColorUtils {
     /**

@@ -4,6 +4,7 @@ import {AggregatorKey} from '../types/aggregators';
 import {BaseData, BasePermissionData, ModelChange} from '../types/base';
 import {BlockInstallationId} from '../types/block';
 import {FieldData, FieldId, FieldType} from '../types/field';
+import {RecordActionData, RecordActionDataCallback} from '../types/record_action_data';
 import {
     GlobalConfigUpdate,
     GlobalConfigData,
@@ -163,18 +164,6 @@ export interface VisList {
     getOrderedRecordIds(): Array<RecordId>;
 }
 
-/** @hidden */
-export interface OpenWithRecordData {
-    /** @hidden */
-    recordId: RecordId;
-    /** @hidden */
-    viewId: ViewId;
-    /** @hidden */
-    tableId: TableId;
-}
-/** @hidden */
-export type OpenWithRecordCallback = (data: OpenWithRecordData) => void;
-
 /**
  * AirtableInterface is designed as the communication interface between the
  * Block SDK and Airtable. The mechanism through which we communicate with Airtable
@@ -267,7 +256,9 @@ export interface AirtableInterface {
         sorts: Array<NormalizedSortConfig>,
     ): VisList;
     setActiveViewOrTable(tableId: TableId, viewId?: ViewId): void;
-    registerOpenWithRecordHandlerAsync(callback: OpenWithRecordCallback): Promise<void>;
+    fetchAndSubscribeToPerformRecordActionAsync(
+        callback: RecordActionDataCallback,
+    ): Promise<RecordActionData | null>;
 
     /**
      * internal utils

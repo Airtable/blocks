@@ -9,7 +9,11 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.49...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.50...HEAD)
+
+No changes.
+
+## [0.0.50](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.49...@airtable/blocks@0.0.50) - 2020-05-28
 
 No changes.
 
