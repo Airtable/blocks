@@ -131,7 +131,23 @@ module.exports = {
 
         return statIfExists !== null;
     },
-    renameAsync: promisify(fs.rename),
+    /**
+     * Asynchronously rename file at `oldPath` to the pathname provided as
+     * `newPath`. In the case that `newPath` already exists, it will be
+     * overwritten. If there is a directory at `newPath`, an error will be
+     * raised instead.
+     *
+     * Unlike `fs.rename` provided by Node.js [1], this method is capable of
+     * renaming across devices.
+     *
+     * [1] https://nodejs.org/api/fs.html#fs_fs_rename_oldpath_newpath_callback
+     */
+    renameAsync: async function(
+        oldPath: string | Buffer | URL,
+        newPath: string | Buffer | URL,
+    ): Promise<void> {
+        await fsExtra.move(oldPath, newPath, {overwrite: true});
+    },
     unlinkAsync: promisify(fs.unlink),
     removeAsync: async function(filePath: string): Promise<void> {
         return await fsExtra.remove(filePath);
