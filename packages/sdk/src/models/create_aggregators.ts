@@ -36,7 +36,14 @@ export interface Aggregator {
     aggregateToString(records: Array<Record>, field: Field): string;
 }
 
-/** @internal */
+/**
+ * Note: this is hidden instead of internal as it is the type of the public models.aggregators.
+ *
+ * If its internal, typescript won't know about it since the types will be stripped, and typescript
+ * blocks will error due to incomplete type definitions.
+ *
+ * @hidden
+ */
 export interface Aggregators {
     [key: string]: Aggregator;
 }
@@ -79,7 +86,17 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
     );
 };
 
-/** @internal */
+/**
+ * Note: this is hidden instead of internal as it is used to determine the type of the public
+ * models.aggregators.
+ *
+ * If its internal, typescript won't know about it since the types will be stripped, and typescript
+ * blocks will error due to incomplete type definitions.
+ *
+ * TODO: this should be made less brittle.
+ *
+ * @hidden
+ */
 export default function createAggregators() {
     const {__airtableInterface: airtableInterface} = getSdk();
     const aggregators: Aggregators = {};
