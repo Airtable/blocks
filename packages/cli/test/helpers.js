@@ -7,8 +7,11 @@ const {TEST_SERVER_PORT} = require('../src/config/block_cli_config_settings');
 const TEST_API_URL = 'http://localhost:' + TEST_SERVER_PORT;
 
 async function assertThrowsAsync(fnAsync: () => Promise<mixed>, message?: string): Promise<Error> {
+    // eslint-disable-next-line airtable/no-missing-await
+    const thenable = fnAsync();
+
     try {
-        await fnAsync();
+        await thenable;
     } catch (err) {
         return err;
     }
