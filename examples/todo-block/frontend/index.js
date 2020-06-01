@@ -29,8 +29,11 @@ function TodoBlock() {
     const view = table ? table.getViewByIdIfExists(viewId) : null;
     const doneField = table ? table.getFieldByIdIfExists(doneFieldId) : null;
 
-    // Don't need to fetch records if doneField doesn't exist
-    const records = useRecords(doneField ? view : null, {fields: [table.primaryField, doneField]});
+    // Don't need to fetch records if doneField doesn't exist (the field or it's parent table may
+    // have been deleted, or may not have been selected yet.)
+    const records = useRecords(doneField ? view : null, {
+        fields: doneField ? [table.primaryField, doneField] : [],
+    });
 
     const tasks = records
         ? records.map(record => {
