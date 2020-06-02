@@ -917,6 +917,69 @@ export enum FieldType {
      * Creating or updating `LAST_MODIFIED_TIME` fields is not supported.
      */
     LAST_MODIFIED_TIME = 'lastModifiedTime',
+    /**
+     * The collaborator who created a record.
+     *
+     * The cell value format is the same as the `SINGLE_COLLABORATOR` field, without the ability to
+     * write to the cell value.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     email: string,
+     *     name?: string,
+     *     profilePicUrl?: string,
+     * }
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
+     *
+     * n/a
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `CREATED_BY` fields is not supported.
+     *
+     */
+    CREATED_BY = 'createdBy',
+    /**
+     * Shows the last collaborator who most recently modified any editable field or just in specific
+     * editable fields.
+     *
+     * The cell value format is the same as the `SINGLE_COLLABORATOR` field, without the ability to
+     * write to the cell value.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     email: string,
+     *     name?: string,
+     *     profilePicUrl?: string,
+     * }
+     * ```
+     *
+     * **Cell write format**
+     * n/a
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     referencedFieldIds: Array<FieldId>,
+     * }
+     * ```
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `LAST_MODIFIED_BY` fields is not supported.
+     *
+     */
+    LAST_MODIFIED_BY = 'lastModifiedBy',
 }
 
 /** @hidden */

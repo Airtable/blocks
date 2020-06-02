@@ -31,6 +31,8 @@ export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.RICH_TEXT]: 'Rich text',
     [FieldType.DURATION]: 'Duration',
     [FieldType.LAST_MODIFIED_TIME]: 'Last modified time',
+    [FieldType.CREATED_BY]: 'Created by',
+    [FieldType.LAST_MODIFIED_BY]: 'Last modified by',
 };
 
 export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
@@ -62,4 +64,6 @@ export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
     [FieldType.RICH_TEXT]: 'richText',
     [FieldType.DURATION]: 'time',
     [FieldType.LAST_MODIFIED_TIME]: 'dayAuto',
+    [FieldType.CREATED_BY]: 'personalAuto',
+    [FieldType.LAST_MODIFIED_BY]: 'personalAuto',
 };

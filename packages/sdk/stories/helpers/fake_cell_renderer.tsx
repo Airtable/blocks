@@ -130,5 +130,9 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
             return <Text>4:30</Text>;
         case FieldType.LAST_MODIFIED_TIME:
             return <Text>1/28/2020 4:36pm</Text>;
+        case FieldType.CREATED_BY:
+            return <CollaboratorToken collaborator={collaboratorOptions[0]} />;
+        case FieldType.LAST_MODIFIED_BY:
+            return <CollaboratorToken collaborator={collaboratorOptions[0]} />;
     }
 }
