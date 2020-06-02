@@ -1,8 +1,9 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useCallback, useEffect} from 'react';
 import {cursor} from '@airtable/blocks';
 import {ViewType} from '@airtable/blocks/models';
 import {
     initializeBlock,
+    registerRecordActionDataCallback,
     useBase,
     useRecordById,
     useLoadable,
@@ -36,7 +37,9 @@ import SettingsForm from './SettingsForm';
 // With a specified table & specified field:
 //
 //  - When the user selects a cell in grid view and the active table matches
-//    the specified table, the block looks in the selected record for the
+//    the specified table or when the user opens a record from a button field
+//    in the specified table:
+//    The block looks in the selected record for the
 //    specified field containing a supported URL (e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc),
 //    and uses this URL to construct an embed URL and inserts this URL into
 //    an iframe.
@@ -45,7 +48,10 @@ function UrlPreviewBlock() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
-    const {isValid} = useSettings();
+    const {
+        isValid,
+        settings: {isEnforced, urlTable},
+    } = useSettings();
 
     // Caches the currently selected record and field in state. If the user
     // selects a record and a preview appears, and then the user de-selects the
@@ -53,6 +59,8 @@ function UrlPreviewBlock() {
     // useful when, for example, the user resizes the blocks pane.
     const [selectedRecordId, setSelectedRecordId] = useState(null);
     const [selectedFieldId, setSelectedFieldId] = useState(null);
+
+    const [recordActionErrorMessage, setRecordActionErrorMessage] = useState('');
 
     // cursor.selectedRecordIds and selectedFieldIds aren't loaded by default,
     // so we need to load them explicitly with the useLoadable hook. The rest of
@@ -76,6 +84,47 @@ function UrlPreviewBlock() {
             setSelectedFieldId(cursor.selectedFieldIds[0]);
         }
     });
+
+    // Close the record action error dialog whenever settings are opened or the selected record
+    // is updated. (This means you don't have to close the modal to see the settings, or when
+    // you've opened a different record.)
+    useEffect(() => {
+        setRecordActionErrorMessage('');
+    }, [isSettingsOpen, selectedRecordId]);
+
+    // Register a callback to be called whenever a record action occurs (via button field)
+    // useCallback is used to memoize the callback, to avoid having to register/unregister
+    // it unnecessarily.
+    const onRecordAction = useCallback(
+        data => {
+            // Ignore the event if settings are already open.
+            // This means we can assume settings are valid (since we force settings to be open if
+            // they are invalid).
+            if (!isSettingsOpen) {
+                if (isEnforced) {
+                    if (data.tableId === urlTable.id) {
+                        setSelectedRecordId(data.recordId);
+                    } else {
+                        // Record is from a mismatching table.
+                        setRecordActionErrorMessage(
+                            `This block is set up to preview URLs using records from the "${urlTable.name}" table, but was opened from a different table.`,
+                        );
+                    }
+                } else {
+                    // Preview is not supported in this case, as we wouldn't know what field to preview.
+                    // Show a dialog to the user instead.
+                    setRecordActionErrorMessage(
+                        'You must enable "Use a specific field for previews" to preview URLs with a button field.',
+                    );
+                }
+            }
+        },
+        [isSettingsOpen, isEnforced, urlTable],
+    );
+    useEffect(() => {
+        // Return the unsubscribe function to ensure we clean up the handler.
+        return registerRecordActionDataCallback(onRecordAction);
+    }, [onRecordAction]);
 
     // This watch deletes the cached selectedRecordId and selectedFieldId when
     // the user moves to a new table or view. This prevents the following
@@ -115,6 +164,15 @@ function UrlPreviewBlock() {
                     setIsSettingsOpen={setIsSettingsOpen}
                 />
             )}
+            {recordActionErrorMessage && (
+                <Dialog onClose={() => setRecordActionErrorMessage('')} maxWidth={400}>
+                    <Dialog.CloseButton />
+                    <Heading size="small">Can&apos;t preview URL</Heading>
+                    <Text variant="paragraph" marginBottom={0}>
+                        {recordActionErrorMessage}
+                    </Text>
+                </Dialog>
+            )}
         </Box>
     );
 }
@@ -128,6 +186,12 @@ function RecordPreviewWithDialog({
     setIsSettingsOpen,
 }) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    // Close the dialog when the selected record is changed.
+    // The new record might have a preview, so we don't want to hide it behind this dialog.
+    useEffect(() => {
+        setIsDialogOpen(false);
+    }, [selectedRecordId]);
 
     return (
         <Fragment>
@@ -216,8 +280,11 @@ function RecordPreview({
     if (
         // If there is/was a specified table enforced, but the cursor
         // is not presently in the specified table, display a message to the user.
+        // Exception: selected record is from the specified table (has been opened
+        // via button field or other means while cursor is on a different table.)
         isEnforced &&
-        cursor.activeTableId !== table.id
+        cursor.activeTableId !== table.id &&
+        !(selectedRecord && selectedRecord.parentTable.id === table.id)
     ) {
         return (
             <Fragment>
@@ -229,16 +296,17 @@ function RecordPreview({
         );
     } else if (
         // activeViewId is briefly null when switching views
-        cursor.activeViewId === null ||
-        table.getViewById(cursor.activeViewId).type !== ViewType.GRID
+        selectedRecord === null &&
+        (cursor.activeViewId === null ||
+            table.getViewById(cursor.activeViewId).type !== ViewType.GRID)
     ) {
         return <Text>Switch to a grid view to see previews</Text>;
     } else if (
         // selectedRecord will be null on block initialization, after
         // the user switches table or view, or if it was deleted.
         selectedRecord === null ||
-        // The selected field may have been deleted.
-        selectedField === null
+        // The preview field may have been deleted.
+        previewField === null
     ) {
         return (
             <Fragment>
