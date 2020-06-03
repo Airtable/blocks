@@ -1,0 +1,53 @@
+#!/bin/bash
+
+set -eou pipefail
+
+function usage {
+    echo 'Usage: yarn pick-pr-from-example EXAMPLE_BLOCK_DIR GITHUB_PULL_REQUEST_ID'
+    echo 'Apply a patch that has been submitted to a public repository for an example block.'
+    echo
+    echo 'EXAMPLE_BLOCK_DIR'
+    echo '  The name of a subdirectory of the `examples/` directory of the Blocks SDK'
+    echo '  repository. The patch will be applied to the code stored here.'
+    echo 'GITHUB_PULL_REQUEST_ID'
+    echo '  The number assigned to the pull request on GitHub.com where the patch has'
+    echo '  been submitted. For example, a pull request with the URL:'
+    echo
+    echo '    https://github.com/Airtable/blocks-hello-world-typescript/pull/2'
+    echo
+    echo '  has an ID of "2".'
+}
+
+if [[ $# -eq 0 ]] ; then
+    echo 'Error: No example specified' >&2
+    echo >&2
+    usage >&2
+    exit 1
+elif [[ $# -eq 1 ]] ; then
+    echo 'Error: No GitHub pull request specified' >&2
+    echo >&2
+    usage >&2
+    exit 1
+fi
+
+pushd $(dirname $0)/../examples/$1
+remote=$(node -p 'require("./git-mirror.json").remote')
+popd
+
+# Retrieve the code from the mirror repository:
+#
+# - the `master` (or "base") branch,
+# - the contributor's branch (via GitHub's "pull" ref namespace [1]
+#
+# Store each Git ref in a temporary location.
+#
+# [1] https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/checking-out-pull-requests-locally
+git fetch $remote master:refs/temp-base refs/pull/$2/head:refs/temp-source
+
+# Delete the temporary Git refs when the script completes regardless of the
+# success or failure of any commands which follow.
+trap 'printf "delete refs/temp-base\ndelete refs/temp-source\n" | git update-ref --stdin' EXIT
+
+# Apply the commits which are distinct in the contributor's branch
+git format-patch refs/temp-source...refs/temp-base --stdout | \
+    git am --directory examples/$1
