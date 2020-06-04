@@ -1,3 +1,4 @@
+/** @module @airtable/blocks/ui: useRecordActionData */ /** */
 import getSdk from '../get_sdk';
 import {RecordActionData} from '../types/record_action_data';
 import {WatchablePerformRecordActionKeys} from '../perform_record_action';
@@ -25,12 +26,8 @@ import {useLoadable, useWatchable} from './ui';
  * You can test your block in development by sending "perform record action" events to your block
  * in the "Advanced" panel of the block developer tools.
  *
- * TODO(emma): update this with instructions on using button field with a custom block when custom
- * blocks are supported in button field config.
- *
- * TODO(emma): This doesn't cover the useLayoutEffect & usePrevious workaround for immediately
- * rendering callback results with this hook (used in scripting) but is probably too advanced.
- * Include it in a guide instead?
+ * After releasing your block, you can use it with a button field by choosing the "Open custom
+ * block" action and selecting your block.
  *
  * @example
  * ```js
@@ -41,7 +38,7 @@ import {useLoadable, useWatchable} from './ui';
  *     const recordActionData = useRecordActionData();
  *
  *     if (recordActionData === null) {
- *         return <span>No events yet</div>;
+ *         return <span>No events yet</span>;
  *     }
  *
  *     return (
@@ -54,7 +51,8 @@ import {useLoadable, useWatchable} from './ui';
  * }
  * ```
  *
- * @hidden
+ * @docsPath UI/hooks/useRecordActionData
+ * @hook
  */
 
 export default function useRecordActionData(): RecordActionData | null {

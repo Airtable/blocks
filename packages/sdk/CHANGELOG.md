@@ -12,6 +12,10 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.51...HEAD)
 
 -   Add `FieldType.CREATED_BY`, `FieldType.LAST_MODIFIED_BY`, and `FieldType.BUTTON`.
+-   Add record action APIs! Use one in your block to handle "open block" requests from a button
+    field.
+    -   `useRecordActionData`
+    -   `registerRecordActionDataCallback`
 
 ## [0.0.51](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.50...@airtable/blocks@0.0.51) - 2020-05-28
 
