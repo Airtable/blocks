@@ -33,6 +33,7 @@ export const ReadableFieldTypes: ObjectMap<FieldType, string> = {
     [FieldType.LAST_MODIFIED_TIME]: 'Last modified time',
     [FieldType.CREATED_BY]: 'Created by',
     [FieldType.LAST_MODIFIED_BY]: 'Last modified by',
+    [FieldType.BUTTON]: 'Button',
 };
 
 export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
@@ -66,4 +67,6 @@ export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
     [FieldType.LAST_MODIFIED_TIME]: 'dayAuto',
     [FieldType.CREATED_BY]: 'personalAuto',
     [FieldType.LAST_MODIFIED_BY]: 'personalAuto',
+    // TODO(emma): update this when button has a real icon and it's added to the SDK iconset
+    [FieldType.BUTTON]: 'laptop',
 };
