@@ -965,6 +965,7 @@ export enum FieldType {
      * ```
      *
      * **Cell write format**
+     *
      * n/a
      *
      * **Field options read format**
@@ -999,9 +1000,11 @@ export enum FieldType {
      * ```
      *
      * **Cell write format**
+     *
      * n/a
      *
      * **Field options read format**
+     *
      * n/a
      *
      * **Field options write format**
