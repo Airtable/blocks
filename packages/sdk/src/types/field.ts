@@ -917,6 +917,99 @@ export enum FieldType {
      * Creating or updating `LAST_MODIFIED_TIME` fields is not supported.
      */
     LAST_MODIFIED_TIME = 'lastModifiedTime',
+    /**
+     * The collaborator who created a record.
+     *
+     * The cell value format is the same as the `SINGLE_COLLABORATOR` field, without the ability to
+     * write to the cell value.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     email: string,
+     *     name?: string,
+     *     profilePicUrl?: string,
+     * }
+     * ```
+     *
+     * **Cell write format**
+     *
+     * n/a
+     *
+     * **Field options read format**
+     *
+     * n/a
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `CREATED_BY` fields is not supported.
+     *
+     */
+    CREATED_BY = 'createdBy',
+    /**
+     * Shows the last collaborator who most recently modified any editable field or just in specific
+     * editable fields.
+     *
+     * The cell value format is the same as the `SINGLE_COLLABORATOR` field, without the ability to
+     * write to the cell value.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     id: string,
+     *     email: string,
+     *     name?: string,
+     *     profilePicUrl?: string,
+     * }
+     * ```
+     *
+     * **Cell write format**
+     * n/a
+     *
+     * **Field options read format**
+     * ```js
+     * {
+     *     referencedFieldIds: Array<FieldId>,
+     * }
+     * ```
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `LAST_MODIFIED_BY` fields is not supported.
+     *
+     */
+    LAST_MODIFIED_BY = 'lastModifiedBy',
+    /**
+     * A button that can be clicked from the Airtable UI to open a URL or open a block.
+     *
+     * You cannot currently programmatically interact with a button field from a block, but you can
+     * configure your block to perform a certain action when it's opened from a button field: see
+     * {@link useRecordActionData} for details.
+     *
+     * **Cell read format**
+     * ```js
+     * {
+     *     // The label of the button
+     *     label: string,
+     *     // URL the button opens, or URL of the block that the button opens.
+     *     // Null when the URL formula has become invalid.
+     *     url: string | null,
+     * }
+     * ```
+     *
+     * **Cell write format**
+     * n/a
+     *
+     * **Field options read format**
+     * n/a
+     *
+     * **Field options write format**
+     *
+     * Creating or updating `BUTTON` fields is not supported.
+     *
+     */
+    BUTTON = 'button',
 }
 
 /** @hidden */

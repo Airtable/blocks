@@ -14,7 +14,10 @@ export const WatchablePerformRecordActionKeys = Object.freeze({
 /** @hidden */
 type WatchablePerformRecordActionKey = ObjectValues<typeof WatchablePerformRecordActionKeys>;
 
-/** hidden */
+/**
+ * Returned by {@link registerRecordActionDataCallback}. Call it to unregister the previously
+ * registered function. Do this before registering another function or unmounting the component.
+ * */
 type UnsubscribeFunction = () => void;
 
 /**
@@ -135,8 +138,8 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
  * You can test your block in development by sending "perform record action" events to your block
  * in the "Advanced" panel of the block developer tools.
  *
- * TODO(emma): update this with instructions on using button field with a custom block when custom
- * blocks are supported in button field config.
+ * After releasing your block, you can use it with a button field by choosing the "Open custom
+ * block" action and selecting your block.
  *
  * @example
  * ```js
@@ -157,7 +160,7 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
  *     }, [callback]);
  *
  *     if (recordActionData === null) {
- *         return <span>No events yet</div>;
+ *         return <span>No events yet</span>;
  *     }
  *
  *     return (
@@ -170,7 +173,6 @@ export class PerformRecordAction extends AbstractModelWithAsyncData<
  * }
  * ```
  *
- * @hidden
  */
 export function registerRecordActionDataCallback(
     callback: RecordActionDataCallback,

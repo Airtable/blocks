@@ -9,9 +9,17 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.51...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.52...HEAD)
 
 No changes.
+
+## [0.0.52](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.51...@airtable/blocks@0.0.52) - 2020-06-08
+
+-   Add `FieldType.CREATED_BY`, `FieldType.LAST_MODIFIED_BY`, and `FieldType.BUTTON`.
+-   Add record action APIs! Use one in your block to handle "open block" requests from a button
+    field.
+    -   `useRecordActionData`
+    -   `registerRecordActionDataCallback`
 
 ## [0.0.51](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.50...@airtable/blocks@0.0.51) - 2020-05-28
 

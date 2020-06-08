@@ -3,6 +3,7 @@ import CollaboratorToken from '../../src/ui/collaborator_token';
 import ChoiceToken from '../../src/ui/choice_token';
 import Text from '../../src/ui/text';
 import Box from '../../src/ui/box';
+import Button from '../../src/ui/button';
 import Icon from '../../src/ui/icon';
 import {CONTROL_WIDTH} from './code_utils';
 import choiceOptions from './choice_options';
@@ -44,12 +45,12 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
                 </React.Fragment>
             );
         case FieldType.SINGLE_COLLABORATOR:
-            return <CollaboratorToken collaborator={collaboratorOptions[0]} />;
+            return <CollaboratorToken.Static collaborator={collaboratorOptions[0]} />;
         case FieldType.MULTIPLE_COLLABORATORS:
             return (
                 <React.Fragment>
                     {collaboratorOptions.map(collaborator => (
-                        <CollaboratorToken
+                        <CollaboratorToken.Static
                             key={collaborator.id}
                             collaborator={collaborator}
                             marginRight={1}
@@ -130,5 +131,15 @@ export default function FakeCellRenderer({fieldType, value}: {fieldType: FieldTy
             return <Text>4:30</Text>;
         case FieldType.LAST_MODIFIED_TIME:
             return <Text>1/28/2020 4:36pm</Text>;
+        case FieldType.CREATED_BY:
+            return <CollaboratorToken.Static collaborator={collaboratorOptions[0]} />;
+        case FieldType.LAST_MODIFIED_BY:
+            return <CollaboratorToken.Static collaborator={collaboratorOptions[0]} />;
+        case FieldType.BUTTON:
+            return (
+                <Button disabled={true} style={{height: '26px'}}>
+                    Open URL
+                </Button>
+            );
     }
 }
