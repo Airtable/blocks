@@ -20,8 +20,8 @@ function CollaboratorTokenExample() {
 
                         return (
                             <React.Fragment>
-                                {base.activeCollaborators.map(choice => (
-                                    <CollaboratorToken key={collaborator.id} choice={choice} marginRight={1} />
+                                {base.activeCollaborators.map(collaborator => (
+                                    <CollaboratorToken key={collaborator.id} collaborator={collaborator} marginRight={1} />
                                 ))}
                             </React.Fragment>
                         );
