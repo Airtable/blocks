@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.52...HEAD)
 
-No changes.
+-   Fix a typo in the docs for `globalConfig.setAsync`.
 
 ## [0.0.52](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.51...@airtable/blocks@0.0.52) - 2020-06-08
 
