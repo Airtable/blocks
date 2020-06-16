@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.51...HEAD)
 
-No changes.
+- Fix renaming files across storage devices during `block run`.
 
 ## [0.0.51](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.50...@airtable/blocks-cli@0.0.51) - 2020-05-18
 
