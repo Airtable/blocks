@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "noEmit": true,
+        "module": "commonjs",
+        "target": "es5",
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "strict": true
+    },
+    "include": ["frontend"]
+}

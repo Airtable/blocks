@@ -1,0 +1,4 @@
+/node_modules
+/.airtableblocksrc.json
+/build
+/.block/platform.remote.json
