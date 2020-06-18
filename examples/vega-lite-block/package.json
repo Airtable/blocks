@@ -1,6 +1,6 @@
 {
     "name": "@airtable/vega-lite-block",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "Create rich data visualizations with Vega-Lite",
     "author": "",
     "license": "MIT",
