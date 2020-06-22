@@ -12,6 +12,8 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.52...HEAD)
 
 -   Fix a typo in the docs for `globalConfig.setAsync`.
+-   Added an explicit `box-sizing: border-box;` to the inner div of ChoiceToken, to prevent
+    accidentally inheriting different box-sizing values.
 
 ## [0.0.52](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.51...@airtable/blocks@0.0.52) - 2020-06-08
 
