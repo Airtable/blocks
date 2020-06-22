@@ -130,13 +130,19 @@ function dangerouslyCrossSpawnAsync(
 ): Promise<{stdout: string, stderr: string}> {
     return new Promise((resolve, reject) => {
         const spawnResult = crossSpawn.sync(filePath, args, {stdio: 'pipe', env, cwd});
-        const {err, stdout, stderr} = spawnResult;
+        const {err, status, stdout, stderr} = spawnResult;
 
         if (err) {
             reject(err);
         } else {
             _formatAndConsoleLogWithPrefix(stdout, chalk.blue(`[${prefix}]`));
             _formatAndConsoleLogWithPrefix(stderr, chalk.yellow(`[${prefix}]`));
+
+            if (status !== 0) {
+                reject(new Error(`${filePath} failed with exit status ${status}`));
+                return;
+            }
+
             resolve({
                 stdout: typeof stdout === 'string' ? stdout : stdout.toString('utf-8'),
                 stderr: typeof stderr === 'string' ? stderr : stderr.toString('utf-8'),

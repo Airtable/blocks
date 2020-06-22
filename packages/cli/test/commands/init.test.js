@@ -322,6 +322,22 @@ describe('init', function() {
             assert(err.message.match(`Could not get template ${URL_PREVIEW_TEMPLATE}`));
         });
 
+        it('throws if Node module installation fails', async function() {
+            const packageJson = {
+                dependencies: {
+                    '@airtable/highly-improbable-package-name': '99.99.9993',
+                },
+            };
+            const sdkPackageJson = {};
+            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            installBlockDependenciesAsyncStub.restore();
+
+            const err = await assertThrowsAsync(async () => {
+                await runInitAsync(getArgv());
+            });
+            assert(err.message.match(/\bnpm\b/));
+        });
+
         it('removes the tmp directory containing the template', async function() {
             stubTemplateDownloadHandlers(createValidTemplateAsync);
             await runInitAsync(getArgv());
