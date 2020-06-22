@@ -20,7 +20,7 @@
         "release-it": "^12.4.3"
     },
     "resolutions": {
-        "typescript": "^3.6.3"
+        "typescript": "~3.7.5"
     },
     "scripts": {
         "format": "prettier --write '**/*.{js,md,json,yml,ts,tsx}'",

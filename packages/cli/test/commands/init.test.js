@@ -2,6 +2,7 @@
 const init = require('../../src/commands/init');
 const blockCliConfigSettings = require('../../src/config/block_cli_config_settings');
 const path = require('path');
+const {execFile} = require('child_process');
 const fs = require('fs');
 const fsExtra = require('fs-extra');
 const fsUtils = require('../../src/helpers/fs_utils');
@@ -55,26 +56,21 @@ describe('init', function() {
         let promptAsyncStub;
         let hasApiKeyAsyncStub;
         let setApiKeyAsyncStub;
+        let cleanUpDownloadedTemplateAsyncStub;
         let blockDirPath;
-
-        const URL_PREVIEW_TEMPLATE = 'git@github.com:Airtable/blocks-url-preview.git';
-        const URL_PREVIEW_DIRECTORY = 'blocks-url-preview';
+        let templateSource;
 
         function getArgv() {
             return {
                 _: [],
                 $0: 'block',
                 blockIdentifier: 'app123/blkABC',
-                template: URL_PREVIEW_TEMPLATE,
+                template: templateSource,
                 blockDirPath,
             };
         }
 
-        async function createValidTemplateAsync() {
-            const gitClonePath = path.join(blockDirPath, 'tmp', URL_PREVIEW_DIRECTORY);
-
-            await fsUtils.mkdirPathAsync(gitClonePath);
-
+        async function createValidTemplateAsync(gitClonePath) {
             await fsUtils.mkdirPathAsync(path.join(gitClonePath, 'frontend'));
             fs.writeFileSync(path.join(gitClonePath, 'frontend', 'index.js'), 'index.js');
             fsExtra.outputJsonSync(path.join(gitClonePath, 'package.json'), {});
@@ -84,16 +80,11 @@ describe('init', function() {
             );
             fs.writeFileSync(path.join(gitClonePath, 'block.json'), 'block.json');
             fs.writeFileSync(path.join(gitClonePath, '.eslintrc.js'), '.eslintrc.js');
-            fs.writeFileSync(path.join(gitClonePath, '.gitignore'), '.gitignore');
-            return gitClonePath;
+            fs.writeFileSync(path.join(gitClonePath, '.gitignore'), 'gitignore');
         }
 
         function createCustomTemplate(packageJson, sdkPackageJson) {
-            return async function createCustomTemplateAsync() {
-                const gitClonePath = path.join(blockDirPath, 'tmp', URL_PREVIEW_DIRECTORY);
-
-                await fsUtils.mkdirPathAsync(gitClonePath);
-
+            return async function createCustomTemplateAsync(gitClonePath) {
                 await fsUtils.mkdirPathAsync(path.join(gitClonePath, 'frontend'));
                 fs.writeFileSync(path.join(gitClonePath, 'frontend', 'index.js'), 'index.js');
                 fsExtra.outputJsonSync(path.join(gitClonePath, 'package.json'), packageJson);
@@ -103,29 +94,58 @@ describe('init', function() {
                 );
                 fs.writeFileSync(path.join(gitClonePath, 'block.json'), 'block.json');
                 fs.writeFileSync(path.join(gitClonePath, '.eslintrc.js'), '.eslintrc.js');
-                fs.writeFileSync(path.join(gitClonePath, '.gitignore'), '.gitignore');
-                return gitClonePath;
+                fs.writeFileSync(path.join(gitClonePath, '.gitignore'), 'gitignore');
             };
         }
 
-        function stubTemplateDownloadHandlers(createTemplateAsync) {
-            sinon.stub(initCommandHelpers, 'downloadTemplateAsync').callsFake(createTemplateAsync);
-            sinon.stub(initCommandHelpers, 'cleanUpDownloadedTemplateAsync');
+        async function gitAsync(args, options) {
+            // Explicitly set credentials to allow these commands to run in
+            // environments which are not fully configured for development
+            // (e.g. continuous integration).
+            const credentials = ['-c', 'user.name=Fake Name', '-c', 'user.email=fake@email.com'];
+
+            return new Promise((resolve, reject) => {
+                execFile('git', credentials.concat(args), options, err => {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve();
+                });
+            });
+        }
+
+        async function stubTemplateDownloadHandlersAsync(createTemplateAsync) {
+            await fsUtils.mkdirPathAsync(templateSource);
+            await createTemplateAsync(templateSource);
+
+            await gitAsync(['init'], {cwd: templateSource});
+            await gitAsync(['add', '.'], {cwd: templateSource});
+            await gitAsync(['commit', '--allow-empty', '--message', 'Initial commit'], {
+                cwd: templateSource,
+            });
         }
 
         async function runInitAsync(argv) {
             // We stub console.log to tidy up test output, but need to restore it
             // because the test runner relies on it!
             const logStub = sinon.stub(console, 'log');
-            await init.runCommandAsync(argv);
-            logStub.restore();
+            try {
+                await init.runCommandAsync(argv);
+            } finally {
+                logStub.restore();
+            }
         }
 
         beforeEach(function() {
             blockDirPath = getTemporaryDirectoryPath();
+            templateSource = getTemporaryDirectoryPath();
 
             hasApiKeyAsyncStub = sinon.stub(configHelpers, 'hasApiKeyAsync').resolves(true);
             setApiKeyAsyncStub = sinon.stub(configHelpers, 'setApiKeyAsync').resolves();
+            cleanUpDownloadedTemplateAsyncStub = sinon.stub(
+                initCommandHelpers,
+                'cleanUpDownloadedTemplateAsync',
+            );
 
             installBlockDependenciesAsyncStub = sinon.stub(
                 initCommandHelpers,
@@ -134,13 +154,15 @@ describe('init', function() {
         });
 
         afterEach(async function() {
+            await fsUtils.removeAsync(templateSource);
             hasApiKeyAsyncStub.restore();
             setApiKeyAsyncStub.restore();
+            cleanUpDownloadedTemplateAsyncStub.restore();
             installBlockDependenciesAsyncStub.restore();
         });
 
         it('writes a directory of files', async function() {
-            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await stubTemplateDownloadHandlersAsync(createValidTemplateAsync);
             await runInitAsync(getArgv());
 
             assert(fs.existsSync(path.join(blockDirPath, '.gitignore')));
@@ -166,7 +188,7 @@ describe('init', function() {
         });
 
         it('installs dependencies', async function() {
-            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await stubTemplateDownloadHandlersAsync(createValidTemplateAsync);
             await runInitAsync(getArgv());
 
             assert(installBlockDependenciesAsyncStub.calledWith(sinon.match(blockDirPath)));
@@ -198,7 +220,9 @@ describe('init', function() {
                 version: '0.0.1',
             };
 
-            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await stubTemplateDownloadHandlersAsync(
+                createCustomTemplate(packageJson, sdkPackageJson),
+            );
             await runInitAsync(getArgv());
 
             const finalPackageJson = await fsExtra.readJson(
@@ -233,7 +257,9 @@ describe('init', function() {
             const sdkPackageJson = {
                 version: '0.0.1',
             };
-            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await stubTemplateDownloadHandlersAsync(
+                createCustomTemplate(packageJson, sdkPackageJson),
+            );
             await runInitAsync(getArgv());
 
             const finalPackageJson = await fsExtra.readJson(
@@ -256,7 +282,9 @@ describe('init', function() {
             const sdkPackageJson = {
                 version: '0.0.1',
             };
-            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await stubTemplateDownloadHandlersAsync(
+                createCustomTemplate(packageJson, sdkPackageJson),
+            );
             await runInitAsync(getArgv());
 
             const finalPackageJson = await fsExtra.readJson(
@@ -270,7 +298,7 @@ describe('init', function() {
         });
 
         it('prompts for API key if the user does not have it set already', async function() {
-            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await stubTemplateDownloadHandlersAsync(createValidTemplateAsync);
             promptAsyncStub = sinon.stub(inquirer, 'prompt').resolves({
                 apiKey: 'key123ABC',
             });
@@ -285,7 +313,7 @@ describe('init', function() {
         });
 
         it('does not prompt for API key if the user does have it set already', async function() {
-            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await stubTemplateDownloadHandlersAsync(createValidTemplateAsync);
             promptAsyncStub = sinon.stub(inquirer, 'prompt');
 
             await runInitAsync(getArgv());
@@ -297,29 +325,20 @@ describe('init', function() {
 
         it('throws if git repo not valid template (missing block.json)', async function() {
             // Use invalid template
-            stubTemplateDownloadHandlers(async () => {
-                const gitClonePath = path.join(blockDirPath, 'tmp', URL_PREVIEW_DIRECTORY);
-
-                await fsUtils.mkdirPathAsync(gitClonePath);
-                return gitClonePath;
-            });
+            await stubTemplateDownloadHandlersAsync(gitClonePath => {});
 
             const err = await assertThrowsAsync(async () => {
                 await runInitAsync(getArgv());
             });
-            assert(err.message === `${URL_PREVIEW_TEMPLATE} does not seem to be a block template`);
+            assert.equal(err.message, `${templateSource} does not seem to be a block template`);
         });
 
         it('throws if template download fails', async function() {
             // Doesn't download a template (e.g. because of a 404)
-            stubTemplateDownloadHandlers(async () => {
-                return path.join(blockDirPath, 'tmp', URL_PREVIEW_DIRECTORY);
-            });
-
             const err = await assertThrowsAsync(async () => {
                 await runInitAsync(getArgv());
             });
-            assert(err.message.match(`Could not get template ${URL_PREVIEW_TEMPLATE}`));
+            assert(err.message.match(`Could not get template ${templateSource}`));
         });
 
         it('throws if Node module installation fails', async function() {
@@ -339,14 +358,14 @@ describe('init', function() {
         });
 
         it('removes the tmp directory containing the template', async function() {
-            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await stubTemplateDownloadHandlersAsync(createValidTemplateAsync);
             await runInitAsync(getArgv());
             const cleanUpStub = (initCommandHelpers.cleanUpDownloadedTemplateAsync: any); // eslint-disable-line flowtype/no-weak-types
             assert(cleanUpStub.calledWithExactly(blockDirPath));
         });
 
         it('removes the block directory if there was an error', async function() {
-            stubTemplateDownloadHandlers(createValidTemplateAsync);
+            await stubTemplateDownloadHandlersAsync(createValidTemplateAsync);
             const fsUtilsRemoveSpy = sinon.spy(fsUtils, 'removeAsync');
             installBlockDependenciesAsyncStub.throws();
             await assertThrowsAsync(async () => await runInitAsync(getArgv()));
