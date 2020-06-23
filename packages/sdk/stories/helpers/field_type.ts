@@ -67,6 +67,5 @@ export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
     [FieldType.LAST_MODIFIED_TIME]: 'dayAuto',
     [FieldType.CREATED_BY]: 'personalAuto',
     [FieldType.LAST_MODIFIED_BY]: 'personalAuto',
-    // TODO(emma): update this when button has a real icon and it's added to the SDK iconset
-    [FieldType.BUTTON]: 'laptop',
+    [FieldType.BUTTON]: 'cursor',
 };
