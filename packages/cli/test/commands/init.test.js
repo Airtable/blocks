@@ -348,7 +348,9 @@ describe('init', function() {
                 },
             };
             const sdkPackageJson = {};
-            stubTemplateDownloadHandlers(createCustomTemplate(packageJson, sdkPackageJson));
+            await stubTemplateDownloadHandlersAsync(
+                createCustomTemplate(packageJson, sdkPackageJson),
+            );
             installBlockDependenciesAsyncStub.restore();
 
             const err = await assertThrowsAsync(async () => {
