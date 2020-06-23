@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...HEAD)
 
-No changes.
+- Remove dependency on `git` executable (using NodeGit under the hood).
 
 ## [0.0.52](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.51...@airtable/blocks-cli@0.0.52) - 2020-06-22
 
