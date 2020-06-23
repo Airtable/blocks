@@ -45,6 +45,7 @@ if (!(React as any).PropTypes) {
 export interface RunInfo {
     isFirstRun: boolean;
     isDevelopmentMode: boolean;
+    intentData: unknown;
 }
 
 /** @hidden */
@@ -178,6 +179,7 @@ export default class BlockSdk {
         this.runInfo = Object.freeze({
             isFirstRun: sdkInitData.isFirstRun,
             isDevelopmentMode: sdkInitData.isDevelopmentMode,
+            intentData: sdkInitData.intentData,
         });
 
         // Now that we've constructed our models, let's hook them up to realtime changes.

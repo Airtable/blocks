@@ -32,6 +32,7 @@ export interface SdkInitData {
     // TODO: figure out what to do with them.
     isFullscreen: boolean;
     isFirstRun: boolean;
+    intentData: unknown;
 }
 
 /** @hidden */
