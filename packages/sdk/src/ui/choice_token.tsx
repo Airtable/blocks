@@ -98,7 +98,7 @@ const ChoiceToken = (props: ChoiceTokenProps) => {
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 onClick={onClick}
-                className={baymax('print-color-exact align-top')}
+                className={baymax('print-color-exact align-top border-box')}
                 backgroundColor={color}
                 minWidth="18px"
                 height="18px"

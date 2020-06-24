@@ -938,8 +938,16 @@ export enum FieldType {
      * n/a
      *
      * **Field options read format**
-     *
-     * n/a
+     * ```js
+     * {
+     *     choices: Array<{
+     *         id: string,
+     *         email: string,
+     *         name?: string,
+     *         profilePicUrl?: string,
+     *     }>,
+     * }
+     * ```
      *
      * **Field options write format**
      *
@@ -965,12 +973,19 @@ export enum FieldType {
      * ```
      *
      * **Cell write format**
+     *
      * n/a
      *
      * **Field options read format**
      * ```js
      * {
      *     referencedFieldIds: Array<FieldId>,
+     *     choices: Array<{
+     *         id: string,
+     *         email: string,
+     *         name?: string,
+     *         profilePicUrl?: string,
+     *     }>,
      * }
      * ```
      *
@@ -999,9 +1014,11 @@ export enum FieldType {
      * ```
      *
      * **Cell write format**
+     *
      * n/a
      *
      * **Field options read format**
+     *
      * n/a
      *
      * **Field options write format**

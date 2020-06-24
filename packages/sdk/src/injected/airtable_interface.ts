@@ -30,6 +30,7 @@ export interface SdkInitData {
     blockInstallationId: BlockInstallationId;
     isFullscreen: boolean;
     isFirstRun: boolean;
+    intentData: unknown;
 }
 
 /** @hidden */

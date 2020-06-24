@@ -39,6 +39,7 @@ if (!(React as any).PropTypes) {
 export interface RunInfo {
     isFirstRun: boolean;
     isDevelopmentMode: boolean;
+    intentData: unknown;
 }
 
 /** @hidden */
@@ -157,6 +158,7 @@ export default class BlockSdk {
         this.runInfo = Object.freeze({
             isFirstRun: sdkInitData.isFirstRun,
             isDevelopmentMode: sdkInitData.isDevelopmentMode,
+            intentData: sdkInitData.intentData,
         });
 
         this._registerHandlers();

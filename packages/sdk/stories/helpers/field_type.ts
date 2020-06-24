@@ -67,5 +67,5 @@ export const IconNamesByFieldType: ObjectMap<FieldType, IconName> = {
     [FieldType.LAST_MODIFIED_TIME]: 'dayAuto',
     [FieldType.CREATED_BY]: 'personalAuto',
     [FieldType.LAST_MODIFIED_BY]: 'personalAuto',
-    [FieldType.BUTTON]: 'laptop',
+    [FieldType.BUTTON]: 'cursor',
 };

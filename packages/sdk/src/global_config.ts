@@ -209,7 +209,7 @@ class GlobalConfig extends Watchable<WatchableGlobalConfigKey> {
      *
      * function updateFavoriteColorIfPossible(color) {
      *     if (globalConfig.hasPermissionToSetPaths('favoriteColor', color)) {
-     *         globalConfig.setPathsAsync('favoriteColor', color);
+     *         globalConfig.setAsync('favoriteColor', color);
      *     }
      *     // The update is now applied within your block (eg will be
      *     // reflected in globalConfig) but are still being saved to
