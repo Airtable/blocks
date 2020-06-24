@@ -1,6 +1,17 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
-import {Box} from '@airtable/blocks/ui';
+import {Box, loadCSSFromString} from '@airtable/blocks/ui';
+
+// This CSS rule is a workaround for a bug in Chromium. It should be removed
+// when the underlying issue is resolved in the Chromium project:
+//
+// https://bugs.chromium.org/p/chromium/issues/detail?id=809574
+loadCSSFromString(`
+video::-webkit-media-controls-timeline {
+  align-self: center;
+  width: calc(100% - 64px);
+}
+`);
 
 function VideoPlayer({startTime, endTime, src}) {
     const [isPlayingInitialClip, setIsPlayingInitialClip] = useState(true);
