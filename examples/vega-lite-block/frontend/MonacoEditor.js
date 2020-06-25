@@ -186,29 +186,6 @@ export default function MonacoEditor({
             }
         });
 
-        const onDidChangeCursorPosition = editor.current.onDidChangeCursorPosition(({position}) => {
-            const model = editor.current.getModel();
-            const valueInRange = model
-                .getValueInRange({
-                    startLineNumber: position.lineNumber,
-                    startColumn: 1,
-                    endLineNumber: position.lineNumber,
-                    endColumn: position.column + 1,
-                })
-                .trim();
-
-            const match = valueInRange.match(/("field"\s*:\s*^)|("field"\s*:\s*")/);
-
-            if (match) {
-                if (timeout) {
-                    clearTimeout(timeout);
-                }
-                timeout = setTimeout(() => {
-                    editor.current.trigger('', 'editor.action.triggerSuggest', {});
-                }, 0);
-            }
-        });
-
         // Set up detection for syntax errors by observing changes to model decorations
         // and capturing the current set of model markers.
         // This provides the array of errors that are used by:
@@ -232,7 +209,6 @@ export default function MonacoEditor({
 
         return () => {
             didChangeModelContent.dispose();
-            onDidChangeCursorPosition.dispose();
             didChangeModelDecorations.dispose();
         };
     });
@@ -271,9 +247,8 @@ export default function MonacoEditor({
         // Setup a completion item provider that contains completions representing
         // all allowed fields of the selected table.
         const completionItemProvider = registerCompletionItemProvider('json', {
-            // We could save a lot of headaches by defining a specific character
-            // that triggers the completion menu
-            // triggerCharacters: [''],
+            // Trigger completion if the last character typed was either of:
+            triggerCharacters: [':', '"'],
             provideCompletionItems(model, position) {
                 return new Promise(resolve => {
                     const valueInRange = model
