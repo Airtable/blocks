@@ -14,7 +14,7 @@
         "react-dom": "^16.9.0",
         "react-vega": "^7.3.0",
         "vega": "^5.10.1",
-        "vega-lite": "^4.10.1"
+        "vega-lite": "^4.13.1"
     },
     "devDependencies": {
         "eslint": "^7.0.0",

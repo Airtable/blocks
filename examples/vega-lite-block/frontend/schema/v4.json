@@ -640,13 +640,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "grid": {
@@ -1225,13 +1225,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "grid": {
@@ -4220,13 +4220,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -4865,13 +4865,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -5636,6 +5636,10 @@
             "additionalProperties": {
                 "$ref": "#/definitions/SelectionInitInterval"
             },
+            "type": "object"
+        },
+        "Dict<unknown>": {
+            "additionalProperties": {},
             "type": "object"
         },
         "Diverging": {
@@ -7978,13 +7982,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -8042,13 +8046,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -8118,13 +8122,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -8217,13 +8221,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -8332,7 +8336,7 @@
             "properties": {
                 "filter": {
                     "$ref": "#/definitions/PredicateComposition",
-                    "description": "The `filter` property must be a predication definition, which can takes one of the following forms:\n\n1) an [expression](https://vega.github.io/vega-lite/docs/types.html#expression) string,\nwhere `datum` can be used to refer to the current data object.\nFor example, `{filter: \"datum.b2 > 60\"}` would make the output data includes only items that have values in the field `b2` over 60.\n\n2) one of the [field predicates](https://vega.github.io/vega-lite/docs/predicate.html#field-predicate): [`equal`](https://vega.github.io/* vega-lite/docs/predicate.html#field-equal-predicate),\n[`lt`](https://vega.github.io/vega-lite/docs/predicate.html#lt-predicate),\n[`lte`](https://vega.github.io/vega-lite/docs/predicate.html#lte-predicate),\n[`gt`](https://vega.github.io/vega-lite/docs/predicate.html#gt-predicate),\n[`gte`](https://vega.github.io/vega-lite/docs/predicate.html#gte-predicate),\n[`range`](https://vega.github.io/vega-lite/docs/predicate.html#range-predicate),\n[`oneOf`](https://vega.github.io/vega-lite/docs/predicate.html#one-of-predicate),\nor [`valid`](https://vega.github.io/vega-lite/docs/predicate.html#valid-predicate),\n\n3) a [selection predicate](https://vega.github.io/vega-lite/docs/predicate.html#selection-predicate), which define the names of a selection that the data point should belong to (or a logical composition of selections).\n\n4) a [logical composition](https://vega.github.io/vega-lite/docs/predicate.html#composition) of (1), (2), or (3)."
+                    "description": "The `filter` property must be a predication definition, which can takes one of the following forms:\n\n1) an [expression](https://vega.github.io/vega-lite/docs/types.html#expression) string,\nwhere `datum` can be used to refer to the current data object.\nFor example, `{filter: \"datum.b2 > 60\"}` would make the output data includes only items that have values in the field `b2` over 60.\n\n2) one of the [field predicates](https://vega.github.io/vega-lite/docs/predicate.html#field-predicate): \n[`equal`](https://vega.github.io/vega-lite/docs/predicate.html#field-equal-predicate),\n[`lt`](https://vega.github.io/vega-lite/docs/predicate.html#lt-predicate),\n[`lte`](https://vega.github.io/vega-lite/docs/predicate.html#lte-predicate),\n[`gt`](https://vega.github.io/vega-lite/docs/predicate.html#gt-predicate),\n[`gte`](https://vega.github.io/vega-lite/docs/predicate.html#gte-predicate),\n[`range`](https://vega.github.io/vega-lite/docs/predicate.html#range-predicate),\n[`oneOf`](https://vega.github.io/vega-lite/docs/predicate.html#one-of-predicate),\nor [`valid`](https://vega.github.io/vega-lite/docs/predicate.html#valid-predicate),\n\n3) a [selection predicate](https://vega.github.io/vega-lite/docs/predicate.html#selection-predicate), which define the names of a selection that the data point should belong to (or a logical composition of selections).\n\n4) a [logical composition](https://vega.github.io/vega-lite/docs/predicate.html#composition) of (1), (2), or (3)."
                 }
             },
             "required": ["filter"],
@@ -9281,13 +9285,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelAlign": {
@@ -9435,13 +9439,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelAlign": {
@@ -9735,7 +9739,7 @@
                 },
                 {
                     "items": {
-                        "type": "object"
+                        "$ref": "#/definitions/Dict<unknown>"
                     },
                     "type": "array"
                 },
@@ -9743,7 +9747,7 @@
                     "type": "string"
                 },
                 {
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>"
                 }
             ]
         },
@@ -10379,13 +10383,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "gradientLength": {
@@ -11655,11 +11659,21 @@
                 "yearmonthdatehours",
                 "yearmonthdatehoursminutes",
                 "yearmonthdatehoursminutesseconds",
+                "yearweek",
+                "yearweekday",
+                "yearweekdayhours",
+                "yearweekdayhoursminutes",
+                "yearweekdayhoursminutesseconds",
+                "yeardayofyear",
                 "quartermonth",
                 "monthdate",
                 "monthdatehours",
                 "monthdatehoursminutes",
                 "monthdatehoursminutesseconds",
+                "weekday",
+                "weeksdayhours",
+                "weekdayhoursminutes",
+                "weekdayhoursminutesseconds",
                 "dayhours",
                 "dayhoursminutes",
                 "dayhoursminutesseconds",
@@ -11675,7 +11689,9 @@
                 "year",
                 "quarter",
                 "month",
+                "week",
                 "day",
+                "dayofyear",
                 "date",
                 "hours",
                 "minutes",
@@ -12918,7 +12934,7 @@
                     "description": "With layered and multi-view displays, a strategy that determines how\nselections' data queries are resolved when applied in a filter transform,\nconditional encoding rule, or scale domain.\n\n__See also:__ [`resolve`](https://vega.github.io/vega-lite/docs/selection-resolve.html) documentation."
                 },
                 "toggle": {
-                    "description": "Controls whether data values should be toggled or only ever inserted into\nmulti selections. Can be `true`, `false` (for insertion only), or a\n[Vega expression](https://vega.github.io/vega/docs/expressions/).\n\n__Default value:__ `true`, which corresponds to `event.shiftKey` (i.e.,\ndata values are toggled when a user interacts with the shift-key pressed).\n\n__See also:__ [`toggle`](https://vega.github.io/vega-lite/docs/toggle.html) documentation.",
+                    "description": "Controls whether data values should be toggled or only ever inserted into\nmulti selections. Can be `true`, `false` (for insertion only), or a\n[Vega expression](https://vega.github.io/vega/docs/expressions/).\n\n__Default value:__ `true`, which corresponds to `event.shiftKey` (i.e.,\ndata values are toggled when a user interacts with the shift-key pressed).\n\nSetting the value to the Vega expression `\"true\"` will toggle data values\nwithout the user pressing the shift-key.\n\n__See also:__ [`toggle`](https://vega.github.io/vega-lite/docs/toggle.html) documentation.",
                     "type": ["string", "boolean"]
                 },
                 "type": {
@@ -12997,7 +13013,7 @@
                     "description": "With layered and multi-view displays, a strategy that determines how\nselections' data queries are resolved when applied in a filter transform,\nconditional encoding rule, or scale domain.\n\n__See also:__ [`resolve`](https://vega.github.io/vega-lite/docs/selection-resolve.html) documentation."
                 },
                 "toggle": {
-                    "description": "Controls whether data values should be toggled or only ever inserted into\nmulti selections. Can be `true`, `false` (for insertion only), or a\n[Vega expression](https://vega.github.io/vega/docs/expressions/).\n\n__Default value:__ `true`, which corresponds to `event.shiftKey` (i.e.,\ndata values are toggled when a user interacts with the shift-key pressed).\n\n__See also:__ [`toggle`](https://vega.github.io/vega-lite/docs/toggle.html) documentation.",
+                    "description": "Controls whether data values should be toggled or only ever inserted into\nmulti selections. Can be `true`, `false` (for insertion only), or a\n[Vega expression](https://vega.github.io/vega/docs/expressions/).\n\n__Default value:__ `true`, which corresponds to `event.shiftKey` (i.e.,\ndata values are toggled when a user interacts with the shift-key pressed).\n\nSetting the value to the Vega expression `\"true\"` will toggle data values\nwithout the user pressing the shift-key.\n\n__See also:__ [`toggle`](https://vega.github.io/vega-lite/docs/toggle.html) documentation.",
                     "type": ["string", "boolean"]
                 }
             },
@@ -15871,6 +15887,30 @@
                 "bluepurple-7",
                 "bluepurple-8",
                 "bluepurple-9",
+                "goldgreen",
+                "goldgreen-3",
+                "goldgreen-4",
+                "goldgreen-5",
+                "goldgreen-6",
+                "goldgreen-7",
+                "goldgreen-8",
+                "goldgreen-9",
+                "goldorange",
+                "goldorange-3",
+                "goldorange-4",
+                "goldorange-5",
+                "goldorange-6",
+                "goldorange-7",
+                "goldorange-8",
+                "goldorange-9",
+                "goldred",
+                "goldred-3",
+                "goldred-4",
+                "goldred-5",
+                "goldred-6",
+                "goldred-7",
+                "goldred-8",
+                "goldred-9",
                 "greenblue",
                 "greenblue-3",
                 "greenblue-4",
@@ -15950,12 +15990,103 @@
                 "yelloworangered-6",
                 "yelloworangered-7",
                 "yelloworangered-8",
-                "yelloworangered-9"
+                "yelloworangered-9",
+                "darkblue",
+                "darkblue-3",
+                "darkblue-4",
+                "darkblue-5",
+                "darkblue-6",
+                "darkblue-7",
+                "darkblue-8",
+                "darkblue-9",
+                "darkgold",
+                "darkgold-3",
+                "darkgold-4",
+                "darkgold-5",
+                "darkgold-6",
+                "darkgold-7",
+                "darkgold-8",
+                "darkgold-9",
+                "darkgreen",
+                "darkgreen-3",
+                "darkgreen-4",
+                "darkgreen-5",
+                "darkgreen-6",
+                "darkgreen-7",
+                "darkgreen-8",
+                "darkgreen-9",
+                "darkmulti",
+                "darkmulti-3",
+                "darkmulti-4",
+                "darkmulti-5",
+                "darkmulti-6",
+                "darkmulti-7",
+                "darkmulti-8",
+                "darkmulti-9",
+                "darkred",
+                "darkred-3",
+                "darkred-4",
+                "darkred-5",
+                "darkred-6",
+                "darkred-7",
+                "darkred-8",
+                "darkred-9",
+                "lightgreyred",
+                "lightgreyred-3",
+                "lightgreyred-4",
+                "lightgreyred-5",
+                "lightgreyred-6",
+                "lightgreyred-7",
+                "lightgreyred-8",
+                "lightgreyred-9",
+                "lightgreyteal",
+                "lightgreyteal-3",
+                "lightgreyteal-4",
+                "lightgreyteal-5",
+                "lightgreyteal-6",
+                "lightgreyteal-7",
+                "lightgreyteal-8",
+                "lightgreyteal-9",
+                "lightmulti",
+                "lightmulti-3",
+                "lightmulti-4",
+                "lightmulti-5",
+                "lightmulti-6",
+                "lightmulti-7",
+                "lightmulti-8",
+                "lightmulti-9",
+                "lightorange",
+                "lightorange-3",
+                "lightorange-4",
+                "lightorange-5",
+                "lightorange-6",
+                "lightorange-7",
+                "lightorange-8",
+                "lightorange-9",
+                "lighttealblue",
+                "lighttealblue-3",
+                "lighttealblue-4",
+                "lighttealblue-5",
+                "lighttealblue-6",
+                "lighttealblue-7",
+                "lighttealblue-8",
+                "lighttealblue-9"
             ],
             "type": "string"
         },
         "SequentialSingleHue": {
-            "enum": ["blues", "greens", "greys", "purples", "reds", "oranges"],
+            "enum": [
+                "blues",
+                "tealblues",
+                "teals",
+                "greens",
+                "browns",
+                "greys",
+                "purples",
+                "warmgreys",
+                "reds",
+                "oranges"
+            ],
             "type": "string"
         },
         "ShapeFieldDefWithCondition": {
@@ -16452,13 +16583,13 @@
                             "type": "string"
                         },
                         {
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>"
                         }
                     ],
-                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/usage/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function. See the [custom format type docs](https://vega.github.io/vega-lite/usage/config.html#custom-format-type) for more details.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
+                    "description": "When used with the default `\"number\"` and `\"time\"` format type, the text formatting pattern for labels of guides (axes, legends, headers) and text marks.\n\n- If the format type is `\"number\"` (e.g., for quantitative fields), this is D3's [number format pattern](https://github.com/d3/d3-format#locale_format).\n- If the format type is `\"time\"` (e.g., for temporal fields), this is D3's [time format pattern](https://github.com/d3/d3-time-format#locale_format).\n\nSee the [format documentation](https://vega.github.io/vega-lite/docs/format.html) for more examples.\n\nWhen used with a [custom `formatType`](https://vega.github.io/vega-lite/docs/config.html#custom-format-type), this value will be passed as `format` alongside `datum.value` to the registered function.\n\n__Default value:__  Derived from [numberFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for number format and from [timeFormat](https://vega.github.io/vega-lite/docs/config.html#format) config for time format."
                 },
                 "formatType": {
-                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/usage/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
+                    "description": "The format type for labels. One of `\"number\"`, `\"time\"`, or a [registered custom format type](https://vega.github.io/vega-lite/docs/config.html#custom-format-type).\n\n__Default value:__\n- `\"time\"` for temporal fields and ordinal and nominal fields with `timeUnit`.\n- `\"number\"` for quantitative fields as well as ordinal and nominal fields without `timeUnit`.",
                     "type": "string"
                 },
                 "labelExpr": {
@@ -17429,8 +17560,8 @@
                     "type": "array"
                 },
                 "usermeta": {
-                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>",
+                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                 }
             },
             "required": ["concat"],
@@ -17533,8 +17664,8 @@
                     "type": "array"
                 },
                 "usermeta": {
-                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>",
+                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                 }
             },
             "required": ["hconcat"],
@@ -17630,8 +17761,8 @@
                     "type": "array"
                 },
                 "usermeta": {
-                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>",
+                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                 },
                 "vconcat": {
                     "description": "A list of views to be concatenated and put into a column.",
@@ -17758,8 +17889,8 @@
                     "type": "array"
                 },
                 "usermeta": {
-                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>",
+                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                 },
                 "view": {
                     "$ref": "#/definitions/ViewBackground",
@@ -17923,8 +18054,8 @@
                             "type": "array"
                         },
                         "usermeta": {
-                            "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>",
+                            "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                         }
                     },
                     "required": ["repeat", "spec"],
@@ -18064,8 +18195,8 @@
                             "type": "array"
                         },
                         "usermeta": {
-                            "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                            "type": "object"
+                            "$ref": "#/definitions/Dict<unknown>",
+                            "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                         }
                     },
                     "required": ["repeat", "spec"],
@@ -18214,8 +18345,8 @@
                     "type": "array"
                 },
                 "usermeta": {
-                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>",
+                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                 }
             },
             "required": ["data", "facet", "spec"],
@@ -18396,8 +18527,8 @@
                     "type": "array"
                 },
                 "usermeta": {
-                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata.",
-                    "type": "object"
+                    "$ref": "#/definitions/Dict<unknown>",
+                    "description": "Optional metadata that will be passed to Vega.\nThis object is completely ignored by Vega and Vega-Lite and can be used for custom metadata."
                 },
                 "view": {
                     "$ref": "#/definitions/ViewBackground",
@@ -18808,11 +18939,21 @@
                 "utcyearmonthdatehours",
                 "utcyearmonthdatehoursminutes",
                 "utcyearmonthdatehoursminutesseconds",
+                "utcyearweek",
+                "utcyearweekday",
+                "utcyearweekdayhours",
+                "utcyearweekdayhoursminutes",
+                "utcyearweekdayhoursminutesseconds",
+                "utcyeardayofyear",
                 "utcquartermonth",
                 "utcmonthdate",
                 "utcmonthdatehours",
                 "utcmonthdatehoursminutes",
                 "utcmonthdatehoursminutesseconds",
+                "utcweekday",
+                "utcweeksdayhours",
+                "utcweekdayhoursminutes",
+                "utcweekdayhoursminutesseconds",
                 "utcdayhours",
                 "utcdayhoursminutes",
                 "utcdayhoursminutesseconds",
@@ -18828,7 +18969,9 @@
                 "utcyear",
                 "utcquarter",
                 "utcmonth",
+                "utcweek",
                 "utcday",
+                "utcdayofyear",
                 "utcdate",
                 "utchours",
                 "utcminutes",
