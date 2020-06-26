@@ -9,9 +9,13 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.53...HEAD)
 
-- Remove dependency on `git` executable (using NodeGit under the hood).
+No changes.
+
+## [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53) - 2020-06-26
+
+-   Remove dependency on `git` executable (using NodeGit under the hood).
 
 ## [0.0.52](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.51...@airtable/blocks-cli@0.0.52) - 2020-06-22
 
