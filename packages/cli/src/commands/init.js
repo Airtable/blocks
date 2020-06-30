@@ -101,20 +101,27 @@ function assertDirectorySeemsToBeATemplate(blockDirPath: string, template: strin
     throw new Error(`${template} does not seem to be a block template`);
 }
 
+function assertTemplateSuccessfullyDownloaded(templatePath: string, template: string): void {
+    // The most likely problem is that the template doesn't exist on
+    // NPM. This is hard to determine robustly, so we just check for the
+    // template dir existing.
+    if (fs.existsSync(templatePath)) {
+        return;
+    }
+
+    throw new Error(
+        `Could not get template ${template} - please check you entered the name correctly`,
+    );
+}
+
 async function populateBlockDirectoryWithTemplateContentAsync(
     blockDirPath: string,
     template: string,
 ): Promise<void> {
     // Download the template to a tmp directory using npm install
-    let templatePath;
+    const templatePath = await initCommandHelpers.downloadTemplateAsync(blockDirPath, template);
 
-    try {
-        templatePath = await initCommandHelpers.downloadTemplateAsync(blockDirPath, template);
-    } catch {
-        throw new Error(
-            `Could not get template ${template} - please check you entered the name correctly`,
-        );
-    }
+    assertTemplateSuccessfullyDownloaded(templatePath, template);
 
     assertDirectorySeemsToBeATemplate(templatePath, template);
 
