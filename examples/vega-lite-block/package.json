@@ -13,7 +13,7 @@
         "react": "^16.9.0",
         "react-dom": "^16.9.0",
         "react-vega": "^7.3.0",
-        "vega": "^5.10.1",
+        "vega": "^5.12.1",
         "vega-lite": "^4.13.1"
     },
     "devDependencies": {
