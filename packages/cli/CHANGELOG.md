@@ -9,9 +9,17 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.53...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.54...HEAD)
 
-- Revert changes from [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53), thus adding back the dependency to `git`. This is because [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53) requires macOS users to have the macOS command line tools to be installed to be used properly
+No changes.
+
+## [0.0.54](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.53...@airtable/blocks-cli@0.0.54) - 2020-07-02
+
+-   Revert changes from
+    [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53),
+    thus adding back the dependency to `git`. This is because
+    [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53)
+    requires macOS users to have the macOS command line tools to be installed to be used properly
 
 ## [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53) - 2020-06-26
 
