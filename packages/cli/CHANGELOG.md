@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.53...HEAD)
 
-No changes.
+- Revert changes from [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53), thus adding back the dependency to `git`. This is because [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53) requires macOS users to have the macOS command line tools to be installed to be used properly
 
 ## [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.52...@airtable/blocks-cli@0.0.53) - 2020-06-26
 
