@@ -381,7 +381,9 @@ class BlockServer {
         const nodeModulesDirPath = path.join(blockDirPath, 'node_modules');
         const nodeModulesDirExists = fs.existsSync(nodeModulesDirPath);
         if (!nodeModulesDirExists) {
-            console.log(`Must run npm in ${blockDirPath} first to install modules`);
+            console.log(
+                `Please run 'npm install' in ${blockDirPath} to install packages before running`,
+            );
             process.exit(1);
         }
         // Get the block entry point filepath.
