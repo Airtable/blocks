@@ -96,20 +96,22 @@ const TopBar = ({
     <Box padding={2} borderBottom="thick">
         <Box padding={1} display="flex" flex="0 0 auto" alignItems="center">
             <Text size="large" paddingRight={1}>
-                Meeting Moderator:
+                Moderator:
             </Text>
             {moderator ? (
                 <CollaboratorToken collaborator={moderator} />
             ) : (
                 <Text size="large">no one</Text>
             )}
-            <TextButton
-                marginLeft="auto"
-                onClick={onTakeOver}
-                disabled={isModerator || !hasPermissionToParticipate}
-            >
-                {isModerator ? 'You are moderating' : 'Take over as moderator'}
-            </TextButton>
+            {isModerator ? null : (
+                <TextButton
+                    marginLeft="auto"
+                    onClick={onTakeOver}
+                    disabled={!hasPermissionToParticipate}
+                >
+                    Take over as moderator
+                </TextButton>
+            )}
         </Box>
         {isModerator && !hasPermissionToParticipate ? (
             <Box paddingTop={1}>
@@ -138,6 +140,9 @@ const TimerStage = ({
     const addTime = (seconds: number): void => {
         globalConfig.setAsync('timerEnd', timerEnd + seconds * 1000);
     };
+    const resetTime = (): void => {
+        globalConfig.setAsync('timerEnd', 0);
+    };
 
     const goToVoting = (): void => {
         globalConfig.setAsync('stage', Stage.VOTING);
@@ -146,20 +151,14 @@ const TimerStage = ({
 
     let remainingUnit;
     let remainingAmount;
-    let timerColor;
+    let timerColor: string = colors.GREEN_BRIGHT;
     let isDone = false;
     if (secondsRemaining > 60) {
         remainingUnit = 'minute';
         remainingAmount = Math.round(secondsRemaining / 60);
-        timerColor = colors.GREEN_BRIGHT;
     } else {
         remainingUnit = 'second';
         remainingAmount = secondsRemaining;
-        if (secondsRemaining > 15) {
-            timerColor = colors.ORANGE_BRIGHT;
-        } else {
-            timerColor = colors.RED_BRIGHT;
-        }
 
         if (secondsRemaining === 0) {
             isDone = true;
@@ -213,7 +212,7 @@ const TimerStage = ({
                         +30s
                     </Button>
                     <Button marginRight={1} onClick={(): void => addTime(60)}>
-                        +60s
+                        +1m
                     </Button>
                     <Button marginRight={1} onClick={(): void => addTime(3 * 60)}>
                         +3m
@@ -221,8 +220,8 @@ const TimerStage = ({
                     <Button marginRight={1} onClick={(): void => addTime(5 * 60)}>
                         +5m
                     </Button>
-                    <Button marginRight={1} onClick={(): void => addTime(7 * 60)}>
-                        +7m
+                    <Button marginRight={1} onClick={(): void => resetTime()}>
+                        Reset
                     </Button>
 
                     <Button variant="primary" marginLeft="auto" onClick={goToVoting}>
@@ -294,15 +293,14 @@ const VotingStage = ({
             <Box
                 display="flex"
                 flex="1 1 auto"
-                justifyContent="center"
+                justifyContent="flex-start"
                 flexDirection="column"
                 overflowY="auto"
+                paddingTop={3}
             >
                 <Box maxHeight="100%">
-                    <Heading size="large" textAlign="center" marginBottom={3}>
-                        🗳 Should we continue
-                        <br />
-                        discussing this topic?
+                    <Heading textAlign="center" marginBottom={3} paddingX={4}>
+                        Should we continue discussing this&nbsp;topic?
                     </Heading>
                     {!hasPermissionToParticipate ? (
                         <Box textAlign="center" marginBottom={2}>
@@ -310,19 +308,19 @@ const VotingStage = ({
                             base to vote.
                         </Box>
                     ) : null}
-                    <Box paddingX={4} marginBottom={2}>
+                    <Box paddingX={4}>
                         <SelectButtonsSynced
                             globalConfigKey={['votes', currentUser.id]}
                             options={voteOptions}
                             size="large"
                         />
                     </Box>
-                    <Heading textAlign="center" size="small" textColor="light">
+                    <Heading textAlign="center" size="small" textColor="light" marginTop={2}>
                         {totalCastVotes}/{totalVotes} votes cast
                     </Heading>
 
                     {uncastVotes.length > 0 && (
-                        <Box marginTop={4} paddingX={3}>
+                        <Box marginTop={2} paddingX={3}>
                             <Heading
                                 size="xsmall"
                                 textColor="light"
@@ -379,6 +377,12 @@ const ResultsStage = ({
     const passVotes = getVotes(globalConfig, Vote.PASS);
     const noVotes = getVotes(globalConfig, Vote.NO);
     const uncastVotes = getVotes(globalConfig, Vote.NOT_VOTED);
+    const maxVotes = Math.max(
+        yesVotes.length,
+        noVotes.length,
+        passVotes.length + uncastVotes.length,
+    );
+    const barColor = colorUtils.getHexForColor(colors.BLUE);
 
     const goToVoting = (): void => {
         globalConfig.setAsync('stage', Stage.VOTING);
@@ -388,54 +392,84 @@ const ResultsStage = ({
         globalConfig.setAsync('timerEnd', 0);
     };
 
-    const result =
-        yesVotes.length === noVotes.length
-            ? 'The votes are tied'
-            : yesVotes.length < noVotes.length
-            ? '👎 No wins'
-            : '👍 Yes wins';
-
     return (
         <>
-            <Box display="flex" flex="1 1 auto" justifyContent="center" flexDirection="column">
-                <Heading size="large" textAlign="center" marginBottom={3}>
-                    {result}
-                </Heading>
-
+            <Box display="flex" flex="1 1 auto" justifyContent="center">
                 <Box
-                    paddingX={3}
+                    margin={3}
                     display="flex"
-                    alignItems="center"
+                    alignItems="stretch"
                     justifyContent="center"
                     flexWrap="nowrap"
                 >
-                    <Heading
-                        size="small"
-                        textColor="light"
-                        variant="caps"
-                        textAlign="center"
-                        paddingX={3}
-                    >
-                        &quot;👎 No&quot; ⨉{noVotes.length}
-                    </Heading>
-                    <Heading
-                        size="small"
-                        textColor="light"
-                        variant="caps"
-                        textAlign="center"
-                        paddingX={3}
-                    >
-                        &quot;🤷‍♀️ Pass&quot; ⨉{passVotes.length + uncastVotes.length}
-                    </Heading>
-                    <Heading
-                        size="small"
-                        textColor="light"
-                        variant="caps"
-                        textAlign="center"
-                        paddingX={3}
-                    >
-                        &quot;👍 Yes&quot; ⨉{yesVotes.length}
-                    </Heading>
+                    <Box flexBasis="33%">
+                        <Box
+                            height="80%"
+                            padding={2}
+                            display="flex"
+                            justifyContent="stretch"
+                            alignItems="flex-end"
+                        >
+                            <Box
+                                height={`${Math.round((100 * noVotes.length) / maxVotes)}%`}
+                                width="100%"
+                                backgroundColor={barColor}
+                                borderBottom={`4px solid ${barColor}`}
+                            />
+                        </Box>
+                        <Heading size="small" textAlign="center" paddingX={3}>
+                            👎&nbsp;No
+                        </Heading>
+                        <Heading size="small" textAlign="center" textColor="light">
+                            {noVotes.length}
+                        </Heading>
+                    </Box>
+                    <Box flexBasis="33%">
+                        <Box
+                            height="80%"
+                            padding={2}
+                            display="flex"
+                            justifyContent="stretch"
+                            alignItems="flex-end"
+                        >
+                            <Box
+                                height={`${Math.round(
+                                    (100 * (passVotes.length + uncastVotes.length)) / maxVotes,
+                                )}%`}
+                                width="100%"
+                                backgroundColor={barColor}
+                                borderBottom={`4px solid ${barColor}`}
+                            />
+                        </Box>
+                        <Heading size="small" textAlign="center" paddingX={3}>
+                            🤷‍♀️&nbsp;Pass
+                        </Heading>
+                        <Heading size="small" textAlign="center" textColor="light">
+                            {passVotes.length + uncastVotes.length}
+                        </Heading>
+                    </Box>
+                    <Box flexBasis="33%">
+                        <Box
+                            height="80%"
+                            padding={2}
+                            display="flex"
+                            justifyContent="stretch"
+                            alignItems="flex-end"
+                        >
+                            <Box
+                                height={`${Math.round((100 * yesVotes.length) / maxVotes)}%`}
+                                width="100%"
+                                backgroundColor={barColor}
+                                borderBottom={`4px solid ${barColor}`}
+                            />
+                        </Box>
+                        <Heading size="small" textAlign="center" paddingX={3}>
+                            👍&nbsp;Yes
+                        </Heading>
+                        <Heading size="small" textAlign="center" textColor="light">
+                            {yesVotes.length}
+                        </Heading>
+                    </Box>
                 </Box>
             </Box>
             {isModerator && hasPermissionToParticipate && (
@@ -505,7 +539,7 @@ function MeetingModeratorBlock(): ReactElement {
             display="flex"
             flexDirection="column"
         >
-            <ViewportConstraint minSize={{width: 415, height: 280}} />
+            <ViewportConstraint minSize={{width: 430, height: 280}} />
             <TopBar
                 moderator={moderator}
                 onTakeOver={onTakeOver}
