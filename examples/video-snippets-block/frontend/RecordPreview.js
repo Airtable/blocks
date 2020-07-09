@@ -1,5 +1,5 @@
 import React from 'react';
-import {cursor} from '@airtable/blocks';
+import {cursor, session} from '@airtable/blocks';
 import {Box, Text, useRecordById} from '@airtable/blocks/ui';
 import {ViewType} from '@airtable/blocks/models';
 
@@ -17,8 +17,18 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (!isValid) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white" textAlign="center" padding={1}>
+                <Text textAlign="center" padding={1}>
                     {message}
+                </Text>
+            </FullScreenBox>
+        );
+    }
+
+    if (session.currentUser === null) {
+        return (
+            <FullScreenBox padding={3}>
+                <Text textAlign="center" padding={1}>
+                    This block is not supported in shares.
                 </Text>
             </FullScreenBox>
         );
@@ -27,7 +37,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (cursor.activeTableId !== table.id) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white" textAlign="center" padding={1}>
+                <Text textAlign="center" padding={1}>
                     Switch to the “{table.name}” table to see previews
                 </Text>
             </FullScreenBox>
@@ -42,7 +52,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     ) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white" textAlign="center" padding={1}>
+                <Text textAlign="center" padding={1}>
                     Switch to a grid view to see previews
                 </Text>
             </FullScreenBox>
@@ -54,7 +64,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (selectedRecord === null) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white" textAlign="center" padding={1}>
+                <Text textAlign="center" padding={1}>
                     Select a record in grid view to see a preview
                 </Text>
             </FullScreenBox>
@@ -66,7 +76,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     if (!attachmentUrl) {
         return (
             <FullScreenBox padding={3}>
-                <Text textColor="white" textAlign="center" padding={1}>
+                <Text textAlign="center" padding={1}>
                     No video in the “{attachmentField.name}” field
                 </Text>
             </FullScreenBox>
@@ -78,7 +88,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
     const caption = captionField ? selectedRecord.getCellValueAsString(captionField) : null;
 
     return (
-        <FullScreenBox>
+        <FullScreenBox backgroundColor="#222">
             <VideoPlayer
                 key={selectedRecord.id}
                 startTime={startTime}

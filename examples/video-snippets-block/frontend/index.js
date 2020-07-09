@@ -13,11 +13,6 @@ import {useSettings} from './settings';
 import RecordPreview from './RecordPreview';
 import SettingsForm from './SettingsForm';
 
-/**
- * This block is remixed from the YoutubePreviewBlock.
- * It adds settings so that you don't have to configure the block in code and switches to uses the
- * React Video Player to play previews from attachments instead of using embedded YouTube video urls.
- */
 function AttachmentVideoViewerBlock() {
     const viewport = useViewport();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Box} from '@airtable/blocks/ui';
 
-export default function FullScreenBox({children}) {
+export default function FullScreenBox({backgroundColor, children}) {
     return (
         <Box
             height="100vh"
@@ -11,7 +11,7 @@ export default function FullScreenBox({children}) {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            backgroundColor="#222"
+            backgroundColor={backgroundColor || '#fff'}
         >
             {children}
         </Box>
@@ -19,5 +19,6 @@ export default function FullScreenBox({children}) {
 }
 
 FullScreenBox.propTypes = {
+    backgroundColor: PropTypes.string,
     children: PropTypes.node,
 };
