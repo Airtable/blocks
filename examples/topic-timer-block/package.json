@@ -1,4 +1,9 @@
 {
+    "name": "@airtable/topic-timer-block",
+    "version": "1.0.0",
+    "description": "",
+    "author": "",
+    "license": "MIT",
     "dependencies": {
         "@airtable/blocks": "latest",
         "react": "^16.12.0",
@@ -15,6 +20,5 @@
     "scripts": {
         "lint": "eslint --ext .js,.jsx,.ts,.tsx frontend",
         "types": "tsc --build"
-    },
-    "license": "MIT"
+    }
 }
