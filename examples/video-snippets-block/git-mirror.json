@@ -1,0 +1,19 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "blocks@airtable.com",
+    "remote": "git@github.com:Airtable/blocks-video-snippets.git",
+    "subdirectory": "examples/video-snippets-block",
+    "shouldStripLineComments": false,
+    "global": [
+        ".block/**/*",
+        "frontend/**/*",
+        "media/**/*",
+        ".eslintrc.js",
+        ".gitignore",
+        "block.json",
+        "LICENSE.md",
+        "package-lock.json",
+        "package.json",
+        "README.md"
+    ]
+}

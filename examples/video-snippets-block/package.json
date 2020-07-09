@@ -1,4 +1,8 @@
 {
+    "name": "@airtable/video-snippets-block",
+    "version": "1.0.0",
+    "description": "",
+    "author": "",
     "dependencies": {
         "@airtable/blocks": "latest",
         "prop-types": "^15.7.2",
