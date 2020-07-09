@@ -1,0 +1,19 @@
+{
+    "authorName": "Airtable",
+    "authorEmail": "blocks@airtable.com",
+    "remote": "git@github.com:Airtable/blocks-topic-timer.git",
+    "subdirectory": "examples/topic-timer-block",
+    "shouldStripLineComments": false,
+    "global": [
+        ".block/**/*",
+        "frontend/**/*",
+        "media/**/*",
+        ".eslintrc.js",
+        ".gitignore",
+        "block.json",
+        "LICENSE.md",
+        "package-lock.json",
+        "package.json",
+        "README.md"
+    ]
+}
