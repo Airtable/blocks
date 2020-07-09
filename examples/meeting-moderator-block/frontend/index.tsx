@@ -214,9 +214,6 @@ const TimerStage = ({
                     <Button marginRight={1} onClick={(): void => addTime(60)}>
                         +1m
                     </Button>
-                    <Button marginRight={1} onClick={(): void => addTime(3 * 60)}>
-                        +3m
-                    </Button>
                     <Button marginRight={1} onClick={(): void => addTime(5 * 60)}>
                         +5m
                     </Button>
@@ -539,7 +536,7 @@ function MeetingModeratorBlock(): ReactElement {
             display="flex"
             flexDirection="column"
         >
-            <ViewportConstraint minSize={{width: 430, height: 280}} />
+            <ViewportConstraint minSize={{width: 370, height: 280}} />
             <TopBar
                 moderator={moderator}
                 onTakeOver={onTakeOver}
