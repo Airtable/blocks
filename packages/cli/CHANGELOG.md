@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.54...HEAD)
 
-No changes.
+- Improved error message when doing `block run` without `node_modules`
 
 ## [0.0.54](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.53...@airtable/blocks-cli@0.0.54) - 2020-07-02
 
