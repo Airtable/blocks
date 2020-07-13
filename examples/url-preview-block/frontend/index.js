@@ -226,7 +226,8 @@ function RecordPreviewWithDialog({
                         >
                             Airtable share links
                         </Link>
-                        , Figma, SoundCloud, Spotify, Vimeo, YouTube
+                        , Figma, SoundCloud, Spotify, Vimeo, YouTube, Loom, Google Drive, Google
+                        Docs, Google Slides, Google Sheets
                     </Text>
                     <Link
                         marginTop={2}
@@ -459,6 +460,27 @@ const converters = [
         }
 
         // URL isn't for Figma
+        return null;
+    },
+    function getLoomPreviewUrl(url) {
+        const match = url.match(/loom\.com\/share\/([\w-]+)(\?|$)/);
+        if (match) {
+            return `https://loom.com/embed/${match[1]}`;
+        }
+
+        // URL isn't for a Loom video
+        return null;
+    },
+    function getGooglePreviewUrl(url) {
+        // Google URLs for docs, images, sheets, and slides all have similar formats
+        const match = url.match(
+            /(docs|drive)\.google\.com\/(document|spreadsheets|presentation|file)\/d\/([\w-]+)/,
+        );
+        if (match) {
+            return `https://${match[1]}.google.com/${match[2]}/d/${match[3]}/preview`;
+        }
+
+        // URL isn't for a supported Google url format
         return null;
     },
 ];
