@@ -245,10 +245,10 @@ function FieldPickerExample() {
                     const FieldPickerExample = () => {
                         const [field, setField] = useState(null);
                         const base = useBase();
-                        const table = table.getTableByNameIfExists("Tasks");
+                        const table = base.getTableByNameIfExists("Tasks");
                         // If table is null or undefined, the FieldPicker will not render.
 
-                        return <FieldPicker table={table} onChange={newField => setField(newField)} ${props} width="${CONTROL_WIDTH}"/>
+                        return <FieldPicker table={table} field={field} onChange={newField => setField(newField)} ${props} width="${CONTROL_WIDTH}"/>
                     };
                 `;
             }}
