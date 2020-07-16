@@ -5,7 +5,8 @@
     "main": "index.js",
     "private": true,
     "scripts": {
-        "airbuild": "echo 'no airbuild configured'"
+        "airbuild": "echo 'no airbuild configured'",
+        "test": "echo 'no tests configured'"
     },
     "devDependencies": {
         "gulp-format-md": "^2.0.0",

@@ -8,7 +8,8 @@
         "git-mirror": "./bin/git-mirror"
     },
     "scripts": {
-        "airbuild": "echo 'no airbuild configured'"
+        "airbuild": "echo 'no airbuild configured'",
+        "test": "echo 'no tests configured'"
     },
     "dependencies": {
         "minimatch": "^3.0.4",
