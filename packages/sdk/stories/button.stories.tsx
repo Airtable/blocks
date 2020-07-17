@@ -77,7 +77,7 @@ function ButtonExample() {
                     onClick={() => console.log('Button clicked')}
                     {...values}
                     icon={icon ? 'edit' : undefined}
-                    aria-label={hasLabel ? 'Edit' : undefined}
+                    aria-label={hasLabel ? undefined : 'Edit'}
                 >
                     {hasLabel ? 'Button' : null}
                 </Button>
