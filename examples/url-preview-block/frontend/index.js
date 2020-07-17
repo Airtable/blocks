@@ -226,8 +226,8 @@ function RecordPreviewWithDialog({
                         >
                             Airtable share links
                         </Link>
-                        , Figma, SoundCloud, Spotify, Vimeo, YouTube, Loom, Google Drive, Google
-                        Docs, Google Slides, Google Sheets
+                        , Figma, SoundCloud, Spotify, Vimeo, YouTube, Loom share links, Google Drive
+                        share links, Google Docs, Google Sheets, Google Slides
                     </Text>
                     <Link
                         marginTop={2}
@@ -472,7 +472,7 @@ const converters = [
         return null;
     },
     function getGooglePreviewUrl(url) {
-        // Google URLs for docs, images, sheets, and slides all have similar formats
+        // Google URLs for Google Drive files, Docs, Sheets, and Slides all have similar formats
         const match = url.match(
             /(docs|drive)\.google\.com\/(document|spreadsheets|presentation|file)\/d\/([\w-]+)/,
         );
