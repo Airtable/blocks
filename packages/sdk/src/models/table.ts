@@ -1819,6 +1819,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         if (dirtyPaths.lock) {
             didTableSchemaChange = true;
         }
+        if (dirtyPaths.externalSyncById) {
+            didTableSchemaChange = true;
+        }
         if (dirtyPaths.description) {
             this._onChange(WatchableTableKeys.description);
             didTableSchemaChange = true;

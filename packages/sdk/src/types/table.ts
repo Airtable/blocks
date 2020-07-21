@@ -8,6 +8,8 @@ import {RecordData, RecordId} from './record';
 export type TableId = string;
 /** @hidden */
 export type TableLock = unknown;
+/** @hidden */
+export type ExternalSyncById = unknown;
 
 /** @hidden */
 export interface TableData {
@@ -18,10 +20,11 @@ export interface TableData {
     activeViewId: ViewId | null;
     viewOrder: Array<ViewId>;
     viewsById: ObjectMap<ViewId, ViewData>;
-    // recordsById will be absent until the block explicity loads the table's data.
+    // recordsById will be absent until the block explicitly loads the table's data.
     recordsById?: ObjectMap<RecordId, RecordData>;
     description: string | null;
     lock: TableLock | null;
+    externalSyncById: ExternalSyncById | null;
 }
 
 /** @hidden */
