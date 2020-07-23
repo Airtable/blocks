@@ -16,14 +16,18 @@ async function downloadTemplateAsync(blockDirPath: string, template: string): Pr
     const writeStream = createWriteStream(tarballPath, {encoding: null});
     await fsUtils.mkdirAsync(tmpDirPath);
 
-    let downloadUrl;
     const octokit = new Octokit({});
     const pathComponents = new URL(template).pathname.split('/');
     const owner = pathComponents[1];
     const repo = pathComponents[2];
+
+    let url;
     try {
-        const {url} = await octokit.repos.downloadArchive({owner, repo, archive_format: 'tarball'});
-        downloadUrl = url;
+        ({url} = await octokit.repos.downloadArchive({
+            owner,
+            repo,
+            archive_format: 'tarball',
+        }));
     } catch (e) {
         if (e.status === 404) {
             e.message = `Template ${template} is not a public repo that could be found on Github`;
@@ -32,7 +36,7 @@ async function downloadTemplateAsync(blockDirPath: string, template: string): Pr
     }
 
     await new Promise((resolve, reject) => {
-        request(downloadUrl)
+        request(url)
             .pipe(writeStream)
             .on('finish', resolve)
             .on('error', reject);
