@@ -12,6 +12,7 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.54...HEAD)
 
 - Improved error message when doing `block run` without `node_modules`
+- Remove dependency on `git` executable (using octokit.github.io/rest.js under the hood).
 
 ## [0.0.54](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.53...@airtable/blocks-cli@0.0.54) - 2020-07-02
 
