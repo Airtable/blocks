@@ -13,6 +13,7 @@ import {
 import {withGoogleMap, StreetViewPanorama, withScriptjs, GoogleMap} from 'react-google-maps';
 import React, {useState, useRef} from 'react';
 
+import FullscreenBox from './FullscreenBox';
 import {useSettingsStore} from './useSettingsStore';
 import {useLocationRequest} from './useLocationRequest';
 import {SettingsView} from './SettingsView';
@@ -108,21 +109,19 @@ const _RecordStreetView = props => {
 
     if (pano) {
         return (
-            <Box>
-                <GoogleMap defaultZoom={8} defaultCenter={position} ref={googleMapRef}>
-                    <StreetViewPanorama
-                        defaultPano={pano}
-                        defaultPosition={position}
-                        defaultPov={pov}
-                        visible
-                        onPanoChanged={_onStreetViewStateChange}
-                        onPositionChanged={_onStreetViewStateChange}
-                        onPovChanged={_onStreetViewStateChange}
-                        onStatusChanged={_onStreetViewStateChange}
-                        options={streetViewOptions}
-                    />
-                </GoogleMap>
-            </Box>
+            <GoogleMap defaultZoom={8} defaultCenter={position} ref={googleMapRef}>
+                <StreetViewPanorama
+                    defaultPano={pano}
+                    defaultPosition={position}
+                    defaultPov={pov}
+                    visible
+                    onPanoChanged={_onStreetViewStateChange}
+                    onPositionChanged={_onStreetViewStateChange}
+                    onPovChanged={_onStreetViewStateChange}
+                    onStatusChanged={_onStreetViewStateChange}
+                    options={streetViewOptions}
+                />
+            </GoogleMap>
         );
     }
     return null;
@@ -131,39 +130,19 @@ const _RecordStreetView = props => {
 const RecordStreetView = withGoogleMap(_RecordStreetView);
 
 const RecordNotOk = ({address, status}) => {
+    let text;
     if (status && status.zeroResults) {
-        return (
-            <Box
-                className="absolute all-0"
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-            >
-                <Box width="100%" textAlign="center">
-                    Cannot find a street view for:
-                </Box>
-                <Box width="100%" textAlign="center">
-                    {address}
-                </Box>
-            </Box>
-        );
+        text = 'Cannot find a street view for:';
     } else if (status && status.unknownError) {
-        return (
-            <Box
-                className="absolute all-0"
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-            >
-                <Box width="100%" textAlign="center">
-                    Received an unknown error while looking for a street view for:
-                </Box>
-                <Box width="100%" textAlign="center">
-                    {address}
-                </Box>
-            </Box>
-        );
+        text = 'Received an unknown error while looking for a street view for:';
     }
+
+    return (
+        <FullscreenBox shouldCenterContent={true}>
+            <Text>{text}</Text>
+            <Text>{address}</Text>
+        </FullscreenBox>
+    );
 };
 
 const RecordGeocodeStreetView = props => {
@@ -174,32 +153,20 @@ const RecordGeocodeStreetView = props => {
         return <RecordStreetView position={loc} {...props} />;
     } else if (loc && loc.locationNotFound) {
         return (
-            <Box
-                className="absolute all-0"
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-            >
-                <Box width="100%" textAlign="center">
+            <FullscreenBox shouldCenterContent={true}>
+                <Text width="100%" textAlign="center">
                     Could not find a location from:
-                </Box>
-                <Box width="100%" textAlign="center">
+                </Text>
+                <Text width="100%" textAlign="center">
                     {address}
-                </Box>
-            </Box>
+                </Text>
+            </FullscreenBox>
         );
     } else {
         return (
-            <Box
-                className="absolute all-0"
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-            >
-                <Box width="100%" textAlign="center">
-                    <Loader />
-                </Box>
-            </Box>
+            <FullscreenBox shouldCenterContent={true}>
+                <Loader />
+            </FullscreenBox>
         );
     }
 };
@@ -276,24 +243,19 @@ const MainRecord = ({settingsStore, record}) => {
 
     if (!address.trim()) {
         return (
-            <Box className="absolute all-0" display="flex" alignItems="center">
-                <Box width="100%" textAlign="center">
+            <FullscreenBox shouldCenterContent={true}>
+                <Text width="100%" textAlign="center">
                     Select a record with the &quot;{settingsStore.locationField.name}&quot; field
                     set.
-                </Box>
-            </Box>
+                </Text>
+            </FullscreenBox>
         );
     }
 
     return (
         <RecordStreetViewWrapper
-            containerElement={
-                <div
-                    className="absolute all-0"
-                    style={{height: settingsStore.showSettings ? 0 : ''}}
-                />
-            }
-            mapElement={<div className="absolute all-0 mapRoot" />}
+            containerElement={<FullscreenBox />}
+            mapElement={<FullscreenBox className="mapRoot" />}
             address={address}
             streetViewState={streetViewState}
             status={status}
@@ -321,13 +283,7 @@ const MainConfigured = ({settingsStore}) => {
 
     if (cursor.activeTableId !== table.id) {
         return (
-            <Box
-                className="absolute all-0"
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-            >
+            <FullscreenBox shouldCenterContent={true}>
                 <Text paddingX={3}>
                     Switch to the &quot;{table.name}&quot; table to see street views.
                 </Text>
@@ -340,7 +296,7 @@ const MainConfigured = ({settingsStore}) => {
                 >
                     Settings
                 </TextButton>
-            </Box>
+            </FullscreenBox>
         );
     }
 
@@ -360,29 +316,19 @@ const MainConfigured = ({settingsStore}) => {
         return <MainRecord settingsStore={settingsStore} record={record} />;
     } else {
         return (
-            <Box className="absolute all-0" display="flex" alignItems="center">
-                <Box width="100%" textAlign="center">
-                    Select a record.
-                </Box>
-            </Box>
+            <FullscreenBox shouldCenterContent={true}>
+                <Text textColor="light">Select a record</Text>
+            </FullscreenBox>
         );
     }
 };
 
 const QuickSetupList = ({showSettings}) => (
-    <Box
-        className="absolute all-0"
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-    >
+    <FullscreenBox shouldCenterContent={true}>
         <Box>
             <Box>
-                <span className="understroke link cursor-pointer" onClick={showSettings}>
-                    Open this block&apos;s settings
-                </span>{' '}
-                and configure the following:
+                <TextButton onClick={showSettings}>Open this block&apos;s settings</TextButton> and
+                configure the following:
             </Box>
             <ul>
                 <li>Google API Key</li>
@@ -390,7 +336,7 @@ const QuickSetupList = ({showSettings}) => (
                 <li>A field with locations in the table</li>
             </ul>
         </Box>
-    </Box>
+    </FullscreenBox>
 );
 
 const _LoadMapsScript = ({children}) => children;
@@ -404,40 +350,31 @@ let Main = () => {
     });
 
     return (
-        <Box className="baymax" position="absolute" width="100%" height="100%">
-            <Box className="absolute all-0">
-                <Box
-                    className="absolute all-0"
-                    style={{display: settingsStore.showSettings ? 'none' : ''}}
-                >
-                    {settingsStore.googleApiKey && (
-                        <LoadMapsScript
-                            loadingElement={
-                                <div className="absolute all-0">
-                                    <Loader />
-                                </div>
-                            }
-                            googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${settingsStore.googleApiKey}`}
-                        >
-                            {settingsStore.isMinimallyConfigured && (
-                                <MainConfigured settingsStore={settingsStore} />
-                            )}
-                        </LoadMapsScript>
-                    )}
-                    {!settingsStore.isMinimallyConfigured && (
-                        <QuickSetupList
-                            showSettings={() => {
-                                settingsStore.showSettings = true;
-                            }}
-                        />
-                    )}
-                </Box>
-                {settingsStore.showSettings ? (
-                    <Box className="absolute all-0">
-                        <SettingsView settingsStore={settingsStore} />
-                    </Box>
-                ) : null}
-            </Box>
+        <Box position="absolute" width="100%" height="100%">
+            <FullscreenBox display={settingsStore.showSettings ? 'none' : null}>
+                {settingsStore.googleApiKey && (
+                    <LoadMapsScript
+                        loadingElement={
+                            <FullscreenBox shouldCenterContent={true}>
+                                <Loader />
+                            </FullscreenBox>
+                        }
+                        googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${settingsStore.googleApiKey}`}
+                    >
+                        {settingsStore.isMinimallyConfigured && (
+                            <MainConfigured settingsStore={settingsStore} />
+                        )}
+                    </LoadMapsScript>
+                )}
+                {!settingsStore.isMinimallyConfigured && (
+                    <QuickSetupList
+                        showSettings={() => {
+                            settingsStore.showSettings = true;
+                        }}
+                    />
+                )}
+            </FullscreenBox>
+            {settingsStore.showSettings ? <SettingsView settingsStore={settingsStore} /> : null}
         </Box>
     );
 };
