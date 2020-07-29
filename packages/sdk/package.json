@@ -131,6 +131,7 @@
         },
         "hooks": {
             "before:init": "../../bin/check-repo-for-release && yarn build && yarn test",
+            "after:version": "yarn build",
             "after:release": "(cd ../../ && tools/git-mirror/bin/git-mirror sync @airtable/blocks@${version})"
         },
         "npm": {
