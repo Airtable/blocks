@@ -40,7 +40,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
             template: {
                 description: 'Block template to use as a starting point for your code',
                 type: 'string',
-                default: blockCliConfigSettings.HELLO_WORLD_TEMPLATE,
+                default: blockCliConfigSettings.HELLO_WORLD_TEMPLATE_URL,
             },
         },
         positionalMap: {

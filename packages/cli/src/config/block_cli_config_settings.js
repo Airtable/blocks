@@ -78,5 +78,5 @@ module.exports = {
     // Directory path of blocks backend wrapper in backend bundle.
     BACKEND_WRAPPER_DIR: 'backend_wrapper',
 
-    HELLO_WORLD_TEMPLATE: 'https://github.com/Airtable/blocks-hello-world.git',
+    HELLO_WORLD_TEMPLATE_URL: 'https://github.com/Airtable/blocks-hello-world',
 };

@@ -39,7 +39,7 @@ describe('init', function() {
 
             assert(
                 runCommandAsyncStub.calledOnceWith(
-                    sinon.match({template: 'https://github.com/Airtable/blocks-hello-world.git'}),
+                    sinon.match({template: 'https://github.com/Airtable/blocks-hello-world'}),
                 ),
             );
         });
