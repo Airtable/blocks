@@ -273,8 +273,17 @@ export interface AirtableInterface {
 const getAirtableInterfaceAtVersion: ((arg1: number) => AirtableInterface) | void = (window as any)
     .__getAirtableInterfaceAtVersion;
 
-if (!getAirtableInterfaceAtVersion) {
-    throw spawnError('@airtable/blocks can only run inside the block frame');
-}
+let airtableInterface: AirtableInterface | null = null;
 
-export default getAirtableInterfaceAtVersion(AIRTABLE_INTERFACE_VERSION);
+/** @hidden */
+export default function getAirtableInterface(): AirtableInterface {
+    if (!airtableInterface) {
+        if (!getAirtableInterfaceAtVersion) {
+            throw spawnError('@airtable/blocks can only run inside the block frame');
+        }
+
+        airtableInterface = getAirtableInterfaceAtVersion(AIRTABLE_INTERFACE_VERSION);
+    }
+
+    return airtableInterface;
+}

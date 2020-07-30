@@ -3,7 +3,7 @@ import Field from '../../src/models/field';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 
-jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
+jest.mock('../../src/injected/airtable_interface', () => () => mockProjectTrackerAirtableInterface);
 
 let mockMutations: any;
 jest.mock('../../src/get_sdk', () => () => ({

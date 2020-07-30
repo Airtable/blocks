@@ -6,7 +6,7 @@ import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 import {FieldTypeConfig} from '../../src/injected/airtable_interface';
 
-jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
+jest.mock('../../src/injected/airtable_interface', () => () => mockProjectTrackerAirtableInterface);
 
 // We need to mock out getSdk() with a fake mutations object first to successfully create the Base object
 const mockAirtableInterface = mockProjectTrackerAirtableInterface as any;

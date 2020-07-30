@@ -4,6 +4,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import getSdk from '../get_sdk';
+import getAirtableInterface from '../injected/airtable_interface';
 import {
     values,
     isNullOrUndefinedOrEmpty,
@@ -407,7 +408,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
             // so we just skip the check.
             // TODO(emma): actually check this somehow.
             if (!field.isComputed) {
-                const airtableInterface = getSdk().__airtableInterface;
+                const airtableInterface = getAirtableInterface();
                 const appInterface = getSdk().__appInterface;
 
                 const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
@@ -468,7 +469,7 @@ export class RecordCard extends React.Component<RecordCardProps> {
     _getWidthAndFieldIdArray(cellContainerWidth: number, fieldsToUse: Array<Field>) {
         const widthAndFieldIdArray = [];
         let runningWidth = 0;
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
 
         for (const field of fieldsToUse) {

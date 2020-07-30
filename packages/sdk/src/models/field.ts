@@ -1,4 +1,6 @@
 /** @module @airtable/blocks/models: Field */ /** */
+import getAirtableInterface from '../injected/airtable_interface';
+
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
@@ -103,7 +105,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get type(): FieldType {
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
 
         const {type} = airtableInterface.fieldTypeProvider.getConfig(
@@ -137,7 +139,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get options(): FieldOptions | null {
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
 
         const {options} = airtableInterface.fieldTypeProvider.getConfig(
@@ -266,7 +268,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     get isComputed(): boolean {
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         return airtableInterface.fieldTypeProvider.isComputed(this._data);
     }
     /**
@@ -349,7 +351,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      * ```
      */
     convertStringToCellValue(string: string): unknown {
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
 
         const cellValue = airtableInterface.fieldTypeProvider.convertStringToCellValue(
