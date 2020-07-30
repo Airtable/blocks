@@ -8,7 +8,7 @@ import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
 import {spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import warning from '../warning';
 import AbstractModel from './abstract_model';
 import View from './view';

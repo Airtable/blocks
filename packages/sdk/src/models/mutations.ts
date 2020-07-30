@@ -1,5 +1,6 @@
 import getSdk from '../get_sdk';
-import getAirtableInterface, {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
+import getAirtableInterface from '../injected/airtable_interface';
 import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';

@@ -10,7 +10,8 @@ import {
     ObjectMap,
 } from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
-import getAirtableInterface, {VisList} from '../injected/airtable_interface';
+import {VisList} from '../types/airtable_interface';
+import getAirtableInterface from '../injected/airtable_interface';
 import {RecordId} from '../types/record';
 import Table, {WatchableTableKeys} from './table';
 import View from './view';

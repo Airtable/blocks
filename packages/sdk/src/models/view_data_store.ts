@@ -11,7 +11,7 @@ import {BaseData, ModelChange} from '../types/base';
 import {FieldId} from '../types/field';
 import {ViewData, ViewId} from '../types/view';
 import {RecordId} from '../types/record';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import {Color} from '../colors';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import RecordStore from './record_store';

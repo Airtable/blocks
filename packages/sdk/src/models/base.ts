@@ -4,7 +4,7 @@ import {CollaboratorData, UserId} from '../types/collaborator';
 import {FieldType} from '../types/field';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import {isEnumValue, entries, isDeepEqual, ObjectValues, ObjectMap, has} from '../private_utils';
 import {spawnError, invariant} from '../error_utils';
 import getSdk from '../get_sdk';

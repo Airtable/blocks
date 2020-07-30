@@ -1,7 +1,7 @@
 /** @module @airtable/blocks: settingsButton */ /** */
 import Watchable from './watchable';
 import {isEnumValue, ObjectValues} from './private_utils';
-import {AirtableInterface} from './injected/airtable_interface';
+import {AirtableInterface} from './types/airtable_interface';
 
 const WatchableSettingsButtonKeys = Object.freeze({
     isVisible: 'isVisible' as const,

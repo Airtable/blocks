@@ -1,5 +1,5 @@
 import getSdk from './get_sdk';
-import {AirtableInterface} from './injected/airtable_interface';
+import {AirtableInterface} from './types/airtable_interface';
 import {RecordActionData, RecordActionDataCallback} from './types/record_action_data';
 import AbstractModelWithAsyncData from './models/abstract_model_with_async_data';
 import {BaseData} from './types/base';
