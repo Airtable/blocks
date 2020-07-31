@@ -81,7 +81,7 @@
         "strip-ansi": "^5.2.0",
         "tar": "^6.0.2",
         "terser": "^3.17.0",
-        "update-notifier": "3.0.1",
+        "update-notifier": "4.1.0",
         "user-agent-bag": "0.2.0",
         "watchify": "^3.9.0",
         "yargs": "^13.2.0"
