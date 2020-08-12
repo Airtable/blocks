@@ -156,7 +156,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * Checks whether the current user has permission to perform the given options update.
      *
-     * Accepts partial input, in the same format as {@link unstable_updateOptionsAsync}.
+     * Accepts partial input, in the same format as {@link updateOptionsAsync}.
      *
      * Returns `{hasPermission: true}` if the current user can update the specified record,
      * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
@@ -166,14 +166,14 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * @example
      * ```js
-     * const updateFieldCheckResult = field.unstable_checkPermissionsForUpdateOptions();
+     * const updateFieldCheckResult = field.checkPermissionsForUpdateOptions();
      *
      * if (!updateFieldCheckResult.hasPermission) {
      *     alert(updateFieldCheckResult.reasonDisplayString);
      * }
      * ```
      */
-    unstable_checkPermissionsForUpdateOptions(options?: FieldOptions): PermissionCheckResult {
+    checkPermissionsForUpdateOptions(options?: FieldOptions): PermissionCheckResult {
         return getSdk().__mutations.checkPermissionsForMutation({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,
@@ -192,21 +192,21 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * Checks whether the current user has permission to perform the options update.
      *
-     * Accepts partial input, in the same format as {@link unstable_updateOptionsAsync}.
+     * Accepts partial input, in the same format as {@link updateOptionsAsync}.
      *
      * @param options new options for the field
      *
      * @example
      * ```js
-     * const canUpdateField = field.unstable_hasPermissionToUpdateOptions();
+     * const canUpdateField = field.hasPermissionToUpdateOptions();
      *
      * if (!canUpdateField) {
      *     alert('not allowed!');
      * }
      * ```
      */
-    unstable_hasPermissionToUpdateOptions(options?: FieldOptions): boolean {
-        return this.unstable_checkPermissionsForUpdateOptions(options).hasPermission;
+    hasPermissionToUpdateOptions(options?: FieldOptions): boolean {
+        return this.checkPermissionsForUpdateOptions(options).hasPermission;
     }
 
     /**
@@ -237,13 +237,13 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *         ]
      *     };
      *
-     *     if (selectField.unstable_hasPermissionToUpdateOptions(updatedOptions)) {
-     *         await selectField.unstable_updateOptionsAsync(updatedOptions);
+     *     if (selectField.hasPermissionToUpdateOptions(updatedOptions)) {
+     *         await selectField.updateOptionsAsync(updatedOptions);
      *     }
      * }
      * ```
      */
-    async unstable_updateOptionsAsync(options: FieldOptions): Promise<void> {
+    async updateOptionsAsync(options: FieldOptions): Promise<void> {
         await getSdk().__mutations.applyMutationAsync({
             type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
             tableId: this.parentTable.id,

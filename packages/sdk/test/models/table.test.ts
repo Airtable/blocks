@@ -147,7 +147,7 @@ describe('Table', () => {
         });
 
         it('accepts null field options and omits them from config', async () => {
-            await table.unstable_createFieldAsync('name2', FieldType.SINGLE_LINE_TEXT, null);
+            await table.createFieldAsync('name2', FieldType.SINGLE_LINE_TEXT, null);
 
             expect(mockApplyMutationAsync).toHaveBeenCalledTimes(1);
             expect(mockApplyMutationAsync).toHaveBeenLastCalledWith(
@@ -168,7 +168,7 @@ describe('Table', () => {
         });
 
         it('accepts undefined field options and omits them from config', async () => {
-            await table.unstable_createFieldAsync('name2', FieldType.SINGLE_LINE_TEXT);
+            await table.createFieldAsync('name2', FieldType.SINGLE_LINE_TEXT);
 
             expect(mockApplyMutationAsync).toHaveBeenCalledTimes(1);
             expect(mockApplyMutationAsync).toHaveBeenLastCalledWith(
@@ -189,7 +189,7 @@ describe('Table', () => {
         });
 
         it('accepts non-null field options', async () => {
-            await table.unstable_createFieldAsync('name2', FieldType.SINGLE_SELECT, {
+            await table.createFieldAsync('name2', FieldType.SINGLE_SELECT, {
                 choices: [{name: 'pick me'}],
             });
 

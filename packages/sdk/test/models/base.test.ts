@@ -253,7 +253,7 @@ describe('Base', () => {
         });
 
         it('accepts null, undefined and non-null field options', async () => {
-            await base.unstable_createTableAsync('new table', [
+            await base.createTableAsync('new table', [
                 {name: 'field 1', type: FieldType.SINGLE_LINE_TEXT},
                 {name: 'field 2', type: FieldType.SINGLE_LINE_TEXT, options: null},
                 {

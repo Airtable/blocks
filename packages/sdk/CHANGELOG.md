@@ -11,7 +11,10 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.53...HEAD)
 
-No changes.
+-   Remove `unstable_` prefix from `Field.updateOptionsAsync`, `Table.createFieldAsync`, and
+    `Base.createTableAsync`. See
+    [Changing base schema](https://airtable.com/developers/blocks/guides/changing-base-schema) for
+    full details.
 
 ## [0.0.53](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.52...@airtable/blocks@0.0.53) - 2020-06-24
 

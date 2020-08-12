@@ -51,7 +51,7 @@ describe('Field', () => {
         it('accepts non-null field options', async () => {
             const field = makeField(FieldType.SINGLE_SELECT);
 
-            await field.unstable_updateOptionsAsync({
+            await field.updateOptionsAsync({
                 choices: [{name: 'pick me'}],
             });
 

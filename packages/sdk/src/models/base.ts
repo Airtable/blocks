@@ -357,7 +357,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *
      * Checks whether the current user has permission to create a table.
      *
-     * Accepts partial input, in the same format as {@link unstable_createTableAsync}.
+     * Accepts partial input, in the same format as {@link createTableAsync}.
      *
      * Returns `{hasPermission: true}` if the current user can update the specified record,
      * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
@@ -368,14 +368,14 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *
      * @example
      * ```js
-     * const createTableCheckResult = base.unstable_checkPermissionsForCreateTable();
+     * const createTableCheckResult = base.checkPermissionsForCreateTable();
      *
      * if (!createTableCheckResult.hasPermission) {
      *     alert(createTableCheckResult.reasonDisplayString);
      * }
      * ```
      */
-    unstable_checkPermissionsForCreateTable(
+    checkPermissionsForCreateTable(
         name?: string,
         fields?: Array<{
             name?: string;
@@ -411,21 +411,21 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *
      * Checks whether the current user has permission to create a table.
      *
-     * Accepts partial input, in the same format as {@link unstable_createTableAsync}.
+     * Accepts partial input, in the same format as {@link createTableAsync}.
      *
      * @param name name for the table. must be case-insensitive unique
      * @param fields array of fields to create in the table
      *
      * @example
      * ```js
-     * const canCreateTable = table.unstable_hasPermissionToCreateTable();
+     * const canCreateTable = table.hasPermissionToCreateTable();
      *
      * if (!canCreateTable) {
      *     alert('not allowed!');
      * }
      * ```
      */
-    unstable_hasPermissionToCreateTable(
+    hasPermissionToCreateTable(
         name?: string,
         fields?: Array<{
             name?: string;
@@ -433,7 +433,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
             options?: {[key: string]: unknown} | null;
         }>,
     ): boolean {
-        return this.unstable_checkPermissionsForCreateTable(name, fields).hasPermission;
+        return this.checkPermissionsForCreateTable(name, fields).hasPermission;
     }
 
     /**
@@ -481,13 +481,13 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
      *         }},
      *     ];
      *
-     *     if (base.unstable_hasPermissionToCreateTable(name, fields)) {
-     *         await base.unstable_createTableAsync(name, fields);
+     *     if (base.hasPermissionToCreateTable(name, fields)) {
+     *         await base.createTableAsync(name, fields);
      *     }
      * }
      * ```
      */
-    async unstable_createTableAsync(
+    async createTableAsync(
         name: string,
         fields: Array<{
             name: string;

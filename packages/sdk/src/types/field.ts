@@ -173,7 +173,7 @@ export enum FieldType {
      * the current choices:
      * ```js
      * const selectField = table.getFieldByName('My select field');
-     * await selectField.unstable_updateOptionsAsync({
+     * await selectField.updateOptionsAsync({
      *     choices: [
      *         ...selectField.options.choices,
      *         {name: 'My new choice'},
@@ -231,7 +231,7 @@ export enum FieldType {
      * the current choices:
      * ```js
      * const multipleSelectField = table.getFieldByName('My multiple select field');
-     * await multipleSelectField.unstable_updateOptionsAsync({
+     * await multipleSelectField.updateOptionsAsync({
      *     choices: [
      *         ...multipleSelectField.options.choices,
      *         {name: 'My new choice'},
