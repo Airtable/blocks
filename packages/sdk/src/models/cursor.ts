@@ -4,7 +4,7 @@ import {RecordId} from '../types/record';
 import {TableId} from '../types/table';
 import {ViewId} from '../types/view';
 import {FieldId} from '../types/field';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import {isEnumValue, entries, ObjectValues, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';

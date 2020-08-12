@@ -1,4 +1,6 @@
 /** @module @airtable/blocks/models: Record */ /** */
+import getAirtableInterface from '../injected/airtable_interface';
+
 import getSdk from '../get_sdk';
 import {Color} from '../colors';
 import {BaseData} from '../types/base';
@@ -207,7 +209,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         if (cellValue === null || cellValue === undefined) {
             return '';
         } else {
-            const airtableInterface = getSdk().__airtableInterface;
+            const airtableInterface = getAirtableInterface();
             const appInterface = getSdk().__appInterface;
             return airtableInterface.fieldTypeProvider.convertCellValueToString(
                 appInterface,
@@ -250,7 +252,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
      * ```
      */
     getAttachmentClientUrlFromCellValueUrl(attachmentId: string, attachmentUrl: string): string {
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
         return airtableInterface.urlConstructor.getAttachmentClientUrl(
             appInterface,

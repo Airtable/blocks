@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: Session */ /** */
 import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import {BaseData, ModelChange} from '../types/base';
 import {CollaboratorData, UserId} from '../types/collaborator';
 import {PermissionLevel} from '../types/permission_levels';

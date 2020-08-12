@@ -79,7 +79,7 @@ function TextButtonExample() {
                     onClick={() => console.log('Button clicked')}
                     {...restOfValues}
                     icon={icon ? 'edit' : undefined}
-                    aria-label={hasLabel ? 'Edit' : undefined}
+                    aria-label={hasLabel ? undefined : 'Edit'}
                 >
                     {hasLabel ? 'Text button' : null}
                 </TextButton>

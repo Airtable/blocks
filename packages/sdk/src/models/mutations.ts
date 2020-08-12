@@ -1,5 +1,6 @@
 import getSdk from '../get_sdk';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
+import getAirtableInterface from '../injected/airtable_interface';
 import {ModelChange} from '../types/base';
 import {Mutation, PartialMutation, PermissionCheckResult, MutationTypes} from '../types/mutations';
 import {entries, ObjectMap} from '../private_utils';
@@ -134,7 +135,7 @@ class Mutations {
     /** @internal */
     _assertMutationIsValid(mutation: Mutation) {
 
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
         const billingPlanGrouping = this._base.__billingPlanGrouping;
 

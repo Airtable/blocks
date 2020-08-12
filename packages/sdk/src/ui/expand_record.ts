@@ -1,5 +1,5 @@
 /** @module @airtable/blocks/ui: expandRecord */ /** */
-import getSdk from '../get_sdk';
+import getAirtableInterface from '../injected/airtable_interface';
 import Record from '../models/record';
 
 /**
@@ -32,7 +32,7 @@ function expandRecord(record: Record, opts?: ExpandRecordOpts) {
         recordIds = opts.records.map(r => r.id);
     }
 
-    getSdk().__airtableInterface.expandRecord(record.parentTable.id, record.id, recordIds);
+    getAirtableInterface().expandRecord(record.parentTable.id, record.id, recordIds);
 }
 
 export default expandRecord;

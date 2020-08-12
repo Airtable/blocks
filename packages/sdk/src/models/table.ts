@@ -8,7 +8,7 @@ import {MutationTypes, PermissionCheckResult} from '../types/mutations';
 import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '../private_utils';
 import {spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import warning from '../warning';
 import AbstractModel from './abstract_model';
 import View from './view';
@@ -1576,7 +1576,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * Checks whether the current user has permission to create a field in this table.
      *
-     * Accepts partial input, in the same format as {@link unstable_createFieldAsync}.
+     * Accepts partial input, in the same format as {@link createFieldAsync}.
      *
      * Returns `{hasPermission: true}` if the current user can update the specified record,
      * `{hasPermission: false, reasonDisplayString: string}` otherwise. `reasonDisplayString` may be
@@ -1588,14 +1588,14 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * @example
      * ```js
-     * const createFieldCheckResult = table.unstable_checkPermissionsForCreateField();
+     * const createFieldCheckResult = table.checkPermissionsForCreateField();
      *
      * if (!createFieldCheckResult.hasPermission) {
      *     alert(createFieldCheckResult.reasonDisplayString);
      * }
      * ```
      */
-    unstable_checkPermissionsForCreateField(
+    checkPermissionsForCreateField(
         name?: string,
         type?: FieldType,
         options?: FieldOptions | null,
@@ -1617,11 +1617,11 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /**
      * _Beta feature with unstable API. May have breaking changes before release._
      *
-     * An alias for `unstable_checkPermissionsForCreateField(name, type, options).hasPermission`.
+     * An alias for `checkPermissionsForCreateField(name, type, options).hasPermission`.
      *
      * Checks whether the current user has permission to create a field in this table.
      *
-     * Accepts partial input, in the same format as {@link unstable_createFieldAsync}.
+     * Accepts partial input, in the same format as {@link createFieldAsync}.
      *
      * @param name name for the field. must be case-insensitive unique for the table
      * @param type type for the field
@@ -1629,19 +1629,19 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *
      * @example
      * ```js
-     * const canCreateField = table.unstable_hasPermissionToCreateField();
+     * const canCreateField = table.hasPermissionToCreateField();
      *
      * if (!canCreateField) {
      *     alert('not allowed!');
      * }
      * ```
      */
-    unstable_hasPermissionToCreateField(
+    hasPermissionToCreateField(
         name?: string,
         type?: FieldType,
         options?: FieldOptions | null,
     ): boolean {
-        return this.unstable_checkPermissionsForCreateField(name, type, options).hasPermission;
+        return this.checkPermissionsForCreateField(name, type, options).hasPermission;
     }
 
     /**
@@ -1669,8 +1669,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * @example
      * ```js
      * async function createNewSingleLineTextField(table, name) {
-     *     if (table.unstable_hasPermissionToCreateField(name, FieldType.SINGLE_LINE_TEXT)) {
-     *         await table.unstable_createFieldAsync(name, FieldType.SINGLE_LINE_TEXT);
+     *     if (table.hasPermissionToCreateField(name, FieldType.SINGLE_LINE_TEXT)) {
+     *         await table.createFieldAsync(name, FieldType.SINGLE_LINE_TEXT);
      *     }
      * }
      *
@@ -1679,8 +1679,8 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *         icon: 'check',
      *         color: 'greenBright',
      *     };
-     *     if (table.unstable_hasPermissionToCreateField(name, FieldType.CHECKBOX, options)) {
-     *         await table.unstable_createFieldAsync(name, FieldType.CHECKBOX, options);
+     *     if (table.hasPermissionToCreateField(name, FieldType.CHECKBOX, options)) {
+     *         await table.createFieldAsync(name, FieldType.CHECKBOX, options);
      *     }
      * }
      *
@@ -1690,13 +1690,13 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      *             name: 'iso',
      *         },
      *     };
-     *     if (table.unstable_hasPermissionToCreateField(name, FieldType.DATE, options)) {
-     *         await table.unstable_createFieldAsync(name, FieldType.DATE, options);
+     *     if (table.hasPermissionToCreateField(name, FieldType.DATE, options)) {
+     *         await table.createFieldAsync(name, FieldType.DATE, options);
      *     }
      * }
      * ```
      */
-    async unstable_createFieldAsync(
+    async createFieldAsync(
         name: string,
         type: FieldType,
         options?: FieldOptions | null,
@@ -1802,6 +1802,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             }
         }
         if (dirtyPaths.lock) {
+            didTableSchemaChange = true;
+        }
+        if (dirtyPaths.externalSyncById) {
             didTableSchemaChange = true;
         }
         if (dirtyPaths.description) {

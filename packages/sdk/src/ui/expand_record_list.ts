@@ -1,6 +1,6 @@
 /** @module @airtable/blocks/ui: expandRecordList */ /** */
+import getAirtableInterface from '../injected/airtable_interface';
 import {invariant} from '../error_utils';
-import getSdk from '../get_sdk';
 import Record from '../models/record';
 import Field from '../models/field';
 
@@ -54,7 +54,7 @@ function expandRecordList(records: Array<Record>, opts?: ExpandRecordListOpts) {
               })
             : null;
 
-    getSdk().__airtableInterface.expandRecordList(tableId, recordIds, fieldIds);
+    getAirtableInterface().expandRecordList(tableId, recordIds, fieldIds);
 }
 
 export default expandRecordList;

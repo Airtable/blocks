@@ -1,4 +1,4 @@
-const sdkInitData = {
+export default {
     isDevelopmentMode: false,
     blockInstallationId: 'blicPfOILwejF6HL2',
     isFirstRun: false,
@@ -403,30 +403,3 @@ const sdkInitData = {
         appInterface: {},
     },
 };
-
-const mockAirtableInterface = {
-    aggregators: {
-        getAllAvailableAggregatorKeys() {
-            return [];
-        },
-    },
-    idGenerator: {
-        generateRecordId: () => 'recGeneratedMockId',
-        generateFieldId: () => 'fldGeneratedMockId',
-        generateTableId: () => 'tblGeneratedMockId',
-    },
-    sdkInitData,
-    fieldTypeProvider: {
-        validateConfigForUpdate: () => {
-            return {isValid: true};
-        },
-        getConfig: () => {
-            return {};
-        },
-        canBePrimary: () => {
-            return true;
-        },
-    },
-};
-
-export default mockAirtableInterface;

@@ -4,6 +4,7 @@ import {cx} from 'emotion';
 import * as React from 'react';
 import {compose} from '@styled-system/core';
 import getSdk from '../get_sdk';
+import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
@@ -172,7 +173,7 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             return null;
         }
 
-        const airtableInterface = getSdk().__airtableInterface;
+        const airtableInterface = getAirtableInterface();
         const appInterface = getSdk().__appInterface;
 
         let cellValueToRender;

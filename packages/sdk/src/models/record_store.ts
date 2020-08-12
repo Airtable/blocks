@@ -17,7 +17,7 @@ import {TableId, TableData} from '../types/table';
 import {FieldId} from '../types/field';
 import {RecordId, RecordData} from '../types/record';
 import {ViewId} from '../types/view';
-import {AirtableInterface} from '../injected/airtable_interface';
+import {AirtableInterface} from '../types/airtable_interface';
 import getSdk from '../get_sdk';
 import AbstractModelWithAsyncData from './abstract_model_with_async_data';
 import Record from './record';

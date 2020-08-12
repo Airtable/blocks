@@ -8,6 +8,8 @@ import {RecordData, RecordId} from './record';
 export type TableId = string;
 /** @hidden */
 export type TableLock = unknown;
+/** @hidden */
+export type ExternalSyncById = unknown;
 
 /** @hidden */
 export interface TableData {
@@ -21,6 +23,7 @@ export interface TableData {
     recordsById?: ObjectMap<RecordId, RecordData>;
     description: string | null;
     lock: TableLock | null;
+    externalSyncById: ExternalSyncById | null;
 }
 
 /** @hidden */

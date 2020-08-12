@@ -1,4 +1,4 @@
-import getSdk from '../get_sdk';
+import getAirtableInterface from '../injected/airtable_interface';
 
 
 /** @hidden */
@@ -7,7 +7,7 @@ class BlockStats {
         this.incrementBy(stat, 1, tags);
     }
     incrementBy(stat: string, value: number, tags?: {[key: string]: string}) {
-        getSdk().__airtableInterface.sendStat({
+        getAirtableInterface().sendStat({
             metricType: 'incrementBy',
             stat,
             value,
@@ -18,7 +18,7 @@ class BlockStats {
         this.decrementBy(stat, 1, tags);
     }
     decrementBy(stat: string, value: number, tags?: {[key: string]: string}) {
-        getSdk().__airtableInterface.sendStat({
+        getAirtableInterface().sendStat({
             metricType: 'decrementBy',
             stat,
             value,
@@ -26,7 +26,7 @@ class BlockStats {
         });
     }
     gauge(stat: string, value: number, tags?: {[key: string]: string}) {
-        getSdk().__airtableInterface.sendStat({
+        getAirtableInterface().sendStat({
             metricType: 'gauge',
             stat,
             value,
@@ -34,7 +34,7 @@ class BlockStats {
         });
     }
     histogram(stat: string, value: number, tags?: {[key: string]: string}) {
-        getSdk().__airtableInterface.sendStat({
+        getAirtableInterface().sendStat({
             metricType: 'histogram',
             stat,
             value,
@@ -42,7 +42,7 @@ class BlockStats {
         });
     }
     distribution(stat: string, value: number, tags?: {[key: string]: string}) {
-        getSdk().__airtableInterface.sendStat({
+        getAirtableInterface().sendStat({
             metricType: 'distribution',
             stat,
             value,
@@ -50,7 +50,7 @@ class BlockStats {
         });
     }
     timing(stat: string, time: number, tags?: {[key: string]: string}) {
-        getSdk().__airtableInterface.sendStat({
+        getAirtableInterface().sendStat({
             metricType: 'timing',
             stat,
             value: time,

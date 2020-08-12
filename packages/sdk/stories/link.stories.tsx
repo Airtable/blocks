@@ -83,7 +83,7 @@ function LinkExample() {
                     target="_blank"
                     {...restOfValues}
                     icon={icon ? 'home' : undefined}
-                    aria-label={hasLabel ? 'Go to homepage' : undefined}
+                    aria-label={hasLabel ? undefined : 'Go to homepage'}
                 >
                     {hasLabel ? 'Link' : null}
                 </Link>

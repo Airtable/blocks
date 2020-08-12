@@ -1,7 +1,7 @@
 /** @module @airtable/blocks: globalConfig */ /** */
 import Watchable from './watchable';
 import getSdk from './get_sdk';
-import {AirtableInterface} from './injected/airtable_interface';
+import {AirtableInterface} from './types/airtable_interface';
 import {spawnError} from './error_utils';
 import {
     GlobalConfigPath,

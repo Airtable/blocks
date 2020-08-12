@@ -1,21 +1,15 @@
-import mockProjectTrackerAirtableInterface from '../airtable_interface_mocks/project_tracker';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import Base from '../../src/models/base';
 import Mutations from '../../src/models/mutations';
 import Session from '../../src/models/session';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
-import {FieldTypeConfig} from '../../src/injected/airtable_interface';
+import {FieldTypeConfig} from '../../src/types/airtable_interface';
 
-jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
-
-const mockAirtableInterface = mockProjectTrackerAirtableInterface as any;
-let mockMutations: any;
-jest.mock('../../src/get_sdk', () => () => ({
-    __mutations: mockMutations,
-    __airtableInterface: mockAirtableInterface,
-    runInfo: {
-        isDevelopment: true,
-    },
+const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+jest.mock('../../src/injected/airtable_interface', () => ({
+    __esModule: true,
+    default: () => mockAirtableInterface,
 }));
 
 jest.mock('../../src/models/mutation_constants', () => ({
@@ -151,7 +145,13 @@ describe('Mutations', () => {
                 }).toThrow("Can't create field: invalid field config.\nMock reason");
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
-                expect(mockValidate).toHaveBeenCalledWith(undefined, config, null, null, 'pro');
+                expect(mockValidate).toHaveBeenCalledWith(
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
+                    config,
+                    null,
+                    null,
+                    'pro',
+                );
             });
 
             it('successfully returns when all criteria pass', () => {
@@ -178,7 +178,13 @@ describe('Mutations', () => {
                 });
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
-                expect(mockValidate).toHaveBeenCalledWith(undefined, config, null, null, 'pro');
+                expect(mockValidate).toHaveBeenCalledWith(
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
+                    config,
+                    null,
+                    null,
+                    'pro',
+                );
             });
         });
 
@@ -250,7 +256,7 @@ describe('Mutations', () => {
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
                 expect(mockValidate).toHaveBeenCalledWith(
-                    undefined,
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
                     newConfig,
                     oldConfig,
                     field._data,
@@ -271,7 +277,7 @@ describe('Mutations', () => {
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
                 expect(mockValidate).toHaveBeenCalledWith(
-                    undefined,
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
                     newConfig,
                     oldConfig,
                     field._data,
@@ -388,7 +394,7 @@ describe('Mutations', () => {
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
                 expect(mockValidate).toHaveBeenCalledWith(
-                    undefined,
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
                     {type: FieldType.SINGLE_LINE_TEXT},
                     null,
                     null,
@@ -431,7 +437,7 @@ describe('Mutations', () => {
 
                 expect(mockCanBePrimary).toHaveBeenCalledTimes(1);
                 expect(mockCanBePrimary).toHaveBeenCalledWith(
-                    undefined,
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
                     {type: FieldType.FORMULA},
                     'pro',
                 );
@@ -458,7 +464,7 @@ describe('Mutations', () => {
 
                 expect(mockValidate).toHaveBeenCalledTimes(1);
                 expect(mockValidate).toHaveBeenCalledWith(
-                    undefined,
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
                     {type: FieldType.SINGLE_LINE_TEXT},
                     null,
                     null,
@@ -467,7 +473,7 @@ describe('Mutations', () => {
 
                 expect(mockCanBePrimary).toHaveBeenCalledTimes(1);
                 expect(mockCanBePrimary).toHaveBeenCalledWith(
-                    undefined,
+                    mockAirtableInterface.sdkInitData.baseData.appInterface,
                     {
                         type: FieldType.SINGLE_LINE_TEXT,
                     },

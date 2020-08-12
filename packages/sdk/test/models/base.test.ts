@@ -1,10 +1,11 @@
-import mockProjectTrackerAirtableInterface from '../airtable_interface_mocks/project_tracker';
+import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 import Base from '../../src/models/base';
 import Table from '../../src/models/table';
 
-jest.mock('../../src/injected/airtable_interface', () => mockProjectTrackerAirtableInterface);
+const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+jest.mock('../../src/injected/airtable_interface', () => () => mockAirtableInterface);
 
 let mockMutations: any;
 jest.mock('../../src/get_sdk', () => () => ({
@@ -17,10 +18,7 @@ jest.mock('../../src/get_sdk', () => () => ({
 describe('Base', () => {
     let base: Base;
     beforeEach(() => {
-        base = new Base(
-            mockProjectTrackerAirtableInterface.sdkInitData.baseData as any,
-            mockProjectTrackerAirtableInterface as any,
-        );
+        base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
     });
 
     describe('getCollaboratorIfExists', () => {
@@ -97,8 +95,8 @@ describe('Base', () => {
     describe('getCollaborator', () => {
         beforeEach(() => {
             base = new Base(
-                mockProjectTrackerAirtableInterface.sdkInitData.baseData as any,
-                mockProjectTrackerAirtableInterface as any,
+                mockAirtableInterface.sdkInitData.baseData as any,
+                mockAirtableInterface,
             );
         });
 
@@ -244,14 +242,14 @@ describe('Base', () => {
             };
 
             mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation(tableId => {
-                const airtableInterface = mockProjectTrackerAirtableInterface as any;
+                const airtableInterface = mockAirtableInterface as any;
                 const recordStore = undefined as any;
                 return new Table(base.__baseData, base, recordStore, tableId, airtableInterface);
             });
         });
 
         it('accepts null, undefined and non-null field options', async () => {
-            await base.unstable_createTableAsync('new table', [
+            await base.createTableAsync('new table', [
                 {name: 'field 1', type: FieldType.SINGLE_LINE_TEXT},
                 {name: 'field 2', type: FieldType.SINGLE_LINE_TEXT, options: null},
                 {

@@ -16,7 +16,7 @@ import * as UI from './ui/ui';
 import SettingsButton from './settings_button';
 import UndoRedo from './undo_redo';
 import {PerformRecordAction} from './perform_record_action';
-import {AirtableInterface, AppInterface} from './injected/airtable_interface';
+import {AirtableInterface, AppInterface} from './types/airtable_interface';
 
 if (!(React as any).PropTypes) {
     (React as any).PropTypes = PropTypes;

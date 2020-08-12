@@ -1,14 +1,9 @@
 import Table from '../../src/models/table';
-import airtableInterface from '../../src/injected/airtable_interface';
+import getAirtableInterface from '../../src/injected/airtable_interface';
 import {MutationTypes} from '../../src/types/mutations';
 import warning from '../../src/warning';
 
-jest.mock('../../src/injected/airtable_interface', () => ({
-    aggregators: {
-        getAllAvailableAggregatorKeys() {
-            return [];
-        },
-    },
+jest.mock('../../src/injected/airtable_interface', () => () => ({
     idGenerator: {
         generateRecordId: () => 'recGeneratedMockId',
     },
@@ -45,7 +40,7 @@ describe('Table', () => {
             const recordStore = {} as any;
             const tableId = 'tblTest';
 
-            return new Table(baseData, parentBase, recordStore, tableId, airtableInterface);
+            return new Table(baseData, parentBase, recordStore, tableId, getAirtableInterface());
         };
 
         beforeEach(() => {
