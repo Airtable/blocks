@@ -1,17 +1,22 @@
 import {cursor} from '@airtable/blocks';
+import {ViewType} from '@airtable/blocks/models';
 import {
     initializeBlock,
     Box,
+    Button,
+    Dialog,
+    Heading,
     Text,
     TextButton,
     Loader,
     useSettingsButton,
     useWatchable,
     useLoadable,
-    useRecords,
+    useRecordById,
 } from '@airtable/blocks/ui';
 import {withGoogleMap, StreetViewPanorama, withScriptjs, GoogleMap} from 'react-google-maps';
-import React, {useState, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import hash from 'object-hash';
 
 import FullscreenBox from './FullscreenBox';
 import {useSettingsStore} from './useSettingsStore';
@@ -61,13 +66,13 @@ const _RecordStreetView = props => {
         const streetView = googleMapRef.current.getStreetView();
         const status = streetView.getStatus();
         const {StreetViewStatus} = getGoogle(window).maps;
-
         if (status === StreetViewStatus.OK) {
+            const position = streetView.getPosition().toJSON();
+            const pov = streetView.getPov();
             onStreetViewStateChange({
                 state: {
-                    address: address,
-                    position: streetView.getPosition(),
-                    pov: streetView.getPov(),
+                    position,
+                    pov,
                 },
                 status: {
                     ok: true,
@@ -81,7 +86,6 @@ const _RecordStreetView = props => {
         ) {
             onStreetViewStateChange({
                 state: {
-                    address: address,
                     position: null,
                     pov: null,
                 },
@@ -94,9 +98,8 @@ const _RecordStreetView = props => {
         } else {
             onStreetViewStateChange({
                 state: {
-                    address: address,
-                    position: position,
-                    pov: pov,
+                    position,
+                    pov,
                 },
                 status: {
                     ok: false,
@@ -186,84 +189,121 @@ const RecordStreetViewWrapper = props => {
     }
 };
 
-/** @type {StreetViewStateChange} */
-const defaultStateCache = {state: null, status: null};
-
 /**
  * @param {object} props
- * @param {import('./useSettingsStore').SettingsStore} props.settingsStore
+ * @param {import('./useSettingsStore').SettingsStore} props.settings
  * @param {import('@airtable/blocks/dist/types/src/models/record').default} props.record
  */
-const MainRecord = ({settingsStore, record}) => {
-    let [{state: streetViewState, status}, setTemporaryStateCache] = useState(
-        /** @type {StreetViewStateChange} */ (defaultStateCache),
-    );
+const MainRecord = ({settings, record}) => {
+    const {
+        cache,
+        cacheField,
+        isAllowedToOverwriteNonCacheValues,
+        locationField,
+        showDefaultUI,
+        showRoadLabels,
+    } = settings;
 
-    let address;
+    let streetViewState = cache.get(record);
+    let locationFieldContents = record.getCellValueAsString(locationField).trim();
+    let cacheFieldContents = record.getCellValueAsString(cacheField).trim();
+    let isAboutToOverwriteNonCacheValues = false;
+
+    // There might be something in the cache field that isn't
+    // geocache data!
+    try {
+        // If the decoded cache value is JSON parsable,
+        // then it might be our cache data.
+        const decoded = cache.decode(cacheFieldContents);
+
+        // If there isn't a position and pov property,
+        // then this definitely isn't our cache data and
+        // we need to signal that to the user.
+        if (decoded && typeof decoded.position !== 'object' && typeof decoded.pov !== 'object') {
+            throw decoded;
+        }
+    } catch (error) {
+        void error;
+        isAboutToOverwriteNonCacheValues = true;
+    }
+
+    if (isAboutToOverwriteNonCacheValues && !isAllowedToOverwriteNonCacheValues) {
+        return (
+            <Dialog width="320px">
+                <Heading>Overwrite the contents of the cache field?</Heading>
+                <Text variant="paragraph">
+                    The contents of the cache field is not recognized. Are you sure you want to
+                    overwrite it with geocode cache data?
+                </Text>
+                <Button
+                    onClick={() => {
+                        settings.cacheField = null;
+                    }}
+                >
+                    Choose a new cache field
+                </Button>
+                <Button
+                    onClick={() => {
+                        settings.isAllowedToOverwriteNonCacheValues = true;
+                    }}
+                >
+                    Continue
+                </Button>
+            </Dialog>
+        );
+    }
+
     /** @type {(change: StreetViewStateChange) => void} */
-    let onStreetViewStateChange;
-    if (settingsStore.cacheField) {
-        let streetViewStateString = String(record.getCellValue(settingsStore.cacheFieldId) || '');
-        if (
-            streetViewStateString &&
-            ((streetViewState && streetViewState.address !== address) || !streetViewState)
-        ) {
-            streetViewState = JSON.parse(streetViewStateString);
+    let onStreetViewStateChange = ({state, status}) => {
+        let mustUpdateCache = status.ok;
+
+        if (streetViewState) {
+            // If there is an existing street view state, and it
+            // matches the new street view state, then we won't bother
+            // updating the cache;
+            mustUpdateCache = mustUpdateCache && hash(streetViewState) !== hash(state);
         }
 
-        onStreetViewStateChange = ({state: newState, status}) => {
-            if (newState.address !== address) return;
-            const cacheState = JSON.stringify(newState);
-            if (cacheState === record.getCellValue(settingsStore.cacheFieldId)) return;
+        if (isAboutToOverwriteNonCacheValues) {
+            // If the user has selected a field for use as a cache,
+            // but that field already has contents in it, and those
+            // contents do not appear to be encoded cache data,
+            // BUT the user has explicitly agreed to allow overwriting
+            // that data;
+            mustUpdateCache = mustUpdateCache && isAllowedToOverwriteNonCacheValues;
+        }
 
-            const table = settingsStore.table;
-            if (status.ok) {
-                table.updateRecordAsync(record, {
-                    [settingsStore.cacheFieldId]: cacheState,
-                });
-            } else {
-                setTemporaryStateCache({state: JSON.parse(cacheState), status});
-            }
-        };
-    } else {
-        onStreetViewStateChange = ({state: newState, status}) => {
-            if (newState.address !== address) return;
-            const cacheState = JSON.stringify(newState);
-            if (cacheState === JSON.stringify(streetViewState)) return;
+        if (mustUpdateCache) {
+            cache.setAsync(record, state);
+        }
+    };
 
-            setTemporaryStateCache({state: JSON.parse(cacheState), status});
-        };
-    }
-
-    address = String(record.getCellValue(settingsStore.locationFieldId) || '');
-
-    if (!address || (address && streetViewState && streetViewState.address !== address)) {
-        streetViewState = null;
-    }
-
-    if (!address.trim()) {
+    if (!locationFieldContents.trim()) {
         return (
             <FullscreenBox shouldCenterContent={true}>
                 <Text width="100%" textAlign="center">
-                    Select a record with the &quot;{settingsStore.locationField.name}&quot; field
-                    set.
+                    Select a non-empty record from the &quot;{locationField.name}&quot; field.
                 </Text>
             </FullscreenBox>
         );
     }
 
+    const disableDefaultUI = !showDefaultUI;
+    const enableCloseButton = false;
+    const streetViewOptions = {
+        disableDefaultUI,
+        enableCloseButton,
+        showRoadLabels,
+    };
+
     return (
         <RecordStreetViewWrapper
+            key={record.id}
             containerElement={<FullscreenBox />}
             mapElement={<FullscreenBox className="mapRoot" />}
-            address={address}
+            address={locationFieldContents}
             streetViewState={streetViewState}
-            status={status}
-            streetViewOptions={{
-                disableDefaultUI: !settingsStore.showDefaultUI,
-                enableCloseButton: false,
-                showRoadLabels: settingsStore.showRoadLabels,
-            }}
+            streetViewOptions={streetViewOptions}
             onStreetViewStateChange={onStreetViewStateChange}
         />
     );
@@ -271,110 +311,135 @@ const MainRecord = ({settingsStore, record}) => {
 
 /**
  * @param {object} props
- * @param {import('./useSettingsStore').SettingsStore} props.settingsStore
+ * @param {import('./useSettingsStore').SettingsStore} props.settings
  */
-const MainConfigured = ({settingsStore}) => {
-    const table = settingsStore.table;
-    const selection = useRecords(table.views[0], {fields: settingsStore.fields});
+const MainConfigured = ({settings}) => {
+    const {fields, locationFieldId, locationField, table} = settings;
+    const cursorKeys = ['selectedRecordIds', 'selectedFieldIds', 'activeTableId', 'activeViewId'];
+
+    // Caches the currently selected record and field in state. If the user
+    // selects a record and a street view appears, and then the user de-selects the
+    // record (but does not select another), the street view will remain. This is
+    // useful when, for example, the user resizes the blocks pane.
+    const selectedIdDefault = {selectedRecordId: '', selectedFieldId: ''};
+    const [{selectedRecordId, selectedFieldId}, setSelectedIds] = useState(selectedIdDefault);
 
     useLoadable(cursor);
-    useWatchable(cursor, ['selectedRecordIds', 'activeTableId', 'activeViewId']);
-    const lastRecordId = useRef('');
+    useWatchable(cursor, cursorKeys, () => {
+        // If the update was triggered by a record being de-selected,
+        // the current selectedRecordId will be retained. This is
+        // what enables the caching described above.
+        //
+        const selectedRecordId =
+            cursor.selectedRecordIds.length > 0 ? cursor.selectedRecordIds[0] : '';
+        const selectedFieldId =
+            cursor.selectedFieldIds.length > 0 ? cursor.selectedFieldIds[0] : '';
 
-    if (cursor.activeTableId !== table.id) {
+        setSelectedIds({selectedRecordId, selectedFieldId});
+
+        // Additional Notes:
+        //
+        // When the user moves to a new table or view, there will be no selectedRecordIds
+        // or selectedFieldIds, so we must delete the cached selectedRecordId and selectedFieldId.
+        // This prevents the following scenario: User selects a record that contains a
+        // street view address. The street view appears. User switches to a different table.
+        // The street view disappears. The user switches back to the original table.
+        // Weirdly, the previously viewed street view reappears, even though no record is selected.
+        //
+    });
+
+    const record = useRecordById(table, selectedRecordId, {fields});
+
+    let message = '';
+    let mustShowSettingsButton = false;
+
+    // Prevent this block from rendering a street view when the active table is not
+    // the table the author selected in settings.
+    if (cursor.activeTableId !== table.id && !(record && record.parentTable.id === table.id)) {
+        message = `Switch to the “${table.name}” table to see street views.`;
+        mustShowSettingsButton = true;
+    } else if (
+        // activeViewId is briefly null when switching views
+        record === null &&
+        (cursor.activeViewId === null ||
+            table.getViewById(cursor.activeViewId).type !== ViewType.GRID)
+    ) {
+        message = 'Switch to a grid view to see street views.';
+    } else if (
+        // record will be null on block initialization, after
+        // the user switches table or view, or if it was deleted.
+        record === null ||
+        // The location field may have been deleted.
+        locationField === null
+    ) {
+        message = 'Select a cell to see a street view.';
+    } else if (selectedFieldId !== locationFieldId) {
+        // Prevent this block from rendering a street view when the selected cell is not
+        // in the field that the author selected in settings.
+        message = `Select a cell in the “${locationField.name}” field to see a street view.`;
+        mustShowSettingsButton = true;
+    }
+
+    if (message) {
         return (
             <FullscreenBox shouldCenterContent={true}>
-                <Text paddingX={3}>
-                    Switch to the &quot;{table.name}&quot; table to see street views.
-                </Text>
-                <TextButton
-                    size="small"
-                    marginTop={3}
-                    onClick={() => {
-                        settingsStore.showSettings = true;
-                    }}
-                >
-                    Settings
-                </TextButton>
+                <Text paddingX={3}>{message}</Text>
+                {mustShowSettingsButton ? (
+                    <TextButton
+                        size="small"
+                        marginTop={3}
+                        onClick={() => {
+                            settings.showSettings = true;
+                        }}
+                    >
+                        Settings
+                    </TextButton>
+                ) : null}
             </FullscreenBox>
         );
     }
 
-    let lastRecord = selection ? selection.find(({id}) => id === lastRecordId.current) : null;
-
-    let firstSelectedRecordId = cursor.selectedRecordIds[0] || '';
-
-    let record = selection ? selection.find(({id}) => id === firstSelectedRecordId) : null;
-
-    if (record && record.getCellValue(settingsStore.locationField))
-        lastRecordId.current = firstSelectedRecordId;
-    else if (record) lastRecordId.current = '';
-
-    if (!record) record = lastRecord;
-
-    if (record) {
-        return <MainRecord settingsStore={settingsStore} record={record} />;
-    } else {
-        return (
-            <FullscreenBox shouldCenterContent={true}>
-                <Text textColor="light">Select a record</Text>
-            </FullscreenBox>
-        );
-    }
+    return <MainRecord settings={settings} record={record} />;
 };
-
-const QuickSetupList = ({showSettings}) => (
-    <FullscreenBox shouldCenterContent={true}>
-        <Box>
-            <Box>
-                <TextButton onClick={showSettings}>Open this block&apos;s settings</TextButton> and
-                configure the following:
-            </Box>
-            <ul>
-                <li>Google API Key</li>
-                <li>A table in the base</li>
-                <li>A field with locations in the table</li>
-            </ul>
-        </Box>
-    </FullscreenBox>
-);
 
 const _LoadMapsScript = ({children}) => children;
 
 const LoadMapsScript = withScriptjs(_LoadMapsScript);
 
 let Main = () => {
-    const settingsStore = useSettingsStore();
+    const settings = useSettingsStore();
     useSettingsButton(() => {
-        settingsStore.showSettings = !settingsStore.showSettings;
+        settings.showSettings = !settings.showSettings;
     });
+
+    const loadingElement = (
+        <FullscreenBox shouldCenterContent={true}>
+            <Loader />
+        </FullscreenBox>
+    );
+
+    useEffect(() => {
+        if (!settings.validated.isValid) {
+            settings.showSettings = true;
+        }
+    }, [settings.validated.isValid, settings.showSettings]);
+
+    const mustShowSettingsView = settings.showSettings || !settings.validated.isValid;
 
     return (
         <Box position="absolute" width="100%" height="100%">
-            <FullscreenBox display={settingsStore.showSettings ? 'none' : null}>
-                {settingsStore.googleApiKey && (
+            {mustShowSettingsView ? (
+                <SettingsView settings={settings} />
+            ) : (
+                <FullscreenBox>
                     <LoadMapsScript
-                        loadingElement={
-                            <FullscreenBox shouldCenterContent={true}>
-                                <Loader />
-                            </FullscreenBox>
-                        }
-                        googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${settingsStore.googleApiKey}`}
+                        loadingElement={loadingElement}
+                        googleMapURL={settings.googleMapURL}
                     >
-                        {settingsStore.isMinimallyConfigured && (
-                            <MainConfigured settingsStore={settingsStore} />
-                        )}
+                        <MainConfigured settings={settings} />
                     </LoadMapsScript>
-                )}
-                {!settingsStore.isMinimallyConfigured && (
-                    <QuickSetupList
-                        showSettings={() => {
-                            settingsStore.showSettings = true;
-                        }}
-                    />
-                )}
-            </FullscreenBox>
-            {settingsStore.showSettings ? <SettingsView settingsStore={settingsStore} /> : null}
+                </FullscreenBox>
+            )}
         </Box>
     );
 };

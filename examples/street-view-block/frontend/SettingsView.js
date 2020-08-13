@@ -10,39 +10,47 @@ import {
     FieldPickerSynced,
     Switch,
 } from '@airtable/blocks/ui';
-import React from 'react';
-import {FieldType} from '@airtable/blocks/models';
+import React, {Fragment} from 'react';
+import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';
 import FullscreenBox from './FullscreenBox';
 
 /**
  * @param {object} props
- * @param {import('./useSettingsStore').SettingsStore} props.settingsStore
+ * @param {import('./useSettingsStore').SettingsStore} props.settings
  */
-const SettingsStatus = ({settingsStore}) => {
-    let text;
-    if (!settingsStore.googleApiKey) {
-        text = 'Enter a Google Maps api key above.';
-    } else if (!settingsStore.table) {
-        text = 'Pick a table with fields that have location data.';
-    } else if (!settingsStore.locationField) {
-        text = 'Pick a field with location data.';
-    } else {
-        return null;
-    }
+const SettingsStatus = ({settings}) => {
+    const {
+        validated: {isValid, action, reason},
+    } = settings;
 
-    return (
-        <Text textColor="light" marginRight={1}>
-            {text}
-        </Text>
-    );
+    return !isValid ? (
+        <Box>
+            <Text textColor="red" marginRight={3}>
+                {reason}
+            </Text>
+            {action ? (
+                <Text textColor="light" marginRight={3}>
+                    {action}
+                </Text>
+            ) : null}
+        </Box>
+    ) : null;
 };
 
 /**
  * @param {object} props
- * @param {import('./useSettingsStore').SettingsStore} props.settingsStore
+ * @param {import('./useSettingsStore').SettingsStore} props.settings
  */
-export const SettingsView = ({settingsStore}) => {
+export const SettingsView = ({settings}) => {
+    const {
+        validated: {isValid},
+    } = settings;
+
+    const doneButtonProps = {
+        disabled: !isValid,
+    };
+
     return (
         <FullscreenBox display="flex" flexDirection="column">
             <Box flex="auto" overflow="auto" padding={3}>
@@ -67,86 +75,69 @@ export const SettingsView = ({settingsStore}) => {
                     <InputSynced globalConfigKey={ConfigKeys.API_KEY} style={{border: 'none'}} />
                 </FormField>
                 <FormField label="Table">
-                    <TablePickerSynced globalConfigKey={ConfigKeys.TABLE} />
+                    <TablePickerSynced globalConfigKey={ConfigKeys.TABLE_ID} />
                 </FormField>
-                {settingsStore.table ? (
+                {settings.table ? (
                     <FormField
-                        label="Location field"
+                        label="Address field"
                         description="Pick a field containing addresses or coordinates."
                     >
                         <FieldPickerSynced
-                            table={settingsStore.table}
-                            globalConfigKey={ConfigKeys.LOCATION_FIELD}
-                            allowedTypes={[
-                                FieldType.BARCODE,
-                                FieldType.FORMULA,
-                                FieldType.MULTILINE_TEXT,
-                                FieldType.MULTIPLE_LOOKUP_VALUES,
-                                FieldType.RICH_TEXT,
-                                FieldType.ROLLUP,
-                                FieldType.SINGLE_LINE_TEXT,
-                                FieldType.SINGLE_SELECT,
-                            ]}
+                            table={settings.table}
+                            globalConfigKey={ConfigKeys.LOCATION_FIELD_ID}
+                            allowedTypes={AllowedLocationFieldTypes}
                         />
                     </FormField>
                 ) : null}
-                {settingsStore.table && settingsStore.locationField ? (
+                {settings.table && settings.locationField ? (
                     <FormField
-                        label="Cache field"
-                        description="This block stores additional information for each address."
+                        label="Geocode cache field"
+                        description="This block stores additional information for each address. Create a new text field in your table and pick it below. Other street view blocks can use the same field."
                     >
                         <FieldPickerSynced
-                            table={settingsStore.table}
-                            globalConfigKey={ConfigKeys.CACHE_FIELD}
-                            allowedTypes={[
-                                FieldType.MULTILINE_TEXT,
-                                FieldType.RICH_TEXT,
-                                FieldType.SINGLE_LINE_TEXT,
-                            ]}
+                            table={settings.table}
+                            globalConfigKey={ConfigKeys.CACHE_FIELD_ID}
+                            allowedTypes={AllowedCacheFieldTypes}
                         />
-                        <Text variant="paragraph" textColor="light" size="small">
-                            Create a new text field in your table and pick it below. Other street
-                            view blocks can use the same field.
-                        </Text>
                     </FormField>
                 ) : null}
                 <Switch
-                    value={settingsStore.showRoadLabels}
+                    value={settings.showRoadLabels}
                     onChange={newValue => {
-                        settingsStore.showRoadLabels = newValue;
+                        settings.showRoadLabels = newValue;
                     }}
                     label="Show road labels"
                     marginBottom={2}
                 />
                 <Switch
-                    value={settingsStore.showDefaultUI}
+                    value={settings.showDefaultUI}
                     onChange={newValue => {
-                        settingsStore.showDefaultUI = newValue;
+                        settings.showDefaultUI = newValue;
                     }}
                     label="Show default UI"
                     marginBottom={3}
                 />
             </Box>
-            <Box flex="none" backgroundColor="white">
+            <Box borderTop="thick" display="flex" flex="none" padding={3}>
                 <Box
+                    flex="auto"
                     display="flex"
-                    paddingY={2}
-                    marginX={3}
-                    borderTop="thick"
                     alignItems="center"
-                    justifyContent="flex-end"
+                    justifyContent="flex-start"
+                    paddingRight={2}
                 >
-                    <SettingsStatus settingsStore={settingsStore} />
-                    <Button
-                        variant="primary"
-                        onClick={() => {
-                            settingsStore.showSettings = false;
-                        }}
-                        style={{border: 'none'}}
-                    >
-                        Done
-                    </Button>
+                    <SettingsStatus settings={settings} />
                 </Box>
+                <Button
+                    size="large"
+                    variant="primary"
+                    onClick={() => {
+                        settings.showSettings = false;
+                    }}
+                    {...doneButtonProps}
+                >
+                    Done
+                </Button>
             </Box>
         </FullscreenBox>
     );

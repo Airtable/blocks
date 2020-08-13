@@ -1,14 +1,25 @@
 import {useState} from 'react';
 import {useGlobalConfig, useBase} from '@airtable/blocks/ui';
+import {base64EncodeUnicode, base64DecodeUnicode} from './base46unicode';
+import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
+import hash from 'object-hash';
 
 const ConfigKeys = {
     API_KEY: 'apiKey',
-    CACHE_FIELD: 'cacheField',
-    LOCATION_FIELD: 'locationField',
+    CACHE_FIELD_ID: 'cacheFieldId',
+    LOCATION_FIELD_ID: 'locationFieldId',
     SHOW_DEFAULT_UI: 'showDefaultUI',
     SHOW_ROAD_LABELS: 'showRoadLabels',
-    TABLE: 'table',
+    TABLE_ID: 'tableId',
 };
+
+function isValidLocationField(field) {
+    return AllowedLocationFieldTypes.includes(field.type);
+}
+
+function isValidCacheField(field) {
+    return AllowedCacheFieldTypes.includes(field.type);
+}
 
 class SettingsStore {
     /**
@@ -20,47 +31,67 @@ class SettingsStore {
         this.globalConfig = globalConfig;
         this.localState = localState;
         this.setLocalState = setLocalState;
+        this.ephemeralCache = {};
     }
 
-    get showSettings() {
-        return this.localState.showSettings;
-    }
+    get cache() {
+        const ephemaralCacheKey = record => {
+            const r = record.id;
+            const c = this.cacheFieldId;
+            return hash({r, c});
+        };
 
-    set showSettings(show) {
-        this.setLocalState({...this.localState, showSettings: show});
-    }
+        const encode = value => {
+            return value ? base64EncodeUnicode(JSON.stringify(value)) : '';
+        };
 
-    get googleApiKey() {
-        return this.globalConfig.get(ConfigKeys.API_KEY);
-    }
+        const decode = value => {
+            return value ? JSON.parse(base64DecodeUnicode(value)) : '';
+        };
 
-    get googleMapURL() {
-        return `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${this.googleApiKey}`;
-    }
+        const get = record => {
+            // First try getting a value directly from the cache field.
+            // If there is no value there, check the ephemaral cache,
+            // which is used as a fallback when the user doesn't have
+            // permission to write the the cache field. This data is
+            // lost when the block is reloaded, but will prevent repeat
+            // requests to the Geocode API.
+            //
+            const encoded =
+                record.getCellValueAsString(this.cacheFieldId) ||
+                this.ephemeralCache[ephemaralCacheKey(record)];
 
-    get tableId() {
-        return String(this.globalConfig.get(ConfigKeys.TABLE) || '');
-    }
+            if (!encoded) {
+                return null;
+            }
+            try {
+                return decode(encoded);
+            } catch (error) {
+                void error;
+                return null;
+            }
+        };
 
-    get table() {
-        return this.base.getTableByIdIfExists(this.tableId);
-    }
+        const setAsync = async (record, geocode) => {
+            const payload = {
+                [this.cacheFieldId]: encode(geocode),
+            };
+            if (this.table.hasPermissionToUpdateRecord(record, payload)) {
+                await this.table.updateRecordAsync(record, payload);
+            } else {
+                // In cases where the user does not have sufficient permission
+                // to write to the cache field, or the cache field has been locked,
+                // store the encoded geocode in the ephemeral cache. This will
+                // prevent unnecessary repeat requests to the Geocode API.
+                this.ephemeralCache[ephemaralCacheKey(record)] = encode(geocode);
+            }
+        };
 
-    get locationFieldId() {
-        return String(this.globalConfig.get(ConfigKeys.LOCATION_FIELD) || '');
-    }
-
-    get locationField() {
-        const {table} = this;
-        return table ? table.getFieldByIdIfExists(this.locationFieldId) : null;
-    }
-
-    get isMinimallyConfigured() {
-        return this.googleApiKey && this.table && this.locationField;
+        return {decode, encode, get, setAsync};
     }
 
     get cacheFieldId() {
-        return String(this.globalConfig.get(ConfigKeys.CACHE_FIELD) || '');
+        return this.globalConfig.get(ConfigKeys.CACHE_FIELD_ID) || '';
     }
 
     get cacheField() {
@@ -68,12 +99,88 @@ class SettingsStore {
         return table ? table.getFieldByIdIfExists(this.cacheFieldId) : null;
     }
 
-    get fieldIds() {
-        return [this.locationFieldId, this.cacheFieldId].filter(Boolean);
+    set cacheField(field) {
+        const fieldId = field ? field.id : null;
+        this.globalConfig.setAsync(ConfigKeys.CACHE_FIELD_ID, fieldId);
     }
 
     get fields() {
-        return [this.locationField, this.cacheField].filter(Boolean);
+        return [this.cacheField, this.locationField];
+    }
+
+    get googleApiKey() {
+        return this.globalConfig.get(ConfigKeys.API_KEY) || '';
+    }
+
+    get googleMapURL() {
+        return `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${this.googleApiKey}`;
+    }
+
+    get locationFieldId() {
+        return this.globalConfig.get(ConfigKeys.LOCATION_FIELD_ID) || '';
+    }
+
+    get locationField() {
+        const {table} = this;
+        return table ? table.getFieldByIdIfExists(this.locationFieldId) : null;
+    }
+
+    get isAllowedToOverwriteNonCacheValues() {
+        return this.localState.isAllowedToOverwriteNonCacheValues;
+    }
+
+    set isAllowedToOverwriteNonCacheValues(value) {
+        this.setLocalState({...this.localState, isAllowedToOverwriteNonCacheValues: value});
+    }
+
+    get isCacheFieldSameAsLocationField() {
+        return (
+            this.cacheFieldId !== '' &&
+            this.locationFieldId !== '' &&
+            this.cacheFieldId === this.locationFieldId
+        );
+    }
+
+    get isInvalidCacheField() {
+        return !isValidCacheField(this.cacheField);
+    }
+
+    get isInvalidLocationField() {
+        return !isValidLocationField(this.locationField);
+    }
+
+    get isMinimallyConfigured() {
+        // This check ensures that these configurations actually map to something
+        // meaningful. For example, if a locationFieldId is set, but the field
+        // itself does not exist (deleted!), then the user must fix this in the
+        // settings.
+        return this.googleApiKey && this.table && this.locationField && this.cacheField;
+    }
+
+    get isMissingAPIKey() {
+        return !this.googleApiKey;
+    }
+
+    get isMissingCacheField() {
+        // See explanation in isMinimallyConfigured
+        return !this.cacheField;
+    }
+
+    get isMissingLocationField() {
+        // See explanation in isMinimallyConfigured
+        return !this.locationField;
+    }
+
+    get isMissingTable() {
+        return !this.table;
+    }
+
+    get showDefaultUI() {
+        return this.globalConfig.get(ConfigKeys.SHOW_DEFAULT_UI) !== false;
+    }
+
+    set showDefaultUI(newValue) {
+        this.globalConfig.setAsync(ConfigKeys.SHOW_DEFAULT_UI, newValue);
     }
 
     get showRoadLabels() {
@@ -84,16 +191,81 @@ class SettingsStore {
         this.globalConfig.setAsync(ConfigKeys.SHOW_ROAD_LABELS, newValue);
     }
 
-    get showDefaultUI() {
-        return this.globalConfig.get(ConfigKeys.SHOW_DEFAULT_UI) !== false;
+    get showSettings() {
+        return this.localState.showSettings;
     }
 
-    set showDefaultUI(newValue) {
-        this.globalConfig.setAsync(ConfigKeys.SHOW_DEFAULT_UI, newValue);
+    set showSettings(show) {
+        this.setLocalState({...this.localState, showSettings: show});
+    }
+
+    get tableId() {
+        return this.globalConfig.get(ConfigKeys.TABLE_ID) || '';
+    }
+
+    get table() {
+        return this.base.getTableByIdIfExists(this.tableId);
+    }
+
+    get validated() {
+        const isValid = !(
+            this.isMissingAPIKey ||
+            this.isMissingTable ||
+            this.isMissingLocationField ||
+            this.isInvalidLocationField ||
+            this.isMissingCacheField ||
+            this.isInvalidCacheField ||
+            this.isCacheFieldSameAsLocationField
+        );
+
+        // The following conditions are written out in descending priority
+        // order, ie. the last one is the most important/relevant
+
+        let reason = '';
+        let action = '';
+
+        if (this.isCacheFieldSameAsLocationField) {
+            action = 'Pick a different cache field.';
+            reason = 'You may not use the same field for location and geocode cache.';
+        }
+
+        if (this.isMissingCacheField || this.isInvalidCacheField) {
+            action =
+                'Pick a field to store cached geocoding data. This field must not be used by other map or street view blocks.';
+            reason = this.isMissingCacheField
+                ? 'The geocode cache field is missing.'
+                : 'Cache field must be single line text or multiline text.';
+        }
+
+        if (this.isMissingLocationField || this.isInvalidLocationField) {
+            action = 'Pick a field containing addresses or coordinates.';
+            reason = this.isMissingLocationField
+                ? 'Location field is missing.'
+                : 'Location field type is not valid, field type must be text based.';
+        }
+
+        if (this.isMissingTable) {
+            action = 'Pick a table containing a field that stores addresses or coordinates.';
+            reason = 'Table is missing.';
+        }
+
+        if (this.isMissingAPIKey) {
+            action = 'Enter a Google Maps API Key.';
+            reason = 'Google Maps API Key is missing.';
+        }
+
+        return {
+            isValid,
+            action,
+            reason,
+        };
     }
 }
 
-const initialSettingsStoreLocalState = {showSettings: false};
+const initialSettingsStoreLocalState = {
+    showSettings: false,
+    isAllowedToOverwriteNonCacheValues: false,
+};
 
 const useSettingsStore = () => {
     const base = useBase();

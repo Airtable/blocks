@@ -14,7 +14,7 @@ const GOOGLE_MAPS_INVALID_KEY_ERROR_CODES = [
 
 // We have to monkeypatch console.error to catch Google's API authentication
 // errors in order to show users helpful error messages...
-const originalConsoleError = console.error || noop; // eslint-disable-line no-console
+const originalConsoleError = console.error || (() => {}); // eslint-disable-line no-console
 // eslint-disable-next-line no-console
 console.error = function(error) {
     if (startsWith(error, 'Geocoding Service: ') && includes(error, 'not authorized')) {

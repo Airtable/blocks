@@ -1,6 +1,7 @@
 {
     "dependencies": {
-        "@airtable/blocks": "0.0.48",
+        "@airtable/blocks": "latest",
+        "object-hash": "^2.0.3",
         "react": "^16.13.0",
         "react-dom": "^16.13.0",
         "react-google-maps": "^9.4.5"
@@ -11,6 +12,6 @@
         "eslint-plugin-react-hooks": "^2.5.0"
     },
     "scripts": {
-        "lint": "eslint frontend"
+        "lint": "eslint frontend/*.js"
     }
 }
