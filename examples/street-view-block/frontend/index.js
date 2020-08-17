@@ -21,7 +21,8 @@ import hash from 'object-hash';
 import FullscreenBox from './FullscreenBox';
 import {useSettingsStore} from './useSettingsStore';
 import {useLocationRequest} from './useLocationRequest';
-import {SettingsView} from './SettingsView';
+import InstructionsView from './InstructionsView';
+import SettingsView from './SettingsView';
 import {getGoogle} from './getGoogle';
 import {useGeocode} from './useGeocode';
 
@@ -434,12 +435,20 @@ let Main = () => {
         }
     }, [settings.validated.isValid, settings.showSettings]);
 
-    const mustShowSettingsView = settings.showSettings || !settings.validated.isValid;
+    const hasSettingsIssue = settings.showSettings || !settings.validated.isValid;
+    const hasAPIKeyIssue =
+        (hasSettingsIssue && settings.isMissingAPIKey) || settings.isInvalidAPIKey;
+
+    const settingsOrInstructions = hasAPIKeyIssue ? (
+        <InstructionsView settings={settings} />
+    ) : (
+        <SettingsView settings={settings} />
+    );
 
     return (
         <Box position="absolute" width="100%" height="100%">
-            {mustShowSettingsView ? (
-                <SettingsView settings={settings} />
+            {hasSettingsIssue ? (
+                settingsOrInstructions
             ) : (
                 <FullscreenBox>
                     <LoadMapsScript

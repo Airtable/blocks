@@ -320,8 +320,6 @@ const useSettingsStore = () => {
     const googleApiKeyError = useGoogleMapsApiError();
     const [localState, setLocalState] = useState(initialSettingsStoreLocalState);
     const settings = new SettingsStore(base, globalConfig, [localState, setLocalState]);
-
-    console.log('googleApiKeyError', googleApiKeyError);
     useEffect(() => {
         if (googleApiKeyError) {
             setLocalState({...localState, googleApiKeyError});

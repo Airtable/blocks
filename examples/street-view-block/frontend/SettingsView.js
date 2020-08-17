@@ -1,5 +1,4 @@
 import {
-    colors,
     Box,
     Text,
     Button,
@@ -14,56 +13,20 @@ import React from 'react';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';
 import FullscreenBox from './FullscreenBox';
-
-const severityColorCode = level => {
-    switch (level) {
-        case 1: {
-            return colors.ORANGE;
-        }
-        case 2: {
-            return colors.RED;
-        }
-        default: {
-            return '';
-        }
-    }
-};
+import SettingsStatus, {severityColorCode} from './SettingsStatus';
 
 /**
  * @param {object} props
  * @param {import('./useSettingsStore').SettingsStore} props.settings
  */
-const SettingsStatus = ({settings}) => {
-    const {
-        validated: {isValid, action, severity, reason},
-    } = settings;
-
-    const textColor = severityColorCode(severity);
-
-    return !isValid ? (
-        <Box>
-            <Text textColor={textColor} marginRight={3}>
-                {reason}
-            </Text>
-            {action ? (
-                <Text textColor="light" marginRight={3}>
-                    {action}
-                </Text>
-            ) : null}
-        </Box>
-    ) : null;
-};
-
-/**
- * @param {object} props
- * @param {import('./useSettingsStore').SettingsStore} props.settings
- */
-export const SettingsView = ({settings}) => {
+export default function SettingsView({settings}) {
     const {
         validated: {isValid, severity, errorKey},
     } = settings;
 
-    const borderColor = ['transparent', colors.ORANGE, colors.RED][severity];
+    const borderColor = [severityColorCode(0), severityColorCode(1), severityColorCode(2)][
+        severity
+    ];
 
     const errorStyle = {
         border: `2px solid ${borderColor}`,
@@ -164,4 +127,4 @@ export const SettingsView = ({settings}) => {
             </Box>
         </FullscreenBox>
     );
-};
+}
