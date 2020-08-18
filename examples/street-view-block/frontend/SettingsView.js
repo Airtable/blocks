@@ -1,7 +1,7 @@
 import {
+    colors,
     Box,
     Text,
-    Link,
     Button,
     FormField,
     Heading,
@@ -15,18 +15,34 @@ import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';
 import FullscreenBox from './FullscreenBox';
 
+const severityColorCode = level => {
+    switch (level) {
+        case 1: {
+            return colors.ORANGE;
+        }
+        case 2: {
+            return colors.RED;
+        }
+        default: {
+            return '';
+        }
+    }
+};
+
 /**
  * @param {object} props
  * @param {import('./useSettingsStore').SettingsStore} props.settings
  */
 const SettingsStatus = ({settings}) => {
     const {
-        validated: {isValid, action, reason},
+        validated: {isValid, action, severity, reason},
     } = settings;
+
+    const textColor = severityColorCode(severity);
 
     return !isValid ? (
         <Box>
-            <Text textColor="red" marginRight={3}>
+            <Text textColor={textColor} marginRight={3}>
                 {reason}
             </Text>
             {action ? (
@@ -44,38 +60,43 @@ const SettingsStatus = ({settings}) => {
  */
 export const SettingsView = ({settings}) => {
     const {
-        validated: {isValid},
+        validated: {isValid, severity, errorKey},
     } = settings;
+
+    const borderColor = ['transparent', colors.ORANGE, colors.RED][severity];
+
+    const errorStyle = {
+        border: `2px solid ${borderColor}`,
+    };
 
     const doneButtonProps = {
         disabled: !isValid,
     };
 
+    const {API_KEY, CACHE_FIELD_ID, LOCATION_FIELD_ID, TABLE_ID} = ConfigKeys;
+
     return (
         <FullscreenBox display="flex" flexDirection="column">
             <Box flex="auto" overflow="auto" padding={3}>
-                <Heading paddingBottom={3}>Street view settings</Heading>
-                <FormField
-                    label="Google API key"
-                    description={
-                        <>
-                            Follow the steps in{' '}
-                            <Link
-                                underline={true}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://developers.google.com/maps/documentation/javascript/get-api-key"
-                            >
-                                Get an API Key
-                            </Link>
-                            .
-                        </>
-                    }
-                >
-                    <InputSynced globalConfigKey={ConfigKeys.API_KEY} style={{border: 'none'}} />
+                <Heading paddingBottom={3}>Settings</Heading>
+                <FormField label="Google API key">
+                    <InputSynced
+                        globalConfigKey={API_KEY}
+                        style={errorKey === API_KEY ? errorStyle : {}}
+                        onChange={() => {
+                            settings.googleApiKeyError = null;
+                        }}
+                    />
+
+                    <Text textColor="light" size="small">
+                        Note: the API key will be visible to all collaborators.
+                    </Text>
                 </FormField>
                 <FormField label="Table">
-                    <TablePickerSynced globalConfigKey={ConfigKeys.TABLE_ID} />
+                    <TablePickerSynced
+                        globalConfigKey={TABLE_ID}
+                        style={errorKey === TABLE_ID ? errorStyle : {}}
+                    />
                 </FormField>
                 {settings.table ? (
                     <FormField
@@ -84,8 +105,9 @@ export const SettingsView = ({settings}) => {
                     >
                         <FieldPickerSynced
                             table={settings.table}
-                            globalConfigKey={ConfigKeys.LOCATION_FIELD_ID}
+                            globalConfigKey={LOCATION_FIELD_ID}
                             allowedTypes={AllowedLocationFieldTypes}
+                            style={errorKey === LOCATION_FIELD_ID ? errorStyle : {}}
                         />
                     </FormField>
                 ) : null}
@@ -96,8 +118,9 @@ export const SettingsView = ({settings}) => {
                     >
                         <FieldPickerSynced
                             table={settings.table}
-                            globalConfigKey={ConfigKeys.CACHE_FIELD_ID}
+                            globalConfigKey={CACHE_FIELD_ID}
                             allowedTypes={AllowedCacheFieldTypes}
+                            style={errorKey === CACHE_FIELD_ID ? errorStyle : {}}
                         />
                     </FormField>
                 ) : null}

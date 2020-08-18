@@ -1,7 +1,9 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useGlobalConfig, useBase} from '@airtable/blocks/ui';
 import {base64EncodeUnicode, base64DecodeUnicode} from './base46unicode';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
+import useGoogleMapsApiError from './useGoogleMapsApiError';
+import getGoogleAuthFailure from './GoogleAuthFailure';
 import hash from 'object-hash';
 
 const ConfigKeys = {
@@ -13,13 +15,11 @@ const ConfigKeys = {
     TABLE_ID: 'tableId',
 };
 
-function isValidLocationField(field) {
-    return AllowedLocationFieldTypes.includes(field.type);
-}
+const isValidLocationField = field => AllowedLocationFieldTypes.includes(field.type);
+const isValidCacheField = field => AllowedCacheFieldTypes.includes(field.type);
 
-function isValidCacheField(field) {
-    return AllowedCacheFieldTypes.includes(field.type);
-}
+const encode = value => (value ? base64EncodeUnicode(JSON.stringify(value)) : '');
+const decode = value => (value ? JSON.parse(base64DecodeUnicode(value)) : '');
 
 class SettingsStore {
     /**
@@ -39,14 +39,6 @@ class SettingsStore {
             const r = record.id;
             const c = this.cacheFieldId;
             return hash({r, c});
-        };
-
-        const encode = value => {
-            return value ? base64EncodeUnicode(JSON.stringify(value)) : '';
-        };
-
-        const decode = value => {
-            return value ? JSON.parse(base64DecodeUnicode(value)) : '';
         };
 
         const get = record => {
@@ -112,6 +104,18 @@ class SettingsStore {
         return this.globalConfig.get(ConfigKeys.API_KEY) || '';
     }
 
+    set googleApiKey(value) {
+        this.globalConfig.setAsync(ConfigKeys.API_KEY, value);
+    }
+
+    get googleApiKeyError() {
+        return this.localState.googleApiKeyError;
+    }
+
+    set googleApiKeyError(value) {
+        this.setLocalState({...this.localState, googleApiKeyError: value});
+    }
+
     get googleMapURL() {
         return `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${this.googleApiKey}`;
     }
@@ -141,12 +145,16 @@ class SettingsStore {
         );
     }
 
+    get isInvalidAPIKey() {
+        return this.localState.googleApiKeyError !== null;
+    }
+
     get isInvalidCacheField() {
-        return !isValidCacheField(this.cacheField);
+        return this.cacheField && !isValidCacheField(this.cacheField);
     }
 
     get isInvalidLocationField() {
-        return !isValidLocationField(this.locationField);
+        return this.locationField && !isValidLocationField(this.locationField);
     }
 
     get isMinimallyConfigured() {
@@ -210,6 +218,7 @@ class SettingsStore {
     get validated() {
         const isValid = !(
             this.isMissingAPIKey ||
+            this.isInvalidAPIKey ||
             this.isMissingTable ||
             this.isMissingLocationField ||
             this.isInvalidLocationField ||
@@ -218,13 +227,15 @@ class SettingsStore {
             this.isCacheFieldSameAsLocationField
         );
 
+        let action = '';
+        let errorKey = '';
+        let reason = '';
+
         // The following conditions are written out in descending priority
         // order, ie. the last one is the most important/relevant
 
-        let reason = '';
-        let action = '';
-
         if (this.isCacheFieldSameAsLocationField) {
+            errorKey = 'cacheFieldId';
             action = 'Pick a different cache field.';
             reason = 'You may not use the same field for location and geocode cache.';
         }
@@ -232,6 +243,7 @@ class SettingsStore {
         if (this.isMissingCacheField || this.isInvalidCacheField) {
             action =
                 'Pick a field to store cached geocoding data. This field must not be used by other map or street view blocks.';
+            errorKey = 'cacheFieldId';
             reason = this.isMissingCacheField
                 ? 'The geocode cache field is missing.'
                 : 'Cache field must be single line text or multiline text.';
@@ -239,6 +251,7 @@ class SettingsStore {
 
         if (this.isMissingLocationField || this.isInvalidLocationField) {
             action = 'Pick a field containing addresses or coordinates.';
+            errorKey = 'locationFieldId';
             reason = this.isMissingLocationField
                 ? 'Location field is missing.'
                 : 'Location field type is not valid, field type must be text based.';
@@ -246,18 +259,51 @@ class SettingsStore {
 
         if (this.isMissingTable) {
             action = 'Pick a table containing a field that stores addresses or coordinates.';
+            errorKey = 'table';
             reason = 'Table is missing.';
+        }
+
+        if (this.isInvalidAPIKey) {
+            ({action, reason} = getGoogleAuthFailure(this.localState.googleApiKeyError));
+            errorKey = 'apiKey';
         }
 
         if (this.isMissingAPIKey) {
             action = 'Enter a Google Maps API Key.';
+            errorKey = 'apiKey';
             reason = 'Google Maps API Key is missing.';
+        }
+
+        //
+        // 0 = present, no highlight
+        // 1 = missing, highlight with orange
+        // 2 = invalid, highlight with red
+        //
+        let severity = 0;
+        if (
+            this.isInvalidAPIKey ||
+            this.isInvalidLocationField ||
+            this.isInvalidCacheField ||
+            this.isCacheFieldSameAsLocationField
+        ) {
+            severity = 2;
+        }
+
+        if (
+            this.isMissingAPIKey ||
+            this.isMissingTable ||
+            this.isMissingLocationField ||
+            this.isMissingCacheField
+        ) {
+            severity = 1;
         }
 
         return {
             isValid,
             action,
+            errorKey,
             reason,
+            severity,
         };
     }
 }
@@ -265,13 +311,24 @@ class SettingsStore {
 const initialSettingsStoreLocalState = {
     showSettings: false,
     isAllowedToOverwriteNonCacheValues: false,
+    googleApiKeyError: null,
 };
 
 const useSettingsStore = () => {
     const base = useBase();
     const globalConfig = useGlobalConfig();
-    const localStateTuple = useState(initialSettingsStoreLocalState);
-    return new SettingsStore(base, globalConfig, localStateTuple);
+    const googleApiKeyError = useGoogleMapsApiError();
+    const [localState, setLocalState] = useState(initialSettingsStoreLocalState);
+    const settings = new SettingsStore(base, globalConfig, [localState, setLocalState]);
+
+    console.log('googleApiKeyError', googleApiKeyError);
+    useEffect(() => {
+        if (googleApiKeyError) {
+            setLocalState({...localState, googleApiKeyError});
+        }
+    }, [googleApiKeyError]);
+
+    return settings;
 };
 
 export default useSettingsStore;
