@@ -65,48 +65,35 @@ const _RecordStreetView = props => {
         if (!onStreetViewStateChange) return;
         const streetView = googleMapRef.current.getStreetView();
         const status = streetView.getStatus();
-        const {StreetViewStatus} = getGoogle(window).maps;
-        if (status === StreetViewStatus.OK) {
-            const position = streetView.getPosition().toJSON();
-            const pov = streetView.getPov();
-            onStreetViewStateChange({
-                state: {
-                    position,
-                    pov,
-                },
-                status: {
-                    ok: true,
-                    unknownError: false,
-                    zeroResults: false,
-                },
-            });
-        } else if (
-            status === StreetViewStatus.UNKNOWN_ERROR ||
-            status === StreetViewStatus.ZERO_RESULTS
-        ) {
-            onStreetViewStateChange({
-                state: {
-                    position: null,
-                    pov: null,
-                },
-                status: {
-                    ok: false,
-                    unknownError: status === StreetViewStatus.UNKNOWN_ERROR,
-                    zeroResults: status === StreetViewStatus.ZERO_RESULTS,
-                },
-            });
-        } else {
-            onStreetViewStateChange({
-                state: {
-                    position,
-                    pov,
-                },
-                status: {
-                    ok: false,
-                    unknownError: false,
-                    zeroResults: false,
-                },
-            });
+        const {OK, UNKNOWN_ERROR, ZERO_RESULTS} = getGoogle(window).maps.StreetViewStatus;
+        const initialPayload = {
+            state: {
+                position,
+                pov,
+            },
+            status: {
+                ok: true,
+                unknownError: false,
+                zeroResults: false,
+            },
+        };
+
+        const hashedInitialPayload = hash(initialPayload);
+
+        if (status === OK) {
+            initialPayload.state.position = streetView.getPosition().toJSON();
+            initialPayload.state.pov = streetView.getPov();
+        }
+
+        if (status === UNKNOWN_ERROR || status === ZERO_RESULTS) {
+            initialPayload.status.ok = false;
+            initialPayload.status.unknownError = status === UNKNOWN_ERROR;
+            initialPayload.status.zeroResults = status === ZERO_RESULTS;
+        }
+
+        // Call onStreetViewStateChange() only if something actually changed.
+        if (hashedInitialPayload !== hash(initialPayload)) {
+            onStreetViewStateChange(initialPayload);
         }
     };
 
@@ -195,6 +182,7 @@ const RecordStreetViewWrapper = props => {
  * @param {import('@airtable/blocks/dist/types/src/models/record').default} props.record
  */
 const MainRecord = ({settings, record}) => {
+    const pendingCacheUpdate = useRef(null);
     const {
         cache,
         cacheField,
@@ -203,6 +191,28 @@ const MainRecord = ({settings, record}) => {
         showDefaultUI,
         showRoadLabels,
     } = settings;
+
+    // This trickery prevents the street view from loading/rendering twice
+    // when there is no cached geocode. Here's what would happen if we didn't do this:
+    //
+    // No geocode? Use the address to look it up and render the street view.
+    // Next we cache that value, but caching that value requires writing to the table.
+    // Writing to the table will cause a re-render because the field is is being
+    // watched for changes by useRecordById:
+    //
+    // "A hook for working with a single record. Automatically handles loading data and
+    // updating your component when the record's cell values etc. change."
+    //
+    // So instead of writing to the cache field in the onStreetViewStateChange
+    // handler below, we stash the values away until the user does anything that would
+    // cause `MainRecord` to be re-rendered.
+    //
+    useEffect(() => {
+        if (pendingCacheUpdate.current) {
+            cache.setAsync(pendingCacheUpdate.current.record, pendingCacheUpdate.current.state);
+            pendingCacheUpdate.current = null;
+        }
+    }, [pendingCacheUpdate.current, cache]);
 
     let streetViewState = cache.get(record);
     let locationFieldContents = record.getCellValueAsString(locationField).trim();
@@ -274,7 +284,7 @@ const MainRecord = ({settings, record}) => {
         }
 
         if (mustUpdateCache) {
-            cache.setAsync(record, state);
+            pendingCacheUpdate.current = {record, state};
         }
     };
 

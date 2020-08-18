@@ -10,7 +10,7 @@ import {
     FieldPickerSynced,
     Switch,
 } from '@airtable/blocks/ui';
-import React, {Fragment} from 'react';
+import React from 'react';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';
 import FullscreenBox from './FullscreenBox';
