@@ -1,4 +1,6 @@
 import BlockSdk from '../src/sdk';
+import Table from '../src/models/table';
+import View from '../src/models/view';
 import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
@@ -256,6 +258,326 @@ describe('sdk', () => {
                     'tblyt8B45wJQIx1c3',
                 ]);
                 expect(sdk.base.tables[1].name).toStrictEqual('second');
+            });
+        });
+
+        describe('table name', () => {
+            let table: Table;
+
+            beforeEach(() => {
+                table = sdk.base.tables.find(({id}) => id === 'tbly388E8NA1CNhnF') as Table;
+            });
+
+            it('notifies base "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'name'],
+                        value: 'Egon',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('notifies table "name" watchers', () => {
+                const mock = jest.fn();
+                table.watch('name', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'name'],
+                        value: 'Egon',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('updates internal state', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'name'],
+                        value: 'Egon',
+                    },
+                ]);
+
+                expect(table.name).toStrictEqual('Egon');
+            });
+        });
+
+        describe('table viewOrder', () => {
+            let table: Table;
+
+            beforeEach(() => {
+                table = sdk.base.tables.find(({id}) => id === 'tbly388E8NA1CNhnF') as Table;
+            });
+
+            it('notifies base "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        value: [
+                            'viwqo8mFAqy2HYSCL',
+                            'viwkNnS94RQAQQTMn',
+                            'viw8v5XkLudbiCJfD',
+                            'viwhz3PjFATSxaV5X',
+                            'viwA4Tzw8IJcHHgul',
+                        ],
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('notifies table "views" watchers', () => {
+                const mock = jest.fn();
+                table.watch('views', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        value: [
+                            'viwqo8mFAqy2HYSCL',
+                            'viwkNnS94RQAQQTMn',
+                            'viw8v5XkLudbiCJfD',
+                            'viwhz3PjFATSxaV5X',
+                            'viwA4Tzw8IJcHHgul',
+                        ],
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('updates internal state - reordering', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        value: [
+                            'viwqo8mFAqy2HYSCL',
+                            'viwkNnS94RQAQQTMn',
+                            'viw8v5XkLudbiCJfD',
+                            'viwhz3PjFATSxaV5X',
+                            'viwA4Tzw8IJcHHgul',
+                        ],
+                    },
+                ]);
+
+                const ids = table.views.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'viwqo8mFAqy2HYSCL',
+                    'viwkNnS94RQAQQTMn',
+                    'viw8v5XkLudbiCJfD',
+                    'viwhz3PjFATSxaV5X',
+                    'viwA4Tzw8IJcHHgul',
+                ]);
+            });
+
+            it('updates internal state - removal', () => {
+                let ids = table.views.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'viwkNnS94RQAQQTMn',
+                    'viwqo8mFAqy2HYSCL',
+                    'viw8v5XkLudbiCJfD',
+                    'viwhz3PjFATSxaV5X',
+                    'viwA4Tzw8IJcHHgul',
+                ]);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewOrder'],
+                        value: [
+                            'viwkNnS94RQAQQTMn',
+                            'viwqo8mFAqy2HYSCL',
+                            'viwhz3PjFATSxaV5X',
+                            'viwA4Tzw8IJcHHgul',
+                        ],
+                    },
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'viewsById', 'viw8v5XkLudbiCJfD'],
+                        value: undefined,
+                    },
+                ]);
+
+                ids = table.views.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'viwkNnS94RQAQQTMn',
+                    'viwqo8mFAqy2HYSCL',
+                    'viwhz3PjFATSxaV5X',
+                    'viwA4Tzw8IJcHHgul',
+                ]);
+            });
+        });
+
+        describe('table lock', () => {
+            it('notifies base "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                // TODO(jugglinmike): The internal cache must be primed in
+                // order to observe the behavior under test. Determine if this
+                // requirement represents a meaningful edge case for Block
+                // development.
+                sdk.base.tables;
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'lock'],
+                        value: {foo: 'bar'},
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            // The state of a table lock is not directly observable on the
+            // client.
+            it.skip('updates internal state', () => {});
+        });
+
+        describe('table externalSyncById', () => {
+            it('notifies base "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                // TODO(jugglinmike): The internal cache must be primed in
+                // order to observe the behavior under test. Determine if this
+                // requirement represents a meaningful edge case for Block
+                // development.
+                sdk.base.tables;
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'externalSyncById'],
+                        value: 'a value',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            // The state of a table lock is not directly observable on the
+            // client.
+            it.skip('updates internal state', () => {});
+        });
+
+        describe('table description', () => {
+            let table: Table;
+
+            beforeEach(() => {
+                table = sdk.base.tables.find(({id}) => id === 'tbly388E8NA1CNhnF') as Table;
+            });
+
+            it('notifies base "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'description'],
+                        value: 'a value',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('notifies table "description" watchers', () => {
+                const mock = jest.fn();
+                table.watch('description', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'description'],
+                        value: 'a value',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('updates internal state', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tbly388E8NA1CNhnF', 'description'],
+                        value: 'a value',
+                    },
+                ]);
+
+                expect(table.description).toEqual('a value');
+            });
+        });
+
+        describe('view name', () => {
+            let view: View;
+
+            beforeEach(() => {
+                view = (sdk.base.tables.find(
+                    ({id}) => id === 'tbly388E8NA1CNhnF',
+                ) as Table).views.find(({id}) => id === 'viw8v5XkLudbiCJfD') as View;
+            });
+
+            it('notifies base "schema" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tbly388E8NA1CNhnF',
+                            'viewsById',
+                            'viw8v5XkLudbiCJfD',
+                            'name',
+                        ],
+                        value: 'a new name',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('notifies view "name" watchers', () => {
+                const mock = jest.fn();
+                view.watch('name', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tbly388E8NA1CNhnF',
+                            'viewsById',
+                            'viw8v5XkLudbiCJfD',
+                            'name',
+                        ],
+                        value: 'a new name',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('updates internal state', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: [
+                            'tablesById',
+                            'tbly388E8NA1CNhnF',
+                            'viewsById',
+                            'viw8v5XkLudbiCJfD',
+                            'name',
+                        ],
+                        value: 'a new name',
+                    },
+                ]);
+
+                expect(view.name).toEqual('a new name');
             });
         });
 
