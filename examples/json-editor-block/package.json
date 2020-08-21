@@ -1,6 +1,6 @@
 {
     "name": "@airtable/json-editor-block",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "license": "MIT",
     "dependencies": {
         "@airtable/blocks": "0.0.43",
