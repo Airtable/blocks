@@ -22,6 +22,8 @@ function SettingsForm({setIsSettingsOpen}) {
         settings: {isEnforced, urlTable},
     } = useSettings();
 
+    const canUpdateSettings = globalConfig.hasPermissionToSet();
+
     return (
         <Box
             position="absolute"
@@ -41,6 +43,7 @@ function SettingsForm({setIsSettingsOpen}) {
                         onChange={value => {
                             globalConfig.setAsync(ConfigKeys.IS_ENFORCED, value);
                         }}
+                        disabled={!canUpdateSettings}
                         label="Use a specific field for previews"
                     />
                     <Text paddingY={1} textColor="light">
