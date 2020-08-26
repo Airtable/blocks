@@ -167,7 +167,6 @@ export default function MonacoEditor({
         // - "onCompletion effect"
         //
 
-        let timeout = null;
         const didChangeModelContent = editor.current.onDidChangeModelContent(event => {
             const model = editor.current.getModel();
 
