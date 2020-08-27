@@ -68,7 +68,8 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
     }
     /** @hidden */
     render() {
-        const {viewport} = getSdk();
+        const {viewport, session} = getSdk();
+        const blockNoun = session.__isFeatureEnabled('blocks.appsRename') ? 'app' : 'block';
 
         const globalAlertInfo = globalAlert.__alertInfo;
         if (globalAlertInfo) {
@@ -124,7 +125,7 @@ class BlockWrapper extends React.Component<BlockWrapperProps> {
                         }}
                     >
                         <span className={baymax('center line-height-4 quiet strong')}>
-                            <span>Please make this block bigger or </span>
+                            <span>Please make this {blockNoun} bigger or </span>
                             <span
                                 className={baymax('pointer understroke link-unquiet')}
                                 onClick={() => viewport.enterFullscreenIfPossible()}
