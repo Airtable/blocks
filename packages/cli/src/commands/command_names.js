@@ -7,6 +7,7 @@ const CommandNames = {
     ADD_REMOTE: ('add-remote': 'add-remote'),
     REMOVE_REMOTE: ('remove-remote': 'remove-remote'),
     LIST_REMOTES: ('list-remotes': 'list-remotes'),
+    SUBMIT: ('submit': 'submit'),
 
     // This command is a helper to migrate old blocks to the standalone CLI world.
     // TODO(jb): remove this once all blocks are migrated to the standalone CLI world.

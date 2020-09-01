@@ -200,6 +200,19 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         example: `block ${CommandNames.MIGRATE_OLD_BLOCK}`,
         runCommandAsync: commandRunner(CommandNames.MIGRATE_OLD_BLOCK),
     },
+    [CommandNames.SUBMIT]: {
+        name: CommandNames.SUBMIT,
+        command: CommandNames.SUBMIT,
+        description: false,
+        example: `block ${CommandNames.SUBMIT}`,
+        runCommandAsync: commandRunner(CommandNames.SUBMIT),
+        optionMap: {
+            remote: {
+                description: 'Configure which remote to use',
+                type: 'string',
+            },
+        },
+    },
 };
 
 module.exports = commandConfigs;

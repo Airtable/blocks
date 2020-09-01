@@ -290,6 +290,45 @@ Run ${chalk.cyan.bold('npm i -g @airtable/blocks')} to update
         return bodyParsed.accessPolicy;
     }
 
+    async createCodeUploadAsync(): Promise<{codeUploadId: string, presignedUploadUrl: string}> {
+        const options = {
+            url: `${this._getBlockBaseUrl()}/codeUpload/create`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
+            },
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = this._parseErrorMessages(statusCode, body);
+            throw new Error(errorMessage);
+        }
+        return body;
+    }
+    async finalizeCodeUploadAsync(requestBody: {
+        codeUploadId: string,
+        status: 'uploaded' | 'failed',
+    }): Promise<{message: string}> {
+        const options = {
+            url: `${this._getBlockBaseUrl()}/codeUpload/finalize`,
+            headers: {
+                Authorization: `Bearer ${this._apiKey}`,
+                'User-Agent': USER_AGENT,
+            },
+            body: requestBody,
+            json: true,
+        };
+        const response = await request.postAsync(options);
+        const {body, statusCode} = response;
+        if (statusCode !== 200) {
+            const errorMessage = this._parseErrorMessages(statusCode, body);
+            throw new Error(errorMessage);
+        }
+        return body;
+    }
+
     get applicationId(): ApplicationId {
         return this._applicationId;
     }
