@@ -1,10 +1,12 @@
 # @airtable/blocks
 
-Thanks for participating in the developer beta of custom blocks for Airtable. With the Blocks SDK,
-you can create your own integrations, visualizations, and internal tools. We're excited to see what
-you build!
+With the Blocks SDK, you can create your own custom apps on top of Airtable. These apps can be
+integrations, visualizations, internal tools, and more!
 
-[Go to our official Blocks SDK documentation website](https://airtable.com/developers/blocks)
+To get started, check out the
+[official Blocks SDK documentation website](https://airtable.com/developers/blocks). If you have any
+questions, feedback, or feature requests, we encourage you to post in the
+[community forum](https://community.airtable.com/c/developers/custom-blocks-beta/54).
 
 By using the software, you accept and agree to abide by terms of the developer agreement below:
 

@@ -35,6 +35,7 @@ export interface BaseData {
     cursorData: CursorData | null;
 
     billingPlanGrouping: string;
+    isBlockDevelopmentRestrictionEnabled: boolean;
 }
 
 /** @hidden */

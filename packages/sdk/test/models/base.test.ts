@@ -18,7 +18,33 @@ jest.mock('../../src/get_sdk', () => () => ({
 describe('Base', () => {
     let base: Base;
     beforeEach(() => {
+        mockAirtableInterface.reset();
         base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+    });
+
+    describe('tables', () => {
+        it('lists all tables in the expected order', () => {
+            expect(base.tables.map(({id}) => id)).toMatchInlineSnapshot(`
+                Array [
+                  "tbly388E8NA1CNhnF",
+                  "tblcstEo50YXLJcK4",
+                  "tblyt8B45wJQIx1c3",
+                ]
+            `);
+        });
+
+        it('omits tables which have no corresponding schema', async () => {
+            const {tablesById} = mockAirtableInterface.sdkInitData.baseData;
+            delete tablesById.tbly388E8NA1CNhnF;
+            base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+
+            expect(base.tables.map(({id}) => id)).toMatchInlineSnapshot(`
+                Array [
+                  "tblcstEo50YXLJcK4",
+                  "tblyt8B45wJQIx1c3",
+                ]
+            `);
+        });
     });
 
     describe('getCollaboratorIfExists', () => {

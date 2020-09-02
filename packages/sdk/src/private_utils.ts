@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import getAirtableInterface from './injected/airtable_interface';
 import {spawnError} from './error_utils';
 import createResponsivePropType from './ui/system/utils/create_responsive_prop_type';
 
@@ -382,4 +383,9 @@ export function debounce<Args extends Array<any>>(
             fn(...args);
         }, timeoutMs);
     };
+}
+
+/** @hidden */
+export function isBlockDevelopmentRestrictionEnabled(): boolean {
+    return getAirtableInterface().sdkInitData.baseData.isBlockDevelopmentRestrictionEnabled;
 }
