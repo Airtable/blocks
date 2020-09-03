@@ -8,9 +8,10 @@ import util from 'util';
 import invariant from 'invariant';
 import archiver from 'archiver';
 import fs from 'fs';
+import fsUtils from '../helpers/fs_utils';
 import path from 'path';
 import {getBlockDirPath} from '../helpers/get_block_dir_path';
-import block_cli_config_settings from '../config/block_cli_config_settings';
+import {BUILD_DIR} from '../config/block_cli_config_settings';
 import {exitWithError} from '../helpers/cli_helpers';
 
 const requestAsync = util.promisify(request);
@@ -40,11 +41,9 @@ export async function runCommandAsync(argv: Argv): Promise<void> {
     );
 
     const blockDirPath = getBlockDirPath();
-    const outputPath = path.join(
-        blockDirPath,
-        block_cli_config_settings.BUILD_DIR,
-        'block_source.zip',
-    );
+    const outputDir = path.join(blockDirPath, BUILD_DIR);
+    await fsUtils.mkdirIfDoesntAlreadyExistAsync(outputDir);
+    const outputPath = path.join(outputDir, 'block_source.zip');
 
     const zip = archiver('zip');
 
