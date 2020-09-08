@@ -69,6 +69,7 @@ const _RecordStreetView = props => {
         const {OK, UNKNOWN_ERROR, ZERO_RESULTS} = getGoogle(window).maps.StreetViewStatus;
         const initialPayload = {
             state: {
+                address,
                 position,
                 pov,
             },
@@ -82,6 +83,7 @@ const _RecordStreetView = props => {
         const hashedInitialPayload = hash(initialPayload);
 
         if (status === OK) {
+            initialPayload.state.address = address;
             initialPayload.state.position = streetView.getPosition().toJSON();
             initialPayload.state.pov = streetView.getPov();
         }
@@ -232,6 +234,12 @@ const MainRecord = ({settings, record}) => {
         // we need to signal that to the user.
         if (decoded && typeof decoded.position !== 'object' && typeof decoded.pov !== 'object') {
             throw decoded;
+        }
+
+        if (decoded.address && decoded.address.trim() !== locationFieldContents) {
+            // The contents of the location field has changed since the last
+            // time the geocode was cached, so we discard the stored state.
+            streetViewState = null;
         }
     } catch (error) {
         void error;
