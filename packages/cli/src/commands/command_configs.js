@@ -79,7 +79,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
                 default: 9000,
             },
             remote: {
-                description: 'Configure which remote to use',
+                description: '[Beta] Configure which remote to use',
                 type: 'string',
             },
             'backend-sdk-base-url': {
@@ -115,7 +115,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         example: `block ${CommandNames.RELEASE}`,
         optionMap: {
             remote: {
-                description: 'Configure which remote to use',
+                description: '[Beta] Configure which remote to use',
                 type: 'string',
             },
             'backend-sdk-base-url': {
@@ -143,7 +143,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.ADD_REMOTE]: {
         name: CommandNames.ADD_REMOTE,
         command: `${CommandNames.ADD_REMOTE} <blockIdentifier> <remoteName>`,
-        description: 'Add a new remote configuration',
+        description: '[Beta] Add a new remote configuration',
         example: `block ${CommandNames.ADD_REMOTE} app123/blk456 new_remote`,
         runCommandAsync: commandRunner(CommandNames.ADD_REMOTE),
         optionMap: {
@@ -162,14 +162,14 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.LIST_REMOTES]: {
         name: CommandNames.LIST_REMOTES,
         command: `${CommandNames.LIST_REMOTES}`,
-        description: 'List remote configurations',
+        description: '[Beta] List remote configurations',
         example: `block ${CommandNames.LIST_REMOTES}`,
         runCommandAsync: commandRunner(CommandNames.LIST_REMOTES),
     },
     [CommandNames.REMOVE_REMOTE]: {
         name: CommandNames.REMOVE_REMOTE,
         command: `${CommandNames.REMOVE_REMOTE} <remoteName>`,
-        description: 'Remove a remote configuration',
+        description: '[Beta] Remove a remote configuration',
         example: `block ${CommandNames.REMOVE_REMOTE} remote_to_delete`,
         runCommandAsync: commandRunner(CommandNames.REMOVE_REMOTE),
     },
@@ -208,7 +208,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
         runCommandAsync: commandRunner(CommandNames.SUBMIT),
         optionMap: {
             remote: {
-                description: 'Configure which remote to use',
+                description: '[Beta] Configure which remote to use',
                 type: 'string',
             },
         },

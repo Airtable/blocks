@@ -12,6 +12,7 @@ const request = require('postman-request');
 const FormData = require('form-data');
 const {promisify} = require('util');
 request.postAsync = promisify(request.post);
+const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
 
 import type {Argv} from 'yargs';
 import type {S3UploadInfo} from '../types/s3_upload_info';
@@ -161,6 +162,10 @@ async function runCommandAsync(argv: Argv): Promise<void> {
         'expects enableDeprecatedAbsolutePathImport to be a boolean',
     );
     const enableIsolatedBuild = !(argv.disableIsolatedBuild || false);
+
+    if (remoteName !== null) {
+        outputRemotesBetaWarning();
+    }
 
     const parseRemoteResult = await parseAndValidateRemoteJsonAsync(remoteName);
     if (parseRemoteResult.err) {

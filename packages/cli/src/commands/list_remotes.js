@@ -7,6 +7,7 @@ const fsUtils = require('../helpers/fs_utils');
 const parseAndValidateRemoteJsonAsync = require('../helpers/parse_and_validate_remote_json_async');
 const blockCliConfigSettings = require('../config/block_cli_config_settings');
 const getBlockDirPathModule = require('../helpers/get_block_dir_path');
+const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
 
 import type {Argv} from 'yargs';
 import type {RemoteJson} from '../types/remote_json_type';
@@ -47,6 +48,8 @@ async function _getRemoteJsonWithNameAsync(
 }
 
 async function runCommandAsync(argv: Argv): Promise<void> {
+    outputRemotesBetaWarning();
+
     const blockDirPath = getBlockDirPathModule.getBlockDirPath();
     const blockConfigDirPath = path.join(
         blockDirPath,

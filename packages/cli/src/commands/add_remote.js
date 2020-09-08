@@ -9,11 +9,14 @@ const getBlockDirPathModule = require('../helpers/get_block_dir_path');
 const fsUtils = require('../helpers/fs_utils');
 const parseBlockIdentifier = require('../helpers/parse_block_identifier');
 const validateRemoteOrApiKeyName = require('../helpers/validate_remote_or_api_key_name');
+const outputRemotesBetaWarning = require('../helpers/output_remotes_beta_warning');
 
 import type {Argv} from 'yargs';
 import type {RemoteJson} from '../types/remote_json_type';
 
 async function runCommandAsync(argv: Argv): Promise<void> {
+    outputRemotesBetaWarning();
+
     const {blockIdentifier, remoteName} = argv;
     invariant(typeof blockIdentifier === 'string', 'expects blockIdentifier to be a string');
     invariant(typeof remoteName === 'string', 'expects remoteName to be a string');

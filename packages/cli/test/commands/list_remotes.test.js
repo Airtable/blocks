@@ -99,7 +99,7 @@ describe('list-remotes', function() {
                 .do(async () => await runListRemotesAsync())
                 .it('lists one remote with "default" as name', async output => {
                     const expectedOutput = 'Name    Block identifier \ndefault app123/blk123';
-                    expect(output.stdout.trim()).to.equal(expectedOutput.trim());
+                    expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
 
             test.stdout()
@@ -121,7 +121,7 @@ describe('list-remotes', function() {
                 .it('lists multiple remotes', async output => {
                     const expectedOutput =
                         'Name    Block identifier \ndefault app123/blk123    \nwhoa    appAbC/blkAbC';
-                    expect(output.stdout.trim()).to.equal(expectedOutput.trim());
+                    expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
 
             test.stdout()
@@ -147,7 +147,7 @@ describe('list-remotes', function() {
                 .it('lists "Server" column if it exists', async output => {
                     const expectedOutput =
                         'Name          Block identifier    Server              \ni_have_server appServer/blkServer https://example.com \ndefault       app123/blk123       undefined';
-                    expect(output.stdout.trim()).to.equal(expectedOutput.trim());
+                    expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
 
             test.stdout()
@@ -173,7 +173,7 @@ describe('list-remotes', function() {
                 .it('lists "Api key name" column if it exists', async output => {
                     const expectedOutput =
                         'Name           Block identifier    Api key name \ni_have_api_key appApiKey/blkApiKey okok         \ndefault        app123/blk123       undefined';
-                    expect(output.stdout.trim()).to.equal(expectedOutput.trim());
+                    expect(output.stdout.trim()).to.include(expectedOutput.trim());
                 });
         });
     });
