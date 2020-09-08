@@ -79,6 +79,8 @@ const InstructionsViewOrderedList = ({children}) => {
  * @param {import('./useSettingsStore').SettingsStore} props.settings
  */
 export default function InstructionsView({settings}) {
+    const showReason = settings.googleApiKeyError !== null;
+    const initialInstructionView = showReason ? 2 : 1;
     /**
      *  1) Welcome
      *  2) Reuse?
@@ -88,8 +90,8 @@ export default function InstructionsView({settings}) {
      * All views include the banner image at the top, the form input at the bottom,
      * and the Done button panel.
      */
-    const [instructionView, setInstructionView] = useState(1);
-    const [apiKey, setApiKey] = useState('');
+    const [instructionView, setInstructionView] = useState(initialInstructionView);
+    const [apiKey, setApiKey] = useState(settings.googleApiKey || '');
 
     const {
         validated: {severity, errorKey},
@@ -119,16 +121,17 @@ export default function InstructionsView({settings}) {
 
     const settingsStatusProps = {
         settings,
-        showReason: false,
+        showReason,
     };
 
     const doneButtonProps = {
         size: 'large',
         variant: 'primary',
         disabled: instructionView > 1 && apiKey.length < 10,
-        onClick: () => {
+        onClick() {
             if (instructionView !== 1) {
                 settings.googleApiKey = apiKey;
+                settings.showSettings = false;
             } else {
                 setInstructionView(2);
             }

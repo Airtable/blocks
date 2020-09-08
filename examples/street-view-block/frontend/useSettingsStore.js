@@ -8,6 +8,7 @@ import hash from 'object-hash';
 
 const ConfigKeys = {
     API_KEY: 'apiKey',
+    API_KEY_ERROR: 'apiKeyError',
     CACHE_FIELD_ID: 'cacheFieldId',
     LOCATION_FIELD_ID: 'locationFieldId',
     SHOW_DEFAULT_UI: 'showDefaultUI',
@@ -93,7 +94,9 @@ class SettingsStore {
 
     set cacheField(field) {
         const fieldId = field ? field.id : null;
-        this.globalConfig.setAsync(ConfigKeys.CACHE_FIELD_ID, fieldId);
+        if (this.globalConfig.hasPermissionToSet(ConfigKeys.CACHE_FIELD_ID, fieldId)) {
+            this.globalConfig.setAsync(ConfigKeys.CACHE_FIELD_ID, fieldId);
+        }
     }
 
     get fields() {
@@ -105,19 +108,24 @@ class SettingsStore {
     }
 
     set googleApiKey(value) {
-        this.globalConfig.setAsync(ConfigKeys.API_KEY, value);
+        // Whenever the API Key is set, the error must be reset to null.
+        const updates = [
+            {path: [ConfigKeys.API_KEY], value},
+            {path: [ConfigKeys.API_KEY_ERROR], value: null},
+        ];
+        if (this.globalConfig.hasPermissionToSetPaths(updates)) {
+            this.globalConfig.setPathsAsync(updates);
+        }
     }
 
     get googleApiKeyError() {
-        return this.localState.googleApiKeyError;
+        return this.globalConfig.get(ConfigKeys.API_KEY_ERROR) || null;
     }
 
     set googleApiKeyError(value) {
-        this.setLocalState({...this.localState, googleApiKeyError: value});
-    }
-
-    get googleMapURL() {
-        return `https://maps.googleapis.com/maps/api/js?v=3.exp&key=${this.googleApiKey}`;
+        if (this.globalConfig.hasPermissionToSet(ConfigKeys.API_KEY_ERROR, value)) {
+            this.globalConfig.setAsync(ConfigKeys.API_KEY_ERROR, value);
+        }
     }
 
     get locationFieldId() {
@@ -146,7 +154,7 @@ class SettingsStore {
     }
 
     get isInvalidAPIKey() {
-        return this.localState.googleApiKeyError !== null;
+        return this.googleApiKeyError !== null;
     }
 
     get isInvalidCacheField() {
@@ -264,7 +272,8 @@ class SettingsStore {
         }
 
         if (this.isInvalidAPIKey) {
-            ({action, reason} = getGoogleAuthFailure(this.localState.googleApiKeyError));
+            // ({action, reason} = getGoogleAuthFailure(this.localState.googleApiKeyError));
+            ({action, reason} = getGoogleAuthFailure(this.googleApiKeyError));
             errorKey = 'apiKey';
         }
 
@@ -311,20 +320,22 @@ class SettingsStore {
 const initialSettingsStoreLocalState = {
     showSettings: false,
     isAllowedToOverwriteNonCacheValues: false,
-    googleApiKeyError: null,
 };
 
 const useSettingsStore = () => {
     const base = useBase();
     const globalConfig = useGlobalConfig();
+    const settings = new SettingsStore(
+        base,
+        globalConfig,
+        useState(initialSettingsStoreLocalState),
+    );
     const googleApiKeyError = useGoogleMapsApiError();
-    const [localState, setLocalState] = useState(initialSettingsStoreLocalState);
-    const settings = new SettingsStore(base, globalConfig, [localState, setLocalState]);
     useEffect(() => {
         if (googleApiKeyError) {
-            setLocalState({...localState, googleApiKeyError});
+            settings.googleApiKeyError = googleApiKeyError;
         }
-    }, [googleApiKeyError]);
+    });
 
     return settings;
 };

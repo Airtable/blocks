@@ -14,8 +14,8 @@ import {
     useLoadable,
     useRecordById,
 } from '@airtable/blocks/ui';
-import {withGoogleMap, StreetViewPanorama, withScriptjs, GoogleMap} from 'react-google-maps';
-import React, {useEffect, useRef, useState} from 'react';
+import {GoogleMap, StreetViewPanorama, useLoadScript} from '@react-google-maps/api';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import hash from 'object-hash';
 
 import FullscreenBox from './FullscreenBox';
@@ -47,7 +47,7 @@ import {useGeocode} from './useGeocode';
  * @param {(newStreetViewState: StreetViewStateChange) => void} props.onStreetViewStateChange
  * @param {import('react-google-maps').StreetViewPanoramaProps['options']} props.streetViewOptions
  */
-const _RecordStreetView = props => {
+const RecordStreetView = props => {
     let {
         address,
         position,
@@ -59,12 +59,12 @@ const _RecordStreetView = props => {
     if (streetViewState && streetViewState.position) position = streetViewState.position;
     if (streetViewState && streetViewState.pov) pov = streetViewState.pov;
 
-    const googleMapRef = useRef(/** @type {import('react-google-maps').GoogleMap} */ (null));
+    const [map, setMap] = useState(null);
     const {pano} = useLocationRequest(position, address);
 
     const _onStreetViewStateChange = () => {
-        if (!onStreetViewStateChange) return;
-        const streetView = googleMapRef.current.getStreetView();
+        if (!onStreetViewStateChange || !map) return;
+        const streetView = map.getStreetView();
         const status = streetView.getStatus();
         const {OK, UNKNOWN_ERROR, ZERO_RESULTS} = getGoogle(window).maps.StreetViewStatus;
         const initialPayload = {
@@ -100,27 +100,49 @@ const _RecordStreetView = props => {
         }
     };
 
+    const onLoad = useCallback(map => {
+        setMap(map);
+    }, []);
+
+    const onUnmount = useCallback(() => {
+        setMap(null);
+    }, []);
+
     if (pano) {
+        const visible = true;
+        const options = {
+            ...streetViewOptions,
+            pano,
+            position,
+            pov,
+            visible,
+        };
+
+        const mapContainerStyle = {
+            width: '100%',
+            height: '100%',
+        };
+
         return (
-            <GoogleMap defaultZoom={8} defaultCenter={position} ref={googleMapRef}>
+            <GoogleMap
+                center={position}
+                mapContainerStyle={mapContainerStyle}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+                zoom={8}
+            >
                 <StreetViewPanorama
-                    defaultPano={pano}
-                    defaultPosition={position}
-                    defaultPov={pov}
-                    visible
                     onPanoChanged={_onStreetViewStateChange}
                     onPositionChanged={_onStreetViewStateChange}
                     onPovChanged={_onStreetViewStateChange}
                     onStatusChanged={_onStreetViewStateChange}
-                    options={streetViewOptions}
+                    options={options}
                 />
             </GoogleMap>
         );
     }
     return null;
 };
-
-const RecordStreetView = withGoogleMap(_RecordStreetView);
 
 const RecordNotOk = ({address, status}) => {
     let text;
@@ -215,7 +237,7 @@ const MainRecord = ({settings, record}) => {
             cache.setAsync(pendingCacheUpdate.current.record, pendingCacheUpdate.current.state);
             pendingCacheUpdate.current = null;
         }
-    }, [pendingCacheUpdate.current, cache]);
+    });
 
     let streetViewState = cache.get(record);
     let locationFieldContents = record.getCellValueAsString(locationField).trim();
@@ -318,8 +340,6 @@ const MainRecord = ({settings, record}) => {
     return (
         <RecordStreetViewWrapper
             key={record.id}
-            containerElement={<FullscreenBox />}
-            mapElement={<FullscreenBox className="mapRoot" />}
             address={locationFieldContents}
             streetViewState={streetViewState}
             streetViewOptions={streetViewOptions}
@@ -421,21 +441,11 @@ const MainConfigured = ({settings}) => {
     return <MainRecord settings={settings} record={record} />;
 };
 
-const _LoadMapsScript = ({children}) => children;
-
-const LoadMapsScript = withScriptjs(_LoadMapsScript);
-
 let Main = () => {
     const settings = useSettingsStore();
     useSettingsButton(() => {
         settings.showSettings = !settings.showSettings;
     });
-
-    const loadingElement = (
-        <FullscreenBox shouldCenterContent={true}>
-            <Loader />
-        </FullscreenBox>
-    );
 
     useEffect(() => {
         if (!settings.validated.isValid) {
@@ -444,29 +454,21 @@ let Main = () => {
     }, [settings.validated.isValid, settings.showSettings]);
 
     const hasSettingsIssue = settings.showSettings || !settings.validated.isValid;
-    const hasAPIKeyIssue =
-        (hasSettingsIssue && settings.isMissingAPIKey) || settings.isInvalidAPIKey;
-
-    const settingsOrInstructions = hasAPIKeyIssue ? (
+    const settingsOrInstructions = settings.isMissingAPIKey ? (
         <InstructionsView settings={settings} />
     ) : (
         <SettingsView settings={settings} />
     );
 
+    const {isLoaded} = useLoadScript({
+        googleMapsApiKey: settings.googleApiKey || '',
+    });
+
+    const mainMapOrNull = isLoaded ? <MainConfigured settings={settings} /> : null;
+
     return (
         <Box position="absolute" width="100%" height="100%">
-            {hasSettingsIssue ? (
-                settingsOrInstructions
-            ) : (
-                <FullscreenBox>
-                    <LoadMapsScript
-                        loadingElement={loadingElement}
-                        googleMapURL={settings.googleMapURL}
-                    >
-                        <MainConfigured settings={settings} />
-                    </LoadMapsScript>
-                </FullscreenBox>
-            )}
+            {hasSettingsIssue ? settingsOrInstructions : mainMapOrNull}
         </Box>
     );
 };

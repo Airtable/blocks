@@ -1,15 +1,16 @@
 import {
     Box,
-    Text,
     Button,
+    FieldPickerSynced,
     FormField,
     Heading,
     InputSynced,
-    TablePickerSynced,
-    FieldPickerSynced,
     Switch,
+    TablePickerSynced,
+    Text,
+    TextButton,
 } from '@airtable/blocks/ui';
-import React from 'react';
+import React, {Fragment} from 'react';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';
 import FullscreenBox from './FullscreenBox';
@@ -38,11 +39,19 @@ export default function SettingsView({settings}) {
 
     const {API_KEY, CACHE_FIELD_ID, LOCATION_FIELD_ID, TABLE_ID} = ConfigKeys;
 
+    const onResetClick = () => (settings.googleApiKey = '');
+    const labelWithResetButton = (
+        <Fragment>
+            Google API key (<TextButton onClick={onResetClick}>Reset</TextButton>)
+        </Fragment>
+    );
+    const googleApiKeyLabel = errorKey === API_KEY ? labelWithResetButton : 'Google API key';
+
     return (
         <FullscreenBox display="flex" flexDirection="column">
             <Box flex="auto" overflow="auto" padding={3}>
                 <Heading paddingBottom={3}>Settings</Heading>
-                <FormField label="Google API key">
+                <FormField label={googleApiKeyLabel}>
                     <InputSynced
                         globalConfigKey={API_KEY}
                         style={errorKey === API_KEY ? errorStyle : {}}
