@@ -11,7 +11,11 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.55...HEAD)
 
-No changes.
+-   **BREAKING:** Remove `Record.primaryCellValue` and `Record.primaryCellValueAsString`, as well as
+    the `primaryCellValue` watchable key on Record. These APIs were deprecated in v0.0.45
+-   **BREAKING:** Remove legacy record creation format. All calls to `Table.createRecordAsync` /
+    `Table.createRecordsAsync` must define record field mappings under a `fields` key. These APIs
+    were deprecated in v0.0.41.
 
 ## [0.0.55](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.54...@airtable/blocks@0.0.55) - 2020-09-02
 

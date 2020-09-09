@@ -10,7 +10,6 @@ import {ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
 import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
-import warning from '../warning';
 import AbstractModel from './abstract_model';
 import Field from './field';
 import Table from './table';
@@ -21,8 +20,6 @@ import RecordStore from './record_store';
 
 const WatchableRecordKeys = Object.freeze({
     name: 'name' as const,
-    // deprecated in favor of name:
-    primaryCellValue: 'primaryCellValue' as const,
     commentCount: 'commentCount' as const,
     // TODO(kasra): these keys don't have matching getters (not that they should
     // it's just inconsistent...)
@@ -349,18 +346,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             this.parentTable.id,
         );
     }
-    /** @hidden */
-    get primaryCellValue(): unknown {
-        warning(
-            'record.primaryCellValue is deprecated. Use record.getCellValue(table.primaryField) instead.',
-        );
-        return this.getCellValue(this.parentTable.primaryField);
-    }
-    /** @hidden */
-    get primaryCellValueAsString(): string {
-        warning('record.primaryCellValueAsString is deprecated. Use record.name instead.');
-        return this.name;
-    }
     /**
      * The primary cell value in this record, formatted as a `string`.
      *
@@ -416,8 +401,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
 
             if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
                 this._onChange(WatchableRecordKeys.name);
-                // deprecated in favor of name:
-                this._onChange(WatchableRecordKeys.primaryCellValue);
             }
 
             for (const fieldId of Object.keys(cellValuesByFieldId)) {
