@@ -45,7 +45,10 @@ function setUpYargs() {
     const yargs = require('yargs');
     yargs.usage('Usage: block <command> [options]');
     registerCommands(yargs);
-    yargs.help('help');
+    // NOTE: Passing `null` to `wrap()` will specify no column limit (no right-align). Doing this
+    // better formats the column output in the help menu
+    // https://github.com/yargs/yargs/blob/088ce6b53f813a30dbfd58107b6a4cb8dc5d0c53/docs/api.md#wrapcolumns
+    yargs.help('help').wrap(null);
     return yargs;
 }
 

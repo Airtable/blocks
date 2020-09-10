@@ -203,7 +203,7 @@ const commandConfigs: {[CommandName]: CommandConfig} = {
     [CommandNames.SUBMIT]: {
         name: CommandNames.SUBMIT,
         command: CommandNames.SUBMIT,
-        description: false,
+        description: 'Submit app for review for listing in the the Airtable Marketplace',
         example: `block ${CommandNames.SUBMIT}`,
         runCommandAsync: commandRunner(CommandNames.SUBMIT),
         optionMap: {
