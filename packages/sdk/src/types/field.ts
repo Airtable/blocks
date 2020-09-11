@@ -750,7 +750,12 @@ export enum FieldType {
      *
      * **Cell read format**
      * ```js
-     * unknown // depends on the field type being looked up
+     * Array<{
+     *     // the ID of the linked record this lookup value comes from
+     *     linkedRecordId: RecordId,
+     *     // the cell value of the lookup. the actual type depends on the field being looked up
+     *     value: unknown,
+     * }>
      * ```
      *
      * **Cell write format**

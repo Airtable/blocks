@@ -4,7 +4,7 @@ import getAirtableInterface from '../injected/airtable_interface';
 import getSdk from '../get_sdk';
 import {Color} from '../colors';
 import {BaseData} from '../types/base';
-import {RecordData} from '../types/record';
+import {RecordData, RecordId} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
@@ -50,10 +50,6 @@ type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
  * @docsPath models/Record
  */
 class Record extends AbstractModel<RecordData, WatchableRecordKey> {
-    // Once all blocks set this flag to true, remove this flag.
-    /** @hidden */
-    static shouldUseNewLookupFormat = false;
-
     /** @internal */
     static _className = 'Record';
     /** @internal */
@@ -151,20 +147,12 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
 
         if (typeof cellValue === 'object' && cellValue !== null) {
-            // HACK: while we migrate our blocks to the new lookup cell value
-            // format, make the public cell value look like an array for
-            // backwards compatibility.
+            // HACK: migrate to new public lookup cell value format if needed
             if (
-                !Record.shouldUseNewLookupFormat &&
-                field.type === FieldType.MULTIPLE_LOOKUP_VALUES
+                field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
+                !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
             ) {
-                const cellValueForMigration: any = [];
-                cellValueForMigration.linkedRecordIds = cloneDeep(
-                    (cellValue as any).linkedRecordIds,
-                );
-                cellValueForMigration.valuesByLinkedRecordId = cloneDeep(
-                    (cellValue as any).valuesByLinkedRecordId,
-                );
+                const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
                 invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
                 for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
                     invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
@@ -178,10 +166,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
                     const value = valuesByLinkedRecordId[linkedRecordId];
                     if (Array.isArray(value)) {
                         for (const v of value) {
-                            cellValueForMigration.push(v);
+                            cellValueForMigration.push({linkedRecordId, value: v});
                         }
                     } else {
-                        cellValueForMigration.push(value);
+                        cellValueForMigration.push({linkedRecordId, value});
                     }
                 }
                 return cellValueForMigration;

@@ -11,6 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.55...HEAD)
 
+-   **BREAKING:** The cell value format for lookup fields (`FieldType.MULTIPLE_LOOKUP_VALUES`) is
+    now `Array<{linkedRecordId: RecordId, value: CellValue}>`
 -   **BREAKING:** Remove `Record.primaryCellValue` and `Record.primaryCellValueAsString`, as well as
     the `primaryCellValue` watchable key on Record. These APIs were deprecated in v0.0.45
 -   **BREAKING:** Remove legacy record creation format. All calls to `Table.createRecordAsync` /
