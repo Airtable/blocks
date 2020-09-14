@@ -9,9 +9,14 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.56...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.57...HEAD)
 
-- New `block submit` command to submit your app code for review to be listed in the Airtable Marketplace.
+No changes.
+
+## [0.0.57](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.56...@airtable/blocks-cli@0.0.57) - 2020-09-13
+
+-   New `block submit` command to submit your app code for review to be listed in the Airtable
+    Marketplace.
 
 ## [0.0.56](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.55...@airtable/blocks-cli@0.0.56) - 2020-09-03
 
