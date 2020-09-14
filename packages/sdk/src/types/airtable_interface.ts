@@ -28,6 +28,7 @@ export interface SdkInitData {
     isFullscreen: boolean;
     isFirstRun: boolean;
     intentData: unknown;
+    isUsingNewLookupCellValueFormat?: true | undefined;
 }
 
 /** @hidden */

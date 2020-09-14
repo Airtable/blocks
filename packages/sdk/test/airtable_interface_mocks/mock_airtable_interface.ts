@@ -4,9 +4,11 @@ import {
     Aggregators,
     AirtableInterface,
     AppInterface,
+    FieldTypeConfig,
 } from '../../src/types/airtable_interface';
-import {cloneDeep} from '../../src/private_utils';
-import {FieldData} from '../../src/types/field';
+import {cloneDeep, ObjectMap} from '../../src/private_utils';
+import {spawnError} from '../../src/error_utils';
+import {FieldData, FieldId} from '../../src/types/field';
 import {ModelChange} from '../../src/types/base';
 import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
 import projectTrackerData from './project_tracker';
@@ -51,8 +53,15 @@ const fieldTypeProvider = {
     validateConfigForUpdate: () => {
         return {isValid: true};
     },
-    getConfig: () => {
-        return {};
+    getConfig: (
+        appInterface: AppInterface,
+        fieldData: FieldData,
+        fieldNamesById: ObjectMap<FieldId, string>,
+    ) => {
+        return {
+            type: fieldData.type,
+            options: fieldData.typeOptions,
+        } as FieldTypeConfig;
     },
     canBePrimary: () => {
         return true;
@@ -66,7 +75,6 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     urlConstructor: any;
     globalConfigHelpers: any;
     setMultipleKvPathsAsync: any;
-    fetchAndSubscribeToTableDataAsync: any;
     unsubscribeFromTableData: any;
     fetchAndSubscribeToCellValuesInFieldsAsync: any;
     unsubscribeFromCellValuesInFields: any;
@@ -131,6 +139,9 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     subscribeToEnterFullScreen() {}
     subscribeToExitFullScreen() {}
     subscribeToFocus() {}
+    fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any> {
+        throw spawnError('unimplemented');
+    }
 
     triggerModelUpdates(changes: ReadonlyArray<ModelChange>) {
         this.emit('modelupdates', {changes});

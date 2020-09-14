@@ -9,7 +9,6 @@ import {isEnumValue, entries, has, ObjectValues, cast, ObjectMap, keys} from '..
 import {spawnError} from '../error_utils';
 import getSdk from '../get_sdk';
 import {AirtableInterface} from '../types/airtable_interface';
-import warning from '../warning';
 import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
@@ -1424,19 +1423,9 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
             if (recordDefKeys.length === 1 && recordDefKeys[0] === 'fields') {
                 fields = recordDef.fields;
             } else {
-                warning([
-                    'Table.createRecordsAsync(): passing objects with field ids/names directly is deprecated and will be removed in a future version.',
-                    'Pass field ids/names & values under the `fields` key instead:',
-                    '',
-                    'myTable.createRecordsAsync([{',
-                    '    fields: {',
-                    "        myField: 'A cell value',",
-                    '    },',
-                    '}]);',
-                    '',
-                    'See: https://airtable.com/developers/blocks/api/models/Table#createRecordsAsync',
-                ]);
-                fields = recordDef as ObjectMap<FieldId | string, unknown>;
+                throw spawnError(
+                    'Invalid record format. Please define field mappings using a `fields` key for each record definition object',
+                );
             }
             return {
                 id: this._airtableInterface.idGenerator.generateRecordId(),

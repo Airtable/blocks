@@ -4,13 +4,12 @@ import getAirtableInterface from '../injected/airtable_interface';
 import getSdk from '../get_sdk';
 import {Color} from '../colors';
 import {BaseData} from '../types/base';
-import {RecordData} from '../types/record';
+import {RecordData, RecordId} from '../types/record';
 import {FieldType, FieldId} from '../types/field';
 import {ViewId} from '../types/view';
 import {isEnumValue, cloneDeep, isObjectEmpty, ObjectValues, FlowAnyObject} from '../private_utils';
 import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
-import warning from '../warning';
 import AbstractModel from './abstract_model';
 import Field from './field';
 import Table from './table';
@@ -21,7 +20,6 @@ import RecordStore from './record_store';
 
 const WatchableRecordKeys = Object.freeze({
     name: 'name' as const,
-    primaryCellValue: 'primaryCellValue' as const,
     commentCount: 'commentCount' as const,
     cellValues: 'cellValues' as const,
 });
@@ -46,9 +44,6 @@ type WatchableRecordKey = ObjectValues<typeof WatchableRecordKeys> | string;
  * @docsPath models/Record
  */
 class Record extends AbstractModel<RecordData, WatchableRecordKey> {
-    /** @hidden */
-    static shouldUseNewLookupFormat = false;
-
     /** @internal */
     static _className = 'Record';
     /** @internal */
@@ -147,16 +142,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
 
         if (typeof cellValue === 'object' && cellValue !== null) {
             if (
-                !Record.shouldUseNewLookupFormat &&
-                field.type === FieldType.MULTIPLE_LOOKUP_VALUES
+                field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
+                !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
             ) {
-                const cellValueForMigration: any = [];
-                cellValueForMigration.linkedRecordIds = cloneDeep(
-                    (cellValue as any).linkedRecordIds,
-                );
-                cellValueForMigration.valuesByLinkedRecordId = cloneDeep(
-                    (cellValue as any).valuesByLinkedRecordId,
-                );
+                const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
                 invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
                 for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
                     invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
@@ -170,10 +159,10 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
                     const value = valuesByLinkedRecordId[linkedRecordId];
                     if (Array.isArray(value)) {
                         for (const v of value) {
-                            cellValueForMigration.push(v);
+                            cellValueForMigration.push({linkedRecordId, value: v});
                         }
                     } else {
-                        cellValueForMigration.push(value);
+                        cellValueForMigration.push({linkedRecordId, value});
                     }
                 }
                 return cellValueForMigration;
@@ -336,18 +325,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             this.parentTable.id,
         );
     }
-    /** @hidden */
-    get primaryCellValue(): unknown {
-        warning(
-            'record.primaryCellValue is deprecated. Use record.getCellValue(table.primaryField) instead.',
-        );
-        return this.getCellValue(this.parentTable.primaryField);
-    }
-    /** @hidden */
-    get primaryCellValueAsString(): string {
-        warning('record.primaryCellValueAsString is deprecated. Use record.name instead.');
-        return this.name;
-    }
     /**
      * The primary cell value in this record, formatted as a `string`.
      *
@@ -400,7 +377,6 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
 
             if (cellValuesByFieldId[this.parentTable.primaryField.id]) {
                 this._onChange(WatchableRecordKeys.name);
-                this._onChange(WatchableRecordKeys.primaryCellValue);
             }
 
             for (const fieldId of Object.keys(cellValuesByFieldId)) {

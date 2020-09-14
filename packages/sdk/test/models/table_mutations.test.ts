@@ -108,82 +108,37 @@ describe('Table', () => {
             expect(warning).not.toHaveBeenCalled();
         });
 
-        it('performs a mutation with warning when passed an object of field names', async () => {
+        it('throws error when passed an object of field names (legacy syntax)', async () => {
             const table = makeTable();
-            await table.createRecordsAsync([
-                {
-                    'Field 1': 5,
-                    'Field 2': 6,
-                } as any, 
-            ]);
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
+            await expect(
+                table.createRecordsAsync([
                     {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 5,
-                            fldTest2: 6,
-                        },
-                    },
-                ],
-            });
+                        'Field 1': 5,
+                        'Field 2': 6,
+                    } as any, 
+                ]),
+            ).rejects.toThrowError(
+                'Invalid record format. Please define field mappings using a `fields` key for each record definition object',
+            );
 
-            expect(warning).toBeCalledTimes(1);
-            expect(warning).toHaveBeenCalledWith([
-                'Table.createRecordsAsync(): passing objects with field ids/names directly is deprecated and will be removed in a future version.',
-                'Pass field ids/names & values under the `fields` key instead:',
-                '',
-                'myTable.createRecordsAsync([{',
-                '    fields: {',
-                "        myField: 'A cell value',",
-                '    },',
-                '}]);',
-                '',
-                'See: https://airtable.com/developers/blocks/api/models/Table#createRecordsAsync',
-            ]);
+            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(0);
         });
 
-        it('performs a mutation with warning when passed an object of field ids', async () => {
+        it('throws error when passed an object of field ids (legacy syntax)', async () => {
             const table = makeTable();
-            await table.createRecordsAsync([
-                {
-                    fldTest1: 7,
-                    fldTest2: 8,
-                } as any, 
-            ]);
-
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_MULTIPLE_RECORDS,
-                tableId: 'tblTest',
-                records: [
+            await expect(
+                table.createRecordsAsync([
                     {
-                        id: 'recGeneratedMockId',
-                        cellValuesByFieldId: {
-                            fldTest1: 7,
-                            fldTest2: 8,
-                        },
-                    },
-                ],
-            });
+                        fldTest1: 7,
+                        fldTest2: 8,
+                    } as any, 
+                ]),
+            ).rejects.toThrowError(
+                'Invalid record format. Please define field mappings using a `fields` key for each record definition object',
+            );
 
-            expect(warning).toBeCalledTimes(1);
-            expect(warning).toHaveBeenCalledWith([
-                'Table.createRecordsAsync(): passing objects with field ids/names directly is deprecated and will be removed in a future version.',
-                'Pass field ids/names & values under the `fields` key instead:',
-                '',
-                'myTable.createRecordsAsync([{',
-                '    fields: {',
-                "        myField: 'A cell value',",
-                '    },',
-                '}]);',
-                '',
-                'See: https://airtable.com/developers/blocks/api/models/Table#createRecordsAsync',
-            ]);
+            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(0);
         });
     });
 });

@@ -1,6 +1,6 @@
 import SdkType from './sdk';
 
-let sdk: SdkType;
+let sdk: SdkType | null = null;
 
 /** @hidden */
 export default function getSdk(): SdkType {
@@ -10,5 +10,10 @@ export default function getSdk(): SdkType {
         sdk = new Sdk(getAirtableInterface());
     }
 
-    return sdk;
+    return sdk as SdkType;
+}
+
+/** @hidden */
+export function clearSdkForTest() {
+    sdk = null;
 }
