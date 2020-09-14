@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.56...HEAD)
 
-No changes.
+- New `block submit` command to submit your app code for review to be listed in the Airtable Marketplace.
 
 ## [0.0.56](https://github.com/airtable/blocks/compare/@airtable/blocks-cli@0.0.55...@airtable/blocks-cli@0.0.56) - 2020-09-03
 
