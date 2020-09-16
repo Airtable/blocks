@@ -13,7 +13,7 @@ The code shows:
 
 ## How to run this block
 
-1. Copy [this base](https://airtable.com/shrg3CySSks0nRw5w).
+1. Create a new base (or you can use an existing base).
 
 2. Create a new block in your new base (see
    [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block)),

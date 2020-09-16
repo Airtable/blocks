@@ -1,7 +1,7 @@
 import {initializeBlock, useBase, useRecords, Loader, Button, Box} from '@airtable/blocks/ui';
 import React, {Fragment, useState} from 'react';
 
-// These values match the base for this example: https://airtable.com/shrIho8SB7RhrlUQL
+// These values match the base for this example: https://airtable.com/shrBJH7LLUMD6ONIf
 const TABLE_NAME = 'Articles';
 const TITLE_FIELD_NAME = 'Title';
 const EXTRACT_FIELD_NAME = 'Extract';

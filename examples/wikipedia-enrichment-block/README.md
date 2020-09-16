@@ -11,7 +11,7 @@ The code shows:
 
 ## How to run this block
 
-1. Copy [this base](https://airtable.com/shrIho8SB7RhrlUQL).
+1. Copy [this base](https://airtable.com/shrBJH7LLUMD6ONIf).
 
 2. Create a new block in your new base (see
    [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block)),
