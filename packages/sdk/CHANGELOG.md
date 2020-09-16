@@ -11,7 +11,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...HEAD)
 
-No changes.
+-   **DEPRECATED:** "blocks" as an icon name. Use `<Icon name="apps" .../>` instead.
 
 ## [1.0.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.0...@airtable/blocks@1.0.1) - 2020-09-24
 
