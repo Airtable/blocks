@@ -4,7 +4,7 @@ import GlobalConfig from '../global_config';
 import useWatchable from './use_watchable';
 
 /**
- * Returns the block's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
+ * Returns the app's {@link GlobalConfig} and updates whenever any key in {@link GlobalConfig}
  * changes.
  *
  * @example

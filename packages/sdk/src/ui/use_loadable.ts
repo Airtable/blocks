@@ -35,7 +35,7 @@ interface UseLoadableOpts {
 }
 
 /**
- * When you're writing a block, not all of the data in your base is available to work with straight
+ * When you're writing an app, not all of the data in your base is available to work with straight
  * away. We need to load it from Airtable first. This hook is a low-level tool for managing that.
  * You might not need to use it directly though - if you're working with a {@link RecordQueryResult}, try
  * {@link useRecords}, {@link useRecordIds}, or {@link useRecordById} first.
@@ -44,7 +44,7 @@ interface UseLoadableOpts {
  * loaded when your component mounts, and unloaded when your component unmounts. By default, you
  * don't need to worry about waiting for the data to load - the hook uses React Suspense to make
  * sure the rest of your component doesn't run until the data is loaded. Whilst the data is
- * loading, the entire block will show a loading indicator. If you want to change where that
+ * loading, the entire app will show a loading indicator. If you want to change where that
  * indicator shows or how it looks, use [`<React.Suspense />`](https://reactjs.org/docs/react-api.html#reactsuspense|)
  * around the component that uses the hook.
  *
@@ -141,7 +141,7 @@ export default function useLoadable(
                 // lifecycle and use that to unload it. Instead, we load it and keep it loaded for a long
                 // enough time that it can resolve and then be rendered successfully. After the timeout has
                 // passed, we unload it, allowing the data to be released as long as it's not used anywhere
-                // else in the block.
+                // else in the app.
                 setTimeout(() => {
                     for (const model of compactModels) {
                         model.unloadData();

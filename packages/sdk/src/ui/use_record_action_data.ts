@@ -5,29 +5,29 @@ import {WatchablePerformRecordActionKeys} from '../perform_record_action';
 import {useLoadable, useWatchable} from './ui';
 
 /**
- * A hook to watch "open block" / "perform record action" events (from button field). Returns
+ * A hook to watch "open app" / "perform record action" events (from button field). Returns
  * the data corresponding to the latest action, or `null` if no actions have occurred yet. If there
- * was a pending event for the block (for example, because a button that opens this block was
- * clicked while the blocks dashboard was closed) it will be returned as the initial value.
+ * was a pending event for the app (for example, because a button that opens this app was
+ * clicked while the apps dashboard was closed) it will be returned as the initial value.
  *
- * Like {@link useLoadable}, this hook puts the block in suspense while subscribing to events and
+ * Like {@link useLoadable}, this hook puts the app in suspense while subscribing to events and
  * fetching the initial data.
  *
  * Also see {@link registerRecordActionDataCallback}, which subscribes to the same events in an
  * asynchronous (callback based) way. An advantage of using this hook over the callback is that you
- * immediately can handle any pending events when your block opens - with a callback, your block
+ * immediately can handle any pending events when your app opens - with a callback, your app
  * will finish it's initial render before handling the event.
  *
- * Like {@link registerRecordActionDataCallback}, your block won't receive events until this hook is
+ * Like {@link registerRecordActionDataCallback}, your app won't receive events until this hook is
  * used for the first time. Because of that, we recommend only using this hook once, in the top
- * level component of your block. Similarly, using both `registerRecordActionDataCallback` and
+ * level component of your app. Similarly, using both `registerRecordActionDataCallback` and
  * `useRecordActionData` is not supported.
  *
- * You can test your block in development by sending "perform record action" events to your block
- * in the "Advanced" panel of the block developer tools.
+ * You can test your app in development by sending "perform record action" events to your app
+ * in the "Advanced" panel of the app developer tools.
  *
- * After releasing your block, you can use it with a button field by choosing the "Open custom
- * block" action and selecting your block.
+ * After releasing your app, you can use it with a button field by choosing the "Open custom
+ * app" action and selecting your app.
  *
  * @example
  * ```js

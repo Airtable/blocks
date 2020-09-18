@@ -8,7 +8,7 @@ import BlockWrapper from './block_wrapper';
 let hasBeenInitialized = false;
 
 /**
- * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Blocks-specific things.
+ * `initializeBlock` takes the top-level React component in your tree and renders it. It is conceptually similar to `ReactDOM.render`, but takes care of some Apps-specific things.
  *
  * @param getEntryElement A function that returns your React Node.
  *
