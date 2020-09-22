@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.0...HEAD)
 
-No changes.
+-   Fixed bug where `Select`, `SelectButtons`, and `Synced` variants behaved incorrectly when there
+    were multiple items with the same value.
 
 ## [1.0.0](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.55...@airtable/blocks@1.0.0) - 2020-09-14
 
