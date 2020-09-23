@@ -500,11 +500,11 @@ const DoesNotSupportShares = (): ReactElement => (
         flexDirection="column"
         justifyContent="center"
     >
-        <Box textAlign="center">This block is not supported in shares.</Box>
+        <Box textAlign="center">This app is not supported in shares.</Box>
     </Box>
 );
 
-function MeetingModeratorBlock(): ReactElement {
+function MeetingModeratorApp(): ReactElement {
     const globalConfig = useGlobalConfig();
     const base = useBase();
     const session = useSession();
@@ -567,4 +567,4 @@ function MeetingModeratorBlock(): ReactElement {
     );
 }
 
-initializeBlock(() => <MeetingModeratorBlock />);
+initializeBlock(() => <MeetingModeratorApp />);

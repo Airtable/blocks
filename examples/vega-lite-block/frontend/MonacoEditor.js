@@ -75,7 +75,7 @@ export default function MonacoEditor({
     const memoizedResize = useCallback(() => {
         // The double call to layout ensures that Monaco responds when
         // the width and height are both 0. This trick was borrowed from
-        // the Script and JSON editor blocks.
+        // the Script and JSON editor apps.
         editor.current.layout({height: 0, width: 0});
         editor.current.layout({height, width});
     }, [height, width]);

@@ -77,7 +77,7 @@ export default function SettingsView({settings}) {
                 {settings.table && settings.locationField ? (
                     <FormField
                         label="Geocode cache field"
-                        description="This block stores additional information for each address. Create a new text field in your table and pick it below. Other street view blocks can use the same field."
+                        description="This app stores additional information for each address. Create a new text field in your table and pick it below. Other street view apps can use the same field."
                     >
                         <FieldPickerSynced
                             table={settings.table}

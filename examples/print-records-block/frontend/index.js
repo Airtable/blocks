@@ -18,7 +18,7 @@ const GlobalConfigKeys = {
     VIEW_ID: 'viewId',
 };
 
-function PrintRecordsBlock() {
+function PrintRecordsApp() {
     const base = useBase();
     const globalConfig = useGlobalConfig();
 
@@ -51,7 +51,7 @@ function Toolbar({table}) {
             <Button
                 onClick={() => {
                     // Inject CSS to hide elements with the "print-hide" class name
-                    // when the block gets printed. This lets us hide the toolbar from
+                    // when the app gets printed. This lets us hide the toolbar from
                     // the print output.
                     printWithoutElementsWithClass('print-hide');
                 }}
@@ -165,4 +165,4 @@ function Record({record}) {
     );
 }
 
-initializeBlock(() => <PrintRecordsBlock />);
+initializeBlock(() => <PrintRecordsApp />);

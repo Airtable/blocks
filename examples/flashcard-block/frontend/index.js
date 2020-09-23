@@ -6,7 +6,7 @@ import FlashcardContainer from './FlashcardContainer';
 import {useSettings} from './settings';
 import SettingsForm from './SettingsForm';
 
-// Determines the maximum size of the block in fullscreen mode.
+// Determines the maximum size of the app in fullscreen mode.
 viewport.addMaxFullscreenSize({
     height: 620,
     width: 840,
@@ -18,11 +18,11 @@ viewport.addMinSize({
 });
 
 /**
- * A simple flashcard block that displays records from a chosen view.
+ * A simple flashcard app that displays records from a chosen view.
  * Supports choosing a question field which is displayed by default and an optional answer field that
  * is hidden until shown by the user.
  */
-function FlashcardBlock() {
+function FlashcardApp() {
     const {isValid, message, settings} = useSettings();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     useSettingsButton(() => {
@@ -59,4 +59,4 @@ function FlashcardBlock() {
     );
 }
 
-initializeBlock(() => <FlashcardBlock />);
+initializeBlock(() => <FlashcardApp />);

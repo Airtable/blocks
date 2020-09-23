@@ -28,7 +28,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
         return (
             <FullScreenBox padding={3}>
                 <Text textAlign="center" padding={1}>
-                    This block is not supported in shares.
+                    This app is not supported in shares.
                 </Text>
             </FullScreenBox>
         );
@@ -59,7 +59,7 @@ function RecordPreview({settingsValidationResult, selectedRecordId}) {
         );
     }
 
-    // selectedRecord will be null on block initialization, after
+    // selectedRecord will be null on app initialization, after
     // the user switches table or view, or if the record is deleted
     if (selectedRecord === null) {
         return (

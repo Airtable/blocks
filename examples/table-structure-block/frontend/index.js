@@ -15,13 +15,13 @@ import React from 'react';
 const FIELD_CELL_WIDTH_PERCENTAGE = '35%';
 const FIELD_DESCRIPTION_CELL_WIDTH_PERCENTAGE = '65%';
 
-function TableStructureBlock() {
-    // useBase will re-render the block whenever the base's configuration changes: this includes
+function TableStructureApp() {
+    // useBase will re-render the app whenever the base's configuration changes: this includes
     // updates to names, descriptions and field options, as well as tables/fields being added or
-    // removed. This means the block will always show the latest structure.
+    // removed. This means the app will always show the latest structure.
     const base = useBase();
 
-    // useWatchable is used to re-render the block whenever the active table or view changes.
+    // useWatchable is used to re-render the app whenever the active table or view changes.
     useWatchable(cursor, ['activeTableId', 'activeViewId']);
 
     // table can be null if it's a new table being created and activeViewId can be null while the
@@ -145,4 +145,4 @@ function Cell({children, width}) {
     );
 }
 
-initializeBlock(() => <TableStructureBlock />);
+initializeBlock(() => <TableStructureApp />);

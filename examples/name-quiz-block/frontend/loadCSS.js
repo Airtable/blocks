@@ -1,7 +1,7 @@
 import {loadCSSFromString} from '@airtable/blocks/ui';
 
 /**
- * A string that contains all of the CSS used in this block.
+ * A string that contains all of the CSS used in this app.
  */
 const cssString = `
     @keyframes scaleUpAndDown {

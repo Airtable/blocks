@@ -69,7 +69,7 @@ function getRawSettingsWithDefaults(globalConfig) {
  * Takes values read from GlobalConfig and converts them to Airtable objects where possible.
  * Also creates an extra key for queryResult which is derived from view and field.
  * @param {object} rawSettings - The object returned by getRawSettingsWithDefaults
- * @param {Base} base - The base being used by the block in order to convert id's to objects
+ * @param {Base} base - The base being used by the app in order to convert id's to objects
  * @returns {{
  *     table: Table | null,
  *     view: View | null,

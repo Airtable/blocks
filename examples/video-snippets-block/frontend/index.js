@@ -13,7 +13,7 @@ import {useSettings} from './settings';
 import RecordPreview from './RecordPreview';
 import SettingsForm from './SettingsForm';
 
-function AttachmentVideoViewerBlock() {
+function AttachmentVideoViewerApp() {
     const viewport = useViewport();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     useSettingsButton(() => {
@@ -33,7 +33,7 @@ function AttachmentVideoViewerBlock() {
     // selects a record and a video appears, and then the user
     // de-selects the record (but does not select another), the video
     // will remain. This is useful when, for example, the user resizes
-    // the blocks pane.
+    // the apps pane.
     const [selectedRecordId, setSelectedRecordId] = useState(null);
 
     // cursor.selectedRecordIds isn't loaded by default, so we need to
@@ -78,4 +78,4 @@ function AttachmentVideoViewerBlock() {
     );
 }
 
-initializeBlock(() => <AttachmentVideoViewerBlock />);
+initializeBlock(() => <AttachmentVideoViewerApp />);

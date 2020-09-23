@@ -27,7 +27,7 @@ loadCSS();
 
 const domParser = new DOMParser();
 
-function FlowchartBlock() {
+function FlowchartApp() {
     const viewport = useViewport();
     const [isSettingsVisible, setIsSettingsVisible] = useState(false);
     useSettingsButton(() => {
@@ -65,7 +65,7 @@ function FlowchartBlock() {
             graph.current.innerHTML = '<span class="prompt">Add some records to get started</span>';
         } else if (queryResult.records.length > MAX_RECORDS) {
             graph.current.innerHTML = `<span class="prompt">
-                    The flowchart block can only visualize up to ${MAX_RECORDS} records. Try deleting some records or 
+                    The flowchart app can only visualize up to ${MAX_RECORDS} records. Try deleting some records or 
                     filtering them out of the view.
                 </span>`;
         } else {
@@ -74,7 +74,7 @@ function FlowchartBlock() {
                 const svgElement = svgDocument.firstElementChild;
                 if (svgElement && graph.current) {
                     // Set the width and height of the SVG element so that it takes up the full dimensions of the
-                    // block frame.
+                    // app frame.
                     const width = svgElement.getAttribute('width');
                     const height = svgElement.getAttribute('height');
                     if (Number(width) > Number(height)) {
@@ -174,4 +174,4 @@ function FlowchartBlock() {
     );
 }
 
-initializeBlock(() => <FlowchartBlock />);
+initializeBlock(() => <FlowchartApp />);

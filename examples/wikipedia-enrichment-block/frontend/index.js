@@ -15,7 +15,7 @@ const MAX_RECORDS_PER_UPDATE = 50;
 // https://en.wikipedia.org/api/rest_v1/#/Page%20content/get_page_summary__title_
 const API_ENDPOINT = 'https://en.wikipedia.org/api/rest_v1/page/summary';
 
-function WikipediaEnrichmentBlock() {
+function WikipediaEnrichmentApp() {
     const base = useBase();
 
     const table = base.getTableByName(TABLE_NAME);
@@ -126,4 +126,4 @@ function delayAsync(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-initializeBlock(() => <WikipediaEnrichmentBlock />);
+initializeBlock(() => <WikipediaEnrichmentApp />);

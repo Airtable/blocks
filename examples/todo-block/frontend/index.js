@@ -16,7 +16,7 @@ import {
 } from '@airtable/blocks/ui';
 import {FieldType} from '@airtable/blocks/models';
 
-function TodoBlock() {
+function TodoApp() {
     const base = useBase();
 
     // Read the user's choice for which table and view to use from globalConfig.
@@ -167,4 +167,4 @@ function AddTaskForm({table}) {
     );
 }
 
-initializeBlock(() => <TodoBlock />);
+initializeBlock(() => <TodoApp />);

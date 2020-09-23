@@ -17,7 +17,7 @@ export const allowedUrlFieldTypes = [
 /**
  * Return settings from GlobalConfig with defaults, and converts them to Airtable objects.
  * @param {object} globalConfig
- * @param {Base} base - The base being used by the block in order to convert id's to objects
+ * @param {Base} base - The base being used by the app in order to convert id's to objects
  * @returns {{
  *     isEnforced: true | false,
  *     urlTable: Table | null,

@@ -5,7 +5,7 @@ const TABLE_NAME = 'Opportunities';
 
 const FIELD_NAME = 'Estimated Value';
 
-function SummaryBlock() {
+function SummaryApp() {
     const base = useBase();
 
     const table = base.getTableByName(TABLE_NAME);
@@ -55,4 +55,4 @@ function Aggregation({field, aggregator, records}) {
     );
 }
 
-initializeBlock(() => <SummaryBlock />);
+initializeBlock(() => <SummaryApp />);

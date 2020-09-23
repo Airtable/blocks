@@ -55,7 +55,7 @@ function SpecificationEditor(props) {
             // and surfaced through onSyntaxError. Since we
             // also allow invalid specification syntax, these
             // errors must be supressed.
-            // Because we cannot have an empty block here, we must
+            // Because we cannot have an empty app here, we must
             // do something to appease to the lint gods.
             void error;
         }

@@ -46,7 +46,7 @@ class SettingsStore {
             // If there is no value there, check the ephemaral cache,
             // which is used as a fallback when the user doesn't have
             // permission to write the the cache field. This data is
-            // lost when the block is reloaded, but will prevent repeat
+            // lost when the app is reloaded, but will prevent repeat
             // requests to the Geocode API.
             //
             const encoded =
@@ -242,7 +242,7 @@ class SettingsStore {
 
         if (this.isMissingCacheField || this.isInvalidCacheField) {
             action =
-                'Pick a field to store cached geocoding data. This field must not be used by other map or street view blocks.';
+                'Pick a field to store cached geocoding data. This field must not be used by other map or street view apps.';
             errorKey = 'cacheFieldId';
             reason = this.isMissingCacheField
                 ? 'The geocode cache field is missing.'

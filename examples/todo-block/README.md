@@ -1,6 +1,6 @@
-# To-do list block
+# To-do list app
 
-This example block shows a to-do list based on the records in a table.
+This example app shows a to-do list based on the records in a table.
 
 The code shows:
 
@@ -14,18 +14,18 @@ The code shows:
 
 -   How to create, update, and delete records in your base.
 
--   How to make your block adapt to the current user's permissions.
+-   How to make your app adapt to the current user's permissions.
 
-## How to run this block
+## How to run this app
 
 1. Create a new base (or you can use an existing base).
 
-2. Create a new block in your new base (see
-   [Create a new block](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-block)),
+2. Create a new app in your new base (see
+   [Create a new app](https://airtable.com/developers/blocks/guides/hello-world-tutorial#create-a-new-app)),
    selecting "To-do list" as your template.
 
-3. From the root of your new block, run `block run`.
+3. From the root of your new app, run `block run`.
 
-## See the block running
+## See the app running
 
-![Block updating to-do list as the user changes data](media/block.gif)
+![App updating to-do list as the user changes data](media/block.gif)

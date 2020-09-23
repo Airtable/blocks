@@ -8,16 +8,16 @@ import GameCompletedScreen from './GameCompletedScreen';
 import Game from './Game';
 import loadCSS from './loadCSS';
 
-// Load all the CSS used in our block.
+// Load all the CSS used in our app.
 loadCSS();
 
-// Determines the minimum size the block needs before it asks the user to enlarge the block.
+// Determines the minimum size the app needs before it asks the user to enlarge the app.
 viewport.addMinSize({
     height: 520,
     width: 600,
 });
 
-// Determines the maximum size of the block in fullscreen mode.
+// Determines the maximum size of the app in fullscreen mode.
 viewport.addMaxFullscreenSize({
     height: 740,
     width: 800,
@@ -50,14 +50,14 @@ const GameStates = Object.freeze({
 });
 
 /**
- * The name trainer block is a game that shows a single name for multiple pictures.
+ * The name trainer app is a game that shows a single name for multiple pictures.
  * Each round the player needs to select the matching picture for the name within the time limit.
  *
  * This component handles all of the game lifecycle and renders a component based on the state of the game.
  */
-function NameQuizBlock() {
+function NameQuizApp() {
     const [gameData, setGameData] = useState({
-        // On first run of the block show the settings screen.
+        // On first run of the app show the settings screen.
         gameState: runInfo.isFirstRun ? GameStates.CONFIGURING_SETTINGS : GameStates.HOME_SCREEN,
         // The game report will be populated when a game ends. It is used by the `GameCompletedScreen`.
         gameReport: null,
@@ -73,7 +73,7 @@ function NameQuizBlock() {
      * @param {Array<{recordId: string, name: string, largePictureUrl: string, smallPictureUrl: string}>} listOfNamesWithPictures
      */
     function startGame(listOfNamesWithPictures) {
-        // Enter the block in fullscreen to have more real estate to play the game.
+        // Enter the app in fullscreen to have more real estate to play the game.
         viewport.enterFullscreenIfPossible();
         setGameData({
             gameState: GameStates.PLAYING,
@@ -131,4 +131,4 @@ function NameQuizBlock() {
     }
 }
 
-initializeBlock(() => <NameQuizBlock />);
+initializeBlock(() => <NameQuizApp />);

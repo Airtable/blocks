@@ -331,7 +331,7 @@ const MainConfigured = ({settings}) => {
     // Caches the currently selected record and field in state. If the user
     // selects a record and a street view appears, and then the user de-selects the
     // record (but does not select another), the street view will remain. This is
-    // useful when, for example, the user resizes the blocks pane.
+    // useful when, for example, the user resizes the apps pane.
     const selectedIdDefault = {selectedRecordId: '', selectedFieldId: ''};
     const [{selectedRecordId, selectedFieldId}, setSelectedIds] = useState(selectedIdDefault);
 
@@ -364,7 +364,7 @@ const MainConfigured = ({settings}) => {
     let message = '';
     let mustShowSettingsButton = false;
 
-    // Prevent this block from rendering a street view when the active table is not
+    // Prevent this app from rendering a street view when the active table is not
     // the table the author selected in settings.
     if (cursor.activeTableId !== table.id && !(record && record.parentTable.id === table.id)) {
         message = `Switch to the “${table.name}” table to see street views.`;
@@ -377,7 +377,7 @@ const MainConfigured = ({settings}) => {
     ) {
         message = 'Switch to a grid view to see street views.';
     } else if (
-        // record will be null on block initialization, after
+        // record will be null on app initialization, after
         // the user switches table or view, or if it was deleted.
         record === null ||
         // The location field may have been deleted.
@@ -385,7 +385,7 @@ const MainConfigured = ({settings}) => {
     ) {
         message = 'Select a cell to see a street view.';
     } else if (selectedFieldId !== locationFieldId) {
-        // Prevent this block from rendering a street view when the selected cell is not
+        // Prevent this app from rendering a street view when the selected cell is not
         // in the field that the author selected in settings.
         message = `Select a cell in the “${locationField.name}” field to see a street view.`;
         mustShowSettingsButton = true;

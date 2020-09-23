@@ -180,8 +180,8 @@ const examples: Array<Example> = [
     },
 ];
 
-function UIPlaygroundBlock() {
+function UIPlaygroundApp() {
     return <ExampleManager examples={examples} />;
 }
 
-initializeBlock(() => <UIPlaygroundBlock />);
+initializeBlock(() => <UIPlaygroundApp />);

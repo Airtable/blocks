@@ -12,7 +12,7 @@ viewport.addMinSize({
     width: 520,
 });
 
-function SchemaMapBlock() {
+function SchemaMapApp() {
     const [shouldShowSettings, setShouldShowSettings] = useState(false);
 
     useSettingsButton(() => {
@@ -31,4 +31,4 @@ function SchemaMapBlock() {
     );
 }
 
-initializeBlock(() => <SchemaMapBlock />);
+initializeBlock(() => <SchemaMapApp />);

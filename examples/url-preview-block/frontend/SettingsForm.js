@@ -38,7 +38,7 @@ function SettingsForm({setIsSettingsOpen}) {
                 <Heading marginBottom={3}>Settings</Heading>
                 <FormField label="">
                     <Switch
-                        aria-label="When enabled, the block will only show previews for the specified table and field, regardless of what field is selected."
+                        aria-label="When enabled, the app will only show previews for the specified table and field, regardless of what field is selected."
                         value={isEnforced}
                         onChange={value => {
                             globalConfig.setAsync(ConfigKeys.IS_ENFORCED, value);
@@ -48,8 +48,8 @@ function SettingsForm({setIsSettingsOpen}) {
                     />
                     <Text paddingY={1} textColor="light">
                         {isEnforced
-                            ? 'The block will show previews for the selected record in grid view if the table has a supported URL in the specified field.'
-                            : 'The block will show previews if the selected cell in grid view has a supported URL.'}
+                            ? 'The app will show previews for the selected record in grid view if the table has a supported URL in the specified field.'
+                            : 'The app will show previews if the selected cell in grid view has a supported URL.'}
                     </Text>
                 </FormField>
                 {isEnforced && (

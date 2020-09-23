@@ -1,6 +1,6 @@
 // btoa only supports ascii, so have to encode unicode.
-// This code is derived from similar code found in the Maps block.
-// The Maps block sourced it from
+// This code is derived from similar code found in the Maps app.
+// The Maps app sourced it from
 // https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
 
 export function base64EncodeUnicode(str) {

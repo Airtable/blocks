@@ -20,12 +20,12 @@ import {
 import {useSettings} from './settings';
 import SettingsForm from './SettingsForm';
 
-// How this block chooses a preview to show:
+// How this app chooses a preview to show:
 //
 // Without a specified Table & Field:
 //
 //  - When the user selects a cell in grid view and the field's content is
-//    a supported preview URL, the block uses this URL to construct an embed
+//    a supported preview URL, the app uses this URL to construct an embed
 //    URL and inserts this URL into an iframe.
 //
 // To Specify a Table & Field:
@@ -39,12 +39,12 @@ import SettingsForm from './SettingsForm';
 //  - When the user selects a cell in grid view and the active table matches
 //    the specified table or when the user opens a record from a button field
 //    in the specified table:
-//    The block looks in the selected record for the
+//    The app looks in the selected record for the
 //    specified field containing a supported URL (e.g. https://www.youtube.com/watch?v=KYz2wyBy3kc),
 //    and uses this URL to construct an embed URL and inserts this URL into
 //    an iframe.
 //
-function UrlPreviewBlock() {
+function UrlPreviewApp() {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     useSettingsButton(() => setIsSettingsOpen(!isSettingsOpen));
 
@@ -56,7 +56,7 @@ function UrlPreviewBlock() {
     // Caches the currently selected record and field in state. If the user
     // selects a record and a preview appears, and then the user de-selects the
     // record (but does not select another), the preview will remain. This is
-    // useful when, for example, the user resizes the blocks pane.
+    // useful when, for example, the user resizes the apps pane.
     const [selectedRecordId, setSelectedRecordId] = useState(null);
     const [selectedFieldId, setSelectedFieldId] = useState(null);
 
@@ -107,7 +107,7 @@ function UrlPreviewBlock() {
                     } else {
                         // Record is from a mismatching table.
                         setRecordActionErrorMessage(
-                            `This block is set up to preview URLs using records from the "${urlTable.name}" table, but was opened from a different table.`,
+                            `This app is set up to preview URLs using records from the "${urlTable.name}" table, but was opened from a different table.`,
                         );
                     }
                 } else {
@@ -178,7 +178,7 @@ function UrlPreviewBlock() {
 }
 
 // Shows a preview, or a dialog that displays information about what
-// kind of services (URLs) are supported by this block.
+// kind of services (URLs) are supported by this app.
 function RecordPreviewWithDialog({
     activeTable,
     selectedRecordId,
@@ -303,7 +303,7 @@ function RecordPreview({
     ) {
         return <Text>Switch to a grid view to see previews</Text>;
     } else if (
-        // selectedRecord will be null on block initialization, after
+        // selectedRecord will be null on app initialization, after
         // the user switches table or view, or if it was deleted.
         selectedRecord === null ||
         // The preview field may have been deleted.
@@ -491,4 +491,4 @@ const converters = [
     },
 ];
 
-initializeBlock(() => <UrlPreviewBlock />);
+initializeBlock(() => <UrlPreviewApp />);

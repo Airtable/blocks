@@ -38,7 +38,7 @@ export const AllowedTypes = [
 //
 // This is the preferred order of fields to look for when finding
 // an initial field to inject into the X nominal type axis, displayed
-// when the user first installs the block.
+// when the user first installs the app.
 export const InitialNominalFieldTypes = [
     FieldType.SINGLE_SELECT,
     FieldType.SINGLE_COLLABORATOR,

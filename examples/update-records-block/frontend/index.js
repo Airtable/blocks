@@ -11,7 +11,7 @@ import {
 import {cursor} from '@airtable/blocks';
 import React, {useState} from 'react';
 
-// These values match the recommended template for this example block.
+// These values match the recommended template for this example app.
 // You can also change them to match your own base, or add Table/FieldPickers to allow the
 // user to choose a table and field to update.
 const TABLE_NAME = 'Inventory';
@@ -21,7 +21,7 @@ const FIELD_NAME = 'In Stock';
 // https://github.com/Airtable/blocks/tree/blob/packages/sdk/docs/guide_writes.md#size-limits-rate-limits
 const MAX_RECORDS_PER_UPDATE = 50;
 
-function UpdateRecordsBlock() {
+function UpdateRecordsApp() {
     const base = useBase();
 
     const tableToUpdate = base.getTableByName(TABLE_NAME);
@@ -33,13 +33,13 @@ function UpdateRecordsBlock() {
     // component will not run until it has loaded.
     useLoadable(cursor);
 
-    // Re-render the block whenever the active table or selected records change.
+    // Re-render the app whenever the active table or selected records change.
     useWatchable(cursor, ['activeTableId', 'selectedRecordIds']);
 
     if (cursor.activeTableId !== tableToUpdate.id) {
         return (
             <Container>
-                <Text>Switch to the “{tableToUpdate.name}” table to use this block.</Text>
+                <Text>Switch to the “{tableToUpdate.name}” table to use this app.</Text>
             </Container>
         );
     }
@@ -160,4 +160,4 @@ async function updateRecordsInBatches(table, updates) {
     }
 }
 
-initializeBlock(() => <UpdateRecordsBlock />);
+initializeBlock(() => <UpdateRecordsApp />);

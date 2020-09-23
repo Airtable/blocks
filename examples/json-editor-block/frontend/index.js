@@ -56,11 +56,11 @@ const changeDelay = 500;
 const supportedFields = [FieldType.MULTILINE_TEXT, FieldType.SINGLE_LINE_TEXT];
 const isFieldSupported = field => supportedFields.includes(field.type);
 
-function JsonEditorBlock() {
+function JsonEditorApp() {
     // Caches the currently selected record and field in state. If the user
     // selects a record and an editor appears, and then the user de-selects the
     // record (but does not select another), the editor will remain. This is
-    // useful when, for example, the user resizes the blocks pane.
+    // useful when, for example, the user resizes the apps pane.
     const [selectedRecordId, setSelectedRecordId] = useState(null);
     const [selectedFieldId, setSelectedFieldId] = useState(null);
 
@@ -175,7 +175,7 @@ function EditorGuard({table, selectedRecordId, selectedFieldId}) {
         // `activeViewId` is briefly null when switching views.
         cursor.activeViewId && table.getViewById(cursor.activeViewId).type === ViewType.GRID;
     const hasSelection =
-        // `selectedRecord` will be null on block initialization, after the
+        // `selectedRecord` will be null on app initialization, after the
         // user switches table or view, or if it was deleted.
         selectedRecord &&
         // The selected field may have been deleted.
@@ -264,4 +264,4 @@ function LoadingScreen() {
     );
 }
 
-initializeBlock(() => <JsonEditorBlock />);
+initializeBlock(() => <JsonEditorApp />);

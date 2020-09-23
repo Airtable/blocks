@@ -60,8 +60,8 @@ export function getInitialTableCoords(tableConfigsByTableId) {
  * Given a new set of table configs and an old set of table coords, return a comprehensive set of
  * table coordinates that includes new tables missing from the old set of coords.
  *
- * It's likely that a table will be created while this block is not running, in which case our
- * globalConfig-persisted table coordinates will become stale. The next time we run the block,
+ * It's likely that a table will be created while this app is not running, in which case our
+ * globalConfig-persisted table coordinates will become stale. The next time we run the app,
  * we want to assign coordinates to these new tables. This helper identifies which tables don't have
  * coordinates assigned, and then remedies that. Any missing tables are positioned in a new column
  * to the right of the current right-most table.

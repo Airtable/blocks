@@ -240,7 +240,7 @@ export function validateFieldDefinitions(table, specification) {
     // By the time this is called, the editor itself has not
     // found any errors while validating the specification
     // based on the schema. This operation will check for conditions
-    // that this block considers an error, ie. bogus field names.
+    // that this app considers an error, ie. bogus field names.
     if (specification && typeof specification === 'object') {
         visitor(specification, (object, property, value) => {
             // The value of a "field" property is not strictly
