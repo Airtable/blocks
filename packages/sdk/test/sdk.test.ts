@@ -129,15 +129,133 @@ describe('sdk', () => {
             });
 
             it('updates internal state - removal', () => {
+                let ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tableOrder'],
                         value: ['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
                     },
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        value: undefined,
+                    },
+                ]);
+
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
+            });
+        });
+
+        describe('tablesById', () => {
+            it('does not notify "tables" watchers', () => {
+                const mock = jest.fn();
+                sdk.base.watch('tables', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        value: 'a new name',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(0);
+            });
+
+            it('notifies "schema" watchers', () => {
+                const mock = jest.fn();
+
+                // TODO(jugglinmike): The internal cache must be primed in
+                // order to observe the behavior under test. Determine if this
+                // requirement represents a meaningful edge case for Block
+                // development.
+                sdk.base.tables;
+
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        value: 'a new name',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(1);
+            });
+
+            it('does not notify "schema" watchers when new value matches current', () => {
+                const mock = jest.fn();
+
+                // TODO(jugglinmike): The internal cache must be primed in
+                // order to observe the behavior under test. Determine if this
+                // requirement represents a meaningful edge case for Block
+                // development.
+                sdk.base.tables;
+
+                sdk.base.watch('schema', mock);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        value: 'Tasks',
+                    },
+                ]);
+
+                expect(mock).toHaveBeenCalledTimes(0);
+            });
+
+            it('updates internal state - modification', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        value: 'a new name',
+                    },
+                ]);
+
+                expect(sdk.base.tables).toHaveLength(3);
+                expect(sdk.base.tables[1].name).toStrictEqual('a new name');
+            });
+
+            it('handles updates to unrecognized tables', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblNEW00000000001', 'name'],
+                        value: 'thing',
+                    },
                 ]);
 
                 const ids = sdk.base.tables.map(({id}) => id);
-                expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+            });
+
+            it('handles multiple updates', () => {
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        value: 'first',
+                    },
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4', 'name'],
+                        value: 'second',
+                    },
+                ]);
+
+                const ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+                expect(sdk.base.tables[1].name).toStrictEqual('second');
             });
         });
 
