@@ -8,6 +8,9 @@ import getAirtableInterface from '../injected/airtable_interface';
 import {spawnError} from '../error_utils';
 import Record from '../models/record';
 import Field from '../models/field';
+import {FieldType} from '../types/field';
+import {RecordId} from '../types/record';
+import {ObjectMap} from '../private_utils';
 import withHooks from './with_hooks';
 import useWatchable from './use_watchable';
 import {
@@ -222,6 +225,32 @@ export class CellRenderer extends React.Component<CellRendererProps> {
             }
 
             cellValueToRender = cellValue;
+        }
+
+        if (
+            cellValueToRender &&
+            field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
+            !airtableInterface.sdkInitData.isUsingNewLookupCellValueFormat
+        ) {
+            const originalCellValue = cellValueToRender as Array<{
+                linkedRecordId: RecordId;
+                value: unknown;
+            }>;
+            const linkedRecordIdsSet = new Set();
+            const valuesByLinkedRecordId = {} as ObjectMap<RecordId, Array<unknown>>;
+
+            for (const {linkedRecordId, value} of originalCellValue) {
+                linkedRecordIdsSet.add(linkedRecordId);
+                if (!valuesByLinkedRecordId[linkedRecordId]) {
+                    valuesByLinkedRecordId[linkedRecordId] = [];
+                }
+                valuesByLinkedRecordId[linkedRecordId].push(value);
+            }
+
+            cellValueToRender = {
+                linkedRecordIds: Array.from(linkedRecordIdsSet),
+                valuesByLinkedRecordId,
+            };
         }
 
         const {cellValueHtml, attributes} = airtableInterface.fieldTypeProvider.getCellRendererData(

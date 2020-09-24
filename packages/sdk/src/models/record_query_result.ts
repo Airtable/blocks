@@ -94,7 +94,7 @@ export interface NormalizedSortConfig {
  * ```
  *
  * ## fields
- * Generally, it's a good idea to load as little data into your block as possible - Airtable bases
+ * Generally, it's a good idea to load as little data into your app as possible - Airtable bases
  * can get pretty big, and we have to keep all that information in memory and up to date if you ask
  * for it. The fields option lets you make sure that only data relevant to you is loaded.
  *
@@ -240,7 +240,7 @@ export interface NormalizedRecordQueryResultOpts {
  *   You can get one of these with `record.selectLinkedRecordsFromCell(someField)`.
  *
  * Once you've got a query result, you need to load it before you can start working with it -
- * blocks don't load record data by default. We recommend using {@link useRecords},
+ * apps don't load record data by default. We recommend using {@link useRecords},
  * {@link useRecordIds}, {@link useRecordById} or {@link useLoadable} to handle this.
  *
  * If you're not using a query result in a React component, you can manually load the data and

@@ -218,7 +218,7 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
      *
      * This action is asynchronous. Unlike updates to cell values, updates to field options are
      * **not** applied optimistically locally. You must `await` the returned promise before
-     * relying on the change in your block.
+     * relying on the change in your app.
      *
      * @param options new options for the field
      *

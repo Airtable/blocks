@@ -94,7 +94,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     /**
      * Request to enter fullscreen mode.
      *
-     * May fail if another block is fullscreen or this block doesn't have
+     * May fail if another app is fullscreen or this app doesn't have
      * permission to fullscreen itself. Watch `isFullscreen` to know if the
      * request succeeded.
      */
@@ -107,7 +107,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * The maximum dimensions of the block when it is in
+     * The maximum dimensions of the app when it is in
      * fullscreen mode. Returns the smallest set of dimensions added with
      * {@link addMaxFullscreenSize}.
      *
@@ -171,8 +171,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * The minimum dimensions of the block - if the viewport gets smaller than this
-     * size, an overlay will be shown asking the user to resize the block to be bigger.
+     * The minimum dimensions of the app - if the viewport gets smaller than this
+     * size, an overlay will be shown asking the user to resize the app to be bigger.
      *
      * The largest set of dimensions added with addMinSize. If `width` or `height` is null, it means
      * there is no minSize constraint on that dimension.
@@ -195,8 +195,8 @@ class Viewport extends Watchable<WatchableViewportKey> {
      * Add a minimum frame size constraint. Use `.minSize`` to get the aggregate
      * of all added constraints.
      *
-     * Upon adding a constraint, if the block is focused and the frame is smaller than the
-     * minimum size, the block will enter fullscreen mode.
+     * Upon adding a constraint, if the app is focused and the frame is smaller than the
+     * minimum size, the app will enter fullscreen mode.
      *
      * Returns a function that can be called to remove the  size constraint that was added.
      *
@@ -232,7 +232,7 @@ class Viewport extends Watchable<WatchableViewportKey> {
     }
 
     /**
-     * `true` if the block frame is smaller than `minSize`, `false` otherwise.
+     * `true` if the app frame is smaller than `minSize`, `false` otherwise.
      */
     get isSmallerThanMinSize(): boolean {
         const {width, height} = this.size;
@@ -241,13 +241,13 @@ class Viewport extends Watchable<WatchableViewportKey> {
         return isWidthTooSmall || isHeightTooSmall;
     }
     /**
-     * `true` if the block is fullscreen, `false` otherwise.
+     * `true` if the app is fullscreen, `false` otherwise.
      */
     get isFullscreen(): boolean {
         return this._isFullscreen;
     }
     /**
-     * The current size of the block frame.
+     * The current size of the app frame.
      *
      * Can be watched.
      */

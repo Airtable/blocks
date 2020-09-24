@@ -224,8 +224,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         return this._data.activeViewId;
     }
     /**
-     * Sets the specified table to active in the Airtable UI. If the blocks pane is fullscreen, the
-     * table will still be set as active, but the blocks pane will continue to be displayed
+     * Sets the specified table to active in the Airtable UI. If the apps pane is fullscreen, the
+     * table will still be set as active, but the apps pane will continue to be displayed
      * fullscreen.
      *
      * @param tableOrTableId The target table or table ID to set as active in the Airtable main page.
@@ -235,8 +235,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         this._airtableInterface.setActiveViewOrTable(tableId);
     }
     /**
-     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the blocks
-     * pane is fullscreen, the view will still be set as active, but the blocks pane will continue
+     * Sets the specified view (and corresponding table) to active in the Airtable UI. If the apps
+     * pane is fullscreen, the view will still be set as active, but the apps pane will continue
      * to be displayed fullscreen.
      *
      * @param tableOrTableId The table or table ID that the target view belongs to.

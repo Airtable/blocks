@@ -5,7 +5,7 @@ import {invariant, spawnAbstractMethodError} from '../error_utils';
 import AbstractModel from './abstract_model';
 
 /**
- * Abstract superclass for all block SDK models that need to fetch async data.
+ * Abstract superclass for all Blocks SDK models that need to fetch async data.
  *
  * @docsPath models/advanced/AbstractModelWithAsyncData
  */

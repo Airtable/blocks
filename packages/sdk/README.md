@@ -21,7 +21,8 @@ By using the software, you accept and agree to abide by terms of the developer a
    without interruption, or be secure, accurate, complete, or error free.
 
 These terms supplement your other agreements with Airtable, which may include the Airtable Terms of
-Service (located at <https://airtable.com/tos>) and the Airtable Privacy Policy (located at
-<https://airtable.com/privacy>).
+Service (located at <https://airtable.com/tos>), the Airtable Privacy Policy (located at
+<https://airtable.com/privacy>), and the Airtable Developer Policy (located at
+<https://airtable.com/developer-policy>).
 
 By using the Software, you accept and agree to abide by these terms.

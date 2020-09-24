@@ -16,7 +16,7 @@ const WatchableSettingsButtonKeys = Object.freeze({
 type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKeys>;
 
 /**
- * Interface to the settings button that lives outside the block's viewport.
+ * Interface to the settings button that lives outside the app's viewport.
  *
  * The {@link useSettingsButton} hook is the recommended way to use the settings button, but you can
  * also use it with {@link useWatchable} if you want more granular control (for example, to only
@@ -28,7 +28,7 @@ type WatchableSettingsButtonKey = ObjectValues<typeof WatchableSettingsButtonKey
  * import {settingsButton} from '@airtable/blocks';
  * import {useWatchable} from '@airtable/blocks/ui';
  *
- * function BlockWithSettings({shouldShowSettingsButton}) {
+ * function AppWithSettings({shouldShowSettingsButton}) {
  *     useEffect(() => {
  *         // A count of calls to `show()` and `hide()` is maintained internally. The button will
  *         // stay visible if there are more calls to `show()` than `hide()` - so here, we check

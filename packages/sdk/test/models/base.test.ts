@@ -5,13 +5,10 @@ import Base from '../../src/models/base';
 import Table from '../../src/models/table';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
-jest.mock('../../src/injected/airtable_interface', () => () => mockAirtableInterface);
-
-let mockMutations: any;
-jest.mock('../../src/get_sdk', () => () => ({
-    __mutations: mockMutations,
-    runInfo: {
-        isDevelopment: true,
+jest.mock('../../src/injected/airtable_interface', () => ({
+    __esModule: true,
+    default() {
+        return mockAirtableInterface;
     },
 }));
 
@@ -111,6 +108,43 @@ describe('Base', () => {
             `);
         });
 
+        it('gracefully handles collaborators with identical names', () => {
+            const {collaboratorsById} = mockAirtableInterface.sdkInitData.baseData;
+            collaboratorsById.usrFAKE0000000001 = {
+                email: 'fake1@example.com',
+                id: 'usrFAKE0000000001',
+                name: 'Gristle McThornbody',
+                profilePicUrl: 'https://example.com/fake1.jpg',
+            };
+            collaboratorsById.usrFAKE0000000002 = {
+                email: 'fake2@example.com',
+                id: 'usrFAKE0000000002',
+                name: 'Gristle McThornbody',
+                profilePicUrl: 'https://example.com/fake2.jpg',
+            };
+            base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
+            expect(base.getCollaboratorIfExists('fake1@example.com')).toMatchInlineSnapshot(`
+                Object {
+                  "email": "fake1@example.com",
+                  "id": "usrFAKE0000000001",
+                  "name": "Gristle McThornbody",
+                  "profilePicUrl": "https://example.com/fake1.jpg",
+                }
+            `);
+            expect(base.getCollaboratorIfExists('fake2@example.com')).toMatchInlineSnapshot(`
+                Object {
+                  "email": "fake2@example.com",
+                  "id": "usrFAKE0000000002",
+                  "name": "Gristle McThornbody",
+                  "profilePicUrl": "https://example.com/fake2.jpg",
+                }
+            `);
+            expect([
+                collaboratorsById.usrFAKE0000000001,
+                collaboratorsById.usrFAKE0000000002,
+            ]).toContainEqual(base.getCollaboratorIfExists('Gristle McThornbody'));
+        });
+
         it('returns null if no collaborator is found', () => {
             expect(base.getCollaboratorIfExists('usr3VLCpyqgc1FAKE')).toBe(null);
             expect(base.getCollaboratorIfExists('fake@example.com')).toBe(null);
@@ -206,6 +240,37 @@ describe('Base', () => {
         });
     });
 
+    describe('getCollaboratorById', () => {
+        it('returns collaborator by id', () => {
+            const collaborator1 = base.getCollaboratorById('usrTv3tPZmP3GYJ9K');
+            const collaborator2 = base.getCollaboratorById('usr8e9aJ8jHSg29YV');
+            expect(collaborator1).toMatchInlineSnapshot(`
+                Object {
+                  "email": "collab4@example.com",
+                  "id": "usrTv3tPZmP3GYJ9K",
+                  "name": "Ash Quintana",
+                  "profilePicUrl": "https://dl.airtable.com/profilePics/7KX9bnbqQyGvWGArbTXB_headshot-yellow-1.png",
+                }
+            `);
+            expect(collaborator2).toMatchInlineSnapshot(`
+                Object {
+                  "email": "collab26@example.com",
+                  "id": "usr8e9aJ8jHSg29YV",
+                  "name": "Paris Fotiou",
+                  "profilePicUrl": "https://dl.airtable.com/profilePics/xoafD4NRXGRLcx3qilRg_Screen%20Shot%202019-01-17%20at%201.20.14%20PM.png",
+                }
+            `);
+        });
+
+        it('throws when no collaborator is found', () => {
+            expect(() =>
+                base.getCollaboratorById('usrDoesNotExist'),
+            ).toThrowErrorMatchingInlineSnapshot(
+                `"No collaborator with ID usrDoesNotExist has access to base 'Project tracker'"`,
+            );
+        });
+    });
+
     describe('getTableIfExists', () => {
         it('returns table by id', () => {
             const table1 = base.getTableIfExists('tbly388E8NA1CNhnF');
@@ -260,12 +325,181 @@ describe('Base', () => {
         });
     });
 
+    describe('getTableById', () => {
+        it('returns table', () => {
+            const table1 = base.getTableById('tbly388E8NA1CNhnF');
+            const table2 = base.getTableById('tblcstEo50YXLJcK4');
+            expect(table1).toBeInstanceOf(Table);
+            expect(table1.id).toBe('tbly388E8NA1CNhnF');
+            expect(table2).toBeInstanceOf(Table);
+            expect(table2.id).toBe('tblcstEo50YXLJcK4');
+        });
+
+        it('throws when not found', () => {
+            expect(() => base.getTableById('tbly388E8NA1cFAKE')).toThrowErrorMatchingInlineSnapshot(
+                `"No table with ID tbly388E8NA1cFAKE in base 'Project tracker'"`,
+            );
+        });
+    });
+
+    describe('getTableByName', () => {
+        it('returns table', () => {
+            const table1 = base.getTableByName('Design projects');
+            const table2 = base.getTableByName('Tasks');
+            expect(table1).toBeInstanceOf(Table);
+            expect(table1.id).toBe('tbly388E8NA1CNhnF');
+            expect(table2).toBeInstanceOf(Table);
+            expect(table2.id).toBe('tblcstEo50YXLJcK4');
+        });
+
+        it('throws when not found', () => {
+            expect(() => base.getTableByName('Susan')).toThrowErrorMatchingInlineSnapshot(
+                `"No table named 'Susan' in base 'Project tracker'"`,
+            );
+        });
+    });
+
+    describe('checkPermissionsForCreateTable', () => {
+        let mockCheck: jest.SpyInstance;
+
+        beforeEach(() => {
+            mockCheck = jest.spyOn(mockAirtableInterface, 'checkPermissionsForMutation');
+        });
+        afterEach(() => {
+            mockCheck.mockRestore();
+        });
+
+        it('operates without arguments', () => {
+            expect(base.checkPermissionsForCreateTable()).toEqual({hasPermission: true});
+
+            expect(mockCheck).toHaveBeenCalledTimes(1);
+            expect(mockCheck.mock.calls[0][0]).toMatchInlineSnapshot(`
+                Object {
+                  "fields": undefined,
+                  "id": undefined,
+                  "name": undefined,
+                  "type": "createSingleTable",
+                }
+            `);
+        });
+
+        it('operates with table name only', () => {
+            expect(base.checkPermissionsForCreateTable('Obadiah')).toEqual({hasPermission: true});
+
+            expect(mockCheck).toHaveBeenCalledTimes(1);
+            expect(mockCheck.mock.calls[0][0]).toMatchInlineSnapshot(`
+                Object {
+                  "fields": undefined,
+                  "id": undefined,
+                  "name": "Obadiah",
+                  "type": "createSingleTable",
+                }
+            `);
+        });
+
+        it('operates with table name and fields (without field type)', () => {
+            const fields = [{name: 'foo'}];
+            expect(base.checkPermissionsForCreateTable('Obadiah', fields)).toEqual({
+                hasPermission: true,
+            });
+
+            expect(mockCheck).toHaveBeenCalledTimes(1);
+            expect(mockCheck.mock.calls[0][0]).toMatchInlineSnapshot(`
+                Object {
+                  "fields": Array [
+                    Object {
+                      "config": undefined,
+                      "name": "foo",
+                    },
+                  ],
+                  "id": undefined,
+                  "name": "Obadiah",
+                  "type": "createSingleTable",
+                }
+            `);
+        });
+
+        it('operates with table name and fields (including options)', () => {
+            const fields = [{name: 'foo', type: FieldType.SINGLE_LINE_TEXT, options: {bar: 'baz'}}];
+            expect(base.checkPermissionsForCreateTable('Obadiah', fields)).toEqual({
+                hasPermission: true,
+            });
+
+            expect(mockCheck).toHaveBeenCalledTimes(1);
+            expect(mockCheck.mock.calls[0][0]).toMatchInlineSnapshot(`
+                Object {
+                  "fields": Array [
+                    Object {
+                      "config": Object {
+                        "options": Object {
+                          "bar": "baz",
+                        },
+                        "type": "singleLineText",
+                      },
+                      "name": "foo",
+                    },
+                  ],
+                  "id": undefined,
+                  "name": "Obadiah",
+                  "type": "createSingleTable",
+                }
+            `);
+        });
+
+        it('operates with table name and fields (without options)', () => {
+            const fields = [{name: 'foo', type: FieldType.SINGLE_LINE_TEXT}];
+            expect(base.checkPermissionsForCreateTable('Obadiah', fields)).toEqual({
+                hasPermission: true,
+            });
+
+            expect(mockCheck).toHaveBeenCalledTimes(1);
+            expect(mockCheck.mock.calls[0][0]).toMatchInlineSnapshot(`
+                Object {
+                  "fields": Array [
+                    Object {
+                      "config": Object {
+                        "type": "singleLineText",
+                      },
+                      "name": "foo",
+                    },
+                  ],
+                  "id": undefined,
+                  "name": "Obadiah",
+                  "type": "createSingleTable",
+                }
+            `);
+        });
+    });
+
+    describe('hasPermissionToCreateTable', () => {
+        let mockCheck: jest.SpyInstance;
+        beforeEach(() => {
+            mockCheck = jest.spyOn(mockAirtableInterface, 'checkPermissionsForMutation');
+        });
+        afterEach(() => {
+            mockCheck.mockRestore();
+        });
+
+        it('operates without arguments', () => {
+            expect(base.hasPermissionToCreateTable()).toEqual(true);
+        });
+
+        it('reports rejection', () => {
+            mockCheck.mockReturnValueOnce({
+                hasPermission: false,
+                reasonDisplayString: 'No',
+            });
+
+            expect(base.hasPermissionToCreateTable()).toEqual(false);
+        });
+    });
+
     describe('createTableAsync', () => {
         let mockGetTableById: any;
+        let mockApplyMutations: jest.SpyInstance;
+
         beforeEach(() => {
-            mockMutations = {
-                applyMutationAsync: jest.fn(),
-            };
+            mockApplyMutations = jest.spyOn(mockAirtableInterface, 'applyMutationAsync');
 
             mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation(tableId => {
                 const airtableInterface = mockAirtableInterface as any;
@@ -273,6 +507,8 @@ describe('Base', () => {
                 return new Table(base.__baseData, base, recordStore, tableId, airtableInterface);
             });
         });
+
+        afterEach(() => mockApplyMutations.mockRestore());
 
         it('accepts null, undefined and non-null field options', async () => {
             await base.createTableAsync('new table', [
@@ -285,23 +521,26 @@ describe('Base', () => {
                 },
             ]);
 
-            expect(mockMutations.applyMutationAsync).toHaveBeenCalledTimes(1);
-            expect(mockMutations.applyMutationAsync).toHaveBeenLastCalledWith({
-                type: MutationTypes.CREATE_SINGLE_TABLE,
-                id: 'tblGeneratedMockId',
-                name: 'new table',
-                fields: [
-                    {name: 'field 1', config: {type: FieldType.SINGLE_LINE_TEXT}},
-                    {name: 'field 2', config: {type: FieldType.SINGLE_LINE_TEXT}},
-                    {
-                        name: 'field 3',
-                        config: {
-                            type: FieldType.SINGLE_SELECT,
-                            options: {choices: [{name: 'pick me'}]},
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenCalledTimes(1);
+            expect(mockAirtableInterface.applyMutationAsync).toHaveBeenLastCalledWith(
+                {
+                    type: MutationTypes.CREATE_SINGLE_TABLE,
+                    id: 'tblGeneratedMockId',
+                    name: 'new table',
+                    fields: [
+                        {name: 'field 1', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                        {name: 'field 2', config: {type: FieldType.SINGLE_LINE_TEXT}},
+                        {
+                            name: 'field 3',
+                            config: {
+                                type: FieldType.SINGLE_SELECT,
+                                options: {choices: [{name: 'pick me'}]},
+                            },
                         },
-                    },
-                ],
-            });
+                    ],
+                },
+                {holdForMs: 100},
+            );
 
             expect(mockGetTableById).toHaveBeenCalledTimes(1);
             expect(mockGetTableById).toHaveBeenLastCalledWith('tblGeneratedMockId');

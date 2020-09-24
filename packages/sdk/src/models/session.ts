@@ -39,7 +39,7 @@ type WatchableSessionKey = ObjectValues<typeof WatchableSessionKeys>;
  * if (session.currentUser !== null) {
  *     console.log("The current user's name is", session.currentUser.name);
  * } else {
- *     console.log('This block is being viewed in a public share');
+ *     console.log('This app is being viewed in a public share');
  * }
  * ```
  * @docsPath models/Session
@@ -81,7 +81,7 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     }
 
     /**
-     * The current user, or `null` if the block is running in a publicly shared base.
+     * The current user, or `null` if the app is running in a publicly shared base.
      *
      * @example
      * ```js
