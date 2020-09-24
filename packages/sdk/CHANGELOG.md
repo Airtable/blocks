@@ -13,6 +13,7 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Fixed bug where `Select`, `SelectButtons`, and `Synced` variants behaved incorrectly when there
     were multiple items with the same value.
+-   Fix a bug using lookup cell values with `<CellRenderer />` introduced in v1.0.0
 
 ## [1.0.0](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.55...@airtable/blocks@1.0.0) - 2020-09-14
 
