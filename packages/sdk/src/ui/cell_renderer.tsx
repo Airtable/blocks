@@ -245,6 +245,8 @@ export class CellRenderer extends React.Component<CellRendererProps> {
 
         // in record.getCellValue, we reformat the cell value to the new public format. in order to
         // make it work with the cell renderer, we need to format it back the other way.
+        // Note: we can't use _getRawCellValue here since we also need to handle formatting
+        // these in the case where the user passed cellValue instead of a record.
         if (
             cellValueToRender &&
             field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&

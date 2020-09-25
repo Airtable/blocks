@@ -12,6 +12,8 @@ commit that affects the code in a way that consumers might care about should inc
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...HEAD)
 
 -   **DEPRECATED:** "blocks" as an icon name. Use `<Icon name="apps" .../>` instead.
+-   Fixed bugs introduced in v1.0.0 that broke using lookup cell values with
+    `Record.getCellValueAsString`, `aggregator.aggregate` and `aggregator.aggregateToString`
 
 ## [1.0.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.0...@airtable/blocks@1.0.1) - 2020-09-24
 
