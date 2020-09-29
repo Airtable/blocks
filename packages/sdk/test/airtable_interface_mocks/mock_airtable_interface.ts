@@ -10,6 +10,8 @@ import {cloneDeep, ObjectMap} from '../../src/private_utils';
 import {spawnError} from '../../src/error_utils';
 import {FieldData, FieldId} from '../../src/types/field';
 import {ModelChange} from '../../src/types/base';
+import {TableId} from '../../src/types/table';
+import {ViewId} from '../../src/types/view';
 import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
 import projectTrackerData from './project_tracker';
 const EventEmitter = require('events');
@@ -87,7 +89,6 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     globalConfigHelpers: any;
     setMultipleKvPathsAsync: any;
     unsubscribeFromTableData: any;
-    fetchAndSubscribeToCellValuesInFieldsAsync: any;
     unsubscribeFromCellValuesInFields: any;
     setCellValuesAsync: any;
     deleteRecordsAsync: any;
@@ -95,8 +96,6 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     fetchAndSubscribeToViewDataAsync: any;
     unsubscribeFromViewData: any;
     fetchDefaultCellValuesByFieldIdAsync: any;
-    fetchAndSubscribeToCursorDataAsync: any;
-    unsubscribeFromCursorData: any;
     expandRecord: any;
     expandRecordList: any;
     expandRecordPickerAsync: any;
@@ -107,7 +106,6 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     enterFullscreen: any;
     exitFullscreen: any;
     createVisList: any;
-    setActiveViewOrTable: any;
     fetchAndSubscribeToPerformRecordActionAsync: any;
     trackEvent: any;
     sendStat: any;
@@ -145,12 +143,23 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
         this.on('modelupdates', fn);
     }
 
+    setActiveViewOrTable(tableId: TableId, viewId: ViewId) {}
+
     // TODO(jugglinmike): Implement
     subscribeToGlobalConfigUpdates() {}
     subscribeToSettingsButtonClick() {}
     subscribeToEnterFullScreen() {}
     subscribeToExitFullScreen() {}
     subscribeToFocus() {}
+    fetchAndSubscribeToCellValuesInFieldsAsync(
+        tableId: TableId,
+        fieldIds: Array<FieldId>,
+    ): Promise<any> {
+        throw spawnError('unimplemented');
+    }
+    fetchAndSubscribeToCursorDataAsync(): Promise<any> {
+        throw spawnError('unimplemented');
+    }
     fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any> {
         throw spawnError('unimplemented');
     }
@@ -165,6 +174,8 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     triggerEnterFullScreen() {}
     triggerExitFullScreen() {}
     triggerFocus() {}
+
+    unsubscribeFromCursorData() {}
 
     get idGenerator() {
         return {
