@@ -3,6 +3,7 @@ import {Stat} from '../types/stat';
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData, BasePermissionData, ModelChange} from '../types/base';
 import {BlockInstallationId} from '../types/block';
+import {CursorData} from '../types/cursor';
 import {FieldData, FieldId, FieldType} from '../types/field';
 import {RecordActionData, RecordActionDataCallback} from '../types/record_action_data';
 import {
@@ -16,8 +17,15 @@ import {UndoRedoMode} from '../types/undo_redo';
 import {ViewportSizeConstraint} from '../types/viewport';
 import {Mutation, PartialMutation, PermissionCheckResult} from '../types/mutations';
 import {TableId} from '../types/table';
-import {ViewId} from '../types/view';
+import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from '../types/view';
 import {NormalizedSortConfig} from '../models/record_query_result';
+
+/** @hidden */
+interface PartialViewData {
+    visibleRecordIds: Array<string>;
+    fieldOrder: ViewFieldOrderData;
+    colorsByRecordId: ViewColorsByRecordIdData | null;
+}
 
 /** @hidden */
 export interface SdkInitData {
@@ -189,7 +197,9 @@ export interface AirtableInterface {
     /**
      * table
      */
-    fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any>;
+    fetchAndSubscribeToTableDataAsync(
+        tableId: string,
+    ): Promise<{recordsById: {[recordId: string]: RecordData}}>;
     unsubscribeFromTableData(tableId: string): void;
     fetchAndSubscribeToCellValuesInFieldsAsync(
         tableId: string,
@@ -206,7 +216,7 @@ export interface AirtableInterface {
     /**
      * view
      */
-    fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<any>;
+    fetchAndSubscribeToViewDataAsync(tableId: string, viewId: string): Promise<PartialViewData>;
     unsubscribeFromViewData(tableId: string, viewId: string): void;
     fetchDefaultCellValuesByFieldIdAsync(
         tableId: string,
@@ -228,7 +238,7 @@ export interface AirtableInterface {
     subscribeToEnterFullScreen(callback: () => void): void;
     subscribeToExitFullScreen(callback: () => void): void;
     subscribeToFocus(callback: () => void): void;
-    fetchAndSubscribeToCursorDataAsync(): Promise<any>;
+    fetchAndSubscribeToCursorDataAsync(): Promise<CursorData>;
     unsubscribeFromCursorData(): void;
     expandRecord(tableId: string, recordId: string, recordIds: Array<string> | null): void;
     expandRecordList(

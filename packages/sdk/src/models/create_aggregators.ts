@@ -58,7 +58,7 @@ const aggregate = (aggregatorKey: AggregatorKey, records: Array<Record>, field: 
     }
 
     const {__appInterface: appInterface, __airtableInterface: airtableInterface} = getSdk();
-    const cellValues = records.map(record => record.getCellValue(field));
+    const cellValues = records.map(record => record._getRawCellValue(field));
     return airtableInterface.aggregators.aggregate(
         appInterface,
         aggregatorKey,
@@ -77,7 +77,7 @@ const aggregateToString = (aggregatorKey: AggregatorKey, records: Array<Record>,
     }
 
     const {__appInterface: appInterface, __airtableInterface: airtableInterface} = getSdk();
-    const cellValues = records.map(record => record.getCellValue(field));
+    const cellValues = records.map(record => record._getRawCellValue(field));
     return airtableInterface.aggregators.aggregateToString(
         appInterface,
         aggregatorKey,

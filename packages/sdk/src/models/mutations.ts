@@ -182,7 +182,7 @@ class Mutations {
                             const validationResult = airtableInterface.fieldTypeProvider.validateCellValueForUpdate(
                                 appInterface,
                                 record.cellValuesByFieldId[fieldId],
-                                existingRecord.getCellValue(fieldId),
+                                existingRecord._getRawCellValue(field),
                                 field._data,
                             );
                             if (!validationResult.isValid) {

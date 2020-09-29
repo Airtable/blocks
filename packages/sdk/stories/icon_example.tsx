@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {css} from 'emotion';
 import {values as objectValues} from '../src/private_utils';
-import {iconNames} from '../src/ui/icon_config';
+import {iconNames, IconName, deprecatedIconNameToReplacementName} from '../src/ui/icon_config';
 import Icon, {iconStylePropTypes} from '../src/ui/icon';
-import {IconName} from '../src/ui/icon_config';
 import theme from '../src/ui/theme/default_theme';
 import Text from '../src/ui/text';
 import Box from '../src/ui/box';
@@ -81,7 +80,7 @@ function SelectableIconWithLabel({
                 data-checked={isChecked}
                 onClick={onClick}
             >
-                <Icon name={iconName} size={size} margin={2} />
+                <Icon name={iconName} size={size} margin={2} suppressWarning={true} />
                 <Text size="small" className={cssHelpers.TRUNCATE}>
                     {iconName}
                 </Text>
@@ -138,7 +137,17 @@ export default function IconExample() {
             styleProps={Object.keys(iconStylePropTypes)}
             renderCodeFn={values => {
                 let exampleCode;
+                let deprecatedWarning = '';
                 if (checkedIconName) {
+                    if (deprecatedIconNameToReplacementName.has(checkedIconName)) {
+                        deprecatedWarning = '// DEPRECATED';
+                        const alternative = deprecatedIconNameToReplacementName.get(
+                            checkedIconName,
+                        );
+                        if (alternative) {
+                            deprecatedWarning += `: use <Icon name="${alternative}" .../> instead.\n`;
+                        }
+                    }
                     exampleCode = `
                         const IconExample = () => {
                             return (<Icon name="${checkedIconName}" size={${values.size}} />)
@@ -151,6 +160,7 @@ export default function IconExample() {
                     import React from 'react';
                     import {Icon} from '@airtable/blocks/ui';
 
+                    ${deprecatedWarning}
                     ${exampleCode}
                 `;
             }}

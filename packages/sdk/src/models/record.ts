@@ -113,20 +113,16 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _getViewMatching(viewOrViewIdOrViewName: View | string): View {
         return this.parentTable.__getViewMatching(viewOrViewIdOrViewName);
     }
-    /**
-     * Gets the cell value of the given field for this record.
-     *
-     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
-     * @example
-     * ```js
-     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
-     * console.log(cellValue);
-     * // => 'cell value'
-     * ```
-     */
-    getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): unknown {
-        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
 
+    /**
+     * @internal
+     *
+     * For use when we need the raw public API cell value. Specifically makes a difference
+     * for lookup fields, where we translate the format to a blocks-specific format in getCellValue.
+     * That format is incompatible with fieldTypeProvider methods, which expect the public API
+     * format - use _getRawCellValue instead.
+     */
+    _getRawCellValue(field: Field): unknown {
         invariant(
             this._parentRecordStore.areCellValuesLoadedForFieldId(field.id),
             'Cell values for field %s are not loaded',
@@ -141,37 +137,56 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             cellValuesByFieldId[field.id] !== undefined ? cellValuesByFieldId[field.id] : null;
 
         if (typeof cellValue === 'object' && cellValue !== null) {
-            if (
-                field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
-                !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
-            ) {
-                const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
-                invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
-                for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
-                    invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
-                    const {valuesByLinkedRecordId} = cellValue as any;
-
-                    invariant(
-                        valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
-                        'valuesByLinkedRecordId',
-                    );
-
-                    const value = valuesByLinkedRecordId[linkedRecordId];
-                    if (Array.isArray(value)) {
-                        for (const v of value) {
-                            cellValueForMigration.push({linkedRecordId, value: v});
-                        }
-                    } else {
-                        cellValueForMigration.push({linkedRecordId, value});
-                    }
-                }
-                return cellValueForMigration;
-            }
-
             return cloneDeep(cellValue);
         } else {
             return cellValue;
         }
+    }
+    /**
+     * Gets the cell value of the given field for this record.
+     *
+     * @param fieldOrFieldIdOrFieldName The field (or field ID or field name) whose cell value you'd like to get.
+     * @example
+     * ```js
+     * const cellValue = myRecord.getCellValue(mySingleLineTextField);
+     * console.log(cellValue);
+     * // => 'cell value'
+     * ```
+     */
+    getCellValue(fieldOrFieldIdOrFieldName: Field | FieldId | string): unknown {
+        const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
+        const cellValue = this._getRawCellValue(field);
+
+        if (
+            typeof cellValue === 'object' &&
+            cellValue !== null &&
+            field.type === FieldType.MULTIPLE_LOOKUP_VALUES &&
+            !getAirtableInterface().sdkInitData.isUsingNewLookupCellValueFormat
+        ) {
+            const cellValueForMigration: Array<{linkedRecordId: RecordId; value: unknown}> = [];
+            invariant(Array.isArray((cellValue as any).linkedRecordIds), 'linkedRecordIds');
+            for (const linkedRecordId of (cellValue as any).linkedRecordIds) {
+                invariant(typeof linkedRecordId === 'string', 'linkedRecordId');
+                const {valuesByLinkedRecordId} = cellValue as any;
+
+                invariant(
+                    valuesByLinkedRecordId && typeof valuesByLinkedRecordId === 'object',
+                    'valuesByLinkedRecordId',
+                );
+
+                const value = valuesByLinkedRecordId[linkedRecordId];
+                if (Array.isArray(value)) {
+                    for (const v of value) {
+                        cellValueForMigration.push({linkedRecordId, value: v});
+                    }
+                } else {
+                    cellValueForMigration.push({linkedRecordId, value});
+                }
+            }
+            return cellValueForMigration;
+        }
+
+        return cellValue;
     }
     /**
      * Gets the cell value of the given field for this record, formatted as a `string`.
@@ -193,7 +208,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
             field.id,
         );
 
-        const cellValue = this.getCellValue(field.id);
+        const cellValue = this._getRawCellValue(field);
 
         if (cellValue === null || cellValue === undefined) {
             return '';

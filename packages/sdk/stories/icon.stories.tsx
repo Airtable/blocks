@@ -11,8 +11,8 @@ const stories = storiesOf('Icon', module);
 
 stories.add('example', () => <IconExample />);
 
-stories.add('standalone', () => <Icon name="blocks" />);
-stories.add('small size will render micro icon', () => <Icon name="blocks" size={12} />);
+stories.add('standalone', () => <Icon name="apps" />);
+stories.add('small size will render micro icon', () => <Icon name="apps" size={12} />);
 
 stories.add('all icons', () => (
     <React.Fragment>

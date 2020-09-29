@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {compose} from '@styled-system/core';
 import {cx} from 'emotion';
+import warning from '../warning';
 import useStyledSystem from './use_styled_system';
 import {
     flexItemSet,
@@ -20,7 +21,13 @@ import {
     HeightProps,
 } from './system';
 import {tooltipAnchorPropTypes, TooltipAnchorProps} from './types/tooltip_anchor_props';
-import {iconNamePropType, IconName, allIconPaths, AllIconName} from './icon_config';
+import {
+    iconNamePropType,
+    IconName,
+    allIconPaths,
+    AllIconName,
+    deprecatedIconNameToReplacementName,
+} from './icon_config';
 
 /**
  * Style props shared between the {@link Icon} and {@link FieldIcon} components. Accepts:
@@ -79,6 +86,8 @@ export const sharedIconPropTypes = {
 interface IconProps extends SharedIconProps {
     /** The name of the icon. For more details, see the {@link IconName|list of supported icons}. */
     name: IconName;
+    /** @internal */
+    suppressWarning?: boolean;
 }
 
 /**
@@ -103,6 +112,7 @@ const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
         style,
         pathClassName,
         pathStyle,
+        suppressWarning = false,
         ...styleProps
     } = props;
 
@@ -116,6 +126,15 @@ const Icon = (props: IconProps, ref: React.Ref<SVGSVGElement>) => {
     const pathData = allIconPaths[iconName];
     if (!pathData) {
         return null;
+    }
+
+    if (deprecatedIconNameToReplacementName.has(name) && !suppressWarning) {
+        const alternative = deprecatedIconNameToReplacementName.get(name);
+        let alternativeText = '';
+        if (alternative) {
+            alternativeText = `Use <Icon name='${alternative}' .../> instead.`;
+        }
+        warning(`'${name}' as an icon name is deprecated. ${alternativeText}`);
     }
 
     const originalSize = isMicro ? 12 : 16;
@@ -148,6 +167,7 @@ const ForwardedRefIcon = React.forwardRef<SVGSVGElement, IconProps>(Icon);
 
 ForwardedRefIcon.propTypes = {
     name: iconNamePropType.isRequired,
+    suppressWarning: PropTypes.bool,
     ...sharedIconPropTypes,
 };
 

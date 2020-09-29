@@ -9,9 +9,15 @@ Not every commit needs to result in a change to this file (e.g. docs and chore c
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...HEAD)
 
 No changes.
+
+## [1.1.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...@airtable/blocks@1.1.0) - 2020-09-29
+
+-   **DEPRECATED:** "blocks" as an icon name. Use `<Icon name="apps" .../>` instead.
+-   Fixed bugs introduced in v1.0.0 that broke using lookup cell values with
+    `Record.getCellValueAsString`, `aggregator.aggregate` and `aggregator.aggregateToString`
 
 ## [1.0.1](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.0...@airtable/blocks@1.0.1) - 2020-09-24
 
