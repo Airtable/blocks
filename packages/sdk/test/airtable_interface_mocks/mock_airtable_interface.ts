@@ -66,6 +66,17 @@ const fieldTypeProvider = {
     canBePrimary: () => {
         return true;
     },
+    convertStringToCellValue(appInterface: AppInterface, string: string, fieldData: FieldData) {
+        return '';
+    },
+    validateCellValueForUpdate(
+        appInterface: AppInterface,
+        newCellValue: unknown,
+        currentCellValue: unknown,
+        fieldData: FieldData,
+    ) {
+        return {isValid: true};
+    },
 };
 
 class MockAirtableInterface extends EventEmitter implements AirtableInterface {

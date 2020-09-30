@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: Field */ /** */
 import getAirtableInterface from '../injected/airtable_interface';
 
@@ -292,6 +291,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
     get description(): string | null {
         return this._data.description;
     }
+    // The following method is untested because its implementation resists
+    // testing and because it is expected to be redesigned.
+    // istanbul ignore next
     /**
      * A list of available aggregators given this field's configuration.
      *
@@ -310,6 +312,9 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             return availableAggregatorKeysSet.has(aggregator.key);
         });
     }
+    // The following method is untested because its implementation resists
+    // testing and because it is expected to be redesigned.
+    // istanbul ignore next
     /**
      * Checks if the given aggregator is available for this field.
      *
@@ -383,12 +388,18 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
             return null;
         }
     }
+    // The following method is untested because it is not referenced by any
+    // code in this repository.
+    // istanbul ignore next
     /**
      * @internal
      */
     __getRawType(): PrivateColumnType {
         return this._data.type;
     }
+    // The following method is untested because it is not referenced by any
+    // code in this repository.
+    // istanbul ignore next
     /**
      * @internal
      */

@@ -32,7 +32,7 @@ export default {
                             relationship: 'many',
                             symmetricColumnId: 'fld3nuJVc9ivC8IJF',
                         },
-                        description: '',
+                        description: 'the project client',
                         lock: null,
                     },
                     fldRljtoVpOt1IDYH: {
