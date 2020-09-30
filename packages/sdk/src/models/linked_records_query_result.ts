@@ -110,7 +110,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     _linkedQueryResult: TableOrViewQueryResult;
     // is the query result currently valid. if the field config changes to link
     // to another table or not be a linked record field at all, isValid will
-    // become false. once a LinkedRecordQueryResult has become invalid, it will
+    // become false. once a LinkedRecordsQueryResult has become invalid, it will
     // not become valid again.
     /** @internal */
     _isValid: boolean = true;
@@ -173,7 +173,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      */
     get parentTable(): Table {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
         return this._linkedTable;
     }
 
@@ -181,7 +181,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * Ordered array of all the linked record ids. Watchable.
      */
     get recordIds(): Array<string> {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
         invariant(this.isDataLoaded, 'LinkedRecordsQueryResult data is not loaded');
 
         // record ids are lazily generated
@@ -195,7 +195,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * Ordered array of all the linked records. Watchable.
      */
     get records(): Array<Record> {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
 
         return this.recordIds.map(recordId => {
             const record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
@@ -208,7 +208,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * The fields that were used to create this LinkedRecordsQueryResult.
      */
     get fields(): Array<Field> | null {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
 
         return this._linkedQueryResult.fields;
     }
@@ -219,7 +219,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordQueryResultKey> {
-        invariant(this.isValid, 'cannot watch an invalid LinkedRecordQueryResult');
+        invariant(this.isValid, 'cannot watch an invalid LinkedRecordsQueryResult');
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
