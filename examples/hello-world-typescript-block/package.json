@@ -1,7 +1,7 @@
 {
-    "name": "@airtable/hello-world-typescript-block",
+    "name": "@airtable/hello-world-typescript-app",
     "version": "2.0.4",
-    "description": "A typescript version of a hello world block",
+    "description": "A typescript version of a hello world app",
     "author": "",
     "license": "MIT",
     "scripts": {

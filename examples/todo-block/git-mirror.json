@@ -1,7 +1,7 @@
 {
     "authorName": "Airtable",
-    "authorEmail": "blocks@airtable.com",
-    "remote": "git@github.com:Airtable/blocks-todo.git",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-todo-list.git",
     "subdirectory": "examples/todo-block",
     "shouldStripLineComments": false,
     "global": [

@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/vega-lite-block",
+    "name": "@airtable/vega-lite-app",
     "version": "1.0.1",
     "description": "Create rich data visualizations with Vega-Lite",
     "author": "",

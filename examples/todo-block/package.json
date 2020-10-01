@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/todo-block",
+    "name": "@airtable/todo-app",
     "version": "2.0.3",
     "description": "A to-do list based on records in a table",
     "author": "",

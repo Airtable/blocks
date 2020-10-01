@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/print-records-block",
+    "name": "@airtable/print-records-app",
     "version": "2.0.2",
     "description": "A printable layout of artists and their artworks, grouped by collection",
     "author": "",

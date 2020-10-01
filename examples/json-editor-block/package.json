@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/json-editor-block",
+    "name": "@airtable/json-editor-app",
     "version": "1.0.2",
     "license": "MIT",
     "dependencies": {

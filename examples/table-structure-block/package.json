@@ -1,7 +1,7 @@
 {
-    "name": "@airtable/table-structure-block",
+    "name": "@airtable/table-structure-app",
     "version": "2.0.1",
-    "description": "A block that shows information about the selected table and its fields",
+    "description": "An app that shows information about the selected table and its fields",
     "author": "",
     "license": "MIT",
     "scripts": {

@@ -1,7 +1,7 @@
 {
     "authorName": "Airtable",
-    "authorEmail": "blocks@airtable.com",
-    "remote": "git@github.com:Airtable/blocks-json-editor.git",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-json-editor.git",
     "subdirectory": "examples/json-editor-block",
     "shouldStripLineComments": false,
     "global": [

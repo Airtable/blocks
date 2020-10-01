@@ -1,7 +1,7 @@
 {
     "authorName": "Airtable",
-    "authorEmail": "blocks@airtable.com",
-    "remote": "git@github.com:Airtable/blocks-simple-chart.git",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-simple-chart.git",
     "subdirectory": "examples/simple-chart-block",
     "shouldStripLineComments": false,
     "global": [

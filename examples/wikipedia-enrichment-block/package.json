@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/wikipedia-enrichment-block",
+    "name": "@airtable/wikipedia-enrichment-app",
     "version": "2.0.2",
     "description": "Enrich records in your base with extracts and images from wikipedia",
     "author": "",

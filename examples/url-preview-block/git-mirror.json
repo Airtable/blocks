@@ -1,7 +1,7 @@
 {
     "authorName": "Airtable",
-    "authorEmail": "blocks@airtable.com",
-    "remote": "git@github.com:Airtable/blocks-url-preview.git",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-url-preview.git",
     "subdirectory": "examples/url-preview-block",
     "shouldStripLineComments": false,
     "global": [

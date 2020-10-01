@@ -1,5 +1,5 @@
 {
-    "name": "@airtable/update-records-block",
+    "name": "@airtable/update-records-app",
     "version": "2.0.2",
     "description": "A button that updates the currently selected records when clicked",
     "author": "",

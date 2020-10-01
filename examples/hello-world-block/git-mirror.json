@@ -1,7 +1,7 @@
 {
     "authorName": "Airtable",
-    "authorEmail": "blocks@airtable.com",
-    "remote": "git@github.com:Airtable/blocks-hello-world.git",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-hello-world.git",
     "subdirectory": "examples/hello-world-block",
     "shouldStripLineComments": false,
     "global": [

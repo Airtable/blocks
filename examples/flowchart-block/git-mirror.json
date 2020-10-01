@@ -1,7 +1,7 @@
 {
     "authorName": "Airtable",
-    "authorEmail": "blocks@airtable.com",
-    "remote": "git@github.com:Airtable/blocks-flowchart.git",
+    "authorEmail": "apps@airtable.com",
+    "remote": "git@github.com:Airtable/apps-flowchart.git",
     "subdirectory": "examples/flowchart-block",
     "shouldStripLineComments": false,
     "global": [
