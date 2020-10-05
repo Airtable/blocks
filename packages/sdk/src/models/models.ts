@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @ignore */ /** */
 import * as recordColoring from './record_coloring';
 import createAggregators from './create_aggregators';

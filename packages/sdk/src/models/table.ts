@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Table */ /** */
 import {BaseData} from '../types/base';
 import {TableData} from '../types/table';

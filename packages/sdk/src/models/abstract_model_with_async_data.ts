@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {BaseData} from '../types/base';
 import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, TimeoutId} from '../private_utils';

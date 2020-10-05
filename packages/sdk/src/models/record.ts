@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Record */ /** */
 import getAirtableInterface from '../injected/airtable_interface';
 

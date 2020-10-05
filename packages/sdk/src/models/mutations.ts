@@ -1,3 +1,4 @@
+// istanbul ignore file
 import getSdk from '../get_sdk';
 import {AirtableInterface} from '../types/airtable_interface';
 import getAirtableInterface from '../injected/airtable_interface';

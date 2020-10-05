@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Session */ /** */
 import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';

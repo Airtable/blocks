@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType, FieldId} from '../types/field';
 import getSdk from '../get_sdk';

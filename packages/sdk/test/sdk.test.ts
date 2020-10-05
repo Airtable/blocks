@@ -152,6 +152,48 @@ describe('sdk', () => {
                 ids = sdk.base.tables.map(({id}) => id);
                 expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
             });
+
+            it('updates internal state - removal and recreation', () => {
+                let ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+                const toRestore = sdk.base.getTableById(ids[1]);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tableOrder'],
+                        value: ['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                    },
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        value: undefined,
+                    },
+                ]);
+
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tableOrder'],
+                        value: ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'],
+                    },
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        value: toRestore,
+                    },
+                ]);
+
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+            });
         });
 
         describe('tablesById', () => {

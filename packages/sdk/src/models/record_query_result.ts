@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import Colors, {Color} from '../colors';
 import {BaseData} from '../types/base';

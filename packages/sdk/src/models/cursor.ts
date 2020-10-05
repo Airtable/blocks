@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Cursor */ /** */
 import {BaseData, ModelChange} from '../types/base';
 import {RecordId} from '../types/record';

@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @hidden */ /** */
 import {invariant, spawnError} from '../error_utils';
 import {TimeoutId} from '../private_utils';

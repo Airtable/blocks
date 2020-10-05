@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Abstract models */ /** */
 import {invariant, spawnAbstractMethodError, spawnError} from '../error_utils';
 import {BaseData} from '../types/base';

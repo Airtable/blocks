@@ -1,3 +1,4 @@
+// istanbul ignore file
 /** @module @airtable/blocks/models: Aggregators */ /** */
 import getSdk from '../get_sdk';
 import {AggregatorKey} from '../types/aggregators';
