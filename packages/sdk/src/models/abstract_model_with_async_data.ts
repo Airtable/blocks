@@ -135,8 +135,7 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
             return;
         }
         if (!this._pendingDataLoadPromise) {
-            this._pendingDataLoadPromise = this._loadDataAsync();
-            this._pendingDataLoadPromise.then(changedKeys => {
+            this._pendingDataLoadPromise = this._loadDataAsync().then(changedKeys => {
                 this._isDataLoaded = true;
                 this._pendingDataLoadPromise = null;
 
@@ -144,6 +143,8 @@ class AbstractModelWithAsyncData<DataType, WatchableKey extends string> extends 
                     this._onChange(key);
                 }
                 this._onChangeIsDataLoaded();
+
+                return changedKeys;
             });
         }
         await this._pendingDataLoadPromise;
