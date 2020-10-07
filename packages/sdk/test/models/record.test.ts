@@ -14,14 +14,7 @@ describe('Record', () => {
         sdk = getSdk();
     });
 
-    let afterCallbacks: Array<() => void> = [];
-    const after = (cb: () => void) => afterCallbacks.push(cb);
-    // Ensures we properly reset mocks, etc even when a test throws.
     afterEach(() => {
-        for (const cb of afterCallbacks) {
-            cb();
-        }
-        afterCallbacks = [];
         clearSdkForTest();
         mockAirtableInterface.reset();
     });
@@ -40,38 +33,35 @@ describe('Record', () => {
                     },
                 },
             ]);
-            const mockFetch = jest
-                .spyOn(mockAirtableInterface, 'fetchAndSubscribeToTableDataAsync')
-                .mockReturnValueOnce(
-                    Promise.resolve({
-                        recordsById: {
-                            recA: {
-                                id: 'recA',
-                                cellValuesByFieldId: {fldMockLookup: null},
-                            },
-                            recB: {
-                                id: 'recB',
-                                cellValuesByFieldId: {
-                                    fldMockLookup: {
-                                        linkedRecordIds: [
-                                            'recLink1',
-                                            'recLink2',
-                                            'recLink3',
-                                            'recLink4',
-                                        ],
-                                        valuesByLinkedRecordId: {
-                                            recLink1: null,
-                                            recLink2: 'abc123',
-                                            recLink3: {id: 'sel123abc', name: 'A name'},
-                                            recLink4: [1, 2, 3],
-                                        },
+            mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockReturnValueOnce(
+                Promise.resolve({
+                    recordsById: {
+                        recA: {
+                            id: 'recA',
+                            cellValuesByFieldId: {fldMockLookup: null},
+                        },
+                        recB: {
+                            id: 'recB',
+                            cellValuesByFieldId: {
+                                fldMockLookup: {
+                                    linkedRecordIds: [
+                                        'recLink1',
+                                        'recLink2',
+                                        'recLink3',
+                                        'recLink4',
+                                    ],
+                                    valuesByLinkedRecordId: {
+                                        recLink1: null,
+                                        recLink2: 'abc123',
+                                        recLink3: {id: 'sel123abc', name: 'A name'},
+                                        recLink4: [1, 2, 3],
                                     },
                                 },
                             },
                         },
-                    }),
-                );
-            after(() => mockFetch.mockRestore());
+                    },
+                }),
+            );
             const queryResult = await table.selectRecordsAsync();
 
             expect(
@@ -126,38 +116,35 @@ describe('Record', () => {
                     },
                 },
             ]);
-            const mockFetch = jest
-                .spyOn(mockAirtableInterface, 'fetchAndSubscribeToTableDataAsync')
-                .mockReturnValueOnce(
-                    Promise.resolve({
-                        recordsById: {
-                            recA: {
-                                id: 'recA',
-                                cellValuesByFieldId: {fldMockLookup: null},
-                            },
-                            recB: {
-                                id: 'recB',
-                                cellValuesByFieldId: {
-                                    fldMockLookup: {
-                                        linkedRecordIds: [
-                                            'recLink1',
-                                            'recLink2',
-                                            'recLink3',
-                                            'recLink4',
-                                        ],
-                                        valuesByLinkedRecordId: {
-                                            recLink1: null,
-                                            recLink2: 'abc123',
-                                            recLink3: {id: 'sel123abc', name: 'A name'},
-                                            recLink4: [1, 2, 3],
-                                        },
+            mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockReturnValueOnce(
+                Promise.resolve({
+                    recordsById: {
+                        recA: {
+                            id: 'recA',
+                            cellValuesByFieldId: {fldMockLookup: null},
+                        },
+                        recB: {
+                            id: 'recB',
+                            cellValuesByFieldId: {
+                                fldMockLookup: {
+                                    linkedRecordIds: [
+                                        'recLink1',
+                                        'recLink2',
+                                        'recLink3',
+                                        'recLink4',
+                                    ],
+                                    valuesByLinkedRecordId: {
+                                        recLink1: null,
+                                        recLink2: 'abc123',
+                                        recLink3: {id: 'sel123abc', name: 'A name'},
+                                        recLink4: [1, 2, 3],
                                     },
                                 },
                             },
                         },
-                    }),
-                );
-            after(() => mockFetch.mockRestore());
+                    },
+                }),
+            );
             const queryResult = await table.selectRecordsAsync();
 
             expect(

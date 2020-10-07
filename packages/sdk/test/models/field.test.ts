@@ -35,14 +35,12 @@ describe('Field', () => {
     };
 
     beforeEach(() => {
-        jest.spyOn(mockAirtableInterface, 'applyMutationAsync');
         sdk = getSdk();
         field = sdk.base.tables[0].fields[1];
     });
 
     afterEach(() => {
         mockAirtableInterface.reset();
-        (mockAirtableInterface.applyMutationAsync as jest.Mock).mockRestore();
         clearSdkForTest();
     });
 
@@ -75,14 +73,6 @@ describe('Field', () => {
     test.skip('#availableAggregators', () => {});
 
     describe('#checkPermissionsForUpdateOptions', () => {
-        beforeEach(() => {
-            jest.spyOn(mockAirtableInterface, 'checkPermissionsForMutation');
-        });
-
-        afterEach(() => {
-            (mockAirtableInterface.checkPermissionsForMutation as jest.Mock).mockRestore();
-        });
-
         test('request to AirtableInterface - without options', () => {
             field.checkPermissionsForUpdateOptions();
 
@@ -119,27 +109,16 @@ describe('Field', () => {
         });
 
         test('forwarding of response from AirtableInterface', () => {
-            const obj = {};
-            (mockAirtableInterface.checkPermissionsForMutation as jest.Mock).mockReturnValue(obj);
-            expect(field.checkPermissionsForUpdateOptions()).toBe(obj);
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
+            });
+            expect(field.checkPermissionsForUpdateOptions()).toStrictEqual({
+                hasPermission: true,
+            });
         });
     });
 
     describe('#convertStringToCellValue', () => {
-        beforeEach(() => {
-            jest.spyOn(mockAirtableInterface.fieldTypeProvider, 'isComputed');
-            jest.spyOn(mockAirtableInterface.fieldTypeProvider, 'convertStringToCellValue');
-            jest.spyOn(mockAirtableInterface.fieldTypeProvider, 'validateCellValueForUpdate');
-        });
-
-        afterEach(() => {
-            (mockAirtableInterface.fieldTypeProvider.isComputed as jest.Mock).mockRestore();
-            (mockAirtableInterface.fieldTypeProvider
-                .convertStringToCellValue as jest.Mock).mockRestore();
-            (mockAirtableInterface.fieldTypeProvider
-                .validateCellValueForUpdate as jest.Mock).mockRestore();
-        });
-
         test('request to AirtableInterface: conversion', () => {
             field.convertStringToCellValue('hello');
 
@@ -152,18 +131,21 @@ describe('Field', () => {
         });
 
         test('computed value (no validation applied)', () => {
-            (mockAirtableInterface.fieldTypeProvider
-                .convertStringToCellValue as jest.Mock).mockReturnValue('converted value 1');
-            (mockAirtableInterface.fieldTypeProvider
-                .validateCellValueForUpdate as jest.Mock).mockReturnValue({isValid: false});
-            (mockAirtableInterface.fieldTypeProvider.isComputed as jest.Mock).mockReturnValue(true);
+            mockAirtableInterface.fieldTypeProvider.convertStringToCellValue.mockReturnValue(
+                'converted value 1',
+            );
+            mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue({
+                isValid: false,
+            });
+            mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
 
             expect(field.convertStringToCellValue('hello')).toBe('converted value 1');
         });
 
         test('request to AirtableInterface: validation', () => {
-            (mockAirtableInterface.fieldTypeProvider
-                .convertStringToCellValue as jest.Mock).mockReturnValue('converted value 2');
+            mockAirtableInterface.fieldTypeProvider.convertStringToCellValue.mockReturnValue(
+                'converted value 2',
+            );
 
             field.convertStringToCellValue('hello');
 
@@ -176,25 +158,25 @@ describe('Field', () => {
         });
 
         test('non-computed value, passing validation', () => {
-            (mockAirtableInterface.fieldTypeProvider
-                .convertStringToCellValue as jest.Mock).mockReturnValue('converted value 3');
-            (mockAirtableInterface.fieldTypeProvider
-                .validateCellValueForUpdate as jest.Mock).mockReturnValue({isValid: true});
-            (mockAirtableInterface.fieldTypeProvider.isComputed as jest.Mock).mockReturnValue(
-                false,
+            mockAirtableInterface.fieldTypeProvider.convertStringToCellValue.mockReturnValue(
+                'converted value 3',
             );
+            mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue({
+                isValid: true,
+            });
+            mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(false);
 
             expect(field.convertStringToCellValue('hello')).toBe('converted value 3');
         });
 
         test('non-computed value, passing validation', () => {
-            (mockAirtableInterface.fieldTypeProvider
-                .convertStringToCellValue as jest.Mock).mockReturnValue('converted value 4');
-            (mockAirtableInterface.fieldTypeProvider
-                .validateCellValueForUpdate as jest.Mock).mockReturnValue({isValid: false});
-            (mockAirtableInterface.fieldTypeProvider.isComputed as jest.Mock).mockReturnValue(
-                false,
+            mockAirtableInterface.fieldTypeProvider.convertStringToCellValue.mockReturnValue(
+                'converted value 4',
             );
+            mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue({
+                isValid: false,
+            });
+            mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(false);
 
             expect(field.convertStringToCellValue('hello')).toBe(null);
         });
@@ -205,33 +187,25 @@ describe('Field', () => {
     });
 
     describe('#hasPermissionToUpdateOptions', () => {
-        beforeEach(() => {
-            jest.spyOn(mockAirtableInterface, 'checkPermissionsForMutation');
-        });
-
-        afterEach(() => {
-            (mockAirtableInterface.checkPermissionsForMutation as jest.Mock).mockRestore();
-        });
-
-        test('return value', () => {
-            (mockAirtableInterface.checkPermissionsForMutation as jest.Mock).mockReturnValue({
-                hasPermission: 24601,
+        test('return value: true', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: true,
             });
-            expect(field.hasPermissionToUpdateOptions()).toBe(24601);
+            expect(field.hasPermissionToUpdateOptions()).toBe(true);
+        });
+
+        test('return value: true', () => {
+            mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                hasPermission: false,
+                reasonDisplayString: '',
+            });
+            expect(field.hasPermissionToUpdateOptions()).toBe(false);
         });
     });
 
     describe('#isComputed', () => {
-        beforeEach(() => {
-            jest.spyOn(mockAirtableInterface.fieldTypeProvider, 'isComputed');
-        });
-
-        afterEach(() => {
-            (mockAirtableInterface.fieldTypeProvider.isComputed as jest.Mock).mockRestore();
-        });
-
         test('affirmative', () => {
-            (mockAirtableInterface.fieldTypeProvider.isComputed as jest.Mock).mockReturnValue(true);
+            mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
 
             expect(field.isComputed).toBe(true);
         });

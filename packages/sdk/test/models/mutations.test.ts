@@ -41,14 +41,8 @@ describe('Mutations', () => {
         );
     });
 
-    let afterCallbacks: Array<() => void> = [];
-    const after = (cb: () => void) => afterCallbacks.push(cb);
-    // Ensures we properly reset mocks, etc even when a test throws.
     afterEach(() => {
-        for (const cb of afterCallbacks) {
-            cb();
-        }
-        afterCallbacks = [];
+        mockAirtableInterface.reset();
     });
 
     describe('_assertMutationIsValid', () => {
@@ -122,12 +116,11 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                const mockValidate = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'validateConfigForUpdate')
-                    .mockImplementation(() => {
+                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                    () => {
                         return {isValid: false, reason: 'Mock reason'};
-                    });
-                after(() => mockValidate.mockRestore());
+                    },
+                );
 
                 const config = {
                     type: FieldType.CHECKBOX,
@@ -158,12 +151,8 @@ describe('Mutations', () => {
             });
 
             it('successfully returns when all criteria pass', () => {
-                const mockValidate = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'validateConfigForUpdate',
-                );
-                after(() => mockValidate.mockRestore());
-
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate;
                 const config = {
                     type: FieldType.CHECKBOX,
                     options: {
@@ -219,12 +208,11 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                let mockValidate = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'validateConfigForUpdate')
-                    .mockImplementation(() => {
+                let mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                    () => {
                         return {isValid: false, reason: 'Mock reason'};
-                    });
-                after(() => mockValidate.mockRestore());
+                    },
+                );
 
                 const oldConfig = {
                     type: FieldType.CHECKBOX,
@@ -233,11 +221,9 @@ describe('Mutations', () => {
                         color: 'greyBright',
                     },
                 };
-                jest.spyOn(mockAirtableInterface.fieldTypeProvider, 'getConfig').mockImplementation(
-                    () => {
-                        return oldConfig;
-                    },
-                );
+                mockAirtableInterface.fieldTypeProvider.getConfig.mockImplementation(() => {
+                    return oldConfig;
+                });
 
                 const table = base.getTableById('tblcstEo50YXLJcK4');
                 const field = table.getFieldById('fldX2QXZGxsqj7YC0');
@@ -266,14 +252,10 @@ describe('Mutations', () => {
                     field._data,
                     'pro',
                 );
-                // Restore so we can spy on the default mock which returns {isValid: true}
-                mockValidate.mockRestore();
 
-                // check it successfully returns if validation passes
-                mockValidate = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'validateConfigForUpdate',
-                );
+                mockValidate.mockClear();
+                mockValidate.mockReturnValue({isValid: true});
+
                 mutations._assertMutationIsValid({
                     type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
                     tableId: table.id,
@@ -380,12 +362,11 @@ describe('Mutations', () => {
                     "Can't create table: field name 'new field with name that is too long' exceeds maximum length of 20 characters",
                 );
 
-                const mockValidate = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'validateConfigForUpdate')
-                    .mockImplementation(() => {
+                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                    () => {
                         return {isValid: false, reason: 'Mock reason'};
-                    });
-                after(() => mockValidate.mockRestore());
+                    },
+                );
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -423,12 +404,11 @@ describe('Mutations', () => {
             });
 
             it('checks the primary field', () => {
-                const mockCanBePrimary = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'canBePrimary')
-                    .mockImplementation(() => {
+                const mockCanBePrimary = mockAirtableInterface.fieldTypeProvider.canBePrimary.mockImplementation(
+                    () => {
                         return false;
-                    });
-                after(() => mockCanBePrimary.mockRestore());
+                    },
+                );
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -450,16 +430,9 @@ describe('Mutations', () => {
             });
 
             it('successfully returns when all criteria pass', () => {
-                const mockValidate = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'validateConfigForUpdate',
-                );
-                const mockCanBePrimary = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'canBePrimary',
-                );
-                after(() => mockValidate.mockRestore());
-                after(() => mockCanBePrimary.mockRestore());
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate;
+                const mockCanBePrimary = mockAirtableInterface.fieldTypeProvider.canBePrimary;
 
                 mutations._assertMutationIsValid({
                     type: MutationTypes.CREATE_SINGLE_TABLE,

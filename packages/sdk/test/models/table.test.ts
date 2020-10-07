@@ -133,12 +133,8 @@ describe('Table', () => {
         let mockApplyMutationAsync: any;
         let mockGetFieldById: any;
 
-        beforeAll(() => {
-            mockApplyMutationAsync = jest.spyOn(mockAirtableInterface, 'applyMutationAsync');
-        });
-
         beforeEach(() => {
-            mockApplyMutationAsync.mockClear();
+            mockApplyMutationAsync = mockAirtableInterface.applyMutationAsync;
             // spy on table.getFieldById since we try to return the field after creation, but
             // we're not actually creating anything so it'll throw
             mockGetFieldById = jest

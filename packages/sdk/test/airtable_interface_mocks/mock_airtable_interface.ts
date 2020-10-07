@@ -16,6 +16,27 @@ import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
 import projectTrackerData from './project_tracker';
 const EventEmitter = require('events');
 
+// From the Jest documentation on `mockReset`:
+//
+// > This is useful when you want to completely reset a mock back to its
+// > initial state. (Note that resetting a *spy* will result in a function with
+// > no return value).
+//
+// In order to reset a Jest Spy to its initial state (which calls through to
+// the authentic implementation), it must be removed via `mockRestore` and
+// recreated using `jest.spyOn`.
+const resetSpies = (target: {[key: string]: any}, names: string[]) => {
+    for (const name of names) {
+        if (jest.isMockFunction(target[name])) {
+            target[name].mockRestore();
+        }
+
+        if (typeof target[name] === 'function') {
+            jest.spyOn(target as any, name);
+        }
+    }
+};
+
 const aggregators = {
     aggregate(
         appInterface: AppInterface,
@@ -119,12 +140,26 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     }
 
     static projectTrackerExample() {
-        return new MockAirtableInterface(projectTrackerData);
+        const iface = new MockAirtableInterface(projectTrackerData) as jest.Mocked<
+            MockAirtableInterface
+        >;
+        iface.reset();
+        return iface;
     }
 
+    /**
+     * Revert the mock interface to its initial state. This includes:
+     *
+     * - removing all event listeners
+     * - restoring the database schema
+     * - recreating the Jest "spies" for every instance method
+     */
     reset() {
         this.removeAllListeners();
         this.sdkInitData = cloneDeep(this._initData);
+
+        resetSpies(this, Object.getOwnPropertyNames(MockAirtableInterface.prototype));
+        resetSpies(this.fieldTypeProvider, Object.keys(this.fieldTypeProvider));
     }
 
     assertAllowedSdkPackageVersion() {}

@@ -18,7 +18,7 @@ describe('Base', () => {
     beforeEach(() => {
         sdk = getSdk();
         cursor = sdk.cursor;
-        jest.spyOn(mockAirtableInterface, 'fetchAndSubscribeToCursorDataAsync').mockReturnValue(
+        mockAirtableInterface.fetchAndSubscribeToCursorDataAsync.mockReturnValue(
             Promise.resolve({
                 selectedFieldIdSet: [],
                 selectedRecordIdSet: [],
@@ -40,7 +40,6 @@ describe('Base', () => {
     });
 
     afterEach(() => {
-        (mockAirtableInterface.fetchAndSubscribeToCursorDataAsync as jest.Mock).mockRestore();
         mockAirtableInterface.reset();
         clearSdkForTest();
     });
@@ -83,14 +82,10 @@ describe('Base', () => {
 
     describe('#isRecordSelected', () => {
         beforeEach(() => {
-            jest.spyOn(
-                mockAirtableInterface,
-                'fetchAndSubscribeToCellValuesInFieldsAsync',
-            ).mockReturnValue(Promise.resolve({recordsById: {}}));
-            jest.spyOn(
-                mockAirtableInterface,
-                'fetchAndSubscribeToTableDataAsync',
-            ).mockReturnValueOnce(
+            mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockReturnValue(
+                Promise.resolve({recordsById: {}}),
+            );
+            mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockReturnValueOnce(
                 Promise.resolve({
                     recordsById: {
                         recA: {
@@ -100,11 +95,6 @@ describe('Base', () => {
                     },
                 }),
             );
-        });
-
-        afterEach(() => {
-            (mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync as jest.Mock).mockRestore();
-            (mockAirtableInterface.fetchAndSubscribeToTableDataAsync as jest.Mock).mockRestore();
         });
 
         test('by record ID - positive', () => {
@@ -168,12 +158,6 @@ describe('Base', () => {
     });
 
     describe('#setActiveTable', () => {
-        beforeEach(() => {
-            jest.spyOn(mockAirtableInterface, 'setActiveViewOrTable');
-        });
-
-        afterEach(() => (mockAirtableInterface.setActiveViewOrTable as jest.Mock).mockRestore());
-
         test('given a Table instance', () => {
             cursor.setActiveTable(sdk.base.getTableByName('Design projects'));
 
@@ -192,12 +176,6 @@ describe('Base', () => {
     });
 
     describe('#setActiveView', () => {
-        beforeEach(() => {
-            jest.spyOn(mockAirtableInterface, 'setActiveViewOrTable');
-        });
-
-        afterEach(() => (mockAirtableInterface.setActiveViewOrTable as jest.Mock).mockRestore());
-
         test('given a Table instance and a View instance', () => {
             cursor.setActiveView(
                 sdk.base.getTableByName('Design projects'),
