@@ -12,7 +12,7 @@ import {
     GlobalConfigPath,
     GlobalConfigPathValidationResult,
 } from '../types/global_config';
-import {RecordData, RecordDef, RecordId} from '../types/record';
+import {RecordData, RecordId} from '../types/record';
 import {UndoRedoMode} from '../types/undo_redo';
 import {ViewportSizeConstraint} from '../types/viewport';
 import {Mutation, PartialMutation, PermissionCheckResult} from '../types/mutations';
@@ -21,7 +21,7 @@ import {ViewColorsByRecordIdData, ViewFieldOrderData, ViewId} from '../types/vie
 import {NormalizedSortConfig} from '../models/record_query_result';
 
 /** @hidden */
-interface PartialViewData {
+export interface PartialViewData {
     visibleRecordIds: Array<string>;
     fieldOrder: ViewFieldOrderData;
     colorsByRecordId: ViewColorsByRecordIdData | null;
@@ -42,14 +42,14 @@ export interface SdkInitData {
 }
 
 /** @hidden */
-interface IdGenerator {
+export interface IdGenerator {
     generateRecordId(): string;
     generateFieldId(): string;
     generateTableId(): string;
 }
 
 /** @hidden */
-interface UrlConstructor {
+export interface UrlConstructor {
     getTableUrl(tableId: TableId): string;
     getViewUrl(viewId: ViewId, tableId: TableId): string;
     getRecordUrl(recordId: RecordId, tableId: TableId): string;
@@ -148,7 +148,7 @@ export interface FieldTypeProvider {
 }
 
 /** @hidden */
-interface GlobalConfigHelpers /**/ {
+export interface GlobalConfigHelpers /**/ {
     validatePath(path: GlobalConfigPath, store: GlobalConfigData): GlobalConfigPathValidationResult;
     validateAndApplyUpdates(
         updates: ReadonlyArray<GlobalConfigUpdate>,
@@ -192,11 +192,6 @@ export interface AirtableInterface {
     assertAllowedSdkPackageVersion: (packageName: string, packageVersion: string) => void;
 
     /**
-     * globalConfig
-     */
-    setMultipleKvPathsAsync(updates: Array<GlobalConfigUpdate>): Promise<void>;
-
-    /**
      * table
      */
     fetchAndSubscribeToTableDataAsync(
@@ -208,12 +203,6 @@ export interface AirtableInterface {
         fieldIds: Array<string>,
     ): Promise<any>;
     unsubscribeFromCellValuesInFields(tableId: string, fieldIds: Array<string>): void;
-    setCellValuesAsync(
-        tableId: string,
-        cellValuesByRecordIdThenFieldId: {[key: string]: RecordDef},
-    ): Promise<void>;
-    deleteRecordsAsync(tableId: string, recordIds: Array<string>): Promise<void>;
-    createRecordsAsync(tableId: string, recordDefs: Array<RecordData>): Promise<void>;
 
     /**
      * view

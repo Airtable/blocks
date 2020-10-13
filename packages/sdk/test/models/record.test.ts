@@ -39,6 +39,8 @@ describe('Record', () => {
                         recA: {
                             id: 'recA',
                             cellValuesByFieldId: {fldMockLookup: null},
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
                         },
                         recB: {
                             id: 'recB',
@@ -58,6 +60,8 @@ describe('Record', () => {
                                     },
                                 },
                             },
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
                         },
                     },
                 }),
@@ -122,6 +126,8 @@ describe('Record', () => {
                         recA: {
                             id: 'recA',
                             cellValuesByFieldId: {fldMockLookup: null},
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
                         },
                         recB: {
                             id: 'recB',
@@ -141,6 +147,8 @@ describe('Record', () => {
                                     },
                                 },
                             },
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
                         },
                     },
                 }),

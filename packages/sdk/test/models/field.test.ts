@@ -21,9 +21,16 @@ describe('Field', () => {
         const fieldId = 'fldTest';
         const baseData = mockAirtableInterface.sdkInitData.baseData;
         const parentTable = baseData.tablesById.tbly388E8NA1CNhnF;
-        parentTable.fieldsById[fieldId] = {name: 'Field 1'};
+        parentTable.fieldsById[fieldId] = {
+            id: fieldId,
+            name: 'Field 1',
+            type: '',
+            typeOptions: null,
+            description: null,
+            lock: null,
+        };
 
-        const newField = new Field(baseData, parentTable, fieldId);
+        const newField = new Field(baseData, sdk.base.getTableById('tbly388E8NA1CNhnF'), fieldId);
 
         // field.type does a bunch of stuff to convert private field data into the public type
         // - we just mock it out completely for simplicity
@@ -136,6 +143,7 @@ describe('Field', () => {
             );
             mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue({
                 isValid: false,
+                reason: '',
             });
             mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
 
@@ -175,6 +183,7 @@ describe('Field', () => {
             );
             mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue({
                 isValid: false,
+                reason: '',
             });
             mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(false);
 

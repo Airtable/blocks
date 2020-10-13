@@ -20,8 +20,8 @@ describe('Base', () => {
         cursor = sdk.cursor;
         mockAirtableInterface.fetchAndSubscribeToCursorDataAsync.mockReturnValue(
             Promise.resolve({
-                selectedFieldIdSet: [],
-                selectedRecordIdSet: [],
+                selectedFieldIdSet: {},
+                selectedRecordIdSet: {},
             }),
         );
 
@@ -58,7 +58,7 @@ describe('Base', () => {
 
     describe('constructor', () => {
         test('tolerates initialization data which does not designate an active table', () => {
-            const baseData = Object.assign({}, mockAirtableInterface.sdkInitData.basedata);
+            const baseData = Object.assign({}, mockAirtableInterface.sdkInitData.baseData);
             baseData.activeTableId = null;
             new Cursor(baseData, mockAirtableInterface);
         });
@@ -91,6 +91,8 @@ describe('Base', () => {
                         recA: {
                             id: 'recA',
                             cellValuesByFieldId: {fldMockLookup: null},
+                            commentCount: 0,
+                            createdTime: new Date().toJSON(),
                         },
                     },
                 }),

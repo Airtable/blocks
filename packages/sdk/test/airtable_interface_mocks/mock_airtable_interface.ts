@@ -5,6 +5,13 @@ import {
     AirtableInterface,
     AppInterface,
     FieldTypeConfig,
+    FieldTypeProvider,
+    SdkInitData,
+    UrlConstructor,
+    GlobalConfigHelpers,
+    PartialViewData,
+    IdGenerator,
+    VisList,
 } from '../../src/types/airtable_interface';
 import {cloneDeep, ObjectMap} from '../../src/private_utils';
 import {spawnError} from '../../src/error_utils';
@@ -13,6 +20,9 @@ import {ModelChange} from '../../src/types/base';
 import {TableId} from '../../src/types/table';
 import {ViewId} from '../../src/types/view';
 import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
+import {CursorData} from '../../src/types/cursor';
+import {RecordData} from '../../src/types/record';
+import {RecordActionData} from '../../src/types/record_action_data';
 import projectTrackerData from './project_tracker';
 const EventEmitter = require('events');
 
@@ -37,7 +47,7 @@ const resetSpies = (target: {[key: string]: any}, names: string[]) => {
     }
 };
 
-const aggregators = {
+const aggregators: Aggregators = {
     aggregate(
         appInterface: AppInterface,
         summaryFunctionKey: AggregatorKey,
@@ -69,7 +79,7 @@ const aggregators = {
     },
 };
 
-const fieldTypeProvider = {
+const fieldTypeProvider: FieldTypeProvider = {
     isComputed(fieldData: FieldData) {
         return false;
     },
@@ -92,6 +102,17 @@ const fieldTypeProvider = {
     convertStringToCellValue(appInterface: AppInterface, string: string, fieldData: FieldData) {
         return '';
     },
+    convertCellValueToString(appInterface: AppInterface, cellValue: unknown, fieldData: FieldData) {
+        return '';
+    },
+    getCellRendererData(
+        appInterface: AppInterface,
+        cellValue: unknown,
+        fieldData: FieldData,
+        shouldWrap: boolean,
+    ) {
+        return {cellValueHtml: `<pre>${JSON.stringify(cellValue)}</pre>`, attributes: {}};
+    },
     validateCellValueForUpdate(
         appInterface: AppInterface,
         newCellValue: unknown,
@@ -100,41 +121,57 @@ const fieldTypeProvider = {
     ) {
         return {isValid: true};
     },
+    getUiConfig(appInterface: AppInterface, fieldData: FieldData) {
+        return {
+            iconName: '',
+            desiredCellWidthForRecordCard: 0,
+            minimumCellWidthForRecordCard: 0,
+        };
+    },
+};
+
+const urlConstructor: UrlConstructor = {
+    getTableUrl(tableId) {
+        return `https://airtable.test/${tableId}`;
+    },
+    getViewUrl(viewId, tableId) {
+        return `https://airtable.test/${tableId}/${viewId}`;
+    },
+    getRecordUrl(recordId, tableId) {
+        return `https://airtable.test/${tableId}/${recordId}`;
+    },
+    getAttachmentClientUrl(appInterface, attachmentId, attachmentUrl) {
+        return attachmentUrl;
+    },
+};
+
+const globalConfigHelpers: GlobalConfigHelpers = {
+    validatePath(path, store) {
+        return {isValid: true};
+    },
+    validateAndApplyUpdates(updates, store) {
+        throw spawnError('validateAndApplyUpdates unimplemented');
+    },
+};
+
+const idGenerator: IdGenerator = {
+    generateRecordId: () => 'recGeneratedMockId',
+    generateFieldId: () => 'fldGeneratedMockId',
+    generateTableId: () => 'tblGeneratedMockId',
 };
 
 class MockAirtableInterface extends EventEmitter implements AirtableInterface {
-    aggregators: Aggregators;
-    fieldTypeProvider: any;
-    sdkInitData: any;
-    urlConstructor: any;
-    globalConfigHelpers: any;
-    setMultipleKvPathsAsync: any;
-    unsubscribeFromTableData: any;
-    unsubscribeFromCellValuesInFields: any;
-    setCellValuesAsync: any;
-    deleteRecordsAsync: any;
-    createRecordsAsync: any;
-    fetchAndSubscribeToViewDataAsync: any;
-    unsubscribeFromViewData: any;
-    fetchDefaultCellValuesByFieldIdAsync: any;
-    expandRecord: any;
-    expandRecordList: any;
-    expandRecordPickerAsync: any;
-    reloadFrame: any;
-    setSettingsButtonVisibility: any;
-    setUndoRedoMode: any;
-    setFullscreenMaxSize: any;
-    enterFullscreen: any;
-    exitFullscreen: any;
-    createVisList: any;
-    fetchAndSubscribeToPerformRecordActionAsync: any;
-    trackEvent: any;
-    sendStat: any;
+    aggregators = aggregators as jest.Mocked<Aggregators>;
+    fieldTypeProvider = fieldTypeProvider as jest.Mocked<FieldTypeProvider>;
+    urlConstructor = urlConstructor as jest.Mocked<UrlConstructor>;
+    globalConfigHelpers = globalConfigHelpers as jest.Mocked<GlobalConfigHelpers>;
+    idGenerator = idGenerator as jest.Mocked<IdGenerator>;
+    sdkInitData!: SdkInitData;
 
-    constructor(initData: any) {
+    private _initData: SdkInitData;
+
+    constructor(initData: SdkInitData) {
         super();
-        this.aggregators = aggregators;
-        this.fieldTypeProvider = fieldTypeProvider;
         this._initData = cloneDeep(initData);
         this.reset();
     }
@@ -160,6 +197,9 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
 
         resetSpies(this, Object.getOwnPropertyNames(MockAirtableInterface.prototype));
         resetSpies(this.fieldTypeProvider, Object.keys(this.fieldTypeProvider));
+        resetSpies(this.urlConstructor, Object.keys(this.urlConstructor));
+        resetSpies(this.globalConfigHelpers, Object.keys(this.globalConfigHelpers));
+        resetSpies(this.idGenerator, Object.keys(this.idGenerator));
     }
 
     assertAllowedSdkPackageVersion() {}
@@ -190,13 +230,21 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
         tableId: TableId,
         fieldIds: Array<FieldId>,
     ): Promise<any> {
-        throw spawnError('unimplemented');
+        throw spawnError('fetchAndSubscribeToCellValuesInFieldsAsync unimplemented');
     }
-    fetchAndSubscribeToCursorDataAsync(): Promise<any> {
-        throw spawnError('unimplemented');
+    fetchAndSubscribeToCursorDataAsync(): Promise<CursorData> {
+        throw spawnError('fetchAndSubscribeToCursorDataAsync unimplemented');
     }
-    fetchAndSubscribeToTableDataAsync(tableId: string): Promise<any> {
-        throw spawnError('unimplemented');
+    fetchAndSubscribeToTableDataAsync(
+        tableId: string,
+    ): Promise<{recordsById: {[recordId: string]: RecordData}}> {
+        throw spawnError('fetchAndSubscribeToTableDataAsync unimplemented');
+    }
+    fetchAndSubscribeToViewDataAsync(): Promise<PartialViewData> {
+        throw spawnError('fetchAndSubscribeToViewDataAsync unimplemented');
+    }
+    fetchDefaultCellValuesByFieldIdAsync(): Promise<{[key: string]: unknown}> {
+        throw spawnError('fetchDefaultCellValuesByFieldIdAsync unimplemented');
     }
 
     triggerModelUpdates(changes: ReadonlyArray<ModelChange>) {
@@ -211,13 +259,48 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     triggerFocus() {}
 
     unsubscribeFromCursorData() {}
+    unsubscribeFromTableData() {}
+    unsubscribeFromCellValuesInFields() {}
+    unsubscribeFromViewData() {}
 
-    get idGenerator() {
-        return {
-            generateRecordId: () => 'recGeneratedMockId',
-            generateFieldId: () => 'fldGeneratedMockId',
-            generateTableId: () => 'tblGeneratedMockId',
-        };
+    expandRecord() {
+        throw spawnError('expandRecord unimplemented');
+    }
+    expandRecordList() {
+        throw spawnError('expandRecordList unimplemented');
+    }
+    expandRecordPickerAsync(): Promise<string | null> {
+        throw spawnError('expandRecordPickerAsync unimplemented');
+    }
+    reloadFrame() {
+        throw spawnError('reloadFrame unimplemented');
+    }
+    setSettingsButtonVisibility() {
+        throw spawnError('setSettingsButtonVisibility unimplemented');
+    }
+    setUndoRedoMode() {
+        throw spawnError('setUndoRedoMode unimplemented');
+    }
+    setFullscreenMaxSize() {
+        throw spawnError('setFullscreenMaxSize unimplemented');
+    }
+    enterFullscreen() {
+        throw spawnError('enterFullscreen unimplemented');
+    }
+    exitFullscreen() {
+        throw spawnError('exitFullscreen unimplemented');
+    }
+    createVisList(): VisList {
+        throw spawnError('createVisList unimplemented');
+    }
+    fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null> {
+        throw spawnError('fetchAndSubscribeToPerformRecordActionAsync unimplemented');
+    }
+    trackEvent() {
+        throw spawnError('trackEvent unimplemented');
+    }
+    sendStat() {
+        throw spawnError('sendStat unimplemented');
     }
 }
 
