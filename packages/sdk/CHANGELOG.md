@@ -51,6 +51,7 @@ No changes.
 -   Fix a typo in the docs for `globalConfig.setAsync`.
 -   Added an explicit `box-sizing: border-box;` to the inner div of ChoiceToken, to prevent
     accidentally inheriting different box-sizing values.
+-   Add `automations` and fix the SVG path for `personalAuto` in `Icon`.
 
 ## [0.0.52](https://github.com/airtable/blocks/compare/@airtable/blocks@0.0.51...@airtable/blocks@0.0.52) - 2020-06-08
 
