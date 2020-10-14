@@ -62,6 +62,12 @@ describe('Base', () => {
             baseData.activeTableId = null;
             new Cursor(baseData, mockAirtableInterface);
         });
+
+        test('tolerates initialization data whose table data has not yet populated', () => {
+            const baseData = Object.assign({}, mockAirtableInterface.sdkInitData.baseData);
+            baseData.tablesById = {};
+            new Cursor(baseData, mockAirtableInterface);
+        });
     });
 
     describe('#activeViewId', () => {
