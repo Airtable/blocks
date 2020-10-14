@@ -130,8 +130,7 @@ describe('LinkedRecordQueryResult', () => {
             const linked = await record.selectLinkedRecordsFromCellAsync('fldLinked1');
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
-                linked.unloadData(); // for the "select" operation
-                linked.unloadData(); // for the "watch" operation
+                linked.unloadData();
             });
 
             // This request is intentionally not awaited in order to ensure
@@ -282,8 +281,7 @@ describe('LinkedRecordQueryResult', () => {
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
 
-                linked.unloadData(); // for the "select" operation
-                linked.unloadData(); // for the "watch" operation
+                linked.unloadData();
             });
 
             expect(() => linked.recordIds).toThrow(Error);
@@ -328,8 +326,7 @@ describe('LinkedRecordQueryResult', () => {
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
 
-                linked.unloadData(); // for the "select" operation
-                linked.unloadData(); // for the "watch" operation
+                linked.unloadData();
             });
 
             expect(() => linked.records).toThrow(Error);
@@ -416,7 +413,6 @@ describe('LinkedRecordQueryResult', () => {
 
                 linked.unloadData(); // for `selectLinkedRecordsFromCellAsync`
                 linked.unloadData(); // for `loadDataAsync`
-                linked.unloadData(); // for `watch`
             });
         });
 
@@ -428,8 +424,7 @@ describe('LinkedRecordQueryResult', () => {
             await new Promise(resolve => {
                 linked.watch('isDataLoaded', resolve);
 
-                linked.unloadData(); // for `loadDataAsync`
-                linked.unloadData(); // for `watch`
+                linked.unloadData();
             });
         });
     });
@@ -467,13 +462,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         describe('key: recordIds', () => {
-            // The implementation fails the following test because watching the
-            // `isDataLoaded` key of a model incorrectly increases its internal
-            // usage counter.
-            //
-            // TODO(jugglinmike): Correct the implementation and enable this
-            // test
-            it.skip('triggers unloading', async () => {
+            it('triggers unloading', async () => {
                 const noop = () => {};
                 linked.watch('recordIds', noop);
                 linked.unloadData();
@@ -486,13 +475,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         describe('key: records', () => {
-            // The implementation fails the following test because watching the
-            // `isDataLoaded` key of a model incorrectly increases its internal
-            // usage counter.
-            //
-            // TODO(jugglinmike): Correct the implementation and enable this
-            // test
-            it.skip('triggers unloading', async () => {
+            it('triggers unloading', async () => {
                 const noop = () => {};
                 linked.watch('records', noop);
                 linked.unloadData();
@@ -597,13 +580,7 @@ describe('LinkedRecordQueryResult', () => {
                 ]);
             };
 
-            // The implementation fails the following test because watching the
-            // `isDataLoaded` key of a model incorrectly increases its internal
-            // usage counter.
-            //
-            // TODO(jugglinmike): Correct the implementation and enable this
-            // test
-            it.skip('triggers unloading', async () => {
+            it('triggers unloading', async () => {
                 const noop = () => {};
                 linked.watch('cellValues', noop);
                 linked.unloadData();
@@ -653,13 +630,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         describe('key: recordColors', () => {
-            // The implementation fails the following test because watching the
-            // `isDataLoaded` key of a model incorrectly increases its internal
-            // usage counter.
-            //
-            // TODO(jugglinmike): Correct the implementation and enable this
-            // test
-            it.skip('triggers unloading', async () => {
+            it('triggers unloading', async () => {
                 const noop = () => {};
                 linked.watch('recordColors', noop);
                 linked.unloadData();
@@ -900,12 +871,7 @@ describe('LinkedRecordQueryResult', () => {
         });
 
         describe('key: isDataLoaded', () => {
-            // The following disabled test describes expected behavior, but it
-            // is not currently implemented correctly.
-            //
-            // TODO(jugglinmike): correct the implementation and enable this
-            // test
-            it.skip('does not trigger loading', async () => {
+            it('does not trigger loading', async () => {
                 const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
                 const linked3 = record.selectLinkedRecordsFromCell('fldLinked1');
 

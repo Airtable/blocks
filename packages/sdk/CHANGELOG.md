@@ -13,6 +13,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 -   Add `automations` and fix the SVG path for `personalAuto` in `Icon`.
 -   Fixed a bug that caused an App to crash when creating a new table before the App has loaded
+-   Fixed bug in watching/unwatching keys of LinkedRecordQueryResult models. Watching/unwatching
+    `isDataLoaded` no longer effects the model's "loaded" state.
 
 ## [1.1.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...@airtable/blocks@1.1.0) - 2020-09-29
 

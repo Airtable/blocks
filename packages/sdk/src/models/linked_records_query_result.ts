@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType, FieldId} from '../types/field';
 import getSdk from '../get_sdk';
-import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
+import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
 import ObjectPool from './object_pool';
@@ -223,15 +223,6 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
-            // The invocation of `loadDataAsync` which is scheduled by the
-            // following statement is superfluous.`loadDataAsync` is invoked by
-            // a superclass's implementation of `watch`, but only conditionally
-            // according to the key value.
-            //
-            // TODO(jugglinmike): remove this invocation and verify that the
-            // expected behavior concerning model loading is preserved
-            fireAndForgetPromise(this.loadDataAsync.bind(this));
-
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 this._watchLinkedQueryCellValuesIfNeededAfterWatch();
             }
@@ -255,14 +246,6 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
-            // The following invocation of `unloadData` is superfluous.
-            // `unloadData` is invoked by a superclass's implementation of
-            // `unwatch`, but only conditionally according to the key value.
-            //
-            // TODO(jugglinmike): remove this invocation and verify that the
-            // expected behavior concerning model unloading is preserved
-            this.unloadData();
-
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 this._unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch();
             }
