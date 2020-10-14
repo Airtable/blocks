@@ -177,11 +177,7 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     }
 
     static projectTrackerExample() {
-        const iface = new MockAirtableInterface(projectTrackerData) as jest.Mocked<
-            MockAirtableInterface
-        >;
-        iface.reset();
-        return iface;
+        return new MockAirtableInterface(projectTrackerData) as jest.Mocked<MockAirtableInterface>;
     }
 
     /**
