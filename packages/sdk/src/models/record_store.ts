@@ -211,6 +211,30 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         }
     }
 
+    __onDataDeletion(): void {
+        // also need to call unloadCellValuesInFieldIds because otherwise
+        // on the hyperbase side, the old record store would still be subscribed
+        // to the cell values and it will refuse a request for new subscription
+        for (const fieldId of Object.keys(this._cellValuesRetainCountByFieldId)) {
+            while (
+                this._cellValuesRetainCountByFieldId[fieldId] &&
+                this._cellValuesRetainCountByFieldId[fieldId] > 0
+            ) {
+                this.unloadCellValuesInFieldIds([fieldId]);
+            }
+        }
+
+        this._forceUnload();
+
+        // similarly unsubscribe from the view data.
+        // this comes after _forceUnload to avoid over releasing the table data.
+        for (const viewDataStore of values(this._viewDataStoresByViewId)) {
+            if (viewDataStore) {
+                viewDataStore.__onDataDeletion();
+            }
+        }
+    }
+
     /**
      * Record metadata means record IDs, createdTime, and commentCount are loaded.
      * Record metadata must be loaded before creating, deleting, or updating records.
@@ -242,6 +266,7 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     async loadCellValuesInFieldIdsAsync(fieldIds: Array<FieldId>) {
+        this._assertNotForceUnloaded();
         const fieldIdsWhichAreNotAlreadyLoadedOrLoading: Array<FieldId> = [];
         const pendingLoadPromises: Array<Promise<Array<WatchableRecordStoreKey>>> = [];
         for (const fieldId of fieldIds) {
@@ -367,6 +392,9 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
+        if (this._isForceUnloaded) {
+            return;
+        }
         const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
         for (const fieldId of fieldIds) {
             // TODO(rwaldron): test this via public api & remove pragma
@@ -558,6 +586,16 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
             }
             for (const fieldId of fieldIds) {
                 this._onChange(WatchableCellValuesInFieldKeyPrefix + fieldId, recordIds, fieldId);
+            }
+        }
+
+        if (dirtyPaths.viewOrder) {
+            // clean up deleted views
+            for (const [viewId, viewDataStore] of entries(this._viewDataStoresByViewId)) {
+                if (viewDataStore && viewDataStore.isDeleted) {
+                    viewDataStore.__onDataDeletion();
+                    delete this._viewDataStoresByViewId[viewId];
+                }
             }
         }
     }

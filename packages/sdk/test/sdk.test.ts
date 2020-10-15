@@ -1,16 +1,31 @@
 import BlockSdk from '../src/sdk';
 import Table from '../src/models/table';
 import View from '../src/models/view';
+import AbstractModelWithAsyncData from '../src/models/abstract_model_with_async_data';
+import getSdk, {clearSdkForTest} from '../src/get_sdk';
 import MockAirtableInterface from './airtable_interface_mocks/mock_airtable_interface';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
+jest.mock('../src/injected/airtable_interface', () => ({
+    __esModule: true,
+    default() {
+        return mockAirtableInterface;
+    },
+}));
+
+jest.useFakeTimers();
 
 describe('sdk', () => {
     let sdk: BlockSdk;
 
     beforeEach(() => {
+        clearSdkForTest();
         mockAirtableInterface.reset();
-        sdk = new BlockSdk(mockAirtableInterface);
+        sdk = getSdk();
+    });
+
+    afterEach(() => {
+        mockAirtableInterface.reset();
     });
 
     describe('model updates', () => {
@@ -193,6 +208,90 @@ describe('sdk', () => {
                     'tblcstEo50YXLJcK4',
                     'tblyt8B45wJQIx1c3',
                 ]);
+            });
+
+            it('updates internal state - removal and recreation after loading records', async () => {
+                let ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+
+                const tableToDelete = sdk.base.getTableById('tblcstEo50YXLJcK4');
+                const deletedTableData = tableToDelete._data;
+                mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockReturnValue(
+                    Promise.resolve({recordsById: {}}),
+                );
+                mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockReturnValue(
+                    Promise.resolve({
+                        recordsById: {
+                            recA: {
+                                id: 'recA',
+                                cellValuesByFieldId: {},
+                                commentCount: 0,
+                                createdTime: new Date().toJSON(),
+                            },
+                        },
+                    }),
+                );
+                const query = await tableToDelete.selectRecordsAsync();
+                expect(() => query.records).not.toThrow();
+
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tableOrder'],
+                        value: ['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3'],
+                    },
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        value: undefined,
+                    },
+                ]);
+
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual(['tbly388E8NA1CNhnF', 'tblyt8B45wJQIx1c3']);
+                // check isDeleted and isDataLoaded on the QueryResult now that the
+                // underlying store is deleted.
+                expect(query.isDeleted).toBe(true);
+                expect(query.isDataLoaded).toBe(false);
+
+                // when the table is restored, it doesn't have recordsById populated
+                deletedTableData.recordsById = undefined;
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tableOrder'],
+                        value: ['tbly388E8NA1CNhnF', 'tblcstEo50YXLJcK4', 'tblyt8B45wJQIx1c3'],
+                    },
+                    {
+                        path: ['tablesById', 'tblcstEo50YXLJcK4'],
+                        value: deletedTableData,
+                    },
+                ]);
+                ids = sdk.base.tables.map(({id}) => id);
+                expect(ids).toStrictEqual([
+                    'tbly388E8NA1CNhnF',
+                    'tblcstEo50YXLJcK4',
+                    'tblyt8B45wJQIx1c3',
+                ]);
+
+                // the old QueryResult should stay deleted even after the table
+                // is restored
+                expect(query.isDeleted).toBe(true);
+                expect(query.isDataLoaded).toBe(false);
+
+                const restoredTable = sdk.base.getTableById('tblcstEo50YXLJcK4');
+                const newQuery = await restoredTable.selectRecordsAsync();
+                expect(() => newQuery.records).not.toThrow();
+
+                // _unloadData() is called with a delay.
+                // The following part of the test verifies that the
+                // delay doesn't cause any issues.
+
+                // assert that _unloadData hasn't been called yet.
+                expect(query._recordStore._isDataLoaded).toBe(true);
+                jest.advanceTimersByTime(AbstractModelWithAsyncData.__DATA_UNLOAD_DELAY_MS);
+                expect(query._recordStore._isDataLoaded).toBe(false);
             });
         });
 

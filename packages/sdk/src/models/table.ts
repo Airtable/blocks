@@ -75,7 +75,6 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         airtableInterface: AirtableInterface,
     ) {
         super(baseData, tableId);
-
         this._parentBase = parentBase;
         this._recordStore = recordStore;
         this._viewModelsById = {}; // View instances are lazily created by getViewById.

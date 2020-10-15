@@ -127,7 +127,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     get _dataOrNullIfDeleted(): TableOrViewQueryResultData | null {
-        if (this._sourceModel.isDeleted) {
+        if (this._sourceModel.isDeleted || this._recordStore.isDeleted) {
             return null;
         }
 

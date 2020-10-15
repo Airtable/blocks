@@ -73,6 +73,10 @@ class ViewDataStore extends AbstractModelWithAsyncData<ViewData, WatchableViewDa
         return this._isDataLoaded && this.parentRecordStore.isRecordMetadataLoaded;
     }
 
+    __onDataDeletion(): void {
+        this._forceUnload();
+    }
+
     async loadDataAsync() {
         // Override this method to also load table data.
         // NOTE: it's important that we call loadDataAsync on the table here and not in
