@@ -1,4 +1,3 @@
-// istanbul ignore file
 import getSdk from '../get_sdk';
 import {AirtableInterface} from '../types/airtable_interface';
 import getAirtableInterface from '../injected/airtable_interface';
@@ -137,6 +136,9 @@ class Mutations {
                 return mutation.recordIds.length > MUTATIONS_MAX_BATCH_SIZE;
             case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS:
                 return mutation.updates.length > MUTATIONS_MAX_BATCH_SIZE;
+            // The "default" case cannot be reached because this method is only
+            // invoked after the mutation type has been validated.
+            // istanbul ignore next
             default:
                 return false;
         }
@@ -606,6 +608,9 @@ class Mutations {
                 ];
             }
 
+            // The following branch is unreachable because this method's only
+            // call site is preceded by an explicit guard for this condition.
+            // istanbul ignore next
             case MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS: {
                 throw spawnError(
                     'attempting to generate model updates for SET_MULTIPLE_GLOBAL_CONFIG_PATH',
@@ -619,6 +624,9 @@ class Mutations {
                 return [];
             }
 
+            // The following branch is unreachable because this method's only
+            // call site is preceded by an explicit guard for this condition.
+            // istanbul ignore next
             default:
                 throw spawnUnknownSwitchCaseError('mutation type', mutation, 'type');
         }
