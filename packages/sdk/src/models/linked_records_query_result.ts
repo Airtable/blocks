@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType, FieldId} from '../types/field';
 import getSdk from '../get_sdk';
@@ -224,6 +223,13 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
+            // The invocation of `loadDataAsync` which is scheduled by the
+            // following statement is superfluous.`loadDataAsync` is invoked by
+            // a superclass's implementation of `watch`, but only conditionally
+            // according to the key value.
+            //
+            // TODO(jugglinmike): remove this invocation and verify that the
+            // expected behavior concerning model loading is preserved
             fireAndForgetPromise(this.loadDataAsync.bind(this));
 
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
@@ -249,6 +255,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
+            // The following invocation of `unloadData` is superfluous.
+            // `unloadData` is invoked by a superclass's implementation of
+            // `unwatch`, but only conditionally according to the key value.
+            //
+            // TODO(jugglinmike): remove this invocation and verify that the
+            // expected behavior concerning model unloading is preserved
             this.unloadData();
 
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
@@ -270,6 +282,9 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     async loadDataAsync(): Promise<void> {
         await super.loadDataAsync();
 
+        // This condition cannot be deterministically reproduced in the testing
+        // environment.
+        // istanbul ignore if
         if (!this.isDataLoaded) {
             // data still might not be loaded after the promise resolves if the
             // linked table changed. in that case, call again:
@@ -301,6 +316,9 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     _unloadData() {
+        // The inverse of this condition cannot be deterministically reproduced
+        // in the testing environment.
+        // istanbul ignore else
         if (this.isValid) {
             pool.unregisterObjectForReuseStrong(this);
             this._unwatchOrigin();
@@ -345,6 +363,13 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             const fieldId = watchKey.slice(
                 RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
             );
+            // The left-hand side of the following logical "or" expression is
+            // always an array value due to the way the `Watchable` class
+            // manages event handlers (it deletes keys whenever the number of
+            // handlers reaches zero), so the right-hand side is unreachable.
+            // TODO(jugglinmike): replace the logical "or" expression with the
+            // left-hand side.
+            // istanbul ignore next
             countByFieldId[fieldId] = (this._changeWatchersByKey[watchKey] || []).length;
         }
 
@@ -367,6 +392,10 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             fieldId,
         );
 
+        // The following condition represents dead code (as demonstrated by the
+        // "invariant" which precedes it).
+        // TODO(jugglinmike): remove `_unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch`
+        // istanbul ignore next
         if (this._cellValueWatchCountByFieldId[fieldId] === 0 && this.isValid) {
             this._unwatchLinkedQueryCellValuesInField(fieldId);
         }
@@ -550,6 +579,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             this._unwatchLinkedQueryCellValues();
         }
         for (const fieldId of Object.keys(this._cellValueWatchCountByFieldId)) {
+            // The following condition is tautological due to the way the
+            // `Watchable` class manages event handlers (it deletes keys
+            // whenever the number of handlers reaches zero).
+            // TODO(jugglinmike): remove the `if` statement and execute its
+            // body unconditionally
+            // istanbul ignore else
             if (this._cellValueWatchCountByFieldId[fieldId] > 0) {
                 this._unwatchLinkedQueryCellValuesInField(fieldId);
             }

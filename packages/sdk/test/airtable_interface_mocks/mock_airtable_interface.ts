@@ -17,13 +17,15 @@ import {cloneDeep, ObjectMap} from '../../src/private_utils';
 import {spawnError} from '../../src/error_utils';
 import {FieldData, FieldId} from '../../src/types/field';
 import {ModelChange} from '../../src/types/base';
+import {RecordData, RecordId} from '../../src/types/record';
 import {TableId} from '../../src/types/table';
 import {ViewId} from '../../src/types/view';
 import {Mutation, PermissionCheckResult} from '../../src/types/mutations';
+import {NormalizedSortConfig} from '../../src/models/record_query_result';
 import {CursorData} from '../../src/types/cursor';
-import {RecordData} from '../../src/types/record';
 import {RecordActionData} from '../../src/types/record_action_data';
 import projectTrackerData from './project_tracker';
+import linkedRecordsData from './linked_records';
 const EventEmitter = require('events');
 
 // From the Jest documentation on `mockReset`:
@@ -180,6 +182,10 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
         return new MockAirtableInterface(projectTrackerData) as jest.Mocked<MockAirtableInterface>;
     }
 
+    static linkedRecordsExample() {
+        return new MockAirtableInterface(linkedRecordsData) as jest.Mocked<MockAirtableInterface>;
+    }
+
     /**
      * Revert the mock interface to its initial state. This includes:
      *
@@ -208,6 +214,23 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
         return {
             hasPermission: true,
         };
+    }
+
+    createVisList(
+        appInterface: AppInterface,
+        recordDatas: Array<RecordData>,
+        fieldDatas: Array<FieldData>,
+        sorts: Array<NormalizedSortConfig>,
+    ): VisList {
+        const visList = ({
+            removeRecordIds(recordIds: Array<RecordId>) {},
+            addRecordData(recordData: RecordData) {},
+            getOrderedRecordIds() {
+                return recordDatas.map(({id}) => id);
+            },
+        } as unknown) as jest.Mocked<VisList>;
+        resetSpies(visList, Object.keys(visList));
+        return visList;
     }
 
     subscribeToModelUpdates(fn: Function) {
@@ -285,9 +308,6 @@ class MockAirtableInterface extends EventEmitter implements AirtableInterface {
     }
     exitFullscreen() {
         throw spawnError('exitFullscreen unimplemented');
-    }
-    createVisList(): VisList {
-        throw spawnError('createVisList unimplemented');
     }
     fetchAndSubscribeToPerformRecordActionAsync(): Promise<RecordActionData | null> {
         throw spawnError('fetchAndSubscribeToPerformRecordActionAsync unimplemented');
