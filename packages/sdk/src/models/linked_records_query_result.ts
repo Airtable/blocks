@@ -6,7 +6,6 @@ import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,
-    RecordQueryResultOpts,
     NormalizedRecordQueryResultOpts,
 } from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
@@ -37,54 +36,12 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     /** @internal */
     static _className = 'LinkedRecordsQueryResult';
 
-    /** @internal */
-    static __createOrReuseQueryResult(
-        record: Record,
-        field: Field,
-        opts: RecordQueryResultOpts,
-    ): LinkedRecordsQueryResult {
-        invariant(
-            record.parentTable === field.parentTable,
-            'record and field must belong to the same table',
-        );
-
-        invariant(
-            field.type === FieldType.MULTIPLE_RECORD_LINKS,
-            'field must be MULTIPLE_RECORD_LINKS',
-        );
-
-        const linkedTableId = field.options && field.options.linkedTableId;
-        invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
-
-        const linkedTable = getSdk().base.getTableById(linkedTableId);
-        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
-
-        const normalizedOpts = TableOrViewQueryResult._normalizeOpts(
-            linkedTable,
-            linkedRecordStore,
-            opts,
-        );
-        const queryResult = record.__linkedRecordsQueryResultPool.getObjectForReuse({
-            record,
-            field,
-            normalizedOpts,
-        });
-        if (queryResult) {
-            return queryResult;
-        } else {
-            return new LinkedRecordsQueryResult(record, field, normalizedOpts);
-        }
-    }
-
     // the record containing the linked-record cell this is a query of.
     /** @internal */
     _record: Record;
     // the cell's field in the record
     /** @internal */
     _field: Field;
-    // the key used to identify this query result in ObjectPool
-    /** @internal */
-    _poolKey: string;
     // the table we're linking to
     /** @internal */
     _linkedTable: Table;
@@ -125,21 +82,15 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         this._field = field;
         this._linkedTable = normalizedOpts.table;
         this._linkedRecordStore = normalizedOpts.recordStore;
-        this._poolKey = `${field.id}::${this._linkedTable.id}`;
 
         // we could rely on RecordQueryResult's reuse pool to make sure we get back
         // the same RecordQueryResult every time, but that would make it much harder
         // to make sure we unwatch everything from the old RecordQueryResult if e.g.
         // the field config changes to point at a different table
-        this._linkedQueryResult = TableOrViewQueryResult.__createOrReuseQueryResultWithNormalizedOpts(
+        this._linkedQueryResult = this._linkedTable.__tableOrViewQueryResultPool.getObjectForReuse(
             this._linkedTable,
             normalizedOpts,
         );
-
-        // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
-        // so register this instance weakly with the object pool. it'll be automatically
-        // unregistered if it hasn't been used after a few seconds
-        this._record.__linkedRecordsQueryResultPool.registerObjectForReuseWeak(this);
     }
 
     /**
@@ -301,6 +252,15 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
             this._invalidateComputedData();
         }
+    }
+
+    /**
+     * the key used to identify this query result in ObjectPool
+     *
+     * @internal
+     */
+    get __poolKey() {
+        return `${this._serializedOpts}::${this._field.id}::${this._linkedTable.id}::${this.isValid}`;
     }
 
     /** @internal */

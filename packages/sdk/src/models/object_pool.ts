@@ -3,31 +3,23 @@
 import {invariant, spawnError} from '../error_utils';
 import {TimeoutId} from '../private_utils';
 
-interface ObjectPoolOptions<T, Opts> {
-    getKeyFromObject: (arg1: T) => string;
-    getKeyFromObjectOptions: (arg1: Opts) => string;
-    canObjectBeReusedForOptions: (arg1: T, arg2: Opts) => boolean;
-}
-
 const WEAK_RETAIN_TIME_MS = 10000;
 
-class ObjectPool<T, Opts> {
+export interface Poolable {
+    __poolKey: string;
+}
+
+class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
     /** @internal */
     _objectsByKey: {[key: string]: Array<T> | void} = {};
     /** @internal */
     _weakObjectsByKey: {[key: string]: Array<{object: T; timeoutId: TimeoutId}> | void} = {};
     /** @internal */
-    _getKeyFromObject: (arg1: T) => string;
-    /** @internal */
-    _getKeyFromObjectOptions: (arg1: Opts) => string;
-    /** @internal */
-    _canObjectBeReusedForOptions: (arg1: T, arg2: Opts) => boolean;
+    _Ctor: Ctor;
 
     /** @hidden */
-    constructor(config: ObjectPoolOptions<T, Opts>) {
-        this._getKeyFromObject = config.getKeyFromObject;
-        this._getKeyFromObjectOptions = config.getKeyFromObjectOptions;
-        this._canObjectBeReusedForOptions = config.canObjectBeReusedForOptions;
+    constructor(ctor: Ctor) {
+        this._Ctor = ctor;
     }
 
     // we have two different ways we can register an object for reuse - weak and strong. This one,
@@ -35,7 +27,7 @@ class ObjectPool<T, Opts> {
     /** @hidden */
     registerObjectForReuseStrong(object: T) {
         this._unregisterObjectForReuseWeakIfExists(object);
-        const objectKey = this._getKeyFromObject(object);
+        const objectKey = object.__poolKey;
         const pooledObjects = this._objectsByKey[objectKey];
         if (pooledObjects) {
             pooledObjects.push(object);
@@ -45,7 +37,7 @@ class ObjectPool<T, Opts> {
     }
     /** @hidden */
     unregisterObjectForReuseStrong(object: T) {
-        const objectKey = this._getKeyFromObject(object);
+        const objectKey = object.__poolKey;
         const pooledObjects = this._objectsByKey[objectKey];
         invariant(pooledObjects, 'pooledObjects');
         const index = pooledObjects.indexOf(object);
@@ -62,8 +54,8 @@ class ObjectPool<T, Opts> {
     // weak, will automatically unregister the object after a few seconds go by without it being
     // used.
     /** @hidden */
-    registerObjectForReuseWeak(object: T) {
-        const objectKey = this._getKeyFromObject(object);
+    _registerObjectForReuseWeak(object: T) {
+        const objectKey = object.__poolKey;
         const pooledObjects = this._weakObjectsByKey[objectKey];
 
         const toStore = {
@@ -89,7 +81,7 @@ class ObjectPool<T, Opts> {
     }
     /** @internal */
     _unregisterObjectForReuseWeakIfExists(object: T): boolean {
-        const objectKey = this._getKeyFromObject(object);
+        const objectKey = object.__poolKey;
         const pooledObjects = this._weakObjectsByKey[objectKey];
         if (!pooledObjects) {
             return false;
@@ -113,15 +105,14 @@ class ObjectPool<T, Opts> {
     }
 
     /** @internal */
-    _getObjectForReuseStrong(objectOptions: Opts): T | null {
-        const key = this._getKeyFromObjectOptions(objectOptions);
+    _getObjectForReuseStrong(key: string): T | null {
         const pooledObjects = this._objectsByKey[key];
         if (pooledObjects) {
             // We expect that there won't be too many QueryResults for a given
             // model, so iterating over them should be okay. If this assumption
             // ends up being wrong, we can hash the opts or something.
             for (const object of pooledObjects) {
-                if (this._canObjectBeReusedForOptions(object, objectOptions)) {
+                if (object.__poolKey === key) {
                     return object;
                 }
             }
@@ -129,16 +120,13 @@ class ObjectPool<T, Opts> {
         return null;
     }
     /** @internal */
-    _getObjectForReuseWeak(objectOptions: Opts): T | null {
-        const key = this._getKeyFromObjectOptions(objectOptions);
+    _getObjectForReuseWeak(key: string): T | null {
         const pooledObjects = this._weakObjectsByKey[key];
         if (!pooledObjects) {
             return null;
         }
 
-        const stored = pooledObjects.find(({object}) =>
-            this._canObjectBeReusedForOptions(object, objectOptions),
-        );
+        const stored = pooledObjects.find(({object}) => object.__poolKey === key);
         if (!stored) {
             return null;
         }
@@ -155,13 +143,19 @@ class ObjectPool<T, Opts> {
         return object;
     }
     /** @hidden */
-    getObjectForReuse(objectOptions: Opts): T | null {
-        const strongObject = this._getObjectForReuseStrong(objectOptions);
-        if (strongObject) {
-            return strongObject;
+    getObjectForReuse(...args: ConstructorParameters<Ctor>): T {
+        const newObject = new this._Ctor(...args);
+        const key = newObject.__poolKey;
+        const existingObject =
+            this._getObjectForReuseStrong(key) || this._getObjectForReuseWeak(key);
+
+        if (existingObject) {
+            return existingObject;
         }
 
-        return this._getObjectForReuseWeak(objectOptions);
+        this._registerObjectForReuseWeak(newObject);
+
+        return newObject;
     }
 }
 

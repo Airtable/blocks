@@ -17,7 +17,6 @@ import Table, {WatchableTableKeys} from './table';
 import View from './view';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,
-    RecordQueryResultOpts,
     NormalizedRecordQueryResultOpts,
     NormalizedSortConfig,
 } from './record_query_result';
@@ -45,31 +44,6 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     static _className = 'TableOrViewQueryResult';
 
-    /** @internal */
-    static __createOrReuseQueryResult(
-        sourceModel: Table | View,
-        recordStore: RecordStore,
-        opts: RecordQueryResultOpts,
-    ) {
-        const tableModel = sourceModel instanceof View ? sourceModel.parentTable : sourceModel;
-        const normalizedOpts = RecordQueryResult._normalizeOpts(tableModel, recordStore, opts);
-        return this.__createOrReuseQueryResultWithNormalizedOpts(sourceModel, normalizedOpts);
-    }
-    /** @internal */
-    static __createOrReuseQueryResultWithNormalizedOpts(
-        sourceModel: Table | View,
-        normalizedOpts: NormalizedRecordQueryResultOpts,
-    ) {
-        const queryResult = normalizedOpts.table.__tableOrViewQueryResultPool.getObjectForReuse({
-            sourceModel,
-            normalizedOpts,
-        });
-        if (queryResult) {
-            return queryResult;
-        } else {
-            return new TableOrViewQueryResult(sourceModel, normalizedOpts);
-        }
-    }
     /** @internal */
     _sourceModel: Table | View;
     /** @internal */
@@ -149,10 +123,6 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         }
         this._fieldIdsSetToLoadOrNullIfAllFields = fieldIdsSetToLoadOrNullIfAllFields;
 
-        // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
-        // so register this instance weakly with the object pool. it'll be automatically
-        // unregistered if it hasn't been used after a few seconds
-        this._table.__tableOrViewQueryResultPool.registerObjectForReuseWeak(this);
         Object.seal(this);
     }
     /** @internal */
@@ -168,6 +138,11 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     /** @internal */
     get __sourceModelId(): string {
         return this._sourceModel.id;
+    }
+
+    /** @internal */
+    get __poolKey(): string {
+        return `${this._serializedOpts}::${this._sourceModel.id}`;
     }
 
     /**

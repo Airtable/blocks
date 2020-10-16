@@ -16,8 +16,8 @@ import Field from './field';
 import ObjectPool from './object_pool';
 import Table from './table';
 import View from './view';
-import {RecordQueryResultOpts, NormalizedRecordQueryResultOpts} from './record_query_result';
-import LinkedRecordsQueryResult, {getLinkedTableId} from './linked_records_query_result';
+import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
+import LinkedRecordsQueryResult from './linked_records_query_result';
 import RecordStore from './record_store';
 
 const WatchableRecordKeys = Object.freeze({
@@ -68,11 +68,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _parentTable: Table;
     __linkedRecordsQueryResultPool: ObjectPool<
         LinkedRecordsQueryResult,
-        {
-            field: Field;
-            record: Record;
-            normalizedOpts: NormalizedRecordQueryResultOpts;
-        }
+        typeof LinkedRecordsQueryResult
     >;
 
     /**
@@ -88,18 +84,7 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
 
         this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
-        this.__linkedRecordsQueryResultPool = new ObjectPool({
-            getKeyFromObject: queryResult => queryResult._poolKey,
-            getKeyFromObjectOptions: ({field, record}) => {
-                return `${field.id}::${getLinkedTableId(field)}`;
-            },
-            canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-                return (
-                    queryResult.isValid &&
-                    queryResult.__canBeReusedForNormalizedOpts(normalizedOpts)
-                );
-            },
-        });
+        this.__linkedRecordsQueryResultPool = new ObjectPool(LinkedRecordsQueryResult);
     }
 
     /**
@@ -336,7 +321,18 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
         opts: RecordQueryResultOpts = {},
     ): LinkedRecordsQueryResult {
         const field = this._getFieldMatching(fieldOrFieldIdOrFieldName);
-        return LinkedRecordsQueryResult.__createOrReuseQueryResult(this, field, opts);
+        const linkedTableId = field.options && field.options.linkedTableId;
+        invariant(typeof linkedTableId === 'string', 'linkedTableId must be set');
+
+        const linkedTable = getSdk().base.getTableById(linkedTableId);
+        const linkedRecordStore = getSdk().base.__getRecordStore(linkedTableId);
+
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
+            linkedTable,
+            linkedRecordStore,
+            opts,
+        );
+        return this.__linkedRecordsQueryResultPool.getObjectForReuse(this, field, normalizedOpts);
     }
     /**
      * Select and load records referenced in a `multipleRecordLinks` cell value. Returns a query result

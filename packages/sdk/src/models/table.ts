@@ -16,7 +16,7 @@ import Field from './field';
 import Base, {ChangedPathsForType} from './base';
 import ObjectPool from './object_pool';
 import Record from './record';
-import {NormalizedRecordQueryResultOpts, RecordQueryResultOpts} from './record_query_result';
+import RecordQueryResult, {RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import RecordStore from './record_store';
 
@@ -63,13 +63,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /** @internal */
     _recordStore: RecordStore;
     /** @internal */
-    __tableOrViewQueryResultPool: ObjectPool<
-        TableOrViewQueryResult,
-        {
-            sourceModel: Table | View;
-            normalizedOpts: NormalizedRecordQueryResultOpts;
-        }
-    >;
+    __tableOrViewQueryResultPool: ObjectPool<TableOrViewQueryResult, typeof TableOrViewQueryResult>;
 
     /**
      * @internal
@@ -91,13 +85,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
 
         this._airtableInterface = airtableInterface;
 
-        this.__tableOrViewQueryResultPool = new ObjectPool({
-            getKeyFromObject: queryResult => queryResult.__sourceModelId,
-            getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
-            canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-                return queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-            },
-        });
+        this.__tableOrViewQueryResultPool = new ObjectPool(TableOrViewQueryResult);
     }
 
     /**
@@ -496,11 +484,12 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
      * ```
      */
     selectRecords(opts?: RecordQueryResultOpts): TableOrViewQueryResult {
-        return TableOrViewQueryResult.__createOrReuseQueryResult(
+        const normalizedOpts = RecordQueryResult._normalizeOpts(
             this,
             this._recordStore,
             opts || {},
         );
+        return this.__tableOrViewQueryResultPool.getObjectForReuse(this, normalizedOpts);
     }
     /**
      * Select and load records from the table. Returns a {@link RecordQueryResult} promise where

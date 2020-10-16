@@ -8,7 +8,6 @@ import {
     isEnumValue,
     assertEnumValue,
     getLocallyUniqueId,
-    isDeepEqual,
     ObjectValues,
     ObjectMap,
     cast,
@@ -30,6 +29,7 @@ import RecordStore from './record_store';
 import {
     ModeTypes as RecordColorModeTypes,
     modes as recordColorModes,
+    serialize as serializeColorMode,
     RecordColorMode,
 } from './record_coloring';
 
@@ -448,8 +448,13 @@ class RecordQueryResult<DataType = {}> extends AbstractModelWithAsyncData<
     /**
      * @internal
      */
-    __canBeReusedForNormalizedOpts(normalizedOpts: NormalizedRecordQueryResultOpts): boolean {
-        return isDeepEqual(this._normalizedOpts, normalizedOpts);
+    get _serializedOpts() {
+        return JSON.stringify([
+            this._normalizedOpts.sorts,
+            this._normalizedOpts.fieldIdsOrNullIfAllFields,
+            this._normalizedOpts.table.id,
+            serializeColorMode(this._normalizedOpts.recordColorMode),
+        ]);
     }
 
     /**

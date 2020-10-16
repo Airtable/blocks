@@ -71,19 +71,6 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
         );
     }
 
-    /** @internal */
-    static __createOrReuseQueryResult(
-        view: View,
-        viewDataStore: ViewDataStore,
-    ): ViewMetadataQueryResult {
-        const queryResult = view.__viewMetadataQueryResultPool.getObjectForReuse({view});
-        if (queryResult) {
-            return queryResult;
-        }
-
-        return new ViewMetadataQueryResult(view.__baseData, view, viewDataStore);
-    }
-
     /** */
     readonly parentView: View;
     /** @internal */
@@ -94,8 +81,11 @@ class ViewMetadataQueryResult extends AbstractModelWithAsyncData<
         super(baseData, getLocallyUniqueId('ViewMetadataQueryResult'));
         this.parentView = parentView;
         this._viewDataStore = viewDataStore;
+    }
 
-        this.parentView.__viewMetadataQueryResultPool.registerObjectForReuseWeak(this);
+    /** @internal */
+    get __poolKey() {
+        return this.parentView.id;
     }
 
     /** @internal */
