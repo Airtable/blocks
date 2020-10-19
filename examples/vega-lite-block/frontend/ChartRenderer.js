@@ -3,8 +3,11 @@ import {VegaLite} from 'react-vega';
 import {useRecords, useViewport} from '@airtable/blocks/ui';
 import {reduceRecords} from './data';
 
-function hasUsableInlineData(spec) {
-    return spec && spec.data && !spec.data.url;
+function getUsableInlineData(spec) {
+    if (spec && spec.data && spec.data.values && Array.isArray(spec.data.values)) {
+        return spec.data.values.slice();
+    }
+    return null;
 }
 /**
  * ChartRenderer   Combine data and specification to produce a
@@ -19,10 +22,15 @@ function ChartRenderer({validatedSettings}) {
 
     const records = useRecords(view || table);
     const spec = JSON.parse(specification);
-    const hasData = hasUsableInlineData(spec);
-    const inlineData = hasData && spec.data;
-    const values = !hasData && reduceRecords(table, records);
-    const data = inlineData ? {...inlineData} : {values};
+    const inlineData = getUsableInlineData(spec);
+    const tableData = reduceRecords(table, records);
+    const data = inlineData ? {values: inlineData} : {values: tableData};
+
+    // If there is BOTH inline data and table data, then combine
+    // them to make both sets available to VegaLite
+    if (inlineData && tableData.length) {
+        data.values.push(...tableData);
+    }
 
     // This tells <VegaLite> which key of the "data"
     // object below (props) will contain the records to use.

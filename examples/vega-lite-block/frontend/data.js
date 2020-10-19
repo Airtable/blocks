@@ -1,9 +1,38 @@
 import React from 'react';
+import {splitAccessPath} from 'vega-util';
 import {FieldType} from '@airtable/blocks/models';
 import {Box, Link} from '@airtable/blocks/ui';
 import {AllowedTypes} from './types';
 import EncodingChannels from './EncodingChannels';
 import visitor from './visitor';
+
+/**
+ * escapeForSpec
+ *
+ * From the vega spec:
+ *
+ * "If field names contain dots or brackets but are not nested, you can use `\\\\` to
+ * escape dots and brackets (e.g., `\"a\\\\.b\"` and `\"a\\\\[0\\\\]\"`).
+ *
+ * See more details about escaping in the
+ * [field documentation](https://vega.github.io/vega-lite/docs/field.html)."
+ *
+ * @param  {string} input   A string field name to process
+ * @param  {Field}  field  An instance of Field
+ * @return {string|number|boolean} A serializable value for the given field in the given record.
+ *                                 Cell read formats
+ */
+
+export function escapeForSpec(input) {
+    return input
+        .replace(/\\\\|\[|\]|\./g, '\\\\$&')
+        .replace(/'/g, '\\\\$&')
+        .replace(/"/g, '\\\\\\$&');
+}
+
+export function escapeForDataPropertyName(input) {
+    return input.replace(/\\\\|\[|\]|\.|'|"/g, '\\\\\\$&');
+}
 
 /**
  * getUsableCellValue
@@ -64,7 +93,10 @@ export function reduceRecords(table, records) {
     for (const record of records) {
         const entry = {};
         for (const field of fields) {
-            entry[field.name] = getUsableCellValue(record, field);
+            entry[field.name] = entry[escapeForDataPropertyName(field.name)] = getUsableCellValue(
+                record,
+                field,
+            );
         }
         entries.push(entry);
     }
@@ -103,12 +135,12 @@ function FieldDefinitionError({property, encoding, table}) {
     }, []);
 
     const json = linesOfJSON.join('\n');
+    const strongFieldName = <strong>{encoding.field}</strong>;
 
     return (
         <Box>
-            {encoding.field ? <strong>{encoding.field}</strong> : '(empty)'} is not a valid{' '}
-            {transformNameLink}, {inlineDataNameLink}, or field name from the{' '}
-            <strong>{table.name}</strong> table:
+            {encoding.field ? strongFieldName : '(empty)'} is not a valid {transformNameLink},{' '}
+            {inlineDataNameLink}, or field name from the <strong>{table.name}</strong> table:
             <Box backgroundColor="grayLight2" padding={2} marginTop={2} borderRadius="default">
                 <pre style={{margin: 0}}>
                     &quot;{property}&quot;: {json}
@@ -117,6 +149,53 @@ function FieldDefinitionError({property, encoding, table}) {
         </Box>
     );
 }
+
+function FieldEscapeError({encoding}) {
+    const strongFieldName = <strong>{encoding.field}</strong>;
+
+    return (
+        <Box>
+            {strongFieldName} contains a character that must be escaped, as in:
+            <Box backgroundColor="grayLight2" padding={2} marginTop={2} borderRadius="default">
+                <pre style={{margin: 0}}>{escapeForSpec(encoding.field)}</pre>
+            </Box>
+        </Box>
+    );
+}
+
+/**
+ * getAccessPaths   This will deconstruct an object into data "paths",
+ * which can be used as valid names for comparison and validation.
+ * Complements vega-util's splitAccessPaths
+ *
+ * @param  {Object} object  An object to create access paths from.
+ * @param  {String} prefix  Used to track access paths as they are built.
+ * @return {Array}          A list of access paths for this object.
+ */
+const getAccessPaths = (object, prefix = '') =>
+    Object.keys(object).reduce((accum, key) => {
+        const prefixDot = prefix.length ? `${prefix}.` : '';
+        const nextPath = prefixDot + key;
+        if (prefix) {
+            accum.push(prefix);
+        }
+        if (typeof object[key] === 'object') {
+            accum.push(...getAccessPaths(object[key], nextPath));
+        } else {
+            accum.push(nextPath);
+        }
+        return accum;
+    }, []);
+
+/**
+ * asAccessPath     A wrapper around the vega-util splitAccessPath
+ * @param  {String} field The string name of the table field, as stored in
+ *                        an encoding channel.
+ * @return {String}       A Vega "access path".
+ */
+const asAccessPath = field => {
+    return splitAccessPath(field).join('.');
+};
 
 /**
  * validateFieldDefinitions ensures that only real field names
@@ -151,7 +230,35 @@ export function validateFieldDefinitions(table, specification) {
                 foundInlineNames.push(
                     ...values.reduce((accum, value) => {
                         if (typeof value === 'object') {
-                            accum.push(...Object.keys(value));
+                            /**
+                             * This process will produce a list of all
+                             * access paths found within the inline data.
+                             *
+                             * For example:
+                             *  "data": {
+                             *      "values": [
+                             *          {"a": "A", "b": { "value": [{"x":28}] } },
+                             *          {"a": "B", "b": { "value": [{"x":55}] } },
+                             *          {"a": "C", "b": { "value": [{"x":43}] } }
+                             *      ]
+                             *  },
+                             *
+                             * Will produce the following access paths:
+                             *
+                             * ["a", "b", "b.value", "b.value.0", "b.value.0.x"]
+                             *
+                             * And can be compared with these valid encoding channel values:
+                             *
+                             *
+                             * asAccessPath("b['value'][0]['x']") === 'b.value.0.x'
+                             * asAccessPath("b.value[0]['x']") === 'b.value.0.x'
+                             * asAccessPath("b['value'][0].x") === 'b.value.0.x'
+                             * asAccessPath("b.value[0].x") === 'b.value.0.x'
+                             *
+                             *
+                             */
+
+                            accum.push(...getAccessPaths(value));
                         }
                         return accum;
                     }, []),
@@ -251,7 +358,29 @@ export function validateFieldDefinitions(table, specification) {
                 value !== null &&
                 typeof value.field === 'string'
             ) {
-                if (!validNames.includes(value.field)) {
+                let fieldAsAccessPath;
+
+                try {
+                    fieldAsAccessPath = asAccessPath(value.field);
+                } catch (_) {
+                    fieldAsAccessPath = '';
+                }
+
+                let isInvalidPath = !validNames.includes(fieldAsAccessPath);
+                let isInvalidName = !validNames.includes(value.field);
+
+                if (!isInvalidName || !isInvalidPath) {
+                    // Match field names that have a single or double quote character, that does not
+                    // appear to be escaped. The field must also be a name from the table itself,
+                    // not an access path pointing to inline data.
+                    let matches = value.field.match(/(?:\w*)('|")/g);
+                    if (fieldNames.includes(value.field) && matches && matches.length) {
+                        errors.push(<FieldEscapeError encoding={value} />);
+                        return;
+                    }
+                }
+
+                if (isInvalidName && isInvalidPath) {
                     errors.push(
                         <FieldDefinitionError property={property} encoding={value} table={table} />,
                     );

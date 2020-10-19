@@ -1,6 +1,7 @@
 import React from 'react';
 import {Box} from '@airtable/blocks/ui';
 import MonacoEditor from './MonacoEditor';
+import {escapeForSpec} from './data';
 import {schemas} from './Specification';
 import {AllowedTypes, VegaTypes} from './types';
 import visitor from './visitor';
@@ -28,7 +29,7 @@ function SpecificationEditor(props) {
                 fieldType: field.type,
                 // insertText, label & command belong to Monaco
                 // and are used for displaying an autocomplete list
-                insertText: `${field.name}`,
+                insertText: `${escapeForSpec(field.name)}`,
                 label: `"${field.name}"`,
             });
         }
