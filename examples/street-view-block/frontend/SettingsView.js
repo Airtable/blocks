@@ -13,6 +13,7 @@ import {
 import React, {Fragment} from 'react';
 import {AllowedCacheFieldTypes, AllowedLocationFieldTypes} from './types';
 import {ConfigKeys} from './useSettingsStore';
+import APIKeyInformationDialog from './APIKeyInformationDialog';
 import FullscreenBox from './FullscreenBox';
 import SettingsStatus, {severityColorCode} from './SettingsStatus';
 
@@ -61,7 +62,8 @@ export default function SettingsView({settings}) {
                     />
 
                     <Text textColor="light" size="small">
-                        Note: the API key will be visible to all collaborators.
+                        Note: the API key will be visible to all collaborators.{' '}
+                        <APIKeyInformationDialog />
                     </Text>
                 </FormField>
                 <FormField label="Table">

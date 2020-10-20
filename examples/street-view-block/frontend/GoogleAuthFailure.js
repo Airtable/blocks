@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Link} from '@airtable/blocks/ui';
+import ExternalLink from './ExternalLink';
 
 export const BILLING_NOT_ENABLED = 'BILLING_NOT_ENABLED';
 export const GEOCODING_NOT_ENABLED = 'GEOCODING_NOT_ENABLED';
@@ -12,15 +12,6 @@ export const UNKNOWN = 'UNKNOWN';
 const URL_GOOGLE_CLOUD_CONSOLE = 'https://console.cloud.google.com';
 const URL_GOOGLE_DEV_API_CREDENTIALS = 'https://console.developers.google.com/apis/credentials';
 
-function Anchor({href, children}) {
-    const aProps = {
-        href,
-        rel: 'noopener noreferrer',
-        target: '_blank',
-    };
-    return <Link {...aProps}>{children}</Link>;
-}
-
 export default function(errorCode) {
     let action = null;
     let reason = null;
@@ -30,7 +21,10 @@ export default function(errorCode) {
             const href = `${URL_GOOGLE_CLOUD_CONSOLE}/project/_/billing/enable`;
             action = (
                 <Fragment>
-                    Please <Anchor href={href}>enable Billing on the Google Cloud Project</Anchor>{' '}
+                    Please{' '}
+                    <ExternalLink href={href}>
+                        enable Billing on the Google Cloud Project
+                    </ExternalLink>{' '}
                     for this API key.
                 </Fragment>
             );
@@ -41,8 +35,9 @@ export default function(errorCode) {
             const href = `${URL_GOOGLE_CLOUD_CONSOLE}/apis/library/geocoding-backend.googleapis.com`;
             action = (
                 <Fragment>
-                    Please <Anchor href={href}>enable the Google Maps Geocoding API</Anchor> for
-                    this API key.
+                    Please{' '}
+                    <ExternalLink href={href}>enable the Google Maps Geocoding API</ExternalLink>{' '}
+                    for this API key.
                 </Fragment>
             );
             reason = 'The Google Maps Geocoding API is not enabled for this API key.';
@@ -52,7 +47,8 @@ export default function(errorCode) {
             const href = `${URL_GOOGLE_CLOUD_CONSOLE}/apis/library/maps-backend.googleapis.com`;
             action = (
                 <Fragment>
-                    Please <Anchor href={href}>enable the Google Maps API</Anchor> for this API key.
+                    Please <ExternalLink href={href}>enable the Google Maps API</ExternalLink> for
+                    this API key.
                 </Fragment>
             );
             reason = 'The Google Maps API is not enabled for this API key.';
@@ -62,7 +58,10 @@ export default function(errorCode) {
             action = (
                 <Fragment>
                     If this is a recently created API key, wait a few minutes and try again. If not,{' '}
-                    <Anchor href={URL_GOOGLE_DEV_API_CREDENTIALS}>generate a new API key</Anchor>.
+                    <ExternalLink href={URL_GOOGLE_DEV_API_CREDENTIALS}>
+                        generate a new API key
+                    </ExternalLink>
+                    .
                 </Fragment>
             );
             reason = 'The API Key has expired.';
@@ -72,9 +71,9 @@ export default function(errorCode) {
             action = (
                 <Fragment>
                     Please{' '}
-                    <Anchor href={URL_GOOGLE_DEV_API_CREDENTIALS}>
+                    <ExternalLink href={URL_GOOGLE_DEV_API_CREDENTIALS}>
                         update this key&apos;s application restrictions
-                    </Anchor>{' '}
+                    </ExternalLink>{' '}
                     to accept requests from <code>*.airtableblocks.com/*</code>.
                 </Fragment>
             );
@@ -87,7 +86,10 @@ export default function(errorCode) {
             action = (
                 <Fragment>
                     Please ensure that this API key is correct, or{' '}
-                    <Anchor href={URL_GOOGLE_DEV_API_CREDENTIALS}>create a new one</Anchor>.
+                    <ExternalLink href={URL_GOOGLE_DEV_API_CREDENTIALS}>
+                        create a new one
+                    </ExternalLink>
+                    .
                 </Fragment>
             );
             reason = 'The API Key is invalid.';

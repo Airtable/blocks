@@ -11,6 +11,7 @@ import {
 } from '@airtable/blocks/ui';
 import React, {Fragment, useState} from 'react';
 import {ConfigKeys} from './useSettingsStore';
+import APIKeyInformationDialog from './APIKeyInformationDialog';
 import FullscreenBox from './FullscreenBox';
 import SettingsStatus, {severityColorCode} from './SettingsStatus';
 import StreetViewImage from './StreetViewImage';
@@ -246,7 +247,8 @@ export default function InstructionsView({settings}) {
                             />
 
                             <Text textColor="light" size="small">
-                                Note: the API key will be visible to all collaborators.
+                                Note: the API key will be visible to all collaborators.{' '}
+                                <APIKeyInformationDialog size="small" />
                             </Text>
                         </FormField>
                     ) : null}
