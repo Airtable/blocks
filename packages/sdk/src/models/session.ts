@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: Session */ /** */
 import {invariant} from '../error_utils';
 import getSdk from '../get_sdk';
@@ -201,12 +200,18 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /**
      * @internal
      */
+    // This method is not referenced anywhere in the SDK codebase.
+    // TODO(jugglinmike): remove this method
+    // istanbul ignore next
     get __currentUserId(): UserId | null {
         return this._sessionData.currentUserId;
     }
     /**
      * @internal
      */
+    // This method is not referenced anywhere in the SDK codebase.
+    // TODO(jugglinmike): remove this method
+    // istanbul ignore next
     get __rawPermissionLevel(): PermissionLevel {
         return this._sessionData.permissionLevel;
     }
