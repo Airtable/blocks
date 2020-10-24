@@ -1,4 +1,7 @@
-export default {
+import {SdkInitData} from '../../src/types/airtable_interface';
+import {ViewType} from '../../src/types/view';
+
+const projectTracker: SdkInitData = {
     isDevelopmentMode: false,
     blockInstallationId: 'blicPfOILwejF6HL2',
     isFirstRun: false,
@@ -32,7 +35,7 @@ export default {
                             relationship: 'many',
                             symmetricColumnId: 'fld3nuJVc9ivC8IJF',
                         },
-                        description: '',
+                        description: 'the project client',
                         lock: null,
                     },
                     fldRljtoVpOt1IDYH: {
@@ -166,31 +169,32 @@ export default {
                     viwkNnS94RQAQQTMn: {
                         id: 'viwkNnS94RQAQQTMn',
                         name: 'All projects',
-                        type: 'grid',
+                        type: ViewType.GRID,
                     },
                     viwqo8mFAqy2HYSCL: {
                         id: 'viwqo8mFAqy2HYSCL',
                         name: 'Incomplete projects by leader',
-                        type: 'grid',
+                        type: ViewType.GRID,
                     },
                     viw8v5XkLudbiCJfD: {
                         id: 'viw8v5XkLudbiCJfD',
                         name: 'Completed projects',
-                        type: 'grid',
+                        type: ViewType.GRID,
                     },
                     viwhz3PjFATSxaV5X: {
                         id: 'viwhz3PjFATSxaV5X',
                         name: 'Project calendar',
-                        type: 'calendar',
+                        type: ViewType.CALENDAR,
                     },
                     viwA4Tzw8IJcHHgul: {
                         id: 'viwA4Tzw8IJcHHgul',
                         name: 'Due dates only',
-                        type: 'calendar',
+                        type: ViewType.CALENDAR,
                     },
                 },
                 description: '',
                 lock: null,
+                externalSyncById: null,
             },
             tblcstEo50YXLJcK4: {
                 id: 'tblcstEo50YXLJcK4',
@@ -266,11 +270,12 @@ export default {
                     viwWxkRmrDMhu7I8p: {
                         id: 'viwWxkRmrDMhu7I8p',
                         name: 'All tasks',
-                        type: 'grid',
+                        type: ViewType.GRID,
                     },
                 },
                 description: '',
                 lock: null,
+                externalSyncById: null,
             },
             tblyt8B45wJQIx1c3: {
                 id: 'tblyt8B45wJQIx1c3',
@@ -320,18 +325,17 @@ export default {
                     viwtbJNofZMnUD8sQ: {
                         id: 'viwtbJNofZMnUD8sQ',
                         name: 'All clients',
-                        type: 'grid',
+                        type: ViewType.GRID,
                     },
                 },
                 description: '',
                 lock: null,
+                externalSyncById: null,
             },
         },
         permissionLevel: 'create',
-        appBlanket: {},
-        sortTiebreakerKey: 'app97Vimdj1OP7QKF',
         currentUserId: 'usrcNLql3ByVkIjIe',
-        enabledFeatureNames: ['blocks.dedupeConcatenate'],
+        enabledFeatureNames: [],
         collaboratorsById: {
             usr3VLCpyqgcI46Sh: {
                 id: 'usr3VLCpyqgcI46Sh',
@@ -401,5 +405,9 @@ export default {
         cursorData: null,
         billingPlanGrouping: 'pro',
         appInterface: {},
+        isBlockDevelopmentRestrictionEnabled: false,
     },
+    intentData: null,
 };
+
+export default projectTracker;

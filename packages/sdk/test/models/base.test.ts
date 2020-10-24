@@ -363,10 +363,7 @@ describe('Base', () => {
         let mockCheck: jest.SpyInstance;
 
         beforeEach(() => {
-            mockCheck = jest.spyOn(mockAirtableInterface, 'checkPermissionsForMutation');
-        });
-        afterEach(() => {
-            mockCheck.mockRestore();
+            mockCheck = mockAirtableInterface.checkPermissionsForMutation;
         });
 
         it('operates without arguments', () => {
@@ -473,11 +470,9 @@ describe('Base', () => {
 
     describe('hasPermissionToCreateTable', () => {
         let mockCheck: jest.SpyInstance;
+
         beforeEach(() => {
-            mockCheck = jest.spyOn(mockAirtableInterface, 'checkPermissionsForMutation');
-        });
-        afterEach(() => {
-            mockCheck.mockRestore();
+            mockCheck = mockAirtableInterface.checkPermissionsForMutation;
         });
 
         it('operates without arguments', () => {
@@ -496,19 +491,14 @@ describe('Base', () => {
 
     describe('createTableAsync', () => {
         let mockGetTableById: any;
-        let mockApplyMutations: jest.SpyInstance;
 
         beforeEach(() => {
-            mockApplyMutations = jest.spyOn(mockAirtableInterface, 'applyMutationAsync');
-
             mockGetTableById = jest.spyOn(base, 'getTableById').mockImplementation(tableId => {
                 const airtableInterface = mockAirtableInterface as any;
                 const recordStore = undefined as any;
                 return new Table(base.__baseData, base, recordStore, tableId, airtableInterface);
             });
         });
-
-        afterEach(() => mockApplyMutations.mockRestore());
 
         it('accepts null, undefined and non-null field options', async () => {
             await base.createTableAsync('new table', [

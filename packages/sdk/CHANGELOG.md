@@ -3,15 +3,24 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). This project
-doesn't currently follow semantic versioning, but will once it reaches 1.0.0.
+started to follow semantic versioning as of version 1.0.0.
 
 Not every commit needs to result in a change to this file (e.g. docs and chore commits). Every
 commit that affects the code in a way that consumers might care about should include edits to the
 'Unreleased' section though. Breaking changes should be prefixed with `**BREAKING:**`.
 
-## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...HEAD)
+## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.0...HEAD)
 
 No changes.
+
+## [1.2.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...@airtable/blocks@1.2.0) - 2020-10-23
+
+-   Added `automations` and fixed the SVG path for `personalAuto` in `Icon`.
+-   Fixed a bug that caused an App to crash when creating a new table before the App has loaded.
+-   Fixed a bug in watching/unwatching keys of LinkedRecordQueryResult models. Watching/unwatching
+    `isDataLoaded` no longer affects the model's "loaded" state.
+-   Fixed a bug introduced in v1.0.0 in `RecordCard` when rendering a record that has a lookup field
+    of an attachment field.
 
 ## [1.1.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.0.1...@airtable/blocks@1.1.0) - 2020-09-29
 

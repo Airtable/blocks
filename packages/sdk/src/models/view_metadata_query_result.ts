@@ -49,7 +49,7 @@ const viewMetadataQueryResultPool: ObjectPool<
  *     const viewMetadata = view.selectMetadata();
  *     await viewMetadata.loadDataAsync();
  *
- *     console.log(viewMetadata.visibleField);
+ *     console.log(viewMetadata.visibleFields);
  *     // => [Field, Field, Field]
  *
  *     console.log(viewMetadata.allFields);

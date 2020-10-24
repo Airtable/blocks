@@ -2,9 +2,11 @@ import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_int
 import Base from '../../src/models/base';
 import Mutations from '../../src/models/mutations';
 import Session from '../../src/models/session';
+import {ModelChange} from '../../src/types/base';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 import {FieldTypeConfig} from '../../src/types/airtable_interface';
+import {disableObjectPool} from '../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -18,9 +20,28 @@ jest.mock('../../src/models/mutation_constants', () => ({
     MAX_TABLE_NAME_LENGTH: 20,
 }));
 
+const compareUpdatePath = (a: ModelChange, b: ModelChange) => {
+    return a.path.join('') > b.path.join('') ? 1 : -1;
+};
+
+const genericRecordData = {
+    cellValuesByFieldId: {fldMockLookup: null},
+    commentCount: 0,
+    createdTime: new Date().toJSON(),
+};
+const recordsById = {
+    recA: {id: 'recA', ...genericRecordData},
+    recB: {id: 'recB', ...genericRecordData},
+    recC: {id: 'recC', ...genericRecordData},
+};
+
+disableObjectPool();
+
 describe('Mutations', () => {
     let base: Base;
     let mutations: Mutations;
+    let applyModelChanges: jest.Mock;
+    let applyGlobalConfigUpdates: jest.Mock;
 
     beforeEach(() => {
         base = new Base(mockAirtableInterface.sdkInitData.baseData, mockAirtableInterface);
@@ -29,23 +50,20 @@ describe('Mutations', () => {
             mockAirtableInterface.sdkInitData.baseData,
             mockAirtableInterface,
         );
+        applyModelChanges = jest.fn();
+        applyGlobalConfigUpdates = jest.fn();
 
         mutations = new Mutations(
             mockAirtableInterface,
             session,
             base,
-            changes => null,
-            updates => null,
+            applyModelChanges,
+            applyGlobalConfigUpdates,
         );
     });
 
-    let afterCallbacks: Array<() => void> = [];
-    const after = (cb: () => void) => afterCallbacks.push(cb);
     afterEach(() => {
-        for (const cb of afterCallbacks) {
-            cb();
-        }
-        afterCallbacks = [];
+        mockAirtableInterface.reset();
     });
 
     describe('_assertMutationIsValid', () => {
@@ -119,12 +137,11 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                const mockValidate = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'validateConfigForUpdate')
-                    .mockImplementation(() => {
+                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                    () => {
                         return {isValid: false, reason: 'Mock reason'};
-                    });
-                after(() => mockValidate.mockRestore());
+                    },
+                );
 
                 const config = {
                     type: FieldType.CHECKBOX,
@@ -155,12 +172,8 @@ describe('Mutations', () => {
             });
 
             it('successfully returns when all criteria pass', () => {
-                const mockValidate = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'validateConfigForUpdate',
-                );
-                after(() => mockValidate.mockRestore());
-
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate;
                 const config = {
                     type: FieldType.CHECKBOX,
                     options: {
@@ -215,12 +228,11 @@ describe('Mutations', () => {
             });
 
             it('validates field config', () => {
-                let mockValidate = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'validateConfigForUpdate')
-                    .mockImplementation(() => {
+                let mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                    () => {
                         return {isValid: false, reason: 'Mock reason'};
-                    });
-                after(() => mockValidate.mockRestore());
+                    },
+                );
 
                 const oldConfig = {
                     type: FieldType.CHECKBOX,
@@ -229,11 +241,9 @@ describe('Mutations', () => {
                         color: 'greyBright',
                     },
                 };
-                jest.spyOn(mockAirtableInterface.fieldTypeProvider, 'getConfig').mockImplementation(
-                    () => {
-                        return oldConfig;
-                    },
-                );
+                mockAirtableInterface.fieldTypeProvider.getConfig.mockImplementation(() => {
+                    return oldConfig;
+                });
 
                 const table = base.getTableById('tblcstEo50YXLJcK4');
                 const field = table.getFieldById('fldX2QXZGxsqj7YC0');
@@ -262,12 +272,10 @@ describe('Mutations', () => {
                     field._data,
                     'pro',
                 );
-                mockValidate.mockRestore();
 
-                mockValidate = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'validateConfigForUpdate',
-                );
+                mockValidate.mockClear();
+                mockValidate.mockReturnValue({isValid: true});
+
                 mutations._assertMutationIsValid({
                     type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
                     tableId: table.id,
@@ -374,12 +382,11 @@ describe('Mutations', () => {
                     "Can't create table: field name 'new field with name that is too long' exceeds maximum length of 20 characters",
                 );
 
-                const mockValidate = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'validateConfigForUpdate')
-                    .mockImplementation(() => {
+                const mockValidate = mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate.mockImplementation(
+                    () => {
                         return {isValid: false, reason: 'Mock reason'};
-                    });
-                after(() => mockValidate.mockRestore());
+                    },
+                );
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -417,12 +424,11 @@ describe('Mutations', () => {
             });
 
             it('checks the primary field', () => {
-                const mockCanBePrimary = jest
-                    .spyOn(mockAirtableInterface.fieldTypeProvider, 'canBePrimary')
-                    .mockImplementation(() => {
+                const mockCanBePrimary = mockAirtableInterface.fieldTypeProvider.canBePrimary.mockImplementation(
+                    () => {
                         return false;
-                    });
-                after(() => mockCanBePrimary.mockRestore());
+                    },
+                );
 
                 expect(() => {
                     mutations._assertMutationIsValid({
@@ -444,16 +450,9 @@ describe('Mutations', () => {
             });
 
             it('successfully returns when all criteria pass', () => {
-                const mockValidate = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'validateConfigForUpdate',
-                );
-                const mockCanBePrimary = jest.spyOn(
-                    mockAirtableInterface.fieldTypeProvider,
-                    'canBePrimary',
-                );
-                after(() => mockValidate.mockRestore());
-                after(() => mockCanBePrimary.mockRestore());
+                const mockValidate =
+                    mockAirtableInterface.fieldTypeProvider.validateConfigForUpdate;
+                const mockCanBePrimary = mockAirtableInterface.fieldTypeProvider.canBePrimary;
 
                 mutations._assertMutationIsValid({
                     type: MutationTypes.CREATE_SINGLE_TABLE,
@@ -480,6 +479,696 @@ describe('Mutations', () => {
                     'pro',
                 );
             });
+        });
+    });
+
+    describe('applyMutationAsync', () => {
+        describe('SET_MULTIPLE_RECORDS_CELL_VALUES', () => {
+            const validRecord = {
+                id: 'recA',
+                cellValuesByFieldId: {
+                    fldRljtoVpOt1IDYH: 9,
+                },
+            };
+
+            it('checks that the table exists', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                        tableId: 'tblNonExistentTableId',
+                        records: [],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't set cell values: No table with id tblNonExistentTableId exists"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('checks that the field exists', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [
+                            {
+                                id: 'recNonExistent',
+                                cellValuesByFieldId: {
+                                    fldNonExistent: {},
+                                },
+                            },
+                        ],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't set cell values: No field with id fldNonExistent exists in table 'Design projects'"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('checks that the field is not computed', async () => {
+                mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [
+                            {
+                                id: 'recNonExistent',
+                                cellValuesByFieldId: {
+                                    fldRljtoVpOt1IDYH: {},
+                                },
+                            },
+                        ],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't set cell values: Field 'Category' is computed and cannot be set"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('fails when batch size limit is exceeded', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: Array.from(new Array(51)).map(() => validRecord),
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Request exceeds maximum batch size limit of 50 items"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('fails when permission is denied', async () => {
+                const mutation = {
+                    type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    records: [validRecord],
+                };
+                mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                    hasPermission: false,
+                    reasonDisplayString: 'mock reason',
+                });
+
+                await expect(
+                    mutations.applyMutationAsync(mutation),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Cannot apply setMultipleRecordsCellValues mutation: mock reason"`,
+                );
+
+                expect(mockAirtableInterface.checkPermissionsForMutation.mock.calls.length).toBe(1);
+                expect(
+                    mockAirtableInterface.checkPermissionsForMutation.mock.calls[0][0],
+                ).toStrictEqual(mutation);
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('succeeds when input is valid', async () => {
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    records: Array.from(new Array(50)).map(() => validRecord),
+                });
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            describe('loaded records', () => {
+                beforeEach(() => {
+                    mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({
+                        recordsById,
+                    });
+                    mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue(
+                        {
+                            recordsById,
+                        },
+                    );
+                    return base.tables[0].selectRecordsAsync();
+                });
+
+                it('checks that the record exists', async () => {
+                    expect(
+                        mutations.applyMutationAsync({
+                            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                            tableId: 'tbly388E8NA1CNhnF',
+                            records: [
+                                {
+                                    id: 'recNonExistent',
+                                    cellValuesByFieldId: {
+                                        fldNonExistent: {},
+                                    },
+                                },
+                            ],
+                        }),
+                    ).rejects.toThrowErrorMatchingInlineSnapshot(
+                        `"Can't set cell values: No record with id recNonExistent exists"`,
+                    );
+                    expect(applyModelChanges.mock.calls.length).toBe(0);
+                });
+
+                it('checks that value is valid', async () => {
+                    mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue(
+                        {isValid: false, reason: 'Mock reason'},
+                    );
+                    await expect(
+                        mutations.applyMutationAsync({
+                            type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                            tableId: 'tbly388E8NA1CNhnF',
+                            records: [
+                                {
+                                    id: 'recA',
+                                    cellValuesByFieldId: {
+                                        fldRljtoVpOt1IDYH: 9,
+                                    },
+                                },
+                            ],
+                        }),
+                    ).rejects.toThrowErrorMatchingInlineSnapshot(`
+"Can't set cell values: invalid cell value for field 'Category'.
+Mock reason"
+`);
+                    expect(applyModelChanges.mock.calls.length).toBe(0);
+                });
+
+                it('succeeds when input is valid', () =>
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [validRecord],
+                    }));
+            });
+        });
+
+        describe('DELETE_MULTIPLE_RECORDS', () => {
+            it('checks that the table exists', async () => {
+                expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                        tableId: 'tblNonExistentTableId',
+                        recordIds: [],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't delete records: No table with id tblNonExistentTableId exists"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('fails when batch size limit is exceeded', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        recordIds: Array.from(new Array(51)).map(() => 'recA'),
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Request exceeds maximum batch size limit of 50 items"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('fails when permission is denied', async () => {
+                const mutation = {
+                    type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    recordIds: ['recA'],
+                };
+                mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                    hasPermission: false,
+                    reasonDisplayString: 'mock reason',
+                });
+
+                await expect(
+                    mutations.applyMutationAsync(mutation),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Cannot apply deleteMultipleRecords mutation: mock reason"`,
+                );
+
+                expect(mockAirtableInterface.checkPermissionsForMutation.mock.calls.length).toBe(1);
+                expect(
+                    mockAirtableInterface.checkPermissionsForMutation.mock.calls[0][0],
+                ).toStrictEqual(mutation);
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('succeeds when input is valid', async () => {
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    recordIds: Array.from(new Array(50)).map(() => 'recA'),
+                });
+
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            describe('loaded records', () => {
+                beforeEach(async () => {
+                    mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({
+                        recordsById,
+                    });
+                    mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
+                        visibleRecordIds: ['recA', 'recB', 'recC'],
+                        fieldOrder: {
+                            fieldIds: ['fldXaTPfxIVhAUYde', 'fld3DvZllJtyaNYpm'],
+                            visibleFieldCount: 2,
+                        },
+                        colorsByRecordId: {},
+                    });
+                    mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue(
+                        {
+                            recordsById,
+                        },
+                    );
+
+                    await base.tables[0].views[0].selectMetadataAsync();
+                    await base.tables[0].selectRecordsAsync();
+                });
+
+                it('checks that the record exists', async () => {
+                    await expect(
+                        mutations.applyMutationAsync({
+                            type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                            tableId: 'tbly388E8NA1CNhnF',
+                            recordIds: ['recNonExistent'],
+                        }),
+                    ).rejects.toThrowErrorMatchingInlineSnapshot(
+                        `"Can't delete records: No record with id recNonExistent exists in table 'Design projects'"`,
+                    );
+                    expect(applyModelChanges.mock.calls.length).toBe(0);
+                });
+
+                it('succeeds when input is valid', async () => {
+                    await mutations.applyMutationAsync({
+                        type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        recordIds: ['recA', 'recC'],
+                    });
+
+                    expect(applyModelChanges.mock.calls.length).toBe(1);
+                    expect(
+                        applyModelChanges.mock.calls[0][0].sort(compareUpdatePath),
+                    ).toStrictEqual([
+                        {
+                            path: ['tablesById', 'tbly388E8NA1CNhnF', 'recordsById', 'recA'],
+                            value: undefined,
+                        },
+                        {
+                            path: ['tablesById', 'tbly388E8NA1CNhnF', 'recordsById', 'recC'],
+                            value: undefined,
+                        },
+                        {
+                            path: [
+                                'tablesById',
+                                'tbly388E8NA1CNhnF',
+                                'viewsById',
+                                'viwkNnS94RQAQQTMn',
+                                'visibleRecordIds',
+                            ],
+                            value: ['recB'],
+                        },
+                    ]);
+                });
+            });
+        });
+
+        describe('CREATE_MULTIPLE_RECORDS', () => {
+            const validRecord = {
+                id: 'recD',
+                cellValuesByFieldId: {
+                    fldXaTPfxIVhAUYde: 9,
+                    fldRljtoVpOt1IDYH: 10,
+                },
+            };
+
+            it('checks that the table exists', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                        tableId: 'tblNonExistentTableId',
+                        records: [],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't create records: No table with id tblNonExistentTableId exists"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('checks that the field exists', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [
+                            {
+                                id: 'recNonExistent',
+                                cellValuesByFieldId: {
+                                    fldNonExistent: {},
+                                },
+                            },
+                        ],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't create records: No field with id fldNonExistent exists in table 'Design projects'"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('checks that the field is not computed', async () => {
+                mockAirtableInterface.fieldTypeProvider.isComputed.mockReturnValue(true);
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [
+                            {
+                                id: 'recNonExistent',
+                                cellValuesByFieldId: {
+                                    fldRljtoVpOt1IDYH: {},
+                                },
+                            },
+                        ],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Can't set cell values: Field 'Category' is computed and cannot be set"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('checks that value is valid', async () => {
+                mockAirtableInterface.fieldTypeProvider.validateCellValueForUpdate.mockReturnValue({
+                    isValid: false,
+                    reason: 'Mock reason',
+                });
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [
+                            {
+                                id: 'recA',
+                                cellValuesByFieldId: {
+                                    fldRljtoVpOt1IDYH: 9,
+                                },
+                            },
+                        ],
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(`
+"Can't create records: invalid cell value for field 'Category'.
+Mock reason"
+`);
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('fails when batch size limit is exceeded', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: Array.from(new Array(51)).map(() => validRecord),
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Request exceeds maximum batch size limit of 50 items"`,
+                );
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('fails when permission is denied', async () => {
+                const mutation = {
+                    type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    records: [validRecord],
+                };
+                mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                    hasPermission: false,
+                    reasonDisplayString: 'mock reason',
+                });
+
+                await expect(
+                    mutations.applyMutationAsync(mutation),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Cannot apply createMultipleRecords mutation: mock reason"`,
+                );
+
+                expect(mockAirtableInterface.checkPermissionsForMutation.mock.calls.length).toBe(1);
+                expect(
+                    mockAirtableInterface.checkPermissionsForMutation.mock.calls[0][0],
+                ).toStrictEqual(mutation);
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            it('succeeds when input is valid', async () => {
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    records: Array.from(new Array(50)).map(() => validRecord),
+                });
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+
+            describe('loaded records', () => {
+                beforeEach(async () => {
+                    mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({
+                        recordsById,
+                    });
+                    mockAirtableInterface.fetchAndSubscribeToViewDataAsync.mockResolvedValue({
+                        visibleRecordIds: ['recA', 'recB', 'recC'],
+                        fieldOrder: {
+                            fieldIds: ['fldXaTPfxIVhAUYde', 'fld3DvZllJtyaNYpm'],
+                            visibleFieldCount: 2,
+                        },
+                        colorsByRecordId: {},
+                    });
+                    mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue(
+                        {
+                            recordsById,
+                        },
+                    );
+
+                    await base.tables[0].views[0].selectMetadataAsync();
+                });
+
+                it('succeeds when input is valid', async () => {
+                    await mutations.applyMutationAsync({
+                        type: MutationTypes.CREATE_MULTIPLE_RECORDS,
+                        tableId: 'tbly388E8NA1CNhnF',
+                        records: [validRecord],
+                    });
+                    expect(applyModelChanges.mock.calls.length).toBe(1);
+                    const changes = applyModelChanges.mock.calls[0][0].sort(compareUpdatePath);
+                    expect(Date.parse(changes[0].value.createdTime)).toBeTruthy();
+                    changes[0].value.createdTime = '';
+                    expect(changes).toStrictEqual([
+                        {
+                            path: ['tablesById', 'tbly388E8NA1CNhnF', 'recordsById', 'recD'],
+                            value: {
+                                id: 'recD',
+                                cellValuesByFieldId: {
+                                    fldXaTPfxIVhAUYde: 9,
+                                },
+                                commentCount: 0,
+                                createdTime: '',
+                            },
+                        },
+                        {
+                            path: [
+                                'tablesById',
+                                'tbly388E8NA1CNhnF',
+                                'viewsById',
+                                'viwkNnS94RQAQQTMn',
+                                'visibleRecordIds',
+                            ],
+                            value: ['recA', 'recB', 'recC', 'recD'],
+                        },
+                    ]);
+                });
+            });
+        });
+
+        describe('SET_MULTIPLE_GLOBAL_CONFIG_PATHS', () => {
+            const validUpdate = {
+                path: ['foo'],
+                value: 'bar',
+            };
+
+            it('fails when permission is denied', async () => {
+                const mutation = {
+                    type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    updates: [],
+                };
+                mockAirtableInterface.checkPermissionsForMutation.mockReturnValue({
+                    hasPermission: false,
+                    reasonDisplayString: 'mock reason',
+                });
+
+                await expect(
+                    mutations.applyMutationAsync(mutation),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Cannot apply setMultipleGlobalConfigPaths mutation: mock reason"`,
+                );
+
+                expect(mockAirtableInterface.checkPermissionsForMutation.mock.calls.length).toBe(1);
+                expect(
+                    mockAirtableInterface.checkPermissionsForMutation.mock.calls[0][0],
+                ).toStrictEqual(mutation);
+                expect(applyGlobalConfigUpdates.mock.calls.length).toBe(0);
+            });
+
+            it('fails when batch size limit is exceeded', async () => {
+                await expect(
+                    mutations.applyMutationAsync({
+                        type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+                        updates: Array.from(new Array(51)).map(() => validUpdate),
+                    }),
+                ).rejects.toThrowErrorMatchingInlineSnapshot(
+                    `"Request exceeds maximum batch size limit of 50 items"`,
+                );
+                expect(applyGlobalConfigUpdates.mock.calls.length).toBe(0);
+            });
+
+            it('forwards updates to injected function', () => {
+                mutations.applyMutationAsync({
+                    type: MutationTypes.SET_MULTIPLE_GLOBAL_CONFIG_PATHS,
+                    updates: [validUpdate],
+                });
+                expect(applyGlobalConfigUpdates.mock.calls.length).toBe(1);
+                expect(applyGlobalConfigUpdates.mock.calls[0].length).toBe(1);
+                expect(applyGlobalConfigUpdates.mock.calls[0][0]).toStrictEqual([validUpdate]);
+            });
+        });
+
+        describe('CREATE_SINGLE_FIELD', () => {
+            it('succeeds when input is valid', async () => {
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.CREATE_SINGLE_FIELD,
+                    tableId: 'tblcstEo50YXLJcK4',
+                    name: 'foo',
+                    id: 'fldNew',
+                    config: {
+                        type: FieldType.SINGLE_LINE_TEXT,
+                    },
+                });
+
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+        });
+
+        describe('UPDATE_SINGLE_FIELD_CONFIG', () => {
+            it('succeeds when input is valid', async () => {
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.UPDATE_SINGLE_FIELD_CONFIG,
+                    tableId: 'tblcstEo50YXLJcK4',
+                    id: 'fldij9kocxowfur16',
+                    config: {
+                        type: FieldType.SINGLE_LINE_TEXT,
+                    },
+                });
+
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+        });
+
+        describe('CREATE_SINGLE_TABLE', () => {
+            it('succeeds when input is valid', async () => {
+                await mutations.applyMutationAsync({
+                    type: MutationTypes.CREATE_SINGLE_TABLE,
+                    id: 'tblNew',
+                    name: 'foo',
+                    fields: [
+                        {
+                            name: 'bar',
+                            config: {
+                                type: FieldType.SINGLE_LINE_TEXT,
+                            },
+                        },
+                    ],
+                });
+
+                expect(applyModelChanges.mock.calls.length).toBe(0);
+            });
+        });
+
+        it('rejects enormous mutations', async () => {
+            await expect(
+                mutations.applyMutationAsync({
+                    type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    records: [
+                        {
+                            id: 'recA',
+                            cellValuesByFieldId: {
+                                fldRljtoVpOt1IDYH: 'x'.repeat(2 * 2 ** 20),
+                            },
+                        },
+                    ],
+                }),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(
+                `"Request exceeds maximum size limit of 1992294.4 bytes"`,
+            );
+            expect(applyModelChanges.mock.calls.length).toBe(0);
+        });
+
+        it('rejects unrecognized mutation types', async () => {
+            const circular: {[key: string]: object} = {};
+            circular.circular = circular;
+
+            await expect(
+                mutations.applyMutationAsync({
+                    type: 'foo' as typeof MutationTypes.DELETE_MULTIPLE_RECORDS,
+                    tableId: 'tblNonExistentTableId',
+                    recordIds: [(circular as unknown) as string],
+                }),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(`"Unknown value foo for mutation type"`);
+            expect(applyModelChanges.mock.calls.length).toBe(0);
+        });
+
+        it('rejects when synchronization failures occur and no state changes have been optimistically applied', async () => {
+            mockAirtableInterface.applyMutationAsync.mockRejectedValue(new Error('foobar'));
+            await expect(
+                mutations.applyMutationAsync({
+                    type: MutationTypes.DELETE_MULTIPLE_RECORDS,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    recordIds: [],
+                }),
+            ).rejects.toThrowErrorMatchingInlineSnapshot(`"foobar"`);
+        });
+
+        it('produces an uncaught exception when synchronization failures occur and a state change has been optimistically applied', async () => {
+            mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockResolvedValue({
+                recordsById,
+            });
+            mockAirtableInterface.fetchAndSubscribeToCellValuesInFieldsAsync.mockResolvedValue({
+                recordsById,
+            });
+            await base.tables[0].selectRecordsAsync();
+
+            mockAirtableInterface.applyMutationAsync.mockRejectedValue(new Error('foobar'));
+
+            const applyPromise = mutations
+                .applyMutationAsync({
+                    type: MutationTypes.SET_MULTIPLE_RECORDS_CELL_VALUES,
+                    tableId: 'tbly388E8NA1CNhnF',
+                    records: [
+                        {
+                            id: 'recA',
+                            cellValuesByFieldId: {
+                                fldRljtoVpOt1IDYH: 9,
+                            },
+                        },
+                    ],
+                })
+                .then(() => {
+                    throw new Error('Unexpected fulfillment');
+                });
+            const uncaughtException = new Promise(resolve => {
+                window.onerror = () => {
+                    resolve();
+                    return true;
+                };
+            });
+
+            try {
+                await Promise.race([applyPromise, uncaughtException]);
+            } finally {
+                window.onerror = null;
+            }
         });
     });
 });

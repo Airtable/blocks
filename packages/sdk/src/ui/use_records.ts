@@ -99,7 +99,8 @@ export function useRecords(tableOrViewOrQueryResult: null): null;
  * particular table, view or query result. Automatically handles loading data and updating
  * your component when the underlying data changes.
  *
- * This hook re-renders when any data concerning the records changes, including cell values - that's
+ * This hook re-renders when data concerning the records changes (specifically, when cell values
+ * change, the record color changes, and when records are added or removed) - that's
  * useful, but can cause re-renders quite often, meaning {@link useRecordIds} or
  * {@link useRecordById} could be more appropriate depending on your use case.
  *
@@ -198,7 +199,7 @@ export function useRecordById(queryResult: AnyQueryResult, recordId: RecordId): 
 
 /**
  * A hook for working with a single record. Automatically handles loading data and updating your
- * component when the record's cell values etc. change.
+ * component when the record's cell values or color changes.
  *
  * Often used with {@link useRecordIds} to render a list of records where each list item only
  * updates when the specific record it concerns changes.

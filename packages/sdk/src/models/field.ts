@@ -4,7 +4,7 @@ import getAirtableInterface from '../injected/airtable_interface';
 import {AggregatorKey} from '../types/aggregators';
 import {BaseData} from '../types/base';
 import {MutationTypes, PermissionCheckResult} from '../types/mutations';
-import {FieldData, PrivateColumnType, FieldType, FieldOptions} from '../types/field';
+import {FieldData, FieldType, FieldOptions} from '../types/field';
 import {isEnumValue, cloneDeep, values, ObjectValues, FlowAnyObject} from '../private_utils';
 import getSdk from '../get_sdk';
 import AbstractModel from './abstract_model';
@@ -371,18 +371,6 @@ class Field extends AbstractModel<FieldData, WatchableFieldKey> {
         } else {
             return null;
         }
-    }
-    /**
-     * @internal
-     */
-    __getRawType(): PrivateColumnType {
-        return this._data.type;
-    }
-    /**
-     * @internal
-     */
-    __getRawTypeOptions(): FlowAnyObject | null | undefined {
-        return this._data.typeOptions;
     }
     /**
      * @internal

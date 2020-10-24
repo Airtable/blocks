@@ -5,19 +5,11 @@ import * as React from 'react';
 import {compose} from '@styled-system/core';
 import getSdk from '../get_sdk';
 import getAirtableInterface from '../injected/airtable_interface';
-import {
-    values,
-    isNullOrUndefinedOrEmpty,
-    flattenDeep,
-    keyBy,
-    uniqBy,
-    FlowAnyObject,
-    has,
-} from '../private_utils';
+import {isNullOrUndefinedOrEmpty, keyBy, uniqBy, FlowAnyObject, has} from '../private_utils';
 import {invariant, spawnError} from '../error_utils';
 import {AttachmentData} from '../types/attachment';
 import {FieldType} from '../types/field';
-import {RecordDef} from '../types/record';
+import {RecordDef, RecordId} from '../types/record';
 import Field from '../models/field';
 import Record from '../models/record';
 import View from '../models/view';
@@ -399,9 +391,9 @@ export class RecordCard extends React.Component<RecordCardProps> {
         let attachmentsInField;
         if (attachmentField.type === FieldType.MULTIPLE_LOOKUP_VALUES) {
             const cellValue = this._getCellValue(attachmentField) as FlowAnyObject;
-            attachmentsInField = flattenDeep(
-                values(cellValue ? cellValue.valuesByLinkedRecordId : {}),
-            );
+            attachmentsInField = cellValue
+                ? cellValue.map((cv: {linkedRecordId: RecordId; value: unknown}) => cv.value)
+                : [];
         } else {
             attachmentsInField = this._getCellValue(attachmentField) as Array<FlowAnyObject>;
         }

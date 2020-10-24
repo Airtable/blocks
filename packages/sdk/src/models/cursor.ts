@@ -109,7 +109,8 @@ class Cursor extends AbstractModelWithAsyncData<CursorData, WatchableCursorKey> 
         const selectedRecordIdSet = baseData.cursorData?.selectedRecordIdSet ?? null;
         const selectedFieldIdSet = baseData.cursorData?.selectedFieldIdSet ?? null;
         const activeTableId = baseData.activeTableId;
-        const activeViewId = activeTableId ? baseData.tablesById[activeTableId].activeViewId : null;
+        const activeTable = activeTableId ? baseData.tablesById[activeTableId] : null;
+        const activeViewId = activeTable?.activeViewId ?? null;
 
         this._cursorData = {
             selectedRecordIdSet,

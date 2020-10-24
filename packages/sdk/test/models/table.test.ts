@@ -133,12 +133,8 @@ describe('Table', () => {
         let mockApplyMutationAsync: any;
         let mockGetFieldById: any;
 
-        beforeAll(() => {
-            mockApplyMutationAsync = jest.spyOn(mockAirtableInterface, 'applyMutationAsync');
-        });
-
         beforeEach(() => {
-            mockApplyMutationAsync.mockClear();
+            mockApplyMutationAsync = mockAirtableInterface.applyMutationAsync;
             mockGetFieldById = jest
                 .spyOn(table, 'getFieldById')
                 .mockImplementation(fieldId => new Field(base.__baseData, table, fieldId));

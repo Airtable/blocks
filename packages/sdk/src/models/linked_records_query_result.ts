@@ -1,7 +1,7 @@
 /** @module @airtable/blocks/models: RecordQueryResult */ /** */
 import {FieldType, FieldId} from '../types/field';
 import getSdk from '../get_sdk';
-import {fireAndForgetPromise, FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
+import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
 import ObjectPool from './object_pool';
@@ -153,7 +153,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * @internal (since we may not be able to return parent model instances in the immutable models world)
      */
     get parentTable(): Table {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
         return this._linkedTable;
     }
 
@@ -161,7 +161,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * Ordered array of all the linked record ids. Watchable.
      */
     get recordIds(): Array<string> {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
         invariant(this.isDataLoaded, 'LinkedRecordsQueryResult data is not loaded');
 
         this._generateComputedDataIfNeeded();
@@ -174,7 +174,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * Ordered array of all the linked records. Watchable.
      */
     get records(): Array<Record> {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
 
         return this.recordIds.map(recordId => {
             const record = this._linkedRecordStore.getRecordByIdIfExists(recordId);
@@ -187,7 +187,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
      * The fields that were used to create this LinkedRecordsQueryResult.
      */
     get fields(): Array<Field> | null {
-        invariant(this.isValid, 'LinkedRecordQueryResult is no longer valid');
+        invariant(this.isValid, 'LinkedRecordsQueryResult is no longer valid');
 
         return this._linkedQueryResult.fields;
     }
@@ -198,12 +198,10 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordQueryResultKey> {
-        invariant(this.isValid, 'cannot watch an invalid LinkedRecordQueryResult');
+        invariant(this.isValid, 'cannot watch an invalid LinkedRecordsQueryResult');
 
         const validKeys = super.watch(keys, callback, context);
         for (const key of validKeys) {
-            fireAndForgetPromise(this.loadDataAsync.bind(this));
-
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 this._watchLinkedQueryCellValuesIfNeededAfterWatch();
             }
@@ -227,8 +225,6 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         const validKeys = super.unwatch(keys, callback, context);
 
         for (const key of validKeys) {
-            this.unloadData();
-
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
                 this._unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch();
             }

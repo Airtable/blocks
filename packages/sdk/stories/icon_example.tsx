@@ -30,7 +30,9 @@ const radioGroupClassName = css({
 });
 const iconButtonClassName = css({
     appearance: 'none',
+    background: 'transparent',
     border: 'none',
+    cursor: 'pointer',
     outline: 'none',
     width: '100%',
     height: '100%',
