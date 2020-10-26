@@ -200,24 +200,6 @@ class Session extends AbstractModel<SessionData, WatchableSessionKey> {
     /**
      * @internal
      */
-    // This method is not referenced anywhere in the SDK codebase.
-    // TODO(jugglinmike): remove this method
-    // istanbul ignore next
-    get __currentUserId(): UserId | null {
-        return this._sessionData.currentUserId;
-    }
-    /**
-     * @internal
-     */
-    // This method is not referenced anywhere in the SDK codebase.
-    // TODO(jugglinmike): remove this method
-    // istanbul ignore next
-    get __rawPermissionLevel(): PermissionLevel {
-        return this._sessionData.permissionLevel;
-    }
-    /**
-     * @internal
-     */
     __isFeatureEnabled(featureName: string): boolean {
         return this._sessionData.enabledFeatureNames.includes(featureName);
     }
