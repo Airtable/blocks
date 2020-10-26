@@ -6,7 +6,6 @@ import {ModelChange} from '../../src/types/base';
 import {FieldType} from '../../src/types/field';
 import {MutationTypes} from '../../src/types/mutations';
 import {FieldTypeConfig} from '../../src/types/airtable_interface';
-import {disableObjectPool} from '../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.projectTrackerExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -36,8 +35,6 @@ const recordsById = {
     recB: {id: 'recB', ...genericRecordData},
     recC: {id: 'recC', ...genericRecordData},
 };
-
-disableObjectPool();
 
 describe('Mutations', () => {
     let base: Base;

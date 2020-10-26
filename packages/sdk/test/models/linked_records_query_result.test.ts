@@ -4,7 +4,7 @@ import getSdk, {clearSdkForTest} from '../../src/get_sdk';
 import Record from '../../src/models/record';
 import RecordQueryResult from '../../src/models/record_query_result';
 import LinkedRecordsQueryResult from '../../src/models/linked_records_query_result';
-import {enableObjectPool, disableObjectPool, waitForWatchKeyAsync} from '../test_helpers';
+import {waitForWatchKeyAsync} from '../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -20,7 +20,6 @@ describe('LinkedRecordQueryResult', () => {
     let record: Record;
 
     beforeEach(async () => {
-        disableObjectPool();
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation(tableId => {
             const first = tableId === 'tblFirst';
             const recId = first ? 'recA' : 'recB';
@@ -70,10 +69,6 @@ describe('LinkedRecordQueryResult', () => {
     });
 
     describe('caching', () => {
-        beforeEach(() => {
-            enableObjectPool();
-        });
-
         it('caches like requests', () => {
             const first = record.selectLinkedRecordsFromCell('fldLinked1');
             const second = record.selectLinkedRecordsFromCell('fldLinked1');
@@ -832,7 +827,13 @@ describe('LinkedRecordQueryResult', () => {
         describe('key: recordColors', () => {
             it('triggers loading', async () => {
                 const view = sdk.base.tables[1].views[0];
+                // The SDK maintains an internal cache for similar queries. The
+                // following query specifies the `fields` option in order to
+                // ensure the SDK creates a new result object (rather than
+                // re-use the result created for the query in this test's
+                // setup).
                 const linked2 = record.selectLinkedRecordsFromCell('fldLinked1', {
+                    fields: [],
                     recordColorMode: {type: 'byView', view},
                 });
 
@@ -872,7 +873,12 @@ describe('LinkedRecordQueryResult', () => {
 
         describe('key: isDataLoaded', () => {
             it('does not trigger loading', async () => {
-                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1');
+                // The SDK maintains an internal cache for similar queries. The
+                // following query specifies the `fields` option in order to
+                // ensure the SDK creates a new result object (rather than
+                // re-use the result created for the query in this test's
+                // setup).
+                const linked2 = record.selectLinkedRecordsFromCell('fldLinked1', {fields: []});
                 const linked3 = record.selectLinkedRecordsFromCell('fldLinked1');
 
                 linked2.watch('isDataLoaded', () => {});

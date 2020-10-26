@@ -13,10 +13,11 @@ import {invariant} from '../error_utils';
 import colorUtils from '../color_utils';
 import AbstractModel from './abstract_model';
 import Field from './field';
+import ObjectPool from './object_pool';
 import Table from './table';
 import View from './view';
-import {RecordQueryResultOpts} from './record_query_result';
-import LinkedRecordsQueryResult from './linked_records_query_result';
+import {RecordQueryResultOpts, NormalizedRecordQueryResultOpts} from './record_query_result';
+import LinkedRecordsQueryResult, {getLinkedTableId} from './linked_records_query_result';
 import RecordStore from './record_store';
 
 const WatchableRecordKeys = Object.freeze({
@@ -65,6 +66,14 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
     _parentRecordStore: RecordStore;
     /** @internal */
     _parentTable: Table;
+    __linkedRecordsQueryResultPool: ObjectPool<
+        LinkedRecordsQueryResult,
+        {
+            field: Field;
+            record: Record;
+            normalizedOpts: NormalizedRecordQueryResultOpts;
+        }
+    >;
 
     /**
      * @internal
@@ -79,6 +88,18 @@ class Record extends AbstractModel<RecordData, WatchableRecordKey> {
 
         this._parentRecordStore = parentRecordStore;
         this._parentTable = parentTable;
+        this.__linkedRecordsQueryResultPool = new ObjectPool({
+            getKeyFromObject: queryResult => queryResult._poolKey,
+            getKeyFromObjectOptions: ({field, record}) => {
+                return `${field.id}::${getLinkedTableId(field)}`;
+            },
+            canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
+                return (
+                    queryResult.isValid &&
+                    queryResult.__canBeReusedForNormalizedOpts(normalizedOpts)
+                );
+            },
+        });
     }
 
     /**

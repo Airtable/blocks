@@ -4,7 +4,6 @@ import getSdk from '../get_sdk';
 import {FlowAnyFunction, FlowAnyObject, ObjectMap} from '../private_utils';
 import {invariant} from '../error_utils';
 import {RecordId} from '../types/record';
-import ObjectPool from './object_pool';
 import RecordQueryResult, {
     WatchableRecordQueryResultKey,
     RecordQueryResultOpts,
@@ -17,30 +16,13 @@ import Field from './field';
 import Record from './record';
 import RecordStore from './record_store';
 
-const getLinkedTableId = (field: Field): string => {
+export const getLinkedTableId = (field: Field): string => {
     const options = field.options;
     const linkedTableId = options && options.linkedTableId;
     invariant(typeof linkedTableId === 'string', 'linkedTableId must exist');
 
     return linkedTableId;
 };
-
-const pool: ObjectPool<
-    LinkedRecordsQueryResult,
-    {
-        field: Field;
-        record: Record;
-        normalizedOpts: NormalizedRecordQueryResultOpts;
-    }
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult._poolKey,
-    getKeyFromObjectOptions: ({field, record}) => {
-        return `${record.id}::${field.id}::${getLinkedTableId(field)}`;
-    },
-    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-        return queryResult.isValid && queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-    },
-});
 
 /**
  * Represents a set of records from a LinkedRecord cell value. See {@link RecordQueryResult} for main
@@ -82,7 +64,11 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             linkedRecordStore,
             opts,
         );
-        const queryResult = pool.getObjectForReuse({record, field, normalizedOpts});
+        const queryResult = record.__linkedRecordsQueryResultPool.getObjectForReuse({
+            record,
+            field,
+            normalizedOpts,
+        });
         if (queryResult) {
             return queryResult;
         } else {
@@ -139,7 +125,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         this._field = field;
         this._linkedTable = normalizedOpts.table;
         this._linkedRecordStore = normalizedOpts.recordStore;
-        this._poolKey = `${record.id}::${field.id}::${this._linkedTable.id}`;
+        this._poolKey = `${field.id}::${this._linkedTable.id}`;
 
         // we could rely on RecordQueryResult's reuse pool to make sure we get back
         // the same RecordQueryResult every time, but that would make it much harder
@@ -153,7 +139,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
         // so register this instance weakly with the object pool. it'll be automatically
         // unregistered if it hasn't been used after a few seconds
-        pool.registerObjectForReuseWeak(this);
+        this._record.__linkedRecordsQueryResultPool.registerObjectForReuseWeak(this);
     }
 
     /**
@@ -280,7 +266,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
 
     /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
-        pool.registerObjectForReuseStrong(this);
+        this._record.__linkedRecordsQueryResultPool.registerObjectForReuseStrong(this);
         this._watchOrigin();
         this._watchLinkedQueryResult();
 
@@ -303,7 +289,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         // in the testing environment.
         // istanbul ignore else
         if (this.isValid) {
-            pool.unregisterObjectForReuseStrong(this);
+            this._record.__linkedRecordsQueryResultPool.unregisterObjectForReuseStrong(this);
             this._unwatchOrigin();
             this._unwatchLinkedQueryResult();
 

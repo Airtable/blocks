@@ -4,6 +4,7 @@ import {BaseData} from '../types/base';
 import {ViewData, ViewType} from '../types/view';
 import {isEnumValue, ObjectValues, FlowAnyObject} from '../private_utils';
 import AbstractModel from './abstract_model';
+import ObjectPool from './object_pool';
 import Table from './table';
 import {RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
@@ -39,6 +40,9 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
     _parentTable: Table;
     /** @internal */
     _viewDataStore: ViewDataStore;
+    /** @internal */
+    __viewMetadataQueryResultPool: ObjectPool<ViewMetadataQueryResult, {view: View}>;
+
     /**
      * @internal
      */
@@ -52,6 +56,11 @@ class View extends AbstractModel<ViewData, WatchableViewKey> {
 
         this._parentTable = parentTable;
         this._viewDataStore = viewDataStore;
+        this.__viewMetadataQueryResultPool = new ObjectPool({
+            getKeyFromObject: queryResult => queryResult.parentView.id,
+            getKeyFromObjectOptions: ({view}) => view.id,
+            canObjectBeReusedForOptions: () => true,
+        });
     }
 
     /**

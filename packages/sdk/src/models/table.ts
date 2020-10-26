@@ -14,8 +14,9 @@ import AbstractModel from './abstract_model';
 import View from './view';
 import Field from './field';
 import Base, {ChangedPathsForType} from './base';
+import ObjectPool from './object_pool';
 import Record from './record';
-import {RecordQueryResultOpts} from './record_query_result';
+import {NormalizedRecordQueryResultOpts, RecordQueryResultOpts} from './record_query_result';
 import TableOrViewQueryResult from './table_or_view_query_result';
 import RecordStore from './record_store';
 
@@ -61,6 +62,14 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     _airtableInterface: AirtableInterface;
     /** @internal */
     _recordStore: RecordStore;
+    /** @internal */
+    __tableOrViewQueryResultPool: ObjectPool<
+        TableOrViewQueryResult,
+        {
+            sourceModel: Table | View;
+            normalizedOpts: NormalizedRecordQueryResultOpts;
+        }
+    >;
 
     /**
      * @internal
@@ -81,6 +90,14 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
         this._cachedFieldNamesById = null;
 
         this._airtableInterface = airtableInterface;
+
+        this.__tableOrViewQueryResultPool = new ObjectPool({
+            getKeyFromObject: queryResult => queryResult.__sourceModelId,
+            getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
+            canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
+                return queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
+            },
+        });
     }
 
     /**

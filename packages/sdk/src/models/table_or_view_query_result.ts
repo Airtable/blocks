@@ -22,7 +22,6 @@ import RecordQueryResult, {
     NormalizedRecordQueryResultOpts,
     NormalizedSortConfig,
 } from './record_query_result';
-import ObjectPool from './object_pool';
 import {ModeTypes as RecordColorModeTypes} from './record_coloring';
 import Field from './field';
 import Record from './record';
@@ -33,20 +32,6 @@ import ViewDataStore, {WatchableViewDataStoreKeys} from './view_data_store';
 interface TableOrViewQueryResultData {
     recordIds: Array<string> | null; // null if data isn't loaded (or if it hasn't been lazily initialized).
 }
-
-const tableOrViewQueryResultPool: ObjectPool<
-    TableOrViewQueryResult,
-    {
-        sourceModel: Table | View;
-        normalizedOpts: NormalizedRecordQueryResultOpts;
-    }
-> = new ObjectPool({
-    getKeyFromObject: queryResult => queryResult.__sourceModelId,
-    getKeyFromObjectOptions: ({sourceModel}) => sourceModel.id,
-    canObjectBeReusedForOptions: (queryResult, {normalizedOpts}) => {
-        return queryResult.__canBeReusedForNormalizedOpts(normalizedOpts);
-    },
-});
 
 /**
  * Represents a set of records directly from a view or table. See {@link RecordQueryResult} for main
@@ -76,7 +61,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         sourceModel: Table | View,
         normalizedOpts: NormalizedRecordQueryResultOpts,
     ) {
-        const queryResult = tableOrViewQueryResultPool.getObjectForReuse({
+        const queryResult = normalizedOpts.table.__tableOrViewQueryResultPool.getObjectForReuse({
             sourceModel,
             normalizedOpts,
         });
@@ -168,7 +153,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         // we want to return the same instance to subsequent calls to __createOrReuseQueryResult,
         // so register this instance weakly with the object pool. it'll be automatically
         // unregistered if it hasn't been used after a few seconds
-        tableOrViewQueryResultPool.registerObjectForReuseWeak(this);
+        this._table.__tableOrViewQueryResultPool.registerObjectForReuseWeak(this);
         Object.seal(this);
     }
     /** @internal */
@@ -421,7 +406,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
     }
     /** @internal */
     async _loadDataAsync(): Promise<Array<WatchableRecordQueryResultKey>> {
-        tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
+        this._table.__tableOrViewQueryResultPool.registerObjectForReuseStrong(this);
 
         invariant(this._mostRecentSourceModelLoadPromise, 'No source model load promises');
         await this._mostRecentSourceModelLoadPromise;
@@ -534,7 +519,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         this._orderedRecordIds = null;
         this._recordIdsSet = null;
 
-        tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
+        this._table.__tableOrViewQueryResultPool.unregisterObjectForReuseStrong(this);
     }
     /** @internal */
     _addRecordIdsToVisList(recordIds: Array<string>) {
