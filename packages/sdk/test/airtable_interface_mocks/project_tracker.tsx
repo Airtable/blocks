@@ -179,7 +179,7 @@ const projectTracker: SdkInitData = {
                     viw8v5XkLudbiCJfD: {
                         id: 'viw8v5XkLudbiCJfD',
                         name: 'Completed projects',
-                        type: ViewType.GRID,
+                        type: ViewType.GALLERY,
                     },
                     viwhz3PjFATSxaV5X: {
                         id: 'viwhz3PjFATSxaV5X',
@@ -192,7 +192,7 @@ const projectTracker: SdkInitData = {
                         type: ViewType.CALENDAR,
                     },
                 },
-                description: '',
+                description: 'description for design projects table',
                 lock: null,
                 externalSyncById: null,
             },

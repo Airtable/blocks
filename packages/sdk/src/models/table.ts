@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: Table */ /** */
 import {BaseData} from '../types/base';
 import {TableData} from '../types/table';
@@ -565,6 +564,7 @@ class Table extends AbstractModel<TableData, WatchableTableKey> {
     /**
      * @internal
      */
+    // istanbul ignore next
     async getDefaultCellValuesByFieldIdAsync(opts?: {
         view?: View | null;
     }): Promise<{[key: string]: unknown}> {

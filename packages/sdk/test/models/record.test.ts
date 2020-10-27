@@ -950,6 +950,41 @@ describe('Record', () => {
 
                 expect(recordC.getColorInView(view.name)).toBe(null);
             });
+
+            test('reports error when provided view is in another table', () => {
+                const otherTable = base.getTable('Second Table');
+                recordA = viewQueryResult.getRecordById('recordA');
+
+                expect(() => {
+                    recordA.getColorInView(otherTable.views[0]);
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"View 'All tasks' is from a different table than table 'First Table'"`,
+                );
+            });
+
+            test('reports error when specified view does not exist', () => {
+                recordA = viewQueryResult.getRecordById('recordA');
+
+                expect(() => {
+                    recordA.getColorInView('non existent view');
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"View 'non existent view' does not exist in table 'First Table'"`,
+                );
+            });
+
+            test('reports error when specified view has been deleted', () => {
+                recordA = viewQueryResult.getRecordById('recordA');
+                mockAirtableInterface.triggerModelUpdates([
+                    {
+                        path: ['tablesById', 'tblFirst', 'viewsById', view.id],
+                        value: undefined,
+                    },
+                ]);
+
+                expect(() => {
+                    recordA.getColorInView(view);
+                }).toThrowErrorMatchingInlineSnapshot(`"View has been deleted"`);
+            });
         });
 
         describe('#getColorHexInView()', () => {
