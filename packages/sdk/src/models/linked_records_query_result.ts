@@ -292,14 +292,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             const fieldId = watchKey.slice(
                 RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
             );
-            // The left-hand side of the following logical "or" expression is
-            // always an array value due to the way the `Watchable` class
-            // manages event handlers (it deletes keys whenever the number of
-            // handlers reaches zero), so the right-hand side is unreachable.
-            // TODO(jugglinmike): replace the logical "or" expression with the
-            // left-hand side.
-            // istanbul ignore next
-            countByFieldId[fieldId] = (this._changeWatchersByKey[watchKey] || []).length;
+            countByFieldId[fieldId] = this._changeWatchersByKey[watchKey].length;
         }
 
         return countByFieldId;
@@ -508,15 +501,7 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
             this._unwatchLinkedQueryCellValues();
         }
         for (const fieldId of Object.keys(this._cellValueWatchCountByFieldId)) {
-            // The following condition is tautological due to the way the
-            // `Watchable` class manages event handlers (it deletes keys
-            // whenever the number of handlers reaches zero).
-            // TODO(jugglinmike): remove the `if` statement and execute its
-            // body unconditionally
-            // istanbul ignore else
-            if (this._cellValueWatchCountByFieldId[fieldId] > 0) {
-                this._unwatchLinkedQueryCellValuesInField(fieldId);
-            }
+            this._unwatchLinkedQueryCellValuesInField(fieldId);
         }
 
         this._isValid = false;
