@@ -491,7 +491,12 @@ class BlockBuilder {
         ];
 
         // Use the blocks-cli dir as the cwd so babel can properly find presets/plugins.
-        return await babel.transformFileAsync(filePath, {presets, plugins, cwd: __dirname});
+        return await babel.transformFileAsync(filePath, {
+            presets,
+            plugins,
+            cwd: __dirname,
+            sourceMaps: 'inline',
+        });
     }
     async _transpileOrCopyAsync(
         fileOrDirectoryPath: string,
