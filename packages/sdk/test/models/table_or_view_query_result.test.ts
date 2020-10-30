@@ -1,6 +1,6 @@
 import MockAirtableInterface from '../airtable_interface_mocks/mock_airtable_interface';
 import Base from '../../src/models/base';
-import {disableObjectPool, enableObjectPool, waitForWatchKeyAsync} from '../test_helpers';
+import {waitForWatchKeyAsync} from '../test_helpers';
 import getSdk, {clearSdkForTest} from '../../src/get_sdk';
 import {modes as recordColorModes} from '../../src/models/record_coloring';
 import {FieldType} from '../../src/types/field';
@@ -84,7 +84,6 @@ describe('TableOrViewQueryResult', () => {
     let base: Base;
 
     beforeEach(() => {
-        disableObjectPool();
         base = getSdk().base;
     });
 
@@ -94,10 +93,6 @@ describe('TableOrViewQueryResult', () => {
     });
 
     describe('caching', () => {
-        beforeEach(() => {
-            enableObjectPool();
-        });
-
         it('caches like requests', () => {
             const first = base.tables[0].selectRecords();
             const second = base.tables[0].selectRecords();

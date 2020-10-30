@@ -136,6 +136,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         };
     }
     /** @internal */
+    // istanbul ignore next
     get __sourceModelId(): string {
         return this._sourceModel.id;
     }
