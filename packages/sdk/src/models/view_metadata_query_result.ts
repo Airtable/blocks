@@ -1,4 +1,3 @@
-// istanbul ignore file
 /** @module @airtable/blocks/models: View */ /** */
 import {BaseData} from '../types/base';
 import {FieldId} from '../types/field';
