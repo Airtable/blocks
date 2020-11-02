@@ -1,4 +1,3 @@
-// istanbul ignore file
 import {
     isEnumValue,
     fireAndForgetPromise,
@@ -53,7 +52,10 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         return (
             isEnumValue(WatchableRecordStoreKeys, key) ||
             key.startsWith(WatchableCellValuesInFieldKeyPrefix) ||
+            // TODO(rwaldron): test this via public api & remove pragma
+            // istanbul ignore next
             key.startsWith(WatchableRecordIdsInViewKeyPrefix) ||
+            // istanbul ignore next
             key.startsWith(WatchableRecordColorsInViewKeyPrefix)
         );
     }
@@ -153,6 +155,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     }
 
     get _dataOrNullIfDeleted(): TableData | null {
+        // TODO(rwaldron): test this via public api & remove pragma
+        // istanbul ignore next
         return this._baseData.tablesById[this.tableId] ?? null;
     }
 
@@ -333,6 +337,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                     'created time out of sync',
                 );
 
+                // TODO(rwaldron): test this via public api & remove pragma
+                // istanbul ignore if
                 if (!existingRecordObj.cellValuesByFieldId) {
                     existingRecordObj.cellValuesByFieldId = {};
                 }
@@ -341,7 +347,9 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                     const fieldId = fieldIds[i];
                     existingCellValuesByFieldId[fieldId] = newRecordObj.cellValuesByFieldId
                         ? newRecordObj.cellValuesByFieldId[fieldId]
-                        : undefined;
+                        : // TODO(rwaldron): test this via public api & remove pragma
+                          // istanbul ignore next
+                          undefined;
                 }
             }
         }
@@ -361,9 +369,13 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
     unloadCellValuesInFieldIds(fieldIds: Array<FieldId>) {
         const fieldIdsWithZeroRetainCount: Array<FieldId> = [];
         for (const fieldId of fieldIds) {
+            // TODO(rwaldron): test this via public api & remove pragma
+            // istanbul ignore next
             let fieldRetainCount = this._cellValuesRetainCountByFieldId[fieldId] || 0;
             fieldRetainCount--;
 
+            // TODO(rwaldron): test this via public api & remove pragma
+            // istanbul ignore if
             if (fieldRetainCount < 0) {
                 console.log('Field data over-released'); // eslint-disable-line no-console
                 fieldRetainCount = 0;
@@ -429,6 +441,9 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
         const areAnyFieldsLoaded =
             this.isDataLoaded ||
             values(this._areCellValuesLoadedByFieldId).some(isLoaded => isLoaded);
+
+        // TODO(rwaldron): test this via public api & remove pragma
+        // istanbul ignore else
         if (!this.isDeleted) {
             if (!areAnyFieldsLoaded) {
                 this._data.recordsById = undefined;
@@ -447,9 +462,13 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                     );
                 }
                 const {recordsById} = this._data;
+                // TODO(rwaldron): test this via public api & remove pragma
+                // istanbul ignore next
                 for (const recordObj of values(recordsById || {})) {
                     for (let i = 0; i < fieldIdsToClear.length; i++) {
                         const fieldId = fieldIdsToClear[i];
+                        // TODO(rwaldron): test this via public api & remove pragma
+                        // istanbul ignore else
                         if (recordObj.cellValuesByFieldId) {
                             recordObj.cellValuesByFieldId[fieldId] = undefined;
                         }
@@ -482,6 +501,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                         removedRecordIds.push(recordId);
 
                         const recordModel = this._recordModelsById[recordId];
+                        // TODO(rwaldron): test this via public api & remove pragma
+                        // istanbul ignore else
                         if (recordModel) {
                             // Remove the Record model if it was deleted.
                             delete this._recordModelsById[recordId];
@@ -489,6 +510,8 @@ class RecordStore extends AbstractModelWithAsyncData<TableData, WatchableRecordS
                     }
                 } else {
                     const recordModel = this._recordModelsById[recordId];
+                    // TODO(rwaldron): test this via public api & remove pragma
+                    // istanbul ignore else
                     if (recordModel) {
                         recordModel.__triggerOnChangeForDirtyPaths(dirtyRecordPaths);
                     }
