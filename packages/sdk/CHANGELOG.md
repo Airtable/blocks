@@ -11,7 +11,8 @@ commit that affects the code in a way that consumers might care about should inc
 
 ## [Unreleased](https://github.com/airtable/blocks/compare/@airtable/blocks@1.2.0...HEAD)
 
-No changes.
+-   Fixed a bug that prevented TableOrViewQueryResult from notifying watchers about the
+    creation/deletion of sorted fields.
 
 ## [1.2.0](https://github.com/airtable/blocks/compare/@airtable/blocks@1.1.0...@airtable/blocks@1.2.0) - 2020-10-23
 

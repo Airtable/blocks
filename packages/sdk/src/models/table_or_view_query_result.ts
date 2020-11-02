@@ -665,12 +665,7 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
         for (const fieldId of addedFieldIds) {
             // If a field that we rely on was created (i.e. it was undeleted), we need to
             // make sure we're watching it's config.
-            // The following branch is unreachable because the `has` function
-            // was not designed to integrate with ECMAScript sets.
-            // TODO(jugglinmike): switch to `Set.prototype.has` and enable the
-            // corresponding test.
-            // istanbul ignore if
-            if (has(fieldIdsSet, fieldId)) {
+            if (fieldIdsSet.has(fieldId)) {
                 wereAnyFieldsCreatedOrDeleted = true;
                 const field = this._table.getFieldByIdIfExists(fieldId);
                 invariant(field, 'Created field does not exist');
@@ -679,19 +674,11 @@ class TableOrViewQueryResult extends RecordQueryResult<TableOrViewQueryResultDat
             }
         }
 
-        // The `else` branch is not reachable until the bug described above is
-        // corrected.
-        // TODO(jugglinmike): correct the bug and include this branch in code
         // coverage analysis
         // istanbul ignore else
         if (!wereAnyFieldsCreatedOrDeleted) {
-            // The following callback function always returns `false` because
-            // the `has` function was not designed to integrate with ECMAScript
-            // sets.
-            // TODO(jugglinmike): switch to `Set.prototype.has` and enable the
-            // corresponding test.
             wereAnyFieldsCreatedOrDeleted = removedFieldIds.some(fieldId =>
-                has(fieldIdsSet, fieldId),
+                fieldIdsSet.has(fieldId),
             );
         }
 

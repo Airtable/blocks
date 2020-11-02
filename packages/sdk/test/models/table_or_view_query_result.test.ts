@@ -920,9 +920,7 @@ describe('TableOrViewQueryResult', () => {
                     expect(spy.mock.calls.length).toBe(0);
                 });
 
-                // This test cannot pass due to a bug in the implementation
-                // TODO(jugglinmike): Correct the bug and enable this test
-                it.skip('notified when sorted field is created', async () => {
+                it('notified when sorted field is created', async () => {
                     const result = await base.tables[0].selectRecordsAsync({
                         sorts: [{field: 'fld3DvZllJtyaNYpm'}, {field: 'fldRljtoVpOt1IDYH'}],
                     });
@@ -1002,9 +1000,7 @@ describe('TableOrViewQueryResult', () => {
                     expect(spy.mock.calls.length).toBe(0);
                 });
 
-                // This test cannot pass due to a bug in the implementation
-                // TODO(jugglinmike): Correct the bug and enable this test
-                it.skip('notified when sorted field is deleted', async () => {
+                it('notified when sorted field is deleted', async () => {
                     const result = await base.tables[0].selectRecordsAsync({
                         sorts: [{field: 'fld3DvZllJtyaNYpm'}, {field: 'fldRljtoVpOt1IDYH'}],
                     });
