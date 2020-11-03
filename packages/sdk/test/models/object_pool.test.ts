@@ -86,7 +86,7 @@ describe('ObjectPool', () => {
         expect(first).not.toBe(second);
     });
 
-    it.skip('eventually releases weakly-held objects whose key has changed', () => {
+    it('eventually releases weakly-held objects whose key has changed', () => {
         const first = pool.getObjectForReuse('a');
         const second = pool.getObjectForReuse('b');
         const third = pool.getObjectForReuse('c');

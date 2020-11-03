@@ -1,5 +1,5 @@
 /** @hidden */ /** */
-import {invariant, spawnError} from '../error_utils';
+import {invariant} from '../error_utils';
 import {TimeoutId} from '../private_utils';
 
 const WEAK_RETAIN_TIME_MS = 10000;
@@ -60,7 +60,7 @@ class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
         const toStore = {
             object,
             timeoutId: setTimeout(
-                () => this.unregisterObjectForReuseWeak(object),
+                () => this._unregisterObjectForReuseWeakIfExists(object),
                 WEAK_RETAIN_TIME_MS,
             ),
         };
@@ -69,21 +69,6 @@ class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
             pooledObjects.push(toStore);
         } else {
             this._weakObjectsByKey[objectKey] = [toStore];
-        }
-    }
-    /** @hidden */
-    // A recent refactoring to ObjectPool encapsulated all concerns realted to
-    // weak references. This method is now effectively private, and the only
-    // remaining callers are in asynchronous callbacks, where throwing an error
-    // is not appropriate.
-    // TODO(jugglinmike): remove this method, replace it with
-    // `_unregisterObjectForReuseWeakIfExists` in all existing call sites, and
-    // activate the unit tests that this change enables.
-    unregisterObjectForReuseWeak(object: T) {
-        const didExist = this._unregisterObjectForReuseWeakIfExists(object);
-        // istanbul ignore if
-        if (!didExist) {
-            throw spawnError('Object was not registered for reuse');
         }
     }
     /** @internal */
@@ -143,7 +128,7 @@ class ObjectPool<T extends Poolable, Ctor extends new (...args: any[]) => T> {
         // reset the timer on this object if it's reused
         clearTimeout(timeoutId);
         stored.timeoutId = setTimeout(
-            () => this.unregisterObjectForReuseWeak(object),
+            () => this._unregisterObjectForReuseWeakIfExists(object),
             WEAK_RETAIN_TIME_MS,
         );
 
