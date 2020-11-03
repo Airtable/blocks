@@ -180,22 +180,24 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
         callback: FlowAnyFunction,
         context?: FlowAnyObject | null,
     ): Array<WatchableRecordQueryResultKey> {
-        const validKeys = super.unwatch(keys, callback, context);
+        const arrayKeys = (Array.isArray(keys) ? keys : [keys]) as ReadonlyArray<
+            WatchableRecordQueryResultKey
+        >;
 
-        for (const key of validKeys) {
+        for (const key of arrayKeys) {
             if (key === RecordQueryResult.WatchableKeys.cellValues) {
-                this._unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch();
+                this._unwatchLinkedQueryCellValuesIfPossibleBeforeUnwatch();
             }
 
             if (key.startsWith(RecordQueryResult.WatchableCellValuesInFieldKeyPrefix)) {
                 const fieldId = key.substring(
                     RecordQueryResult.WatchableCellValuesInFieldKeyPrefix.length,
                 );
-                this._unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch(fieldId);
+                this._unwatchLinkedQueryCellValuesInFieldIfPossibleBeforeUnwatch(fieldId);
             }
         }
 
-        return validKeys;
+        return super.unwatch(arrayKeys, callback, context);
     }
 
     /** @inheritdoc */
@@ -276,8 +278,8 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /** @internal */
-    _unwatchLinkedQueryCellValuesIfPossibleAfterUnwatch() {
-        if (this._cellValuesWatchCount === 0 && this.isValid) {
+    _unwatchLinkedQueryCellValuesIfPossibleBeforeUnwatch() {
+        if (this._cellValuesWatchCount === 1 && this.isValid) {
             this._unwatchLinkedQueryCellValues();
         }
     }
@@ -306,19 +308,14 @@ class LinkedRecordsQueryResult extends RecordQueryResult {
     }
 
     /** @internal */
-    _unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch(fieldId: string) {
+    _unwatchLinkedQueryCellValuesInFieldIfPossibleBeforeUnwatch(fieldId: string) {
         invariant(
-            this._cellValueWatchCountByFieldId[fieldId] &&
-                this._cellValueWatchCountByFieldId[fieldId] > 0,
+            this._cellValueWatchCountByFieldId[fieldId],
             "cellValuesInField:%s over-free'd",
             fieldId,
         );
 
-        // The following condition represents dead code (as demonstrated by the
-        // "invariant" which precedes it).
-        // TODO(jugglinmike): remove `_unwatchLinkedQueryCellValuesInFieldIfPossibleAfterUnwatch`
-        // istanbul ignore next
-        if (this._cellValueWatchCountByFieldId[fieldId] === 0 && this.isValid) {
+        if (this._cellValueWatchCountByFieldId[fieldId] === 1 && this.isValid) {
             this._unwatchLinkedQueryCellValuesInField(fieldId);
         }
     }

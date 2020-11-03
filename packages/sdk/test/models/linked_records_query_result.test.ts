@@ -4,7 +4,7 @@ import getSdk, {clearSdkForTest} from '../../src/get_sdk';
 import Record from '../../src/models/record';
 import RecordQueryResult from '../../src/models/record_query_result';
 import LinkedRecordsQueryResult from '../../src/models/linked_records_query_result';
-import {waitForWatchKeyAsync} from '../test_helpers';
+import {simulateTimersAndClearAfterEachTest, waitForWatchKeyAsync} from '../test_helpers';
 
 const mockAirtableInterface = MockAirtableInterface.linkedRecordsExample();
 jest.mock('../../src/injected/airtable_interface', () => ({
@@ -18,6 +18,8 @@ describe('LinkedRecordQueryResult', () => {
     let sdk: Sdk;
     let query: RecordQueryResult;
     let record: Record;
+
+    simulateTimersAndClearAfterEachTest();
 
     beforeEach(async () => {
         mockAirtableInterface.fetchAndSubscribeToTableDataAsync.mockImplementation(tableId => {
@@ -467,6 +469,17 @@ describe('LinkedRecordQueryResult', () => {
 
                 expect(linked.isDataLoaded).toBe(false);
             });
+
+            it('triggers unloading (specified via array)', async () => {
+                const noop = () => {};
+                linked.watch('recordIds', noop);
+                linked.unloadData();
+                linked.unwatch(['recordIds'], noop);
+
+                await waitForWatchKeyAsync(linked, 'isDataLoaded');
+
+                expect(linked.isDataLoaded).toBe(false);
+            });
         });
 
         describe('key: records', () => {
@@ -499,14 +512,19 @@ describe('LinkedRecordQueryResult', () => {
                 ]);
             };
 
-            // The implementation fails the following test because watching the
-            // `isDataLoaded` key of a model incorrectly increases its internal
-            // usage counter. Additionally, this test cannot currently pass due
-            // to a violated "invariant" in the source.
-            //
-            // TODO(jugglinmike): Correct the implementation and enable this
-            // test
-            it.skip('triggers unloading', async () => {
+            it('reports error when over-freed', () => {
+                const noop = () => {};
+                linked.watch('cellValuesInField:fldSecondary', noop);
+                linked.unwatch('cellValuesInField:fldSecondary', noop);
+
+                expect(() => {
+                    linked.unwatch('cellValuesInField:fldSecondary', noop);
+                }).toThrowErrorMatchingInlineSnapshot(
+                    `"cellValuesInField:fldSecondary over-free'd"`,
+                );
+            });
+
+            it('triggers unloading', async () => {
                 const noop = () => {};
                 linked.watch('cellValuesInField:fldSecondary', noop);
                 linked.unloadData();
@@ -515,6 +533,13 @@ describe('LinkedRecordQueryResult', () => {
                 await waitForWatchKeyAsync(linked, 'isDataLoaded');
 
                 expect(linked.isDataLoaded).toBe(false);
+
+                expect(mockAirtableInterface.unsubscribeFromCursorData.mock.calls.length).toBe(1);
+                expect(mockAirtableInterface.unsubscribeFromTableData.mock.calls.length).toBe(0);
+                expect(mockAirtableInterface.unsubscribeFromCellValuesInFields.mock.calls).toEqual([
+                    ['tblSecond', ['fldSecondary']],
+                ]);
+                expect(mockAirtableInterface.unsubscribeFromViewData.mock.calls.length).toBe(0);
             });
 
             it('does not alter other subscriptions', () => {
@@ -539,11 +564,16 @@ describe('LinkedRecordQueryResult', () => {
                 expect(spy3).toHaveBeenCalledTimes(2);
             });
 
-            // This test cannot currently pass due to a violated "invariant" in
-            // the source.
-            // TODO(jugglinmike): update the source and enable this test
-            it.skip('properly cleans up final subscription', () => {
+            it('properly cleans up final subscription', () => {
                 const spy = jest.fn();
+
+                // By watching, unwatching, and watching again, this test can
+                // validate that internal state is completely reset whenever
+                // all listeners are removed. This approach would cause a
+                // faulty implementation to emit multiple events for a single
+                // handler.
+                linked.watch('cellValuesInField:fldSecondary', spy);
+                linked.unwatch('cellValuesInField:fldSecondary', spy);
                 linked.watch('cellValuesInField:fldSecondary', spy);
 
                 change('something else');

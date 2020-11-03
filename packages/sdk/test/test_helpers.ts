@@ -29,3 +29,29 @@ export function waitForWatchKeyAsync<Key extends string>(
         model.watch(key, handler);
     });
 }
+
+export function simulateTimersAndClearAfterEachTest(): void {
+    let automaticAdvancement: ReturnType<typeof setInterval>;
+
+    beforeAll(() => {
+        // Automatically advance simulated time
+        automaticAdvancement = setInterval(() => {
+            jest.advanceTimersByTime(20);
+        }, 20);
+
+        jest.useFakeTimers();
+    });
+
+    afterAll(() => {
+        clearInterval(automaticAdvancement);
+    });
+
+    // When models are deleted, the SDK defers some de-registration-related
+    // messages as an internal optimization. Messages which are initially
+    // triggered by one test may not be sent until another test is executing,
+    // and this can interfere with the latter test. Clear all timers that are
+    // pending following every test in order to promote isolation.
+    afterEach(() => {
+        jest.clearAllTimers();
+    });
+}
