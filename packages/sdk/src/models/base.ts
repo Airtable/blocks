@@ -541,10 +541,7 @@ class Base extends AbstractModel<BaseData, WatchableBaseKey> {
         const {tablesById} = changedPaths;
         if (tablesById) {
             for (const [tableId, dirtyTablePaths] of entries(tablesById)) {
-                // Directly access from _tableModelsById to avoid creating
-                // a table model if it doesn't already exist. If it doesn't exist,
-                // nothing can be subscribed to any events on it.
-                const table = this._tableModelsById[tableId];
+                const table = this.getTableByIdIfExists(tableId);
                 if (table && dirtyTablePaths) {
                     const didTableSchemaChange = table.__triggerOnChangeForDirtyPaths(
                         dirtyTablePaths,

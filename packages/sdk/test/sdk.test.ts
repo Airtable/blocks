@@ -214,12 +214,6 @@ describe('sdk', () => {
             it('notifies "schema" watchers', () => {
                 const mock = jest.fn();
 
-                // TODO(jugglinmike): The internal cache must be primed in
-                // order to observe the behavior under test. Determine if this
-                // requirement represents a meaningful edge case for Block
-                // development.
-                sdk.base.tables;
-
                 sdk.base.watch('schema', mock);
 
                 mockAirtableInterface.triggerModelUpdates([
@@ -234,12 +228,6 @@ describe('sdk', () => {
 
             it('does not notify "schema" watchers when new value matches current', () => {
                 const mock = jest.fn();
-
-                // TODO(jugglinmike): The internal cache must be primed in
-                // order to observe the behavior under test. Determine if this
-                // requirement represents a meaningful edge case for Block
-                // development.
-                sdk.base.tables;
 
                 sdk.base.watch('schema', mock);
 
@@ -462,12 +450,6 @@ describe('sdk', () => {
                 const mock = jest.fn();
                 sdk.base.watch('schema', mock);
 
-                // TODO(jugglinmike): The internal cache must be primed in
-                // order to observe the behavior under test. Determine if this
-                // requirement represents a meaningful edge case for Block
-                // development.
-                sdk.base.tables;
-
                 mockAirtableInterface.triggerModelUpdates([
                     {
                         path: ['tablesById', 'tbly388E8NA1CNhnF', 'lock'],
@@ -487,12 +469,6 @@ describe('sdk', () => {
             it('notifies base "schema" watchers', () => {
                 const mock = jest.fn();
                 sdk.base.watch('schema', mock);
-
-                // TODO(jugglinmike): The internal cache must be primed in
-                // order to observe the behavior under test. Determine if this
-                // requirement represents a meaningful edge case for Block
-                // development.
-                sdk.base.tables;
 
                 mockAirtableInterface.triggerModelUpdates([
                     {
